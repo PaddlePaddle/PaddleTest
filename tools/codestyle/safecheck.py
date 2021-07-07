@@ -14,7 +14,7 @@ regex = [
 
 
 def check(file):
-    """ check """
+    """ 1check """
     try:
         with open(file, encoding="utf-8") as f:
             for line in f:
