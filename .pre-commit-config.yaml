@@ -19,13 +19,18 @@ repos:
     - id: flake8
       args:
       - --max-line-length=120
-      - --extend-ignore=E1,E203,E722,E402,F401,F403,F405
+      - --extend-ignore=E1,E203,E722,E402,F401,F403,F405,F811
       exclude: ^.*test/
       additional_dependencies:
         - "pep8-naming"
 
   - repo: https://github.com/PyCQA/pylint
-    rev: pylint-2.5.0
+    rev: v2.8.3
     hooks:
       - id: pylint
         files: \.(py)$
+        args:
+        - --disable=E,W,R,C0103
+        - --enable=
+        - --max-line-length=120
+        # - --fail-under=9
