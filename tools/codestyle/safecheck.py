@@ -15,13 +15,16 @@ regex = [
 
 def check(file):
     """ check """
-    with open(file, encoding="utf-8") as f:
-        for line in f:
-            for r in regex:
-                if re.search(r, line) is not None:
-                    print("error file:" + file)
-                    print("error line:" + line)
-                    exit(1)
+    try:
+        with open(file, encoding="utf-8") as f:
+            for line in f:
+                for r in regex:
+                    if re.search(r, line) is not None:
+                        print("error file:" + file)
+                        print("error line:" + line)
+                        exit(1)
+    except FileNotFoundError as e:
+        print(e)
 
 
 if __name__ == "__main__":
