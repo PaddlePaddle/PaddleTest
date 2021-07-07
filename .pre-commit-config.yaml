@@ -23,3 +23,9 @@ repos:
       exclude: ^.*test/
       additional_dependencies:
         - "pep8-naming"
+
+  - repo: https://github.com/PyCQA/pylint
+    rev: pylint-2.5.0
+    hooks:
+      - id: pylint
+        files: \.(py)$
