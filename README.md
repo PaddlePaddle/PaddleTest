@@ -25,3 +25,4 @@ pre-commit审核主要是三种，包括`black`,`flake8`,`pylint`，在CI阶段�
 
 ### 合入规范
 合入**必须**要求通过全部CI检测，原则上禁止强行Merge，如果有Pylint代码格式阻塞，可以讨论是否禁止某一条规范生效，**必须**要求一个QA Reviewer，禁止出现敏感代码。
+test
