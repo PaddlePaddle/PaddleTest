@@ -1,6 +1,7 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
+""" code style custom rule """
 import re
 import sys
 
@@ -13,7 +14,8 @@ regex = [
 
 
 def check(file):
-    with open(file) as f:
+    """ check """
+    with open(file, encoding="utf-8") as f:
         for line in f:
             for r in regex:
                 if re.search(r, line) is not None:
