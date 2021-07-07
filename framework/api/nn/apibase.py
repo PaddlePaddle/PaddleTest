@@ -2,15 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-/***************************************************************************
-  *
-  * Copyright (c) 2020 Baidu.com, Inc. All Rights Reserved
-  * @file apibase.py
-  * @author zhengtianyu
-  * @date 2020/7/1 3:46 PM
-  * @brief api test framework base class
-  *
-  **************************************************************************/
+  nn test base class
 """
 from inspect import isfunction
 import copy

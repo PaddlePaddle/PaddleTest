@@ -2,15 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-/***************************************************************************
-*
-* Copyright (c) 2020 Baidu.com, Inc. All Rights Reserved
-* @file test_conv2d.py
-* @author zhengtianyu
-* @date 2020-08-28 16:30:26
-* @brief test_conv2d
-*
-**************************************************************************/
+test_conv2d
 """
 from apibase import APIBase
 from apibase import randtool
