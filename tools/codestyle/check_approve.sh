@@ -9,6 +9,7 @@ export PYTHONPATH=$DIR:$PYTHONPATH
 ignore="safecheck.py"
 
 for file in $(git diff --name-status | awk '$1 != "D" {print $2}'); do
+
     if [[ ${file} =~ ${ignore} ]]; then
         echo "ignore safecheck.py"
     else
