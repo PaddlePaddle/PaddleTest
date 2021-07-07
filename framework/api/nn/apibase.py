@@ -689,11 +689,11 @@ def compare(result, expect, delta=1e-6, rtol=1e-5):
         # tools.assert_equal(result.shape, expect.shape)
         assert result.shape == expect.shape
     elif isinstance(result, list):
-        for i in enumerate(result):
-            if isinstance(i, (np.generic, np.ndarray)):
-                compare(i, expect[i], delta, rtol)
+        for i, j in enumerate(result):
+            if isinstance(j, (np.generic, np.ndarray)):
+                compare(j, expect[i], delta, rtol)
             else:
-                compare(i.numpy(), expect[i], delta, rtol)
+                compare(j.numpy(), expect[i], delta, rtol)
         # result = np.array(result)
         # expect = np.array(expect)
         # res = np.allclose(result, expect, atol=delta)
