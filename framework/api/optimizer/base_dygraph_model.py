@@ -16,7 +16,12 @@ class Dygraph(paddle.nn.Layer):
         """__init__"""
         paddle.set_default_dtype(np.float64)
         super(Dygraph, self).__init__()
-        self.fc = paddle.nn.Linear(in_features=10, out_features=2)
+        self.fc = paddle.nn.Linear(
+            in_features=10,
+            out_features=2,
+            weight_attr=paddle.nn.initializer.Constant(value=0.5),
+            bias_attr=paddle.nn.initializer.Constant(value=0.33),
+        )
 
     def forward(self, inputs):
         """forward"""
