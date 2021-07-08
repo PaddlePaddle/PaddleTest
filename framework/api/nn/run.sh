@@ -9,5 +9,8 @@ do
         echo "跳过"
     else
         python3.7 -m pytest ${file}
+        if [ $? -ne 0 ]; then
+            echo ${file} >> result.txt
+        fi
     fi
 done
