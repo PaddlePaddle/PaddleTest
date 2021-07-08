@@ -1,4 +1,4 @@
-home=pwd
+home=$PWD
 # nn
 cd nn
 bash ./run.sh
