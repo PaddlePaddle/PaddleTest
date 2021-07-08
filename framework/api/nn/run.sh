@@ -8,6 +8,6 @@ do
     if [[ ${ignore} =~ ${file##*/} ]]; then
         echo "跳过"
     else
-        python3.7 -m pytest -sv ${file}
+        python3.7 -m pytest ${file}
     fi
 done
