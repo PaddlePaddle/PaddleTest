@@ -1,6 +1,7 @@
-"""
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
+"""
+test resnet50 model
 """
 import os
 import sys
@@ -11,8 +12,11 @@ import wget
 import pytest
 import numpy as np
 
+# pylint: disable=wrong-import-position
 sys.path.append("..")
 from test_case import InferenceTest
+
+# pylint: enable=wrong-import-position
 
 
 def check_model_exist():
