@@ -178,10 +178,10 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j in range(len(output_data)):
+            for j, out_data in enumerate(output_data):
                 assert (
-                    abs(output_data[j] - output_data_truth_val[j]) <= delta
-                ), f"{output_data[j]} - {output_data_truth_val[j]} > {delta}"
+                    abs(out_data[j] - output_data_truth_val[j]) <= delta
+                ), f"{out_data[j]} - {output_data_truth_val[j]} > {delta}"
 
 
 def record_by_pid(pid: int, cuda_visible_device: int):
