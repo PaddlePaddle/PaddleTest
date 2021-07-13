@@ -19,7 +19,7 @@ repos:
     - id: flake8
       args:
       - --max-line-length=120
-      - --extend-ignore=E1,E203,E722,E402,F401,F403,F405,F811
+      - --extend-ignore=E1,E203,E722,E402,F401,F403,F405,F811,N
       exclude: ^.*test/
       additional_dependencies:
         - "pep8-naming"
