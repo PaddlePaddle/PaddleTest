@@ -19,7 +19,6 @@ import numpy as np
 import paddle.inference as paddle_infer
 
 from pynvml.smi import nvidia_smi
-from bs4 import BeautifulSoup as bs
 
 _gpu_mem_lists = []
 
