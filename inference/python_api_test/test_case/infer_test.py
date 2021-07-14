@@ -166,7 +166,7 @@ class InferenceTest(object):
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
-        for i, input_data_name in enumerate(input_names):
+        for _, input_data_name in enumerate(input_names):
             input_handle = predictor.get_input_handle(input_data_name)
             input_handle.copy_from_cpu(input_data_dict[input_data_name])
 
