@@ -88,7 +88,7 @@ class InferenceTest(object):
 
         output_data_dict = {}
         output_names = predictor.get_output_names()
-        for i, output_data_name in enumerate(output_names):
+        for _, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
