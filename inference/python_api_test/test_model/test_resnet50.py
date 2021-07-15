@@ -29,6 +29,7 @@ def check_model_exist():
 
 
 @pytest.mark.p0
+@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config
@@ -40,6 +41,7 @@ def test_config():
 
 
 @pytest.mark.p0
+@pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
     test no gpu resources occupied after disable gpu
@@ -54,6 +56,7 @@ def test_disable_gpu():
 
 
 @pytest.mark.p1
+@pytest.mark.trt_fp32_bz1_precision
 def test_trtfp32_bz1():
     """
     compared trt fp32 batch_size=1 resnet50 outputs with no ir config
