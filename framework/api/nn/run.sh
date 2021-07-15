@@ -1,7 +1,9 @@
 pip3.7 install pytest
 export FLAGS_call_stack_level=2
 cases=`find . -name "test*.py" | sort`
-ignore=""
+ignore="test_adaptive_avg_pool1D.py \
+test_adaptive_avg_pool2D.py \
+test_adaptive_avg_pool3D.py"
 bug=0
 
 echo "============ failed cases =============" >> result.txt
