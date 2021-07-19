@@ -31,5 +31,5 @@ else
       cat ${file}
     done
   echo "error!"
-  exit 33
+  exit 8
 fi
