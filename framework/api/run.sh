@@ -1,4 +1,15 @@
 home=$PWD
+# base
+cd paddlebase
+rm -rf ./result.txt
+echo "[paddlebase cases result]" >> result.txt
+bash ./run.sh
+nn=$?
+echo ${nn}
+cat ./result.txt
+cd $home
+
+
 # nn
 cd nn
 rm -rf ./result.txt
