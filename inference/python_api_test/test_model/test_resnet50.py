@@ -28,6 +28,7 @@ def check_model_exist():
         wget.download(resnet50_url, out="./")
         tar = tarfile.open("resnet50.tgz")
         tar.extractall()
+        tar.close()
 
 
 @pytest.mark.p0
