@@ -180,7 +180,7 @@ class InferenceTest(object):
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
                 assert (
-                    abs(out_data[j] - output_data_truth_val[j]) <= delta
+                    abs(output_data[j] - output_data_truth_val[j]) <= delta
                 ), f"{out_data[j]} - {output_data_truth_val[j]} > {delta}"
 
 
