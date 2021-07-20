@@ -6,8 +6,8 @@ test resnet50 model
 import os
 import sys
 import logging
-import six
 import tarfile
+import six
 import wget
 import pytest
 import numpy as np
