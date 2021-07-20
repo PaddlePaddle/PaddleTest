@@ -34,6 +34,11 @@ cd $home
 # result
 echo "=============== result ================="
 if [ `expr ${paddlebase} + ${nn} + ${optimizer}` -eq 0 ]; then
+  result=`find . -name "result.txt"`
+  for file in ${result}
+    do
+      cat ${file}
+    done
   echo "success!"
 else
   result=`find . -name "result.txt"`
