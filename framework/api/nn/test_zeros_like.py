@@ -30,7 +30,7 @@ class TestZerosLike(APIBase):
 obj = TestZerosLike(paddle.zeros_like)
 
 
-@pytest.mark.p0
+@pytest.mark.api_base_zeros_like_vartype
 def test_zeros_like_base():
     """
     base
@@ -40,6 +40,7 @@ def test_zeros_like_base():
     obj.base(res=res, x=x)
 
 
+@pytest.mark.api_base_zeros_like_parameters
 def test_zeros_like():
     """
     default
@@ -49,6 +50,7 @@ def test_zeros_like():
     obj.run(res=res, x=x)
 
 
+@pytest.mark.api_base_zeros_like_parameters
 def test_zeros_like1():
     """
     input_type=float, large shape

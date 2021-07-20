@@ -29,7 +29,7 @@ obj = TestZeros(paddle.zeros)
 
 
 # test dtype=np.*
-@pytest.mark.p0
+@pytest.mark.api_base_zeros_vartype
 def test_zeros_base():
     """
     shape_type=list, dtype=np.float32
@@ -40,6 +40,7 @@ def test_zeros_base():
     obj.base(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros():
     """
     shape_type=tuple
@@ -49,6 +50,7 @@ def test_zeros():
     obj.run(res=res, shape=shape)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros1():
     """
     shape_type=tuple, dtype=np.int32
@@ -59,6 +61,7 @@ def test_zeros1():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros2():
     """
     no shape_type=(np.int32)Tensor, dtype=np.int64
@@ -69,6 +72,7 @@ def test_zeros2():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros3():
     """
     shape_type=list, dtype=np.float16
@@ -79,6 +83,7 @@ def test_zeros3():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros4():
     """
     shape_type=tuple, dtype=np.float64
@@ -90,6 +95,7 @@ def test_zeros4():
 
 
 # test dtype=bool
+@pytest.mark.api_base_zeros_parameters
 def test_zeros5():
     """
     shape_type=list,dtype='bool'
@@ -100,6 +106,7 @@ def test_zeros5():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros6():
     """
     shape_type=list,dtype=bool
@@ -110,6 +117,7 @@ def test_zeros6():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros7():
     """
     shape_type=list,dtype=np.bool
@@ -120,6 +128,7 @@ def test_zeros7():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros8():
     """
     shape_type=list,dtype=None
@@ -131,6 +140,7 @@ def test_zeros8():
 
 
 # test dtype=str
+@pytest.mark.api_base_zeros_parameters
 def test_zeros9():
     """
     shape_type=tuple,dtype='float32'
@@ -141,6 +151,7 @@ def test_zeros9():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros10():
     """
     shape_type=list,dtype='float16'
@@ -151,6 +162,7 @@ def test_zeros10():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros11():
     """
     shape_type=list,dtype='float64'
@@ -161,6 +173,7 @@ def test_zeros11():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros12():
     """
     shape_type=(np.int64)Tensor,dtype='int32'
@@ -171,6 +184,7 @@ def test_zeros12():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros13():
     """
     shape_type=tuple,dtype='int64'
@@ -182,6 +196,7 @@ def test_zeros13():
 
 
 # test shape=(np)Tensor
+@pytest.mark.api_base_zeros_parameters
 def test_zeros14():
     """
     shape_type=(np)Tensor,shape=np.array([1])
@@ -191,6 +206,7 @@ def test_zeros14():
     obj.run(res=res, shape=shape)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros15():
     """
     shape_type=(np)Tensor,shape=np.array([1, ])
@@ -200,6 +216,7 @@ def test_zeros15():
     obj.run(res=res, shape=shape)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros16():
     """
     shape_type=(np)Tensor,shape=np.array([])
@@ -209,6 +226,7 @@ def test_zeros16():
     obj.run(res=res, shape=shape)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros17():
     """
     shape_type=(np)Tensor,shape=np.array([1, (1)])
@@ -219,6 +237,7 @@ def test_zeros17():
 
 
 # test shape=list
+@pytest.mark.api_base_zeros_parameters
 def test_zeros18():
     """
     shape_type=list,shape=[1000]
@@ -228,6 +247,7 @@ def test_zeros18():
     obj.run(res=res, shape=shape)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros19():
     """
     shape_type=list,shape=[1, (1)]
@@ -238,6 +258,7 @@ def test_zeros19():
 
 
 # test name
+@pytest.mark.api_base_zeros_parameters
 def test_zeros20():
     """
     shape_type=list,name=None
@@ -248,6 +269,7 @@ def test_zeros20():
     obj.run(res=res, shape=shape, name=name)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros21():
     """
     shape_type=list,name='None'
@@ -258,6 +280,7 @@ def test_zeros21():
     obj.run(res=res, shape=shape, name=name)
 
 
+@pytest.mark.api_base_zeros_parameters
 def test_zeros22():
     """
     shape_type=list,name="zeros_name"
@@ -269,6 +292,7 @@ def test_zeros22():
 
 
 # test shape_type=tuple
+@pytest.mark.api_base_zeros_parameters
 def test_zeros23():
     """
     shape_type=tuple,shape=(1,)
@@ -324,6 +348,7 @@ def test_zeros23():
 
 
 # exception case
+@pytest.mark.api_base_zeros_exception
 def test_zeros29():
     """
     shape_type=list,shape_value=[2, [3]],static TypeError
@@ -332,6 +357,7 @@ def test_zeros29():
     obj.exception(mode='c', etype='InvalidArgumentError', shape=shape)
 
 
+@pytest.mark.api_base_zeros_exception
 def test_zeros30():
     """
     no shape_type=tuple,shape=(0),AttributeError
@@ -340,6 +366,7 @@ def test_zeros30():
     obj.exception(mode='python', etype=AttributeError, shape=shape)
 
 
+@pytest.mark.api_base_zeros_exception
 def test_zeros31():
     """
     shape_type=tuple,shape=(1.1),AttributeError
@@ -348,6 +375,7 @@ def test_zeros31():
     obj.exception(mode='python', etype=AttributeError, shape=shape)
 
 
+@pytest.mark.api_base_zeros_exception
 def test_zeros32():
     """
     shape_type=tuple,shape=(1000, 1),dtype=np.int8,static TypeError
@@ -357,6 +385,7 @@ def test_zeros32():
     obj.exception(mode='c', etype='NotFoundError', shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_exception
 def test_zeros33():
     """
     shape_type=list,dtype='BOOL'
@@ -366,6 +395,7 @@ def test_zeros33():
     obj.exception(mode='python', etype=TypeError, shape=shape, dtype=dtype)
 
 
+@pytest.mark.api_base_zeros_exception
 def test_zeros34():
     """
     shape_type=list,shape=-1,static TypeError
