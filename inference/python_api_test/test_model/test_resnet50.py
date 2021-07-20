@@ -15,6 +15,7 @@ import numpy as np
 # pylint: disable=wrong-import-position
 sys.path.append("..")
 from test_case.infer_test import InferenceTest
+
 # pylint: enable=wrong-import-position
 
 
@@ -25,8 +26,9 @@ def check_model_exist():
     resnet50_url = "https://paddle-inference-dist.bj.bcebos.com/Paddle-Inference-Demo/resnet50.tgz"
     if not os.path.exists("./resnet50/inference.pdiparams"):
         wget.download(resnet50_url, out="./")
-        tar=tarfile.open("resnet50.tgz")
+        tar = tarfile.open("resnet50.tgz")
         tar.extractall()
+
 
 @pytest.mark.p0
 @pytest.mark.config_init_combined_model
