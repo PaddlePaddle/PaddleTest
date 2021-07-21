@@ -1,0 +1,4 @@
+wget
+psutil
+pytest
+pynvml
