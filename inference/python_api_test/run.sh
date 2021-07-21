@@ -1,6 +1,6 @@
 home=$PWD
 # base
-pip3.7 install -r requirements.txt
+python -m pip install -r requirements.txt
 cd test_class_model
 rm -rf ./result.txt
 echo "[class model inference cases result]" >> result.txt
