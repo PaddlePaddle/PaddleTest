@@ -6,8 +6,8 @@ test resnet50 model
 import os
 import sys
 import logging
+import tarfile
 import six
-
 import wget
 import pytest
 import numpy as np
@@ -26,6 +26,9 @@ def check_model_exist():
     resnet50_url = "https://paddle-inference-dist.bj.bcebos.com/Paddle-Inference-Demo/resnet50.tgz"
     if not os.path.exists("./resnet50/inference.pdiparams"):
         wget.download(resnet50_url, out="./")
+        tar = tarfile.open("resnet50.tgz")
+        tar.extractall()
+        tar.close()
 
 
 @pytest.mark.p0
