@@ -1,4 +1,3 @@
-python -m pip install pytest
 export FLAGS_call_stack_level=2
 cases=`find . -name "test*.py" | sort`
 ignore=""
