@@ -5,10 +5,9 @@
 test rand
 """
 from apibase import APIBase
-from apibase import randtool
 import paddle
 import pytest
-import paddle.fluid as fluid
+from paddle import fluid
 import numpy as np
 
 
@@ -57,7 +56,7 @@ def test_rand1():
     exception dtype is int32 BUG
     """
     obj.seed = 1
-    res = np.array([[0, 7], [6, 0]])
+    # res = np.array([[0, 7], [6, 0]])
     obj.exception(etype="NotFoundError", shape=[2, 2], dtype=np.int32)
 
 

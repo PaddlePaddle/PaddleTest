@@ -7,8 +7,7 @@ test normal
 import paddle
 import pytest
 import numpy as np
-import paddle.fluid as fluid
-
+from paddle import fluid
 
 types = [np.float32, np.float64]
 if fluid.is_compiled_with_cuda() is True:
@@ -106,7 +105,7 @@ def test_static1():
         for t in types:
             main_program = fluid.default_main_program()
             startup_program = fluid.default_startup_program()
-            shape = [3, 4]
+            # shape = [3, 4]
             with fluid.unique_name.guard():
                 with fluid.program_guard(main_program=main_program, startup_program=startup_program):
                     exe = fluid.Executor(place)
@@ -126,7 +125,7 @@ def test_static2():
         for t in types:
             main_program = fluid.default_main_program()
             startup_program = fluid.default_startup_program()
-            shape = [3, 4]
+            # shape = [3, 4]
             mean = np.array([1, 2, 3]).astype("float32")
             feed = {"mean": mean}
             with fluid.unique_name.guard():
@@ -149,7 +148,7 @@ def test_static3():
         for t in types:
             main_program = fluid.default_main_program()
             startup_program = fluid.default_startup_program()
-            shape = [3, 4]
+            # shape = [3, 4]
             mean = np.array([1, 2, 3]).astype("float32")
             std = np.array([1, 2, 3]).astype("float32")
             feed = {"mean": mean, "std": std}

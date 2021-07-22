@@ -5,10 +5,8 @@
 test randint
 """
 from apibase import APIBase
-from apibase import randtool
 import paddle
 import pytest
-import paddle.fluid as fluid
 import numpy as np
 
 
@@ -65,7 +63,7 @@ def test_randint2():
     """
     exception shape
     """
-    res = np.array([[0, 7], [6, 0]])
+    # res = np.array([[0, 7], [6, 0]])
     obj.exception(etype=AttributeError, mode="python", low=0, high=10, shape="2")
 
 
@@ -84,7 +82,7 @@ def test_randint4():
     """
     exception dtype is float BUG
     """
-    res = np.array([[9, 9], [5, 8]])
+    # res = np.array([[9, 9], [5, 8]])
     obj.exception(etype="NotFoundError", low=0, high=10, shape=[2, 2], dtype=np.float32)
 
 
@@ -93,7 +91,7 @@ def test_randint5():
     """
     exception low > high
     """
-    res = np.array([[9, 9], [5, 8]])
+    # res = np.array([[9, 9], [5, 8]])
     obj.exception(etype="InvalidArgumentError", low=100, high=10, shape=[2, 2])
 
 
@@ -102,5 +100,5 @@ def test_randint6():
     """
     exception low > high
     """
-    res = np.array([[9, 9], [5, 8]])
+    # res = np.array([[9, 9], [5, 8]])
     obj.exception(etype=ValueError, mode="python", low=0, shape=[2, 2])

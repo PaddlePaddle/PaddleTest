@@ -4,14 +4,13 @@
 """
 test meshgrid
 """
-from apibase import APIBase
 from apibase import randtool
+from apibase import compare
 import paddle
 import pytest
-import paddle.fluid as fluid
-import numpy as np
+from paddle import fluid
 from paddle.fluid.dygraph.base import to_variable
-from apibase import compare
+import numpy as np
 
 
 if fluid.is_compiled_with_cuda() is True:
@@ -33,8 +32,8 @@ def test_meshgrid_base():
             paddle.disable_static(place)
             res = paddle.meshgrid(to_variable(x), to_variable(y))
             expect = np.meshgrid(x, y)
-            for i in range(len(expect)):
-                expect[i] = expect[i].transpose(1, 0)
+            for i, exp in enumerate(expect):
+                expect[i] = exp.transpose(1, 0)
             compare(res, expect)
             paddle.enable_static()
 
@@ -53,7 +52,7 @@ def test_meshgrid():
             paddle.disable_static(place)
             res = paddle.meshgrid(to_variable(x), to_variable(y), to_variable(z))
             expect = np.meshgrid(x, y, z)
-            for i in range(len(expect)):
-                expect[i] = expect[i].transpose(1, 0, 2)
+            for i, exp in enumerate(expect):
+                expect[i] = exp.transpose(1, 0, 2)
             compare(res, expect)
             paddle.enable_static()

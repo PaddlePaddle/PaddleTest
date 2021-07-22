@@ -7,8 +7,8 @@ test multinomial
 import paddle
 import pytest
 import numpy as np
-import paddle.fluid as fluid
-from apibase import compare
+from paddle import fluid
+
 
 if fluid.is_compiled_with_cuda() is True:
     devices = ["gpu", "cpu"]
