@@ -17,7 +17,7 @@ def test_is_empty():
     x = np.arange(1, 7).reshape((2, 3)).astype(np.float32)
     x_tensor = paddle.to_tensor(x)
     check = paddle.is_empty(x_tensor)
-    assert check is False
+    assert check.numpy() == np.array([False])
 
 
 @pytest.mark.api_base_is_empty_vartype
@@ -28,7 +28,7 @@ def test_is_empty1():
     x = [1, 2, 3]
     x_tensor = paddle.to_tensor(x)
     check = paddle.is_empty(x_tensor)
-    assert check is False
+    assert check.numpy() == np.array([False])
 
 
 @pytest.mark.api_base_is_empty_vartype
@@ -39,7 +39,7 @@ def test_is_empty2():
     x = 8
     x_tensor = paddle.to_tensor(x)
     check = paddle.is_empty(x_tensor)
-    assert check is False
+    assert check.numpy() == np.array([False])
 
 
 @pytest.mark.api_base_is_empty_parameters
@@ -50,7 +50,7 @@ def test_is_empty3():
     x = []
     x_tensor = paddle.to_tensor(x)
     check = paddle.is_empty(x_tensor)
-    assert check is True
+    assert check.numpy() == np.array([True])
 
 
 @pytest.mark.api_base_is_empty_parameters
@@ -61,7 +61,7 @@ def test_is_empty4():
     x = np.array([[]] * 3)
     x_tensor = paddle.to_tensor(x)
     check = paddle.is_empty(x_tensor)
-    assert check is True
+    assert check.numpy() == np.array([True])
 
 
 @pytest.mark.api_base_is_empty_parameters
@@ -72,7 +72,7 @@ def test_is_empty5():
     x = np.array([[]] * 3).astype(np.int32)
     x_tensor = paddle.to_tensor(x)
     check = paddle.is_empty(x_tensor)
-    assert check is True
+    assert check.numpy() == np.array([True])
 
 
 @pytest.mark.api_base_is_empty_parameters
@@ -83,7 +83,7 @@ def test_is_empty6():
     x = np.array([[]] * 3).astype(np.int64)
     x_tensor = paddle.to_tensor(x)
     check = paddle.is_empty(x_tensor)
-    assert check is True
+    assert check.numpy() == np.array([True])
 
 
 @pytest.mark.api_base_is_empty_vartype
@@ -94,4 +94,4 @@ def test_is_empty5():
     x = np.array([[]] * 3).astype(np.float64)
     x_tensor = paddle.to_tensor(x)
     check = paddle.is_empty(x_tensor)
-    assert check is True
+    assert check.numpy() == np.array([True])
