@@ -16,6 +16,7 @@ import numpy as np
 # pylint: disable=wrong-import-position
 sys.path.append("..")
 from test_case import InferenceTest
+
 # pylint: enable=wrong-import-position
 
 
@@ -39,9 +40,7 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(
-        model_file="./resnet50/inference.pdmodel",
-        params_file="./resnet50/inference.pdiparams")
+    test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
     test_suite.config_test()
 
 
@@ -79,9 +78,7 @@ def test_trtfp32_bz1():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(
-        model_file="./resnet50/inference.pdmodel",
-        params_file="./resnet50/inference.pdiparams")
+    test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
     test_suite2.trt_fp32_bz1_test(input_data_dict, output_data_dict)
 
 
@@ -104,11 +101,7 @@ def test_trtfp32_bz1_multi_thread():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(
-        model_file="./resnet50/inference.pdmodel",
-        params_file="./resnet50/inference.pdiparams")
-    test_suite2.trt_fp32_bz1_multi_thread_test(
-        input_data_dict, output_data_dict)
+    test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+    test_suite2.trt_fp32_bz1_multi_thread_test(input_data_dict, output_data_dict)
 
     del test_suite2  # destroy class to save memory
-    

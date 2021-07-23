@@ -212,13 +212,13 @@ class InferenceTest(object):
         predictors = paddle_infer.PredictorPool(self.pd_config, thread_num)
         for i in range(5):
             record_thread = threading.Thread(
-                target=self.run_multi_thread_test_predictor, 
-                args=(predictors.retrive(i), input_data_dict, output_data_dict, 5, 1e-5)
+                target=self.run_multi_thread_test_predictor,
+                args=(predictors.retrive(i), input_data_dict, output_data_dict, 5, 1e-5),
             )
-    
+
             record_thread.start()
             record_thread.join()
-            
+
     def run_multi_thread_test_predictor(
         self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5
     ):
