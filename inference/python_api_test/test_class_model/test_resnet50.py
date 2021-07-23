@@ -3,6 +3,7 @@
 """
 test resnet50 model
 """
+from test_case import InferenceTest
 import os
 import sys
 import logging
@@ -14,7 +15,6 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
 
 # pylint: enable=wrong-import-position
 
@@ -39,7 +39,9 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./resnet50/inference.pdmodel",
+        params_file="./resnet50/inference.pdiparams")
     test_suite.config_test()
 
 
@@ -51,7 +53,9 @@ def test_disable_gpu():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./resnet50/inference.pdmodel",
+        params_file="./resnet50/inference.pdiparams")
     batch_size = 1
     fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
     input_data_dict = {"inputs": fake_input}
@@ -61,24 +65,28 @@ def test_disable_gpu():
 @pytest.mark.p1
 @pytest.mark.trt_fp32_bz1_precision
 def test_trtfp32_bz1():
-   """
-   compared trt fp32 batch_size=1 resnet50 outputs with no ir config
-   """
-   check_model_exist()
+    """
+    compared trt fp32 batch_size=1 resnet50 outputs with no ir config
+    """
+    check_model_exist()
 
-   batch_size = 1
-   fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
-   input_data_dict = {"inputs": fake_input}
+    batch_size = 1
+    fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
+    input_data_dict = {"inputs": fake_input}
 
-   test_suite = InferenceTest()
-   test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
-   output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+    test_suite = InferenceTest()
+    test_suite.load_config(
+        model_file="./resnet50/inference.pdmodel",
+        params_file="./resnet50/inference.pdiparams")
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
-   del test_suite  # destroy class to save memory
+    del test_suite  # destroy class to save memory
 
-   test_suite2 = InferenceTest()
-   test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
-   test_suite2.trt_fp32_bz1_test(input_data_dict, output_data_dict)
+    test_suite2 = InferenceTest()
+    test_suite2.load_config(
+        model_file="./resnet50/inference.pdmodel",
+        params_file="./resnet50/inference.pdiparams")
+    test_suite2.trt_fp32_bz1_test(input_data_dict, output_data_dict)
 
 
 @pytest.mark.p1
@@ -94,13 +102,18 @@ def test_trtfp32_bz1_multi_thread():
     input_data_dict = {"inputs": fake_input}
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./resnet50/inference.pdmodel",
+        params_file="./resnet50/inference.pdiparams")
     output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
-    test_suite2.trt_fp32_bz1_multi_thread_test(input_data_dict, output_data_dict)
+    test_suite2.load_config(
+        model_file="./resnet50/inference.pdmodel",
+        params_file="./resnet50/inference.pdiparams")
+    test_suite2.trt_fp32_bz1_multi_thread_test(
+        input_data_dict, output_data_dict)
 
-    del test_suite2 # destroy class to save memory
+    del test_suite2  # destroy class to save memory

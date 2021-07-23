@@ -18,7 +18,7 @@ import pynvml
 import numpy as np
 import paddle.inference as paddle_infer
 
-from pynvml.smi import nvidia_smi 
+from pynvml.smi import nvidia_smi
 
 _gpu_mem_lists = []
 
@@ -211,11 +211,16 @@ class InferenceTest(object):
         thread_num = 5
         predictors = paddle_infer.PredictorPool(self.pd_config, thread_num)
         for i in range(5):
-            record_thread = threading.Thread(target=self.run_multi_thread_test_predictor, args=(predictors.retrive(i), input_data_dict, output_data_dict, 5, 1e-5))
+            record_thread = threading.Thread(
+                target=self.run_multi_thread_test_predictor, 
+                args=(predictors.retrive(i), input_data_dict, output_data_dict, 5, 1e-5))
+            
             record_thread.start()
             record_thread.join()
     
-    def run_multi_thread_test_predictor(self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5):
+    def run_multi_thread_test_predictor(
+        self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5
+    ):
         """
         test paddle predictor
         多线程TensorRT预测器，max_batch_size=4,预测batch_size=1
@@ -242,6 +247,7 @@ class InferenceTest(object):
                 assert (
                     abs(out_data - output_data_truth_val[j]) <= delta
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+
 
 def record_by_pid(pid: int, cuda_visible_device: int):
     """
