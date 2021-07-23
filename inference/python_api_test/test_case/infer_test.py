@@ -114,7 +114,7 @@ class InferenceTest(object):
 
         cuda_visible_devices = os.environ.get("CUDA_VISIBLE_DEVICES")
         if cuda_visible_devices:
-            cuda_visible_device = cuda_visible_devices.split(",")[0]
+            cuda_visible_device = int(cuda_visible_devices.split(",")[0])
         else:
             cuda_visible_device = 0
 
