@@ -257,12 +257,3 @@ class TestMultiLangClient(object):
 
         kill_process(9696)
         kill_process(12000, 3)
-
-
-if __name__ == '__main__':
-    tc = TestMultiLangClient()
-    tc.setup_method()
-    # tc.setup_class()
-    tc.test_predict()
-    # tsc = TestSDKConfig()
-    # tsc.test_gen_desc()
