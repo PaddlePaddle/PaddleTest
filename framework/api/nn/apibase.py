@@ -10,7 +10,6 @@ import logging
 import pytest
 import numpy as np
 import paddle
-import paddle.fluid as fluid
 from paddle import to_tensor
 
 
@@ -61,11 +60,11 @@ class APIBase(object):
         if len(self.types) == 0:
             raise TypeError("You must define types in hook function.")
         # 设置执行device
-        if len(self.places) == 0 and fluid.is_compiled_with_cuda() is True:
-            self.places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+        if len(self.places) == 0 and paddle.device.is_compiled_with_cuda() is True:
+            self.places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
         else:
             # default
-            self.places = [fluid.CPUPlace()]
+            self.places = [paddle.CPUPlace()]
         # 日志等级
         if self.debug:
             logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -546,11 +545,11 @@ class APIBase(object):
         """
         if self.__layertype == "func":
             paddle.seed(self.seed)
-            main_program = fluid.Program()
-            startup_program = fluid.Program()
+            main_program = paddle.static.Program()
+            startup_program = paddle.static.Program()
             params = copy.deepcopy(kwargs)
-            with fluid.unique_name.guard():
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+            with paddle.utils.unique_name.guard():
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
                     # PS:没有单列出一个函数做值传递，因为self.kwargs只有一个，就没单列出来
                     xyz = []
                     for k, v in kwargs.items():
@@ -564,9 +563,9 @@ class APIBase(object):
                         if isinstance(v, (np.generic, np.ndarray)):
                             # no_grad_Var不需要转换类型
                             if self.no_grad_var is not None and k in self.no_grad_var:
-                                params[k] = fluid.data(name=k, shape=v.shape, dtype=v.dtype)
+                                params[k] = paddle.static.data(name=k, shape=v.shape, dtype=v.dtype)
                             else:
-                                params[k] = fluid.data(name=k, shape=v.shape, dtype=self.dtype)
+                                params[k] = paddle.static.data(name=k, shape=v.shape, dtype=self.dtype)
                             xyz.append(k)
                             # enable compute gradient
                             params[k].stop_gradient = False
@@ -575,8 +574,8 @@ class APIBase(object):
                         loss = paddle.mean(output)
                         grad_var = {}
                         for k in xyz:
-                            grad_var[k] = fluid.gradients(loss, params[k])
-                        exe = fluid.Executor(self.place)
+                            grad_var[k] = paddle.static.gradients(loss, params[k])
+                        exe = paddle.static.Executor(self.place)
                         exe.run(startup_program)
                         # print(list(grad_var.values()))
                         # print([output] + list(grad_var.values()))
@@ -587,20 +586,20 @@ class APIBase(object):
                         grad = dict(zip(xyz, res[1:]))
                         return res[0], grad
                     else:
-                        exe = fluid.Executor(self.place)
+                        exe = paddle.static.Executor(self.place)
                         exe.run(startup_program)
                         # print(list(grad_var.values()))
                         # print([output] + list(grad_var.values()))
                         res = exe.run(main_program, feed=kwargs, fetch_list=[output], return_numpy=True)
                         return res[0]
         elif self.__layertype == "class":
-            main_program = fluid.Program()
-            startup_program = fluid.Program()
+            main_program = paddle.static.Program()
+            startup_program = paddle.static.Program()
             main_program.random_seed = self.seed
             startup_program.random_seed = self.seed
             params = copy.deepcopy(kwargs)
-            with fluid.unique_name.guard():
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+            with paddle.utils.unique_name.guard():
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
                     # PS:没有单列出一个函数做值传递，因为self.kwargs只有一个，就没单列出来
                     for k, v in kwargs.items():
                         if isinstance(v, (np.generic, np.ndarray)):
@@ -613,28 +612,28 @@ class APIBase(object):
                         if isinstance(v, (np.generic, np.ndarray)):
                             # no_grad_Var不需要转换类型
                             if self.no_grad_var is not None and k in self.no_grad_var:
-                                params[k] = fluid.data(name=k, shape=v.shape, dtype=v.dtype)
+                                params[k] = paddle.static.data(name=k, shape=v.shape, dtype=v.dtype)
                             else:
-                                params[k] = fluid.data(name=k, shape=v.shape, dtype=self.dtype)
+                                params[k] = paddle.static.data(name=k, shape=v.shape, dtype=self.dtype)
                             # enable compute gradient
                             params[k].stop_gradient = False
                     if data is not None:
                         data = data.astype(self.dtype)
-                        self.data = fluid.data(name="data", shape=data.shape, dtype=self.dtype)
+                        self.data = paddle.static.data(name="data", shape=data.shape, dtype=self.dtype)
                         self.data.stop_gradient = False
                     data = dict({"data": data}, **kwargs)
                     obj = self.func(**params)
                     output = obj(self.data)
                     if self.enable_backward:
                         loss = paddle.mean(output)
-                        g = fluid.gradients(loss, self.data)
-                        exe = fluid.Executor(self.place)
+                        g = paddle.static.gradients(loss, self.data)
+                        exe = paddle.static.Executor(self.place)
                         exe.run(startup_program)
                         res = exe.run(main_program, feed=data, fetch_list=[output, g], return_numpy=True)
                         grad = {"data": res[1]}
                         return res[0], grad
                     else:
-                        exe = fluid.Executor(self.place)
+                        exe = paddle.static.Executor(self.place)
                         exe.run(startup_program)
                         res = exe.run(main_program, feed=data, fetch_list=[output], return_numpy=True)
                         return res[0]
