@@ -106,6 +106,7 @@ def test_trtfp32_bz1_multi_thread():
 
     del test_suite2  # destroy class to save memory
 
+
 @pytest.mark.p1
 @pytest.mark.mkldnn_bz1_precision
 def test_mkldnn():
