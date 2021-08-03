@@ -114,7 +114,7 @@ class InferenceTest(object):
 
         cuda_visible_devices = os.environ.get("CUDA_VISIBLE_DEVICES")
         if cuda_visible_devices:
-            cuda_visible_device = cuda_visible_devices.split(",")[0]
+            cuda_visible_device = int(cuda_visible_devices.split(",")[0])
         else:
             cuda_visible_device = 0
 
@@ -183,18 +183,19 @@ class InferenceTest(object):
                     abs(out_data - output_data_truth_val[j]) <= delta
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
 
-    def trt_fp32_bz1_multi_thread_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5):
+    def trt_fp32_bz1_multi_thread_test(self, input_data_dict: dict, output_data_dict: dict, repeat=2, thread_num=5, delta=1e-5):
         """
         test enable_tensorrt_engine()
         batch_size = 1
         trt max_batch_size = 4
         thread_num = 5
         precision_mode = paddle_infer.PrecisionType.Float32
-        多线程TensorRT预测器，max_batch_size=4,预测batch_size=1
+        Multithreading TensorRT predictor
         Args:
             input_data_dict(dict) : input data constructed as dictionary
             output_data_dict(dict) : output data constructed as dictionary
-            repeat(int) : inference repeat time, set to catch gpu mem
+            repeat(int) : inference repeat time
+            thread_num(int) : number of threads
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
             None
@@ -208,12 +209,11 @@ class InferenceTest(object):
             use_static=False,
             use_calib_mode=False,
         )
-        thread_num = 5
         predictors = paddle_infer.PredictorPool(self.pd_config, thread_num)
-        for i in range(5):
+        for i in range(thread_num):
             record_thread = threading.Thread(
                 target=self.run_multi_thread_test_predictor,
-                args=(predictors.retrive(i), input_data_dict, output_data_dict, 5, 1e-5),
+                args=(predictors.retrive(i), input_data_dict, output_data_dict, repeat, delta),
             )
 
             record_thread.start()
@@ -223,11 +223,13 @@ class InferenceTest(object):
         self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5
     ):
         """
-        test paddle predictor
-        多线程TensorRT预测器，max_batch_size=4,预测batch_size=1
+        test paddle predictor in multithreaded task
         Args:
             predictor: paddle inference predictor
+            input_data_dict(dict) : input data constructed as dictionary
+            output_data_dict(dict) : output data constructed as dictionary
             repeat(int) : inference repeat time, set to catch gpu mem
+            delta(float): difference threshold between inference outputs and thruth value
         Returns:
             None
         """
