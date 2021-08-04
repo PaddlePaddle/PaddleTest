@@ -52,3 +52,19 @@ def test_slice_base_1():
     strides = [1, -2]
     res = x_data[starts[0] : ends[0] : strides[0], starts[1] : ends[1] : strides[1]]
     obj.run(res=res, x=x_data, axes=axes, starts=starts, ends=ends, strides=strides)
+
+
+@pytest.mark.api_base_slice_param
+def test_slice_base_2():
+    """
+    strides > max
+    """
+    x_data = np.arange(6 * 6).reshape((6, 6))
+    axes = [0, 1]
+    starts = [3, 4]
+    ends = [5, 2]
+    strides = [4, -2]
+    res = x_data[starts[0] : ends[0] : strides[0], starts[1] : ends[1] : strides[1]]
+    obj.run(res=res, x=x_data, axes=axes, starts=starts, ends=ends, strides=strides)
+
+
