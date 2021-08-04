@@ -13,8 +13,9 @@ import numpy as np
 
 class TestElu(APIBase):
     """
-    test 
+    test
     """
+
     def hook(self):
         """
         implement
