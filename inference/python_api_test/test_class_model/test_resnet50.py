@@ -127,6 +127,6 @@ def test_mkldnn():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
-    test_suite2.mkldnn_bz1_test(input_data_dict, output_data_dict)
+    test_suite2.mkldnn_test(input_data_dict, output_data_dict)
 
     del test_suite2  # destroy class to save memory
