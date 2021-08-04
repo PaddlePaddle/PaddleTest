@@ -13,9 +13,8 @@ import numpy as np
 
 class TestSlice(APIBase):
     """
-    test max
+    test slice
     """
-
     def hook(self):
         """
         implement
@@ -28,7 +27,6 @@ class TestSlice(APIBase):
 
 
 obj = TestSlice(paddle.strided_slice)
-
 
 @pytest.mark.api_base_slice_vartype
 def test_slice_base():
@@ -51,4 +49,3 @@ def test_slice_base_1():
     strides = [1, -2]
     res = x_data[starts[0] : ends[0] : strides[0], starts[1] : ends[1] : strides[1]]
     obj.run(res=res, x=x_data, axes=axes, starts=starts, ends=ends, strides=strides)
-    
