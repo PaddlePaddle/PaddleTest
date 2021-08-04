@@ -139,6 +139,41 @@ class InferenceTest(object):
         gpu_max_mem = max([float(i["used(MB)"]) for i in _gpu_mem_lists])
         assert abs(gpu_max_mem - ori_gpu_mem) < 1, "set disable_gpu(), but gpu activity found"
 
+    def mkldnn_test(self, input_data_dict: dict, output_data_dict: dict, mkldnn_cache_capacity=1, repeat=2, delta=1e-5):
+        """
+        test enable_mkldnn()
+        Args:
+            input_data_dict(dict) : input data constructed as dictionary
+            output_data_dict(dict) : output data constructed as dictionary
+            mkldnn_cache_capacity(int) : MKLDNN cache capacity
+            repeat(int) : inference repeat time
+            delta(float): difference threshold between inference outputs and thruth value
+        Returns:
+            None
+        """
+        self.pd_config.enable_mkldnn()
+        self.pd_config.set_mkldnn_cache_capacity(mkldnn_cache_capacity)
+        predictor = paddle_infer.create_predictor(self.pd_config)
+
+        input_names = predictor.get_input_names()
+        for _, input_data_name in enumerate(input_names):
+            input_handle = predictor.get_input_handle(input_data_name)
+            input_handle.copy_from_cpu(input_data_dict[input_data_name])
+
+        for i in range(repeat):
+            predictor.run()
+
+        output_names = predictor.get_output_names()
+        for i, output_data_name in enumerate(output_names):
+            output_handle = predictor.get_output_handle(output_data_name)
+            output_data = output_handle.copy_to_cpu()
+            output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name].flatten()
+            for j, out_data in enumerate(output_data):
+                assert (
+                    abs(out_data - output_data_truth_val[j]) <= delta
+                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+
     def trt_fp32_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5):
         """
         test enable_tensorrt_engine()
@@ -181,7 +216,77 @@ class InferenceTest(object):
             for j, out_data in enumerate(output_data):
                 assert (
                     abs(out_data - output_data_truth_val[j]) <= delta
-                ), f"{out_data[j]} - {output_data_truth_val[j]} > {delta}"
+                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+
+    def trt_fp32_bz1_multi_thread_test(
+        self, input_data_dict: dict, output_data_dict: dict, repeat=2, thread_num=5, delta=1e-5
+    ):
+        """
+        test enable_tensorrt_engine()
+        batch_size = 1
+        trt max_batch_size = 4
+        thread_num = 5
+        precision_mode = paddle_infer.PrecisionType.Float32
+        Multithreading TensorRT predictor
+        Args:
+            input_data_dict(dict) : input data constructed as dictionary
+            output_data_dict(dict) : output data constructed as dictionary
+            repeat(int) : inference repeat time
+            thread_num(int) : number of threads
+            delta(float): difference threshold between inference outputs and thruth value
+        Returns:
+            None
+        """
+        self.pd_config.enable_use_gpu(1000, 0)
+        self.pd_config.enable_tensorrt_engine(
+            workspace_size=1 << 30,
+            max_batch_size=4,
+            min_subgraph_size=3,
+            precision_mode=paddle_infer.PrecisionType.Float32,
+            use_static=False,
+            use_calib_mode=False,
+        )
+        predictors = paddle_infer.PredictorPool(self.pd_config, thread_num)
+        for i in range(thread_num):
+            record_thread = threading.Thread(
+                target=self.run_multi_thread_test_predictor,
+                args=(predictors.retrive(i), input_data_dict, output_data_dict, repeat, delta),
+            )
+
+            record_thread.start()
+            record_thread.join()
+
+    def run_multi_thread_test_predictor(
+        self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5
+    ):
+        """
+        test paddle predictor in multithreaded task
+        Args:
+            predictor: paddle inference predictor
+            input_data_dict(dict) : input data constructed as dictionary
+            output_data_dict(dict) : output data constructed as dictionary
+            repeat(int) : inference repeat time, set to catch gpu mem
+            delta(float): difference threshold between inference outputs and thruth value
+        Returns:
+            None
+        """
+        input_names = predictor.get_input_names()
+        for _, input_data_name in enumerate(input_names):
+            input_handle = predictor.get_input_handle(input_data_name)
+            input_handle.copy_from_cpu(input_data_dict[input_data_name])
+
+        for i in range(repeat):
+            predictor.run()
+        output_names = predictor.get_output_names()
+        for i, output_data_name in enumerate(output_names):
+            output_handle = predictor.get_output_handle(output_data_name)
+            output_data = output_handle.copy_to_cpu()
+            output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name].flatten()
+            for j, out_data in enumerate(output_data):
+                assert (
+                    abs(out_data - output_data_truth_val[j]) <= delta
+                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
 
 
 def record_by_pid(pid: int, cuda_visible_device: int):
