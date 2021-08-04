@@ -40,7 +40,7 @@ def test_slice_base():
     obj.base(res=res, x=x_data, axes=[0], starts=[3], ends=[1], strides=[-2])
 
 
-@pytest.mark.api_base_slice_param
+@pytest.mark.api_base_slice_parameters
 def test_slice_base_1():
     """
     axes > 0
@@ -54,7 +54,7 @@ def test_slice_base_1():
     obj.run(res=res, x=x_data, axes=axes, starts=starts, ends=ends, strides=strides)
 
 
-@pytest.mark.api_base_slice_param
+@pytest.mark.api_base_slice_parameters
 def test_slice_base_2():
     """
     strides > max
