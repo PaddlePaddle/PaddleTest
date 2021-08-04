@@ -15,6 +15,7 @@ class TestSlice(APIBase):
     """
     test slice
     """
+
     def hook(self):
         """
         implement
@@ -28,6 +29,7 @@ class TestSlice(APIBase):
 
 obj = TestSlice(paddle.strided_slice)
 
+
 @pytest.mark.api_base_slice_vartype
 def test_slice_base():
     """
@@ -36,6 +38,7 @@ def test_slice_base():
     x_data = np.arange(6)
     res = np.array([3])
     obj.base(res=res, x=x_data, axes=[0], starts=[3], ends=[1], strides=[-2])
+
 
 @pytest.mark.api_base_slice_param
 def test_slice_base_1():
