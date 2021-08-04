@@ -66,5 +66,3 @@ def test_slice_base_2():
     strides = [4, -2]
     res = x_data[starts[0] : ends[0] : strides[0], starts[1] : ends[1] : strides[1]]
     obj.run(res=res, x=x_data, axes=axes, starts=starts, ends=ends, strides=strides)
-
-
