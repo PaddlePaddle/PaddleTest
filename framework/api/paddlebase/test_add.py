@@ -100,7 +100,7 @@ def test_add3():
 @pytest.mark.api_base_abs_parameters
 def test_add4():
     """
-    x is float, y is float, broadcast
+    x is float, y is float,  broadcast
     """
     x = randtool("float", -10, 10, (3, 3, 3))
     y = randtool("float", -10, 10, (1, 3, 3))
