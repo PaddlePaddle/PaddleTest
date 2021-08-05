@@ -14,14 +14,11 @@ end_lr = 0.5
 warmup_steps = 20
 learning_rate = 0.5
     
+
 def test_warmup_1():
     """
     test warmup base test
     """
-    start_lr = 0
-    end_lr = 0.5
-    warmup_steps = 20
-    learning_rate = 0.5
     scheduler_1 = paddle.optimizer.lr.LinearWarmup(\
         learning_rate=learning_rate, warmup_steps=warmup_steps,\
         start_lr=start_lr, end_lr=end_lr, verbose=False)
