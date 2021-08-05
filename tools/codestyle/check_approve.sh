@@ -8,7 +8,7 @@ export PYTHONPATH=$DIR:$PYTHONPATH
 
 ignore="safecheck.py"
 
-for file in $(git diff --name-only HEAD HEAD^); do
+for file in $(git diff --name-only pr_${AGILE_PULL_ID} ${AGILE_COMPILE_BRANCH}); do
     if [[ ${file} =~ ${ignore} ]]; then
         echo "ignore safecheck.py"
     else
