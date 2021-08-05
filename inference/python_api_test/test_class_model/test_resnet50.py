@@ -71,7 +71,7 @@ def test_trtfp32_bz1():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    images_list,npy_list = test_suite.get_images_npy(file_path,images_size)
+    images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"inputs": fake_input}
     output_data_dict = np.array(npy_list[0:batch_size]).astype("float32")
@@ -84,6 +84,7 @@ def test_trtfp32_bz1():
 
     del test_suite2  # destroy class to save memory
 
+
 @pytest.mark.p1
 @pytest.mark.trt_fp32_more_bz_precision
 def test_trtfp32_more_bz():
@@ -95,9 +96,9 @@ def test_trtfp32_more_bz():
     file_path = "./resnet50"
     images_size = 224
     batch_size_pool = 10
-    for batch_size in range(1,batch_size_pool+1):
+    for batch_size in range(1, batch_size_pool + 1):
         test_suite = InferenceTest()
-        images_list,npy_list = test_suite.get_images_npy(file_path,images_size)
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"inputs": fake_input}
         output_data_dict = np.array(npy_list[0:batch_size]).astype("float32")
@@ -109,6 +110,7 @@ def test_trtfp32_more_bz():
         test_suite2.trt_fp32_more_bz_test(input_data_dict, output_data_dict)
 
         del test_suite2  # destroy class to save memory
+
 
 @pytest.mark.p1
 @pytest.mark.trt_fp32_multi_thread_bz1_precision
@@ -122,7 +124,7 @@ def test_trtfp32_bz1_multi_thread():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    images_list,npy_list = test_suite.get_images_npy(file_path,images_size)
+    images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"inputs": fake_input}
     output_data_dict = np.array(npy_list[0:batch_size]).astype("float32")
@@ -148,7 +150,7 @@ def test_mkldnn():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    images_list,npy_list = test_suite.get_images_npy(file_path,images_size)
+    images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"inputs": fake_input}
     output_data_dict = np.array(npy_list[0:batch_size]).astype("float32")

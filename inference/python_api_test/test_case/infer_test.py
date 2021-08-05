@@ -94,7 +94,7 @@ class InferenceTest(object):
             output_data_dict[output_data_name] = output_data
         return output_data_dict
 
-    def get_images_npy(self, file_path:str ,images_size:int) -> list:
+    def get_images_npy(self, file_path: str, images_size: int) -> list:
         """
         get images and npy truth value
         Args:
@@ -103,16 +103,16 @@ class InferenceTest(object):
             images_list(list): images array in list
             npy_list(list):npy array in list
         """
-        images_path = os.path.join(file_path,"images")
-        npy_path = os.path.join(file_path,"result")
+        images_path = os.path.join(file_path, "images")
+        npy_path = os.path.join(file_path, "result")
         if not os.path.exists(images_path):
             raise Exception(f"{images_path} not find")
         if not os.path.exists(npy_path):
             raise Exception(f"{npy_path} not find")
-        
-        images_list = read_images_path(images_path,images_size)
+
+        images_list = read_images_path(images_path, images_size)
         npy_list = read_npy_path(npy_path)
-        return images_list,npy_list
+        return images_list, npy_list
 
     def config_test(self):
         """
@@ -393,7 +393,8 @@ def get_gpu_mem(gpu_id=0):
     pynvml.nvmlShutdown()
     return gpu_mem
 
-def read_images_path(images_path,images_size):
+
+def read_images_path(images_path, images_size):
     """
     read images
     Args:
@@ -401,13 +402,14 @@ def read_images_path(images_path,images_size):
     Returns:
         img_array(numpy): numpy array
     """
-    image_names =sorted(os.listdir(images_path))
+    image_names = sorted(os.listdir(images_path))
     images_list = []
     for name in image_names:
-        image_path = os.path.join(images_path,name)
+        image_path = os.path.join(images_path, name)
         im = cv2.imread(image_path)
-        images_list.append(preprocess(im,images_size))
+        images_list.append(preprocess(im, images_size))
     return images_list
+
 
 def read_npy_path(npys_path):
     """
@@ -420,9 +422,10 @@ def read_npy_path(npys_path):
     npy_names = sorted(os.listdir(npys_path))
     npy_list = []
     for name in npy_names:
-        npy_path = os.path.join(npys_path,name)
+        npy_path = os.path.join(npys_path, name)
         npy_list.append(np.load(npy_path))
     return npy_list
+
 
 def resize_short(img, target_size):
     """
@@ -439,6 +442,7 @@ def resize_short(img, target_size):
     resized = cv2.resize(img, (resized_width, resized_height))
     return resized
 
+
 def crop_image(img, target_size, center):
     """
     crop image
@@ -451,7 +455,7 @@ def crop_image(img, target_size, center):
     """
     height, width = img.shape[:2]
     size = target_size
-    if center == True:
+    if center:
         w_start = (width - size) / 2
         h_start = (height - size) / 2
     else:
@@ -459,10 +463,11 @@ def crop_image(img, target_size, center):
         h_start = np.random.randint(0, height - size + 1)
     w_end = w_start + size
     h_end = h_start + size
-    img = img[int(h_start):int(h_end), int(w_start):int(w_end), :]
+    img = img[int(h_start) : int(h_end), int(w_start) : int(w_end), :]
     return img
 
-def preprocess(img,img_size):
+
+def preprocess(img, img_size):
     """
     preprocess img
     Args:
@@ -475,7 +480,7 @@ def preprocess(img,img_size):
     img = resize_short(img, img_size)
     img = crop_image(img, img_size, True)
     # bgr-> rgb && hwc->chw
-    img = img[:, :, ::-1].astype('float32').transpose((2, 0, 1)) / 255
+    img = img[:, :, ::-1].astype("float32").transpose((2, 0, 1)) / 255
     img_mean = np.array(mean).reshape((3, 1, 1))
     img_std = np.array(std).reshape((3, 1, 1))
     img -= img_mean
