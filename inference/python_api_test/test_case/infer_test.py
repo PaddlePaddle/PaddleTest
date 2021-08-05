@@ -10,7 +10,7 @@ import logging
 import threading
 from multiprocessing import Process
 
-
+import cv2
 import psutil
 import yaml
 import pytest
@@ -94,6 +94,26 @@ class InferenceTest(object):
             output_data_dict[output_data_name] = output_data
         return output_data_dict
 
+    def get_images_npy(self, file_path:str ,images_size:int) -> list:
+        """
+        get images and npy truth value
+        Args:
+            file_path(str) : images and npy saved path
+        Returns:
+            images_list(list): images array in list
+            npy_list(list):npy array in list
+        """
+        images_path = os.path.join(file_path,"images")
+        npy_path = os.path.join(file_path,"result")
+        if not os.path.exists(images_path):
+            raise Exception(f"{images_path} not find")
+        if not os.path.exists(npy_path):
+            raise Exception(f"{npy_path} not find")
+        
+        images_list = read_images_path(images_path,images_size)
+        npy_list = read_npy_path(npy_path)
+        return images_list,npy_list
+
     def config_test(self):
         """
         test config instance
@@ -168,7 +188,7 @@ class InferenceTest(object):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
+            output_data_truth_val = output_data_dict.flatten()
             for j, out_data in enumerate(output_data):
                 assert (
                     abs(out_data - output_data_truth_val[j]) <= delta
@@ -212,8 +232,52 @@ class InferenceTest(object):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
+            output_data_truth_val = output_data_dict.flatten()
+            for j, out_data in enumerate(output_data.flatten()):
+                assert (
+                    abs(out_data - output_data_truth_val[j]) <= delta
+                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+
+    def trt_fp32_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5):
+        """
+        test enable_tensorrt_engine()
+        batch_size = 10
+        trt max_batch_size = 10
+        precision_mode = paddle_infer.PrecisionType.Float32
+        Args:
+            input_data_dict(dict) : input data constructed as dictionary
+            output_data_dict(dict) : output data constructed as dictionary
+            repeat(int) : inference repeat time, set to catch gpu mem
+            delta(float): difference threshold between inference outputs and thruth value
+        Returns:
+            None
+        """
+        self.pd_config.enable_use_gpu(1000, 0)
+        self.pd_config.enable_tensorrt_engine(
+            workspace_size=1 << 30,
+            max_batch_size=10,
+            min_subgraph_size=3,
+            precision_mode=paddle_infer.PrecisionType.Float32,
+            use_static=False,
+            use_calib_mode=False,
+        )
+        predictor = paddle_infer.create_predictor(self.pd_config)
+
+        input_names = predictor.get_input_names()
+        for _, input_data_name in enumerate(input_names):
+            input_handle = predictor.get_input_handle(input_data_name)
+            input_handle.copy_from_cpu(input_data_dict[input_data_name])
+
+        for i in range(repeat):
+            predictor.run()
+
+        output_names = predictor.get_output_names()
+        for i, output_data_name in enumerate(output_names):
+            output_handle = predictor.get_output_handle(output_data_name)
+            output_data = output_handle.copy_to_cpu()
+            output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict.flatten()
+            for j, out_data in enumerate(output_data.flatten()):
                 assert (
                     abs(out_data - output_data_truth_val[j]) <= delta
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
@@ -240,7 +304,7 @@ class InferenceTest(object):
         self.pd_config.enable_use_gpu(1000, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
-            max_batch_size=4,
+            max_batch_size=1,
             min_subgraph_size=3,
             precision_mode=paddle_infer.PrecisionType.Float32,
             use_static=False,
@@ -282,7 +346,7 @@ class InferenceTest(object):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
+            output_data_truth_val = output_data_dict.flatten()
             for j, out_data in enumerate(output_data):
                 assert (
                     abs(out_data - output_data_truth_val[j]) <= delta
@@ -328,3 +392,92 @@ def get_gpu_mem(gpu_id=0):
     gpu_mem["gpu_mem_utilization_rate(%)"] = gpu_utilization_info.memory
     pynvml.nvmlShutdown()
     return gpu_mem
+
+def read_images_path(images_path,images_size):
+    """
+    read images
+    Args:
+        images_path(str): images input path
+    Returns:
+        img_array(numpy): numpy array
+    """
+    image_names =sorted(os.listdir(images_path))
+    images_list = []
+    for name in image_names:
+        image_path = os.path.join(images_path,name)
+        im = cv2.imread(image_path)
+        images_list.append(preprocess(im,images_size))
+    return images_list
+
+def read_npy_path(npys_path):
+    """
+    read numpy result
+    Args:
+        npys_path(str): numpy result path
+    Returns:
+        result_array(numpy): numpy array
+    """
+    npy_names = sorted(os.listdir(npys_path))
+    npy_list = []
+    for name in npy_names:
+        npy_path = os.path.join(npys_path,name)
+        npy_list.append(np.load(npy_path))
+    return npy_list
+
+def resize_short(img, target_size):
+    """
+    resize to target size
+    Args:
+        img(numpy): img input
+        target_size(int): img size
+    Returns:
+        resized(numpy): resize img
+    """
+    percent = float(target_size) / min(img.shape[0], img.shape[1])
+    resized_width = int(round(img.shape[1] * percent))
+    resized_height = int(round(img.shape[0] * percent))
+    resized = cv2.resize(img, (resized_width, resized_height))
+    return resized
+
+def crop_image(img, target_size, center):
+    """
+    crop image
+    Args:
+        img(numpy): img input
+        target_size(int): img size
+        center(bool): Keep central area or not
+    Returns:
+        img(numpy): crop image
+    """
+    height, width = img.shape[:2]
+    size = target_size
+    if center == True:
+        w_start = (width - size) / 2
+        h_start = (height - size) / 2
+    else:
+        w_start = np.random.randint(0, width - size + 1)
+        h_start = np.random.randint(0, height - size + 1)
+    w_end = w_start + size
+    h_end = h_start + size
+    img = img[int(h_start):int(h_end), int(w_start):int(w_end), :]
+    return img
+
+def preprocess(img,img_size):
+    """
+    preprocess img
+    Args:
+        img_size: img size
+    Returns:
+        img: img add one axis
+    """
+    mean = [0.485, 0.456, 0.406]
+    std = [0.229, 0.224, 0.225]
+    img = resize_short(img, img_size)
+    img = crop_image(img, img_size, True)
+    # bgr-> rgb && hwc->chw
+    img = img[:, :, ::-1].astype('float32').transpose((2, 0, 1)) / 255
+    img_mean = np.array(mean).reshape((3, 1, 1))
+    img_std = np.array(std).reshape((3, 1, 1))
+    img -= img_mean
+    img /= img_std
+    return img[np.newaxis, :][0]
