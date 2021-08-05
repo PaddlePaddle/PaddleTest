@@ -42,9 +42,9 @@ class InferenceTest(object):
         """
         load model to create config
         Args:
-            model_path(str) : uncombined model path
-            model_file(str) : combined model's model file
-            params_file(str) : combined model's params file
+            model_path(str): uncombined model path
+            model_file(str): combined model's model file
+            params_file(str): combined model's params file
         Returns:
             None
         """
@@ -65,7 +65,7 @@ class InferenceTest(object):
         """
         get truth value calculated by target device kernel
         Args:
-            input_data_dict(dict) : input data constructed as dictionary
+            input_data_dict(dict): input data constructed as dictionary
         Returns:
             None
         """
@@ -98,10 +98,10 @@ class InferenceTest(object):
         """
         get images and npy truth value
         Args:
-            file_path(str) : images and npy saved path
+            file_path(str): images and npy saved path
         Returns:
             images_list(list): images array in list
-            npy_list(list):npy array in list
+            npy_list(list): npy array in list
         """
         images_path = os.path.join(file_path, "images")
         npy_path = os.path.join(file_path, "result")
@@ -124,8 +124,8 @@ class InferenceTest(object):
         """
         test disable_gpu() api
         Args:
-            input_data_dict(dict) : input data constructed as dictionary
-            repeat(int) : inference repeat time, set to catch gpu mem
+            input_data_dict(dict): input data constructed as dictionary
+            repeat(int): inference repeat time, set to catch gpu mem
         Returns:
             None
         """
@@ -163,10 +163,10 @@ class InferenceTest(object):
         """
         test enable_mkldnn()
         Args:
-            input_data_dict(dict) : input data constructed as dictionary
-            output_data_dict(dict) : output data constructed as dictionary
-            mkldnn_cache_capacity(int) : MKLDNN cache capacity
-            repeat(int) : inference repeat time
+            input_data_dict(dict): input data constructed as dictionary
+            output_data_dict(dict): output data constructed as dictionary
+            mkldnn_cache_capacity(int): MKLDNN cache capacity
+            repeat(int): inference repeat time
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
             None
@@ -188,7 +188,7 @@ class InferenceTest(object):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict.flatten()
+            output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
                 assert (
                     abs(out_data - output_data_truth_val[j]) <= delta
@@ -201,9 +201,9 @@ class InferenceTest(object):
         trt max_batch_size = 1
         precision_mode = paddle_infer.PrecisionType.Float32
         Args:
-            input_data_dict(dict) : input data constructed as dictionary
-            output_data_dict(dict) : output data constructed as dictionary
-            repeat(int) : inference repeat time, set to catch gpu mem
+            input_data_dict(dict): input data constructed as dictionary
+            output_data_dict(dict): output data constructed as dictionary
+            repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
             None
@@ -232,7 +232,7 @@ class InferenceTest(object):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict.flatten()
+            output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data.flatten()):
                 assert (
                     abs(out_data - output_data_truth_val[j]) <= delta
@@ -245,9 +245,9 @@ class InferenceTest(object):
         trt max_batch_size = 10
         precision_mode = paddle_infer.PrecisionType.Float32
         Args:
-            input_data_dict(dict) : input data constructed as dictionary
-            output_data_dict(dict) : output data constructed as dictionary
-            repeat(int) : inference repeat time, set to catch gpu mem
+            input_data_dict(dict): input data constructed as dictionary
+            output_data_dict(dict): output data constructed as dictionary
+            repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
             None
@@ -276,7 +276,7 @@ class InferenceTest(object):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict.flatten()
+            output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data.flatten()):
                 assert (
                     abs(out_data - output_data_truth_val[j]) <= delta
@@ -293,10 +293,10 @@ class InferenceTest(object):
         precision_mode = paddle_infer.PrecisionType.Float32
         Multithreading TensorRT predictor
         Args:
-            input_data_dict(dict) : input data constructed as dictionary
-            output_data_dict(dict) : output data constructed as dictionary
-            repeat(int) : inference repeat time
-            thread_num(int) : number of threads
+            input_data_dict(dict): input data constructed as dictionary
+            output_data_dict(dict): output data constructed as dictionary
+            repeat(int): inference repeat time
+            thread_num(int): number of threads
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
             None
@@ -327,9 +327,9 @@ class InferenceTest(object):
         test paddle predictor in multithreaded task
         Args:
             predictor: paddle inference predictor
-            input_data_dict(dict) : input data constructed as dictionary
-            output_data_dict(dict) : output data constructed as dictionary
-            repeat(int) : inference repeat time, set to catch gpu mem
+            input_data_dict(dict): input data constructed as dictionary
+            output_data_dict(dict): output data constructed as dictionary
+            repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
             None
@@ -346,7 +346,7 @@ class InferenceTest(object):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict.flatten()
+            output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
                 assert (
                     abs(out_data - output_data_truth_val[j]) <= delta
@@ -357,8 +357,8 @@ def record_by_pid(pid: int, cuda_visible_device: int):
     """
     record_by_pid
     Args:
-        pid(int) : pid of the process
-        cuda_visible_device(int) : first gpu card of CUDA_VISIBLE_DEVICES
+        pid(int): pid of the process
+        cuda_visible_device(int): first gpu card of CUDA_VISIBLE_DEVICES
     Returns:
         gpu_max_mem(float): recorded max gpu mem
     """

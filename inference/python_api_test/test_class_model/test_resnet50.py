@@ -71,10 +71,11 @@ def test_trtfp32_bz1():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
+    test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"inputs": fake_input}
-    output_data_dict = np.array(npy_list[0:batch_size]).astype("float32")
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
     del test_suite  # destroy class to save memory
 
@@ -98,10 +99,11 @@ def test_trtfp32_more_bz():
     batch_size_pool = 10
     for batch_size in range(1, batch_size_pool + 1):
         test_suite = InferenceTest()
+        test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"inputs": fake_input}
-        output_data_dict = np.array(npy_list[0:batch_size]).astype("float32")
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
 
@@ -124,10 +126,11 @@ def test_trtfp32_bz1_multi_thread():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
+    test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"inputs": fake_input}
-    output_data_dict = np.array(npy_list[0:batch_size]).astype("float32")
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
     del test_suite  # destroy class to save memory
 
@@ -150,10 +153,11 @@ def test_mkldnn():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
+    test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"inputs": fake_input}
-    output_data_dict = np.array(npy_list[0:batch_size]).astype("float32")
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
     del test_suite  # destroy class to save memory
 
