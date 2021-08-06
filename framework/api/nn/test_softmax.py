@@ -30,7 +30,7 @@ class TestSoftmax(APIBase):
 obj = TestSoftmax(paddle.nn.Softmax)
 
 
-@pytest.mark.api_nn_SOFTMAX_vartype
+@pytest.mark.api_nn_Softmax_vartype
 def test_softmax_base():
     """
     base
@@ -58,7 +58,7 @@ def test_softmax_base():
     obj.base(res=res, data=x)
 
 
-@pytest.mark.api_nn_SOFTMAX_parameters
+@pytest.mark.api_nn_Softmax_parameters
 def test_softmax():
     """
     default
@@ -86,7 +86,7 @@ def test_softmax():
     obj.run(res=res, data=x)
 
 
-@pytest.mark.api_nn_SOFTMAX_parameters
+@pytest.mark.api_nn_Softmax_parameters
 def test_softmax1():
     """
     axis = 1
@@ -114,7 +114,7 @@ def test_softmax1():
     obj.run(res=res, data=x, axis=1)
 
 
-@pytest.mark.api_nn_SOFTMAX_exception
+@pytest.mark.api_nn_Softmax_exception
 def test_softmax2():
     """
     exception axis = 4
@@ -134,7 +134,7 @@ def test_softmax2():
     obj.exception(etype="InvalidArgumentError", data=x, axis=4)
 
 
-@pytest.mark.api_nn_SOFTMAX_parameters
+@pytest.mark.api_nn_Softmax_parameters
 def test_softmax3():
     """
     axis=2
@@ -162,7 +162,7 @@ def test_softmax3():
     obj.run(res=res, data=x, axis=2)
 
 
-@pytest.mark.api_nn_SOFTMAX_parameters
+@pytest.mark.api_nn_Softmax_parameters
 def test_softmax4():
     """
     axis=0
