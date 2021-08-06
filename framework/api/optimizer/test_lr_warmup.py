@@ -40,7 +40,7 @@ def test_warmup_2():
         last_epoch=last_epoch,
         verbose=False,
     )
-    assert learning_rate == scheduler_2.get_lr() 
+    assert learning_rate == scheduler_2.get_lr()
 
 
 def test_warmup_3():
