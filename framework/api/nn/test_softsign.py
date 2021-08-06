@@ -30,7 +30,7 @@ class TestSoftsign(APIBase):
 obj = TestSoftsign(paddle.nn.Softsign)
 
 
-@pytest.mark.api_nn_SOFTSIGN_vartype
+@pytest.mark.api_nn_Softsign_vartype
 def test_softsign_base():
     """
     base
@@ -40,7 +40,7 @@ def test_softsign_base():
     obj.base(res=res, data=x)
 
 
-@pytest.mark.api_nn_SOFTSIGN_parameters
+@pytest.mark.api_nn_Softsign_parameters
 def test_softsign():
     """
     default
