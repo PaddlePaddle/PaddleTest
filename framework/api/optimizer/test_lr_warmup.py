@@ -48,7 +48,7 @@ def test_warmup_3():
     test warmup_steps <=0
     """
     try:
-        scheduler_3 = paddle.optimizer.lr.LinearWarmup(
+        paddle.optimizer.lr.LinearWarmup(
             learning_rate=learning_rate, warmup_steps=0, start_lr=start_lr, end_lr=end_lr, verbose=True
         )
     except AssertionError as error:
