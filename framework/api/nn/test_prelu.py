@@ -4,6 +4,7 @@
 """
 test_prelu
 """
+
 from apibase import APIBase
 from apibase import randtool
 import paddle
