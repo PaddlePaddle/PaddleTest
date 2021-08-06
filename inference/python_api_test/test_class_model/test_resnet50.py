@@ -191,7 +191,7 @@ def test_trtfp16_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
-        test_suite2.trt_fp16_more_bz_test(input_data_dict, output_data_dict, delta=1e-4)
+        test_suite2.trt_fp16_more_bz_test(input_data_dict, output_data_dict, delta=1e-3)
 
         del test_suite2  # destroy class to save memory
 
