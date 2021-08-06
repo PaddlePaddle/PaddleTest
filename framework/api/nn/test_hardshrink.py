@@ -30,7 +30,7 @@ class TestNNHardshrink(APIBase):
 obj = TestNNHardshrink(paddle.nn.Hardshrink)
 
 
-@pytest.mark.api_nn_ELU_vartype
+@pytest.mark.api_nn_HARDSHRINK_vartype
 def test_hardshrink_base():
     """
     base
@@ -40,7 +40,7 @@ def test_hardshrink_base():
     obj.base(res=res, data=x)
 
 
-@pytest.mark.api_nn_ELU_parameters
+@pytest.mark.api_nn_HARDSHRINK_parameters
 def test_hardshrink():
     """
     default
@@ -50,7 +50,7 @@ def test_hardshrink():
     obj.run(res=res, data=x)
 
 
-@pytest.mark.api_nn_ELU_parameters
+@pytest.mark.api_nn_HARDSHRINK_parameters
 def test_hardshrink1():
     """
     threshold = 0
@@ -61,7 +61,7 @@ def test_hardshrink1():
     obj.run(res=res, data=x, threshold=threshold)
 
 
-@pytest.mark.api_nn_ELU_parameters
+@pytest.mark.api_nn_HARDSHRINK_parameters
 def test_hardshrink2():
     """
     threshold = 0 x contains 0.01
@@ -72,7 +72,7 @@ def test_hardshrink2():
     obj.run(res=res, data=x, threshold=threshold)
 
 
-@pytest.mark.api_nn_ELU_vartype
+@pytest.mark.api_nn_HARDSHRINK_vartype
 def test_hardshrink3():
     """
     threshold = -1
@@ -83,7 +83,7 @@ def test_hardshrink3():
     obj.base(res=res, data=x, threshold=threshold)
 
 
-@pytest.mark.api_nn_ELU_exception
+@pytest.mark.api_nn_HARDSHRINK_exception
 def test_hardshrink4():
     """
     threshold = "1"
