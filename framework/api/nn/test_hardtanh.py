@@ -30,7 +30,7 @@ class TestHardtanh(APIBase):
 obj = TestHardtanh(paddle.nn.Hardtanh)
 
 
-@pytest.mark.api_nn_HARDTANH_vartype
+@pytest.mark.api_nn_Hardtanh_vartype
 def test_hardtanh_base():
     """
     base
@@ -40,7 +40,7 @@ def test_hardtanh_base():
     obj.base(res=res, data=x)
 
 
-@pytest.mark.api_nn_HARDTANH_parameters
+@pytest.mark.api_nn_Hardtanh_parameters
 def test_hardtanh():
     """
     default
@@ -52,7 +52,7 @@ def test_hardtanh():
     obj.run(res=res, data=x, max=paddle_max, min=paddle_min)
 
 
-@pytest.mark.api_nn_HARDTANH_parameters
+@pytest.mark.api_nn_Hardtanh_parameters
 def test_hardtanh1():
     """
     max = 1.3 min = 0
@@ -64,7 +64,7 @@ def test_hardtanh1():
     obj.run(res=res, data=x, max=paddle_max, min=paddle_min)
 
 
-@pytest.mark.api_nn_HARDTANH_parameters
+@pytest.mark.api_nn_Hardtanh_parameters
 def test_hardtanh2():
     """
     max = 0 min = -3.4
@@ -76,7 +76,7 @@ def test_hardtanh2():
     obj.run(res=res, data=x, max=paddle_max, min=paddle_min)
 
 
-@pytest.mark.api_nn_HARDTANH_parameters
+@pytest.mark.api_nn_Hardtanh_parameters
 def test_hardtanh3():
     """
     max = 1 min = 1
@@ -88,7 +88,7 @@ def test_hardtanh3():
     obj.run(res=res, data=x, max=paddle_max, min=paddle_min)
 
 
-@pytest.mark.api_nn_HARDTANH_parameters
+@pytest.mark.api_nn_Hardtanh_parameters
 def test_hardtanh4():
     """
     max = 0 min = 0
@@ -100,7 +100,7 @@ def test_hardtanh4():
     obj.run(res=res, data=x, max=paddle_max, min=paddle_min)
 
 
-@pytest.mark.api_nn_HARDTANH_parameters
+@pytest.mark.api_nn_Hardtanh_parameters
 def test_hardtanh5():
     """
     max = -3.2 min = -3.2
@@ -112,7 +112,7 @@ def test_hardtanh5():
     obj.run(res=res, data=x, max=paddle_max, min=paddle_min)
 
 
-@pytest.mark.api_nn_HARDTANH_parameters
+@pytest.mark.api_nn_Hardtanh_parameters
 def test_hardtanh6():
     """
     max < min max=-3.3 min=3.3
@@ -124,7 +124,7 @@ def test_hardtanh6():
     obj.run(res=res, data=x, max=paddle_max, min=paddle_min)
 
 
-@pytest.mark.api_nn_HARDTANH_exception
+@pytest.mark.api_nn_Hardtanh_exception
 def test_hardtanh7():
     """
     exception max is a string
