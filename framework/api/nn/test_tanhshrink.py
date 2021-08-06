@@ -30,7 +30,7 @@ class TestTanhshrink(APIBase):
 obj = TestTanhshrink(paddle.nn.Tanhshrink)
 
 
-@pytest.mark.api_nn_TANHSHRINK_vartype
+@pytest.mark.api_nn_Tanhshrink_vartype
 def test_tanhshrink_base():
     """
     base
@@ -40,7 +40,7 @@ def test_tanhshrink_base():
     obj.base(res=res, data=x)
 
 
-@pytest.mark.api_nn_TANHSHRINK_parameters
+@pytest.mark.api_nn_Tanhshrink_parameters
 def test_tanhshrink():
     """
     default
