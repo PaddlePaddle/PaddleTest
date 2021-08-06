@@ -30,7 +30,7 @@ class TestSigmoid(APIBase):
 obj = TestSigmoid(paddle.nn.Sigmoid)
 
 
-@pytest.mark.api_nn_SIGMOID_vartype
+@pytest.mark.api_nn_Sigmoid_vartype
 def test_Sigmoid_base():
     """
     Sigmoid_base
@@ -40,7 +40,7 @@ def test_Sigmoid_base():
     obj.base(res=res, data=x_data)
 
 
-@pytest.mark.api_nn_SIGMOID_parameters
+@pytest.mark.api_nn_Sigmoid_parameters
 def test_Sigmoid_input0():
     """
     input=[1.0, 2.0, 3.0, 4.0]
