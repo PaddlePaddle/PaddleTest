@@ -30,7 +30,7 @@ class TestSoftshrink(APIBase):
 obj = TestSoftshrink(paddle.nn.Softshrink)
 
 
-@pytest.mark.api_nn_SOFTSHRINK_vartype
+@pytest.mark.api_nn_Softshrink_vartype
 def test_softshrink_base():
     """
     base
@@ -49,7 +49,7 @@ def test_softshrink_base():
     obj.base(res=res, data=x, threshold=threshold)
 
 
-@pytest.mark.api_nn_SOFTSHRINK_parameters
+@pytest.mark.api_nn_Softshrink_parameters
 def test_softshrink():
     """
     default
@@ -68,7 +68,7 @@ def test_softshrink():
     obj.run(res=res, data=x, threshold=threshold)
 
 
-@pytest.mark.api_nn_SOFTSHRINK_parameters
+@pytest.mark.api_nn_Softshrink_parameters
 def test_softshrink1():
     """
     threshold = 0
@@ -87,7 +87,7 @@ def test_softshrink1():
     obj.run(res=res, data=x, threshold=threshold)
 
 
-@pytest.mark.api_nn_SOFTSHRINK_exception
+@pytest.mark.api_nn_Softshrink_exception
 def test_softshrink2():
     """
     exception threshold = -3.3
