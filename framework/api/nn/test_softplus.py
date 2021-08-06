@@ -30,7 +30,7 @@ class TestSoftplus(APIBase):
 obj = TestSoftplus(paddle.nn.Softplus)
 
 
-@pytest.mark.api_nn_SOFTPLUS_vartype
+@pytest.mark.api_nn_Softplus_vartype
 def test_softplus_base():
     """
     base
@@ -43,7 +43,7 @@ def test_softplus_base():
     obj.base(res=res, data=x, beta=beta, threshold=threshold)
 
 
-@pytest.mark.api_nn_SOFTPLUS_parameters
+@pytest.mark.api_nn_Softplus_parameters
 def test_softplus():
     """
     default
@@ -56,7 +56,7 @@ def test_softplus():
     obj.run(res=res, data=x, beta=beta, threshold=threshold)
 
 
-@pytest.mark.api_nn_SOFTPLUS_parameters
+@pytest.mark.api_nn_Softplus_parameters
 def test_softplus1():
     """
     beta = 0.000001
@@ -69,7 +69,7 @@ def test_softplus1():
     obj.run(res=res, data=x, beta=beta, threshold=threshold)
 
 
-@pytest.mark.api_nn_SOFTPLUS_parameters
+@pytest.mark.api_nn_Softplus_parameters
 def test_softplus2():
     """
     beta = -0.000001
@@ -82,7 +82,7 @@ def test_softplus2():
     obj.run(res=res, data=x, beta=beta, threshold=threshold)
 
 
-@pytest.mark.api_nn_SOFTPLUS_parameters
+@pytest.mark.api_nn_Softplus_parameters
 def test_softplus3():
     """
     beta = -3
@@ -95,7 +95,7 @@ def test_softplus3():
     obj.run(res=res, data=x, beta=beta, threshold=threshold)
 
 
-@pytest.mark.api_nn_SOFTPLUS_parameters
+@pytest.mark.api_nn_Softplus_parameters
 def test_softplus4():
     """
     beta = 3  threshold = 5
@@ -108,7 +108,7 @@ def test_softplus4():
     obj.run(res=res, data=x, beta=beta, threshold=threshold)
 
 
-@pytest.mark.api_nn_SOFTPLUS_parameters
+@pytest.mark.api_nn_Softplus_parameters
 def test_softplus5():
     """
     beta = 3  threshold = -5
