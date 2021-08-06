@@ -34,6 +34,7 @@ obj = TestLogSoftmax(paddle.nn.LogSoftmax)
 def test_logsoftmax_base():
     """
     base
+
     """
     x = np.array([[[1], [2]], [[3], [4]]]).astype(np.float32)
     res = x.reshape(2, 2)
