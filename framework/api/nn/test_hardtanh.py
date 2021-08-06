@@ -124,7 +124,7 @@ def test_hardtanh6():
     obj.run(res=res, data=x, max=paddle_max, min=paddle_min)
 
 
-@pytest.mark.api_nn_ELU_exception
+@pytest.mark.api_nn_HARDTANH_exception
 def test_hardtanh7():
     """
     exception max is a string
