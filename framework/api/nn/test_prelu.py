@@ -44,7 +44,7 @@ class TestPRelu(APIBase):
 obj = TestPRelu(paddle.nn.PReLU)
 
 
-@pytest.mark.api_nn_PRELU_vartype
+@pytest.mark.api_nn_PReLU_vartype
 def test_prelu_base():
     """
     base
@@ -56,7 +56,7 @@ def test_prelu_base():
     obj.base(res=res, data=data)
 
 
-@pytest.mark.api_nn_PRELU_parameters
+@pytest.mark.api_nn_PReLU_parameters
 def test_prelu_float64():
     """
     base float64
