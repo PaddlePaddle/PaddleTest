@@ -33,7 +33,7 @@ class TestTanh(APIBase):
 obj = TestTanh(paddle.tanh)
 
 
-@pytest.mark.api_nn_TANH_vartype
+@pytest.mark.api_nn_Tanh_vartype
 def test_tanh_base():
     """
     base
@@ -43,7 +43,7 @@ def test_tanh_base():
     obj.base(res=res, x=x)
 
 
-@pytest.mark.api_nn_TANH_parameters
+@pytest.mark.api_nn_Tanh_parameters
 def test_tanh():
     """
     x=+
@@ -53,7 +53,7 @@ def test_tanh():
     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_nn_TANH_parameters
+@pytest.mark.api_nn_Tanh_parameters
 def test_tanh1():
     """
     x=-
@@ -63,7 +63,7 @@ def test_tanh1():
     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_nn_TANH_parameters
+@pytest.mark.api_nn_Tanh_parameters
 def test_tanh2():
     """
     x=-/+
@@ -73,7 +73,7 @@ def test_tanh2():
     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_nn_TANH_parameters
+@pytest.mark.api_nn_Tanh_parameters
 def test_tanh3():
     """
     x = np.array([0])
@@ -92,7 +92,7 @@ def test_tanh3():
 #     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_nn_TANH_parameters
+@pytest.mark.api_nn_Tanh_parameters
 def test_tanh5():
     """
     x = np.array([1e-9])
@@ -102,7 +102,7 @@ def test_tanh5():
     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_nn_TANH_parameters
+@pytest.mark.api_nn_Tanh_parameters
 def test_tanh6():
     """
     x=0
@@ -113,7 +113,7 @@ def test_tanh6():
 
 
 # test name
-@pytest.mark.api_nn_TANH_parameters
+@pytest.mark.api_nn_Tanh_parameters
 def test_tanh7():
     """
     name="test name"
