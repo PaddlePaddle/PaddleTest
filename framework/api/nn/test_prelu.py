@@ -48,6 +48,7 @@ obj = TestPRelu(paddle.nn.PReLU)
 def test_prelu_base():
     """
     base
+
     """
     data = randtool("float", -10, 10, [2, 3, 3, 3])
     # num_parameters = 1
