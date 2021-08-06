@@ -30,7 +30,7 @@ class TestRelu6(APIBase):
 obj = TestRelu6(paddle.nn.ReLU6)
 
 
-@pytest.mark.api_nn_RELU6_vartype
+@pytest.mark.api_nn_ReLU6_vartype
 def test_relu6_base():
     """
     base
@@ -40,7 +40,7 @@ def test_relu6_base():
     obj.base(res=res, data=x)
 
 
-@pytest.mark.api_nn_RELU6_parameters
+@pytest.mark.api_nn_ReLU6_parameters
 def test_relu6():
     """
     default
@@ -50,7 +50,7 @@ def test_relu6():
     obj.run(res=res, data=x)
 
 
-@pytest.mark.api_nn_RELU6_parameters
+@pytest.mark.api_nn_ReLU6_parameters
 def test_relu61():
     """
     x = np.array([6, 6, 6, 6]
