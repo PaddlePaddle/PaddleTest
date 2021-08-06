@@ -30,7 +30,7 @@ class TestLogSoftmax(APIBase):
 obj = TestLogSoftmax(paddle.nn.LogSoftmax)
 
 
-@pytest.mark.api_nn_LOGSOFTMAX_vartype
+@pytest.mark.api_nn_LogSoftmax_vartype
 def test_logsoftmax_base():
     """
     base
@@ -41,7 +41,7 @@ def test_logsoftmax_base():
     obj.base(res=res, data=x, axis=0)
 
 
-@pytest.mark.api_nn_LOGSOFTMAX_parameters
+@pytest.mark.api_nn_LogSoftmax_parameters
 def test_logsoftmax():
     """
     default
@@ -52,7 +52,7 @@ def test_logsoftmax():
     obj.run(res=res, data=x)
 
 
-@pytest.mark.api_nn_LOGSOFTMAX_parameters
+@pytest.mark.api_nn_LogSoftmax_parameters
 def test_logsoftmax1():
     """
     axis=-1
@@ -64,7 +64,7 @@ def test_logsoftmax1():
     obj.run(res=res, data=x, axis=-1)
 
 
-@pytest.mark.api_nn_LOGSOFTMAX_parameters
+@pytest.mark.api_nn_LogSoftmax_parameters
 def test_logsoftmax2():
     """
     axis=0
@@ -75,7 +75,7 @@ def test_logsoftmax2():
     obj.run(res=res, data=x, axis=0)
 
 
-@pytest.mark.api_nn_LOGSOFTMAX_parameters
+@pytest.mark.api_nn_LogSoftmax_parameters
 def test_logsoftmax3():
     """
     axis=1
@@ -87,7 +87,7 @@ def test_logsoftmax3():
     obj.run(res=res, data=x, axis=1)
 
 
-@pytest.mark.api_nn_LOGSOFTMAX_parameters
+@pytest.mark.api_nn_LogSoftmax_parameters
 def test_logsoftmax4():
     """
     axis=2
@@ -99,7 +99,7 @@ def test_logsoftmax4():
     obj.run(res=res, data=x, axis=2)
 
 
-@pytest.mark.api_nn_LOGSOFMAX_exception
+@pytest.mark.api_nn_LogSoftmax_exception
 def test_logsoftmax5():
     """
     axis=3
@@ -111,7 +111,7 @@ def test_logsoftmax5():
     obj.exception(etype="InvalidArgumentError", data=x, axis=3)
 
 
-@pytest.mark.api_nn_LOGSOFTMAX_exception
+@pytest.mark.api_nn_LogSoftmax_exception
 def test_logsoftmax6():
     """
     axis="3"
