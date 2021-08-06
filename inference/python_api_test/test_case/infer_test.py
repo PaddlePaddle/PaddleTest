@@ -283,7 +283,7 @@ class InferenceTest(object):
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
 
     def trt_fp32_bz1_multi_thread_test(
-        self, input_data_dict: dict, output_data_dict: dict, repeat=2, thread_num=5, delta=1e-5
+        self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5
     ):
         """
         test enable_tensorrt_engine()
@@ -409,7 +409,7 @@ class InferenceTest(object):
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
 
     def trt_fp16_bz1_multi_thread_test(
-        self, input_data_dict: dict, output_data_dict: dict, repeat=2, thread_num=5, delta=1e-5
+        self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5
     ):
         """
         test enable_tensorrt_engine()
