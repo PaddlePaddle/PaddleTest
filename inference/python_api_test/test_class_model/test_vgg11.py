@@ -114,6 +114,7 @@ def test_trtfp32_bz1_multi_thread():
 
     del test_suite2  # destroy class to save memory
 
+
 @pytest.mark.p1
 @pytest.mark.trt_fp16_more_bz_precision
 def test_trtfp16_more_bz():
