@@ -159,9 +159,7 @@ class InferenceTest(object):
         gpu_max_mem = max([float(i["used(MB)"]) for i in _gpu_mem_lists])
         assert abs(gpu_max_mem - ori_gpu_mem) < 1, "set disable_gpu(), but gpu activity found"
 
-    def mkldnn_test(
-        self, input_data_dict: dict, output_data_dict: dict, mkldnn_cache_capacity=1, repeat=2, delta=1e-5, gpu_mem=1000
-    ):
+    def mkldnn_test(self, input_data_dict: dict, output_data_dict: dict, mkldnn_cache_capacity=1, repeat=2, delta=1e-5):
         """
         test enable_mkldnn()
         Args:

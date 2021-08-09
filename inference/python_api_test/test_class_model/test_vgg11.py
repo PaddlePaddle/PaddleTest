@@ -70,8 +70,8 @@ def test_trtfp32_more_bz():
 
     file_path = "./vgg11"
     images_size = 224
-    batch_size_pool = 10
-    for batch_size in range(1, batch_size_pool + 1, 3):
+    batch_size_pool = [1, 10]
+    for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
@@ -125,8 +125,8 @@ def test_trtfp16_more_bz():
 
     file_path = "./vgg11"
     images_size = 224
-    batch_size_pool = 10
-    for batch_size in range(1, batch_size_pool + 1, 4):
+    batch_size_pool = [1, 10]
+    for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
