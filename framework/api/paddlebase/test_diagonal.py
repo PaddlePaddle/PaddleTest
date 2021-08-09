@@ -34,7 +34,7 @@ obj1 = TestDiagonal(paddle.diagonal)
 obj1.types = [np.int32, np.int64]
 
 
-@pytest.mark.api_base_diagflat_vartype
+@pytest.mark.api_base_diagonal_vartype
 def test_diagonal_base():
     """
     base float
@@ -44,7 +44,7 @@ def test_diagonal_base():
     obj.base(res=res, x=x)
 
 
-@pytest.mark.api_base_diagflat_vartype
+@pytest.mark.api_base_diagonal_vartype
 def test_diagonal_base1():
     """
     base int
@@ -54,7 +54,7 @@ def test_diagonal_base1():
     obj1.base(res=res, x=x)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal():
     """
     offset = 1
@@ -65,7 +65,7 @@ def test_diagonal():
     obj.run(res=res, x=x, offset=offset)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal1():
     """
     offset = -1
@@ -76,7 +76,7 @@ def test_diagonal1():
     obj.run(res=res, x=x, offset=offset)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal2():
     """
     3d tensor
@@ -86,7 +86,7 @@ def test_diagonal2():
     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal3():
     """
     4d tensor
@@ -96,7 +96,7 @@ def test_diagonal3():
     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal4():
     """
     5d tensor
@@ -106,7 +106,7 @@ def test_diagonal4():
     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal5():
     """
     axis1 = 0, axis2 = 3
@@ -118,7 +118,7 @@ def test_diagonal5():
     obj.run(res=res, x=x, axis1=axis1, axis2=axis2)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal6():
     """
     axis1 = 2, axis2 = 3
@@ -130,7 +130,7 @@ def test_diagonal6():
     obj.run(res=res, x=x, axis1=axis1, axis2=axis2)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal7():
     """
     axis1 = 3, axis2 = 4
@@ -142,7 +142,7 @@ def test_diagonal7():
     obj.run(res=res, x=x, axis1=axis1, axis2=axis2)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal8():
     """
     axis1 = 4, axis2 = 2
@@ -154,7 +154,7 @@ def test_diagonal8():
     obj.run(res=res, x=x, axis1=axis1, axis2=axis2)
 
 
-@pytest.mark.api_base_diagflat_parameters
+@pytest.mark.api_base_diagonal_parameters
 def test_diagonal9():
     """
     axis1 = -1, axis2 = 2
