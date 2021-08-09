@@ -112,7 +112,15 @@ class TestWebService(object):
         os.system("rm -rf PipelineServingLogs")
 
     def predict_brpc(self, batch=False, batch_size=1):
-        """predict by bRPC client"""
+        """
+        predict by bRPC client
+        inputs:
+            batch(bool): True if feed_data have batch dimension
+            batch_size(int): feed_data's batch_size
+        returns:
+            result_class(list): prediction result of feed_data's class
+            result_prob(list): prediction result of feed_data's probability
+        """
         client = Client()
         client.load_client_config(self.client_dir)
         client.connect(["127.0.0.1:12000"])
