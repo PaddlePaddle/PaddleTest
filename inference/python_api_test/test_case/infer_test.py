@@ -61,7 +61,7 @@ class InferenceTest(object):
         else:
             raise Exception(f"model file path is not exist, [{model_path}] or [{model_file}] invalid!")
 
-    def get_truth_val(self, input_data_dict: dict, device: str) -> dict:
+    def get_truth_val(self, input_data_dict: dict, device: str, gpu_mem=1000) -> dict:
         """
         get truth value calculated by target device kernel
         Args:
@@ -72,7 +72,7 @@ class InferenceTest(object):
         if device == "cpu":
             self.pd_config.disable_gpu()
         elif device == "gpu":
-            self.pd_config.enable_use_gpu(1000, 0)
+            self.pd_config.enable_use_gpu(gpu_mem, 0)
         else:
             raise Exception(f"{device} not support in current test codes")
         self.pd_config.switch_ir_optim(False)
@@ -194,7 +194,7 @@ class InferenceTest(object):
                     abs(out_data - output_data_truth_val[j]) <= delta
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
 
-    def trt_fp32_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5):
+    def trt_fp32_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
         """
         test enable_tensorrt_engine()
         batch_size = 1
@@ -208,7 +208,7 @@ class InferenceTest(object):
         Returns:
             None
         """
-        self.pd_config.enable_use_gpu(1000, 0)
+        self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=1,
@@ -238,7 +238,7 @@ class InferenceTest(object):
                     abs(out_data - output_data_truth_val[j]) <= delta
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
 
-    def trt_fp32_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5):
+    def trt_fp32_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
         """
         test enable_tensorrt_engine()
         batch_size = 10
@@ -252,7 +252,7 @@ class InferenceTest(object):
         Returns:
             None
         """
-        self.pd_config.enable_use_gpu(1000, 0)
+        self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=10,
@@ -283,7 +283,7 @@ class InferenceTest(object):
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
 
     def trt_fp32_bz1_multi_thread_test(
-        self, input_data_dict: dict, output_data_dict: dict, repeat=2, thread_num=5, delta=1e-5
+        self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5, gpu_mem=1000
     ):
         """
         test enable_tensorrt_engine()
@@ -301,7 +301,7 @@ class InferenceTest(object):
         Returns:
             None
         """
-        self.pd_config.enable_use_gpu(1000, 0)
+        self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=1,
@@ -320,7 +320,7 @@ class InferenceTest(object):
             record_thread.start()
             record_thread.join()
 
-    def trt_fp16_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5):
+    def trt_fp16_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
         """
         test enable_tensorrt_engine()
         batch_size = 1
@@ -334,7 +334,7 @@ class InferenceTest(object):
         Returns:
             None
         """
-        self.pd_config.enable_use_gpu(1000, 0)
+        self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=1,
@@ -364,7 +364,7 @@ class InferenceTest(object):
                     abs(out_data - output_data_truth_val[j]) <= delta
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
 
-    def trt_fp16_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5):
+    def trt_fp16_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
         """
         test enable_tensorrt_engine()
         batch_size = 10
@@ -378,7 +378,7 @@ class InferenceTest(object):
         Returns:
             None
         """
-        self.pd_config.enable_use_gpu(1000, 0)
+        self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=10,
@@ -409,7 +409,7 @@ class InferenceTest(object):
                 ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
 
     def trt_fp16_bz1_multi_thread_test(
-        self, input_data_dict: dict, output_data_dict: dict, repeat=2, thread_num=5, delta=1e-5
+        self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5, gpu_mem=1000
     ):
         """
         test enable_tensorrt_engine()
@@ -427,7 +427,7 @@ class InferenceTest(object):
         Returns:
             None
         """
-        self.pd_config.enable_use_gpu(1000, 0)
+        self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=1,
@@ -447,7 +447,7 @@ class InferenceTest(object):
             record_thread.join()
 
     def run_multi_thread_test_predictor(
-        self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5
+        self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5
     ):
         """
         test paddle predictor in multithreaded task
