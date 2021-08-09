@@ -61,33 +61,6 @@ def test_disable_gpu():
 
 
 @pytest.mark.p1
-@pytest.mark.trt_fp32_bz1_precision
-def test_trtfp32_bz1():
-    """
-    compared trt fp32 batch_size=1 vgg11 outputs with true val
-    """
-    check_model_exist()
-
-    file_path = "./vgg11"
-    images_size = 224
-    batch_size = 1
-    test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-    images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
-    fake_input = np.array(images_list[0:batch_size]).astype("float32")
-    input_data_dict = {"x": fake_input}
-    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-
-    del test_suite  # destroy class to save memory
-
-    test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-    test_suite2.trt_fp32_bz1_test(input_data_dict, output_data_dict)
-
-    del test_suite2  # destroy class to save memory
-
-
-@pytest.mark.p1
 @pytest.mark.trt_fp32_more_bz_precision
 def test_trtfp32_more_bz():
     """
@@ -98,7 +71,7 @@ def test_trtfp32_more_bz():
     file_path = "./vgg11"
     images_size = 224
     batch_size_pool = 10
-    for batch_size in range(1, batch_size_pool + 1):
+    for batch_size in range(1, batch_size_pool + 1, 3):
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
@@ -143,33 +116,6 @@ def test_trtfp32_bz1_multi_thread():
 
 
 @pytest.mark.p1
-@pytest.mark.trt_fp16_bz1_precision
-def test_trtfp16_bz1():
-    """
-    compared trt fp16 batch_size=1 vgg11 outputs with true val
-    """
-    check_model_exist()
-
-    file_path = "./vgg11"
-    images_size = 224
-    batch_size = 1
-    test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-    images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
-    fake_input = np.array(images_list[0:batch_size]).astype("float32")
-    input_data_dict = {"x": fake_input}
-    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-
-    del test_suite  # destroy class to save memory
-
-    test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-    test_suite2.trt_fp16_bz1_test(input_data_dict, output_data_dict)
-
-    del test_suite2  # destroy class to save memory
-
-
-@pytest.mark.p1
 @pytest.mark.trt_fp16_more_bz_precision
 def test_trtfp16_more_bz():
     """
@@ -180,7 +126,7 @@ def test_trtfp16_more_bz():
     file_path = "./vgg11"
     images_size = 224
     batch_size_pool = 10
-    for batch_size in range(1, batch_size_pool + 1):
+    for batch_size in range(1, batch_size_pool + 1, 4):
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
@@ -192,7 +138,7 @@ def test_trtfp16_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-        test_suite2.trt_fp16_more_bz_test(input_data_dict, output_data_dict, delta=1e-3)
+        test_suite2.trt_fp16_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-3, gpu_mem=3000)
 
         del test_suite2  # destroy class to save memory
 
@@ -219,7 +165,7 @@ def test_trtfp16_bz1_multi_thread():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-    test_suite2.trt_fp16_bz1_multi_thread_test(input_data_dict, output_data_dict)
+    test_suite2.trt_fp16_bz1_multi_thread_test(input_data_dict, output_data_dict, gpu_mem=3000)
 
     del test_suite2  # destroy class to save memory
 
