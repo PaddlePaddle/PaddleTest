@@ -72,7 +72,7 @@ def test_lgamma_base_backward():
 
 
 @pytest.mark.api_base_lgamma_parameters
-def test_lgamma_base():
+def test_lgamma():
     """
     base float
     """
