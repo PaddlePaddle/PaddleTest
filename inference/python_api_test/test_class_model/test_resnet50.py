@@ -96,8 +96,8 @@ def test_trtfp32_more_bz():
 
     file_path = "./resnet50"
     images_size = 224
-    batch_size_pool = 10
-    for batch_size in range(1, batch_size_pool + 1):
+    batch_size_pool = [1, 5, 10]
+    for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
@@ -163,7 +163,7 @@ def test_trtfp16_bz1():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
-    test_suite2.trt_fp16_bz1_test(input_data_dict, output_data_dict)
+    test_suite2.trt_fp16_bz1_test(input_data_dict, output_data_dict, delta=1e-2)
 
     del test_suite2  # destroy class to save memory
 
@@ -178,8 +178,8 @@ def test_trtfp16_more_bz():
 
     file_path = "./resnet50"
     images_size = 224
-    batch_size_pool = 10
-    for batch_size in range(1, batch_size_pool + 1):
+    batch_size_pool = [1, 5, 10]
+    for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
@@ -191,7 +191,7 @@ def test_trtfp16_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
-        test_suite2.trt_fp16_more_bz_test(input_data_dict, output_data_dict, delta=1e-3)
+        test_suite2.trt_fp16_more_bz_test(input_data_dict, output_data_dict, delta=1e-2)
 
         del test_suite2  # destroy class to save memory
 
