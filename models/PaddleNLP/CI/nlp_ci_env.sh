@@ -33,7 +33,7 @@ python -m pip install $2;
 ####################################
 mkdir /ssd1/paddlenlp
 export PPNLP_HOME=/ssd1/paddlenlp
-ln -s ln -s /home/data/cfs/models_ce/PaddleNLP/  /ssd1/paddlenlp/
+ln -s /home/data/cfs/models_ce/PaddleNLP/  /ssd1/paddlenlp/
 ####################################
 # for paddlenlp env
 nlp1_build (){
