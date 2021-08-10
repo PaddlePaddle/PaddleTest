@@ -47,8 +47,18 @@ def test_neg_base():
 @pytest.mark.api_base_neg_vartype
 def test_neg_base1():
     """
-    base float
+    base int
     """
     x = randtool("int", -5, 5, [6, 6])
     res = np.negative(x)
     obj1.base(res=res, x=x)
+
+
+@pytest.mark.api_base_neg_parameters
+def test_neg():
+    """
+    test zero
+    """
+    x = np.zeros(shape=[6, 6, 6])
+    res = np.negative(x)
+    obj.run(res=res, x=x)
