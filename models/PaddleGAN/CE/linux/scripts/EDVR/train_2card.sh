@@ -3,7 +3,7 @@ export FLAGS_cudnn_deterministic=True
 cur_path=`pwd`
 echo $cur_path
 
-cd /workspace/task/PaddleGAN
+cd /workspace/PaddleGAN/ce/Paddle_Cloud_CE/src/task/PaddleGAN
 sed -i 's/use_flip: True/use_flip: False/g' configs/edvr_m_wo_tsa.yaml #将 use_flip 字段替换为 Fasle
 sed -i 's/use_rot: True/use_rot: False/g' configs/edvr_m_wo_tsa.yaml #将 use_rot 字段替换为 Fasle
 rm -rf data
