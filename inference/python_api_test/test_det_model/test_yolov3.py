@@ -57,10 +57,13 @@ def test_disable_gpu():
     im_size = 608
     im = np.random.randn(batch_size, 3, 608, 608).astype("float32")
     data = np.random.randn(batch_size, 3, 608, 608).astype("float32")
-    scale_factor = np.array([im_size * 1. / im.shape[0], im_size * 1. / im.shape[1]]).reshape((1, 2)).astype(np.float32)
+    scale_factor = (
+        np.array([im_size * 1.0 / im.shape[0], im_size * 1.0 / im.shape[1]]).reshape((1, 2)).astype(np.float32)
+    )
     im_shape = np.array([im_size, im_size]).reshape((1, 2)).astype(np.float32)
-    input_data_dict = {"im_shape": im_shape,"image": data,"scale_factor": scale_factor}
+    input_data_dict = {"im_shape": im_shape, "image": data, "scale_factor": scale_factor}
     test_suite.disable_gpu_test(input_data_dict)
+
 
 @pytest.mark.p1
 @pytest.mark.trt_fp32_more_bz_precision
@@ -77,14 +80,20 @@ def test_trtfp32_more_bz():
 
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        images_list, images_origin_list, npy_list = test_suite.get_images_npy(file_path, images_size, center=False, model_type='det')
+        images_list, images_origin_list, npy_list = test_suite.get_images_npy(
+            file_path, images_size, center=False, model_type="det"
+        )
 
         img = images_origin_list[0:batch_size]
-        result = npy_list[0:batch_size*2]
+        result = npy_list[0 : batch_size * 2]
         data = np.array(images_list[0:batch_size]).astype("float32")
         scale_factor_pool = []
-        for batch in range(batch_size):         
-            scale_factor = np.array([images_size * 1. / img[batch].shape[0], images_size * 1. / img[batch].shape[1]]).reshape((1, 2)).astype(np.float32)
+        for batch in range(batch_size):
+            scale_factor = (
+                np.array([images_size * 1.0 / img[batch].shape[0], images_size * 1.0 / img[batch].shape[1]])
+                .reshape((1, 2))
+                .astype(np.float32)
+            )
             scale_factor_pool.append(scale_factor)
         scale_factor_pool = np.array(scale_factor_pool).reshape((batch_size, 2))
         im_shape_pool = []
@@ -92,18 +101,18 @@ def test_trtfp32_more_bz():
             im_shape = np.array([images_size, images_size]).reshape((1, 2)).astype(np.float32)
             im_shape_pool.append(im_shape)
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
-        input_data_dict = {"im_shape": im_shape_pool,"image": data,"scale_factor": scale_factor_pool}
+        input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
 
         scale_0 = []
-        for batch in range(0,batch_size*2,2): 
-            scale_0 = np.concatenate((scale_0,result[batch].flatten()),axis=0)
+        for batch in range(0, batch_size * 2, 2):
+            scale_0 = np.concatenate((scale_0, result[batch].flatten()), axis=0)
         scale_1 = []
-        for batch in range(1,batch_size*2,2): 
-            scale_1 = np.concatenate((scale_1,result[batch].flatten()),axis=0)
+        for batch in range(1, batch_size * 2, 2):
+            scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
-        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0,"save_infer_model/scale_1.tmp_1":scale_1}
+        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.trt_fp32_more_bz_test(input_data_dict, output_data_dict, repeat=1,  delta=1e-4)
+        test_suite.trt_fp32_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
 
         del test_suite  # destroy class to save memory
 
@@ -123,14 +132,20 @@ def test_trtfp32_more_bz_multi_thread():
 
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        images_list, images_origin_list, npy_list = test_suite.get_images_npy(file_path, images_size, center=False, model_type='det')
+        images_list, images_origin_list, npy_list = test_suite.get_images_npy(
+            file_path, images_size, center=False, model_type="det"
+        )
 
         img = images_origin_list[0:batch_size]
-        result = npy_list[0:batch_size*2]
+        result = npy_list[0 : batch_size * 2]
         data = np.array(images_list[0:batch_size]).astype("float32")
         scale_factor_pool = []
-        for batch in range(batch_size):         
-            scale_factor = np.array([images_size * 1. / img[batch].shape[0], images_size * 1. / img[batch].shape[1]]).reshape((1, 2)).astype(np.float32)
+        for batch in range(batch_size):
+            scale_factor = (
+                np.array([images_size * 1.0 / img[batch].shape[0], images_size * 1.0 / img[batch].shape[1]])
+                .reshape((1, 2))
+                .astype(np.float32)
+            )
             scale_factor_pool.append(scale_factor)
         scale_factor_pool = np.array(scale_factor_pool).reshape((batch_size, 2))
         im_shape_pool = []
@@ -138,18 +153,18 @@ def test_trtfp32_more_bz_multi_thread():
             im_shape = np.array([images_size, images_size]).reshape((1, 2)).astype(np.float32)
             im_shape_pool.append(im_shape)
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
-        input_data_dict = {"im_shape": im_shape_pool,"image": data,"scale_factor": scale_factor_pool}
+        input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
 
         scale_0 = []
-        for batch in range(0,batch_size*2,2): 
-            scale_0 = np.concatenate((scale_0,result[batch].flatten()),axis=0)
+        for batch in range(0, batch_size * 2, 2):
+            scale_0 = np.concatenate((scale_0, result[batch].flatten()), axis=0)
         scale_1 = []
-        for batch in range(1,batch_size*2,2): 
-            scale_1 = np.concatenate((scale_1,result[batch].flatten()),axis=0)
+        for batch in range(1, batch_size * 2, 2):
+            scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
-        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0,"save_infer_model/scale_1.tmp_1":scale_1}
+        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.trt_fp32_bz1_multi_thread_test(input_data_dict, output_data_dict, repeat=1,  delta=1e-4)
+        test_suite.trt_fp32_bz1_multi_thread_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
 
         del test_suite  # destroy class to save memory
 
@@ -164,19 +179,25 @@ def test_more_bz_mkldnn():
 
     file_path = "./yolov3"
     images_size = 608
-    batch_size_pool = [1,4,8,10]
+    batch_size_pool = [1, 4, 8, 10]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        images_list, images_origin_list, npy_list = test_suite.get_images_npy(file_path, images_size, center=False, model_type='det')
+        images_list, images_origin_list, npy_list = test_suite.get_images_npy(
+            file_path, images_size, center=False, model_type="det"
+        )
 
         img = images_origin_list[0:batch_size]
-        result = npy_list[0:batch_size*2]
+        result = npy_list[0 : batch_size * 2]
         data = np.array(images_list[0:batch_size]).astype("float32")
         scale_factor_pool = []
-        for batch in range(batch_size):         
-            scale_factor = np.array([images_size * 1. / img[batch].shape[0], images_size * 1. / img[batch].shape[1]]).reshape((1, 2)).astype(np.float32)
+        for batch in range(batch_size):
+            scale_factor = (
+                np.array([images_size * 1.0 / img[batch].shape[0], images_size * 1.0 / img[batch].shape[1]])
+                .reshape((1, 2))
+                .astype(np.float32)
+            )
             scale_factor_pool.append(scale_factor)
         scale_factor_pool = np.array(scale_factor_pool).reshape((batch_size, 2))
         im_shape_pool = []
@@ -184,15 +205,15 @@ def test_more_bz_mkldnn():
             im_shape = np.array([images_size, images_size]).reshape((1, 2)).astype(np.float32)
             im_shape_pool.append(im_shape)
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
-        input_data_dict = {"im_shape": im_shape_pool,"image": data,"scale_factor": scale_factor_pool}
+        input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
 
         scale_0 = []
-        for batch in range(0,batch_size*2,2): 
-            scale_0 = np.concatenate((scale_0,result[batch].flatten()),axis=0)
+        for batch in range(0, batch_size * 2, 2):
+            scale_0 = np.concatenate((scale_0, result[batch].flatten()), axis=0)
         scale_1 = []
-        for batch in range(1,batch_size*2,2): 
-            scale_1 = np.concatenate((scale_1,result[batch].flatten()),axis=0)
+        for batch in range(1, batch_size * 2, 2):
+            scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
-        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0,"save_infer_model/scale_1.tmp_1":scale_1}
+        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.mkldnn_test(input_data_dict, output_data_dict, repeat=1,  delta=1e-4)
+        test_suite.mkldnn_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
