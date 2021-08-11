@@ -30,6 +30,7 @@ echo "python="$1
 set -x
 python -m pip install --ignore-installed --upgrade pip
 python -m pip install $2;
+python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 ####################################
 mkdir /ssd1/paddlenlp
 export PPNLP_HOME=/ssd1/paddlenlp
