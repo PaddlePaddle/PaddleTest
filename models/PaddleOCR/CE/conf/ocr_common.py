@@ -35,6 +35,6 @@ SET_MULTI_CUDA = '0,1'
 
 # PaddleOCR
 REPO_PaddleOCR = "https://github.com/PaddlePaddle/PaddleOCR.git"
-BASE_BRANCH = "release/2.1"
-ocr_BRANCH = "release/2.1"
+BASE_BRANCH = "dygraph"
+ocr_BRANCH = "dygraph"
 
