@@ -66,9 +66,7 @@ mkdir /workspace/logs
 export log_path=/workspace/logs
 ####################################
 # run p0case
-sed -i 's/cudaid1=$1/cudaid1=0/' nlp_ci__case.sh;
-sed -i 's/cudaid2=$2/cudaid2=0,1/' nlp_ci_case.sh;
-bash nlp_ci_case.sh
+bash nlp_ci_case.sh ${cudaid1} ${cudaid2}
 P0case_EXCODE=$? || true
 ####################################
 echo -e "\033[35m ---- result: \033[0m"
