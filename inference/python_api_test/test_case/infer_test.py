@@ -94,11 +94,13 @@ class InferenceTest(object):
             output_data_dict[output_data_name] = output_data
         return output_data_dict
 
-    def get_images_npy(self, file_path: str, images_size: int) -> list:
+    def get_images_npy(self, file_path: str, images_size: int, center=True, model_type="class") -> list:
         """
         get images and npy truth value
         Args:
             file_path(str): images and npy saved path
+            images_size(int): images size
+            center(bool):
         Returns:
             images_list(list): images array in list
             npy_list(list): npy array in list
@@ -110,9 +112,13 @@ class InferenceTest(object):
         if not os.path.exists(npy_path):
             raise Exception(f"{npy_path} not find")
 
-        images_list = read_images_path(images_path, images_size)
         npy_list = read_npy_path(npy_path)
-        return images_list, npy_list
+        if model_type == "class":
+            images_list = read_images_path(images_path, images_size, center=True, model_type="class")
+            return images_list, npy_list
+        elif model_type == "det":
+            images_list, images_origin_list = read_images_path(images_path, images_size, center=False, model_type="det")
+            return images_list, images_origin_list, npy_list
 
     def config_test(self):
         """
@@ -190,9 +196,10 @@ class InferenceTest(object):
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
+                diff = diff_calculation(out_data, output_data_truth_val[j])
                 assert (
-                    abs(out_data - output_data_truth_val[j]) <= delta
-                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+                    diff <= delta
+                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
     def trt_fp32_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
         """
@@ -233,10 +240,11 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data.flatten()):
+            for j, out_data in enumerate(output_data):
+                diff = diff_calculation(out_data, output_data_truth_val[j])
                 assert (
-                    abs(out_data - output_data_truth_val[j]) <= delta
-                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+                    diff <= delta
+                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
     def trt_fp32_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
         """
@@ -277,10 +285,11 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data.flatten()):
+            for j, out_data in enumerate(output_data):
+                diff = diff_calculation(out_data, output_data_truth_val[j])
                 assert (
-                    abs(out_data - output_data_truth_val[j]) <= delta
-                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+                    diff <= delta
+                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
     def trt_fp32_bz1_multi_thread_test(
         self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5, gpu_mem=1000
@@ -359,10 +368,11 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data.flatten()):
+            for j, out_data in enumerate(output_data):
+                diff = diff_calculation(out_data, output_data_truth_val[j])
                 assert (
-                    abs(out_data - output_data_truth_val[j]) <= delta
-                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+                    diff <= delta
+                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
     def trt_fp16_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
         """
@@ -403,10 +413,11 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data.flatten()):
+            for j, out_data in enumerate(output_data):
+                diff = diff_calculation(out_data, output_data_truth_val[j])
                 assert (
-                    abs(out_data - output_data_truth_val[j]) <= delta
-                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+                    diff <= delta
+                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
     def trt_fp16_bz1_multi_thread_test(
         self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5, gpu_mem=1000
@@ -474,9 +485,10 @@ class InferenceTest(object):
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
+                diff = diff_calculation(out_data, output_data_truth_val[j])
                 assert (
-                    abs(out_data - output_data_truth_val[j]) <= delta
-                ), f"{out_data} - {output_data_truth_val[j]} > {delta}"
+                    diff <= delta
+                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
 
 def record_by_pid(pid: int, cuda_visible_device: int):
@@ -520,7 +532,7 @@ def get_gpu_mem(gpu_id=0):
     return gpu_mem
 
 
-def read_images_path(images_path, images_size):
+def read_images_path(images_path, images_size, center=True, model_type="class"):
     """
     read images
     Args:
@@ -530,11 +542,16 @@ def read_images_path(images_path, images_size):
     """
     image_names = sorted(os.listdir(images_path))
     images_list = []
+    images_origin_list = []
     for name in image_names:
         image_path = os.path.join(images_path, name)
         im = cv2.imread(image_path)
-        images_list.append(preprocess(im, images_size))
-    return images_list
+        images_origin_list.append(im)
+        images_list.append(preprocess(im, images_size, center, model_type))
+    if model_type == "class":
+        return images_list
+    elif model_type == "det":
+        return images_list, images_origin_list
 
 
 def read_npy_path(npys_path):
@@ -553,20 +570,30 @@ def read_npy_path(npys_path):
     return npy_list
 
 
-def resize_short(img, target_size):
+def resize_short(img, target_size, model_type="class"):
     """
     resize to target size
     Args:
         img(numpy): img input
         target_size(int): img size
+        model_type(str): model type
     Returns:
         resized(numpy): resize img
     """
-    percent = float(target_size) / min(img.shape[0], img.shape[1])
-    resized_width = int(round(img.shape[1] * percent))
-    resized_height = int(round(img.shape[0] * percent))
-    resized = cv2.resize(img, (resized_width, resized_height))
-    return resized
+    if model_type == "class":
+        percent = float(target_size) / min(img.shape[0], img.shape[1])
+        resized_width = int(round(img.shape[1] * percent))
+        resized_height = int(round(img.shape[0] * percent))
+        resized = cv2.resize(img, (resized_width, resized_height))
+        return resized
+    elif model_type == "det":
+        im_shape = img.shape
+        im_size_min = np.min(im_shape[0:2])
+        im_size_max = np.max(im_shape[0:2])
+        im_scale_x = float(target_size) / float(im_shape[1])
+        im_scale_y = float(target_size) / float(im_shape[0])
+        resized = cv2.resize(img, None, None, fx=im_scale_x, fy=im_scale_y)
+        return resized
 
 
 def crop_image(img, target_size, center):
@@ -593,7 +620,7 @@ def crop_image(img, target_size, center):
     return img
 
 
-def preprocess(img, img_size):
+def preprocess(img, img_size, center=True, model_type="class"):
     """
     preprocess img
     Args:
@@ -603,7 +630,7 @@ def preprocess(img, img_size):
     """
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
-    img = resize_short(img, img_size)
+    img = resize_short(img, img_size, model_type)
     img = crop_image(img, img_size, True)
     # bgr-> rgb && hwc->chw
     img = img[:, :, ::-1].astype("float32").transpose((2, 0, 1)) / 255
@@ -612,3 +639,31 @@ def preprocess(img, img_size):
     img -= img_mean
     img /= img_std
     return img[np.newaxis, :][0]
+
+
+def diff_calculation(num0, num1, delta=5):
+    """
+    diff of judging significant digits
+    Args:
+        num0(float): input num 0
+        num1(float): input num 1
+    Returns:
+        diff(float): return diff
+    """
+    difference = num0 - num1
+    num0_int_length = len(str(int(num0)))
+    num1_int_length = len(str(int(num1)))
+    num0_int = int(num0)
+    num1_int = int(num1)
+    if num0 < 1 and num1 < 1 and difference < 1:
+        return difference
+    elif num0_int_length == num1_int_length:
+        if num0_int_length >= 5:
+            return abs(num0_int - num1_int)
+        else:
+            scale = 5 - num1_int_length
+            num0_padding = num0 * scale
+            num1_padding = num1 * scale
+            return abs(num0_padding - num1_padding) / (10 * scale)
+    elif num0_int_length != num1_int_length:
+        return difference
