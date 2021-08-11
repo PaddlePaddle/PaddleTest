@@ -14,16 +14,16 @@ fi
 waybill_ie(){
 cd ${nlp_dir}/examples/information_extraction/waybill_ie/
 cp -r /ssd1/paddlenlp/download/waybill_ie/* ${nlp_dir}/examples/information_extraction/waybill_ie/data/
-export CUDA_VISIBLE_DEVICES=${cudaid1} 
-# BiGRU +CRF star training 
+export CUDA_VISIBLE_DEVICES=${cudaid1}
+# BiGRU +CRF star training
 time (
-python download.py --data_dir ./waybill_ie    
+python download.py --data_dir ./waybill_ie
 python run_bigru_crf.py >${log_path}/waybill_ie_bigru_crf) >>${log_path}/waybill_ie_bigru_crf 2>&1
 print_info $? waybill_ie_bigru_crf
-# ERNIE +RF star training 
+# ERNIE +RF star training
 time (python run_ernie.py >${log_path}/waybill_ie_ernie) >>${log_path}/waybill_ie_ernie 2>&1
 print_info $? waybill_ie_ernie
-# ERNIE +CRF star training 
+# ERNIE +CRF star training
 time (python run_ernie_crf.py >${log_path}/waybill_ie_ernie_crf) >>${log_path}/waybill_ie_ernie_crf 2>&1
 print_info $? waybill_ie_ernie_crf
 }
@@ -65,7 +65,7 @@ print_info $? msra_ner_predict
 glue() {
 cd ${nlp_dir}/examples/benchmark/glue/
 CUDA_VISIBLE_DEVICES=${cudaid2}
-##  TASK_SST-2 
+##  TASK_SST-2
 export TASK_NAME=SST-2
 time (python -m paddle.distributed.launch  run_glue.py \
     --model_type albert    \
@@ -241,7 +241,7 @@ time (python -m paddle.distributed.launch ./run_glue.py \
 print_info $? xlnet_train
 }
 # 10 ofa
-ofa(){  
+ofa(){
 cd ${nlp_dir}/examples/model_compression/ofa/
 cd ../../benchmark/glue/
 CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -326,7 +326,7 @@ print_info $? albert_sst-2_train
 # 13 squad
 squad (){
 cd ${nlp_dir}/examples/machine_reading_comprehension/SQuAD/
-CUDA_VISIBLE_DEVICES=${cudaid1}  
+CUDA_VISIBLE_DEVICES=${cudaid1}
 # finetune
 time (python -m paddle.distributed.launch run_squad.py \
     --model_type bert \
@@ -361,7 +361,7 @@ print_info $? squad_predict
 }
 # 14 tinybert
 tinybert() {
-CUDA_VISIBLE_DEVICES=${cudaid1} 
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${nlp_dir}/examples/model_compression/tinybert/
 cp -r /ssd1/paddlenlp/download/tinybert/pretrained_models/ ./
 #中间层蒸馏
@@ -404,7 +404,7 @@ print_info $? tinybert_predslim
 }
 # 15 lexical_analysis
 lexical_analysis(){
-CUDA_VISIBLE_DEVICES=${cudaid2} 
+CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/examples/lexical_analysis/
 #train
 time (python download.py --data_dir ./ )
@@ -438,7 +438,7 @@ print_info $? lexical_analysis_deploy
 }
 # 16 seq2seq
 seq2seq() {
-CUDA_VISIBLE_DEVICES=${cudaid2} 
+CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/examples/machine_translation/seq2seq/
 # train  (1041/steps) 5min
 time (python train.py \
@@ -489,7 +489,7 @@ print_info $? seq2seq_depoly
 }
 # 17 pretrained_models
 pretrained_models() {
-CUDA_VISIBLE_DEVICES=${cudaid2} 
+CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/examples/text_classification/pretrained_models/
 time (python -m paddle.distributed.launch train.py --device gpu  --epochs 2 --save_dir ./checkpoints >${log_path}/pretrained_models_train) >>${log_path}/pretrained_models_train 2>&1
 print_info $? pretrained_models_train
@@ -498,9 +498,9 @@ print_info $? pretrained_models_export
 time (python deploy/python/predict.py --model_dir=./output >${log_path}/pretrained_models_deploy) >>${log_path}/pretrained_models_deploy 2>&1
 print_info $? pretrained_models_deploy
 }
-# 18 word_embedding 5min 
+# 18 word_embedding 5min
 word_embedding(){
-CUDA_VISIBLE_DEVICES=${cudaid1} 
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${nlp_dir}/examples/word_embedding/
 # 使用paddlenlp.embeddings.TokenEmbedding
 time (python train.py --device='gpu' \
@@ -521,7 +521,7 @@ print_info $? word_embedding_paddle_train
 }
 # 19 ernie-ctm
 ernie-ctm(){
-CUDA_VISIBLE_DEVICES=${cudaid2} 
+CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/examples/text_to_knowledge/ernie-ctm/
 cp -r /ssd1/paddlenlp/download/ctm/data ./
 time (python -m paddle.distributed.launch  train.py \
@@ -563,9 +563,9 @@ print_info $? distilbert_train
 }
 # 21 stacl
 stacl() {
-cd ${nlp_dir}/examples/simultaneous_translation/stacl/   
+cd ${nlp_dir}/examples/simultaneous_translation/stacl/
 cp -r /ssd1/paddlenlp/download/stacl/* ./
-CUDA_VISIBLE_DEVICES=${cudaid2} 
+CUDA_VISIBLE_DEVICES=${cudaid2}
 time (sed -i "s/save_step: 10000/save_step: 1/g" config/transformer.yaml
 sed -i "s/p print_step: 100/print_step: 1/g" config/transformer.yaml
 sed -i "s/epoch: 30/epoch: 1/g" config/transformer.yaml
@@ -592,11 +592,11 @@ sed -i 's#init_from_params: "trained_models/step_final/"#init_from_params: "./tr
 python predict.py --config ./config/transformer.yaml >${log_path}/stacl_predict) >>${log_path}/stacl_predict 2>&1
 print_info $? stacl_predict
 }
-# 22 transformer 
+# 22 transformer
 transformer (){
 cd ${nlp_dir}/examples/machine_translation/transformer/
-CUDA_VISIBLE_DEVICES=${cudaid2}    
-time ( 
+CUDA_VISIBLE_DEVICES=${cudaid2}
+time (
 sed -i "s/save_step: 10000/save_step: 1/g" configs/transformer.base.yaml
 sed -i "s/print_step: 100/print_step: 1/g" configs/transformer.base.yaml
 sed -i "s/epoch: 30/epoch: 1/g" configs/transformer.base.yaml
@@ -624,7 +624,7 @@ print_info $? transformer_infer
 # 23 pet
 pet (){
 cd ${nlp_dir}/examples/few_shot/pet/
-CUDA_VISIBLE_DEVICES=${cudaid1}  
+CUDA_VISIBLE_DEVICES=${cudaid1}
 #chid_train
 time (
 python  -u -m paddle.distributed.launch  \
