@@ -1,4 +1,4 @@
-MODEL: "RedNet50" # 模型名
+MODEL: "ResNet50" # 模型名
 PRIORITY: P0
 GIT:
   addr: $REPO_PaddleClas
@@ -11,7 +11,7 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: scripts/RedNet50/ #脚本的路径
+  model_scripts_path: scripts/ResNet50/ #脚本的路径
   model_log_path: log
 
 EXEC:
@@ -39,7 +39,7 @@ TRAIN: # 训练步骤
         threshold: 0.5
         actived: True
         evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/RedNet50_1card.log
+    output: $ROOT_PATH/$model_log_path/resnet50_1card.log
   -
     priority: P0  # dy_gpu1
     tag: linux_dy_gpu2
@@ -58,4 +58,4 @@ TRAIN: # 训练步骤
         threshold: 0.5
         actived: True
         evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/RedNet50_2card.log
+    output: $ROOT_PATH/$model_log_path/resnet50_2card.log
