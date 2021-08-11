@@ -27,8 +27,8 @@ class TestLgamma(APIBase):
         # self.debug = True
         # self.static = True
         # enable check grad
-        self.delta = 1e-5
-        self.rtol = 1e-5
+        # self.delta = 1e-6
+        # self.rtol = 1e-6
         self.enable_backward = False
 
 
@@ -55,7 +55,7 @@ def test_lgamma_base():
     """
     base float
     """
-    x = randtool("float", -5, 5, [6, 6])
+    x = randtool("float", -5, 5, [6, 6]).astype(np.float32)
     res = compute_lgamma(x)
     obj.base(res=res, x=x)
 
@@ -66,7 +66,6 @@ def test_lgamma_base_backward():
     test backward delta = 0.05
     """
     x = randtool("float", -5, 5, [3, 3])
-    print(x)
     res = compute_lgamma(x)
     obj1.base(res=res, x=x)
 
