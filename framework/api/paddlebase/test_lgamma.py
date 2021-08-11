@@ -27,8 +27,6 @@ class TestLgamma(APIBase):
         # self.debug = True
         # self.static = True
         # enable check grad
-        # self.delta = 1e-6
-        # self.rtol = 1e-6
         self.enable_backward = False
 
 
