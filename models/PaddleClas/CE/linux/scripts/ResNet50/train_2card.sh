@@ -9,7 +9,7 @@ sed -ie '/RandFlipImage/d'  ppcls/configs/ImageNet/ResNet/ResNet50.yaml
 sed -ie '/flip_code/d'  ppcls/configs/ImageNet/ResNet/ResNet50.yaml
 
 rm -rf dataset
-ln -s /home/data/cfs/models_ce/PaddleClas dataset
+ln -s /home/data/cfs/models_ce/ILSVRC2012_w dataset/ILSVRC2012
 if [ ! -d "log" ]; then
   mkdir log
 fi
