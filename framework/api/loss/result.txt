@@ -1,0 +1,2 @@
+============ failed cases =============
+total bugs: 0
