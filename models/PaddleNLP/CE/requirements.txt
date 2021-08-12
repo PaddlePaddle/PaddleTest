@@ -1,0 +1,23 @@
+numpy
+sentencepiece==0.1.95
+regex
+tqdm==4.57.0
+jieba
+colorlog
+colorama
+seqeval
+attrdict
+pyyaml
+h5py
+pandas
+sentencepiece
+termcolor
+gensim
+tqdm
+pgl >= 2.1
+nltk
+easydict
+multiprocess
+sklearn
+paddleslim
+visualdl
