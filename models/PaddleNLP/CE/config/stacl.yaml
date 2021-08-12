@@ -1,5 +1,5 @@
 MODEL: "stacl" # 模型名
-PRIORITY: P1, Dy_con # 数据集不能公开，改成P1以及收敛性的任务
+PRIORITY: P0, Dy_con # 数据集不能公开，改成P1以及收敛性的任务
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo

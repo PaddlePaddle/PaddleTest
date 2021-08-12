@@ -17,5 +17,4 @@ python -m pip install -r requirements.txt
 rm -rf data/nist2m
 mkdir -p data/nist2m
 
-cd data/nist2m
-# 待提供数据集bos地址
+cp -r  /workspace/task/datasets/stacl/data/nist2m/*  ./data/nist2m/
