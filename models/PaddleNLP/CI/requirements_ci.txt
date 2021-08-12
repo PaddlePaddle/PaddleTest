@@ -1,0 +1,12 @@
+sentencepiece
+jieba
+colorlog
+colorama
+seqeval
+regex
+tqdm
+attrdict==2.0.1
+PyYAML==5.4.1
+subword_nmt==0.3.7
+visualdl
+pandas

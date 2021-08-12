@@ -1,4 +1,6 @@
 home=$PWD
+python3.7 -m pip install pytest
+python3.7 -m pip install scipy
 # base
 cd paddlebase
 rm -rf ./result.txt
@@ -30,10 +32,19 @@ echo ${optimizer}
 cat ./result.txt
 cd $home
 
+# loss
+cd loss
+rm -rf ./result.txt
+echo "[loss cases result]" >> result.txt
+bash ./run.sh
+loss=$?
+echo ${loss}
+cat ./result.txt
+cd $home
 
 # result
 echo "=============== result ================="
-if [ `expr ${paddlebase} + ${nn} + ${optimizer}` -eq 0 ]; then
+if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss}` -eq 0 ]; then
   result=`find . -name "result.txt"`
   for file in ${result}
     do
