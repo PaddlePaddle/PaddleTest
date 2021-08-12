@@ -197,6 +197,7 @@ class InferenceTest(object):
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
                 diff = diff_calculation(out_data, output_data_truth_val[j])
+                print(out_data,output_data_truth_val[j])
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
@@ -631,7 +632,7 @@ def preprocess(img, img_size, center=True, model_type="class"):
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
     img = resize_short(img, img_size, model_type)
-    img = crop_image(img, img_size, True)
+    img = crop_image(img, img_size, center)
     # bgr-> rgb && hwc->chw
     img = img[:, :, ::-1].astype("float32").transpose((2, 0, 1)) / 255
     img_mean = np.array(mean).reshape((3, 1, 1))
