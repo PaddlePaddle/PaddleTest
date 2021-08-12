@@ -2,3 +2,4 @@ wget
 psutil
 pytest
 pynvml
+opencv-python
