@@ -1,0 +1,77 @@
+MODEL: "lic2021_baseline" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $DGU_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/lic2021_baseline/ #脚本的路径
+  model_log_path: log/lic2021_baseline/
+
+EXEC:
+  exec_cases: [DATA_PROC, TRAIN]
+  exec_priority: [p0,p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash finetune.sh $XPU 'single' $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 3.1483
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      ppl:
+        latest: True
+        kpi_base: 23.2973
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash finetune.sh $XPU 'multi' $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 3.1483
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      ppl:
+        latest: True
+        kpi_base: 23.2973
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_multi_$XPU.log

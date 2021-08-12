@@ -1,0 +1,323 @@
+MODEL: "DuEE" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/DuEE/ #脚本的路径
+  model_log_path: log/DuEE/
+
+EXEC:
+  exec_cases: [DATA_PROC, TRAIN, INFER]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+  -
+    priority: p0
+    tag:  win_download_data
+    run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: compile_package.bat
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_trigger_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU trigger single $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.038564
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_trigger_single_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_trigger_gpu2
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU trigger multi $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.114422
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/train_trigger_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_trigger
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU trigger $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.038564
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_trigger_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_role_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU role single $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.453216
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_role_single_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_role_gpu2
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU role multi $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.530493
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/train_role_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_role
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU role $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.453216
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_role_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_enum_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU enum single $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 1.134540
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_enum_single_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_enum_gpu2
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU enum multi $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.636208
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/train_enum_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_enum
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU enum $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 1.158387
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_enum_$XPU.log
+
+INFER:
+  -
+    priority: p0
+    tag: linux_dy_trigger_gpu1
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU trigger single
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_trigger_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_trigger
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU trigger
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_trigger_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_role_gpu1
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU role single
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_role_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_role
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU role
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_role_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_enum_gpu1
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU enum single
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_enum_single_$XPU.log
+
+  -
+    priority: p2 #暂时关闭，显卡不足
+    tag: win_dy_gpu1_enum
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU enum
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_enum_$XPU.log
