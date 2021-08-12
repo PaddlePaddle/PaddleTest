@@ -64,6 +64,7 @@ def test_disable_gpu():
     input_data_dict = {"im_shape": im_shape, "image": data, "scale_factor": scale_factor}
     test_suite.disable_gpu_test(input_data_dict)
 
+
 @pytest.mark.p1
 @pytest.mark.trt_fp32_bz1_precision
 def test_trtfp32_bz1():

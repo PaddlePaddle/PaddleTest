@@ -196,8 +196,8 @@ class InferenceTest(object):
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
-                diff = diff_calculation(out_data, output_data_truth_val[j])
-                print(out_data,output_data_truth_val[j])
+                diff = sig_fig_compare(out_data, output_data_truth_val[j])
+                print(out_data, output_data_truth_val[j])
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
@@ -242,7 +242,7 @@ class InferenceTest(object):
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
-                diff = diff_calculation(out_data, output_data_truth_val[j])
+                diff = sig_fig_compare(out_data, output_data_truth_val[j])
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
@@ -287,7 +287,7 @@ class InferenceTest(object):
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
-                diff = diff_calculation(out_data, output_data_truth_val[j])
+                diff = sig_fig_compare(out_data, output_data_truth_val[j])
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
@@ -370,7 +370,7 @@ class InferenceTest(object):
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
-                diff = diff_calculation(out_data, output_data_truth_val[j])
+                diff = sig_fig_compare(out_data, output_data_truth_val[j])
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
@@ -415,7 +415,7 @@ class InferenceTest(object):
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
-                diff = diff_calculation(out_data, output_data_truth_val[j])
+                diff = sig_fig_compare(out_data, output_data_truth_val[j])
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
@@ -486,7 +486,7 @@ class InferenceTest(object):
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
             for j, out_data in enumerate(output_data):
-                diff = diff_calculation(out_data, output_data_truth_val[j])
+                diff = sig_fig_compare(out_data, output_data_truth_val[j])
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
@@ -642,9 +642,9 @@ def preprocess(img, img_size, center=True, model_type="class"):
     return img[np.newaxis, :][0]
 
 
-def diff_calculation(num0, num1, delta=5):
+def sig_fig_compare(num0, num1, delta=5):
     """
-    diff of judging significant digits
+    compare significant figure
     Args:
         num0(float): input num 0
         num1(float): input num 1
