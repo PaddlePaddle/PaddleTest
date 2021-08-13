@@ -18,7 +18,7 @@ mkdir -p $log_path
 echo "-------  install slim --------"
 cd ${root_path}/PaddleSlim
 python -m pip install pip==20.2.4
-python -m pip install opencv-python==4.2.0.32 -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install -r requirements.txt
 python setup.py install
 echo "------- after install slim --------"
