@@ -42,7 +42,7 @@ class TestSANAS(StaticCase):
         """
         port = 8773
         config = [("MobileNetV2BlockSpace", {"block_mask": [0]})]
-        sanas = SANAS(
+        SANAS(
             configs=config,
             server_addr=("", port),
             init_temperature=0.7,
@@ -61,7 +61,7 @@ class TestSANAS(StaticCase):
         """
         port = 8774
         config = [("MobileNetV2BlockSpace", {"block_mask": [0]})]
-        sanas1 = SANAS(
+        SANAS(
             configs=config,
             server_addr=("", port),
             init_temperature=0.7,
@@ -73,7 +73,7 @@ class TestSANAS(StaticCase):
             is_server=True,
         )
 
-        sanas2 = SANAS(
+        SANAS(
             configs=config,
             server_addr=("172.0.0.1", port),
             init_temperature=0.7,

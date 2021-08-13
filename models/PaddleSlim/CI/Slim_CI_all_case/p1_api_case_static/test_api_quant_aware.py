@@ -21,10 +21,10 @@ import unittest
 import paddle
 from paddleslim.quant import quant_aware, convert
 from static_case import StaticCase
-from models import MobileNet
 from paddle.fluid.framework import IrGraph
-from paddle.fluid import core
 import numpy as np
+from paddle.fluid import core
+from models import MobileNet
 
 sys.path.append("../")
 sys.path.append("../demo")

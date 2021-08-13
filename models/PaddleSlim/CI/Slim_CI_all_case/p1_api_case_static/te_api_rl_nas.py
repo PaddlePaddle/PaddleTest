@@ -67,7 +67,7 @@ class TestRLNAS(StaticCase):
         :return:
         """
         config = [("MobileNetV2BlockSpace", {"block_mask": [0]})]
-        sanas1 = RLNAS(
+        RLNAS(
             key="lstm",
             configs=config,
             use_gpu=False,
@@ -82,7 +82,7 @@ class TestRLNAS(StaticCase):
             temperature=1.0,
         )
 
-        sanas2 = RLNAS(
+        RLNAS(
             key="lstm",
             configs=config,
             use_gpu=False,
@@ -103,7 +103,7 @@ class TestRLNAS(StaticCase):
         :return:
         """
         config = [("MobileNetV2BlockSpace", {"block_mask": [0]})]
-        sanas1 = RLNAS(
+        RLNAS(
             key="ddpg",
             configs=config,
             use_gpu=False,
@@ -114,7 +114,7 @@ class TestRLNAS(StaticCase):
             load_controller=None,
         )
 
-        sanas2 = RLNAS(
+        RLNAS(
             key="ddpg",
             configs=config,
             use_gpu=False,

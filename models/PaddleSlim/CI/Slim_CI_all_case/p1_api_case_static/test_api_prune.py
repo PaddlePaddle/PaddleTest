@@ -6,7 +6,7 @@
 Copyright (c) 2020 Baidu.com, Inc. All Rights Reserved
 File: test_prune.py
 
-Authors: guomengmeng01(guomengmeng01@baidu.com)
+Authors:
 Date: 2020/10/27 10:02
 """
 
@@ -23,11 +23,6 @@ Date: 2020/10/27 10:02
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-@Desc:
-@File:
-@Author:
-"""
 import sys
 import unittest
 import paddle.fluid as fluid
