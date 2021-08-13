@@ -88,7 +88,7 @@ class TestRLNAS(StaticCase):
             key="lstm",
             configs=config,
             use_gpu=False,
-            server_addr=("172.0.0.1", 8774),
+            server_addr=("localhost", 8774),
             is_server=False,
             is_sync=False,
             save_controller="./rlnas_controller2",
