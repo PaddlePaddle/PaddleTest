@@ -19,7 +19,8 @@ def check(file):
         with open(file, encoding="utf-8") as f:
             for line in f:
                 for r in regex:
-                    if re.search(r, line) is not None:
+                    match = re.search(r, line)
+                    if match and match.group() != "127.0.0.1":
                         print("error file:" + file)
                         print("error line:" + line)
                         exit(1)

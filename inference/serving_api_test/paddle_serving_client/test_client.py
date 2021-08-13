@@ -7,7 +7,7 @@ import subprocess
 import numpy as np
 import pytest
 
-from paddle_serving_client import Client, MultiLangClient, SDKConfig
+from paddle_serving_client import Client, SDKConfig
 from paddle_serving_app.reader import Sequential, File2Image, Resize, CenterCrop
 from paddle_serving_app.reader import RGB2BGR, Transpose, Div, Normalize
 
@@ -54,16 +54,10 @@ class TestClient(object):
     def setup_class(self):
         """setup func"""
         self.dir = os.path.dirname(os.path.abspath(__file__))
-        self.model_dir = f"{os.path.split(self.dir)[0]}/paddle_serving_server/resnet_v2_50_imagenet_model"
-        self.client_dir = f"{os.path.split(self.dir)[0]}/paddle_serving_server/resnet_v2_50_imagenet_client"
+        self.model_dir = f"{os.path.split(self.dir)[0]}/data/resnet_v2_50_imagenet_model"
+        self.client_dir = f"{os.path.split(self.dir)[0]}/data/resnet_v2_50_imagenet_client"
         with open(f"{self.model_dir}/../key", "rb") as f:
             self.key = f.read()
-
-    def setup_method(self):
-        """setup func"""
-        self.dir = os.path.dirname(os.path.abspath(__file__))
-        self.model_dir = f"{os.path.split(self.dir)[0]}/paddle_serving_server/resnet_v2_50_imagenet_model"
-        self.client_dir = f"{os.path.split(self.dir)[0]}/paddle_serving_server/resnet_v2_50_imagenet_client"
 
     @pytest.mark.api_clientClient_loadClientConfig_parameters
     def test_load_client_config(self):
@@ -98,7 +92,7 @@ class TestClient(object):
         # start encrypt server
         p = subprocess.Popen(
             f"python3.6 -m paddle_serving_server.serve --model "
-            f"{os.path.split(self.dir)[0]}/paddle_serving_server/encrypt_server --port 9300 --use_encryption_model",
+            f"{os.path.split(self.dir)[0]}/data/encrypt_server --port 9300 --use_encryption_model",
             shell=True,
         )
         os.system("sleep 3")
@@ -201,106 +195,3 @@ class TestClient(object):
         assert result_prob == [0.9341405034065247, 0.9341405034065247]
 
         kill_process(9697, 3)
-
-
-class TestMultiLangClient(object):
-    """test grpc client"""
-
-    def setup_method(self):
-        """setup func"""
-        self.dir = os.path.dirname(os.path.abspath(__file__))
-        self.model_dir = f"{os.path.split(self.dir)[0]}/paddle_serving_server/resnet_v2_50_imagenet_model"
-        self.client_dir = f"{os.path.split(self.dir)[0]}/paddle_serving_server/resnet_v2_50_imagenet_client"
-
-    def start_grpc_server_with_bsf(self):
-        """start an async grpc server"""
-        p = subprocess.Popen(
-            f"python3.6 -m paddle_serving_server.serve --model {self.model_dir} "
-            f"--port 9696 --gpu_ids 0,1 --thread 10 --op_num 2 --use_multilang",
-            shell=True,
-        )
-        os.system("sleep 10")
-
-    @pytest.mark.api_clientClient_connect_parameters
-    def test_connect(self):
-        """test client connect"""
-        self.start_grpc_server_with_bsf()
-
-        assert check_gpu_memory(0) is True
-        assert check_gpu_memory(1) is True
-
-        client = MultiLangClient()
-        client.connect(["127.0.0.1:9696"])
-        assert client.feed_names_ == ["image"]
-        assert client.feed_types_ == {"image": 1}
-        assert client.feed_shapes_ == {"image": [3, 224, 224]}
-        assert client.fetch_names_ == ["score"]
-        assert client.fetch_types_ == {"score": 1}
-
-        kill_process(9696)
-        kill_process(12000, 3)
-
-    @pytest.mark.api_clientClient_predict_parameters
-    def test_predict(self):
-        """test predict"""
-        self.start_grpc_server_with_bsf()
-
-        assert check_gpu_memory(0) is True
-        assert check_gpu_memory(1) is True
-
-        client = MultiLangClient()
-        client.connect(["127.0.0.1:9696"])
-
-        # prepared image data
-        seq = Sequential(
-            [
-                File2Image(),
-                Resize(256),
-                CenterCrop(224),
-                RGB2BGR(),
-                Transpose((2, 0, 1)),
-                Div(255),
-                Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225], True),
-            ]
-        )
-        image_file = f"{self.model_dir}/../daisy.jpg"
-        img = seq(image_file)
-
-        # sync
-        for i in range(1, 3):
-            feed = {"image": img}
-            fetch_map = client.predict(feed=feed, fetch=["score"], batch=False)
-            print(fetch_map)
-            result_class = np.argmax(fetch_map["score"], axis=1).tolist()
-            result_prob = np.max(fetch_map["score"], axis=1).tolist()
-            print(f"sync_turn{i}_result_class:", result_class)
-            print(f"sync_turn{i}_result_prob:", result_prob)
-            assert result_class == [985]
-            assert result_prob == [0.9341405034065247]
-
-        # batch_size = 2
-        img_batch = img[np.newaxis, :]
-        img_batch = np.repeat(img_batch, repeats=2, axis=0)
-        for i in range(1, 3):
-            fetch_map = client.predict(feed={"image": img_batch}, fetch=["score"], batch=True)
-            result_class = np.argmax(fetch_map["score"], axis=1).tolist()
-            result_prob = np.max(fetch_map["score"], axis=1).tolist()
-            print(f"batch_turn{i}_result_class:", result_class)
-            print(f"batch_turn{i}_result_prob:", result_prob)
-            assert result_class == [985, 985]
-            assert result_prob == [0.9341405034065247, 0.9341405034065247]
-
-        # async
-        for i in range(1, 3):
-            feed = {"image": img}
-            future = client.predict(feed=feed, fetch=["score"], batch=False, asyn=True)
-            fetch_map = future.result()
-            result_class = np.argmax(fetch_map["score"], axis=1).tolist()
-            result_prob = np.max(fetch_map["score"], axis=1).tolist()
-            print(f"asyn_turn{i}_result_class:", result_class)
-            print(f"asyn_turn{i}_result_prob:", result_prob)
-            assert result_class == [985]
-            assert result_prob == [0.9341405034065247]
-
-        kill_process(9696)
-        kill_process(12000, 3)

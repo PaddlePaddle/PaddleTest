@@ -1,0 +1,347 @@
+MODEL: "distill_lstm" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $distill_lstm_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/distill_lstm/ #脚本的路径
+  model_log_path: log/distill_lstm/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN, DISTILL]
+  exec_priority: [p0, p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+  -
+    priority: p0
+    tag: mac_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1_chnsenticorp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU single chnsenticorp
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.75
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_chnsenticorp_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2_chnsenticorp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU multi chnsenticorp
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.7454128440366973
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_chnsenticorp_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_sst-2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU single sst-2 '/root/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.75
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_sst-2_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2_sst-2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU multi sst-2 '/root/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.75229
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_sst-2_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_qqp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU single qqp '/root/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.79364
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_qqp_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2_qqp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU multi qqp '/root/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.79394
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_qqp_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: mac_dy_cpu_chnsenticorp # mac的case
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU mac chnsenticorp
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_chnsenticorp_mac_$XPU.log
+
+
+  -
+    priority: p0
+    tag: mac_dy_cpu_sst-2 # mac的case
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU mac sst-2 '/Users/paddle/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_sst-2_mac_$XPU.log
+
+
+  -
+    priority: p0
+    tag: mac_dy_cpu_qqp # mac的case
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU mac qqp '/Users/paddle/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_qqp_mac_$XPU.log
+
+
+DISTILL:
+  -
+    priority: p1
+    tag: linux_dy_gpu1_chnsenticorp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash distill.sh $XPU single chnsenticorp
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/distill_chnsenticorp_single_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu2_chnsenticorp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash distill.sh $XPU multi chnsenticorp
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/distill_chnsenticorp_multi_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_sst-2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash distill.sh $XPU single sst-2
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/distill_sst-2_single_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu2_sst-2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash distill.sh $XPU multi sst-2
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/distill_sst-2_multi_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_qqp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash distill.sh $XPU single qqp
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/distill_qqp_single_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu2_qqp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash distill.sh $XPU multi qqp
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/distill_qqp_multi_$XPU.log

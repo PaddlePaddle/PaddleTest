@@ -1,0 +1,251 @@
+MODEL: "semantic_indexing_ance" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/semantic_indexing_ance/ #脚本的路径
+  model_log_path: log/semantic_indexing_ance/
+
+EXEC:
+  exec_cases: [DATA_PROC, TRAIN, EVAL, INFER]
+  exec_priority: [p0, p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1_batch
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA batch
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 79.329269
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_batch_single_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu2_batch
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' $SET_MULTI_CUDA batch
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 215.214279
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_batch_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_batch
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA batch
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 79.329269
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_batch_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_hardest
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA hardest
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 79.329269
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_hardest_single_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu2_hardest
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' $SET_MULTI_CUDA hardest
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 215.214279
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_hardest_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_hardest
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA hardest
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 79.329269
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_hardest_$XPU.log
+
+
+EVAL:
+  -
+    priority: p1
+    tag: linux_dy_gpu1_batch
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash eval.sh $XPU $SET_CUDA batch
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_batch_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_hardest
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash eval.sh $XPU $SET_CUDA hardest
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_hardest_$XPU.log
+
+
+INFER:
+  -
+    priority: p1
+    tag: linux_dy_gpu1_batch
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU $SET_CUDA batch
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_batch_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_batch
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA batch
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_batch_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_hardest
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU $SET_CUDA hardest
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_hardest_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_hardest
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA hardest
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_hardest_$XPU.log
