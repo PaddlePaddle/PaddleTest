@@ -1,0 +1,197 @@
+MODEL: "slim_st_darts" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleSlim
+  path: $ROOT_PATH/PaddleSlim
+  branch: $slim_st_darts_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/slim_st_darts/ #脚本的路径
+  model_log_path: log/slim_st_darts/
+
+EXEC:
+  exec_cases: [SEARCH, TRAIN]
+  exec_priority: $EXEC_PRIORITY
+  exec_tag: $EXEC_TAG
+
+
+TRAIN: # 训练步骤
+  -
+    priority: p2
+    tag: linux_st_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu1 slim_st_darts_linux_st_gpu1
+
+    kpis: #kpi指标
+      best_valid_acc:
+        latest: True
+        kpi_base: 0.438802
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_darts_linux_st_gpu1.log
+
+  -
+    priority: p0
+    tag: linux_st_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu2 slim_st_darts_linux_st_gpu2
+
+    kpis: #kpi指标
+      best_valid_acc:
+        latest: True
+        kpi_base: 0.442408
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_darts_linux_st_gpu2.log
+
+  -
+    priority: p2
+    tag: linux_st_cpu
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_cpu slim_st_darts_linux_st_cpu
+
+    kpis: #kpi指标
+      top1:
+        latest: True
+        kpi_base: 0.610519
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      top5:
+        latest: True
+        kpi_base: 0.956808
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_darts_linux_st_cpu.log
+
+SEARCH: # 训练步骤
+  -
+    priority: p0
+    tag: linux_st_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh search.sh linux_st_gpu1 slim_st_darts_search_linux_st_gpu1
+
+    kpis: #kpi指标
+      top1:
+        latest: True
+        kpi_base: 0.577563
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      top5:
+        latest: True
+        kpi_base: 0.946530
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_darts_search_linux_st_gpu1.log
+
+  -
+    priority: p2
+    tag: linux_st_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh search.sh linux_st_gpu2 slim_st_darts_search_linux_st_gpu2
+
+    kpis: #kpi指标
+      top1:
+        latest: True
+        kpi_base: 0.584429
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      top5:
+        latest: True
+        kpi_base: 0.952938
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_darts_search_linux_st_gpu2.log
+
+  -
+    priority: p2
+    tag: linux_st_cpu
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh search.sh linux_st_cpu slim_st_darts_search_linux_st_cpu
+
+    kpis: #kpi指标
+      acc_top1:
+        latest: True
+        kpi_base: 0.610519
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      acc_top5:
+        latest: True
+        kpi_base: 0.956808
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_darts_search_linux_st_cpu.log
+

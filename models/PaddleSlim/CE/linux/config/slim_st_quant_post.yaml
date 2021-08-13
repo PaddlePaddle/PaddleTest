@@ -1,0 +1,164 @@
+MODEL: "slim_st_quant_post" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleSlim
+  path: $ROOT_PATH/PaddleSlim
+  branch: $slim_st_quant_post_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/slim_st_quant_post/ #脚本的路径
+  model_log_path: log/slim_st_quant_post/
+
+EXEC:
+  exec_cases: [DATA_PROC,EXPORT,TRAIN,EVAL1,EVAL2]
+  exec_priority: $EXEC_PRIORITY
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    tag: linux_down_data
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh data_proc.sh all
+
+EXPORT: # 训练步骤
+  -
+    tag: linux_st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh export_model slim_st_quant_post_export_model
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_quant_post_export_model.log
+
+TRAIN: # 训练步骤
+  -
+    tag: linux_st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh quant_post slim_st_quant_post_linux_st_quant_post
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_quant_post_linux_st_quant_post.log
+
+  -
+    tag: linux_st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh quant_post_bc slim_st_quant_post_linux_st_quant_post_bc
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_quant_post_linux_st_quant_post_bc.log
+
+EVAL1: # 训练步骤
+  -
+    tag: linux_st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh eval1 slim_st_quant_post_linux_st_eval1
+
+    kpis: #kpi指标
+      top1:
+        latest: True
+        kpi_base: 0.701678
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      top5:
+        latest: True
+        kpi_base: 0.903657
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_quant_post_linux_st_eval1.log
+
+
+EVAL2: # 训练步骤
+  -
+    tag: linux_st_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh eval2 slim_st_quant_post_linux_st_eval2
+
+    kpis: #kpi指标
+      top1:
+        latest: True
+        kpi_base: 0.701678
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      top5:
+        latest: True
+        kpi_base: 0.903657
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_quant_post_linux_st_eval2.log
