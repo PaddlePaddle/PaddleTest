@@ -26,10 +26,10 @@ Date: 2020/10/27 10:02
 import sys
 import unittest
 import paddle.fluid as fluid
+import paddle
 from paddleslim.prune import Pruner
 from static_case import StaticCase
 from layers import conv_bn_layer
-import paddle
 
 sys.path.append("../")
 

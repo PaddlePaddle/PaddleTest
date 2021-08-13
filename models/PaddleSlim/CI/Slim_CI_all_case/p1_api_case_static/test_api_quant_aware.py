@@ -19,10 +19,10 @@
 import sys
 import unittest
 import paddle
+import numpy as np
 from paddleslim.quant import quant_aware, convert
 from static_case import StaticCase
 from paddle.fluid.framework import IrGraph
-import numpy as np
 from paddle.fluid import core
 from models import MobileNet
 
