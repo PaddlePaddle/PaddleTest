@@ -77,7 +77,7 @@ class TestSANAS(StaticCase):
 
         SANAS(
             configs=config,
-            server_addr=("172.0.0.1", port),
+            server_addr=("localhost", port),
             init_temperature=0.7,
             reduce_rate=0.8,
             init_tokens=None,

@@ -120,7 +120,7 @@ class TestRLNAS(StaticCase):
             key="ddpg",
             configs=config,
             use_gpu=False,
-            server_addr=("172.0.0.1", 8776),
+            server_addr=("localhost", 8776),
             is_server=False,
             is_sync=True,
             save_controller="./rlnas_controller2",
