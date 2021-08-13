@@ -11,9 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import sys
-
-sys.path.append("../")
 import unittest
 import numpy
 import paddle
@@ -22,8 +25,13 @@ from static_case import StaticCase
 from paddleslim.prune import sensitivity, merge_sensitive, load_sensitivities, get_ratios_by_loss
 from layers import conv_bn_layer
 
+sys.path.append("../")
+
 
 class TestSensitivity(StaticCase):
+    """
+    Test paddleslim.prune.sensitivity
+    """
     def test_sensitivity(self):
         """
         paddleslim.prune.sensitivity(program,
@@ -129,6 +137,10 @@ class TestSensitivity(StaticCase):
         self.assertTrue(sens == origin_sens)
 
     def test_get_ratios_by_loss(self):
+        """
+        Test get_ratios_by_loss
+        :return:
+        """
         sen = {"weight_0": {0.1: 0.22, 0.2: 0.33}, "weight_1": {0.1: 0.21, 0.2: 0.4}}
         res = {"weight_0": 0.17272727272727273, "weight_1": 0.14736842105263157}
         ratios = get_ratios_by_loss(sen, 0.3)

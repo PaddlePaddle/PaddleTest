@@ -11,14 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import sys
-import paddle
-
-sys.path.append("../")
-import paddleslim.quant as quant
 import unittest
-
+import paddle
+import paddleslim.quant as quant
 from static_case import StaticCase
+sys.path.append("../")
 
 if paddle.is_compiled_with_cuda() is True:
     places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
@@ -28,6 +31,9 @@ else:
 
 
 class TestQuantEmbedding(StaticCase):
+    """
+    Test paddleslim.quant.quant_embedding
+    """
     def test_quant_embedding(self):
         """
         paddleslim.quant.quant_embedding(program, place, config=None, scope=None)
@@ -39,7 +45,7 @@ class TestQuantEmbedding(StaticCase):
             param_attr = paddle.ParamAttr(name="emb", initializer=paddle.nn.initializer.Uniform(-0.005, 0.005))
             weight = train_program.global_block().create_parameter((100, 128), attr=param_attr, dtype="float32")
 
-            input_emb = paddle.nn.functional.embedding(x=input_word, weight=weight, sparse=True)
+            paddle.nn.functional.embedding(x=input_word, weight=weight, sparse=True)
 
         infer_program = train_program.clone(for_test=True)
 
@@ -47,7 +53,7 @@ class TestQuantEmbedding(StaticCase):
         exe = paddle.static.Executor(place)
         exe.run(paddle.static.default_startup_program())
 
-        quant_program = quant.quant_embedding(infer_program, place)
+        quant.quant_embedding(infer_program, place)
 
     def test_quant_embedding1(self):
         """
@@ -61,14 +67,14 @@ class TestQuantEmbedding(StaticCase):
                 param_attr = paddle.ParamAttr(name="emb", initializer=paddle.nn.initializer.Uniform(-0.005, 0.005))
                 weight = train_program.global_block().create_parameter((100, 128), attr=param_attr, dtype="float32")
 
-                input_emb = paddle.nn.functional.embedding(x=input_word, weight=weight, sparse=True)
+                paddle.nn.functional.embedding(x=input_word, weight=weight, sparse=True)
 
             infer_program = train_program.clone(for_test=True)
 
             exe = paddle.static.Executor(place)
             exe.run(paddle.static.default_startup_program())
             config = {"quantize_op_types": ["lookup_table"], "lookup_table": {"quantize_type": "abs_max"}}
-            quant_program = quant.quant_embedding(infer_program, config=config, place=place)
+            quant.quant_embedding(infer_program, config=config, place=place)
 
     def test_quant_embedding2(self):
         """
@@ -82,7 +88,7 @@ class TestQuantEmbedding(StaticCase):
                 param_attr = paddle.ParamAttr(name="emb", initializer=paddle.nn.initializer.Uniform(-0.005, 0.005))
                 weight = train_program.global_block().create_parameter((100, 128), attr=param_attr, dtype="float32")
 
-                input_emb = paddle.nn.functional.embedding(x=input_word, weight=weight, sparse=True)
+                paddle.nn.functional.embedding(x=input_word, weight=weight, sparse=True)
 
             infer_program = train_program.clone(for_test=True)
 
@@ -92,7 +98,7 @@ class TestQuantEmbedding(StaticCase):
                 "quantize_op_types": ["lookup_table", "fused_embedding_seq_pool", "pyramid_hash"],
                 "lookup_table": {"quantize_type": "log"},
             }
-            quant_program = quant.quant_embedding(infer_program, config=config, place=place)
+            quant.quant_embedding(infer_program, config=config, place=place)
 
 
 if __name__ == "__main__":

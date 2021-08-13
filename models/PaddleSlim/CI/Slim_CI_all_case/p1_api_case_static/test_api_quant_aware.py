@@ -11,25 +11,33 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import sys
-
-sys.path.append("../")
 import unittest
 import paddle
 from paddleslim.quant import quant_aware, convert
 from static_case import StaticCase
-
-sys.path.append("../demo")
 from models import MobileNet
-from layers import conv_bn_layer
-import paddle.dataset.mnist as reader
 from paddle.fluid.framework import IrGraph
 from paddle.fluid import core
 import numpy as np
 
+sys.path.append("../")
+sys.path.append("../demo")
 
 class TestQuantAwareCase1(StaticCase):
+    """
+        Test QuantAware
+    """
     def get_model(self):
+        """
+        get model
+        :return
+        """
         image = paddle.static.data(name="image", shape=[None, 1, 28, 28], dtype="float32")
         label = paddle.static.data(name="label", shape=[None, 1], dtype="int64")
         model = MobileNet()
@@ -41,7 +49,10 @@ class TestQuantAwareCase1(StaticCase):
         return startup_prog, train_prog
 
     def get_op_number(self, prog):
-
+        """
+        get op number
+        :return
+        """
         graph = IrGraph(core.Graph(prog.desc), for_test=False)
         quant_op_nums = 0
         op_nums = 0
@@ -54,7 +65,10 @@ class TestQuantAwareCase1(StaticCase):
         return op_nums, quant_op_nums
 
     def get_op_number_2(self, prog):
-
+        """
+        get op number
+        :return
+        """
         graph = IrGraph(core.Graph(prog.desc), for_test=False)
         quant_op_nums = 0
         op_nums = 0
@@ -233,8 +247,14 @@ class TestQuantAwareCase1(StaticCase):
 
 
 class TestQuantAwareCase2(StaticCase):
+    """
+    Test QuantAware
+    """
     # def test_accuracy(self):
     def te_accuracy(self):
+        """
+        Test accuracy
+        """
         image = paddle.static.data(name="image", shape=[None, 1, 28, 28], dtype="float32")
         label = paddle.static.data(name="label", shape=[None, 1], dtype="int64")
         model = MobileNet()
@@ -255,6 +275,9 @@ class TestQuantAwareCase2(StaticCase):
         exe.run(paddle.static.default_startup_program())
 
         def transform(x):
+            """
+            define transform
+            """
             return np.reshape(x, [1, 28, 28])
 
         train_dataset = paddle.vision.datasets.MNIST(mode="train", backend="cv2", transform=transform)
@@ -267,6 +290,9 @@ class TestQuantAwareCase2(StaticCase):
         )
 
         def train(program):
+            """
+             define train
+            """
             iter = 0
             for data in train_loader():
                 cost, top1, top5 = exe.run(program, feed=data, fetch_list=[avg_cost, acc_top1, acc_top5])
@@ -275,6 +301,9 @@ class TestQuantAwareCase2(StaticCase):
                     print("train iter={}, avg loss {}, acc_top1 {}, acc_top5 {}".format(iter, cost, top1, top5))
 
         def test(program):
+            """
+             define test
+            """
             iter = 0
             result = [[], [], []]
             for data in valid_loader():

@@ -11,11 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import paddle.fluid as fluid
 from paddle.fluid.param_attr import ParamAttr
 
-
 def conv_bn_layer(input, num_filters, filter_size, name, stride=1, groups=1, act=None, bias=False, use_cudnn=True):
+    """
+    construct conv and batch_norm layer
+    """
     conv = fluid.layers.conv2d(
         input=input,
         num_filters=num_filters,

@@ -23,16 +23,20 @@ Date: 2020/10/27 10:02
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import sys
-
-sys.path.append("../")
 import unittest
-from static_case import StaticCase
 import paddle.fluid as fluid
 from paddleslim.prune import Pruner
 from static_case import StaticCase
 from layers import conv_bn_layer
 import paddle
+
+sys.path.append("../")
 
 if paddle.is_compiled_with_cuda() is True:
     # places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
@@ -44,7 +48,8 @@ else:
 
 class TestPrune(StaticCase):
     """
-    test paddleslim.prune.Pruner.prune(program, scope, params, ratios, place=None, lazy=False, only_graph=False, param_backup=False, param_shape_backup=False)
+    test paddleslim.prune.Pruner.prune(program, scope, params, ratios, place=None, lazy=False, only_graph=False, \
+    param_backup=False, param_shape_backup=False)
     """
 
     def test_prune1(self):
@@ -72,7 +77,7 @@ class TestPrune(StaticCase):
             conv5 = conv_bn_layer(sum2, 8, 3, "conv5")
             conv6 = conv_bn_layer(conv5, 8, 3, "conv6")
 
-            conv7 = fluid.layers.conv2d_transpose(input=conv6, num_filters=16, filter_size=2, stride=2)
+            fluid.layers.conv2d_transpose(input=conv6, num_filters=16, filter_size=2, stride=2)
 
         shapes = {}
         for param in main_program.global_block().all_parameters():
@@ -136,7 +141,7 @@ class TestPrune(StaticCase):
             conv5 = conv_bn_layer(sum2, 8, 3, "conv5")
             conv6 = conv_bn_layer(conv5, 8, 3, "conv6")
 
-            conv7 = fluid.layers.conv2d_transpose(input=conv6, num_filters=16, filter_size=2, stride=2)
+            fluid.layers.conv2d_transpose(input=conv6, num_filters=16, filter_size=2, stride=2)
 
         shapes = {}
         for param in main_program.global_block().all_parameters():
@@ -200,7 +205,7 @@ class TestPrune(StaticCase):
             conv5 = conv_bn_layer(sum2, 8, 3, "conv5")
             conv6 = conv_bn_layer(conv5, 8, 3, "conv6")
 
-            conv7 = fluid.layers.conv2d_transpose(input=conv6, num_filters=16, filter_size=2, stride=2)
+            fluid.layers.conv2d_transpose(input=conv6, num_filters=16, filter_size=2, stride=2)
 
         shapes = {}
         for param in main_program.global_block().all_parameters():

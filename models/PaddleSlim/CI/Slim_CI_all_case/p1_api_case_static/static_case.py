@@ -14,7 +14,7 @@
 """
 @Desc:
 @File:
-@Author: guomengmeng01
+@Author:
 """
 import unittest
 import paddle
@@ -22,7 +22,7 @@ import paddle
 
 class StaticCase(unittest.TestCase):
     """
-
+    enable static graph
     """
 
     def setUp(self):

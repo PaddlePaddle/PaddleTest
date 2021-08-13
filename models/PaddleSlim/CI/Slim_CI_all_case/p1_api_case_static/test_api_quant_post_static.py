@@ -11,19 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import sys
 
-sys.path.append("../")
 import unittest
 import paddle
 from paddleslim.quant import quant_post_static
 from static_case import StaticCase
-
-sys.path.append("../demo")
-from models import MobileNet
-from layers import conv_bn_layer
-import paddle.dataset.mnist as reader
 import numpy as np
+from models import MobileNet
+
+sys.path.append("../")
+sys.path.append("../demo")
+
 
 if paddle.is_compiled_with_cuda() is True:
     places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
@@ -33,6 +37,9 @@ else:
 
 
 class TestQuantAwareCase1(StaticCase):
+    """
+    Test  QuantAware
+    """
     def test_accuracy(self):
         """
         paddleslim.quant.quant_post_static(executor,

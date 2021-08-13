@@ -11,25 +11,31 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import sys
-
-sys.path.append("../")
 import unittest
-import paddle
 from paddleslim.nas import SANAS, RLNAS
 from paddleslim.nas.early_stop import MedianStop
 from static_case import StaticCase
+
+sys.path.append("../")
 
 steps = 5
 epochs = 5
 
 
 class TestMedianStop(StaticCase):
+    """
+    Test class paddleslim.nas.early_stop.MedianStop
+    """
     def test_median_stop1(self):
         """
         class paddleslim.nas.early_stop.MedianStop(strategy, start_epoch, mode)
         mode='minimize'
-        有问题待修复
         :return:
         """
         # config = [('ResNetBlockSpace', {'block_mask': [0]})]

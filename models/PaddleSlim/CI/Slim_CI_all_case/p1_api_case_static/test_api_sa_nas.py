@@ -11,15 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import sys
-
-sys.path.append("../")
 import unittest
 from static_case import StaticCase
 from paddleslim.nas import SANAS
 
+sys.path.append("../")
 
 class TestSANAS(StaticCase):
+    """
+    Test SANAS
+    """
     def test_SANAS1(self):
         """
         classpaddleslim.nas.SANAS(configs,

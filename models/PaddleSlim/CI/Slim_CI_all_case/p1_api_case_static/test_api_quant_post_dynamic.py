@@ -11,23 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import sys
 from pathlib import Path
-
-sys.path.append("../")
 import unittest
 import paddle
 from paddleslim.quant import quant_post_dynamic
 from static_case import StaticCase
-
-sys.path.append("../demo")
-from models import MobileNet
-from layers import conv_bn_layer
-import paddle.dataset.mnist as reader
 import numpy as np
+from models import MobileNet
 
+sys.path.append("../")
+sys.path.append("../demo")
 
 class TestQuantPostOnlyWeightCase1(StaticCase):
+    """
+    Test QuantPostOnlyWeight
+    """
     def test_accuracy(self):
         """
         test paddleslim.quant.quant_post_dynamic(model_dir,

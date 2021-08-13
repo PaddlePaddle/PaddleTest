@@ -11,17 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+@Desc:
+@File:
+@Author:
+"""
 import sys
-
-sys.path.append("../")
 import unittest
 import paddle
 from paddleslim.dist import merge, soft_label_loss
 from layers import conv_bn_layer
 from static_case import StaticCase
 
+sys.path.append("../")
 
 class TestMerge(StaticCase):
+    """
+    Test paddleslim.dist.soft_label_loss
+    """
     def test_soft_label_loss_1(self):
         """
         paddleslim.dist.soft_label_loss, teacher_temperature=2., student_temperature=2.
@@ -31,7 +38,7 @@ class TestMerge(StaticCase):
         input = paddle.static.data(name="image", shape=[None, 3, 224, 224])
         conv1 = conv_bn_layer(input, 8, 3, "conv1")
         conv2 = conv_bn_layer(conv1, 8, 3, "conv2")
-        student_predict = conv1 + conv2
+        conv1 + conv2
 
         teacher_main = paddle.static.Program()
         teacher_startup = paddle.static.Program()
@@ -44,7 +51,7 @@ class TestMerge(StaticCase):
             conv4 = conv_bn_layer(conv3, 8, 3, "conv4")
             sum2 = conv4 + sum1
             conv5 = conv_bn_layer(sum2, 8, 3, "conv5")
-            teacher_predict = conv_bn_layer(conv5, 8, 3, "conv6")
+            conv_bn_layer(conv5, 8, 3, "conv6")
 
         data_name_map = {"image": "image"}
         merge(teacher_main, paddle.static.default_main_program(), data_name_map, place)
@@ -52,7 +59,7 @@ class TestMerge(StaticCase):
         for block in paddle.static.default_main_program().blocks:
             for op in block.ops:
                 merged_ops.append(op.type)
-        distill_loss = soft_label_loss(
+        soft_label_loss(
             "teacher_conv6_bn_output.tmp_2", "conv2_bn_output.tmp_2", paddle.static.default_main_program(), 2.0, 2.0
         )
         loss_ops = []
