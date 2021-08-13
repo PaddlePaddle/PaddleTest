@@ -28,10 +28,12 @@ from models import MobileNet
 sys.path.append("../")
 sys.path.append("../demo")
 
+
 class TestQuantPostOnlyWeightCase1(StaticCase):
     """
     Test QuantPostOnlyWeight
     """
+
     def test_accuracy(self):
         """
         test paddleslim.quant.quant_post_dynamic(model_dir,

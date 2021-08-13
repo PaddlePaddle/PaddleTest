@@ -25,10 +25,12 @@ from static_case import StaticCase
 
 sys.path.append("../")
 
+
 class TestMerge(StaticCase):
     """
     Test paddleslim.dist.soft_label_loss
     """
+
     def test_soft_label_loss_1(self):
         """
         paddleslim.dist.soft_label_loss, teacher_temperature=2., student_temperature=2.

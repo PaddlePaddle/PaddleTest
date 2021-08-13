@@ -29,10 +29,12 @@ from models import MobileNet
 sys.path.append("../")
 sys.path.append("../demo")
 
+
 class TestQuantAwareCase1(StaticCase):
     """
         Test QuantAware
     """
+
     def get_model(self):
         """
         get model
@@ -43,7 +45,7 @@ class TestQuantAwareCase1(StaticCase):
         model = MobileNet()
         out = model.net(input=image, class_dim=10)
         cost = paddle.nn.functional.loss.cross_entropy(input=out, label=label)
-        avg_cost = paddle.mean(x=cost)
+        paddle.mean(x=cost)
         startup_prog = paddle.static.default_startup_program()
         train_prog = paddle.static.default_main_program()
         return startup_prog, train_prog
@@ -250,6 +252,7 @@ class TestQuantAwareCase2(StaticCase):
     """
     Test QuantAware
     """
+
     # def test_accuracy(self):
     def te_accuracy(self):
         """

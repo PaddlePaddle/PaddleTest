@@ -19,6 +19,7 @@
 import paddle.fluid as fluid
 from paddle.fluid.param_attr import ParamAttr
 
+
 def conv_bn_layer(input, num_filters, filter_size, name, stride=1, groups=1, act=None, bias=False, use_cudnn=True):
     """
     construct conv and batch_norm layer

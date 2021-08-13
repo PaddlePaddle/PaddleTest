@@ -40,6 +40,7 @@ class TestQuantAwareCase1(StaticCase):
     """
     Test  QuantAware
     """
+
     def test_accuracy(self):
         """
         paddleslim.quant.quant_post_static(executor,

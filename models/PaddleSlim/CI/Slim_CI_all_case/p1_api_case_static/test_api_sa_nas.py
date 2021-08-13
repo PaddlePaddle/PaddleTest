@@ -23,10 +23,12 @@ from paddleslim.nas import SANAS
 
 sys.path.append("../")
 
+
 class TestSANAS(StaticCase):
     """
     Test SANAS
     """
+
     def test_SANAS1(self):
         """
         classpaddleslim.nas.SANAS(configs,

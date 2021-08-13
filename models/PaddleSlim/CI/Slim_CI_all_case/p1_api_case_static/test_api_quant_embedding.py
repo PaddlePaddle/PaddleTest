@@ -21,6 +21,7 @@ import unittest
 import paddle
 import paddleslim.quant as quant
 from static_case import StaticCase
+
 sys.path.append("../")
 
 if paddle.is_compiled_with_cuda() is True:
@@ -34,6 +35,7 @@ class TestQuantEmbedding(StaticCase):
     """
     Test paddleslim.quant.quant_embedding
     """
+
     def test_quant_embedding(self):
         """
         paddleslim.quant.quant_embedding(program, place, config=None, scope=None)

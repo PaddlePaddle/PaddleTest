@@ -32,6 +32,7 @@ class TestSensitivity(StaticCase):
     """
     Test paddleslim.prune.sensitivity
     """
+
     def test_sensitivity(self):
         """
         paddleslim.prune.sensitivity(program,

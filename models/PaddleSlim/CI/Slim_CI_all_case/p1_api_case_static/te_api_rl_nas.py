@@ -24,10 +24,12 @@ from paddleslim.nas import RLNAS
 
 sys.path.append("../")
 
+
 class TestRLNAS(StaticCase):
     """
     Test classpaddleslim.nas.RLNAS(key,...)
     """
+
     def test_RLNAS1(self):
         """
         classpaddleslim.nas.RLNAS(key,

@@ -32,6 +32,7 @@ class TestMedianStop(StaticCase):
     """
     Test class paddleslim.nas.early_stop.MedianStop
     """
+
     def test_median_stop1(self):
         """
         class paddleslim.nas.early_stop.MedianStop(strategy, start_epoch, mode)

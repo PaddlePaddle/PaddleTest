@@ -38,6 +38,7 @@ class TestMerge(StaticCase):
     """
     test paddleslim.dist.merge
     """
+
     def test_merge_1(self):
         """
         test api :paddleslim.dist.merge
