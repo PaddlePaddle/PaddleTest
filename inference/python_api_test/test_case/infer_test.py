@@ -201,6 +201,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+        predictor.try_shrink_memory()
 
     def trt_fp32_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
         """
@@ -246,6 +247,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+        predictor.try_shrink_memory()
 
     def trt_fp32_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
         """
@@ -291,6 +293,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+        predictor.try_shrink_memory()
 
     def trt_fp32_bz1_multi_thread_test(
         self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5, gpu_mem=1000
@@ -374,6 +377,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+        predictor.try_shrink_memory()
 
     def trt_fp16_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
         """
@@ -419,6 +423,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+        predictor.try_shrink_memory()
 
     def trt_fp16_bz1_multi_thread_test(
         self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5, gpu_mem=1000
@@ -490,6 +495,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+        predictor.try_shrink_memory()
 
 
 def record_by_pid(pid: int, cuda_visible_device: int):
