@@ -67,7 +67,7 @@ slim_st_sa_nas_BRANCH = BASE_BRANCH
 slim_st_darts_BRANCH = BASE_BRANCH
 
 
-#linux下 P0的任务要跑的标签 daily
+# linux下 P0的任务要跑的标签 daily
 daily = True
 if daily:
     EXEC_PRIORITY = ["p0", "p1"]
@@ -75,22 +75,15 @@ if daily:
     EXEC_TAG = [
         "linux_st_gpu1",
         "linux_dy_gpu1",
-
         "linux_st_gpu2",
         "linux_dy_gpu2",
-
         "linux_st_cpu",
         "linux_dy_cpu",
-
         # 自定义tag
         "linux_down_data",
     ]
 else:
-# linux下 P0的收敛性任务,month
+    # linux下 P0的收敛性任务,month
     EXEC_PRIORITY = ["p0", "p1"]
     EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
-    EXEC_TAG = [
-        "linux_st_con_gpu2",
-        "linux_dy_con_gpu2",
-        "linux_down_data"
-    ]
+    EXEC_TAG = ["linux_st_con_gpu2", "linux_dy_con_gpu2", "linux_down_data"]
