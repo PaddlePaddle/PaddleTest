@@ -53,4 +53,3 @@ else
 train_model_multi
 kill -9 `ps afx | grep train | awk '{print $1}'`
 fi
-

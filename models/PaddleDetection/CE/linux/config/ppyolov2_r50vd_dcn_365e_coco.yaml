@@ -122,4 +122,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/ppyolov2_r50vd_dcn_365e_coco_eval_single.log
-

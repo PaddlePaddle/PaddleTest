@@ -64,7 +64,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/mask_rcnn_r50_fpn_1x_coco_train_multi.log
-    
+
   -
     priority: p0
     tag: linux_dy_gpu1
@@ -99,7 +99,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/mask_rcnn_r50_fpn_1x_coco_train_single.log
-    
+
 
 EVAL:
   - #可以有多步

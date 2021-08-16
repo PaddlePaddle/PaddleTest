@@ -122,4 +122,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/ssd_mobilenet_v1_300_120e_voc_eval_single.log
-

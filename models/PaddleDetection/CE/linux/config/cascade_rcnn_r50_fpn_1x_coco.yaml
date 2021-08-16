@@ -122,4 +122,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/cascade_rcnn_r50_fpn_1x_coco_eval_single.log
-

@@ -122,4 +122,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/ttfnet_darknet53_1x_coco_eval_single.log
-
