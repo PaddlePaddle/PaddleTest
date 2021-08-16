@@ -131,7 +131,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 11.162603
-        threshold: 0.001
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -465,8 +465,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.55596
-        threshold: 0.01
+        kpi_base: 0.49197
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"

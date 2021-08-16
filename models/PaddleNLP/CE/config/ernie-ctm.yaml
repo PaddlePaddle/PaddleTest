@@ -40,7 +40,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 124.396538
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
