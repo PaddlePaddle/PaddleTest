@@ -118,8 +118,8 @@ def test_broadcast_tensors1():
         y = randtool("float", -5, 5, [1, 6, 1, 1, 3]).astype(i)
         z = randtool("float", -5, 5, [1, 1, 1, 2, 3]).astype(i)
         s = randtool("float", -5, 5, [1, 6, 1, 6, 3]).astype(i)
-        # etype = ValueError
-        # with pytest.raises(etype):
-        paddle.broadcast_tensors(
-            input=[paddle.to_tensor(x), paddle.to_tensor(y), paddle.to_tensor(z), paddle.to_tensor(s)]
-        )
+        etype = ValueError
+        with pytest.raises(etype):
+            paddle.broadcast_tensors(
+                input=[paddle.to_tensor(x), paddle.to_tensor(y), paddle.to_tensor(z), paddle.to_tensor(s)]
+            )
