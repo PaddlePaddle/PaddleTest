@@ -440,7 +440,7 @@ FINETUNE: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.651025
-        threshold: 0.001
+        threshold: 0.01
         actived: True
         evaluation: "-"
         unit_repr: "s"
