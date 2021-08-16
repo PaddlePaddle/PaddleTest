@@ -29,4 +29,5 @@ def check(file):
 
 
 if __name__ == "__main__":
+    print("check {}".format(str(sys.argv[1])))
     check(sys.argv[1])
