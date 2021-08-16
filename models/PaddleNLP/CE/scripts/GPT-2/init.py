@@ -1,4 +1,5 @@
 """
-init visualdl & print paddle commit
+init visualdl
 """
+# encoding: utf-8
 from visualdl import LogWriter
