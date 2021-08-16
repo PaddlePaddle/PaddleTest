@@ -19,11 +19,11 @@ PADDLE_ON_MODEL_CE = "1"
 WITH_AVX = "ON"
 # 资源配置
 IS_SINGLE_CUDA = True
-XPU = 'gpu'  # 取值gpu或cpu
+XPU = "gpu"  # 取值gpu或cpu
 # 配置文件中SET_CUDA为None，框架不配置gpu cuda，使用cpu场景
 # CE会根据TC的teamcity 再分配
-SET_CUDA = '0'
-SET_MULTI_CUDA = '0,1'
+SET_CUDA = "0"
+SET_MULTI_CUDA = "0,1"
 
 # PaddleSlim
 REPO_PaddleSlim = "https://github.com/PaddlePaddle/PaddleSlim.git"
@@ -70,27 +70,27 @@ slim_st_darts_BRANCH = BASE_BRANCH
 #linux下 P0的任务要跑的标签 daily
 daily = True
 if daily:
-    EXEC_PRIORITY = ["p0", "p1", ]
+    EXEC_PRIORITY = ["p0", "p1"]
     EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
     EXEC_TAG = [
-    "linux_st_gpu1",
-    "linux_dy_gpu1",
+        "linux_st_gpu1",
+        "linux_dy_gpu1",
 
-    "linux_st_gpu2",
-    "linux_dy_gpu2",
+        "linux_st_gpu2",
+        "linux_dy_gpu2",
 
-    "linux_st_cpu",
-    "linux_dy_cpu",
+        "linux_st_cpu",
+        "linux_dy_cpu",
 
-    # 自定义tag
-    "linux_down_data",
+        # 自定义tag
+        "linux_down_data",
     ]
 else:
 # linux下 P0的收敛性任务,month
     EXEC_PRIORITY = ["p0", "p1"]
     EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
     EXEC_TAG = [
-    "linux_st_con_gpu2",
-    "linux_dy_con_gpu2",
-    "linux_down_data"
+        "linux_st_con_gpu2",
+        "linux_dy_con_gpu2",
+        "linux_down_data"
     ]
