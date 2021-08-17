@@ -5,6 +5,8 @@ print_info(){
 if [ $1 -ne 0 ];then
     mv ${log_path}/$2 ${log_path}/FAIL_$2.log
     echo -e "\033[31m ${log_path}/FAIL_$2 \033[0m"
+    echo "fail log as follow"
+    cat  ${log_path}/FAIL_$2.log
 else
     mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
     echo -e "\033[32m ${log_path}/SUCCESS_$2 \033[0m"
@@ -392,13 +394,60 @@ do
 done
 }
 
+ce_tests_dygraph_ptq4(){
+cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dygraph_ptq4
+ln -s ${slim_dir}/demo/data/ILSVRC2012
+test_samples=1000  # if set as -1, use all test samples
+data_path='./ILSVRC2012/'
+batch_size=32
+epoch=1
+lr=0.0001
+num_workers=1
+output_dir=$PWD/output_ptq
+quant_batch_num=10
+quant_batch_size=10
+for model in mobilenet_v1 mobilenet_v2 resnet50 vgg16
+do
+    echo "--------quantize model: ${model}-------------"
+    export CUDA_VISIBLE_DEVICES=${cudaid1}
+    # save ptq quant model
+    python ./src/ptq.py \
+        --data=${data_path} \
+        --arch=${model} \
+        --quant_batch_num=${quant_batch_num} \
+        --quant_batch_size=${quant_batch_size} \
+        --output_dir=${output_dir} > ${log_path}/ptq_${model} 2>&1
+        print_info $? ptq_${model}
+
+    echo "-------- eval fp32_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/fp32_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=True \
+        --ir_optim=False > ${log_path}/ptq_eval_fp32_${model} 2>&1
+        print_info $? ptq_eval_fp32_${model}
+
+    echo "-------- eval int8_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/int8_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=False \
+        --ir_optim=False > ${log_path}/ptq_eval_int8_${model} 2>&1
+        print_info $? ptq_eval_int8_${model}
+
+done
+}
+
 all_quant(){ # 10个模型
-    demo_quant_quant_aware    # 2个模型
-    demo_quant_quant_embedding  # 1个模型
-    demo_quant_quant_post   # 4个策略
-    demo_dygraph_quant    # 2个模型
-    demo_quant_pact_quant_aware  # 1个模型
-    ce_tests_dygraph_qat4  # 4个模型
+    ce_tests_dygraph_ptq4
+#    demo_quant_quant_aware    # 2个模型
+#    demo_quant_quant_embedding  # 1个模型
+#    demo_quant_quant_post   # 4个策略
+#    demo_dygraph_quant    # 2个模型
+#    demo_quant_pact_quant_aware  # 1个模型
+#    ce_tests_dygraph_qat4  # 4个模型
 }
 
 # 3 prune
@@ -841,7 +890,9 @@ all_darts(){  # 2个模型
 }
 
 ####################################
-export all_case_list=(all_distillation all_quant all_prune all_nas all_darts)
+#export all_case_list=(all_distillation all_quant all_prune all_nas all_darts)
+export all_case_list=(all_quant)
+
 export all_case_time=0
 declare -A all_P0case_dic
 all_case_dic=(["all_distillation"]=5 ["all_quant"]=15 ["all_prune"]=1 ["all_nas"]=30 ["all_darts"]=30 ['unstructured_prune']=15 ['dy_qat1']=1)
