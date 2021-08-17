@@ -1,0 +1,9 @@
+tqdm
+typeguard ; python_version >= '3.4'
+visualdl>=2.0.0b
+opencv-python
+PyYAML
+shapely
+scipy
+Cython
+pycocotools
