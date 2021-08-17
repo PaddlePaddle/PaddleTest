@@ -423,8 +423,9 @@ class InferenceTest(object):
 
             record_thread.start()
             record_thread.join()
-    
-    def trt_fp32_bz1_dynamic_multi_thread_test(self,
+
+    def trt_fp32_bz1_dynamic_multi_thread_test(
+        self,
         input_data_dict: dict,
         output_data_dict: dict,
         repeat=1,
@@ -593,7 +594,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-    
+
     def trt_fp16_more_bz_dynamic_test(
         self,
         input_data_dict: dict,
@@ -702,7 +703,8 @@ class InferenceTest(object):
             record_thread.start()
             record_thread.join()
 
-    def trt_fp16_bz1_dynamic_multi_thread_test(self,
+    def trt_fp16_bz1_dynamic_multi_thread_test(
+        self,
         input_data_dict: dict,
         output_data_dict: dict,
         repeat=1,
