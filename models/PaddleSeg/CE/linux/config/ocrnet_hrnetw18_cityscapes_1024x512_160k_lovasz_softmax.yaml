@@ -1,0 +1,145 @@
+MODEL: "ocrnet_hrnetw18_cityscapes_1024x512_160k_lovasz_softmax" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleSeg
+  path: $ROOT_PATH/PaddleSeg
+  branch: $BASE_BRANCH
+
+ENV:
+  http_proxy: $HTTP_PROXY
+  https_proxy: $HTTPS_PROXY
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: ./scripts/ocrnet_hrnetw18_cityscapes_1024x512_160k_lovasz_softmax/ #脚本的路径
+  model_log_path: log/ocrnet_hrnetw18_cityscapes_1024x512_160k_lovasz_softmax
+
+EXEC:
+  exec_cases: [TRAIN,EVAL]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p1
+    tag: linux_dy_process_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh 'multi'
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 1.6013
+        threshold: 0.5
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      ips:
+        latest: True
+        kpi_base: 3.8486
+        threshold: 0.9
+        actived: True
+        evaluation: "+"
+        unit_repr: "images/s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ocrnet_hrnetw18_cityscapes_1024x512_160k_lovasz_softmax_train_multi.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh 'single'
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 1.6893
+        threshold: 0.5
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      ips:
+        latest: True
+        kpi_base: 2.2127
+        threshold: 0.9
+        actived: True
+        evaluation: "+"
+        unit_repr: "images/s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ocrnet_hrnetw18_cityscapes_1024x512_160k_lovasz_softmax_train_single.log
+
+
+EVAL:
+  - #可以有多步
+    priority: p1
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh eval.sh 'single'
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 1.354209
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/ocrnet_hrnetw18_cityscapes_1024x512_160k_lovasz_softmax_eval_single.log
+
+  - #可以有多步
+    priority: p1
+    tag: linux_dy_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh eval.sh 'multi'
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 1.354209
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/ocrnet_hrnetw18_cityscapes_1024x512_160k_lovasz_softmax_eval_multi.log
