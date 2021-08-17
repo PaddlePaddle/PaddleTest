@@ -201,6 +201,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+        predictor.try_shrink_memory()
 
     def trt_fp32_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
         """
@@ -225,6 +226,30 @@ class InferenceTest(object):
             use_static=False,
             use_calib_mode=False,
         )
+        predictor = paddle_infer.create_predictor(self.pd_config)
+
+        input_names = predictor.get_input_names()
+        for _, input_data_name in enumerate(input_names):
+            input_handle = predictor.get_input_handle(input_data_name)
+            input_handle.copy_from_cpu(input_data_dict[input_data_name])
+
+        for i in range(repeat):
+            predictor.run()
+
+        output_names = predictor.get_output_names()
+        for i, output_data_name in enumerate(output_names):
+            output_handle = predictor.get_output_handle(output_data_name)
+            output_data = output_handle.copy_to_cpu()
+            output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name].flatten()
+            for j, out_data in enumerate(output_data):
+                diff = sig_fig_compare(out_data, output_data_truth_val[j])
+                assert (
+                    diff <= delta
+                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+
+        predictor.try_shrink_memory()  # try_shrink_memory
+
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
@@ -353,6 +378,29 @@ class InferenceTest(object):
             use_static=False,
             use_calib_mode=False,
         )
+        predictor = paddle_infer.create_predictor(self.pd_config)
+
+        input_names = predictor.get_input_names()
+        for _, input_data_name in enumerate(input_names):
+            input_handle = predictor.get_input_handle(input_data_name)
+            input_handle.copy_from_cpu(input_data_dict[input_data_name])
+
+        for i in range(repeat):
+            predictor.run()
+
+        output_names = predictor.get_output_names()
+        for i, output_data_name in enumerate(output_names):
+            output_handle = predictor.get_output_handle(output_data_name)
+            output_data = output_handle.copy_to_cpu()
+            output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name].flatten()
+            for j, out_data in enumerate(output_data):
+                diff = sig_fig_compare(out_data, output_data_truth_val[j])
+                assert (
+                    diff <= delta
+                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+
+        predictor.try_shrink_memory()  # try_shrink_memory
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
