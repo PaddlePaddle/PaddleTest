@@ -17,16 +17,15 @@
 @Author:
 """
 import sys
+sys.path.append("../")
 from pathlib import Path
 import unittest
 import paddle
 from paddleslim.quant import quant_post_dynamic
 from static_case import StaticCase
 import numpy as np
-from models import MobileNet
-
-sys.path.append("../")
 sys.path.append("../demo")
+from models import MobileNet
 
 
 class TestQuantPostOnlyWeightCase1(StaticCase):
