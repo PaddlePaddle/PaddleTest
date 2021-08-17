@@ -24,4 +24,3 @@ if [ -d "$cur_path/../../PaddleSeg/data/VOCdevkit" ]; then
 rm -rf $cur_path/../../PaddleSeg/data/VOCdevkit
 fi
 ln -s /ssd2/ce_data/PaddleSeg/pascalvoc/VOCdevkit $cur_path/../../PaddleSeg/data/VOCdevkit
-

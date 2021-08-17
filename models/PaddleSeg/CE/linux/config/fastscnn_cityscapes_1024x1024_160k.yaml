@@ -143,6 +143,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/fastscnn_cityscapes_1024x1024_160k_eval_multi.log
-
-
-

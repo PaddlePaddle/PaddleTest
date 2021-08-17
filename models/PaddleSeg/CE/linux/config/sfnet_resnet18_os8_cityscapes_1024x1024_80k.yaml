@@ -143,5 +143,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/sfnet_resnet18_os8_cityscapes_1024x1024_80k_eval_multi.log
-
-

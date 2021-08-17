@@ -143,6 +143,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/ocrnet_hrnetw18_cityscapes_1024x512_160k_lovasz_softmax_eval_multi.log
-
-
-

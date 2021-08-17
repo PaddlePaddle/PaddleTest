@@ -175,4 +175,3 @@ EVAL:
 #        path: $ROOT_PATH/$model_scripts_path
 #        cmd: sh python_infer.sh >$model_log_path/python_infer.log
 #    output: $ROOT_PATH/$model_log_path/python_infer.log
-
