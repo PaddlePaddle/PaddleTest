@@ -17,6 +17,8 @@
 @Author:
 """
 import sys
+
+# pylint: disable=wrong-import-position
 sys.path.append("../")
 from pathlib import Path
 import unittest
@@ -24,8 +26,11 @@ import paddle
 from paddleslim.quant import quant_post_dynamic
 from static_case import StaticCase
 import numpy as np
+
 sys.path.append("../demo")
 from models import MobileNet
+
+# pylint: enable=wrong-import-position
 
 
 class TestQuantPostOnlyWeightCase1(StaticCase):

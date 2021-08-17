@@ -17,14 +17,19 @@
 @Author:
 """
 import sys
+
+# pylint: disable=wrong-import-position
 sys.path.append("../")
 import unittest
 import paddle
 from paddleslim.quant import quant_post_static
 from static_case import StaticCase
 import numpy as np
+
 sys.path.append("../demo")
 from models import MobileNet
+
+# pylint: disable=wrong-import-position
 
 if paddle.is_compiled_with_cuda() is True:
     places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]

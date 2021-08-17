@@ -17,6 +17,8 @@
 @Author:
 """
 import sys
+
+# pylint: disable=wrong-import-position
 sys.path.append("../")
 import unittest
 import paddle
@@ -25,8 +27,12 @@ from paddleslim.quant import quant_aware, convert
 from static_case import StaticCase
 from paddle.fluid.framework import IrGraph
 from paddle.fluid import core
+
 sys.path.append("../demo")
 from models import MobileNet
+
+# pylint: enable=wrong-import-position
+
 
 class TestQuantAwareCase1(StaticCase):
     """
