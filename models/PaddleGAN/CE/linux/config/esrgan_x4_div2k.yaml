@@ -56,4 +56,3 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/esrgan_x4_div2k_2card.log
-

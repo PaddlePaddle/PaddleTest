@@ -16,4 +16,3 @@ python -m pip install -r requirements.txt
 python -m paddle.distributed.launch tools/main.py -c configs/realsr_bicubic_noise_x4_df2k.yaml -o total_iters=100 log_config.interval=10 > log/realsr_bicubic_noise_x4_df2k_2card.log 2>&1
 cat log/realsr_bicubic_noise_x4_df2k_2card.log | grep " INFO: Iter: 100/100" > ../log/realsr_bicubic_noise_x4_df2k_2card.log
 cat log/realsr_bicubic_noise_x4_df2k_2card.log
-

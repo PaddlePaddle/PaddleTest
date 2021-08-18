@@ -15,5 +15,3 @@ fi
 python -m pip install -r requirements.txt
 python -m paddle.distributed.launch tools/main.py -c configs/cyclegan_cityscapes.yaml -o total_iters=100 log_config.interval=10 > log/cyclegan_cityscapes_2card.log 2>&1
 cat log/cyclegan_cityscapes_2card.log | grep " INFO: Iter: 100/100" > ../log/cyclegan_cityscapes_2card.log
-
-

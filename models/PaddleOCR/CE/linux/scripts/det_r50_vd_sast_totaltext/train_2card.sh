@@ -42,9 +42,8 @@ cat log/det_r50_vd_sast_totaltext_2card.log | grep "2/2" > ../log/det_r50_vd_sas
 
 linenum=`cat ../log/det_r50_vd_sast_totaltext_2card_tmp.log | wc -l`
 linenum_last1=`expr $linenum - 1`
-if [ $linenum_last1 -eq 0 ] 
+if [ $linenum_last1 -eq 0 ]
   then cp ../log/det_r50_vd_sast_totaltext_2card_tmp.log ../log/det_r50_vd_sast_totaltext_2card.log
   else sed ''1,"$linenum_last1"'d' ../log/det_r50_vd_sast_totaltext_2card_tmp.log > ../log/det_r50_vd_sast_totaltext_2card.log
 fi
 rm -rf ../log/det_r50_vd_sast_totaltext_2card_tmp.log
-

@@ -15,5 +15,4 @@ fi
 python -m pip install -r requirements.txt
 python -m paddle.distributed.launch tools/main.py -c configs/realsr_kernel_noise_x4_dped.yaml -o total_iters=100 log_config.interval=10 > log/realsr_kernel_noise_x4_dped_2card.log 2>&1
 cat log/realsr_kernel_noise_x4_dped_2card.log | grep " INFO: Iter: 100/100" > ../log/realsr_kernel_noise_x4_dped_2card.log
-
-
+cat log/realsr_kernel_noise_x4_dped_2card.log

@@ -10,4 +10,3 @@ mkdir log
 python -m pip install -r requirements.txt
 python -m paddle.distributed.launch tools/train.py -c ppcls/configs/ImageNet/VGG/VGG11.yaml -o Global.epochs=2 -o Global.eval_during_train=False > log/vgg11_2card.log 2>&1
 cat log/vgg11_2card.log | grep Avg | grep 'Epoch 2/2' > ../log/vgg11_2card.log
-

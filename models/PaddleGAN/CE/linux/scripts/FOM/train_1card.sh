@@ -15,4 +15,3 @@ fi
 python -m pip install -r requirements.txt
 python tools/main.py -c configs/firstorder_fashion.yaml -o total_iters=100 log_config.interval=20 log_config.visiual_interval=999999 snapshot_config.interval=999999 validate.interval=999999 > log/fom_1card.log 2>&1
 cat log/fom_1card.log | grep " INFO: Iter: 100/100" > ../log/fom_1card.log
-

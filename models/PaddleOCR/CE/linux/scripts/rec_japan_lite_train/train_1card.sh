@@ -18,4 +18,4 @@ sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' configs/rec
 
 python tools/train.py -c configs/rec/multi_language/rec_japan_lite_train.yml -o Global.epoch_num=10 > log/rec_japan_lite_train_1card.log 2>&1
 cat log/rec_japan_lite_train_1card.log | grep "10/10" > ../log/rec_japan_lite_train_1card.log
-
+cat log/rec_japan_lite_train_1card.log

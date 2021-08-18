@@ -56,4 +56,3 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/cyclegan_horse2zebra_2card.log
-

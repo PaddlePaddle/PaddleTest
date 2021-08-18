@@ -18,4 +18,3 @@ sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' configs/rec
 
 python -m paddle.distributed.launch tools/train.py -c configs/rec/multi_language/rec_arabic_lite_train.yml -o Global.epoch_num=10 > log/rec_arabic_lite_train_2card.log 2>&1
 cat log/rec_arabic_lite_train_2card.log | grep "10/10" > ../log/rec_arabic_lite_train_2card.log
-

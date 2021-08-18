@@ -56,4 +56,3 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/pix2pix_cityscapes_2gpus_2card.log
-

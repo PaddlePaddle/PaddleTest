@@ -13,4 +13,3 @@ fi
 python -m pip install -r requirements.txt
 python tools/main.py -c configs/edvr_m_wo_tsa.yaml -o total_iters=100 dataset.train.use_flip=False dataset.train.use_rot=False  log_config.interval=20 log_config.visiual_interval=999999 snapshot_config.interval=999999 > log/edvr_1card.log 2>&1
 cat log/edvr_1card.log | grep " INFO: Iter: 100/100" > ../log/edvr_1card.log
-

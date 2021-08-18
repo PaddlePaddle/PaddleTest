@@ -56,4 +56,3 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/realsr_bicubic_noise_x4_df2k_2card.log
-

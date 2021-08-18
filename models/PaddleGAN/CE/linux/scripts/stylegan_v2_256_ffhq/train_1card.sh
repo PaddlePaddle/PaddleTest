@@ -15,5 +15,3 @@ fi
 python -m pip install -r requirements.txt
 python tools/main.py -c configs/stylegan_v2_256_ffhq.yaml -o total_iters=100 log_config.interval=10 > log/stylegan_v2_256_ffhq_1card.log 2>&1
 cat log/stylegan_v2_256_ffhq_1card.log | grep " INFO: Iter: 100/100" > ../log/stylegan_v2_256_ffhq_1card.log
-
-

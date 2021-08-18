@@ -18,12 +18,12 @@ if [ ! -f "pretrain_models/ResNet50_vd_pretrained.pdparams" ]; then
 fi
 
 if [ ! -f "pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar" ]; then
-    wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar 
+    wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
     tar xf pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar -C pretrain_models
 fi
 
 if [ ! -f "pretrain_models/ch_ppocr_server_v2.0_det_train.tar" ]; then
-    wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_server_v2.0_det_train.tar 
+    wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_server_v2.0_det_train.tar
     tar xf pretrain_models/ch_ppocr_server_v2.0_det_train.tar -C pretrain_models
 fi
 
@@ -42,9 +42,8 @@ cat log/ch_det_res18_db_v2.0_1card.log | grep "2/2" > ../log/ch_det_res18_db_v2.
 
 linenum=`cat ../log/ch_det_res18_db_v2.0_1card_tmp.log | wc -l`
 linenum_last1=`expr $linenum - 1`
-if [ $linenum_last1 -eq 0 ] 
+if [ $linenum_last1 -eq 0 ]
   then cp ../log/ch_det_res18_db_v2.0_1card_tmp.log ../log/ch_det_res18_db_v2.0_1card.log
   else sed ''1,"$linenum_last1"'d' ../log/ch_det_res18_db_v2.0_1card_tmp.log > ../log/ch_det_res18_db_v2.0_1card.log
 fi
 rm -rf ../log/ch_det_res18_db_v2.0_1card_tmp.log
-
