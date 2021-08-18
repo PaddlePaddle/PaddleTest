@@ -41,6 +41,7 @@ slim_st_quant_post_BRANCH = BASE_BRANCH
 slim_st_pact_quant_aware_BRANCH = BASE_BRANCH
 slim_dy_quant_v3_BRANCH = BASE_BRANCH
 slim_dy_ce_tests_qat_BRANCH = BASE_BRANCH
+slim_dy_ce_tests_ptq_BRANCH = BASE_BRANCH
 
 slim_st_dist_res50_v1_BRANCH = BASE_BRANCH
 slim_st_dist_res101_res50_BRANCH = BASE_BRANCH
