@@ -401,9 +401,7 @@ test_samples=1000  # if set as -1, use all test samples
 data_path='./ILSVRC2012/'
 batch_size=32
 epoch=1
-lr=0.0001
-num_workers=1
-output_dir=$PWD/output_ptq
+output_dir="./output_ptq"
 quant_batch_num=10
 quant_batch_size=10
 for model in mobilenet_v1 mobilenet_v2 resnet50 vgg16
@@ -425,6 +423,7 @@ do
         --data_dir=${data_path} \
         --batch_size=${batch_size} \
         --use_gpu=True \
+        --test_samples=${test_samples} \
         --ir_optim=False > ${log_path}/ptq_eval_fp32_${model} 2>&1
         print_info $? ptq_eval_fp32_${model}
 
@@ -434,20 +433,27 @@ do
         --data_dir=${data_path} \
         --batch_size=${batch_size} \
         --use_gpu=False \
+        --test_samples=${test_samples} \
         --ir_optim=False > ${log_path}/ptq_eval_int8_${model} 2>&1
         print_info $? ptq_eval_int8_${model}
 
 done
 }
 
+#用于更新release分支下无ce_tests_dygraph_ptq case；release分支设置is_develop="False"
+is_develop="True"
+
 all_quant(){ # 10个模型
-    ce_tests_dygraph_ptq4
-#    demo_quant_quant_aware    # 2个模型
-#    demo_quant_quant_embedding  # 1个模型
-#    demo_quant_quant_post   # 4个策略
-#    demo_dygraph_quant    # 2个模型
-#    demo_quant_pact_quant_aware  # 1个模型
-#    ce_tests_dygraph_qat4  # 4个模型
+    if [ "${is_develop}" == "True" ];then
+      ce_tests_dygraph_ptq4
+    fi
+    ce_tests_dygraph_ptq4#
+    demo_quant_quant_aware    # 2个模型
+    demo_quant_quant_embedding  # 1个模型
+    demo_quant_quant_post   # 4个策略
+    demo_dygraph_quant    # 2个模型
+    demo_quant_pact_quant_aware  # 1个模型
+    ce_tests_dygraph_qat4  # 4个模型
 }
 
 # 3 prune
@@ -890,8 +896,7 @@ all_darts(){  # 2个模型
 }
 
 ####################################
-#export all_case_list=(all_distillation all_quant all_prune all_nas all_darts)
-export all_case_list=(all_quant)
+export all_case_list=(all_distillation all_quant all_prune all_nas all_darts)
 
 export all_case_time=0
 declare -A all_P0case_dic

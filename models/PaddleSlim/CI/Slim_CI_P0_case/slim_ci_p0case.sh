@@ -397,6 +397,52 @@ do
 done
 }
 
+ce_tests_dygraph_ptq4(){
+cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dygraph_ptq4
+ln -s ${slim_dir}/demo/data/ILSVRC2012
+test_samples=1000  # if set as -1, use all test samples
+data_path='./ILSVRC2012/'
+batch_size=32
+epoch=1
+output_dir="./output_ptq"
+quant_batch_num=10
+quant_batch_size=10
+for model in mobilenet_v1 mobilenet_v2 resnet50 vgg16
+do
+    echo "--------quantize model: ${model}-------------"
+    export CUDA_VISIBLE_DEVICES=${cudaid1}
+    # save ptq quant model
+    python ./src/ptq.py \
+        --data=${data_path} \
+        --arch=${model} \
+        --quant_batch_num=${quant_batch_num} \
+        --quant_batch_size=${quant_batch_size} \
+        --output_dir=${output_dir} > ${log_path}/ptq_${model} 2>&1
+        print_info $? ptq_${model}
+
+    echo "-------- eval fp32_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/fp32_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=True \
+        --test_samples=${test_samples} \
+        --ir_optim=False > ${log_path}/ptq_eval_fp32_${model} 2>&1
+        print_info $? ptq_eval_fp32_${model}
+
+    echo "-------- eval int8_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/int8_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=False \
+        --test_samples=${test_samples} \
+        --ir_optim=False > ${log_path}/ptq_eval_int8_${model} 2>&1
+        print_info $? ptq_eval_int8_${model}
+
+done
+}
+
 quant(){
     quant_aware
     st_quant_post
@@ -412,6 +458,7 @@ all_quant(){ # 10个模型
     pact_quant_aware
     dy_quant
     dy_qat4
+    ce_tests_dygraph_ptq4
 }
 
 # 3 prune
