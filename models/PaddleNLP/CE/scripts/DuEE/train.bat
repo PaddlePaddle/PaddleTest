@@ -1,8 +1,6 @@
 @echo off
 cd ../..
-
-md log\DuEE
-
+if not exist log\DuEE md log\DuEE
 set logpath=%cd%\log\DuEE
 
 cd models_repo\examples\information_extraction\DuEE\
