@@ -13,7 +13,6 @@ Date:    2021/02/17 14:33:27
 
 import os
 
-
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 # 公共全局变量
 PADDLE_ON_MODEL_CE = "1"
@@ -58,6 +57,7 @@ multitask_sharebottom_BRANCH = BASE_BRANCH
 recall_ncf_BRANCH = BASE_BRANCH
 recall_word2vec_BRANCH = BASE_BRANCH
 recall_mind_BRANCH = BASE_BRANCH
+
 # linux gpu下 P0的任务要跑的标签 daily  PaddleRec_Py37_Linux_Cuda10.2_FuncTest_P0_D
 # 当daily为True，任务只跑日级别功能验证；当daily为False，任务切换为月级别收敛性任务
 daily = True
@@ -69,7 +69,6 @@ if daily:
         "linux_dy_gpu1",
         "linux_down_data",
     ]
-
     EXEC_TAG_LINUX_GPU2 = [
         # "linux_st_gpu2",
         "linux_dy_gpu2",
@@ -80,7 +79,6 @@ if daily:
         "linux_dy_gpu1", "linux_dy_gpu2", "linux_dy_cpu",
         "linux_down_data",
     ]
-
 else:
     # rec P0级别收敛性任务
     EXEC_PRIORITY = ["p0"]

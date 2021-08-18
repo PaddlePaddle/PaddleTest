@@ -46,6 +46,14 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_dy_gpu1.log
   -
     tag: linux_dy_gpu2  # dy_gpu2
@@ -66,6 +74,13 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/match_dssm_linux_dy_gpu2_dist_log/workerlog.0
   -
@@ -83,6 +98,13 @@ TRAIN: # 训练步骤
         threshold: 0.02
         actived: True
         evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_dy_cpu.log
@@ -106,6 +128,14 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_st_gpu1.log
   -
     tag: linux_st_gpu2  # st_gpu2
@@ -126,6 +156,13 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/match_dssm_linux_st_gpu2_dist_log/workerlog.0
 
@@ -144,6 +181,13 @@ TRAIN: # 训练步骤
         threshold: 0.02
         actived: True
         evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_st_cpu.log
@@ -167,6 +211,14 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_dy_gpu1_con.log
 
   - # dssm模型单卡静态图训练step
@@ -188,6 +240,14 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_st_gpu1_con.log
 
 
@@ -210,6 +270,14 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_gpu1_pair.log
   -
     tag: linux_dy_gpu2
@@ -229,6 +297,13 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_gpu2_pair.log
   -
@@ -246,6 +321,13 @@ INFER:
         threshold: 0.02
         actived: True
         evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_cpu_pair.log
@@ -267,6 +349,14 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_gpu1_pair.log
   -
     tag: linux_st_gpu2
@@ -287,6 +377,13 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_gpu2_pair.log
   -
@@ -304,6 +401,13 @@ INFER:
         threshold: 0.02
         actived: True
         evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_cpu_pair.log
@@ -326,6 +430,14 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     #output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_gpu1_con_pair.log
     output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_gpu1_con.log
 
@@ -346,5 +458,13 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     #output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_gpu1_con_pair.log
     output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_gpu1_con.log

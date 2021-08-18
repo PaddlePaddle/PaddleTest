@@ -44,6 +44,14 @@ dy_TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     output: $ROOT_PATH/$model_log_path/S_rank_dy_dnn_train_gpu1.log
 
   -
@@ -64,6 +72,13 @@ dy_TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/rank_dy_dnn_train_gpu2_dist_log/workerlog.0
 
@@ -82,6 +97,13 @@ dy_TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_rank_dy_dnn_train_cpu.log
 
@@ -101,6 +123,14 @@ dy_INFER:
         actived: True
         evaluation: "-"
         unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
     output: $ROOT_PATH/$model_log_path/S_rank_dy_dnn_infer_gpu1.log
 
   -
@@ -118,5 +148,12 @@ dy_INFER:
         actived: True
         evaluation: "-"
         unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_rank_dy_dnn_infer_cpu.log
