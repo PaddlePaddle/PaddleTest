@@ -1,7 +1,7 @@
 @echo off
 cd ../..
 
-md log\DuIE
+if not exist log\DuIE md log\DuIE
 
 set logpath=%cd%\log\DuIE
 
