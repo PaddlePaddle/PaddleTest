@@ -23,4 +23,4 @@ if [ $linenum_last1 -eq 0 ]
   else sed ''1,"$linenum_last1"'d' ../log/e2e_r50_vd_pgnet_1card_tmp.log > ../log/e2e_r50_vd_pgnet_1card.log
 fi
 rm -rf ../log/e2e_r50_vd_pgnet_1card_tmp.log
-
+cat log/e2e_r50_vd_pgnet_1card.log 

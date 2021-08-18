@@ -26,3 +26,4 @@ if [ $linenum_last1 -eq 0 ]
 fi
 rm -rf ../log/cls_mv3_1card_temp.log
 
+cat log/cls_mv3_1card.log
