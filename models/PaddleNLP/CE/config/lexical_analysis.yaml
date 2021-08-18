@@ -1,5 +1,5 @@
 MODEL: "lexical_analysis" # 模型名
-PRIORITY: P0, Pre_test
+PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
