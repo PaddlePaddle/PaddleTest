@@ -307,13 +307,66 @@ do
 done
 }
 
+ce_tests_dygraph_ptq4(){
+cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dygraph_ptq4
+ln -s ${slim_dir}/demo/data/ILSVRC2012
+test_samples=1000  # if set as -1, use all test samples
+data_path='./ILSVRC2012/'
+batch_size=32
+epoch=1
+output_dir="./output_ptq"
+quant_batch_num=10
+quant_batch_size=10
+#for model in mobilenet_v1 mobilenet_v2 resnet50 vgg16
+for model in mobilenet_v1
+do
+    echo "--------quantize model: ${model}-------------"
+    # save ptq quant model
+    python ./src/ptq.py \
+        --data=${data_path} \
+        --arch=${model} \
+        --quant_batch_num=${quant_batch_num} \
+        --quant_batch_size=${quant_batch_size} \
+        --output_dir=${output_dir} > ${log_path}/ptq_${model} 2>&1
+        print_info $? ptq_${model}
+
+    echo "-------- eval fp32_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/fp32_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=False \
+        --test_samples=${test_samples} \
+        --ir_optim=False > ${log_path}/ptq_eval_fp32_${model} 2>&1
+        print_info $? ptq_eval_fp32_${model}
+
+    echo "-------- eval int8_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/int8_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=False \
+        --test_samples=${test_samples} \
+        --ir_optim=False > ${log_path}/ptq_eval_int8_${model} 2>&1
+        print_info $? ptq_eval_int8_${model}
+
+done
+}
+
+#用于更新release分支下无ce_tests_dygraph_ptq case；release分支设置is_develop="False"
+is_develop="True"
+
 all_quant(){
+  if [ "${is_develop}" == "True" ];then
+      ce_tests_dygraph_ptq4
+  fi
   demo_quant_aware
   demo_quant_embedding
   demo_st_quant_post
   demo_quant_pact_quant_aware
   demo_dygraph_quant
   demo_dy_qat1
+
 }
 
 # 3 prune
