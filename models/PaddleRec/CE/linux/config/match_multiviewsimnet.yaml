@@ -352,5 +352,3 @@ INFER:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_linux_st_cpu_pair.log
-
-

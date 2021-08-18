@@ -82,4 +82,3 @@ fi
 
 python eval.py > ${log_path}/$2_eval.log 2>&1
 print_info $? $2_eval
-

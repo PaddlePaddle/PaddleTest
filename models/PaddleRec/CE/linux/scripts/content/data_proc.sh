@@ -18,6 +18,3 @@ if [ ! -d ${data_path}/$1 ];then
 fi
 rm -rf ${code_path}/$1;
 ln -s ${data_path}/$1 ${code_path}/$1;
-
-
-

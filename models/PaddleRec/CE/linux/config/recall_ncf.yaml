@@ -566,5 +566,3 @@ INFER:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_st_gpu1_con_evaluate.log
-
-

@@ -46,5 +46,3 @@ nohup python -u ../../../tools/paddle_infer.py --model_file=output_model_all_wid
 --params_file=output_model_all_wide_deep/2/rec_inference.pdiparams \
 --use_gpu=False --data_dir=data/sample_data/train \
 --reader_file=criteo_reader.py --batchsize=5 > wide_python_infer_demo &
-
-

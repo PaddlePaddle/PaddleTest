@@ -350,5 +350,3 @@ INFER:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_rank_naml_infer_linux_st_cpu.log
-
-

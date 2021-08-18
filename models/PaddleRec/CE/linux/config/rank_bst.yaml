@@ -277,5 +277,3 @@ INFER:
         evaluation: "+"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/S_rank_bst_infer_linux_st_cpu.log
-
-
