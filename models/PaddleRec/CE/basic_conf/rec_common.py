@@ -19,10 +19,10 @@ PADDLE_ON_MODEL_CE = "1"
 WITH_AVX = "ON"
 # 资源配置
 IS_SINGLE_CUDA = True
-XPU = 'gpu'  # 取值gpu或cpu
+XPU = "gpu"  # 取值gpu或cpu
 # 配置文件中SET_CUDA为None，框架不配置gpu cuda，使用cpu场景
-SET_CUDA = '0'
-SET_MULTI_CUDA = '0,1'
+SET_CUDA = "0"
+SET_MULTI_CUDA = "0,1"
 
 # PaddleRec
 REPO_PaddleRec = "https://github.com/PaddlePaddle/PaddleRec.git"
@@ -75,26 +75,18 @@ if daily:
         "linux_down_data",
     ]
     EXEC_TAG_LINUX_ALL = [
-        "linux_st_gpu1", "linux_st_gpu2", "linux_st_cpu",
-        "linux_dy_gpu1", "linux_dy_gpu2", "linux_dy_cpu",
+        "linux_st_gpu1",
+        "linux_st_gpu2",
+        "linux_st_cpu",
+        "linux_dy_gpu1",
+        "linux_dy_gpu2",
+        "linux_dy_cpu",
         "linux_down_data",
     ]
 else:
     # rec P0级别收敛性任务
     EXEC_PRIORITY = ["p0"]
     EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
-    EXEC_TAG = [
-        "linux_dy_gpu1_con",
-        "linux_st_gpu1_con",
-        "linux_down_data",
-    ]
-    EXEC_TAG_LINUX_GPU2 = [
-        "linux_dy_gpu1_con",
-        "linux_st_gpu1_con",
-        "linux_down_data",
-    ]
-    EXEC_TAG_LINUX_ALL = [
-        "linux_dy_gpu1_con",
-        "linux_st_gpu1_con",
-        "linux_down_data",
-    ]
+    EXEC_TAG = ["linux_dy_gpu1_con", "linux_st_gpu1_con", "linux_down_data"]
+    EXEC_TAG_LINUX_GPU2 = ["linux_dy_gpu1_con", "linux_st_gpu1_con", "linux_down_data"]
+    EXEC_TAG_LINUX_ALL = ["linux_dy_gpu1_con", "linux_st_gpu1_con", "linux_down_data"]
