@@ -19,6 +19,7 @@ print_info(){
 if [ $1 -ne 0 ];then
     echo -e "${model},train_model_$2,FAIL"
     echo "exit_code: 1.0" >> ../log/${model}/${model}_train_$2.log
+    cat ../log/${model}/${model}_train_$2.log
 else
     echo -e "${model},train_model_$2,SUCCESS"
     echo "exit_code: 0.0" >> ../log/${model}/${model}_train_$2.log
