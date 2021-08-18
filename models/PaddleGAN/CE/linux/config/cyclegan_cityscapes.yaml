@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       G_idt_A_loss:
         latest: True
         kpi_base: 0.564
-        threshold: 0.3
+        threshold: 1 # 0.3
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/cyclegan_cityscapes_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       G_idt_A_loss:
         latest: True
         kpi_base: 0.887
-        threshold: 0.3
+        threshold: 1 # 0.3
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/cyclegan_cityscapes_2card.log

@@ -34,7 +34,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 17.115042
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/rec_mv3_none_bilstm_ctc_1card.log
@@ -53,7 +53,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 17.301086
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/rec_mv3_none_bilstm_ctc_2card.log

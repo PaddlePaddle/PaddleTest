@@ -34,7 +34,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 109.408752
-        threshold: 20
+        threshold: 1 # 20
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/e2e_r50_vd_pgnet_1card.log
@@ -53,7 +53,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 103.036285
-        threshold: 20
+        threshold: 1 # 20
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/e2e_r50_vd_pgnet_2card.log

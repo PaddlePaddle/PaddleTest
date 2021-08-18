@@ -17,14 +17,12 @@ if [ ! -f "pretrain_models/ResNet50_vd_pretrained.pdparams" ]; then
   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet50_vd_pretrained.pdparams
 fi
 
-if [ ! -f "pretrain_models/ch_ppocr_mobile_v2.0_det_train" ]; then
-    rm -rf pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar
+if [ ! -f "pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar" ]; then
     wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar 
     tar xf pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar -C pretrain_models
 fi
 
-if [ ! -f "pretrain_models/ch_ppocr_server_v2.0_det_train" ]; then
-    rm -rf pretrain_models/ch_ppocr_server_v2.0_det_train.tar
+if [ ! -f "pretrain_models/ch_ppocr_server_v2.0_det_train.tar" ]; then
     wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_server_v2.0_det_train.tar 
     tar xf pretrain_models/ch_ppocr_server_v2.0_det_train.tar -C pretrain_models
 fi

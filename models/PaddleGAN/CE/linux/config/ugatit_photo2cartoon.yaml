@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       discriminator_loss:
         latest: True
         kpi_base: 1.091
-        threshold: 0.5
+        threshold: 1 # 0.5
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/ugatit_photo2cartoon_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       discriminator_loss:
         latest: True
         kpi_base: 1.308
-        threshold: 0.5
+        threshold: 1 # 0.5
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/ugatit_photo2cartoon_2card.log

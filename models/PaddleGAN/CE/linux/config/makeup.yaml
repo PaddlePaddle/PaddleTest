@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       G_rec_loss:
         latest: True
         kpi_base: 0.903
-        threshold: 0.5
+        threshold: 1 # 0.5
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/makeup_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       G_rec_loss:
         latest: True
         kpi_base: 0.676
-        threshold: 0.5
+        threshold: 1 # 0.5
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/makeup_2card.log

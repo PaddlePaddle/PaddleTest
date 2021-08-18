@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       loss_pix:
         latest: True
         kpi_base: 0.016
-        threshold: 0.02
+        threshold: 1 # 0.02
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/realsr_kernel_noise_x4_dped_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       loss_pix:
         latest: True
         kpi_base: 0.014
-        threshold: 0.02
+        threshold: 1 # 0.02
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/realsr_kernel_noise_x4_dped_2card.log

@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       loss_total:
         latest: True
         kpi_base: 113
-        threshold: 9
+        threshold: 1 # 9
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/drn_psnr_x4_div2k_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       loss_total:
         latest: True
         kpi_base: 117
-        threshold: 9
+        threshold: 1 # 9
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/drn_psnr_x4_div2k_2card.log

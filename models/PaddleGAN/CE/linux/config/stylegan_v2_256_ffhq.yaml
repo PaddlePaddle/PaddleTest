@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       l_d:
         latest: True
         kpi_base: 0.273
-        threshold: 0.3
+        threshold: 1 # 0.3
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/stylegan_v2_256_ffhq_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       l_d:
         latest: True
         kpi_base: 0.133
-        threshold: 0.3
+        threshold: 1 # 0.3
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/stylegan_v2_256_ffhq_2card.log

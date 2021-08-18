@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       D_fake_loss:
         latest: True
         kpi_base: 0.775
-        threshold: 0.2
+        threshold: 1 # 0.2
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/cond_dcgan_mnist_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       D_fake_loss:
         latest: True
         kpi_base: 0.724
-        threshold: 0.2
+        threshold: 1 # 0.2
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/cond_dcgan_mnist_2card.log

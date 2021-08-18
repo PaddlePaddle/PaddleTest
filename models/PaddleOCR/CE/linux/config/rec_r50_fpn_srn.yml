@@ -34,7 +34,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 4569.609375
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/rec_r50_fpn_srn_1card.log
@@ -53,7 +53,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 4767.763672
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/rec_r50_fpn_srn_2card.log

@@ -34,7 +34,7 @@ TRAIN: # 训练步骤
       loss_pix:
         latest: True
         kpi_base: 0.035
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/esrgan_1card.log
@@ -53,7 +53,7 @@ TRAIN: # 训练步骤
       loss_pix:
         latest: True
         kpi_base: 0.038
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/esrgan_2card.log

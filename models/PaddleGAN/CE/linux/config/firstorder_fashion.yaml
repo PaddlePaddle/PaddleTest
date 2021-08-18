@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       gen_gan:
         latest: True
         kpi_base: 0.419
-        threshold: 0.2
+        threshold: 1 # 0.2
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/firstorder_fashion_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       gen_gan:
         latest: True
         kpi_base: 0.307
-        threshold: 0.2
+        threshold: 1 # 0.2
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/firstorder_fashion_2card.log

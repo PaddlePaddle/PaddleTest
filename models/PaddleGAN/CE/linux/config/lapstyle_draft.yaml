@@ -30,10 +30,10 @@ TRAIN: # 训练步骤
         cmd: sh train_1card.sh
 
     kpis: #kpi指标
-      losloss_style_remds:
+      loss_style_remds:
         latest: True
         kpi_base: 0.726
-        threshold: 0.3
+        threshold: 1 # 0.3
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/lapstyle_draft_1card.log
@@ -49,10 +49,10 @@ TRAIN: # 训练步骤
         cmd: sh train_2card.sh
 
     kpis: #kpi指标
-      losloss_style_remds:
+      loss_style_remds:
         latest: True
         kpi_base: 0.726
-        threshold: 0.3
+        threshold: 1 # 0.3
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/lapstyle_draft_2card.log

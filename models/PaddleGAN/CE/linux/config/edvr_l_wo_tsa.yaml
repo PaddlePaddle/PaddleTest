@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       loss_pixel:
         latest: True
         kpi_base: 25104
-        threshold: 5000
+        threshold: 1 # 5000
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/edvr_l_wo_tsa_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       loss_pixel:
         latest: True
         kpi_base: 29224
-        threshold: 5000
+        threshold: 1 # 5000
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/edvr_l_wo_tsa_2card.log

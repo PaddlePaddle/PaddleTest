@@ -34,7 +34,7 @@ TRAIN: # 训练步骤
       perceptual:
         latest: True
         kpi_base: 130.534
-        threshold: 20
+        threshold: 1 # 20
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/fom_1card.log
@@ -53,7 +53,7 @@ TRAIN: # 训练步骤
       perceptual:
         latest: True
         kpi_base: 112.705
-        threshold: 20
+        threshold: 1 # 20
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/fom_2card.log

@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       init_c_loss:
         latest: True
         kpi_base: 297.876
-        threshold: 99
+        threshold: 1 # 99
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/animeganv2_pretrain_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       init_c_loss:
         latest: True
         kpi_base: 358
-        threshold: 99
+        threshold: 1 # 99
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/animeganv2_pretrain_2card.log

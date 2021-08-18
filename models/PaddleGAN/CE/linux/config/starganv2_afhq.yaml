@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       D/latent_real:
         latest: True
         kpi_base: 0.098
-        threshold: 0.1
+        threshold: 1 # 0.1
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/starganv2_afhq_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       D/latent_real:
         latest: True
         kpi_base: 0.192
-        threshold: 0.1
+        threshold: 1 # 0.1
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/starganv2_afhq_2card.log

@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       loss_pixel:
         latest: True
         kpi_base: 0.071
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/lesrcnn_psnr_x4_div2k_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       loss_pixel:
         latest: True
         kpi_base: 0.087
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/lesrcnn_psnr_x4_div2k_2card.log

@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       equivariance_value:
         latest: True
         kpi_base: 1.052
-        threshold: 0.5
+        threshold: 1 # 0.5
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/firstorder_vox_256_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       equivariance_value:
         latest: True
         kpi_base: 0.695
-        threshold: 0.5
+        threshold: 1 # 0.5
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/firstorder_vox_256_2card.log

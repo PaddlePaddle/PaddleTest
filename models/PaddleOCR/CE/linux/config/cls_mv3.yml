@@ -1,4 +1,4 @@
-MODEL: "CLAS" # 模型名
+MODEL: "cls_mv3" # 模型名
 R5IORITY: P1
 GIT:
   addr: $REPO_PaddleOCR
@@ -34,7 +34,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.321633
-        threshold: 0.01
+        threshold: 1 # 0.01
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/cls_mv3_1card.log
@@ -53,7 +53,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.520886
-        threshold: 0.01
+        threshold: 1 # 0.01
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/cls_mv3_2card.log

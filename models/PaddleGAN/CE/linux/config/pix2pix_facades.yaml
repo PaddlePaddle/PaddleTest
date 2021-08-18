@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       D_fake_loss:
         latest: True
         kpi_base: 0.224
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/pix2pix_facades_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       D_fake_loss:
         latest: True
         kpi_base: 0.232
-        threshold: 0.05
+        threshold: 1 # 0.05
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/pix2pix_facades_2card.log

@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
       d_loss:
         latest: True
         kpi_base: 234.495
-        threshold: 99
+        threshold: 1 # 99
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/animeganv2_1card.log
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
       d_loss:
         latest: True
         kpi_base: 230.856
-        threshold: 99
+        threshold: 1 # 99
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/animeganv2_2card.log
