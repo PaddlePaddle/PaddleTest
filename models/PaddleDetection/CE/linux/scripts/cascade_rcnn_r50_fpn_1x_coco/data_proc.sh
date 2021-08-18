@@ -14,11 +14,11 @@ root_path=$cur_path/../../
 if [ -d "$cur_path/../../PaddleDetection/dataset/coco" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/coco
 fi
-ln -s /ssd2/ce_data/yolov3/dataset/coco $cur_path/../../PaddleDetection/dataset/coco
+ln -s /ssd2/ce_data/PaddleDetection/coco $cur_path/../../PaddleDetection/dataset/coco
 if [ -d "$cur_path/../../PaddleDetection/dataset/voc" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/voc
 fi
-ln -s /ssd2/ce_data/yolov3/dataset/voc $cur_path/../../PaddleDetection/dataset/voc
+ln -s /ssd2/ce_data/PaddleSeg/pascalvoc $cur_path/../../PaddleDetection/dataset/voc
 
 
 #train config process
