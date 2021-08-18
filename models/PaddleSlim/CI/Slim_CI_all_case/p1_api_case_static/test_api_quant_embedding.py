@@ -19,10 +19,12 @@
 import sys
 import unittest
 import paddle
+
+# pylint: disable=wrong-import-position
+sys.path.append("../")
+# pylint: enable=wrong-import-position
 import paddleslim.quant as quant
 from static_case import StaticCase
-
-sys.path.append("../")
 
 if paddle.is_compiled_with_cuda() is True:
     places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
@@ -33,7 +35,7 @@ else:
 
 class TestQuantEmbedding(StaticCase):
     """
-    Test paddleslim.quant.quant_embedding
+    test paddleslim.quant.quant_embedding
     """
 
     def test_quant_embedding(self):
@@ -41,11 +43,12 @@ class TestQuantEmbedding(StaticCase):
         paddleslim.quant.quant_embedding(program, place, config=None, scope=None)
         :return:
         """
+        startup_program = paddle.static.Program()
         train_program = paddle.static.Program()
-        with paddle.static.program_guard(train_program):
+        with paddle.static.program_guard(train_program, startup_program):
             input_word = paddle.static.data(name="input_word", shape=[None, 1], dtype="int64")
             param_attr = paddle.ParamAttr(name="emb", initializer=paddle.nn.initializer.Uniform(-0.005, 0.005))
-            weight = train_program.global_block().create_parameter((100, 128), attr=param_attr, dtype="float32")
+            weight = paddle.static.create_parameter((100, 128), attr=param_attr, dtype="float32")
 
             paddle.nn.functional.embedding(x=input_word, weight=weight, sparse=True)
 
@@ -53,7 +56,7 @@ class TestQuantEmbedding(StaticCase):
 
         place = paddle.CUDAPlace(0) if paddle.is_compiled_with_cuda() else paddle.static.CPUPlace()
         exe = paddle.static.Executor(place)
-        exe.run(paddle.static.default_startup_program())
+        exe.run(startup_program)
 
         quant.quant_embedding(infer_program, place)
 
