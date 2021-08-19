@@ -13,5 +13,8 @@ if [ ! -d "../log" ]; then
   mkdir ../log
 fi
 python -m pip install -r requirements.txt
+
+sed -i 's!num_workers: 16!num_workers: 4!g' configs/lapstyle_draft.yml
+
 python -m paddle.distributed.launch tools/main.py -c configs/lapstyle_draft.yaml -o total_iters=100 log_config.interval=10 > log/lapstyle_draft_2card.log 2>&1
 cat log/lapstyle_draft_2card.log | grep " INFO: Iter: 100/100" > ../log/lapstyle_draft_2card.log
