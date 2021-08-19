@@ -32,9 +32,12 @@ python -m pip install --ignore-installed --upgrade pip
 python -m pip install $2;
 python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 ####################################
-mkdir /ssd1/paddlenlp
+mkdir /ssd1
+cd /ssd1
+mkdir paddlenlp
+cd /workspace
 export PPNLP_HOME=/ssd1/paddlenlp
-ln -s /home/data/cfs/models_ce/PaddleNLP/  /ssd1/paddlenlp/
+ln -s /home/data/cfs/models_ce/PaddleNLP/*  /ssd1/paddlenlp/
 ####################################
 # for paddlenlp env
 nlp1_build (){
@@ -55,6 +58,7 @@ $3
 python -m pip install -r requirements_ci.txt
 python -m init_file.py
 python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -c 'from visualdl import LogWriter'
 pip list
 set +x
 ####################################
