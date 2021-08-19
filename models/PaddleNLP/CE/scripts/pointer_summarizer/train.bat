@@ -9,7 +9,7 @@ cd models_repo\examples\text_summarization\pointer_summarizer\
 
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
-%sed% -i "s/max_iterations = 5000/max_iterations = 30/g" config.py
+%sed% -i "s/max_iterations = 100000/max_iterations = 30/g" config.py
 %sed% -i "s/if iter % 5000 == 0 or iter == 1000:/if iter % 30 == 0 :/g" train.py
 
 python train.py > %logpath%/train_%1.log 2>&1
