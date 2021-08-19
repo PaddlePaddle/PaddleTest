@@ -1,0 +1,654 @@
+MODEL: "few_shot_efl" # 模型名 不支持多卡
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/few_shot_efl/ #脚本的路径
+  model_log_path: log/few_shot_efl/
+
+EXEC:
+  exec_cases: [TRAIN, INFER]
+  exec_priority: [p0, p1]
+  exec_tag: $EXEC_TAG
+
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1_iflytek
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA iflytek
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 36.878
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_iflytek_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_iflytek
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA iflytek
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 36.878
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_iflytek_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA tnews
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 50.547
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_tnews_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA tnews
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 50.547
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_tnews_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_eprstmt
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA eprstmt
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 53.115
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_eprstmt_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_eprstmt
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA eprstmt
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 53.115
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_eprstmt_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_bustm
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA bustm
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 54.176
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_bustm_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_bustm
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA bustm
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 47.46
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_bustm_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_ocnli
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA ocnli
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 33.254
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_ocnli_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_ocnli
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA ocnli
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 33.254
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_ocnli_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_csl
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA csl
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 49.295
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_csl_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_csl
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA csl
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 49.295
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_csl_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_csldcp
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA csldcp
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 38.117
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_csldcp_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_csldcp
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA csldcp
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 38.117
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_csldcp_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_cluewsc
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA cluewsc
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 52.664
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_cluewsc_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_cluewsc
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA cluewsc
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 49.795
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_cluewsc_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_chid
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA chid
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 17.083
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_chid_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_chid
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA chid
+
+    kpis: #kpi指标
+      dev_accuracy:
+        latest: True
+        kpi_base: 13.487
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_chid_$XPU.log
+
+
+INFER:
+  -
+    priority: p1
+    tag: linux_dy_gpu1_iflytek
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA iflytek 100
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_iflytek_single_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_iflytek
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA iflytek 100
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_iflytek_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA tnews 30
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_tnews_single_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA tnews 100
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_tnews_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_eprstmt
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA eprstmt 4
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_eprstmt_single_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_eprstmt
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA eprstmt 16
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_eprstmt_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_bustm
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA bustm 4
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_bustm_single_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_bustm
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA bustm 16
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_bustm_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_ocnli
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA ocnli 4
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_ocnli_single_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_ocnli
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA ocnli 16
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_ocnli_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_csl
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA csl 4
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_csl_single_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_csl
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA csl 16
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_csl_$XPU.log
+
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_csldcp
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA csldcp 67
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_csldcp_single_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_csldcp
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA csldcp 100
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_csldcp_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_cluewsc
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA cluewsc 4
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_cluewsc_single_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_cluewsc
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA cluewsc 16
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_cluewsc_$XPU.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_chid
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA chid 19
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_chid_single_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_chid
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA chid 74
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_chid_$XPU.log

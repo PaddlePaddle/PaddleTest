@@ -1,0 +1,130 @@
+MODEL: "transformer" # 模型名
+PRIORITY: P0, Dy_con  # 收敛性任务
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $TRANSFORMER_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/transformer/ #脚本的路径
+  model_log_path: log/transformer/
+
+EXEC:
+  exec_cases: [TRAIN]
+  exec_priority: [p0,p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh 'single' $XPU
+
+    kpis: #kpi指标
+      ppl:
+        latest: True
+        kpi_base: 14.429425
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/single_card_train.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu2
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh 'multi' $XPU $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      ppl:
+        latest: True
+        kpi_base: 14.429425
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/multi_cards_train.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu2_con  # 多卡收敛
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh 'multi' $XPU $SET_MULTI_CUDA con
+
+    kpis: #kpi指标
+      ppl:
+        latest: True
+        kpi_base: 14.429425
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/multi_cards_train.log
+
+INFER:
+  - #可以有多步
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+DY_TO_ST: # 动转静
+  - #可以有多步
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash dy_to_st.sh $XPU
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/dy_to_st_$XPU.log

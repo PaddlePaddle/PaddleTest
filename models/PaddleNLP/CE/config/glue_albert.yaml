@@ -1,0 +1,146 @@
+MODEL: "glue_albert" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $GLUE_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/glue/ #脚本的路径
+  model_log_path: log/glue/
+
+EXEC:
+  exec_cases: [TRAIN]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_gpu1_SST-2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' 'albert' 'albert-base-v2' 'SST-2' 1e-5
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.5091743119266054
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_albert-base-v2_SST-2_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_gpu2_SST-2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' 'albert' 'albert-base-v2' 'SST-2' 1e-5
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.5091743119266054
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_albert-base-v2_SST-2_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_gpu1_SST-2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU albert albert-base-v2 SST-2 1e-5
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.699278
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_albert-base-v2_SST-2_$XPU.log
+
+
+  -
+    priority: p0
+    tag: linux_gpu1_MNLI
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' 'albert' 'albert-base-v2' 'MNLI' 3e-5
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.31818644931227713
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_albert-base-v2_MNLI_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_gpu2_MNLI
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' 'albert' 'albert-base-v2' 'MNLI' 3e-5
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.31818644931227713
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_albert-base-v2_MNLI_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_gpu1_MNLI
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU albert albert-base-v2 MNLI 3e-5
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 1.081002
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_albert-base-v2_MNLI_$XPU.log

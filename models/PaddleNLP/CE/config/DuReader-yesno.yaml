@@ -1,0 +1,75 @@
+MODEL: "DuReader-yesno" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $DuReader_yesno_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/DuReader-yesno/ #脚本的路径
+  model_log_path: log/DuReader-yesno/
+
+EXEC:
+  exec_cases: [TRAIN]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    # env: #去掉，自动调度
+    #   CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU single $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.958432
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      # accu:
+      #   latest: True
+      #   kpi_base: 0.479312
+      #   threshold: 0.01
+      #   actived: True
+      #   evaluation: "+"
+      #   unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_single_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    # env: #去掉，自动调度
+    #   CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU multi $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 1.153762
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      # accu:
+      #   latest: True
+      #   kpi_base: 0.479312
+      #   threshold: 0.01
+      #   actived: True
+      #   evaluation: "+"
+      #   unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_multi_$XPU.log

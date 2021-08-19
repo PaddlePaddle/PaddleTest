@@ -1,0 +1,122 @@
+MODEL: "hrnet_w32_256x192" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleDetection
+  path: $ROOT_PATH/PaddleDetection
+  branch: $BASE_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: ./scripts/hrnet_w32_256x192/ #脚本的路径
+  model_log_path: log/hrnet_w32_256x192
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN,EVAL]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_dy_process_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh 'multi'
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.001172
+        threshold: 0.5 #0.03
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      ips:
+        latest: True
+        kpi_base: 4.4162
+        threshold: 0.9
+        actived: True
+        evaluation: "+"
+        unit_repr: "images/s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/hrnet_w32_256x192_train_multi.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh 'single'
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.001061
+        threshold: 0.5 #0.03
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      ips:
+        latest: True
+        kpi_base: 4.3338
+        threshold: 0.9
+        actived: True
+        evaluation: "+"
+        unit_repr: "images/s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/chrnet_w32_256x192_train_single.log
+
+
+EVAL:
+  - #可以有多步
+    priority: p1
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh eval.sh 'single'
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 1.354209
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/hrnet_w32_256x192_coco_eval_single.log
