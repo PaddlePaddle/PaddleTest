@@ -21,3 +21,5 @@ multiprocess
 sklearn
 paddleslim
 visualdl
+pyrouge
+nltk
