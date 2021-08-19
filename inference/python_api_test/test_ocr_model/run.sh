@@ -1,6 +1,6 @@
 export FLAGS_call_stack_level=2
 cases=`find . -name "test*.py" | sort`
-ignore=""
+ignore="test_ocr_det_mv3_db_fp16.py"
 bug=0
 
 echo "============ failed cases =============" >> result.txt
