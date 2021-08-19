@@ -32,7 +32,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       D_fake_loss:
         latest: True
-        kpi_base: 0.329
+        kpi_base: 1
         threshold: 1 # 0.3
         actived: True
         evaluation: "-"
@@ -51,7 +51,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       D_fake_loss:
         latest: True
-        kpi_base: 0.546
+        kpi_base: 0.8
         threshold: 1 # 0.3
         actived: True
         evaluation: "-"
