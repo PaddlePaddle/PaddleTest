@@ -24,7 +24,6 @@ case $1 in
   ;;
 esac
 python -c 'import sys; print(sys.version_info[:])'
-python -c 'from visualdl import LogWriter'
 echo "python="$1
 ####################################
 # for paddle env
@@ -59,6 +58,7 @@ $3
 python -m pip install -r requirements_ci.txt
 python -m init_file.py
 python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -c 'from visualdl import LogWriter'
 pip list
 set +x
 ####################################
