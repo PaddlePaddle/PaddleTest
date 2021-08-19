@@ -32,7 +32,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       G_idt_A_loss:
         latest: True
-        kpi_base: 1.699
+        kpi_base: 2
         threshold: 1 # 0.5
         actived: True
         evaluation: "-"
@@ -51,7 +51,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       G_idt_A_loss:
         latest: True
-        kpi_base: 1.177
+        kpi_base: 1.5
         threshold: 1 # 0.5
         actived: True
         evaluation: "-"
