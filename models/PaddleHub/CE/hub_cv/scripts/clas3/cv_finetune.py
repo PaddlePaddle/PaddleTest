@@ -7,17 +7,12 @@ clas3 finetune
 import ast
 import argparse
 import os
+import shutil
 import paddle
-import numpy as np
 import paddlehub as hub
 from paddlehub.finetune.trainer import Trainer
-from paddlehub.datasets import OpticDiscSeg
-from paddlehub.vision.segmentation_transforms import Compose, Resize, Normalize
 from paddlehub.datasets import Flowers
-from paddlehub.vision.utils import ConfusionMatrix
 import paddlehub.vision.transforms as T
-import cv2
-import shutil
 
 
 parser = argparse.ArgumentParser(__doc__)

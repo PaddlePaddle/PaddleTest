@@ -4,11 +4,10 @@
 """
 seg1 finetune
 """
-from paddlehub.datasets import ChnSentiCorp
-from paddlehub.datasets import LCQMC
 import ast
 import argparse
 import os
+import shutil
 import paddle
 import numpy as np
 import paddlehub as hub
@@ -16,8 +15,6 @@ from paddlehub.finetune.trainer import Trainer
 from paddlehub.datasets import OpticDiscSeg
 from paddlehub.vision.segmentation_transforms import Compose, Resize, Normalize
 from paddlehub.vision.utils import ConfusionMatrix
-import cv2
-import shutil
 
 
 parser = argparse.ArgumentParser(__doc__)
