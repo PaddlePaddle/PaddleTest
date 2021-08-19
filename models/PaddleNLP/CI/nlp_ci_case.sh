@@ -681,6 +681,7 @@ cp -r /ssd1/paddlenlp/download/transformer-xl/* ./
 CUDA_VISIBLE_DEVICES=${cudaid2}
 time (sed -i 's/print_step: 100/print_step: 1/g' configs/enwik8.yaml
 sed -i 's/save_step: 20000/save_step: 3/g' configs/enwik8.yaml
+sed -i 's/batch_size: 16/batch_size: 8/g' configs/enwik8.yaml
 sed -i 's/max_step: 400000/max_step: 4/g' configs/enwik8.yaml
 python3.7 -m paddle.distributed.launch  train.py --config ./configs/enwik8.yaml >${log_path}/train_enwik8) >>${log_path}/train_enwik8 2>&1
 print_info $? train_enwik8
