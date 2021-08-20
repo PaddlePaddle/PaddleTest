@@ -20,7 +20,7 @@ fi
 #访问RD程序
 cd $code_path
 
-sed -i 's/max_iterations = 5000/max_iterations = 30/g' config.py
+sed -i 's/max_iterations = 100000/max_iterations = 30/g' config.py
 sed -i 's/if iter % 5000 == 0 or iter == 1000:/if iter % 30 == 0 :/g' train.py
 
 #训练
