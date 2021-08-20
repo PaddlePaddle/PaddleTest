@@ -1,0 +1,13 @@
+bert-base-chinese
+bert-base-multilingual-cased
+bert-base-multilingual-uncased
+chinese-bert-wwm
+chinese-bert-wwm-ext
+chinese-electra-base
+chinese-electra-small
+ernie
+ernie_tiny
+rbt3
+rbtl3
+roberta-wwm-ext
+roberta-wwm-ext-large
