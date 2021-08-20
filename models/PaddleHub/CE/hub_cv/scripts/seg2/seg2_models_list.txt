@@ -1,0 +1,3 @@
+humanseg_lite
+humanseg_mobile
+humanseg_server
