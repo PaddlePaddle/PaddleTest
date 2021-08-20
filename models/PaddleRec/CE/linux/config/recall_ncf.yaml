@@ -1,0 +1,568 @@
+MODEL: "recall_ncf" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleRec
+  path: $ROOT_PATH/PaddleRec
+  branch: $recall_ncf_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/recall/ #脚本的路径
+  model_log_path: log/recall_ncf/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN,INFER]
+  exec_priority: [p0,linux_dy_gpu1,linux_st_gpu2]
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh data_proc.sh movielens_pinterest_NCF
+
+TRAIN: # 训练步骤
+  -
+    tag: linux_dy_gpu1  # dy_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_gpu1 recall_ncf_linux_dy_gpu1
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_linux_dy_gpu1.log
+  -
+    tag: linux_dy_gpu2  # dy_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_gpu2 recall_ncf_linux_dy_gpu2
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/recall_ncf_linux_dy_gpu2_dist_log/workerlog.0
+  -
+    tag: linux_dy_cpu   # dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_cpu recall_ncf_linux_dy_cpu
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_linux_dy_cpu.log
+
+  -
+    tag: linux_st_gpu1  # st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu1 recall_ncf_linux_st_gpu1
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_linux_st_gpu1.log
+  -
+    tag: linux_st_gpu2  # st_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu2 recall_ncf_linux_st_gpu2
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/recall_ncf_linux_st_gpu2_dist_log/workerlog.0
+
+  -
+    tag: linux_st_cpu # st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_cpu recall_ncf_linux_st_cpu
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_linux_st_cpu.log
+
+  -
+    tag: linux_dy_gpu1_con  # dy_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_gpu1_con recall_ncf_linux_dy_gpu1_con
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_linux_dy_gpu1_con.log
+
+  -
+    tag: linux_st_gpu1_con  # dy_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu1_con recall_ncf_linux_st_gpu1_con
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_linux_st_gpu1_con.log
+
+
+INFER:
+  - #可以有多步
+    tag: linux_dy_gpu1
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_gpu1 recall_ncf_infer_linux_dy_gpu1
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_dy_gpu1_evaluate.log
+  -
+    tag: linux_dy_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_gpu2 recall_ncf_infer_linux_dy_gpu2
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_dy_gpu2_evaluate.log
+  -
+    tag: linux_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_cpu recall_ncf_infer_linux_dy_cpu
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_dy_cpu_evaluate.log
+  - #可以有多步
+    tag: linux_st_gpu1
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_gpu1 recall_ncf_infer_linux_st_gpu1
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_st_gpu1_evaluate.log
+  -
+    tag: linux_st_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_gpu2 recall_ncf_infer_linux_st_gpu2
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_st_gpu2_evaluate.log
+  -
+    tag: linux_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_cpu recall_ncf_infer_linux_st_cpu
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_st_cpu_evaluate.log
+
+  -
+    tag: linux_dy_gpu1_con
+    priority: p0
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_gpu1_con recall_ncf_infer_linux_dy_gpu1_con
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_dy_gpu1_con_evaluate.log
+
+  -
+    tag: linux_st_gpu1_con
+    priority: p0
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_gpu1_con recall_ncf_infer_linux_st_gpu1_con
+
+    kpis: #kpi指标
+      hr:
+        latest: True
+        kpi_base: 0.58
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      ndcg:
+        latest: True
+        kpi_base: 0.33
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_st_gpu1_con_evaluate.log
