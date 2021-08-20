@@ -12,6 +12,8 @@
 │
 ├── PaddleOCR/       -------------------------> PaddleOCR的自动化case
 │
+├── PaddleGAN/       -------------------------> PaddleGAN的自动化case
+│
 ├── PaddleSeg/       -------------------------> PaddleSeg的自动化case
 │
 ├── PaddleDetection/ -------------------------> PaddleDetection的自动化case

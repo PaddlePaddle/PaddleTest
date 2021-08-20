@@ -1,0 +1,58 @@
+MODEL: "stylegan_v2_256_ffhq" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleGAN
+  path: $ROOT_PATH/PaddleGAN
+  branch: $gan_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/stylegan_v2_256_ffhq/ #脚本的路径
+  model_log_path: log
+
+EXEC:
+  exec_cases: [TRAIN]
+  exec_priority: [P1]
+  exec_tag: [linux_dy_gpu1,linux_dy_gpu2]
+#测试套
+TRAIN: # 训练步骤
+  -
+    priority: P1  # dy_gpu1
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train_1card.sh
+
+    kpis: #kpi指标
+      l_d:
+        latest: True
+        kpi_base: 0.5
+        threshold: 1 # 0.3
+        actived: True
+        evaluation: "-"
+    output: $ROOT_PATH/$model_log_path/stylegan_v2_256_ffhq_1card.log
+  -
+    priority: P1  # dy_gpu1
+    tag: linux_dy_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train_2card.sh
+
+    kpis: #kpi指标
+      l_d:
+        latest: True
+        kpi_base: 0.2
+        threshold: 1 # 0.3
+        actived: True
+        evaluation: "-"
+    output: $ROOT_PATH/$model_log_path/stylegan_v2_256_ffhq_2card.log
