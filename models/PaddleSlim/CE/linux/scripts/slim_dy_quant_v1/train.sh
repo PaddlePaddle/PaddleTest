@@ -44,6 +44,7 @@ if [ "$1" = "linux_dy_gpu1" ];then #单卡
 elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
     python -m paddle.distributed.launch  \
     --log_dir="quant_v1_linux_dy_gpu2_dist_log" train.py \
+    --model='mobilenet_v1' \
     --pretrained_model '../../pretrain/MobileNetV1_pretrained' \
     --num_epochs 1 \
     --batch_size 128 > ${log_path}/$2.log 2>&1
