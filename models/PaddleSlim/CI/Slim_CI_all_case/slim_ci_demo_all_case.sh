@@ -638,7 +638,7 @@ print_info $? dy_prune_fpgm_mobilenetv2_50_T
 
 #add
 CUDA_VISIBLE_DEVICES=${cudaid2} python -m paddle.distributed.launch \
---log_dir="fpgm_resnet34_f-42_train_log" \
+--log_dir="fpgm_resnet34_f_42_train_log" \
 train.py \
     --use_gpu=True \
     --model="resnet34" \
