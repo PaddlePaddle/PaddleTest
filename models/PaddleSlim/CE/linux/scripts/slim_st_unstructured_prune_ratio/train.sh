@@ -34,7 +34,7 @@ echo -e "\033[32m `pwd` train \033[0m";
 
 if [ "$1" = "linux_st_gpu1" ];then #单卡
     python train.py \
-    --batch_size 512 \
+    --batch_size 256 \
     --pretrained_model ../pretrain/MobileNetV1_pretrained \
     --lr 0.05 \
     --pruning_mode ratio \
@@ -50,7 +50,7 @@ if [ "$1" = "linux_st_gpu1" ];then #单卡
 
 elif [ "$1" = "linux_st_gpu2" ];then #单卡
     python train.py \
-    --batch_size 512 \
+    --batch_size 256 \
     --pretrained_model ../pretrain/MobileNetV1_pretrained \
     --lr 0.05 \
     --pruning_mode ratio \
@@ -66,7 +66,7 @@ elif [ "$1" = "linux_st_gpu2" ];then #单卡
 
 elif [ "$1" = "linux_st_cpu" ];then #单卡
     python train.py \
-    --batch_size 512 \
+    --batch_size 256 \
     --pretrained_model ../pretrain/MobileNetV1_pretrained \
     --lr 0.05 \
     --pruning_mode ratio \

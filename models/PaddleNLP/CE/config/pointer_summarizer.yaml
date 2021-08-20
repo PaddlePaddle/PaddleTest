@@ -44,9 +44,9 @@ TRAIN:
         cmd: bash train.sh 'single' $XPU
 
     kpis:
-      loss:
+      avg loss:
         latest: True
-        kpi_base: 10.00
+        kpi_base: 7.81670762
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -66,9 +66,9 @@ TRAIN:
         cmd: train.bat $XPU
 
     kpis:
-      loss:
+      avg loss:
         latest: True
-        kpi_base: 10.00
+        kpi_base: 7.81670762
         threshold: 0.05
         actived: True
         evaluation: "-"
