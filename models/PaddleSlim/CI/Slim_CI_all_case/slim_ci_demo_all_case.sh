@@ -71,10 +71,12 @@ demo_deep_mutual_learning(){
 cd ${slim_dir}/demo/deep_mutual_learning || catchException demo_deep_mutual_learning
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 model=dml_mv1_mv1_gpu1
-CUDA_VISIBLE_DEVICES=${cudaid1} python dml_train.py --epochs 1 >${log_path}/${model} 2>&1
+CUDA_VISIBLE_DEVICES=${cudaid1}
+python dml_train.py --epochs 1 >${log_path}/${model} 2>&1
 print_info $? ${model}
 model=dml_mv1_res50_gpu1
-CUDA_VISIBLE_DEVICES=${cudaid1} python dml_train.py --models='mobilenet-resnet50' --epochs 1 >${log_path}/${model} 2>&1
+CUDA_VISIBLE_DEVICES=${cudaid1}
+python dml_train.py --models='mobilenet-resnet50' --batch_size 128 --epochs 1 >${log_path}/${model} 2>&1
 print_info $? ${model}
 }
 
@@ -196,7 +198,7 @@ print_info $? demo_quant_pact_quant_aware_v3
 # load
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 2 --lr 0.0001 --use_pact True --batch_size 128 --lr_strategy=piecewise_decay \
+--num_epochs 2 --lr 0.0001 --use_pact True --batch_size 64 --lr_strategy=piecewise_decay \
 --step_epochs 20 --l2_decay 1e-5 \
 --checkpoint_dir ./output/MobileNetV3_large_x1_0/0 \
 --checkpoint_epoch 0 >${log_path}/demo_quant_pact_quant_aware_v3_load 2>&1
@@ -711,7 +713,7 @@ python train.py \
 --test_period 1 \
 --model_period 1 \
 --model_path st_ratio_models >${log_path}/st_unstructured_prune_ratio_T 2>&1
-print_info $? st_ratio_prune_ratio_T
+print_info $? st_unstructured_prune_ratio_T
 
 # MNIST数据集
 python train.py \
