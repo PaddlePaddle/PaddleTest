@@ -1,4 +1,7 @@
 export FLAGS_cudnn_deterministic=True
+echo ${Project_path}
+ls;
+pwd;
 cd ${Project_path}
 
 if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
@@ -47,3 +50,4 @@ if [ $linenum_last1 -eq 0 ]
   else sed ''1,"$linenum_last1"'d' ../log/ch_det_lite_train_cml_v2.1_1card_tmp.log > ../log/ch_det_lite_train_cml_v2.1_1card.log
 fi
 rm -rf ../log/ch_det_lite_train_cml_v2.1_1card_tmp.log
+cat log/ch_det_lite_train_cml_v2.1_1card.log
