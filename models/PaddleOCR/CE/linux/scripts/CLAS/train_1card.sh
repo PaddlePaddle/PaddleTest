@@ -1,12 +1,12 @@
 export FLAGS_cudnn_deterministic=True
-cd /workspace/PaddleOCR/ce/Paddle_Cloud_CE/src/task/PaddleOCR
+cd ${Project_path}
 
 sed -i 's!batch_size_per_card: 512!batch_size_per_card: 16!g' configs/cls/cls_mv3.yml
 sed -ie '/- RecAug:/{N;d;}' configs/cls/cls_mv3.yml
 sed -ie '/- RandAugment:/d' configs/cls/cls_mv3.yml #删除 RandAugment 字段行
 
 rm -rf train_data
-ln -s /home/data/cfs/models_ce/PaddleOCR/train_data train_data
+ln -s ${Data_path}/train_data train_data
 if [ ! -d "log" ]; then
   mkdir log
 fi

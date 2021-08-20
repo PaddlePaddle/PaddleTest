@@ -1,10 +1,10 @@
 export FLAGS_cudnn_deterministic=True
-cd /workspace/PaddleGAN/ce/Paddle_Cloud_CE/src/task/PaddleGAN
+cd ${Project_path}
 sed -ie '/- name: PairedRandomHorizontalFlip/{N;d;}' configs/esrgan_x4_div2k.yaml  #删除随机变量
 sed -ie '/- name: PairedRandomVerticalFlip/{N;d;}' configs/esrgan_x4_div2k.yaml
 sed -ie '/- name: PairedRandomTransposeHW/{N;d;}' configs/esrgan_x4_div2k.yaml
 rm -rf data
-ln -s /home/data/cfs/models_ce/PaddleGAN data
+ln -s ${Data_path} data
 if [ ! -d "log" ]; then
   mkdir log
 fi
