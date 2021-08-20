@@ -447,7 +447,6 @@ all_quant(){ # 10个模型
     if [ "${is_develop}" == "True" ];then
       ce_tests_dygraph_ptq4
     fi
-    ce_tests_dygraph_ptq4#
     demo_quant_quant_aware    # 2个模型
     demo_quant_quant_embedding  # 1个模型
     demo_quant_quant_post   # 4个策略
