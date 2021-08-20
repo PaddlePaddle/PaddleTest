@@ -16,9 +16,10 @@ catchException() {
   echo $1 failed due to exception >> FAIL_Exception.log
 }
 
-cudaid1=${1:-0} # use 0-th card as default
-cudaid2=${2:-0,1} # use 0-th card as default
-CUDA_VISIBLE_DEVICES=${cudaid2}
+cudaid1=$1
+cudaid2=$2
+echo "cudaid1,cudaid2", ${cudaid1}, ${cudaid2}
+export CUDA_VISIBLE_DEVICES=${cudaid1}
 export FLAGS_fraction_of_gpu_memory_to_use=0.98
 # data PaddleSlim/demo/data/ILSVRC2012
 cd ${slim_dir}/demo
@@ -646,7 +647,7 @@ print_info $? st_unstructured_prune_threshold_T
 # eval
 python evaluate.py \
        --pruned_model=st_unstructured_models \
-       --data="imagenet"  >${log_path}/st_unstructured_prune_threshold_eval &
+       --data="imagenet"  > ${log_path}/st_unstructured_prune_threshold_eval 2>&1
 print_info $? st_unstructured_prune_threshold_eval
 # load
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -660,11 +661,11 @@ python -m paddle.distributed.launch \
 --data imagenet \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
---num_epochs 3 \
+--num_epochs 1 \
 --test_period 1 \
 --model_path st_unstructured_models \
 ----pretrained_model st_unstructured_models \
---resume_epoch 1 >${log_path}/st_unstructured_prune_threshold_load 2>&1
+--resume_epoch 1 > ${log_path}/st_unstructured_prune_threshold_load 2>&1
 print_info $? st_unstructured_prune_threshold_load
 
 ## sparsity: -55%, accuracy: 67%+/87%+
@@ -680,7 +681,7 @@ python train.py \
 --step_epochs 1 2 3 \
 --num_epochs 1 \
 --test_period 1 \
---model_path st_ratio_models >${log_path}/st_ratio_prune_ratio_T 2>&1
+--model_path st_ratio_models > ${log_path}/st_ratio_prune_ratio_T 2>&1
 print_info $? st_ratio_prune_ratio_T
 
 # MNIST数据集
@@ -700,7 +701,7 @@ print_info $? st_unstructured_prune_threshold_mnist_T
 # eval
 python evaluate.py \
        --pruned_model=st_unstructured_models_mnist \
-       --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval &
+       --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval 2>&1
 print_info $? st_unstructured_prune_threshold_mnist_eval
 }
 dy_unstructured_prune(){
@@ -735,10 +736,10 @@ python -m paddle.distributed.launch \
 --step_epochs 1 2 3 \
 --num_epochs 1 --model_period 1 \
 --test_period 1 \
---model_path ./dy_threshold_models >${log_path}/dy_threshold_prune_T 2>&1
-print_info $? dy_threshold_prune_T
+--model_path ./dy_threshold_models >${log_path}/dy_threshold_threshold_T 2>&1
+print_info $? dy_threshold_threshold_T
 # eval
-python evaluate.py --pruned_model "./dy_threshold_models/model-pruned.pdparams" \
+python evaluate.py --pruned_model dy_threshold_models/model-pruned.pdparams \
 --data imagenet >${log_path}/dy_threshold_prune_eval 2>&1
 print_info $? dy_threshold_prune_eval
 
@@ -752,7 +753,7 @@ python -m paddle.distributed.launch \
 --batch_size 256 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
---num_epochs 3 \
+--num_epochs 1 \
 --test_period 1 \
 --model_path ./dy_threshold_models \
 --pretrained_model "./dy_threshold_models/model-pruned.pdparams" \
@@ -760,7 +761,7 @@ python -m paddle.distributed.launch \
 print_info $? dy_threshold_prune_T
 # cifar10
 python train.py --data cifar10 --lr 0.05 \
---pruning_mode threshold  --num_epochs 30 \
+--pruning_mode threshold  --num_epochs 1 \
 --threshold 0.01 >${log_path}/dy_threshold_prune_cifar10_T 2>&1
 print_info $? dy_threshold_prune_cifar10_T
 
@@ -921,7 +922,7 @@ done
 echo -e "\033[35m ---- end run P0case  \033[0m"
 
 cd ${slim_dir}/logs
-FF=`ls *_FAIL*|wc -l`
+FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
     exit 1
 else

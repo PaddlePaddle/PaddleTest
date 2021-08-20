@@ -676,7 +676,7 @@ print_info $? st_unstructured_prune_threshold_T
 # eval
 python evaluate.py \
        --pruned_model=st_unstructured_models \
-       --data="imagenet"  >${log_path}/st_unstructured_prune_threshold_eval &
+       --data="imagenet"  >${log_path}/st_unstructured_prune_threshold_eval 2>&1
 print_info $? st_unstructured_prune_threshold_eval
 # load
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -733,7 +733,7 @@ print_info $? st_unstructured_prune_threshold_mnist_T
 # eval
 python evaluate.py \
        --pruned_model=st_unstructured_models_mnist \
-       --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval &
+       --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval 2>&1
 print_info $? st_unstructured_prune_threshold_mnist_eval
 }
 demo_dygraph_unstructured_pruning(){
