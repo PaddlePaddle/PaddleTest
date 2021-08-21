@@ -193,7 +193,7 @@ python train.py --model MobileNetV3_large_x1_0 \
 print_info $? demo_quant_pact_quant_aware_v3_nopact
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 1 --lr 0.0001 --use_pact True --batch_size 128 --lr_strategy=piecewise_decay \
+--num_epochs 1 --lr 0.0001 --use_pact True --batch_size 64 --lr_strategy=piecewise_decay \
 --step_epochs 2 --l2_decay 1e-5 >${log_path}/demo_quant_pact_quant_aware_v3 2>&1
 print_info $? demo_quant_pact_quant_aware_v3
 # load
