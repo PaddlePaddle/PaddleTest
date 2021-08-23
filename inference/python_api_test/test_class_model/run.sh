@@ -22,4 +22,3 @@ done
 
 echo "total bugs: "${bug} >> result.txt
 exit ${bug}
-
