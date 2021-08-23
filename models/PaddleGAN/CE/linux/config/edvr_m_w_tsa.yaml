@@ -1,0 +1,58 @@
+MODEL: "edvr_m_w_tsa" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleGAN
+  path: $ROOT_PATH/PaddleGAN
+  branch: $gan_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/edvr_m_w_tsa/ #脚本的路径
+  model_log_path: log
+
+EXEC:
+  exec_cases: [TRAIN]
+  exec_priority: [P1]
+  exec_tag: [linux_dy_gpu1,linux_dy_gpu2]
+#测试套
+TRAIN: # 训练步骤
+  -
+    priority: P1  # dy_gpu1
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train_1card.sh
+
+    kpis: #kpi指标
+      loss_pixel:
+        latest: True
+        kpi_base: 35000
+        threshold: 1 # 9999
+        actived: True
+        evaluation: "-"
+    output: $ROOT_PATH/$model_log_path/edvr_m_w_tsa_1card.log
+  -
+    priority: P1  # dy_gpu1
+    tag: linux_dy_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train_2card.sh
+
+    kpis: #kpi指标
+      loss_pixel:
+        latest: True
+        kpi_base: 35000
+        threshold: 1 # 9999
+        actived: True
+        evaluation: "-"
+    output: $ROOT_PATH/$model_log_path/edvr_m_w_tsa_2card.log

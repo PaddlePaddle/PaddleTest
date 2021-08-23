@@ -1,0 +1,12 @@
+bisenetv2_cityscapes
+deeplabv3p_resnet50_cityscapes
+deeplabv3p_resnet50_voc
+fastscnn_cityscapes
+fcn_hrnetw18_cityscapes
+fcn_hrnetw18_voc
+fcn_hrnetw48_cityscapes
+fcn_hrnetw48_voc
+hardnet_cityscapes
+ocrnet_hrnetw18_cityscapes
+ocrnet_hrnetw18_voc
+unet_cityscapes

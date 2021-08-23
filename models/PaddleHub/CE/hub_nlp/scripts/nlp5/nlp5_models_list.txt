@@ -1,0 +1,3 @@
+ernie_gen_couplet
+ernie_gen_lover_words
+ernie_gen_poetry
