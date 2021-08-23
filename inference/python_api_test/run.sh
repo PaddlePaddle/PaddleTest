@@ -36,7 +36,6 @@ echo "[Ocr model inference cases result]" >> result.txt
 bash ./run.sh
 bug=$?
 cd ..
-<<<<<<< HEAD
 echo "===============Ocr model result ================="
 cat ./test_ocr_model/result.txt
 if [ `expr ${bug}` -eq 0 ]; then
