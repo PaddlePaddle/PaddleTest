@@ -82,4 +82,3 @@ def test_mkldnn():
     test_suite2.mkldnn_test(input_data_dict, output_data_dict)
 
     del test_suite2  # destroy class to save memory
-
