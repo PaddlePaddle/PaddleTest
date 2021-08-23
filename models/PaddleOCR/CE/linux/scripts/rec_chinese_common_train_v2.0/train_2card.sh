@@ -1,6 +1,5 @@
 export FLAGS_cudnn_deterministic=True
-
-cd {Project_path}
+cd ${Project_path}
 # data
 rm -rf train_data
 ln -s ${Data_path}/train_data train_data

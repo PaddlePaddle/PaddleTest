@@ -1,8 +1,10 @@
 export FLAGS_cudnn_deterministic=True
 echo ${Project_path}
+echo ${Data_path}
 ls;
 pwd;
 cd ${Project_path}
+pwd;
 
 if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams

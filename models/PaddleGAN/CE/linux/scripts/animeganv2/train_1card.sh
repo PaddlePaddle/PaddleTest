@@ -1,8 +1,10 @@
 export FLAGS_cudnn_deterministic=True
 echo ${Project_path}
+echo ${Data_path}
 ls;
 pwd;
 cd ${Project_path}
+pwd;
 
 sed -i 's/epochs/total_iters/g' configs/animeganv2.yaml #将epcoh换为iter
 sed -i 's/decay_total_iters/decay_epochs/g' configs/animeganv2.yaml #恢复学习率衰减字段

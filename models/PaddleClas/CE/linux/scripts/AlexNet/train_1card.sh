@@ -1,8 +1,11 @@
 export FLAGS_cudnn_deterministic=True
 echo ${Project_path}
+echo ${Data_path}
 ls;
 pwd;
 cd ${Project_path}
+pwd;
+
 sed -i 's/RandCropImage/ResizeImage/g' ppcls/configs/ImageNet/AlexNet/AlexNet.yaml
 sed -ie '/RandFlipImage/d' ppcls/configs/ImageNet/AlexNet/AlexNet.yaml
 sed -ie '/flip_code/d' ppcls/configs/ImageNet/AlexNet/AlexNet.yaml
