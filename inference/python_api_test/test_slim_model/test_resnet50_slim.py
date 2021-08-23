@@ -61,7 +61,7 @@ def test_disable_gpu():
 
 @pytest.mark.p1
 @pytest.mark.trt_fp32_more_bz_precision
-def test_trtfp32_more_bz():
+def test_int8_more_bz():
     """
     compared trt fp32 batch_size=1-10 resnet50 outputs with true val
     """
@@ -78,6 +78,8 @@ def test_trtfp32_more_bz():
         fake_output = np.array(npy_list[0:batch_size]).astype("float32")
         input_data_dict = {"image": fake_input}
         output_data_dict = {"save_infer_model/scale_0.tmp_0": fake_output}
-        test_suite.trt_fp32_more_bz_test(input_data_dict, output_data_dict, delta=5e-1)
+        test_suite.trt_more_bz_test(
+            input_data_dict, output_data_dict, delta=5e-1, precision="int8", use_calib_mode=True
+        )
 
         del test_suite  # destroy class to save memory
