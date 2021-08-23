@@ -41,7 +41,7 @@ TRAIN:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh 'single' $XPU
+        cmd: bash train.sh $XPU 'single'
 
     kpis:
       avg loss:
