@@ -702,7 +702,7 @@ print_info $? st_unstructured_prune_threshold_load
 ## sparsity: -55%, accuracy: 67%+/87%+
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 python train.py \
---batch_size 512 \
+--batch_size 256 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode ratio \
@@ -774,7 +774,7 @@ python -m paddle.distributed.launch \
 --model_path dy_threshold_models >${log_path}/dy_threshold_prune_T 2>&1
 print_info $? dy_threshold_prune_T
 # eval
-python evaluate.py --pruned_model dy_threshold_models/model.pdparams \
+python evaluate.py --pruned_model dy_threshold_models/model-pruned.pdparams \
 --data imagenet >${log_path}/dy_threshold_prune_eval 2>&1
 print_info $? dy_threshold_prune_eval
 
