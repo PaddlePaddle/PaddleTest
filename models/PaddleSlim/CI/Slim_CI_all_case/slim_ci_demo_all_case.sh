@@ -774,7 +774,7 @@ python -m paddle.distributed.launch \
 --model_path dy_threshold_models >${log_path}/dy_threshold_prune_T 2>&1
 print_info $? dy_threshold_prune_T
 # eval
-python evaluate.py --pruned_model dy_threshold_models/model-pruned.pdparams \
+python evaluate.py --pruned_model dy_threshold_models/model.pdparams\
 --data imagenet >${log_path}/dy_threshold_prune_eval 2>&1
 print_info $? dy_threshold_prune_eval
 
@@ -792,7 +792,7 @@ python -m paddle.distributed.launch \
 --test_period 1 \
 --model_period 1 \
 --model_path dy_threshold_models_new \
---pretrained_model dy_threshold_models/model-pruned.pdparams \
+--pretrained_model dy_threshold_models/model.pdparams\
 --resume_epoch 1 > ${log_path}/dy_threshold_prune_T_load 2>&1
 print_info $? dy_threshold_prune_T_load
 # cifar10
