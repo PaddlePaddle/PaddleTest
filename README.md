@@ -25,3 +25,13 @@ pre-commit审核主要是三种，包括`black`,`flake8`,`pylint`，在CI阶段�
 
 ### 合入规范
 合入**必须**要求通过全部CI检测，原则上禁止强行Merge，如果有Pylint代码格式阻塞，可以讨论是否禁止某一条规范生效，**必须**要求一个QA Reviewer，禁止出现敏感代码。
+
+### CI 触发规则
++ 默认触发全部CI任务
++ 只触发某一个CI任务，需要在commit信息中添加相应的关键字
+
+|CI任务名称|关键字|效果|
+|---|---|---|
+|linux-ci|notest,test=linux_ci|只触发linux-ci任务，其余均不触发|
+|linux-inference-ci|notest,test=linux_inference_ci|只触发linux-inference-ci任务，其余均不触发|
+|CodeStyle|notest,test=codestyle|只触发CodeStyle任务，其余均不触发|
