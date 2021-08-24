@@ -1,0 +1,2 @@
+w2v_weibo_target_word-word_dim300
+w2v_wiki_target_word-word_dim300

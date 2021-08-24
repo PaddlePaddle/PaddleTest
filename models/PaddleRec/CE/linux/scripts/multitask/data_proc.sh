@@ -8,7 +8,8 @@ echo "$model_name get data"
 root_path=$cur_path/../../
 code_path=$cur_path/../../PaddleRec/datasets
 
-data_path=/ssd2/ce_data/rec_datasets
+mkdir $cur_path/../../ce_data/rec_datasets
+data_path=$cur_path/../../ce_data/rec_datasets
 #临时环境更改
 if [ ! -d ${data_path}/$1 ];then
     cd ${code_path}/$1;
