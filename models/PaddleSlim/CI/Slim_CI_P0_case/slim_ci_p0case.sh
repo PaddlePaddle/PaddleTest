@@ -316,6 +316,7 @@ do
 done
 }
 
+# shellcheck disable=SC2120
 dy_qat4(){
 cd ${slim_dir}/ce_tests/dygraph/quant || catchException dy_qat4
 test_samples=1000  # if set as -1, use all test samples
@@ -450,6 +451,9 @@ quant(){
     dy_quant
 }
 
+#用于更新release分支下无ce_tests_dygraph_ptq case；release分支设置is_develop="False"
+is_develop="True"
+
 all_quant(){ # 10个模型
     quant_aware
     quant_aware2
@@ -458,7 +462,9 @@ all_quant(){ # 10个模型
     pact_quant_aware
     dy_quant
     dy_qat4
-    ce_tests_dygraph_ptq4
+    if [ "${is_develop}" == "True" ];then
+        ce_tests_dygraph_ptq4
+    fi
 }
 
 # 3 prune
