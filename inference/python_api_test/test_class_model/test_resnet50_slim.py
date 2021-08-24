@@ -80,7 +80,12 @@ def test_int8_more_bz():
         input_data_dict = {"image": fake_input}
         output_data_dict = {"save_infer_model/scale_0.tmp_0": fake_output}
         test_suite.trt_more_bz_test(
-            input_data_dict, output_data_dict, delta=5e-1, max_batch_size=max_batch_size, precision="trt_int8", use_calib_mode=True
+            input_data_dict,
+            output_data_dict,
+            delta=5e-1,
+            max_batch_size=max_batch_size,
+            precision="trt_int8",
+            use_calib_mode=True,
         )
 
         del test_suite  # destroy class to save memory

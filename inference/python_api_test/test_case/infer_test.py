@@ -236,11 +236,18 @@ class InferenceTest(object):
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
-    def trt_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000,
-     min_subgraph_size=3,
+    def trt_bz1_test(
+        self,
+        input_data_dict: dict,
+        output_data_dict: dict,
+        repeat=5,
+        delta=1e-5,
+        gpu_mem=1000,
+        min_subgraph_size=3,
         precision="trt_fp32",
         use_static=False,
-        use_calib_mode=False,):
+        use_calib_mode=False,
+    ):
         """
         test enable_use_gpu()
         Args:
@@ -252,9 +259,9 @@ class InferenceTest(object):
             None
         """
         trt_precision_map = {
-            'trt_fp32': paddle_infer.PrecisionType.Float32,
-            'trt_fp16': paddle_infer.PrecisionType.Half,
-            'trt_int8': paddle_infer.PrecisionType.Int8
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
@@ -341,9 +348,9 @@ class InferenceTest(object):
             None
         """
         trt_precision_map = {
-            'trt_fp32': paddle_infer.PrecisionType.Float32,
-            'trt_fp16': paddle_infer.PrecisionType.Half,
-            'trt_int8': paddle_infer.PrecisionType.Int8
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
@@ -417,9 +424,9 @@ class InferenceTest(object):
         """
 
         trt_precision_map = {
-            'trt_fp32': paddle_infer.PrecisionType.Float32,
-            'trt_fp16': paddle_infer.PrecisionType.Half,
-            'trt_int8': paddle_infer.PrecisionType.Int8
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
@@ -494,9 +501,9 @@ class InferenceTest(object):
             None
         """
         trt_precision_map = {
-            'trt_fp32': paddle_infer.PrecisionType.Float32,
-            'trt_fp16': paddle_infer.PrecisionType.Half,
-            'trt_int8': paddle_infer.PrecisionType.Int8
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
@@ -558,9 +565,9 @@ class InferenceTest(object):
             None
         """
         trt_precision_map = {
-            'trt_fp32': paddle_infer.PrecisionType.Float32,
-            'trt_fp16': paddle_infer.PrecisionType.Half,
-            'trt_int8': paddle_infer.PrecisionType.Int8
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(

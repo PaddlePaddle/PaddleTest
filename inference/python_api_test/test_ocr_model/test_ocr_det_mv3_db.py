@@ -124,6 +124,7 @@ def test_gpu_more_bz():
 
         del test_suite2  # destroy class to save memory
 
+
 @pytest.mark.p1
 @pytest.mark.trt_fp32_bz1_precision
 def test_trt_fp32_bz1():
@@ -218,7 +219,7 @@ def test_trt_fp32_bz1():
             min_subgraph_size=10,
             repeat=1,
             delta=9e-2,
-            precision = 'trt_fp32',
+            precision="trt_fp32",
             names=names,
             min_input_shape=min_input_shape,
             max_input_shape=max_input_shape,
