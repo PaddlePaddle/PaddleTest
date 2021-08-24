@@ -255,6 +255,10 @@ class InferenceTest(object):
             output_data_dict(dict): output data constructed as dictionary
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
+            min_subgraph_size(int): min subgraph size
+            precision(str): trt precision mode,[fp32,fp16,int8]
+            use_static(bool): use static
+            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
