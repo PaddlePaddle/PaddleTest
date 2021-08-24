@@ -37,4 +37,5 @@ pre-commit审核主要是三种，包括`black`,`flake8`,`pylint`，在CI阶段�
 |CodeStyle|notest,test=codestyle|只触发CodeStyle任务，其余均不触发|
 
 ### CI任务分类触发
-+ 框架内容合入不触发inference任务
++ 框架内容合入不触发linux-inference-ci任务
++ 预测内容合入不触发linux-ci任务
