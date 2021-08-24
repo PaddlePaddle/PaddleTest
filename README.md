@@ -29,6 +29,7 @@ pre-commit审核主要是三种，包括`black`,`flake8`,`pylint`，在CI阶段�
 ### CI 触发规则
 + 默认触发全部CI任务
 + 只触发某一个CI任务，需要在commit信息中添加相应的关键字
+
 |CI任务名称|关键字|效果|
 |---|---|---|
 |linux-ci|test=linux_ci|只触发linux-ci任务，其余均不触发|
