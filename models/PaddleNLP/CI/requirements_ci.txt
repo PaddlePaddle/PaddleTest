@@ -12,3 +12,4 @@ visualdl
 pandas
 pyrouge
 nltk
+beautifulsoup4
