@@ -18,7 +18,7 @@
 * 每个测试Case需要添加pytest mark，@pytest.mark.xxx为固定写法。添加规则分四段， @pytest.mark.api_(module)_(api_name)_(vartype|parameters|exception|.etc)。例如,paddle.nn.Conv2d的数据类型测试Case标记就是 @pytest.mark.api_nn_Conv2d_vartype。 参数覆盖测试Case标记就是 @pytest.mark.api_nn_Conv2d_parameters
 
 ## 使用方式
-**参考test_example.py 或者 test_roll.py**
+**参考test_elu.py test_conv相关**
 * 需要编写一个类继承APICase类，并且重写hook方法，hook方法主要需要包含self.types定义，同时也可选择性改写基类功能配置参数。
 * docstring 写传入的参数列表，方便直观看到传入参数
 * 实例化对象 obj。
