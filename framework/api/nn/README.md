@@ -9,6 +9,10 @@
 * pytest . --html=report.html 生成Html测试报告，名字是report.html
 * pytest --disable-warnings -sv xx.py::test_xx 执行xx.py下的test_xx测试用例
 
+## 执行流程
+框架会根据输入API，构建网络，执行涉及到的数据类型，动态图，静态图，前向，反向，并对比动态图，静态图的前向结果正确性，动态图，静态图反向结果与数学推导反向的结果正确性。
+整理流程就是框架会根据传入的API，和API参数，计算API前向，之后接入paddle.mean()作为loss层用来计算反向。全部API都是按照此逻辑计算。之后用导数定义推导数值计算的反向，存在一定误差，可以通过阈值规避误差。
+
 ## 规范
 每个API对应一个文件
 
