@@ -35,3 +35,14 @@ pre-commit审核主要是三种，包括`black`,`flake8`,`pylint`，在CI阶段�
 |linux-ci|notest,test=linux_ci|只触发linux-ci任务，其余均不触发|
 |linux-inference-ci|notest,test=linux_inference_ci|只触发linux-inference-ci任务，其余均不触发|
 |CodeStyle|notest,test=codestyle|只触发CodeStyle任务，其余均不触发|
+
+### CI任务分类触发
++ 框架内容合入不触发linux-inference-ci任务
++ 预测内容合入不触发linux-ci任务
++ 模型内容合入不触发linux-ci任务和linux-inference-ci任务
+
+|任务类型|关键字|效果|
+|---|---|---|
+|框架任务|run_mode=framework|linux-inference-ci任务不执行|
+|预测任务|run_mode=inference|linux-ci任务不执行|
+|模型任务|run_mode=model|linux-ci任务与linux-inference-ci任务不执行|
