@@ -14,11 +14,13 @@ VARIABLES:
 
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
-  exec_priority: [p0,linux_dy_gpu1,linux_st_gpu2]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
 
 #测试套
 DATA_PROC:
   -
+    tag: linux_down_data
     priority: p0
     run:
       -
