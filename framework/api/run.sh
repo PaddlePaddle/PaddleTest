@@ -46,8 +46,8 @@ cd $home
 cd device
 rm -rf ./result.txt
 echo "[device cases result]" >> result.txt
-device ./run.sh
-loss=$?
+bash ./run.sh
+device=$?
 echo ${device}
 cat ./result.txt
 cd $home
