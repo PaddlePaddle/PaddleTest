@@ -63,7 +63,7 @@ FINETUNE: # 训练步骤
     output: $ROOT_PATH/$model_log_path/finetune_multi_$XPU.log
 
   -
-    priority: p0 
+    priority: p0
     tag: win_dy_gpu1
     run:
       -
