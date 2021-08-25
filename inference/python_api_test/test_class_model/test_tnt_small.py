@@ -69,7 +69,7 @@ def test_gpu_more_bz():
 
     file_path = "./TNT_small"
     images_size = 224
-    # TNT_small模型多batch下报错，暂时只跑batch_size=1
+    # TODO:TNT_small模型多batch下报错，暂时只跑batch_size=1
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
@@ -90,6 +90,130 @@ def test_gpu_more_bz():
         test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict)
 
         del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.p1
+@pytest.mark.trt_fp32_more_bz_precision
+def test_trt_fp32_more_bz():
+    """
+    compared trt fp32 batch_size=1-10 TNT_small outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./TNT_small"
+    images_size = 224
+    # TODO:TNT_small模型多batch下报错，暂时只跑batch_size=1
+    batch_size_pool = [1]
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        test_suite.load_config(
+            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+        )
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        input_data_dict = {"x": fake_input}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+        del test_suite  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(
+            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+        )
+        test_suite2.trt_more_bz_test(
+            input_data_dict, output_data_dict, max_batch_size=10, min_subgraph_size=30, precision="trt_fp32"
+        )
+
+        del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.p1
+@pytest.mark.trt_fp32_multi_thread_bz1_precision
+def test_trt_fp32_bz1_multi_thread():
+    """
+    compared trt fp32 batch_size=1 TNT_small multi_thread outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./TNT_small"
+    images_size = 224
+    batch_size = 1
+    test_suite = InferenceTest()
+    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+    fake_input = np.array(images_list[0:batch_size]).astype("float32")
+    input_data_dict = {"x": fake_input}
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+    del test_suite  # destroy class to save memory
+
+    test_suite2 = InferenceTest()
+    test_suite2.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, min_subgraph_size=30, precision="trt_fp32")
+
+    del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.p1
+@pytest.mark.trt_fp16_more_bz_precision
+def test_trt_fp16_more_bz():
+    """
+    compared trt fp16 batch_size=1-10 TNT_small outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./TNT_small"
+    images_size = 224
+    # TODO:TNT_small模型多batch下报错，暂时只跑batch_size=1
+    batch_size_pool = [1]
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        test_suite.load_config(
+            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+        )
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        input_data_dict = {"x": fake_input}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+        del test_suite  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(
+            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+        )
+        test_suite2.trt_more_bz_test(
+            input_data_dict, output_data_dict, delta=1e-2, max_batch_size=10, min_subgraph_size=30, precision="trt_fp16"
+        )
+
+        del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.p1
+@pytest.mark.trt_fp16_multi_thread_bz1_precision
+def test_trt_fp16_bz1_multi_thread():
+    """
+    compared trt fp16 batch_size=1 TNT_small multi_thread outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./TNT_small"
+    images_size = 224
+    batch_size = 1
+    test_suite = InferenceTest()
+    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+    fake_input = np.array(images_list[0:batch_size]).astype("float32")
+    input_data_dict = {"x": fake_input}
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+    del test_suite  # destroy class to save memory
+
+    test_suite2 = InferenceTest()
+    test_suite2.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, min_subgraph_size=30, precision="trt_fp16")
+
+    del test_suite2  # destroy class to save memory
 
 
 @pytest.mark.p1
