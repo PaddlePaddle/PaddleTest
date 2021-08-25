@@ -18,7 +18,6 @@ ln -s ${Data_path} data
 # env
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
-apt-get install -y ffmpeg
 
 # dependency
 python -m pip install -r requirements.txt --ignore-installed
@@ -43,6 +42,9 @@ done
 find configs/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip'| grep -v 'edvr' | grep -v 'lapstyle_rev_second' | grep -v 'lapstyle_rev_first'| grep -v 'firstorder_vox_256'> models_list_all
 git diff $(git log --pretty=oneline |grep "#"|head -1|awk '{print }') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print}'| tee -a  models_list
 shuf models_list_all >> models_list
+wc -l models_list
+cat models_list
+
 cat models_list | while read line
 do
 echo $line
@@ -75,6 +77,7 @@ fi
 esac
 
 # evaluate 
+export CUDA_VISIBLE_DEVICES=${cudaid1}
 params_dir=$(ls output)
 echo $params_dir
 case ${model} in

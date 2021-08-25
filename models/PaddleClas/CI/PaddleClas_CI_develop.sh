@@ -24,6 +24,7 @@ find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'
 shuf models_list_all > models_list
 echo "length models_list"
 wc -l models_list
+cat models_list
 git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print }'|tee -a  models_list
 
 # dir
@@ -46,9 +47,10 @@ do
 filename=${line##*/}
 #echo $filename
 model=${filename%.*}
+rm -rf output
 echo $model
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=32 -o DataLoader.Eval.sampler.batch_size=32  > $log_path/train/$model.log 2>&1 
+python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=2 -o Global.output_dir=${output_path} -o DataLoader.Train.sampler.batch_size=2 -o DataLoader.Eval.sampler.batch_size=2  > $log_path/train/$model.log 2>&1 
 if [ $? -eq 0 ];then
    echo -e "\033[33m training of $model  successfully!\033[0m"|tee -a $log_path/result.log
 else
@@ -56,10 +58,11 @@ else
    echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
 fi 
 
-
+params_dir=$(ls output)
+echo $params_dir
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 # eval
-python tools/eval.py -c $line -o Global.pretrained_model=$output_path/$model/best_model > $log_path/eval/$model.log 2>&1
+python tools/eval.py -c $line -o Global.pretrained_model=$output_path/$params_dir/best_model > $log_path/eval/$model.log 2>&1
 if [ $? -eq 0 ];then   
    echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -68,7 +71,7 @@ else
 fi
 
 # infer
-python tools/infer.py -c $line -o Global.pretrained_model=$output_path/$model/best_model > $log_path/infer/$model.log 2>&1
+python tools/infer.py -c $line -o Global.pretrained_model=$output_path/$params_dir/best_model > $log_path/infer/$model.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -77,7 +80,7 @@ else
 fi
 
 # export_model
-python tools/export_model.py -c $line -o Global.pretrained_model=$output_path/$model/best_model -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
+python tools/export_model.py -c $line -o Global.pretrained_model=$output_path/$params_dir/best_model -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else

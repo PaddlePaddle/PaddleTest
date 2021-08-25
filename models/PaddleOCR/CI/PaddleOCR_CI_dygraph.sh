@@ -71,6 +71,8 @@ find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'r
 
 shuf models_list_det_db > models_list
 shuf models_list_rec >> models_list
+wc -l models_list
+cat models_list
 
 cat models_list | while read line
 do
@@ -88,7 +90,7 @@ fi
 if [ ${category} == "rec" ];then
 
 if [[ $(echo $model | grep -c "chinese") -ne 0 ]];then
-python -m paddle.distributed.launch   tools/train.py -c $line -o  Global.distort=True Global.use_space_char=True Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model_use_space.log 2>&1
+python -m paddle.distributed.launch   tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.distort=True Global.use_space_char=True Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model_use_space.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model_use_space.log) -eq 0 ]];then
    echo -e "\033[33m training of $model use_space_char successfully!\033[0m" | tee -a $log_path/result.log
 else
@@ -97,7 +99,7 @@ else
 fi
 fi
 
-python -m paddle.distributed.launch  tools/train.py -c $line -o Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
+python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]];then
    echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
@@ -224,7 +226,7 @@ fi
 
 # cls
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-python -m paddle.distributed.launch  tools/train.py -c configs/cls/cls_mv3.yml -o Train.loader.batch_size_per_card=10 Global.print_batch_step=1 Global.epoch_num=1 > $log_path/train/cls_mv3.log 2>&1 
+python -m paddle.distributed.launch  tools/train.py -c configs/cls/cls_mv3.yml -o Train.loader.batch_size_per_card=2 Global.print_batch_step=1 Global.epoch_num=1 > $log_path/train/cls_mv3.log 2>&1 
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/cls_mv3.log) -eq 0 ]];then
    echo -e "\033[33m training of cls_mv3  successfully!\033[0m" | tee -a $log_path/result.log
 else
