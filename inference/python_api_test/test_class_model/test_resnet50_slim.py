@@ -73,7 +73,7 @@ def test_int8_more_bz():
     max_batch_size = 10
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        if 'win' in sys.platform:
+        if "win" in sys.platform:
             test_suite.load_config(model_path=".\\resnet50_quant\\resnet50_quant")
         else:
             test_suite.load_config(model_path="./resnet50_quant/resnet50_quant")
