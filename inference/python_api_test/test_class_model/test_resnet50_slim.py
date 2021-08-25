@@ -73,7 +73,10 @@ def test_int8_more_bz():
     max_batch_size = 10
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        test_suite.load_config(model_path="./resnet50_quant/resnet50_quant")
+        if win in sys.platform:
+            test_suite.load_config(model_path=".\\resnet50_quant\\resnet50_quant")
+        else:
+            test_suite.load_config(model_path="./resnet50_quant/resnet50_quant")
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         fake_output = np.array(npy_list[0:batch_size]).astype("float32")
