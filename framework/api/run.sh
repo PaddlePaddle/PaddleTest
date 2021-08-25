@@ -42,9 +42,19 @@ echo ${loss}
 cat ./result.txt
 cd $home
 
+# device
+cd device
+rm -rf ./result.txt
+echo "[device cases result]" >> result.txt
+device ./run.sh
+loss=$?
+echo ${device}
+cat ./result.txt
+cd $home
+
 # result
 echo "=============== result ================="
-if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss}` -eq 0 ]; then
+if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss} + ${device}` -eq 0 ]; then
   result=`find . -name "result.txt"`
   for file in ${result}
     do
