@@ -1,14 +1,12 @@
 unset GREP_OPTIONS
 echo ${cudaid1}
 echo ${cudaid2}
-echo ${http_proxy}
-echo ${https_proxy}
 echo ${Data_path}
 echo ${paddle_compile}
 
 # python
 python -c 'import sys; print(sys.version_info[:])'
-echo "python=3.8"
+echo "python version"
 
 export http_proxy=${http_proxy};
 export https_proxy=${https_proxy};
@@ -20,14 +18,13 @@ ln -s ${Data_path} dataset
 # env
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
-apt-get update
-apt-get install -y git
 python -m pip install -r requirements.txt --ignore-installed
 
 find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval'| grep -v 'ResNeXt101_32x8d_wsl'| grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNeXt101_32x16d_wsl' > models_list_all
 shuf models_list_all > models_list
+echo "length models_list"
 wc -l models_list
-git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print ${cudaid2}}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print }'|tee -a  models_list
+git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print }'|tee -a  models_list
 
 # dir
 log_path=log
