@@ -22,9 +22,20 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install -r requirements.txt --ignore-installed
 # ppgan
+python -m pip install ppgan
 python -m pip install -v -e .
 python -m pip install dlib
-python -m pip install ffmpeg
+
+yum install epel-release -y
+yum update -y
+rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+yum install ffmpeg ffmpeg-devel -y
+echo "ffmpeg"
+ffmpeg
+
+pip list 
+echo "pip list"
 
 # dir
 log_path=log
@@ -39,7 +50,7 @@ else
 fi
 done
 
-find configs/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip'| grep -v 'edvr' | grep -v 'lapstyle_rev_second' | grep -v 'lapstyle_rev_first'| grep -v 'firstorder_vox_256'> models_list_all
+find configs/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip' | grep -v 'lapstyle_rev_second' | grep -v 'lapstyle_rev_first'| grep -v 'firstorder_vox_256'> models_list_all
 git diff $(git log --pretty=oneline |grep "#"|head -1|awk '{print }') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print}'| tee -a  models_list
 shuf models_list_all >> models_list
 wc -l models_list
@@ -57,8 +68,9 @@ sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 case ${model} in
 lapstyle_rev_second)
-python tools/main.py --config-file $line -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output > $log_path/train/${model}.log 2>&1
+python tools/main.py --config-file $line -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=2 > $log_path/train/${model}.log 2>&1
 if [[ $? -eq 0 ]];then
+   cat $log_path/train/${model}.log
    echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
    cat $log_path/train/${model}.log
@@ -80,6 +92,7 @@ esac
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 params_dir=$(ls output)
 echo $params_dir
+ls output/$params_dir/
 case ${model} in
 stylegan_v2_256_ffhq)
   python tools/extract_weight.py output/$params_dir/iter_20_checkpoint.pdparams --net-name gen_ema --output stylegan_extract.pdparams > $log_path/eval/${model}_extract_weight.log 2>&1

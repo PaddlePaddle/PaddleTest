@@ -47,19 +47,21 @@ do
 filename=${line##*/}
 #echo $filename
 model=${filename%.*}
-rm -rf output
+rm -rf $output_path
 echo $model
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=2 -o Global.output_dir=${output_path} -o DataLoader.Train.sampler.batch_size=2 -o DataLoader.Eval.sampler.batch_size=2  > $log_path/train/$model.log 2>&1 
+python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=2 -o Global.output_dir=${output_path} -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1 
 if [ $? -eq 0 ];then
    echo -e "\033[33m training of $model  successfully!\033[0m"|tee -a $log_path/result.log
 else
    cat $log_path/train/$model.log
    echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
 fi 
+sleep 5s
 
-params_dir=$(ls output)
+params_dir=$(ls $output_path)
 echo $params_dir
+ls $output_path/$params_dir/
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 # eval
 python tools/eval.py -c $line -o Global.pretrained_model=$output_path/$params_dir/best_model > $log_path/eval/$model.log 2>&1
@@ -88,14 +90,27 @@ else
    echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
 fi
 
-# predict
 cd deploy
-python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
+if [[ ${model} =~ '384' ]];then
+   sed -i 's/size: 224/size: 384/g' configs/inference_cls.yaml
+   sed -i 's/resize_short: 256/resize_short: 384/g' configs/inference_cls.yaml
+   python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/predict/${model}.log
+      echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
+   fi
+   sed -i 's/size: 384/size: 224/g' configs/inference_cls.yaml
+   sed -i 's/resize_short: 384/resize_short: 256/g' configs/inference_cls.yaml
 else
-   cat ../$log_path/predict/${model}.log
-   echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+   python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
+   else
+      cat ../$log_path/predict/${model}.log
+      echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+   fi
 fi
 cd ..
 done

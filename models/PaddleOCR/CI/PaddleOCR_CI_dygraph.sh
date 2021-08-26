@@ -25,6 +25,7 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt --ignore-installed
 # paddleocr
 python -m pip install paddleocr
+python -m pip install gast==0.3.3
 
 # download model
 if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
@@ -78,7 +79,7 @@ cat models_list | while read line
 do
 echo $line
 sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' $line
-algorithm=$(grep -i algorithm $line |awk -F: '{print }'| sed 's/ //g')
+algorithm=$(grep -i algorithm $line |awk -F: '{print $2}'| sed 's/ //g')
 filename=${line##*/}
 model=${filename%.*}
 category=${model%%_*}
@@ -108,7 +109,7 @@ else
 fi
 
 else
-python -m paddle.distributed.launch  tools/train.py -c $line  -o Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir="output/"${model}  > $log_path/train/$model.log 2>&1
+python -m paddle.distributed.launch  tools/train.py -c $line  -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir="output/"${model}  > $log_path/train/$model.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]];then
    echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
@@ -148,6 +149,7 @@ else
    echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 fi
+
 # export_model
 python tools/export_model.py -c $line -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest"  Global.save_inference_dir="./models_inference/"${model} >  $log_path/export/${model}.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/${model}.log) -eq 0 ]];then
@@ -156,6 +158,7 @@ else
    cat $log_path/export/${model}.log
    echo -e "\033[31m export_model of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
+
 # predict
 if [ ${category} == "rec" ];then
 if [[ $(echo $model | grep -c "chinese") -eq 0 ]];then
@@ -181,7 +184,7 @@ fi
 else
 
 # multi_language
-language=`echo $model |awk -F '_' '{print }'`
+language=`echo $model |awk -F '_' '{print $2}'`
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  --rec_char_type=$language --rec_char_dict_path="ppocr/utils/dict/"$language"_dict.txt" > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
