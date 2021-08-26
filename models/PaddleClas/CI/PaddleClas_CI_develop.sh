@@ -20,12 +20,12 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install -r requirements.txt --ignore-installed
 
-find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval'| grep -v 'ResNeXt101_32x8d_wsl'| grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNeXt101_32x16d_wsl' > models_list_all
+find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval'| grep -v 'ResNeXt101_32x8d_wsl'| grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNeXt101_32x16d_wsl' > models_list_all
 shuf models_list_all > models_list
 echo "length models_list"
 wc -l models_list
 cat models_list
-git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print }'|tee -a  models_list
+git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
 
 # dir
 log_path=log
@@ -51,7 +51,8 @@ rm -rf $output_path
 echo $model
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=2 -o Global.output_dir=${output_path} -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1 
-if [ $? -eq 0 ];then
+params_dir=$(ls $output_path)
+if [ -f "$output_path/$params_dir/latest.pdparams" ];then
    echo -e "\033[33m training of $model  successfully!\033[0m"|tee -a $log_path/result.log
 else
    cat $log_path/train/$model.log
@@ -59,12 +60,11 @@ else
 fi 
 sleep 5s
 
-params_dir=$(ls $output_path)
 echo $params_dir
 ls $output_path/$params_dir/
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 # eval
-python tools/eval.py -c $line -o Global.pretrained_model=$output_path/$params_dir/best_model > $log_path/eval/$model.log 2>&1
+python tools/eval.py -c $line -o Global.pretrained_model=$output_path/$params_dir/latest > $log_path/eval/$model.log 2>&1
 if [ $? -eq 0 ];then   
    echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -73,7 +73,7 @@ else
 fi
 
 # infer
-python tools/infer.py -c $line -o Global.pretrained_model=$output_path/$params_dir/best_model > $log_path/infer/$model.log 2>&1
+python tools/infer.py -c $line -o Global.pretrained_model=$output_path/$params_dir/latest > $log_path/infer/$model.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -82,7 +82,7 @@ else
 fi
 
 # export_model
-python tools/export_model.py -c $line -o Global.pretrained_model=$output_path/$params_dir/best_model -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
+python tools/export_model.py -c $line -o Global.pretrained_model=$output_path/$params_dir/latest -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else

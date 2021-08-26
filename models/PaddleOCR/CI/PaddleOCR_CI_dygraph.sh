@@ -68,7 +68,7 @@ fi
 done
 
 find configs/det -name *.yml -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
-find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' > models_list_rec
+find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_chinese_lite_train_distillation_v2.1'  > models_list_rec
 
 shuf models_list_det_db > models_list
 shuf models_list_rec >> models_list
@@ -217,15 +217,16 @@ else
 fi
 fi
 done
-# predict
-python tools/infer/predict_system.py --image_dir="./doc/imgs/12.jpg" --det_model_dir="./models/inference/det/"  --rec_model_dir="./models/inference/rec/" > $log_path/predict/predict_system.log 2>&1
-if [[ $? -eq 0 ]]; then
-   cat $log_path/predict/predict_system.log
-   echo -e "\033[33m predict of system  successfully!\033[0m"| tee -a $log_path/result.log
-else
-   cat $log_path/predict/predict_system.log
-   echo -e "\033[31m predict of system failed!\033[0m"| tee -a $log_path/result.log
-fi
+
+# # predict
+# python tools/infer/predict_system.py --image_dir="./doc/imgs/12.jpg" --det_model_dir="./models/inference/det/"  --rec_model_dir="./models/inference/rec/" > $log_path/predict/predict_system.log 2>&1
+# if [[ $? -eq 0 ]]; then
+#    cat $log_path/predict/predict_system.log
+#    echo -e "\033[33m predict of system  successfully!\033[0m"| tee -a $log_path/result.log
+# else
+#    cat $log_path/predict/predict_system.log
+#    echo -e "\033[31m predict of system failed!\033[0m"| tee -a $log_path/result.log
+# fi
 
 # cls
 export CUDA_VISIBLE_DEVICES=${cudaid2}
