@@ -685,7 +685,7 @@ sed -i 's/batch_size: 16/batch_size: 8/g' configs/enwik8.yaml
 sed -i 's/max_step: 400000/max_step: 3/g' configs/enwik8.yaml
 python -m paddle.distributed.launch  train.py --config ./configs/enwik8.yaml >${log_path}/train_enwik8) >>${log_path}/train_enwik8 2>&1
 print_info $? train_enwik8
-time (
+time (sed -i 's/batch_size: 8/batch_size: 4/g' configs/enwik8.yaml
 sed -i 's#init_from_params: "./trained_models/step_final/"#init_from_params: "./trained_models/step_3/"#g' configs/enwik8.yaml
 python eval.py --config ./configs/enwik8.yaml >${log_path}/eval_enwik8) >>${log_path}/eval_enwik8 2>&1
 print_info $? eval_enwik8
@@ -700,6 +700,37 @@ sed -i 's/if iter % 5000 == 0 or iter == 1000:/if iter % 5 == 0 :/g' train.py
 python train.py >${log_path}/pointer_summarizer_train) >>${log_path}/pointer_summarizer_train 2>&1
 print_info $? pointer_summarizer_train
 }
+#28 question_matching
+question_matching() {
+cd ${nlp_dir}/examples/text_matching/question_matching/
+cp -r /ssd1/paddlenlp/download/question_matching/* ./  
+CUDA_VISIBLE_DEVICES=${cudaid2}
+#train
+time (
+python -u -m paddle.distributed.launch train.py \
+       --train_set ./data_v4/train/ALL/train \
+       --dev_set ./data_v4/train/ALL/dev \
+       --device gpu \
+       --eval_step 10 \
+       --max_steps 10 \
+       --save_dir ./checkpoints_epoch \
+       --train_batch_size 32 \
+       --learning_rate 2E-5 \
+       --epochs 1 \
+       --rdrop_coef 0.0 >${log_path}/question_matching_train) >>${log_path}/question_matching_train 2>&1
+print_info $? question_matching_train
+#predict
+time (
+CUDA_VISIBLE_DEVICES=${cudaid1}
+python -u \
+    predict.py \
+    --device gpu \
+    --params_path "./checkpoints/model_10/model_state.pdparams" \
+    --batch_size 128 \
+    --input_file ./data_v4/test/public_test_A \
+    --result_file 0.0_predict_public_result_test_A_re >${log_path}/question_matching_predict) >>${log_path}/question_matching_predict 2>&1
+print_info $? question_matching_predict
+}
 ####################################
 export P0case_list=()
 export P0case_time=0
@@ -707,13 +738,14 @@ export all_P0case_time=0
 declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["squad"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
-  ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 ["pointer_summarizer"]=5)
+  ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
+  ["pointer_summarizer"]=5 ["question_matching"]=5 )
 get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
 done
 P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt xlnet ofa albert squad tinybert lexical_analysis seq2seq \
-pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer)
+pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching)
 P0case_time=${all_P0case_time}
 }
 set -e
