@@ -83,7 +83,6 @@ all_distillation(){ # 大数据 5个模型
 distillation
 distillation2
 dml
-#pantheon
 }
 # 2.1 quant/quant_aware 使用小数据集即可
 quant_aware(){
@@ -399,6 +398,52 @@ do
 done
 }
 
+dy_ptq1(){
+cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dygraph_ptq4
+ln -s ${slim_dir}/demo/data/ILSVRC2012
+test_samples=1000  # if set as -1, use all test samples
+data_path='./ILSVRC2012/'
+batch_size=32
+epoch=1
+output_dir="./output_ptq"
+quant_batch_num=10
+quant_batch_size=10
+for model in mobilenet_v1
+do
+    echo "--------quantize model: ${model}-------------"
+    export CUDA_VISIBLE_DEVICES=${cudaid1}
+    # save ptq quant model
+    python ./src/ptq.py \
+        --data=${data_path} \
+        --arch=${model} \
+        --quant_batch_num=${quant_batch_num} \
+        --quant_batch_size=${quant_batch_size} \
+        --output_dir=${output_dir} > ${log_path}/ptq_${model} 2>&1
+        print_info $? ptq_${model}
+
+    echo "-------- eval fp32_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/fp32_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=True \
+        --test_samples=${test_samples} \
+        --ir_optim=False > ${log_path}/ptq_eval_fp32_${model} 2>&1
+        print_info $? ptq_eval_fp32_${model}
+
+    echo "-------- eval int8_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/int8_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=False \
+        --test_samples=${test_samples} \
+        --ir_optim=False > ${log_path}/ptq_eval_int8_${model} 2>&1
+        print_info $? ptq_eval_int8_${model}
+
+done
+}
+
 ce_tests_dygraph_ptq4(){
 cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dygraph_ptq4
 ln -s ${slim_dir}/demo/data/ILSVRC2012
@@ -443,6 +488,11 @@ do
         print_info $? ptq_eval_int8_${model}
 
 done
+}
+
+ce_tests_demo(){
+    dy_qat1
+    dy_ptq1
 }
 
 quant(){
@@ -837,8 +887,6 @@ print_info $? ${model}
 #print_info $? ${model}
 }
 
-
-
 slimfacenet(){
 cd ${slim_dir}/demo/slimfacenet
 ln -s ${data_path}/slim/slimfacenet/CASIA CASIA
@@ -867,11 +915,11 @@ darts_1
 }
 
 ####################################
-export P0case_list=()
+#export P0case_list=()  #在命令行中设置
 export P0case_time=0
 export all_P0case_time=0
 declare -A all_P0case_dic
-all_P0case_dic=(["distillation"]=5 ["quant"]=15 ["prune"]=1 ["nas"]=30 ["darts"]=30 ['unstructured_prune']=15 ['dy_qat1']=1)
+all_P0case_dic=(["distillation"]=5 ["quant"]=15 ["prune"]=1 ["nas"]=30 ["darts"]=30 ['unstructured_prune']=15 ['ce_tests_demo']=15 )
 get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
@@ -881,7 +929,7 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     dir1=${arr_file_name[0]}
     dir2=${arr_file_name[1]}
     echo "file_name:"${file_name}   "dir1:"${dir1}, "dir2:"${dir2}
-    if [[ ${file_name##*.} =~ "md" ]] || [[ ${file_name##*.} =~ "rst" ]] || [[ ${dir1} =~ "docs" ]];then
+    if [[ ${file_name##*.} =~ "md" ]] || [[ ${file_name##*.} =~ "rst" ]] || [[ ${dir1} =~ "docs" ]] || [[ ${dir1} =~ "tests" ]] || [[ ${file_name##*.} =~ "jpg" ]] || [[ ${file_name##*.} =~ "png" ]] ;then
         continue
     elif [[ ${dir1} =~ "paddleslim" ]];then # 如果修改了paddleslim,则回归全量P0
         P0case_list=(distillation quant prune nas unstructured_prune darts)
@@ -889,17 +937,19 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
         break
     elif [[ ${dir1} =~ "demo" ]];then # 注意：如果修改不是现有P0case目录中的脚本，也不是demo/*.py脚本，则不触发P0case，因为该PR变更CI无case可覆盖
          if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then   # 如果修改了demo/P0case ,则回归相应的P0case;
-                P0case_list[${#P0case_list[*]}]=${dir2}
-                P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir2}]}`
-
+                echo "${all_P0case_dic[@]}" | grep "${dir2}"
+                if [ $? != 0 ];then
+                  P0case_list[${#P0case_list[*]}]=${dir2}
+                  P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir2}]}`
+                fi
          elif [[ ${dir2##*.} =~ "py" ]];then  # 如果修改了demo/*.py,则回归全量P0
                 P0case_list=(distillation quant prune nas unstructured_prune darts)
                 P0case_time=${all_P0case_time}
                 break
          fi
     elif [[ ${dir1} =~ "ce_tests" ]];then
-         P0case_list[${#P0case_list[*]}]="dy_qat1"
-         P0case_time=`expr ${P0case_time} + ${all_P0case_dic["dy_qat1"]}`
+         P0case_list[${#P0case_list[*]}]="ce_tests_demo"
+         P0case_time=`expr ${P0case_time} + ${all_P0case_dic["ce_tests_demo"]}`
     else
         echo "changed files no in P0case, skip "
         break
