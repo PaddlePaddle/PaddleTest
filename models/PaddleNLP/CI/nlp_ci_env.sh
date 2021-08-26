@@ -37,6 +37,7 @@ cd /ssd1
 mkdir paddlenlp
 cd /workspace
 export PPNLP_HOME=/ssd1/paddlenlp
+export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
 ln -s /home/data/cfs/models_ce/PaddleNLP/*  /ssd1/paddlenlp/
 ####################################
 # for paddlenlp env

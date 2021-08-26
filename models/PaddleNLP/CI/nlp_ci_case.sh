@@ -663,15 +663,15 @@ print_info $? simbert
 ernie-doc(){
 cd ${nlp_dir}/examples/language_model/ernie-doc/
 CUDA_VISIBLE_DEVICES=${cudaid2}
-time (python -m paddle.distributed.launch  --log_dir hyp run_classifier.py --epochs 15 --layerwise_decay 0.7 --learning_rate 5e-5 --batch_size 8 --save_steps 2000  --dataset hyp --output_dir hyp >${log_path}/hyp) >>${log_path}/hyp 2>&1
+time (python -m paddle.distributed.launch  --log_dir hyp run_classifier.py --epochs 15 --layerwise_decay 0.7 --learning_rate 5e-5 --batch_size 4 --save_steps 100 --max_steps 100  --dataset hyp --output_dir hyp >${log_path}/hyp) >>${log_path}/hyp 2>&1
 print_info $? hyp
-time (python -m paddle.distributed.launch  --log_dir cmrc2018 run_mrc.py --batch_size 8 --layerwise_decay 0.8 --dropout 0.2 --learning_rate 4.375e-5 --epochs 1 --save_steps 5000 --dataset cmrc2018 --output_dir cmrc2018  >${log_path}/cmrc2018) >>${log_path}/cmrc2018 2>&1
+time (python -m paddle.distributed.launch  --log_dir cmrc2018 run_mrc.py --batch_size 4 --layerwise_decay 0.8 --dropout 0.2 --learning_rate 4.375e-5 --epochs 1 --save_steps 100 --max_steps 100  --dataset cmrc2018 --output_dir cmrc2018  >${log_path}/cmrc2018) >>${log_path}/cmrc2018 2>&1
 print_info $?  cmrc2018
-time (python -m paddle.distributed.launch  --log_dir c3 run_mcq.py --learning_rate 6.5e-5 --epochs 1 --save_steps 1000 --output_dir c3 >${log_path}/c3) >>${log_path}/c3 2>&1
+time (python -m paddle.distributed.launch  --log_dir c3 run_mcq.py --learning_rate 6.5e-5 --epochs 1 --save_steps 100 --max_steps 100  --output_dir c3 >${log_path}/c3) >>${log_path}/c3 2>&1
 print_info $? c3
-time (python -m paddle.distributed.launch  --log_dir cail/ run_semantic_matching.py --epochs 1 --layerwise_decay 0.8 --learning_rate 1.25e-5 --batch_size 4  --save_steps 1000 --output_dir cail >${log_path}/cail) >>${log_path}/cail 2>&1
+time (python -m paddle.distributed.launch  --log_dir cail/ run_semantic_matching.py --epochs 1 --layerwise_decay 0.8 --learning_rate 1.25e-5 --batch_size 4  --save_steps 100 --max_steps 100 --output_dir cail >${log_path}/cail) >>${log_path}/cail 2>&1
 print_info $? cail
-time (python -m paddle.distributed.launch  --log_dir msra run_sequence_labeling.py --learning_rate 3e-5 --epochs 1 --save_steps 5000 --output_dir msra  >${log_path}/msar) >>${log_path}/msar 2>&1
+time (python -m paddle.distributed.launch  --log_dir msra run_sequence_labeling.py --learning_rate 3e-5 --epochs 1 --save_steps 100 --max_steps 100  --output_dir msra  >${log_path}/msar) >>${log_path}/msar 2>&1
 print_info $? msar
 }
 #26 transformer-xl
@@ -680,10 +680,10 @@ cd ${nlp_dir}/examples/language_model/transformer-xl/
 cp -r /ssd1/paddlenlp/download/transformer-xl/* ./
 CUDA_VISIBLE_DEVICES=${cudaid2}
 time (sed -i 's/print_step: 100/print_step: 1/g' configs/enwik8.yaml
-sed -i 's/save_step: 20000/save_step: 3/g' configs/enwik8.yaml
+sed -i 's/save_step: 10000/save_step: 3/g' configs/enwik8.yaml
 sed -i 's/batch_size: 16/batch_size: 8/g' configs/enwik8.yaml
-sed -i 's/max_step: 400000/max_step: 4/g' configs/enwik8.yaml
-python3.7 -m paddle.distributed.launch  train.py --config ./configs/enwik8.yaml >${log_path}/train_enwik8) >>${log_path}/train_enwik8 2>&1
+sed -i 's/max_step: 400000/max_step: 3/g' configs/enwik8.yaml
+python -m paddle.distributed.launch  train.py --config ./configs/enwik8.yaml >${log_path}/train_enwik8) >>${log_path}/train_enwik8 2>&1
 print_info $? train_enwik8
 time (
 sed -i 's#init_from_params: "./trained_models/step_final/"#init_from_params: "./trained_models/step_3/"#g' configs/enwik8.yaml
