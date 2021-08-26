@@ -219,9 +219,9 @@ time (python -m paddle.distributed.launch run_pretrain.py \
     --device gpu >${log_path}/gpt_pretrain) >>${log_path}/gpt_pretrain 2>&1
 print_info $? gpt_pretrain
 # test acc
-# cd tests/
-# time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
-# print_info $? gpt_test_acc
+cd tests/
+time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
+print_info $? gpt_test_acc
 }
 # 9 xlnet
 xlnet(){
@@ -659,6 +659,47 @@ time (
 python predict.py --input_file ./dev.tsv >${log_path}/simbert) >>${log_path}/simbert 2>&1
 print_info $? simbert
 }
+#25 ernie-doc
+ernie-doc(){
+cd ${nlp_dir}/examples/language_model/ernie-doc/
+CUDA_VISIBLE_DEVICES=${cudaid2}
+time (python -m paddle.distributed.launch  --log_dir hyp run_classifier.py --epochs 15 --layerwise_decay 0.7 --learning_rate 5e-5 --batch_size 4 --save_steps 100 --max_steps 100  --dataset hyp --output_dir hyp >${log_path}/hyp) >>${log_path}/hyp 2>&1
+print_info $? hyp
+time (python -m paddle.distributed.launch  --log_dir cmrc2018 run_mrc.py --batch_size 4 --layerwise_decay 0.8 --dropout 0.2 --learning_rate 4.375e-5 --epochs 1 --save_steps 100 --max_steps 100  --dataset cmrc2018 --output_dir cmrc2018  >${log_path}/cmrc2018) >>${log_path}/cmrc2018 2>&1
+print_info $?  cmrc2018
+time (python -m paddle.distributed.launch  --log_dir c3 run_mcq.py --learning_rate 6.5e-5 --epochs 1 --save_steps 100 --max_steps 100  --output_dir c3 >${log_path}/c3) >>${log_path}/c3 2>&1
+print_info $? c3
+time (python -m paddle.distributed.launch  --log_dir cail/ run_semantic_matching.py --epochs 1 --layerwise_decay 0.8 --learning_rate 1.25e-5 --batch_size 4  --save_steps 100 --max_steps 100 --output_dir cail >${log_path}/cail) >>${log_path}/cail 2>&1
+print_info $? cail
+time (python -m paddle.distributed.launch  --log_dir msra run_sequence_labeling.py --learning_rate 3e-5 --epochs 1 --save_steps 100 --max_steps 100  --output_dir msra  >${log_path}/msar) >>${log_path}/msar 2>&1
+print_info $? msar
+}
+#26 transformer-xl
+transformer-xl (){
+cd ${nlp_dir}/examples/language_model/transformer-xl/
+cp -r /ssd1/paddlenlp/download/transformer-xl/* ./
+CUDA_VISIBLE_DEVICES=${cudaid2}
+time (sed -i 's/print_step: 100/print_step: 1/g' configs/enwik8.yaml
+sed -i 's/save_step: 10000/save_step: 3/g' configs/enwik8.yaml
+sed -i 's/batch_size: 16/batch_size: 8/g' configs/enwik8.yaml
+sed -i 's/max_step: 400000/max_step: 3/g' configs/enwik8.yaml
+python -m paddle.distributed.launch  train.py --config ./configs/enwik8.yaml >${log_path}/train_enwik8) >>${log_path}/train_enwik8 2>&1
+print_info $? train_enwik8
+time (
+sed -i 's#init_from_params: "./trained_models/step_final/"#init_from_params: "./trained_models/step_3/"#g' configs/enwik8.yaml
+python eval.py --config ./configs/enwik8.yaml >${log_path}/eval_enwik8) >>${log_path}/eval_enwik8 2>&1
+print_info $? eval_enwik8
+}
+#27 pointer_summarizer
+pointer_summarizer() {
+cd ${nlp_dir}/examples/text_summarization/pointer_summarizer/
+cp -r /ssd1/paddlenlp/download/pointer_summarizer/* ./
+CUDA_VISIBLE_DEVICES=${cudaid1}
+time (sed -i 's/max_iterations = 100000/max_iterations = 5/g' config.py
+sed -i 's/if iter % 5000 == 0 or iter == 1000:/if iter % 5 == 0 :/g' train.py
+python train.py >${log_path}/pointer_summarizer_train) >>${log_path}/pointer_summarizer_train 2>&1
+print_info $? pointer_summarizer_train
+}
 ####################################
 export P0case_list=()
 export P0case_time=0
@@ -666,13 +707,13 @@ export all_P0case_time=0
 declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["squad"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
-  ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5)
+  ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 ["pointer_summarizer"]=5)
 get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
 done
 P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt xlnet ofa albert squad tinybert lexical_analysis seq2seq \
-pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert)
+pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer)
 P0case_time=${all_P0case_time}
 }
 set -e

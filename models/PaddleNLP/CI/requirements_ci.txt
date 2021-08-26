@@ -10,3 +10,6 @@ PyYAML==5.4.1
 subword_nmt==0.3.7
 visualdl
 pandas
+pyrouge
+nltk
+beautifulsoup4

@@ -8,7 +8,8 @@ echo "$model_name get data"
 root_path=$cur_path/../../
 code_path=$cur_path/../../PaddleRec/datasets
 
-data_path=/ssd2/ce_data/rec_datasets
+mkdir $cur_path/../../rec_datasets
+data_path=$cur_path/../../rec_datasets
 #临时环境更改
 
 #获取数据逻辑
