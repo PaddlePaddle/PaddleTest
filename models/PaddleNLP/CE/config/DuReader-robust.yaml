@@ -46,7 +46,7 @@ TRAIN: # 训练步骤
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/finetune_single_$XPU.log
   -
-    priority: p1
+    priority: p0
     tag: linux_dy_gpu2
 
     run:

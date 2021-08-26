@@ -119,13 +119,13 @@ def test_more_bz_mkldnn():
 @pytest.mark.gpu_more_bz_precision
 def test_gpu_more_bz():
     """
-    compared mkldnn yolov3 batch size = [1,4,8,10] outputs with true val
+    compared gpu yolov3 batch size = [1,4,8] outputs with true val
     """
     check_model_exist()
 
     file_path = "./yolov3"
     images_size = 608
-    batch_size_pool = [1, 4, 8, 10]
+    batch_size_pool = [1, 4, 8]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
