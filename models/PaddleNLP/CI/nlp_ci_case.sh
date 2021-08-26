@@ -703,7 +703,7 @@ print_info $? pointer_summarizer_train
 #28 question_matching
 question_matching() {
 cd ${nlp_dir}/examples/text_matching/question_matching/
-cp -r /ssd1/paddlenlp/download/question_matching/* ./  
+cp -r /ssd1/paddlenlp/download/question_matching/* ./
 CUDA_VISIBLE_DEVICES=${cudaid2}
 #train
 time (
