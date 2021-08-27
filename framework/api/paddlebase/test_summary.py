@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
+
+"""
+test summary
+"""
 import paddle
 import paddle.nn as nn
 import pytest
@@ -6,6 +13,7 @@ from paddle.static import InputSpec
 
 
 class LeNet(nn.Layer):
+    """LeNet"""
     def __init__(self, num_classes=10):
         super(LeNet, self).__init__()
         self.num_classes = num_classes
@@ -22,6 +30,7 @@ class LeNet(nn.Layer):
             self.fc = nn.Sequential(nn.Linear(400, 120), nn.Linear(120, 84), nn.Linear(84, 10))
 
     def forward(self, inputs):
+        """forward"""
         x = self.features(inputs)
 
         if self.num_classes > 0:
@@ -31,7 +40,9 @@ class LeNet(nn.Layer):
 
 
 class LeNetMultiInput(LeNet):
+    """LeNetMultiInput"""
     def forward(self, inputs, y):
+        """forward"""
         x = self.features(inputs)
         if self.num_classes > 0:
             x = paddle.flatten(x, 1)
@@ -40,6 +51,7 @@ class LeNetMultiInput(LeNet):
 
 
 class LeNetListInput(LeNet):
+    """LeNetListInput"""
     def forward(self, inputs):
         x = self.features(inputs[0])
 
@@ -50,6 +62,7 @@ class LeNetListInput(LeNet):
 
 
 class LeNetDictInput(LeNet):
+    """LeNetDictInput"""
     def forward(self, inputs):
         x = self.features(inputs["x1"])
 
@@ -166,11 +179,13 @@ class TestSummaryStatic(SummaryTestBase):
 
     @classmethod
     def setup_class(cls):
+        """setup"""
         paddle.enable_static()
         print("setup class")
 
     @classmethod
     def teardown_class(cls):
+        """teardown"""
         print("tear down")
         paddle.disable_static()
 
