@@ -15,7 +15,8 @@ class LeNet(nn.Layer):
             nn.MaxPool2D(2, 2),
             nn.Conv2D(6, 16, 5, stride=1, padding=0),
             nn.ReLU(),
-            nn.MaxPool2D(2, 2))
+            nn.MaxPool2D(2, 2),
+        )
 
         if num_classes > 0:
             self.fc = nn.Sequential(nn.Linear(400, 120), nn.Linear(120, 84), nn.Linear(84, 10))
@@ -50,11 +51,11 @@ class LeNetListInput(LeNet):
 
 class LeNetDictInput(LeNet):
     def forward(self, inputs):
-        x = self.features(inputs['x1'])
+        x = self.features(inputs["x1"])
 
         if self.num_classes > 0:
             x = paddle.flatten(x, 1)
-            x = self.fc(x + inputs['x2'])
+            x = self.fc(x + inputs["x2"])
         return x
 
 
@@ -84,11 +85,11 @@ class SummaryTestBase:
 
     inputsize_params_single = [(1, 1, 28, 28), InputSpec([None, 1, 28, 28], "float32", "image")]
     inputsize_params_multi = [
-        [(1, 1, 28, 28),(1,400)],
-        [InputSpec([None, 1, 28, 28], 'float32', 'input0'),InputSpec([None, 400], 'float32', 'input1')],
+        [(1, 1, 28, 28), (1,400)],
+        [InputSpec([None, 1, 28, 28], 'float32', 'input0'), InputSpec([None, 400], "float32", "input1")],
     ]
     input_params_single = [paddle.rand([1, 1, 28, 28])]
-    input_params_multi_dict = [{'x1': paddle.rand([1, 1, 28, 28]), "x2": paddle.rand([1, 400])}]
+    input_params_multi_dict = [{"x1": paddle.rand([1, 1, 28, 28]), "x2": paddle.rand([1, 400])}]
     input_params_multi_list = [[paddle.rand([1, 1, 28, 28]), paddle.rand([1, 400])]]
 
     @pytest.fixture(scope="function")
@@ -110,7 +111,6 @@ class SummaryTestBase:
         print(return_para)
         print(paddle.in_dynamic_mode())
 
-
     @pytest.mark.api_base_summary_parameters
     @pytest.mark.parametrize("return_para", inputsize_params_multi, indirect=True)
     def test_inputsize_multi(self, return_para):
@@ -122,7 +122,6 @@ class SummaryTestBase:
         params_info = paddle.summary(lenet_multi_input, input_size=return_para)
         assert params_info["total_params"] == params_counts(lenet_multi_input)
         print(paddle.in_dynamic_mode())
-
 
     @pytest.mark.api_base_summary_parameters
     @pytest.mark.skipif("paddle.in_dynamic_mode() is False", reason="skip test case, need to be fixed")
@@ -138,14 +137,14 @@ class SummaryTestBase:
 
     @pytest.mark.skipif("paddle.in_dynamic_mode() is False", reason="skip test case, need to be fixed")
     @pytest.mark.parametrize("return_para", input_params_multi_list, indirect=True)
-    def test_input_multi_list(self,return_para):
+    def test_input_multi_list(self, return_para):
         """
         test input parameter when the model has multiple input
         list input demo
         """
         lenet_multi_input = LeNetListInput()
         params_info = paddle.summary(lenet_multi_input, input=return_para)
-        assert params_info['total_params'] == params_counts(lenet_multi_input)
+        assert params_info["total_params"] == params_counts(lenet_multi_input)
         print(paddle.in_dynamic_mode())
 
     @pytest.mark.skipif("paddle.in_dynamic_mode() is False", reason="skip test case, need to be fixed")
