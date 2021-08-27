@@ -52,9 +52,19 @@ echo ${device}
 cat ./result.txt
 cd $home
 
+# incubate
+cd incubate
+rm -rf ./result.txt
+echo "[incubate cases result]" >> result.txt
+bash ./run.sh
+incubate=$?
+echo ${incubate}
+cat ./result.txt
+cd $home
+
 # result
 echo "=============== result ================="
-if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss} + ${device}` -eq 0 ]; then
+if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss} + ${device} + ${incubate}` -eq 0 ]; then
   result=`find . -name "result.txt"`
   for file in ${result}
     do
