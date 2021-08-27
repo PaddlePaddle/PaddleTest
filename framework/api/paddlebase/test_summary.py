@@ -85,8 +85,8 @@ class SummaryTestBase:
 
     inputsize_params_single = [(1, 1, 28, 28), InputSpec([None, 1, 28, 28], "float32", "image")]
     inputsize_params_multi = [
-        [(1, 1, 28, 28), (1,400)],
-        [InputSpec([None, 1, 28, 28], 'float32', 'input0'), InputSpec([None, 400], "float32", "input1")],
+        [(1, 1, 28, 28), (1, 400)],
+        [InputSpec([None, 1, 28, 28], "float32", "input0"), InputSpec([None, 400], "float32", "input1")],
     ]
     input_params_single = [paddle.rand([1, 1, 28, 28])]
     input_params_multi_dict = [{"x1": paddle.rand([1, 1, 28, 28]), "x2": paddle.rand([1, 400])}]
