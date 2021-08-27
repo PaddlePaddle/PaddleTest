@@ -4,26 +4,21 @@ import pytest
 import numpy as np
 from paddle.static import InputSpec
 
+
 class LeNet(nn.Layer):
     def __init__(self, num_classes=10):
         super(LeNet, self).__init__()
         self.num_classes = num_classes
         self.features = nn.Sequential(
-            nn.Conv2D(
-                1, 6, 3, stride=1, padding=1),
+            nn.Conv2D(1, 6, 3, stride=1, padding=1),
             nn.ReLU(),
             nn.MaxPool2D(2, 2),
-            nn.Conv2D(
-                6, 16, 5, stride=1, padding=0),
+            nn.Conv2D(6, 16, 5, stride=1, padding=0),
             nn.ReLU(),
             nn.MaxPool2D(2, 2))
 
         if num_classes > 0:
-            self.fc = nn.Sequential(
-                nn.Linear(400, 120),
-                nn.Linear(120, 84),
-                nn.Linear(
-                    84, 10))
+            self.fc = nn.Sequential(nn.Linear(400, 120), nn.Linear(120, 84), nn.Linear(84, 10))
 
     def forward(self, inputs):
         x = self.features(inputs)
@@ -44,7 +39,6 @@ class LeNetMultiInput(LeNet):
 
 
 class LeNetListInput(LeNet):
-
     def forward(self, inputs):
         x = self.features(inputs[0])
 
@@ -55,7 +49,6 @@ class LeNetListInput(LeNet):
 
 
 class LeNetDictInput(LeNet):
-
     def forward(self, inputs):
         x = self.features(inputs['x1'])
 
@@ -71,7 +64,7 @@ def params_counts(sample_nets):
     """
     params = 0
     counts = sample_nets.state_dict()
-    for k,v in counts.items():
+    for k, v in counts.items():
         params += np.prod(v.shape)
     return params
 
@@ -79,68 +72,69 @@ def params_counts(sample_nets):
 @pytest.mark.fixture(scope="class")
 def use_static_mode():
     """
-    turn on static graph mode 
+    turn on static graph mode
     """
     paddle.enable_static()
     yield
     paddle.disable_static()
 
 
-class SummaryTestBase():
+class SummaryTestBase:
     """test for summary"""
 
-    inputsize_params_single = [(1, 1, 28, 28), InputSpec([None, 1, 28, 28], 'float32', 'image')]
-    inputsize_params_multi = [[(1, 1, 28, 28),(1,400)],[InputSpec([None, 1, 28, 28], 'float32', 'input0'),InputSpec([None, 400], 'float32', 'input1')]]
+    inputsize_params_single = [(1, 1, 28, 28), InputSpec([None, 1, 28, 28], "float32", "image")]
+    inputsize_params_multi = [
+        [(1, 1, 28, 28),(1,400)],
+        [InputSpec([None, 1, 28, 28], 'float32', 'input0'),InputSpec([None, 400], 'float32', 'input1')],
+    ]
     input_params_single = [paddle.rand([1, 1, 28, 28])]
-    input_params_multi_dict = [{'x1': paddle.rand([1, 1, 28, 28]), 'x2': paddle.rand([1, 400])}]
+    input_params_multi_dict = [{'x1': paddle.rand([1, 1, 28, 28]), "x2": paddle.rand([1, 400])}]
     input_params_multi_list = [[paddle.rand([1, 1, 28, 28]), paddle.rand([1, 400])]]
 
     @pytest.fixture(scope="function")
-    def return_para(self,request):
+    def return_para(self, request):
         """
         return diff parameter
         """
         yield request.param
 
-
     @pytest.mark.api_base_summary_parameters
     @pytest.mark.parametrize("return_para", inputsize_params_single, indirect=True)
-    def test_inputsize_single(self,return_para):
+    def test_inputsize_single(self, return_para):
         """
         test input_size parameter when the model has only one input
         """
         lenet = LeNet()
         params_info = paddle.summary(lenet, input_size=return_para)
-        assert params_info['total_params'] == params_counts(lenet)
+        assert params_info["total_params"] == params_counts(lenet)
         print(return_para)
         print(paddle.in_dynamic_mode())
 
 
     @pytest.mark.api_base_summary_parameters
     @pytest.mark.parametrize("return_para", inputsize_params_multi, indirect=True)
-    def test_inputsize_multi(self,return_para):
+    def test_inputsize_multi(self, return_para):
         """
         test input_size parameter when the model has multiple input
         """
         lenet_multi_input = LeNetMultiInput()
         print(return_para)
         params_info = paddle.summary(lenet_multi_input, input_size=return_para)
-        assert params_info['total_params'] == params_counts(lenet_multi_input)
+        assert params_info["total_params"] == params_counts(lenet_multi_input)
         print(paddle.in_dynamic_mode())
 
 
     @pytest.mark.api_base_summary_parameters
     @pytest.mark.skipif("paddle.in_dynamic_mode() is False", reason="skip test case, need to be fixed")
     @pytest.mark.parametrize("return_para", input_params_single, indirect=True)
-    def test_input_single(self,return_para):
+    def test_input_single(self, return_para):
         """
         test input parameter when the model has only one input
         """
         lenet = LeNet()
         print(paddle.in_dynamic_mode())
         params_info = paddle.summary(lenet, input=return_para)
-        assert params_info['total_params'] == params_counts(lenet)
-
+        assert params_info["total_params"] == params_counts(lenet)
 
     @pytest.mark.skipif("paddle.in_dynamic_mode() is False", reason="skip test case, need to be fixed")
     @pytest.mark.parametrize("return_para", input_params_multi_list, indirect=True)
@@ -154,34 +148,37 @@ class SummaryTestBase():
         assert params_info['total_params'] == params_counts(lenet_multi_input)
         print(paddle.in_dynamic_mode())
 
-
     @pytest.mark.skipif("paddle.in_dynamic_mode() is False", reason="skip test case, need to be fixed")
     @pytest.mark.parametrize("return_para", input_params_multi_dict, indirect=True)
-    def test_input_multi_dict(self,return_para):
+    def test_input_multi_dict(self, return_para):
         """
         test input parameter when the model has multiple input
         list input demo
         """
         lenet_multi_input = LeNetDictInput()
         params_info = paddle.summary(lenet_multi_input, input=return_para)
-        assert params_info['total_params'] == params_counts(lenet_multi_input)
+        assert params_info["total_params"] == params_counts(lenet_multi_input)
 
 
 class TestSummaryStatic(SummaryTestBase):
     """
     test paddle.summary on static mode
     """
+
     @classmethod
     def setup_class(cls):
         paddle.enable_static()
-        print('setup class')
+        print("setup class")
+
     @classmethod
     def teardown_class(cls):
-        print('tear down')
+        print("tear down")
         paddle.disable_static()
+
 
 class TestSummaryDynamic(SummaryTestBase):
     """
     test paddle.summary on dynamic mode
     """
+
     pass
