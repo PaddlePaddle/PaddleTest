@@ -84,7 +84,7 @@ else
 fi
 
 # export_model
-python tools/export_model.py -c $line -o Global.pretrained_model=$output_path/$params_dir/latest -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
+python tools/export_model.py -c $line -o Global.pretrained_model=output/$params_dir/latest -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
