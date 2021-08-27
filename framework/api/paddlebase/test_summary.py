@@ -14,6 +14,7 @@ from paddle.static import InputSpec
 
 class LeNet(nn.Layer):
     """LeNet"""
+
     def __init__(self, num_classes=10):
         super(LeNet, self).__init__()
         self.num_classes = num_classes
@@ -41,6 +42,7 @@ class LeNet(nn.Layer):
 
 class LeNetMultiInput(LeNet):
     """LeNetMultiInput"""
+
     def forward(self, inputs, y):
         """forward"""
         x = self.features(inputs)
@@ -52,6 +54,7 @@ class LeNetMultiInput(LeNet):
 
 class LeNetListInput(LeNet):
     """LeNetListInput"""
+
     def forward(self, inputs):
         x = self.features(inputs[0])
 
@@ -63,6 +66,7 @@ class LeNetListInput(LeNet):
 
 class LeNetDictInput(LeNet):
     """LeNetDictInput"""
+
     def forward(self, inputs):
         x = self.features(inputs["x1"])
 
