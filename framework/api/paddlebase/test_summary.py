@@ -153,6 +153,7 @@ class SummaryTestBase:
         assert params_info["total_params"] == params_counts(lenet)
 
     @pytest.mark.skipif("paddle.in_dynamic_mode() is False", reason="skip test case, need to be fixed")
+    @pytest.mark.api_base_summary_parameters
     @pytest.mark.parametrize("return_para", input_params_multi_list, indirect=True)
     def test_input_multi_list(self, return_para):
         """
@@ -165,6 +166,7 @@ class SummaryTestBase:
         print(paddle.in_dynamic_mode())
 
     @pytest.mark.skipif("paddle.in_dynamic_mode() is False", reason="skip test case, need to be fixed")
+    @pytest.mark.api_base_summary_parameters
     @pytest.mark.parametrize("return_para", input_params_multi_dict, indirect=True)
     def test_input_multi_dict(self, return_para):
         """
