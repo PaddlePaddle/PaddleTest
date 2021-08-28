@@ -15,6 +15,14 @@ export https_proxy=${https_proxy};
 rm -rf data
 ln -s ${Data_path} data
 
+if [ ! -f "/root/.cache/paddle/dataset/mnist/train-images-idx3-ubyte.gz" ]; then
+   wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-images-idx3-ubyte.gz
+fi
+
+if [ ! -f "/root/.cache/paddle/dataset/mnist/train-labels-idx1-ubyte.gz" ]; then
+   wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-labels-idx1-ubyte.gz
+fi
+
 # env
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
@@ -52,10 +60,6 @@ else
    echo -e "\033[33m ${log_path}/${stage} is created successfully!\033[0m"
 fi
 done
-
-2021-08-26 18:33:21 [31m evaluate of edvr_l_blur_wo_tsa failed![0m
-2021-08-26 18:33:21 [31m evaluate of edvr_l_blur_w_tsa failed![0m
-2021-08-26 18:33:21 [31m evaluate of mprnet_deblurring failed![0m
 
 find configs/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' > models_list_all
 git diff $(git log --pretty=oneline |grep "#"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'| tee -a  models_list
