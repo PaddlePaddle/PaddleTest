@@ -685,10 +685,10 @@ sed -i 's/batch_size: 16/batch_size: 8/g' configs/enwik8.yaml
 sed -i 's/max_step: 400000/max_step: 3/g' configs/enwik8.yaml
 python -m paddle.distributed.launch  train.py --config ./configs/enwik8.yaml >${log_path}/train_enwik8) >>${log_path}/train_enwik8 2>&1
 print_info $? train_enwik8
-time (sed -i 's/batch_size: 8/batch_size: 4/g' configs/enwik8.yaml
-sed -i 's#init_from_params: "./trained_models/step_final/"#init_from_params: "./trained_models/step_3/"#g' configs/enwik8.yaml
-python eval.py --config ./configs/enwik8.yaml >${log_path}/eval_enwik8) >>${log_path}/eval_enwik8 2>&1
-print_info $? eval_enwik8
+# time (sed -i 's/batch_size: 8/batch_size: 4/g' configs/enwik8.yaml
+# sed -i 's#init_from_params: "./trained_models/step_final/"#init_from_params: "./trained_models/step_3/"#g' configs/enwik8.yaml
+# python eval.py --config ./configs/enwik8.yaml >${log_path}/eval_enwik8) >>${log_path}/eval_enwik8 2>&1
+# print_info $? eval_enwik8
 }
 #27 pointer_summarizer
 pointer_summarizer() {
@@ -713,7 +713,7 @@ python -u -m paddle.distributed.launch train.py \
        --device gpu \
        --eval_step 10 \
        --max_steps 10 \
-       --save_dir ./checkpoints_epoch \
+       --save_dir ./checkpoints \
        --train_batch_size 32 \
        --learning_rate 2E-5 \
        --epochs 1 \
