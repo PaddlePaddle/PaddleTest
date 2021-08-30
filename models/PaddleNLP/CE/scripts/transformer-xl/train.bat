@@ -15,4 +15,4 @@ set sed="C:\Program Files\Git\usr\bin\sed.exe"
 %sed% -i 's/save_step: 10000/save_step: 3/g' configs/enwik8.yaml
 %sed% -i 's/max_step: 400000/max_step: 4/g' configs/enwik8.yaml
 
-python -m paddle.distributed.launch  --gpus %2 train.py --config ./configs/enwik8.yaml --device=%1  > %logpath%\enwik8_train_%1.log 2>&1
+python -m paddle.distributed.launch  --gpus %2 train.py --config ./configs/enwik8.yaml > %logpath%\enwik8_train_%1.log 2>&1
