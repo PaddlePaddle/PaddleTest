@@ -137,6 +137,27 @@ TRAIN: # 训练步骤
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_recv_$XPU.log
 
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU  $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 10.984482
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_gpt2_$XPU.log
+
 INFER:
   -
     priority: p1
