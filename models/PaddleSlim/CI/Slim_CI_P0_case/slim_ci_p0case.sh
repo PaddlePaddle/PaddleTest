@@ -916,7 +916,7 @@ darts_1
 
 ####################################
 #export P0case_list=()  #在命令行中设置
-echo "根据message获取的case列表：${P0case_list[*]}"
+echo "message obtain case list：${P0case_list[*]}"
 export P0case_time=0
 export all_P0case_time=0
 declare -A all_P0case_dic
@@ -940,6 +940,7 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
          if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then   # 如果修改了demo/P0case ,则回归相应的P0case;
                 echo "${P0case_list[*]}" | grep "${dir2}"
                 if [ $? != 0 ];then
+                  echo "add case ${dir2}"
                   P0case_list[${#P0case_list[*]}]=${dir2}
                   P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir2}]}`
                 fi
