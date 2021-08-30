@@ -916,7 +916,7 @@ darts_1
 
 ####################################
 #export P0case_list=()  #在命令行中设置
-echo ${P0case_list[*]}
+echo "根据message获取的case列表：${P0case_list[*]}"
 export P0case_time=0
 export all_P0case_time=0
 declare -A all_P0case_dic
