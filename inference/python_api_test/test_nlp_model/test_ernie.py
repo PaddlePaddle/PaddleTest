@@ -24,9 +24,9 @@ def check_model_exist():
     """
     check model exist
     """
-    ocr_det_mv3_db_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.2/nlp/ernie.tgz"
+    ernie_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.2/nlp/ernie.tgz"
     if not os.path.exists("./ernie/inference.pdiparams"):
-        wget.download(ocr_det_mv3_db_url, out="./")
+        wget.download(ernie_url, out="./")
         tar = tarfile.open("ernie.tgz")
         tar.extractall()
         tar.close()
@@ -68,7 +68,6 @@ def test_mkldnn():
     """
     check_model_exist()
 
-    file_path = "./ernie"
     test_suite = InferenceTest()
     test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
     data_path = "./ernie/data.txt"
