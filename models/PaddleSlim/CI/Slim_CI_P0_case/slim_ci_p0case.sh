@@ -933,9 +933,9 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     if [[ ${file_name##*.} =~ "md" ]] || [[ ${file_name##*.} =~ "rst" ]] || [[ ${dir1} =~ "docs" ]] || [[ ${dir1} =~ "tests" ]] || [[ ${file_name##*.} =~ "jpg" ]] || [[ ${file_name##*.} =~ "png" ]] ;then
         continue
     elif [[ ${dir1} =~ "paddleslim" ]];then # 如果修改了paddleslim,则回归全量P0
+        echo "update dir:paddleslim"
         P0case_list=(distillation quant prune nas unstructured_prune darts)
         P0case_time=${all_P0case_time}
-        break
     elif [[ ${dir1} =~ "demo" ]];then # 注意：如果修改不是现有P0case目录中的脚本，也不是demo/*.py脚本，则不触发P0case，因为该PR变更CI无case可覆盖
          if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then   # 如果修改了demo/P0case ,则回归相应的P0case;
                 echo "${P0case_list[*]}" | grep "${dir2}"
@@ -950,6 +950,7 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
                 break
          fi
     elif [[ ${dir1} =~ "ce_tests" ]];then
+         echo "update dir:ce_tests"
          P0case_list[${#P0case_list[*]}]="ce_tests_demo"
          P0case_time=`expr ${P0case_time} + ${all_P0case_dic["ce_tests_demo"]}`
     else
