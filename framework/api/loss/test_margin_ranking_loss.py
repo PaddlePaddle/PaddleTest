@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-paddle.nn.MarginRankingLoss
+paddle.nn.functional.margin_ranking_loss
 """
 import paddle
 import pytest
@@ -11,19 +11,18 @@ from base_dygraph_model import Dygraph
 import numpy as np
 
 
-@pytest.mark.loss_nn_MarginRankingLoss_vartype
-def test_nn_margin_ranking_loss_base():
+@pytest.mark.loss_margin_ranking_loss_vartype
+def test_margin_ranking_loss_base():
     """
-    test nn.MarginRankingLoss base test
+    test nn.functional.margin_ranking_loss base test
     """
     datareader = np.random.random(size=[2, 10])
     label = np.array([[1, -1], [-1, -1]]).astype(np.float64)
     other = np.array([[2, 1], [2, 4]]).astype(np.float64)
-    loss = paddle.nn.MarginRankingLoss
+    loss = paddle.nn.functional.margin_ranking_loss
     runner = Runner(datareader, loss)
     runner.softmax = False
-    runner.add_kwargs_to_dict("params_group1", margin=0.0, reduction="mean", name=None)
-    runner.add_kwargs_to_dict("params_group2", other=other, label=label)
+    runner.add_kwargs_to_dict("params_group1", other=other, label=label, margin=0.0, reduction="mean", name=None)
     expect = [
         0.6310311176096826,
         0.6305001903870682,
