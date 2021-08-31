@@ -91,6 +91,24 @@ TRAIN: # 训练步骤
 
     output: $ROOT_PATH/$model_log_path/recv_enwik8_train.log
 
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.161786
+        threshold: 0.02
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/enwik8_train_$XPU.log
+
 
 EVAL:
   - #可以有多步

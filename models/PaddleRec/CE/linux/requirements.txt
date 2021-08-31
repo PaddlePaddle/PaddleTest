@@ -1,0 +1,4 @@
+PyYAML
+scipy
+sklearn
+faiss

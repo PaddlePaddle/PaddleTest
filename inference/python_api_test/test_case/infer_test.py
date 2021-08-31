@@ -19,6 +19,8 @@ import numpy as np
 import paddle.inference as paddle_infer
 
 from pynvml.smi import nvidia_smi
+from .image_preprocess import read_images_path, get_images_npy, read_npy_path, preprocess, sig_fig_compare
+from .text_preprocess import ernie_data as text_pre
 
 _gpu_mem_lists = []
 
@@ -120,6 +122,17 @@ class InferenceTest(object):
             images_list, images_origin_list = read_images_path(images_path, images_size, center=False, model_type="det")
             return images_list, images_origin_list, npy_list
 
+    def get_text_npy(self, file_path: str) -> list:
+        """
+        get images and npy truth value
+        Args:
+            file_path(str): images and npy saved path
+        Returns:
+            npy_list(list): npy array in list
+        """
+        predict = text_pre(file_path)
+        return predict
+
     def config_test(self):
         """
         test config instance
@@ -200,14 +213,10 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-        predictor.try_shrink_memory()
 
-    def trt_fp32_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
+    def gpu_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
         """
-        test enable_tensorrt_engine()
-        batch_size = 1
-        trt max_batch_size = 1
-        precision_mode = paddle_infer.PrecisionType.Float32
+        test enable_use_gpu()
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
@@ -217,13 +226,67 @@ class InferenceTest(object):
             None
         """
         self.pd_config.enable_use_gpu(gpu_mem, 0)
+        predictor = paddle_infer.create_predictor(self.pd_config)
+
+        input_names = predictor.get_input_names()
+        for _, input_data_name in enumerate(input_names):
+            input_handle = predictor.get_input_handle(input_data_name)
+            input_handle.copy_from_cpu(input_data_dict[input_data_name])
+
+        for i in range(repeat):
+            predictor.run()
+
+        output_names = predictor.get_output_names()
+        for i, output_data_name in enumerate(output_names):
+            output_handle = predictor.get_output_handle(output_data_name)
+            output_data = output_handle.copy_to_cpu()
+            output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name].flatten()
+            for j, out_data in enumerate(output_data):
+                diff = sig_fig_compare(out_data, output_data_truth_val[j])
+                assert (
+                    diff <= delta
+                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+
+    def trt_bz1_test(
+        self,
+        input_data_dict: dict,
+        output_data_dict: dict,
+        repeat=5,
+        delta=1e-5,
+        gpu_mem=1000,
+        min_subgraph_size=3,
+        precision="trt_fp32",
+        use_static=False,
+        use_calib_mode=False,
+    ):
+        """
+        test enable_use_gpu()
+        Args:
+            input_data_dict(dict): input data constructed as dictionary
+            output_data_dict(dict): output data constructed as dictionary
+            repeat(int): inference repeat time, set to catch gpu mem
+            delta(float): difference threshold between inference outputs and thruth value
+            min_subgraph_size(int): min subgraph size
+            precision(str): trt precision mode,[fp32,fp16,int8]
+            use_static(bool): use static
+            use_calib_mode(bool): use calib mode
+        Returns:
+            None
+        """
+        trt_precision_map = {
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
+        }
+        self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=1,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Float32,
-            use_static=False,
-            use_calib_mode=False,
+            min_subgraph_size=min_subgraph_size,
+            precision_mode=trt_precision_map[precision],
+            use_static=use_static,
+            use_calib_mode=use_calib_mode,
         )
         predictor = paddle_infer.create_predictor(self.pd_config)
 
@@ -248,7 +311,6 @@ class InferenceTest(object):
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
         predictor.try_shrink_memory()  # try_shrink_memory
-
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
@@ -271,29 +333,51 @@ class InferenceTest(object):
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
-    def trt_fp32_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
+    def trt_more_bz_test(
+        self,
+        input_data_dict: dict,
+        output_data_dict: dict,
+        repeat=1,
+        delta=1e-5,
+        gpu_mem=1000,
+        max_batch_size=3,
+        min_subgraph_size=3,
+        precision="fp32",
+        use_static=False,
+        use_calib_mode=False,
+    ):
         """
         test enable_tensorrt_engine()
         batch_size = 10
         trt max_batch_size = 10
-        precision_mode = paddle_infer.PrecisionType.Float32
+        precision_mode = fp32,fp16,int8
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
+            min_subgraph_size(int): min subgraph size
+            precision(str): trt precision mode,[fp32,fp16,int8]
+            use_static(bool): use static
+            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
+        trt_precision_map = {
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
+        }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
-            max_batch_size=10,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Float32,
-            use_static=False,
-            use_calib_mode=False,
+            max_batch_size=max_batch_size,
+            min_subgraph_size=min_subgraph_size,
+            precision_mode=trt_precision_map[precision],
+            use_static=use_static,
+            use_calib_mode=use_calib_mode,
         )
+
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
@@ -316,7 +400,7 @@ class InferenceTest(object):
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
-    def trt_fp32_more_bz_dynamic_test(
+    def trt_more_bz_dynamic_test(
         self,
         input_data_dict: dict,
         output_data_dict: dict,
@@ -328,12 +412,16 @@ class InferenceTest(object):
         min_input_shape=None,
         max_input_shape=None,
         opt_input_shape=None,
+        min_subgraph_size=3,
+        precision="fp32",
+        use_static=False,
+        use_calib_mode=False,
     ):
         """
         test enable_tensorrt_engine()
         max_batch_size = 1-10
         trt max_batch_size = 10
-        precision_mode = paddle_infer.PrecisionType.Float32
+        precision_mode = fp32,fp16,int8
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
@@ -343,18 +431,27 @@ class InferenceTest(object):
             min_input_shape(list): TensorRT min input shape
             max_input_shape(list): TensorRT max input shape
             opt_input_shape(list): TensorRT best input shape
+            min_subgraph_size(int): min subgraph size
+            precision(str): trt precision mode,[fp32,fp16,int8]
+            use_static(bool): use static
+            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
 
+        trt_precision_map = {
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
+        }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=max_batch_size,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Float32,
-            use_static=False,
-            use_calib_mode=False,
+            min_subgraph_size=min_subgraph_size,
+            precision_mode=trt_precision_map[precision],
+            use_static=use_static,
+            use_calib_mode=use_calib_mode,
         )
 
         self.pd_config.set_trt_dynamic_shape_info(
@@ -386,15 +483,25 @@ class InferenceTest(object):
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
         predictor.try_shrink_memory()
 
-    def trt_fp32_bz1_multi_thread_test(
-        self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5, gpu_mem=1000
+    def trt_bz1_multi_thread_test(
+        self,
+        input_data_dict: dict,
+        output_data_dict: dict,
+        repeat=1,
+        thread_num=2,
+        delta=1e-5,
+        gpu_mem=1000,
+        min_subgraph_size=3,
+        precision="fp32",
+        use_static=False,
+        use_calib_mode=False,
     ):
         """
         test enable_tensorrt_engine()
         batch_size = 1
         trt max_batch_size = 4
         thread_num = 5
-        precision_mode = paddle_infer.PrecisionType.Float32
+        precision_mode = fp32,fp16,int8
         Multithreading TensorRT predictor
         Args:
             input_data_dict(dict): input data constructed as dictionary
@@ -402,17 +509,26 @@ class InferenceTest(object):
             repeat(int): inference repeat time
             thread_num(int): number of threads
             delta(float): difference threshold between inference outputs and thruth value
+            min_subgraph_size(int): min subgraph size
+            precision(str): trt precision mode,[fp32,fp16,int8]
+            use_static(bool): use static
+            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
+        trt_precision_map = {
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
+        }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=1,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Float32,
-            use_static=False,
-            use_calib_mode=False,
+            min_subgraph_size=min_subgraph_size,
+            precision_mode=trt_precision_map[precision],
+            use_static=use_static,
+            use_calib_mode=use_calib_mode,
         )
         predictors = paddle_infer.PredictorPool(self.pd_config, thread_num)
         for i in range(thread_num):
@@ -420,11 +536,10 @@ class InferenceTest(object):
                 target=self.run_multi_thread_test_predictor,
                 args=(predictors.retrive(i), input_data_dict, output_data_dict, repeat, delta),
             )
-
             record_thread.start()
             record_thread.join()
 
-    def trt_fp32_bz1_dynamic_multi_thread_test(
+    def trt_dynamic_multi_thread_test(
         self,
         input_data_dict: dict,
         output_data_dict: dict,
@@ -437,35 +552,47 @@ class InferenceTest(object):
         min_input_shape=None,
         max_input_shape=None,
         opt_input_shape=None,
+        min_subgraph_size=3,
+        precision="fp32",
+        use_static=False,
+        use_calib_mode=False,
     ):
         """
         test enable_tensorrt_engine()
         batch_size = 1
         trt max_batch_size = 1
         thread_num = 2
-        precision_mode = paddle_infer.PrecisionType.Float32
+        precision_mode = fp32,fp16,int8
         Multithreading TensorRT predictor
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
             repeat(int): inference repeat time
-            thread_num(int): number of threads
             delta(float): difference threshold between inference outputs and thruth value
             names(list): input names
             min_input_shape(list): TensorRT min input shape
             max_input_shape(list): TensorRT max input shape
             opt_input_shape(list): TensorRT best input shape
+            min_subgraph_size(int): min subgraph size
+            precision(str): trt precision mode,[fp32,fp16,int8]
+            use_static(bool): use static
+            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
+        trt_precision_map = {
+            "trt_fp32": paddle_infer.PrecisionType.Float32,
+            "trt_fp16": paddle_infer.PrecisionType.Half,
+            "trt_int8": paddle_infer.PrecisionType.Int8,
+        }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         self.pd_config.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=1,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Float32,
-            use_static=False,
-            use_calib_mode=False,
+            min_subgraph_size=min_subgraph_size,
+            precision_mode=trt_precision_map[precision],
+            use_static=use_static,
+            use_calib_mode=use_calib_mode,
         )
         self.pd_config.set_trt_dynamic_shape_info(
             {names[i]: min_input_shape[i] for i in range(len(names))},
@@ -478,286 +605,6 @@ class InferenceTest(object):
                 target=self.run_multi_thread_test_predictor,
                 args=(predictors.retrive(i), input_data_dict, output_data_dict, repeat, delta),
             )
-
-            record_thread.start()
-            record_thread.join()
-
-    def trt_fp16_bz1_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
-        """
-        test enable_tensorrt_engine()
-        batch_size = 1
-        trt max_batch_size = 1
-        precision_mode = paddle_infer.PrecisionType.Half
-        Args:
-            input_data_dict(dict): input data constructed as dictionary
-            output_data_dict(dict): output data constructed as dictionary
-            repeat(int): inference repeat time, set to catch gpu mem
-            delta(float): difference threshold between inference outputs and thruth value
-        Returns:
-            None
-        """
-        self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=1,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Half,
-            use_static=False,
-            use_calib_mode=False,
-        )
-        predictor = paddle_infer.create_predictor(self.pd_config)
-
-        input_names = predictor.get_input_names()
-        for _, input_data_name in enumerate(input_names):
-            input_handle = predictor.get_input_handle(input_data_name)
-            input_handle.copy_from_cpu(input_data_dict[input_data_name])
-
-        for i in range(repeat):
-            predictor.run()
-
-        output_names = predictor.get_output_names()
-        for i, output_data_name in enumerate(output_names):
-            output_handle = predictor.get_output_handle(output_data_name)
-            output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-
-        predictor.try_shrink_memory()  # try_shrink_memory
-        predictor = paddle_infer.create_predictor(self.pd_config)
-
-        input_names = predictor.get_input_names()
-        for _, input_data_name in enumerate(input_names):
-            input_handle = predictor.get_input_handle(input_data_name)
-            input_handle.copy_from_cpu(input_data_dict[input_data_name])
-
-        for i in range(repeat):
-            predictor.run()
-
-        output_names = predictor.get_output_names()
-        for i, output_data_name in enumerate(output_names):
-            output_handle = predictor.get_output_handle(output_data_name)
-            output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-
-    def trt_fp16_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=5, delta=1e-5, gpu_mem=1000):
-        """
-        test enable_tensorrt_engine()
-        batch_size = 10
-        trt max_batch_size = 10
-        precision_mode = paddle_infer.PrecisionType.Half
-        Args:
-            input_data_dict(dict): input data constructed as dictionary
-            output_data_dict(dict): output data constructed as dictionary
-            repeat(int): inference repeat time, set to catch gpu mem
-            delta(float): difference threshold between inference outputs and thruth value
-        Returns:
-            None
-        """
-        self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=10,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Half,
-            use_static=False,
-            use_calib_mode=False,
-        )
-        predictor = paddle_infer.create_predictor(self.pd_config)
-
-        input_names = predictor.get_input_names()
-        for _, input_data_name in enumerate(input_names):
-            input_handle = predictor.get_input_handle(input_data_name)
-            input_handle.copy_from_cpu(input_data_dict[input_data_name])
-
-        for i in range(repeat):
-            predictor.run()
-
-        output_names = predictor.get_output_names()
-        for i, output_data_name in enumerate(output_names):
-            output_handle = predictor.get_output_handle(output_data_name)
-            output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-
-    def trt_fp16_more_bz_dynamic_test(
-        self,
-        input_data_dict: dict,
-        output_data_dict: dict,
-        repeat=1,
-        delta=1e-5,
-        gpu_mem=1000,
-        max_batch_size=10,
-        names=None,
-        min_input_shape=None,
-        max_input_shape=None,
-        opt_input_shape=None,
-    ):
-        """
-        test enable_tensorrt_engine()
-        max_batch_size = 1-10
-        trt max_batch_size = 10
-        precision_mode = paddle_infer.PrecisionType.Half
-        Args:
-            input_data_dict(dict): input data constructed as dictionary
-            output_data_dict(dict): output data constructed as dictionary
-            repeat(int): inference repeat time, set to catch gpu mem
-            delta(float): difference threshold between inference outputs and thruth value
-            names(list): input names
-            min_input_shape(list): TensorRT min input shape
-            max_input_shape(list): TensorRT max input shape
-            opt_input_shape(list): TensorRT best input shape
-        Returns:
-            None
-        """
-
-        self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=max_batch_size,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Half,
-            use_static=False,
-            use_calib_mode=False,
-        )
-
-        self.pd_config.set_trt_dynamic_shape_info(
-            {names[i]: min_input_shape[i] for i in range(len(names))},
-            {names[i]: max_input_shape[i] for i in range(len(names))},
-            {names[i]: opt_input_shape[i] for i in range(len(names))},
-        )
-
-        predictor = paddle_infer.create_predictor(self.pd_config)
-
-        input_names = predictor.get_input_names()
-        for _, input_data_name in enumerate(input_names):
-            input_handle = predictor.get_input_handle(input_data_name)
-            input_handle.copy_from_cpu(input_data_dict[input_data_name])
-
-        for i in range(repeat):
-            predictor.run()
-
-        output_names = predictor.get_output_names()
-        for i, output_data_name in enumerate(output_names):
-            output_handle = predictor.get_output_handle(output_data_name)
-            output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-        predictor.try_shrink_memory()
-
-    def trt_fp16_bz1_multi_thread_test(
-        self, input_data_dict: dict, output_data_dict: dict, repeat=1, thread_num=2, delta=1e-5, gpu_mem=1000
-    ):
-        """
-        test enable_tensorrt_engine()
-        batch_size = 1
-        trt max_batch_size = 4
-        thread_num = 5
-        precision_mode = paddle_infer.PrecisionType.Half
-        Multithreading TensorRT predictor
-        Args:
-            input_data_dict(dict): input data constructed as dictionary
-            output_data_dict(dict): output data constructed as dictionary
-            repeat(int): inference repeat time
-            thread_num(int): number of threads
-            delta(float): difference threshold between inference outputs and thruth value
-        Returns:
-            None
-        """
-        self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=1,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Half,
-            use_static=False,
-            use_calib_mode=False,
-        )
-        predictors = paddle_infer.PredictorPool(self.pd_config, thread_num)
-        for i in range(thread_num):
-            record_thread = threading.Thread(
-                target=self.run_multi_thread_test_predictor,
-                args=(predictors.retrive(i), input_data_dict, output_data_dict, repeat, delta),
-            )
-
-            record_thread.start()
-            record_thread.join()
-
-    def trt_fp16_bz1_dynamic_multi_thread_test(
-        self,
-        input_data_dict: dict,
-        output_data_dict: dict,
-        repeat=1,
-        delta=1e-5,
-        thread_num=2,
-        gpu_mem=1000,
-        max_batch_size=10,
-        names=None,
-        min_input_shape=None,
-        max_input_shape=None,
-        opt_input_shape=None,
-    ):
-        """
-        test enable_tensorrt_engine()
-        batch_size = 1
-        trt max_batch_size = 4
-        thread_num = 5
-        precision_mode = paddle_infer.PrecisionType.Float32
-        Multithreading TensorRT predictor
-        Args:
-            input_data_dict(dict): input data constructed as dictionary
-            output_data_dict(dict): output data constructed as dictionary
-            repeat(int): inference repeat time
-            thread_num(int): number of threads
-            delta(float): difference threshold between inference outputs and thruth value
-            names(list): input names
-            min_input_shape(list): TensorRT min input shape
-            max_input_shape(list): TensorRT max input shape
-            opt_input_shape(list): TensorRT best input shape
-        Returns:
-            None
-        """
-        self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=1,
-            min_subgraph_size=3,
-            precision_mode=paddle_infer.PrecisionType.Float32,
-            use_static=False,
-            use_calib_mode=False,
-        )
-        self.pd_config.set_trt_dynamic_shape_info(
-            {names[i]: min_input_shape[i] for i in range(len(names))},
-            {names[i]: max_input_shape[i] for i in range(len(names))},
-            {names[i]: opt_input_shape[i] for i in range(len(names))},
-        )
-        predictors = paddle_infer.PredictorPool(self.pd_config, thread_num)
-        for i in range(thread_num):
-            record_thread = threading.Thread(
-                target=self.run_multi_thread_test_predictor,
-                args=(predictors.retrive(i), input_data_dict, output_data_dict, repeat, delta),
-            )
-
             record_thread.start()
             record_thread.join()
 
@@ -795,25 +642,6 @@ class InferenceTest(object):
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
 
-def record_by_pid(pid: int, cuda_visible_device: int):
-    """
-    record_by_pid
-    Args:
-        pid(int): pid of the process
-        cuda_visible_device(int): first gpu card of CUDA_VISIBLE_DEVICES
-    Returns:
-        gpu_max_mem(float): recorded max gpu mem
-    """
-    global _gpu_mem_lists
-
-    while psutil.pid_exists(pid):
-        gpu_mem = get_gpu_mem(cuda_visible_device)
-        _gpu_mem_lists.append(gpu_mem)
-
-    gpu_max_mem = max([float(i["used(MB)"]) for i in _gpu_mem_lists])
-    return gpu_max_mem
-
-
 def get_gpu_mem(gpu_id=0):
     """
     get gpu mem from gpu id
@@ -836,138 +664,20 @@ def get_gpu_mem(gpu_id=0):
     return gpu_mem
 
 
-def read_images_path(images_path, images_size, center=True, model_type="class"):
+def record_by_pid(pid: int, cuda_visible_device: int):
     """
-    read images
+    record_by_pid
     Args:
-        images_path(str): images input path
+        pid(int): pid of the process
+        cuda_visible_device(int): first gpu card of CUDA_VISIBLE_DEVICES
     Returns:
-        img_array(numpy): numpy array
+        gpu_max_mem(float): recorded max gpu mem
     """
-    image_names = sorted(os.listdir(images_path))
-    images_list = []
-    images_origin_list = []
-    for name in image_names:
-        image_path = os.path.join(images_path, name)
-        im = cv2.imread(image_path)
-        images_origin_list.append(im)
-        images_list.append(preprocess(im, images_size, center, model_type))
-    if model_type == "class":
-        return images_list
-    elif model_type == "det":
-        return images_list, images_origin_list
+    global _gpu_mem_lists
 
+    while psutil.pid_exists(pid):
+        gpu_mem = get_gpu_mem(cuda_visible_device)
+        _gpu_mem_lists.append(gpu_mem)
 
-def read_npy_path(npys_path):
-    """
-    read numpy result
-    Args:
-        npys_path(str): numpy result path
-    Returns:
-        result_array(numpy): numpy array
-    """
-    npy_names = sorted(os.listdir(npys_path))
-    npy_list = []
-    for name in npy_names:
-        npy_path = os.path.join(npys_path, name)
-        npy_list.append(np.load(npy_path))
-    return npy_list
-
-
-def resize_short(img, target_size, model_type="class"):
-    """
-    resize to target size
-    Args:
-        img(numpy): img input
-        target_size(int): img size
-        model_type(str): model type
-    Returns:
-        resized(numpy): resize img
-    """
-    if model_type == "class":
-        percent = float(target_size) / min(img.shape[0], img.shape[1])
-        resized_width = int(round(img.shape[1] * percent))
-        resized_height = int(round(img.shape[0] * percent))
-        resized = cv2.resize(img, (resized_width, resized_height))
-        return resized
-    elif model_type == "det":
-        im_shape = img.shape
-        im_size_min = np.min(im_shape[0:2])
-        im_size_max = np.max(im_shape[0:2])
-        im_scale_x = float(target_size) / float(im_shape[1])
-        im_scale_y = float(target_size) / float(im_shape[0])
-        resized = cv2.resize(img, None, None, fx=im_scale_x, fy=im_scale_y)
-        return resized
-
-
-def crop_image(img, target_size, center):
-    """
-    crop image
-    Args:
-        img(numpy): img input
-        target_size(int): img size
-        center(bool): Keep central area or not
-    Returns:
-        img(numpy): crop image
-    """
-    height, width = img.shape[:2]
-    size = target_size
-    if center:
-        w_start = (width - size) / 2
-        h_start = (height - size) / 2
-    else:
-        w_start = np.random.randint(0, width - size + 1)
-        h_start = np.random.randint(0, height - size + 1)
-    w_end = w_start + size
-    h_end = h_start + size
-    img = img[int(h_start) : int(h_end), int(w_start) : int(w_end), :]
-    return img
-
-
-def preprocess(img, img_size, center=True, model_type="class"):
-    """
-    preprocess img
-    Args:
-        img_size: img size
-    Returns:
-        img: img add one axis
-    """
-    mean = [0.485, 0.456, 0.406]
-    std = [0.229, 0.224, 0.225]
-    img = resize_short(img, img_size, model_type)
-    img = crop_image(img, img_size, center)
-    # bgr-> rgb && hwc->chw
-    img = img[:, :, ::-1].astype("float32").transpose((2, 0, 1)) / 255
-    img_mean = np.array(mean).reshape((3, 1, 1))
-    img_std = np.array(std).reshape((3, 1, 1))
-    img -= img_mean
-    img /= img_std
-    return img[np.newaxis, :][0]
-
-
-def sig_fig_compare(num0, num1, delta=5):
-    """
-    compare significant figure
-    Args:
-        num0(float): input num 0
-        num1(float): input num 1
-    Returns:
-        diff(float): return diff
-    """
-    difference = num0 - num1
-    num0_int_length = len(str(int(num0)))
-    num1_int_length = len(str(int(num1)))
-    num0_int = int(num0)
-    num1_int = int(num1)
-    if num0 < 1 and num1 < 1 and difference < 1:
-        return difference
-    elif num0_int_length == num1_int_length:
-        if num0_int_length >= 5:
-            return abs(num0_int - num1_int)
-        else:
-            scale = 5 - num1_int_length
-            num0_padding = num0 * scale
-            num1_padding = num1 * scale
-            return abs(num0_padding - num1_padding) / (10 * scale)
-    elif num0_int_length != num1_int_length:
-        return difference
+    gpu_max_mem = max([float(i["used(MB)"]) for i in _gpu_mem_lists])
+    return gpu_max_mem

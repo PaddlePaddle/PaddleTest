@@ -24,7 +24,6 @@ case $1 in
   ;;
 esac
 python -c 'import sys; print(sys.version_info[:])'
-python -c 'from visualdl import LogWriter'
 echo "python="$1
 ####################################
 # for paddle env
@@ -38,6 +37,7 @@ cd /ssd1
 mkdir paddlenlp
 cd /workspace
 export PPNLP_HOME=/ssd1/paddlenlp
+export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
 ln -s /home/data/cfs/models_ce/PaddleNLP/*  /ssd1/paddlenlp/
 ####################################
 # for paddlenlp env
@@ -59,6 +59,7 @@ $3
 python -m pip install -r requirements_ci.txt
 python -m init_file.py
 python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -c 'from visualdl import LogWriter'
 pip list
 set +x
 ####################################

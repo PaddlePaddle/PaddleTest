@@ -1,0 +1,222 @@
+MODEL: "chinese_text_detection_db_server" # 模型名称
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleHub
+  path: $ROOT_PATH/PaddleHub
+  branch: $CV_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/ocr3/ #脚本的路径
+  model_log_path: log/chinese_text_detection_db_server
+
+EXEC:
+  exec_cases: [INSTALL, FINETUNE, PREDICT, UNINSTALL]
+  exec_priority: [p0, p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+INSTALL:
+  -
+    priority: p0
+    tag: install_module
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash cv_install.sh chinese_text_detection_db_server $HUB_CONFIG
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_chinese_text_detection_db_server_install.log
+
+#FINETUNE:
+#  -
+#    priority: p0
+#    tag: linux_mini-finetune_mini-epoch_gpu1
+#    env: #去掉，自动调度
+#      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+#
+#    # task, train_data, use_gpu, batch_size, num_epoch, dataset,
+#    # optimizer, learning_rate, max_seq_len, save_interval, checkpoint_dir
+#    run:
+#      -
+#        path: $ROOT_PATH/$model_scripts_path
+#        cmd: bash cv_finetune.sh text-matching dev True 16 1 LCQMC Adam 1e-5 128 1 save
+#
+#    kpis:
+#      exit_code:
+#        latest: True
+#        kpi_base: 0
+#        threshold: 0
+#        actived: True
+#        evaluation: "-"
+#        unit_repr: None
+#    output: $ROOT_PATH/$model_log_path/EXIT_chinese_text_detection_db_server_finetune_text-matching_dev_True_16_1_LCQMC_Adam_1e-5_128_1_save.log
+#
+#  -
+#    priority: p0
+#    tag: win_mini-finetune_mini-epoch_gpu1
+#    env: #去掉，自动调度
+#      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+#
+#    # task, train_data, use_gpu, batch_size, num_epoch, dataset,
+#    # optimizer, learning_rate, max_seq_len, save_interval, checkpoint_dir
+#    run:
+#      -
+#        path: $ROOT_PATH/$model_scripts_path
+#        cmd: bash cv_finetune.sh text-matching dev True 8 1 LCQMC Adam 1e-5 128 1 save
+#
+#    kpis:
+#      exit_code:
+#        latest: True
+#        kpi_base: 0
+#        threshold: 0
+#        actived: True
+#        evaluation: "-"
+#        unit_repr: None
+#    output: $ROOT_PATH/$model_log_path/EXIT_chinese_text_detection_db_server_finetune_text-matching_dev_True_8_1_LCQMC_Adam_1e-5_128_1_save.log
+#
+#  -
+#    priority: p1
+#    tag: linux_finetune_mini-epoch_gpu1
+#    env: #去掉，自动调度
+#      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+#
+#    # task, train_data, use_gpu, batch_size, num_epoch, dataset,
+#    # optimizer, learning_rate, max_seq_len, save_interval, checkpoint_dir
+#    run:
+#      -
+#        path: $ROOT_PATH/$model_scripts_path
+#        cmd: bash cv_finetune.sh text-matching train True 16 LCQMC Adam 1e-5 128 save
+#
+#    kpis:
+#      exit_code:
+#        latest: True
+#        kpi_base: 0
+#        threshold: 0
+#        actived: True
+#        evaluation: "-"
+#        unit_repr: None
+#    output: $ROOT_PATH/$model_log_path/EXIT_chinese_text_detection_db_server_finetune_text-matching_train_True_16_2_LCQMC_Adam_1e-5_128_2_save.log
+
+PREDICT:
+  -
+    priority: p0
+    tag: linux_predict_without_model_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # use_gpu, visualization, batch_size, box_thresh, output_dir, img_path
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash cv_predict.sh chinese_text_detection_db_server True True 0.5 output_dir ./../../img_ocr1
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_chinese_text_detection_db_server_predict_True_True_0.5.log
+
+  -
+    priority: p0
+    tag: win_predict_without_model_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # use_gpu, visualization, batch_size, box_thresh, output_dir, img_path
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash cv_predict.sh chinese_text_detection_db_server True True 0.5 output_dir .\..\..\img_ocr1
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_chinese_text_detection_db_server_predict_True_True_0.5.log
+
+  -
+    priority: p0
+    tag: win_predict_without_model_cpu
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # use_gpu, visualization, batch_size, box_thresh, output_dir, img_path
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash cv_predict.sh chinese_text_detection_db_server False True 0.5 output_dir .\..\..\img_ocr1
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_chinese_text_detection_db_server_predict_False_True_0.5.log
+
+  -
+    priority: p0
+    tag: mac_predict_without_model_cpu
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # use_gpu, visualization, batch_size, box_thresh, output_dir, img_path
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash cv_predict.sh chinese_text_detection_db_server False True 0.5 output_dir ./../../img_ocr1
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_chinese_text_detection_db_server_predict_False_True_0.5.log
+
+#  -
+#    priority: p1
+#    tag: linux_predict_with_model_gpu1
+#    env: #去掉，自动调度
+#      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+#
+#    # use_gpu, visualization, batch_size, box_thresh, output_dir, img_path
+#    run:
+#      -
+#        path: $ROOT_PATH/$model_scripts_path
+#        cmd: bash cv_predict.sh chinese_text_detection_db_server True True 0.5 output_dir ./../../img_ocr1
+#    kpis:
+#      exit_code:
+#        latest: True
+#        kpi_base: 0
+#        threshold: 0
+#        actived: True
+#        evaluation: "-"
+#        unit_repr: None
+#    output: $ROOT_PATH/$model_log_path/EXIT_chinese_text_detection_db_server_predict_True_True_0.5.log
+
+UNINSTALL:
+  -
+    priority: p0
+    tag: uninstall_module
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: hub uninstall chinese_text_detection_db_server

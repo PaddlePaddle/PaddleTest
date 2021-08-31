@@ -83,7 +83,7 @@ def test_trtfp32_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-        test_suite2.trt_fp32_more_bz_test(input_data_dict, output_data_dict)
+        test_suite2.trt_more_bz_test(input_data_dict, output_data_dict, precision="fp32")
 
         del test_suite2  # destroy class to save memory
 
@@ -110,7 +110,7 @@ def test_trtfp32_bz1_multi_thread():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-    test_suite2.trt_fp32_bz1_multi_thread_test(input_data_dict, output_data_dict)
+    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, precision="fp32")
 
     del test_suite2  # destroy class to save memory
 
@@ -138,7 +138,9 @@ def test_trtfp16_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-        test_suite2.trt_fp16_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-3, gpu_mem=3000)
+        test_suite2.trt_more_bz_test(
+            input_data_dict, output_data_dict, repeat=1, delta=1e-3, gpu_mem=3000, precision="fp16"
+        )
 
         del test_suite2  # destroy class to save memory
 
@@ -165,7 +167,7 @@ def test_trtfp16_bz1_multi_thread():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-    test_suite2.trt_fp16_bz1_multi_thread_test(input_data_dict, output_data_dict, gpu_mem=3000)
+    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, gpu_mem=3000, precision="fp16")
 
     del test_suite2  # destroy class to save memory
 
