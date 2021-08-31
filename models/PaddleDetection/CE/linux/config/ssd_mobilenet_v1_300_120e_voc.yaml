@@ -9,7 +9,7 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: ./scripts/yssd_mobilenet_v1_300_120e_voc/ #脚本的路径
+  model_scripts_path: ./scripts/ssd_mobilenet_v1_300_120e_voc/ #脚本的路径
   model_log_path: log/ssd_mobilenet_v1_300_120e_voc
 
 EXEC:
