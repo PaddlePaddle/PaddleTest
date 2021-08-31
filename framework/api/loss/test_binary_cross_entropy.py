@@ -4,26 +4,25 @@
 """
 paddle.nn.functional.binary_cross_entropy
 """
-
 import paddle
+import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
 import reader
 import numpy as np
 
 
+@pytest.mark.loss_binary_cross_entropy_vartype
 def test_binary_cross_entropy_base():
     """
     test binary_cross_entropy base test
     """
-    model = Dygraph()
     datareader = reader.reader
     label = np.array([[[0, 1]]]).astype(np.float64)
     loss = paddle.nn.functional.binary_cross_entropy
-    runner = Runner(datareader, label, model, loss)
+    runner = Runner(datareader, loss)
     runner.softmax = True
-    runner.add_kwargs_to_dict("params_group1", weight=None, reduction="mean", name=None)
-    runner.run()
+    runner.add_kwargs_to_dict("params_group1", label=label, weight=None, reduction="mean", name=None)
     expect = [
         0.6931471805599453,
         0.6911983087323113,
@@ -36,4 +35,4 @@ def test_binary_cross_entropy_base():
         0.6777672411546121,
         0.6758783111270596,
     ]
-    runner.check(expect)
+    runner.run(model=Dygraph, expect=expect)

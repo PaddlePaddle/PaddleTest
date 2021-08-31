@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-paddle.nn.MSELoss
+paddle.nn.functional.mse_loss
 """
 import paddle
 import pytest
@@ -11,18 +11,17 @@ from base_dygraph_model import Dygraph
 import numpy as np
 
 
-@pytest.mark.loss_nn_MSELoss_vartype
+@pytest.mark.loss_mse_loss_vartype
 def test_nn_mse_loss_base():
     """
-    test nn.MSELoss base test
+    test nn.functional.mse_loss base test
     """
     datareader = np.random.random(size=[5, 10])
     label = np.random.randint(0, 1, size=[5, 2]).astype(np.float64)
-    loss = paddle.nn.MSELoss
+    loss = paddle.nn.functional.mse_loss
     runner = Runner(datareader, loss)
     runner.softmax = False
-    runner.add_kwargs_to_dict("params_group1", reduction="mean")
-    runner.add_kwargs_to_dict("params_group2", label=label)
+    runner.add_kwargs_to_dict("params_group1", label=label, reduction="mean", name=None)
     expect = [
         7.019458764884789,
         6.973347883852658,

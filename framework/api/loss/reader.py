@@ -4,7 +4,6 @@
 """
 reader
 """
-
 import numpy as np
 
 reader = np.random.random(size=[1, 1, 10])
