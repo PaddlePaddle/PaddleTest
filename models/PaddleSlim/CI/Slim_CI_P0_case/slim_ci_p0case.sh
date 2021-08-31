@@ -781,7 +781,7 @@ python -m paddle.distributed.launch \
 --lr 0.05 \
 --pruning_mode threshold \
 --threshold 0.01 \
---batch_size 256 \
+--batch_size 128 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
 --num_epochs 1 --model_period 1 \
