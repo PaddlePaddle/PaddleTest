@@ -935,6 +935,7 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     elif [[ ${dir1} =~ "paddleslim" ]];then # 如果修改了paddleslim,则回归全量P0
         echo "update dir:paddleslim"
         P0case_list=(distillation quant prune nas unstructured_prune darts ce_tests_demo)
+        echo ${P0case_list[*]}
         P0case_time=${all_P0case_time}
     elif [[ ${dir1} =~ "demo" ]];then # 注意：如果修改不是现有P0case目录中的脚本，也不是demo/*.py脚本，则不触发P0case，因为该PR变更CI无case可覆盖
          if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then   # 如果修改了demo/P0case ,则回归相应的P0case;
