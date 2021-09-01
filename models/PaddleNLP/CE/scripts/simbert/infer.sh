@@ -37,7 +37,7 @@ fi
 #访问RD程序
 cd $code_path
 
-python predict.py --input_file ./datasets/lcqmc/dev.tsv  --device $1 > ${log_path}/infer_$2_$1.log 2>&1
+python predict.py --input_file ./dev.tsv  --device $1 > ${log_path}/infer_$2_$1.log 2>&1
 print_info $?  infer_$2_$1
 
 export http_proxy=$HTTPPROXY
