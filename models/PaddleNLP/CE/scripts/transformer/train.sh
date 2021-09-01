@@ -37,6 +37,13 @@ if [[ $4 != 'con' ]];then
 
 fi
 
+if [[ $4 == 'con' ]];then
+    # 收敛任务,修改yaml中的参数
+    sed -i "s/epoch: 30/epoch: 3/g" configs/transformer.base.yaml
+    sed -i "s/max_iter: None/max_iter: 70000/g" configs/transformer.base.yaml
+
+fi
+
 #判断CPU还是GPU
 if [ $2 == "cpu" ];then
     sed -i "s/use_gpu: True/use_gpu: False/g" configs/transformer.base.yaml
