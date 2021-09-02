@@ -23,5 +23,6 @@ def test_npair_loss_base():
     runner = Runner(datareader, loss)
     runner.softmax = False
     runner.add_kwargs_to_dict("params_group1", positive=positive, labels=label, l2_reg=0.002)
+    runner.add_kwargs_to_dict("params_group3", dtype=np.float32, out_features=6)
     expect = [4.1371465, 4.1366587, 4.136171, 4.135683, 4.1351953, 4.134708, 4.1342216, 4.1337347, 4.1332483, 4.1327624]
-    runner.run(model=Dygraph, expect=expect, dtype=np.float32, out_features=6)
+    runner.run(model=Dygraph, expect=expect)

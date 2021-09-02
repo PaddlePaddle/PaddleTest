@@ -22,6 +22,7 @@ def test_kl_div_base():
     runner = Runner(datareader, loss)
     runner.softmax = False
     runner.add_kwargs_to_dict("params_group1", label=label, reduction="mean", name=None)
+    runner.add_kwargs_to_dict("params_group3", dtype=np.float32)
     expect = [
         -1.3249776,
         -1.3252525,
@@ -34,4 +35,4 @@ def test_kl_div_base():
         -1.3271772,
         -1.3274521,
     ]
-    runner.run(model=Dygraph, expect=expect, dtype=np.float32)
+    runner.run(model=Dygraph, expect=expect)

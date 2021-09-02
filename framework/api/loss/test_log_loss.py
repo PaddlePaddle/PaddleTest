@@ -23,5 +23,6 @@ def test_log_loss_base():
     runner.static = False
     runner.softmax = True
     runner.add_kwargs_to_dict("params_group1", label=label, epsilon=0.0001, name=None)
+    runner.add_kwargs_to_dict("params_group3", dtype=np.float32, in_features=10, out_features=1)
     expect = [5.630299, 5.630299, 5.630299, 5.630299, 5.630299, 5.630299, 5.630299, 5.630299, 5.630299, 5.630299]
-    runner.run(model=Dygraph, expect=expect, dtype=np.float32, in_features=10, out_features=1)
+    runner.run(model=Dygraph, expect=expect)
