@@ -28,6 +28,7 @@ class Runner(object):
         self.softmax = False
         self.dygraph = True
         self.static = True
+        # self.case_name = '_base'
         self.np_type = None
         types = {0: "func", 1: "class"}
         # 设置函数执行方式，函数式还是声明式.
@@ -36,7 +37,7 @@ class Runner(object):
         else:
             self.__layertype = types[1]
         # 传参工具
-        self.kwargs_dict = {"params_group1": {}, "params_group2": {}}
+        self.kwargs_dict = {"params_group1": {}, "params_group2": {}, "params_group3": {}}
 
     def add_kwargs_to_dict(self, group_name, **kwargs):
         """
@@ -44,7 +45,7 @@ class Runner(object):
         """
         self.kwargs_dict[group_name] = kwargs
 
-    def run(self, model=None, expect=None, dtype=np.float64, in_features=10, out_features=2):
+    def run(self, model=None, expect=None):
         """run your models"""
         if self.__layertype == "func":
             # test dygraph
@@ -54,7 +55,7 @@ class Runner(object):
                 self.reader_dygraph = copy.deepcopy(self.reader)
                 self.reader_dygraph = paddle.to_tensor(self.reader_dygraph)
                 self.kwargs_dict_dygraph = copy.deepcopy(self.kwargs_dict)
-                self.model_dygraph = model(dtype=dtype, in_features=in_features, out_features=out_features)
+                self.model_dygraph = model(**self.kwargs_dict_dygraph["params_group3"])
                 self.optimizer_dygraph = paddle.optimizer.SGD(
                     self.learning_rate, parameters=self.model_dygraph.parameters()
                 )
@@ -84,7 +85,7 @@ class Runner(object):
                 self.result = []
                 self.reader_data = copy.deepcopy(self.reader)
                 self.kwargs_dict_static = copy.deepcopy(self.kwargs_dict)
-                self.model_static = model(dtype=dtype, in_features=in_features, out_features=out_features)
+                self.model_static = model(**self.kwargs_dict_dygraph["params_group3"])
                 self.optimizer_static = paddle.optimizer.SGD(
                     self.learning_rate, parameters=self.model_static.parameters()
                 )
@@ -117,15 +118,7 @@ class Runner(object):
                         exe = paddle.static.Executor()
                         exe.run(startup_program)
                         for i in range(10):
-                            res = exe.run(
-                                main_program,
-                                feed=feed_dict,
-                                # feed={"reader_static": self.reader_data,
-                                #       "other": self.kwargs_dict["params_group1"]["other"],
-                                #       "label": self.kwargs_dict["params_group1"]["label"]},
-                                fetch_list=[loss],
-                                return_numpy=True,
-                            )
+                            res = exe.run(main_program, feed=feed_dict, fetch_list=[loss], return_numpy=True)
                             # logging.info('at {}, res is: {}'.format(i, res))
                             if self.debug:
                                 print(res[0])
@@ -141,7 +134,7 @@ class Runner(object):
                 self.reader_dygraph = copy.deepcopy(self.reader)
                 self.reader_dygraph = paddle.to_tensor(self.reader_dygraph)
                 self.kwargs_dict_dygraph = copy.deepcopy(self.kwargs_dict)
-                self.model_dygraph = model(dtype=dtype, in_features=in_features, out_features=out_features)
+                self.model_dygraph = model(**self.kwargs_dict_dygraph["params_group3"])
                 self.optimizer_dygraph = paddle.optimizer.SGD(
                     self.learning_rate, parameters=self.model_dygraph.parameters()
                 )
@@ -159,11 +152,12 @@ class Runner(object):
                             self.kwargs_dict_dygraph["params_group2"][k] = paddle.to_tensor(v)
                 for i in range(10):
                     out = self.model_dygraph(self.reader_dygraph)
+                    # logging.info('at {}, model out.shape is: {}'.format(i, out.shape))
                     if self.softmax is True:
                         out = paddle.nn.functional.softmax(out)
-                    # loss = self.loss(out, **self.kwargs_dict_dygraph["params_group1"])
                     obj = self.loss(**self.kwargs_dict_dygraph["params_group1"])
                     loss = obj(out, **self.kwargs_dict_dygraph["params_group2"])
+                    # logging.info('at {}, loss.shape is: {}'.format(i, loss.shape))
                     loss.backward()
                     self.optimizer_dygraph.step()
                     self.optimizer_dygraph.clear_grad()
@@ -179,7 +173,7 @@ class Runner(object):
                 self.result = []
                 self.reader_data = copy.deepcopy(self.reader)
                 self.kwargs_dict_static = copy.deepcopy(self.kwargs_dict)
-                self.model_static = model(dtype=dtype, in_features=in_features, out_features=out_features)
+                self.model_static = model(**self.kwargs_dict_dygraph["params_group3"])
                 self.optimizer_static = paddle.optimizer.SGD(
                     self.learning_rate, parameters=self.model_static.parameters()
                 )
@@ -191,6 +185,15 @@ class Runner(object):
                             name="reader_static", shape=self.reader_data.shape, dtype=self.reader_data.dtype
                         )
                         feed_dict = {"reader_static": self.reader_data}
+                        for k, v in self.kwargs_dict_static["params_group1"].items():
+                            if isinstance(v, (np.generic, np.ndarray)):
+                                if self.np_type is not None and k in self.np_type:
+                                    self.kwargs_dict_static["params_group1"][k] = v
+                                else:
+                                    self.kwargs_dict_static["params_group1"][k] = paddle.static.data(
+                                        name=k, shape=v.shape, dtype=v.dtype
+                                    )
+                                    feed_dict[k] = v
                         for k, v in self.kwargs_dict_static["params_group2"].items():
                             if isinstance(v, (np.generic, np.ndarray)):
                                 if self.np_type is not None and k in self.np_type:
