@@ -53,8 +53,8 @@ echo $model
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 #看情况加判断针对占大显存，MV3设置batch_size与epoch
 case ${model} in
-ViT_large_patch16_384|ResNeXt101_32x48d_wsl|ViT_huge_patch16_224)
-python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=1 -o Global.output_dir=output -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1 
+ViT_large_patch16_384|ResNeXt101_32x48d_wsl|ViT_huge_patch16_224|RedNet152)
+python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=4 -o Global.output_dir=output -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1 
 params_dir=$(ls output)
 echo "params_dir"
 echo $params_dir

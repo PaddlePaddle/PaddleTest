@@ -68,7 +68,7 @@ fi
 done
 
 find configs/det -name *.yml -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
-find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_chinese_lite_train_distillation_v2.1' | grep -v 'rec_mtb_nrtr' > models_list_rec
+find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_mtb_nrtr' > models_list_rec
 
 shuf models_list_det_db > models_list
 shuf models_list_rec >> models_list
@@ -161,8 +161,11 @@ fi
 
 # predict
 if [ ${category} == "rec" ];then
+echo "rec"
 if [[ $(echo $model | grep -c "chinese") -eq 0 ]];then
+echo "none chinese"
 if [ ${algorithm} == "SRN" ];then
+echo "SRN"
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="1, 64,256" --rec_char_type="en" --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
@@ -172,6 +175,7 @@ else
 fi
 
 else
+echo "none SRN"
 if [[ $(echo $model | grep -c "lite") -eq 0 ]];then
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
@@ -182,7 +186,7 @@ else
 fi
 
 else
-
+echo "multi_language"
 # multi_language
 language=`echo $model |awk -F '_' '{print $2}'`
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  --rec_char_type=$language --rec_char_dict_path="ppocr/utils/dict/"$language"_dict.txt" > $log_path/predict/${model}.log 2>&1
@@ -196,6 +200,8 @@ fi
 fi
 
 else
+echo "chinese"
+
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    cat $log_path/predict/${model}.log
@@ -204,9 +210,11 @@ else
    cat $log_path/predict/${model}.log
    echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
+
 fi
 
 else
+echo "det"
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"${model} --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    cat $log_path/predict/${model}.log
