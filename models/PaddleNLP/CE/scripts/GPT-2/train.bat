@@ -1,9 +1,9 @@
 @echo off
 cd ../..
 
-if not exist log\gpt md log\gpt
+if not exist log\GPT-2\ md log\GPT-2\
 
-set logpath=%cd%\log\gpt
+set logpath=%cd%\log\GPT-2
 
 cd models_repo\examples\language_model\gpt\
 
