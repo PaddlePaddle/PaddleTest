@@ -7,7 +7,7 @@ set logpath=%cd%\log\transformer-xl
 
 cd models_repo\examples\language_model\transformer-xl\
 
-xcopy /y /c /h /r D:\ce_data\paddleNLP\transformer-xl\*  .\
+xcopy /e /y /c /h /r D:\ce_data\paddleNLP\transformer-xl\*  .\
 
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 %sed% -i 's/print_step: 100/print_step: 1/g' configs/enwik8.yaml
