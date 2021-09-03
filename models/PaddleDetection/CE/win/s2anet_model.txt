@@ -1,5 +1,5 @@
-s2anet_conv_1x_dota 
-s2anet_1x_dota 
-s2anet_1x_spine 
-s2anet_alignconv_2x_dota 
+s2anet_conv_1x_dota
+s2anet_1x_dota
+s2anet_1x_spine
+s2anet_alignconv_2x_dota
 s2anet_conv_2x_dota

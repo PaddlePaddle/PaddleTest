@@ -34,7 +34,7 @@ echo !model!
 cd log
 md !model!
 cd ..
-echo !model! | findstr /i "cityscapes" 
+echo !model! | findstr /i "cityscapes"
 if !errorlevel! GTR 0 (
     set predict_pic="2007_000033.jpg"
     if not exist seg_pretrained\!model!\model.pdparams (

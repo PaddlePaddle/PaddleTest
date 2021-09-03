@@ -91,7 +91,7 @@ if !errorlevel! EQU 0 (
     call:infer
     call:export
     call:python_infer
-) 
+)
 echo !model! | findstr /i "vehicle"
 if !errorlevel! EQU 0 (
     xcopy %absolute_path%\configs\vehicle\demo\003.png %absolute_path%\demo
@@ -111,7 +111,7 @@ if !errorlevel! EQU 0 (
     call:infer
     call:export
     call:python_infer
-echo end 
+echo end
 )
 )
 )
@@ -200,10 +200,10 @@ python deploy/python/!python_infer_method!.py --model_dir=./inference_model/!mod
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
-echo !model!, python_infer, FAIL 
+echo !model!, python_infer, FAIL
 ) else (
 echo !model!,python_infer, SUCCESS
-) 
+)
 ) else (
 echo !model! does not run python_infer for some reason!
 )

@@ -131,5 +131,3 @@ echo !model!, python_infer, SUCCESS
 )
 )
 goto:eof
-
-
