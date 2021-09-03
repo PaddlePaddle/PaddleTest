@@ -1,0 +1,3 @@
+sparse_rcnn_r50_fpn_3x_pro100_coco 
+sparse_rcnn_r50_fpn_3x_pro300_coco 
+detr_r50_1x_coco

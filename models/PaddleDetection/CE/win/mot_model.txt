@@ -1,0 +1,8 @@
+configs/mot/fairmot/fairmot_dla34_30e_1088x608.yml
+configs/mot/jde/jde_darknet53_30e_1088x608.yml
+configs/mot/jde/jde_darknet53_30e_576x320.yml
+configs/mot/jde/jde_darknet53_30e_864x480.yml
+fairmot_dla34_30e_1088x608_headtracking21 
+fairmot_dla34_30e_1088x608_kitticars 
+deepsort_pcb_pyramid_r101 
+deepsort_yolov3_pcb_pyramid_r101 
