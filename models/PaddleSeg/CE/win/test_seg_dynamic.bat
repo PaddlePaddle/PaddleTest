@@ -4,7 +4,6 @@ set CUDA_VISIBLE_DEVICES=0
 
 rem create log dir
 if exist log (
-rem del /f /s /q log/*.*
 rd /s /q log
 rd /s /q log_err
 md log

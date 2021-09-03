@@ -1,13 +1,11 @@
 #!/bin/bash
 
 
-# python -m pip install pip==20.2.4
 python -m pip install --upgrade pip
 echo -e '*****************paddle_version*****'
     python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************detection_version****'
     git rev-parse HEAD
-# git diff --numstat --diff-filter=AMR ${branch} | grep legacy | awk '{print $NF}' | tee static_config_list
 err_sign=falsel
 if [ -d "log" ];then rm -rf log
 fi
@@ -36,12 +34,10 @@ print_result(){
 }
 
 
-
 # run dynamic models
 pip install -r requirements.txt
 log_dir=.
 model_type_path=
-#find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | tee dynamic_config_all
 sed -i '' "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
 skip_export_model='gscnn_resnet50_os8_cityscapes_1024x512_80k'
 # dynamic fun

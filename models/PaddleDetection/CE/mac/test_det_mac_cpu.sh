@@ -30,7 +30,6 @@ cd ../..
 sed -i "" "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 # modify dynamic_train_iter
 sed -i '' 's/for step_id, data in enumerate(self.loader):/for step_id, data in enumerate(self.loader):\n                if step_id == 10: break/g' ppdet/engine/trainer.py
-#sed -i '' 's/for step_id, data in enumerate(loader):/for step_id, data in enumerate(loader):\n            if step_id == 10: break/g' ppdet/engine/trainer.py
 sed -i '' 's/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
 sed -i '' 's/for step_id, data in enumerate(dataloader):/for step_id, data in enumerate(dataloader):\n            if step_id == 10: break/g' ppdet/engine/tracker.py
 #modify coco images
@@ -174,7 +173,6 @@ if [[ -n `echo "${model_skip_train_eval}" | grep -w "${model}"` ]];then
 else
     TRAIN_WITH_EVAL
 fi
-#TRAIN_WITH_EVAL
 if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     EVAL_MOT
     INFER_MOT

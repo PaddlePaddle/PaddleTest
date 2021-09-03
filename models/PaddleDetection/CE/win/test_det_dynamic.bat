@@ -21,14 +21,12 @@ rem change the pretrained model dir
 
 rem create log dir
 if exist log (
-rem del /f /s /q log/*.*
 rd /s /q log
 md log
 ) else (
 md log
 )
 if exist log_err (
-rem del /f /s /q log/*.*
 rd /s /q log_err
 md log_err
 ) else (

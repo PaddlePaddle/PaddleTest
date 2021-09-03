@@ -1,18 +1,12 @@
 #!/bin/bash
 unset GREP_OPTIONS
-#rm -rf /usr/local/python2.7.15/bin/python
-#rm -rf /usr/local/python2.7.15/bin/pip
-#ln -s /usr/local/bin/python3.8 /usr/local/python2.7.15/bin/python
-#ln -s /usr/local/bin/pip3.8 /usr/local/python2.7.15/bin/pip
 
 python -m pip install pip==20.2.4
-# python -m pip install --upgrade pip
 echo -e '*****************paddle_version*****'
     python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************detection_version****'
     git rev-parse HEAD
 
-# git diff --numstat --diff-filter=AMR ${branch} | grep legacy | awk '{print $NF}' | tee static_config_list
 err_sign=falsel
 if [ -d "log" ];then rm -rf log
 fi
@@ -49,7 +43,6 @@ print_result(){
         echo -e "${model},${mode},SUCCESS"
     fi
 }
-#
 # run static models
 cd legacy
 pip install -r requirements.txt
@@ -59,7 +52,6 @@ model_type_path=legacy
 # prepare data
 if [ -d "dataset/mini_pet" ];then rm -rf dataset/mini_pet
 fi
-# python dataset/download_pet.py
 ln -s ${data_path}/mini_pet dataset/mini_pet
 if [ -d "pretrain" ];then rm -rf pretrain
 fi

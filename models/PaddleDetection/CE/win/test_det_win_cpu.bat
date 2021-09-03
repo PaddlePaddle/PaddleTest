@@ -8,18 +8,15 @@ set sed="C:\Program Files\Git\usr\bin\sed.exe"
 %sed% -i '/for step_id, data in enumerate(self.loader):/a\                if step_id == max_step_id: break' ppdet/engine/trainer.py
 %sed% -i 's/self.img_ids = self.coco.getImgIds()/self.img_ids = self.coco.getImgIds()[:20]/g' ppdet/data/source/keypoint_coco.py
 %sed% -i '/def _load_coco_keypoint_annotations(self):/i\        self.db = self.db[:20]' ppdet/data/source/keypoint_coco.py
-rem get model name
 
 rem create log dir
 if exist log (
-rem del /f /s /q log/*.*
 rd /s /q log
 md log
 ) else (
 md log
 )
 if exist log_err (
-rem del /f /s /q log/*.*
 rd /s /q log_err
 md log_err
 ) else (

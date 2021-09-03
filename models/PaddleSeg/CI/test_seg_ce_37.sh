@@ -32,12 +32,10 @@ print_result(){
         mv ${log_dir}/log/${model}/${model}_${mode}.log ${log_dir}/log_err/${model}/
         err_sign=true
         cat ${log_dir}/log/${model}/${model}_${mode}.log
-        #exit 1
     else
         echo -e "${model},${mode},SUCCESS"
     fi
 }
-#
 # run static models
 cd legacy
 pip install -r requirements.txt
@@ -47,7 +45,6 @@ model_type_path=legacy
 # prepare data
 if [ -d "dataset/mini_pet" ];then rm -rf dataset/mini_pet
 fi
-# python dataset/download_pet.py
 ln -s ${data_path}/mini_pet dataset/mini_pet
 if [ -d "pretrain" ];then rm -rf pretrain
 fi

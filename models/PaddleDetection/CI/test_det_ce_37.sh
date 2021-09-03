@@ -29,9 +29,6 @@ sed -i 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
 # modify dynamic_train_iter
 sed -i '/for step_id, data in enumerate(self.loader):/i\            max_step_id =1' ppdet/engine/trainer.py
 sed -i '/for step_id, data in enumerate(self.loader):/a\                if step_id == max_step_id: break' ppdet/engine/trainer.py
-#modify eval iter
-#sed -i '/for step_id, data in enumerate(loader):/i\        max_step_id =1' ppdet/engine/trainer.py
-#sed -i '/for step_id, data in enumerate(loader):/a\            if step_id == max_step_id: break' ppdet/engine/trainer.py
 #modify mot_eval iter
 sed -i '/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/i\        max_step_id=1' ppdet/engine/tracker.py
@@ -56,11 +53,7 @@ ln -s ${data_path}/data/DOTA_1024_s2anet dataset/DOTA_1024_s2anet
 if [ -d "/root/.cache/paddle/weights" ];then rm -rf /root/.cache/paddle/weights
 fi
 ln -s ${data_path}/data/ppdet_pretrained /root/.cache/paddle/weights
-#find . | grep .yml | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep picodet | awk '{print $NF}' | tee picodet_list
-#find . | grep .yml | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep keypoint | awk '{print $NF}' | tee keypoint_list
 find . | grep .yml | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep -v picodet | grep -v gfl | awk '{print $NF}' | tee config_list
-#cat keypoint_list >>config_list3
-
 
 print_result(){
     if [ $? -ne 0 ];then

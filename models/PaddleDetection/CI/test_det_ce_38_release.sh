@@ -47,9 +47,6 @@ sed -i 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
 # modify dynamic_train_iter
 sed -i '/for step_id, data in enumerate(self.loader):/i\            max_step_id =1' ppdet/engine/trainer.py
 sed -i '/for step_id, data in enumerate(self.loader):/a\                if step_id == max_step_id: break' ppdet/engine/trainer.py
-#modify eval iter
-#sed -i '/for step_id, data in enumerate(loader):/i\        max_step_id =1' ppdet/engine/trainer.py
-#sed -i '/for step_id, data in enumerate(loader):/a\            if step_id == max_step_id: break' ppdet/engine/trainer.py
 #modify mot_eval iter
 sed -i '/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/i\        max_step_id=1' ppdet/engine/tracker.py
@@ -72,8 +69,6 @@ if [ -d "dataset/DOTA_1024_s2anet" ];then rm -rf dataset/DOTA_1024_s2anet
 fi
 ln -s ${data_path}/DOTA_1024_s2anet dataset/DOTA_1024_s2anet
 find . | grep .yml | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep  -v minicoco | grep -v deepsort | grep -v picodet | grep -v gfl | awk '{print $NF}' | tee config_list
-#find . | grep .yml | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep  -v minicoco | awk '{print $NF}' | tee config_list
-
 
 print_result(){
     if [ $? -ne 0 ];then
