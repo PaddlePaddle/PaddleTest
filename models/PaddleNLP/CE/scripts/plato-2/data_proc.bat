@@ -1,7 +1,4 @@
 @echo off
 cd ../..
 
-cd models_repo\examples\dialogue\plato-2\
-
-python -m wget https://paddlenlp.bj.bcebos.com/models/transformers/plato2/data.tar.gz
-tar -zxf data.tar.gz
+xcopy /e /y /c /h /r D:\ce_data\paddleNLP\plato-2\*  .\models_repo\examples\dialogue\plato-2\
