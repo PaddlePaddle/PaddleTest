@@ -59,6 +59,7 @@ def test_disable_gpu():
     input_data_dict = {"x": fake_input}
     test_suite.disable_gpu_test(input_data_dict)
 
+
 @pytest.mark.p1
 @pytest.mark.mkldnn_bz1_precision
 def test_mkldnn():
@@ -84,6 +85,7 @@ def test_mkldnn():
     test_suite2.mkldnn_test(input_data_dict, output_data_dict)
 
     del test_suite2  # destroy class to save memory
+
 
 @pytest.mark.p1
 @pytest.mark.gpu_more_bz_precision

@@ -82,7 +82,7 @@ def test_trtfp32_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-        test_suite2.trt_more_bz_test(input_data_dict, output_data_dict, max_batch_size=batch_size,precision="trt_fp32")
+        test_suite2.trt_more_bz_test(input_data_dict, output_data_dict, max_batch_size=batch_size, precision="trt_fp32")
 
         del test_suite2  # destroy class to save memory
 
