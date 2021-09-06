@@ -62,7 +62,6 @@ def test_disable_gpu():
 
 
 @pytest.mark.p1
-@pytest.mark.jetson
 @pytest.mark.mkldnn_bz1_precision
 def test_mkldnn():
     """
