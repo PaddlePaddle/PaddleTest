@@ -71,7 +71,7 @@ def test_trt_fp32_more_bz():
 
     file_path = "./pcpvt_base"
     images_size = 224
-    batch_size_pool = [1, 5]
+    batch_size_pool = [1, 5, 10]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -90,6 +90,40 @@ def test_trt_fp32_more_bz():
         )
         test_suite2.trt_more_bz_test(
             input_data_dict, output_data_dict, max_batch_size=10, precision="trt_fp32", delta=1e-2
+        )
+
+        del test_suite2  # destroy class to save memory
+
+@pytest.mark.p1
+@pytest.mark.jetson
+@pytest.mark.trt_fp32_more_bz_precision
+def test_jetson_trt_fp32_more_bz():
+    """
+    compared trt fp32 batch_size=1-10 pcpvt_base outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./pcpvt_base"
+    images_size = 224
+    batch_size_pool = [1, 5]
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        test_suite.load_config(
+            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+        )
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        input_data_dict = {"x": fake_input}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+        del test_suite  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(
+            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+        )
+        test_suite2.trt_more_bz_test(
+            input_data_dict, output_data_dict, max_batch_size=10, precision="trt_fp32", delta=5e-2
         )
 
         del test_suite2  # destroy class to save memory
