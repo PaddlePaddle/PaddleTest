@@ -161,7 +161,7 @@ def test_trt_fp32_bz1_dynamic_multi_thread():
         min_input_shape=min_input_shape,
         max_input_shape=max_input_shape,
         opt_input_shape=opt_input_shape,
-        precision="trt_fp32"
+        precision="trt_fp32",
     )
 
     del test_suite2  # destroy class to save memory
@@ -265,7 +265,7 @@ def test_trtfp32_more_bz_dynamic_bz():
             min_input_shape=min_input_shape,
             max_input_shape=max_input_shape,
             opt_input_shape=opt_input_shape,
-            precision="trt_fp32"
+            precision="trt_fp32",
         )
 
         del test_suite2  # destroy class to save memory

@@ -63,6 +63,7 @@ def test_disable_gpu():
     input_data_dict = {"x": fake_input}
     test_suite.disable_gpu_test(input_data_dict)
 
+
 @pytest.mark.p1
 @pytest.mark.trt_fp16_more_bz_precision
 def test_trt_fp16_more_bz():
@@ -160,10 +161,11 @@ def test_trt_fp16_more_bz():
             min_input_shape=min_input_shape,
             max_input_shape=max_input_shape,
             opt_input_shape=opt_input_shape,
-            precision="trt_fp16"
+            precision="trt_fp16",
         )
 
         del test_suite2  # destroy class to save memory
+
 
 @pytest.mark.p1
 @pytest.mark.jetson
@@ -263,7 +265,7 @@ def test_trt_fp16_more_bz():
             min_input_shape=min_input_shape,
             max_input_shape=max_input_shape,
             opt_input_shape=opt_input_shape,
-            precision="trt_fp16"
+            precision="trt_fp16",
         )
 
         del test_suite2  # destroy class to save memory
@@ -366,5 +368,5 @@ def test_trtfp16_bz1_multi_thread():
         min_input_shape=min_input_shape,
         max_input_shape=max_input_shape,
         opt_input_shape=opt_input_shape,
-        precision="trt_fp16"
+        precision="trt_fp16",
     )

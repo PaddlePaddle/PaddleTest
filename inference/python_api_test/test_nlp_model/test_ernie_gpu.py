@@ -59,6 +59,7 @@ def test_disable_gpu():
     input_data_dict = {"input_ids": fake_input0, "token_type_ids": fake_input1}
     test_suite.disable_gpu_test(input_data_dict)
 
+
 @pytest.mark.p1
 @pytest.mark.jetson
 @pytest.mark.gpu_bz1_precision
