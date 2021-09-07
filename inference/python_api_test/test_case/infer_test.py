@@ -413,7 +413,7 @@ class InferenceTest(object):
         max_input_shape=None,
         opt_input_shape=None,
         min_subgraph_size=3,
-        precision="fp32",
+        precision="trt_fp32",
         use_static=False,
         use_calib_mode=False,
     ):
@@ -553,7 +553,7 @@ class InferenceTest(object):
         max_input_shape=None,
         opt_input_shape=None,
         min_subgraph_size=3,
-        precision="fp32",
+        precision="trt_fp32",
         use_static=False,
         use_calib_mode=False,
     ):

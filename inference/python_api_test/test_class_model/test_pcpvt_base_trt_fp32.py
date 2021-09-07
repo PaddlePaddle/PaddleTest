@@ -61,7 +61,6 @@ def test_disable_gpu():
 
 
 @pytest.mark.p1
-@pytest.mark.jetson
 @pytest.mark.trt_fp32_more_bz_precision
 def test_trt_fp32_more_bz():
     """

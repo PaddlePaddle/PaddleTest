@@ -10,7 +10,7 @@ do
     if [[ ${ignore} =~ ${file##*/} ]]; then
         echo "跳过"
     else
-        python -m pytest -m mark jetson --disable-warnings -v ${file}
+        python -m pytest -m jetson --disable-warnings -v ${file}
         if [ $? -ne 0 ]; then
             echo ${file} >> result.txt
             bug=`expr ${bug} + 1`
