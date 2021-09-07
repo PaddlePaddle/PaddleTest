@@ -178,8 +178,8 @@ def test_trtfp32_more_bz_dynamic_bz():
 
     file_path = "./ocr_det_mv3_db"
     images_size = 640
-    batch_size_pool = [1, 5,10]
-    max_batch_size = 2
+    batch_size_pool = [1, 5]
+    max_batch_size = 5
     names = [
         "x",
         "conv2d_92.tmp_0",
@@ -265,7 +265,8 @@ def test_trtfp32_more_bz_dynamic_bz():
             min_input_shape=min_input_shape,
             max_input_shape=max_input_shape,
             opt_input_shape=opt_input_shape,
-            precision="trt_fp32"
+            precision="trt_fp32",
+            max_batch_size=max_batch_size
         )
 
         del test_suite2  # destroy class to save memory

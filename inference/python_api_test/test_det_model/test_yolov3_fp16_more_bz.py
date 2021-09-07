@@ -150,7 +150,6 @@ def test_trt_fp16_more_bz():
         del test_suite  # destroy class to save memory
 
 @pytest.mark.p1
-@pytest.mark.jetson
 @pytest.mark.trt_fp16_more_bz_precision
 def test_jetson_trt_fp16_more_bz():
     """
