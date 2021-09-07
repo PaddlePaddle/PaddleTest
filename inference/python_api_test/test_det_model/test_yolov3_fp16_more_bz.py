@@ -160,7 +160,7 @@ def test_jetson_trt_fp16_more_bz():
 
     file_path = "./yolov3"
     images_size = 608
-    batch_size_pool = [1, 5, 10]
+    batch_size_pool = [1, 5]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
