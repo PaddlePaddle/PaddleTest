@@ -265,8 +265,7 @@ def test_trtfp32_more_bz_dynamic_bz():
             min_input_shape=min_input_shape,
             max_input_shape=max_input_shape,
             opt_input_shape=opt_input_shape,
-            precision="trt_fp32",
-            max_batch_size=max_batch_size
+            precision="trt_fp32"
         )
 
         del test_suite2  # destroy class to save memory
