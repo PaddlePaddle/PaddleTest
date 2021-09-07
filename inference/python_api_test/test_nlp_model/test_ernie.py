@@ -86,3 +86,30 @@ def test_mkldnn():
     test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5)
 
     del test_suite2  # destroy class to save memory
+
+@pytest.mark.p1
+@pytest.mark.gpu_bz1_precision
+def test_gpu_bz1():
+    """
+    compared gpu ocr_det_mv3_db outputs with true val
+    """
+    check_model_exist()
+
+    test_suite = InferenceTest()
+    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    data_path = "./ernie/data.txt"
+    images_list = test_suite.get_text_npy(data_path)
+
+    input_data_dict = {
+        "input_ids": np.array([images_list[0][0]]).astype("int64"),
+        "token_type_ids": np.array([images_list[0][1]]).astype("int64"),
+    }
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+
+    del test_suite  # destroy class to save memory
+
+    test_suite2 = InferenceTest()
+    test_suite2.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
+
+    del test_suite2  # destroy class to save memory
