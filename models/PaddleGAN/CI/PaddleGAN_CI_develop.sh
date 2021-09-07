@@ -48,7 +48,7 @@ python -m pip install -v -e.
 yum install gcc gcc-c++
 yum install cmake boost
 # python -m pip install dlib -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install data/dlib-19.22.99-cp37-cp37m-linux_x86_64.whl
+python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
 
 
@@ -191,6 +191,7 @@ else
    cat $log_path/infer/fist_order_motion_model.log
    echo -e "\033[31m infer of fist order motion model multi_person failed!\033[0m"| tee -a $log_path/result.log
 fi
+
 # face_parse
 python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
 if [[ $? -eq 0 ]];then
@@ -206,7 +207,8 @@ if [[ $? -eq 0 ]];then
 else
    cat $log_path/infer/psgan.log
    echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
-# fi
+fi
+
 # video restore
 python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > $log_path/infer/video_restore.log 2>&1
 if [[ $? -eq 0 ]];then
