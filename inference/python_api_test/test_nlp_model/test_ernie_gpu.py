@@ -59,12 +59,12 @@ def test_disable_gpu():
     input_data_dict = {"input_ids": fake_input0, "token_type_ids": fake_input1}
     test_suite.disable_gpu_test(input_data_dict)
 
-
 @pytest.mark.p1
-@pytest.mark.mkldnn_bz1_precision
-def test_mkldnn():
+@pytest.mark.jetson
+@pytest.mark.gpu_bz1_precision
+def test_gpu_bz1():
     """
-    compared mkldnn ocr_det_mv3_db outputs with true val
+    compared gpu ocr_det_mv3_db outputs with true val
     """
     check_model_exist()
 
@@ -83,6 +83,6 @@ def test_mkldnn():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
-    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
 
     del test_suite2  # destroy class to save memory
