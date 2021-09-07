@@ -33,6 +33,7 @@ def check_model_exist():
 
 
 @pytest.mark.p0
+@pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
     """
@@ -93,7 +94,9 @@ def test_mkldnn():
 
     del test_suite2  # destroy class to save memory
 
-
+@pytest.mark.p0
+@pytest.mark.jetson
+@pytest.mark.gpu_more_bz_precision
 def test_gpu_more_bz():
     """
     compared trt fp32 batch_size=1,2 ocr_det_mv3_db outputs with true val
