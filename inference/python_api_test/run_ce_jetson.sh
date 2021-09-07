@@ -2,7 +2,7 @@ home=$PWD
 cd test_class_model
 rm -rf ./result.txt
 echo "[Class model inference cases result]" >> result.txt
-bash ./run_ce.sh
+bash ./run_ce_jetson.sh
 bug=$?
 cd ..
 echo "===============Class model result ================="
@@ -17,7 +17,7 @@ fi
 cd test_det_model
 rm -rf ./result.txt
 echo "[Detection model inference cases result]" >> result.txt
-bash ./run_ce.sh
+bash ./run_ce_jetson.sh
 bug=$?
 cd ..
 echo "===============Detection model result ================="
@@ -32,7 +32,7 @@ fi
 cd test_ocr_model
 rm -rf ./result.txt
 echo "[Ocr model inference cases result]" >> result.txt
-bash ./run_ce.sh
+bash ./run_ce_jetson.sh
 bug=$?
 cd ..
 echo "===============Ocr model result ================="
@@ -47,7 +47,7 @@ fi
 cd test_nlp_model
 rm -rf ./result.txt
 echo "[NLP model inference cases result]" >> result.txt
-bash ./run_ce.sh
+bash ./run_ce_jetson.sh
 bug=$?
 cd ..
 echo "===============NLP model result ================="
