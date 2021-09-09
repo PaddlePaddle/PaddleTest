@@ -6,6 +6,7 @@ echo "$model_name 模型数据预处理阶段"
 #配置目标数据存储路径
 root_path=$cur_path/../../
 code_path=$cur_path/../../models_repo/examples/model_compression/distill_lstm/
+data_path=$code_path/SST-2/
 #临时环境更改
 cd $root_path/models_repo && ls
 cd $code_path
@@ -15,3 +16,7 @@ if [ ! -f "senta_word_dict.txt" ]
 then
     wget https://paddlenlp.bj.bcebos.com/data/senta_word_dict.txt
 fi
+
+rm -rf $data_path
+mkdir -p $data_path
+cp -r /workspace/task/datasets/distill_lstm/sst-2/*  ./SST-2/
