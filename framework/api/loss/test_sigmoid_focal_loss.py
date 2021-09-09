@@ -25,5 +25,6 @@ def test_nn_sigmoid_focal_loss_base():
     runner.add_kwargs_to_dict(
         "params_group1", label=label, normalizer=norm, alpha=0.25, gamma=2.0, reduction="sum", name=None
     )
+    runner.add_kwargs_to_dict("params_group3", dtype=np.float32)
     expect = [5.9079647, 5.894992, 5.882022, 5.8690534, 5.8560877, 5.843124, 5.830162, 5.8172035, 5.8042474, 5.791294]
-    runner.run(model=Dygraph, expect=expect, dtype=np.float32)
+    runner.run(model=Dygraph, expect=expect)

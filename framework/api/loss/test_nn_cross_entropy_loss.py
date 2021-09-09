@@ -20,11 +20,13 @@ def test_nn_cross_entropy_loss_base():
     label = np.random.randint(0, 1, size=(5)).astype(np.int64)
     loss = paddle.nn.CrossEntropyLoss
     runner = Runner(datareader, loss)
+    runner.case_name = "_base"
     runner.softmax = False
     runner.add_kwargs_to_dict(
         "params_group1", weight=None, ignore_index=-100, reduction="mean", soft_label=False, axis=-1, name=None
     )
     runner.add_kwargs_to_dict("params_group2", label=label)
+    runner.add_kwargs_to_dict("params_group3", dtype=np.float64, in_features=10, out_features=2)
     expect = [
         0.6931471805599453,
         0.6915090863883171,

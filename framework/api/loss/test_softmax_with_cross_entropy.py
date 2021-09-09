@@ -31,6 +31,7 @@ def test_softmax_with_cross_entropy_base():
         return_softmax=False,
         axis=-1,
     )
+    runner.add_kwargs_to_dict("params_group3", dtype=np.float32)
     expect = [
         0.6931472,
         0.69111603,
@@ -43,4 +44,4 @@ def test_softmax_with_cross_entropy_base():
         0.6773496,
         0.6754453,
     ]
-    runner.run(model=Dygraph, expect=expect, dtype=np.float32)
+    runner.run(model=Dygraph, expect=expect)
