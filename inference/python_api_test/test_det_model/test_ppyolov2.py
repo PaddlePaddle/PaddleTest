@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test yolov3 model
+test ppyolov2 model
 """
 
 import os
@@ -24,16 +24,15 @@ def check_model_exist():
     """
     check model exist
     """
-    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.1/detection/yolov3.tgz"
-    if not os.path.exists("./yolov3/model.pdiparams"):
-        wget.download(yolov3_url, out="./")
-        tar = tarfile.open("yolov3.tgz")
+    ppyolov2_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.0/detection/ppyolov2.tgz"
+    if not os.path.exists("./ppyolov2/model.pdiparams"):
+        wget.download(ppyolov2_url, out="./")
+        tar = tarfile.open("ppyolov2.tgz")
         tar.extractall()
         tar.close()
 
 
 @pytest.mark.p0
-@pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
     """
@@ -41,7 +40,7 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+    test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
     test_suite.config_test()
 
 
@@ -53,11 +52,11 @@ def test_disable_gpu():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+    test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
     batch_size = 1
-    im_size = 608
-    im = np.random.randn(batch_size, 3, 608, 608).astype("float32")
-    data = np.random.randn(batch_size, 3, 608, 608).astype("float32")
+    im_size = 640
+    im = np.random.randn(batch_size, 3, 640, 640).astype("float32")
+    data = np.random.randn(batch_size, 3, 640, 640).astype("float32")
     scale_factor = (
         np.array([im_size * 1.0 / im.shape[0], im_size * 1.0 / im.shape[1]]).reshape((1, 2)).astype(np.float32)
     )
@@ -70,17 +69,17 @@ def test_disable_gpu():
 @pytest.mark.mkldnn_more_bz_precision
 def test_more_bz_mkldnn():
     """
-    compared mkldnn yolov3 batch size = [1,4,8,10] outputs with true val
+    compared mkldnn ppyolov2 more batch size outputs with true val
     """
     check_model_exist()
 
-    file_path = "./yolov3"
-    images_size = 608
-    batch_size_pool = [1, 4, 8, 10]
+    file_path = "./ppyolov2"
+    images_size = 640
+    batch_size_pool = [1, 5, 10]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -112,32 +111,31 @@ def test_more_bz_mkldnn():
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
         test_suite.mkldnn_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
 
 
 @pytest.mark.p1
-@pytest.mark.jetson
 @pytest.mark.gpu_more_bz_precision
 def test_gpu_more_bz():
     """
-    compared gpu yolov3 batch size = [1,4,8] outputs with true val
+    compared gpu ppyolov2 more batch size outputs with true val
     """
     check_model_exist()
 
-    file_path = "./yolov3"
-    images_size = 608
-    batch_size_pool = [1, 4, 8]
+    file_path = "./ppyolov2"
+    images_size = 640
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
 
         img = images_origin_list[0:batch_size]
-        result = npy_list[0 : batch_size * 2]
+        result = npy_list[0 : (batch_size) * 2]
         data = np.array(images_list[0:batch_size]).astype("float32")
         scale_factor_pool = []
         for batch in range(batch_size):
@@ -163,5 +161,5 @@ def test_gpu_more_bz():
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
+        test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
+        test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1)
