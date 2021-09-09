@@ -299,8 +299,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       test_accuracy:
         latest: True
-        kpi_base: 50.512
-        threshold: 0.01
+        kpi_base: 49.795
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -367,7 +367,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: infer.bat $XPU $SET_CUDA iflytek 58
+        cmd: infer.bat $XPU $SET_CUDA iflytek 232
     kpis:
       exit_code:
         latest: True
