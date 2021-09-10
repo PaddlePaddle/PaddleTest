@@ -112,16 +112,6 @@ def test_divide5():
     obj.run(res=res, x=x, y=y, name=name)
 
 
-# def test_divide6():
-#     """
-#     x =y= np.array([]),[]?None,icafe
-#     """
-#     x = np.array([])
-#     y = np.array([])
-#     res = np.true_divide(x, y)
-#     obj.run(res=res, x=x, y=y)
-
-
 obj.enable_backward = False
 
 
@@ -147,26 +137,15 @@ def test_divide8():
     obj.run(res=res, x=x, y=y)
 
 
-@pytest.mark.api_base_divide_parameters
-def test_divide9():
-    """
-    res=paddle.to_tensor(99.0) / 100
-    exp=paddle.divide(paddle.to_tensor(99.0), paddle.to_tensor(100.0))
-    """
-    paddle.disable_static()
-    x = np.ones((2, 3, 3, 1, 2, 5, 2)).astype(np.float32) * 99
-    y = np.ones((2, 3, 3, 1, 2, 5, 2)).astype(np.float32) * 100
-    res = paddle.to_tensor(x) / 100
-    exp = paddle.divide(paddle.to_tensor(x), paddle.to_tensor(y))
-    compare(exp.numpy(), res.numpy(), delta=1e-10, rtol=1e-10)
-    # obj.run(res=res.numpy(), x=x, y=y, delta=1e-10, rtol=1e-10)
-
-
-# x = np.ones((1)).astype(np.float32) * 99
-# y = np.ones((1)).astype(np.float32) * 100
-# res = paddle.to_tensor(x) / 100
-# exp = paddle.divide(paddle.to_tensor(x), paddle.to_tensor(y))
-# print(res)
-# print(res.numpy())
-# print(exp)
-# print(exp.numpy())
+# @pytest.mark.api_base_divide_parameters
+# def test_divide9():
+#     """
+#     res=paddle.to_tensor(99.0) / 100
+#     exp=paddle.divide(paddle.to_tensor(99.0), paddle.to_tensor(100.0))
+#     """
+#     paddle.disable_static()
+#     x = np.ones((2, 3, 3, 1, 2, 5, 2)).astype(np.float32) * 99
+#     y = np.ones((2, 3, 3, 1, 2, 5, 2)).astype(np.float32) * 100
+#     res = paddle.to_tensor(x) / 100
+#     exp = paddle.divide(paddle.to_tensor(x), paddle.to_tensor(y))
+#     compare(exp.numpy(), res.numpy(), delta=1e-10, rtol=1e-10)
