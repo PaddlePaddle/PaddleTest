@@ -33,6 +33,7 @@ def check_model_exist():
 
 
 @pytest.mark.p0
+@pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
     """
@@ -60,6 +61,7 @@ def test_disable_gpu():
 
 
 @pytest.mark.p1
+@pytest.mark.jetson
 @pytest.mark.trt_fp32_more_bz_precision
 def test_trtfp32_more_bz():
     """
@@ -88,6 +90,7 @@ def test_trtfp32_more_bz():
 
 
 @pytest.mark.p1
+@pytest.mark.jetson
 @pytest.mark.trt_fp32_multi_thread_bz1_precision
 def test_trtfp32_bz1_multi_thread():
     """
