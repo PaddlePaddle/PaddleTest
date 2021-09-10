@@ -1,1 +1,1 @@
-# PaddlePaddle框架测试套件
+# PaddlePaddle框架功能测试套件
