@@ -96,6 +96,7 @@ def test_mkldnn():
 
 
 @pytest.mark.p1
+@pytest.mark.jetson
 @pytest.mark.mkldnn_bz1_precision
 def test_gpu_more_bz():
     """
