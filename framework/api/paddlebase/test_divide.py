@@ -147,5 +147,6 @@ def test_divide8():
 #     x = np.ones((2, 3, 3, 1, 2, 5, 2)).astype(np.float32) * 99
 #     y = np.ones((2, 3, 3, 1, 2, 5, 2)).astype(np.float32) * 100
 #     res = paddle.to_tensor(x) / 100
+#
 #     exp = paddle.divide(paddle.to_tensor(x), paddle.to_tensor(y))
 #     compare(exp.numpy(), res.numpy(), delta=1e-10, rtol=1e-10)
