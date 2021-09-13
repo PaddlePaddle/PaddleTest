@@ -12,6 +12,8 @@ regex = [
     r"password",
 ]
 
+while_list = ["127.0.0.1", "4.4.0.46"]
+
 
 def check(file):
     """ check """
@@ -20,7 +22,7 @@ def check(file):
             for line in f:
                 for r in regex:
                     match = re.search(r, line)
-                    if match and match.group() != "127.0.0.1":
+                    if match and match.group() not in while_list:
                         print("error file:" + file)
                         print("error line:" + line)
                         exit(1)

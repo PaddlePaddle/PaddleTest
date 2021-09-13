@@ -4,36 +4,35 @@
 """
 paddle.nn.functional.kl_div
 """
-
 import paddle
+import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
-import reader
 import numpy as np
 
 
+@pytest.mark.loss_kl_div_vartype
 def test_kl_div_base():
     """
     test nn.functional.kl_div base test
     """
-    model = Dygraph(dtype=np.float32)
     datareader = np.random.random(size=[5, 10]).astype("float32")
     label = np.random.random(size=[5, 2]).astype("float32")
     loss = paddle.nn.functional.kl_div
-    runner = Runner(datareader, label, model, loss)
+    runner = Runner(datareader, loss)
     runner.softmax = False
-    runner.add_kwargs_to_dict("params_group1", reduction="mean", name=None)
-    runner.run()
+    runner.add_kwargs_to_dict("params_group1", label=label, reduction="mean", name=None)
+    runner.add_kwargs_to_dict("params_group3", dtype=np.float32)
     expect = [
-        -1.4750609889053445,
-        -1.4753909973250376,
-        -1.4757210057447305,
-        -1.476051014164423,
-        -1.4763810225841156,
-        -1.4767110310038087,
-        -1.4770410394235016,
-        -1.4773710478431945,
-        -1.4777010562628872,
-        -1.4780310646825803,
+        -1.3249776,
+        -1.3252525,
+        -1.3255274,
+        -1.3258024,
+        -1.3260773,
+        -1.3263524,
+        -1.3266273,
+        -1.3269022,
+        -1.3271772,
+        -1.3274521,
     ]
-    runner.check(expect)
+    runner.run(model=Dygraph, expect=expect)
