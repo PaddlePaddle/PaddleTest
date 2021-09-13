@@ -42,25 +42,35 @@ class mailmsg(object):
         msg["To"] = ";".join(receiver_to_list)
         msg["Cc"] = ";".join(receiver_cc_list)
         now_time = datetime.datetime.now()
-        now_time_str = datetime.datetime.strftime(now_time, '%Y-%m-%d %H:%M:%S')
+        now_time_str = datetime.datetime.strftime(now_time, "%Y-%m-%d %H:%M:%S")
 
         # Add text
-        html_text = '''
+        html_text = (
+                """
                 <p></p>
-                ''' + self.content + '''
+                """
+                + self.content
+                + """  
                 <p></p>
                 <table border=1>
                 <tr><th>case</th><th>baseline_hybrid</th><th>result_auto</th></tr>
-                <tr><td>DP2</td><td>7.116779</td><td>'''+sys.argv[1]+'''</td></tr>
-                <tr><td>MP2</td><td>None</td><td>'''+sys.argv[2]+'''</td></tr>
-                <tr><td>DP2MP2</td><td>7.097414</td><td>'''+sys.argv[3]+'''</td></tr>
+                <tr><td>DP2</td><td>7.116779</td><td>"""
+                +sys.argv[1]
+                +"""</td></tr>
+                <tr><td>MP2</td><td>None</td><td>"""
+                +sys.argv[2]
+                +"""</td></tr>
+                <tr><td>DP2MP2</td><td>7.097414</td><td>"""
+                +sys.argv[3]
+                +"""</td></tr>
                 </table>
                 <p></p>
                 
-                <p>Task link：<a href=""></a></p>
+                <p>Task link：<a href="http://paddle-ce.bcc-bdbl.baidu.com:8111/viewType.html?buildTypeId=ContinuousEvaluation_PaddleLocalBuild_Framework_Inference_Distribution_StaticGpt"></a></p>
                 Machine address：gzns-ps-201608-m02-www028.gzns.baidu.com (Account password private chat)
                 </p>
-                '''
+                """
+        )
 
         msg.attach(MIMEText(html_text, _subtype="html", _charset="UTF-8"))
         # Add attachment
@@ -92,6 +102,5 @@ class mailmsg(object):
 
 if __name__ == "__main__":
     # send_baidu_mail= mailmsg("liujie44@baidu.com", "liujie44@baidu.com", "Email Test", "my content")
-    send_baidu_mail = mailmsg("liujie44@baidu.com", "liujie44@baidu.com", "gpt CE Report",
-            "results:")
+    send_baidu_mail = mailmsg("liujie44@baidu.com", "liujie44@baidu.com", "gpt CE Report", "results:")
     send_baidu_mail.send_email()
