@@ -52,7 +52,7 @@ python -m pip install dlib -i https://pypi.tuna.tsinghua.edu.cn/simple
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
 
 
-pip list 
+pip list
 echo "pip list"
 
 # dir
@@ -113,7 +113,7 @@ fi
   ;;
 esac
 
-# evaluate 
+# evaluate
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 ls output/$params_dir/
 case ${model} in
@@ -227,4 +227,3 @@ exit 1
 else
 exit 0
 fi
-

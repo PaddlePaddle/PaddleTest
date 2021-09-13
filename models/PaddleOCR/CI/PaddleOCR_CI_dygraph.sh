@@ -121,7 +121,7 @@ fi
 # eval
 if [[ ${model} =~ "sast" ]];then
    sleep 0.01
-else  
+else
 python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" > $log_path/eval/$model.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/$model.log) -eq 0 ]];then
    echo -e "\033[33m eval of $model  successfully!\033[0m" | tee -a $log_path/result.log
@@ -133,7 +133,7 @@ fi
 
 # infer
 if [ ${category} == "rec" ];then
-python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" Global.infer_img=doc/imgs_words/en/word_1.png > $log_path/infer/${model}.log 2>&1 
+python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" Global.infer_img=doc/imgs_words/en/word_1.png > $log_path/infer/${model}.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
    echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -230,7 +230,7 @@ else
    cat $log_path/predict/${model}.log
    echo -e "\033[31m Student predict of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
-fi 
+fi
 
 fi
 
@@ -259,7 +259,7 @@ done
 
 # cls
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-python -m paddle.distributed.launch  tools/train.py -c configs/cls/cls_mv3.yml -o Train.loader.batch_size_per_card=2 Global.print_batch_step=1 Global.epoch_num=1 > $log_path/train/cls_mv3.log 2>&1 
+python -m paddle.distributed.launch  tools/train.py -c configs/cls/cls_mv3.yml -o Train.loader.batch_size_per_card=2 Global.print_batch_step=1 Global.epoch_num=1 > $log_path/train/cls_mv3.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/cls_mv3.log) -eq 0 ]];then
    echo -e "\033[33m training of cls_mv3  successfully!\033[0m" | tee -a $log_path/result.log
 else
@@ -273,7 +273,7 @@ else
    cat $log_path/eval/cls_mv3.log
    echo -e "\033[31m eval of cls_mv3 failed!\033[0m" | tee -a $log_path/result.log
 fi
-python tools/infer_cls.py -c configs/cls/cls_mv3.yml -o Global.pretrained_model=output/cls/mv3/latest Global.load_static_weights=false Global.infer_img=doc/imgs_words/ch/word_1.jpg > $log_path/infer/cls_mv3.log 2>&1 
+python tools/infer_cls.py -c configs/cls/cls_mv3.yml -o Global.pretrained_model=output/cls/mv3/latest Global.load_static_weights=false Global.infer_img=doc/imgs_words/ch/word_1.jpg > $log_path/infer/cls_mv3.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/cls_mv3.log) -eq 0 ]];then
    echo -e "\033[33m infer of cls_mv3  successfully!\033[0m"| tee -a $log_path/result.log
 else
