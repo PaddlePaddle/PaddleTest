@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test yolov3 model
+test ppyolo model
 """
 
 import os
@@ -24,15 +24,16 @@ def check_model_exist():
     """
     check model exist
     """
-    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.1/detection/yolov3.tgz"
-    if not os.path.exists("./yolov3/model.pdiparams"):
-        wget.download(yolov3_url, out="./")
-        tar = tarfile.open("yolov3.tgz")
+    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.0/detection/ppyolo.tgz"
+    if not os.path.exists("./ppyolo/model.pdiparams"):
+        wget.download(ppyolo_url, out="./")
+        tar = tarfile.open("ppyolo.tgz")
         tar.extractall()
         tar.close()
 
 
 @pytest.mark.p0
+@pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
     """
@@ -40,25 +41,46 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+    test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
     test_suite.config_test()
 
 
-@pytest.mark.p1
-@pytest.mark.trt_fp32_multi_thread_more_bz_precision
-def test_trtfp32_more_bz_multi_thread():
+@pytest.mark.p0
+@pytest.mark.config_disablegpu_memory
+def test_disable_gpu():
     """
-    compared trt fp32 batch_size=4 yolov3 multi_thread outputs with true val
+    test no gpu resources occupied after disable gpu
+    """
+    check_model_exist()
+    test_suite = InferenceTest()
+    test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
+    batch_size = 1
+    im_size = 608
+    im = np.random.randn(batch_size, 3, 608, 608).astype("float32")
+    data = np.random.randn(batch_size, 3, 608, 608).astype("float32")
+    scale_factor = (
+        np.array([im_size * 1.0 / im.shape[0], im_size * 1.0 / im.shape[1]]).reshape((1, 2)).astype(np.float32)
+    )
+    im_shape = np.array([im_size, im_size]).reshape((1, 2)).astype(np.float32)
+    input_data_dict = {"im_shape": im_shape, "image": data, "scale_factor": scale_factor}
+    test_suite.disable_gpu_test(input_data_dict)
+
+
+@pytest.mark.p1
+@pytest.mark.mkldnn_more_bz_precision
+def test_more_bz_mkldnn():
+    """
+    compared mkldnn ppyolo batch size = [1,4,8,10] outputs with true val
     """
     check_model_exist()
 
-    file_path = "./yolov3"
+    file_path = "./ppyolo"
     images_size = 608
-    batch_size_pool = [4]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -90,27 +112,26 @@ def test_trtfp32_more_bz_multi_thread():
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4, precision="fp32")
-
-        del test_suite  # destroy class to save memory
+        test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
+        test_suite.mkldnn_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
 
 
 @pytest.mark.p1
-@pytest.mark.trt_fp32_more_bz_precision
-def test_trtfp32_more_bz():
+@pytest.mark.jetson
+@pytest.mark.gpu_more_bz_precision
+def test_gpu_more_bz():
     """
-    compared trt fp32 batch_size=1,5,10 yolov3 outputs with true val
+    compared gpu ppyolo batch size = [1,4,8] outputs with true val
     """
     check_model_exist()
 
-    file_path = "./yolov3"
+    file_path = "./ppyolo"
     images_size = 608
-    batch_size_pool = [1, 5, 10]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -142,7 +163,5 @@ def test_trtfp32_more_bz():
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.trt_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4, precision="fp32")
-
-        del test_suite  # destroy class to save memory
+        test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
+        test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
