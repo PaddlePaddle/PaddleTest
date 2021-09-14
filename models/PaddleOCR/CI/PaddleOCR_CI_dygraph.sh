@@ -177,7 +177,8 @@ fi
 else
 echo "none SRN"
 if [[ $(echo $model | grep -c "lite") -eq 0 ]];then
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+# python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
