@@ -22,4 +22,6 @@ paddleslim
 visualdl
 pyrouge
 nltk
+chardet
+seqeval
 tqdm
