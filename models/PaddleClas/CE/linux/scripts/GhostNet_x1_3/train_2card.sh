@@ -1,11 +1,11 @@
 export FLAGS_cudnn_deterministic=True
-cd /workspace/PaddleClas/ce/Paddle_Cloud_CE/src/task/PaddleClas
+cd ${Project_path}
 sed -i 's/RandCropImage/ResizeImage/g'  ppcls/configs/ImageNet/GhostNet/GhostNet_x1_3.yaml
 sed -ie '/RandFlipImage/d'  ppcls/configs/ImageNet/GhostNet/GhostNet_x1_3.yaml
 sed -ie '/flip_code/d'  ppcls/configs/ImageNet/GhostNet/GhostNet_x1_3.yaml
 
 rm -rf dataset
-ln -s /home/data/cfs/models_ce/PaddleClas dataset
+ln -s ${Data_path} dataset
 mkdir log
 python -m pip install -r requirements.txt
 python -m paddle.distributed.launch tools/train.py -c ppcls/configs/ImageNet/GhostNet/GhostNet_x1_3.yaml -o Global.epochs=2 -o DataLoader.Train.sampler.shuffle=False -o DataLoader.Train.sampler.batch_size=4 -o DataLoader.Eval.sampler.batch_size=4 > log/GhostNet_x1_3_2card.log 2>&1
