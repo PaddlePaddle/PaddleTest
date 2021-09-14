@@ -1,7 +1,6 @@
 numpy
 sentencepiece==0.1.95
 regex
-tqdm==4.57.0
 jieba
 colorlog
 colorama
@@ -23,3 +22,4 @@ paddleslim
 visualdl
 pyrouge
 nltk
+tqdm
