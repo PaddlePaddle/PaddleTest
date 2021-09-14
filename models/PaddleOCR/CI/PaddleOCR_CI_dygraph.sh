@@ -68,7 +68,7 @@ fi
 done
 
 find configs/det -name *.yml -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
-find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_mtb_nrtr' > models_list_rec
+find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train'  > models_list_rec
 
 shuf models_list_det_db > models_list
 shuf models_list_rec >> models_list
