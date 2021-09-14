@@ -33,6 +33,7 @@ def check_model_exist():
 
 
 @pytest.mark.p0
+@pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
     """
@@ -88,6 +89,7 @@ def test_mkldnn():
 
 
 @pytest.mark.p1
+@pytest.mark.jetson
 @pytest.mark.gpu_more_bz_precision
 def test_gpu_more_bz():
     """

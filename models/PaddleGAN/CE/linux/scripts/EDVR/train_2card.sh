@@ -1,9 +1,9 @@
 export FLAGS_cudnn_deterministic=True
-cd /workspace/PaddleGAN/ce/Paddle_Cloud_CE/src/task/PaddleGAN
+cd ${Project_path}
 sed -i 's/use_flip: True/use_flip: False/g' configs/cyclegan_cityscapes.yaml #将 use_flip 字段替换为 Fasle
 sed -i 's/use_rot: True/use_rot: False/g' configs/cyclegan_cityscapes.yaml #将 use_rot 字段替换为 Fasle
 rm -rf data
-ln -s /home/data/cfs/models_ce/PaddleGAN data
+ln -s ${Data_path} data
 if [ ! -d "log" ]; then
   mkdir log
 fi
