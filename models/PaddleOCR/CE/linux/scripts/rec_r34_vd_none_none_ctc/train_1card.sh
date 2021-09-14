@@ -1,9 +1,8 @@
 export FLAGS_cudnn_deterministic=True
-
-cd /workspace/PaddleOCR/ce/Paddle_Cloud_CE/src/task/PaddleOCR
+cd ${Project_path}
 # data
 rm -rf train_data
-ln -s /home/data/cfs/models_ce/PaddleOCR/train_data train_data
+ln -s ${Data_path}/train_data train_data
 # log
 if [ ! -d "log" ]; then
   mkdir log

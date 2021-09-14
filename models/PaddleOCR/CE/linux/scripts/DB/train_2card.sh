@@ -1,5 +1,5 @@
 export FLAGS_cudnn_deterministic=True
-cd /workspace/PaddleOCR/ce/Paddle_Cloud_CE/src/task/PaddleOCR
+cd ${Project_path}
 
 if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
@@ -28,7 +28,7 @@ if [ ! -f "pretrain_models/ch_ppocr_server_v2.0_det_train.tar" ]; then
 fi
 
 rm -rf train_data
-ln -s /home/data/cfs/models_ce/PaddleOCR/train_data train_data
+ln -s ${Data_path}/train_data train_data
 if [ ! -d "log" ]; then
   mkdir log
 fi
