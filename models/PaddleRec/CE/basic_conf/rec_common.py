@@ -65,8 +65,12 @@ if daily:
     EXEC_PRIORITY = ["p0", "p1"]
     EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
     EXEC_TAG = [
-        # "linux_st_gpu1",
-        "linux_dy_gpu1",
+        "linux_st_gpu1",
+        # "linux_st_gpu2",
+        # "linux_st_cpu",
+        # "linux_dy_gpu1",
+        # "linux_dy_gpu2",
+        # "linux_dy_cpu",
         "linux_down_data",
     ]
     EXEC_TAG_LINUX_GPU2 = [
@@ -76,10 +80,10 @@ if daily:
     ]
     EXEC_TAG_LINUX_ALL = [
         "linux_st_gpu1",
-        "linux_st_gpu2",
+        # "linux_st_gpu2",
         "linux_st_cpu",
         "linux_dy_gpu1",
-        "linux_dy_gpu2",
+        # "linux_dy_gpu2",
         "linux_dy_cpu",
         "linux_down_data",
     ]

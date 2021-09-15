@@ -33,8 +33,6 @@ EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["INSTALL", "FINETUNE", "PREDICT", "UNINSTALL"]
 EXEC_TAG = [
     # 补充一些自定义标签
-    "install_module",
     "linux_finetune_mini-epoch_gpu1",
     "linux_predict_with_model_gpu1",
-    "uninstall_module",
 ]

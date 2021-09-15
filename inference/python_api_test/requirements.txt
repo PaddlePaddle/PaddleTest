@@ -3,3 +3,5 @@ psutil
 pytest
 pynvml
 opencv-python
+paddlenlp==2.0.8
+sentencepiece==0.1.96

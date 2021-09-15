@@ -5,7 +5,7 @@
 cur_path=`pwd`
 model_name=${PWD##*/}
 
-echo "$model_name 模型训练阶段"
+echo "$model_name 模型预测阶段"
 
 #取消代理
 HTTPPROXY=$http_proxy

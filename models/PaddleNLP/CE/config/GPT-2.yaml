@@ -1,5 +1,5 @@
 MODEL: "GPT-2" # 模型名
-PRIORITY: P0, Pre_test
+PRIORITY: P0, Pre_test, Dy_con
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -136,6 +136,25 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_recv_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU  $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 10.984482
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_gpt2_$XPU.log
 
 INFER:
   -
