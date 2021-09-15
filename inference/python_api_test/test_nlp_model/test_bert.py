@@ -64,7 +64,7 @@ def test_disable_gpu():
 @pytest.mark.mkldnn_bz1_precision
 def test_mkldnn():
     """
-    compared mkldnn ocr_det_mv3_db outputs with true val
+    compared mkldnn bert outputs with true val
     """
     check_model_exist()
 
@@ -92,7 +92,7 @@ def test_mkldnn():
 @pytest.mark.gpu_bz1_precision
 def test_gpu_bz1():
     """
-    compared mkldnn ocr_det_mv3_db outputs with true val
+    compared mkldnn bert outputs with true val
     """
     check_model_exist()
 
