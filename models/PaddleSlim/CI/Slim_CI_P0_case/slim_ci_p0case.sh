@@ -810,10 +810,10 @@ python -m paddle.distributed.launch \
 --last_epoch 1 >${log_path}/dy_threshold_prune_T 2>&1
 print_info $? dy_threshold_prune_T
 # cifar10
-#python train.py --data cifar10 --lr 0.05 \
-#--pruning_mode threshold  --num_epochs 1 \
-#--threshold 0.01 >${log_path}/dy_threshold_prune_cifar10_T 2>&1
-#print_info $? dy_threshold_prune_cifar10_T
+python train.py --data cifar10 --lr 0.05 \
+--pruning_mode threshold  --num_epochs 1 \
+--threshold 0.01 >${log_path}/dy_threshold_prune_cifar10_T 2>&1
+print_info $? dy_threshold_prune_cifar10_T
 
 }
 
