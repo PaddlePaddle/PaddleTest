@@ -37,6 +37,7 @@ cd /ssd1
 mkdir paddlenlp
 cd /workspace
 export PPNLP_HOME=/ssd1/paddlenlp
+export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
 ln -s /home/data/cfs/models_ce/PaddleNLP/*  /ssd1/paddlenlp/
 ####################################
 # for paddlenlp env
@@ -56,8 +57,10 @@ nlp2_build (){
 }
 $3
 python -m pip install -r requirements_ci.txt
-python -m init_file.py
+unset http_proxy && unset https_proxy
 python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
+export http_proxy=$4;
+export https_proxy=$4;
 python -c 'from visualdl import LogWriter'
 pip list
 set +x

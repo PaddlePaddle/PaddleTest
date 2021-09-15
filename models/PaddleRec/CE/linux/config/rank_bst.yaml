@@ -1,5 +1,5 @@
 MODEL: "rank_bst" # 模型名
-PRIORITY: P2 # 数据处理脚本需要单独写
+PRIORITY: P3 # 数据处理脚本需要单独写
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
