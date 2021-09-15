@@ -491,7 +491,7 @@ python  train.py \
 --model_path dy_threshold_models --use_gpu False >${log_path}/dy_threshold_prune_T 2>&1
 print_info $? dy_threshold_prune_T
 # eval
-python evaluate.py --pruned_model dy_threshold_models/model-pruned.pdparams \
+python evaluate.py --pruned_model dy_threshold_models/model.pdparams \
 --data imagenet --use_gpu False >${log_path}/dy_threshold_prune_eval 2>&1
 print_info $? dy_threshold_prune_eval
 # cifar10
