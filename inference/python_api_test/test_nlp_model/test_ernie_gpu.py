@@ -32,7 +32,7 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.config_init_combined_model
 def test_config():
     """
@@ -44,7 +44,7 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
@@ -60,7 +60,7 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.gpu_bz1_precision
 def test_gpu_bz1():

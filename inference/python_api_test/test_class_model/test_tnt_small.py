@@ -131,7 +131,6 @@ def test_trt_fp32_more_bz():
 
 
 @pytest.mark.p1
-@pytest.mark.jetson
 @pytest.mark.trt_fp32_multi_thread_bz1_precision
 def test_trt_fp32_bz1_multi_thread():
     """
@@ -195,7 +194,6 @@ def test_trt_fp16_more_bz():
 
 
 @pytest.mark.p1
-@pytest.mark.jetson
 @pytest.mark.trt_fp16_multi_thread_bz1_precision
 def test_trt_fp16_bz1_multi_thread():
     """
