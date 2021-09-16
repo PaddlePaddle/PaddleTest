@@ -74,9 +74,9 @@ echo -e "\033[35m ---- result: \033[0m"
 echo -e "\033[35m ---- P0case_EXCODE: $P0case_EXCODE \033[0m"
 if [ $P0case_EXCODE -ne 0 ] ; then
     cd logs
-    FF=`ls *_FAIL*|wc -l`
+    FF=`ls *FAIL*|wc -l`
     echo -e "\033[31m ---- P0case failed number: ${FF} \033[0m"
-    ls *_FAIL*
+    ls *FAIL*
     exit $P0case_EXCODE
 else
     echo -e "\033[32m ---- P0case Success \033[0m"

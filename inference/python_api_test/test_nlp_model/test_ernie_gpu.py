@@ -65,7 +65,7 @@ def test_disable_gpu():
 @pytest.mark.gpu_bz1_precision
 def test_gpu_bz1():
     """
-    compared gpu ocr_det_mv3_db outputs with true val
+    compared gpu bert outputs with true val
     """
     check_model_exist()
 

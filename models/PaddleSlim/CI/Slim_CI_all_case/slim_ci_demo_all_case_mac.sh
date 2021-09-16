@@ -618,7 +618,7 @@ python -m paddle.distributed.launch \
 --test_period 1 \
 --model_path st_unstructured_models \
 --pretrained_model st_unstructured_models \
---resume_epoch 1 --use_gpu False >${log_path}/st_unstructured_prune_threshold_load 2>&1
+--last_epoch 1 --use_gpu False >${log_path}/st_unstructured_prune_threshold_load 2>&1
 print_info $? st_unstructured_prune_threshold_load
 
 ## sparsity: -55%, accuracy: 67%+/87%+
@@ -708,7 +708,7 @@ python -m paddle.distributed.launch \
 --test_period 1 \
 --model_path dy_threshold_models \
 --pretrained_model dy_threshold_models \
---resume_epoch 1 --use_gpu False >${log_path}/dy_threshold_prune_T_load 2>&1
+--last_epoch 1 --use_gpu False >${log_path}/dy_threshold_prune_T_load 2>&1
 print_info $? dy_threshold_prune_T_load
 # cifar10
 python train.py --data cifar10 --lr 0.05 \
