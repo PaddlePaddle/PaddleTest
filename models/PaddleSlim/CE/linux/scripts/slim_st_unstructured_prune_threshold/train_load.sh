@@ -47,7 +47,7 @@ if [ "$1" = "linux_st_gpu1" ];then #单卡
     --model_period 1 \
     --model_path st_unstructured_models \
     --pretrained_model st_unstructured_models \
-    --resume_epoch 1 > ${log_path}/$2.log 2>&1
+    --last_epoch 1 > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu2" ];then #单卡
@@ -66,7 +66,7 @@ elif [ "$1" = "linux_st_gpu2" ];then #单卡
     --model_period 1 \
     --model_path st_unstructured_models \
     --pretrained_model st_unstructured_models \
-    --resume_epoch 1 > ${log_path}/$2.log 2>&1
+    --last_epoch 1 > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_cpu" ];then #单卡
@@ -84,7 +84,7 @@ elif [ "$1" = "linux_st_cpu" ];then #单卡
     --model_period 1 \
     --model_path st_unstructured_models \
     --pretrained_model st_unstructured_models \
-    --resume_epoch 1 \
+    --last_epoch 1 \
     --use_gpu False > ${log_path}/$2.log 2>&1
     print_info $? $2
 
