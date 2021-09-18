@@ -156,6 +156,6 @@ def test_jetson_gpu_more_bz():
             model_file="./ocr_det_mv3_db/inference.pdmodel", params_file="./ocr_det_mv3_db/inference.pdiparams"
         )
 
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=3e-5)
+        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=3e-4)
 
         del test_suite2  # destroy class to save memory
