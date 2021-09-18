@@ -28,6 +28,7 @@ def test_margin_cross_entropy_2():
     loss = paddle.nn.functional.margin_cross_entropy
     runner = Runner(datareader, loss)
     runner.softmax = True
+    runner.mean_loss = True
     runner.add_kwargs_to_dict(
         "params_group1",
         label=label,
@@ -40,16 +41,9 @@ def test_margin_cross_entropy_2():
         reduction=None,
     )
     runner.add_kwargs_to_dict("params_group3", dtype=np.float64, in_features=10, out_features=4)
-    expect = [
-        0.06838991078472811,
-        0.06498025172082632,
-        0.0618818588414974,
-        0.059054196107834404,
-        0.05646349220212549,
-        0.054081379514777886,
-        0.05188385041399612,
-        0.0498504474459089,
-        0.047963628289570535,
-        0.04620826284448239,
-    ]
+    expect = [0.06838991078472811, 0.06661214136650885,
+              0.0649204641090921, 0.06330883999857849,
+              0.061771780397832654, 0.060304285789012105,
+              0.05890179251431488, 0.057560126323949176,
+              0.05627546173840599, 0.05504428639402802]
     runner.run(model=Dygraph, expect=expect)

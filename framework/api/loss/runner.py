@@ -29,6 +29,7 @@ class Runner(object):
         self.softmax = False
         self.dygraph = True
         self.static = True
+        self.mean_loss = False
         # self.case_name = '_base'
         self.np_type = None
         types = {0: "func", 1: "class"}
@@ -71,6 +72,8 @@ class Runner(object):
                     if self.softmax is True:
                         out = paddle.nn.functional.softmax(out)
                     loss = self.loss(out, **self.kwargs_dict_dygraph["params_group1"])
+                    if self.mean_loss is True:
+                        loss = paddle.mean(loss)
                     loss.backward()
                     self.optimizer_dygraph.step()
                     self.optimizer_dygraph.clear_grad()
@@ -113,6 +116,8 @@ class Runner(object):
                         if self.softmax is True:
                             out = paddle.nn.functional.softmax(out)
                         loss = self.loss(out, **self.kwargs_dict_static["params_group1"])
+                        if self.mean_loss is True:
+                            loss = paddle.mean(loss)
                         # logging.info('loss is: {}'.format(loss))
                         # logging.info('loss.shape is: {}'.format(loss.shape))
                         self.optimizer_static.minimize(loss)
@@ -158,6 +163,8 @@ class Runner(object):
                         out = paddle.nn.functional.softmax(out)
                     obj = self.loss(**self.kwargs_dict_dygraph["params_group1"])
                     loss = obj(out, **self.kwargs_dict_dygraph["params_group2"])
+                    if self.mean_loss is True:
+                        loss = paddle.mean(loss)
                     # logging.info('at {}, loss.shape is: {}'.format(i, loss.shape))
                     loss.backward()
                     self.optimizer_dygraph.step()
@@ -212,6 +219,8 @@ class Runner(object):
                         obj = self.loss(**self.kwargs_dict_static["params_group1"])
                         print(self.kwargs_dict_static["params_group2"])
                         loss = obj(out, **self.kwargs_dict_static["params_group2"])
+                        if self.mean_loss is True:
+                            loss = paddle.mean(loss)
                         # logging.info('loss is: {}'.format(loss))
                         self.optimizer_static.minimize(loss)
                         exe = paddle.static.Executor()
