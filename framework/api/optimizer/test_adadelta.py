@@ -4,9 +4,8 @@
 """
 test Adadelta case
 """
-
-
 import paddle
+import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
 from linear_dygraph_model import LinearNet
@@ -14,6 +13,7 @@ from conv2d_dygraph_model import Conv2DNet
 import reader
 
 
+@pytest.mark.api_optimizer_adadelta_vartype
 def test_adadelta_base():
     """
     test adadelta base test
@@ -46,6 +46,7 @@ def test_adadelta_base():
     runner.check(expect)
 
 
+@pytest.mark.api_optimizer_adadelta_parameters
 def test_adadelta_conv2d():
     """
     test adadelta opt with conv2d net test
