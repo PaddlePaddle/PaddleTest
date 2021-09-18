@@ -219,73 +219,73 @@ def test_matrix_power_10():
 #     obj.rtol = 1e-7
 
 
-@pytest.mark.api_linalg_matrix_power_exception
-def test_matrix_power_12():
-    """
-    TypeError
-    x=42
-    n=-2
-    """
-    dim_n = -2
-    x = 42
-    obj.exception(etype="TypeError", x=x, n=dim_n)
-
-
-@pytest.mark.api_linalg_matrix_power_exception
-def test_matrix_power_13():
-    """
-    TypeError
-    x.shape=[2, 1, 32, 32]
-    n=[-2]
-    """
-    dim_n = [-2]
-    x = np.random.random((2, 1, 32, 32)).astype(np.float32)
-    obj.exception(etype="TypeError", x=x, n=dim_n)
-
-
-@pytest.mark.api_linalg_matrix_power_exception
-def test_matrix_power_14():
-    """
-    TypeError
-    x = np.array.astype(np.int32)
-    n=-2
-    """
-    dim_n = -2
-    x = np.random.random((2, 1, 32, 32)).astype(np.int32)
-    obj.exception(etype="TypeError", x=x, n=dim_n)
-
-
-@pytest.mark.api_linalg_matrix_power_exception
-def test_matrix_power_15():
-    """
-    ValueError
-    x.shape=[32]
-    n=-2
-    """
-    dim_n = -2
-    x = np.random.random((32)).astype(np.float32)
-    obj.exception(etype="ValueError", x=x, n=dim_n)
-
-
-@pytest.mark.api_linalg_matrix_power_exception
-def test_matrix_power_16():
-    """
-    ValueError
-    x.shape=[2, 1, 32, 16]
-    n=-2
-    """
-    dim_n = -2
-    x = np.random.random((2, 1, 32, 16)).astype(np.float32)
-    obj.exception(etype="ValueError", x=x, n=dim_n)
-
-
-@pytest.mark.api_linalg_matrix_power_exception
-def test_matrix_power_17():
-    """
-    ValueError
-    x=np.array([[2, 1, 2], [2, 1, 2], [1, 1, 7]]).astype(np.float32)
-    n=-2
-    """
-    dim_n = -2
-    x = np.array([[2, 1, 2], [2, 1, 2], [1, 1, 7]]).astype(np.float32)
-    obj.exception(etype="ValueError", x=x, n=dim_n)
+# @pytest.mark.api_linalg_matrix_power_exception
+# def test_matrix_power_12():
+#     """
+#     TypeError
+#     x=42
+#     n=-2
+#     """
+#     dim_n = -2
+#     x = 42
+#     obj.exception(etype="TypeError", x=x, n=dim_n)
+#
+#
+# @pytest.mark.api_linalg_matrix_power_exception
+# def test_matrix_power_13():
+#     """
+#     TypeError
+#     x.shape=[2, 1, 32, 32]
+#     n=[-2]
+#     """
+#     dim_n = [-2]
+#     x = np.random.random((2, 1, 32, 32)).astype(np.float32)
+#     obj.exception(etype="TypeError", x=x, n=dim_n)
+#
+#
+# @pytest.mark.api_linalg_matrix_power_exception
+# def test_matrix_power_14():
+#     """
+#     TypeError
+#     x = np.array.astype(np.int32)
+#     n=-2
+#     """
+#     dim_n = -2
+#     x = np.random.random((2, 1, 32, 32)).astype(np.int32)
+#     obj.exception(etype="TypeError", x=x, n=dim_n)
+#
+#
+# @pytest.mark.api_linalg_matrix_power_exception
+# def test_matrix_power_15():
+#     """
+#     ValueError
+#     x.shape=[32]
+#     n=-2
+#     """
+#     dim_n = -2
+#     x = np.random.random((32)).astype(np.float32)
+#     obj.exception(etype="ValueError", x=x, n=dim_n)
+#
+#
+# @pytest.mark.api_linalg_matrix_power_exception
+# def test_matrix_power_16():
+#     """
+#     ValueError
+#     x.shape=[2, 1, 32, 16]
+#     n=-2
+#     """
+#     dim_n = -2
+#     x = np.random.random((2, 1, 32, 16)).astype(np.float32)
+#     obj.exception(etype="ValueError", x=x, n=dim_n)
+#
+#
+# @pytest.mark.api_linalg_matrix_power_exception
+# def test_matrix_power_17():
+#     """
+#     ValueError
+#     x=np.array([[2, 1, 2], [2, 1, 2], [1, 1, 7]]).astype(np.float32)
+#     n=-2
+#     """
+#     dim_n = -2
+#     x = np.array([[2, 1, 2], [2, 1, 2], [1, 1, 7]]).astype(np.float32)
+#     obj.exception(etype="ValueError", x=x, n=dim_n)
