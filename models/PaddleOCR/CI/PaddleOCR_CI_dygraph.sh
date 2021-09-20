@@ -101,7 +101,7 @@ fi
 fi
 
 python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest" ];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
    echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
    cat $log_path/train/$model.log
@@ -110,7 +110,7 @@ fi
 
 else
 python -m paddle.distributed.launch  tools/train.py -c $line  -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir="output/"${model}  > $log_path/train/$model.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest" ];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
    echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
    cat  $log_path/train/$model.log
@@ -122,7 +122,7 @@ fi
 if [[ ${model} =~ "sast" ]];then
    sleep 0.01
 else
-python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" > $log_path/eval/$model.log 2>&1
+python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest.pdparams" > $log_path/eval/$model.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/$model.log) -eq 0 ]];then
    echo -e "\033[33m eval of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
