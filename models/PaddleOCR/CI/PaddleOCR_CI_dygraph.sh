@@ -22,10 +22,14 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 
 # dependency
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt --ignore-installed
+python -m pip install -r requirements.txt --ignore-installed -i https://pypi.tuna.tsinghua.edu.cn/simple
 # paddleocr
 python -m pip install paddleocr
 python -m pip install gast==0.3.3
+
+
+unset http_proxy
+unset https_proxy
 
 # download model
 if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
@@ -89,16 +93,6 @@ category="det"
 fi
 
 if [ ${category} == "rec" ];then
-
-if [[ $(echo $model | grep -c "chinese") -ne 0 ]];then
-python -m paddle.distributed.launch   tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.distort=True Global.use_space_char=True Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]] && [ -f "output/"${model}"/latest" ];then
-   echo -e "\033[33m training of $model use_space_char successfully!\033[0m" | tee -a $log_path/result.log
-else
-   $log_path/train/$model.log
-   echo -e "\033[31m training of $model use_space_char failed!\033[0m" | tee -a $log_path/result.log
-fi
-fi
 
 python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then

@@ -29,7 +29,7 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 
 # dependency
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt --ignore-installed
+python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
 # ppgan
 yum install epel-release -y
 yum update -y
@@ -51,6 +51,8 @@ python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 python -m pip install dlib -i https://pypi.tuna.tsinghua.edu.cn/simple
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
 
+unset http_proxy
+unset https_proxy
 
 pip list
 echo "pip list"
