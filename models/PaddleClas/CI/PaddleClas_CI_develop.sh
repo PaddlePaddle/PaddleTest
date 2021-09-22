@@ -53,7 +53,7 @@ model=${filename%.*}
 if [ -d "output" ]; then
    rm -rf output
 fi
-echo $model
+echo $model 
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 #看情况加判断针对占大显存，MV3设置batch_size与epoch
 case ${model} in
