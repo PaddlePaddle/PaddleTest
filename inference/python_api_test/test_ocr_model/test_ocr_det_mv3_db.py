@@ -32,7 +32,7 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
@@ -47,7 +47,7 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
@@ -64,7 +64,7 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.mkldnn_bz1_precision
 def test_mkldnn():
     """
@@ -95,7 +95,7 @@ def test_mkldnn():
     del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.gpu_more_bz_precision
 def test_gpu_more_bz():
     """
@@ -128,7 +128,6 @@ def test_gpu_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p0
 @pytest.mark.jetson
 @pytest.mark.gpu_more_bz_precision
 def test_jetson_gpu_more_bz():
@@ -139,7 +138,7 @@ def test_jetson_gpu_more_bz():
 
     file_path = "./ocr_det_mv3_db"
     images_size = 640
-    batch_size_pool = [1, 5, 10]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -157,6 +156,6 @@ def test_jetson_gpu_more_bz():
             model_file="./ocr_det_mv3_db/inference.pdmodel", params_file="./ocr_det_mv3_db/inference.pdiparams"
         )
 
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=3e-5)
+        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=3e-4)
 
         del test_suite2  # destroy class to save memory

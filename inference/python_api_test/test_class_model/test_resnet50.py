@@ -32,7 +32,7 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
@@ -45,7 +45,7 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
@@ -60,8 +60,7 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
-@pytest.mark.jetson
+@pytest.mark.server
 @pytest.mark.trt_fp32_more_bz_precision
 def test_trt_fp32_more_bz():
     """
@@ -92,8 +91,38 @@ def test_trt_fp32_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
 @pytest.mark.jetson
+@pytest.mark.trt_fp32_more_bz_precision
+def test_jetson_trt_fp32_more_bz():
+    """
+    compared trt fp32 batch_size=1-10 resnet50 outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./resnet50"
+    images_size = 224
+    batch_size_pool = [1, 2]
+    max_batch_size = 10
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        input_data_dict = {"inputs": fake_input}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+        del test_suite  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+        test_suite2.trt_more_bz_test(
+            input_data_dict, output_data_dict, max_batch_size=max_batch_size, precision="trt_fp32"
+        )
+
+        del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.server
 @pytest.mark.trt_fp32_multi_thread_bz1_precision
 def test_trt_fp32_bz1_multi_thread():
     """
@@ -120,8 +149,7 @@ def test_trt_fp32_bz1_multi_thread():
     del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
-@pytest.mark.jetson
+@pytest.mark.server
 @pytest.mark.trt_fp16_more_bz_precision
 def test_trt_fp16_more_bz():
     """
@@ -152,8 +180,38 @@ def test_trt_fp16_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
 @pytest.mark.jetson
+@pytest.mark.trt_fp16_more_bz_precision
+def test_jetson_trt_fp16_more_bz():
+    """
+    compared trt fp16 batch_size=1-10 resnet50 outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./resnet50"
+    images_size = 224
+    batch_size_pool = [1, 2]
+    max_batch_size = 10
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        input_data_dict = {"inputs": fake_input}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+        del test_suite  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+        test_suite2.trt_more_bz_test(
+            input_data_dict, output_data_dict, delta=1e-2, max_batch_size=max_batch_size, precision="trt_fp16"
+        )
+
+        del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.server
 @pytest.mark.trt_fp16_multi_thread_bz1_precision
 def test_trt_fp16_bz1_multi_thread():
     """
@@ -180,7 +238,7 @@ def test_trt_fp16_bz1_multi_thread():
     del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.mkldnn_bz1_precision
 def test_mkldnn():
     """
@@ -207,8 +265,7 @@ def test_mkldnn():
     del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
-@pytest.mark.jetson
+@pytest.mark.server
 @pytest.mark.gpu_more_bz_precision
 def test_gpu_more_bz():
     """
@@ -219,6 +276,34 @@ def test_gpu_more_bz():
     file_path = "./resnet50"
     images_size = 224
     batch_size_pool = [1, 5, 10]
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        input_data_dict = {"inputs": fake_input}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+        del test_suite  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
+        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
+
+        del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.jetson
+@pytest.mark.gpu_more_bz_precision
+def test_jetson_gpu_more_bz():
+    """
+    compared trt gpu batch_size=1-10 resnet50 outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./resnet50"
+    images_size = 224
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")

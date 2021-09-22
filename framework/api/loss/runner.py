@@ -7,6 +7,7 @@ loss case runner
 from inspect import isfunction
 import logging
 import copy
+import pytest
 import paddle
 import numpy as np
 
@@ -28,6 +29,7 @@ class Runner(object):
         self.softmax = False
         self.dygraph = True
         self.static = True
+        self.mean_loss = False
         # self.case_name = '_base'
         self.np_type = None
         types = {0: "func", 1: "class"}
@@ -70,6 +72,8 @@ class Runner(object):
                     if self.softmax is True:
                         out = paddle.nn.functional.softmax(out)
                     loss = self.loss(out, **self.kwargs_dict_dygraph["params_group1"])
+                    if self.mean_loss is True:
+                        loss = paddle.mean(loss)
                     loss.backward()
                     self.optimizer_dygraph.step()
                     self.optimizer_dygraph.clear_grad()
@@ -112,6 +116,8 @@ class Runner(object):
                         if self.softmax is True:
                             out = paddle.nn.functional.softmax(out)
                         loss = self.loss(out, **self.kwargs_dict_static["params_group1"])
+                        if self.mean_loss is True:
+                            loss = paddle.mean(loss)
                         # logging.info('loss is: {}'.format(loss))
                         # logging.info('loss.shape is: {}'.format(loss.shape))
                         self.optimizer_static.minimize(loss)
@@ -157,6 +163,8 @@ class Runner(object):
                         out = paddle.nn.functional.softmax(out)
                     obj = self.loss(**self.kwargs_dict_dygraph["params_group1"])
                     loss = obj(out, **self.kwargs_dict_dygraph["params_group2"])
+                    if self.mean_loss is True:
+                        loss = paddle.mean(loss)
                     # logging.info('at {}, loss.shape is: {}'.format(i, loss.shape))
                     loss.backward()
                     self.optimizer_dygraph.step()
@@ -211,6 +219,8 @@ class Runner(object):
                         obj = self.loss(**self.kwargs_dict_static["params_group1"])
                         print(self.kwargs_dict_static["params_group2"])
                         loss = obj(out, **self.kwargs_dict_static["params_group2"])
+                        if self.mean_loss is True:
+                            loss = paddle.mean(loss)
                         # logging.info('loss is: {}'.format(loss))
                         self.optimizer_static.minimize(loss)
                         exe = paddle.static.Executor()
@@ -242,3 +252,36 @@ class Runner(object):
             print("expect loss is {}".format(expect))
             print("Model result is {}".format(result))
             assert False
+
+
+def compare(result, expect, delta=1e-6, rtol=1e-7):
+    """
+    比较函数
+    :param result: 输入值
+    :param expect: 输出值
+    :param delta: 误差值
+    :return:
+    """
+    if isinstance(result, np.ndarray):
+        expect = np.array(expect)
+        res = np.allclose(result, expect, atol=delta, rtol=rtol, equal_nan=True)
+        # 出错打印错误数据
+        if res is False:
+            logging.error("the result is {}".format(result))
+            logging.error("the expect is {}".format(expect))
+        assert res
+        assert result.shape == expect.shape
+    elif isinstance(result, list):
+        for i, j in enumerate(result):
+            if isinstance(j, (np.generic, np.ndarray)):
+                compare(j, expect[i], delta, rtol)
+            else:
+                compare(j.numpy(), expect[i], delta, rtol)
+    elif isinstance(result, str):
+        res = result == expect
+        if res is False:
+            logging.error("the result is {}".format(result))
+            logging.error("the expect is {}".format(expect))
+        assert res
+    else:
+        assert result == pytest.approx(expect, delta)

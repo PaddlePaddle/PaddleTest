@@ -4,9 +4,8 @@
 """
 test lr LinearWarmup case
 """
-
-
 import paddle
+import pytest
 
 start_lr = 0
 end_lr = 0.5
@@ -14,6 +13,7 @@ warmup_steps = 20
 learning_rate = 0.5
 
 
+@pytest.mark.api_optimizer_warmup_vartype
 def test_warmup_1():
     """
     test warmup base test
@@ -27,6 +27,7 @@ def test_warmup_1():
         scheduler_1.step()
 
 
+@pytest.mark.api_optimizer_warmup_parameters
 def test_warmup_2():
     """
     test step > warmup_step
@@ -43,6 +44,7 @@ def test_warmup_2():
     assert learning_rate == scheduler_2.get_lr()
 
 
+@pytest.mark.api_optimizer_warmup_parameters
 def test_warmup_3():
     """
     test warmup_steps <=0

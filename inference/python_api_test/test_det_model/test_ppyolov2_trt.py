@@ -32,7 +32,7 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.config_init_combined_model
 def test_config():
     """
@@ -44,7 +44,7 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.gpu_more_bz_precision
 def test_trt_fp32_more_bz():
     """

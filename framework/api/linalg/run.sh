@@ -1,5 +1,6 @@
+pip3.7 install pytest
 export FLAGS_call_stack_level=2
-cases="./test_resnet50.py ./test_resnet50_slim.py ./test_tnt_small.py"
+cases=`find . -name "test*.py" | sort`
 ignore=""
 bug=0
 
@@ -10,7 +11,7 @@ do
     if [[ ${ignore} =~ ${file##*/} ]]; then
         echo "跳过"
     else
-        python -m pytest -m server --disable-warnings -v ${file}
+        python3.7 -m pytest ${file}
         if [ $? -ne 0 ]; then
             echo ${file} >> result.txt
             bug=`expr ${bug} + 1`
