@@ -26,6 +26,10 @@ DATA_PROC:
       -
         path: $ROOT_PATH/scripts
         cmd: bash compile_package.sh
+      # 先做makefile替换代码, 这块日后优化需要判断当前的python版本再做替换，
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash linux_py37.sh
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
@@ -34,6 +38,10 @@ DATA_PROC:
     priority: p0
     tag: mac_download_data
     run:
+      # 先做makefile替换代码
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash mac_py39.sh
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
