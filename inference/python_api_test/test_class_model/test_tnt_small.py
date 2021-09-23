@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -24,12 +24,13 @@ def check_model_exist():
     """
     check model exist
     """
-    tnt_small_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.1/class/TNT_small.tgz"
+    tnt_small_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2rc/class/TNT_small.tgz"
     if not os.path.exists("./TNT_small/inference.pdiparams"):
         wget.download(tnt_small_url, out="./")
         tar = tarfile.open("TNT_small.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./TNT_small/inference", output_model_path="./TNT_small/inference")
 
 
 @pytest.mark.server
@@ -71,8 +72,7 @@ def test_gpu_more_bz():
 
     file_path = "./TNT_small"
     images_size = 224
-    # TODO:TNT_small模型多batch下报错，暂时只跑batch_size=1
-    batch_size_pool = [1]
+    batch_size_pool = [1, 5]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -105,8 +105,7 @@ def test_trt_fp32_more_bz():
 
     file_path = "./TNT_small"
     images_size = 224
-    # TODO:TNT_small模型多batch下报错，暂时只跑batch_size=1
-    batch_size_pool = [1]
+    batch_size_pool = [1, 5]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -168,8 +167,7 @@ def test_trt_fp16_more_bz():
 
     file_path = "./TNT_small"
     images_size = 224
-    # TODO:TNT_small模型多batch下报错，暂时只跑batch_size=1
-    batch_size_pool = [1]
+    batch_size_pool = [1, 5]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(

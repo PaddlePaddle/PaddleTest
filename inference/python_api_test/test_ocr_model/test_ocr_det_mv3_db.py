@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +30,7 @@ def check_model_exist():
         tar = tarfile.open("ocr_det_mv3_db.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./ocr_det_mv3_db/inference", output_model_path="./ocr_det_mv3_db/inference")
 
 
 @pytest.mark.server
