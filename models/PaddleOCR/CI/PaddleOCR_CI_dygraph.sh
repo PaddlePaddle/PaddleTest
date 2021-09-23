@@ -86,11 +86,14 @@ sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' $line
 algorithm=$(grep -i algorithm $line |awk -F: '{print $2}'| sed 's/ //g')
 filename=${line##*/}
 model=${filename%.*}
-category=${model%%_*}
 
-if [ ${category} == "ch" ];then
-category="det"
+if [[ $model =~ "rec" ]];then
+   category="rec"
+else
+   category="det"
 fi
+echo "category"
+echo $category
 
 if [ ${category} == "rec" ];then
 

@@ -11,6 +11,11 @@ echo "python version"
 export http_proxy=${http_proxy};
 export https_proxy=${https_proxy};
 
+#visualdl
+echo "visualdl err"
+ls /root/.visualdl/conf
+rm -rf /root/.visualdl/conf
+
 # data
 rm -rf dataset
 ln -s ${Data_path} dataset
@@ -53,7 +58,7 @@ model=${filename%.*}
 if [ -d "output" ]; then
    rm -rf output
 fi
-echo $model 
+echo $model
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 #看情况加判断针对占大显存，MV3设置batch_size与epoch
 case ${model} in
@@ -86,7 +91,7 @@ esac
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 ls output/$params_dir/
 # eval
-python tools/eval.py -c $line -o Global.pretrained_model=output/$params_dir/latest > $log_path/eval/$model.log 2>&1
+python tools/eval.py -c $line -o Global.pretrained_model=output/$params_dir/latest -o DataLoader.Eval.sampler.batch_size=1 > $log_path/eval/$model.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
