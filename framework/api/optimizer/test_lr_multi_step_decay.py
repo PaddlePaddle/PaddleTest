@@ -5,6 +5,7 @@
 test lr MultiStepDecay case
 """
 import paddle
+import pytest
 from lrbase import Runner
 
 
@@ -18,6 +19,7 @@ def naive_multi_step_decay(lr_last, lr_0, epoch, milestones, gamma, **kwargs):
     return lr_0 * (gamma ** len(milestones))
 
 
+@pytest.mark.api_optimizer_multi_step_decay_vartype
 def test_multi_step_decay_1():
     """
     test MultiStepDecay base test

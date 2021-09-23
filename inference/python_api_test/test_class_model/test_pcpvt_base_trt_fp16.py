@@ -32,7 +32,7 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
@@ -45,7 +45,7 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
@@ -60,7 +60,7 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.trt_fp16_more_bz_precision
 def test_trt_fp16_more_bz():
     """
@@ -94,7 +94,6 @@ def test_trt_fp16_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
 @pytest.mark.jetson
 @pytest.mark.trt_fp16_more_bz_precision
 def test_jetson_trt_fp16_more_bz():
@@ -105,7 +104,7 @@ def test_jetson_trt_fp16_more_bz():
 
     file_path = "./pcpvt_base"
     images_size = 224
-    batch_size_pool = [1, 5]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -129,8 +128,7 @@ def test_jetson_trt_fp16_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
-@pytest.mark.jetson
+@pytest.mark.server
 @pytest.mark.trt_fp16_multi_thread_bz1_precision
 def test_trt_fp16_bz1_multi_thread():
     """
