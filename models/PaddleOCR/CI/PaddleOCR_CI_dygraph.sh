@@ -22,10 +22,14 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 
 # dependency
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt --ignore-installed
+python -m pip install -r requirements.txt --ignore-installed -i https://pypi.tuna.tsinghua.edu.cn/simple
 # paddleocr
 python -m pip install paddleocr
 python -m pip install gast==0.3.3
+
+
+unset http_proxy
+unset https_proxy
 
 # download model
 if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
@@ -82,26 +86,19 @@ sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' $line
 algorithm=$(grep -i algorithm $line |awk -F: '{print $2}'| sed 's/ //g')
 filename=${line##*/}
 model=${filename%.*}
-category=${model%%_*}
 
-if [ ${category} == "ch" ];then
-category="det"
+if [[ $model =~ "rec" ]];then
+   category="rec"
+else
+   category="det"
 fi
+echo "category"
+echo $category
 
 if [ ${category} == "rec" ];then
 
-if [[ $(echo $model | grep -c "chinese") -ne 0 ]];then
-python -m paddle.distributed.launch   tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.distort=True Global.use_space_char=True Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model_use_space.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model_use_space.log) -eq 0 ]];then
-   echo -e "\033[33m training of $model use_space_char successfully!\033[0m" | tee -a $log_path/result.log
-else
-   $log_path/train/$model_use_space.log
-   echo -e "\033[31m training of $model use_space_char failed!\033[0m" | tee -a $log_path/result.log
-fi
-fi
-
 python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
    echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
    cat $log_path/train/$model.log
@@ -110,7 +107,7 @@ fi
 
 else
 python -m paddle.distributed.launch  tools/train.py -c $line  -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir="output/"${model}  > $log_path/train/$model.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
    echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
    cat  $log_path/train/$model.log
@@ -122,7 +119,7 @@ fi
 if [[ ${model} =~ "sast" ]];then
    sleep 0.01
 else
-python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" > $log_path/eval/$model.log 2>&1
+python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest.pdparams" > $log_path/eval/$model.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/$model.log) -eq 0 ]];then
    echo -e "\033[33m eval of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
@@ -177,7 +174,8 @@ fi
 else
 echo "none SRN"
 if [[ $(echo $model | grep -c "lite") -eq 0 ]];then
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+# python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
