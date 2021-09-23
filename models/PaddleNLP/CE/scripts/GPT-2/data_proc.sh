@@ -15,4 +15,5 @@ rm -rf $code_path/raw_data
 rm -rf $code_path/data
 
 mkdir -p $code_path/data
-wget -P $code_path/data https://paddlenlp.bj.bcebos.com/models/transformers/gpt2/train.data.json_ids.npz
+wget -P $code_path/data  https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy
+wget -P $code_path/data  https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz
