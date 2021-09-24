@@ -9,7 +9,7 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: scripts/recall/ #脚本的路径
+  model_scripts_path: scripts/recall_mind/ #脚本的路径
   model_log_path: log/recall_mind/
 
 EXEC:

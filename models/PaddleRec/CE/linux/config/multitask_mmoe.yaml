@@ -39,13 +39,6 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 multitask_mmoe_linux_dy_gpu1
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -74,13 +67,6 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 multitask_mmoe_linux_dy_gpu2
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -106,13 +92,6 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_cpu multitask_mmoe_linux_dy_cpu
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -142,13 +121,6 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 multitask_mmoe_linux_st_gpu1
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -177,13 +149,6 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 multitask_mmoe_linux_st_gpu2
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -210,13 +175,6 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu multitask_mmoe_linux_st_cpu
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -245,13 +203,6 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1_con multitask_mmoe_linux_dy_gpu1_con
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -280,13 +231,6 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1_con multitask_mmoe_linux_st_gpu1_con
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -317,13 +261,6 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1 multitask_mmoe_infer_linux_dy_gpu1
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -351,13 +288,6 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu2 multitask_mmoe_infer_linux_dy_gpu2
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -383,13 +313,6 @@ INFER:
         cmd: sh infer.sh linux_dy_cpu multitask_mmoe_infer_linux_dy_cpu
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -417,13 +340,6 @@ INFER:
         cmd: sh infer.sh linux_st_gpu1 multitask_mmoe_infer_linux_st_gpu1
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -451,13 +367,6 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh linux_st_gpu2 multitask_mmoe_infer_linux_st_gpu2
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -483,13 +392,6 @@ INFER:
         cmd: sh infer.sh linux_st_cpu multitask_mmoe_infer_linux_st_cpu
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -517,13 +419,6 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1_con multitask_mmoe_infer_linux_dy_gpu1_con
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
@@ -551,13 +446,13 @@ INFER:
         cmd: sh infer.sh linux_st_gpu1_con multitask_mmoe_infer_linux_st_gpu1_con
 
     kpis: #kpi指标
-      auc_income:
-        latest: True
-        kpi_base: 0.680340
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
+#      auc_income:
+#        latest: True
+#        kpi_base: 0.680340
+#        threshold: 0.02
+#        actived: True
+#        evaluation: "+"
+#        unit_repr: None
       auc_marital:
         latest: True
         kpi_base: 0.992199
