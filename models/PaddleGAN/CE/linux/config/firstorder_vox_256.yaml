@@ -51,7 +51,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       equivariance_value:
         latest: True
-        kpi_base: 0.695
+        kpi_base: 1.3 #0.695
         threshold: 1 # 0.5
         actived: True
         evaluation: "-"

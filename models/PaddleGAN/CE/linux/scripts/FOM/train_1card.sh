@@ -1,11 +1,11 @@
 export FLAGS_cudnn_deterministic=True
-cd /workspace/PaddleGAN/ce/Paddle_Cloud_CE/src/task/PaddleGAN
+cd ${Project_path}
 sed -i 's/epochs/total_iters/g' configs/firstorder_fashion.yaml #将epcoh换为iter
 sed -ie '/- name: PairedRandomHorizontalFlip/d' configs/firstorder_fashion.yaml #删除 - name: PairedRandomHorizontalFlip
 sed -ie '/prob: 0.5/{N;d;}' configs/firstorder_fashion.yaml  #删除随机变量 相关参数
 
 rm -rf data
-ln -s /home/data/cfs/models_ce/PaddleGAN data
+ln -s ${Data_path} data
 if [ ! -d "log" ]; then
   mkdir log
 fi

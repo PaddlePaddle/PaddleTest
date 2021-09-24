@@ -64,7 +64,7 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.trt_fp16_more_bz_precision
 def test_trt_fp16_more_bz():
     """
@@ -271,8 +271,7 @@ def test_trt_fp16_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
-@pytest.mark.jetson
+@pytest.mark.server
 @pytest.mark.trt_fp16_multi_thread_bz1_precision
 def test_trtfp16_bz1_multi_thread():
     """
