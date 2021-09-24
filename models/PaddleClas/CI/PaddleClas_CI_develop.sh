@@ -123,18 +123,18 @@ if [[ ${model} =~ '384' ]];then
    sed -i 's/resize_short: 256/resize_short: 384/g' configs/inference_cls.yaml
    python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
    if [ $? -eq 0 ];then
-      echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+      echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
    else
       cat $log_path/predict/${model}.log
-      echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
+      echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
    fi
 
    python python/predict_cls.py -c configs/inference_cls.yaml -o Global.infer_imgs="./images"  -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
    if [ $? -eq 0 ];then
-      echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+      echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
    else
       cat $log_path/predict/${model}.log
-      echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a $log_path/result.log
+      echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
    fi
 
    sed -i 's/size: 384/size: 224/g' configs/inference_cls.yaml

@@ -153,7 +153,7 @@ makeup)
 esac
 done
 
-
+#infer
 python -u applications/tools/styleganv2.py --output_path styleganv2_infer --model_type ffhq-config-f --seed 233 --size 1024 --style_dim 512 --n_mlp 8 --channel_multiplier 2 --n_row 3 --n_col 5 > $log_path/infer/styleganv2.log 2>&1
 if [[ $? -eq 0 ]];then
    echo -e "\033[33m infer of styleganv2  successfully!\033[0m"| tee -a $log_path/result.log
