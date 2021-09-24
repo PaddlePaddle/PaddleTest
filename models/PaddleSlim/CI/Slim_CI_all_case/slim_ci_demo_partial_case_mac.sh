@@ -492,7 +492,7 @@ python  train.py \
 print_info $? dy_threshold_prune_T
 # eval
 python evaluate.py --pruned_model dy_threshold_models/model.pdparams \
---data imagenet  >${log_path}/dy_threshold_prune_eval 2>&1
+--data imagenet --use_gpu False >${log_path}/dy_threshold_prune_eval 2>&1
 print_info $? dy_threshold_prune_eval
 # cifar10
 python train.py --data cifar10 --lr 0.05 \
