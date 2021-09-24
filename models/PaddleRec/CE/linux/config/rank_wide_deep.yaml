@@ -42,14 +42,14 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.795215
-        threshold: 0.02
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
       time:
         latest: True
         kpi_base: 12100.89
-        threshold: 0.2
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -77,14 +77,14 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.795215
-        threshold: 0.02
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
       time:
         latest: True
         kpi_base: 12100.89
-        threshold: 0.2
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -109,14 +109,14 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.795215
-        threshold: 0.02
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
       time:
         latest: True
         kpi_base: 12100.89
-        threshold: 0.2
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -145,14 +145,14 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.795215
-        threshold: 0.02
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
       time:
         latest: True
         kpi_base: 12100.89
-        threshold: 0.2
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -179,14 +179,14 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.795215
-        threshold: 0.02
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
       time:
         latest: True
         kpi_base: 12100.89
-        threshold: 0.2
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -211,14 +211,14 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.795215
-        threshold: 0.02
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
       time:
         latest: True
         kpi_base: 12100.89
-        threshold: 0.2
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -246,14 +246,14 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.795215
-        threshold: 0.02
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
       time:
         latest: True
         kpi_base: 12100.89
-        threshold: 0.2
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -281,14 +281,14 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.795215
-        threshold: 0.02
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
       time:
         latest: True
         kpi_base: 12100.89
-        threshold: 0.2
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"

@@ -54,7 +54,6 @@ fi
 
 # wide_deep模型功能运行
 sed -i "s/  epochs: 4/  epochs: 1/g" config_bigdata.yaml
-sed -i "s/  infer_end_epoch: 4/  infer_end_epoch: 1/g" config_bigdata.yaml
 
 rm -rf output
 
