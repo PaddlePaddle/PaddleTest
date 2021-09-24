@@ -4,3 +4,4 @@
 init
 """
 from .infer_test import InferenceTest
+from .model_clip import clip_model_extra_op

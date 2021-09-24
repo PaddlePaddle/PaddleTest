@@ -1,4 +1,0 @@
-============ failed cases =============
-total bugs: 0
-============ failed cases =============
-total bugs: 0

@@ -299,8 +299,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       test_accuracy:
         latest: True
-        kpi_base: 50.512
-        threshold: 0.01
+        kpi_base: 49.795
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -350,7 +350,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU 'single' $SET_CUDA iflytek 116
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA iflytek 58
     kpis:
       exit_code:
         latest: True
@@ -384,7 +384,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU 'single' $SET_CUDA tnews 30
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA tnews 15
     kpis:
       exit_code:
         latest: True
@@ -418,7 +418,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU 'single' $SET_CUDA eprstmt 4
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA eprstmt 2
     kpis:
       exit_code:
         latest: True
@@ -452,7 +452,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU 'single' $SET_CUDA bustm 4
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA bustm 2
     kpis:
       exit_code:
         latest: True
@@ -486,7 +486,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU 'single' $SET_CUDA ocnli 4
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA ocnli 2
     kpis:
       exit_code:
         latest: True
@@ -520,7 +520,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU 'single' $SET_CUDA csl 4
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA csl 2
     kpis:
       exit_code:
         latest: True
@@ -555,7 +555,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU 'single' $SET_CUDA csldcp 67
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA csldcp 34
     kpis:
       exit_code:
         latest: True
@@ -589,7 +589,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU 'single' $SET_CUDA cluewsc 4
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA cluewsc 2
     kpis:
       exit_code:
         latest: True
@@ -623,7 +623,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU 'single' $SET_CUDA chid 6
+        cmd: bash infer.sh $XPU 'single' $SET_CUDA chid 3
     kpis:
       exit_code:
         latest: True

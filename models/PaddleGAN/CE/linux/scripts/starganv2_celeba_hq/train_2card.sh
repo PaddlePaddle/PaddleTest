@@ -1,5 +1,5 @@
 export FLAGS_cudnn_deterministic=True
-cd /workspace/PaddleGAN/ce/Paddle_Cloud_CE/src/task/PaddleGAN
+cd ${Project_path}
 
 if [ ! -f "models/stargan-v2/wing.pdparams" ]; then
   wget -P ./models/stargan-v2/ https://paddlegan.bj.bcebos.com/models/wing.pdparams
@@ -10,7 +10,7 @@ sed -i 's/decay_total_iters/decay_epochs/g' configs/starganv2_celeba_hq.yaml #�
 sed -i 's/interval:/interval: 99999 #/g' configs/starganv2_celeba_hq.yaml #将epcoh换为iter
 
 rm -rf data
-ln -s /home/data/cfs/models_ce/PaddleGAN data
+ln -s ${Data_path} data
 if [ ! -d "log" ]; then
   mkdir log
 fi

@@ -32,7 +32,8 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
+@pytest.mark.server
+@pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
     """
@@ -44,7 +45,7 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
@@ -59,7 +60,7 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.trt_fp32_more_bz_precision
 def test_int8_more_bz():
     """
@@ -70,6 +71,41 @@ def test_int8_more_bz():
     file_path = "./resnet50_quant"
     images_size = 224
     batch_size_pool = [1, 5, 10]
+    max_batch_size = 10
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        if "win" in sys.platform:
+            test_suite.load_config(model_path=".\\resnet50_quant\\resnet50_quant")
+        else:
+            test_suite.load_config(model_path="./resnet50_quant/resnet50_quant")
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        fake_output = np.array(npy_list[0:batch_size]).astype("float32")
+        input_data_dict = {"image": fake_input}
+        output_data_dict = {"save_infer_model/scale_0.tmp_0": fake_output}
+        test_suite.trt_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            delta=5e-1,
+            max_batch_size=max_batch_size,
+            precision="trt_int8",
+            use_calib_mode=True,
+        )
+
+        del test_suite  # destroy class to save memory
+
+
+@pytest.mark.jetson
+@pytest.mark.trt_fp32_more_bz_precision
+def test_jetson_int8_more_bz():
+    """
+    compared trt fp32 batch_size=1-10 resnet50 outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./resnet50_quant"
+    images_size = 224
+    batch_size_pool = [1, 2]
     max_batch_size = 10
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()

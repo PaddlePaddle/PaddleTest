@@ -4,15 +4,15 @@
 """
 test sgd support params groups case
 """
-
-
 import paddle
+import pytest
 from runner import Runner
 from linear_dygraph_model import LinearNet
 import reader
 
 
-def test_sgd_params_group():
+@pytest.mark.api_optimizer_sgd_params_group_vartype
+def test_sgd_params_group_base():
     """
     test sgd base test
     """
@@ -40,16 +40,4 @@ def test_sgd_params_group():
         24.384698401993962,
         24.134715300368555,
     ]
-    # expect = [
-    #     26.45557023,
-    #     26.38481750,
-    #     26.31408541,
-    #     26.24337390,
-    #     26.17268292,
-    #     26.10201242,
-    #     26.03136234,
-    #     25.96073263,
-    #     25.89012322,
-    #     25.81953407,
-    # ]
     runner.check(expect)
