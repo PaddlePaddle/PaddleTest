@@ -125,7 +125,7 @@ if [[ ${model} =~ '384' ]];then
    if [ $? -eq 0 ];then
       echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
    else
-      cat $log_path/predict/${model}.log
+      cat ../$log_path/predict/${model}.log
       echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
    fi
 
@@ -133,7 +133,7 @@ if [[ ${model} =~ '384' ]];then
    if [ $? -eq 0 ];then
       echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
    else
-      cat $log_path/predict/${model}.log
+      cat ../$log_path/predict/${model}.log
       echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
    fi
 

@@ -84,6 +84,7 @@ do
 echo $line
 sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' $line
 algorithm=$(grep -i algorithm $line |awk -F: '{print $2}'| sed 's/ //g')
+echo $algorithm
 filename=${line##*/}
 model=${filename%.*}
 
@@ -187,14 +188,14 @@ fi
 
 else
 echo "have Teacher Student "
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}"/Student"  > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${model}"/Student"  > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m Student predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
    cat $log_path/predict/${model}.log
    echo -e "\033[31m Student predict of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}"/Teacher"  > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${model}"/Teacher"  > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m Teacher predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else

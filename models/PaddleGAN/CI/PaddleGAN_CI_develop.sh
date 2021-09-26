@@ -31,14 +31,14 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
 # ppgan
-yum install epel-release -y
 yum update -y
+yum install epel-release -y
 rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
 rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
 
 yum install cmake boost -y
 yum install opencv opencv-python opencv-devel python-devel numpy -y
-yum install ffmpeg ffmpeg-devel -y
+yum install ffmpeg -y
 echo "ffmpeg"
 ffmpeg
 python -m pip install ppgan
@@ -203,7 +203,7 @@ fi
 #    echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
 # fi
 # # psgan
-# python tools/psgan_infer.py --config-file configs/makeup.yaml --model_path gan_models/psgan_weight.pdparams --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > $log_path/infer/psgan.log 2>&1
+# python tools/psgan_infer.py --config-file configs/makeup.yaml --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > $log_path/infer/psgan.log 2>&1
 # if [[ $? -eq 0 ]];then
 #    echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
 # else
