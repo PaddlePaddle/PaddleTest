@@ -384,3 +384,54 @@ def test_transpose_conv2d6():
         weight_attr=fluid.initializer.ConstantInitializer(value=1),
         bias_attr=fluid.initializer.ConstantInitializer(value=0),
     )
+
+
+@pytest.mark.api_nn_Conv2DTranspose_parameters
+def test_transpose_conv2d7():
+    """
+    default
+    """
+    np.random.seed(obj.seed)
+    x = randtool("float", 0, 1, [2, 3, 4, 4]).astype("float32")
+    in_channels = 3
+    out_channels = 1
+    kernel_size = [3, 3]
+    stride = 1
+    padding = 0
+    dilation = 1
+    padding_mode = "zeros"
+    groups = 1
+    res = np.array(
+        [
+            [
+                [
+                    [1.7994, 2.9210, 2.9210, 1.1216],
+                    [3.1950, 5.9235, 5.9235, 2.7286],
+                    [3.1950, 5.9235, 5.9235, 2.7286],
+                    [1.3956, 3.0026, 3.0026, 1.6070],
+                ]
+            ],
+            [
+                [
+                    [1.6811, 2.7743, 2.7743, 1.0932],
+                    [2.8684, 5.5386, 5.5386, 2.6701],
+                    [2.8684, 5.5386, 5.5386, 2.6701],
+                    [1.1874, 2.7643, 2.7643, 1.5769],
+                ]
+            ],
+        ]
+    )
+    obj.run(
+        res=res,
+        data=x,
+        in_channels=in_channels,
+        out_channels=out_channels,
+        kernel_size=kernel_size,
+        stride=stride,
+        padding=padding,
+        dilation=dilation,
+        padding_mode=padding_mode,
+        groups=groups,
+        weight_attr=fluid.initializer.ConstantInitializer(value=1),
+        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+    )
