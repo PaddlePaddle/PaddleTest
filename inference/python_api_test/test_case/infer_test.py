@@ -247,7 +247,6 @@ class InferenceTest(object):
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
 
-
     def trt_bz1_test(
         self,
         input_data_dict: dict,
