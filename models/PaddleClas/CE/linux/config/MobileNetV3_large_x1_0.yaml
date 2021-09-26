@@ -1,5 +1,5 @@
 MODEL: "MobileNetV3_large_x1_0" # 模型名
-PRIORITY: P0
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -14,13 +14,13 @@ VARIABLES:
 
 EXEC:
   exec_cases: [TRAIN]
-  exec_priority: [P0]
+  exec_priority: [P1]
   exec_tag: [linux_dy_gpu1,linux_dy_gpu2]
 
 #测试套
 TRAIN: # 训练步骤
   -
-    priority: P0  # dy_gpu1
+    priority: P1  # dy_gpu1
     tag: linux_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
@@ -39,7 +39,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/mv3_1card.log
   -
-    priority: P0  # dy_gpu1
+    priority: P1  # dy_gpu1
     tag: linux_dy_gpu2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置

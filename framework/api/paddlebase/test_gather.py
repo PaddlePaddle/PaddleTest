@@ -22,6 +22,7 @@ class TestGather(APIBase):
         self.types = [np.int32, np.int64, np.float32, np.float64]
         self.enable_backward = False
         self.no_grad_var = ["index", "axis"]
+        self.debug = True
 
 
 obj = TestGather(paddle.gather)
@@ -71,3 +72,33 @@ def test_gather3():
     axis = np.array([1]).astype("int64")
     res = np.array([[0, 2, 1, 0], [3, 5, 4, 3], [6, 8, 7, 6]])
     obj.base(res=res, x=x, index=index, axis=axis)
+
+
+@pytest.mark.api_base_gather_parameters
+def test_gather4():
+    """
+    index is an empty tensor int32
+    axis is 0
+    """
+    x = np.random.random((3, 4))
+    index = np.array([]).astype(np.int32)
+    axis = 0
+    res = np.array([]).reshape((0, 4))
+    obj.static = False
+    obj.run(res=res, x=x, index=index, axis=axis)
+    obj.static = True
+
+
+@pytest.mark.api_base_gather_parameters
+def test_gather5():
+    """
+    index is an empty tensor int64
+    axis is 1
+    """
+    x = np.random.random((3, 4))
+    index = np.array([]).astype(np.int64)
+    axis = 1
+    res = np.array([]).reshape((3, 0))
+    obj.static = False
+    obj.run(res=res, x=x, index=index, axis=axis)
+    obj.static = True

@@ -11,6 +11,11 @@ echo "python version"
 export http_proxy=${http_proxy};
 export https_proxy=${https_proxy};
 
+#visualdl
+echo "visualdl err"
+ls /root/.visualdl/conf
+rm -rf /root/.visualdl/conf
+
 # data
 rm -rf dataset
 ln -s ${Data_path} dataset
@@ -18,7 +23,11 @@ ln -s ${Data_path} dataset
 # env
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
-python -m pip install -r requirements.txt --ignore-installed
+python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+unset http_proxy
+unset https_proxy
+
 
 find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
 shuf models_list_all > models_list
@@ -82,7 +91,7 @@ esac
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 ls output/$params_dir/
 # eval
-python tools/eval.py -c $line -o Global.pretrained_model=output/$params_dir/latest > $log_path/eval/$model.log 2>&1
+python tools/eval.py -c $line -o Global.pretrained_model=output/$params_dir/latest -o DataLoader.Eval.sampler.batch_size=1 > $log_path/eval/$model.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
