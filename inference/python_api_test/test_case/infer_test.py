@@ -250,6 +250,7 @@ class InferenceTest(object):
             #         diff <= delta
             #     ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
         print(results)
+
     def trt_bz1_test(
         self,
         input_data_dict: dict,
@@ -348,7 +349,7 @@ class InferenceTest(object):
         use_static=False,
         use_calib_mode=False,
         dynamic=False,
-        tuned=False
+        tuned=False,
     ):
         """
         test enable_tensorrt_engine()
@@ -375,7 +376,7 @@ class InferenceTest(object):
         self.pd_config.enable_use_gpu(gpu_mem, 0)
         if dynamic:
             if tuned:
-                self.pd_config.collect_shape_range_info('shape_range.pbtxt')
+                self.pd_config.collect_shape_range_info("shape_range.pbtxt")
                 return 0
             else:
                 self.pd_config.enable_tensorrt_engine(
@@ -386,16 +387,16 @@ class InferenceTest(object):
                     use_static=use_static,
                     use_calib_mode=use_calib_mode,
                 )
-                self.pd_config.enable_tuned_tensorrt_dynamic_shape('shape_range.pbtxt',True)
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape("shape_range.pbtxt", True)
         else:
             self.pd_config.enable_tensorrt_engine(
-                    workspace_size=1 << 30,
-                    max_batch_size=max_batch_size,
-                    min_subgraph_size=min_subgraph_size,
-                    precision_mode=trt_precision_map[precision],
-                    use_static=use_static,
-                    use_calib_mode=use_calib_mode,
-                )
+                workspace_size=1 << 30,
+                max_batch_size=max_batch_size,
+                min_subgraph_size=min_subgraph_size,
+                precision_mode=trt_precision_map[precision],
+                use_static=use_static,
+                use_calib_mode=use_calib_mode,
+            )
 
         predictor = paddle_infer.create_predictor(self.pd_config)
 
@@ -659,6 +660,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+
     def test_trt_more_bz_test(
         self,
         input_data_dict: dict,
@@ -671,8 +673,8 @@ class InferenceTest(object):
         precision="fp32",
         use_static=False,
         use_calib_mode=False,
-        tuned=False
-        ):
+        tuned=False,
+    ):
         """
         test enable_tensorrt_engine()
         batch_size = 10
@@ -697,7 +699,6 @@ class InferenceTest(object):
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
 
-
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
@@ -719,6 +720,7 @@ class InferenceTest(object):
                 assert (
                     diff <= delta
                 ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+
 
 def get_gpu_mem(gpu_id=0):
     """
