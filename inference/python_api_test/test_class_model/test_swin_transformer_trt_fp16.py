@@ -48,121 +48,7 @@ def test_config():
 
 
 @pytest.mark.server
-@pytest.mark.trt_fp32_more_bz_precision
-def test_trt_fp32_more_bz():
-    """
-    compared trt fp32 batch_size=1-10 swin_transformer outputs with true val
-    """
-    check_model_exist()
-
-    file_path = "./swin_transformer"
-    images_size = 384
-    batch_size_pool = [1, 5]
-    for batch_size in batch_size_pool:
-        test_suite = InferenceTest()
-        test_suite.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
-        )
-        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
-        fake_input = np.array(images_list[0:batch_size]).astype("float32")
-        print(fake_input.shape)
-        input_data_dict = {"x": fake_input}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-
-        del test_suite  # destroy class to save memory
-
-        test_suite2 = InferenceTest()
-        test_suite2.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
-        )
-        test_suite2.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            repeat=1,
-            delta=1e-4,
-            min_subgraph_size=10,
-            precision="trt_fp32",
-            max_batch_size=batch_size,
-        )
-
-        del test_suite2  # destroy class to save memory
-
-
-@pytest.mark.server
-@pytest.mark.jetson
-@pytest.mark.trt_fp32_more_bz_precision
-def test_trt_fp32_more_bz():
-    """
-    compared trt fp32 batch_size=1-10 swin_transformer outputs with true val
-    """
-    check_model_exist()
-
-    file_path = "./swin_transformer"
-    images_size = 384
-    batch_size_pool = [1, 2]
-    for batch_size in batch_size_pool:
-        test_suite = InferenceTest()
-        test_suite.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
-        )
-        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
-        fake_input = np.array(images_list[0:batch_size]).astype("float32")
-        print(fake_input.shape)
-        input_data_dict = {"x": fake_input}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-
-        del test_suite  # destroy class to save memory
-
-        test_suite2 = InferenceTest()
-        test_suite2.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
-        )
-        test_suite2.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            repeat=1,
-            delta=1e-4,
-            min_subgraph_size=10,
-            precision="trt_fp32",
-            max_batch_size=batch_size,
-        )
-
-        del test_suite2  # destroy class to save memory
-
-
-@pytest.mark.server
-@pytest.mark.trt_fp32_multi_thread_bz1_precision
-def test_trtfp32_bz1_multi_thread():
-    """
-    compared trt fp32 batch_size=1 swin_transformer multi_thread outputs with true val
-    """
-    check_model_exist()
-
-    file_path = "./swin_transformer"
-    images_size = 384
-    batch_size = 1
-    test_suite = InferenceTest()
-    test_suite.load_config(
-        model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
-    )
-    images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
-    fake_input = np.array(images_list[0:batch_size]).astype("float32")
-    input_data_dict = {"x": fake_input}
-    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-
-    del test_suite  # destroy class to save memory
-
-    test_suite2 = InferenceTest()
-    test_suite2.load_config(
-        model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
-    )
-    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4, precision="trt_fp32")
-
-    del test_suite2  # destroy class to save memory
-
-
-@pytest.mark.server
-@pytest.mark.trt_fp16_more_bz_precision
+@pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
     compared trt fp32 batch_size=1-10 swin_transformer outputs with true val
@@ -193,7 +79,7 @@ def test_trt_fp16_more_bz():
             output_data_dict,
             repeat=1,
             delta=1e-4,
-            min_subgraph_size=10,
+            min_subgraph_size=5,
             precision="trt_fp16",
             max_batch_size=batch_size,
         )
@@ -202,7 +88,7 @@ def test_trt_fp16_more_bz():
 
 
 @pytest.mark.jetson
-@pytest.mark.trt_fp16_more_bz_precision
+@pytest.mark.trt_fp16
 def test_jetson_trt_fp16_more_bz():
     """
     compared trt fp32 batch_size=1-10 swin_transformer outputs with true val
@@ -211,7 +97,7 @@ def test_jetson_trt_fp16_more_bz():
 
     file_path = "./swin_transformer"
     images_size = 384
-    batch_size_pool = [1, 2]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -233,7 +119,7 @@ def test_jetson_trt_fp16_more_bz():
             output_data_dict,
             repeat=1,
             delta=1e-4,
-            min_subgraph_size=2,
+            min_subgraph_size=1,
             precision="trt_fp16",
             max_batch_size=batch_size,
         )
@@ -242,7 +128,7 @@ def test_jetson_trt_fp16_more_bz():
 
 
 @pytest.mark.server
-@pytest.mark.trt_fp16_multi_thread_bz1_precision
+@pytest.mark.trt_fp16_multi_thread
 def test_trt_fp16_bz1_multi_thread():
     """
     compared trt fp32 batch_size=1 swin_transformer multi_thread outputs with true val
@@ -268,7 +154,7 @@ def test_trt_fp16_bz1_multi_thread():
         model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
     )
     test_suite2.trt_bz1_multi_thread_test(
-        input_data_dict, output_data_dict, repeat=1, delta=1e-4, min_subgraph_size=10, precision="trt_fp16"
+        input_data_dict, output_data_dict, repeat=1, delta=1e-4, min_subgraph_size=1, precision="trt_fp16"
     )
 
     del test_suite2  # destroy class to save memory

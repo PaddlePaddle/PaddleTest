@@ -46,7 +46,7 @@ def test_config():
 
 
 @pytest.mark.server
-@pytest.mark.trt_fp32_multi_thread_more_bz_precision
+@pytest.mark.trt_fp32_multi_thread
 def test_trtfp32_more_bz_multi_thread():
     """
     compared trt fp32 batch_size=4 yolov3 multi_thread outputs with true val
@@ -100,7 +100,7 @@ def test_trtfp32_more_bz_multi_thread():
 
 
 @pytest.mark.server
-@pytest.mark.trt_fp32_more_bz_precision
+@pytest.mark.trt_fp32
 def test_trtfp32_more_bz():
     """
     compared trt fp32 batch_size=1,5,10 yolov3 outputs with true val
@@ -154,8 +154,8 @@ def test_trtfp32_more_bz():
 
 
 @pytest.mark.jetson
-@pytest.mark.trt_fp32_more_bz_precision
-def test_jetson_trtfp32_more_bz():
+@pytest.mark.trt_fp32
+def test_jetson_trt_fp32_more_bz():
     """
     compared trt fp32 batch_size=1,5,10 yolov3 outputs with true val
     """
@@ -163,7 +163,7 @@ def test_jetson_trtfp32_more_bz():
 
     file_path = "./yolov3"
     images_size = 608
-    batch_size_pool = [1, 2]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()

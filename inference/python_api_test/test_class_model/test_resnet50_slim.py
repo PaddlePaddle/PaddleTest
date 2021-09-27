@@ -61,7 +61,7 @@ def test_disable_gpu():
 
 
 @pytest.mark.server
-@pytest.mark.trt_fp32_more_bz_precision
+@pytest.mark.trt_int8
 def test_int8_more_bz():
     """
     compared trt fp32 batch_size=1-10 resnet50 outputs with true val
@@ -96,17 +96,17 @@ def test_int8_more_bz():
 
 
 @pytest.mark.jetson
-@pytest.mark.trt_fp32_more_bz_precision
+@pytest.mark.trt_int8
 def test_jetson_int8_more_bz():
     """
-    compared trt fp32 batch_size=1-10 resnet50 outputs with true val
+    compared trt fp32 batch_size=1 for jetson resnet50 outputs with true val
     """
     check_model_exist()
 
     file_path = "./resnet50_quant"
     images_size = 224
-    batch_size_pool = [1, 2]
-    max_batch_size = 10
+    batch_size_pool = [1]
+    max_batch_size = 1
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         if "win" in sys.platform:

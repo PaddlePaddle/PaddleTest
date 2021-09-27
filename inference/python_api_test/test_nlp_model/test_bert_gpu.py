@@ -60,36 +60,9 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
-@pytest.mark.mkldnn_bz1_precision
-def test_mkldnn():
-    """
-    compared mkldnn bert outputs with true val
-    """
-    check_model_exist()
-
-    test_suite = InferenceTest()
-    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
-    data_path = "./bert/data.txt"
-    images_list = test_suite.get_text_npy(data_path)
-
-    input_data_dict = {
-        "input_ids": np.array([images_list[0][0]]).astype("int64"),
-        "token_type_ids": np.array([images_list[0][1]]).astype("int64"),
-    }
-    output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
-
-    del test_suite  # destroy class to save memory
-
-    test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
-    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5)
-
-    del test_suite2  # destroy class to save memory
-
-
-@pytest.mark.p1
-@pytest.mark.gpu_bz1_precision
+@pytest.mark.server
+@pytest.mark.jetson
+@pytest.mark.gpu
 def test_gpu_bz1():
     """
     compared mkldnn bert outputs with true val

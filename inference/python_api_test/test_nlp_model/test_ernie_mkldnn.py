@@ -47,23 +47,7 @@ def test_config():
 
 
 @pytest.mark.server
-@pytest.mark.config_disablegpu_memory
-def test_disable_gpu():
-    """
-    test no gpu resources occupied after disable gpu
-    """
-    check_model_exist()
-    test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
-    batch_size = 1
-    fake_input0 = np.zeros((batch_size, 128)).astype("int64")
-    fake_input1 = np.zeros((batch_size, 128)).astype("int64")
-    input_data_dict = {"input_ids": fake_input0, "token_type_ids": fake_input1}
-    test_suite.disable_gpu_test(input_data_dict)
-
-
-@pytest.mark.server
-@pytest.mark.mkldnn_bz1_precision
+@pytest.mark.mkldnn
 def test_mkldnn():
     """
     compared mkldnn bert outputs with true val

@@ -62,7 +62,7 @@ def test_disable_gpu():
 
 @pytest.mark.server
 @pytest.mark.jetson
-@pytest.mark.gpu_bz1_precision
+@pytest.mark.gpu
 def test_gpu_bz1():
     """
     compared gpu bert outputs with true val
