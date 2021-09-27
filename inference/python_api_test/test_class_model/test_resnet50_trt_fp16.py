@@ -33,9 +33,6 @@ def check_model_exist():
         clip_model_extra_op(path_prefix="./resnet50/inference", output_model_path="./resnet50/inference")
 
 
-@pytest.mark.server
-@pytest.mark.jetson
-@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config

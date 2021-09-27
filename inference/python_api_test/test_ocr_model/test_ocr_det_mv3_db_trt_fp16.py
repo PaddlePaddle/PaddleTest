@@ -32,9 +32,6 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
-@pytest.mark.jetson
-@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config

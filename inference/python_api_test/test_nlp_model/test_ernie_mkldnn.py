@@ -33,9 +33,6 @@ def check_model_exist():
         clip_model_extra_op(path_prefix="./ernie/inference", output_model_path="./ernie/inference")
 
 
-@pytest.mark.server
-@pytest.mark.jetson
-@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config
