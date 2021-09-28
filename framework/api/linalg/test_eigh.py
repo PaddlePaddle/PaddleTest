@@ -134,12 +134,8 @@ def test_eigh4():
     A = np.array([[2 - 6j, 4 + 7j], [4 - 7j, 4]])
     res = np.linalg.eigh(A)
     eigen_vector = np.array(
-        [
-            [(-0.749363560289441 - 0j), (0.662158783457815 + 0j)],
-            [(0.32852275584841306 + 0.5749148227347227j), (0.3717884412453006 + 0.6506297721792759j)],
-        ]
+        [[0.37178844 + 0.65062977j, 0.32852276 + 0.57491482j], [-0.66215878 + 0.0j, 0.74936356 + 0.0j]]
     )
-
     e_value, e_vector = cal_eigh("complex128", x=A, UPLO="U", place=place)
     assert np.allclose(np.linalg.norm(res[0]), np.linalg.norm(e_value))
     assert np.allclose(eigen_vector, e_vector)
