@@ -28,6 +28,7 @@ class TestEigvals(APIBase):
 
 
 obj = TestEigvals(paddle.linalg.eigvals)
+obj.places = [paddle.CPUPlace()]
 
 
 @pytest.mark.api_linalg_eigvals_vartype

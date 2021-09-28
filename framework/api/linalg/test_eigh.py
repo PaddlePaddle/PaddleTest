@@ -19,7 +19,7 @@ else:
     place = paddle.CPUPlace()
 
 
-def cal_eigh(dtype, x, UPLO="L"):
+def cal_eigh(dtype, x, UPLO="L", place=place):
     """
         calculate eigh api
         """
@@ -33,7 +33,7 @@ def cal_eigh(dtype, x, UPLO="L"):
         x_s = paddle.static.data(name="x_s", shape=x.shape, dtype=dtype)
         y = paddle.linalg.eigh(x_s, UPLO)
         logging.info(place)
-        exe = paddle.static.Executor()
+        exe = paddle.static.Executor(place)
         exe.run(startup_program)
         static_res = exe.run(main_program, feed={"x_s": x}, fetch_list=[y], return_numpy=True)
         paddle.disable_static()
@@ -126,7 +126,10 @@ def test_eigh3():
 def test_eigh4():
     """
     validation eigenvector
+    cpu
     """
+    paddle.device.set_device("cpu")
+    place = paddle.CPUPlace()
     # types = ['complex64', 'complex128']
     A = np.array([[2 - 6j, 4 + 7j], [4 - 7j, 4]])
     res = np.linalg.eigh(A)
@@ -136,6 +139,28 @@ def test_eigh4():
             [(0.32852275584841306 + 0.5749148227347227j), (0.3717884412453006 + 0.6506297721792759j)],
         ]
     )
+
+    e_value, e_vector = cal_eigh("complex128", x=A, UPLO="U", place=place)
+    assert np.allclose(np.linalg.norm(res[0]), np.linalg.norm(e_value))
+    assert np.allclose(eigen_vector, e_vector)
+
+
+@pytest.mark.api_base_eigh_parameters
+def test_eigh5():
+    """
+    validation eigenvector
+    gpu
+    """
+
+    A = np.array([[2 - 6j, 4 + 7j], [4 - 7j, 4]])
+    res = np.linalg.eigh(A)
+    eigen_vector = np.array(
+        [
+            [(0.3717883825302124 + 0.6506297588348389j), (0.3285227417945862 + 0.574914813041687j)],
+            [(-0.662158727645874 + 0j), (0.7493635416030884 + 0j)],
+        ]
+    )
+
     # print(res)
     # for d in types:
     e_value, e_vector = cal_eigh("complex128", x=A, UPLO="U")
