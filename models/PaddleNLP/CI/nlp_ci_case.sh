@@ -199,31 +199,69 @@ print_info $? electra_pretrain
 }
 # 8 gpt
 gpt(){
-cd ${nlp_dir}/examples/language_model/gpt/
-cp -r /ssd1/paddlenlp/download/gpt/data/ ./
-cp -r /ssd1/paddlenlp/download/gpt/ckpt/ ./
-export CUDA_VISIBLE_DEVICES=${cudaid2}
+#data process
+cd ${nlp_dir}/examples/language_model/data_tools/
+sed -i "s/python3/python/g" Makefile
+sed -i "s/python-config/python3.7m-config/g" Makefile
 #pretrain
-time (python -m paddle.distributed.launch run_pretrain.py \
+cd ${nlp_dir}/examples/language_model/gpt/
+cp -r /ssd1/paddlenlp/download/gpt/* ./
+export CUDA_VISIBLE_DEVICES=${cudaid2}
+time (python -m paddle.distributed.launch  run_pretrain.py \
     --model_type gpt \
     --model_name_or_path gpt2-en \
-    --input_dir "./data" \
-    --output_dir "output" \
-    --weight_decay 0.01 \
-    --grad_clip 1.0 \
-    --max_steps 1 \
-    --save_steps 1 \
-    --decay_steps 1 \
-    --warmup_rate 0.01 \
-    --micro_batch_size 4 \
+    --input_dir "./pre_data"\
+    --output_dir "output"\
+    --weight_decay 0.01\
+    --grad_clip 1.0\
+    --max_steps 100\
+    --save_steps 100\
+    --decay_steps 320000\
+    --warmup_rate 0.01\
+    --micro_batch_size 2 \
     --device gpu >${log_path}/gpt_pretrain) >>${log_path}/gpt_pretrain 2>&1
 print_info $? gpt_pretrain
 # test acc
-cd tests/
+cd ${nlp_dir}/tests/examples/gpt/
 time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
 print_info $? gpt_test_acc
 }
-# 9 xlnet
+# 9 ernie
+ernie (){
+export CUDA_VISIBLE_DEVICES=${cudaid2}
+cd ${nlp_dir}/examples/language_model/ernie-1.0/
+cp -r /ssd1/paddlenlp/download/ernie-1.0/* ./
+time (python -u  -m paddle.distributed.launch  \
+    --log_dir "./log" \
+    run_pretrain_static.py \
+    --model_type "ernie" \
+    --model_name_or_path "ernie-1.0" \
+    --input_dir "./data/" \
+    --output_dir "./output/" \
+    --max_seq_len 512 \
+    --micro_batch_size 32 \
+    --global_batch_size 64 \
+    --sharding_degree 1 \
+    --dp_degree 2 \
+    --use_sharding false \
+    --use_amp true \
+    --use_recompute false \
+    --max_lr 0.0001 \
+    --min_lr 0.00001 \
+    --max_steps 40 \
+    --save_steps 20 \
+    --checkpoint_steps 5000 \
+    --decay_steps 3960000 \
+    --weight_decay 0.01 \
+    --warmup_rate 0.0025 \
+    --grad_clip 1.0 \
+    --logging_freq 20\
+    --num_workers 2 \
+    --eval_freq 1000 \
+    --device "gpu" >${log_path}/ernie_pretrain) >>${log_path}/ernie_pretrain 2>&1
+print_info $? ernie_pretrain
+}
+# 10 xlnet
 xlnet(){
 cd ${nlp_dir}/examples/language_model/xlnet/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -240,7 +278,7 @@ time (python -m paddle.distributed.launch ./run_glue.py \
     --output_dir ./xlnet/ >${log_path}/xlnet_train) >>${log_path}/xlnet_train 2>&1
 print_info $? xlnet_train
 }
-# 10 ofa
+# 11 ofa
 ofa(){
 cd ${nlp_dir}/examples/model_compression/ofa/
 cd ../../benchmark/glue/
@@ -279,7 +317,7 @@ time (python -m paddle.distributed.launch run_glue_ofa.py  \
           --width_mult_list 1.0 0.8333333333333334 0.6666666666666666 0.5 >${log_path}/ofa_slim) >>${log_path}/ofa_slim 2>&1
 print_info $? ofa_slim
 }
-# 11 albert
+# 12 albert
 albert (){
 cd ${nlp_dir}/examples/benchmark/glue/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -298,31 +336,6 @@ time (python -m paddle.distributed.launch  run_glue.py \
         --device gpu >${log_path}/albert_sst-2_train) >>${log_path}/albert_sst-2_train 2>&1
 print_info $? albert_sst-2_train
 }
-# #12 ernie 超过1h
-# ernie (){
-# CUDA_VISIBLE_DEVICES=${cudaid2}
-# cd ${nlp_dir}/examples/language_model/ernie/
-# time (python -m paddle.distributed.fleet.launch \
-#     --log_dir ./output_dir/log \
-#     run_pretraining.py \
-#     --global_bsz 64 \
-#     --micro_bsz 1 \
-#     --max_seq_len 512 \
-#     --ernie_config_file config/ernie_base_config.json \
-#     --learning_rate 1e-4 \
-#     --log_steps 1 \
-#     --num_train_steps 1 \
-#     --save_steps 100 \
-#     --output_dir ./output_dir \
-#     --use_recompute true \
-#     --use_sharding true \
-#     --use_sop false \
-#     --num_mp=1 \
-#     --num_sharding=2 \
-#     --num_pp=1 \
-#     --num_dp=1 >${log_path}/ernie_pretrain) >>${log_path}/ernie_pretrain 2>&1
-# print_info $? ernie_pretrain
-# }
 # 13 squad
 squad (){
 cd ${nlp_dir}/examples/machine_reading_comprehension/SQuAD/
@@ -736,7 +749,7 @@ export P0case_list=()
 export P0case_time=0
 export all_P0case_time=0
 declare -A all_P0case_dic
-all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["xlnet"]=2 \
+all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["squad"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
   ["pointer_summarizer"]=5 ["question_matching"]=5 )
@@ -744,7 +757,7 @@ get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
 done
-P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt xlnet ofa albert squad tinybert lexical_analysis seq2seq \
+P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie xlnet ofa albert squad tinybert lexical_analysis seq2seq \
 pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching)
 P0case_time=${all_P0case_time}
 }
