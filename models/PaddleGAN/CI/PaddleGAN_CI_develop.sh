@@ -29,7 +29,7 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 
 # dependency
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt --ignore-installed
+python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
 # ppgan
 yum install epel-release -y
 yum update -y
@@ -51,6 +51,8 @@ python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 python -m pip install dlib -i https://pypi.tuna.tsinghua.edu.cn/simple
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
 
+unset http_proxy
+unset https_proxy
 
 pip list
 echo "pip list"
@@ -160,13 +162,13 @@ else
    echo -e "\033[31m infer of styleganv2 failed!\033[0m"| tee -a $log_path/result.log
 fi
 # Wav2Lip
-python applications/tools/wav2lip.py --face ./docs/imgs/mona7s.mp4 --audio ./docs/imgs/guangquan.m4a --outfile Wav2Lip_infer.mp4 > $log_path/infer/wav2lip.log 2>&1
-if [[ $? -eq 0 ]];then
-   echo -e "\033[33m infer of wav2lip  successfully!\033[0m"| tee -a $log_path/result.log
-else
-   cat $log_path/infer/wav2lip.log
-   echo -e "\033[31m infer of wav2lip failed!\033[0m"| tee -a $log_path/result.log
-fi
+# python applications/tools/wav2lip.py --face ./docs/imgs/mona7s.mp4 --audio ./docs/imgs/guangquan.m4a --outfile Wav2Lip_infer.mp4 > $log_path/infer/wav2lip.log 2>&1
+# if [[ $? -eq 0 ]];then
+#    echo -e "\033[33m infer of wav2lip  successfully!\033[0m"| tee -a $log_path/result.log
+# else
+#    cat $log_path/infer/wav2lip.log
+#    echo -e "\033[31m infer of wav2lip failed!\033[0m"| tee -a $log_path/result.log
+# fi
 # animeganv2
 python applications/tools/animeganv2.py --input_image ./docs/imgs/animeganv2_test.jpg > $log_path/infer/animeganv2.log 2>&1
 if [[ $? -eq 0 ]];then

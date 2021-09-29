@@ -5,8 +5,7 @@
 test_transpose
 """
 from apibase import APIBase
-
-# from apibase import randtool
+from apibase import compare
 import paddle
 import pytest
 import numpy as np
@@ -72,3 +71,39 @@ def test_transpose2():
         np.float64
     )
     obj.run(res=res, x=x, perm=perm)
+
+
+@pytest.mark.api_base_transpose_parameters
+def test_transpose3():
+    """
+    x.shape=(1, 3, 2, 2)
+    res.shape=(3, 1, 2, 2)
+    bool
+    """
+    paddle.disable_static()
+    x = np.array(
+        [[[[False, True], [True, False]], [[False, False], [True, False]], [[True, True], [False, True]]]]
+    ).astype(np.bool)
+    exp = np.array(
+        [[[[False, True], [True, False]]], [[[False, False], [True, False]]], [[[True, True], [False, True]]]]
+    ).astype(np.bool)
+    x_p = paddle.to_tensor(x)
+    perm = [1, 0, 2, 3]
+    res = paddle.transpose(x_p, perm)
+    compare(res.numpy(), exp)
+
+
+@pytest.mark.api_base_transpose_parameters
+def test_transpose4():
+    """
+    x.shape=(2, 1, 3, 4, 2, 1, 2)
+    res.shape=(2, 2, 1, 2, 4, 1, 3)
+    bool
+    """
+    paddle.disable_static()
+    x = np.random.random((2, 1, 3, 4, 2, 1, 2)) * 4 - 2
+    x_p = paddle.to_tensor(x.astype(np.bool))
+    perm = [6, 0, 1, 4, 3, 5, 2]
+    exp = np.transpose(x.astype(np.bool), perm)
+    res = paddle.transpose(x_p, perm)
+    compare(res.numpy(), exp)
