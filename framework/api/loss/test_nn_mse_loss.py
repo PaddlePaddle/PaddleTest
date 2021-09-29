@@ -4,36 +4,35 @@
 """
 paddle.nn.MSELoss
 """
-
 import paddle
+import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
-import reader
 import numpy as np
 
 
+@pytest.mark.loss_nn_MSELoss_vartype
 def test_nn_mse_loss_base():
     """
     test nn.MSELoss base test
     """
-    model = Dygraph()
     datareader = np.random.random(size=[5, 10])
     label = np.random.randint(0, 1, size=[5, 2]).astype(np.float64)
     loss = paddle.nn.MSELoss
-    runner = Runner(datareader, label, model, loss)
+    runner = Runner(datareader, loss)
     runner.softmax = False
     runner.add_kwargs_to_dict("params_group1", reduction="mean")
-    runner.run()
+    runner.add_kwargs_to_dict("params_group2", label=label)
     expect = [
-        8.797613809314154,
-        8.727873155895239,
-        8.65868640960391,
-        8.590049170783894,
-        8.521957074725274,
-        8.454405791386904,
-        8.38739102512103,
-        8.320908514400106,
-        8.254954031545779,
-        8.189523382460031,
+        7.019458764884789,
+        6.973347883852658,
+        6.92754050576595,
+        6.88203463264913,
+        6.836828279679613,
+        6.791919475101177,
+        6.747306260137942,
+        6.702986688908922,
+        6.658958828343143,
+        6.615220758095295,
     ]
-    runner.check(expect)
+    runner.run(model=Dygraph, expect=expect)

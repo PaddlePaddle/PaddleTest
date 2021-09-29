@@ -55,7 +55,7 @@ TRAIN:
 
 
   -
-    priority: p0
+    priority: p1
     tag: win_dy_gpu1
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA

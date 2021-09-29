@@ -1,0 +1,40 @@
+MODEL: "ch_ppocr_mobile_v2.0_det_server" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleOCR
+  path: $ROOT_PATH/PaddleOCR
+  branch: $ocr_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: $ROOT_PATH/PaddleOCR/tests #脚本的路径
+  model_log_path: $ROOT_PATH/PaddleOCR/tests/output #产出的日志目录
+
+EXEC:
+  exec_cases: [FULLCHAIN]
+  exec_priority: [P0]
+  exec_tag: [lite_train_infer_gpu2]
+
+#全链条测试 lite_train_infer
+FULLCHAIN: # 训练步骤
+  -
+    priority: P0  # dy_gpu1
+    tag: lite_train_infer_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/PaddleOCR
+        cmd: "bash tests/prepare.sh ./tests/ocr_det_server_params.txt lite_train_infer; bash tests/test.sh ./tests/ocr_det_server_params.txt lite_train_infer;"
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 8.889750 # 9.499928
+        threshold: 1 # 0.9
+        actived: True
+        evaluation: "-"
+    output: $ROOT_PATH/PaddleOCR/tests/output/norm_train_gpus_0,1_autocast_null/train.log

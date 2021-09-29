@@ -37,11 +37,21 @@ if [[ $4 == 'con' ]];then
   MAXSTEP=1000000
   SAVE_STEP=20000
   EPOCHS=3
+  LOGSTEP=100
+  wget https://bert-data.bj.bcebos.com/benchmark_sample%2Fhdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5.tar.gz
+  tar -xzvf benchmark_sample%2Fhdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5.tar.gz
+  DATATPATH='./hdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en/training/'
 else
   MAXSTEP=3
   SAVE_STEP=1
   EPOCHS=1
+  LOGSTEP=1
+  DATATPATH='./data/'
 fi
+
+echo $MAXSTEP
+echo $SAVE_STEP
+echo $EPOCHS
 
 if [[ $1 == 'gpu' ]];then #GPU
     python -m paddle.distributed.launch --gpus "$3"  run_pretrain.py \
@@ -54,9 +64,9 @@ if [[ $1 == 'gpu' ]];then #GPU
     --adam_epsilon 1e-6 \
     --warmup_steps 10000 \
     --num_train_epochs ${EPOCHS} \
-    --input_dir data/ \
+    --input_dir ${DATATPATH} \
     --output_dir pretrained_models_multi/ \
-    --logging_steps 1 \
+    --logging_steps ${LOGSTEP} \
     --save_steps ${SAVE_STEP} \
     --max_steps ${MAXSTEP} \
     --device $1 \

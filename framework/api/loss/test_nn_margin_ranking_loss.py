@@ -4,38 +4,36 @@
 """
 paddle.nn.MarginRankingLoss
 """
-
 import paddle
+import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
-import reader
 import numpy as np
 
 
+@pytest.mark.loss_nn_MarginRankingLoss_vartype
 def test_nn_margin_ranking_loss_base():
     """
     test nn.MarginRankingLoss base test
     """
-    model = Dygraph()
     datareader = np.random.random(size=[2, 10])
-    label = paddle.to_tensor([[1, -1], [-1, -1]], dtype="float64")
+    label = np.array([[1, -1], [-1, -1]]).astype(np.float64)
     other = np.array([[2, 1], [2, 4]]).astype(np.float64)
     loss = paddle.nn.MarginRankingLoss
-    runner = Runner(datareader, other, model, loss)
+    runner = Runner(datareader, loss)
     runner.softmax = False
     runner.add_kwargs_to_dict("params_group1", margin=0.0, reduction="mean", name=None)
-    runner.add_kwargs_to_dict("params_group2", label=label)
-    runner.run()
+    runner.add_kwargs_to_dict("params_group2", other=other, label=label)
     expect = [
-        0.7593716739231385,
-        0.7587214473614408,
-        0.7580712207997423,
-        0.7574209942380448,
-        0.7567707676763465,
-        0.7561205411146485,
-        0.7554703145529503,
-        0.7548200879912526,
-        0.7541698614295543,
-        0.7535196348678563,
+        0.6310311176096826,
+        0.6305001903870682,
+        0.6299692631644536,
+        0.6294383359418392,
+        0.6289074087192248,
+        0.6283764814966103,
+        0.6278455542739958,
+        0.6273146270513813,
+        0.6267836998287669,
+        0.6262527726061524,
     ]
-    runner.check(expect)
+    runner.run(model=Dygraph, expect=expect)

@@ -20,6 +20,7 @@ import paddle.inference as paddle_infer
 
 from pynvml.smi import nvidia_smi
 from .image_preprocess import read_images_path, get_images_npy, read_npy_path, preprocess, sig_fig_compare
+from .text_preprocess import ernie_data as text_pre
 
 _gpu_mem_lists = []
 
@@ -120,6 +121,17 @@ class InferenceTest(object):
         elif model_type == "det":
             images_list, images_origin_list = read_images_path(images_path, images_size, center=False, model_type="det")
             return images_list, images_origin_list, npy_list
+
+    def get_text_npy(self, file_path: str) -> list:
+        """
+        get images and npy truth value
+        Args:
+            file_path(str): images and npy saved path
+        Returns:
+            npy_list(list): npy array in list
+        """
+        predict = text_pre(file_path)
+        return predict
 
     def config_test(self):
         """
@@ -401,7 +413,7 @@ class InferenceTest(object):
         max_input_shape=None,
         opt_input_shape=None,
         min_subgraph_size=3,
-        precision="fp32",
+        precision="trt_fp32",
         use_static=False,
         use_calib_mode=False,
     ):
@@ -480,7 +492,7 @@ class InferenceTest(object):
         delta=1e-5,
         gpu_mem=1000,
         min_subgraph_size=3,
-        precision="fp32",
+        precision="trt_fp32",
         use_static=False,
         use_calib_mode=False,
     ):
@@ -541,7 +553,7 @@ class InferenceTest(object):
         max_input_shape=None,
         opt_input_shape=None,
         min_subgraph_size=3,
-        precision="fp32",
+        precision="trt_fp32",
         use_static=False,
         use_calib_mode=False,
     ):
