@@ -75,7 +75,7 @@ else
 fi
   ;;
 *)
-python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=1 -o Global.output_dir=output -o DataLoader.Train.sampler.batch_size=8 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1
+python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=1 -o Global.output_dir=output -o DataLoader.Train.sampler.batch_size=4 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1
 params_dir=$(ls output)
 echo "params_dir"
 echo $params_dir
@@ -118,7 +118,7 @@ else
 fi
 
 cd deploy
-if [[ ${model} =~ '384' ]];then
+if [[ ${model} =~ '384' ]] && [[ ! ${model} =~ 'LeViT' ]];then
    sed -i 's/size: 224/size: 384/g' configs/inference_cls.yaml
    sed -i 's/resize_short: 256/resize_short: 384/g' configs/inference_cls.yaml
    python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1

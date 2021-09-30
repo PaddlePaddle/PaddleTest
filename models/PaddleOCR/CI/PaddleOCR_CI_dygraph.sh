@@ -76,6 +76,7 @@ find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'r
 
 shuf models_list_det_db > models_list
 shuf models_list_rec >> models_list
+echo "length models_list"
 wc -l models_list
 cat models_list
 

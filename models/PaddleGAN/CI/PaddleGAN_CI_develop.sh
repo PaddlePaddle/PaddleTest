@@ -73,6 +73,7 @@ done
 find configs/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' > models_list_all
 git diff $(git log --pretty=oneline |grep "#"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'| tee -a  models_list
 shuf models_list_all >> models_list
+echo "length models_list"
 wc -l models_list
 cat models_list
 
