@@ -174,6 +174,15 @@ else
    echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 
+elif [ ${algorithm} == "SAR" ];then
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words/en/word_1.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 48, 48, 160" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+if [[ $? -eq 0 ]]; then
+   echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/predict/${model}.log
+   echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
+fi
+
 else
 echo "none SRN"
 if [[ $(echo $model | grep -c "lite") -eq 0 ]];then

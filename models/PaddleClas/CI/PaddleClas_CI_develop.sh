@@ -29,8 +29,14 @@ echo "visualdl err"
 ls /root/.visualdl/conf
 rm -rf /root/.visualdl/conf
 
-find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
-shuf models_list_all > models_list
+# find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
+# shuf models_list_all > models_list
+if [ ${model_flag} =~ 'hard' ] then:
+shuf datase/cls_model_list_hard > models_list
+else
+shuf dataset/cls_model_list_essay > models_list
+fi
+
 echo "length models_list"
 wc -l models_list
 cat models_list
