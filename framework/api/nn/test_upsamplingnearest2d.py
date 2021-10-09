@@ -4,6 +4,7 @@
 """
 test_upsamplingnearest2d
 """
+
 from apibase import APIBase
 from apibase import randtool
 import pytest
@@ -16,14 +17,14 @@ def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format=
     """
     def
     """
-    
+
+    if size is None:
+        size = [h_in * scale_factor, w_in * scale_factor]
     global emptyImage
     h_out = size[0]
     w_out = size[1]
     h_in = img.shape[2]
     w_in = img.shape[3]
-    if size is None:
-        size = [h_in * scale_factor, w_in * scale_factor]
     if data_format == "NCHW":
         num_batchs, channels, height, width = img.shape
         emptyImage = np.zeros((num_batchs, channels, h_out, w_out), type_)
