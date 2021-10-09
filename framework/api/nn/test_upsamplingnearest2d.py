@@ -1,180 +1,138 @@
-# Copyright (c) 2021 PaddlePaddle Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-from __future__ import print_function
-
-import unittest
-import numpy as np
+#!/bin/env python
+# -*- coding: utf-8 -*-
+# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
+"""
+test_upsamplingnearest2d
+"""
+from apibase import APIBase
+from apibase import randtool
+import pytest
 import paddle
-import paddle.nn as nn
+import paddle.fluid as fluid
+import numpy as np
 
 
-def upsample_2d(img, type="float64", scale_factor=None, size=None, data_format="NCHW"):
+class TestUpsamplingNearest2d(APIBase):
+    """
+    test
+    """
+
+    def hook(self):
+        """
+        implement
+        """
+        self.types = [np.float32, np.float64]
+        # self.debug = True
+        # self.static = True
+        # enable check grad
+        # self.enable_backward = True
+
+
+obj = TestUpsamplingNearest2d(paddle.nn.UpSamplingNearest2D)
+
+
+def upsample_2d(img, type_='float64', scale_factor=None, size=None, data_format='NCHW'):
+    global emptyImage
     h_out = size[0]
     w_out = size[1]
     h_in = img.shape[2]
     w_in = img.shape[3]
-    if size == None:
+    if size is None:
         size = [h_in * scale_factor, w_in * scale_factor]
-    if data_format == "NCHW":
-        num_batches, channels, height, width = img.shape
-        emptyImage = np.zeros((num_batches, channels, h_out, w_out), type)
+    if data_format == 'NCHW':
+        num_batchs, channels, height, width = img.shape
+        emptyImage = np.zeros((num_batchs, channels, h_out, w_out), type_)
         sh = h_out / height
         sw = w_out / width
-        for i_h_out in range(h_out):
-            for j_w_out in range(w_out):
-                x_h_in = int(i_h_out / sh)
-                y_w_in = int(j_w_out / sw)
-                emptyImage[:, :, i_h_out, j_w_out] = img[:, :, x_h_in, y_w_in]
-    elif data_format == "NHWC":
+        for i in range(h_out):
+            for j in range(w_out):
+                x = int(i / sh)
+                y = int(j / sw)
+                emptyImage[:, :, i, j] = img[:, :, x, y]
+    elif data_format == 'NHWC':
         img = img.transpose((0, 3, 1, 2))
-        num_batches, channels, height, width = img.shape
-        emptyImage = np.zeros((num_batches, channels, h_out, w_out), type)
+        num_batchs, channels, height, width = img.shape
+        emptyImage = np.zeros((num_batchs, channels, h_out, w_out), type)
         sh = h_out / height
         sw = w_out / width
-        for i_h_out in range(h_out):
-            for j_w_out in range(w_out):
-                x_h_in = int(i_h_out / sh)
-                y_w_in = int(j_w_out / sw)
-                emptyImage[:, :, i_h_out, j_w_out] = img[:, :, x_h_in, y_w_in]
+        for i in range(h_out):
+            for j in range(w_out):
+                x = int(i / sh)
+                y = int(j / sw)
+                emptyImage[:, :, i, j] = img[:, :, x, y]
         emptyImage = emptyImage.transpose((0, 2, 3, 1))
     return emptyImage
 
 
-class TestUpsamplingNearest2D(unittest.TestCase):
-    def test_input_range(self):
-        size = [5, 5]
-        # generate test data
-        np.random.seed(0)
-        input_data = paddle.rand(shape=[2, 3, 6, 10])
-        # data_format="NCHW"
-        # generation Function
-        upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NCHW")
-        # result verification
-        for i_test_1 in range(-3, 10):
-            times = 10 ** i_test_1
-            x_test = paddle.to_tensor(input_data * times).astype("float64")
-            res = upsample_func(x_test).numpy().flatten().tolist()
-            res_ = upsample_2d(x_test, size=size).flatten().tolist()
-            self.assertAlmostEqual(res, res_)
-
-        # data_format="NHWC"
-        # generation Function
-        upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NHWC")
-        # result verification
-        for i_test_2 in range(-3, 10):
-            times = 10 ** i_test_2
-            x_test = paddle.to_tensor(input_data * times).astype("float64")
-            res = upsample_func(x_test).numpy().flatten().tolist()
-            res_ = upsample_2d(x_test, size=size, data_format="NHWC").flatten().tolist()
-            self.assertAlmostEqual(res, res_)
-
-    def test_input_dtype(self):
-        # generate test data
-        size = [5, 5]
-        np.random.seed(0)
-        input_data = paddle.rand(shape=[2, 3, 6, 10])
-
-        # data_format="NCHW"
-        # generation Function
-        upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NCHW")
-        # Data type test
-        type_list = ["float32", "float64"]
-        for try_type in type_list:
-            x_test = paddle.to_tensor(input_data).astype(try_type)
-            result = upsample_func(x_test)
-
-        # data_format="NHWC"
-        # generation Function
-        upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NHWC")
-        # Data type test
-        type_list = ["float32", "float64"]
-        for try_type in type_list:
-            x_test = paddle.to_tensor(input_data).astype(try_type)
-            result = upsample_func(x_test)
-
-    def test_wrong_input_dtype(self):
-        # generate test data
-        size = [5, 5]
-        np.random.seed(0)
-        input_data = paddle.rand(shape=[2, 3, 6, 10])
-
-        # data_format="NCHW"
-        # generation Function
-        upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NCHW")
-        # generation type list
-        type_list = ["bool", "float16", "int8", "int16"]
-        # Data type test
-        for try_type in type_list:
-            x_test = paddle.to_tensor(input_data).astype(try_type)
-            self.assertRaises(RuntimeError, upsample_func, x_test)
-
-        # data_format="NHWC"
-        # generation Function
-        upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NHWC")
-        # generation type list
-        type_list = ["bool", "float16", "int8", "int16"]
-        # Data type test
-        for try_type in type_list:
-            x_test = paddle.to_tensor(input_data).astype(try_type)
-            self.assertRaises(RuntimeError, upsample_func, x_test)
-
-    def test_range(self):
-        # when x are larger than 10**9 or less than 10**-4, the result may error
-        # generate test data
-        size = [5, 5]
-        np.random.seed(0)
-        input_data = paddle.rand(shape=[2, 3, 6, 10])
-
-        # Large number test
-
-        # data_format="NCHW"
-        # generation Function
-        upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NCHW")
-        # data modification
-        x_test = paddle.to_tensor(input_data * 10 ** 10).astype("float64")
-        # result verification
-        res = upsample_func(x_test).numpy().flatten().tolist()
-        res_ = upsample_2d(x_test, size=size).flatten().tolist()
-        self.assertEqual(res, res_)
-
-        # data modification
-        x_test = paddle.to_tensor(input_data * 10 ** -4).astype("float64")
-        # data conversion
-        res = upsample_func(x_test).numpy().flatten().tolist()
-        res_ = upsample_2d(x_test, size=size).flatten().tolist()
-        self.assertEqual(res, res_)
-
-        # Small number test
-
-        # data_format="NHWC"
-        # generation Function
-        upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NHWC")
-        # data modification
-        x_test = paddle.to_tensor(input_data * 10 ** 10).astype("float64")
-        # data conversion
-        res = upsample_func(x_test).numpy().flatten().tolist()
-        res_ = upsample_2d(x_test, size=size, data_format="NHWC").flatten().tolist()
-        self.assertEqual(res, res_)
-
-        # data modificatio
-        x_test = paddle.to_tensor(input_data * 10 ** -4).astype("float64")
-        # data conversion
-        res = upsample_func(x_test).numpy().flatten().tolist()
-        res_ = upsample_2d(x_test, size=size, data_format="NHWC").flatten().tolist()
-        self.assertEqual(res, res_)
+@pytest.mark.api_nn_UpsamplingNearest2d_vartype
+def test_upsamplingnearest2d_base():
+    """
+    base
+    """
+    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    data_format = "NCHW"
+    size = [12, 12]
+    res = upsample_2d(x, size=size)
+    obj.base(res=res, data=x, size=size)
 
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.mark.api_nn_UpsamplingNearest2d_vartype
+def test_upsamplingnearest2d():
+    """
+    default
+    """
+    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    data_format = "NCHW"
+    size = [12, 12]
+    res = upsample_2d(x, size=size)
+    obj.run(res=res, data=x, size=size)
+
+
+@pytest.mark.api_nn_UpsamplingNearest2d_parameters
+def test_upsamplingnearest2d1():
+    """
+    data_format = "NCHW"
+    """
+    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    data_format = "NCHW"
+    size = [12, 12]
+    res = upsample_2d(x, size=size, data_format=data_format)
+    obj.run(res=res, data=x, size=size, data_format=data_format)
+
+
+@pytest.mark.api_nn_UpsamplingNearest2d_parameters
+def test_upsamplingnearest2d2():
+    """
+    data_format = "NHWC"
+    """
+    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    data_format = "NHWC"
+    size = [12, 12]
+    res = upsample_2d(x, size=size, data_format=data_format)
+    obj.run(res=res, data=x, size=size, data_format=data_format)
+
+
+@pytest.mark.api_nn_UpsamplingNearest2d_parameters
+def test_upsamplingnearest2d3():
+    """
+    size = None, scale_factor = 2
+    """
+    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    data_format = "NCHW"
+    size = None
+    scale_factor = 2
+    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
+    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
+
+
+@pytest.mark.api_nn_UpsamplingNearest2d_parameters
+def test_upsamplingnearest2d4():
+    """
+    size = None, scale_factor = 5
+    """
+    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    data_format = "NCHW"
+    size = None
+    scale_factor = 5
+    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
+    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
