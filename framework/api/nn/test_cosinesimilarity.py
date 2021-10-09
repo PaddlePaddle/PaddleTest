@@ -36,12 +36,9 @@ def test_cosinesimilarity_base():
     """
     base
     """
-    # x = randtool("float", -10, 10, [3, 10, 3, 3])
+
     x1 = randtool("float", -10, 10, [1, 5])
     x2 = randtool("float", -10, 10, [1, 5])
-    # x = randtool("float", -10, 10, [3, 10, 3, 3])
-    # x1 = np.random.rand(5,1)
-    # x2 = np.random.rand(5,1)
 
     axis = 1
     eps = 1e-8
@@ -52,7 +49,6 @@ def test_cosinesimilarity_base():
     n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
     cos_sim = w12 / n12
 
-    # x = (x1, x2)
     res = cos_sim
     # paddle_res = paddle.nn.functional.cosine_similarity(paddle.to_tensor(x1), paddle.to_tensor(x2))
     # res = np.maximum(0, x1)
@@ -63,7 +59,7 @@ def test_cosinesimilarity_base():
     # x2 = np.random.rand(2,3)
     x1 = paddle.to_tensor(x1)
     x2 = paddle.to_tensor(x2)
-    # res=paddle.to_tensor(res)
+
 
     cos_sim_func = paddle.nn.CosineSimilarity(axis=axis, eps=eps)
     paddle_res = cos_sim_func(x1, x2).numpy()
