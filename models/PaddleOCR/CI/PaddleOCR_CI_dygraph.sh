@@ -8,6 +8,13 @@ echo ${paddle_compile}
 python -c 'import sys; print(sys.version_info[:])'
 echo "python version"
 
+#system
+if [ -d "/etc/redhat-release" ]; then
+   echo "system centos"
+else
+   echo "system linux"
+fi
+
 export http_proxy=${http_proxy};
 export https_proxy=${https_proxy};
 
@@ -71,14 +78,28 @@ else
 fi
 done
 
+if [ -f "models_list" ]; then
+   rm -rf models_list
+fi
+
 find configs/det -name *.yml -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
 find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train'  > models_list_rec
 
-shuf models_list_det_db > models_list
-shuf models_list_rec >> models_list
+shuf models_list_det_db > models_list_all
+shuf models_list_rec >> models_list_all
+
+if [[ ${model_flag} =~ 'CI_all' ]]; then
+   shuf models_list_all > models_list
+elif [[ ${model_flag} == "pr" ]];then
+   shuf -n $pr_num models_list_all > models_list
+else
+   shuf models_list_all > models_list
+fi
+
 echo "length models_list"
 wc -l models_list
 cat models_list
+git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
 
 cat models_list | while read line
 do

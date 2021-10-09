@@ -8,6 +8,13 @@ echo ${paddle_compile}
 python -c 'import sys; print(sys.version_info[:])'
 echo "python version"
 
+#system
+if [ -d "/etc/redhat-release" ]; then
+   echo "system centos"
+else
+   echo "system linux"
+fi
+
 export http_proxy=${http_proxy};
 export https_proxy=${https_proxy};
 
@@ -29,18 +36,36 @@ echo "visualdl err"
 ls /root/.visualdl/conf
 rm -rf /root/.visualdl/conf
 
-# find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
-# shuf models_list_all > models_list
-if [ ${model_flag} =~ 'hard' ] then:
-shuf datase/cls_model_list_hard > models_list
+if [ -f "models_list" ]; then
+   rm -rf models_list
+fi
+
+find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
+
+if [[ ${model_flag} =~ 'CI_step1' ]]; then
+   cat models_list_all | while read line
+   do
+   if [[ ${line} =~ 'AlexNet' ]] ||[[ ${line} =~ 'DPN' ]] ||[[ ${line} =~ 'DarkNet' ]] ||[[ ${line} =~ 'DeiT' ]] ||[[ ${line} =~ 'DenseNet' ]] ||[[ ${line} =~ 'EfficientNet' ]] ||[[ ${line} =~ 'GhostNet' ]] ||[[ ${line} =~ 'HRNet' ]] ||[[ ${line} =~ 'HarDNet' ]] ||[[ ${line} =~ 'Inception' ]] ||[[ ${line} =~ 'LeViT' ]] ||[[ ${line} =~ 'MixNet' ]] ||[[ ${line} =~ 'MobileNetV1' ]] ||[[ ${line} =~ 'MobileNetV2' ]] ||[[ ${line} =~ 'MobileNetV3' ]] ||[[ ${line} =~ 'PPLCNet' ]] ||[[ ${line} =~ 'ReXNet' ]] ||[[ ${line} =~ 'RedNet' ]] ||[[ ${line} =~ 'Res2Net' ]]; then
+      echo ${line}  >> models_list
+   fi
+   done
+
+elif [[ ${model_flag} == "pr" ]];then
+   shuf -n $pr_num models_list_all > models_list
+
 else
-shuf dataset/cls_model_list_essay > models_list
+   cat models_list_all | while read line
+   do
+   if [[ ! ${line} =~ 'AlexNet' ]] && [[ ! ${line} =~ 'DPN' ]] && [[ ! ${line} =~ 'DarkNet' ]] && [[ ! ${line} =~ 'DeiT' ]] && [[ ! ${line} =~ 'DenseNet' ]] && [[ ! ${line} =~ 'EfficientNet' ]] && [[ ! ${line} =~ 'GhostNet' ]] && [[ ! ${line} =~ 'HRNet' ]] && [[ ! ${line} =~ 'HarDNet' ]] && [[ ! ${line} =~ 'Inception' ]] && [[ ! ${line} =~ 'LeViT' ]] && [[ ! ${line} =~ 'MixNet' ]] && [[ ! ${line} =~ 'MobileNetV1' ]] && [[ ! ${line} =~ 'MobileNetV2' ]] && [[ ! ${line} =~ 'MobileNetV3' ]] && [[ ! ${line} =~ 'PPLCNet' ]] && [[ ! ${line} =~ 'ReXNet' ]] && [[ ! ${line} =~ 'RedNet' ]] && [[ ! ${line} =~ 'Res2Net' ]]; then
+      echo ${line}  >> models_list
+   fi
+   done
 fi
 
 echo "length models_list"
 wc -l models_list
 cat models_list
-git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
+git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yml|awk -F 'b/' '{print$2}'| tee -a  models_list
 
 # dir
 log_path=log

@@ -30,23 +30,28 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
-# ppgan
-yum update -y
-yum install epel-release -y
-rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
-rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
 
-yum install cmake boost -y
-yum install opencv opencv-python opencv-devel python-devel numpy -y
-yum install ffmpeg -y
-echo "ffmpeg"
-ffmpeg
+if [ -d "/etc/redhat-release" ]; then
+   echo "system centos"
+   # ppgan
+   yum update -y
+   yum install epel-release -y
+   rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+   rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+   yum install cmake boost -y
+   yum install opencv opencv-python opencv-devel python-devel numpy -y
+   yum install ffmpeg -y
+   echo "ffmpeg"
+   ffmpeg
+   #install  dlib
+   yum install gcc gcc-c++
+   yum install cmake boost
+else
+   echo "system linux"
+fi
+
 python -m pip install ppgan
 python -m pip install -v -e.
-
-#install  dlib
-yum install gcc gcc-c++
-yum install cmake boost
 python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 python -m pip install dlib -i https://pypi.tuna.tsinghua.edu.cn/simple
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
@@ -70,12 +75,24 @@ else
 fi
 done
 
+if [ -f "models_list" ]; then
+   rm -rf models_list
+fi
+
 find configs/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' > models_list_all
-git diff $(git log --pretty=oneline |grep "#"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'| tee -a  models_list
-shuf models_list_all >> models_list
+
+if [[ ${model_flag} =~ 'CI_all' ]]; then
+   shuf models_list_all > models_list
+elif [[ ${model_flag} == "pr" ]];then
+   shuf -n $pr_num models_list_all > models_list
+else
+   shuf models_list_all > models_list
+fi
+
 echo "length models_list"
 wc -l models_list
 cat models_list
+git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
 
 cat models_list | while read line
 do
