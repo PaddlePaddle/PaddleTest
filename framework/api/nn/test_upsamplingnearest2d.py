@@ -31,7 +31,7 @@ class TestUpsamplingNearest2d(APIBase):
 obj = TestUpsamplingNearest2d(paddle.nn.UpSamplingNearest2D)
 
 
-def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format='NCHW'):
+def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format="NCHW"):
     global emptyImage
     h_out = size[0]
     w_out = size[1]
