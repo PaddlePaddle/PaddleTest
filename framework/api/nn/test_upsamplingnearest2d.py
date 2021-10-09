@@ -20,11 +20,7 @@ import paddle
 import paddle.nn as nn
 
 
-def upsample_2d(img,
-                type="float64",
-                scale_factor=None,
-                size=None,
-                data_format="NCHW"):
+def upsample_2d(img, type="float64", scale_factor=None, size=None, data_format="NCHW"):
     h_out = size[0]
     w_out = size[1]
     h_in = img.shape[2]
@@ -67,7 +63,7 @@ class TestUpsamplingNearest2D(unittest.TestCase):
         upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NCHW")
         # result verification
         for i in range(-3, 10):
-            times = 10**i
+            times = 10 ** i
             x = paddle.to_tensor(input_data * times).astype("float64")
             res = upsample_func(x).numpy().flatten().tolist()
             res_ = upsample_2d(x, size=size).flatten().tolist()
@@ -78,11 +74,10 @@ class TestUpsamplingNearest2D(unittest.TestCase):
         upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NHWC")
         # result verification
         for i in range(-3, 10):
-            times = 10**i
+            times = 10 ** i
             x = paddle.to_tensor(input_data * times).astype("float64")
             res = upsample_func(x).numpy().flatten().tolist()
-            res_ = upsample_2d(
-                x, size=size, data_format="NHWC").flatten().tolist()
+            res_ = upsample_2d(x, size=size, data_format="NHWC").flatten().tolist()
             self.assertAlmostEqual(res, res_)
 
     def test_input_dtype(self):
@@ -148,14 +143,14 @@ class TestUpsamplingNearest2D(unittest.TestCase):
         # generation Function
         upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NCHW")
         # data modification
-        x = paddle.to_tensor(input_data * 10**10).astype("float64")
+        x = paddle.to_tensor(input_data * 10 ** 10).astype("float64")
         # result verification
         res = upsample_func(x).numpy().flatten().tolist()
         res_ = upsample_2d(x, size=size).flatten().tolist()
         self.assertEqual(res, res_)
 
         # data modification
-        x = paddle.to_tensor(input_data * 10**-4).astype("float64")
+        x = paddle.to_tensor(input_data * 10 ** -4).astype("float64")
         # data conversion
         res = upsample_func(x).numpy().flatten().tolist()
         res_ = upsample_2d(x, size=size).flatten().tolist()
@@ -167,14 +162,14 @@ class TestUpsamplingNearest2D(unittest.TestCase):
         # generation Function
         upsample_func = nn.UpsamplingNearest2D(size=size, data_format="NHWC")
         # data modification
-        x = paddle.to_tensor(input_data * 10**10).astype("float64")
+        x = paddle.to_tensor(input_data * 10 ** 10).astype("float64")
         # data conversion
         res = upsample_func(x).numpy().flatten().tolist()
         res_ = upsample_2d(x, size=size, data_format="NHWC").flatten().tolist()
         self.assertEqual(res, res_)
 
         # data modificatio
-        x = paddle.to_tensor(input_data * 10**-4).astype("float64")
+        x = paddle.to_tensor(input_data * 10 ** -4).astype("float64")
         # data conversion
         res = upsample_func(x).numpy().flatten().tolist()
         res_ = upsample_2d(x, size=size, data_format="NHWC").flatten().tolist()
