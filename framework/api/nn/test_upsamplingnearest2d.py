@@ -23,8 +23,6 @@ def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format=
     global emptyImage
     h_out = size[0]
     w_out = size[1]
-    h_in = img.shape[2]
-    w_in = img.shape[3]
     if data_format == "NCHW":
         num_batchs, channels, height, width = img.shape
         emptyImage = np.zeros((num_batchs, channels, h_out, w_out), type_)
@@ -78,7 +76,7 @@ def test_upsamplingnearest2d_base():
     data_format = "NCHW"
     size = [12, 12]
     res = upsample_2d(x, size=size)
-    obj.base(res=res, data=x, size=size)
+    obj.base(res=res, data=x, size=size, data_format=data_format)
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_vartype
@@ -90,7 +88,7 @@ def test_upsamplingnearest2d():
     data_format = "NCHW"
     size = [12, 12]
     res = upsample_2d(x, size=size)
-    obj.run(res=res, data=x, size=size)
+    obj.run(res=res, data=x, size=size, data_format=data_format)
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
