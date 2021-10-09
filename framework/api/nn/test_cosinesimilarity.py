@@ -81,8 +81,8 @@ def test_cosinesimilarity():
     """
     input shape
     """
-    x1 = randtool("float", -10, 10, [3, 8,2])
-    x2 = randtool("float", -10, 10, [3, 8,2])
+    x1 = randtool("float", -10, 10, [3, 8, 2])
+    x2 = randtool("float", -10, 10, [3, 8, 2])
 
     axis = 1
     eps = 1e-8
