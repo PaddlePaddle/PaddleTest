@@ -17,7 +17,8 @@ def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format=
     """
     def
     """
-
+    h_in = img.shape[0]
+    w_in = img.shape[1]
     if size is None:
         size = [h_in * scale_factor, w_in * scale_factor]
     global emptyImage
