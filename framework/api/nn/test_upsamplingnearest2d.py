@@ -73,9 +73,9 @@ def test_upsamplingnearest2d_base():
     """
     base
     """
-    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    x = randtool("float", -10, 10, [1, 3, 6, 10])
     data_format = "NCHW"
-    size = [12, 12]
+    size = [5, 5]
     res = upsample_2d(x, size=size)
     obj.base(res=res, data=x, size=size, data_format=data_format)
 
@@ -85,9 +85,9 @@ def test_upsamplingnearest2d():
     """
     default
     """
-    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    x = randtool("float", -10, 10, [1, 3, 6, 10])
     data_format = "NCHW"
-    size = [12, 12]
+    size = [5, 5]
     res = upsample_2d(x, size=size)
     obj.run(res=res, data=x, size=size, data_format=data_format)
 
@@ -97,9 +97,9 @@ def test_upsamplingnearest2d1():
     """
     data_format = "NCHW"
     """
-    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    x = randtool("float", -10, 10, [1, 3, 6, 10])
     data_format = "NCHW"
-    size = [12, 12]
+    size = [5, 5]
     res = upsample_2d(x, size=size, data_format=data_format)
     obj.run(res=res, data=x, size=size, data_format=data_format)
 
@@ -109,9 +109,9 @@ def test_upsamplingnearest2d2():
     """
     data_format = "NHWC"
     """
-    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    x = randtool("float", -10, 10, [1, 3, 6, 10])
     data_format = "NHWC"
-    size = [12, 12]
+    size = [5, 5]
     res = upsample_2d(x, size=size, data_format=data_format)
     obj.run(res=res, data=x, size=size, data_format=data_format)
 
@@ -121,7 +121,7 @@ def test_upsamplingnearest2d3():
     """
     size = None, scale_factor = 2
     """
-    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    x = randtool("float", -10, 10, [1, 3, 6, 10])
     data_format = "NCHW"
     size = None
     scale_factor = 2
@@ -134,9 +134,9 @@ def test_upsamplingnearest2d4():
     """
     size = None, scale_factor = 5
     """
-    x = randtool("float", -10, 10, [2, 3, 6, 10])
+    x = randtool("float", -10, 10, [1, 3, 6, 10])
     data_format = "NCHW"
     size = None
-    scale_factor = 5
+    scale_factor = 2.5
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
