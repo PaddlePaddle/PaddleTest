@@ -31,7 +31,7 @@ class TestUpsamplingNearest2d(APIBase):
 obj = TestUpsamplingNearest2d(paddle.nn.UpSamplingNearest2D)
 
 
-def upsample_2d(img, type_='float64', scale_factor=None, size=None, data_format='NCHW'):
+def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format='NCHW'):
     global emptyImage
     h_out = size[0]
     w_out = size[1]
@@ -39,7 +39,7 @@ def upsample_2d(img, type_='float64', scale_factor=None, size=None, data_format=
     w_in = img.shape[3]
     if size is None:
         size = [h_in * scale_factor, w_in * scale_factor]
-    if data_format == 'NCHW':
+    if data_format == "NCHW":
         num_batchs, channels, height, width = img.shape
         emptyImage = np.zeros((num_batchs, channels, h_out, w_out), type_)
         sh = h_out / height
@@ -49,7 +49,7 @@ def upsample_2d(img, type_='float64', scale_factor=None, size=None, data_format=
                 x = int(i / sh)
                 y = int(j / sw)
                 emptyImage[:, :, i, j] = img[:, :, x, y]
-    elif data_format == 'NHWC':
+    elif data_format == "NHWC":
         img = img.transpose((0, 3, 1, 2))
         num_batchs, channels, height, width = img.shape
         emptyImage = np.zeros((num_batchs, channels, h_out, w_out), type)
@@ -113,7 +113,7 @@ def test_upsamplingnearest2d2():
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
-def test_upsamplingnearest2d3():
+def test_upsamplingnearest2d1():
     """
     size = None, scale_factor = 2
     """
@@ -126,7 +126,7 @@ def test_upsamplingnearest2d3():
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
-def test_upsamplingnearest2d4():
+def test_upsamplingnearest2d1():
     """
     size = None, scale_factor = 5
     """
