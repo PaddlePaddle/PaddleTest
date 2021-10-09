@@ -132,11 +132,11 @@ def test_upsamplingnearest2d3():
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
 def test_upsamplingnearest2d4():
     """
-    size = None, scale_factor = 5
+    size = None, scale_factor = 4
     """
     x = randtool("float", -10, 10, [1, 3, 6, 10])
     data_format = "NCHW"
     size = None
-    scale_factor = 5
+    scale_factor = 4
     res = upsample_2d(img=x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
