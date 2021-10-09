@@ -12,26 +12,11 @@ import paddle.fluid as fluid
 import numpy as np
 
 
-class TestUpsamplingNearest2d(APIBase):
-    """
-    test
-    """
-
-    def hook(self):
-        """
-        implement
-        """
-        self.types = [np.float32, np.float64]
-        # self.debug = True
-        # self.static = True
-        # enable check grad
-        # self.enable_backward = True
-
-
-obj = TestUpsamplingNearest2d(paddle.nn.UpSamplingNearest2D)
-
-
 def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format="NCHW"):
+    """
+    def
+    """
+    
     global emptyImage
     h_out = size[0]
     w_out = size[1]
@@ -62,6 +47,25 @@ def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format=
                 emptyImage[:, :, i, j] = img[:, :, x, y]
         emptyImage = emptyImage.transpose((0, 2, 3, 1))
     return emptyImage
+
+
+class TestUpsamplingNearest2d(APIBase):
+    """
+    test
+    """
+
+    def hook(self):
+        """
+        implement
+        """
+        self.types = [np.float32, np.float64]
+        # self.debug = True
+        # self.static = True
+        # enable check grad
+        # self.enable_backward = True
+
+
+obj = TestUpsamplingNearest2d(paddle.nn.UpSamplingNearest2D)
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_vartype
