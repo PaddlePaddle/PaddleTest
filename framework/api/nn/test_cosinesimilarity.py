@@ -60,7 +60,6 @@ def test_cosinesimilarity_base():
     x1 = paddle.to_tensor(x1)
     x2 = paddle.to_tensor(x2)
 
-
     cos_sim_func = paddle.nn.CosineSimilarity(axis=axis, eps=eps)
     paddle_res = cos_sim_func(x1, x2).numpy()
 
