@@ -203,31 +203,36 @@ else
    cat $log_path/infer/fist_order_motion_model.log
    echo -e "\033[31m infer of fist order motion model failed!\033[0m"| tee -a $log_path/result.log
 fi
-# fist order motion model multi_person
-python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image_multi_person.jpg --ratio 0.4 --relative --adapt_scale --multi_person > $log_path/infer/fist_order_motion_model_multi_person.log 2>&1
-if [[ $? -eq 0 ]];then
-   echo -e "\033[33m infer of fist order motion model  multi_person successfully!\033[0m"| tee -a $log_path/result.log
-else
-   cat $log_path/infer/fist_order_motion_model.log
-   echo -e "\033[31m infer of fist order motion model multi_person failed!\033[0m"| tee -a $log_path/result.log
+
+if [[! ${model_flag} =~ "CI_all" ]];then
+   # fist order motion model multi_person
+   python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image_multi_person.jpg --ratio 0.4 --relative --adapt_scale --multi_person > $log_path/infer/fist_order_motion_model_multi_person.log 2>&1
+   if [[ $? -eq 0 ]];then
+      echo -e "\033[33m infer of fist order motion model  multi_person successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/infer/fist_order_motion_model.log
+      echo -e "\033[31m infer of fist order motion model multi_person failed!\033[0m"| tee -a $log_path/result.log
+   fi
 fi
 
-# # face_parse
-# python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-# if [[ $? -eq 0 ]];then
-#    echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
-# else
-#    cat $log_path/infer/face_parse.log
-#    echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
-# fi
-# # psgan
-# python tools/psgan_infer.py --config-file configs/makeup.yaml --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > $log_path/infer/psgan.log 2>&1
-# if [[ $? -eq 0 ]];then
-#    echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
-# else
-#    cat $log_path/infer/psgan.log
-#    echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
-# fi
+if [[ ${model_flag} == "pr" ]];then
+   # face_parse
+   python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
+   if [[ $? -eq 0 ]];then
+      echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/infer/face_parse.log
+      echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
+   fi
+   # psgan
+   python tools/psgan_infer.py --config-file configs/makeup.yaml --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > $log_path/infer/psgan.log 2>&1
+   if [[ $? -eq 0 ]];then
+      echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/infer/psgan.log
+      echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
+   fi
+fi
 
 # video restore
 python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > $log_path/infer/video_restore.log 2>&1
