@@ -51,6 +51,9 @@ if [[ $1 =~ 'pr' ]]; then #model_flag
    rm -rf data
    ln -s $6 data #data_path
    ls data
+
+   apt-get update
+   apt-get install -y ffmpeg
 else
    # ppgan
    yum update -y
@@ -78,6 +81,9 @@ if [ -d "/etc/redhat-release" ]; then
 else
    echo "system linux"
 fi
+
+unset http_proxy
+unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
@@ -232,7 +238,7 @@ else
    echo -e "\033[31m infer of fist order motion model failed!\033[0m"| tee -a $log_path/result.log
 fi
 
-if [[! ${model_flag} =~ "CI_all" ]];then
+if [[! $1 == "pr" ]];then
    # fist order motion model multi_person
    python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image_multi_person.jpg --ratio 0.4 --relative --adapt_scale --multi_person > $log_path/infer/fist_order_motion_model_multi_person.log 2>&1
    if [[ $? -eq 0 ]];then

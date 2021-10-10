@@ -65,6 +65,8 @@ else
    echo "system linux"
 fi
 
+unset http_proxy
+unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --upgrade pip
