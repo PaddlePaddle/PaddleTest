@@ -3,6 +3,47 @@ echo ${cudaid1}
 echo ${cudaid2}
 echo ${Data_path}
 echo ${paddle_compile}
+export CUDA_VISIBLE_DEVICES=${cudaid2}
+
+# data
+echo "----ln  data-----"
+rm -rf train_data
+ln -s ${Data_path}/train_data train_data
+ls train_data
+gpu_flag=True
+
+if [[ $1 =~ 'pr' ]]; then #model_flag
+   export CUDA_VISIBLE_DEVICES=$4 #cudaid
+   
+   echo "---py37  env -----"
+   rm -rf /usr/local/python2.7.15/bin/python
+   rm -rf /usr/local/bin/python
+   export PATH=/usr/local/bin/python:${PATH}
+   case $3 in #python
+   36)
+   ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+   ;;
+   37)
+   ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+   ;;
+   38)
+   ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+   ;;
+   39)
+   ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+   ;;
+   esac
+   python -c "import sys; print('python version:',sys.version_info[:])";
+   
+   echo "----install  paddle-----"
+   python -m pip uninstall paddlepaddle-gpu -y
+   python -m pip install $5 #paddle_compile
+
+   echo "----ln  data-----"
+   rm -rf train_data
+   ln -s $6/train_data train_data
+   ls train_data
+fi
 
 # python
 python -c 'import sys; print(sys.version_info[:])'
@@ -15,28 +56,14 @@ else
    echo "system linux"
 fi
 
-export http_proxy=${http_proxy};
-export https_proxy=${https_proxy};
-
-# data
-rm -rf train_data
-ln -s ${Data_path}/train_data train_data
-gpu_flag=True
-
 # env
-export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
-
 # dependency
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt --ignore-installed -i https://pypi.tuna.tsinghua.edu.cn/simple
 # paddleocr
-python -m pip install paddleocr
-python -m pip install gast==0.3.3
-
-
-unset http_proxy
-unset https_proxy
+python -m pip install paddleocr -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install gast==0.3.3 -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # download model
 if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
@@ -80,6 +107,7 @@ done
 
 if [ -f "models_list" ]; then
    rm -rf models_list
+   rm -rf models_list_all
 fi
 
 find configs/det -name *.yml -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
@@ -90,16 +118,18 @@ shuf models_list_rec >> models_list_all
 
 if [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
-elif [[ ${model_flag} == "pr" ]];then
-   shuf -n $pr_num models_list_all > models_list
+elif [[ $1 =~ "pr" ]];then
+   shuf -n $2 models_list_all > models_list
 else
    shuf models_list_all > models_list
 fi
 
 echo "length models_list"
 wc -l models_list
-cat models_list
 git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
+echo "diff models_list"
+wc -l models_list
+cat models_list
 
 cat models_list | while read line
 do
@@ -312,7 +342,6 @@ done
 # fi
 
 # cls
-export CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch  tools/train.py -c configs/cls/cls_mv3.yml -o Train.loader.batch_size_per_card=2 Global.print_batch_step=1 Global.epoch_num=1 > $log_path/train/cls_mv3.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/cls_mv3.log) -eq 0 ]];then
    echo -e "\033[33m training of cls_mv3  successfully!\033[0m" | tee -a $log_path/result.log

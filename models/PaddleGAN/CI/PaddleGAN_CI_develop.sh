@@ -3,17 +3,13 @@ echo ${cudaid1}
 echo ${cudaid2}
 echo ${Data_path}
 echo ${paddle_compile}
-
-# python
-python -c 'import sys; print(sys.version_info[:])'
-echo "python version"
-
-export http_proxy=${http_proxy};
-export https_proxy=${https_proxy};
+export CUDA_VISIBLE_DEVICES=${cudaid2}
 
 # data
+echo "----ln  data-----"
 rm -rf data
 ln -s ${Data_path} data
+ls data
 
 if [ ! -f "/root/.cache/paddle/dataset/mnist/train-images-idx3-ubyte.gz" ]; then
    wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-images-idx3-ubyte.gz
@@ -23,16 +19,38 @@ if [ ! -f "/root/.cache/paddle/dataset/mnist/train-labels-idx1-ubyte.gz" ]; then
    wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-labels-idx1-ubyte.gz
 fi
 
-# env
-export CUDA_VISIBLE_DEVICES=${cudaid2}
-export FLAGS_fraction_of_gpu_memory_to_use=0.8
+if [[ $1 =~ 'pr' ]]; then #model_flag
+   export CUDA_VISIBLE_DEVICES=$4 #cudaid
+   
+   echo "---py37  env -----"
+   rm -rf /usr/local/python2.7.15/bin/python
+   rm -rf /usr/local/bin/python
+   export PATH=/usr/local/bin/python:${PATH}
+   case $3 in #python
+   36)
+   ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+   ;;
+   37)
+   ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+   ;;
+   38)
+   ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+   ;;
+   39)
+   ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+   ;;
+   esac
+   python -c "import sys; print('python version:',sys.version_info[:])";
+   
+   echo "----install  paddle-----"
+   python -m pip uninstall paddlepaddle-gpu -y
+   python -m pip install $5 #paddle_compile
 
-# dependency
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
-
-if [ -d "/etc/redhat-release" ]; then
-   echo "system centos"
+   echo "----ln  data-----"
+   rm -rf data
+   ln -s $6 data #data_path
+   ls data
+else
    # ppgan
    yum update -y
    yum install epel-release -y
@@ -46,18 +64,27 @@ if [ -d "/etc/redhat-release" ]; then
    #install  dlib
    yum install gcc gcc-c++
    yum install cmake boost
+fi
+
+# python
+python -c 'import sys; print(sys.version_info[:])'
+echo "python version"
+
+# env
+# dependency
+if [ -d "/etc/redhat-release" ]; then
+   echo "system centos"
 else
    echo "system linux"
 fi
-
+export FLAGS_fraction_of_gpu_memory_to_use=0.8
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install ppgan
 python -m pip install -v -e.
-python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 python -m pip install dlib -i https://pypi.tuna.tsinghua.edu.cn/simple
+# python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
-
-unset http_proxy
-unset https_proxy
 
 pip list
 echo "pip list"
@@ -77,22 +104,25 @@ done
 
 if [ -f "models_list" ]; then
    rm -rf models_list
+   rm -rf models_list_all
 fi
 
 find configs/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' > models_list_all
 
 if [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
-elif [[ ${model_flag} == "pr" ]];then
-   shuf -n $pr_num models_list_all > models_list
+elif [[ $1 =~ "pr" ]];then
+   shuf -n $2 models_list_all > models_list
 else
    shuf models_list_all > models_list
 fi
 
 echo "length models_list"
 wc -l models_list
-cat models_list
 git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
+echo "diff models_list"
+wc -l models_list
+cat models_list
 
 cat models_list | while read line
 do
@@ -105,7 +135,6 @@ fi
 sed -i '1s/epochs/total_iters/' $line
 # animeganv2
 sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
-export CUDA_VISIBLE_DEVICES=${cudaid2}
 case ${model} in
 lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second)
 python tools/main.py --config-file $line -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output > $log_path/train/${model}.log 2>&1
@@ -120,7 +149,7 @@ else
 fi
   ;;
 *)
-python  -m paddle.distributed.launch --gpus=${cudaid2} tools/main.py --config-file $line -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output > $log_path/train/${model}.log 2>&1
+python  -m paddle.distributed.launch tools/main.py --config-file $line -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output > $log_path/train/${model}.log 2>&1
 params_dir=$(ls output)
 echo "params_dir"
 echo $params_dir
@@ -134,7 +163,6 @@ fi
 esac
 
 # evaluate
-export CUDA_VISIBLE_DEVICES=${cudaid1}
 ls output/$params_dir/
 case ${model} in
 stylegan_v2_256_ffhq)
@@ -159,7 +187,6 @@ makeup)
 *)
 
 # echo $params_dir
-  export CUDA_VISIBLE_DEVICES=${cudaid1}
   python tools/main.py --config-file $line --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams > $log_path/eval/${model}.log 2>&1
   if [[ $? -eq 0 ]];then
      echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
@@ -215,7 +242,7 @@ if [[! ${model_flag} =~ "CI_all" ]];then
    fi
 fi
 
-if [[ ${model_flag} == "pr" ]];then
+if [[ $1 == "pr" ]];then
    # face_parse
    python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
    if [[ $? -eq 0 ]];then

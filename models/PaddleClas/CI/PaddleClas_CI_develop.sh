@@ -3,6 +3,55 @@ echo ${cudaid1}
 echo ${cudaid2}
 echo ${Data_path}
 echo ${paddle_compile}
+export CUDA_VISIBLE_DEVICES=${cudaid2}
+
+# data
+rm -rf dataset
+ln -s ${Data_path} dataset
+ls dataset
+
+cd deploy
+rm -rf recognition_demo_data_v1.0
+rm -rf recognition_demo_data_v1.1
+rm -rf models
+ln -s  ${Data_path}/* .
+cd ..
+
+if [[ $1 =~ 'pr' ]]; then #model_flag
+   export CUDA_VISIBLE_DEVICES=$4 #cudaid
+   
+   echo "---py37  env -----"
+   rm -rf /usr/local/python2.7.15/bin/python
+   rm -rf /usr/local/bin/python
+   export PATH=/usr/local/bin/python:${PATH}
+   case $3 in #python
+   36)
+   ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+   ;;
+   37)
+   ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+   ;;
+   38)
+   ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+   ;;
+   39)
+   ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+   ;;
+   esac
+   python -c "import sys; print('python version:',sys.version_info[:])";
+   
+   echo "----install  paddle-----"
+   python -m pip uninstall paddlepaddle-gpu -y
+   python -m pip install $5 #paddle_compile
+
+   echo "----ln  data-----"
+   rm -rf dataset
+   ln -s $6 dataset #data_path
+   ls dataset
+   cd deploy
+   ln -s $6/* .
+   cd ..
+fi
 
 # python
 python -c 'import sys; print(sys.version_info[:])'
@@ -15,29 +64,15 @@ else
    echo "system linux"
 fi
 
-export http_proxy=${http_proxy};
-export https_proxy=${https_proxy};
-
-
-# data
-rm -rf dataset
-ln -s ${Data_path} dataset
-
 # env
-export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
-
-unset http_proxy
-unset https_proxy
-
-#visualdl
-echo "visualdl err"
-ls /root/.visualdl/conf
-rm -rf /root/.visualdl/conf
+python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 if [ -f "models_list" ]; then
    rm -rf models_list
+   rm -rf models_list_all
 fi
 
 find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
@@ -50,10 +85,10 @@ if [[ ${model_flag} =~ 'CI_step1' ]]; then
    fi
    done
 
-elif [[ ${model_flag} == "pr" ]];then
-   shuf -n $pr_num models_list_all > models_list
+elif [[ ${1} =~ "pr" ]];then
+   shuf -n $2 models_list_all > models_list
 
-else
+elif [[ ${model_flag} =~ 'CI_step2' ]]; then
    cat models_list_all | while read line
    do
    if [[ ! ${line} =~ 'AlexNet' ]] && [[ ! ${line} =~ 'DPN' ]] && [[ ! ${line} =~ 'DarkNet' ]] && [[ ! ${line} =~ 'DeiT' ]] && [[ ! ${line} =~ 'DenseNet' ]] && [[ ! ${line} =~ 'EfficientNet' ]] && [[ ! ${line} =~ 'GhostNet' ]] && [[ ! ${line} =~ 'HRNet' ]] && [[ ! ${line} =~ 'HarDNet' ]] && [[ ! ${line} =~ 'Inception' ]] && [[ ! ${line} =~ 'LeViT' ]] && [[ ! ${line} =~ 'MixNet' ]] && [[ ! ${line} =~ 'MobileNetV1' ]] && [[ ! ${line} =~ 'MobileNetV2' ]] && [[ ! ${line} =~ 'MobileNetV3' ]] && [[ ! ${line} =~ 'PPLCNet' ]] && [[ ! ${line} =~ 'ReXNet' ]] && [[ ! ${line} =~ 'RedNet' ]] && [[ ! ${line} =~ 'Res2Net' ]]; then
@@ -64,8 +99,10 @@ fi
 
 echo "length models_list"
 wc -l models_list
+git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
+echo "diff models_list"
+wc -l models_list
 cat models_list
-git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yml|awk -F 'b/' '{print$2}'| tee -a  models_list
 
 # dir
 log_path=log
@@ -90,8 +127,13 @@ if [ -d "output" ]; then
    rm -rf output
 fi
 echo $model
-export CUDA_VISIBLE_DEVICES=${cudaid2}
 #看情况加判断针对占大显存，MV3设置batch_size与epoch
+
+#visualdl
+echo "visualdl err"
+ls /root/.visualdl/conf
+rm -rf /root/.visualdl/conf
+
 case ${model} in
 ViT_large_patch16_384|ResNeXt101_32x48d_wsl|ViT_huge_patch16_224|RedNet152|EfficientNetB6|EfficientNetB7)
 python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=2 -o Global.output_dir=output -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1
@@ -119,7 +161,6 @@ fi
   ;;
 esac
 
-export CUDA_VISIBLE_DEVICES=${cudaid1}
 ls output/$params_dir/
 # eval
 python tools/eval.py -c $line -o Global.pretrained_model=output/$params_dir/latest -o DataLoader.Eval.sampler.batch_size=1 > $log_path/eval/$model.log 2>&1
@@ -192,10 +233,8 @@ fi
 cd ..
 done
 
-if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'pr' ]] ; then
+if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
    echo "rec step"
-   ####### rec  #########
-   export CUDA_VISIBLE_DEVICES=${cudaid2}
 
    # log
    log_path=log
@@ -225,12 +264,10 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'pr' ]] ; then
    # product_dataset 
    sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
    sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
-
-
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
 
-   # logo_dataset 
+   # # logo_dataset 
    # sed -ie '/self.images = self.images\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
    # sed -ie '/self.labels = self.labels\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
    # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:10000\]'  ppcls/data/dataloader/logo_dataset.py
@@ -259,14 +296,13 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'pr' ]] ; then
    find ppcls/configs/Products/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep  Inshop  >> models_list_rec
    find ppcls/configs/Vehicle/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
 
-   if [[ ${model_flag} =~ 'pr' ]]; then
+   if [[ $1 =~ 'pr' ]]; then
       shuf -n $pr_num models_list_rec > models_list
    else
       shuf models_list_rec > models_list
    fi
-   
+
    #train
-   output_path="output"
    cat models_list | while read line
    do
    #echo $line
@@ -285,7 +321,7 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'pr' ]] ; then
    fi 
 
    # eval
-   python tools/eval.py -c $line -o Global.pretrained_model=$output_path/${category}_${model}/RecModel/latest > $log_path/eval/${category}_${model}.log 2>&1
+   python tools/eval.py -c $line -o Global.pretrained_model=output/${category}_${model}/RecModel/latest > $log_path/eval/${category}_${model}.log 2>&1
    if [ $? -eq 0 ];then
       echo -e "\033[33m eval of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
    else
@@ -295,7 +331,7 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'pr' ]] ; then
 
 
    # export_model
-   python tools/export_model.py -c $line -o Global.pretrained_model=$output_path/${category}_${model}/RecModel/latest  -o Global.save_inference_dir=./inference/${category}_${model} > $log_path/export_model/${category}_${model}.log 2>&1
+   python tools/export_model.py -c $line -o Global.pretrained_model=output/${category}_${model}/RecModel/latest  -o Global.save_inference_dir=./inference/${category}_${model} > $log_path/export_model/${category}_${model}.log 2>&1
    if [ $? -eq 0 ];then
       echo -e "\033[33m export_model of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
    else
@@ -305,12 +341,6 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'pr' ]] ; then
 
    # predict
    cd deploy
-   rm -rf recognition_demo_data_v1.0
-   rm -rf recognition_demo_data_v1.1
-   rm -rf models
-
-   ln -s  ${Data_path}/* .
-
    case $category in
    Cartoonface)
    python  python/predict_system.py -c configs/inference_cartoon.yaml > ../$log_path/predict/cartoon.log 2>&1
