@@ -20,6 +20,7 @@ if [ ! -f "/root/.cache/paddle/dataset/mnist/train-labels-idx1-ubyte.gz" ]; then
 fi
 
 if [[ $1 =~ 'pr' ]]; then #model_flag
+   echo "model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
    
    echo "---py37  env -----"
@@ -79,7 +80,7 @@ else
 fi
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install ppgan
 python -m pip install -v -e.
 python -m pip install dlib -i https://pypi.tuna.tsinghua.edu.cn/simple

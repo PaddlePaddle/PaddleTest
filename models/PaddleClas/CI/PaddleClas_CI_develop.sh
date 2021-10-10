@@ -18,6 +18,7 @@ ln -s  ${Data_path}/* .
 cd ..
 
 if [[ $1 =~ 'pr' ]]; then #model_flag
+   echo "model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
    
    echo "---py37  env -----"
@@ -67,7 +68,7 @@ fi
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 if [ -f "models_list" ]; then
@@ -297,7 +298,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
    find ppcls/configs/Vehicle/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
 
    if [[ $1 =~ 'pr' ]]; then
-      shuf -n $pr_num models_list_rec > models_list
+      shuf -n $2 models_list_rec > models_list
    else
       shuf models_list_rec > models_list
    fi

@@ -13,6 +13,7 @@ ls train_data
 gpu_flag=True
 
 if [[ $1 =~ 'pr' ]]; then #model_flag
+   echo "model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
    
    echo "---py37  env -----"
@@ -60,7 +61,7 @@ fi
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt --ignore-installed -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 # paddleocr
 python -m pip install paddleocr -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install gast==0.3.3 -i https://pypi.tuna.tsinghua.edu.cn/simple
