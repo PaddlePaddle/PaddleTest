@@ -217,6 +217,7 @@ class APIBase(object):
                     dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
                 paddle.enable_static()
                 # start run paddle static
+                paddle.seed(self.seed)
                 logging.info("[start] run " + self.__class__.__name__ + " static")
                 if self.enable_backward:
                     static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
@@ -337,6 +338,7 @@ class APIBase(object):
             paddle.enable_static()
             # start run paddle static
             logging.info("[start] run " + self.__class__.__name__ + " static")
+            paddle.seed(self.seed)
             if self.enable_backward:
                 static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
             else:
