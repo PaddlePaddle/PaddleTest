@@ -21,7 +21,6 @@ def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format=
     w_in = img.shape[3]
     if size is None:
         size = [h_in * scale_factor, w_in * scale_factor]
-    global emptyImage
     h_out = size[0]
     w_out = size[1]
     if data_format == "NCHW":
@@ -132,11 +131,11 @@ def test_upsamplingnearest2d3():
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
 def test_upsamplingnearest2d4():
     """
-    size = None, scale_factor = 4
+    size = None, scale_factor = 5
     """
     x = randtool("float", -10, 10, [1, 3, 6, 10])
     data_format = "NCHW"
     size = None
-    scale_factor = 4
+    scale_factor = 5
     res = upsample_2d(img=x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
