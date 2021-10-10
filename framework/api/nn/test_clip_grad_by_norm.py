@@ -14,7 +14,7 @@ import numpy as np
 
 def numpy_clip_grad_by_norm(test_data, clip_norm):
     """
-    ClipGradByGlobalNorm implemented by numpy.
+    ClipGradByNorm implemented by numpy.
     """
     cliped_data = []
     for data, grad in test_data:
@@ -25,7 +25,7 @@ def numpy_clip_grad_by_norm(test_data, clip_norm):
     return cliped_data
 
 
-def generate_test_data(length, shape, dtype):
+def generate_test_data(length, shape, dtype, value=10):
     """
     generate test data
     """
@@ -33,8 +33,8 @@ def generate_test_data(length, shape, dtype):
     numpy_data = []
     np.random.seed(100)
     for i in range(length):
-        np_weight = randtool("float", -255, 255, shape).astype(dtype)
-        np_weight_grad = randtool("float", -255, 255, shape).astype(dtype)
+        np_weight = randtool("float", -value, value, shape).astype(dtype)
+        np_weight_grad = randtool("float", -value, value, shape).astype(dtype)
         numpy_data.append((np_weight, np_weight_grad))
 
         tensor_weight = paddle.to_tensor(np_weight)
@@ -112,6 +112,28 @@ def test_clip_grad_by_norm2():
     clip_norm = 10.0
     dtype = "float32"
     np_data, paddle_data = generate_test_data(length, shape, dtype)
+    np_res = numpy_clip_grad_by_norm(np_data, clip_norm=clip_norm)
+
+    paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
+    paddle_cliped_data = paddle_clip(paddle_data)
+    paddle_res = []
+    for w, g in paddle_cliped_data:
+        paddle_res.append((w.numpy(), g.numpy()))
+
+    for res, p_res in zip(np_res, paddle_res):
+        compare(res[1], p_res[1])
+
+
+@pytest.mark.api_nn_ClipGradByNorm_parameters
+def test_clip_grad_by_norm3():
+    """
+    value
+    """
+    shape = [10, 10]
+    length = 5
+    clip_norm = 1.0
+    dtype = "float32"
+    np_data, paddle_data = generate_test_data(length, shape, dtype, value=25555)
     np_res = numpy_clip_grad_by_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)

@@ -30,7 +30,7 @@ def numpy_clip_grad_by_global_norm(test_data, clip_norm):
     return cliped_data
 
 
-def generate_test_data(length, shape):
+def generate_test_data(length, shape, value=10):
     """
     generate test data
     """
@@ -38,8 +38,8 @@ def generate_test_data(length, shape):
     numpy_data = []
     np.random.seed(100)
     for i in range(length):
-        np_weight = np.random.rand(*shape)
-        np_weight_grad = np.random.rand(*shape)
+        np_weight = randtool("float", -value, value, shape)
+        np_weight_grad = randtool("float", -value, value, shape)
         numpy_data.append((np_weight, np_weight_grad))
 
         tensor_weight = paddle.to_tensor(np_weight)
@@ -148,14 +148,14 @@ def test_clip_grad_by_global_norm3():
 
 
 @pytest.mark.api_nn_ClipGradByGlobalNorm_parameters
-def test_clip_grad_by_global_norm1():
+def test_clip_grad_by_global_norm4():
     """
     value
     """
     shape = [10, 10]
-    length = 15
+    length = 4
     clip_norm = 1.0
-    np_data, paddle_data = generate_test_data(length, shape)
+    np_data, paddle_data = generate_test_data(length, shape, value=255555)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
