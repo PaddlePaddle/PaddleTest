@@ -5,11 +5,11 @@
 test_pixel_shuffle
 """
 
-from __future__ import print_function
-
-import unittest
-import numpy as np
+from apibase import APIBase
+from apibase import randtool, compare
 import paddle
+import pytest
+import numpy as np
 
 
 def pixel_shuffle_np(x, up_factor, data_format="NCHW"):
@@ -34,96 +34,96 @@ def pixel_shuffle_np(x, up_factor, data_format="NCHW"):
         return npresult
 
 
-class TestPixelShuffleImperative(unittest.TestCase):
+class TestPixelShuffle(APIBase):
     """
-    test paddle.nn.PixelShuffle imperative in different input types and parameters.
-    """
-
-    def setUp(self):
-        self.dtype1 = "float32"
-        self.up_factor1 = 3
-        self.nchw_shape1 = [2, 9, 4, 4]
-        self.nhwc_shape1 = [2, 4, 4, 9]
-
-        self.dtype2 = "float64"
-        self.up_factor2 = 4
-        self.nchw_shape2 = [4, 1024, 77, 77]
-        self.nhwc_shape2 = [4, 77, 77, 1024]
-
-    def test_nchw1(self):
-        """
-        test data_format 'NCHW' and input data type 'float32'
-        """
-        x = np.random.rand(*self.nchw_shape1).astype(self.dtype1)
-        res = pixel_shuffle_np(x, self.up_factor1, data_format="NCHW")
-        x = paddle.to_tensor(x)
-        pixel_shuffle = paddle.nn.PixelShuffle(self.up_factor1, data_format="NCHW")
-        paddle_res = pixel_shuffle(x).numpy()
-        self.assertEqual((paddle_res == res).all(), True)
-
-    def test_nhwc1(self):
-        """
-        test data_format 'NHWC' and input data type 'float32'
-        """
-        x = np.random.rand(*self.nhwc_shape1).astype(self.dtype1)
-        res = pixel_shuffle_np(x, self.up_factor1, data_format="NHWC")
-        x = paddle.to_tensor(x)
-        pixel_shuffle = paddle.nn.PixelShuffle(self.up_factor1, data_format="NHWC")
-        paddle_res = pixel_shuffle(x).numpy()
-        self.assertEqual((paddle_res == res).all(), True)
-
-    def test_nchw2(self):
-        """
-        test data_format 'NCHW' and input data type 'float64'
-        """
-        x = np.random.rand(*self.nchw_shape2).astype(self.dtype2)
-        res = pixel_shuffle_np(x, self.up_factor2, data_format="NCHW")
-        x = paddle.to_tensor(x)
-        pixel_shuffle = paddle.nn.PixelShuffle(self.up_factor2, data_format="NCHW")
-        paddle_res = pixel_shuffle(x).numpy()
-        self.assertEqual((paddle_res == res).all(), True)
-
-    def test_nhwc2(self):
-        """
-        test data_format 'NHWC' and input data type 'float64'
-        """
-        x = np.random.rand(*self.nhwc_shape2).astype(self.dtype2)
-        res = pixel_shuffle_np(x, self.up_factor2, data_format="NHWC")
-        x = paddle.to_tensor(x)
-        pixel_shuffle = paddle.nn.PixelShuffle(self.up_factor2, data_format="NHWC")
-        paddle_res = pixel_shuffle(x).numpy()
-        self.assertEqual((paddle_res == res).all(), True)
-
-
-class TestPixelShuffleError(unittest.TestCase):
-    """
-    test paddle.nn.PixelShuffle error.
+    test
     """
 
-    def test_input_type_errors(self):
+    def hook(self):
         """
-        when input dtype = 'int32', raise RuntimeError
+        implement
         """
-        x = paddle.randint(low=0, high=255, shape=[2, 9, 4, 4], dtype="int32")
-        data_format = "NCHW"
-        up_factor = 3
-        self.assertRaises(RuntimeError, paddle.nn.PixelShuffle(up_factor, data_format), x)
+        self.types = [np.float32, np.float64]
 
 
-class TestPixelShuffleParameter(unittest.TestCase):
+obj = TestPixelShuffle(paddle.nn.PixelShuffle)
+
+
+@pytest.mark.api_nn_PixelShuffle_vartype
+def test_pixel_shuffle_base():
     """
-    test paddle.nn.PixelShuffle initialize parameter.
+    base
     """
+    x = randtool("float", -10, 10, [2, 9, 4, 4])
+    up_factor = 3
+    data_format = "NCHW"
+    res = pixel_shuffle_np(x, up_factor, data_format=data_format)
 
-    def test_factor_error(self):
-        """
-        The square of upscale_factor should divide the number of channel, otherwise raise ValueError.
-        """
-        up_factor = 3
-        data_format = "NCHW"
-        x = paddle.rand((4, 16, 224, 224))
-        self.assertRaises(ValueError, paddle.nn.PixelShuffle(up_factor, data_format=data_format), x)
+    x = paddle.to_tensor(x)
+    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
+    paddle_res = pixel_shuffle(x).numpy()
+    compare(paddle_res, res)
 
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.mark.api_nn_PixelShuffle_parameters
+def test_pixel_shuffle_norm1():
+    """
+    input shape
+    """
+    x = randtool("float", -10, 10, [4, 81, 77, 77])
+    up_factor = 3
+    data_format = "NCHW"
+    res = pixel_shuffle_np(x, up_factor, data_format=data_format)
+
+    x = paddle.to_tensor(x)
+    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
+    paddle_res = pixel_shuffle(x).numpy()
+    compare(paddle_res, res)
+
+
+@pytest.mark.api_nn_PixelShuffle_parameters
+def test_pixel_shuffle_norm2():
+    """
+    data_format
+    """
+    x = randtool("float", -10, 10, [2, 4, 4, 9])
+    up_factor = 3
+    data_format = "NHWC"
+    res = pixel_shuffle_np(x, up_factor, data_format=data_format)
+
+    x = paddle.to_tensor(x)
+    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
+    paddle_res = pixel_shuffle(x).numpy()
+    compare(paddle_res, res)
+
+
+@pytest.mark.api_nn_PixelShuffle_parameters
+def test_pixel_shuffle_norm3():
+    """
+    up_factor
+    """
+    x = randtool("float", -10, 10, [2, 81, 4, 4])
+    up_factor = 9
+    data_format = "NCHW"
+    res = pixel_shuffle_np(x, up_factor, data_format=data_format)
+
+    x = paddle.to_tensor(x)
+    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
+    paddle_res = pixel_shuffle(x).numpy()
+    compare(paddle_res, res)
+
+
+@pytest.mark.api_nn_PixelShuffle_parameters
+def test_pixel_shuffle_norm4():
+    """
+    value
+    """
+    x = randtool("float", -2555, 2555, [2, 9, 4, 4])
+    up_factor = 3
+    data_format = "NCHW"
+    res = pixel_shuffle_np(x, up_factor, data_format=data_format)
+
+    x = paddle.to_tensor(x)
+    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
+    paddle_res = pixel_shuffle(x).numpy()
+    compare(paddle_res, res)
