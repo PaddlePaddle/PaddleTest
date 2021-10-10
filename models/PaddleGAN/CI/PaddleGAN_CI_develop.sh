@@ -85,9 +85,9 @@ fi
 unset http_proxy
 unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
-python -m pip install --upgrade pip
+python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install ppgan
+python -m pip install ppgan -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install -v -e.
 python -m pip install dlib -i https://pypi.tuna.tsinghua.edu.cn/simple
 # python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
@@ -126,7 +126,9 @@ fi
 
 echo "length models_list"
 wc -l models_list
-git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
+if [[ ${1} =~ "pr" ]];then
+   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
+fi
 echo "diff models_list"
 wc -l models_list
 cat models_list

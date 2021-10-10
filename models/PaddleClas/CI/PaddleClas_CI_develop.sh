@@ -68,8 +68,8 @@ fi
 unset http_proxy
 unset https_proxy
 # env
-export FLAGS_fraction_of_gpu_memory_to_use=0.8
-python -m pip install --upgrade pip
+export FLAGS_fraction_of_gpu_memory_to_use=0.8 
+python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
 
@@ -102,7 +102,9 @@ fi
 
 echo "length models_list"
 wc -l models_list
-git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
+if [[ ${1} =~ "pr" ]];then
+   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
+fi
 echo "diff models_list"
 wc -l models_list
 cat models_list
@@ -298,12 +300,17 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
    # find ppcls/configs/Logo/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    find ppcls/configs/Products/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep  Inshop  >> models_list_rec
    find ppcls/configs/Vehicle/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
+   echo "rec models_list"
+   wc -l models_list_rec
+   cat models_list_rec
 
    if [[ $1 =~ 'pr' ]]; then
       shuf -n $2 models_list_rec > models_list
    else
       shuf models_list_rec > models_list
    fi
+   echo "rec run models_list"
+   cat models_list
 
    #train
    cat models_list | while read line
