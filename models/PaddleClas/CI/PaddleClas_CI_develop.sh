@@ -41,6 +41,8 @@ if [[ $1 =~ 'pr' ]]; then #model_flag
    esac
    python -c "import sys; print('python version:',sys.version_info[:])";
    
+   unset http_proxy
+   unset https_proxy
    echo "----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install $5 #paddle_compile
@@ -50,7 +52,7 @@ if [[ $1 =~ 'pr' ]]; then #model_flag
    ln -s $6 dataset #data_path
    ls dataset
    cd deploy
-   
+
    rm -rf recognition_demo_data_v1.0
    rm -rf recognition_demo_data_v1.1
    rm -rf models
@@ -82,7 +84,7 @@ if [ -f "models_list" ]; then
    rm -rf models_list_all
 fi
 
-find ppcls/configs/ImageNet/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
+find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
 
 if [[ ${model_flag} =~ 'CI_step1' ]]; then
    cat models_list_all | while read line
@@ -102,6 +104,10 @@ elif [[ ${model_flag} =~ 'CI_step2' ]]; then
       echo ${line}  >> models_list
    fi
    done
+
+else
+   shuf models_list_all > models_list
+   
 fi
 
 echo "length models_list"

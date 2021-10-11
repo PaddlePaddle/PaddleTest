@@ -37,6 +37,8 @@ if [[ $1 =~ 'pr' ]]; then #model_flag
    esac
    python -c "import sys; print('python version:',sys.version_info[:])";
    
+   unset http_proxy
+   unset https_proxy
    echo "----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install $5 #paddle_compile
@@ -113,10 +115,12 @@ done
 if [ -f "models_list" ]; then
    rm -rf models_list
    rm -rf models_list_all
+   rm -rf models_list_det_db
+   rm -rf models_list_rec
 fi
 
-find configs/det -name *.yml -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
-find configs/rec -name *.yml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train'  > models_list_rec
+find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
+find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train'  > models_list_rec
 
 shuf models_list_det_db > models_list_all
 shuf models_list_rec >> models_list_all

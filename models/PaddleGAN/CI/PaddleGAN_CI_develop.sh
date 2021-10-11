@@ -42,7 +42,9 @@ if [[ $1 =~ 'pr' ]]; then #model_flag
    ;;
    esac
    python -c "import sys; print('python version:',sys.version_info[:])";
-   
+      
+   unset http_proxy
+   unset https_proxy
    echo "----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install $5 #paddle_compile
@@ -117,7 +119,7 @@ if [ -f "models_list" ]; then
    rm -rf models_list_all
 fi
 
-find configs/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' > models_list_all
+find configs/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' > models_list_all
 
 if [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
