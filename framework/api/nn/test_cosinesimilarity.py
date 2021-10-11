@@ -140,10 +140,10 @@ def test_cosinesimilarity4():
     input value
     test on different shape
     """
-    x1 = randtool("float", -100, 100, [5, 1, 2, 3, 4])
+    x1 = randtool("float", -100, 100, [5, 2, 3, 4])
     x2 = randtool("float", -100, 100, [2, 3, 4])
 
-    axis = 1
+    axis = -1
     eps = 1e-8
 
     res = cos_sim(x1, x2, axis, eps)
