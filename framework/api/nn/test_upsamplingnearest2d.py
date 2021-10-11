@@ -13,7 +13,7 @@ import paddle.fluid as fluid
 import numpy as np
 
 
-def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format="NCHW"):
+def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
     """
     def
     """
@@ -25,7 +25,7 @@ def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format=
     w_out = size[1]
     if data_format == "NCHW":
         num_batchs, channels, height, width = img.shape
-        emptyImage = np.zeros((num_batchs, channels, h_out, w_out), type_)
+        emptyImage = np.zeros((num_batchs, channels, h_out, w_out))
         sh = h_out / height
         sw = w_out / width
         for i in range(h_out):
@@ -36,7 +36,7 @@ def upsample_2d(img, type_="float64", scale_factor=None, size=None, data_format=
     elif data_format == "NHWC":
         img = img.transpose((0, 3, 1, 2))
         num_batchs, channels, height, width = img.shape
-        emptyImage = np.zeros((num_batchs, channels, h_out, w_out), type)
+        emptyImage = np.zeros((num_batchs, channels, h_out, w_out))
         sh = h_out / height
         sw = w_out / width
         for i in range(h_out):
