@@ -9,7 +9,7 @@ pwd;
 rm -rf ~/datasets
 ln -s ${Data_path}/train_data ~/datasets
 mkdir log
-python -m pip install -e .     
+python -m pip install -e .
 cd ./examples/fastspeech2/baker
 # data preprocess
 if [ ! -f "baker_alignment_tone.tar.gz" ]; then
@@ -47,6 +47,3 @@ python synthesize.py \
   --output-dir=exp/default/test \
   --device="gpu" \
   --phones-dict=dump/phone_id_map.txt
-
-
-

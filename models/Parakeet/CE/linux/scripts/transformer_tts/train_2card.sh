@@ -9,7 +9,7 @@ pwd;
 rm -rf ~/datasets
 ln -s ${Data_path}/train_data ~/datasets
 mkdir log
-python -m pip install -e .     
+python -m pip install -e .
 cd ./examples/transformer_tts/ljspeech
 # train
 sed -i "s/max_epoch: 500/max_epoch: 1/g;s/batch_size: 16/batch_size: 2/g"  ./conf/default.yaml
@@ -44,6 +44,3 @@ python synthesize_e2e.py \
   --output-dir=exp/default/test_e2e \
   --device="gpu" \
   --phones-dict=dump/phone_id_map.txt
-
-
-

@@ -20,10 +20,10 @@ PADDLE_ON_MODEL_CE = "1"
 WITH_AVX = "ON"
 # 资源配置
 IS_SINGLE_CUDA = True
-XPU = 'gpu'  # 取值gpu或cpu
+XPU = "gpu"  # 取值gpu或cpu
 # 配置文件中SET_CUDA为None，框架不配置gpu cuda，使用cpu场景
-SET_CUDA = '0'
-SET_MULTI_CUDA = '0,1'
+SET_CUDA = "0"
+SET_MULTI_CUDA = "0,1"
 # if XPU == 'gpu':
 #     if IS_SINGLE_CUDA:
 #         SET_CUDA = '0'
@@ -35,4 +35,3 @@ SET_MULTI_CUDA = '0,1'
 REPO_Parakeet = "https://github.com/PaddlePaddle/Parakeet.git"
 BASE_BRANCH = "develop"
 parakeet_BRANCH = "develop"
-

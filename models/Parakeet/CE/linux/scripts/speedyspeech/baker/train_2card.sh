@@ -9,7 +9,7 @@ pwd;
 rm -rf ~/datasets
 ln -s ${Data_path}/train_data ~/datasets
 mkdir log
-python -m pip install -e .     
+python -m pip install -e .
 cd ./examples/speedyspeech/baker
 # train
 sed -i "s/max_epoch: 300/max_epoch: 10/g"  ./conf/default.yaml
@@ -38,6 +38,3 @@ python inference.py \
   --inference-dir=exp/default/inference \
   --text=sentences.txt \
   --output-dir=exp/default/pd_infer_out
-
-
-

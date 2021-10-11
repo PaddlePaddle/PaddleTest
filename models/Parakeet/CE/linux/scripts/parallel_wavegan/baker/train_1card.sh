@@ -8,7 +8,7 @@ pwd;
 rm -rf ~/datasets
 ln -s ${Data_path}/train_data ~/datasets
 mkdir log
-python -m pip install -e .     
+python -m pip install -e .
 cd ./examples/parallelwave_gan/baker
 # data preprocess
 bash preprocess.sh
@@ -32,5 +32,3 @@ python synthesize.py \
   --checkpoint=exp/default/checkpoints/snapshot_iter_500.pdz \
   --test-metadata=./metadata_10.jsonl \
   --output-dir=exp/default/test
-
-

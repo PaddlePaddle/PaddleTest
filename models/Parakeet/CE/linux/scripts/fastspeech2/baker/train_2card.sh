@@ -9,7 +9,7 @@ pwd;
 rm -rf ~/datasets
 ln -s ${Data_path}/train_data ~/datasets
 mkdir log
-python -m pip install -e .     
+python -m pip install -e .
 cd ./examples/fastspeech2/baker
 # train
 sed -i "s/max_epoch: 1000/max_epoch: 2/g;s/batch_size: 64/batch_size: 16/g"  ./conf/default.yaml
@@ -34,4 +34,3 @@ python synthesize.py \
   --output-dir=exp/default/test \
   --device="gpu" \
   --phones-dict=dump/phone_id_map.txt
-

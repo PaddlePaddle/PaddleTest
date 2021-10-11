@@ -8,7 +8,7 @@ pwd;
 rm -rf ~/datasets
 ln -s ${Data_path}/train_data ~/datasets
 mkdir log
-python -m pip install -e .     
+python -m pip install -e .
 cd ./examples/parallelwave_gan/baker
 # train
 sed -i "s/train_max_steps: 400000/train_max_steps: 500/g;s/save_interval_steps: 5000/save_interval_steps: 500/g;s/eval_interval_steps: 1000/eval_interval_steps: 500/g;s/batch_size: 8/batch_size: 2/g"  ./conf/default.yaml
@@ -28,5 +28,3 @@ python synthesize.py \
   --checkpoint=exp/default/checkpoints/snapshot_iter_500.pdz \
   --test-metadata=./metadata_10.jsonl \
   --output-dir=exp/default/test
-
-

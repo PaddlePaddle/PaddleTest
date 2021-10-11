@@ -7,7 +7,7 @@ cd ${Project_path}
 pwd;
 
 mkdir log
-python -m pip install -e .     
+python -m pip install -e .
 cd ./examples/tacotron2
 rm -rf LJSpeech-1.1
 ln -s ${Data_path}/train_data/LJSpeech-1.1 ./
@@ -18,4 +18,3 @@ cat ../../log/tacotron2_2card.log | grep "step: 500" | grep "Rank: 0" | awk 'BEG
 # synthesize
 rm -rf exp
 python synthesize.py --checkpoint_path=output/checkpoints/step-500 --input=sentences.txt --output=exp/ --device=gpu
-

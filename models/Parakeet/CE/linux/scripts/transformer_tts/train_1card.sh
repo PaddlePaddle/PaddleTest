@@ -9,7 +9,7 @@ pwd;
 rm -rf ~/datasets
 ln -s ${Data_path}/train_data ~/datasets
 mkdir log
-python -m pip install -e .     
+python -m pip install -e .
 cd ./examples/transformer_tts/ljspeech
 # data preprocess
 sed -i "s/python3/python/g" preprocess.sh
@@ -54,5 +54,3 @@ python synthesize_e2e.py \
   --output-dir=exp/default/test_e2e \
   --device="gpu" \
   --phones-dict=dump/phone_id_map.txt
-
-

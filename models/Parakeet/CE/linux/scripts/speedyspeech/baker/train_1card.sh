@@ -9,7 +9,7 @@ pwd;
 rm -rf ~/datasets
 ln -s ${Data_path}/train_data ~/datasets
 mkdir log
-python -m pip install -e .     
+python -m pip install -e .
 cd ./examples/speedyspeech/baker
 # data preprocess
 bash preprocess.sh
@@ -45,6 +45,3 @@ python inference.py \
   --inference-dir=exp/default/inference \
   --text=sentences.txt \
   --output-dir=exp/default/pd_infer_out
-
-
-
