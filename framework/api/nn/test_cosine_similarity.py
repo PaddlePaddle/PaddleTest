@@ -31,10 +31,10 @@ obj = TestCosineSimilarity(paddle.nn.CosineSimilarity)
 
 
 def compute_cosine_similarity(x1, x2, axis=1, eps=1e-8):
-    w12 = paddle.sum(paddle.multiply(x1, x2), axis=axis)
-    w1 = paddle.sum(paddle.multiply(x1, x1), axis=axis)
-    w2 = paddle.sum(paddle.multiply(x2, x2), axis=axis)
-    n12 = paddle.sqrt(paddle.clip(w1 * w2, min=eps * eps))
+    w12 = np.sum(np.multiply(x1, x2), axis=axis)
+    w1 = np.sum(np.multiply(x1, x1), axis=axis)
+    w2 = np.sum(np.multiply(x2, x2), axis=axis)
+    n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
     cos_sim = w12 / n12
     return cos_sim
 
@@ -46,10 +46,15 @@ def test_cosine_similarity_base():
     """
     x1 = randtool("int", -10, 10, [5, 10])
     x2 = randtool("int", -10, 10, [5, 10])
+    axis = 1
+    eps = 1e-8
+    expected_result = compute_cosine_similarity(x1, x2, axis=axis, eps=eps)
 
-    result1 = compute_cosine_similarity(x1, x2, axis=1, eps=1e-8)
-    result2 = paddle.nn.CosineSimilarity(axis=1, eps=1e-8)(x1, x2)
-    compare(result1, result2)
+    x1 = paddle.to_tensor(x1)
+    x2 = paddle.to_tensor(x2)
+    result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
+
+    compare(result, expected_result)
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
@@ -57,10 +62,86 @@ def test_cosine_similarity():
     """
     default
     """
-    x1 = randtool("float", -10, 10, [2, 3, 4, 4])
-    x2 = randtool("float", -10, 10, [2, 3, 4, 4])
+    x1 = randtool("float", -10, 10, [5, 10])
+    x2 = randtool("float", -10, 10, [5, 10])
+    axis = 1
+    eps = 1e-8
+    expected_result = compute_cosine_similarity(x1, x2, axis=axis, eps=eps)
 
-    result1 = compute_cosine_similarity(x1, x2, axis=0, eps=1e-8)
-    result2 = paddle.nn.CosineSimilarity(axis=0, eps=1e-8)(x1, x2)
-    compare(result1, result2)
+    x1 = paddle.to_tensor(x1)
+    x2 = paddle.to_tensor(x2)
+    result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
 
+    compare(result, expected_result)
+
+
+@pytest.mark.api_nn_CosineSimilarity_parameters
+def test_cosine_similarity2():
+    """
+    modify value range
+    """
+    x1 = randtool("float", -10000, 10000, [5, 10])
+    x2 = randtool("float", -10000, 10000, [5, 10])
+    axis = 1
+    eps = 1e-8
+    expected_result = compute_cosine_similarity(x1, x2, axis=axis, eps=eps)
+
+    x1 = paddle.to_tensor(x1)
+    x2 = paddle.to_tensor(x2)
+    result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
+
+    compare(result, expected_result)
+
+
+@pytest.mark.api_nn_CosineSimilarity_parameters
+def test_cosine_similarity3():
+    """
+    modify input shape
+    """
+    x1 = randtool("float", -10, 10, [5, 6, 7, 8, 10])
+    x2 = randtool("float", -10, 10, [5, 6, 7, 8, 10])
+    axis = 1
+    eps = 1e-8
+    expected_result = compute_cosine_similarity(x1, x2, axis=axis, eps=eps)
+
+    x1 = paddle.to_tensor(x1)
+    x2 = paddle.to_tensor(x2)
+    result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
+
+    compare(result, expected_result)
+
+
+@pytest.mark.api_nn_CosineSimilarity_parameters
+def test_cosine_similarity4():
+    """
+    modify axis
+    """
+    x1 = randtool("float", -10, 10, [5, 10])
+    x2 = randtool("float", -10, 10, [5, 10])
+    axis = 0
+    eps = 1e-8
+    expected_result = compute_cosine_similarity(x1, x2, axis=axis, eps=eps)
+
+    x1 = paddle.to_tensor(x1)
+    x2 = paddle.to_tensor(x2)
+    result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
+
+    compare(result, expected_result)
+
+
+@pytest.mark.api_nn_CosineSimilarity_parameters
+def test_cosine_similarity5():
+    """
+    modify eps
+    """
+    x1 = randtool("float", -10, 10, [5, 10])
+    x2 = randtool("float", -10, 10, [5, 10])
+    axis = 1
+    eps = 1e-4
+    expected_result = compute_cosine_similarity(x1, x2, axis=axis, eps=eps)
+
+    x1 = paddle.to_tensor(x1)
+    x2 = paddle.to_tensor(x2)
+    result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
+
+    compare(result, expected_result)
