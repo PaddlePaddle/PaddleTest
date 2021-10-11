@@ -5,7 +5,6 @@
 test_clip_grad_by_norm
 """
 
-from apibase import APIBase
 from apibase import randtool, compare
 import paddle
 import pytest
