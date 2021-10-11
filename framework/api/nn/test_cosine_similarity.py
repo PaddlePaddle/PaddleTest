@@ -57,7 +57,7 @@ def test_cosine_similarity_base():
     x2 = paddle.to_tensor(x2)
     result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
 
-    compare(result, expected_result)
+    compare(result.numpy(), expected_result)
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
@@ -75,7 +75,7 @@ def test_cosine_similarity():
     x2 = paddle.to_tensor(x2)
     result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
 
-    compare(result, expected_result)
+    compare(result.numpy(), expected_result)
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
@@ -94,7 +94,7 @@ def test_cosine_similarity2():
     x2 = paddle.to_tensor(x2)
     result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
 
-    compare(result, expected_result)
+    compare(result.numpy(), expected_result)
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
@@ -112,7 +112,7 @@ def test_cosine_similarity3():
     x2 = paddle.to_tensor(x2)
     result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
 
-    compare(result, expected_result)
+    compare(result.numpy(), expected_result)
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
@@ -130,7 +130,7 @@ def test_cosine_similarity4():
     x2 = paddle.to_tensor(x2)
     result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
 
-    compare(result, expected_result)
+    compare(result.numpy(), expected_result)
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
@@ -148,7 +148,7 @@ def test_cosine_similarity5():
     x2 = paddle.to_tensor(x2)
     result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
 
-    compare(result, expected_result)
+    compare(result.numpy(), expected_result)
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
@@ -166,7 +166,7 @@ def test_cosine_similarity6():
     x2 = paddle.to_tensor(x2)
     result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
 
-    compare(result, expected_result)
+    compare(result.numpy(), expected_result)
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
@@ -185,4 +185,4 @@ def test_cosine_similarity7():
     x2 = paddle.to_tensor(x2)
     result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1, x2)
 
-    compare(result, expected_result)
+    compare(result.numpy(), expected_result)
