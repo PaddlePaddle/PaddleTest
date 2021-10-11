@@ -22,8 +22,6 @@ class TestAlphaDropout(APIBase):
         self.types = [np.float32, np.float64]
         self.seed = 100
         self.enable_backward = False
-        # self.static = True
-        # self.dygraph = False
 
 
 obj = TestAlphaDropout(paddle.nn.AlphaDropout)
