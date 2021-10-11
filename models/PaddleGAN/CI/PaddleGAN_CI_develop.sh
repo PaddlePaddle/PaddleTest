@@ -19,7 +19,7 @@ ls data
 #    wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-labels-idx1-ubyte.gz
 # fi
 
-if [[ $1 =~ 'pr' ]]; then #model_flag
+if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
    
@@ -125,12 +125,15 @@ if [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
 elif [[ $1 =~ "pr" ]];then
    shuf -n $2 models_list_all > models_list
+elif [[ ${1} =~ "single" ]];then
+   echo $7 > models_list
 else
    shuf models_list_all > models_list
 fi
 
 echo "length models_list"
 wc -l models_list
+cat models_list
 if [[ ${1} =~ "pr" ]];then
    git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
 fi

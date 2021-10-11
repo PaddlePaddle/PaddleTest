@@ -13,7 +13,7 @@ ln -s ${Data_path}/* .
 ls train_data
 gpu_flag=True
 
-if [[ $1 =~ 'pr' ]]; then #model_flag
+if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
    
@@ -129,12 +129,15 @@ if [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
 elif [[ $1 =~ "pr" ]];then
    shuf -n $2 models_list_all > models_list
+elif [[ ${1} =~ "single" ]];then
+   echo $7 > models_list
 else
    shuf models_list_all > models_list
 fi
 
 echo "length models_list"
 wc -l models_list
+cat models_list
 if [[ ${1} =~ "pr" ]];then
    git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
 fi
@@ -342,37 +345,29 @@ fi
 fi
 done
 
-# # predict
-# python tools/infer/predict_system.py --image_dir="./doc/imgs/12.jpg" --det_model_dir="./models/inference/det/"  --rec_model_dir="./models/inference/rec/" > $log_path/predict/predict_system.log 2>&1
-# if [[ $? -eq 0 ]]; then
-#    cat $log_path/predict/predict_system.log
-#    echo -e "\033[33m predict of system  successfully!\033[0m"| tee -a $log_path/result.log
-# else
-#    cat $log_path/predict/predict_system.log
-#    echo -e "\033[31m predict of system failed!\033[0m"| tee -a $log_path/result.log
-# fi
-
 # cls
-python -m paddle.distributed.launch  tools/train.py -c configs/cls/cls_mv3.yml -o Train.loader.batch_size_per_card=2 Global.print_batch_step=1 Global.epoch_num=1 > $log_path/train/cls_mv3.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/cls_mv3.log) -eq 0 ]];then
-   echo -e "\033[33m training of cls_mv3  successfully!\033[0m" | tee -a $log_path/result.log
-else
-   cat  $log_path/train/cls_mv3.log
-   echo -e "\033[31m training of cls_mv3 failed!\033[0m" | tee -a $log_path/result.log
-fi
-python tools/eval.py -c configs/cls/cls_mv3.yml -o Global.checkpoints=output/cls/mv3/latest > $log_path/eval/cls_mv3.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/cls_mv3.log) -eq 0 ]];then
-   echo -e "\033[33m eval of cls_mv3  successfully!\033[0m" | tee -a $log_path/result.log
-else
-   cat $log_path/eval/cls_mv3.log
-   echo -e "\033[31m eval of cls_mv3 failed!\033[0m" | tee -a $log_path/result.log
-fi
-python tools/infer_cls.py -c configs/cls/cls_mv3.yml -o Global.pretrained_model=output/cls/mv3/latest Global.load_static_weights=false Global.infer_img=doc/imgs_words/ch/word_1.jpg > $log_path/infer/cls_mv3.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/cls_mv3.log) -eq 0 ]];then
-   echo -e "\033[33m infer of cls_mv3  successfully!\033[0m"| tee -a $log_path/result.log
-else
-   cat $log_path/infer/cls_mv3.log
-   echo -e "\033[31m infer of cls_mv3 failed!\033[0m"| tee -a $log_path/result.log
+if [[ ${model_flag} =~ 'CI_all' ]]; then
+   python -m paddle.distributed.launch  tools/train.py -c configs/cls/cls_mv3.yml -o Train.loader.batch_size_per_card=2 Global.print_batch_step=1 Global.epoch_num=1 > $log_path/train/cls_mv3.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/cls_mv3.log) -eq 0 ]];then
+      echo -e "\033[33m training of cls_mv3  successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat  $log_path/train/cls_mv3.log
+      echo -e "\033[31m training of cls_mv3 failed!\033[0m" | tee -a $log_path/result.log
+   fi
+   python tools/eval.py -c configs/cls/cls_mv3.yml -o Global.checkpoints=output/cls/mv3/latest > $log_path/eval/cls_mv3.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/cls_mv3.log) -eq 0 ]];then
+      echo -e "\033[33m eval of cls_mv3  successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/eval/cls_mv3.log
+      echo -e "\033[31m eval of cls_mv3 failed!\033[0m" | tee -a $log_path/result.log
+   fi
+   python tools/infer_cls.py -c configs/cls/cls_mv3.yml -o Global.pretrained_model=output/cls/mv3/latest Global.load_static_weights=false Global.infer_img=doc/imgs_words/ch/word_1.jpg > $log_path/infer/cls_mv3.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/cls_mv3.log) -eq 0 ]];then
+      echo -e "\033[33m infer of cls_mv3  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/infer/cls_mv3.log
+      echo -e "\033[31m infer of cls_mv3 failed!\033[0m"| tee -a $log_path/result.log
+   fi
 fi
 
 num=`cat $log_path/result.log | grep "failed" | wc -l`
