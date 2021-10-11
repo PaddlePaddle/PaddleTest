@@ -64,7 +64,7 @@ class TestUpsamplingNearest2d(APIBase):
         # self.enable_backward = True
 
 
-obj = TestUpsamplingNearest2d(paddle.nn.UpSamplingNearest2D)
+obj = TestUpsamplingNearest2d(paddle.nn.UpsamplingNearest2D)
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_vartype
