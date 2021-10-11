@@ -5,13 +5,15 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
-# data
-echo "----ln  data-----"
-rm -rf train_data
-rm -rf pretrain_models
-ln -s ${Data_path}/* .
-ls train_data
-gpu_flag=True
+if [[ ${model_flag} =~ 'CI']]; then 
+   # data
+   echo "----ln  data-----"
+   rm -rf train_data
+   rm -rf pretrain_models
+   ln -s ${Data_path}/* .
+   ls train_data
+   gpu_flag=True
+fi
 
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "model_flag pr"
@@ -112,12 +114,10 @@ else
 fi
 done
 
-if [ -f "models_list" ]; then
-   rm -rf models_list
-   rm -rf models_list_all
-   rm -rf models_list_det_db
-   rm -rf models_list_rec
-fi
+rm -rf models_list
+rm -rf models_list_all
+rm -rf models_list_det_db
+rm -rf models_list_rec
 
 find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
 find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train'  > models_list_rec

@@ -5,17 +5,19 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
-# data
-rm -rf dataset
-ln -s ${Data_path} dataset
-ls dataset
+if [[ ${model_flag} =~ 'CI']]; then 
+   # data
+   rm -rf dataset
+   ln -s ${Data_path} dataset
+   ls dataset
 
-cd deploy
-rm -rf recognition_demo_data_v1.0
-rm -rf recognition_demo_data_v1.1
-rm -rf models
-ln -s  ${Data_path}/* .
-cd ..
+   cd deploy
+   rm -rf recognition_demo_data_v1.0
+   rm -rf recognition_demo_data_v1.1
+   rm -rf models
+   ln -s  ${Data_path}/* .
+   cd ..
+fi
 
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "model_flag pr"
@@ -79,10 +81,8 @@ python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install  -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install  --ignore-installed paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-if [ -f "models_list" ]; then
-   rm -rf models_list
-   rm -rf models_list_all
-fi
+rm -rf models_list
+rm -rf models_list_all
 
 find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
 
@@ -153,9 +153,8 @@ echo "visualdl err"
 ls /root/.visualdl/conf
 rm -rf /root/.visualdl/conf
 
-case ${model} in
-ViT_large_patch16_384|ResNeXt101_32x48d_wsl|ViT_huge_patch16_224|RedNet152|EfficientNetB6|EfficientNetB7)
-python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=2 -o Global.output_dir=output -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1
+#train
+python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.output_dir=output -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1
 params_dir=$(ls output)
 echo "params_dir"
 echo $params_dir
@@ -165,20 +164,13 @@ else
    cat $log_path/train/$model.log
    echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
 fi
-  ;;
-*)
-python -m paddle.distributed.launch --gpus=${cudaid2} tools/train.py  -c $line -o Global.epochs=1 -o Global.output_dir=output -o DataLoader.Train.sampler.batch_size=4 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1
-params_dir=$(ls output)
-echo "params_dir"
-echo $params_dir
-if [ -f "output/$params_dir/latest.pdparams" ];then
-   echo -e "\033[33m training of $model  successfully!\033[0m"|tee -a $log_path/result.log
-else
-   cat $log_path/train/$model.log
-   echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
+
+if [[ ${model} =~ 'MobileNetV3' ]] ;then
+   echo "use pretrain model"
+   echo ${model}
+   rm -rf output/$params_dir/latest.pdparams
+   cp -r dataset/pretrain_models/${model}_pretrained.pdparams output/$params_dir/latest.pdparams
 fi
-  ;;
-esac
 
 ls output/$params_dir/
 # eval
@@ -255,19 +247,6 @@ done
 if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
    echo "rec step"
 
-   # log
-   log_path=log
-   phases='train eval infer export_model predict'
-   for phase in $phases
-   do
-   if [[ -d ${log_path}/${phase} ]]; then
-      echo -e "\033[33m ${log_path}/${phase} is exsit!\033[0m"
-   else
-      mkdir -p  ${log_path}/${phase}
-      echo -e "\033[33m ${log_path}/${phase} is created successfully!\033[0m"
-   fi
-   done
-
    # small data
    # icartoon_dataset
    sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
@@ -304,7 +283,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/vehicle_dataset.py
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/vehicle_dataset.py
 
-
+   rm -rf models_list_rec
    find ppcls/configs/Cartoonface/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    # find ppcls/configs/Logo/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    find ppcls/configs/Products/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep  Inshop  >> models_list_rec

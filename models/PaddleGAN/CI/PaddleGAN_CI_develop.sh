@@ -5,11 +5,14 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
-# data
-echo "----ln  data-----"
-rm -rf data
-ln -s ${Data_path} data
-ls data
+if [[ ${model_flag} =~ 'CI']]; then 
+   # data
+   echo "----ln  data-----"
+   rm -rf data
+   ln -s ${Data_path} data
+   ls data
+fi
+
 
 # if [ ! -f "/root/.cache/paddle/dataset/mnist/train-images-idx3-ubyte.gz" ]; then
 #    wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-images-idx3-ubyte.gz
@@ -114,10 +117,8 @@ else
 fi
 done
 
-if [ -f "models_list" ]; then
-   rm -rf models_list
-   rm -rf models_list_all
-fi
+rm -rf models_list
+rm -rf models_list_all
 
 find configs/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' > models_list_all
 
