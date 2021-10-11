@@ -116,6 +116,6 @@ def test_jetson_gpu_more_bz():
         test_suite2.load_config(
             model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5, gpu_mem=0)
+        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5, gpu_mem=4000)
 
         del test_suite2  # destroy class to save memory

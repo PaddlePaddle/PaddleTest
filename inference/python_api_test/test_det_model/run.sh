@@ -1,5 +1,8 @@
 export FLAGS_call_stack_level=2
-cases="test_yolov3.py"
+cases="test_yolov3_gpu.py \
+       test_yolov3_mkldnn.py \
+       test_yolov3_trt_fp32.py \
+       test_yolov3_trt_fp16.py"
 bug=0
 
 echo "============ failed cases =============" >> result.txt
