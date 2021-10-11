@@ -40,6 +40,9 @@ DATA_PROC:
     run:
       # 先做makefile替换代码
       -
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
+      -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash mac_py39.sh
       -
