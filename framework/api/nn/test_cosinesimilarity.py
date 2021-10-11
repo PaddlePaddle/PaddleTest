@@ -28,7 +28,16 @@ class TestCosineSimilarity(APIBase):
         # enable check grad
 
 
-obj = TestCosineSimilarity(paddle.nn.CosineSimilarity)
+# obj = TestCosineSimilarity(paddle.nn.CosineSimilarity)
+def cos_sim(x1, x2, axis, eps):
+    """
+    Cosine Similarity using numpy
+    """
+    w12 = np.sum(np.multiply(x1, x2), axis=axis)
+    w1 = np.sum(np.multiply(x1, x1), axis=axis)
+    w2 = np.sum(np.multiply(x2, x2), axis=axis)
+    n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
+    return w12 / n12
 
 
 @pytest.mark.api_nn_CosineSimilarity_vartype
@@ -43,31 +52,14 @@ def test_cosinesimilarity_base():
     axis = 1
     eps = 1e-8
 
-    w12 = np.sum(np.multiply(x1, x2), axis=axis)
-    w1 = np.sum(np.multiply(x1, x1), axis=axis)
-    w2 = np.sum(np.multiply(x2, x2), axis=axis)
-    n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
-    cos_sim = w12 / n12
+    res = cos_sim(x1, x2, axis, eps)
 
-    res = cos_sim
-    # paddle_res = paddle.nn.functional.cosine_similarity(paddle.to_tensor(x1), paddle.to_tensor(x2))
-    # res = np.maximum(0, x1)
-    # print(res)
-
-    # np.random.seed(0)
-    # x1 = np.random.rand(2,3)
-    # x2 = np.random.rand(2,3)
     x1 = paddle.to_tensor(x1)
     x2 = paddle.to_tensor(x2)
 
     cos_sim_func = paddle.nn.CosineSimilarity(axis=axis, eps=eps)
     paddle_res = cos_sim_func(x1, x2).numpy()
 
-    # print(result)
-
-    # x1 = paddle.to_tensor(x1)
-    # x2 = paddle.to_tensor(x2)
-    # obj.base(res=res, data={'x1': x1, 'x2': x2}, axis=axis, eps=eps)
     compare(paddle_res, res)
 
 
@@ -83,13 +75,7 @@ def test_cosinesimilarity():
     axis = 1
     eps = 1e-8
 
-    w12 = np.sum(np.multiply(x1, x2), axis=axis)
-    w1 = np.sum(np.multiply(x1, x1), axis=axis)
-    w2 = np.sum(np.multiply(x2, x2), axis=axis)
-    n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
-    cos_sim = w12 / n12
-
-    res = cos_sim
+    res = cos_sim(x1, x2, axis, eps)
 
     x1 = paddle.to_tensor(x1)
     x2 = paddle.to_tensor(x2)
@@ -113,13 +99,7 @@ def test_cosinesimilarity2():
     eps = 1e-8
 
     for axis in axis_list:
-        w12 = np.sum(np.multiply(x1, x2), axis=axis)
-        w1 = np.sum(np.multiply(x1, x1), axis=axis)
-        w2 = np.sum(np.multiply(x2, x2), axis=axis)
-        n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
-        cos_sim = w12 / n12
-
-        res = cos_sim
+        res = cos_sim(x1, x2, axis, eps)
 
         x1_tensor = paddle.to_tensor(x1)
         x2_tensor = paddle.to_tensor(x2)
@@ -143,13 +123,7 @@ def test_cosinesimilarity3():
     eps_list = [1e-6, 1e-6, 1e-7, 1e-8, 1e-9]
 
     for eps in eps_list:
-        w12 = np.sum(np.multiply(x1, x2), axis=axis)
-        w1 = np.sum(np.multiply(x1, x1), axis=axis)
-        w2 = np.sum(np.multiply(x2, x2), axis=axis)
-        n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
-        cos_sim = w12 / n12
-
-        res = cos_sim
+        res = cos_sim(x1, x2, axis, eps)
 
         x1_tensor = paddle.to_tensor(x1)
         x2_tensor = paddle.to_tensor(x2)
@@ -172,13 +146,7 @@ def test_cosinesimilarity4():
     axis = 1
     eps = 1e-8
 
-    w12 = np.sum(np.multiply(x1, x2), axis=axis)
-    w1 = np.sum(np.multiply(x1, x1), axis=axis)
-    w2 = np.sum(np.multiply(x2, x2), axis=axis)
-    n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
-    cos_sim = w12 / n12
-
-    res = cos_sim
+    res = cos_sim(x1, x2, axis, eps)
 
     x1_tensor = paddle.to_tensor(x1)
     x2_tensor = paddle.to_tensor(x2)
@@ -201,13 +169,7 @@ def test_cosinesimilarity5():
     axis = 0
     eps = 1e-8
 
-    w12 = np.sum(np.multiply(x1, x2), axis=axis)
-    w1 = np.sum(np.multiply(x1, x1), axis=axis)
-    w2 = np.sum(np.multiply(x2, x2), axis=axis)
-    n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
-    cos_sim = w12 / n12
-
-    res = cos_sim
+    res = cos_sim(x1, x2, axis, eps)
 
     x1_tensor = paddle.to_tensor(x1)
     x2_tensor = paddle.to_tensor(x2)
