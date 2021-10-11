@@ -243,13 +243,13 @@ def test_alpha_dropout2():
     compare(res, paddle_res)
 
 
-@pytest.mark.api_nn_AlphaDropout_parameters
-def test_alpha_dropout2():
-    """
-    p = -1
-    """
-    x = randtool("float", 0, 2, [2, 3])
-    obj.exception(etype=ValueError, mode="python", data=x, p=-1)
+# @pytest.mark.api_nn_AlphaDropout_parameters
+# def test_alpha_dropout2():
+#     """
+#     p = -1
+#     """
+#     x = randtool("float", 0, 2, [2, 3])
+#     obj.exception(etype=ValueError, mode="python", data=x, p=-1)
 
 
 # @pytest.mark.api_nn_AlphaDropout_parameters
