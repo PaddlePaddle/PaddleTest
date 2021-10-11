@@ -249,7 +249,7 @@ else
    echo -e "\033[31m infer of fist order motion model failed!\033[0m"| tee -a $log_path/result.log
 fi
 
-if [[! $1 == "pr" ]];then
+if [[ ! $1 == "pr" ]];then
    # fist order motion model multi_person
    python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image_multi_person.jpg --ratio 0.4 --relative --adapt_scale --multi_person > $log_path/infer/fist_order_motion_model_multi_person.log 2>&1
    if [[ $? -eq 0 ]];then
