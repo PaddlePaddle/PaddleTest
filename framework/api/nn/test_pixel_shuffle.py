@@ -58,11 +58,7 @@ def test_pixel_shuffle_base():
     up_factor = 3
     data_format = "NCHW"
     res = pixel_shuffle_np(x, up_factor, data_format=data_format)
-
-    x = paddle.to_tensor(x)
-    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
-    paddle_res = pixel_shuffle(x).numpy()
-    compare(paddle_res, res)
+    obj.run(res=res, data=x, upscale_factor=up_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_PixelShuffle_parameters
@@ -70,15 +66,11 @@ def test_pixel_shuffle_norm1():
     """
     input shape
     """
-    x = randtool("float", -10, 10, [4, 81, 77, 77])
+    x = randtool("float", -10, 10, [4, 81, 4, 4])
     up_factor = 3
     data_format = "NCHW"
     res = pixel_shuffle_np(x, up_factor, data_format=data_format)
-
-    x = paddle.to_tensor(x)
-    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
-    paddle_res = pixel_shuffle(x).numpy()
-    compare(paddle_res, res)
+    obj.run(res=res, data=x, upscale_factor=up_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_PixelShuffle_parameters
@@ -90,11 +82,7 @@ def test_pixel_shuffle_norm2():
     up_factor = 3
     data_format = "NHWC"
     res = pixel_shuffle_np(x, up_factor, data_format=data_format)
-
-    x = paddle.to_tensor(x)
-    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
-    paddle_res = pixel_shuffle(x).numpy()
-    compare(paddle_res, res)
+    obj.run(res=res, data=x, upscale_factor=up_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_PixelShuffle_parameters
@@ -106,11 +94,7 @@ def test_pixel_shuffle_norm3():
     up_factor = 9
     data_format = "NCHW"
     res = pixel_shuffle_np(x, up_factor, data_format=data_format)
-
-    x = paddle.to_tensor(x)
-    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
-    paddle_res = pixel_shuffle(x).numpy()
-    compare(paddle_res, res)
+    obj.run(res=res, data=x, upscale_factor=up_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_PixelShuffle_parameters
@@ -122,8 +106,4 @@ def test_pixel_shuffle_norm4():
     up_factor = 3
     data_format = "NCHW"
     res = pixel_shuffle_np(x, up_factor, data_format=data_format)
-
-    x = paddle.to_tensor(x)
-    pixel_shuffle = paddle.nn.PixelShuffle(up_factor, data_format)
-    paddle_res = pixel_shuffle(x).numpy()
-    compare(paddle_res, res)
+    obj.run(res=res, data=x, upscale_factor=up_factor, data_format=data_format)

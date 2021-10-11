@@ -43,21 +43,6 @@ def generate_test_data(length, shape, dtype, value=10):
     return numpy_data, tensor_data
 
 
-class TestClipGradByNorm(APIBase):
-    """
-    test
-    """
-
-    def hook(self):
-        """
-        implement
-        """
-        self.types = [np.float32]
-
-
-obj = TestClipGradByNorm(paddle.nn.ClipGradByNorm)
-
-
 @pytest.mark.api_nn_ClipGradByNorm_vartype
 def test_clip_grad_by_norm_base():
     """
