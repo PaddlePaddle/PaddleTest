@@ -42,8 +42,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.2121
-        threshold: 0.02
+        kpi_base: 0.3021
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -70,8 +70,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.2121
-        threshold: 0.02
+        kpi_base: 0.3021
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -95,8 +95,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.2121
-        threshold: 0.02
+        kpi_base: 0.3021
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -124,8 +124,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.2121
-        threshold: 0.02
+        kpi_base: 0.3021
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -152,8 +152,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.2121
-        threshold: 0.02
+        kpi_base: 0.3021
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -178,8 +178,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.2121
-        threshold: 0.02
+        kpi_base: 0.3021
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
