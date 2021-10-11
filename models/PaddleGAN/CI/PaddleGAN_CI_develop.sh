@@ -11,13 +11,13 @@ rm -rf data
 ln -s ${Data_path} data
 ls data
 
-if [ ! -f "/root/.cache/paddle/dataset/mnist/train-images-idx3-ubyte.gz" ]; then
-   wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-images-idx3-ubyte.gz
-fi
+# if [ ! -f "/root/.cache/paddle/dataset/mnist/train-images-idx3-ubyte.gz" ]; then
+#    wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-images-idx3-ubyte.gz
+# fi
 
-if [ ! -f "/root/.cache/paddle/dataset/mnist/train-labels-idx1-ubyte.gz" ]; then
-   wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-labels-idx1-ubyte.gz
-fi
+# if [ ! -f "/root/.cache/paddle/dataset/mnist/train-labels-idx1-ubyte.gz" ]; then
+#    wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-labels-idx1-ubyte.gz
+# fi
 
 if [[ $1 =~ 'pr' ]]; then #model_flag
    echo "model_flag pr"
@@ -85,13 +85,16 @@ fi
 unset http_proxy
 unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
-python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install --ignore-installed  --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install ppgan -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install -v -e.
-python -m pip install dlib -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install --ignore-installed  ppgan -i https://pypi.tuna.tsinghua.edu.cn/simple
+echo "install ppgan "
+python -m pip install  -v -e.
+echo "install dlib "
+python -m pip install --ignore-installed  dlib -i https://pypi.tuna.tsinghua.edu.cn/simple
 # python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
+echo "install done "
 
 pip list
 echo "pip list"

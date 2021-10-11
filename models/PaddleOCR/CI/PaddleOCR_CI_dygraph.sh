@@ -8,7 +8,8 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 # data
 echo "----ln  data-----"
 rm -rf train_data
-ln -s ${Data_path}/train_data train_data
+rm -rf pretrain_models
+ln -s ${Data_path}/* .
 ls train_data
 gpu_flag=True
 
@@ -41,8 +42,9 @@ if [[ $1 =~ 'pr' ]]; then #model_flag
    python -m pip install $5 #paddle_compile
 
    echo "----ln  data-----"
+   rm -rf pretrain_models
    rm -rf train_data
-   ln -s $6/train_data train_data
+   ln -s $6/* .
    ls train_data
 fi
 
@@ -62,38 +64,38 @@ unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
-python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install --ignore-installed --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 # paddleocr
-python -m pip install paddleocr -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install gast==0.3.3 -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install  --ignore-installed paddleocr -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install  --ignore-installed gast==0.3.3 -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # download model
-if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
-fi
+# if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
+#   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
+# fi
 
-if [ ! -f "pretrain_models/ResNet18_vd_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet18_vd_pretrained.pdparams
-fi
+# if [ ! -f "pretrain_models/ResNet18_vd_pretrained.pdparams" ]; then
+#   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet18_vd_pretrained.pdparams
+# fi
 
-if [ ! -f "pretrain_models/ResNet50_vd_ssld_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet50_vd_ssld_pretrained.pdparams
-fi
+# if [ ! -f "pretrain_models/ResNet50_vd_ssld_pretrained.pdparams" ]; then
+#   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet50_vd_ssld_pretrained.pdparams
+# fi
 
-if [ ! -f "pretrain_models/ResNet50_vd_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet50_vd_pretrained.pdparams
-fi
+# if [ ! -f "pretrain_models/ResNet50_vd_pretrained.pdparams" ]; then
+#   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet50_vd_pretrained.pdparams
+# fi
 
-if [ ! -f "pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar" ]; then
-    wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
-    tar xf pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar -C pretrain_models
-fi
+# if [ ! -f "pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar" ]; then
+#     wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
+#     tar xf pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar -C pretrain_models
+# fi
 
-if [ ! -f "pretrain_models/ch_ppocr_server_v2.0_det_train.tar" ]; then
-    wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_server_v2.0_det_train.tar
-    tar xf pretrain_models/ch_ppocr_server_v2.0_det_train.tar -C pretrain_models
-fi
+# if [ ! -f "pretrain_models/ch_ppocr_server_v2.0_det_train.tar" ]; then
+#     wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_server_v2.0_det_train.tar
+#     tar xf pretrain_models/ch_ppocr_server_v2.0_det_train.tar -C pretrain_models
+# fi
 
 # dir
 log_path=log

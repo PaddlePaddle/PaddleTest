@@ -50,6 +50,10 @@ if [[ $1 =~ 'pr' ]]; then #model_flag
    ln -s $6 dataset #data_path
    ls dataset
    cd deploy
+   
+   rm -rf recognition_demo_data_v1.0
+   rm -rf recognition_demo_data_v1.1
+   rm -rf models
    ln -s $6/* .
    cd ..
 fi
@@ -70,8 +74,8 @@ unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8 
 python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install  -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install  --ignore-installed paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 if [ -f "models_list" ]; then
    rm -rf models_list
@@ -253,11 +257,6 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
       echo -e "\033[33m ${log_path}/${phase} is created successfully!\033[0m"
    fi
    done
-
-   # pretrained model
-   if [ ! -f "product_ResNet50_vd_Aliproduct_v1.0_pretrained.pdparams" ]; then
-      wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/models/pretrain/product_ResNet50_vd_Aliproduct_v1.0_pretrained.pdparams
-   fi
 
    # small data
    # icartoon_dataset
