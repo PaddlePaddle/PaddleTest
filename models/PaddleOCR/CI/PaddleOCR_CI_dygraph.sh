@@ -5,7 +5,7 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
-if [[ ${model_flag} =~ 'CI']]; then 
+if [[ ${model_flag} =~ 'CI' ]]; then 
    # data
    echo "----ln  data-----"
    rm -rf train_data
