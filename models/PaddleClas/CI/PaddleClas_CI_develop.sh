@@ -95,7 +95,7 @@ if [[ ${model_flag} =~ 'CI_step1' ]]; then
    fi
    done
 
-elif [[ ${1} =~ "pr" ]] ;then
+elif [[ ${1} =~ "pr" ]] || [[ ${1} =~ "rec_single" ]];then
    shuf -n $2 models_list_all > models_list
 
 elif [[ ${1} =~ "clas_single" ]];then
@@ -113,10 +113,6 @@ elif [[ ${model_flag} =~ 'all' ]] || [[ ${1} =~ 'all' ]]; then
    shuf models_list_all > models_list
    
 fi
-
-if [[ ! -f "models_list" ]];then
-   echo > models_list
-fi 
 
 echo "######  length models_list"
 wc -l models_list
