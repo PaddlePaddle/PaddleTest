@@ -11,4 +11,4 @@ cd $modle_path
 python setup.py bdist_wheel
 python -m pip install --upgrade paddlenlp
 python -m pip uninstall -y paddlenlp
-python -m pip install ./dist/paddlenlp*.whl
+python -m pip install --ignore-installed ./dist/paddlenlp*.whl

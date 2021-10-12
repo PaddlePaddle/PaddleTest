@@ -26,6 +26,8 @@ demo19(){
 declare -A dic
 dic=([dnn]='models/rank/dnn' [wide_deep]='models/rank/wide_deep' [deepfm]='models/rank/deepfm' [fm]='models/rank/fm' [gateDnn]='models/rank/gateDnn' \
 [logistic_regression]='models/rank/logistic_regression' [naml]='models/rank/naml' [ffm]='models/rank/ffm' [xdeepfm]='models/rank/xdeepfm' \
+[bst]='models/rank/bst' [dcn]='models/rank/dcn' [deepfefm]='models/rank/deepfefm' [dien]='models/rank/dien' \
+[din]='models/rank/din' [dlrm]='models/rank/dlrm' [dmr]='models/rank/dmr' \
 [esmm]='models/multitask/esmm' [mmoe]='models/multitask/mmoe' [ple]='models/multitask/ple' [share_bottom]='models/multitask/share_bottom' \
 [dssm]='models/match/dssm' [match-pyramid]='models/match/match-pyramid' [multiview-simnet]='models/match/multiview-simnet' \
 [tagspace]='models/contentunderstanding/tagspace' [textcnn]='models/contentunderstanding/textcnn' \
