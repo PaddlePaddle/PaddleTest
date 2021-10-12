@@ -110,7 +110,7 @@ def test_gpu_more_bz():
 
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
-        test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)\
+        test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
 
 
 @pytest.mark.jetson

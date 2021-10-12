@@ -41,6 +41,7 @@ def test_config():
     test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
     test_suite.config_test()
 
+
 @pytest.mark.server
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():

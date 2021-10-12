@@ -90,4 +90,3 @@ def test_int8_more_bz():
         )
 
         del test_suite  # destroy class to save memory
-

@@ -130,4 +130,3 @@ def test_trt_fp16_bz1_multi_thread():
     test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, precision="trt_fp16")
 
     del test_suite2  # destroy class to save memory
-
