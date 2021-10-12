@@ -29,6 +29,8 @@ class TestCosineSimilarity(APIBase):
 
 
 # obj = TestCosineSimilarity(paddle.nn.CosineSimilarity)
+
+
 def cos_sim(x1, x2, axis, eps):
     """
     Cosine Similarity using numpy
@@ -178,3 +180,81 @@ def test_cosinesimilarity5():
     paddle_res = cos_sim_func(x1_tensor, x2_tensor).numpy()
 
     compare(paddle_res, res)
+    # obj.run(res=res,x1=x1,x2=x2)
+
+
+@pytest.mark.api_nn_CosineSimilarity_parameters
+def test_cosinesimilarity6():
+    """
+    error axis
+    axis out of range
+    """
+    x1 = randtool("float", -100, 100, [5, 1, 3])
+    x2 = randtool("float", -100, 100, [1, 3])
+
+    axis = 2
+    eps = 1e-8
+
+    # res = cos_sim(x1, x2, axis, eps)
+
+    x1_tensor = paddle.to_tensor(x1)
+    x2_tensor = paddle.to_tensor(x2)
+
+    cos_sim_func = paddle.nn.CosineSimilarity(axis=axis, eps=eps)
+
+    # cos_sim_func(x1_tensor, x2_tensor)
+    try:
+        cos_sim_func(x1_tensor, x2_tensor)
+    except ValueError:
+        pass
+
+
+@pytest.mark.api_nn_CosineSimilarity_parameters
+def test_cosinesimilarity7():
+    """
+    error type
+    type is not float
+    """
+    x1 = randtool("int", -100, 100, [5, 1, 3])
+    x2 = randtool("float", -100, 100, [5, 1, 3])
+
+    axis = 1
+    eps = 1e-8
+
+    # res = cos_sim(x1, x2, axis, eps)
+
+    x1_tensor = paddle.to_tensor(x1)
+    x2_tensor = paddle.to_tensor(x2)
+
+    cos_sim_func = paddle.nn.CosineSimilarity(axis=axis, eps=eps)
+
+    # cos_sim_func(x1_tensor, x2_tensor)
+    try:
+        cos_sim_func(x1_tensor, x2_tensor)
+    except ValueError:
+        pass
+
+
+def test_cosinesimilarity8():
+    """
+    error shape
+    Broadcast dimension mismatch
+    """
+    x1 = randtool("float", -100, 100, [5, 1, 3])
+    x2 = randtool("float", -100, 100, [2, 3])
+
+    axis = 1
+    eps = 1e-8
+
+    # res = cos_sim(x1, x2, axis, eps)
+
+    x1_tensor = paddle.to_tensor(x1)
+    x2_tensor = paddle.to_tensor(x2)
+
+    cos_sim_func = paddle.nn.CosineSimilarity(axis=axis, eps=eps)
+
+    # cos_sim_func(x1_tensor, x2_tensor)
+    try:
+        cos_sim_func(x1_tensor, x2_tensor)
+    except ValueError:
+        pass
