@@ -7,7 +7,7 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 
 if [[ ${model_flag} =~ 'CI' ]]; then 
    # data
-   echo "----ln  data-----"
+   echo "######  ----ln  data-----"
    rm -rf data
    ln -s ${Data_path} data
    ls data
@@ -24,10 +24,10 @@ rm -rf /root/.cache/paddle/dataset/mnist
 # fi
 
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
-   echo "model_flag pr"
+   echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
    
-   echo "---py37  env -----"
+   echo "######  ---py37  env -----"
    rm -rf /usr/local/python2.7.15/bin/python
    rm -rf /usr/local/bin/python
    export PATH=/usr/local/bin/python:${PATH}
@@ -49,11 +49,11 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
       
    unset http_proxy
    unset https_proxy
-   echo "----install  paddle-----"
+   echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install $5 #paddle_compile
 
-   echo "----ln  data-----"
+   echo "######  ----ln  data-----"
    rm -rf data
    ln -s $6 data #data_path
    ls data
@@ -69,7 +69,7 @@ else
    yum install cmake boost -y
    yum install opencv opencv-python opencv-devel python-devel numpy -y
    yum install ffmpeg -y
-   echo "ffmpeg"
+   echo "######  ffmpeg"
    ffmpeg
    #install  dlib
    yum install gcc gcc-c++
@@ -78,14 +78,14 @@ fi
 
 # python
 python -c 'import sys; print(sys.version_info[:])'
-echo "python version"
+echo "######  python version"
 
 # env
 # dependency
 if [ -d "/etc/redhat-release" ]; then
-   echo "system centos"
+   echo "######  system centos"
 else
-   echo "system linux"
+   echo "######  system linux"
 fi
 
 unset http_proxy
@@ -94,16 +94,16 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed  ppgan -i https://mirror.baidu.com/pypi/simple
-echo "install ppgan "
+echo "######  install ppgan "
 python -m pip install  -v -e.
-echo "install dlib "
+echo "######  install dlib "
 python -m pip install --ignore-installed  dlib -i https://mirror.baidu.com/pypi/simple
 # python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
-echo "install done "
+echo "######  install done "
 
 pip list
-echo "pip list"
+echo "######  pip list"
 
 # dir
 log_path=log
@@ -133,13 +133,13 @@ else
    shuf models_list_all > models_list
 fi
 
-echo "length models_list"
+echo "######  length models_list"
 wc -l models_list
 cat models_list
 if [[ ${1} =~ "pr" ]];then
    git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
 fi
-echo "diff models_list"
+echo "######  diff models_list"
 wc -l models_list
 cat models_list
 
@@ -158,7 +158,7 @@ case ${model} in
 lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second)
 python tools/main.py --config-file $line -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output > $log_path/train/${model}.log 2>&1
 params_dir=$(ls output)
-echo "params_dir"
+echo "######  params_dir"
 echo $params_dir
 if [ -f "output/$params_dir/iter_20_checkpoint.pdparams" ];then
    echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
@@ -170,7 +170,7 @@ fi
 *)
 python  -m paddle.distributed.launch tools/main.py --config-file $line -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output > $log_path/train/${model}.log 2>&1
 params_dir=$(ls output)
-echo "params_dir"
+echo "######  params_dir"
 echo $params_dir
 if [ -f "output/$params_dir/iter_20_checkpoint.pdparams" ];then
    echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log

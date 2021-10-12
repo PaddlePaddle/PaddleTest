@@ -7,7 +7,7 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 
 if [[ ${model_flag} =~ 'CI' ]]; then 
    # data
-   echo "----ln  data-----"
+   echo "######  ----ln  data-----"
    rm -rf train_data
    rm -rf pretrain_models
    ln -s ${Data_path}/* .
@@ -16,10 +16,10 @@ if [[ ${model_flag} =~ 'CI' ]]; then
 fi
 
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
-   echo "model_flag pr"
+   echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
    
-   echo "---py37  env -----"
+   echo "######  ---py37  env -----"
    rm -rf /usr/local/python2.7.15/bin/python
    rm -rf /usr/local/bin/python
    export PATH=/usr/local/bin/python:${PATH}
@@ -41,11 +41,11 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    
    unset http_proxy
    unset https_proxy
-   echo "----install  paddle-----"
+   echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install $5 #paddle_compile
 
-   echo "----ln  data-----"
+   echo "######  ----ln  data-----"
    rm -rf pretrain_models
    rm -rf train_data
    ln -s $6/* .
@@ -54,13 +54,13 @@ fi
 
 # python
 python -c 'import sys; print(sys.version_info[:])'
-echo "python version"
+echo "######  python version"
 
 #system
 if [ -d "/etc/redhat-release" ]; then
-   echo "system centos"
+   echo "######  system centos"
 else
-   echo "system linux"
+   echo "######  system linux"
 fi
 
 unset http_proxy
@@ -135,13 +135,13 @@ else
    shuf models_list_all > models_list
 fi
 
-echo "length models_list"
+echo "######  length models_list"
 wc -l models_list
 cat models_list
 if [[ ${1} =~ "pr" ]];then
    git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
 fi
-echo "diff models_list"
+echo "######  diff models_list"
 wc -l models_list
 cat models_list
 
@@ -160,7 +160,7 @@ if [[ $model =~ "rec" ]];then
 else
    category="det"
 fi
-echo "category"
+echo "######  category"
 echo $category
 
 if [ ${category} == "rec" ];then
@@ -226,11 +226,11 @@ fi
 
 # predict
 if [ ${category} == "rec" ];then
-echo "rec"
+echo "######  rec"
 if [[ $(echo $model | grep -c "chinese") -eq 0 ]];then
-echo "none chinese"
+echo "######  none chinese"
 if [ ${algorithm} == "SRN" ];then
-echo "SRN"
+echo "######  SRN"
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="1, 64,256" --rec_char_type="en" --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
@@ -249,7 +249,7 @@ else
 fi
 
 else
-echo "none SRN"
+echo "######  none SRN"
 if [[ $(echo $model | grep -c "lite") -eq 0 ]];then
 
 if [ -f "./models_inference/${model}/inference.pdiparams"  ];then
@@ -263,7 +263,7 @@ else
 fi
 
 else
-echo "have Teacher Student "
+echo "######  have Teacher Student "
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Student" --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m Student predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
@@ -282,7 +282,7 @@ fi
 fi
 
 else
-echo "multi_language"
+echo "######  multi_language"
 # multi_language
 language=`echo $model |awk -F '_' '{print $2}'`
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  --rec_char_type=$language --rec_char_dict_path="ppocr/utils/dict/"$language"_dict.txt" > $log_path/predict/${model}.log 2>&1
@@ -297,7 +297,7 @@ fi
 fi
 
 else
-echo "chinese"
+echo "######  chinese"
 
 if [ -f "./models_inference/${model}/inference.pdiparams"  ];then
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
@@ -310,7 +310,7 @@ else
 fi
 
 else
-echo "have Teacher Student "
+echo "######  have Teacher Student "
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Teacher" --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    cat $log_path/predict/${model}.log
@@ -332,7 +332,7 @@ fi
 fi
 
 else
-echo "det"
+echo "######  det"
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"${model} --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    cat $log_path/predict/${model}.log

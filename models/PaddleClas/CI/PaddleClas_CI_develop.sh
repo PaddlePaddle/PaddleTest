@@ -20,10 +20,10 @@ if [[ ${model_flag} =~ 'CI' ]]; then
 fi
 
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
-   echo "model_flag pr"
+   echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
    
-   echo "---py37  env -----"
+   echo "######  ---py37  env -----"
    rm -rf /usr/local/python2.7.15/bin/python
    rm -rf /usr/local/bin/python
    export PATH=/usr/local/bin/python:${PATH}
@@ -45,11 +45,11 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    
    unset http_proxy
    unset https_proxy
-   echo "----install  paddle-----"
+   echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install $5 #paddle_compile
 
-   echo "----ln  data-----"
+   echo "######  ----ln  data-----"
    rm -rf dataset
    ln -s $6 dataset #data_path
    ls dataset
@@ -64,13 +64,13 @@ fi
 
 # python
 python -c 'import sys; print(sys.version_info[:])'
-echo "python version"
+echo "######  python version"
 
 #system
 if [ -d "/etc/redhat-release" ]; then
-   echo "system centos"
+   echo "######  system centos"
 else
-   echo "system linux"
+   echo "######  system linux"
 fi
 
 unset http_proxy
@@ -108,18 +108,18 @@ elif [[ ${model_flag} =~ 'CI_step2' ]]; then
    fi
    done
 
-elif [[ ${model_flag} =~ 'CI_all' ]]; then
+elif [[ ${model_flag} =~ 'all' ]] || [[ ${1} =~ 'all' ]]; then
    shuf models_list_all > models_list
    
 fi
 
-echo "length models_list"
+echo "######  length models_list"
 wc -l models_list
 cat models_list
 if [[ ${1} =~ "pr" ]];then
    git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
 fi
-echo "diff models_list"
+echo "######  diff models_list"
 wc -l models_list
 cat models_list
 
@@ -149,14 +149,14 @@ echo $model
 #看情况加判断针对占大显存，MV3设置batch_size与epoch
 
 #visualdl
-echo "visualdl err"
+echo "######  visualdl err"
 ls /root/.visualdl/conf
 rm -rf /root/.visualdl/conf
 
 #train
 python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.output_dir=output -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1  > $log_path/train/$model.log 2>&1
 params_dir=$(ls output)
-echo "params_dir"
+echo "######  params_dir"
 echo $params_dir
 if [ -f "output/$params_dir/latest.pdparams" ];then
    echo -e "\033[33m training of $model  successfully!\033[0m"|tee -a $log_path/result.log
@@ -166,7 +166,7 @@ else
 fi
 
 if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] ;then
-   echo "use pretrain model"
+   echo "######  use pretrain model"
    echo ${model}
    rm -rf output/$params_dir/latest.pdparams
    cp -r dataset/pretrain_models/${model}_pretrained.pdparams output/$params_dir/latest.pdparams
@@ -245,63 +245,65 @@ cd ..
 done
 
 if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
-   echo "rec step"
+   echo "######  rec step"
 
-   # small data
-   # icartoon_dataset
+   # # small data
+   # # icartoon_dataset
    sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
    sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
 
-   # product_dataset 
-   sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
-   sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
+   # # product_dataset 
+   # sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
+   # sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
 
-   # # logo_dataset 
-   # sed -ie '/self.images = self.images\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
-   # sed -ie '/self.labels = self.labels\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
-   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:10000\]'  ppcls/data/dataloader/logo_dataset.py
-   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/logo_dataset.py
+   # # # logo_dataset 
+   # # sed -ie '/self.images = self.images\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
+   # # sed -ie '/self.labels = self.labels\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
+   # # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:10000\]'  ppcls/data/dataloader/logo_dataset.py
+   # # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/logo_dataset.py
 
-   # vehicle_dataset
-   sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-   sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-   sed -ie '/self.bboxes = self.bboxes\[:200\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-   sed -ie '/self.cameras = self.cameras\[:200\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # # vehicle_dataset
+   # sed -ie '/self.images = self.images\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -ie '/self.labels = self.labels\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -ie '/self.bboxes = self.bboxes\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -ie '/self.cameras = self.cameras\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
 
-   numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
-   number1=`echo $numbers |cut -d' ' -f1`
-   sed -i "`echo $number1` a\        self.bboxes = self.bboxes\[:200\]" ppcls/data/dataloader/vehicle_dataset.py
+   # numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
+   # number1=`echo $numbers |cut -d' ' -f1`
+   # sed -i "`echo $number1` a\        self.bboxes = self.bboxes\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
 
-   numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
-   number2=`echo $numbers |cut -d' ' -f2`
-   sed -i "`echo $number2` a\        self.cameras = self.cameras\[:200\]" ppcls/data/dataloader/vehicle_dataset.py
+   # numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
+   # number2=`echo $numbers |cut -d' ' -f2`
+   # sed -i "`echo $number2` a\        self.cameras = self.cameras\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
 
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/vehicle_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
 
    rm -rf models_list_rec
    find ppcls/configs/Cartoonface/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    # find ppcls/configs/Logo/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    find ppcls/configs/Products/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep  Inshop  >> models_list_rec
-   # find ppcls/configs/Vehicle/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
-   echo "rec models_list"
+   find ppcls/configs/Vehicle/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
+   echo "######  rec models_list"
    wc -l models_list_rec
    cat models_list_rec
 
    # #二选一
-   # if [[ $1 =~ 'pr' ]]; then
-   #    shuf -n $2 models_list_rec > models_list
-   # else
-   #    shuf models_list_rec > models_list
-   # fi
-   #二选一
-   shuf models_list_rec > models_list
+   if [[ $1 =~ 'pr' ]]; then
+      shuf -n $2 models_list_rec > models_list
+   elif [[ $1 =~ "rec_single" ]];then
+      echo $7 > models_list
+   else
+      shuf models_list_rec > models_list
+   fi
+   # #二选一
+   # shuf models_list_rec > models_list
 
-   echo "rec run models_list"
+   echo "######  rec run models_list"
    cat models_list
 
    #train
