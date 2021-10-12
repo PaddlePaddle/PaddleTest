@@ -77,9 +77,9 @@ unset http_proxy
 unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8 
-python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install  -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install  --ignore-installed paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
+python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
 
 rm -rf models_list
 rm -rf models_list_all
@@ -165,7 +165,7 @@ else
    echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
 fi
 
-if [[ ${model} =~ 'MobileNetV3' ]] ;then
+if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] ;then
    echo "use pretrain model"
    echo ${model}
    rm -rf output/$params_dir/latest.pdparams
@@ -287,16 +287,20 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
    find ppcls/configs/Cartoonface/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    # find ppcls/configs/Logo/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    find ppcls/configs/Products/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep  Inshop  >> models_list_rec
-   find ppcls/configs/Vehicle/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
+   # find ppcls/configs/Vehicle/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
    echo "rec models_list"
    wc -l models_list_rec
    cat models_list_rec
 
-   if [[ $1 =~ 'pr' ]]; then
-      shuf -n $2 models_list_rec > models_list
-   else
-      shuf models_list_rec > models_list
-   fi
+   # #二选一
+   # if [[ $1 =~ 'pr' ]]; then
+   #    shuf -n $2 models_list_rec > models_list
+   # else
+   #    shuf models_list_rec > models_list
+   # fi
+   #二选一
+   shuf models_list_rec > models_list
+
    echo "rec run models_list"
    cat models_list
 

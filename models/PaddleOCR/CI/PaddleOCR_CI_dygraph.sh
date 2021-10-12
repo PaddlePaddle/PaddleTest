@@ -68,11 +68,11 @@ unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
-python -m pip install --ignore-installed --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 # paddleocr
-python -m pip install  --ignore-installed paddleocr -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install  --ignore-installed gast==0.3.3 -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
+python -m pip install  --ignore-installed gast==0.3.3 -i https://mirror.baidu.com/pypi/simple
 
 # download model
 # if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
