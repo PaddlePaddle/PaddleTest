@@ -235,7 +235,7 @@ def test_upsamplingnearest2d9():
     """
     test when input x contains values less than 0.
 
-    expected results:
+    expected results :
     the results of numpy and paddle api should not be different.
     """
     x = randtool("float", -10, 10, [2, 3, 6, 10])
