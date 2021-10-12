@@ -207,10 +207,11 @@ def test_alpha_dropout1():
     paddle.seed(100)
     p = 0.5  # defult is 0.5
     res = numpy_alpha_dropout(x, p)
-    func = paddle.nn.AlphaDropout()
+
     paddle.seed(100)
+    func = paddle.nn.AlphaDropout()
     paddle_res = func(paddle.to_tensor(x))
-    compare(paddle_res, res)
+    compare(res, paddle_res)
 
 
 @pytest.mark.api_nn_AlphaDropout_parameters
