@@ -95,7 +95,6 @@ if [[ ${model_flag} =~ 'CI_step1' ]]; then
    fi
    done
 
-# elif [[ ${1} =~ "pr" ]] || [[ ${1} =~ "rec_single" ]];then
 elif [[ ${1} =~ "pr" ]] ;then
    shuf -n $2 models_list_all > models_list
 
@@ -115,7 +114,7 @@ elif [[ ${model_flag} =~ 'all' ]] || [[ ${1} =~ 'all' ]]; then
    
 fi
 
-if [ -f "models_list" ];then
+if [[ ! -f "models_list" ]];then
    echo > models_list
 fi 
 
