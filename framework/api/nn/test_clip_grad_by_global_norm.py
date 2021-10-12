@@ -50,12 +50,21 @@ def generate_test_data(length, shape, value=10):
 @pytest.mark.api_nn_ClipGradByGlobalNorm_vartype
 def test_clip_grad_by_global_norm_base():
     """
-    base
+    Test base.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 4
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Expected Results:
+        The output of ClipGradByGlobalNorm implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 4
     clip_norm = 1.0
-    np_data, paddle_data = generate_test_data(length, shape)
+    np_data, paddle_data = generate_test_data(length, shape, value=10)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
@@ -64,6 +73,7 @@ def test_clip_grad_by_global_norm_base():
     for w, g in paddle_cliped_data:
         paddle_res.append((w.numpy(), g.numpy()))
 
+    # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
 
@@ -71,12 +81,24 @@ def test_clip_grad_by_global_norm_base():
 @pytest.mark.api_nn_ClipGradByGlobalNorm_parameters
 def test_clip_grad_by_global_norm1():
     """
-    input shape
+    Test ClipGradByGlobalNorm when input shape changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 4
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        input grad shape: [10, 10] -> [9, 13, 11]
+
+    Expected Results:
+        The output of ClipGradByGlobalNorm implemented by numpy and paddle should be equal.
     """
     shape = [9, 13, 11]
     length = 4
     clip_norm = 1.0
-    np_data, paddle_data = generate_test_data(length, shape)
+    np_data, paddle_data = generate_test_data(length, shape, value=10)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
@@ -85,6 +107,7 @@ def test_clip_grad_by_global_norm1():
     for w, g in paddle_cliped_data:
         paddle_res.append((w.numpy(), g.numpy()))
 
+    # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
 
@@ -92,12 +115,24 @@ def test_clip_grad_by_global_norm1():
 @pytest.mark.api_nn_ClipGradByGlobalNorm_parameters
 def test_clip_grad_by_global_norm2():
     """
-    clip_norm
+    Test ClipGradByGlobalNorm when clip_norm changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 4
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        clip_norm: 1.0 -> -1.0
+
+    Expected Results:
+        The output of ClipGradByGlobalNorm implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 4
     clip_norm = -1.0
-    np_data, paddle_data = generate_test_data(length, shape)
+    np_data, paddle_data = generate_test_data(length, shape, value=10)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
@@ -106,6 +141,7 @@ def test_clip_grad_by_global_norm2():
     for w, g in paddle_cliped_data:
         paddle_res.append((w.numpy(), g.numpy()))
 
+    # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
 
@@ -113,12 +149,24 @@ def test_clip_grad_by_global_norm2():
 @pytest.mark.api_nn_ClipGradByGlobalNorm_parameters
 def test_clip_grad_by_global_norm3():
     """
-    group_name
+    Test ClipGradByGlobalNorm when set group_name.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 4
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        group_name: 'test_group'
+
+    Expected Results:
+        The output of ClipGradByGlobalNorm implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 4
     clip_norm = 1.0
-    np_data, paddle_data = generate_test_data(length, shape)
+    np_data, paddle_data = generate_test_data(length, shape, value=10)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm, group_name="test_group")
@@ -127,6 +175,7 @@ def test_clip_grad_by_global_norm3():
     for w, g in paddle_cliped_data:
         paddle_res.append((w.numpy(), g.numpy()))
 
+    # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
 
@@ -134,7 +183,19 @@ def test_clip_grad_by_global_norm3():
 @pytest.mark.api_nn_ClipGradByGlobalNorm_parameters
 def test_clip_grad_by_global_norm4():
     """
-    value
+    Test ClipGradByGlobalNorm when value range changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 4
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        value range: [-10, 10] -> [-255555, 255555]
+
+    Expected Results:
+        The output of ClipGradByGlobalNorm implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 4
@@ -148,5 +209,6 @@ def test_clip_grad_by_global_norm4():
     for w, g in paddle_cliped_data:
         paddle_res.append((w.numpy(), g.numpy()))
 
+    # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
