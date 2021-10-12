@@ -74,33 +74,6 @@ python -m pip install --ignore-installed -r requirements.txt -i https://mirror.b
 python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed gast==0.3.3 -i https://mirror.baidu.com/pypi/simple
 
-# download model
-# if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
-#   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
-# fi
-
-# if [ ! -f "pretrain_models/ResNet18_vd_pretrained.pdparams" ]; then
-#   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet18_vd_pretrained.pdparams
-# fi
-
-# if [ ! -f "pretrain_models/ResNet50_vd_ssld_pretrained.pdparams" ]; then
-#   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet50_vd_ssld_pretrained.pdparams
-# fi
-
-# if [ ! -f "pretrain_models/ResNet50_vd_pretrained.pdparams" ]; then
-#   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet50_vd_pretrained.pdparams
-# fi
-
-# if [ ! -f "pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar" ]; then
-#     wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
-#     tar xf pretrain_models/ch_ppocr_mobile_v2.0_det_train.tar -C pretrain_models
-# fi
-
-# if [ ! -f "pretrain_models/ch_ppocr_server_v2.0_det_train.tar" ]; then
-#     wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_server_v2.0_det_train.tar
-#     tar xf pretrain_models/ch_ppocr_server_v2.0_det_train.tar -C pretrain_models
-# fi
-
 # dir
 log_path=log
 stage_list='train eval infer export predict'
