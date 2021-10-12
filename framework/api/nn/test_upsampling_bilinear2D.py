@@ -57,7 +57,22 @@ def numpy_upsampling_bilinear2D(x, size=None, scale_factor=None, data_format="NC
 @pytest.mark.api_nn_UpsamplingBilinear2D_vartype
 def test_upsampling_bilinear2D_base():
     """
-    base
+    Test base.
+
+    Test base config:
+        x = randtool("float", -10, 10, [2, 3, 50, 50])
+        size = [100, 100]
+        scale_factor = None
+        data_format = "NCHW"
+        delta = 1e-3
+        rtol = 1e-5
+
+    Notes:
+        The numerical error will increase when input shape and input value increase. So delta
+        and rtol should be bigger.
+
+    Expected Results:
+        The error of upsampling bilinear2d implemented by numpy and paddle should be small.
     """
     x = randtool("float", -10, 10, [2, 3, 50, 50])
     size = [100, 100]
@@ -76,9 +91,27 @@ def test_upsampling_bilinear2D_base():
 @pytest.mark.api_nn_UpsamplingBilinear2D_parameters
 def test_upsampling_bilinear2D_norm1():
     """
-    size: [224, 224] -> [448, 448]
+    Test upsampling bilinear2d when size is larger.
+
+    Test base config:
+        x = randtool("float", -10, 10, [2, 3, 50, 50])
+        size = [100, 100]
+        scale_factor = None
+        data_format = "NCHW"
+        delta = 1e-3
+        rtol = 1e-5
+
+    Notes:
+        The numerical error will increase when input shape and input value increase. So delta
+        and rtol should be bigger.
+
+    Changes:
+        size: [100, 100] -> [448, 448]
+
+    Expected Results:
+        The error of upsampling bilinear2d implemented by numpy and paddle should be small.
     """
-    x = randtool("float", -10, 10, [2, 3, 224, 224])
+    x = randtool("float", -10, 10, [2, 3, 50, 50])
     size = [448, 448]
     scale_factor = None
     data_format = "NCHW"
@@ -95,10 +128,28 @@ def test_upsampling_bilinear2D_norm1():
 @pytest.mark.api_nn_UpsamplingBilinear2D_parameters
 def test_upsampling_bilinear2D_norm2():
     """
-    size: [224, 224] -> [112, 112]
+    Test upsampling bilinear2d when size changes.
+
+    Test base config:
+        x = randtool("float", -10, 10, [2, 3, 50, 50])
+        size = [100, 100]
+        scale_factor = None
+        data_format = "NCHW"
+        delta = 1e-3
+        rtol = 1e-5
+
+    Notes:
+        The numerical error will increase when input shape and input value increase. So delta
+        and rtol should be bigger.
+
+    Changes:
+        size: [100, 100] -> [25, 25]
+
+    Expected Results:
+        The error of upsampling bilinear2d implemented by numpy and paddle should be small.
     """
-    x = randtool("float", -10, 10, [2, 3, 224, 224])
-    size = [112, 112]
+    x = randtool("float", -10, 10, [2, 3, 50, 50])
+    size = [25, 25]
     scale_factor = None
     data_format = "NCHW"
     delta = 1e-3
@@ -114,7 +165,26 @@ def test_upsampling_bilinear2D_norm2():
 @pytest.mark.api_nn_UpsamplingBilinear2D_parameters
 def test_upsampling_bilinear2D_norm3():
     """
-    scale_facor: 3.75
+    Test upsampling bilinear2d when scale_factor increases.
+
+    Test base config:
+        x = randtool("float", -10, 10, [2, 3, 50, 50])
+        size = [100, 100]
+        scale_factor = None
+        data_format = "NCHW"
+        delta = 1e-3
+        rtol = 1e-5
+
+    Notes:
+        The numerical error will increase when input shape and input value increase. So delta
+        and rtol should be bigger.
+
+    Changes:
+        size = None
+        scale_factor: 3.75
+
+    Expected Results:
+        The error of upsampling bilinear2d implemented by numpy and paddle should be small.
     """
     x = randtool("float", -10, 10, [2, 3, 50, 50])
     size = None
@@ -133,26 +203,26 @@ def test_upsampling_bilinear2D_norm3():
 @pytest.mark.api_nn_UpsamplingBilinear2D_parameters
 def test_upsampling_bilinear2D_norm4():
     """
-    scale_facor: 0.75
-    """
-    x = randtool("float", -10, 10, [2, 3, 50, 50])
-    size = None
-    scale_factor = 0.75
-    data_format = "NCHW"
-    delta = 1e-3
-    rtol = 1e-5
-    res = numpy_upsampling_bilinear2D(x, size, scale_factor, data_format=data_format)
+    Test upsampling bilinear2d when scale_factor increases.
 
-    tensor_x = paddle.to_tensor(x)
-    paddle_res = paddle.nn.UpsamplingBilinear2D(size=size, scale_factor=scale_factor, data_format=data_format)(tensor_x)
-    paddle_res = paddle_res.numpy()
-    compare(res, paddle_res, delta, rtol)
+    Test base config:
+        x = randtool("float", -10, 10, [2, 3, 50, 50])
+        size = [100, 100]
+        scale_factor = None
+        data_format = "NCHW"
+        delta = 1e-3
+        rtol = 1e-5
 
+    Notes:
+        The numerical error will increase when input shape and input value increase. So delta
+        and rtol should be bigger.
 
-@pytest.mark.api_nn_UpsamplingBilinear2D_parameters
-def test_upsampling_bilinear2D_norm4():
-    """
-    scale_facor: 0.75
+    Changes:
+        size = None
+        scale_factor: 0.75
+
+    Expected Results:
+        The error of upsampling bilinear2d implemented by numpy and paddle should be small.
     """
     x = randtool("float", -10, 10, [2, 3, 50, 50])
     size = None
@@ -171,7 +241,25 @@ def test_upsampling_bilinear2D_norm4():
 @pytest.mark.api_nn_UpsamplingBilinear2D_parameters
 def test_upsampling_bilinear2D_norm5():
     """
-    data_format
+    Test upsampling bilinear2d when data_format changes.
+
+    Test base config:
+        x = randtool("float", -10, 10, [2, 3, 50, 50])
+        size = [100, 100]
+        scale_factor = None
+        data_format = "NCHW"
+        delta = 1e-3
+        rtol = 1e-5
+
+    Notes:
+        The numerical error will increase when input shape and input value increase. So delta
+        and rtol should be bigger.
+
+    Changes:
+        data_format: 'NCHW' -> 'NHWC'
+
+    Expected Results:
+        The error of upsampling bilinear2d implemented by numpy and paddle should be small.
     """
     x = randtool("float", -10, 10, [2, 3, 50, 50])
     size = [100, 100]
@@ -190,7 +278,25 @@ def test_upsampling_bilinear2D_norm5():
 @pytest.mark.api_nn_UpsamplingBilinear2D_parameters
 def test_upsampling_bilinear2D_norm6():
     """
-    name
+    Test upsampling bilinear2d when set name.
+
+    Test base config:
+        x = randtool("float", -10, 10, [2, 3, 50, 50])
+        size = [100, 100]
+        scale_factor = None
+        data_format = "NCHW"
+        delta = 1e-3
+        rtol = 1e-5
+
+    Notes:
+        The numerical error will increase when input shape and input value increase. So delta
+        and rtol should be bigger.
+
+    Changes:
+        set paddle.nn.UpsamplingBilinear2D parameter name to "test"
+
+    Expected Results:
+        The error of upsampling bilinear2d implemented by numpy and paddle should be small.
     """
     x = randtool("float", -10, 10, [2, 3, 50, 50])
     size = [100, 100]
@@ -211,13 +317,33 @@ def test_upsampling_bilinear2D_norm6():
 @pytest.mark.api_nn_UpsamplingBilinear2D_parameters
 def test_upsampling_bilinear2D_norm6():
     """
-    value
+    Test upsampling bilinear2d when input value range changes.
+
+    Test base config:
+        x = randtool("float", -10, 10, [2, 3, 50, 50])
+        size = [100, 100]
+        scale_factor = None
+        data_format = "NCHW"
+        delta = 1e-3
+        rtol = 1e-5
+
+    Notes:
+        The numerical error will increase when input shape and input value increase. So delta
+        and rtol should be bigger.
+
+    Changes:
+        input value range: [-10, 10] -> [-255, 255]
+        delta = 1e-2
+        When range be larger, delta and rtol should increase.
+
+    Expected Results:
+        The error of upsampling bilinear2d implemented by numpy and paddle should be small.
     """
     x = randtool("float", -255, 255, [2, 3, 50, 50])
     size = [100, 100]
     scale_factor = None
     data_format = "NCHW"
-    delta = 1e-3
+    delta = 1e-2
     rtol = 1e-5
     res = numpy_upsampling_bilinear2D(x, size, scale_factor, data_format=data_format)
 
