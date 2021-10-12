@@ -5,7 +5,7 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
-if [[ ${model_flag} =~ 'CI' ]]; then 
+if [[ ${model_flag} =~ 'CI' ]]; then
    # data
    echo "######  ----ln  data-----"
    rm -rf data
@@ -26,7 +26,7 @@ rm -rf /root/.cache/paddle/dataset/mnist
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
-   
+
    echo "######  ---py37  env -----"
    rm -rf /usr/local/python2.7.15/bin/python
    rm -rf /usr/local/bin/python
@@ -46,7 +46,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    ;;
    esac
    python -c "import sys; print('python version:',sys.version_info[:])";
-      
+
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"

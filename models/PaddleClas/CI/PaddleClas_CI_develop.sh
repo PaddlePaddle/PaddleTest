@@ -5,7 +5,7 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
-if [[ ${model_flag} =~ 'CI' ]]; then 
+if [[ ${model_flag} =~ 'CI' ]]; then
    # data
    rm -rf dataset
    ln -s ${Data_path} dataset
@@ -22,7 +22,7 @@ fi
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
-   
+
    echo "######  ---py37  env -----"
    rm -rf /usr/local/python2.7.15/bin/python
    rm -rf /usr/local/bin/python
@@ -42,7 +42,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    ;;
    esac
    python -c "import sys; print('python version:',sys.version_info[:])";
-   
+
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"
@@ -76,7 +76,7 @@ fi
 unset http_proxy
 unset https_proxy
 # env
-export FLAGS_fraction_of_gpu_memory_to_use=0.8 
+export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
@@ -111,7 +111,7 @@ elif [[ ${model_flag} =~ 'CI_step2' ]]; then
 
 elif [[ ${model_flag} =~ 'all' ]] || [[ ${1} =~ 'all' ]]; then
    shuf models_list_all > models_list
-   
+
 fi
 
 echo "######  length models_list"
@@ -255,13 +255,13 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec_single
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
 
-   # # product_dataset 
+   # # product_dataset
    # sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
    # sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
    # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
    # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
 
-   # # # logo_dataset 
+   # # # logo_dataset
    # # sed -ie '/self.images = self.images\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
    # # sed -ie '/self.labels = self.labels\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
    # # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:10000\]'  ppcls/data/dataloader/logo_dataset.py
@@ -322,7 +322,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec_single
    else
       cat $log_path/train/${category}_${model}.log
       echo -e "\033[31m training of ${category}_${model} failed!\033[0m"|tee -a $log_path/result.log
-   fi 
+   fi
 
    # eval
    python tools/eval.py -c $line -o Global.pretrained_model=output/${category}_${model}/RecModel/latest > $log_path/eval/${category}_${model}.log 2>&1
