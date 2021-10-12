@@ -108,7 +108,7 @@ elif [[ ${model_flag} =~ 'CI_step2' ]]; then
    fi
    done
 
-else
+elif [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
    
 fi

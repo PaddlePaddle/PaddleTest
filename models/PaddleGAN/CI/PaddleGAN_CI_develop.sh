@@ -13,6 +13,7 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    ls data
 fi
 
+rm -rf /root/.cache/paddle/dataset/mnist
 
 # if [ ! -f "/root/.cache/paddle/dataset/mnist/train-images-idx3-ubyte.gz" ]; then
 #    wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-images-idx3-ubyte.gz

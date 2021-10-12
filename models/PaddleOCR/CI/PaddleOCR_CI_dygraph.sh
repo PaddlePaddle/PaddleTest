@@ -69,7 +69,7 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple
+python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 # paddleocr
 python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed gast==0.3.3 -i https://mirror.baidu.com/pypi/simple
