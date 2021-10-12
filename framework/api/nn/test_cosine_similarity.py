@@ -38,20 +38,20 @@ def compute_cosine_similarity(x1, x2, axis=1, eps=1e-8):
     return w12 / n12
 
 
-@pytest.mark.api_nn_CosineSimilarity_vartype
-def test_cosine_similarity_base():
-    """
-    base, check int data type of input
-    """
-    x1 = randtool("int", -10, 10, [5, 10])
-    x2 = randtool("int", -10, 10, [5, 10])
-    x1_tensor = paddle.to_tensor(x1)
-    x2_tensor = paddle.to_tensor(x2)
-    axis = 1
-    eps = 1e-8
-    expected_result = compute_cosine_similarity(x1, x2, axis=axis, eps=eps)
-    result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1_tensor, x2_tensor)
-    compare(result.numpy(), expected_result)
+# @pytest.mark.api_nn_CosineSimilarity_vartype
+# def test_cosine_similarity_base():
+#     """
+#     base, check int data type of input
+#     """
+#     x1 = randtool("int", -10, 10, [5, 10])
+#     x2 = randtool("int", -10, 10, [5, 10])
+#     x1_tensor = paddle.to_tensor(x1)
+#     x2_tensor = paddle.to_tensor(x2)
+#     axis = 1
+#     eps = 1e-8
+#     expected_result = compute_cosine_similarity(x1, x2, axis=axis, eps=eps)
+#     result = paddle.nn.CosineSimilarity(axis=axis, eps=eps)(x1_tensor, x2_tensor)
+#     compare(result.numpy(), expected_result)
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
