@@ -1,7 +1,9 @@
 pip3.7 install pytest
 export FLAGS_call_stack_level=2
 cases=`find . -name "test*.py" | sort`
-ignore=""
+ignore="test_cuda_get_device_capability.py \ 
+test_cuda_get_device_name.py
+"
 bug=0
 
 echo "============ failed cases =============" >> result.txt
