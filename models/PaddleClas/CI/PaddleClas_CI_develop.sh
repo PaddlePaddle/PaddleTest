@@ -83,6 +83,7 @@ python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com
 
 rm -rf models_list
 rm -rf models_list_all
+rm -rf models_list_rec
 
 find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
 
@@ -94,10 +95,11 @@ if [[ ${model_flag} =~ 'CI_step1' ]]; then
    fi
    done
 
-elif [[ ${1} =~ "pr" ]];then
+# elif [[ ${1} =~ "pr" ]] || [[ ${1} =~ "rec_single" ]];then
+elif [[ ${1} =~ "pr" ]] ;then
    shuf -n $2 models_list_all > models_list
 
-elif [[ ${1} =~ "single" ]];then
+elif [[ ${1} =~ "clas_single" ]];then
    echo $7 > models_list
 
 elif [[ ${model_flag} =~ 'CI_step2' ]]; then
@@ -112,6 +114,10 @@ elif [[ ${model_flag} =~ 'all' ]] || [[ ${1} =~ 'all' ]]; then
    shuf models_list_all > models_list
    
 fi
+
+if [ -f "models_list" ];then
+   echo > models_list
+fi 
 
 echo "######  length models_list"
 wc -l models_list
@@ -146,7 +152,6 @@ if [ -d "output" ]; then
    rm -rf output
 fi
 echo $model
-#看情况加判断针对占大显存，MV3设置batch_size与epoch
 
 #visualdl
 echo "######  visualdl err"
@@ -244,7 +249,7 @@ fi
 cd ..
 done
 
-if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
+if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec_single' ]]; then
    echo "######  rec step"
 
    # # small data
@@ -283,7 +288,6 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] ; then
    # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
    # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
 
-   rm -rf models_list_rec
    find ppcls/configs/Cartoonface/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    # find ppcls/configs/Logo/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    find ppcls/configs/Products/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep  Inshop  >> models_list_rec
