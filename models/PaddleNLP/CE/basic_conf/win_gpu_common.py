@@ -90,4 +90,10 @@ EXEC_TAG = [
     "win_dy_gpu1_ernie_crf",
     "win_dy_gpu1_bigru_crf",
     "win_dy_gpu1_24",
+    "win_dy_gpu1_thucnews",
+    "win_dy_gpu1_imdb",
+    "win_dy_gpu1_hyp",
+    "win_dy_gpu1_duredear-robust",
+    "win_dy_gpu1_drcd",
+    "win_dy_gpu1_cmrc2018"
 ]

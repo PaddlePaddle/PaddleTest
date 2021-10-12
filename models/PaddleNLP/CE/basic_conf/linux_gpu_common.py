@@ -129,4 +129,17 @@ EXEC_TAG = [
     "linux_dy_gpu2_sst-2",
     "linux_dy_gpu1_qqp",
     "linux_dy_gpu2_qqp",
+    "linux_dy_gpu1_imdb",
+    "linux_dy_gpu2_imdb",
+    "linux_dy_gpu1_hyp",
+    "linux_dy_gpu2_hyp",
+    "linux_dy_gpu2_iflytek",
+    "linux_dy_gpu1_thucnews",
+    "linux_dy_gpu2_thucnews",
+    "linux_dy_gpu1_duredear-robust",
+    "linux_dy_gpu2_duredear-robust",
+    "linux_dy_gpu1_drcd",
+    "linux_dy_gpu2_drcd",
+    "linux_dy_gpu1_cmrc2018",
+    "linux_dy_gpu2_cmrc2018"
 ]

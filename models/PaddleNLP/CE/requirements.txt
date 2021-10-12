@@ -24,3 +24,5 @@ pyrouge
 nltk
 chardet
 tqdm
+re
+beautifulsoup4
