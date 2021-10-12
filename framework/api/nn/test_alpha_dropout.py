@@ -5,7 +5,6 @@
     test AlphaDropout
 """
 import logging
-from paddle.fluid import layers
 from apibase import APIBase, compare, compare_grad
 from apibase import randtool
 import paddle
@@ -285,9 +284,7 @@ class TestAlphaDropout(APIBase):
 
 
 obj = TestAlphaDropout(paddle.nn.AlphaDropout)
-paddle.seed(RANDOM_SEED)
-np_random_tensor = layers.uniform_random([2, 3], dtype="float32", min=0.0, max=1.0)
-np_random_tensor = np_random_tensor.numpy()
+np_random_tensor = np.array([[0.55355287, 0.20714243, 0.01162981], [0.51577556, 0.36369765, 0.26091650]])
 
 
 def numpy_alpha_dropout(x, p, random_tensor, training=True):
