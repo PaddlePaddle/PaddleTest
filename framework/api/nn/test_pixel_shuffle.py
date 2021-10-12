@@ -52,7 +52,15 @@ obj = TestPixelShuffle(paddle.nn.PixelShuffle)
 @pytest.mark.api_nn_PixelShuffle_vartype
 def test_pixel_shuffle_base():
     """
-    base
+    Test base.
+
+    Test base config:
+        x = randtool("float", -10, 10, [2, 9, 4, 4])
+        up_factor = 3
+        data_format = "NCHW"
+
+    Expected Results:
+        The output of pixel shuffle implemented by numpy and paddle should be equal.
     """
     x = randtool("float", -10, 10, [2, 9, 4, 4])
     up_factor = 3
@@ -64,7 +72,18 @@ def test_pixel_shuffle_base():
 @pytest.mark.api_nn_PixelShuffle_parameters
 def test_pixel_shuffle_norm1():
     """
-    input shape
+    Test pixel shuffle when input shape changes.
+
+    Test Base config:
+        x = randtool("float", -10, 10, [2, 9, 4, 4])
+        up_factor = 3
+        data_format = "NCHW"
+
+    Changes:
+        input shape: [2, 9, 4, 4] -> [4, 81, 4, 4]
+
+    Expected Results:
+        The output of pixel shuffle implemented by numpy and paddle should be equal.
     """
     x = randtool("float", -10, 10, [4, 81, 4, 4])
     up_factor = 3
@@ -76,7 +95,19 @@ def test_pixel_shuffle_norm1():
 @pytest.mark.api_nn_PixelShuffle_parameters
 def test_pixel_shuffle_norm2():
     """
-    data_format
+    Test pixel shuffle when data_format changes.
+
+    Test Base config:
+        x = randtool("float", -10, 10, [2, 9, 4, 4])
+        up_factor = 3
+        data_format = "NCHW"
+
+    Changes:
+        input shape: [2, 9, 4, 4] -> [2, 4, 4, 9]
+        data_format: 'NCHW' -> 'NHWC'
+
+    Expected Results:
+        The output of pixel shuffle implemented by numpy and paddle should be equal.
     """
     x = randtool("float", -10, 10, [2, 4, 4, 9])
     up_factor = 3
@@ -88,10 +119,22 @@ def test_pixel_shuffle_norm2():
 @pytest.mark.api_nn_PixelShuffle_parameters
 def test_pixel_shuffle_norm3():
     """
-    up_factor
+    Test pixel shuffle when upscale_factor changes.
+
+    Test Base config:
+        x = randtool("float", -10, 10, [2, 9, 4, 4])
+        up_factor = 3
+        data_format = "NCHW"
+
+    Changes:
+        input shape: [2, 9, 4, 4] -> [2, 16, 4, 4]
+        up_factor: 3 -> 4
+
+    Expected Results:
+        The output of pixel shuffle implemented by numpy and paddle should be equal.
     """
-    x = randtool("float", -10, 10, [2, 81, 4, 4])
-    up_factor = 9
+    x = randtool("float", -10, 10, [2, 16, 4, 4])
+    up_factor = 4
     data_format = "NCHW"
     res = pixel_shuffle_np(x, up_factor, data_format=data_format)
     obj.run(res=res, data=x, upscale_factor=up_factor, data_format=data_format)
@@ -100,7 +143,18 @@ def test_pixel_shuffle_norm3():
 @pytest.mark.api_nn_PixelShuffle_parameters
 def test_pixel_shuffle_norm4():
     """
-    value
+    Test pixel shuffle when input value changes.
+
+    Test Base config:
+        x = randtool("float", -10, 10, [2, 9, 4, 4])
+        up_factor = 3
+        data_format = "NCHW"
+
+    Changes:
+        input value: range(-10, 10) -> range(-2555, 2555)
+
+    Expected Results:
+        The output of pixel shuffle implemented by numpy and paddle should be equal.
     """
     x = randtool("float", -2555, 2555, [2, 9, 4, 4])
     up_factor = 3
