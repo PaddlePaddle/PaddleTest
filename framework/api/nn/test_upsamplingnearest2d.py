@@ -35,8 +35,12 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
     """
     def
     """
-    h_in = img.shape[2]
-    w_in = img.shape[3]
+    if data_format == "NCHW":
+        h_in = img.shape[2]
+        w_in = img.shape[3]
+    else:
+        h_in = img.shape[1]
+        w_in = img.shape[2]
     if size is None:
         size = [h_in * scale_factor, w_in * scale_factor]
     h_out = size[0]
