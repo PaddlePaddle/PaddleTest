@@ -45,13 +45,22 @@ def generate_test_data(length, shape, dtype, value=10):
 @pytest.mark.api_nn_ClipGradByNorm_vartype
 def test_clip_grad_by_norm_base():
     """
-    base
+    Test base.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 5
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Expected Results:
+        The output of ClipGradByNorm implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 5
     clip_norm = 1.0
     dtype = "float32"
-    np_data, paddle_data = generate_test_data(length, shape, dtype)
+    np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
     np_res = numpy_clip_grad_by_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
@@ -60,6 +69,7 @@ def test_clip_grad_by_norm_base():
     for w, g in paddle_cliped_data:
         paddle_res.append((w.numpy(), g.numpy()))
 
+    # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
 
@@ -67,13 +77,25 @@ def test_clip_grad_by_norm_base():
 @pytest.mark.api_nn_ClipGradByNorm_parameters
 def test_clip_grad_by_norm1():
     """
-    input shape
+    Test ClipGradByNorm when input shape changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 5
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        input grad shape: [10, 10] -> [7, 13, 10]
+
+    Expected Results:
+        The output of ClipGradByNorm implemented by numpy and paddle should be equal.
     """
     shape = [7, 13, 10]
     length = 5
     clip_norm = 1.0
     dtype = "float32"
-    np_data, paddle_data = generate_test_data(length, shape, dtype)
+    np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
     np_res = numpy_clip_grad_by_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
@@ -82,6 +104,7 @@ def test_clip_grad_by_norm1():
     for w, g in paddle_cliped_data:
         paddle_res.append((w.numpy(), g.numpy()))
 
+    # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
 
@@ -89,13 +112,25 @@ def test_clip_grad_by_norm1():
 @pytest.mark.api_nn_ClipGradByNorm_parameters
 def test_clip_grad_by_norm2():
     """
-    clip_norm
+    Test ClipGradByNorm when input shape changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 5
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        clip_norm: 10.0
+
+    Expected Results:
+        The output of ClipGradByNorm implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 5
     clip_norm = 10.0
     dtype = "float32"
-    np_data, paddle_data = generate_test_data(length, shape, dtype)
+    np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
     np_res = numpy_clip_grad_by_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
@@ -104,6 +139,7 @@ def test_clip_grad_by_norm2():
     for w, g in paddle_cliped_data:
         paddle_res.append((w.numpy(), g.numpy()))
 
+    # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
 
@@ -111,7 +147,19 @@ def test_clip_grad_by_norm2():
 @pytest.mark.api_nn_ClipGradByNorm_parameters
 def test_clip_grad_by_norm3():
     """
-    value
+    Test ClipGradByNorm when value range changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 5
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        value range: [-10, 10] -> [-25555, 25555]
+
+    Expected Results:
+        The output of ClipGradByNorm implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 5
@@ -126,5 +174,6 @@ def test_clip_grad_by_norm3():
     for w, g in paddle_cliped_data:
         paddle_res.append((w.numpy(), g.numpy()))
 
+    # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
