@@ -286,10 +286,10 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec_single
    # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
    # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
 
-   find ppcls/configs/Cartoonface/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
-   # find ppcls/configs/Logo/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
-   find ppcls/configs/Products/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep  Inshop  >> models_list_rec
-   find ppcls/configs/Vehicle/ -name *.yaml -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
+   find ppcls/configs/Cartoonface/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
+   find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
+   find ppcls/configs/Products/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' | grep  Inshop  >> models_list_rec
+   find ppcls/configs/Vehicle/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
    echo "######  rec models_list"
    wc -l models_list_rec
    cat models_list_rec
@@ -318,7 +318,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec_single
    category=`echo $line | awk -F [\/] '{print $3}'`
    echo ${category}_${model}
    echo $category
-   python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
+
+   python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=64 -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/train/${category}_${model}.log) -eq 0 ]];then
       echo -e "\033[33m training of ${category}_${model}  successfully!\033[0m"|tee -a $log_path/result.log
    else
