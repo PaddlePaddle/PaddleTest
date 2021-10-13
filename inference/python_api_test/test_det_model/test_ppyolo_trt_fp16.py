@@ -43,10 +43,11 @@ def test_config():
 
 
 @pytest.mark.server
-@pytest.mark.mkldnn_more_bz_precision
-def test_more_bz_mkldnn():
+@pytest.mark.jetson
+@pytest.mark.trt_fp16
+def test_trt_fp16_more_bz():
     """
-    compared mkldnn ppyolo batch size = [1,4,8,10] outputs with true val
+    compared trt_fp16 ppyolo batch size = [1] outputs with true val
     """
     check_model_exist()
 

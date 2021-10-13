@@ -44,7 +44,7 @@ def test_config():
 
 @pytest.mark.server
 @pytest.mark.jetson
-@pytest.mark.gpu
+@pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
     compared gpu ppyolov2 more batch size outputs with true val
