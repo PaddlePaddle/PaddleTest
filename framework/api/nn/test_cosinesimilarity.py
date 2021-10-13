@@ -233,7 +233,7 @@ def test_cosinesimilarity7():
         cos_sim_func(x1_tensor, x2_tensor)
     except Exception as e:
         # print(e)
-        if "(InvalidArgument) Tensor holds the wrong type" in e.args[0]:
+        if "[operator < elementwise_mul > error]" in e.args[0]:
             pass
         else:
             raise Exception
@@ -260,7 +260,7 @@ def test_cosinesimilarity8():
         cos_sim_func(x1_tensor, x2_tensor)
     except Exception as e:
         # print(e)
-        if "(InvalidArgument) Broadcast dimension mismatch." in e.args[0]:
+        if "[operator < elementwise_mul > error]" in e.args[0]:
             pass
         else:
             raise Exception
