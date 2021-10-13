@@ -195,8 +195,6 @@ def test_cosinesimilarity6():
     axis = 2
     eps = 1e-8
 
-    # res = cos_sim(x1, x2, axis, eps)
-
     x1_tensor = paddle.to_tensor(x1)
     x2_tensor = paddle.to_tensor(x2)
 
@@ -225,8 +223,6 @@ def test_cosinesimilarity7():
     axis = 1
     eps = 1e-8
 
-    # res = cos_sim(x1, x2, axis, eps)
-
     x1_tensor = paddle.to_tensor(x1)
     x2_tensor = paddle.to_tensor(x2)
 
@@ -253,8 +249,6 @@ def test_cosinesimilarity8():
 
     axis = 1
     eps = 1e-8
-
-    # res = cos_sim(x1, x2, axis, eps)
 
     x1_tensor = paddle.to_tensor(x1)
     x2_tensor = paddle.to_tensor(x2)
