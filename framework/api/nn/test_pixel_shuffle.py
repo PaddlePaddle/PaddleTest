@@ -119,7 +119,7 @@ def test_pixel_shuffle_norm2():
 @pytest.mark.api_nn_PixelShuffle_parameters
 def test_pixel_shuffle_norm3():
     """
-    Test pixel shuffle when upscale_factor changes.
+    Test pixel shuffle when input data channels cann't be factorized by upscale_factor.
 
     Test Base config:
         x = randtool("float", -10, 10, [2, 9, 4, 4])
@@ -131,19 +131,43 @@ def test_pixel_shuffle_norm3():
         up_factor: 3 -> 4
 
     Expected Results:
+        when input data channels cann't be factorized by upscale_factor, raise ValueError.
+    """
+    x = paddle.rand(shape=[2, 9, 4, 4])
+    up_factor = 4
+    data_format = "NCHW"
+    with pytest.raises(ValueError):
+        pixel_shuffle = paddle.nn.PixelShuffle(upscale_factor=up_factor, data_format=data_format)
+        pixel_shuffle(x)
+
+
+@pytest.mark.api_nn_PixelShuffle_parameters
+def test_pixel_shuffle_norm4():
+    """
+    Test pixel shuffle when input data dtype changes.
+
+    Test Base config:
+        x = randtool("float", -10, 10, [2, 9, 4, 4])
+        up_factor = 3
+        data_format = "NCHW"
+
+    Changes:
+        input data dtype: float -> int
+
+    Expected Results:
         The output of pixel shuffle implemented by numpy and paddle should be equal.
     """
-    x = randtool("float", -10, 10, [2, 16, 4, 4])
-    up_factor = 4
+    x = randtool("int", -10, 10, [4, 9, 4, 4])
+    up_factor = 3
     data_format = "NCHW"
     res = pixel_shuffle_np(x, up_factor, data_format=data_format)
     obj.run(res=res, data=x, upscale_factor=up_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_PixelShuffle_parameters
-def test_pixel_shuffle_norm4():
+def test_pixel_shuffle_norm5():
     """
-    Test pixel shuffle when input value changes.
+    Test pixel shuffle when input value range changes.
 
     Test Base config:
         x = randtool("float", -10, 10, [2, 9, 4, 4])
