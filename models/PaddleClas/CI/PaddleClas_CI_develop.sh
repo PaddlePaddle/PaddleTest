@@ -80,6 +80,7 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
+python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl
 
 rm -rf models_list
 rm -rf models_list_all
@@ -119,7 +120,8 @@ wc -l models_list
 cat models_list
 if [[ ${1} =~ "pr" ]];then
    # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
-   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep ImageNet|awk -F 'b/' '{print$2}'|tee -a  models_list
+   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep ImageNet|awk -F 'b/' '{print$2}'|tee -a  models_list_diff
+   shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
 echo "######  diff models_list"
 wc -l models_list

@@ -11,17 +11,17 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    rm -rf data
    ln -s ${Data_path} data
    ls data
+
+   rm -rf /root/.cache/paddle/dataset/mnist
+   if [ ! -f "/root/.cache/paddle/dataset/mnist/train-images-idx3-ubyte.gz" ]; then
+      wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-images-idx3-ubyte.gz
+   fi
+
+   if [ ! -f "/root/.cache/paddle/dataset/mnist/train-labels-idx1-ubyte.gz" ]; then
+      wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-labels-idx1-ubyte.gz
+   fi
 fi
 
-rm -rf /root/.cache/paddle/dataset/mnist
-
-# if [ ! -f "/root/.cache/paddle/dataset/mnist/train-images-idx3-ubyte.gz" ]; then
-#    wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-images-idx3-ubyte.gz
-# fi
-
-# if [ ! -f "/root/.cache/paddle/dataset/mnist/train-labels-idx1-ubyte.gz" ]; then
-#    wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-labels-idx1-ubyte.gz
-# fi
 
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
@@ -138,7 +138,8 @@ wc -l models_list
 cat models_list
 if [[ ${1} =~ "pr" ]];then
    # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
-   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|awk -F 'b/' '{print$2}'|tee -a  models_list
+   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|awk -F 'b/' '{print$2}'|tee -a  models_list_diff
+   shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
 echo "######  diff models_list"
 wc -l models_list
