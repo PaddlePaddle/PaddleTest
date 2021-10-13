@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -30,9 +30,11 @@ def check_model_exist():
         tar = tarfile.open("ernie.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./ernie/inference", output_model_path="./ernie/inference")
 
 
-@pytest.mark.p0
+@pytest.mark.server
+@pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
     """
@@ -44,7 +46,7 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
@@ -60,11 +62,11 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.mkldnn_bz1_precision
 def test_mkldnn():
     """
-    compared mkldnn ocr_det_mv3_db outputs with true val
+    compared mkldnn bert outputs with true val
     """
     check_model_exist()
 

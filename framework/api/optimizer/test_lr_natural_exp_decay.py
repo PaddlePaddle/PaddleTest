@@ -6,6 +6,7 @@ test lr NaturalExpDecay case
 """
 import math
 import paddle
+import pytest
 from lrbase import Runner
 
 
@@ -17,6 +18,7 @@ def naive_natural_exp_decay(lr_last, lr_0, epoch, gamma, **kwargs):
     return lr_last
 
 
+@pytest.mark.api_optimizer_natural_exp_decay_vartype
 def test_natural_exp_decay_1():
     """
     test NaturalExpDecay base test

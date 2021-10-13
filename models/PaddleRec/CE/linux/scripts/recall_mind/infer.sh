@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+#外部传入参数说明
+# $1: 'single' 单卡训练； 'multi' 多卡训练； 'cpu' cpu 训练
+#获取当前路径
+cur_path=`pwd`
+model_name=$2
+temp_path=$(echo $2|awk -F '_' '{print $2}')
+echo "$2 infer"
+
+#路径配置
+root_path=$cur_path/../../
+code_path=$cur_path/../../PaddleRec/models/recall/${temp_path}/
+log_path=$root_path/log/recall/
+mkdir -p $log_path
+#临时环境更改
+
+#访问RD程序,包含eval过程
+print_info(){
+if [ $1 -ne 0 ];then
+    echo "exit_code: 1.0" >> ${log_path}/$2.log
+    cat ${log_path}/$2.log
+    mv ${log_path}/$2.log ${log_path}/F_$2.log
+    echo -e "\033[31m ${log_path}/F_$2 \033[0m"
+else
+    echo "exit_code: 0.0" >> ${log_path}/$2.log
+    cat ${log_path}/$2.log
+    mv ${log_path}/$2.log ${log_path}/S_$2.log
+    echo -e "\033[32m ${log_path}/S_$2 \033[0m"
+fi
+}
+
+cd $code_path
+echo -e "\033[32m `pwd` infer \033[0m";
+
+# mind模型收敛性运行
+# 单卡动态图预测收敛性
+if [ "$1" = "linux_dy_gpu1_con" ]; then
+    # 修改use_gpu选项
+    sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
+    python -u infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_dy_all" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
+# 单卡静态图预测收敛性
+elif [ "$1" = "linux_st_gpu1_con" ]; then
+    # 修改use_gpu选项
+    sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
+    python -u static_infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_st_all" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
+fi
+
+# mind模型功能运行
+sed -i "s/  epochs: 20/  epochs: 1/g" config_bigdata.yaml
+sed -i "s/  infer_start_epoch: 19/  infer_start_epoch: 0/g" config_bigdata.yaml
+sed -i "s/  infer_end_epoch: 20/  infer_end_epoch: 1/g" config_bigdata.yaml
+
+if [ "$1" = "linux_dy_gpu1" ];then #单卡
+    sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
+    python -u infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_dy_gpu1" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
+elif [ "$1" = "linux_dy_gpu2" ];then #多卡
+    sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
+    # 多卡的运行方式
+    python -m paddle.distributed.launch infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_dy_gpu2" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
+elif [ "$1" = "linux_dy_cpu" ];then
+    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
+    python -u infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_dy_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
+elif [ "$1" = "linux_st_gpu1" ];then #单卡
+    sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
+    python -u static_infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_st_gpu1" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
+elif [ "$1" = "linux_st_gpu2" ];then #多卡
+    sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
+    # 多卡的运行方式
+    python -m paddle.distributed.launch static_infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_st_gpu2" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
+elif [ "$1" = "linux_st_cpu" ];then
+    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
+    python -u static_infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_st_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+else
+    echo "$model_name infer.sh  parameter error "
+fi

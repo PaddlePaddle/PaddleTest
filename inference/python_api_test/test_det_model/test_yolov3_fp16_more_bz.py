@@ -32,7 +32,7 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
@@ -45,7 +45,7 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.trt_fp16_multi_thread_more_bz_precision
 def test_trt_fp16_more_bz_multi_thread():
@@ -100,7 +100,7 @@ def test_trt_fp16_more_bz_multi_thread():
         del test_suite  # destroy class to save memory
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.trt_fp16_more_bz_precision
 def test_trt_fp16_more_bz():
     """
@@ -152,7 +152,7 @@ def test_trt_fp16_more_bz():
         del test_suite  # destroy class to save memory
 
 
-@pytest.mark.p1
+@pytest.mark.jetson
 @pytest.mark.trt_fp16_more_bz_precision
 def test_jetson_trt_fp16_more_bz():
     """
@@ -162,7 +162,7 @@ def test_jetson_trt_fp16_more_bz():
 
     file_path = "./yolov3"
     images_size = 608
-    batch_size_pool = [1, 5]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
