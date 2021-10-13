@@ -62,7 +62,6 @@ def test_trt_fp32_more_bz():
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
-        print(fake_input.shape)
         input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
@@ -77,7 +76,7 @@ def test_trt_fp32_more_bz():
             output_data_dict,
             repeat=1,
             delta=1e-4,
-            min_subgraph_size=5,
+            min_subgraph_size=10,
             precision="trt_fp32",
             max_batch_size=batch_size,
         )
@@ -103,7 +102,6 @@ def test_jetson_trt_fp32_more_bz():
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
-        print(fake_input.shape)
         input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
@@ -118,13 +116,12 @@ def test_jetson_trt_fp32_more_bz():
             output_data_dict,
             repeat=1,
             delta=1e-4,
-            min_subgraph_size=1,
+            min_subgraph_size=10,
             precision="trt_fp32",
             max_batch_size=batch_size,
         )
 
         del test_suite2  # destroy class to save memory
-
 
 @pytest.mark.server
 @pytest.mark.trt_fp32_multi_thread
@@ -152,6 +149,6 @@ def test_trtfp32_bz1_multi_thread():
     test_suite2.load_config(
         model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
     )
-    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4, precision="trt_fp32")
+    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, min_subgraph_size=10, repeat=1, delta=1e-4, precision="trt_fp32")
 
     del test_suite2  # destroy class to save memory

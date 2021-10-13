@@ -54,7 +54,7 @@ def test_trt_fp16_more_bz():
 
     file_path = "./swin_transformer"
     images_size = 384
-    batch_size_pool = [1]
+    batch_size_pool = [1, 5]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -76,7 +76,7 @@ def test_trt_fp16_more_bz():
             output_data_dict,
             repeat=1,
             delta=1e-4,
-            min_subgraph_size=5,
+            min_subgraph_size=10,
             precision="trt_fp16",
             max_batch_size=batch_size,
         )
@@ -116,13 +116,12 @@ def test_jetson_trt_fp16_more_bz():
             output_data_dict,
             repeat=1,
             delta=1e-4,
-            min_subgraph_size=1,
+            min_subgraph_size=10,
             precision="trt_fp16",
             max_batch_size=batch_size,
         )
 
         del test_suite2  # destroy class to save memory
-
 
 @pytest.mark.server
 @pytest.mark.trt_fp16_multi_thread
@@ -151,7 +150,7 @@ def test_trt_fp16_bz1_multi_thread():
         model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
     )
     test_suite2.trt_bz1_multi_thread_test(
-        input_data_dict, output_data_dict, repeat=1, delta=1e-4, min_subgraph_size=1, precision="trt_fp16"
+        input_data_dict, output_data_dict, repeat=1, delta=1e-4, min_subgraph_size=10, precision="trt_fp16"
     )
 
     del test_suite2  # destroy class to save memory
