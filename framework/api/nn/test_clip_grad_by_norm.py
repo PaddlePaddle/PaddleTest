@@ -50,6 +50,7 @@ def test_clip_grad_by_norm_base():
     Test base config:
         input grad shape = [10, 10]
         input grad number = 5
+        input data type = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -82,6 +83,7 @@ def test_clip_grad_by_norm1():
     Test base config:
         input grad shape = [10, 10]
         input grad number = 5
+        input data type = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -112,11 +114,12 @@ def test_clip_grad_by_norm1():
 @pytest.mark.api_nn_ClipGradByNorm_parameters
 def test_clip_grad_by_norm2():
     """
-    Test ClipGradByNorm when input shape changes.
+    Test ClipGradByNorm when clip_norm changes.
 
     Test base config:
         input grad shape = [10, 10]
         input grad number = 5
+        input data type = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -147,11 +150,40 @@ def test_clip_grad_by_norm2():
 @pytest.mark.api_nn_ClipGradByNorm_parameters
 def test_clip_grad_by_norm3():
     """
+    Test ClipGradByNorm when clip_norm changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 5
+        input data type = 'float32'
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        clip_norm: -1.0
+
+    Expected Results:
+        clip_norm cann't less equal than 0.0, raise ValueError.
+    """
+    shape = [10, 10]
+    length = 5
+    clip_norm = -1.0
+    dtype = "float32"
+    np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
+
+    with pytest.raises(ValueError):
+        paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
+
+
+@pytest.mark.api_nn_ClipGradByNorm_parameters
+def test_clip_grad_by_norm4():
+    """
     Test ClipGradByNorm when value range changes.
 
     Test base config:
         input grad shape = [10, 10]
         input grad number = 5
+        input data type = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -177,3 +209,61 @@ def test_clip_grad_by_norm3():
     # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
+
+
+@pytest.mark.api_nn_ClipGradByNorm_vartype
+def test_clip_grad_by_norm5():
+    """
+    Test ClipGradByNorm when input data type changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 5
+        input data type = 'float32'
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        input data type: float32 -> float64
+
+    Expected Results:
+        paddle.nn.ClipGradByNorm cann't accept input data with 'float64', raise RuntimeError.
+    """
+    shape = [10, 10]
+    length = 5
+    clip_norm = 1.0
+    dtype = "float64"
+    np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
+
+    with pytest.raises(RuntimeError):
+        paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
+        paddle_clip(paddle_data)
+
+
+@pytest.mark.api_nn_ClipGradByNorm_vartype
+def test_clip_grad_by_norm6():
+    """
+    Test ClipGradByNorm when input data type changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 5
+        input data type = 'float16'
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        input data type: float32 -> float16
+
+    Expected Results:
+        paddle.nn.ClipGradByNorm cann't accept input data with 'float16', raise RuntimeError.
+    """
+    shape = [10, 10]
+    length = 5
+    clip_norm = 1.0
+    dtype = "float16"
+    np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
+
+    with pytest.raises(RuntimeError):
+        paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
+        paddle_clip(paddle_data)
