@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_install.sh ernie_tiny $HUB_CONFIG
+        cmd: bash nlp_install.sh ernie_tiny
     kpis:
       exit_code:
         latest: True
