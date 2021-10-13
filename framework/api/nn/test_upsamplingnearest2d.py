@@ -42,7 +42,7 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
         h_in = img.shape[1]
         w_in = img.shape[2]
     if size is None:
-        if str(type(scale_factor)) == "list":
+        if str(type(scale_factor)) == "<class 'list'>" or str(type(scale_factor)) == "<class 'paddle.Tensor'>":
             size = [h_in * scale_factor[0], w_in * scale_factor[1]]
         else:
             size = [h_in * scale_factor, w_in * scale_factor]
@@ -61,6 +61,7 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
     elif data_format == "NHWC":
         img = img.transpose((0, 3, 1, 2))
         num_batchs, channels, height, width = img.shape
+        print(num_batchs, channels, height, width)
         emptyImage = np.zeros((num_batchs, channels, h_out, w_out))
         sh = h_out / height
         sw = w_out / width
@@ -69,7 +70,6 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
                 x = int(i / sh)
                 y = int(j / sw)
                 emptyImage[:, :, i, j] = img[:, :, x, y]
-        emptyImage = emptyImage.transpose((0, 2, 3, 1))
     return emptyImage
 
 
@@ -184,7 +184,7 @@ def test_upsamplingnearest2d5():
     x = randtool("float", -10, 10, [2, 3, 6, 10])
     data_format = "NCHW"
     size = None
-    scale_factor = (2, 3)
+    scale_factor = [2, 3]
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
@@ -215,7 +215,7 @@ def test_upsamplingnearest2d7():
     """
     x = randtool("float", -10, 10, [2, 3, 6, 10])
     data_format = "NCHW"
-    size = (12, 13)
+    size = [12, 13]
     scale_factor = None
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
@@ -248,7 +248,7 @@ def test_upsamplingnearest2d9():
     x = randtool("float", -10, 10, [2, 3, 6, 10])
     x[x >= 0] = x[x >= 0] * -1
     data_format = "NCHW"
-    size = (12, 13)
+    size = [12, 13]
     scale_factor = None
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
