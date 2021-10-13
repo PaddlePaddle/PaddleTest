@@ -123,6 +123,7 @@ def test_jetson_trt_fp32_more_bz():
 
         del test_suite2  # destroy class to save memory
 
+
 @pytest.mark.server
 @pytest.mark.trt_fp32_multi_thread
 def test_trtfp32_bz1_multi_thread():
@@ -149,6 +150,8 @@ def test_trtfp32_bz1_multi_thread():
     test_suite2.load_config(
         model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
     )
-    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, min_subgraph_size=10, repeat=1, delta=1e-4, precision="trt_fp32")
+    test_suite2.trt_bz1_multi_thread_test(
+        input_data_dict, output_data_dict, min_subgraph_size=10, repeat=1, delta=1e-4, precision="trt_fp32"
+    )
 
     del test_suite2  # destroy class to save memory
