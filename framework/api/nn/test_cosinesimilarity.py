@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test_cosinesimilarity
+test paddle.nn.CosineSimilarity
 """
 
 from apibase import APIBase
@@ -21,7 +21,7 @@ class TestCosineSimilarity(APIBase):
         """
         implement
         """
-        self.types = [np.int8, np.float32, np.float64]
+        self.types = [np.float32, np.float64]
         # self.enable_backward=False
         # self.debug = True
         # self.static = True
