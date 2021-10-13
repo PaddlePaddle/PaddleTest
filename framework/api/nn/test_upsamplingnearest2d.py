@@ -11,7 +11,7 @@ import paddle
 import paddle.fluid as fluid
 import numpy as np
 
-
+paddle.enable_static()
 class TestUpsamplingNearest2d(APIBase):
     """
     test
