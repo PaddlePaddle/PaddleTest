@@ -70,7 +70,7 @@ def test_trt_fp32_more_bz():
             model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
         )
         test_suite2.trt_more_bz_test(
-            input_data_dict, output_data_dict, max_batch_size=10, precision="trt_fp32", delta=1e-2
+            input_data_dict, output_data_dict, max_batch_size=batch_size, precision="trt_fp32", delta=1e-2
         )
 
         del test_suite2  # destroy class to save memory
@@ -104,7 +104,7 @@ def test_jetson_trt_fp32_more_bz():
             model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
         )
         test_suite2.trt_more_bz_test(
-            input_data_dict, output_data_dict, max_batch_size=10, precision="trt_fp32", delta=4e-1
+            input_data_dict, output_data_dict, max_batch_size=batch_size, precision="trt_fp32", delta=4e-1
         )
 
         del test_suite2  # destroy class to save memory
