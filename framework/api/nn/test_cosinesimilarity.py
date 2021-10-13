@@ -205,8 +205,12 @@ def test_cosinesimilarity6():
     # cos_sim_func(x1_tensor, x2_tensor)
     try:
         cos_sim_func(x1_tensor, x2_tensor)
-    except ValueError:
-        pass
+    except Exception as e:
+        # print(e)
+        if "[operator < reduce_sum > error]" in e.args[0]:
+            pass
+        else:
+            raise Exception
 
 
 @pytest.mark.api_nn_CosineSimilarity_parameters
@@ -231,8 +235,12 @@ def test_cosinesimilarity7():
     # cos_sim_func(x1_tensor, x2_tensor)
     try:
         cos_sim_func(x1_tensor, x2_tensor)
-    except ValueError:
-        pass
+    except Exception as e:
+        # print(e)
+        if "(InvalidArgument) Tensor holds the wrong type" in e.args[0]:
+            pass
+        else:
+            raise Exception
 
 
 def test_cosinesimilarity8():
@@ -256,5 +264,9 @@ def test_cosinesimilarity8():
     # cos_sim_func(x1_tensor, x2_tensor)
     try:
         cos_sim_func(x1_tensor, x2_tensor)
-    except ValueError:
-        pass
+    except Exception as e:
+        # print(e)
+        if "(InvalidArgument) Broadcast dimension mismatch." in e.args[0]:
+            pass
+        else:
+            raise Exception
