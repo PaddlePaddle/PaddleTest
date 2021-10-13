@@ -29,7 +29,7 @@ def numpy_clip_grad_by_global_norm(test_data, clip_norm):
     return cliped_data
 
 
-def generate_test_data(length, shape, value=10):
+def generate_test_data(length, shape, dtype="float32", value=10):
     """
     generate test data
     """
@@ -37,8 +37,8 @@ def generate_test_data(length, shape, value=10):
     numpy_data = []
     np.random.seed(100)
     for i in range(length):
-        np_weight = randtool("float", -value, value, shape)
-        np_weight_grad = randtool("float", -value, value, shape)
+        np_weight = randtool("float", -value, value, shape).astype(dtype)
+        np_weight_grad = randtool("float", -value, value, shape).astype(dtype)
         numpy_data.append((np_weight, np_weight_grad))
 
         tensor_weight = paddle.to_tensor(np_weight)
@@ -55,6 +55,7 @@ def test_clip_grad_by_global_norm_base():
     Test base config:
         input grad shape = [10, 10]
         input grad number = 4
+        input data dtype = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -64,7 +65,8 @@ def test_clip_grad_by_global_norm_base():
     shape = [10, 10]
     length = 4
     clip_norm = 1.0
-    np_data, paddle_data = generate_test_data(length, shape, value=10)
+    dtype = "float32"
+    np_data, paddle_data = generate_test_data(length, shape, dtype=dtype, value=10)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
@@ -86,6 +88,7 @@ def test_clip_grad_by_global_norm1():
     Test base config:
         input grad shape = [10, 10]
         input grad number = 4
+        input data dtype = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -98,7 +101,8 @@ def test_clip_grad_by_global_norm1():
     shape = [9, 13, 11]
     length = 4
     clip_norm = 1.0
-    np_data, paddle_data = generate_test_data(length, shape, value=10)
+    dtype = "float32"
+    np_data, paddle_data = generate_test_data(length, shape, dtype=dtype, value=10)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
@@ -120,6 +124,7 @@ def test_clip_grad_by_global_norm2():
     Test base config:
         input grad shape = [10, 10]
         input grad number = 4
+        input data dtype = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -132,7 +137,8 @@ def test_clip_grad_by_global_norm2():
     shape = [10, 10]
     length = 4
     clip_norm = -1.0
-    np_data, paddle_data = generate_test_data(length, shape, value=10)
+    dtype = "float32"
+    np_data, paddle_data = generate_test_data(length, shape, dtype=dtype, value=10)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
@@ -154,6 +160,7 @@ def test_clip_grad_by_global_norm3():
     Test base config:
         input grad shape = [10, 10]
         input grad number = 4
+        input data dtype = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -166,7 +173,8 @@ def test_clip_grad_by_global_norm3():
     shape = [10, 10]
     length = 4
     clip_norm = 1.0
-    np_data, paddle_data = generate_test_data(length, shape, value=10)
+    dtype = "float32"
+    np_data, paddle_data = generate_test_data(length, shape, dtype=dtype, value=10)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm, group_name="test_group")
@@ -188,6 +196,7 @@ def test_clip_grad_by_global_norm4():
     Test base config:
         input grad shape = [10, 10]
         input grad number = 4
+        input data dtype = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -200,7 +209,8 @@ def test_clip_grad_by_global_norm4():
     shape = [10, 10]
     length = 4
     clip_norm = 1.0
-    np_data, paddle_data = generate_test_data(length, shape, value=255555)
+    dtype = "float32"
+    np_data, paddle_data = generate_test_data(length, shape, dtype=dtype, value=255555)
     np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
 
     paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
@@ -212,3 +222,68 @@ def test_clip_grad_by_global_norm4():
     # compare grad value computed by numpy and paddle
     for res, p_res in zip(np_res, paddle_res):
         compare(res[1], p_res[1])
+
+
+@pytest.mark.api_nn_ClipGradByGlobalNorm_vartype
+def test_clip_grad_by_global_norm5():
+    """
+    Test ClipGradByGlobalNorm when input data dtype changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 4
+        input data dtype = 'float32'
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        input data dtype: float32 -> float64
+
+    Expected Results:
+        The output of ClipGradByGlobalNorm implemented by numpy and paddle should be equal.
+    """
+    shape = [10, 10]
+    length = 4
+    clip_norm = 1.0
+    dtype = "float64"
+    np_data, paddle_data = generate_test_data(length, shape, dtype=dtype, value=10)
+    np_res = numpy_clip_grad_by_global_norm(np_data, clip_norm=clip_norm)
+
+    paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
+    paddle_cliped_data = paddle_clip(paddle_data)
+    paddle_res = []
+    for w, g in paddle_cliped_data:
+        paddle_res.append((w.numpy(), g.numpy()))
+
+    # compare grad value computed by numpy and paddle
+    for res, p_res in zip(np_res, paddle_res):
+        compare(res[1], p_res[1])
+
+
+@pytest.mark.api_nn_ClipGradByGlobalNorm_vartype
+def test_clip_grad_by_global_norm6():
+    """
+    Test ClipGradByGlobalNorm when input data dtype changes.
+
+    Test base config:
+        input grad shape = [10, 10]
+        input grad number = 4
+        input data dtype = 'float32'
+        clip_norm = 1.0
+        value range: [-10, 10]
+
+    Changes:
+        input data dtype: float32 -> float16
+
+    Expected Results:
+        paddle.nn.ClipGradByGlobalNorm cann't accept input data with 'float16', raise RuntimeError.
+    """
+    shape = [10, 10]
+    length = 4
+    clip_norm = 1.0
+    dtype = "float16"
+    np_data, paddle_data = generate_test_data(length, shape, dtype=dtype, value=10)
+
+    with pytest.raises(RuntimeError):
+        paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
+        paddle_clip(paddle_data)
