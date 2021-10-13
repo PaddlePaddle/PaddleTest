@@ -172,7 +172,7 @@ def test_clip_grad_by_norm3():
     np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
 
     with pytest.raises(ValueError):
-        paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
+        paddle.nn.ClipGradByNorm(clip_norm=clip_norm)(paddle_data)
 
 
 @pytest.mark.api_nn_ClipGradByNorm_parameters
