@@ -89,4 +89,4 @@ def test_trt_fp32_more_bz():
 
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
-        test_suite.trt_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1, precision="trt_fp32")
+        test_suite.trt_more_bz_test(input_data_dict, output_data_dict, min_subgraph_size=10, repeat=1, delta=1, precision="trt_fp32")
