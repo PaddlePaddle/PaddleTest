@@ -40,7 +40,7 @@ python -u ./run_clue.py \
     --warmup_proportion 0.1 \
     --weight_decay 0.01 \
     --adam_epsilon 1e-8 \
-    --device $1 > $log_path/finetune_${TASK_NAME}_$2_$1.log 2>&1 
+    --device $1 > $log_path/finetune_${TASK_NAME}_$2_$1.log 2>&1
 
 export http_proxy=$HTTPPROXY
 export https_proxy=$HTTPSPROXY

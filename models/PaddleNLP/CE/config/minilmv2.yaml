@@ -45,7 +45,7 @@ FINETUNE: # 训练步骤
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/finetune_AFQMC_single_$XPU.log
-  
+
   -
     priority: p0
     tag: linux_gpu2_AFQMC
@@ -65,7 +65,7 @@ FINETUNE: # 训练步骤
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/finetune_AFQMC_multi_$XPU.log
-  
+
   -
     priority: p0
     tag: win_gpu1_AFQMC
