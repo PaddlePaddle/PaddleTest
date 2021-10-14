@@ -300,7 +300,10 @@ def numpy_alpha_dropout(x, p, random_tensor, training=True):
 @pytest.mark.api_nn_AlphaDropout_vartype
 def test_alpha_dropout_base():
     """
-    base
+    基础测试， 包括：
+    1. 数据类型测试
+    2. cpu/gpu测试
+    3. 动态图静态图结果正确性验证
     """
     x = randtool("float", 0, 2, [2, 3])
     p = 0.5
@@ -313,7 +316,7 @@ def test_alpha_dropout_base():
 @pytest.mark.api_nn_AlphaDropout_parameters
 def test_alpha_dropout1():
     """
-    default
+    默认参数结果测试
     """
     x = randtool("float", 0, 2, [2, 3])
     paddle.seed(100)
@@ -323,54 +326,54 @@ def test_alpha_dropout1():
     obj.run([res, gpu_res], x)
 
 
-#
-# @pytest.mark.api_nn_AlphaDropout_parameters
-# def test_alpha_dropout2():
-#     """
-#     p=1
-#     """
-#     x = randtool("float", 0, 2, [2, 3])
-#     paddle.seed(100)
-#     p = 1.0  # defult is 0.5
-#     res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor)
-#     gpu_res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor_gpu)
-#     obj.run([res, gpu_res], x)
-#
-#
-# @pytest.mark.api_nn_AlphaDropout_parameters
-# def test_alpha_dropout2():
-#     """
-#     p=0
-#     """
-#     x = randtool("float", 0, 2, [2, 3])
-#     paddle.seed(100)
-#     res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor)
-#     gpu_res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor_gpu)
-#     obj.run([res, gpu_res], x)
-#
-#
-# @pytest.mark.api_nn_AlphaDropout_parameters
-# def test_alpha_dropout2():
-#     """
-#     p = -1
-#     """
-#     x = randtool("float", 0, 2, [2, 3])
-#     obj.exception(etype=ValueError, mode="python", data=x, p=-1)
-#
-#
-# @pytest.mark.api_nn_AlphaDropout_parameters
-# def test_alpha_dropout2():
-#     """
-#     p = 2, 使用exception接口
-#     """
-#     x = randtool("float", 0, 2, [2, 3])
-#     obj.exception(etype=ValueError, mode="python", data=x, p=-2)
-#
-#
-# @pytest.mark.api_nn_AlphaDropout_parameters
-# def test_alpha_dropout2():
-#     """
-#     p = '1'
-#     """
-#     x = randtool("float", 0, 2, [2, 3])
-#     obj.exception(etype=TypeError, mode="python", data=x, p="1")
+@pytest.mark.api_nn_AlphaDropout_parameters
+def test_alpha_dropout2():
+    """
+    右边界测试，p=1
+    """
+    x = randtool("float", 0, 2, [2, 3])
+    paddle.seed(100)
+    p = 1.0  # defult is 0.5
+    res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor)
+    gpu_res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor_gpu)
+    obj.run([res, gpu_res], x)
+
+
+@pytest.mark.api_nn_AlphaDropout_parameters
+def test_alpha_dropout2():
+    """
+    左边界测试，p=0
+    """
+    x = randtool("float", 0, 2, [2, 3])
+    paddle.seed(100)
+    p = 0
+    res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor)
+    gpu_res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor_gpu)
+    obj.run([res, gpu_res], x)
+
+
+@pytest.mark.api_nn_AlphaDropout_parameters
+def test_alpha_dropout2():
+    """
+    p为负值异常测试, p=-1
+    """
+    x = randtool("float", 0, 2, [2, 3])
+    obj.exception(etype=ValueError, mode="python", data=x, p=-1)
+
+
+@pytest.mark.api_nn_AlphaDropout_parameters
+def test_alpha_dropout2():
+    """
+    p大于1异常测试, p=2
+    """
+    x = randtool("float", 0, 2, [2, 3])
+    obj.exception(etype=ValueError, mode="python", data=x, p=-2)
+
+
+@pytest.mark.api_nn_AlphaDropout_parameters
+def test_alpha_dropout2():
+    """
+    p值类型错误测试，p = '1' string类型
+    """
+    x = randtool("float", 0, 2, [2, 3])
+    obj.exception(etype=TypeError, mode="python", data=x, p="1")
