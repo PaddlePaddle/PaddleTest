@@ -275,8 +275,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; t
         shuf models_list_rec > models_list
     fi
     echo "######  rec models_list"
-    wc -l models_list_rec
-    cat models_list_rec
+    wc -l models_list
+    cat models_list
 
     if [[ ${1} =~ "pr" ]];then
         # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
@@ -291,6 +291,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; t
         cat models_list_diff_rec
     fi
     echo "######  rec run models_list"
+    wc -l models_list
     cat models_list
 
     #train
@@ -311,10 +312,10 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; t
 
     if [[ ${line} =~ 'Aliproduct' ]]; then
         python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=64 -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
-    elif [[ ${line} =~ 'quantization' ]]; then
-        python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=32 -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
+   #  elif [[ ${line} =~ 'quantization' ]]; then
+   #      python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=32 -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
     else
-        python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=64 -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
+        python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=32 -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
     fi
 
     params_dir=$(ls output/${category}_${model})
