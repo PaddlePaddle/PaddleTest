@@ -118,7 +118,7 @@ if [[ ${1} =~ "pr" ]];then
    echo "######  diff models_list_diff"
    wc -l models_list_diff
    cat models_list_diff
-   shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
+   shuf -n 3 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
 echo "######  diff models_list"
 wc -l models_list

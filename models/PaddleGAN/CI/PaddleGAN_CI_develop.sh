@@ -138,11 +138,11 @@ wc -l models_list
 cat models_list
 if [[ ${1} =~ "pr" ]];then
    # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
-   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|awk -F 'b/' '{print$2}'|tee -a  models_list_diff
+   git diff $(git log --pretty=oneline |grep "#"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|awk -F 'b/' '{print$2}'|tee -a  models_list_diff
    echo "######  diff models_list_diff"
    wc -l models_list_diff
    cat models_list_diff
-   shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
+   shuf -n 3 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
 echo "######  diff models_list"
 wc -l models_list
