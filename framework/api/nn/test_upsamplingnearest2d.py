@@ -71,7 +71,7 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
                 x = int(i / sh)
                 y = int(j / sw)
                 emptyImage[:, :, i, j] = img[:, :, x, y]
-         emptyImage=emptyImage.transpose((0, 2, 3, 1))
+        emptyImage = emptyImage.transpose((0, 2, 3, 1))
     return emptyImage
 
 
