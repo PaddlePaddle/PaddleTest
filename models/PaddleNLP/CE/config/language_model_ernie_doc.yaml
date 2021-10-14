@@ -110,7 +110,7 @@ CLASSIFIER_TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_hyp_$XPU.log
-  
+
   -
     priority: p0
     tag: win_dy_gpu1_hyp
@@ -130,7 +130,7 @@ CLASSIFIER_TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_hyp_$XPU.log
-  
+
   -
     priority: p0
     tag: linux_dy_gpu1_iflytek
@@ -225,7 +225,7 @@ CLASSIFIER_TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_thucnews_$XPU.log
-  
+
   -
     priority: p0
     tag: win_dy_gpu1_thucnews
@@ -283,7 +283,7 @@ MRC_TRAIN:
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_duredear-robust_$XPU.log
-  
+
   -
     priority: p0
     tag: win_dy_gpu1_duredear-robust
@@ -569,7 +569,7 @@ SEQUENCE_TRAIN:
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_MSRA-NER_$XPU.log
-  
+
   -
     priority: p0
     tag: win_dy_gpu1

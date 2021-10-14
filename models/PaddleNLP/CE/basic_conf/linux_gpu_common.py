@@ -141,5 +141,5 @@ EXEC_TAG = [
     "linux_dy_gpu1_drcd",
     "linux_dy_gpu2_drcd",
     "linux_dy_gpu1_cmrc2018",
-    "linux_dy_gpu2_cmrc2018"
+    "linux_dy_gpu2_cmrc2018",
 ]
