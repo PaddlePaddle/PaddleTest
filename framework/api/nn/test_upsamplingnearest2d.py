@@ -200,7 +200,7 @@ def test_upsamplingnearest2d6():
     x = randtool("float", -10, 10, [2, 3, 6, 10])
     data_format = "NCHW"
     size = None
-    scale_factor = paddle.to_tensor([2, 3])
+    scale_factor = paddle.to_tensor(paddle.totensor(np.array([2,3])))
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
@@ -231,7 +231,7 @@ def test_upsamplingnearest2d8():
     """
     x = randtool("float", -10, 10, [2, 3, 6, 10])
     data_format = "NCHW"
-    size = paddle.to_tensor([12, 13])
+    scale_factor = paddle.to_tensor(paddle.totensor(np.array([12,13])))
     scale_factor = None
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
