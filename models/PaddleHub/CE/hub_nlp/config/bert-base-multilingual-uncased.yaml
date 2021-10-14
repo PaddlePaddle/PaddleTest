@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_install.sh bert-base-multilingual-uncased $HUB_CONFIG
+        cmd: bash nlp_install.sh bert-base-multilingual-uncased
     kpis:
       exit_code:
         latest: True
