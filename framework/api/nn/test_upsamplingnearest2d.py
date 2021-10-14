@@ -63,7 +63,6 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
     elif data_format == "NHWC":
         img = img.transpose((0, 3, 1, 2))
         num_batchs, channels, height, width = img.shape
-        print(num_batchs, channels, height, width)
         emptyImage = np.zeros((num_batchs, channels, h_out, w_out))
         sh = h_out / height
         sw = w_out / width
@@ -72,6 +71,7 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
                 x = int(i / sh)
                 y = int(j / sw)
                 emptyImage[:, :, i, j] = img[:, :, x, y]
+         emptyImage=emptyImage.transpose((0, 2, 3, 1))
     return emptyImage
 
 
