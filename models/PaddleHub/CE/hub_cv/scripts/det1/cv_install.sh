@@ -13,6 +13,5 @@ else
     echo "exit_code: 0.0" >> ${log_path}/EXIT_$2.log
 fi
 }
-hub config server==$2
 hub install $1 > ${log_path}/${1}_install.log 2>&1
 print_info $? ${1}_install
