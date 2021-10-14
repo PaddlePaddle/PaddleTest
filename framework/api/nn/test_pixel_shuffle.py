@@ -127,7 +127,6 @@ def test_pixel_shuffle_norm3():
         data_format = "NCHW"
 
     Changes:
-        input shape: [2, 9, 4, 4] -> [2, 16, 4, 4]
         up_factor: 3 -> 4
 
     Expected Results:
