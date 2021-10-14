@@ -328,7 +328,7 @@ class APIBase(object):
             paddle.seed(self.seed)
             self._check_params(res, data, **kwargs)
             dygraph_forward_res = self._dygraph_forward()
-            if isinstance(dygraph_forward_res, (list)):
+            if isinstance(dygraph_forward_res, (list, tuple)):
                 compare(dygraph_forward_res, res, self.delta, self.rtol)
             else:
                 compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
@@ -687,7 +687,7 @@ def compare(result, expect, delta=1e-6, rtol=1e-5):
         assert res
         # tools.assert_equal(result.shape, expect.shape)
         assert result.shape == expect.shape
-    elif isinstance(result, list):
+    elif isinstance(result, (list, tuple)):
         for i, j in enumerate(result):
             if isinstance(j, (np.generic, np.ndarray)):
                 compare(j, expect[i], delta, rtol)
