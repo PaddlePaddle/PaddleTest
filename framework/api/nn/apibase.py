@@ -209,7 +209,7 @@ class APIBase(object):
                 paddle.seed(self.seed)
                 self._check_params(res, data, **kwargs)
                 dygraph_forward_res = self._dygraph_forward()
-                if isinstance(dygraph_forward_res, (list)):
+                if isinstance(dygraph_forward_res, (list, tuple)):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
                 else:
                     compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
@@ -267,7 +267,7 @@ class APIBase(object):
                 self._check_params(res, data, **kwargs)
                 dygraph_forward_res = self._dygraph_forward()
                 logging.info("dygraph forward result is :")
-                if isinstance(dygraph_forward_res, (list)):
+                if isinstance(dygraph_forward_res, (list, tuple)):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
                     logging.info(dygraph_forward_res)
                 else:
