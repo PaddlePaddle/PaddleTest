@@ -96,7 +96,7 @@ if [[ ${model_flag} =~ 'CI_step1' ]]; then
    fi
    done
 
-elif [[ ${1} =~ "pr" ]] || [[ ${1} =~ "rec" ]];then
+elif [[ ${1} =~ "pr" ]] || [[ ${1} =~ "rec_single" ]];then
    shuf -n $2 models_list_all > models_list
 
 elif [[ ${1} =~ "clas_single" ]];then
@@ -110,7 +110,7 @@ elif [[ ${model_flag} =~ 'CI_step2' ]]; then
    fi
    done
 
-elif [[ ${model_flag} =~ 'all' ]] || [[ ${1} =~ 'clas_all' ]]; then
+elif [[ ${model_flag} =~ 'all' ]] || [[ ${1} =~ 'all' ]]; then
    shuf models_list_all > models_list
 
 fi
@@ -121,9 +121,6 @@ cat models_list
 if [[ ${1} =~ "pr" ]];then
    # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
    git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep ImageNet|awk -F 'b/' '{print$2}'|tee -a  models_list_diff
-   echo "######  diff models_list_diff"
-   wc -l models_list_diff
-   cat models_list_diff
    shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
 echo "######  diff models_list"
@@ -171,7 +168,7 @@ else
    echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
 fi
 
-if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'RedNet' ]] ;then
+if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] ;then
    echo "######  use pretrain model"
    echo ${model}
    rm -rf output/$params_dir/latest.pdparams
@@ -250,144 +247,147 @@ fi
 cd ..
 done
 
-if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; then
-    echo "######  rec step"
-    rm -rf models_list
-    
-    # # small data
-    # # icartoon_dataset
-    sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
-    sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
-    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
-    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
+if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec_single' ]]; then
+   echo "######  rec step"
 
-    find ppcls/configs/Cartoonface/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
-    find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
-    find ppcls/configs/Products/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec
-    find ppcls/configs/Vehicle/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec
-    find ppcls/configs/slim/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成slim
+   # # small data
+   # # icartoon_dataset
+   sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
+   sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
+   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
+   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
 
-    if [[ $1 =~ 'pr' ]]; then
-        shuf -n $2 models_list_rec > models_list
-    elif [[ $1 =~ "rec_single" ]];then
-        echo $7 > models_list
-    elif [[ $1 =~ "rec_all" ]];then
-        shuf models_list_rec > models_list
-    fi
-    echo "######  rec models_list"
-    wc -l models_list_rec
-    cat models_list_rec
+   # # product_dataset
+   # sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
+   # sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
 
-    if [[ ${1} =~ "pr" ]];then
-        # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
-        git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep Cartoonface|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
-        git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep Logo|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
-        git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep Products|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
-        git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep Vehicle|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
-        git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep slim|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
-        shuf -n 5 models_list_diff_rec >> models_list #防止diff yaml文件过多导致pr时间过长
-        echo "######  diff models_list_diff"
-        wc -l models_list_diff_rec
-        cat models_list_diff_rec
-    fi
-    echo "######  rec run models_list"
-    cat models_list
+   # # # logo_dataset
+   # # sed -ie '/self.images = self.images\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
+   # # sed -ie '/self.labels = self.labels\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
+   # # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:10000\]'  ppcls/data/dataloader/logo_dataset.py
+   # # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/logo_dataset.py
 
-    #train
-    cat models_list | while read line
-    do
-    #echo $line
-    filename=${line##*/}
-    #echo $filename
-    model=${filename%.*}
-    category=`echo $line | awk -F [\/] '{print $3}'`
-    echo ${category}_${model}
-    echo $category
+   # # vehicle_dataset
+   # sed -ie '/self.images = self.images\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -ie '/self.labels = self.labels\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -ie '/self.bboxes = self.bboxes\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -ie '/self.cameras = self.cameras\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
 
-    if [ -d "output" ]; then
-        rm -rf output
-    fi
-    echo $model
+   # numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
+   # number1=`echo $numbers |cut -d' ' -f1`
+   # sed -i "`echo $number1` a\        self.bboxes = self.bboxes\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
 
-    if [[ ${line} =~ 'Aliproduct' ]]; then
-        python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=64 -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
-    elif [[ ${line} =~ 'quantization' ]]; then
-        python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=32 -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
-    else
-        python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=64 -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
-    fi
+   # numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
+   # number2=`echo $numbers |cut -d' ' -f2`
+   # sed -i "`echo $number2` a\        self.cameras = self.cameras\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
 
-    params_dir=$(ls output/${category}_${model})
-    echo "######  params_dir"
-    echo $params_dir
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
 
-    if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] && [[ -f "output/${category}_${model}/$params_dir/latest.pdparams" ]];then
-        echo -e "\033[33m training of ${category}_${model}  successfully!\033[0m"|tee -a $log_path/result.log
-    else
-        cat $log_path/train/${category}_${model}.log
-        echo -e "\033[31m training of ${category}_${model} failed!\033[0m"|tee -a $log_path/result.log
-    fi
+   find ppcls/configs/Cartoonface/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
+   find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
+   find ppcls/configs/Products/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' | grep  Inshop  >> models_list_rec
+   find ppcls/configs/Vehicle/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'ReID' >> models_list_rec
+   echo "######  rec models_list"
+   wc -l models_list_rec
+   cat models_list_rec
 
-    # eval
-    python tools/eval.py -c $line -o Global.pretrained_model=output/${category}_${model}/$params_dir/latest > $log_path/eval/${category}_${model}.log 2>&1
-    if [ $? -eq 0 ];then
-        echo -e "\033[33m eval of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
-    else
-        cat $log_path/eval/${category}_${model}.log
-        echo -e "\033[31m eval of ${category}_${model} failed!\033[0m" | tee -a $log_path/result.log
-    fi
+   # #二选一
+   if [[ $1 =~ 'pr' ]]; then
+      shuf -n $2 models_list_rec > models_list
+   elif [[ $1 =~ "rec_single" ]];then
+      echo $7 > models_list
+   else
+      shuf models_list_rec > models_list
+   fi
+   # #二选一
+   # shuf models_list_rec > models_list
 
-    # export_model
-    python tools/export_model.py -c $line -o Global.pretrained_model=output/${category}_${model}/$params_dir/latest  -o Global.save_inference_dir=./inference/${category}_${model} > $log_path/export_model/${category}_${model}.log 2>&1
-    if [ $? -eq 0 ];then
-        echo -e "\033[33m export_model of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
-    else
-        cat $log_path/export_model/${category}_${model}.log
-        echo -e "\033[31m export_model of ${category}_${model} failed!\033[0m" | tee -a $log_path/result.log
-    fi
+   echo "######  rec run models_list"
+   cat models_list
 
-    # predict
-    cd deploy
-    case $category in
-    Cartoonface)
-    python  python/predict_system.py -c configs/inference_cartoon.yaml > ../$log_path/predict/cartoon.log 2>&1
-    if [ $? -eq 0 ];then
-        echo -e "\033[33m predict of ${category}_${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
-    else
-        cat ../$log_path/predict/cartoon.log
-    echo -e "\033[31m predict of ${category}_${model} failed!\033[0m"| tee -a ../$log_path/result.log
-    fi
-    ;;
-    Logo)
-    python  python/predict_system.py -c configs/inference_logo.yaml > ../$log_path/predict/logo.log 2>&1
-    if [ $? -eq 0 ];then
-        echo -e "\033[33m predict of ${category}_${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
-    else
-        cat ../$log_path/predict/logo.log
-    echo -e "\033[31m predict of ${category}_${model} failed!\033[0m"| tee -a ../$log_path/result.log
-    fi
-    ;;
-    Products)
-    python  python/predict_system.py -c configs/inference_product.yaml > ../$log_path/predict/product.log 2>&1
-    if [ $? -eq 0 ];then
-        echo -e "\033[33m predict of ${category}_${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
-    else
-        cat ../$log_path/predict/product.log
-    echo -e "\033[31m predict of ${category}_${model} failed!\033[0m"| tee -a ../$log_path/result.log
-    fi
-    ;;
-    Vehicle)
-    python  python/predict_system.py -c configs/inference_vehicle.yaml > ../$log_path/predict/vehicle.log 2>&1
-    if [ $? -eq 0 ];then
-        echo -e "\033[33m predict of ${category}_${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
-    else
-        cat ../$log_path/predict/vehicle.log
-    echo -e "\033[31m predict of ${category}_${model} failed!\033[0m"| tee -a ../$log_path/result.log
-    fi
-    ;;
-    esac
-    cd ..
-    done
+   #train
+   cat models_list | while read line
+   do
+   #echo $line
+   filename=${line##*/}
+   #echo $filename
+   model=${filename%.*}
+   category=`echo $line | awk -F [\/] '{print $3}'`
+   echo ${category}_${model}
+   echo $category
+
+   python -m paddle.distributed.launch tools/train.py  -c $line -o Global.epochs=1 -o Global.save_interval=1 -o Global.eval_interval=1 -o DataLoader.Train.sampler.batch_size=64 -o Global.output_dir="./output/"${category}_${model} > $log_path/train/${category}_${model}.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/train/${category}_${model}.log) -eq 0 ]];then
+      echo -e "\033[33m training of ${category}_${model}  successfully!\033[0m"|tee -a $log_path/result.log
+   else
+      cat $log_path/train/${category}_${model}.log
+      echo -e "\033[31m training of ${category}_${model} failed!\033[0m"|tee -a $log_path/result.log
+   fi
+
+   # eval
+   python tools/eval.py -c $line -o Global.pretrained_model=output/${category}_${model}/RecModel/latest > $log_path/eval/${category}_${model}.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m eval of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/eval/${category}_${model}.log
+      echo -e "\033[31m eval of ${category}_${model} failed!\033[0m" | tee -a $log_path/result.log
+   fi
+
+
+   # export_model
+   python tools/export_model.py -c $line -o Global.pretrained_model=output/${category}_${model}/RecModel/latest  -o Global.save_inference_dir=./inference/${category}_${model} > $log_path/export_model/${category}_${model}.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m export_model of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/export_model/${category}_${model}.log
+      echo -e "\033[31m export_model of ${category}_${model} failed!\033[0m" | tee -a $log_path/result.log
+   fi
+
+   # predict
+   cd deploy
+   case $category in
+   Cartoonface)
+   python  python/predict_system.py -c configs/inference_cartoon.yaml > ../$log_path/predict/cartoon.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m predict of ${category}_${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
+   else
+      cat ../$log_path/predict/cartoon.log
+   echo -e "\033[31m predict of ${category}_${model} failed!\033[0m"| tee -a ../$log_path/result.log
+   fi
+   ;;
+   Logo)
+   python  python/predict_system.py -c configs/inference_logo.yaml > ../$log_path/predict/logo.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m predict of ${category}_${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
+   else
+      cat ../$log_path/predict/logo.log
+   echo -e "\033[31m predict of ${category}_${model} failed!\033[0m"| tee -a ../$log_path/result.log
+   fi
+   ;;
+   Products)
+   python  python/predict_system.py -c configs/inference_product.yaml > ../$log_path/predict/product.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m predict of ${category}_${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
+   else
+      cat ../$log_path/predict/product.log
+   echo -e "\033[31m predict of ${category}_${model} failed!\033[0m"| tee -a ../$log_path/result.log
+   fi
+   ;;
+   Vehicle)
+   python  python/predict_system.py -c configs/inference_vehicle.yaml > ../$log_path/predict/vehicle.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m predict of ${category}_${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
+   else
+      cat ../$log_path/predict/vehicle.log
+   echo -e "\033[31m predict of ${category}_${model} failed!\033[0m"| tee -a ../$log_path/result.log
+   fi
+   ;;
+   esac
+   cd ..
+   done
 fi
 
 num=`cat $log_path/result.log | grep "failed" | wc -l`
