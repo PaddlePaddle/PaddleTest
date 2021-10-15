@@ -16,9 +16,10 @@ catchException() {
   echo $1 failed due to exception >> FAIL_Exception.log
 }
 
-cudaid1=${1:-0} # use 0-th card as default
-cudaid2=${2:-0,1} # use 0-th card as default
-CUDA_VISIBLE_DEVICES=${cudaid2}
+cudaid1=$1
+cudaid2=$2
+echo "cudaid1,cudaid2", ${cudaid1}, ${cudaid2}
+export CUDA_VISIBLE_DEVICES=${cudaid1}
 export FLAGS_fraction_of_gpu_memory_to_use=0.98
 # data PaddleSlim/demo/data/ILSVRC2012
 cd ${slim_dir}/demo
@@ -82,7 +83,6 @@ all_distillation(){ # 大数据 5个模型
 distillation
 distillation2
 dml
-#pantheon
 }
 # 2.1 quant/quant_aware 使用小数据集即可
 quant_aware(){
@@ -398,6 +398,52 @@ do
 done
 }
 
+dy_ptq1(){
+cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dygraph_ptq4
+ln -s ${slim_dir}/demo/data/ILSVRC2012
+test_samples=1000  # if set as -1, use all test samples
+data_path='./ILSVRC2012/'
+batch_size=32
+epoch=1
+output_dir="./output_ptq"
+quant_batch_num=10
+quant_batch_size=10
+for model in mobilenet_v1
+do
+    echo "--------quantize model: ${model}-------------"
+    export CUDA_VISIBLE_DEVICES=${cudaid1}
+    # save ptq quant model
+    python ./src/ptq.py \
+        --data=${data_path} \
+        --arch=${model} \
+        --quant_batch_num=${quant_batch_num} \
+        --quant_batch_size=${quant_batch_size} \
+        --output_dir=${output_dir} > ${log_path}/ptq_${model} 2>&1
+        print_info $? ptq_${model}
+
+    echo "-------- eval fp32_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/fp32_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=True \
+        --test_samples=${test_samples} \
+        --ir_optim=False > ${log_path}/ptq_eval_fp32_${model} 2>&1
+        print_info $? ptq_eval_fp32_${model}
+
+    echo "-------- eval int8_infer model -------------", ${model}
+    python ./src/test.py \
+        --model_path=${output_dir}/${model}/int8_infer \
+        --data_dir=${data_path} \
+        --batch_size=${batch_size} \
+        --use_gpu=False \
+        --test_samples=${test_samples} \
+        --ir_optim=False > ${log_path}/ptq_eval_int8_${model} 2>&1
+        print_info $? ptq_eval_int8_${model}
+
+done
+}
+
 ce_tests_dygraph_ptq4(){
 cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dygraph_ptq4
 ln -s ${slim_dir}/demo/data/ILSVRC2012
@@ -442,6 +488,11 @@ do
         print_info $? ptq_eval_int8_${model}
 
 done
+}
+
+ce_tests_demo(){
+    dy_qat1
+    dy_ptq1
 }
 
 quant(){
@@ -646,7 +697,7 @@ print_info $? st_unstructured_prune_threshold_T
 # eval
 python evaluate.py \
        --pruned_model=st_unstructured_models \
-       --data="imagenet"  >${log_path}/st_unstructured_prune_threshold_eval &
+       --data="imagenet"  > ${log_path}/st_unstructured_prune_threshold_eval 2>&1
 print_info $? st_unstructured_prune_threshold_eval
 # load
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -660,11 +711,11 @@ python -m paddle.distributed.launch \
 --data imagenet \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
---num_epochs 3 \
+--num_epochs 1 \
 --test_period 1 \
 --model_path st_unstructured_models \
 ----pretrained_model st_unstructured_models \
---resume_epoch 1 >${log_path}/st_unstructured_prune_threshold_load 2>&1
+--last_epoch 1 > ${log_path}/st_unstructured_prune_threshold_load 2>&1
 print_info $? st_unstructured_prune_threshold_load
 
 ## sparsity: -55%, accuracy: 67%+/87%+
@@ -680,7 +731,7 @@ python train.py \
 --step_epochs 1 2 3 \
 --num_epochs 1 \
 --test_period 1 \
---model_path st_ratio_models >${log_path}/st_ratio_prune_ratio_T 2>&1
+--model_path st_ratio_models > ${log_path}/st_ratio_prune_ratio_T 2>&1
 print_info $? st_ratio_prune_ratio_T
 
 # MNIST数据集
@@ -700,7 +751,7 @@ print_info $? st_unstructured_prune_threshold_mnist_T
 # eval
 python evaluate.py \
        --pruned_model=st_unstructured_models_mnist \
-       --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval &
+       --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval 2>&1
 print_info $? st_unstructured_prune_threshold_mnist_eval
 }
 dy_unstructured_prune(){
@@ -730,16 +781,16 @@ python -m paddle.distributed.launch \
 --lr 0.05 \
 --pruning_mode threshold \
 --threshold 0.01 \
---batch_size 256 \
+--batch_size 128 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
 --num_epochs 1 --model_period 1 \
 --test_period 1 \
---model_path ./dy_threshold_models >${log_path}/dy_threshold_prune_T 2>&1
-print_info $? dy_threshold_prune_T
+--model_path ./dy_threshold_models >${log_path}/dy_threshold_threshold_T 2>&1
+print_info $? dy_threshold_threshold_T
 # eval
-python evaluate.py --pruned_model "./dy_threshold_models/model-pruned.pdparams" \
---data imagenet >${log_path}/dy_threshold_prune_eval 2>&1
+python evaluate.py --pruned_model dy_threshold_models/model.pdparams \
+--data imagenet > ${log_path}/dy_threshold_prune_eval 2>&1
 print_info $? dy_threshold_prune_eval
 
 # load
@@ -752,16 +803,16 @@ python -m paddle.distributed.launch \
 --batch_size 256 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
---num_epochs 3 \
+--num_epochs 1 \
 --test_period 1 \
 --model_path ./dy_threshold_models \
---pretrained_model "./dy_threshold_models/model-pruned.pdparams" \
---resume_epoch 1 >${log_path}/dy_threshold_prune_T 2>&1
+--pretrained_model dy_threshold_models/model.pdparams \
+--last_epoch 1 >${log_path}/dy_threshold_prune_T 2>&1
 print_info $? dy_threshold_prune_T
 # cifar10
 python train.py --data cifar10 --lr 0.05 \
---pruning_mode threshold  --num_epochs 30 \
---threshold 0.01 >${log_path}/dy_threshold_prune_cifar10_T 2>&1
+--pruning_mode threshold  --num_epochs 1 \
+--threshold 0.01 > ${log_path}/dy_threshold_prune_cifar10_T 2>&1
 print_info $? dy_threshold_prune_cifar10_T
 
 }
@@ -836,8 +887,6 @@ print_info $? ${model}
 #print_info $? ${model}
 }
 
-
-
 slimfacenet(){
 cd ${slim_dir}/demo/slimfacenet
 ln -s ${data_path}/slim/slimfacenet/CASIA CASIA
@@ -866,11 +915,12 @@ darts_1
 }
 
 ####################################
-export P0case_list=()
+#export P0case_list=()  #在命令行中设置
+echo "message obtain case list：${P0case_list[*]}"
 export P0case_time=0
 export all_P0case_time=0
 declare -A all_P0case_dic
-all_P0case_dic=(["distillation"]=5 ["quant"]=15 ["prune"]=1 ["nas"]=30 ["darts"]=30 ['unstructured_prune']=15 ['dy_qat1']=1)
+all_P0case_dic=(["distillation"]=5 ["quant"]=15 ["prune"]=1 ["nas"]=30 ["darts"]=30 ['unstructured_prune']=15 ['ce_tests_demo']=15 )
 get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
@@ -880,25 +930,30 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     dir1=${arr_file_name[0]}
     dir2=${arr_file_name[1]}
     echo "file_name:"${file_name}   "dir1:"${dir1}, "dir2:"${dir2}
-    if [[ ${file_name##*.} =~ "md" ]] || [[ ${file_name##*.} =~ "rst" ]] || [[ ${dir1} =~ "docs" ]];then
+    if [[ ${file_name##*.} =~ "md" ]] || [[ ${file_name##*.} =~ "rst" ]] || [[ ${dir1} =~ "docs" ]] || [[ ${dir1} =~ "tests" ]] || [[ ${file_name##*.} =~ "jpg" ]] || [[ ${file_name##*.} =~ "png" ]] ;then
         continue
     elif [[ ${dir1} =~ "paddleslim" ]];then # 如果修改了paddleslim,则回归全量P0
-        P0case_list=(distillation quant prune nas unstructured_prune darts)
+        echo "update dir:paddleslim"
+        P0case_list=(distillation quant prune nas unstructured_prune darts ce_tests_demo)
+        echo ${P0case_list[*]}
         P0case_time=${all_P0case_time}
-        break
     elif [[ ${dir1} =~ "demo" ]];then # 注意：如果修改不是现有P0case目录中的脚本，也不是demo/*.py脚本，则不触发P0case，因为该PR变更CI无case可覆盖
          if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then   # 如果修改了demo/P0case ,则回归相应的P0case;
-                P0case_list[${#P0case_list[*]}]=${dir2}
-                P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir2}]}`
-
+                echo "${P0case_list[*]}" | grep "${dir2}"
+                if [ $? != 0 ];then
+                  echo "add case ${dir2}"
+                  P0case_list[${#P0case_list[*]}]=${dir2}
+                  P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir2}]}`
+                fi
          elif [[ ${dir2##*.} =~ "py" ]];then  # 如果修改了demo/*.py,则回归全量P0
                 P0case_list=(distillation quant prune nas unstructured_prune darts)
                 P0case_time=${all_P0case_time}
                 break
          fi
     elif [[ ${dir1} =~ "ce_tests" ]];then
-         P0case_list[${#P0case_list[*]}]="dy_qat1"
-         P0case_time=`expr ${P0case_time} + ${all_P0case_dic["dy_qat1"]}`
+         echo "update dir:ce_tests"
+         P0case_list[${#P0case_list[*]}]="ce_tests_demo"
+         P0case_time=`expr ${P0case_time} + ${all_P0case_dic["ce_tests_demo"]}`
     else
         echo "changed files no in P0case, skip "
         break
@@ -921,7 +976,7 @@ done
 echo -e "\033[35m ---- end run P0case  \033[0m"
 
 cd ${slim_dir}/logs
-FF=`ls *_FAIL*|wc -l`
+FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
     exit 1
 else

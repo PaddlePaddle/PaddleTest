@@ -5,6 +5,7 @@
 test lr StepDecay case
 """
 import paddle
+import pytest
 from lrbase import Runner
 
 
@@ -16,6 +17,7 @@ def naive_step_decay(lr_last, lr_0, epoch, step_size, gamma, **kwargs):
     return lr_0 * (gamma ** i)
 
 
+@pytest.mark.api_optimizer_step_decay_vartype
 def test_step_decay_1():
     """
     test StepDecay base test

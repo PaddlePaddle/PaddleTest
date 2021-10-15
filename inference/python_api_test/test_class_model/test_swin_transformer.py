@@ -32,7 +32,7 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.config_init_combined_model
 def test_config():
@@ -47,7 +47,7 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
+@pytest.mark.server
 @pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
@@ -64,7 +64,7 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
+@pytest.mark.server
 @pytest.mark.mkldnn_bz1_precision
 def test_mkldnn():
     """
@@ -95,8 +95,7 @@ def test_mkldnn():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
-@pytest.mark.jetson
+@pytest.mark.server
 @pytest.mark.mkldnn_bz1_precision
 def test_gpu_more_bz():
     """
@@ -106,6 +105,38 @@ def test_gpu_more_bz():
     file_path = "./swin_transformer"
     images_size = 384
     batch_size_pool = [1, 5]
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        test_suite.load_config(
+            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        )
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        input_data_dict = {"x": fake_input}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+
+        del test_suite  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(
+            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        )
+        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
+
+        del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.server
+@pytest.mark.jetson
+@pytest.mark.mkldnn_bz1_precision
+def test_gpu_more_bz():
+    """
+    compared mkldnn swin_transformer outputs with true val
+    """
+    check_model_exist()
+    file_path = "./swin_transformer"
+    images_size = 384
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
