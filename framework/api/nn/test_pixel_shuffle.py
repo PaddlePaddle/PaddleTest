@@ -135,9 +135,7 @@ def test_pixel_shuffle_norm3():
     x = paddle.rand(shape=[2, 9, 4, 4])
     up_factor = 4
     data_format = "NCHW"
-    with pytest.raises(ValueError):
-        pixel_shuffle = paddle.nn.PixelShuffle(upscale_factor=up_factor, data_format=data_format)
-        pixel_shuffle(x)
+    obj.exception(ValueError, mode="python", data=x, upscale_factor=up_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_PixelShuffle_parameters
