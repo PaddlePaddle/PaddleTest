@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-paddle.nn.RNN float32测试
+paddle.nn.RNN float64测试
 """
 import copy
 
@@ -12,8 +12,6 @@ import pytest
 import numpy as np
 
 from framework.api.nn.rnn_numpy import SimpleRNNCell, RNN
-
-_dtype = np.float32
 
 
 class TestRNN(APIBase):
@@ -25,10 +23,11 @@ class TestRNN(APIBase):
         """
         implement
         """
-        self.types = ["float32"]
+        self.types = ["float64"]
         self.seed = 100
         self.delta = 0.0001
         self.forward_kwargs = {}  # 前向传播参数
+        paddle.set_default_dtype("float64")
 
     def _static_forward(self, res, data=None, **kwargs):
         """
@@ -96,7 +95,7 @@ class TestRNN(APIBase):
 obj = TestRNN(paddle.nn.RNN)
 
 
-def copy_cell_params(np_cell, paddle_cell, dtype="float32"):
+def copy_cell_params(np_cell, paddle_cell, dtype="float64"):
     """
     将np_cell的参数复制到paddle_cell中
     """
@@ -118,7 +117,7 @@ def test_rnn_base():
     np_cell = SimpleRNNCell(4, 8)
     rnn = RNN(cell=np_cell)
     res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float32"), res_final_states.astype("float32")]
+    res = [res_outputs.astype("float64"), res_final_states.astype("float64")]
     paddle.disable_static()
     cell = paddle.nn.SimpleRNNCell(4, 8)
     cell = copy_cell_params(np_cell, cell)
@@ -136,7 +135,7 @@ def test_rnn1():
     np_cell = SimpleRNNCell(4, 8)
     rnn = RNN(cell=np_cell)
     res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float32"), res_final_states.astype("float32")]
+    res = [res_outputs.astype("float64"), res_final_states.astype("float64")]
 
     paddle.disable_static()
 
@@ -158,7 +157,7 @@ def test_rnn2():
     np_cell = SimpleRNNCell(4, 8)
     rnn = RNN(cell=np_cell, is_reverse=True)
     res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float32"), res_final_states.astype("float32")]
+    res = [res_outputs.astype("float64"), res_final_states.astype("float64")]
 
     paddle.disable_static()
 
@@ -178,7 +177,7 @@ def test_rnn3():
     np_cell = SimpleRNNCell(4, 8)
     rnn = RNN(cell=np_cell, time_major=True)
     res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float32"), res_final_states.astype("float32")]
+    res = [res_outputs.astype("float64"), res_final_states.astype("float64")]
 
     paddle.disable_static()
 
