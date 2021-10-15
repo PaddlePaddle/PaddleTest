@@ -446,11 +446,11 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; t
     ;;
     esac
     cd ..
-   
+
    \cp ppcls/data/dataloader/icartoon_dataset_org.py ppcls/data/dataloader/icartoon_dataset.py
    \cp ppcls/data/dataloader/imagenet_dataset_org.py ppcls/data/dataloader/imagenet_dataset.py
    \cp ppcls/data/dataloader/vehicle_dataset_org.py ppcls/data/dataloader/vehicle_dataset.py
-   
+
     done
 fi
 
