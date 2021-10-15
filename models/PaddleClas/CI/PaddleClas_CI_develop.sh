@@ -272,7 +272,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; t
         shuf -n $2 models_list_rec > models_list
     elif [[ $1 =~ "rec_single" ]];then
         echo $7 > models_list
-    elif [[ $1 =~ "rec_all" ]];then
+    elif [[ $1 =~ "rec_all" ]] || [[ ${model_flag} =~ "CI_step3" ]];then
         shuf models_list_rec > models_list
     fi
     echo "######  rec models_list"
