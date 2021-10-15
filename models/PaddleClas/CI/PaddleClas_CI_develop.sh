@@ -280,28 +280,28 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; t
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
 
-   # product_dataset
-   sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
-   sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
+   # # product_dataset
+   # sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
+   # sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
 
-   # vehicle_dataset
-   sed -ie '/self.images = self.images\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-   sed -ie '/self.labels = self.labels\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-   sed -ie '/self.bboxes = self.bboxes\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-   sed -ie '/self.cameras = self.cameras\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # # vehicle_dataset
+   # sed -ie '/self.images = self.images\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -ie '/self.labels = self.labels\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -ie '/self.bboxes = self.bboxes\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -ie '/self.cameras = self.cameras\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
 
-   numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
-   number1=`echo $numbers |cut -d' ' -f1`
-   sed -i "`echo $number1` a\        self.bboxes = self.bboxes\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
+   # numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
+   # number1=`echo $numbers |cut -d' ' -f1`
+   # sed -i "`echo $number1` a\        self.bboxes = self.bboxes\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
 
-   numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
-   number2=`echo $numbers |cut -d' ' -f2`
-   sed -i "`echo $number2` a\        self.cameras = self.cameras\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
+   # numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
+   # number2=`echo $numbers |cut -d' ' -f2`
+   # sed -i "`echo $number2` a\        self.cameras = self.cameras\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
 
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
+   # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
 
     find ppcls/configs/Cartoonface/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
     find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
