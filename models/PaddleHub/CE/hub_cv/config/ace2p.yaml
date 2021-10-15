@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_install.sh ace2p $HUB_CONFIG
+        cmd: bash cv_install.sh ace2p
     kpis:
       exit_code:
         latest: True

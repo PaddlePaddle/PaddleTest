@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_install.sh U2Net_Portrait $HUB_CONFIG
+        cmd: bash cv_install.sh U2Net_Portrait
     kpis:
       exit_code:
         latest: True
