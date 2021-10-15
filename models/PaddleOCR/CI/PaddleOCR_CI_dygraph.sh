@@ -5,6 +5,8 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
+gpu_flag=True
+
 if [[ ${model_flag} =~ 'CI' ]]; then
    # data
    echo "######  ----ln  data-----"
@@ -12,7 +14,6 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    rm -rf pretrain_models
    ln -s ${Data_path}/* .
    ls train_data
-   gpu_flag=True
 fi
 
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag

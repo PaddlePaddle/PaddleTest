@@ -86,7 +86,7 @@ rm -rf models_list
 rm -rf models_list_all
 rm -rf models_list_rec
 
-find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'| grep -v 'ResNet50_fp16_dygraph' | grep -v 'ResNet50_fp16'  | grep -v 'SE_ResNeXt101_32x4d_fp16'  > models_list_all
+find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill'  > models_list_all
 
 if [[ ${model_flag} =~ 'CI_step1' ]]; then
    cat models_list_all | while read line
@@ -154,6 +154,10 @@ if [ -d "output" ]; then
 fi
 echo $model
 
+if [[ ${line} =~ 'fp16' ]];then
+   python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
+fi
+
 #visualdl
 echo "######  visualdl "
 ls /root/.visualdl/conf
@@ -199,7 +203,13 @@ else
 fi
 
 # export_model
-python tools/export_model.py -c $line -o Global.pretrained_model=output/$params_dir/latest -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
+if [[ ${line} =~ 'fp16' ]];then
+   python tools/export_model.py -c $line -o Global.pretrained_model=output/$params_dir/latest -o Global.save_inference_dir=./inference/$model -o Arch.data_format="NCHW" > $log_path/export_model/$model.log 2>&1
+else
+   python tools/export_model.py -c $line -o Global.pretrained_model=output/$params_dir/latest -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
+
+fi
+
 if [ $? -eq 0 ];then
    echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -230,8 +240,12 @@ if [[ ${model} =~ '384' ]] && [[ ! ${model} =~ 'LeViT' ]];then
    sed -i 's/size: 384/size: 224/g' configs/inference_cls.yaml
    sed -i 's/resize_short: 384/resize_short: 256/g' configs/inference_cls.yaml
 else
+   if [[ ${line} =~ 'fp16' ]];then
+      python python/predict_cls.py -c configs/inference_cls_ch4.yaml -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
+   else
+      python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
+   fi
 
-   python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
    if [ $? -eq 0 ];then
       echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
    else
@@ -239,7 +253,11 @@ else
       echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
    fi
 
+   if [[ ${line} =~ 'fp16' ]];then
+   python python/predict_cls.py -c configs/inference_cls_ch4.yaml  -o Global.infer_imgs="./images"  -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
+   else
    python python/predict_cls.py -c configs/inference_cls.yaml  -o Global.infer_imgs="./images"  -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"$model > ../$log_path/predict/$model.log 2>&1
+   fi
    if [ $? -eq 0 ];then
       echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
    else
@@ -254,13 +272,36 @@ done
 if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; then
     echo "######  rec step"
     rm -rf models_list
-    
-    # # small data
-    # # icartoon_dataset
-    sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
-    sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
-    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
-    sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
+
+   # # small data
+   # # icartoon_dataset
+   sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
+   sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/icartoon_dataset.py
+   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
+   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
+
+   # product_dataset
+   sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
+   sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
+   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
+   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
+
+   # vehicle_dataset
+   sed -ie '/self.images = self.images\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   sed -ie '/self.labels = self.labels\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   sed -ie '/self.bboxes = self.bboxes\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+   sed -ie '/self.cameras = self.cameras\[:400\]/d'  ppcls/data/dataloader/vehicle_dataset.py
+
+   numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
+   number1=`echo $numbers |cut -d' ' -f1`
+   sed -i "`echo $number1` a\        self.bboxes = self.bboxes\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
+
+   numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
+   number2=`echo $numbers |cut -d' ' -f2`
+   sed -i "`echo $number2` a\        self.cameras = self.cameras\[:400\]" ppcls/data/dataloader/vehicle_dataset.py
+
+   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
+   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:400\]'  ppcls/data/dataloader/vehicle_dataset.py
 
     find ppcls/configs/Cartoonface/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
     find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
