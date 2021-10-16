@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +30,7 @@ def check_model_exist():
         tar = tarfile.open("ernie.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./ernie/inference", output_model_path="./ernie/inference")
 
 
 def test_config():
@@ -43,27 +44,10 @@ def test_config():
 
 
 @pytest.mark.server
-@pytest.mark.config_disablegpu_memory
-def test_disable_gpu():
+@pytest.mark.mkldnn
+def test_mkldnn():
     """
-    test no gpu resources occupied after disable gpu
-    """
-    check_model_exist()
-    test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
-    batch_size = 1
-    fake_input0 = np.zeros((batch_size, 128)).astype("int64")
-    fake_input1 = np.zeros((batch_size, 128)).astype("int64")
-    input_data_dict = {"input_ids": fake_input0, "token_type_ids": fake_input1}
-    test_suite.disable_gpu_test(input_data_dict)
-
-
-@pytest.mark.server
-@pytest.mark.jetson
-@pytest.mark.gpu
-def test_gpu_bz1():
-    """
-    compared gpu bert outputs with true val
+    compared mkldnn bert outputs with true val
     """
     check_model_exist()
 
@@ -82,6 +66,6 @@ def test_gpu_bz1():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
-    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5)
 
     del test_suite2  # destroy class to save memory

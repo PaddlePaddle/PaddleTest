@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test ppyolov2 model
+test ppyolo model
 """
 
 import os
@@ -24,47 +24,45 @@ def check_model_exist():
     """
     check model exist
     """
-    ppyolov2_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.0/detection/ppyolov2.tgz"
-    if not os.path.exists("./ppyolov2/model.pdiparams"):
-        wget.download(ppyolov2_url, out="./")
-        tar = tarfile.open("ppyolov2.tgz")
+    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.0/detection/ppyolo.tgz"
+    if not os.path.exists("./ppyolo/model.pdiparams"):
+        wget.download(ppyolo_url, out="./")
+        tar = tarfile.open("ppyolo.tgz")
         tar.extractall()
         tar.close()
 
 
-@pytest.mark.server
-@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
+    test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
     test_suite.config_test()
 
 
 @pytest.mark.server
-@pytest.mark.gpu_more_bz_precision
-def test_trt_fp32_more_bz():
+@pytest.mark.mkldnn_more_bz_precision
+def test_more_bz_mkldnn():
     """
-    compared gpu ppyolov2 more batch size outputs with true val
+    compared mkldnn ppyolo batch size = [1,4,8,10] outputs with true val
     """
     check_model_exist()
 
-    file_path = "./ppyolov2"
-    images_size = 640
+    file_path = "./ppyolo"
+    images_size = 608
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
+        test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
 
         img = images_origin_list[0:batch_size]
-        result = npy_list[0 : (batch_size) * 2]
+        result = npy_list[0 : batch_size * 2]
         data = np.array(images_list[0:batch_size]).astype("float32")
         scale_factor_pool = []
         for batch in range(batch_size):
@@ -90,5 +88,5 @@ def test_trt_fp32_more_bz():
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
-        test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
-        test_suite.trt_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1, precision="trt_fp32")
+        test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
+        test_suite.mkldnn_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
