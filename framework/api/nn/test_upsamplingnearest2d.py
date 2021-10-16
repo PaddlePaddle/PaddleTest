@@ -200,7 +200,6 @@ def test_upsamplingnearest2d6():
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
 
-
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
 def test_upsamplingnearest2d7():
     """
