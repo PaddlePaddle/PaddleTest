@@ -48,9 +48,9 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
             or str(type(scale_factor)) == "<class 'list'>"
             or str(type(scale_factor)) == "<class 'numpy.ndarray'>)"
         ):
-            size = [h_in * scale_factor[0], w_in * scale_factor[1]]
+            size = [int(h_in * scale_factor[0]), int(w_in * scale_factor[1])]
         else:
-            size = [h_in * scale_factor, w_in * scale_factor]
+            size = [int(h_in * scale_factor), int(w_in * scale_factor)]
     h_out = size[0]
     w_out = size[1]
     if data_format == "NCHW":
