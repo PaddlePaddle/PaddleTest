@@ -43,7 +43,7 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
         h_in = img.shape[1]
         w_in = img.shape[2]
     if size is None:
-        if str(type(scale_factor)) == "<class 'tuple'>" or str(type(scale_factor)) == "<class 'list'>" or str(type(scale_factor)) == "<class 'paddle.Tensor'>":
+        if (str(type(scale_factor)) == "<class 'tuple'>" or str(type(scale_factor)) == "<class 'list'>"):
             size = [h_in * scale_factor[0], w_in * scale_factor[1]]
         else:
             size = [h_in * scale_factor, w_in * scale_factor]
@@ -191,7 +191,7 @@ def test_upsamplingnearest2d6():
     x = randtool("float", -10, 10, [2, 3, 6, 10])
     data_format = "NCHW"
     size = None
-    scale_factor = np.array([2, 3]).astype(np.float32)
+    scale_factor = np.array([2, 3]).astype(np.float)
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
@@ -220,7 +220,7 @@ def test_upsamplingnearest2d8():
     """
     x = randtool("float", -10, 10, [2, 3, 6, 10])
     data_format = "NCHW"
-    size = np.array([12, 13]).astype(np.int32)
+    size = np.array([12, 13]).astype(np.float)
     scale_factor = None
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
