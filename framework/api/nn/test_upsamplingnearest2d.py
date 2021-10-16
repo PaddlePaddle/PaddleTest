@@ -188,21 +188,6 @@ def test_upsamplingnearest2d5():
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
 def test_upsamplingnearest2d6():
     """
-    test when scale_factor is a tensor like Tensor([2,3])
-    expected results:
-    the results of numpy and paddle api should not be different.
-    """
-    x = randtool("float", -10, 10, [2, 3, 6, 10])
-    data_format = "NCHW"
-    size = None
-    scale_factor = np.array([2, 3]).astype(np.float)
-    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
-    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
-
-
-@pytest.mark.api_nn_UpsamplingNearest2d_parameters
-def test_upsamplingnearest2d7():
-    """
     test when size is a tuple like (12,13)
     expected results:
     the results of numpy and paddle api should not be different.
@@ -215,23 +200,9 @@ def test_upsamplingnearest2d7():
     obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
 
-@pytest.mark.api_nn_UpsamplingNearest2d_parameters
-def test_upsamplingnearest2d8():
-    """
-    test when size is a Tensor like Tensor([12,13])
-    expected results:
-    the results of numpy and paddle api should not be different.
-    """
-    x = randtool("float", -10, 10, [2, 3, 6, 10])
-    data_format = "NCHW"
-    size = np.array([12, 13]).astype(np.float)
-    scale_factor = None
-    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
-    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
-
 
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
-def test_upsamplingnearest2d9():
+def test_upsamplingnearest2d7():
     """
     test when input x contains values less than 0.
     expected results :
