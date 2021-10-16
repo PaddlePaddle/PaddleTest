@@ -45,7 +45,7 @@ def upsample_2d(img, scale_factor=None, size=None, data_format="NCHW"):
     if size is None:
         if (
             str(type(scale_factor)) == "<class 'tuple'>"
-            or str(type(scale_factor)) == "<class 'list'>" 
+            or str(type(scale_factor)) == "<class 'list'>"
             or str(type(scale_factor)) == "<class 'numpy.ndarray'>)"
         ):
             size = [h_in * scale_factor[0], w_in * scale_factor[1]]
