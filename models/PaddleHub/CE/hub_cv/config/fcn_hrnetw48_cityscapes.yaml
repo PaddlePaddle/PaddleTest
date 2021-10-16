@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_install.sh fcn_hrnetw48_cityscapes $HUB_CONFIG
+        cmd: bash cv_install.sh fcn_hrnetw48_cityscapes
     kpis:
       exit_code:
         latest: True
