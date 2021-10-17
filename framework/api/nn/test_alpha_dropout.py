@@ -340,7 +340,7 @@ def test_alpha_dropout2():
 
 
 @pytest.mark.api_nn_AlphaDropout_parameters
-def test_alpha_dropout2():
+def test_alpha_dropout3():
     """
     左边界测试，p=0
     """
@@ -353,7 +353,7 @@ def test_alpha_dropout2():
 
 
 @pytest.mark.api_nn_AlphaDropout_parameters
-def test_alpha_dropout2():
+def test_alpha_dropout4():
     """
     p为负值异常测试, p=-1
     """
@@ -362,7 +362,7 @@ def test_alpha_dropout2():
 
 
 @pytest.mark.api_nn_AlphaDropout_parameters
-def test_alpha_dropout2():
+def test_alpha_dropout5():
     """
     p大于1异常测试, p=2
     """
@@ -371,9 +371,35 @@ def test_alpha_dropout2():
 
 
 @pytest.mark.api_nn_AlphaDropout_parameters
-def test_alpha_dropout2():
+def test_alpha_dropout6():
     """
     p值类型错误测试，p = '1' string类型
     """
     x = randtool("float", 0, 2, [2, 3])
     obj.exception(etype=TypeError, mode="python", data=x, p="1")
+
+
+@pytest.mark.api_nn_AlphaDropout_parameters
+def test_alpha_dropout7():
+    """
+    多维度测试
+    """
+    _shape = (5, 10, 15, 20)
+    paddle.disable_static()
+    x = randtool("float", 0, 2, _shape)
+    paddle.seed(100)
+    paddle.set_device("cpu")
+    np_random_tensor = paddle.uniform(_shape, dtype="float32", min=0.0, max=1.0)
+    np_random_tensor = np.array(np_random_tensor)
+
+    p = 0.5
+    gpu_res = None
+    if paddle.device.is_compiled_with_cuda() is True:
+        paddle.set_device("gpu")
+        paddle.seed(100)
+        np_random_tensor_gpu = paddle.uniform(_shape, dtype="float32", min=0.0, max=1.0)
+        np_random_tensor_gpu = np.array(np_random_tensor_gpu)
+        gpu_res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor_gpu)
+
+    res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor)
+    obj.run([res, gpu_res], x)
