@@ -11,7 +11,7 @@ import paddle
 import pytest
 import numpy as np
 
-from framework.api.nn.rnn_numpy import SimpleRNNCell, RNN
+from rnn_numpy import SimpleRNNCell, RNN
 
 
 class TestRNN(APIBase):
