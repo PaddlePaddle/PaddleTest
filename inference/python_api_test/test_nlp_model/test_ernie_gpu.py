@@ -32,8 +32,6 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.server
-@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config
@@ -62,7 +60,7 @@ def test_disable_gpu():
 
 @pytest.mark.server
 @pytest.mark.jetson
-@pytest.mark.gpu_bz1_precision
+@pytest.mark.gpu
 def test_gpu_bz1():
     """
     compared gpu bert outputs with true val
