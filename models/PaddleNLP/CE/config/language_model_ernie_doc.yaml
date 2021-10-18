@@ -194,6 +194,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: linux_dy_gpu1_thucnews
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-zh thucnews
