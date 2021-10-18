@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test ernie model
+test bert model
 """
 
 import os
@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 # pylint: enable=wrong-import-position
 
@@ -24,25 +24,21 @@ def check_model_exist():
     """
     check model exist
     """
-    ernie_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.2/nlp/ernie.tgz"
-    if not os.path.exists("./ernie/inference.pdiparams"):
-        wget.download(ernie_url, out="./")
-        tar = tarfile.open("ernie.tgz")
+    bert_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.2/nlp/bert.tgz"
+    if not os.path.exists("./bert/inference.pdiparams"):
+        wget.download(bert_url, out="./")
+        tar = tarfile.open("bert.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./ernie/inference", output_model_path="./ernie/inference")
 
 
-@pytest.mark.server
-@pytest.mark.jetson
-@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
     test_suite.config_test()
 
 
@@ -54,7 +50,7 @@ def test_disable_gpu():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
     batch_size = 1
     fake_input0 = np.zeros((batch_size, 128)).astype("int64")
     fake_input1 = np.zeros((batch_size, 128)).astype("int64")
@@ -63,16 +59,17 @@ def test_disable_gpu():
 
 
 @pytest.mark.server
-@pytest.mark.mkldnn_bz1_precision
-def test_mkldnn():
+@pytest.mark.jetson
+@pytest.mark.gpu
+def test_gpu_bz1():
     """
     compared mkldnn bert outputs with true val
     """
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
-    data_path = "./ernie/data.txt"
+    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
+    data_path = "./bert/data.txt"
     images_list = test_suite.get_text_npy(data_path)
 
     input_data_dict = {
@@ -84,7 +81,7 @@ def test_mkldnn():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
-    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
+    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
 
     del test_suite2  # destroy class to save memory
