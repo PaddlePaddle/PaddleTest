@@ -136,10 +136,14 @@ EXEC_TAG = [
     "linux_dy_gpu2_iflytek",
     "linux_dy_gpu1_thucnews",
     "linux_dy_gpu2_thucnews",
-    "linux_dy_gpu1_duredear-robust",
-    "linux_dy_gpu2_duredear-robust",
+    "linux_dy_gpu1_dureader_robust",
+    "linux_dy_gpu2_dureader_robust",
     "linux_dy_gpu1_drcd",
     "linux_dy_gpu2_drcd",
     "linux_dy_gpu1_cmrc2018",
     "linux_dy_gpu2_cmrc2018",
+    "linux_dy_gpu1_LCQMC",
+    "linux_dy_gpu1_BQ_Corpus",
+    "linux_dy_gpu1_STS-B",
+    "linux_dy_gpu1_ATEC"
 ]

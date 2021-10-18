@@ -55,7 +55,7 @@ else
        --save_dir ./checkpoints/$2 \
        --train_batch_size 32 \
        --learning_rate 2E-5 \
-       -epochs 1 \
+       --epochs 1 \
        --save_step 20 \
        --max_steps 100 \
        --rdrop_coef 0.0 \
