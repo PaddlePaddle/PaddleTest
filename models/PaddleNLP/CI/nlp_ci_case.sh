@@ -231,7 +231,10 @@ print_info $? gpt_test_acc
 ernie (){
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/examples/language_model/ernie-1.0/
-cp -r /ssd1/paddlenlp/download/ernie-1.0/* ./
+mkdir data && cd data
+wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_ids.npy
+wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_idx.npz
+cd ../
 time (python -u  -m paddle.distributed.launch  \
     --log_dir "./log" \
     run_pretrain_static.py \
