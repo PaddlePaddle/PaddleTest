@@ -331,12 +331,13 @@ def test_alpha_dropout2():
     """
     右边界测试，p=1
     """
+    paddle.disable_static()
     x = randtool("float", 0, 2, [2, 3])
     paddle.seed(100)
     p = 1.0  # defult is 0.5
     res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor)
     gpu_res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor_gpu)
-    obj.run([res, gpu_res], x)
+    obj.run([res, gpu_res], x, p=p)
 
 
 @pytest.mark.api_nn_AlphaDropout_parameters
@@ -349,7 +350,7 @@ def test_alpha_dropout3():
     p = 0
     res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor)
     gpu_res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor_gpu)
-    obj.run([res, gpu_res], x)
+    obj.run([res, gpu_res], x, p=p)
 
 
 @pytest.mark.api_nn_AlphaDropout_parameters
