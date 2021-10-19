@@ -114,7 +114,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer_LCQMC_$XPU.log
-  
+
   -
     priority: p0
     tag: linux_dy_gpu1_BQ_Corpus
@@ -165,6 +165,3 @@ INFER:
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer_ATEC_$XPU.log
-
-
-   
