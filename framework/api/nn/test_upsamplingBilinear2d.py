@@ -62,7 +62,7 @@ def upsample_2d(img, scale_factor=None, size=[12, 12], data_format="NCHW"):
                         srcY = i * (srch / dsth)
                         srcX = j * (srcw / dstw)
                         # srcY = (i+0.5) * (srch / dsth) -0.5
-                        ##srcX = (j+0.5) * (srcw / dstw) -0.5
+                        # srcX = (j+0.5) * (srcw / dstw) -0.5
                         x1, x2 = int(np.floor(srcX)), int(srcX) + 1
                         y1, y2 = int(np.floor(srcY)), int(srcY) + 1
                         x2 = min(x1 + 1, srcw - 1)
@@ -90,7 +90,7 @@ def upsample_2d(img, scale_factor=None, size=[12, 12], data_format="NCHW"):
                         srcY = i * (srch / dsth)
                         srcX = j * (srcw / dstw)
                         # srcY = (i+0.5) * (srch / dsth) -0.5
-                        ##srcX = (j+0.5) * (srcw / dstw) -0.5
+                        # srcX = (j+0.5) * (srcw / dstw) -0.5
                         x1, x2 = int(np.floor(srcX)), int(srcX) + 1
                         y1, y2 = int(np.floor(srcY)), int(srcY) + 1
                         x2 = min(x1 + 1, srcw - 1)
