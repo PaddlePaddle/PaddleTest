@@ -93,7 +93,7 @@ EXEC_TAG = [
     "win_dy_gpu1_thucnews",
     "win_dy_gpu1_imdb",
     "win_dy_gpu1_hyp",
-    "win_dy_gpu1_duredear-robust",
+    "win_dy_gpu1_dureader_robust",
     "win_dy_gpu1_drcd",
     "win_dy_gpu1_cmrc2018",
 ]
