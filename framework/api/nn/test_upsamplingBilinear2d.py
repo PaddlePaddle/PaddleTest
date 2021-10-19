@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test_upsamplingnearest2d
+test_upsamplingbilinear2d
 """
 from apibase import APIBase
 from apibase import randtool
