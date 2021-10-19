@@ -33,6 +33,9 @@ obj = TestUpsamplingBilinear2d(paddle.nn.UpsamplingBilinear2D)
 
 
 def upsample_2d(img, scale_factor=None, size=[12, 12], data_format="NCHW"):
+    """
+    def
+    """
     if data_format == "NCHW":
         h_in = img.shape[2]
         w_in = img.shape[3]
