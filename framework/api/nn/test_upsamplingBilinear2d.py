@@ -197,8 +197,7 @@ def test_upsamplingnearest2d4():
     data_format = "NCHW"
     size = None
     scale_factor = [2, 3]
-    res = upsample_2d(x, size=size, scale_factor=scale_factor,
-                      data_format=data_format)
+    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size,
             scale_factor=scale_factor, data_format=data_format)
 
@@ -214,8 +213,7 @@ def test_upsamplingnearest2d5():
     data_format = "NCHW"
     size = None
     scale_factor = (2, 3)
-    res = upsample_2d(x, size=size, scale_factor=scale_factor,
-                      data_format=data_format)
+    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size,
             scale_factor=scale_factor, data_format=data_format)
 
@@ -231,8 +229,7 @@ def test_upsamplingnearest2d6():
     data_format = "NCHW"
     size = (12, 13)
     scale_factor = None
-    res = upsample_2d(x, size=size, scale_factor=scale_factor,
-                      data_format=data_format)
+    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size,
             scale_factor=scale_factor, data_format=data_format)
 
@@ -249,7 +246,6 @@ def test_upsamplingnearest2d7():
     data_format = "NCHW"
     size = [12, 13]
     scale_factor = None
-    res = upsample_2d(x, size=size, scale_factor=scale_factor,
-                      data_format=data_format)
+    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
     obj.run(res=res, data=x, size=size,
             scale_factor=scale_factor, data_format=data_format)
