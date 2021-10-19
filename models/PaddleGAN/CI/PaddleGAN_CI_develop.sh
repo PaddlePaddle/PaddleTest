@@ -266,24 +266,24 @@ if [[ ! $1 == "pr" ]];then
    fi
 fi
 
-if [[ $1 == "pr" ]];then
-   # face_parse
-   python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-   if [[ $? -eq 0 ]];then
-      echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
-   else
-      cat $log_path/infer/face_parse.log
-      echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
-   fi
-   # psgan
-   python tools/psgan_infer.py --config-file configs/makeup.yaml --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > $log_path/infer/psgan.log 2>&1
-   if [[ $? -eq 0 ]];then
-      echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
-   else
-      cat $log_path/infer/psgan.log
-      echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
-   fi
-fi
+# if [[ $1 == "pr" ]];then
+#    # face_parse
+#    python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
+#    if [[ $? -eq 0 ]];then
+#       echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
+#    else
+#       cat $log_path/infer/face_parse.log
+#       echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
+#    fi
+#    # psgan
+#    python tools/psgan_infer.py --config-file configs/makeup.yaml --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > $log_path/infer/psgan.log 2>&1
+#    if [[ $? -eq 0 ]];then
+#       echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
+#    else
+#       cat $log_path/infer/psgan.log
+#       echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
+#    fi
+# fi
 
 # video restore
 python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > $log_path/infer/video_restore.log 2>&1
