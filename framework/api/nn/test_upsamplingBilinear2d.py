@@ -69,10 +69,8 @@ def upsample_2d(img, scale_factor=None, size=[12, 12], data_format="NCHW"):
                         y2 = min(y1+1, srch-1)
                         #fl.write("{} {} {} {}\n".format(x1,x2,y1,y2))
                         # print(j,y1,y2,srcY)
-                        f1 = (x2 - srcX) * img[num_batche, channel, y1, x2] + \
-                            (srcX - x1) * img[num_batche, channel, y1, x1]
-                        f2 = (x2 - srcX) * img[num_batche, channel, y2, x2] + \
-                            (srcX - x1) * img[num_batche, channel, y2, x2]
+                        f1 = (x2 - srcX) * img[num_batche, channel, y1, x2] + (srcX - x1) * img[num_batche, channel, y1, x1]
+                        f2 = (x2 - srcX) * img[num_batche, channel, y2, x2] + (srcX - x1) * img[num_batche, channel, y2, x2]
                         f = (srcY - y1) * f1 + (y2 - srcY) * f2
         emptyImage[num_batche, channel, i, j] = f
     elif data_format == 'NHWC':
@@ -95,10 +93,8 @@ def upsample_2d(img, scale_factor=None, size=[12, 12], data_format="NCHW"):
                         y2 = min(y1+1, srch-1)
                         #fl.write("{} {} {} {}\n".format(x1,x2,y1,y2))
                         # print(j,y1,y2,srcY)
-                        f1 = (x2 - srcX) * img[num_batche, channel, y1, x2] + \
-                            (srcX - x1) * img[num_batche, channel, y1, x1]
-                        f2 = (x2 - srcX) * img[num_batche, channel, y2, x2] + \
-                            (srcX - x1) * img[num_batche, channel, y2, x2]
+                        f1 = (x2 - srcX) * img[num_batche, channel, y1, x2] + (srcX - x1) * img[num_batche, channel, y1, x1]
+                        f2 = (x2 - srcX) * img[num_batche, channel, y2, x2] + (srcX - x1) * img[num_batche, channel, y2, x2]
                         f = (srcY - y1) * f1 + (y2 - srcY) * f2
                         emptyImage[num_batche, channel, i, j] = f
         emptyImage = emptyImage.transpose((0, 2, 3, 1))
@@ -163,10 +159,8 @@ def test_upsamplingnearest2d2():
     data_format = "NCHW"
     size = None
     scale_factor = 2
-    res = upsample_2d(x, size=size, scale_factor=scale_factor,
-                      data_format=data_format)
-    obj.run(res=res, data=x, size=size,
-            scale_factor=scale_factor, data_format=data_format)
+    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
+    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
@@ -180,10 +174,8 @@ def test_upsamplingnearest2d3():
     data_format = "NCHW"
     size = None
     scale_factor = 5
-    res = upsample_2d(x, size=size, scale_factor=scale_factor,
-                      data_format=data_format)
-    obj.run(res=res, data=x, size=size,
-            scale_factor=scale_factor, data_format=data_format)
+    res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
+    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
@@ -198,8 +190,7 @@ def test_upsamplingnearest2d4():
     size = None
     scale_factor = [2, 3]
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
-    obj.run(res=res, data=x, size=size,
-            scale_factor=scale_factor, data_format=data_format)
+    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
@@ -214,8 +205,7 @@ def test_upsamplingnearest2d5():
     size = None
     scale_factor = (2, 3)
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
-    obj.run(res=res, data=x, size=size,
-            scale_factor=scale_factor, data_format=data_format)
+    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
@@ -230,8 +220,7 @@ def test_upsamplingnearest2d6():
     size = (12, 13)
     scale_factor = None
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
-    obj.run(res=res, data=x, size=size,
-            scale_factor=scale_factor, data_format=data_format)
+    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
 
 
 @pytest.mark.api_nn_UpsamplingNearest2d_parameters
@@ -247,5 +236,4 @@ def test_upsamplingnearest2d7():
     size = [12, 13]
     scale_factor = None
     res = upsample_2d(x, size=size, scale_factor=scale_factor, data_format=data_format)
-    obj.run(res=res, data=x, size=size,
-            scale_factor=scale_factor, data_format=data_format)
+    obj.run(res=res, data=x, size=size, scale_factor=scale_factor, data_format=data_format)
