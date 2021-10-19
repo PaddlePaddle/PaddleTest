@@ -387,7 +387,7 @@ def test_alpha_dropout7():
     """
     _shape = (5, 10, 15, 20)
     paddle.disable_static()
-    x = randtool("float", 0, 2, _shape)
+    x = randtool("float", -5, 10, _shape)
     paddle.seed(100)
     paddle.set_device("cpu")
     np_random_tensor = paddle.uniform(_shape, dtype="float32", min=0.0, max=1.0)
@@ -404,3 +404,16 @@ def test_alpha_dropout7():
 
     res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor)
     obj.run([res, gpu_res], x)
+
+
+@pytest.mark.api_nn_AlphaDropout_parameters
+def test_alpha_dropout8():
+    """
+    x正负测试范围测试
+    """
+    x = randtool("float", -100, 100, [2, 3])
+    paddle.seed(100)
+    p = 0.5
+    res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor)
+    gpu_res = numpy_alpha_dropout(x, p, random_tensor=np_random_tensor_gpu)
+    obj.run([res, gpu_res], x, p=p)
