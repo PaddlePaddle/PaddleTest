@@ -26,3 +26,4 @@ chardet
 tqdm
 re
 beautifulsoup4
+bs4
