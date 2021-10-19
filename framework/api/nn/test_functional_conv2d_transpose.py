@@ -8,7 +8,6 @@ from apibase import APIBase
 from apibase import randtool
 import paddle
 
-# import paddle.fluid as fluid
 import paddle.nn as nn
 import pytest
 import numpy as np
@@ -48,22 +47,50 @@ def test_conv2d_transpose_base():
     weight = paddle.create_parameter(
         shape=[in_channels, out_channels] + kernel_size,
         dtype="float32",
-        default_initializer=nn.initializer.Constant(value=1),
+        default_initializer=nn.initializer.Constant(value=1.0),
     )
     bias = paddle.create_parameter(
-        shape=[out_channels], dtype="float32", is_bias=True, default_initializer=nn.initializer.Constant(value=0)
+        shape=[out_channels], dtype="float32", is_bias=True, default_initializer=nn.initializer.Constant(value=0.0)
     )
 
     stride = 1
     padding = 1
     output_padding = 0
     dilation = 1
-    # padding_mode = "zeros"
     groups = 1
     res = np.array([[[[5.9235, 5.9235], [5.9235, 5.9235]]], [[[5.5386, 5.5386], [5.5386, 5.5386]]]])
+    # result = paddle.nn.functional.conv2d_transpose(
+    #     x=paddle.to_tensor(x),
+    #     weight=weight,
+    #     bias=bias,
+    #     stride=stride,
+    #     padding=padding,
+    #     output_padding=output_padding,
+    #     dilation=dilation,
+    #     groups=groups,
+    #     output_size=None,
+    #     data_format="NCHW",
+    # )
+    # print(result, res, sep=3*'\n')
+
+    x = paddle.to_tensor(x)
+    # kwargs = dict(
+    #     x=x,
+    #     weight=weight,
+    #     bias=bias,
+    #     stride=stride,
+    #     padding=padding,
+    #     output_padding=output_padding,
+    #     dilation=dilation,
+    #     groups=groups,
+    #     output_size=None,
+    #     data_format="NCHW")
+    # print(kwargs)
+    # copy.deepcopy(kwargs)
+
     obj.base(
         res=res,
-        data=x,
+        x=x,
         weight=weight,
         bias=bias,
         stride=stride,
