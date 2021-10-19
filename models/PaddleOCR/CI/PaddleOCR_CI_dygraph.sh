@@ -5,6 +5,8 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
+gpu_flag=True
+
 if [[ ${model_flag} =~ 'CI' ]]; then
    # data
    echo "######  ----ln  data-----"
@@ -12,7 +14,6 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    rm -rf pretrain_models
    ln -s ${Data_path}/* .
    ls train_data
-   gpu_flag=True
 fi
 
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
@@ -93,7 +94,7 @@ rm -rf models_list_det_db
 rm -rf models_list_rec
 
 find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
-find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train'  > models_list_rec
+find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_r31_sar' | grep -v 'rec_resnet_stn_bilstm_att' > models_list_rec
 
 shuf models_list_det_db > models_list_all
 shuf models_list_rec >> models_list_all
@@ -112,9 +113,13 @@ echo "######  length models_list"
 wc -l models_list
 cat models_list
 if [[ ${1} =~ "pr" ]];then
-   # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
-   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep rec|awk -F 'b/' '{print$2}'|tee -a  models_list
-   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|grep det|awk -F 'b/' '{print$2}'|tee -a  models_list
+   # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yml|awk -F 'b/' '{print$2}'|tee -a  models_list
+   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yml|grep configs|grep rec|awk -F 'b/' '{print$2}'|tee -a  models_list_diff
+   git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yml|grep configs|grep det|awk -F 'b/' '{print$2}'|tee -a  models_list_diff
+   echo "######  diff models_list_diff"
+   wc -l models_list_diff
+   cat models_list_diff
+   shuf -n 3 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
 echo "######  diff models_list"
 wc -l models_list
