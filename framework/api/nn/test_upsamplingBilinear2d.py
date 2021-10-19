@@ -61,19 +61,23 @@ def upsample_2d(img, scale_factor=None, size=[12, 12], data_format="NCHW"):
                     for j in range(dstw):
                         srcY = i * (srch / dsth)
                         srcX = j * (srcw / dstw)
-                        #srcY = (i+0.5) * (srch / dsth) -0.5
+                        # srcY = (i+0.5) * (srch / dsth) -0.5
                         ##srcX = (j+0.5) * (srcw / dstw) -0.5
-                        x1, x2 = int(np.floor(srcX)), int(srcX)+1
-                        y1, y2 = int(np.floor(srcY)), int(srcY)+1
-                        x2 = min(x1+1, srcw-1)
-                        y2 = min(y1+1, srch-1)
-                        #fl.write("{} {} {} {}\n".format(x1,x2,y1,y2))
+                        x1, x2 = int(np.floor(srcX)), int(srcX) + 1
+                        y1, y2 = int(np.floor(srcY)), int(srcY) + 1
+                        x2 = min(x1 + 1, srcw - 1)
+                        y2 = min(y1 + 1, srch - 1)
+                        # fl.write("{} {} {} {}\n".format(x1,x2,y1,y2))
                         # print(j,y1,y2,srcY)
-                        f1 = (x2 - srcX) * img[num_batche, channel, y1, x2] + (srcX - x1) * img[num_batche, channel, y1, x1]
-                        f2 = (x2 - srcX) * img[num_batche, channel, y2, x2] + (srcX - x1) * img[num_batche, channel, y2, x2]
+                        f1 = (x2 - srcX) * img[num_batche, channel, y1, x2] + (srcX - x1) * img[
+                            num_batche, channel, y1, x1
+                        ]
+                        f2 = (x2 - srcX) * img[num_batche, channel, y2, x2] + (srcX - x1) * img[
+                            num_batche, channel, y2, x2
+                        ]
                         f = (srcY - y1) * f1 + (y2 - srcY) * f2
         emptyImage[num_batche, channel, i, j] = f
-    elif data_format == 'NHWC':
+    elif data_format == "NHWC":
         img = img.transpose((0, 3, 1, 2))
         num_batches, channels, height, width = img.shape
         emptyImage = np.zeros((num_batches, channels, size[0], size[1]))
@@ -85,18 +89,22 @@ def upsample_2d(img, scale_factor=None, size=[12, 12], data_format="NCHW"):
                     for j in range(dstw):
                         srcY = i * (srch / dsth)
                         srcX = j * (srcw / dstw)
-                        #srcY = (i+0.5) * (srch / dsth) -0.5
+                        # srcY = (i+0.5) * (srch / dsth) -0.5
                         ##srcX = (j+0.5) * (srcw / dstw) -0.5
-                        x1, x2 = int(np.floor(srcX)), int(srcX)+1
-                        y1, y2 = int(np.floor(srcY)), int(srcY)+1
-                        x2 = min(x1+1, srcw-1)
-                        y2 = min(y1+1, srch-1)
-                        #fl.write("{} {} {} {}\n".format(x1,x2,y1,y2))
+                        x1, x2 = int(np.floor(srcX)), int(srcX) + 1
+                        y1, y2 = int(np.floor(srcY)), int(srcY) + 1
+                        x2 = min(x1 + 1, srcw - 1)
+                        y2 = min(y1 + 1, srch - 1)
+                        # fl.write("{} {} {} {}\n".format(x1,x2,y1,y2))
                         # print(j,y1,y2,srcY)
-                        f1 = (x2 - srcX) * img[num_batche, channel, y1, x2] + (srcX - x1) * img[num_batche, channel, y1, x1]
-                        f2 = (x2 - srcX) * img[num_batche, channel, y2, x2] + (srcX - x1) * img[num_batche, channel, y2, x2]
+                        f1 = (x2 - srcX) * img[num_batche, channel, y1, x2] + (srcX - x1) * img[
+                            num_batche, channel, y1, x1
+                        ]
+                        f2 = (x2 - srcX) * img[num_batche, channel, y2, x2] + (srcX - x1) * img[
+                            num_batche, channel, y2, x2
+                        ]
                         f = (srcY - y1) * f1 + (y2 - srcY) * f2
-                        emptyImage[num_batche, channel, i, j] = f
+        emptyImage[num_batche, channel, i, j] = f
         emptyImage = emptyImage.transpose((0, 2, 3, 1))
     return emptyImage
 
