@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test vgg11 model
+test TNT_small model
 """
 
 import os
@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -24,12 +24,13 @@ def check_model_exist():
     """
     check model exist
     """
-    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1/class/vgg11.tgz"
-    if not os.path.exists("./vgg11/inference.pdiparams"):
-        wget.download(vgg11_url, out="./")
-        tar = tarfile.open("vgg11.tgz")
+    tnt_small_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2rc/class/TNT_small.tgz"
+    if not os.path.exists("./TNT_small/inference.pdiparams"):
+        wget.download(tnt_small_url, out="./")
+        tar = tarfile.open("TNT_small.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./TNT_small/inference", output_model_path="./TNT_small/inference")
 
 
 def test_config():
@@ -38,7 +39,7 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
     test_suite.config_test()
 
 
@@ -46,16 +47,18 @@ def test_config():
 @pytest.mark.trt_fp32
 def test_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp32 batch_size=1-10 TNT_small outputs with true val
     """
     check_model_exist()
 
-    file_path = "./vgg11"
+    file_path = "./TNT_small"
     images_size = 224
-    batch_size_pool = [1, 10]
+    batch_size_pool = [1, 5]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        test_suite.load_config(
+            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+        )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
@@ -64,27 +67,32 @@ def test_trt_fp32_more_bz():
         del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
-        test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-        test_suite2.trt_more_bz_test(input_data_dict, output_data_dict, max_batch_size=batch_size, precision="trt_fp32")
+        test_suite2.load_config(
+            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+        )
+        test_suite2.trt_more_bz_test(
+            input_data_dict, output_data_dict, max_batch_size=10, min_subgraph_size=30, precision="trt_fp32"
+        )
 
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.trt_fp32
 def test_jetson_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp32 batch_size=1 TNT_small outputs with true val
     """
     check_model_exist()
 
-    file_path = "./vgg11"
+    file_path = "./TNT_small"
     images_size = 224
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        test_suite.load_config(
+            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+        )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
@@ -93,25 +101,29 @@ def test_jetson_trt_fp32_more_bz():
         del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
-        test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-        test_suite2.trt_more_bz_test(input_data_dict, output_data_dict, max_batch_size=batch_size, precision="trt_fp32")
+        test_suite2.load_config(
+            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+        )
+        test_suite2.trt_more_bz_test(
+            input_data_dict, output_data_dict, max_batch_size=10, min_subgraph_size=30, precision="trt_fp32"
+        )
 
         del test_suite2  # destroy class to save memory
 
 
 @pytest.mark.server
 @pytest.mark.trt_fp32_multi_thread
-def test_trtfp32_bz1_multi_thread():
+def test_trt_fp32_bz1_multi_thread():
     """
-    compared trt fp32 batch_size=1 vgg11 multi_thread outputs with true val
+    compared trt fp32 batch_size=1 TNT_small multi_thread outputs with true val
     """
     check_model_exist()
 
-    file_path = "./vgg11"
+    file_path = "./TNT_small"
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"x": fake_input}
@@ -120,7 +132,7 @@ def test_trtfp32_bz1_multi_thread():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, precision="trt_fp32")
+    test_suite2.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, min_subgraph_size=30, precision="trt_fp32")
 
     del test_suite2  # destroy class to save memory
