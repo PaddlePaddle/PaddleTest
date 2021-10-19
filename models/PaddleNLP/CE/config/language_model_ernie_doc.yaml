@@ -1,0 +1,591 @@
+MODEL: "language_model_ernie_doc" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $DGU_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/language_model_ernie_doc/ #脚本的路径
+  model_log_path: log/language_model_ernie_doc/
+
+EXEC:
+  exec_cases: [CLASSIFIER_TRAIN, MRC_TRAIN, MCQ_TRAIN, SEMANTIC_TRAIN, SEQUENCE_TRAIN]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+
+CLASSIFIER_TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1_imdb
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-en imdb
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_imdb_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2_imdb
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classifier.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-en imdb
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_imdb_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_imdb
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: classifier.bat $XPU ernie-doc-base-en imdb
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_imdb_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_hyp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-en hyp
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_hyp_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2_hyp
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classifier.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-en hyp
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_hyp_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_hyp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: classifier.bat $XPU ernie-doc-base-en hyp
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_hyp_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_iflytek
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-zh iflytek
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_iflytek_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2_iflytek
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classifier.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-zh iflytek
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_iflytek_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_iflytek
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: classifier.bat $XPU ernie-doc-base-zh iflytek
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_iflytek_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_thucnews
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-zh thucnews
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_thucnews_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2_thucnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classifier.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-zh thucnews
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_thucnews_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_thucnews
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: classifier.bat $XPU ernie-doc-base-zh thucnews
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_thucnews_$XPU.log
+
+MRC_TRAIN:
+  -
+    priority: p0
+    tag: linux_dy_gpu1_duredear-robust
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA ernie-doc-base-zh duredear-robust
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_duredear-robust_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_gpu2_duredear-robust
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh duredear-robust
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_duredear-robust_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_duredear-robust
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: reading_cmp.bat $XPU ernie-doc-base-zh duredear-robust
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_duredear-robust_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_drcd
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA ernie-doc-base-zh drcd
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_drcd_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_gpu2_drcd
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-zh drcd
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_drcd_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_drcd
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: reading_cmp.bat $XPU ernie-doc-base-zh drcd
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_drcd_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_cmrc2018
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA  ernie-doc-base-zh cmrc2018
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_cmrc2018_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_gpu2_cmrc2018
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-zh cmrc2018
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_cmrc2018_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_cmrc2018
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: reading_cmp.bat $XPU ernie-doc-base-zh cmrc2018
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_cmrc2018_$XPU.log
+
+MCQ_TRAIN:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash single_choice.sh $XPU "single" $SET_CUDA ernie-doc-base-zh C3
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_C3_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash single_choice.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh C3
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_C3_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: single_choice.bat $XPU ernie-doc-base-zh C3
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_C3_$XPU.log
+
+SEMANTIC_TRAIN:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash semantic.sh $XPU "single" $SET_CUDA ernie-doc-base-zh CAIL2019-SCM
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_CAIL2019-SCM_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash semantic.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh CAIL2019-SCM
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_CAIL2019-SCM_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: semantic.bat $XPU ernie-doc-base-zh CAIL2019-SCM
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_CAIL2019-SCM_$XPU.log
+
+SEQUENCE_TRAIN:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash sequence.sh $XPU "single" $SET_CUDA ernie-doc-base-zh MSRA-NER
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_MSRA-NER_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash sequence.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh MSRA-NER
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_MSRA-NER_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sequence.bat $XPU ernie-doc-base-zh MSRA-NER
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.522773
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_MSRA-NER_$XPU.log
