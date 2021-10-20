@@ -25,5 +25,4 @@ chardet
 tqdm
 beautifulsoup4
 bs4
-# windows 39下安装不上，好像也不影响模型运行
 pgl >= 2.1
