@@ -37,8 +37,9 @@ python -u -m paddle.distributed.launch --gpus $3 \
   --batch_size 64 \
   --learning_rate 5E-5 \
   --epochs 1 \
-  --save_steps 100 \
+  --save_steps 20 \
   --eval_steps 100 \
+  --max_steps 100 \
   --max_seq_length 64 \
   --infer_with_fc_pooler \
   --dropout 0.1 \

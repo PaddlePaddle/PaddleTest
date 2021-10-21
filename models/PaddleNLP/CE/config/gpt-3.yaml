@@ -23,6 +23,10 @@ DATA_PROC:
     priority: p0
     tag: linux_download_data
     run:
+      # 先做makefile替换代码, 这块日后优化需要判断当前的python版本再做替换，
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash linux_py38.sh
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
