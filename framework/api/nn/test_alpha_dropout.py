@@ -23,6 +23,7 @@ class TestAlphaDropout(APIBase):
         """
         self.types = [np.float32, np.float64]
         self.enable_backward = False
+        # self.enable_backward = True
         self.debug = False
 
     def _baserun(self, res, data=None, **kwargs):
