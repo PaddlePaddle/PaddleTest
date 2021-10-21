@@ -1,5 +1,5 @@
 MODEL: "simcse" # 模型名
-PRIORITY: P1_delay
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -104,7 +104,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU $SET_CUDA LCQMC 100
+        cmd: bash infer.sh $XPU $SET_CUDA LCQMC 80
     kpis:
       exit_code:
         latest: True
@@ -121,7 +121,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU $SET_CUDA BQ_Corpus 100
+        cmd: bash infer.sh $XPU $SET_CUDA BQ_Corpus 80
     kpis:
       exit_code:
         latest: True
@@ -138,7 +138,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU $SET_CUDA STS-B 100
+        cmd: bash infer.sh $XPU $SET_CUDA STS-B 80
     kpis:
       exit_code:
         latest: True
@@ -155,7 +155,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU $SET_CUDA ATEC 100
+        cmd: bash infer.sh $XPU $SET_CUDA ATEC 80
     kpis:
       exit_code:
         latest: True
