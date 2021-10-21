@@ -46,7 +46,7 @@ if [[ $2 == "multi" ]]; then
        --max_steps 100 \
        --rdrop_coef 0.0 \
        --device $1 > $log_path/train_$2_$1.log 2>&1
-    print $? train_$2_$1
+    print_info $? train_$2_$1
 else
     python train.py \
        --train_set train.txt \
@@ -60,7 +60,7 @@ else
        --max_steps 100 \
        --rdrop_coef 0.0 \
        --device $1  >$log_path/train_$2_$1.log 2>&1
-    print $? train_$2_$1
+    print_info $? train_$2_$1
 fi
 
 #set http_proxy

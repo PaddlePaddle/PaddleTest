@@ -54,7 +54,7 @@ if [[ $2 == "faster" ]]; then
         --device=$1 \
         --top_k 0 \
         --top_p 1 >$log_path/infer_$2_$1.log 2>&1
-    print $? infer_$2_$1
+    print_info $? infer_$2_$1
 else
     python run_gen.py \
         --dataset_name=dureader_qg \
@@ -67,7 +67,7 @@ else
         --max_dec_len=20 \
         --min_dec_len=3 \
         --device=gpu >$log_path/infer_$2_$1.log 2>&1
-    print $? infer_$2_$1
+    print_info $? infer_$2_$1
 fi
 
 
