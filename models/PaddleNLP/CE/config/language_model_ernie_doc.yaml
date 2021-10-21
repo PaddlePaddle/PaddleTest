@@ -194,6 +194,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: linux_dy_gpu1_thucnews
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-zh thucnews
@@ -249,13 +250,13 @@ CLASSIFIER_TRAIN: # 训练步骤
 MRC_TRAIN:
   -
     priority: p0
-    tag: linux_dy_gpu1_duredear-robust
+    tag: linux_dy_gpu1_dureader_robust
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA ernie-doc-base-zh duredear-robust
+        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA ernie-doc-base-zh dureader_robust
 
     kpis: #kpi指标
       loss:
@@ -265,14 +266,14 @@ MRC_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_single_duredear-robust_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_single_dureader_robust_$XPU.log
   -
     priority: p0
-    tag: linux_dy_gpu2_duredear-robust
+    tag: linux_dy_gpu2_dureader_robust
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh duredear-robust
+        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh dureader_robust
 
     kpis: #kpi指标
       loss:
@@ -282,17 +283,17 @@ MRC_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_multi_duredear-robust_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_multi_dureader_robust_$XPU.log
 
   -
     priority: p0
-    tag: win_dy_gpu1_duredear-robust
+    tag: win_dy_gpu1_dureader_robust
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: reading_cmp.bat $XPU ernie-doc-base-zh duredear-robust
+        cmd: reading_cmp.bat $XPU ernie-doc-base-zh dureader_robust
 
     kpis: #kpi指标
       loss:
@@ -302,7 +303,7 @@ MRC_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_duredear-robust_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_dureader_robust_$XPU.log
 
   -
     priority: p0
@@ -427,7 +428,7 @@ MCQ_TRAIN:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash single_choice.sh $XPU "single" $SET_CUDA ernie-doc-base-zh C3
+        cmd: bash single_choice.sh $XPU "single" $SET_CUDA ernie-doc-base-zh c3
 
     kpis: #kpi指标
       loss:
@@ -437,14 +438,14 @@ MCQ_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_single_C3_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_single_c3_$XPU.log
   -
     priority: p0
     tag: linux_dy_gpu2
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash single_choice.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh C3
+        cmd: bash single_choice.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh c3
 
     kpis: #kpi指标
       loss:
@@ -454,7 +455,7 @@ MCQ_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_multi_C3_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_multi_c3_$XPU.log
 
   -
     priority: p0
@@ -464,7 +465,7 @@ MCQ_TRAIN:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: single_choice.bat $XPU ernie-doc-base-zh C3
+        cmd: single_choice.bat $XPU ernie-doc-base-zh c3
     kpis: #kpi指标
       loss:
         latest: True
@@ -473,7 +474,7 @@ MCQ_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_C3_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_c3_$XPU.log
 
 SEMANTIC_TRAIN:
   -
@@ -484,7 +485,7 @@ SEMANTIC_TRAIN:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash semantic.sh $XPU "single" $SET_CUDA ernie-doc-base-zh CAIL2019-SCM
+        cmd: bash semantic.sh $XPU "single" $SET_CUDA ernie-doc-base-zh ail2019_scm
 
     kpis: #kpi指标
       loss:
@@ -494,14 +495,14 @@ SEMANTIC_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_single_CAIL2019-SCM_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_single_ail2019_scm_$XPU.log
   -
     priority: p0
     tag: linux_dy_gpu2
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash semantic.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh CAIL2019-SCM
+        cmd: bash semantic.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh ail2019_scm
 
     kpis: #kpi指标
       loss:
@@ -511,7 +512,7 @@ SEMANTIC_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_multi_CAIL2019-SCM_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_multi_ail2019_scm_$XPU.log
 
   -
     priority: p0
@@ -521,7 +522,7 @@ SEMANTIC_TRAIN:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: semantic.bat $XPU ernie-doc-base-zh CAIL2019-SCM
+        cmd: semantic.bat $XPU ernie-doc-base-zh ail2019_scm
     kpis: #kpi指标
       loss:
         latest: True
@@ -530,7 +531,7 @@ SEMANTIC_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_CAIL2019-SCM_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_ail2019_scm_$XPU.log
 
 SEQUENCE_TRAIN:
   -
@@ -541,7 +542,7 @@ SEQUENCE_TRAIN:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash sequence.sh $XPU "single" $SET_CUDA ernie-doc-base-zh MSRA-NER
+        cmd: bash sequence.sh $XPU "single" $SET_CUDA ernie-doc-base-zh msra_ner
 
     kpis: #kpi指标
       loss:
@@ -551,14 +552,14 @@ SEQUENCE_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_single_MSRA-NER_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_single_msra_ner_$XPU.log
   -
     priority: p0
     tag: linux_dy_gpu2
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash sequence.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh MSRA-NER
+        cmd: bash sequence.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh msra_ner
 
     kpis: #kpi指标
       loss:
@@ -568,7 +569,7 @@ SEQUENCE_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_multi_MSRA-NER_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_multi_msra_ner_$XPU.log
 
   -
     priority: p0
@@ -578,7 +579,7 @@ SEQUENCE_TRAIN:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sequence.bat $XPU ernie-doc-base-zh MSRA-NER
+        cmd: sequence.bat $XPU ernie-doc-base-zh msra_ner
     kpis: #kpi指标
       loss:
         latest: True
@@ -587,4 +588,4 @@ SEQUENCE_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_MSRA-NER_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_msra_ner_$XPU.log

@@ -32,7 +32,7 @@ fi
 
 #访问RD程序
 cd $code_path
-
+mkdir -p log
 python -m paddle.distributed.launch --gpus $3 --log_dir ./log run_gen.py \
     --dataset_name=dureader_qg \
     --model_name_or_path=unimo-text-1.0 \
