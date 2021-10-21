@@ -22,15 +22,26 @@ if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
 
+print_info(){
+if [ $1 -ne 0 ];then
+    cat ${log_path}/$2.log
+    echo "exit_code: 1.0" >> ${log_path}/$2.log
+else
+    echo "exit_code: 0.0" >> ${log_path}/$2.log
+fi
+}
+
 cd $code_path
-  python -u -m paddle.distributed.launch --gpus $3 \
-      ptuning.py \
-      --task_name $4 \
-      --device $1 \
-      --p_embedding_num 1 \
-      --save_dir "checkpoints/$4/$2" \
-      --batch_size 8 \
-      --learning_rate 5E-5 \
-      --epochs 1 \
-      --save_steps 20 \
-      --max_seq_length 512 > ${log_path}/train_$4_$2_$1.log 2>&1
+python -u -m paddle.distributed.launch --gpus $3 \
+    ptuning.py \
+    --task_name $4 \
+    --device $1 \
+    --p_embedding_num 1 \
+    --save_dir "checkpoints/$4/$2" \
+    --batch_size 8 \
+    --learning_rate 5E-5 \
+    --epochs 1 \
+    --save_steps 20 \
+    --max_seq_length 512 > ${log_path}/train_$4_$2_$1.log 2>&1
+
+print_info $? train_$4_$2_$1
