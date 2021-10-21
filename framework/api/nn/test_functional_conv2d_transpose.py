@@ -395,3 +395,77 @@ def test_functional_conv2d_transpose6():
         output_size=None,
         data_format="NHWC",
     )
+
+
+@pytest.mark.api_nn_functional_conv2d_transpose_exception
+def test_functional_conv2d_transpose7():
+    """
+    invalid "output_size": when stride > 1, there are multiple possible
+    [H_out, W_out],
+    Expected output_size[i] must be in [infer_shape, infer_shape + strides[i]),
+    in this case H_out must be in [863, 870),
+    W_out must be in [611, 618)
+    """
+    np.random.seed(obj.seed)
+    x = randtool("float", 0, 1, [32, 58, 123, 87]).astype("float32")
+    in_channels = 58
+    out_channels = 21
+    groups = 1
+    kernel_size = [9, 9]
+    stride = 7
+    padding = 0
+    output_padding = 0
+    dilation = 1
+    weight = np.full(shape=[in_channels, out_channels // groups] + kernel_size, fill_value=1.0)
+    bias = np.full(shape=[out_channels], fill_value=0.0)
+    for h_out, w_out in [(870, 611), (863, 618), (862, 619)]:
+        output_size = [h_out, w_out]
+        paddle.disable_static()
+        obj.exception(
+            etype=ValueError,
+            mode="python",
+            x=x,
+            weight=weight,
+            bias=bias,
+            stride=stride,
+            padding=padding,
+            output_padding=output_padding,
+            dilation=dilation,
+            output_size=output_size,
+            data_format="NCHW",
+        )
+
+
+@pytest.mark.api_nn_functional_conv2d_transpose_exception
+def test_functional_conv2d_transpose8():
+    """
+    (InvalidArgument) The number of input channels should be equal to filter channels for Op(conv_transpose).
+    But received: the input's channels is [87], the shape of input is [32, 58, 123, 87], the filter's channels is [58],
+    the shape of filter is [58, 21, 9, 9]. The data_format is NHWC.The error may come from wrong data_format setting.
+      [Hint: Expected C == filter_dims[0], but received C:87 != filter_dims[0]:58.]
+    """
+    np.random.seed(obj.seed)
+    x = randtool("float", 0, 1, [32, 58, 123, 87]).astype("float32")
+    in_channels = 58
+    out_channels = 21
+    groups = 1
+    kernel_size = [9, 9]
+    stride = 7
+    padding = 0
+    output_padding = 0
+    dilation = 1
+    weight = np.full(shape=[in_channels, out_channels // groups] + kernel_size, fill_value=1.0)
+    bias = np.full(shape=[out_channels], fill_value=0.0)
+    obj.exception(
+        etype=ValueError,
+        mode="python",
+        x=x,
+        weight=weight,
+        bias=bias,
+        stride=stride,
+        padding=padding,
+        output_padding=output_padding,
+        dilation=dilation,
+        output_size=None,
+        data_format="NHWC",
+    )
