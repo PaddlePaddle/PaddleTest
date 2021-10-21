@@ -1,4 +1,4 @@
-MODEL: "ernie_gen" # 模型名称
+MODEL: "transformer_nist_wait_1" # 模型名称
 PRIORITY: P0
 GIT:
   addr: $REPO_PaddleHub
@@ -9,11 +9,11 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: scripts/nlp10/ #脚本的路径
-  model_log_path: log/ernie_gen
+  model_scripts_path: scripts/nlp13/ #脚本的路径
+  model_log_path: log/transformer_nist_wait_1
 
 EXEC:
-  exec_cases: [INSTALL, FINETUNE, INSTALL_DIY, PREDICT, UNINSTALL, UNINSTALL_DIY]
+  exec_cases: [INSTALL, FINETUNE, PREDICT, UNINSTALL]
   exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_install.sh ernie_gen
+        cmd: bash nlp_install.sh transformer_nist_wait_1
     kpis:
       exit_code:
         latest: True
@@ -34,44 +34,44 @@ INSTALL:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/EXIT_ernie_gen_install.log
+    output: $ROOT_PATH/$model_log_path/EXIT_transformer_nist_wait_1_install.log
 
-FINETUNE:
-  -
-    priority: p0
-    tag: linux_mini-finetune_mini-epoch_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    # use_gpu, max_steps, batch_size,
-    # module_name, author
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_finetune.sh ernie_gen True 300 2 test_module paddle_qa
-
-    kpis:
-      exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-    output: $ROOT_PATH/$model_log_path/EXIT_ernie_gen_finetune_True_300_2_test_module_paddle_qa.log
-
+#FINETUNE:
+#  -
+#    priority: p0
+#    tag: linux_mini-finetune_mini-epoch_gpu1
+#    env: #去掉，自动调度
+#      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+#
+#    # task, train_data, use_gpu, batch_size, num_epoch, dataset,
+#    # optimizer, learning_rate, max_seq_len, save_interval, checkpoint_dir
+#    run:
+#      -
+#        path: $ROOT_PATH/$model_scripts_path
+#        cmd: bash nlp_finetune.sh transformer_nist_wait_1 text-matching dev True 16 1 LCQMC Adam 1e-5 128 1 save
+#
+#    kpis:
+#      exit_code:
+#        latest: True
+#        kpi_base: 0
+#        threshold: 0
+#        actived: True
+#        evaluation: "-"
+#        unit_repr: None
+#    output: $ROOT_PATH/$model_log_path/EXIT_transformer_nist_wait_1_finetune_text-matching_dev_True_16_1_LCQMC_Adam_1e-5_128_1_save.log
+#
 #  -
 #    priority: p0
 #    tag: win_mini-finetune_mini-epoch_gpu1
 #    env: #去掉，自动调度
 #      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 #
-#    # use_gpu, max_steps, batch_size,
-#    # module_name, author
+#    # task, train_data, use_gpu, batch_size, num_epoch, dataset,
+#    # optimizer, learning_rate, max_seq_len, save_interval, checkpoint_dir
 #    run:
 #      -
 #        path: $ROOT_PATH/$model_scripts_path
-#        cmd: bash nlp_finetune.sh ernie_gen True 300 2 test_module paddle_qa
+#        cmd: bash nlp_finetune.sh transformer_nist_wait_1 text-matching dev True 8 1 LCQMC Adam 1e-5 128 1 save
 #
 #    kpis:
 #      exit_code:
@@ -81,20 +81,20 @@ FINETUNE:
 #        actived: True
 #        evaluation: "-"
 #        unit_repr: None
-#    output: $ROOT_PATH/$model_log_path/EXIT_ernie_gen_finetune_True_300_2_test_module_paddle_qa.log
-
+#    output: $ROOT_PATH/$model_log_path/EXIT_transformer_nist_wait_1_finetune_text-matching_dev_True_8_1_LCQMC_Adam_1e-5_128_1_save.log
+#
 #  -
 #    priority: p1
 #    tag: linux_finetune_mini-epoch_gpu1
 #    env: #去掉，自动调度
 #      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 #
-#    # use_gpu, max_steps, batch_size,
-#    # module_name, author
+#    # task, train_data, use_gpu, batch_size, num_epoch, dataset,
+#    # optimizer, learning_rate, max_seq_len, save_interval, checkpoint_dir
 #    run:
 #      -
 #        path: $ROOT_PATH/$model_scripts_path
-#        cmd: bash nlp_finetune.sh ernie_gen text-matching True 300 2 test_module paddle_qa
+#        cmd: bash nlp_finetune.sh transformer_nist_wait_1 text-matching train True 16 4 LCQMC Adam 1e-5 128 2 save
 #
 #    kpis:
 #      exit_code:
@@ -104,25 +104,7 @@ FINETUNE:
 #        actived: True
 #        evaluation: "-"
 #        unit_repr: None
-#    output: $ROOT_PATH/$model_log_path/EXIT_ernie_gen_finetune_True_300_2_test_module_paddle_qa.log
-
-INSTALL_DIY:
-  -
-    priority: p0
-    tag: install_module
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_install.sh test_module
-    kpis:
-      exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-    output: $ROOT_PATH/log/test_module/EXIT_test_module_install.log
+#    output: $ROOT_PATH/$model_log_path/EXIT_transformer_nist_wait_1_finetune_text-matching_train_True_16_4_LCQMC_Adam_1e-5_128_2_save.log
 
 PREDICT:
   -
@@ -131,11 +113,11 @@ PREDICT:
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    # use_gpu, beam_width
+    # use_gpu, max_length, max_out_len
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh test_module True 5
+        cmd: bash nlp_predict.sh transformer_nist_wait_1 True 256 256
     kpis:
       exit_code:
         latest: True
@@ -144,7 +126,7 @@ PREDICT:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/log/test_module/EXIT_test_module_predict_True_5.log
+    output: $ROOT_PATH/$model_log_path/EXIT_transformer_nist_wait_1_predict_True_256_256.log
 
   -
     priority: p0
@@ -152,11 +134,11 @@ PREDICT:
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    # use_gpu, beam_width
+    # use_gpu, max_length, max_out_len
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh test_module True 5
+        cmd: bash nlp_predict.sh transformer_nist_wait_1 True 256 256
     kpis:
       exit_code:
         latest: True
@@ -165,7 +147,7 @@ PREDICT:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/log/test_module/EXIT_test_module_predict_True_5.log
+    output: $ROOT_PATH/$model_log_path/EXIT_transformer_nist_wait_1_predict_True_256_256.log
 
   -
     priority: p0
@@ -173,11 +155,11 @@ PREDICT:
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    # use_gpu, beam_width
+    # use_gpu, max_length, max_out_len
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh test_module False 5
+        cmd: bash nlp_predict.sh transformer_nist_wait_1 False 256 256
     kpis:
       exit_code:
         latest: True
@@ -186,7 +168,7 @@ PREDICT:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/log/test_module/EXIT_test_module_predict_False_5.log
+    output: $ROOT_PATH/$model_log_path/EXIT_transformer_nist_wait_1_predict_False_256_256.log
 
   -
     priority: p0
@@ -194,11 +176,11 @@ PREDICT:
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    # use_gpu, beam_width
+    # use_gpu, max_length, max_out_len
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh test_module False 5
+        cmd: bash nlp_predict.sh transformer_nist_wait_1 False 256 256
     kpis:
       exit_code:
         latest: True
@@ -207,7 +189,7 @@ PREDICT:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/log/test_module/EXIT_test_module_predict_False_5.log
+    output: $ROOT_PATH/$model_log_path/EXIT_transformer_nist_wait_1_predict_False_256_256.log
 
 #  -
 #    priority: p1
@@ -215,11 +197,11 @@ PREDICT:
 #    env: #去掉，自动调度
 #      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 #
-#    # use_gpu, beam_width
+#    # use_gpu, max_length, max_out_len
 #    run:
 #      -
 #        path: $ROOT_PATH/$model_scripts_path
-#        cmd: bash nlp_predict.sh test_module True 5
+#        cmd: bash nlp_predict.sh transformer_nist_wait_1 True 256 256
 #    kpis:
 #      exit_code:
 #        latest: True
@@ -228,7 +210,7 @@ PREDICT:
 #        actived: True
 #        evaluation: "-"
 #        unit_repr: None
-#    output: $ROOT_PATH/log/test_module/EXIT_test_module_predict_True_5.log
+#    output: $ROOT_PATH/$model_log_path/EXIT_transformer_nist_wait_1_predict_True_256_256.log
 
 UNINSTALL:
   -
@@ -237,13 +219,4 @@ UNINSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: hub uninstall ernie_gen
-
-UNINSTALL_DIY:
-  -
-    priority: p0
-    tag: uninstall_diy_module
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: hub uninstall test_module
+        cmd: hub uninstall transformer_nist_wait_1
