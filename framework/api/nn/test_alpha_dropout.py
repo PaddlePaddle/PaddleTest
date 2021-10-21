@@ -404,7 +404,7 @@ def test_alpha_dropout4():
     obj.run(res=res, data=x, p=p)
 
 
-@pytest.mark.api_nn_AlphaDropout_parameters
+@pytest.mark.api_nn_AlphaDropout_exception
 def test_alpha_dropout5():
     """
     check invalid p=-0.5
@@ -413,7 +413,7 @@ def test_alpha_dropout5():
     obj.exception(etype=ValueError, mode="python", data=x, p=-0.5)
 
 
-@pytest.mark.api_nn_AlphaDropout_parameters
+@pytest.mark.api_nn_AlphaDropout_exception
 def test_alpha_dropout6():
     """
     check invalid p=1.1
@@ -422,7 +422,7 @@ def test_alpha_dropout6():
     obj.exception(etype=ValueError, mode="python", data=x, p=1.1)
 
 
-@pytest.mark.api_nn_AlphaDropout_parameters
+@pytest.mark.api_nn_AlphaDropout_exception
 def test_alpha_dropout7():
     """
     check invalid p='0.7', p is a string
