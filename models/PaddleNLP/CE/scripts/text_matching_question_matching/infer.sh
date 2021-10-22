@@ -39,7 +39,7 @@ python -u predict.py \
     --batch_size 128 \
     --input_file ./data/test/public_test_A \
     --result_file "predict_result" > $log_path/infer_$1.log 2>&1
-print $? infer_$1.log
+print_info $? infer_$1
 
 
 #set http_proxy
