@@ -10,13 +10,14 @@ unset https_proxy
 cur_path=`pwd`
 model_name=${PWD##*/}
 
-echo "$model_name 模型预测阶段"
+echo "$model_name 模型预测阶段阶段"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/text_matching/question_matching
+code_path=$cur_path/../../models_repo/examples/text_to_knowledge/wordtag
 log_path=$root_path/log/$model_name/
 
+#访问RD程序
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
@@ -33,15 +34,6 @@ fi
 #访问RD程序
 cd $code_path
 
-python -u predict.py \
-    --device $1 \
-    --params_path "./checkpoints/single/model_80/model_state.pdparams" \
-    --batch_size 128 \
-    --input_file ./data/test/public_test_A \
-    --result_file "predict_result" > $log_path/infer_$1.log 2>&1
+python predict.py --max_seq_len 128 --batch_size 2 --device $1 > $log_path/infer_$1.log 2>&1
+
 print_info $? infer_$1
-
-
-#set http_proxy
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY

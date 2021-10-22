@@ -22,6 +22,16 @@ if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
 
+
+print_info(){
+if [ $1 -ne 0 ];then
+    cat ${log_path}/$2.log
+    echo "exit_code: 1.0" >> ${log_path}/$2.log
+else
+    echo "exit_code: 0.0" >> ${log_path}/$2.log
+fi
+}
+
 cd $code_path
 
 python -u -m paddle.distributed.launch --gpus $3 \
@@ -36,4 +46,6 @@ python -u -m paddle.distributed.launch --gpus $3 \
 	--epochs 1 \
 	--max_seq_length 512 \
 	--save_steps 100 \
+	--rdrop_coef $5 \
 	--language_model "ernie-1.0" > ${log_path}/train_$4_$2_$1.log 2>&1
+print_info $? train_$4_$2_$1

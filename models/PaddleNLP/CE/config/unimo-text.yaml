@@ -27,7 +27,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 3.0169
+        kpi_base: 2.7126
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -37,7 +37,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2
-
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -46,7 +45,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 3.0169
+        kpi_base: 3.4297
         threshold: 0.05
         actived: True
         evaluation: "-"
