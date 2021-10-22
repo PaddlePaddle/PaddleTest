@@ -225,16 +225,16 @@ else
    echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
 fi
 
-if [[ `expr $RANDOM % 2` -eq 0 ]] and [[ ${model_flag} =~ 'CI' ]];then #加入随机扰动
-   echo "model_clip"
-   python model_clip.py --path_prefix="./inference/$model" --output_model_path="./inference/$model" > $log_path/model_clip/$model.log 2>&1
-   if [ $? -eq 0 ];then
-      echo -e "\033[33m model_clip of $model  successfully!\033[0m"| tee -a $log_path/result.log
-   else
-      cat $log_path/model_clip/$model.log
-      echo -e "\033[31m model_clip of $model failed!\033[0m" | tee -a $log_path/result.log
-   fi
-fi
+# if [[ `expr $RANDOM % 2` -eq 0 ]] and [[ ${model_flag} =~ 'CI' ]];then #加入随机扰动
+#    echo "model_clip"
+#    python model_clip.py --path_prefix="./inference/$model/inference" --output_model_path="./inference/$model/inference" > $log_path/model_clip/$model.log 2>&1
+#    if [ $? -eq 0 ];then
+#       echo -e "\033[33m model_clip of $model  successfully!\033[0m"| tee -a $log_path/result.log
+#    else
+#       cat $log_path/model_clip/$model.log
+#       echo -e "\033[31m model_clip of $model failed!\033[0m" | tee -a $log_path/result.log
+#    fi
+# fi
 
 cd deploy
 if [[ ${model} =~ '384' ]] && [[ ! ${model} =~ 'LeViT' ]];then
