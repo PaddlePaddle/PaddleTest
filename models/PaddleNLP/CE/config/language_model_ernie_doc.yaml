@@ -10,7 +10,7 @@ VARIABLES:
   model_scripts_path: scripts/language_model_ernie_doc/ #脚本的路径
   model_log_path: log/language_model_ernie_doc/
   linux_nltk_data: /workspace/task/datasets/ernie-doc/nltk_data
-  win_nltk_data: D:\ce_data\paddleNLP\ernie_doc\nltk_data
+  win_nltk_data:  D:/ce_data/paddleNLP/ernie_doc/nltk_data
 
 EXEC:
   exec_cases: [CLASSIFIER_TRAIN, MRC_TRAIN, MCQ_TRAIN, SEMANTIC_TRAIN, SEQUENCE_TRAIN]
