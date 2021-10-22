@@ -11,7 +11,7 @@ VARIABLES:
   model_log_path: log/minilmv2/
 
 EXEC:
-  exec_cases: [DATA_PROC, FINETUNE, DISTILL]
+  exec_cases: [DATA_PROC, EVAL]
   exec_priority: [p0]
   exec_tag: $EXEC_TAG
 
@@ -25,7 +25,64 @@ DATA_PROC:
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
 
-FINETUNE: # 训练步骤
+FINETUNE: # 训练步骤，还未提测
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash finetune.sh $XPU 'single' $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.7138
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash finetune.sh $XPU 'multi' $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.7138
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: finetune.bat $XPU
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.7138
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/finetune_$XPU.log
+
+EVAL:
   -
     priority: p0
     tag: linux_dy_gpu1_AFQMC
@@ -34,37 +91,18 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'single'
+        cmd: bash eval.sh $XPU AFQMC
 
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 0.7138
-        threshold: 0.01
+        kpi_base: 0
+        threshold: 0
         actived: True
         evaluation: "-"
-        unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/finetune_AFQMC_single_$XPU.log
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_AFQMC_$XPU.log
 
-  -
-    priority: p0
-    tag: linux_dy_gpu2_AFQMC
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'multi' AFQMC
-
-    kpis: #kpi指标
-      loss:
-        latest: True
-        kpi_base: 0.7138
-        threshold: 0.01
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/finetune_AFQMC_multi_$XPU.log
 
   -
     priority: p0
@@ -74,17 +112,17 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: finetune.bat $XPU AFQMC
+        cmd: eval.bat $XPU AFQMC
 
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 0.7138
-        threshold: 0.01
+        kpi_base: 0
+        threshold: 0
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/finetune_AFQMC_$XPU.log
+    output: $ROOT_PATH/$model_log_path/eval_AFQMC_$XPU.log
 
   -
     priority: p0
@@ -94,37 +132,17 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'single'
+        cmd: bash eval.sh $XPU TNEWS
 
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 0.7138
-        threshold: 0.01
+        kpi_base: 0
+        threshold: 0
         actived: True
         evaluation: "-"
-        unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/finetune_TNEWS_single_$XPU.log
-
-  -
-    priority: p0
-    tag: linux_dy_gpu2_TNEWS
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'multi' TNEWS
-
-    kpis: #kpi指标
-      loss:
-        latest: True
-        kpi_base: 0.7138
-        threshold: 0.01
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/finetune_TNEWS_multi_$XPU.log
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_TNEWS_$XPU.log
 
   -
     priority: p0
@@ -134,14 +152,51 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: finetune.bat $XPU TNEWS
-
+        cmd: eval.bat $XPU TNEWS
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 0.7138
-        threshold: 0.01
+        kpi_base: 0
+        threshold: 0
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/finetune_TNEWS_$XPU.log
+    output: $ROOT_PATH/$model_log_path/eval_TNEWS_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_IFLYTEK
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash eval.sh $XPU IFLYTEK
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_IFLYTEK_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_IFLYTEK
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: eval.bat $XPU IFLYTEK
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_IFLYTEK_$XPU.log
