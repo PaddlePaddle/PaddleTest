@@ -1,5 +1,5 @@
 MODEL: "ViT_large_patch16_384" # 模型名
-PRIORITY: P3
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas

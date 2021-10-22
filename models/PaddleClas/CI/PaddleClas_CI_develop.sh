@@ -5,6 +5,15 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
+#$1 <-> model_flag CI是效率云 step1是clas分类 step2是clas分类 step3是识别，pr是TC，all是全量，single是单独模型debug
+#$2 <-> pr_num   随机跑pr的模型数
+#$3 <-> python   python版本
+#$4 <-> cudaid   cuda卡号
+#$5 <-> paddle_compile   paddle包地址
+#$6 <-> data_path   数据路径
+#$7 <-> single_yaml_debug  单独模型yaml字符
+#model_clip 根据日期单双数决定剪裁
+
 if [[ ${model_flag} =~ 'CI' ]]; then
    # data
    rm -rf dataset
@@ -132,7 +141,7 @@ cat models_list
 
 # dir
 log_path=log
-phases='train eval infer export_model predict'
+phases='train eval infer export_model model_clip predict'
 for phase in $phases
 do
 if [[ -d ${log_path}/${phase} ]]; then
@@ -207,7 +216,6 @@ if [[ ${line} =~ 'fp16' ]];then
    python tools/export_model.py -c $line -o Global.pretrained_model=output/$params_dir/latest -o Global.save_inference_dir=./inference/$model -o Arch.data_format="NCHW" > $log_path/export_model/$model.log 2>&1
 else
    python tools/export_model.py -c $line -o Global.pretrained_model=output/$params_dir/latest -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
-
 fi
 
 if [ $? -eq 0 ];then
@@ -215,6 +223,17 @@ if [ $? -eq 0 ];then
 else
    cat $log_path/export_model/$model.log
    echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
+fi
+
+if [[ `expr $RANDOM % 2` -eq 0 ]];then #加入随机扰动
+   echo "model_clip"
+   python model_clip.py --path_prefix="./inference/$model" --output_model_path="./inference/$model" > $log_path/model_clip/$model.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m model_clip of $model  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/model_clip/$model.log
+      echo -e "\033[31m model_clip of $model failed!\033[0m" | tee -a $log_path/result.log
+   fi
 fi
 
 cd deploy

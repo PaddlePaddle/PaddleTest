@@ -1,5 +1,5 @@
 MODEL: "SwinTransformer_large_patch4_window7_224" # 模型名
-PRIORITY: P3
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas

@@ -60,6 +60,8 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
 
    apt-get update
    apt-get install -y ffmpeg
+   apt-get install cmake -y
+   apt-get install gcc -y
 else
    # ppgan
    yum update -y
