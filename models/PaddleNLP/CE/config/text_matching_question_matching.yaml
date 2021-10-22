@@ -120,11 +120,11 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: infer.bat $XPU
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.05
+        kpi_base: 0
+        threshold: 0
         actived: True
         evaluation: "-"
-        unit_repr: "s"
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
