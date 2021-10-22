@@ -225,7 +225,7 @@ else
    echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
 fi
 
-if [[ `expr $RANDOM % 2` -eq 0 ]];then #加入随机扰动
+if [[ `expr $RANDOM % 2` -eq 0 ]] and [[ ${model_flag} =~ 'CI' ]];then #加入随机扰动
    echo "model_clip"
    python model_clip.py --path_prefix="./inference/$model" --output_model_path="./inference/$model" > $log_path/model_clip/$model.log 2>&1
    if [ $? -eq 0 ];then
