@@ -1,0 +1,167 @@
+MODEL: "simcse" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/simcse/ #脚本的路径
+  model_log_path: log/simcse/
+
+EXEC:
+  exec_cases: [DATA_PROC, TRAIN, INFER]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+TRAIN:
+  -
+    priority: p0
+    tag: linux_dy_gpu1_LCQMC
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA LCQMC
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.24024
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_LCQMC_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_BQ_Corpus
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA BQ_Corpus
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.24024
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_BQ_Corpus_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_STS-B
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA STS-B
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.24024
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_STS-B_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_ATEC
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA ATEC
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.24024
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_ATEC_$XPU.log
+
+
+INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1_LCQMC
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU $SET_CUDA LCQMC 80
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_LCQMC_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_BQ_Corpus
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU $SET_CUDA BQ_Corpus 80
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_BQ_Corpus_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_STS-B
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU $SET_CUDA STS-B 80
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_STS-B_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_ATEC
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU $SET_CUDA ATEC 80
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_ATEC_$XPU.log
