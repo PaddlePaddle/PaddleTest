@@ -32,7 +32,7 @@ fi
 #访问RD程序
 cd $code_path
 
-if [[ $2 == "faster" ]]; then
+if [ $2 == 'faster' ];then
     #  先编包
     cd ../../../paddlenlp/ops
     mkdir build
