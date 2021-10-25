@@ -1,0 +1,127 @@
+MODEL: "slim_st_sa_nas" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleSlim
+  path: $ROOT_PATH/PaddleSlim
+  branch: $slim_st_sa_nas_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/slim_st_sa_nas/ #脚本的路径
+  model_log_path: log/slim_st_sa_nas/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN,EVAL,EXPORT]
+  exec_priority: $EXEC_PRIORITY
+  exec_tag: $EXEC_TAG
+
+
+TRAIN: # 训练步骤
+  -
+    priority: p2
+    tag: linux_st_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu1 slim_st_sa_nas_linux_st_gpu1
+
+    kpis: #kpi指标
+      acc_top1:
+        latest: True
+        kpi_base: 0.4337
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      acc_top5:
+        latest: True
+        kpi_base: 0.79541
+        threshold: 0.8612
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_sa_nas_linux_st_gpu1.log
+
+  -
+    priority: p0
+    tag: linux_st_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu2 slim_st_sa_nas_linux_st_gpu2
+
+    kpis: #kpi指标
+      acc_top1:
+        latest: True
+        kpi_base: 0.4337
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      acc_top5:
+        latest: True
+        kpi_base: 0.79541
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    #output: $ROOT_PATH/$model_log_path/st_sa_nas_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/slim_st_sa_nas_linux_st_gpu2.log
+
+
+  -
+    priority: p2
+    tag: linux_st_cpu
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_cpu slim_st_sa_nas_linux_st_cpu
+
+    kpis: #kpi指标
+      acc_top1:
+        latest: True
+        kpi_base: 0.4337
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      acc_top5:
+        latest: True
+        kpi_base: 0.79541
+        threshold: 0.8612
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_st_sa_nas_linux_st_cpu.log

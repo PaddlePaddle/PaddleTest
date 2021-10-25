@@ -1,0 +1,102 @@
+MODEL: "SQuAD" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $SQuAD_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/SQuAD/ #脚本的路径
+  model_log_path: log/SQuAD/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN]
+  exec_priority: [p0,p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh gpu 1.1
+      -
+        path: $PROJECT_ROOT/utils
+        cmd: python process_log.py --log_path=$ROOT_PATH/$model_log_path/train_gpu_1.1.log --reg='"' --obj=""
+
+    kpis: #kpi指标
+      # exact:
+      #   latest: True
+      #   kpi_base: 61.9
+      #   threshold: 0.01
+      #   actived: True
+      #   evaluation: "-"
+      #   unit_repr: "s"
+      f1:
+        latest: True
+        kpi_base: 15.69993
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_gpu_1.1.log
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh gpu 2.0
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/train_gpu_2.0.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 5.847321
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_win_$XPU.log

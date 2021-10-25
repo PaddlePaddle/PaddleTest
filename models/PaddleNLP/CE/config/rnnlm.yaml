@@ -1,0 +1,90 @@
+MODEL: "rnnlm" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $rnnlm_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/rnnlm/ #脚本的路径
+  model_log_path: log/rnnlm/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN]
+  exec_priority: [p0,p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+  -
+    priority: p0
+    tag: mac_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc_mac.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU single $SET_CUDA
+
+    kpis: #kpi指标
+      Perplexity:
+        latest: True
+        kpi_base: 210.5817
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU multi $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      Perplexity:
+        latest: True
+        kpi_base: 214.1181
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: mac_dy_cpu
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_$XPU.log

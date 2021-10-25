@@ -1,0 +1,76 @@
+MODEL: "pointer_summarizer"
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/pointer_summarizer
+  branch: $BASE_BRANCH
+
+VARIABLES:
+  model_scripts_path: scripts/pointer_summarizer/ #脚本的路径
+  model_log_path: log/pointer_summarizer/
+
+EXEC:
+  exec_cases: [DATA_PROC, TRAIN]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
+
+TRAIN:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single'
+
+    kpis:
+      avg loss:
+        latest: True
+        kpi_base: 7.81670762
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_$XPU.log
+
+
+  -
+    priority: p1
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU
+
+    kpis:
+      avg loss:
+        latest: True
+        kpi_base: 7.81670762
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_$XPU.log

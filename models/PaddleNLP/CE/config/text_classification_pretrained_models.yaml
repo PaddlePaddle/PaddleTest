@@ -1,0 +1,190 @@
+MODEL: "text_classification_pretrained" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $TEXT_CLASSIFICATION_PRETRAINED_BRANCH
+
+VARIABLES:
+  model_scripts_path: scripts/text_classification_pretrained/ #脚本的路径
+  model_log_path: log/text_classification_pretrained/
+
+EXEC:
+  exec_cases: $EXEC_CASES
+  exec_priority: $EXEC_PRIORITY
+  exec_tag: $EXEC_TAG
+
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: "linux_dy_gpu1"
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU "single"
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.19159
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      accu:
+        latest: True
+        kpi_base: 0.93083
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_$XPU.log
+
+  -
+    priority: p1
+    tag: "linux_dy_gpu2"
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU "multi"
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.19222
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+
+      accu:
+        latest: True
+        kpi_base: 0.93000
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: "linux_dy_cpu"
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.18155
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+
+      accu:
+        latest: True
+        kpi_base: 0.95250
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_$XPU.log
+
+  -
+    priority: p0
+    tag: "win_dy_gpu1"
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.19388
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      accu:
+        latest: True
+        kpi_base: 0.93083
+        threshold: 0.01
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_$XPU.log
+
+INFER:
+  -
+    priority: p0
+    tag: "linux_dy_gpu1"
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU "single"
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_single_$XPU.log
+
+
+  -
+    priority: p1
+    tag: "linux_dy_gpu2"
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU "multi"
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: "win_dy_gpu1"
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log

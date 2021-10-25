@@ -31,6 +31,7 @@ class Runner(object):
             loss = paddle.mean(out)
             loss.backward()
             self.optimizer.step()
+            self.optimizer.clear_grad()
             if self.debug:
                 print(loss)
             self.result.append(loss.numpy()[0])

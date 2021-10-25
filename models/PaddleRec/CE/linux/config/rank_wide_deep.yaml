@@ -1,0 +1,573 @@
+MODEL: "rank_wide_deep" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleRec
+  path: $ROOT_PATH/PaddleRec
+  branch: $rank_wide_deep_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/rank_wide_deep/ #脚本的路径
+  model_log_path: log/rank_wide_deep/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN,INFER]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+#测试套
+DATA_PROC:
+  -
+    tag: linux_down_data
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh data_proc.sh criteo
+
+TRAIN: # 训练步骤
+  -
+    tag: linux_dy_gpu1  # dy_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_gpu1 rank_wide_deep_linux_dy_gpu1
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.795215
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 12100.89
+        threshold: 0.3
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_linux_dy_gpu1.log
+  -
+    tag: linux_dy_gpu2  # dy_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_gpu2 rank_wide_deep_linux_dy_gpu2
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.795215
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 12100.89
+        threshold: 0.3
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/rank_wide_deep_linux_dy_gpu2_dist_log/workerlog.0
+  -
+    tag: linux_dy_cpu   # dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_cpu rank_wide_deep_linux_dy_cpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.795215
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 12100.89
+        threshold: 0.3
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_linux_dy_cpu.log
+
+  -
+    tag: linux_st_gpu1  # st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu1 rank_wide_deep_linux_st_gpu1
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.795215
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 12100.89
+        threshold: 0.3
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_linux_st_gpu1.log
+  -
+    tag: linux_st_gpu2  # st_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu2 rank_wide_deep_linux_st_gpu2
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.795215
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 12100.89
+        threshold: 0.3
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/rank_wide_deep_linux_st_gpu2_dist_log/workerlog.0
+
+  -
+    tag: linux_st_cpu # st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_cpu rank_wide_deep_linux_st_cpu
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.795215
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 12100.89
+        threshold: 0.3
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_linux_st_cpu.log
+
+  -
+    tag: linux_dy_gpu1_con  # dy_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_gpu1_con rank_wide_deep_linux_dy_gpu1_con
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.795215
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 12100.89
+        threshold: 0.3
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_linux_dy_gpu1_con.log
+
+  -
+    tag: linux_st_gpu1_con  # dy_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu1_con rank_wide_deep_linux_st_gpu1_con
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.795215
+        threshold: 0.03
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 12100.89
+        threshold: 0.3
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_linux_st_gpu1_con.log
+
+INFER:
+  - #可以有多步
+    tag: linux_dy_gpu1
+    priority: p0
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_gpu1 rank_wide_deep_infer_linux_dy_gpu1
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.798696
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 530.16
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_infer_linux_dy_gpu1.log
+  -
+    tag: linux_dy_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_gpu2 rank_wide_deep_infer_linux_dy_gpu2
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.798696
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 530.16
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/rank_wide_deep_infer_linux_dy_gpu2_dist_log/workerlog.0
+  -
+    tag: linux_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_cpu rank_wide_deep_infer_linux_dy_cpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.798696
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 530.16
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_infer_linux_dy_cpu.log
+  - #可以有多步
+    tag: linux_st_gpu1
+    priority: p0
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_gpu1 rank_wide_deep_infer_linux_st_gpu1
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.798696
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 530.16
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_infer_linux_st_gpu1.log
+  -
+    tag: linux_st_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_gpu2 rank_wide_deep_infer_linux_st_gpu2
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.798696
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 530.16
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/rank_wide_deep_infer_linux_st_gpu2_dist_log/workerlog.0
+  -
+    tag: linux_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_cpu rank_wide_deep_infer_linux_st_cpu
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.798696
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 530.16
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_infer_linux_st_cpu.log
+
+  -
+    tag: linux_dy_gpu1_con
+    priority: p0
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_gpu1_con rank_wide_deep_infer_linux_dy_gpu1_con
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.798696
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 530.16
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_infer_linux_dy_gpu1_con.log
+
+  -
+    tag: linux_st_gpu1_con
+    priority: p0
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_gpu1_con rank_wide_deep_infer_linux_st_gpu1_con
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.798696
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      time:
+        latest: True
+        kpi_base: 530.16
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_wide_deep_infer_linux_st_gpu1_con.log
