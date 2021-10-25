@@ -309,7 +309,7 @@ def test_clip_grad_by_global_norm7():
         value range: [-10, 10]
 
     Changes:
-        input data dtype: float32 -> float16
+        input data dtype: float32 -> ['int8', 'int16', 'int32', 'float16']
 
     Expected Results:
         paddle.nn.ClipGradByGlobalNorm cann't accept input data with 'float16', raise RuntimeError.
@@ -317,9 +317,11 @@ def test_clip_grad_by_global_norm7():
     shape = [10, 10]
     length = 4
     clip_norm = 1.0
-    dtype = "float16"
-    np_data, paddle_data = generate_test_data(length, shape, dtype=dtype, value=10)
-
-    with pytest.raises(RuntimeError):
-        paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
-        paddle_clip(paddle_data)
+    unsupport_dtypes = ["int8", "int16", "int32", "float16"]
+    paddle_clip = paddle.nn.ClipGradByGlobalNorm(clip_norm=clip_norm)
+    for dtype in unsupport_dtypes:
+        np_data, paddle_data = generate_test_data(length, shape, dtype=dtype, value=10)
+        try:
+            paddle_clip(paddle_data)
+        except RuntimeError:
+            pass
