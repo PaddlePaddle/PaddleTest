@@ -94,10 +94,10 @@ EVAL:
         cmd: bash eval.sh $XPU AFQMC
 
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0
-        threshold: 0
+        kpi_base: 0.384716
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -115,10 +115,10 @@ EVAL:
         cmd: eval.bat $XPU AFQMC
 
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0
-        threshold: 0
+        kpi_base: 0.384716
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -135,10 +135,10 @@ EVAL:
         cmd: bash eval.sh $XPU TNEWS
 
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0
-        threshold: 0
+        kpi_base: 0.686274
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -154,10 +154,10 @@ EVAL:
         path: $ROOT_PATH/$model_scripts_path
         cmd: eval.bat $XPU TNEWS
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0
-        threshold: 0
+        kpi_base: 0.686274
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -173,10 +173,10 @@ EVAL:
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash eval.sh $XPU IFLYTEK
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0
-        threshold: 0
+        kpi_base: 2.995393
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -192,10 +192,10 @@ EVAL:
         path: $ROOT_PATH/$model_scripts_path
         cmd: eval.bat $XPU IFLYTEK
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0
-        threshold: 0
+        kpi_base: 2.995393
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: None
