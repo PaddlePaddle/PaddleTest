@@ -28,9 +28,10 @@ python -u ./run_clue.py \
     --batch_size 16   \
     --learning_rate 2e-5 \
     --num_train_epochs 1 \
-    --logging_steps 100 \
+    --logging_steps 10 \
     --seed 42 \
     --save_steps 100 \
+    --max_steps 100 \
     --warmup_proportion 0.1 \
     --weight_decay 0.01 \
     --adam_epsilon 1e-8 \
