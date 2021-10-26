@@ -31,7 +31,7 @@ if [[ ${model_flag} =~ 'CI' ]]; then
 fi
 
 
-if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
+if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
 
@@ -56,7 +56,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    python -c "import sys; print('python version:',sys.version_info[:])";
 
    apt-get update
-   apt-get install -y ffmpeg
+   apt-get install ffmpeg -y 
    apt-get install cmake -y
    apt-get install gcc -y
 
@@ -77,14 +77,16 @@ else
    yum install epel-release -y
    rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
    rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
-   yum install cmake boost -y
-   yum install opencv opencv-python opencv-devel python-devel numpy -y
+   yum install boost -y
+   yum install opencv -y
    yum install ffmpeg -y
    echo "######  ffmpeg"
    ffmpeg
    #install  dlib
-   yum install gcc gcc-c++
-   yum install cmake boost
+   yum install gcc -y
+   yum install cmake -y
+   echo "######  cmake"
+   cmake
 fi
 
 # python

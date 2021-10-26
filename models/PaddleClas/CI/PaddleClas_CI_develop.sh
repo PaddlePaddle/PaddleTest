@@ -5,8 +5,8 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
-#$1 <-> model_flag CI是效率云 step1是clas分类 step2是clas分类 step3是识别，
-#     pr是TC，all是全量，single是单独模型debug
+#$1 <-> model_flag CI是效率云 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
+#     pr是TC，clas是分类，rec是识别，single是单独模型debug
 #$2 <-> pr_num   随机跑pr的模型数
 #$3 <-> python   python版本
 #$4 <-> cudaid   cuda卡号
@@ -29,7 +29,7 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    cd ..
 fi
 
-if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
+if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
 
@@ -58,6 +58,8 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install $5 #paddle_compile
+   echo "######  paddle version"
+   python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 
    echo "######  ----ln  data-----"
    rm -rf dataset
@@ -137,7 +139,7 @@ elif [[ ${model_flag} =~ 'CI_step2' ]]; then
    fi
    done
 
-elif [[ ${model_flag} =~ 'all' ]] || [[ ${1} =~ 'clas_all' ]]; then
+elif [[ ${model_flag} =~ 'CI_all' ]] ; then #对应CI_ALL的情况
    shuf models_list_all > models_list
 
 fi
@@ -262,8 +264,8 @@ else
    echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
 fi
 
-# if [[ `expr $RANDOM % 2` -eq 0 ]] and [[ ${model_flag} =~ 'CI' ]];then #加入随机扰动
-if [[ ${model_flag} =~ 'CI' ]];then #加入随机扰动
+# if [[ `expr $RANDOM % 2` -eq 0 ]] && ([[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]]);then #加入随机扰动
+if [[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]];then #加入随机扰动
    echo "model_clip"
    python model_clip.py --path_prefix="./inference/$model/inference" \
       --output_model_path="./inference/$model/inference" \
@@ -345,7 +347,7 @@ fi
 cd ..
 done
 
-if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; then
+if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'CI_all' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; then
    echo "######  rec step"
    rm -rf models_list
 
@@ -360,7 +362,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; t
         shuf -n $2 models_list_rec > models_list
     elif [[ $1 =~ "rec_single" ]];then
         echo $7 > models_list
-    elif [[ $1 =~ "rec_all" ]] || [[ ${model_flag} =~ "CI_step3" ]];then
+    elif [[ ${model_flag} =~ "CI" ]];then
         shuf models_list_rec > models_list
     fi
     echo "######  rec models_list"
@@ -398,7 +400,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ $1 =~ 'pr' ]] || [[ $1 =~ 'rec' ]]; t
    \cp ppcls/data/dataloader/icartoon_dataset.py ppcls/data/dataloader/icartoon_dataset_org.py #保留原始文件
    \cp ppcls/data/dataloader/imagenet_dataset.py ppcls/data/dataloader/imagenet_dataset_org.py
    \cp ppcls/data/dataloader/vehicle_dataset.py ppcls/data/dataloader/vehicle_dataset_org.py
-   if [[ ! ${model_flag} =~ 'CI_step3' ]]; then #全量不修改
+   if [[ ! ${model_flag} =~ 'CI' ]]; then #全量不修改
       # # small data
       # # icartoon_dataset
       sed -ie '/self.images = self.images\[:2000\]/d'  \ppcls/data/dataloader/icartoon_dataset.py
