@@ -1,0 +1,38 @@
+MODEL: "wordtag" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $GLUE_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/wordtag/ #脚本的路径
+  model_log_path: log/wordtag/
+
+EXEC:
+  exec_cases: [INFER]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+INFER: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
