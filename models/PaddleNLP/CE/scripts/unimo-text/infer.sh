@@ -32,7 +32,7 @@ fi
 #访问RD程序
 cd $code_path
 
-if [[ $2 == "faster" ]]; then
+if [ $2 == 'faster' ];then
     #  先编包
     cd ../../../paddlenlp/ops
     mkdir build
@@ -66,7 +66,7 @@ else
         --do_predict \
         --max_dec_len=20 \
         --min_dec_len=3 \
-        --device=gpu >$log_path/infer_$2_$1.log 2>&1
+        --device=$1 >$log_path/infer_$2_$1.log 2>&1
     print_info $? infer_$2_$1
 fi
 

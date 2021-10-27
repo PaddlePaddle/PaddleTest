@@ -35,7 +35,7 @@ cd $code_path
 
 python -u predict.py \
     --device $1 \
-    --params_path "./checkpoints/single/model_80/model_state.pdparams" \
+    --params_path "./checkpoints/single/model_50/model_state.pdparams" \
     --batch_size 128 \
     --input_file ./data/test/public_test_A \
     --result_file "predict_result" > $log_path/infer_$1.log 2>&1
