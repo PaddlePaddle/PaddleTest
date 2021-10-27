@@ -32,8 +32,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.68490
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -51,8 +51,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.43566
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -112,8 +112,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.69870
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -279,7 +279,7 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.652548
+        kpi_base: 1.704417
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -298,7 +298,7 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.598245
+        kpi_base: 0.573542
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -359,7 +359,7 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.597534
+        kpi_base: 1.663830
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -524,8 +524,8 @@ SEMANTIC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.75040
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -543,8 +543,8 @@ SEMANTIC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.73117
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -585,7 +585,7 @@ SEQUENCE_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.690129
+        kpi_base: 0.638697
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -604,7 +604,7 @@ SEQUENCE_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.380492
+        kpi_base: 0.322155
         threshold: 0.05
         actived: True
         evaluation: "-"
