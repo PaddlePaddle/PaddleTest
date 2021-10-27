@@ -32,9 +32,6 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
-@pytest.mark.jetson
-@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config
@@ -47,25 +44,9 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
-@pytest.mark.config_disablegpu_memory
-def test_disable_gpu():
-    """
-    test no gpu resources occupied after disable gpu
-    """
-    check_model_exist()
-    test_suite = InferenceTest()
-    test_suite.load_config(
-        model_file="./ocr_det_mv3_db/inference.pdmodel", params_file="./ocr_det_mv3_db/inference.pdiparams"
-    )
-    batch_size = 1
-    fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
-    input_data_dict = {"x": fake_input}
-    test_suite.disable_gpu_test(input_data_dict)
-
-
+@pytest.mark.win
 @pytest.mark.server
-@pytest.mark.trt_fp16_more_bz_precision
+@pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
     compared trt fp16 batch_size=1-10 ocr_det_mv3_db outputs with true val
@@ -167,10 +148,9 @@ def test_trt_fp16_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
 @pytest.mark.jetson
-@pytest.mark.trt_fp16_more_bz_precision
-def test_trt_fp16_more_bz():
+@pytest.mark.trt_fp16
+def test_jetson_trt_fp16_more_bz():
     """
     compared trt fp16 batch_size=1-10 ocr_det_mv3_db outputs with true val
     """
@@ -178,7 +158,7 @@ def test_trt_fp16_more_bz():
 
     file_path = "./ocr_det_mv3_db"
     images_size = 640
-    batch_size_pool = [1, 2]
+    batch_size_pool = [1]
     max_batch_size = 10
     names = [
         "x",
@@ -271,8 +251,9 @@ def test_trt_fp16_more_bz():
         del test_suite2  # destroy class to save memory
 
 
+@pytest.mark.win
 @pytest.mark.server
-@pytest.mark.trt_fp16_multi_thread_bz1_precision
+@pytest.mark.trt_fp16_multi_thread
 def test_trtfp16_bz1_multi_thread():
     """
     compared trt fp16 batch_size=1 ocr_det_mv3_db multi_thread outputs with true val
