@@ -1,5 +1,11 @@
 export FLAGS_call_stack_level=2
-cases="test_ernie.py"
+cases="test_bert_gpu.py \
+       test_bert_mkldnn.py \
+       test_ernie_gpu.py \
+       test_ernie_mkldnn.py \
+       test_ernie_trt_fp16.py \
+       test_ernie_trt_fp32.py
+      "
 bug=0
 
 echo "============ failed cases =============" >> result.txt

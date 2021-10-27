@@ -9,6 +9,8 @@ GIT:
 VARIABLES:
   model_scripts_path: scripts/language_model_ernie_doc/ #脚本的路径
   model_log_path: log/language_model_ernie_doc/
+  linux_nltk_data: /workspace/task/datasets/ernie-doc/nltk_data
+  win_nltk_data:  D:/ce_data/paddleNLP/ernie_doc/nltk_data
 
 EXEC:
   exec_cases: [CLASSIFIER_TRAIN, MRC_TRAIN, MCQ_TRAIN, SEMANTIC_TRAIN, SEQUENCE_TRAIN]
@@ -22,6 +24,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: linux_dy_gpu1_imdb
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -29,8 +32,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.68490
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -39,6 +42,8 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_imdb
+    env: #去掉，自动调度
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -46,8 +51,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.43566
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -58,11 +63,11 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: win_dy_gpu1_imdb
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: classifier.bat $XPU ernie-doc-base-en imdb
-
     kpis: #kpi指标
       loss:
         latest: True
@@ -78,6 +83,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: linux_dy_gpu1_hyp
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -96,6 +102,8 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_hyp
+    env:
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -104,8 +112,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.69870
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -116,6 +124,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: win_dy_gpu1_hyp
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -136,6 +145,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: linux_dy_gpu1_iflytek
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -144,8 +154,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 4.18687
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -154,6 +164,8 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_iflytek
+    env:
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -162,8 +174,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 3.99273
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -174,6 +186,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: win_dy_gpu1_iflytek
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -194,6 +207,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: linux_dy_gpu1_thucnews
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+      NLTK_DATA: $linux_nltk_data
+    run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-zh thucnews
@@ -201,8 +216,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 2.41917
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -211,6 +226,8 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_thucnews
+    env:
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -219,8 +236,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 2.41504
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -231,6 +248,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     tag: win_dy_gpu1_thucnews
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -249,66 +267,71 @@ CLASSIFIER_TRAIN: # 训练步骤
 MRC_TRAIN:
   -
     priority: p0
-    tag: linux_dy_gpu1_duredear-robust
+    tag: linux_dy_gpu1_dureader_robust
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA ernie-doc-base-zh duredear-robust
+        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA ernie-doc-base-zh dureader_robust
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_single_duredear-robust_$XPU.log
-  -
-    priority: p0
-    tag: linux_dy_gpu2_duredear-robust
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh duredear-robust
-
-    kpis: #kpi指标
-      loss:
-        latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_multi_duredear-robust_$XPU.log
-
-  -
-    priority: p0
-    tag: win_dy_gpu1_duredear-robust
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: reading_cmp.bat $XPU ernie-doc-base-zh duredear-robust
-
-    kpis: #kpi指标
-      loss:
-        latest: True
-        kpi_base: 0.522773
+        kpi_base: 1.704417
         threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_duredear-robust_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_single_dureader_robust_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_gpu2_dureader_robust
+    env:
+      NLTK_DATA: $linux_nltk_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh dureader_robust
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.573542
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_dureader_robust_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_dureader_robust
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: reading_cmp.bat $XPU ernie-doc-base-zh dureader_robust
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.266915
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_dureader_robust_$XPU.log
 
   -
     priority: p0
     tag: linux_dy_gpu1_drcd
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -317,8 +340,8 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 3.772181
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -326,6 +349,8 @@ MRC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu2_drcd
+    env:
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -334,8 +359,8 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 1.663830
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -346,6 +371,7 @@ MRC_TRAIN:
     tag: win_dy_gpu1_drcd
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -354,7 +380,7 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
+        kpi_base: 6.152804
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -366,6 +392,7 @@ MRC_TRAIN:
     tag: linux_dy_gpu1_cmrc2018
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -374,8 +401,8 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 1.93235
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -383,6 +410,8 @@ MRC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu2_cmrc2018
+    env:
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -391,8 +420,8 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 1.997002
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -403,6 +432,7 @@ MRC_TRAIN:
     tag: win_dy_gpu1_cmrc2018
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -411,7 +441,7 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
+        kpi_base: 6.253108
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -424,47 +454,51 @@ MCQ_TRAIN:
     tag: linux_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash single_choice.sh $XPU "single" $SET_CUDA ernie-doc-base-zh C3
+        cmd: bash single_choice.sh $XPU "single" $SET_CUDA ernie-doc-base-zh c3
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 1.38241
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_single_C3_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_single_c3_$XPU.log
   -
     priority: p0
     tag: linux_dy_gpu2
+    env:
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash single_choice.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh C3
+        cmd: bash single_choice.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh c3
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 1.38194
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_multi_C3_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_multi_c3_$XPU.log
 
   -
     priority: p0
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: single_choice.bat $XPU ernie-doc-base-zh C3
+        cmd: single_choice.bat $XPU ernie-doc-base-zh c3
     kpis: #kpi指标
       loss:
         latest: True
@@ -473,7 +507,7 @@ MCQ_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_C3_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_c3_$XPU.log
 
 SEMANTIC_TRAIN:
   -
@@ -481,47 +515,51 @@ SEMANTIC_TRAIN:
     tag: linux_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash semantic.sh $XPU "single" $SET_CUDA ernie-doc-base-zh CAIL2019-SCM
+        cmd: bash semantic.sh $XPU "single" $SET_CUDA ernie-doc-base-zh cail2019_scm
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.75040
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_single_CAIL2019-SCM_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_single_cail2019_scm_$XPU.log
   -
     priority: p0
     tag: linux_dy_gpu2
+    env:
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash semantic.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh CAIL2019-SCM
+        cmd: bash semantic.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh cail2019_scm
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.73117
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_multi_CAIL2019-SCM_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_multi_cail2019_scm_$XPU.log
 
   -
     priority: p0
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: semantic.bat $XPU ernie-doc-base-zh CAIL2019-SCM
+        cmd: semantic.bat $XPU ernie-doc-base-zh cail2019_scm
     kpis: #kpi指标
       loss:
         latest: True
@@ -530,7 +568,7 @@ SEMANTIC_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_CAIL2019-SCM_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_cail2019_scm_$XPU.log
 
 SEQUENCE_TRAIN:
   -
@@ -538,47 +576,51 @@ SEQUENCE_TRAIN:
     tag: linux_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash sequence.sh $XPU "single" $SET_CUDA ernie-doc-base-zh MSRA-NER
+        cmd: bash sequence.sh $XPU "single" $SET_CUDA ernie-doc-base-zh msra_ner
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.638697
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_single_MSRA-NER_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_single_msra_ner_$XPU.log
   -
     priority: p0
     tag: linux_dy_gpu2
+    env:
+      NLTK_DATA: $linux_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash sequence.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh MSRA-NER
+        cmd: bash sequence.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh msra_ner
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.322155
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_multi_MSRA-NER_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_multi_msra_ner_$XPU.log
 
   -
     priority: p0
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+      NLTK_DATA: $win_nltk_data
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sequence.bat $XPU ernie-doc-base-zh MSRA-NER
+        cmd: sequence.bat $XPU ernie-doc-base-zh msra_ner
     kpis: #kpi指标
       loss:
         latest: True
@@ -587,4 +629,4 @@ SEQUENCE_TRAIN:
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_MSRA-NER_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_msra_ner_$XPU.log
