@@ -23,7 +23,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU 'single' $SET_CUDA iflytek 0.7
+        cmd: bash train.sh $XPU 'single' $SET_CUDA iflytek 0
 
     kpis: #kpi指标
       loss:
@@ -48,7 +48,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: train.bat $XPU $SET_CUDA iflytek 0.7
+        cmd: train.bat $XPU $SET_CUDA iflytek 0
 
     kpis: #kpi指标
       loss:
@@ -78,7 +78,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.38998
+        kpi_base: 4.28092
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -267,7 +267,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU 'single' $SET_CUDA csldcp 0.3
+        cmd: bash train.sh $XPU 'single' $SET_CUDA csldcp 0
 
     kpis: #kpi指标
       loss:
@@ -292,7 +292,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: train.bat $XPU $SET_CUDA csldcp 0.3
+        cmd: train.bat $XPU $SET_CUDA csldcp 0
 
     kpis: #kpi指标
       loss:

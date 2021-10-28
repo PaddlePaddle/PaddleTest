@@ -26,6 +26,13 @@ DATA_PROC:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh data_proc.sh
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: compile_package.bat
 
 TRAIN: # 训练步骤
   -

@@ -621,7 +621,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: infer.bat $XPU $SET_CUDA csldcp 134
+        cmd: infer.bat $XPU $SET_CUDA csldcp 268
     kpis:
       exit_code:
         latest: True
