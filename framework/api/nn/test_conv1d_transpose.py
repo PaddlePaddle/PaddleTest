@@ -540,7 +540,7 @@ def test_conv1d_transpose12():
 @pytest.mark.api_nn_Conv1D_Transpose_parameters
 def test_conv1d_transpose13():
     """
-    padding_mode = "zeros" dilation = [2]
+    dilation = (2,)
     """
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4])
@@ -549,39 +549,10 @@ def test_conv1d_transpose13():
     kernel_size = [3]
     stride = 1
     padding = 1
-    dilation = [2]
-    padding_mode = "zeros"
-    res = np.array([[[1.6100, 1.9365]], [[1.5691, 1.7079]]])
-    obj.run(
-        res=res,
-        data=x,
-        in_channels=in_channels,
-        out_channels=out_channels,
-        kernel_size=kernel_size,
-        stride=stride,
-        padding=padding,
-        padding_mode=padding_mode,
-        dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
-    )
-
-
-@pytest.mark.api_nn_Conv1D_Transpose_parameters
-def test_conv1d_transpose14():
-    """
-    padding_mode = "zeros" dilation = (2, 2)
-    """
-    np.random.seed(obj.seed)
-    x = randtool("float", 0, 1, [2, 3, 4])
-    in_channels = 3
-    out_channels = 1
-    kernel_size = [3]
-    stride = [1]
-    padding = 1
     dilation = (2,)
-    padding_mode = "zeros"
-    res = np.array([[[1.6100, 1.9365]], [[1.5691, 1.7079]]])
+    res = np.array([[[0.48512244, 1.9364898, 1.6099877, 1.9364898, 1.6099877, 0.67694026]],
+
+                    [[0.46526742,1.707906,  1.5691025, 1.707906,  1.5691025, 0.5311621]]])
     obj.run(
         res=res,
         data=x,
@@ -590,17 +561,17 @@ def test_conv1d_transpose14():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        padding_mode=padding_mode,
         dilation=dilation,
         weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
         bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
     )
+
 
 
 @pytest.mark.api_nn_Conv1D_Transpose_parameters
 def test_conv1d_transpose15():
     """
-    padding_mode = "zeros" dilation = (2, 2)  padding = (1, 2)
+     dilation = (2, 2)  padding = (1, 2)
     """
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 2])
@@ -610,8 +581,8 @@ def test_conv1d_transpose15():
     stride = 1
     padding = (1,)
     dilation = (2,)
-    padding_mode = "zeros"
-    res = np.array([[[1.6100, 1.9365]], [[1.5691, 1.7079]]])
+    res = np.array([[[0.32672048,0.77089256, 0.32672048, 0.77089256]],
+                    [[0.9832671, 0.8655973, 0.9832671, 0.8655973]]])
     obj.run(
         res=res,
         data=x,
@@ -620,38 +591,8 @@ def test_conv1d_transpose15():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        padding_mode=padding_mode,
         dilation=dilation,
         weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
         bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
     )
 
-
-@pytest.mark.api_nn_Conv1D_Transpose_parameters
-def test_conv1d_transpose16():
-    """
-    padding_mode = "zeros" dilation = (2, 2)  padding = [1, 2]
-    """
-    np.random.seed(obj.seed)
-    x = randtool("float", 0, 1, [2, 3, 4])
-    in_channels = 3
-    out_channels = 1
-    kernel_size = [3]
-    stride = [1]
-    padding = [1]
-    dilation = (2,)
-    padding_mode = "zeros"
-    res = np.array([[[1.6100, 1.9365]], [[1.5691, 1.7079]]])
-    obj.run(
-        res=res,
-        data=x,
-        in_channels=in_channels,
-        out_channels=out_channels,
-        kernel_size=kernel_size,
-        stride=stride,
-        padding=padding,
-        padding_mode=padding_mode,
-        dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
-    )
