@@ -1,4 +1,4 @@
-MODEL: "ViT_large_patch16_384" # 模型名
+MODEL: "ViT_small_patch16_224" # 模型名
 PRIORITY: P1
 GIT:
   addr: $REPO_PaddleClas
@@ -9,7 +9,7 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: scripts/ViT_large_patch16_384/ #脚本的路径
+  model_scripts_path: scripts/ViT_small_patch16_224/ #脚本的路径
   model_log_path: log
 
 EXEC:
@@ -37,7 +37,7 @@ TRAIN: # 训练步骤
         threshold: 0.5
         actived: True
         evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/ViT_large_patch16_384_1card.log
+    output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_1card.log
   -
     priority: P1  # dy_gpu1
     tag: linux_dy_gpu2
@@ -56,4 +56,4 @@ TRAIN: # 训练步骤
         threshold: 0.5
         actived: True
         evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/ViT_large_patch16_384_2card.log
+    output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_2card.log
