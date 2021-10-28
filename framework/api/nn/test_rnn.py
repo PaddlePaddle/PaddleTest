@@ -23,7 +23,7 @@ class TestRNN(APIBase):
         """
         implement
         """
-        self.types = ["float32"]
+        self.types = [np.float32]
         self.seed = 100
         self.delta = 0.0001
         self.forward_kwargs = {}  # 前向传播参数
@@ -203,7 +203,7 @@ class TestRNN64(TestRNN):
         """
         implement
         """
-        self.types = ["float64"]
+        self.types = [np.float64]
         self.seed = 100
         self.delta = 0.0001
         self.forward_kwargs = {}  # 前向传播参数
