@@ -271,3 +271,17 @@ def test_upsampling_bilinear2d_9():
     obj.exception(
         etype=ValueError, mode="python", data=x, size=size, scale_factor=scale_factor, data_format=data_format
     )
+    
+      
+@pytest.mark.api_nn_UpsamplingBilinear2D_exception
+def test_upsampling_bilinear2d_10():
+    """
+    ValueError: Only one of size or scale_factor should be defined.
+    """
+    x = randtool("float", low=-10, high=10, shape=[4, 5, 6, 7])
+    size = [10, 10]
+    scale_factor = [4.0, 5.0]
+    data_format = "NCHW"
+    obj.exception(
+        etype=ValueError, mode="python", data=x, size=size, scale_factor=scale_factor, data_format=data_format
+    )
