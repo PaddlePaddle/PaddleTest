@@ -23,7 +23,7 @@ class TestBiRNN(APIBase):
         """
         implement
         """
-        self.types = ["float32"]
+        self.types = [np.float32]
         self.seed = 100
         self.delta = 0.0001
         self.forward_kwargs = {}  # 前向传播参数
@@ -74,7 +74,7 @@ class TestBiRNN(APIBase):
 
                     for k, v in static_cell_fw.named_parameters():
                         v.set_value(parameters_fw[k])
-                    for k, v in static_cell_fw.named_parameters():
+                    for k, v in static_cell_bw.named_parameters():
                         v.set_value(parameters_bw[k])
 
                     res = exe.run(main_program, feed=data, fetch_list=[output, h, g], return_numpy=True)
@@ -86,7 +86,7 @@ class TestBiRNN(APIBase):
 
                     for k, v in static_cell_fw.named_parameters():
                         v.set_value(parameters_fw[k])
-                    for k, v in static_cell_fw.named_parameters():
+                    for k, v in static_cell_bw.named_parameters():
                         v.set_value(parameters_bw[k])
 
                     res = exe.run(main_program, feed=data, fetch_list=[output, h], return_numpy=True)
@@ -122,50 +122,52 @@ def copy_cell_params(np_cell, paddle_cell, dtype="float32"):
     return paddle_cell
 
 
+def create_cell(input_size, hidden_size):
+    """
+    update
+    """
+    np_cell_fw = SimpleRNNCell(input_size, hidden_size)
+    np_cell_bw = SimpleRNNCell(input_size, hidden_size)
+    paddle_cell_fw = paddle.nn.SimpleRNNCell(input_size, hidden_size)
+    paddle_cell_bw = paddle.nn.SimpleRNNCell(input_size, hidden_size)
+
+    paddle_cell_fw = copy_cell_params(np_cell_fw, paddle_cell_fw)
+    paddle_cell_bw = copy_cell_params(np_cell_bw, paddle_cell_bw)
+
+    return np_cell_fw, np_cell_bw, paddle_cell_fw, paddle_cell_bw
+
+
 @pytest.mark.api_nn_RNN_vartype
 def test_rnn_base():
     """
     base测试，包括动态度、静态图、cpu/gpu，grad，动态静态图的结果一致性
     """
-    paddle.set_default_dtype("float32")
     np.random.seed(obj.seed)
     inputs = np.random.random((3, 3, 4))
-    np_cell_fw = SimpleRNNCell(4, 8)
-    np_cell_bw = SimpleRNNCell(4, 8)
+    np_cell_fw, np_cell_bw, paddle_cell_fw, paddle_cell_bw = create_cell(4, 8)
     rnn = BiRNN(cell_fw=np_cell_fw, cell_bw=np_cell_bw)
     res_outputs = rnn(inputs)[0]
     res = res_outputs.astype("float32")
+    obj.base(res, data=inputs, cell_fw=paddle_cell_fw, cell_bw=paddle_cell_bw)
+
+
+@pytest.mark.api_nn_RNN_parameters
+def test_rnn1():
+    """
+    测试默认参数
+    """
+    paddle.set_default_dtype("float32")
     paddle.disable_static()
-    cell_fw = paddle.nn.SimpleRNNCell(4, 8)
-    cell_bw = paddle.nn.SimpleRNNCell(4, 8)
-    cell_fw = copy_cell_params(np_cell_fw, cell_fw)
-    cell_bw = copy_cell_params(np_cell_bw, cell_bw)
+    # numpy
+    np.random.seed(obj.seed)
+    inputs = np.random.random((10, 8, 16))
+    np_cell_fw, np_cell_bw, paddle_cell_fw, paddle_cell_bw = create_cell(16, 32)
+    rnn = BiRNN(cell_fw=np_cell_fw, cell_bw=np_cell_bw)
+    res_outputs = rnn(inputs)[0]
+    res = res_outputs.astype("float32")
+    obj.run(res, data=inputs, cell_fw=paddle_cell_fw, cell_bw=paddle_cell_bw)
 
-    obj.base(res, data=inputs, cell_fw=cell_fw, cell_bw=cell_bw)
 
-
-#
-# @pytest.mark.api_nn_RNN_parameters
-# def test_rnn1():
-#     """
-#     测试默认参数
-#     """
-#     paddle.set_default_dtype("float32")
-#     # numpy
-#     np.random.seed(obj.seed)
-#     inputs = np.random.random((10, 8, 16))
-#     np_cell = SimpleRNNCell(16, 32)
-#     rnn = BiRNN(cell=np_cell)
-#     res_outputs, res_final_states = rnn(inputs)
-#     res = [res_outputs.astype("float32"), res_final_states.astype("float32")]
-#
-#     paddle.disable_static()
-#
-#     cell = paddle.nn.SimpleRNNCell(16, 32)
-#     cell = copy_cell_params(np_cell, cell)
-#     obj.run(res, data=inputs, cell=cell)
-#
-#
 # @pytest.mark.apt_nn_RNN_parameters
 # def test_rnn2():
 #     """
