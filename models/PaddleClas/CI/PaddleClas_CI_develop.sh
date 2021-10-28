@@ -103,7 +103,7 @@ rm -rf models_list_all
 rm -rf models_list_rec
 
 find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; \
-   | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'distill' \
+   | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' |  grep -v 'fp16' |grep -v 'distill' \
    > models_list_all
 
 if [[ ${model_flag} =~ 'CI_step1' ]]; then

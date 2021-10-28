@@ -8,6 +8,13 @@ rm -rf dataset
 ln -s ${Data_path} dataset
 mkdir log
 python -m pip install -r requirements.txt
-python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml -o Global.epochs=2 -o DataLoader.Train.sampler.shuffle=False -o DataLoader.Train.sampler.batch_size=4 -o DataLoader.Eval.sampler.batch_size=4 > log/resnet50_1card.log 2>&1
-cat log/resnet50_1card.log | grep Train | grep Avg | grep 'Epoch 2/2' > ../log/resnet50_1card.log
+python  tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml  \
+    -o Global.epochs=5  \
+    -o Global.seed=1234 \
+    -o DataLoader.Train.loader.num_workers=0 \
+    -o DataLoader.Train.sampler.shuffle=False  \
+    -o Global.eval_during_train=False  \
+    -o Global.save_interval=5 \
+    -o DataLoader.Train.sampler.batch_size=4  > log/resnet50_1card.log 2>&1
+cat log/resnet50_1card.log | grep Train | grep Avg | grep 'Epoch 5/5' > ../log/resnet50_1card.log
 cat log/resnet50_1card.log

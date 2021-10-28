@@ -73,6 +73,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'single' ]]; then #model_flag
 
 else
    # ppgan
+   echo "######  ffmpeg"
    yum update -y
    yum install epel-release -y
    rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
@@ -80,13 +81,18 @@ else
    yum install boost -y
    yum install opencv -y
    yum install ffmpeg -y
-   echo "######  ffmpeg"
    ffmpeg
    #install  dlib
+   echo "######  gcc"
    yum install gcc -y
-   yum install cmake -y
+   yum install centos-release-scl -y
+   yum install devtoolset-8-gcc -y
+   ls /opt/rh/devtoolset-8/enable
+   source /opt/rh/devtoolset-8/enable
+   gcc -v
    echo "######  cmake"
-   cmake
+   yum install cmake -y
+   cmake -version
 fi
 
 # python
@@ -120,7 +126,9 @@ python -m pip install  dlib \
    -i https://mirror.baidu.com/pypi/simple
 # python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
+python -c 'import dlib'
 echo "######  install done "
+
 
 pip list
 echo "######  pip list"
