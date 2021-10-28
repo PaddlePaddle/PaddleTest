@@ -569,7 +569,7 @@ def test_conv1d_transpose13():
 
 
 @pytest.mark.api_nn_Conv1D_Transpose_parameters
-def test_conv1d_transpose15():
+def test_conv1d_transpose14():
     """
      dilation = (2, 2)  padding = (1, 2)
     """
