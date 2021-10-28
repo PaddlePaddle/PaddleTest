@@ -847,7 +847,7 @@ python -m paddle.distributed.launch \
           --pruning_steps 100 \
           --stable_epochs 0 \
           --pruning_epochs 54 \
-          --tunning_epochs 54 \ResNet50
+          --tunning_epochs 54 \
           --last_epoch -1 \
           --pruning_strategy gmp \
           --skip_params_type exclude_conv1x1 ${log_path}/dy_unstructured_prune_ratio_gmp 2>&1
