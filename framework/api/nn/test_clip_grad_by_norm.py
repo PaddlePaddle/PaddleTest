@@ -262,10 +262,10 @@ def test_clip_grad_by_norm6():
     shape = [10, 10]
     length = 5
     clip_norm = 1.0
-    unsupport_dtype = ["int8", "int16", "int32", "float16", "float64"]
+    unsupport_dtype = ["int8", "int16", "int32", "float16"]
 
-    for dtype in unsupport_dtype:
-        with pytest.raises(RuntimeError):
+    with pytest.raises(RuntimeError):
+        for dtype in unsupport_dtype:
             paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
             np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
             paddle_clip(paddle_data)
