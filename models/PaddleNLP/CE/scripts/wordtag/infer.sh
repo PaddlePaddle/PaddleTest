@@ -14,7 +14,7 @@ echo "$model_name 模型预测阶段阶段"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/text_to_knowledge/wordtag/
+code_path=$cur_path/../../models_repo/examples/text_to_knowledge/wordtag
 log_path=$root_path/log/$model_name/
 
 #访问RD程序

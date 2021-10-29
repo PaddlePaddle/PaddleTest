@@ -13,7 +13,6 @@ sentencepiece
 termcolor
 gensim
 tqdm
-pgl >= 2.1
 nltk
 easydict
 multiprocess
@@ -24,6 +23,6 @@ pyrouge
 nltk
 chardet
 tqdm
-re
 beautifulsoup4
 bs4
+pgl >= 2.1

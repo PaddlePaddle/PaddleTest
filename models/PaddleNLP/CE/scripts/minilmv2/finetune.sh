@@ -17,30 +17,39 @@ if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
 
-#访问RD程序
+print_info(){
+if [ $1 -ne 0 ];then
+    cat ${log_path}/$2.log
+    echo "exit_code: 1.0" >> ${log_path}/$2.log
+else
+    echo "exit_code: 0.0" >> ${log_path}/$2.log
+fi
+}
+
 cd $code_path
 
-pretrained_models="10w"
-TASK_NAME=AFQMC
-max_seq_len=128
-num_train_epochs=3
-learning_rate=2e-5
+python -m paddle.distributed.launch --gpus $3 general_distill.py \
+  --student_model_type tinybert \
+  --num_relation_heads 48 \
+  --student_model_name_or_path tinybert-6l-768d-zh \
+  --init_from_student False \
+  --teacher_model_type bert \
+  --teacher_model_name_or_path bert-base-chinese \
+  --max_seq_length 128 \
+  --batch_size 256 \
+  --learning_rate 6e-4 \
+  --logging_steps 10 \
+  --max_steps 30 \
+  --warmup_steps 4000 \
+  --save_steps 10 \
+  --teacher_layer_index 11 \
+  --student_layer_index 5 \
+  --weight_decay 1e-2 \
+  --output_dir ./pretrain \
+  --device $1 \
+  --input_dir ./data > $log_path/finetune_$2_$1.log 2>&1
 
-python -u ./run_clue.py \
-    --model_type tinybert  \
-    --model_name_or_path ${pretrained_models} \
-    --task_name ${TASK_NAME} \
-    --max_seq_length ${max_seq_len} \
-    --batch_size 16   \
-    --learning_rate ${learning_rate} \
-    --num_train_epochs ${num_train_epochs} \
-    --logging_steps 100 \
-    --seed 42  \
-    --save_steps  100 \
-    --warmup_proportion 0.1 \
-    --weight_decay 0.01 \
-    --adam_epsilon 1e-8 \
-    --device $1 > $log_path/finetune_${TASK_NAME}_$2_$1.log 2>&1
+print_info $? finetune_$2_$1
 
 export http_proxy=$HTTPPROXY
 export https_proxy=$HTTPSPROXY

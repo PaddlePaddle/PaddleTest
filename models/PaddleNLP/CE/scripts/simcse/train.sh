@@ -34,15 +34,16 @@ cd $code_path
 python -u -m paddle.distributed.launch --gpus $3 \
   train.py \
   --save_dir ./$4/$2 \
-  --batch_size 64 \
+  --batch_size 32 \
   --learning_rate 5E-5 \
   --epochs 1 \
-  --save_steps 100 \
+  --save_steps 20 \
   --eval_steps 100 \
+  --max_steps 100 \
   --max_seq_length 64 \
   --infer_with_fc_pooler \
   --dropout 0.1 \
   --train_set_file "./senteval_cn/$4/train.txt" \
-  --test_set_file "./senteval_cn/$4/dev.tsv"
+  --test_set_file "./senteval_cn/$4/dev.tsv" \
   --device $1 >$log_path/train_$2_$4_$1.log 2>&1
-print_info $? ttrain_$2_$4_$1
+print_info $? train_$2_$4_$1

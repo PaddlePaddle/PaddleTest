@@ -32,7 +32,6 @@ fi
 
 #访问RD程序
 cd $code_path
-mkdir -p log
 python -m paddle.distributed.launch --gpus $3 --log_dir ./log run_gen.py \
     --dataset_name=dureader_qg \
     --model_name_or_path=unimo-text-1.0 \
@@ -49,7 +48,7 @@ python -m paddle.distributed.launch --gpus $3 --log_dir ./log run_gen.py \
     --do_train \
     --do_predict \
     --device=$1 > $log_path/train_$2_$1.log 2>&1
-print $? train_$2_$1
+print_info $? train_$2_$1
 
 #set http_proxy
 export http_proxy=$HTTPPROXY
