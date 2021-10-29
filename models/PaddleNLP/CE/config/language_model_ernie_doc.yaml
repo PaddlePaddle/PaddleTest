@@ -71,7 +71,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
+        kpi_base: 0.71198
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -133,7 +133,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
+        kpi_base: 0.72946
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -195,7 +195,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
+        kpi_base: 4.88359
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -257,7 +257,7 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
+        kpi_base: 2.42463
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -502,7 +502,7 @@ MCQ_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
+        kpi_base: 1.38604
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -563,7 +563,7 @@ SEMANTIC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
+        kpi_base: 0.75598
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -624,7 +624,7 @@ SEQUENCE_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
+        kpi_base: 1.944319
         threshold: 0.05
         actived: True
         evaluation: "-"
