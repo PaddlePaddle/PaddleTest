@@ -267,7 +267,5 @@ def test_clip_grad_by_norm6():
     paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
     for dtype in unsupport_dtype:
         np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
-        try:
+        with pytest.raises(RuntimeError):
             paddle_clip(paddle_data)
-        except RuntimeError:
-            pass
