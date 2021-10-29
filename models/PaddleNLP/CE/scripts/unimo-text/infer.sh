@@ -15,6 +15,7 @@ echo "$model_name 模型训练阶段"
 #路径配置
 root_path=$cur_path/../../
 code_path=$cur_path/../../models_repo/examples/text_generation/unimo-text/
+log_path=$root_path/log/$model_name/
 
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
@@ -32,7 +33,7 @@ fi
 #访问RD程序
 cd $code_path
 
-if [[ $2 == "faster" ]]; then
+if [ $2 == 'faster' ];then
     #  先编包
     cd ../../../paddlenlp/ops
     mkdir build
