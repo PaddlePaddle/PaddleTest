@@ -83,3 +83,29 @@ def test_jit_to_tensor_2():
     runner = Runner(func=func, name="to_tensor_2", dtype=["float32"], ftype="func")
     runner.add_kwargs_to_dict("params_group1", inputs=inps)
     runner.run()
+
+
+@pytest.mark.jit_to_tensor_parameters
+def test_jit_to_tensor_3():
+    """
+    @paddle.jit.to_static
+    def fun(inputs):
+        return paddle.to_tensor(inputs)
+    inputs=randtool("float", -2, 2, shape=[3, 6, 2, 2, 2, 1, 5, 4, 2])
+    dtype=["float16"]
+    only support gpu
+    """
+
+    @paddle.jit.to_static
+    def func(inputs):
+        """
+        paddle.to_tensor
+        """
+        return paddle.to_tensor(inputs)
+
+    inps = randtool("float", -2, 2, shape=[3, 6, 2, 2, 2, 1, 5, 4, 2])
+    runner = Runner(func=func, name="to_tensor_3", dtype=["float16"], ftype="func")
+    runner.places = ["gpu:0"]
+    runner.add_kwargs_to_dict("params_group1", inputs=inps)
+    if paddle.device.is_compiled_with_cuda() is True:
+        runner.run()
