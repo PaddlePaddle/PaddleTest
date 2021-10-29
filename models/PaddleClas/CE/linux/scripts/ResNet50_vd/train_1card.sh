@@ -3,7 +3,6 @@ cd ${Project_path}
 sed -i 's/RandCropImage/ResizeImage/g' ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml
 sed -ie '/RandFlipImage/d' ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml
 sed -ie '/flip_code/d' ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml
-# sed -i '46,47d' ppcls/configs/ImageNet/g/ResNet/ResNet50_vd.yaml
 rm -rf dataset
 ln -s ${Data_path} dataset
 mkdir log

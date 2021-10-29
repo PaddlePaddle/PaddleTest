@@ -16,5 +16,5 @@ python -m paddle.distributed.launch tools/train.py -c ppcls/configs/ImageNet/Res
     -o Global.eval_during_train=False  \
     -o Global.save_interval=5 \
     -o DataLoader.Train.sampler.batch_size=4 > log/resnet50_2card.log 2>&1
-cat log/resnet50_1card.log | grep Train | grep Avg | grep 'Epoch 5/5' > ../log/resnet50_2card.log
-cat log/resnet50_1card.log
+cat log/resnet50_2card.log | grep Train | grep Avg | grep 'Epoch 5/5' > ../log/resnet50_2card.log
+cat log/resnet50_2card.log
