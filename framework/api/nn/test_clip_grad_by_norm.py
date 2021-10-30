@@ -50,7 +50,7 @@ def test_clip_grad_by_norm_base():
     Test base config:
         input grad shape = [10, 10]
         input grad number = 5
-        input data type = 'float32'
+        input data type = 'float32' or "float64"
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -60,19 +60,20 @@ def test_clip_grad_by_norm_base():
     shape = [10, 10]
     length = 5
     clip_norm = 1.0
-    dtype = "float32"
-    np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
-    np_res = numpy_clip_grad_by_norm(np_data, clip_norm=clip_norm)
+    support_dtype = ["float32", "float64"]
+    for dtype in support_dtype:
+        np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
+        np_res = numpy_clip_grad_by_norm(np_data, clip_norm=clip_norm)
 
-    paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
-    paddle_cliped_data = paddle_clip(paddle_data)
-    paddle_res = []
-    for w, g in paddle_cliped_data:
-        paddle_res.append((w.numpy(), g.numpy()))
+        paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
+        paddle_cliped_data = paddle_clip(paddle_data)
+        paddle_res = []
+        for w, g in paddle_cliped_data:
+            paddle_res.append((w.numpy(), g.numpy()))
 
-    # compare grad value computed by numpy and paddle
-    for res, p_res in zip(np_res, paddle_res):
-        compare(res[1], p_res[1])
+        # compare grad value computed by numpy and paddle
+        for res, p_res in zip(np_res, paddle_res):
+            compare(res[1], p_res[1])
 
 
 @pytest.mark.api_nn_ClipGradByNorm_parameters
@@ -254,7 +255,7 @@ def test_clip_grad_by_norm6():
         value range: [-10, 10]
 
     Changes:
-        input grad type: 'float32' -> ['int8', 'int16', 'int32', 'float16', 'float64']
+        input grad type: 'float32' -> ['int8', 'int16', 'int32', 'float16']
 
     Expected Results:
         Raise RuntimeError when input grad type is not supported.
