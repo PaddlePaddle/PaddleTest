@@ -43,6 +43,7 @@ def test_config():
     test_suite.config_test()
 
 
+@pytest.mark.win
 @pytest.mark.server
 @pytest.mark.trt_fp32
 def test_trt_fp32_more_bz():
@@ -105,6 +106,7 @@ def test_jetson_trt_fp32_more_bz():
         del test_suite2  # destroy class to save memory
 
 
+@pytest.mark.win
 @pytest.mark.server
 @pytest.mark.trt_fp32_multi_thread
 def test_trt_fp32_bz1_multi_thread():
