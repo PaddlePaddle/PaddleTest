@@ -11,7 +11,7 @@ import paddle
 import pytest
 import numpy as np
 from paddle.nn import BeamSearchDecoder, dynamic_decode
-from paddle.nn import GRUCell, Linear, Embedding, LSTMCell, Softmax
+from paddle.nn import GRUCell, Linear, Embedding, LSTMCell, SimpleRNNCell, Softmax
 
 
 class TestBeamSearchDecoder(APIBase):
@@ -180,6 +180,78 @@ def test_beamsearchdecoder1():
 @pytest.mark.api_nn_LayerNorm_parameters
 def test_beamsearchdecoder2():
     """
+    change decoder_cell to simpleRNNCell
+    """
+    paddle.seed(obj.seed)
+    trg_embeder = Embedding(100, 32)
+    output_layer = Linear(32, 32)
+    decoder_cell = SimpleRNNCell(input_size=32, hidden_size=32)
+    decoder = BeamSearchDecoder(
+        decoder_cell, start_token=0, end_token=1, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
+    )
+    encoder_output = paddle.ones((4, 8, 32), dtype=paddle.get_default_dtype())
+    outputs = dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=10)
+    output = outputs[0]
+    res = [
+        [
+            [16, 16, 16, 16],
+            [6, 6, 6, 6],
+            [6, 6, 6, 6],
+            [15, 6, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [6, 15, 15, 6],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 6],
+        ],
+        [
+            [16, 16, 16, 16],
+            [6, 6, 6, 6],
+            [6, 6, 6, 6],
+            [15, 6, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [6, 15, 15, 6],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 6],
+        ],
+        [
+            [16, 16, 16, 16],
+            [6, 6, 6, 6],
+            [6, 6, 6, 6],
+            [15, 6, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [6, 15, 15, 6],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 6],
+        ],
+        [
+            [16, 16, 16, 16],
+            [6, 6, 6, 6],
+            [6, 6, 6, 6],
+            [15, 6, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [6, 15, 15, 6],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 15],
+            [15, 15, 15, 6],
+        ],
+    ]
+    compare(np.array(output), res)
+
+
+@pytest.mark.api_nn_LayerNorm_parameters
+def test_beamsearchdecoder3():
+    """
     change the beam size
     """
     paddle.seed(obj.seed)
@@ -250,7 +322,7 @@ def test_beamsearchdecoder2():
 
 
 @pytest.mark.api_nn_LayerNorm_parameters
-def test_beamsearchdecoder3():
+def test_beamsearchdecoder4():
     """
     change the size of the input sequence
     """
@@ -274,7 +346,7 @@ def test_beamsearchdecoder3():
 
 
 @pytest.mark.api_nn_LayerNorm_parameters
-def test_beamsearchdecoder4():
+def test_beamsearchdecoder5():
     """
     change the type of the output_layer
     """
@@ -287,7 +359,7 @@ def test_beamsearchdecoder4():
     decoder = BeamSearchDecoder(
         decoder_cell, start_token=0, end_token=1, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
     )
-    encoder_output = paddle.ones((4, 8, 16), dtype="float32")
+    encoder_output = paddle.ones((4, 8, 16), dtype=paddle.get_default_dtype())
     outputs = dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=5)
     output = outputs[0]
     res = [
@@ -300,7 +372,7 @@ def test_beamsearchdecoder4():
 
 
 @pytest.mark.api_nn_LayerNorm_parameters
-def test_beamsearchdecoder5():
+def test_beamsearchdecoder6():
     """
     error shape
     input_size mismatch hidden_size
