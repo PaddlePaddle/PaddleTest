@@ -50,7 +50,7 @@ def test_clip_grad_by_norm_base():
     Test base config:
         input grad shape = [10, 10]
         input grad number = 5
-        input data type = 'float32' or "float64"
+        input data type = 'float32'
         clip_norm = 1.0
         value range: [-10, 10]
 
@@ -60,20 +60,20 @@ def test_clip_grad_by_norm_base():
     shape = [10, 10]
     length = 5
     clip_norm = 1.0
-    support_dtype = ["float32", "float64"]
-    for dtype in support_dtype:
-        np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
-        np_res = numpy_clip_grad_by_norm(np_data, clip_norm=clip_norm)
+    dtype = "float32"
 
-        paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
-        paddle_cliped_data = paddle_clip(paddle_data)
-        paddle_res = []
-        for w, g in paddle_cliped_data:
-            paddle_res.append((w.numpy(), g.numpy()))
+    np_data, paddle_data = generate_test_data(length, shape, dtype, value=10)
+    np_res = numpy_clip_grad_by_norm(np_data, clip_norm=clip_norm)
 
-        # compare grad value computed by numpy and paddle
-        for res, p_res in zip(np_res, paddle_res):
-            compare(res[1], p_res[1])
+    paddle_clip = paddle.nn.ClipGradByNorm(clip_norm=clip_norm)
+    paddle_cliped_data = paddle_clip(paddle_data)
+    paddle_res = []
+    for w, g in paddle_cliped_data:
+        paddle_res.append((w.numpy(), g.numpy()))
+
+    # compare grad value computed by numpy and paddle
+    for res, p_res in zip(np_res, paddle_res):
+        compare(res[1], p_res[1])
 
 
 @pytest.mark.api_nn_ClipGradByNorm_parameters
