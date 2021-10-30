@@ -17,4 +17,4 @@ python  tools/train.py -c ppcls/configs/ImageNet/VisionTransformer/ViT_small_pat
     -o Global.eval_during_train=False  \
     -o Global.save_interval=5 \
     -o DataLoader.Train.sampler.batch_size=4 > log/ViT_small_patch16_224_1card.log 2>&1
-cat log/ViT_small_patch16_224_1card.log | grep Train | grep Avg | grep 'Epoch 2/2' > ../log/ViT_small_patch16_224_1card.log
+cat log/ViT_small_patch16_224_1card.log | grep Train | grep Avg | grep 'Epoch 5/5' > ../log/ViT_small_patch16_224_1card.log

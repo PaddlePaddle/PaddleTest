@@ -15,4 +15,5 @@ python  tools/train.py -c ppcls/configs/ImageNet/Inception/InceptionV4.yaml  \
     -o Global.eval_during_train=False  \
     -o Global.save_interval=5 \
     -o DataLoader.Train.sampler.batch_size=4 > log/inceptionv4_1card.log 2>&1
-cat log/inceptionv4_1card.log | grep Avg | grep 'Epoch 2/2' > ../log/inceptionv4_1card.log
+cat log/inceptionv4_1card.log | grep Avg | grep 'Epoch 5/5' > ../log/inceptionv4_1card.log
+cat log/inceptionv4_1card.log
