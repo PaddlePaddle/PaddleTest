@@ -332,73 +332,72 @@ def test_upsample_linear():
                 )
 
 
-#
-# @pytest.mark.api_nn_Upsample_parameters
-# def test_upsample_linear2():
-#     """
-#     input has larger value range [-1000.0, 1000.0)
-#     """
-#     x = randtool("float", -1000, 1000, [2, 4, 10])
-#     size = [14]
-#     scale_factor = None
-#     mode = "linear"
-#     align_corners = True
-#     align_mode = 0
-#     data_format = "NCW"
-#
-#     res = linear_interpolation_using_numpy(
-#         x=x,
-#         size=size,
-#         scale_factor=scale_factor,
-#         align_corners=align_corners,
-#         align_mode=align_mode,
-#         data_format=data_format,
-#     )
-#     obj.run(
-#         res=res,
-#         data=x,
-#         size=size,
-#         scale_factor=scale_factor,
-#         mode=mode,
-#         align_corners=align_corners,
-#         align_mode=align_mode,
-#         data_format=data_format,
-#     )
+@pytest.mark.api_nn_Upsample_parameters
+def test_upsample_linear2():
+    """
+    input has larger value range [-1000.0, 1000.0)
+    """
+    x = randtool("float", -1000, 1000, [2, 4, 10])
+    size = [17]
+    scale_factor = None
+    mode = "linear"
+    align_corners = True
+    align_mode = 0
+    data_format = "NCW"
+
+    res = linear_interpolation_using_numpy(
+        x=x,
+        size=size,
+        scale_factor=scale_factor,
+        align_corners=align_corners,
+        align_mode=align_mode,
+        data_format=data_format,
+    )
+    obj.run(
+        res=res,
+        data=x,
+        size=size,
+        scale_factor=scale_factor,
+        mode=mode,
+        align_corners=align_corners,
+        align_mode=align_mode,
+        data_format=data_format,
+    )
 
 
-# @pytest.mark.api_nn_Upsample_parameters
-# def test_upsample_linear3():
-#     """
-#     size or scale_factor is a Tensor
-#     """
-#     x = randtool("float", -10, 10, [2, 4, 10])
-#     mode = "linear"
-#     align_corners = True
-#     align_mode = 0
-#     data_format = "NCW"
-#
-#     for size, scale_factor in [([14], None), (None, [2.4])]:
-#         res = linear_interpolation_using_numpy(
-#             x=x,
-#             size=size,
-#             scale_factor=scale_factor,
-#             align_corners=align_corners,
-#             align_mode=align_mode,
-#             data_format=data_format,
-#         )
-#         # don't use dtype=np.int
-#         size = np.array(size, dtype=np.int32) if size is not None else None
-#         scale_factor = np.array(scale_factor, dtype=np.float32) if scale_factor is not None else None
-#         obj.run(
-#             res=res,
-#             data=x,
-#             size=size,
-#             scale_factor=scale_factor,
-#             mode=mode,
-#             align_corners=align_corners,
-#             align_mode=align_mode,
-#             data_format=data_format,
-#         )
+@pytest.mark.api_nn_Upsample_parameters
+def test_upsample_linear3():
+    """
+    size or scale_factor is a Tensor
+    """
+    x = randtool("float", -10, 10, [2, 4, 10])
+    mode = "linear"
+    align_corners = True
+    align_mode = 0
+    data_format = "NCW"
+
+    for size, scale_factor in [([17], None), (None, [2.4])]:
+        res = linear_interpolation_using_numpy(
+            x=x,
+            size=size,
+            scale_factor=scale_factor,
+            align_corners=align_corners,
+            align_mode=align_mode,
+            data_format=data_format,
+        )
+        # don't use dtype=np.int
+        size = np.array(size, dtype=np.int32) if size is not None else None
+        scale_factor = np.array(scale_factor, dtype=np.float32) if scale_factor is not None else None
+        obj.run(
+            res=res,
+            data=x,
+            size=size,
+            scale_factor=scale_factor,
+            mode=mode,
+            align_corners=align_corners,
+            align_mode=align_mode,
+            data_format=data_format,
+        )
 
 
 @pytest.mark.api_nn_Upsample_exception
