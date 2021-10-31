@@ -73,24 +73,27 @@ def linear_interpolation_using_numpy(x, size, scale_factor=None, align_corners=T
 
     if size is not None:
         out_w = size[0]
-        if align_corners and out_w > 1:
-            ratio_w = (in_w - 1.0) / (out_w - 1.0)
-        else:
-            ratio_w = 1.0 * in_w / out_w
+        scale_w = 0
     else:
+        scale_w = scale_factor[0]
         # Caution!!!!!
         # it's critical to add np.around, because C++ souce code of paddle.nn.Upsample
         # is like this:
         #      out_h = static_cast<int>(in_h * scale_h);
         #      out_w = static_cast<int>(in_w * scale_w);
         # so it's possible to have numerical instability to make the test fail
-        out_w = np.int(np.around(in_w * scale_factor[0]))
-        if align_corners and out_w > 1:
+        out_w = np.int(np.around(in_w * scale_w))
+    out = np.zeros((batch_size, channel, out_w))
+
+    ratio_w = 0.0
+    if out_w > 1:
+        if align_corners:
             ratio_w = (in_w - 1.0) / (out_w - 1.0)
         else:
-            ratio_w = 1.0 / scale_factor[0]
-
-    out = np.zeros((batch_size, channel, out_w))
+            if scale_w > 0:
+                ratio_w = 1.0 / scale_w
+            else:
+                ratio_w = 1.0 * in_w / out_w
 
     for j in range(out_w):
         if align_mode == 0 and not align_corners:
@@ -382,7 +385,8 @@ def test_upsample_linear3():
             align_mode=align_mode,
             data_format=data_format,
         )
-        size = np.array(size, dtype=np.int) if size is not None else None
+        # don't use dtype=np.int
+        size = np.array(size, dtype=np.int32) if size is not None else None
         scale_factor = np.array(scale_factor, dtype=np.float32) if scale_factor is not None else None
         obj.run(
             res=res,
