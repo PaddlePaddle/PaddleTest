@@ -337,13 +337,13 @@ def test_upsample_linear2():
     """
     input has larger value range [-1000.0, 1000.0)
     """
-    x = randtool("float", -1000, 1000, [2, 4, 10])
+    x = randtool("float", -1000, 1000, [2, 10, 4])
     size = [17]
     scale_factor = None
     mode = "linear"
     align_corners = True
     align_mode = 0
-    data_format = "NCW"
+    data_format = "NWC"
 
     res = linear_interpolation_using_numpy(
         x=x,
@@ -370,11 +370,11 @@ def test_upsample_linear3():
     """
     size or scale_factor is a Tensor
     """
-    x = randtool("float", -10, 10, [2, 4, 10])
+    x = randtool("float", -10, 10, [2, 10, 4])
     mode = "linear"
     align_corners = True
     align_mode = 0
-    data_format = "NCW"
+    data_format = "NWC"
 
     for size, scale_factor in [([17], None), (None, [2.4])]:
         res = linear_interpolation_using_numpy(
