@@ -7,8 +7,49 @@ test paddle.nn.Upsample
 import numpy as np
 import pytest
 import paddle
-from apibase import randtool
-from test_upsample_part1 import TestUpsample
+from apibase import randtool, APIBase
+
+
+class TestUpsample(APIBase):
+    """
+    test
+    """
+
+    def hook(self):
+        """
+        implement
+        """
+        self.types = [np.float32, np.float64]
+        self.debug = True
+        self.delta = 1e-3
+        self.no_grad_var = ["scale_factor", "size"]
+
+    def exception(self, etype, mode_="c", data=None, **kwargs):
+        """
+        overwrite this method to avoid argument name collision:
+        change "mode" to "mode_",
+        note: paddle.nn.Upsample also has an argument "mode"
+        """
+        # 禁止输入res
+        if "res" in kwargs.keys():
+            assert False, "exception检测不需要输入res参数"
+        # 复用前向计算函数， 随便定义res
+        res = np.array([0])
+        if mode_ == "c":
+            try:
+                self.run(res, data, **kwargs)
+            except Exception as e:
+                e = str(e)
+                if etype in e:
+                    assert True
+                else:
+                    assert False, "异常校验失败,异常类型为" + etype
+                # print(str(e))
+        if mode_ == "python":
+            with pytest.raises(etype):
+                self.run(res, data, **kwargs)
+                # print(excinfo.value)
+                # assert "!23" in excinfo.value
 
 
 obj = TestUpsample(paddle.nn.Upsample)
