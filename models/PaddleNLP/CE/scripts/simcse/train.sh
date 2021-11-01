@@ -34,7 +34,7 @@ cd $code_path
 python -u -m paddle.distributed.launch --gpus $3 \
   train.py \
   --save_dir ./$4/$2 \
-  --batch_size 64 \
+  --batch_size 32 \
   --learning_rate 5E-5 \
   --epochs 1 \
   --save_steps 20 \
