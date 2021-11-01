@@ -1,5 +1,5 @@
-MODEL: "ResNet50" # 模型名
-PRIORITY: P0
+MODEL: "ReXNet_1_0" # 模型名
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -9,18 +9,18 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: scripts/ResNet50/ #脚本的路径
+  model_scripts_path: scripts/ReXNet_1_0/ #脚本的路径
   model_log_path: log
 
 EXEC:
   exec_cases: [TRAIN]
-  exec_priority: [P0]
+  exec_priority: [P1]
   exec_tag: [linux_dy_gpu1,linux_dy_gpu2]
 
 #测试套
 TRAIN: # 训练步骤
   -
-    priority: P0  # dy_gpu1
+    priority: P1  # dy_gpu1
     tag: linux_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
@@ -37,9 +37,9 @@ TRAIN: # 训练步骤
         threshold: 0.5
         actived: True
         evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/resnet50_1card.log
+    output: $ROOT_PATH/$model_log_path/ReXNet_1_0_1card.log
   -
-    priority: P0  # dy_gpu1
+    priority: P1  # dy_gpu1
     tag: linux_dy_gpu2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
@@ -56,4 +56,4 @@ TRAIN: # 训练步骤
         threshold: 0.5
         actived: True
         evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/resnet50_2card.log
+    output: $ROOT_PATH/$model_log_path/ReXNet_1_0_2card.log

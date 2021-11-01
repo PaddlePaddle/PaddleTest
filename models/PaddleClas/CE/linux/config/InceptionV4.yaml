@@ -1,5 +1,5 @@
 MODEL: "InceptionV4" # 模型名
-PRIORITY: P1
+PRIORITY: P0
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -14,13 +14,13 @@ VARIABLES:
 
 EXEC:
   exec_cases: [TRAIN]
-  exec_priority: [P1]
-  exec_tag: [linux_dy_gpu1, linux_dy_gpu2]
+  exec_priority: [P0]
+  exec_tag: [linux_dy_gpu1,linux_dy_gpu2]
 
 #测试套
 TRAIN: # 训练步骤
   -
-    priority: P1  # dy_gpu1
+    priority: P0  # dy_gpu1
     tag: linux_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
@@ -33,13 +33,13 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.26712
+        kpi_base: 6.48126
         threshold: 0.5
         actived: True
         evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/inceptionv4_1card.log
+    output: $ROOT_PATH/$model_log_path/InceptionV4_1card.log
   -
-    priority: P1  # dy_gpu1
+    priority: P0  # dy_gpu1
     tag: linux_dy_gpu2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
@@ -52,8 +52,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.33463
+        kpi_base: 6.46063
         threshold: 0.5
         actived: True
         evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/inceptionv4_2card.log
+    output: $ROOT_PATH/$model_log_path/InceptionV4_2card.log

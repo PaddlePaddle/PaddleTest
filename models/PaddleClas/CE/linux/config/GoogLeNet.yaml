@@ -33,7 +33,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 11.00204
+        kpi_base: 6.48126
         threshold: 0.5
         actived: True
         evaluation: "-"
@@ -52,7 +52,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 11.00204
+        kpi_base: 6.46063
         threshold: 0.5
         actived: True
         evaluation: "-"
