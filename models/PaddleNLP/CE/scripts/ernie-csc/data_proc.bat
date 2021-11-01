@@ -12,4 +12,3 @@ python download.py --data_dir ./extra_train_ds/ --url https://github.com/wdimmy/
 python change_sgml_to_txt.py -i extra_train_ds/train.sgml -o extra_train_ds/train.txt
 
 python download.py
-
