@@ -637,20 +637,17 @@ sed -i "s/max_iter: None/max_iter: 3/g" config/transformer.yaml
 sed -i "s/batch_size: 4096/batch_size: 500/g" config/transformer.yaml
 python -m paddle.distributed.launch train.py --config ./config/transformer.yaml  >${log_path}/stacl_wk-1) >>${log_path}/stacl_wk-1 2>&1
 print_info $? stacl_wk-1
-
 time (
 sed -i "s/waitk: -1/waitk: 3/g" config/transformer.yaml
 sed -i 's/save_model: "trained_models"/save_model: "trained_models_3"/g' config/transformer.yaml
 sed -i 's#init_from_checkpoint: ""#init_from_checkpoint: "./trained_models/step_1/"#g' config/transformer.yaml
 python -m paddle.distributed.launch  train.py --config ./config/transformer.yaml >${log_path}/stacl_wk3) >>${log_path}/stacl_wk3 2>&1
 print_info $? stacl_wk3
-
 time (sed -i "s/waitk: 3/waitk: 5/g" config/transformer.yaml
 sed -i 's/save_model: "trained_models_3"/save_model: "trained_models_5"/g' config/transformer.yaml
 sed -i 's#init_from_checkpoint: "./trained_models/step_1/"#init_from_checkpoint: "./trained_models_3/step_1/"#g' config/transformer.yaml
 python -m paddle.distributed.launch train.py --config ./config/transformer.yaml >${log_path}/stacl_wk5) >>${log_path}/stacl_wk5 2>&1
 print_info $? stacl_wk5
-
 time (sed -i "s/batch_size: 500/batch_size: 100/g" config/transformer.yaml
 sed -i 's#init_from_params: "trained_models/step_final/"#init_from_params: "./trained_models_5/step_1/"#g' config/transformer.yaml
 python predict.py --config ./config/transformer.yaml >${log_path}/stacl_predict) >>${log_path}/stacl_predict 2>&1
@@ -735,6 +732,7 @@ python export_model.py  \
 ${nlp_dir}/paddlenlp/ops/build_tr_cc/bin/./transformer_e2e -batch_size 8 -gpu_id 0 -model_dir ./infer_model/ -vocab_file ${PPNLP_HOME}/datasets/WMT14ende/WMT14.en-de/wmt14_ende_data_bpe/vocab_all.bpe.33708 \
 -data_file ${PPNLP_HOME}/datasets/WMT14ende/WMT14.en-de/wmt14_ende_data_bpe/newstest2014.tok.bpe.33708.en  >${log_path}/transformer_deploy_C_FT >>${log_path}/transformer_deploy_C_FT 2>&1
 print_info $? transformer_deploy_C_FT
+
 }
 # 23 pet
 pet (){
