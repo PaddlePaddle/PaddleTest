@@ -16,7 +16,7 @@ def ernie_data(data_path):
     """
     max_seq_length = 128
     examples = []
-    with open(data_path) as f:
+    with open(data_path, "r", encoding="utf-8") as f:
         data = f.readlines()
         tokenizer = ppnlp.transformers.ErnieTinyTokenizer.from_pretrained("ernie-tiny")
         for text in data:
