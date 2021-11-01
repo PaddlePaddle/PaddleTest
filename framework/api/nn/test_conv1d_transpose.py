@@ -79,17 +79,14 @@ def test_conv1d_transpose():
     # weight_attr = np.full(shape=[in_channels, out_channels // groups] + kernel_size, fill_value=1)
     # bias_attr = np.full(shape=[out_channels], fill_value=0)
     res = np.array(
-        [
-            [[1.5298, 2.4252, 2.4252, 0.8953], [1.5298, 2.4252, 2.4252, 0.8953]],
-            [[1.6651, 3.4984, 3.4984, 1.8332], [1.6651, 3.4984, 3.4984, 1.8332]],
-        ]
+        [[[1.5298, 2.4251, 0.895], [1.5298, 2.4251, 0.895]], [[1.6651, 3.4983, 1.833], [1.6651, 3.4984, 1.834]]]
     )
     obj.run(
         res=res,
         data=x,
         in_channels=in_channels,
         out_channels=out_channels,
-        kernel_size = kernel_size,
+        kernel_size=kernel_size,
         stride=stride,
         padding=padding,
         output_padding=output_padding,
@@ -117,10 +114,7 @@ def test_conv1d_transpose1():
     output_padding = 0
     dilation = 1
     res = np.array(
-        [
-            [[1.5298, 2.4251, 0.895],[1.5298, 2.4251, 0.895]],
-            [[1.6651, 3.4983, 1.833],[1.6651, 3.4984, 1.834]],
-        ]
+        [[[1.5298, 2.4251, 0.895], [1.5298, 2.4251, 0.895]], [[1.6651, 3.4983, 1.833], [1.6651, 3.4984, 1.834]]]
     )
 
     obj.run(
@@ -131,13 +125,14 @@ def test_conv1d_transpose1():
         stride=stride,
         padding=padding,
         output_padding=output_padding,
-        kernel_size = kernel_size,
+        kernel_size=kernel_size,
         groups=groups,
         dilation=dilation,
         weight_attr=fluid.initializer.ConstantInitializer(value=1),
         bias_attr=fluid.initializer.ConstantInitializer(value=0),
         data_format="NCL",
     )
+
 
 @pytest.mark.api_nn_Conv1D_Transpose_parameters
 def test_conv1d_transpose2():
@@ -148,17 +143,14 @@ def test_conv1d_transpose2():
     x = randtool("float", 0, 1, [2, 3, 2])
     in_channels = 3
     out_channels = 2
-    kernel_size = (2)
+    kernel_size = 2
     groups = 1
     stride = 1
     padding = [0]
     output_padding = 0
     dilation = 1
     res = np.array(
-        [
-            [[1.5298, 2.4251, 0.895],[1.5298, 2.4251, 0.895]],
-            [[1.6651, 3.4983, 1.833],[1.6651, 3.4984, 1.834]],
-        ]
+        [[[1.5298, 2.4251, 0.895], [1.5298, 2.4251, 0.895]], [[1.6651, 3.4983, 1.833], [1.6651, 3.4984, 1.834]]]
     )
 
     obj.run(
@@ -169,13 +161,14 @@ def test_conv1d_transpose2():
         stride=stride,
         padding=padding,
         output_padding=output_padding,
-        kernel_size = kernel_size,
+        kernel_size=kernel_size,
         groups=groups,
         dilation=dilation,
         weight_attr=fluid.initializer.ConstantInitializer(value=1),
         bias_attr=fluid.initializer.ConstantInitializer(value=0),
         data_format="NCL",
     )
+
 
 @pytest.mark.api_nn_Conv1D_Transpose_parameters
 def test_conv1d_transpose3():
@@ -194,16 +187,8 @@ def test_conv1d_transpose3():
     dilation = 1
     res = np.array(
         [
-            [
-                 [1.5299, 2.4252, 0.8954],
-                 [1.5297, 2.4252, 0.8950],
-                 [1.5295, 2.4251, 0.8956]
-            ],
-            [
-                 [1.6651, 3.4983, 1.8332],
-                 [1.6652, 3.4983, 1.8332],
-                 [1.6651, 3.4983, 1.8332]
-            ]
+            [[1.5299, 2.4252, 0.8954], [1.5297, 2.4252, 0.8950], [1.5295, 2.4251, 0.8956]],
+            [[1.6651, 3.4983, 1.8332], [1.6652, 3.4983, 1.8332], [1.6651, 3.4983, 1.8332]],
         ]
     )
 
@@ -215,13 +200,14 @@ def test_conv1d_transpose3():
         stride=stride,
         padding=padding,
         output_padding=output_padding,
-        kernel_size = kernel_size,
+        kernel_size=kernel_size,
         groups=groups,
         dilation=dilation,
         weight_attr=fluid.initializer.ConstantInitializer(value=1),
         bias_attr=fluid.initializer.ConstantInitializer(value=0),
         data_format="NCL",
     )
+
 
 @pytest.mark.api_nn_Conv1D_Transpose_parameters
 def test_conv1d_transpose4():
@@ -237,12 +223,16 @@ def test_conv1d_transpose4():
     padding = 0
     res = np.array(
         [
-            [[1.5298465, 1.5298465, 2.4251616, 0.89531505, 0.89531505],
-             [1.5298465, 1.5298465, 2.4251616, 0.89531505, 0.89531505],
-             [1.5298465, 1.5298465, 2.4251616, 0.89531505, 0.89531505]],
-            [[1.665139, 1.665139, 3.4983778, 1.8332388, 1.8332388],
-             [1.665139,  1.665139,  3.4983778, 1.8332388, 1.8332388],
-             [1.665139, 1.665139, 3.4983778, 1.8332388, 1.8332388]]
+            [
+                [1.5298465, 1.5298465, 2.4251616, 0.89531505, 0.89531505],
+                [1.5298465, 1.5298465, 2.4251616, 0.89531505, 0.89531505],
+                [1.5298465, 1.5298465, 2.4251616, 0.89531505, 0.89531505],
+            ],
+            [
+                [1.665139, 1.665139, 3.4983778, 1.8332388, 1.8332388],
+                [1.665139, 1.665139, 3.4983778, 1.8332388, 1.8332388],
+                [1.665139, 1.665139, 3.4983778, 1.8332388, 1.8332388],
+            ],
         ]
     )
 
@@ -272,12 +262,7 @@ def test_conv1d_transpose5():
     kernel_size = [3]
     stride = [2]
     padding = 1
-    res = np.array(
-        [
-            [[1.5298465, 2.4251616, 0.89531505]],
-            [[1.665139, 3.4983778, 1.8332388]]
-        ]
-    )
+    res = np.array([[[1.5298465, 2.4251616, 0.89531505]], [[1.665139, 3.4983778, 1.8332388]]])
     obj.run(
         res=res,
         data=x,
@@ -301,8 +286,8 @@ def test_conv1d_transpose6():
     in_channels = 3
     out_channels = 6
     kernel_size = [3]
-    stride = (2)
-    padding = (0)
+    stride = 2
+    padding = 0
     groups = 3
 
     res = np.array(
@@ -321,8 +306,8 @@ def test_conv1d_transpose6():
                 [0.6804508, 0.6804508, 1.1670389, 0.48658812, 0.48658812],
                 [0.6804508, 0.6804508, 1.1670389, 0.48658812, 0.48658812],
                 [0.9650268, 0.9650268, 1.3584255, 0.39339873, 0.39339873],
-                [0.9650268, 0.9650268, 1.3584255, 0.39339873, 0.39339873]
-            ]
+                [0.9650268, 0.9650268, 1.3584255, 0.39339873, 0.39339873],
+            ],
         ]
     )
     obj.run(
@@ -353,10 +338,8 @@ def test_conv1d_transpose7():
     padding = 0
     res = np.array(
         [
-            [[0.77089256, 1.397613, 1.397613, 0.32672048],
-             [0.77089256, 1.397613, 1.397613, 0.32672048]],
-             [[0.8655973, 2.1488645, 2.1488645, 0.9832671],
-             [0.8655973, 2.1488645, 2.1488645, 0.9832671]]
+            [[0.77089256, 1.397613, 1.397613, 0.32672048], [0.77089256, 1.397613, 1.397613, 0.32672048]],
+            [[0.8655973, 2.1488645, 2.1488645, 0.9832671], [0.8655973, 2.1488645, 2.1488645, 0.9832671]],
         ]
     )
     obj.run(
@@ -387,11 +370,8 @@ def test_conv1d_transpose8():
     data_format = "NLC"
     res = np.array(
         [
-            [[0.77089256, 1.397613, 1.397613, 0.32672048],
-             [0.77089256, 1.397613, 1.397613, 0.32672048]],
-
-            [[0.8655973, 2.1488645, 2.1488645, 0.9832671],
-             [0.8655973, 2.1488645, 2.1488645, 0.9832671]]
+            [[0.77089256, 1.397613, 1.397613, 0.32672048], [0.77089256, 1.397613, 1.397613, 0.32672048]],
+            [[0.8655973, 2.1488645, 2.1488645, 0.9832671], [0.8655973, 2.1488645, 2.1488645, 0.9832671]],
         ]
     ).transpose(0, 2, 1)
     obj.run(
@@ -420,12 +400,7 @@ def test_conv1d_transpose9():
     kernel_size = [3]
     stride = 1
     padding = "VALID"
-    res = np.array(
-        [
-            [[0.77089256, 1.397613, 1.397613, 0.32672048]],
-            [[0.8655973, 2.1488645, 2.1488645, 0.9832671]]
-        ]
-    )
+    res = np.array([[[0.77089256, 1.397613, 1.397613, 0.32672048]], [[0.8655973, 2.1488645, 2.1488645, 0.9832671]]])
     obj.run(
         res=res,
         data=x,
@@ -451,12 +426,7 @@ def test_conv1d_transpose10():
     kernel_size = [3]
     stride = 1
     padding = "SAME"
-    res = np.array(
-        [
-            [[1.7446721, 2.7216122, 2.5869281, 1.8018057]],
-             [[1.6420112, 2.4731734, 2.4002645, 1.6349971]]
-        ]
-    )
+    res = np.array([[[1.7446721, 2.7216122, 2.5869281, 1.8018057]], [[1.6420112, 2.4731734, 2.4002645, 1.6349971]]])
     obj.run(
         res=res,
         data=x,
@@ -482,13 +452,8 @@ def test_conv1d_transpose11():
     kernel_size = [3]
     stride = 1
     padding = "SAME"
-    dilation = (2)
-    res = np.array(
-        [
-            [[1.7446721, 2.7216122, 2.5869281, 1.8018057]],
-             [[1.6420112, 2.4731734, 2.4002645, 1.6349971]]
-        ]
-    )
+    dilation = 2
+    res = np.array([[[1.7446721, 2.7216122, 2.5869281, 1.8018057]], [[1.6420112, 2.4731734, 2.4002645, 1.6349971]]])
     obj.run(
         res=res,
         data=x,
@@ -497,7 +462,7 @@ def test_conv1d_transpose11():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        dilation = dilation,
+        dilation=dilation,
         weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
         bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
     )
@@ -520,7 +485,7 @@ def test_conv1d_transpose12():
     res = np.array(
         [
             [[0.9595495, 0.48512244, 1.9364898, 1.6099877, 1.9364898, 1.6099877, 0.67694026, 0.8248653]],
-            [[0.87674373, 0.46526742, 1.707906, 1.5691025, 1.707906, 1.5691025, 0.5311621, 0.803835]]
+            [[0.87674373, 0.46526742, 1.707906, 1.5691025, 1.707906, 1.5691025, 0.5311621, 0.803835]],
         ]
     )
     obj.run(
@@ -550,9 +515,12 @@ def test_conv1d_transpose13():
     stride = 1
     padding = 1
     dilation = (2,)
-    res = np.array([[[0.48512244, 1.9364898, 1.6099877, 1.9364898, 1.6099877, 0.67694026]],
-
-                    [[0.46526742,1.707906,  1.5691025, 1.707906,  1.5691025, 0.5311621]]])
+    res = np.array(
+        [
+            [[0.48512244, 1.9364898, 1.6099877, 1.9364898, 1.6099877, 0.67694026]],
+            [[0.46526742, 1.707906, 1.5691025, 1.707906, 1.5691025, 0.5311621]],
+        ]
+    )
     obj.run(
         res=res,
         data=x,
@@ -565,7 +533,6 @@ def test_conv1d_transpose13():
         weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
         bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
     )
-
 
 
 @pytest.mark.api_nn_Conv1D_Transpose_parameters
@@ -581,8 +548,7 @@ def test_conv1d_transpose14():
     stride = 1
     padding = (1,)
     dilation = (2,)
-    res = np.array([[[0.32672048,0.77089256, 0.32672048, 0.77089256]],
-                    [[0.9832671, 0.8655973, 0.9832671, 0.8655973]]])
+    res = np.array([[[0.32672048, 0.77089256, 0.32672048, 0.77089256]], [[0.9832671, 0.8655973, 0.9832671, 0.8655973]]])
     obj.run(
         res=res,
         data=x,
@@ -595,4 +561,3 @@ def test_conv1d_transpose14():
         weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
         bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
     )
-
