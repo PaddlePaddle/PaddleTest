@@ -30,7 +30,7 @@ class TestBeamSearchDecoder(APIBase):
         # self.enable_backward = True
 
 
-obj = TestBeamSearchDecoder(paddle.nn.BeamSearchDecoder)
+# obj = TestBeamSearchDecoder(paddle.nn.BeamSearchDecoder)
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_vartype
@@ -38,7 +38,7 @@ def test_beamsearchdecoder_base():
     """
     base
     """
-    paddle.seed(obj.seed)
+    paddle.seed(33)
     trg_embeder = Embedding(100, 32)
     output_layer = Linear(32, 32)
     decoder_cell = GRUCell(input_size=32, hidden_size=32)
@@ -105,12 +105,12 @@ def test_beamsearchdecoder_base():
     compare(np.array(output), res)
 
 
-@pytest.mark.api_nn_LayerNorm_parameters
+@pytest.mark.api_nn_BeamSearchDecoder_parameters
 def test_beamsearchdecoder1():
     """
     change decoder_cell to LSTM cell
     """
-    paddle.seed(obj.seed)
+    paddle.seed(33)
     trg_embeder = Embedding(100, 32)
     output_layer = Linear(32, 32)
     decoder_cell = LSTMCell(input_size=32, hidden_size=32)
@@ -177,12 +177,12 @@ def test_beamsearchdecoder1():
     compare(np.array(output), res)
 
 
-@pytest.mark.api_nn_LayerNorm_parameters
+@pytest.mark.api_nn_BeamSearchDecoder_parameters
 def test_beamsearchdecoder2():
     """
     change decoder_cell to simpleRNNCell
     """
-    paddle.seed(obj.seed)
+    paddle.seed(33)
     trg_embeder = Embedding(100, 32)
     output_layer = Linear(32, 32)
     decoder_cell = SimpleRNNCell(input_size=32, hidden_size=32)
@@ -249,12 +249,12 @@ def test_beamsearchdecoder2():
     compare(np.array(output), res)
 
 
-@pytest.mark.api_nn_LayerNorm_parameters
+@pytest.mark.api_nn_BeamSearchDecoder_parameters
 def test_beamsearchdecoder3():
     """
     change the beam size
     """
-    paddle.seed(obj.seed)
+    paddle.seed(33)
     trg_embeder = Embedding(100, 32)
     output_layer = Linear(32, 32)
     decoder_cell = GRUCell(input_size=32, hidden_size=32)
@@ -321,12 +321,12 @@ def test_beamsearchdecoder3():
     compare(np.array(output), res)
 
 
-@pytest.mark.api_nn_LayerNorm_parameters
+@pytest.mark.api_nn_BeamSearchDecoder_parameters
 def test_beamsearchdecoder4():
     """
     change the size of the input sequence
     """
-    paddle.seed(obj.seed)
+    paddle.seed(33)
     trg_embeder = Embedding(100, 16)
     output_layer = Linear(16, 16)
     decoder_cell = GRUCell(input_size=16, hidden_size=16)
@@ -345,12 +345,12 @@ def test_beamsearchdecoder4():
     compare(np.array(output), res)
 
 
-@pytest.mark.api_nn_LayerNorm_parameters
+@pytest.mark.api_nn_BeamSearchDecoder_parameters
 def test_beamsearchdecoder5():
     """
     change the type of the output_layer
     """
-    paddle.seed(obj.seed)
+    paddle.seed(33)
     trg_embeder = Embedding(100, 16)
     output_layer = Softmax(-1)
     # output_layer=Linear(16,16)
@@ -371,13 +371,13 @@ def test_beamsearchdecoder5():
     compare(np.array(output), res)
 
 
-@pytest.mark.api_nn_LayerNorm_parameters
+@pytest.mark.api_nn_BeamSearchDecoder_parameters
 def test_beamsearchdecoder6():
     """
     error shape
     input_size mismatch hidden_size
     """
-    paddle.seed(obj.seed)
+    paddle.seed(33)
     trg_embeder = Embedding(100, 16)
     output_layer = Linear(16, 16)
     decoder_cell = GRUCell(input_size=16, hidden_size=32)
@@ -390,6 +390,74 @@ def test_beamsearchdecoder6():
     except Exception as e:
         # print(e)
         if ("[operator < matmul > error]" in e.args[0]) or ("[operator < matmul_v2 > error]" in e.args[0]):
+            pass
+        else:
+            raise Exception
+
+
+@pytest.mark.api_nn_BeamSearchDecoder_parameters
+def test_beamsearchdecoder7():
+    """
+    end_token out of range
+    """
+    paddle.seed(33)
+    trg_embeder = Embedding(100, 16)
+    output_layer = Linear(16, 16)
+    decoder_cell = GRUCell(input_size=16, hidden_size=16)
+    try:
+        decoder = BeamSearchDecoder(
+            decoder_cell, start_token=0, end_token=16, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
+        )
+        encoder_output = paddle.ones((4, 8, 16), dtype=paddle.get_default_dtype())
+        dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=5)
+    except Exception as e:
+        # print(e)
+        if "list assignment index out of range" in e.args[0]:
+            pass
+        else:
+            raise Exception
+
+
+def test_beamsearchdecoder8():
+    """
+    Exception to the type of start_id
+    """
+    paddle.seed(33)
+    trg_embeder = Embedding(100, 16)
+    output_layer = Linear(16, 16)
+    decoder_cell = GRUCell(input_size=16, hidden_size=16)
+    try:
+        decoder = BeamSearchDecoder(
+            decoder_cell, start_token="a", end_token=1, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
+        )
+        encoder_output = paddle.ones((4, 8, 16), dtype=paddle.get_default_dtype())
+        dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=5)
+    except Exception as e:
+        # print(e)
+        if "invalid literal for int()" in e.args[0]:
+            pass
+        else:
+            raise Exception
+
+
+def test_beamsearchdecoder9():
+    """
+    the size of each embedding vector mismatch the size of GRUCell
+    """
+    paddle.seed(33)
+    try:
+
+        trg_embeder = Embedding(100, 32)
+        output_layer = Linear(16, 16)
+        decoder_cell = GRUCell(input_size=16, hidden_size=16)
+        decoder = BeamSearchDecoder(
+            decoder_cell, start_token=0, end_token=2, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
+        )
+        encoder_output = paddle.ones((4, 8, 16), dtype=paddle.get_default_dtype())
+        dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=5)
+    except Exception as e:
+        # print(e)
+        if "[operator < matmul_v2 > error]" in e.args[0]:
             pass
         else:
             raise Exception
