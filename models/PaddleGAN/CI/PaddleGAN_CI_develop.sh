@@ -56,7 +56,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    python -c "import sys; print('python version:',sys.version_info[:])";
 
    apt-get update
-   apt-get install ffmpeg -y 
+   apt-get install ffmpeg -y
    apt-get install cmake -y
    apt-get install gcc -y
 
@@ -120,8 +120,8 @@ python -m pip install  ppgan \
    -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
 python -m pip install --ignore-installed dlib \
-   -i https://pypi.tuna.tsinghua.edu.cn/simple  
-# python -m pip install --ignore-installed  dlib 
+   -i https://pypi.tuna.tsinghua.edu.cn/simple
+# python -m pip install --ignore-installed  dlib
 python -m pip install  dlib \
    -i https://mirror.baidu.com/pypi/simple
 # python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
