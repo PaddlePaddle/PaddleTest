@@ -62,7 +62,7 @@ def cal_specal_norm_static(x, place, w0, w1, dim=0, power_iters=1, dtype="float3
     """
     paddle.enable_static()
     main_program, strartup_program = paddle.static.Program(), paddle.static.Program()
-    with paddle.utils.spectra.guard():
+    with paddle.utils.unique_name.guard():
         with paddle.static.program_guard(main_program=main_program, startup_program=strartup_program):
             data = paddle.static.data(name="data", shape=x.shape, dtype=dtype)
             spectral_norm = paddle.nn.SpectralNorm(x.shape, dim=dim, power_iters=power_iters, dtype=dtype)
