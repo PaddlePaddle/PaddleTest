@@ -6,7 +6,7 @@ paddle.nn.RNN float32测试
 """
 import copy
 
-from apibase import APIBase
+from apibase import APIBase, compare
 import paddle
 import pytest
 import numpy as np
@@ -110,6 +110,25 @@ class TestBiRNN(APIBase):
 obj = TestBiRNN(paddle.nn.BiRNN)
 
 
+class TestBiRNN64(TestBiRNN):
+    """
+    test RNN float64
+    """
+
+    def hook(self):
+        """
+        implement
+        """
+        self.types = [np.float64]
+        self.seed = 100
+        self.delta = 0.0001
+        self.forward_kwargs = {}  # 前向传播参数
+        paddle.set_default_dtype("float64")
+
+
+obj64 = TestBiRNN64(paddle.nn.BiRNN)
+
+
 def copy_cell_params(np_cell, paddle_cell, dtype="float32"):
     """
     将np_cell的参数复制到paddle_cell中
@@ -124,7 +143,7 @@ def copy_cell_params(np_cell, paddle_cell, dtype="float32"):
 
 def create_cell(input_size, hidden_size, dtype="float32"):
     """
-    update
+    创建RNNCell，保证numpy版本和Paddle初始化参数相同。
     """
     np_cell_fw = SimpleRNNCell(input_size, hidden_size)
     np_cell_bw = SimpleRNNCell(input_size, hidden_size)
@@ -155,7 +174,9 @@ def test_rnn_base():
 @pytest.mark.api_nn_RNN_parameters
 def test_rnn1():
     """
-    测试默认参数
+    float32默认参数测试。
+    time_major=False
+    RnnCell size = (16, 32)
     """
     paddle.set_default_dtype("float32")
     paddle.disable_static()
@@ -172,7 +193,7 @@ def test_rnn1():
 @pytest.mark.api_nn_RNN_parameters
 def test_rnn2():
     """
-    测试默认参数
+    time_major=True
     """
     paddle.set_default_dtype("float32")
     paddle.disable_static()
@@ -186,29 +207,51 @@ def test_rnn2():
     obj.run(res, data=inputs, cell_fw=paddle_cell_fw, cell_bw=paddle_cell_bw, time_major=True)
 
 
-class TestBiRNN64(TestBiRNN):
+def test_rnn3():
     """
-    test RNN float64
+    带初始化状态测试, 带有initial_states
     """
+    dtype = "float32"
+    paddle.set_default_dtype(dtype)
+    paddle.disable_static()
+    # numpy
+    np.random.seed(obj.seed)
+    inputs = np.random.random((10, 8, 16))
+    initial_states0 = np.random.random((10, 32))
+    initial_states1 = np.random.random((10, 32))
+    initial_states = [initial_states0, initial_states1]
+    np_cell_fw, np_cell_bw, paddle_cell_fw, paddle_cell_bw = create_cell(16, 32, dtype=dtype)
+    np_rnn = BiRNN(cell_fw=np_cell_fw, cell_bw=np_cell_bw)
+    np_outputs = np_rnn(inputs, initial_states=initial_states)[0].astype(dtype)
 
-    def hook(self):
-        """
-        implement
-        """
-        self.types = [np.float64]
-        self.seed = 100
-        self.delta = 0.0001
-        self.forward_kwargs = {}  # 前向传播参数
-        paddle.set_default_dtype("float64")
+    paddle_rnn = paddle.nn.BiRNN(cell_fw=paddle_cell_fw, cell_bw=paddle_cell_bw)
+    initial_states = [paddle.to_tensor(t, dtype=dtype) for t in initial_states]
+    paddle_outputs = paddle_rnn(paddle.to_tensor(inputs, dtype=dtype), initial_states=initial_states)[0]
+
+    compare(expect=np_outputs, result=paddle_outputs.numpy(), delta=obj.delta, rtol=obj.rtol)
 
 
-obj64 = TestBiRNN64(paddle.nn.BiRNN)
+@pytest.mark.api_nn_RNN_parameters
+def test_rnn4():
+    """
+    float32 异常测试，fw_cell和bw_cell尺寸不同
+    """
+    paddle.set_default_dtype("float32")
+    paddle.disable_static()
+    # numpy
+    np.random.seed(obj64.seed)
+    inputs = np.random.random((10, 4, 128))
+
+    paddle_cell_fw = paddle.nn.SimpleRNNCell(4, 16)
+    paddle_cell_bw = paddle.nn.SimpleRNNCell(8, 16)
+
+    obj.exception(etype=ValueError, mode="python", data=inputs, cell_fw=paddle_cell_fw, cell_bw=paddle_cell_bw)
 
 
 @pytest.mark.api_nn_RNN_vartype
 def test_rnn_base_64():
     """
-    base测试，包括动态度、静态图、cpu/gpu，grad，动态静态图的结果一致性
+    float64 base测试，包括动态度、静态图、cpu/gpu，grad，动态静态图的结果一致性
     """
     paddle.disable_static()
     paddle.set_default_dtype("float64")
@@ -224,7 +267,9 @@ def test_rnn_base_64():
 @pytest.mark.api_nn_RNN_parameters
 def test_rnn1_64():
     """
-    测试默认参数
+    float64默认参数测试。
+    time_major=False
+    RnnCell size = (16, 32)
     """
     paddle.set_default_dtype("float64")
     paddle.disable_static()
@@ -241,7 +286,7 @@ def test_rnn1_64():
 @pytest.mark.api_nn_RNN_parameters
 def test_rnn2_64():
     """
-    测试默认参数
+    time_major=True
     """
     paddle.set_default_dtype("float64")
     paddle.disable_static()
@@ -253,3 +298,68 @@ def test_rnn2_64():
     res_outputs = rnn(inputs)[0]
     res = res_outputs.astype(np.float64)
     obj64.run(res, data=inputs, cell_fw=paddle_cell_fw, cell_bw=paddle_cell_bw, time_major=True)
+
+
+def test_rnn3_64():
+    """
+    带初始化状态测试, 带有initial_states, time_major=False
+    """
+    dtype = "float64"
+    paddle.set_default_dtype(dtype)
+    paddle.disable_static()
+    # numpy
+    np.random.seed(obj.seed)
+    inputs = np.random.random((10, 8, 16))
+    initial_states0 = np.random.random((10, 32))
+    initial_states1 = np.random.random((10, 32))
+    initial_states = [initial_states0, initial_states1]
+    np_cell_fw, np_cell_bw, paddle_cell_fw, paddle_cell_bw = create_cell(16, 32, dtype=dtype)
+    np_rnn = BiRNN(cell_fw=np_cell_fw, cell_bw=np_cell_bw)
+    np_outputs = np_rnn(inputs, initial_states=initial_states)[0].astype(dtype)
+
+    paddle_rnn = paddle.nn.BiRNN(cell_fw=paddle_cell_fw, cell_bw=paddle_cell_bw)
+    initial_states = [paddle.to_tensor(t, dtype=dtype) for t in initial_states]
+    paddle_outputs = paddle_rnn(paddle.to_tensor(inputs, dtype=dtype), initial_states=initial_states)[0]
+
+    compare(expect=np_outputs, result=paddle_outputs.numpy(), delta=obj.delta, rtol=obj.rtol)
+
+
+def test_rnn3_64():
+    """
+    带初始化状态测试, 带有initial_states，time_major=False
+    """
+    dtype = "float64"
+    paddle.set_default_dtype(dtype)
+    paddle.disable_static()
+    # numpy
+    np.random.seed(obj.seed)
+    inputs = np.random.random((10, 8, 16))
+    initial_states0 = np.random.random((10, 32))
+    initial_states1 = np.random.random((10, 32))
+    initial_states = [initial_states0, initial_states1]
+    np_cell_fw, np_cell_bw, paddle_cell_fw, paddle_cell_bw = create_cell(16, 32, dtype=dtype)
+    np_rnn = BiRNN(cell_fw=np_cell_fw, cell_bw=np_cell_bw)
+    np_outputs = np_rnn(inputs, initial_states=initial_states)[0].astype(dtype)
+
+    paddle_rnn = paddle.nn.BiRNN(cell_fw=paddle_cell_fw, cell_bw=paddle_cell_bw)
+    initial_states = [paddle.to_tensor(t, dtype=dtype) for t in initial_states]
+    paddle_outputs = paddle_rnn(paddle.to_tensor(inputs, dtype=dtype), initial_states=initial_states)[0]
+
+    compare(expect=np_outputs, result=paddle_outputs.numpy(), delta=obj.delta, rtol=obj.rtol)
+
+
+@pytest.mark.api_nn_RNN_parameters
+def test_rnn4_64():
+    """
+    float64 异常测试，fw_cell和bw_cell尺寸不同
+    """
+    paddle.set_default_dtype("float64")
+    paddle.disable_static()
+    # numpy
+    np.random.seed(obj64.seed)
+    inputs = np.random.random((10, 4, 128))
+
+    paddle_cell_fw = paddle.nn.SimpleRNNCell(4, 16)
+    paddle_cell_bw = paddle.nn.SimpleRNNCell(8, 16)
+
+    obj.exception(etype=ValueError, mode="python", data=inputs, cell_fw=paddle_cell_fw, cell_bw=paddle_cell_bw)
