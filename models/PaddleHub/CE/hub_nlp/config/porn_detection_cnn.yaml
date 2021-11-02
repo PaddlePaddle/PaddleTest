@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_install.sh porn_detection_cnn $HUB_CONFIG
+        cmd: bash nlp_install.sh porn_detection_cnn
     kpis:
       exit_code:
         latest: True
