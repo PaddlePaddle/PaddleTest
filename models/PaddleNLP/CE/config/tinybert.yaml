@@ -130,6 +130,7 @@ FINETUNE: # 训练步骤
     priority: p0
     tag: win_gpu1_QNLI
     env:
+      GLOG_v: 4
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
       -
@@ -190,6 +191,7 @@ FINETUNE: # 训练步骤
     priority: p0
     tag: win_gpu1_CoLA
     env:
+      GLOG_v: 4
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
       -
@@ -250,6 +252,7 @@ FINETUNE: # 训练步骤
     priority: p0
     tag: win_gpu1_MRPC
     env:
+      GLOG_v: 4
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
       -
@@ -370,6 +373,7 @@ FINETUNE: # 训练步骤
     priority: p0 #时间太久
     tag: win_gpu1_MNLI
     env:
+      GLOG_v: 4
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
       -
@@ -430,6 +434,7 @@ FINETUNE: # 训练步骤
     priority: p0
     tag: win_gpu1_RTE
     env:
+      GLOG_v: 4
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
       -

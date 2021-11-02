@@ -49,7 +49,7 @@ TRAIN: # 训练步骤
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.72875
+        kpi_base: 0.70875
         threshold: 0.03
         actived: True
         evaluation: "+"
@@ -83,7 +83,7 @@ TRAIN: # 训练步骤
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.7265625
+        kpi_base: 0.7065625
         threshold: 0.032
         actived: True
         evaluation: "+"

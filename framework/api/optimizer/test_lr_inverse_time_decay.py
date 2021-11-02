@@ -5,6 +5,7 @@
 test lr InverseTimeDecay case
 """
 import paddle
+import pytest
 from lrbase import Runner
 
 
@@ -16,6 +17,7 @@ def naive_inverse_time_decay(lr_last, lr_0, epoch, gamma, **kwargs):
     return lr_last
 
 
+@pytest.mark.api_optimizer_inverse_time_decay_vartype
 def test_inverse_time_decay_1():
     """
     test InverseTimeDecay base test

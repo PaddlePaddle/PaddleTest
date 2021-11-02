@@ -1,7 +1,6 @@
 numpy
 sentencepiece==0.1.95
 regex
-tqdm==4.57.0
 jieba
 colorlog
 colorama
@@ -14,7 +13,6 @@ sentencepiece
 termcolor
 gensim
 tqdm
-pgl >= 2.1
 nltk
 easydict
 multiprocess
@@ -23,3 +21,9 @@ paddleslim
 visualdl
 pyrouge
 nltk
+chardet
+tqdm
+beautifulsoup4
+bs4
+pypinyin
+pgl >= 2.1

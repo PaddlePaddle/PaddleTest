@@ -4,15 +4,15 @@
 """
 test Adam case
 """
-
-
 import paddle
+import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
 from linear_dygraph_model import LinearNet
 import reader
 
 
+@pytest.mark.api_optimizer_adam_vartype
 def test_adam_base():
     """
     test adam base test
