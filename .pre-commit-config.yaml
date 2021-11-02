@@ -30,7 +30,7 @@ repos:
       - id: pylint
         files: \.(py)$
         args:
-        - --disable=E,W,R,C0103
+        - --disable=E,W,R,C0103,C0413
         - --enable=
         - --max-line-length=120
         # - --fail-under=9
