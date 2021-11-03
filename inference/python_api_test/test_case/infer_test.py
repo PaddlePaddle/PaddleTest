@@ -235,7 +235,6 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-
         output_names = predictor.get_output_names()
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
@@ -345,6 +344,8 @@ class InferenceTest(object):
         precision="fp32",
         use_static=False,
         use_calib_mode=False,
+        dynamic=False,
+        tuned=False,
     ):
         """
         test enable_tensorrt_engine()
@@ -369,14 +370,29 @@ class InferenceTest(object):
             "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=max_batch_size,
-            min_subgraph_size=min_subgraph_size,
-            precision_mode=trt_precision_map[precision],
-            use_static=use_static,
-            use_calib_mode=use_calib_mode,
-        )
+        if dynamic:
+            if tuned:
+                self.pd_config.collect_shape_range_info("shape_range.pbtxt")
+                return 0
+            else:
+                self.pd_config.enable_tensorrt_engine(
+                    workspace_size=1 << 30,
+                    max_batch_size=max_batch_size,
+                    min_subgraph_size=min_subgraph_size,
+                    precision_mode=trt_precision_map[precision],
+                    use_static=use_static,
+                    use_calib_mode=use_calib_mode,
+                )
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape("shape_range.pbtxt", True)
+        else:
+            self.pd_config.enable_tensorrt_engine(
+                workspace_size=1 << 30,
+                max_batch_size=max_batch_size,
+                min_subgraph_size=min_subgraph_size,
+                precision_mode=trt_precision_map[precision],
+                use_static=use_static,
+                use_calib_mode=use_calib_mode,
+            )
 
         predictor = paddle_infer.create_predictor(self.pd_config)
 
