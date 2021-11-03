@@ -1,5 +1,7 @@
 export FLAGS_call_stack_level=2
-cases="test_ocr_det_mv3_db.py"
+cases="test_ocr_det_mv3_db_gpu.py \
+       test_ocr_det_mv3_db_mkldnn.py
+      "
 bug=0
 
 echo "============ failed cases =============" >> result.txt

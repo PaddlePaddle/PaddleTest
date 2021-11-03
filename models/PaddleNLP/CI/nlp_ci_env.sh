@@ -59,6 +59,7 @@ $3
 python -m pip install -r requirements_ci.txt
 unset http_proxy && unset https_proxy
 python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install $2;
 export http_proxy=$4;
 export https_proxy=$4;
 python -c 'from visualdl import LogWriter'

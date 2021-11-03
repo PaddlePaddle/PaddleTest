@@ -1,0 +1,71 @@
+MODEL: "gpt-3" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $GLUE_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/gpt-3/ #脚本的路径
+  model_log_path: log/gpt-3/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      # 先做makefile替换代码, 这块日后优化需要判断当前的python版本再做替换，
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash linux_py38.sh
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_st_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash st_train.sh $XPU 'single' $SET_CUDA
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 10.984482
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_st_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_st_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash st_train.sh $XPU 'multi' $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 10.984482
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_st_multi_$XPU.log
