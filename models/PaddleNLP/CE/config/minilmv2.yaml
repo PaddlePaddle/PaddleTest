@@ -25,6 +25,14 @@ DATA_PROC:
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
 
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
+
 FINETUNE: # 训练步骤，还未提测
   -
     priority: p0
