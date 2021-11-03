@@ -1,5 +1,5 @@
 MODEL: "SwinTransformer_large_patch4_window12_384" # 模型名
-PRIORITY: P3
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -33,8 +33,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 9.63905
-        threshold: 0.5
+        kpi_base: 6.47612
+        threshold: 0.0
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/SwinTransformer_large_patch4_window12_384_1card.log
@@ -52,8 +52,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.80262
-        threshold: 0.5
+        kpi_base: 6.52868
+        threshold: 0.0
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/SwinTransformer_large_patch4_window12_384_2card.log
