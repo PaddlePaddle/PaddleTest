@@ -130,7 +130,9 @@ def test_adaptive_max_pool1d3():
     """
     exception return_mask=True
     """
-    x = randtool("float", -10, 10, [2, 3, 8])
-    output_size = 8
-    # res = max_pool1D_forward_naive(x=x, ksize=output_size, strides=0, paddings=0, adaptive=True)
-    obj.exception(etype=AttributeError, mode="python", x=x, output_size=output_size, return_mask=True)
+    obj2 = TestFunctionalAdaptiveMaxPool1d(paddle.nn.functional.adaptive_max_pool1d)
+    obj2.static = False
+    np.random.seed(22)
+    x = np.random.rand(1, 1, 4)
+    res = np.array([[[[0.20846054, 0.48168106, 0.42053804, 0.85918200]]], [[[0, 1, 2, 3]]]])
+    obj2.run(res=res, x=x, output_size=4, return_mask=True)

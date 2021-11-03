@@ -153,20 +153,15 @@ def test_max_pool1d4():
     """
     exception return_mask=True
     """
-    x = randtool("float", -10, 10, [2, 3, 8])
+    obj2 = TestFunctionalMaxpool1d(paddle.nn.functional.max_pool1d)
+    obj2.static = False
+    np.random.seed(22)
+    x = np.random.rand(1, 1, 2)
     kernel_size = 2
-    stride = 1
-    padding = 1
-    # res = max_pool1D_forward_naive(x=x, ksize=kernel_size, strides=stride, paddings=padding)
-    obj.exception(
-        etype=AttributeError,
-        mode="python",
-        x=x,
-        kernel_size=kernel_size,
-        stride=stride,
-        padding=padding,
-        return_mask=True,
-    )
+    stride = 2
+    padding = 0
+    res = np.array([[[[0.48168106]]], [[[1]]]])
+    obj2.run(res=res, x=x, kernel_size=kernel_size, stride=stride, padding=padding, return_mask=True)
 
 
 @pytest.mark.api_nn_max_pool1d_parameters
