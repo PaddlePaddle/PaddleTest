@@ -169,3 +169,53 @@ def test_rnncellbase8():
             pass
         else:
             raise Exception
+
+
+@pytest.mark.api_nn_RNNCellBase_parameters
+def test_rnncellbase9():
+    """
+    init_volume=-2
+    """
+    x = paddle.randn((4, 16))
+    shape = (4, 16)
+    dtype = paddle.float32
+    init_volume = -2
+
+    res = paddle.ones((4, 4, 16), dtype=paddle.float32) * -2
+    paddle_res = obj.get_initial_states(batch_ref=x, shape=shape, dtype=dtype, init_value=init_volume)
+
+    compare(res.numpy(), paddle_res.numpy())
+
+
+@pytest.mark.api_nn_RNNCellBase_parameters
+def test_rnncellbase10():
+    """
+    exception:wrong shape
+    """
+    x = paddle.randn((4, 16))
+    shape = (-1, -1)
+    dtype = paddle.float32
+
+    try:
+        obj.get_initial_states(batch_ref=x, shape=shape, dtype=dtype)
+    except Exception as e:
+        if "[operator < fill_constant_batch_size_like > error]" in e.args[0]:
+            pass
+        else:
+            raise Exception
+
+
+@pytest.mark.api_nn_RNNCellBase_parameters
+def test_rnncellbas11():
+    """
+    init_volume=1e22
+    """
+    x = paddle.randn((4, 16))
+    shape = (4, 16)
+    dtype = paddle.float32
+    init_volume = 1e22
+
+    res = paddle.ones((4, 4, 16), dtype=paddle.float32) * 1e22
+    paddle_res = obj.get_initial_states(batch_ref=x, shape=shape, dtype=dtype, init_value=init_volume)
+
+    compare(res.numpy(), paddle_res.numpy())
