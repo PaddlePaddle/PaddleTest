@@ -42,6 +42,7 @@ def test_config():
     test_suite.config_test()
 
 
+@pytest.mark.win
 @pytest.mark.server
 @pytest.mark.mkldnn_more_bz_precision
 def test_more_bz_mkldnn():

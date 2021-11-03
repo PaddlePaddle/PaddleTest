@@ -25,4 +25,5 @@ chardet
 tqdm
 beautifulsoup4
 bs4
+pypinyin
 pgl >= 2.1
