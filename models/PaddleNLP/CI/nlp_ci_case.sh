@@ -199,7 +199,7 @@ print_info $? electra_pretrain
 # 8 gpt
 gpt(){
 #data process
-cd ${nlp_dir}/examples/language_model/data_tools/
+cd ${nlp_dir}/examples/language_model/data_tools/   
 sed -i "s/python3/python/g" Makefile
 sed -i "s/python-config/python3.7m-config/g" Makefile
 #pretrain
@@ -221,9 +221,9 @@ time (python -m paddle.distributed.launch  run_pretrain.py \
     --device gpu >${log_path}/gpt_pretrain) >>${log_path}/gpt_pretrain 2>&1
 print_info $? gpt_pretrain
 # test acc
-cd ${nlp_dir}/tests/examples/gpt/
-time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
-print_info $? gpt_test_acc
+# cd ${nlp_dir}/tests/examples/gpt/
+# time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
+# print_info $? gpt_test_acc
 # FT
 cd ${nlp_dir}/
 export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
@@ -231,7 +231,7 @@ wget https://paddle-qa.bj.bcebos.com/paddlenlp/paddle_inference.tgz
 tar -xzvf paddle_inference.tgz
 cd ${nlp_dir}/paddlenlp/ops
 export CC=/usr/local/gcc-8.2/bin/gcc
-export CXX=/usr/local/gcc-8.2/bin/gcc
+export CXX=/usr/local/gcc-8.2/bin/g++
 #python
 mkdir build_gpt_so
 cd build_gpt_so/
@@ -242,7 +242,7 @@ cd ../
 #c++
 mkdir build_gpt_cc
 cd build_gpt_cc/
-cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON
+cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON  
 make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
 print_info $? gpt_C_FT
 #depoly python
@@ -257,8 +257,8 @@ python infer.py \
     --start_token "<|endoftext|>" \
     --end_token "<|endoftext|>" \
     --temperature 1.0  >${log_path}/gpt_deploy_P_FT >>${log_path}/gpt_deploy_P_FT 2>&1
-print_info $? gpt_deploy_P_FT
-#depoly C++
+print_info $? gpt_deploy_P_FT 
+#depoly C++  
 python export_model.py \
     --model_name_or_path gpt2-medium-en \
     --decoding_lib ${nlp_dir}/paddlenlp/ops/build_gpt_so/lib/libdecoding_op.so \
@@ -272,7 +272,7 @@ python export_model.py \
 mv infer_model/ ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
 cd ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
 ./gpt -batch_size 1 -gpu_id 0 -model_dir ./infer_model -vocab_file ./infer_model/vocab.txt -start_token "<|endoftext|>" -end_token "<|endoftext|>"  >${log_path}/gpt_deploy_C_FT >>${log_path}/gpt_deploy_C_FT 2>&1
-print_info $? gpt_deploy_C_FT
+print_info $? gpt_deploy_C_FT 
 }
 # 9 ernie-1.0
 ernie-1.0 (){
@@ -667,22 +667,22 @@ sed -i "s/max_iter: None/max_iter: 2/g" configs/transformer.base.yaml
 sed -i "s/batch_size: 4096/batch_size: 1000/g" configs/transformer.base.yaml
 python -m paddle.distributed.launch train.py --config ./configs/transformer.base.yaml >${log_path}/transformer_train) >>${log_path}/transformer_train 2>&1
 print_info $? transformer_train
-time (
-#predict
-sed -i 's#init_from_params: "./trained_models/step/"#init_from_params: "./trained_models/step_1/"#g' configs/transformer.base.yaml
-python predict.py --config ./configs/transformer.base.yaml >${log_path}/transformer_predict) >>${log_path}/transformer_predict 2>&1
-print_info $? transformer_predict
-#export
-time (python export_model.py --config ./configs/transformer.base.yaml >${log_path}/transformer_export) >>${log_path}/transformer_export 2>&1
-print_info $? transformer_export
-#infer
-time (cd ./deploy/python/
-python inference.py \
-        --config ../../configs/transformer.base.yaml \
-        --batch_size 8 \
-        --device gpu \
-        --model_dir ../../infer_model/ >${log_path}/transformer_infer) >>${log_path}/transformer_infer 2>&1
-print_info $? transformer_infer
+# time (
+# #predict
+# sed -i 's#init_from_params: "./trained_models/step/"#init_from_params: "./trained_models/step_1/"#g' configs/transformer.base.yaml
+# python predict.py --config ./configs/transformer.base.yaml >${log_path}/transformer_predict) >>${log_path}/transformer_predict 2>&1
+# print_info $? transformer_predict
+# #export
+# time (python export_model.py --config ./configs/transformer.base.yaml >${log_path}/transformer_export) >>${log_path}/transformer_export 2>&1
+# print_info $? transformer_export
+# #infer
+# time (cd ./deploy/python/
+# python inference.py \
+#         --config ../../configs/transformer.base.yaml \
+#         --batch_size 8 \
+#         --device gpu \
+#         --model_dir ../../infer_model/ >${log_path}/transformer_infer) >>${log_path}/transformer_infer 2>&1
+# print_info $? transformer_infer
 # FT
 cd ${nlp_dir}/paddlenlp/ops
 #python op
@@ -695,10 +695,10 @@ cd ../
 #C++ op
 mkdir build_tr_cc
 cd build_tr_cc/
-cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON
+cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON 
 make -j >${log_path}/transformer_C_FT >>${log_path}/transformer_C_FT 2>&1
 print_info $? transformer_C_FT
-#deploy python
+#deploy python 
 cd ${nlp_dir}/examples/machine_translation/transformer/faster_transformer/
 sed -i "s#./trained_models/step_final/#./base_trained_models/step_final/#g" ../configs/transformer.base.yaml
 wget https://paddlenlp.bj.bcebos.com/models/transformers/transformer/transformer-base-wmt_ende_bpe.tar.gz
@@ -848,13 +848,14 @@ print_info $? question_matching_predict
 }
 # 29 ernie-csc
 ernie-csc() {
+export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/examples/text_correction/ernie-csc
 #dowdnload data
 python download.py --data_dir ./extra_train_ds/ --url https://github.com/wdimmy/Automatic-Corpus-Generation/raw/master/corpus/train.sgml
 #trans xml txt
 python change_sgml_to_txt.py -i extra_train_ds/train.sgml -o extra_train_ds/train.txt
-#4卡训练
-python-m paddle.distributed.launch  train.py --batch_size 32 --logging_steps 100 --epochs 10 --learning_rate 0.0002 --model_name_or_path ernie-1.0 --output_dir ./checkpoints/ --extra_train_ds_dir ./extra_train_ds/  >${log_path}/ernie-csc_train >>${log_path}/ernie-csc_train 2>&1
+#2卡训练
+python -m paddle.distributed.launch  train.py --batch_size 32 --logging_steps 100 --epochs 1 --learning_rate 5e-5 --model_name_or_path ernie-1.0 --output_dir ./checkpoints/ --extra_train_ds_dir ./extra_train_ds/  >${log_path}/ernie-csc_train >>${log_path}/ernie-csc_train 2>&1
 print_info $? ernie-csc_train
 #predict
 sh run_sighan_predict.sh >${log_path}/ernie-csc_predict >>${log_path}/ernie-csc_ernie-csc_predict 2>&1
