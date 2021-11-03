@@ -1,5 +1,5 @@
 MODEL: "xlnet" # 模型名
-PRIORITY: P0
+PRIORITY: P0_2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
