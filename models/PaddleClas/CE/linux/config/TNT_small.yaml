@@ -33,8 +33,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 9.63905
-        threshold: 0.5
+        kpi_base: 8.86392
+        threshold: 0.0
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/TNT_small_1card.log
@@ -52,8 +52,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.80262
-        threshold: 0.5
+        kpi_base: 7.25404
+        threshold: 0.0
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/TNT_small_2card.log

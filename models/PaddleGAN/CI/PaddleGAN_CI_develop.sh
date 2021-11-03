@@ -5,6 +5,14 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
+#$1 <-> model_flag CI是效率云  pr是TC，all是全量，single是单独模型debug
+#$2 <-> pr_num   随机跑pr的模型数
+#$3 <-> python   python版本
+#$4 <-> cudaid   cuda卡号
+#$5 <-> paddle_compile   paddle包地址
+#$6 <-> data_path   数据路径
+#$7 <-> single_yaml_debug  单独模型yaml字符
+
 if [[ ${model_flag} =~ 'CI' ]]; then
    # data
    echo "######  ----ln  data-----"
@@ -23,7 +31,7 @@ if [[ ${model_flag} =~ 'CI' ]]; then
 fi
 
 
-if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
+if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
 
@@ -47,6 +55,11 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    esac
    python -c "import sys; print('python version:',sys.version_info[:])";
 
+   apt-get update
+   apt-get install ffmpeg -y
+   apt-get install cmake -y
+   apt-get install gcc -y
+
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"
@@ -58,22 +71,28 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    ln -s $6 data #data_path
    ls data
 
-   apt-get update
-   apt-get install -y ffmpeg
 else
    # ppgan
+   echo "######  ffmpeg"
    yum update -y
    yum install epel-release -y
    rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
    rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
-   yum install cmake boost -y
-   yum install opencv opencv-python opencv-devel python-devel numpy -y
+   yum install boost -y
+   yum install opencv -y
    yum install ffmpeg -y
-   echo "######  ffmpeg"
    ffmpeg
    #install  dlib
-   yum install gcc gcc-c++
-   yum install cmake boost
+   echo "######  gcc"
+   yum install gcc -y
+   yum install centos-release-scl -y
+   yum install devtoolset-8-gcc -y
+   ls /opt/rh/devtoolset-8/enable
+   source /opt/rh/devtoolset-8/enable
+   gcc -v
+   echo "######  cmake"
+   yum install cmake -y
+   cmake -version
 fi
 
 # python
@@ -91,16 +110,25 @@ fi
 unset http_proxy
 unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
-python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
-python -m pip install --ignore-installed  ppgan -i https://mirror.baidu.com/pypi/simple
+python -m pip install --ignore-installed  --upgrade pip \
+   -i https://mirror.baidu.com/pypi/simple
+python -m pip install -r requirements.txt  \
+   -i https://mirror.baidu.com/pypi/simple
 echo "######  install ppgan "
-python -m pip install  -v -e.
+python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
+python -m pip install  ppgan \
+   -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
-python -m pip install --ignore-installed  dlib -i https://mirror.baidu.com/pypi/simple
+python -m pip install --ignore-installed dlib \
+   -i https://pypi.tuna.tsinghua.edu.cn/simple
+# python -m pip install --ignore-installed  dlib
+python -m pip install  dlib \
+   -i https://mirror.baidu.com/pypi/simple
 # python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
+python -c 'import dlib'
 echo "######  install done "
+
 
 pip list
 echo "######  pip list"
@@ -121,7 +149,9 @@ done
 rm -rf models_list
 rm -rf models_list_all
 
-find configs/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'| grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' > models_list_all
+find configs/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'\
+   | grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' \
+   > models_list_all
 
 if [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
@@ -137,8 +167,10 @@ echo "######  length models_list"
 wc -l models_list
 cat models_list
 if [[ ${1} =~ "pr" ]];then
-   # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
-   git diff $(git log --pretty=oneline |grep "#"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep yaml|grep configs|awk -F 'b/' '{print$2}'|tee -a  models_list_diff
+   # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
+      # | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
+   git diff $(git log --pretty=oneline |grep "#"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
+      | grep diff|grep yaml|grep configs|awk -F 'b/' '{print$2}'|tee -a  models_list_diff
    echo "######  diff models_list_diff"
    wc -l models_list_diff
    cat models_list_diff
@@ -161,7 +193,9 @@ sed -i '1s/epochs/total_iters/' $line
 sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 case ${model} in
 lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second)
-python tools/main.py --config-file $line -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output > $log_path/train/${model}.log 2>&1
+python tools/main.py --config-file $line \
+   -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
+   > $log_path/train/${model}.log 2>&1
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
@@ -173,7 +207,9 @@ else
 fi
   ;;
 *)
-python  -m paddle.distributed.launch tools/main.py --config-file $line -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output > $log_path/train/${model}.log 2>&1
+python  -m paddle.distributed.launch tools/main.py --config-file $line \
+   -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
+   > $log_path/train/${model}.log 2>&1
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
@@ -190,14 +226,20 @@ esac
 ls output/$params_dir/
 case ${model} in
 stylegan_v2_256_ffhq)
-  python tools/extract_weight.py output/$params_dir/iter_20_checkpoint.pdparams --net-name gen_ema --output stylegan_extract.pdparams > $log_path/eval/${model}_extract_weight.log 2>&1
+  python tools/extract_weight.py output/$params_dir/iter_20_checkpoint.pdparams \
+   --net-name gen_ema \
+   --output stylegan_extract.pdparams \
+   > $log_path/eval/${model}_extract_weight.log 2>&1
   if [[ $? -eq 0 ]];then
      echo -e "\033[33m extract_weight of $model  successfully!\033[0m"| tee -a $log_path/result.log
   else
      cat $log_path/eval/${model}.log
      echo -e "\033[31m extract_weight of $model failed!\033[0m"| tee -a $log_path/result.log
   fi
-  python applications/tools/styleganv2.py --output_path stylegan_infer --weight_path stylegan_extract.pdparams --size 256 > $log_path/eval/${model}.log 2>&1
+  python applications/tools/styleganv2.py --output_path stylegan_infer \
+   --weight_path stylegan_extract.pdparams \
+   --size 256 \
+   > $log_path/eval/${model}.log 2>&1
   if [[ $? -eq 0 ]];then
      echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
   else
@@ -211,7 +253,9 @@ makeup)
 *)
 
 # echo $params_dir
-  python tools/main.py --config-file $line --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams > $log_path/eval/${model}.log 2>&1
+  python tools/main.py --config-file $line \
+   --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams \
+   > $log_path/eval/${model}.log 2>&1
   if [[ $? -eq 0 ]];then
      echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
   else
@@ -223,7 +267,17 @@ esac
 done
 
 #infer
-python -u applications/tools/styleganv2.py --output_path styleganv2_infer --model_type ffhq-config-f --seed 233 --size 1024 --style_dim 512 --n_mlp 8 --channel_multiplier 2 --n_row 3 --n_col 5 > $log_path/infer/styleganv2.log 2>&1
+python -u applications/tools/styleganv2.py \
+   --output_path styleganv2_infer \
+   --model_type ffhq-config-f \
+   --seed 233 \
+   --size 1024 \
+   --style_dim 512 \
+   --n_mlp 8 \
+   --channel_multiplier 2 \
+   --n_row 3 \
+   --n_col 5 \
+   > $log_path/infer/styleganv2.log 2>&1
 if [[ $? -eq 0 ]];then
    echo -e "\033[33m infer of styleganv2  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -239,7 +293,9 @@ fi
 #    echo -e "\033[31m infer of wav2lip failed!\033[0m"| tee -a $log_path/result.log
 # fi
 # animeganv2
-python applications/tools/animeganv2.py --input_image ./docs/imgs/animeganv2_test.jpg > $log_path/infer/animeganv2.log 2>&1
+python applications/tools/animeganv2.py \
+   --input_image ./docs/imgs/animeganv2_test.jpg \
+   > $log_path/infer/animeganv2.log 2>&1
 if [[ $? -eq 0 ]];then
    echo -e "\033[33m infer of animeganv2  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -247,7 +303,13 @@ else
    echo -e "\033[31m infer of animeganv2 failed!\033[0m"| tee -a $log_path/result.log
 fi
 # fist order motion model
-python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image.png --ratio 0.4 --relative --adapt_scale > $log_path/infer/fist_order_motion_model.log 2>&1
+python -u applications/tools/first-order-demo.py \
+   --driving_video ./docs/imgs/fom_dv.mp4 \
+   --source_image ./docs/imgs/fom_source_image.png \
+   --ratio 0.4 \
+   --relative \
+   --adapt_scale \
+   > $log_path/infer/fist_order_motion_model.log 2>&1
 if [[ $? -eq 0 ]];then
    echo -e "\033[33m infer of fist order motion model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -257,7 +319,14 @@ fi
 
 if [[ ! $1 == "pr" ]];then
    # fist order motion model multi_person
-   python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image_multi_person.jpg --ratio 0.4 --relative --adapt_scale --multi_person > $log_path/infer/fist_order_motion_model_multi_person.log 2>&1
+   python -u applications/tools/first-order-demo.py \
+      --driving_video ./docs/imgs/fom_dv.mp4 \
+      --source_image ./docs/imgs/fom_source_image_multi_person.jpg \
+      --ratio 0.4 \
+      --relative \
+      --adapt_scale \
+      --multi_person \
+      > $log_path/infer/fist_order_motion_model_multi_person.log 2>&1
    if [[ $? -eq 0 ]];then
       echo -e "\033[33m infer of fist order motion model  multi_person successfully!\033[0m"| tee -a $log_path/result.log
    else
@@ -266,27 +335,34 @@ if [[ ! $1 == "pr" ]];then
    fi
 fi
 
-if [[ $1 == "pr" ]];then
-   # face_parse
-   python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-   if [[ $? -eq 0 ]];then
-      echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
-   else
-      cat $log_path/infer/face_parse.log
-      echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
-   fi
-   # psgan
-   python tools/psgan_infer.py --config-file configs/makeup.yaml --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > $log_path/infer/psgan.log 2>&1
-   if [[ $? -eq 0 ]];then
-      echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
-   else
-      cat $log_path/infer/psgan.log
-      echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
-   fi
+# face_parse
+python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
+if [[ $? -eq 0 ]];then
+   echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/infer/face_parse.log
+   echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
+fi
+# psgan
+python tools/psgan_infer.py \
+   --config-file configs/makeup.yaml \
+   --source_path  docs/imgs/ps_source.png \
+   --reference_dir docs/imgs/ref \
+   --evaluate-only \
+   > $log_path/infer/psgan.log 2>&1
+if [[ $? -eq 0 ]];then
+   echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/infer/psgan.log
+   echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
 fi
 
 # video restore
-python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > $log_path/infer/video_restore.log 2>&1
+python applications/tools/video-enhance.py \
+   --input data/Peking_input360p_clip_10_11.mp4 \
+   --process_order DAIN DeOldify EDVR \
+   --output video_restore_infer \
+   > $log_path/infer/video_restore.log 2>&1
 if [[ $? -eq 0 ]];then
    echo -e "\033[33m infer of video restore  successfully!\033[0m"| tee -a $log_path/result.log
 else
