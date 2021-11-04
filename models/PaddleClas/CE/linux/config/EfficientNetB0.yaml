@@ -33,8 +33,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 10 #9.63905
-        threshold: 0.5
+        kpi_base: 12.77855
+        threshold: 0.0
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/EfficientNetB0_1card.log
@@ -52,8 +52,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 10 #6.80262
-        threshold: 0.5
+        kpi_base: 12.24543
+        threshold: 0.0
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/EfficientNetB0_2card.log
