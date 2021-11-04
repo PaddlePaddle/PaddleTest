@@ -4,12 +4,10 @@ rm -rf data
 ln -s ${data_path} data
 
 # env
-unset http_proxy
-unset https_proxy
-python -m pip install --upgrade pip -i https://mirror.baidu.com/pypi/simple  
-python -m pip install -r requirements.txt  -i https://mirror.baidu.com/pypi/simple 
-python -m pip install -v -e .  -i https://mirror.baidu.com/pypi/simple 
-python -m pip install dlib  -i https://mirror.baidu.com/pypi/simple
+python -m pip install --upgrade pip -i 
+python -m pip install -r requirements.txt  
+python -m pip install -v -e .  
+python -m pip install dlib 
 
 
 # dir
@@ -27,7 +25,6 @@ else
 fi
 done
 
-output_path="output"
 cat gan_models_list_P0 | while read line
 do
 #echo $line
@@ -38,6 +35,7 @@ echo $model
 if [ -d "output" ]; then
    rm -rf output
 fi
+sed -i '' 's/epochs/total_iters/g' $line #将epcoh换为iter
 #train
 python tools/main.py -c $line -o total_iters=20 log_config.interval=20 log_config.visiual_interval=1 snapshot_config.interval=10 output_dir=output > $log_path/train/$model.log 2>&1 
 params_dir=$(ls output)

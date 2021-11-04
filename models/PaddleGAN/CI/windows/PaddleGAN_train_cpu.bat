@@ -54,84 +54,84 @@ if not !errorlevel! == 0 (
 echo ----------------------------------------------------------------
 )
 
-@REM echo infer
-@REM echo styleganv2
-@REM python -u applications/tools/styleganv2.py --output_path styleganv2_infer --model_type ffhq-config-f --seed 233 --size 1024 --style_dim 512 --n_mlp 8 --channel_multiplier 2 --n_row 3 --n_col 5 > %log_path%/styleganv2_infer.log 2>&1
+echo infer
+echo styleganv2
+python -u applications/tools/styleganv2.py --output_path styleganv2_infer --model_type ffhq-config-f --seed 233 --size 1024 --style_dim 512 --n_mlp 8 --channel_multiplier 2 --n_row 3 --n_col 5 > %log_path%/styleganv2_infer.log 2>&1
+if  !errorlevel! GTR 0 (
+        echo   styleganv2,infer,FAIL  >> %log_path%\result.log
+        echo  infer of styleganv2 failed!
+) else (
+        echo   styleganv2,infer,SUCCESS  >> %log_path%\result.log
+        echo   infer of styleganv2 successfully!
+)
+
+@REM echo wav2lip
+@REM python applications/tools/wav2lip.py --face ./docs/imgs/mona7s.mp4 --audio ./docs/imgs/guangquan.m4a --outfile Wav2Lip_infer.mp4 > %log_path%/wav2lip_infer.log 2>&1
 @REM if  !errorlevel! GTR 0 (
-@REM         echo   styleganv2,infer,FAIL  >> %log_path%\result.log
-@REM         echo  infer of styleganv2 failed!
+@REM         echo   wav2lip,infer,FAIL  >> %log_path%\result.log
+@REM         echo  infer of wav2lip failed!
 @REM ) else (
-@REM         echo   styleganv2,infer,SUCCESS  >> %log_path%\result.log
-@REM         echo   infer of styleganv2 successfully!
+@REM         echo   wav2lip,infer,SUCCESS  >> %log_path%\result.log
+@REM         echo   infer of wav2lip successfully!
 @REM )
 
-@REM @REM echo wav2lip
-@REM @REM python applications/tools/wav2lip.py --face ./docs/imgs/mona7s.mp4 --audio ./docs/imgs/guangquan.m4a --outfile Wav2Lip_infer.mp4 > %log_path%/wav2lip_infer.log 2>&1
-@REM @REM if  !errorlevel! GTR 0 (
-@REM @REM         echo   wav2lip,infer,FAIL  >> %log_path%\result.log
-@REM @REM         echo  infer of wav2lip failed!
-@REM @REM ) else (
-@REM @REM         echo   wav2lip,infer,SUCCESS  >> %log_path%\result.log
-@REM @REM         echo   infer of wav2lip successfully!
-@REM @REM )
+echo animeganv2
+python applications/tools/animeganv2.py --input_image ./docs/imgs/animeganv2_test.jpg > %log_path%/animeganv2_infer.log 2>&1
+if  !errorlevel! GTR 0 (
+        echo   animeganv2,infer,FAIL  >> %log_path%\result.log
+        echo  infer of animeganv2 failed!
+) else (
+        echo   animeganv2,infer,SUCCESS  >> %log_path%\result.log
+        echo   infer of animeganv2 successfully!
+)
+echo first order motion
+python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image.png --ratio 0.4 --relative --adapt_scale > %log_path%/first_order_motion_single_person_infer.log 2>&1
+if  !errorlevel! GTR 0 (
+        echo   first_order_motion_single_person,infer,FAIL  >> %log_path%\result.log
+        echo  infer of first_order_motion_single_person failed!
+) else (
+        echo   first_order_motion_single_person,infer,SUCCESS  >> %log_path%\result.log
+        echo   infer of first_order_motion_single_person successfully!
+)
 
-@REM echo animeganv2
-@REM python applications/tools/animeganv2.py --input_image ./docs/imgs/animeganv2_test.jpg > %log_path%/animeganv2_infer.log 2>&1
+@REM echo first order motion multi
+@REM python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image_multi_person.jpg --ratio 0.4 --relative --adapt_scale --multi_person > %log_path%/first_order_motion_multi_person_infer.log 2>&1
 @REM if  !errorlevel! GTR 0 (
-@REM         echo   animeganv2,infer,FAIL  >> %log_path%\result.log
-@REM         echo  infer of animeganv2 failed!
+@REM         echo   first_order_motion_multi_person,infer,FAIL  >> %log_path%\result.log
+@REM         echo  infer of first_order_motion_multi_person failed!
 @REM ) else (
-@REM         echo   animeganv2,infer,SUCCESS  >> %log_path%\result.log
-@REM         echo   infer of animeganv2 successfully!
-@REM )
-@REM echo first order motion
-@REM python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image.png --ratio 0.4 --relative --adapt_scale > %log_path%/first_order_motion_single_person_infer.log 2>&1
-@REM if  !errorlevel! GTR 0 (
-@REM         echo   first_order_motion_single_person,infer,FAIL  >> %log_path%\result.log
-@REM         echo  infer of first_order_motion_single_person failed!
-@REM ) else (
-@REM         echo   first_order_motion_single_person,infer,SUCCESS  >> %log_path%\result.log
-@REM         echo   infer of first_order_motion_single_person successfully!
-@REM )
-
-@REM @REM echo first order motion multi
-@REM @REM python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image_multi_person.jpg --ratio 0.4 --relative --adapt_scale --multi_person > %log_path%/first_order_motion_multi_person_infer.log 2>&1
-@REM @REM if  !errorlevel! GTR 0 (
-@REM @REM         echo   first_order_motion_multi_person,infer,FAIL  >> %log_path%\result.log
-@REM @REM         echo  infer of first_order_motion_multi_person failed!
-@REM @REM ) else (
-@REM @REM         echo   first_order_motion_multi_person,infer,SUCCESS  >> %log_path%\result.log
-@REM @REM         echo   infer of first_order_motion_multi_person successfully!
-@REM @REM )
-
-@REM echo face parse
-@REM python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > %log_path%/face_parse_infer.log 2>&1
-@REM if  !errorlevel! GTR 0 (
-@REM         echo   face_parse,infer,FAIL  >> %log_path%\result.log
-@REM         echo  infer of face_parse failed!
-@REM ) else (
-@REM         echo   face_parse,infer,SUCCESS  >> %log_path%\result.log
-@REM         echo   infer of face_parse successfully!
-@REM )
-@REM echo psgan
-@REM python tools/psgan_infer.py --config-file configs/makeup.yaml --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > %log_path%/psgan_infer.log 2>&1
-@REM if  !errorlevel! GTR 0 (
-@REM         echo   psgan,infer,FAIL  >> %log_path%\result.log
-@REM         echo  infer of psgan failed!
-@REM ) else (
-@REM         echo   psgan,infer,SUCCESS  >> %log_path%\result.log
-@REM         echo   infer of psgan successfully!
+@REM         echo   first_order_motion_multi_person,infer,SUCCESS  >> %log_path%\result.log
+@REM         echo   infer of first_order_motion_multi_person successfully!
 @REM )
 
-@REM echo vidieo restore
-@REM python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > %log_path%/vidieo_restore_infer.log 2>&1
-@REM if  !errorlevel! GTR 0 (
-@REM         echo   vidieo restore,infer,FAIL  >> %log_path%\result.log
-@REM         echo  infer of vidieo restore failed!
-@REM ) else (
-@REM         echo   vidieo restore,infer,SUCCESS  >> %log_path%\result.log
-@REM         echo   infer of vidieo restore successfully!
-@REM )
+echo face parse
+python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > %log_path%/face_parse_infer.log 2>&1
+if  !errorlevel! GTR 0 (
+        echo   face_parse,infer,FAIL  >> %log_path%\result.log
+        echo  infer of face_parse failed!
+) else (
+        echo   face_parse,infer,SUCCESS  >> %log_path%\result.log
+        echo   infer of face_parse successfully!
+)
+echo psgan
+python tools/psgan_infer.py --config-file configs/makeup.yaml --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > %log_path%/psgan_infer.log 2>&1
+if  !errorlevel! GTR 0 (
+        echo   psgan,infer,FAIL  >> %log_path%\result.log
+        echo  infer of psgan failed!
+) else (
+        echo   psgan,infer,SUCCESS  >> %log_path%\result.log
+        echo   infer of psgan successfully!
+)
+
+echo vidieo restore
+python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > %log_path%/vidieo_restore_infer.log 2>&1
+if  !errorlevel! GTR 0 (
+        echo   vidieo restore,infer,FAIL  >> %log_path%\result.log
+        echo  infer of vidieo restore failed!
+) else (
+        echo   vidieo restore,infer,SUCCESS  >> %log_path%\result.log
+        echo   infer of vidieo restore successfully!
+)
 
 
 rmdir data /S /Q

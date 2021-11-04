@@ -40,17 +40,41 @@ if not !errorlevel! == 0 (
 )
 
 echo eval
-for /d %%j in %params_dir% do (
-echo %%j
-python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams > %log_path%/!model!_eval.log 2>&1
-if not !errorlevel! == 0 (
-        echo   !model!,eval,FAIL  >> %log_path%\result.log
-        echo  eval of !model! failed!
-) else (
-        echo   !model!,eval,SUCCESS  >> %log_path%\result.log
-        echo   eval of !model! successfully!
+if !model! == "stylegan_v2_256_ffhq" (
+        for /d %%j in %params_dir% do (
+        echo %%j
+        python tools/extract_weight.py output/%%j/iter_20_checkpoint.pdparams --net-name gen_ema --output stylegan_extract.pdparams > %log_path%/!model!_extract_weight.log 2>&1
+        if not !errorlevel! == 0 (
+                echo   !model!,extract_weight,FAIL  >> %log_path%\result.log
+                echo  extract_weight of !model! failed!
+        ) else (
+                echo   !model!,extract_weight,SUCCESS  >> %log_path%\result.log
+                echo   extract_weight of !model! successfully!
+        )
+        python applications/tools/styleganv2.py --output_path stylegan_infer --weight_path stylegan_extract.pdparams --size 256 > %log_path%/!model!_eval.log 2>&1
+        if not !errorlevel! == 0 (
+                echo   !model!,eval,FAIL  >> %log_path%\result.log
+                echo  eval of !model! failed!
+        ) else (
+                echo   !model!,eval,SUCCESS  >> %log_path%\result.log
+                echo   eval of !model! successfully!
+        )
+        )
 )
+else(
+        for /d %%j in %params_dir% do (
+        echo %%j
+        python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams > %log_path%/!model!_eval.log 2>&1
+        if not !errorlevel! == 0 (
+                echo   !model!,eval,FAIL  >> %log_path%\result.log
+                echo  eval of !model! failed!
+        ) else (
+                echo   !model!,eval,SUCCESS  >> %log_path%\result.log
+                echo   eval of !model! successfully!
+        )
+        )
 )
+
 echo ----------------------------------------------------------------
 )
 

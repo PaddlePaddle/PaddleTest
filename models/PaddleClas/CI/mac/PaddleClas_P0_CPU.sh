@@ -4,13 +4,10 @@ unset GREP_OPTIONS
 rm -rf dataset
 ln -s ${data_path} dataset
 
-
-unset http_proxy
-unset https_proxy
 # env
-python -m pip install --upgrade pip -i https://mirror.baidu.com/pypi/simple  
-python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple
-python -m pip install paddleslim -i https://mirror.baidu.com/pypi/simple  
+python -m pip install --upgrade pip 
+python -m pip install -r requirements.txt 
+python -m pip install paddleslim 
 
 # dir
 log_path=log
