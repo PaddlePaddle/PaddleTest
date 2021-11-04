@@ -60,6 +60,7 @@ audio(){
    #生成python测试代码
    $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
    #运行python测试代码
+   sed -i "s/\/PATH\/TO\/AUDIO/doc_audio.wav/g" test_${module_name}.py
    #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
    $py_cmd test_${module_name}.py
    if [ $? -ne 0 ]; then
@@ -121,7 +122,7 @@ text(){
 ci(){
   text=True
   image=True
-  audio=False
+  audio=True
   video=False
   #提取包含modules的路径
   modules=`cat diff.log | grep "modules"`
