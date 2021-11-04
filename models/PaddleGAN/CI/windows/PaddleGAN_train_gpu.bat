@@ -40,7 +40,7 @@ if not !errorlevel! == 0 (
 )
 
 echo eval
-if !model! == "stylegan_v2_256_ffhq" (
+if !model!==stylegan_v2_256_ffhq (
         for /d %%j in %params_dir% do (
         echo %%j
         python tools/extract_weight.py output/%%j/iter_20_checkpoint.pdparams --net-name gen_ema --output stylegan_extract.pdparams > %log_path%/!model!_extract_weight.log 2>&1
@@ -60,8 +60,7 @@ if !model! == "stylegan_v2_256_ffhq" (
                 echo   eval of !model! successfully!
         )
         )
-)
-else(
+) else (
         for /d %%j in %params_dir% do (
         echo %%j
         python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams > %log_path%/!model!_eval.log 2>&1

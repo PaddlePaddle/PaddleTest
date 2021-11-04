@@ -36,6 +36,7 @@ if [ -d "output" ]; then
    rm -rf output
 fi
 sed -i '' 's/epochs/total_iters/g' $line #将epcoh换为iter
+sed -i '' 's/decay_total_iters/decay_epochs/g' $line #恢复学习率衰减字段
 #train
 python tools/main.py -c $line -o total_iters=20 log_config.interval=20 log_config.visiual_interval=1 snapshot_config.interval=10 output_dir=output > $log_path/train/$model.log 2>&1 
 params_dir=$(ls output)
