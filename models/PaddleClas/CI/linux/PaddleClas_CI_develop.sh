@@ -5,7 +5,7 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
-if [[ ${model_flag} =~ 'CE' ]]
+if [[ ${model_flag} =~ 'CE' ]]; then
    cd ${Project_path}
    export FLAGS_cudnn_deterministic=True
 fi
