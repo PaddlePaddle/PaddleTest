@@ -5,13 +5,13 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
-#$1 <-> model_flag CI是效率云  pr是TC，all是全量，single是单独模型debug
-#$2 <-> pr_num   随机跑pr的模型数
-#$3 <-> python   python版本
-#$4 <-> cudaid   cuda卡号
-#$5 <-> paddle_compile   paddle包地址
-#$6 <-> data_path   数据路径
-#$7 <-> single_yaml_debug  单独模型yaml字符
+#<-> model_flag CI是效率云  pr是TC，all是全量，single是单独模型debug
+#<-> pr_num   随机跑pr的模型数
+#<-> python   python版本
+#<-> cudaid2   cuda卡号
+#<-> paddle_compile   paddle包地址
+#<-> Data_path   数据路径
+#$1 <-> 自己定义single_yaml_debug  单独模型yaml字符
 
 if [[ ${model_flag} =~ 'CI' ]]; then
    # data
@@ -31,15 +31,15 @@ if [[ ${model_flag} =~ 'CI' ]]; then
 fi
 
 
-if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'single' ]]; then #model_flag
+if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
-   export CUDA_VISIBLE_DEVICES=$4 #cudaid
+   export CUDA_VISIBLE_DEVICES=${cudaid2} #cudaid2
 
    echo "######  ---py37  env -----"
    rm -rf /usr/local/python2.7.15/bin/python
    rm -rf /usr/local/bin/python
    export PATH=/usr/local/bin/python:${PATH}
-   case $3 in #python
+   case ${python} in #python
    36)
    ln -s /usr/local/bin/python3.6 /usr/local/bin/python
    ;;
@@ -64,11 +64,11 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'single' ]]; then #model_flag
    unset https_proxy
    echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
-   python -m pip install $5 #paddle_compile
+   python -m pip install ${paddle_compile} #paddle_compile
 
    echo "######  ----ln  data-----"
    rm -rf data
-   ln -s $6 data #data_path
+   ln -s ${Data_path} data #data_path
    ls data
 
 else
@@ -155,10 +155,10 @@ find configs/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'\
 
 if [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
-elif [[ ${1} =~ "pr" ]];then
-   shuf -n $2 models_list_all > models_list
-elif [[ ${1} =~ "single" ]];then
-   echo $7 > models_list
+elif [[ ${model_flag} =~ "pr" ]];then
+   shuf -n {pr_num} models_list_all > models_list
+elif [[ ${model_flag} =~ "single" ]];then
+   echo $1 > models_list
 else
    shuf models_list_all > models_list
 fi
@@ -166,7 +166,7 @@ fi
 echo "######  length models_list"
 wc -l models_list
 cat models_list
-if [[ ${1} =~ "pr" ]];then
+if [[ ${model_flag} =~ "pr" ]];then
    # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
       # | grep diff|grep yaml|awk -F 'b/' '{print$2}'|tee -a  models_list
    git diff $(git log --pretty=oneline |grep "#"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
@@ -317,7 +317,7 @@ else
    echo -e "\033[31m infer of fist order motion model failed!\033[0m"| tee -a $log_path/result.log
 fi
 
-if [[ ! $1 == "pr" ]];then
+if [[ ! ${model_flag} == "pr" ]];then
    # fist order motion model multi_person
    python -u applications/tools/first-order-demo.py \
       --driving_video ./docs/imgs/fom_dv.mp4 \
@@ -369,6 +369,7 @@ else
    cat $log_path/infer/video_restore.log
    echo -e "\033[31m infer of video restore failed!\033[0m"| tee -a $log_path/result.log
 fi
+
 # result
 num=`cat $log_path/result.log | grep "failed" | wc -l`
 if [ "${num}" -gt "0" ];then
