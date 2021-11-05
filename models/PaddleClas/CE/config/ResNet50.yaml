@@ -9,7 +9,7 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_function_path: CI/linux/ #脚本的路径
+  model_function_path: linux/ #脚本的路径
   model_scripts_path: scripts/ #脚本的路径
   model_log_path: log
   yaml: ppcls/configs/ImageNet/ResNet/ResNet50.yaml
