@@ -5,6 +5,11 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 
+if [[ ${model_flag} =~ 'CE' ]]
+   cd ${Project_path}
+   export FLAGS_cudnn_deterministic=True
+fi
+
 # <-> model_flag CI是效率云 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
 #     pr是TC，clas是分类，rec是识别，single是单独模型debug
 # <-> pr_num   随机跑pr的模型数
@@ -191,7 +196,6 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    #train
    #多卡
    if [[ ${model_flag} =~ "CE" ]]; then
-      export FLAGS_cudnn_deterministic=True
       sed -i 's/RandCropImage/ResizeImage/g' $line
       sed -ie '/RandFlipImage/d' $line
       sed -ie '/flip_code/d' $line
@@ -211,7 +215,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          -o Global.output_dir=output \
          -o DataLoader.Train.sampler.batch_size=1 \
          -o DataLoader.Eval.sampler.batch_size=1  \
-         > $log_path/train/$model.log 2>&1
+         > $log_path/train/${model}_2card.log 2>&1
    fi
    params_dir=$(ls output)
    echo "######  params_dir"
@@ -220,7 +224,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
       echo "training_multi_exit_code: 0.0" >> $log_path/result.log
    else
-      if [[ ${model_flag} =~ "CE" ]]; then cat $log_path/train/$model.log ; else cat $log_path/train/$model${model}_2card.log ; fi
+      cat $log_path/train/${model}_2card.log
       echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
       echo "training_multi_exit_code: 1.0" >> $log_path/result.log
    fi
@@ -246,7 +250,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          -o Global.output_dir=output \
          -o DataLoader.Train.sampler.batch_size=1 \
          -o DataLoader.Eval.sampler.batch_size=1  \
-         > $log_path/train/$model.log 2>&1
+         > $log_path/train/${model}_1card.log 2>&1
    fi
    params_dir=$(ls output)
    echo "######  params_dir"
@@ -255,7 +259,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
       echo "training_single_exit_code: 0.0" >> $log_path/result.log
    else
-      if [[ ${model_flag} =~ "CE" ]]; then cat $log_path/train/$model.log ; else cat $log_path/train/$model${model}_1card.log ; fi
+      cat $log_path/train/${model}_1card.log
       echo -e "\033[31m training single of $model failed!\033[0m"|tee -a $log_path/result.log
       echo "training_single_exit_code: 1.0" >> $log_path/result.log
    fi
