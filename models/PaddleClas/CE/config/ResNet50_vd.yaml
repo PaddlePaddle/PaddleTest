@@ -28,7 +28,7 @@ FUNCTION: # 训练步骤
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
-        path: $ROOT_PATH/../../$model_function_path
+        path: $ROOT_PATH/$model_function_path
         cmd: sh PaddleClas_CI_develop.sh $yaml
     kpis: #kpi指标
       training_multi_exit_code:

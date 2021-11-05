@@ -22,6 +22,4 @@ elif [[ $2 == 'export_linux' ]] ; then
 
 elif [[ $2 == 'predict_linux' ]] ; then 
     cat ${log_path}/result.log | grep predict_exit_code >../log/${model}_predict.log
-
-
-
+fi
