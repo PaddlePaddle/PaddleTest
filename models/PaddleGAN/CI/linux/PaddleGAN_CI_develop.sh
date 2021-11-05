@@ -13,13 +13,13 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 #<-> Data_path   数据路径
 #$1 <-> 自己定义single_yaml_debug  单独模型yaml字符
 
-if [[ ${model_flag} =~ 'CI' ]]; then
-   # data
-   echo "######  ----ln  data-----"
-   rm -rf data
-   ln -s ${Data_path} data
-   ls data
+# data
+echo "######  ----ln  data-----"
+rm -rf data
+ln -s ${Data_path} data
+ls data
 
+if [[ ${model_flag} =~ 'CI' ]]; then
    rm -rf /root/.cache/paddle/dataset/mnist
    if [ ! -f "/root/.cache/paddle/dataset/mnist/train-images-idx3-ubyte.gz" ]; then
       wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-images-idx3-ubyte.gz
@@ -29,7 +29,6 @@ if [[ ${model_flag} =~ 'CI' ]]; then
       wget -P /root/.cache/paddle/dataset/mnist/ https://dataset.bj.bcebos.com/mnist/train-labels-idx1-ubyte.gz
    fi
 fi
-
 
 if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
@@ -53,7 +52,6 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    ln -s /usr/local/bin/python3.9 /usr/local/bin/python
    ;;
    esac
-   python -c "import sys; print('python version:',sys.version_info[:])";
 
    apt-get update
    apt-get install ffmpeg -y
@@ -65,11 +63,6 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install ${paddle_compile} #paddle_compile
-
-   echo "######  ----ln  data-----"
-   rm -rf data
-   ln -s ${Data_path} data #data_path
-   ls data
 
 else
    # ppgan
@@ -94,6 +87,10 @@ else
    yum install cmake -y
    cmake -version
 fi
+
+# paddle
+echo "######  paddle version"
+python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 
 # python
 python -c 'import sys; print(sys.version_info[:])'

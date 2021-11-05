@@ -15,23 +15,19 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 #$1 <-> 自己定义的  single_yaml_debug  单独模型yaml字符
 #model_clip 根据日期单双数决定剪裁
 
-if [[ ${model_flag} =~ 'CI' ]]; then
-   # data
-   rm -rf dataset
-   ln -s ${Data_path} dataset
-   ls dataset
-
-   cd deploy
-   rm -rf recognition_demo_data_v1.0
-   rm -rf recognition_demo_data_v1.1
-   rm -rf models
-   ln -s  ${Data_path}/* .
-   cd ..
-fi
+echo "######  ----ln  data-----"
+rm -rf dataset
+ln -s ${Data_path} dataset
+ls dataset
+cd deploy
+rm -rf recognition_demo_data_v1.0
+rm -rf recognition_demo_data_v1.1
+rm -rf models
+ln -s ${Data_path}/* .
+cd ..
 
 if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
-   export CUDA_VISIBLE_DEVICES=${cudaid2} #cudaid
 
    echo "######  ---py37  env -----"
    rm -rf /usr/local/python2.7.15/bin/python
@@ -51,28 +47,18 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    ln -s /usr/local/bin/python3.9 /usr/local/bin/python
    ;;
    esac
-   python -c "import sys; print('python version:',sys.version_info[:])";
 
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install ${paddle_compile} #paddle_compile
-   echo "######  paddle version"
-   python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 
-   echo "######  ----ln  data-----"
-   rm -rf dataset
-   ln -s ${Data_path} dataset #data_path
-   ls dataset
-   cd deploy
-
-   rm -rf recognition_demo_data_v1.0
-   rm -rf recognition_demo_data_v1.1
-   rm -rf models
-   ln -s ${Data_path}/* .
-   cd ..
 fi
+
+# paddle
+echo "######  paddle version"
+python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 
 # python
 python -c 'import sys; print(sys.version_info[:])'
@@ -103,7 +89,7 @@ rm -rf models_list_all
 rm -rf models_list_rec
 
 #找到diff yaml  &  拆分任务  &  定义要跑的model list
-if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
+if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
    find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; \
       | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' |grep -v 'distill' \
       > models_list_all
@@ -124,7 +110,7 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
    elif [[ ${model_flag} =~ "pr" ]];then
       shuf -n ${pr_num} models_list_all > models_list
 
-   elif [[ ${model_flag} =~ "clas_single" ]];then
+   elif [[ ${model_flag} =~ "clas_single" ]] || [[ ${model_flag} =~ "CE" ]]; then
       echo $1 > models_list
 
    elif [[ ${model_flag} =~ 'CI_step2' ]]; then
@@ -163,6 +149,13 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
    wc -l models_list
    cat models_list
 
+   if [ -d "output" ]; then
+      rm -rf output
+   fi
+   if [ -d "log" ]; then
+      rm -rf log
+   fi
+
    # dir
    log_path=log
    phases='train eval infer export_model model_clip predict'
@@ -182,9 +175,6 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
    filename=${line##*/}
    #echo $filename
    model=${filename%.*}
-   if [ -d "output" ]; then
-      rm -rf output
-   fi
    echo $model
 
    if [[ ${line} =~ 'fp16' ]];then
@@ -199,20 +189,75 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
    rm -rf /root/.visualdl/conf
 
    #train
-   python -m paddle.distributed.launch tools/train.py  \
-      -c $line -o Global.epochs=1 \
-      -o Global.output_dir=output \
-      -o DataLoader.Train.sampler.batch_size=1 \
-      -o DataLoader.Eval.sampler.batch_size=1  \
-      > $log_path/train/$model.log 2>&1
+   #多卡
+   if [[ ${model_flag} =~ "CE" ]]; then
+      export FLAGS_cudnn_deterministic=True
+      sed -i 's/RandCropImage/ResizeImage/g' $line
+      sed -ie '/RandFlipImage/d' $line
+      sed -ie '/flip_code/d' $line
+      python -m paddle.distributed.launch tools/train.py -c $line  \
+         -o Global.epochs=5  \
+         -o Global.seed=1234 \
+         -o Global.output_dir=output \
+         -o DataLoader.Train.loader.num_workers=0 \
+         -o DataLoader.Train.sampler.shuffle=False  \
+         -o Global.eval_during_train=False  \
+         -o Global.save_interval=5 \
+         -o DataLoader.Train.sampler.batch_size=4 \
+         > $log_path/train/${model}_2card.log 2>&1
+   else
+      python -m paddle.distributed.launch tools/train.py  \
+         -c $line -o Global.epochs=1 \
+         -o Global.output_dir=output \
+         -o DataLoader.Train.sampler.batch_size=1 \
+         -o DataLoader.Eval.sampler.batch_size=1  \
+         > $log_path/train/$model.log 2>&1
+   fi
    params_dir=$(ls output)
    echo "######  params_dir"
    echo $params_dir
-   if [ -f "output/$params_dir/latest.pdparams" ];then
-      echo -e "\033[33m training of $model  successfully!\033[0m"|tee -a $log_path/result.log
+   if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
+      echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
+      echo "training_multi_exit_code: 0.0" >> $log_path/result.log
    else
-      cat $log_path/train/$model.log
-      echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
+      if [[ ${model_flag} =~ "CE" ]]; then cat $log_path/train/$model.log ; else cat $log_path/train/$model${model}_2card.log ; fi
+      echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
+      echo "training_multi_exit_code: 1.0" >> $log_path/result.log
+   fi
+
+   #单卡
+   ls output/$params_dir/
+   sleep 3
+   rm -rf output #清空多卡cache
+   if [[ ${model_flag} =~ "CE" ]]; then
+      python  tools/train.py -c $line  \
+         -o Global.epochs=5  \
+         -o Global.seed=1234 \
+         -o Global.output_dir=output \
+         -o DataLoader.Train.loader.num_workers=0 \
+         -o DataLoader.Train.sampler.shuffle=False  \
+         -o Global.eval_during_train=False  \
+         -o Global.save_interval=5 \
+         -o DataLoader.Train.sampler.batch_size=4  \
+         > $log_path/train/${model}_1card.log 2>&1
+   else
+      python tools/train.py  \
+         -c $line -o Global.epochs=1 \
+         -o Global.output_dir=output \
+         -o DataLoader.Train.sampler.batch_size=1 \
+         -o DataLoader.Eval.sampler.batch_size=1  \
+         > $log_path/train/$model.log 2>&1
+   fi
+   params_dir=$(ls output)
+   echo "######  params_dir"
+   echo $params_dir
+   if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
+      echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
+      echo "training_single_exit_code: 0.0" >> $log_path/result.log
+   else
+      if [[ ${model_flag} =~ "CE" ]]; then cat $log_path/train/$model.log ; else cat $log_path/train/$model${model}_1card.log ; fi
+      echo -e "\033[31m training single of $model failed!\033[0m"|tee -a $log_path/result.log
+      echo "training_single_exit_code: 1.0" >> $log_path/result.log
    fi
 
    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'RedNet' ]] ;then
@@ -221,7 +266,7 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
       rm -rf output/$params_dir/latest.pdparams
       cp -r dataset/pretrain_models/${model}_pretrained.pdparams output/$params_dir/latest.pdparams
    fi
-   sleep 5
+   sleep 3
 
    ls output/$params_dir/
    # eval
@@ -231,18 +276,22 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
       > $log_path/eval/$model.log 2>&1
    if [ $? -eq 0 ];then
       echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
+      echo "eval_exit_code: 0.0" >> $log_path/result.log
    else
       cat $log_path/eval/$model.log
       echo -e "\033[31m eval of $model failed!\033[0m" | tee -a $log_path/result.log
+      echo "eval_exit_code: 1.0" >> $log_path/result.log
    fi
 
    # infer
    python tools/infer.py -c $line -o Global.pretrained_model=output/$params_dir/latest > $log_path/infer/$model.log 2>&1
    if [ $? -eq 0 ];then
       echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
+      echo "infer_exit_code: 0.0" >> $log_path/result.log
    else
       cat $log_path/infer/${model}_infer.log
       echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
+      echo "infer_exit_code: 1.0" >> $log_path/result.log
    fi
 
    # export_model
@@ -261,9 +310,11 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
 
    if [ $? -eq 0 ];then
       echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
+      echo "export_model_exit_code: 0.0" >> $log_path/result.log
    else
       cat $log_path/export_model/$model.log
       echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
+      echo "export_model_exit_code: 1.0" >> $log_path/result.log
    fi
 
    if [[ `expr $RANDOM % 2` -eq 0 ]] && ([[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]]);then
@@ -301,9 +352,11 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
          > ../$log_path/predict/$model.log 2>&1
       if [ $? -eq 0 ];then
          echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
+         echo "predict_exit_code: 0.0" >> $log_path/result.log
       else
          cat ../$log_path/predict/${model}.log
          echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+         echo "predict_exit_code: 1.0" >> $log_path/result.log
       fi
 
       sed -i 's/size: 384/size: 224/g' configs/inference_cls.yaml
@@ -340,9 +393,11 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
       fi
       if [ $? -eq 0 ];then
          echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
+         echo "predict_exit_code: 0.0" >> $log_path/result.log
       else
          cat ../$log_path/predict/${model}.log
          echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+         echo "predict_exit_code: 1.0" >> $log_path/result.log
       fi
 
    fi
