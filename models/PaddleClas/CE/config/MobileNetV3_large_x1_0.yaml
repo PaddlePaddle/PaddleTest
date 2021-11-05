@@ -7,12 +7,12 @@ GIT:
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
-  yaml: ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
 
 VARIABLES:
   model_function_path: CI/linux/ #脚本的路径
   model_scripts_path: scripts/ #脚本的路径
   model_log_path: log
+  yaml: ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
 
 EXEC:
   exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
