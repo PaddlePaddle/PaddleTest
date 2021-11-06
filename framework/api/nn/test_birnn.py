@@ -175,7 +175,7 @@ def test_rnn_base():
 def test_rnn1():
     """
     float32默认参数测试。
-    time_major=False
+    time_major=False,
     RnnCell size = (16, 32)
     """
     paddle.set_default_dtype("float32")
