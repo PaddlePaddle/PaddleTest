@@ -38,11 +38,11 @@ image(){
        $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
        #判断模型是否需要输入特殊图片文件
        if [ `grep -c ${module_name}__ "special_data_modules.txt"` -ne '0' ]; then
-           sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
-       else
            special_module_line=`grep ${module_name}__ "special_data_modules.txt"`
            tail=${special_module_line##*__}
            sed -i "s/\/PATH\/TO\/IMAGE/${module_name}.${tail}/g" test_${module_name}.py
+       else
+           sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
        fi
        #运行python测试代码
        $py_cmd test_${module_name}.py
