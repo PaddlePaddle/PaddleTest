@@ -1,11 +1,14 @@
 export FLAGS_call_stack_level=2
 cases="test_yolov3_gpu.py \
        test_yolov3_mkldnn.py \
+       test_ppyolo_trt_fp32.py \
+       test_ppyolov2_trt_fp32.py \
+       test_solov2_trt_fp32.py \
        test_ppyolo_gpu.py \
        test_ppyolo_mkldnn.py \
        test_ppyolov2_gpu.py \
-       test_ppyolov2_mkldnn.py
-       test_solov2_gpu.py
+       test_ppyolov2_mkldnn.py \
+       test_solov2_gpu.py \
        test_solov2_mkldnn.py"
 bug=0
 
