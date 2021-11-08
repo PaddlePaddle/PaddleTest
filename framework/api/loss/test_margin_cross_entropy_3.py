@@ -4,11 +4,16 @@
 """
 paddle.nn.functional.margin_cross_entropy
 """
+import sys
 import paddle
 import pytest
 from runner import compare
 
+sys.path.append("../..")
+from utils.interceptor import skip_not_compile_gpu
 
+
+@skip_not_compile_gpu
 @pytest.mark.loss_margin_cross_entropy_parameters
 def test_margin_cross_entropy_3():
     """
