@@ -93,6 +93,22 @@ rm -rf models_list
 rm -rf models_list_all
 rm -rf models_list_rec
 
+if [ -d "log" ]; then
+   rm -rf log
+fi
+# dir
+log_path=log
+phases='train eval infer export_model model_clip predict'
+for phase in $phases
+do
+if [[ -d ${log_path}/${phase} ]]; then
+   echo -e "\033[33m ${log_path}/${phase} is exsit!\033[0m"
+else
+   mkdir -p  ${log_path}/${phase}
+   echo -e "\033[33m ${log_path}/${phase} is created successfully!\033[0m"
+fi
+done
+
 #找到diff yaml  &  拆分任务  &  定义要跑的model list
 if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
    find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; \
@@ -154,30 +170,16 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    wc -l models_list
    cat models_list
 
-   if [ -d "log" ]; then
-      rm -rf log
-   fi
-   # dir
-   log_path=log
-   phases='train eval infer export_model model_clip predict'
-   for phase in $phases
-   do
-   if [[ -d ${log_path}/${phase} ]]; then
-      echo -e "\033[33m ${log_path}/${phase} is exsit!\033[0m"
-   else
-      mkdir -p  ${log_path}/${phase}
-      echo -e "\033[33m ${log_path}/${phase} is created successfully!\033[0m"
-   fi
-   done
-
+   #开始循环
    cat models_list | while read line
    do
-
    #echo $line
    filename=${line##*/}
    #echo $filename
    model=${filename%.*}
    echo $model
+
+
 
    if [[ ${line} =~ 'fp16' ]];then
       echo "fp16"
@@ -196,6 +198,10 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    #train
    #多卡
    if [[ ${model_flag} =~ "CE" ]]; then
+      if [[ ${line} =~ 'GoogLeNet' ]] || [[ ${line} =~ 'VGG' ]] || [[ ${line} =~ 'ViT' ]] || [[ ${line} =~ 'PPLCNet' ]] || [[ ${line} =~ 'MobileNetV3' ]]; then
+      sed -i 's/learning_rate:/learning_rate: 0.0001 #/g' $line #将 学习率调低为0.0001
+      echo "change lr"
+      fi
       sed -i 's/RandCropImage/ResizeImage/g' $line
       sed -ie '/RandFlipImage/d' $line
       sed -ie '/flip_code/d' $line

@@ -72,7 +72,7 @@ FUNCTION: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/PaddleClas/log/result.log
+    output: $ROOT_PATH/PaddleClas/$model_log_path/result.log
 
 TRAIN: # 训练步骤
   -
@@ -125,7 +125,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 100
+        kpi_base: 6.83643
         threshold: 0
         actived: True
         evaluation: "-"
