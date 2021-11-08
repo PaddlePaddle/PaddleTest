@@ -47,7 +47,7 @@ FINETUNE:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash audio_finetune.sh panns_cnn6 True 16 10 5e-5 2 save
+        cmd: bash audio_finetune.sh panns_cnn6 sound-cls True 16 10 5e-5 2 save
 
     kpis:
       exit_code:
@@ -57,7 +57,7 @@ FINETUNE:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn6_finetune_True_16_10_5e-5_2_save.log
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn6_finetune_sound-cls_True_16_10_5e-5_2.log
 
   -
     priority: p0
@@ -69,7 +69,7 @@ FINETUNE:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash audio_finetune.sh panns_cnn6 True 16 10 5e-5 2 save
+        cmd: bash audio_finetune.sh panns_cnn6 sound-cls True 16 10 5e-5 2 save
 
     kpis:
       exit_code:
@@ -79,7 +79,7 @@ FINETUNE:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn6_finetune_True_16_10_5e-5_2_save.log
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn6_finetune_sound-cls_True_16_10_5e-5_2.log
 
   -
     priority: p1
@@ -91,7 +91,7 @@ FINETUNE:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash audio_finetune.sh panns_cnn6 True 16 20 5e-5 4 save
+        cmd: bash audio_finetune.sh panns_cnn6 sound-cls True 16 20 5e-5 4 save
 
     kpis:
       exit_code:
@@ -101,7 +101,7 @@ FINETUNE:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn6_finetune_True_16_20_5e-5_4_save.log
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn6_finetune_sound-cls_True_16_20_5e-5_4.log
 
 PREDICT:
   -

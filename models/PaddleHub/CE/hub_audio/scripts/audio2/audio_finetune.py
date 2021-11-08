@@ -2,14 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-/***************************************************************************
-  *
-  * Copyright (c) 2020 Baidu.com, Inc. All Rights Reserved
-  * @file:  audio_finetune_gpu.py
-  * @date  2021/5/20 8:38 PM
-  * @brief
-  *
-  **************************************************************************/
+finetune audio2
 """
 import os
 import argparse
