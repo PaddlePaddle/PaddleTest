@@ -9,51 +9,121 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: scripts/SwinTransformer_large_patch4_window12_384/ #脚本的路径
+  model_function_path: linux/ #脚本的路径
+  model_scripts_path: scripts/ #脚本的路径
   model_log_path: log
 
 EXEC:
-  exec_cases: [TRAIN]
+  exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
   exec_priority: [P1]
-  exec_tag: [linux_dy_gpu1,linux_dy_gpu2]
+  exec_tag: [function_test,train_linux_gpu1,train_linux_gpu2,infer_linux,eval_linux,infer_linux,predict_linux]
 
 #测试套
-TRAIN: # 训练步骤
+FUNCTION: # 训练步骤
   -
-    priority: P1  # dy_gpu1
-    tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train_1card.sh
-
-    kpis: #kpi指标
-      loss:
-        latest: True
-        kpi_base: 6.47612
-        threshold: 0.0
-        actived: True
-        evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/SwinTransformer_large_patch4_window12_384_1card.log
-  -
-    priority: P1  # dy_gpu1
-    tag: linux_dy_gpu2
+    tag: function_test
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path
+        cmd: sh PaddleClas_CI_develop.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_large_patch4_window12_384.yaml
 
+TRAIN: # 训练步骤
+  -
+    tag: train_linux_gpu1
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train_2card.sh
-
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_large_patch4_window12_384.yaml train_linux_gpu1
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.52868
-        threshold: 0.0
+        kpi_base: 6.28964
+        threshold: 0
         actived: True
         evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_large_patch4_window12_384_1card.log
+  -
+    tag: train_linux_gpu2
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_large_patch4_window12_384.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.57773
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_large_patch4_window12_384_2card.log
+
+EVAL: # 训练步骤
+  -
+    tag: eval_linux
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_large_patch4_window12_384.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.57773
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_large_patch4_window12_384_eval.log
+
+INFER: # 训练步骤
+  -
+    tag: infer_linux
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_large_patch4_window12_384.yaml infer_linux
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_large_patch4_window12_384_infer.log
+
+PREDICT: # 训练步骤
+  -
+    tag: predict_linux
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_large_patch4_window12_384.yaml predict_linux
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_large_patch4_window12_384_predict.log

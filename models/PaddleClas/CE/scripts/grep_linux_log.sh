@@ -6,8 +6,7 @@ log_path=log
 cd ${Project_path}
 echo '#####ls'
 ls
-ls ${log_path}/
-ls ${log_path}/train/
+
 if [[ $2 == 'train_linux_gpu1' ]] ; then 
     echo '#####train_linux_gpu1'
     cat ${log_path}/train/${model}_1card.log | grep Train | grep Avg | grep 'Epoch 5/5'

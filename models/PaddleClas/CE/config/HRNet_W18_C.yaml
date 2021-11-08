@@ -29,50 +29,6 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path
         cmd: sh PaddleClas_CI_develop.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml
-    kpis: #kpi指标
-      training_multi_exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-      training_single_exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-      eval_exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-      infer_exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-      export_model_exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-      predict_exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-    output: $ROOT_PATH/PaddleClas/$model_log_path/result.log
 
 TRAIN: # 训练步骤
   -
@@ -87,7 +43,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.46709
+        kpi_base: 6.4426
         threshold: 0.1
         actived: True
         evaluation: "-"
@@ -105,8 +61,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.57658
-        threshold: 0.1
+        kpi_base: 6.47671
+        threshold: 0。1
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -125,7 +81,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.57658
+        kpi_base: 6.47671
         threshold: 0.1
         actived: True
         evaluation: "-"
