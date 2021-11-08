@@ -154,13 +154,9 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    wc -l models_list
    cat models_list
 
-   if [ -d "output" ]; then
-      rm -rf output
-   fi
    if [ -d "log" ]; then
       rm -rf log
    fi
-
    # dir
    log_path=log
    phases='train eval infer export_model model_clip predict'
@@ -176,6 +172,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
    cat models_list | while read line
    do
+
    #echo $line
    filename=${line##*/}
    #echo $filename
@@ -193,6 +190,9 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    ls /root/.visualdl/conf
    rm -rf /root/.visualdl/conf
 
+   if [ -d "output" ]; then
+      rm -rf output
+   fi
    #train
    #多卡
    if [[ ${model_flag} =~ "CE" ]]; then
@@ -356,11 +356,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          > ../$log_path/predict/$model.log 2>&1
       if [ $? -eq 0 ];then
          echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-         echo "predict_exit_code: 0.0" >> $log_path/result.log
+         echo "predict_exit_code: 0.0" >> ../$log_path/result.log
       else
          cat ../$log_path/predict/${model}.log
          echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-         echo "predict_exit_code: 1.0" >> $log_path/result.log
+         echo "predict_exit_code: 1.0" >> ../$log_path/result.log
       fi
 
       sed -i 's/size: 384/size: 224/g' configs/inference_cls.yaml
@@ -397,11 +397,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       fi
       if [ $? -eq 0 ];then
          echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-         echo "predict_exit_code: 0.0" >> $log_path/result.log
+         echo "predict_exit_code: 0.0" >> ../$log_path/result.log
       else
          cat ../$log_path/predict/${model}.log
          echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-         echo "predict_exit_code: 1.0" >> $log_path/result.log
+         echo "predict_exit_code: 1.0" >> ../$log_path/result.log
       fi
 
    fi
