@@ -14,7 +14,7 @@ import numpy as np
 @pytest.mark.loss_cross_entropy_vartype
 def test_cross_entropy_base():
     """
-    test cross_entropy base test
+    test cross_entropy base
     """
     datareader = np.random.random(size=[5, 10])
     label = np.random.randint(0, 1, size=(5)).astype(np.int64)
