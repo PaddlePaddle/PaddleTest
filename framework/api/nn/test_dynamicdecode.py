@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test paddle.nn.dynamic_decoder
+test paddle.nn.dynamic_decode
 """
 
 from apibase import APIBase
@@ -18,7 +18,7 @@ import paddle.fluid.layers as layers
 from paddle.fluid.layers import GreedyEmbeddingHelper, SampleEmbeddingHelper
 
 
-class TestDynamicDecoder(APIBase):
+class TestDynamicDecode(APIBase):
     """
     test
     """
@@ -37,8 +37,8 @@ class TestDynamicDecoder(APIBase):
 # obj = TestDynamicDecoder(paddle.nn.dynamic_decoder)
 
 
-@pytest.mark.api_nn_dynamic_decoder_vartype
-def test_dynamic_decoder_base():
+@pytest.mark.api_nn_dynamic_decode_vartype
+def test_dynamic_decode_base():
     """
     base
     """
@@ -108,8 +108,8 @@ def test_dynamic_decoder_base():
     compare(np.array(outputs[0]), res)
 
 
-@pytest.mark.api_nn_dynamic_decoder_parameters
-def test_dynamic_decoder1():
+@pytest.mark.api_nn_dynamic_decode_parameters
+def test_dynamic_decode1():
     """
     change the type of decoder_cell
     """
@@ -179,8 +179,8 @@ def test_dynamic_decoder1():
     compare(np.array(outputs[0]), res)
 
 
-@pytest.mark.api_nn_dynamic_decoder_parameters
-def test_dynamic_decoder2():
+@pytest.mark.api_nn_dynamic_decode_parameters
+def test_dynamic_decode2():
     """
     change the input size
     """
@@ -250,8 +250,8 @@ def test_dynamic_decoder2():
     compare(np.array(outputs[0]), res)
 
 
-@pytest.mark.api_nn_dynamic_decoder_parameters
-def test_dynamic_decoder3():
+@pytest.mark.api_nn_dynamic_decode_parameters
+def test_dynamic_decode3():
     """
     change the max_step_num
     """
@@ -273,8 +273,8 @@ def test_dynamic_decoder3():
     compare(np.array(outputs[0]), res)
 
 
-@pytest.mark.api_nn_dynamic_decoder_parameters
-def test_dynamic_decoder4():
+@pytest.mark.api_nn_dynamic_decode_parameters
+def test_dynamic_decode4():
     """
     set the output_time_major True
     """
@@ -300,8 +300,8 @@ def test_dynamic_decoder4():
     compare(np.array(outputs[0]), res)
 
 
-@pytest.mark.api_nn_dynamic_decoder_parameters
-def test_dynamic_decoder5():
+@pytest.mark.api_nn_dynamic_decode_parameters
+def test_dynamic_decode5():
     """
     change the type of decoder to greedy decoder
     """
@@ -335,8 +335,8 @@ def test_dynamic_decoder5():
     compare(np.array(outputs[0][0]), res)
 
 
-@pytest.mark.api_nn_dynamic_decoder_parameters
-def test_dynamic_decoder6():
+@pytest.mark.api_nn_dynamic_decode_parameters
+def test_dynamic_decode6():
     """
     change the type of decoder to sampling decoder
     """
@@ -366,8 +366,8 @@ def test_dynamic_decoder6():
     compare(np.array(outputs[0][0]), res)
 
 
-@pytest.mark.api_nn_dynamic_decoder_exception
-def test_dynamic_decoder7():
+@pytest.mark.api_nn_dynamic_decode_exception
+def test_dynamic_decode7():
     """
     Decoder type error
     """
@@ -385,8 +385,8 @@ def test_dynamic_decoder7():
             raise Exception
 
 
-@pytest.mark.api_nn_dynamic_decoder_exception
-def test_dynamic_decoder8():
+@pytest.mark.api_nn_dynamic_decode_exception
+def test_dynamic_decode8():
     """
     No parameters passed to inits
     """
