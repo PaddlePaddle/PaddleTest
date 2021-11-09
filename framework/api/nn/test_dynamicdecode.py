@@ -34,7 +34,7 @@ class TestDynamicDecode(APIBase):
         # self.enable_backward = True
 
 
-# obj = TestDynamicDecoder(paddle.nn.dynamic_decoder)
+# obj = TestDynamicDecode(paddle.nn.dynamic_decode)
 
 
 @pytest.mark.api_nn_dynamic_decode_vartype
