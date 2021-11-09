@@ -855,14 +855,14 @@ python change_sgml_to_txt.py -i extra_train_ds/train.sgml -o extra_train_ds/trai
 python -m paddle.distributed.launch  train.py --batch_size 32 --logging_steps 100 --epochs 1 --learning_rate 5e-5 --model_name_or_path ernie-1.0 --output_dir ./checkpoints/ --extra_train_ds_dir ./extra_train_ds/  >${log_path}/ernie-csc_train >>${log_path}/ernie-csc_train 2>&1
 print_info $? ernie-csc_train
 #predict
-sh run_sighan_predict.sh >${log_path}/ernie-csc_predict >>${log_path}/ernie-csc_ernie-csc_predict 2>&1
-print_info $? ernie-csc_ernie-csc_predict
+sh run_sighan_predict.sh >${log_path}/ernie-csc_predict >>${log_path}/ernie-csc_predict 2>&1
+print_info $? ernie-csc_predict
 #export model
-python export_model.py --params_path checkpoints/best_model.pdparams --output_path ./infer_model/static_graph_params >${log_path}/ernie-csc_export >>${log_path}/ernie-csc_ernie-csc_export 2>&1
-print_info $? ernie-csc_ernie-csc_export
+python export_model.py --params_path checkpoints/best_model.pdparams --output_path ./infer_model/static_graph_params >${log_path}/ernie-csc_export >>${log_path}/ernie-csc_export 2>&1
+print_info $? ernie-csc_export
 #python deploy
-python predict.py --model_file infer_model/static_graph_params.pdmodel --params_file infer_model/static_graph_params.pdiparams >${log_path}/ernie-csc_deploy >>${log_path}/ernie-csc_ernie-csc_deploy 2>&1
-print_info $? ernie-csc_ernie-csc_deploy
+python predict.py --model_file infer_model/static_graph_params.pdmodel --params_file infer_model/static_graph_params.pdiparams >${log_path}/ernie-csc_deploy >>${log_path}/ernie-csc_deploy 2>&1
+print_info $? ernie-csc_deploy
 }
 ####################################
 export P0case_list=()
