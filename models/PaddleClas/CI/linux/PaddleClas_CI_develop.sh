@@ -1,6 +1,7 @@
 unset GREP_OPTIONS
 echo ${cudaid1}
 echo ${cudaid2}
+echo ${model_flag}
 echo ${Data_path}
 echo ${Project_path}
 echo ${paddle_compile}
@@ -9,10 +10,10 @@ echo "path before"
 pwd
 if [[ ${model_flag} =~ 'CE' ]]; then
    cd ${Project_path}
+   echo "path after"
+   pwd
    export FLAGS_cudnn_deterministic=True
 fi
-echo "path after"
-pwd
 
 # <-> model_flag CI是效率云 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
 #     pr是TC，clas是分类，rec是识别，single是单独模型debug

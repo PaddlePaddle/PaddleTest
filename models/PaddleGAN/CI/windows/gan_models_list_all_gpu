@@ -1,6 +1,5 @@
 configs/realsr_kernel_noise_x4_dped.yaml
 configs/wgan_mnist.yaml
-configs/firstorder_vox_mobile_256.yaml
 configs/pan_psnr_x4_div2k.yaml
 configs/stylegan_v2_256_ffhq.yaml
 configs/starganv2_afhq.yaml
@@ -14,7 +13,6 @@ configs/cyclegan_cityscapes.yaml
 configs/iconvsr_reds.yaml
 configs/edvr_m_w_tsa.yaml
 configs/starganv2_celeba_hq.yaml
-configs/firstorder_vox_256.yaml
 configs/drn_psnr_x4_div2k.yaml
 configs/dcgan_mnist.yaml
 configs/edvr_l_wo_tsa.yaml
@@ -31,4 +29,3 @@ configs/pix2pix_cityscapes.yaml
 configs/esrgan_x4_div2k.yaml
 configs/animeganv2_pretrain.yaml
 configs/lesrcnn_psnr_x4_div2k.yaml
-configs/firstorder_fashion.yaml

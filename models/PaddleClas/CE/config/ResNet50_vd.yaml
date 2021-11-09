@@ -28,7 +28,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path
-        cmd: sh PaddleClas_CI_develop.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml
+        cmd: sh PaddleClas_CI_develop.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml
 
 TRAIN: # 训练步骤
   -
@@ -39,7 +39,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml train_linux_gpu1
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml train_linux_gpu1
     kpis: #kpi指标
       loss:
         latest: True
@@ -57,7 +57,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml train_linux_gpu2
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml train_linux_gpu2
     kpis: #kpi指标
       loss:
         latest: True
@@ -77,7 +77,7 @@ EVAL: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml eval_linux
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml eval_linux
     kpis: #kpi指标
       loss:
         latest: True
@@ -97,7 +97,7 @@ INFER: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml infer_linux
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml infer_linux
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -117,7 +117,7 @@ PREDICT: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml predict_linux
+        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml predict_linux
     kpis: #kpi指标
       predict_exit_code:
         latest: True
