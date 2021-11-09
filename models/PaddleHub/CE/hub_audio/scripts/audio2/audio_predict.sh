@@ -12,7 +12,7 @@ else
     echo "exit_code: 0.0" >> ${log_path}/EXIT_$2.log
 fi
 }
-python3.8 audio_predict.py --model_name $1 \
+python audio_predict.py --model_name $1 \
                         --task $2 \
                         --use_finetune_model $3 \
                         --use_gpu $4 \
