@@ -2,13 +2,17 @@ unset GREP_OPTIONS
 echo ${cudaid1}
 echo ${cudaid2}
 echo ${Data_path}
+echo ${Project_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-
+echo "path before"
+pwd
 if [[ ${model_flag} =~ 'CE' ]]; then
    cd ${Project_path}
    export FLAGS_cudnn_deterministic=True
 fi
+echo "path after"
+pwd
 
 # <-> model_flag CI是效率云 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
 #     pr是TC，clas是分类，rec是识别，single是单独模型debug
@@ -19,7 +23,6 @@ fi
 # <-> Data_path   数据路径
 #$1 <-> 自己定义的  single_yaml_debug  单独模型yaml字符
 #model_clip 根据日期单双数决定剪裁
-
 echo "######  ----ln  data-----"
 rm -rf dataset
 ln -s ${Data_path} dataset
