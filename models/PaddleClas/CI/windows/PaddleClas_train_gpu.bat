@@ -3,7 +3,7 @@ set log_path=log
 set gpu_flag=True
 md log
 rem data_set
-cd dataset 
+cd dataset
 if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
 cd ..
 if not exist pretrain_models (mklink /j pretrain_models %data_path%\PaddleClas\pretrain_models)
@@ -26,7 +26,7 @@ set target2=!target2:*/=!
 set model=!target2:.yaml=!
 echo !model!
 rem nvidia-smi
-rem train 
+rem train
 
 if exist "output" (
    echo "!model! output  exist"
@@ -49,7 +49,7 @@ if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!
     del "output\!model!\latest.pdparams"
-    echo f| xcopy /s /y /F "pretrain_models\!model!_pretrained.pdparams" "output\!model!\latest.pdparams" 
+    echo f| xcopy /s /y /F "pretrain_models\!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
 ) else (
     echo ######   not load pretrain
 )
@@ -105,7 +105,7 @@ for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )
 findstr /s "FAIL" log/result.log
 rem echo %num%
 
-if %num%==0 ( 
+if %num%==0 (
  exit /b 0
 ) else (
  exit /b 1

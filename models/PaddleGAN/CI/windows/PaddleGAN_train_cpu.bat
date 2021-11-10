@@ -1,6 +1,6 @@
 @ echo off
 set log_path=log
-set params_dir=(output/*) 
+set params_dir=(output/*)
 @REM set 不能放在循环中
 md log
 rem data
@@ -141,7 +141,7 @@ for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )
 findstr /s "FAIL" log/result.log
 rem echo %num%
 
-if %num%==0 ( 
+if %num%==0 (
  exit /b 0
 ) else (
  exit /b 1

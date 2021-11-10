@@ -4,10 +4,10 @@ rm -rf data
 ln -s ${data_path} data
 
 # env
-python -m pip install --upgrade pip -i 
-python -m pip install -r requirements.txt  
-python -m pip install -v -e .  
-python -m pip install dlib 
+python -m pip install --upgrade pip -i
+python -m pip install -r requirements.txt
+python -m pip install -v -e .
+python -m pip install dlib
 
 
 sed -i '' 's/epochs/total_iters/g' configs/cyclegan_cityscapes.yaml #将epcoh换为iter
@@ -17,8 +17,8 @@ sed -ie '/- name: RandomHorizontalFlip/d' configs/cyclegan_cityscapes.yaml #删�
 sed -ie '/prob: 0.5/d' configs/cyclegan_cityscapes.yaml #删除 prob 字段行
 
 sed -ie '/- name: PairedRandomHorizontalFlip/{N;d;}' configs/esrgan_x4_div2k.yaml  #删除随机变量
-sed -ie '/- name: PairedRandomVerticalFlip/{N;d;}' configs/esrgan_x4_div2k.yaml   
-sed -ie '/- name: PairedRandomTransposeHW/{N;d;}' configs/esrgan_x4_div2k.yaml   
+sed -ie '/- name: PairedRandomVerticalFlip/{N;d;}' configs/esrgan_x4_div2k.yaml
+sed -ie '/- name: PairedRandomTransposeHW/{N;d;}' configs/esrgan_x4_div2k.yaml
 
 sed -i '' 's/use_flip: True/use_flip: False/g' configs/edvr_m_wo_tsa.yaml #将 use_flip 字段替换为 Fasle
 sed -i '' 's/use_rot: True/use_rot: False/g' configs/edvr_m_wo_tsa.yaml #将 use_rot 字段替换为 Fasle
@@ -56,7 +56,7 @@ fi
 # sed -i '' 's/epochs/total_iters/g' $line #将epcoh换为iter
 # sed -i '' 's/decay_total_iters/decay_epochs/g' $line #恢复学习率衰减字段
 #train
-python tools/main.py -c $line -o total_iters=20 log_config.interval=20 log_config.visiual_interval=1 snapshot_config.interval=10 output_dir=output > $log_path/train/$model.log 2>&1 
+python tools/main.py -c $line -o total_iters=20 log_config.interval=20 log_config.visiual_interval=1 snapshot_config.interval=10 output_dir=output > $log_path/train/$model.log 2>&1
 params_dir=$(ls output)
 echo "params_dir"
 if [ -f "output/$params_dir/iter_20_checkpoint.pdparams" ];then
@@ -64,7 +64,7 @@ if [ -f "output/$params_dir/iter_20_checkpoint.pdparams" ];then
 else
    cat $log_path/train/$model.log
    echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
-fi 
+fi
 sleep 5
 
 if [[ ! ${line} =~ 'firstorder' ]]; then

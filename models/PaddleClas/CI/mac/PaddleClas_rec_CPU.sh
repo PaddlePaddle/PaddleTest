@@ -19,7 +19,7 @@ sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/icartoon_d
 sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
 sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/icartoon_dataset.py
 
-# product_dataset 
+# product_dataset
 sed -ie '/self.images = self.images\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
 sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_dataset.py
 
@@ -27,7 +27,7 @@ sed -ie '/self.labels = self.labels\[:200\]/d'  ppcls/data/dataloader/imagenet_d
 sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
 sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:200\]'  ppcls/data/dataloader/imagenet_dataset.py
 
-# logo_dataset 
+# logo_dataset
 # sed -ie '/self.images = self.images\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
 # sed -ie '/self.labels = self.labels\[:10000\]/d'  ppcls/data/dataloader/logo_dataset.py
 # sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:10000\]'  ppcls/data/dataloader/logo_dataset.py
@@ -76,7 +76,7 @@ if [ $? -eq 0 ];then
 else
    cat $log_path/train/${category}_${model}.log
    echo -e "\033[31m training of ${category}_${model} failed!\033[0m"|tee -a $log_path/result.log
-fi 
+fi
 
 # eval
 python tools/eval.py -c $line -o Global.pretrained_model=$output_path/${category}_${model}/RecModel/latest -o Global.device=cpu > $log_path/eval/${category}_${model}.log 2>&1

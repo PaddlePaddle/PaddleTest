@@ -5,9 +5,9 @@ rm -rf dataset
 ln -s ${data_path} dataset
 
 # env
-python -m pip install --upgrade pip 
-python -m pip install -r requirements.txt 
-python -m pip install paddleslim 
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install paddleslim
 
 # dir
 log_path=log
@@ -30,13 +30,13 @@ filename=${line##*/}
 #echo $filename
 model=${filename%.*}
 echo $model
-python tools/train.py  -c $line -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=32 -o DataLoader.Eval.sampler.batch_size=32 -o Global.device=cpu > $log_path/train/$model.log 2>&1 
+python tools/train.py  -c $line -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=32 -o DataLoader.Eval.sampler.batch_size=32 -o Global.device=cpu > $log_path/train/$model.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m training of $model  successfully!\033[0m"|tee -a $log_path/result.log
 else
    cat $log_path/train/$model.log
    echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
-fi 
+fi
 sleep 5
 
 # eval
@@ -93,7 +93,7 @@ cd ..
 done
 
 # PaddleClas_rec
-# source PaddleClas_rec_CPU.sh 
+# source PaddleClas_rec_CPU.sh
 
 num=`cat $log_path/result.log | grep "failed" | wc -l`
 if [ "${num}" -gt "0" ];then
