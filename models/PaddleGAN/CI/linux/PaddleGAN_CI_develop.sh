@@ -153,7 +153,7 @@ find configs/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'\
 if [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
 elif [[ ${model_flag} =~ "pr" ]];then
-   shuf -n {pr_num} models_list_all > models_list
+   shuf -n ${pr_num} models_list_all > models_list
 elif [[ ${model_flag} =~ "single" ]];then
    echo $1 > models_list
 else

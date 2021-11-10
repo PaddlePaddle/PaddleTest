@@ -116,7 +116,7 @@ done
 #找到diff yaml  &  拆分任务  &  定义要跑的model list
 if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
    find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; \
-      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' |grep -v 'distill' \
+      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'fp16' |grep -v 'distill' \
       > models_list_all
 
    if [[ ${model_flag} =~ 'CI_step1' ]]; then
