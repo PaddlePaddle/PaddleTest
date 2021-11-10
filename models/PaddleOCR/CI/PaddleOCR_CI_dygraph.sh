@@ -238,7 +238,7 @@ else
    echo -e "\033[31m export_model of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 
-# predict
+# predict屏蔽sast两个模型该功能
 if [ ${category} == "rec" ];then
 echo "######  rec"
 if [[ $(echo $model | grep -c "chinese") -eq 0 ]];then
