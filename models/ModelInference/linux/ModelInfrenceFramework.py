@@ -670,4 +670,4 @@ class TestOcrClsInference:
                            real cls_scores is: %s, expect cls_scores is: %s"
                     % (cls_scores, expect_cls_scores)
                 )
-            print("*************************************************************************")
+            print("**************************************************************************")
