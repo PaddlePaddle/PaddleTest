@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_install.sh repvgg_b2g4_imagenet $HUB_CONFIG
+        cmd: bash cv_install.sh repvgg_b2g4_imagenet
     kpis:
       exit_code:
         latest: True

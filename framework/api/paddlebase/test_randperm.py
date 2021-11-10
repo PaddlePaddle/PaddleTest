@@ -4,11 +4,15 @@
 """
 test randperm
 """
+import sys
 from apibase import APIBase
 from apibase import randtool
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../..")
+from utils.interceptor import skip_platform_not_linux
 
 
 class TestRandperm(APIBase):
@@ -30,6 +34,7 @@ class TestRandperm(APIBase):
 obj = TestRandperm(paddle.randperm)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randperm_vartype
 def test_randperm_base():
     """
@@ -40,6 +45,7 @@ def test_randperm_base():
     obj.base(res=res, n=n)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randperm_parameters
 def test_randperm():
     """
@@ -50,6 +56,7 @@ def test_randperm():
     obj.run(res=res, n=n)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randperm_parameters
 def test_randperm1():
     """
@@ -61,6 +68,7 @@ def test_randperm1():
     obj.run(res=res, n=n)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randperm_parameters
 def test_randperm2():
     """
@@ -72,6 +80,7 @@ def test_randperm2():
     obj.run(res=res, n=n, dtype=np.float32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randperm_exception
 def test_randperm3():
     """
@@ -83,6 +92,7 @@ def test_randperm3():
     obj.exception(etype="InvalidArgumentError", n=n, dtype=np.float32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randperm_exception
 def test_randperm4():
     """
