@@ -5,11 +5,7 @@ set params_dir=(output/*)
 md log
 rem data
 rd /s /q data
-mklink /j data %data_path%\PaddleGAN_small
-
-@REM configs/firstorder_vox_mobile_256.yaml
-@REM configs/firstorder_vox_256.yaml
-@REM configs/firstorder_fashion.yaml
+mklink /j data %data_path%\PaddleGAN
 
 rem dependency
 python -m pip install -r requirements.txt
