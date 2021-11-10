@@ -127,31 +127,31 @@ wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdp
           """
         cmd_gpu = (
             """cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml \
--o Global.inference_model_dir=../inference/%s -o Global.batch_size=1\
+-o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 \
 -o Global.use_gpu=True -o Global.use_tensorrt=False -o Global.enable_mkldnn=False"""
             % self.model
         )
         cmd_trt = (
             """cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml \
--o Global.inference_model_dir=../inference/%s -o Global.batch_size=1\
+-o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 \
 -o Global.use_gpu=True -o Global.use_tensorrt=True -o Global.enable_mkldnn=False"""
             % self.model
         )
         cmd_fp16 = (
             """cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml \
--o Global.inference_model_dir=../inference/%s -o Global.batch_size=1\
+-o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 \
 -o Global.use_gpu=True -o Global.use_tensorrt=True -o  Global.use_fp16=True -o Global.enable_mkldnn=False"""
             % self.model
         )
         cmd_cpu = (
             """cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml \
--o Global.inference_model_dir=../inference/%s -o Global.batch_size=1\
+-o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 \
 -o Global.use_gpu=False -o Global.use_tensorrt=False -o Global.enable_mkldnn=False"""
             % self.model
         )
         cmd_mkldnn = (
             """cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml \
--o Global.inference_model_dir=../inference/%s -o Global.batch_size=1\
+-o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 \
 -o Global.use_gpu=False -o Global.use_tensorrt=False -o Global.enable_mkldnn=True"""
             % self.model
         )
@@ -221,31 +221,31 @@ wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/models/infere
           clas rec predict
           """
         cmd_gpu = """cd PaddleClas/deploy; python python/predict_system.py -c %s -o Global.infer_imgs=%s \
--o Global.use_gpu=True -o Global.use_tensorrt=False\
+-o Global.use_gpu=True -o Global.use_tensorrt=False \
 -o Global.use_fp16=False -o Global.enable_mkldnn=False""" % (
             self.yaml,
             self.infer_imgs,
         )
         cmd_trt = """cd PaddleClas/deploy; python python/predict_system.py -c %s -o Global.infer_imgs=%s \
--o Global.use_gpu=True -o Global.use_tensorrt=True\
+-o Global.use_gpu=True -o Global.use_tensorrt=True \
 -o Global.use_fp16=False -o Global.enable_mkldnn=False""" % (
             self.yaml,
             self.infer_imgs,
         )
         cmd_fp16 = """cd PaddleClas/deploy; python python/predict_system.py -c %s -o Global.infer_imgs=%s \
--o Global.use_gpu=True -o Global.use_tensorrt=True\
+-o Global.use_gpu=True -o Global.use_tensorrt=True \
 -o Global.use_fp16=True -o Global.enable_mkldnn=False""" % (
             self.yaml,
             self.infer_imgs,
         )
         cmd_cpu = """cd PaddleClas/deploy; python python/predict_system.py -c %s -o Global.infer_imgs=%s \
--o Global.use_gpu=False -o Global.use_tensorrt=False\
+-o Global.use_gpu=False -o Global.use_tensorrt=False \
   -o Global.use_fp16=False -o Global.enable_mkldnn=False""" % (
             self.yaml,
             self.infer_imgs,
         )
         cmd_mkldnn = """cd PaddleClas/deploy; python python/predict_system.py -c %s -o Global.infer_imgs=%s \
--o Global.use_gpu=False -o Global.use_tensorrt=False\
+-o Global.use_gpu=False -o Global.use_tensorrt=False \
   -o Global.use_fp16=False -o Global.enable_mkldnn=True""" % (
             self.yaml,
             self.infer_imgs,
@@ -670,4 +670,4 @@ class TestOcrClsInference:
                            real cls_scores is: %s, expect cls_scores is: %s"
                     % (cls_scores, expect_cls_scores)
                 )
-            print("*************************************************************************")
+            print("**************************************************************************")
