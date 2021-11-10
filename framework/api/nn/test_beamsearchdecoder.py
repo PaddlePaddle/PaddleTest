@@ -5,7 +5,7 @@
 test paddle.nn.BeamSearchDecoder
 """
 
-from apibase import APIBase
+import random
 from apibase import compare
 import paddle
 import pytest
@@ -14,95 +14,273 @@ from paddle.nn import BeamSearchDecoder, dynamic_decode
 from paddle.nn import GRUCell, Linear, Embedding, LSTMCell, SimpleRNNCell, Softmax
 
 
-class TestBeamSearchDecoder(APIBase):
+np.random.seed(2)
+random.seed(2)
+paddle.seed(2)
+
+
+class ModelGRUCell(paddle.nn.Layer):
     """
-    test
+    GRUCell model
     """
 
-    def hook(self):
+    def __init__(self):
         """
-        implement
+        initialize
         """
-        self.types = [np.float32, np.float64, np.uint8, np.int64, np.int32, bool]
-        # self.debug = True
-        # self.static = True
-        # enable check grad
-        # self.enable_backward = True
+        super(ModelGRUCell, self).__init__()
+        self.trg_embeder = Embedding(100, 32)
+        self.output_layer = Linear(32, 32)
+        self.decoder_cell = GRUCell(input_size=32, hidden_size=32)
+        self.decoder = BeamSearchDecoder(
+            self.decoder_cell,
+            start_token=0,
+            end_token=1,
+            beam_size=4,
+            embedding_fn=self.trg_embeder,
+            output_fn=self.output_layer,
+        )
+
+    def forward(self):
+        """
+        forward
+        """
+        encoder_output = paddle.ones((4, 8, 32), dtype=paddle.get_default_dtype())
+        outputs = dynamic_decode(
+            decoder=self.decoder, inits=self.decoder_cell.get_initial_states(encoder_output), max_step_num=10
+        )
+        return outputs[0]
 
 
-# obj = TestBeamSearchDecoder(paddle.nn.BeamSearchDecoder)
-
-
-@pytest.mark.api_nn_BeamSearchDecoder_vartype
-def test_beamsearchdecoder_base():
+class ModelLSTMCell(paddle.nn.Layer):
     """
-    base
+    LSTMCell model
     """
-    paddle.seed(33)
-    trg_embeder = Embedding(100, 32)
-    output_layer = Linear(32, 32)
-    decoder_cell = GRUCell(input_size=32, hidden_size=32)
-    decoder = BeamSearchDecoder(
-        decoder_cell, start_token=0, end_token=1, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
-    )
-    encoder_output = paddle.ones((4, 8, 32), dtype=paddle.get_default_dtype())
-    outputs = dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=10)
-    output = outputs[0]
+
+    def __init__(self):
+        """
+        initialize
+        """
+        super(ModelLSTMCell, self).__init__()
+        self.trg_embeder = Embedding(100, 32)
+        self.output_layer = Linear(32, 32)
+        self.decoder_cell = LSTMCell(input_size=32, hidden_size=32)
+        self.decoder = BeamSearchDecoder(
+            self.decoder_cell,
+            start_token=0,
+            end_token=1,
+            beam_size=4,
+            embedding_fn=self.trg_embeder,
+            output_fn=self.output_layer,
+        )
+
+    def forward(self):
+        """
+        forward
+        """
+        encoder_output = paddle.ones((4, 8, 32), dtype=paddle.get_default_dtype())
+        outputs = dynamic_decode(
+            decoder=self.decoder, inits=self.decoder_cell.get_initial_states(encoder_output), max_step_num=10
+        )
+        return outputs[0]
+
+
+class ModelSimpleRNNCell(paddle.nn.Layer):
+    """
+    SimpleRNNCell model
+    """
+
+    def __init__(self):
+        """
+        initialize
+        """
+        super(ModelSimpleRNNCell, self).__init__()
+        self.trg_embeder = Embedding(100, 32)
+        self.output_layer = Linear(32, 32)
+        self.decoder_cell = SimpleRNNCell(input_size=32, hidden_size=32)
+        self.decoder = BeamSearchDecoder(
+            self.decoder_cell,
+            start_token=0,
+            end_token=1,
+            beam_size=4,
+            embedding_fn=self.trg_embeder,
+            output_fn=self.output_layer,
+        )
+
+    def forward(self):
+        """
+        forward
+        """
+        encoder_output = paddle.ones((4, 8, 32), dtype=paddle.get_default_dtype())
+        outputs = dynamic_decode(
+            decoder=self.decoder, inits=self.decoder_cell.get_initial_states(encoder_output), max_step_num=10
+        )
+        return outputs[0]
+
+
+class ModelGRUCell1(paddle.nn.Layer):
+    """
+    GRUCell model1
+    """
+
+    def __init__(self):
+        """
+        initialize
+        """
+        super(ModelGRUCell1, self).__init__()
+        self.trg_embeder = Embedding(100, 32)
+        self.output_layer = Linear(32, 32)
+        self.decoder_cell = GRUCell(input_size=32, hidden_size=32)
+        self.decoder = BeamSearchDecoder(
+            self.decoder_cell,
+            start_token=0,
+            end_token=1,
+            beam_size=8,
+            embedding_fn=self.trg_embeder,
+            output_fn=self.output_layer,
+        )
+
+    def forward(self):
+        """
+        forward
+        """
+        encoder_output = paddle.ones((4, 8, 32), dtype=paddle.get_default_dtype())
+        outputs = dynamic_decode(
+            decoder=self.decoder, inits=self.decoder_cell.get_initial_states(encoder_output), max_step_num=10
+        )
+        return outputs[0]
+
+
+class ModelGRUCell2(paddle.nn.Layer):
+    """
+    GRUCell model2
+    """
+
+    def __init__(self):
+        """
+        initialize
+        """
+        super(ModelGRUCell2, self).__init__()
+        self.trg_embeder = Embedding(100, 16)
+        self.output_layer = Linear(16, 16)
+        self.decoder_cell = GRUCell(input_size=16, hidden_size=16)
+        self.decoder = BeamSearchDecoder(
+            self.decoder_cell,
+            start_token=0,
+            end_token=1,
+            beam_size=4,
+            embedding_fn=self.trg_embeder,
+            output_fn=self.output_layer,
+        )
+
+    def forward(self):
+        """
+        forward
+        """
+        encoder_output = paddle.ones((4, 8, 16), dtype=paddle.get_default_dtype())
+        outputs = dynamic_decode(
+            decoder=self.decoder, inits=self.decoder_cell.get_initial_states(encoder_output), max_step_num=5
+        )
+        return outputs[0]
+
+
+class ModelGRUCell3(paddle.nn.Layer):
+    """
+    GRUCell model3
+    """
+
+    def __init__(self):
+        """
+        initialize
+        """
+        super(ModelGRUCell3, self).__init__()
+        self.trg_embeder = Embedding(100, 16)
+        self.output_layer = Softmax(-1)
+        self.decoder_cell = GRUCell(input_size=16, hidden_size=16)
+        self.decoder = BeamSearchDecoder(
+            self.decoder_cell,
+            start_token=0,
+            end_token=1,
+            beam_size=4,
+            embedding_fn=self.trg_embeder,
+            output_fn=self.output_layer,
+        )
+
+    def forward(self):
+        """
+        forward
+        """
+        encoder_output = paddle.ones((4, 8, 16), dtype=paddle.get_default_dtype())
+        outputs = dynamic_decode(
+            decoder=self.decoder, inits=self.decoder_cell.get_initial_states(encoder_output), max_step_num=5
+        )
+        return outputs[0]
+
+
+@pytest.mark.api_nn_BeamSearchDecoder_parameter
+def test_beamsearchdecoder0():
+    """
+    GRUCell
+    """
+    m = ModelGRUCell()
+    a = paddle.load("model/model_grucell")
+    m.set_state_dict(a)
     res = [
         [
-            [9, 3, 3, 28],
-            [3, 3, 9, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
+            [24, 24, 24, 24],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [24, 24, 0, 0],
+            [0, 0, 24, 24],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 24, 0, 24],
         ],
         [
-            [9, 3, 3, 28],
-            [3, 3, 9, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
+            [24, 24, 24, 24],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [24, 24, 0, 0],
+            [0, 0, 24, 24],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 24, 0, 24],
         ],
         [
-            [9, 3, 3, 28],
-            [3, 3, 9, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
+            [24, 24, 24, 24],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [24, 24, 0, 0],
+            [0, 0, 24, 24],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 24, 0, 24],
         ],
         [
-            [9, 3, 3, 28],
-            [3, 3, 9, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
-            [3, 3, 3, 3],
+            [24, 24, 24, 24],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [24, 24, 0, 0],
+            [0, 0, 24, 24],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 24, 0, 24],
         ],
     ]
-    compare(np.array(output), res)
+
+    compare(m().numpy(), res)
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_parameters
@@ -110,71 +288,65 @@ def test_beamsearchdecoder1():
     """
     change decoder_cell to LSTM cell
     """
-    paddle.seed(33)
-    trg_embeder = Embedding(100, 32)
-    output_layer = Linear(32, 32)
-    decoder_cell = LSTMCell(input_size=32, hidden_size=32)
-    decoder = BeamSearchDecoder(
-        decoder_cell, start_token=0, end_token=1, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
-    )
-    encoder_output = paddle.ones((4, 8, 32), dtype=paddle.get_default_dtype())
-    outputs = dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=10)
-    output = outputs[0]
+    m = ModelLSTMCell()
+    a = paddle.load("model/model_lstmcell")
+    m.set_state_dict(a)
     res = [
         [
-            [14, 14, 14, 14],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 10, 2],
-            [10, 2, 2, 2],
-            [2, 2, 2, 10],
+            [20, 20, 20, 20],
+            [31, 31, 31, 31],
+            [24, 24, 24, 24],
+            [20, 20, 20, 20],
+            [24, 24, 24, 24],
+            [20, 20, 20, 20],
+            [27, 27, 27, 24],
+            [20, 20, 20, 20],
+            [27, 24, 27, 24],
+            [20, 20, 20, 20],
+            [24, 24, 27, 24],
         ],
         [
-            [14, 14, 14, 14],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 10, 2],
-            [10, 2, 2, 2],
-            [2, 2, 2, 10],
+            [20, 20, 20, 20],
+            [31, 31, 31, 31],
+            [24, 24, 24, 24],
+            [20, 20, 20, 20],
+            [24, 24, 24, 24],
+            [20, 20, 20, 20],
+            [27, 27, 27, 24],
+            [20, 20, 20, 20],
+            [27, 24, 27, 24],
+            [20, 20, 20, 20],
+            [24, 24, 27, 24],
         ],
         [
-            [14, 14, 14, 14],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 10, 2],
-            [10, 2, 2, 2],
-            [2, 2, 2, 10],
+            [20, 20, 20, 20],
+            [31, 31, 31, 31],
+            [24, 24, 24, 24],
+            [20, 20, 20, 20],
+            [24, 24, 24, 24],
+            [20, 20, 20, 20],
+            [27, 27, 27, 24],
+            [20, 20, 20, 20],
+            [27, 24, 27, 24],
+            [20, 20, 20, 20],
+            [24, 24, 27, 24],
         ],
         [
-            [14, 14, 14, 14],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 2, 2],
-            [2, 2, 10, 2],
-            [10, 2, 2, 2],
-            [2, 2, 2, 10],
+            [20, 20, 20, 20],
+            [31, 31, 31, 31],
+            [24, 24, 24, 24],
+            [20, 20, 20, 20],
+            [24, 24, 24, 24],
+            [20, 20, 20, 20],
+            [27, 27, 27, 24],
+            [20, 20, 20, 20],
+            [27, 24, 27, 24],
+            [20, 20, 20, 20],
+            [24, 24, 27, 24],
         ],
-    ]  # [4,11,4]
-    compare(np.array(output), res)
+    ]
+
+    compare(m().numpy(), res)
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_parameters
@@ -182,71 +354,64 @@ def test_beamsearchdecoder2():
     """
     change decoder_cell to simpleRNNCell
     """
-    paddle.seed(33)
-    trg_embeder = Embedding(100, 32)
-    output_layer = Linear(32, 32)
-    decoder_cell = SimpleRNNCell(input_size=32, hidden_size=32)
-    decoder = BeamSearchDecoder(
-        decoder_cell, start_token=0, end_token=1, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
-    )
-    encoder_output = paddle.ones((4, 8, 32), dtype=paddle.get_default_dtype())
-    outputs = dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=10)
-    output = outputs[0]
+    m = ModelSimpleRNNCell()
+    a = paddle.load("model/model_simplernncell")
+    m.set_state_dict(a)
     res = [
         [
-            [16, 16, 16, 16],
-            [6, 6, 6, 6],
-            [6, 6, 6, 6],
-            [15, 6, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [6, 15, 15, 6],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 6],
+            [0, 0, 0, 0],
+            [31, 31, 31, 31],
+            [19, 19, 19, 19],
+            [25, 25, 25, 25],
+            [29, 29, 29, 29],
+            [14, 14, 14, 14],
+            [5, 12, 12, 12],
+            [14, 5, 5, 5],
+            [14, 14, 14, 14],
+            [5, 5, 14, 14],
+            [14, 14, 5, 14],
         ],
         [
-            [16, 16, 16, 16],
-            [6, 6, 6, 6],
-            [6, 6, 6, 6],
-            [15, 6, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [6, 15, 15, 6],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 6],
+            [0, 0, 0, 0],
+            [31, 31, 31, 31],
+            [19, 19, 19, 19],
+            [25, 25, 25, 25],
+            [29, 29, 29, 29],
+            [14, 14, 14, 14],
+            [5, 12, 12, 12],
+            [14, 5, 5, 5],
+            [14, 14, 14, 14],
+            [5, 5, 14, 14],
+            [14, 14, 5, 14],
         ],
         [
-            [16, 16, 16, 16],
-            [6, 6, 6, 6],
-            [6, 6, 6, 6],
-            [15, 6, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [6, 15, 15, 6],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 6],
+            [0, 0, 0, 0],
+            [31, 31, 31, 31],
+            [19, 19, 19, 19],
+            [25, 25, 25, 25],
+            [29, 29, 29, 29],
+            [14, 14, 14, 14],
+            [5, 12, 12, 12],
+            [14, 5, 5, 5],
+            [14, 14, 14, 14],
+            [5, 5, 14, 14],
+            [14, 14, 5, 14],
         ],
         [
-            [16, 16, 16, 16],
-            [6, 6, 6, 6],
-            [6, 6, 6, 6],
-            [15, 6, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [6, 15, 15, 6],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 15],
-            [15, 15, 15, 6],
+            [0, 0, 0, 0],
+            [31, 31, 31, 31],
+            [19, 19, 19, 19],
+            [25, 25, 25, 25],
+            [29, 29, 29, 29],
+            [14, 14, 14, 14],
+            [5, 12, 12, 12],
+            [14, 5, 5, 5],
+            [14, 14, 14, 14],
+            [5, 5, 14, 14],
+            [14, 14, 5, 14],
         ],
     ]
-    compare(np.array(output), res)
+    compare(m().numpy(), res)
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_parameters
@@ -254,71 +419,65 @@ def test_beamsearchdecoder3():
     """
     change the beam size
     """
-    paddle.seed(33)
-    trg_embeder = Embedding(100, 32)
-    output_layer = Linear(32, 32)
-    decoder_cell = GRUCell(input_size=32, hidden_size=32)
-    decoder = BeamSearchDecoder(
-        decoder_cell, start_token=0, end_token=1, beam_size=8, embedding_fn=trg_embeder, output_fn=output_layer
-    )
-    encoder_output = paddle.ones((4, 8, 32), dtype=paddle.get_default_dtype())
-    outputs = dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=10)
-    output = outputs[0]
+    m = ModelGRUCell1()
+    a = paddle.load("model/model_grucell1")
+    m.set_state_dict(a)
     res = [
         [
-            [9, 3, 3, 9, 3, 28, 27, 6],
-            [3, 3, 9, 27, 3, 3, 3, 3],
-            [3, 3, 3, 3, 9, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
+            [24, 24, 24, 24, 24, 24, 24, 24],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 24],
+            [24, 24, 0, 24, 0, 24, 24, 0],
+            [0, 0, 24, 0, 24, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 24, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 24, 0, 0],
+            [0, 0, 0, 0, 0, 0, 24, 0],
+            [0, 24, 0, 0, 24, 0, 0, 0],
         ],
         [
-            [9, 3, 3, 9, 3, 28, 27, 6],
-            [3, 3, 9, 27, 3, 3, 3, 3],
-            [3, 3, 3, 3, 9, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
+            [24, 24, 24, 24, 24, 24, 24, 24],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 24],
+            [24, 24, 0, 24, 0, 24, 24, 0],
+            [0, 0, 24, 0, 24, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 24, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 24, 0, 0],
+            [0, 0, 0, 0, 0, 0, 24, 0],
+            [0, 24, 0, 0, 24, 0, 0, 0],
         ],
         [
-            [9, 3, 3, 9, 3, 28, 27, 6],
-            [3, 3, 9, 27, 3, 3, 3, 3],
-            [3, 3, 3, 3, 9, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
+            [24, 24, 24, 24, 24, 24, 24, 24],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 24],
+            [24, 24, 0, 24, 0, 24, 24, 0],
+            [0, 0, 24, 0, 24, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 24, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 24, 0, 0],
+            [0, 0, 0, 0, 0, 0, 24, 0],
+            [0, 24, 0, 0, 24, 0, 0, 0],
         ],
         [
-            [9, 3, 3, 9, 3, 28, 27, 6],
-            [3, 3, 9, 27, 3, 3, 3, 3],
-            [3, 3, 3, 3, 9, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
-            [3, 3, 3, 3, 3, 3, 3, 3],
+            [24, 24, 24, 24, 24, 24, 24, 24],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 24],
+            [24, 24, 0, 24, 0, 24, 24, 0],
+            [0, 0, 24, 0, 24, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 24, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 24, 0, 0],
+            [0, 0, 0, 0, 0, 0, 24, 0],
+            [0, 24, 0, 0, 24, 0, 0, 0],
         ],
-    ]  # [4,11,8]
-    compare(np.array(output), res)
+    ]
+
+    compare(m().numpy(), res)
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_parameters
@@ -326,23 +485,17 @@ def test_beamsearchdecoder4():
     """
     change the size of the input sequence
     """
-    paddle.seed(33)
-    trg_embeder = Embedding(100, 16)
-    output_layer = Linear(16, 16)
-    decoder_cell = GRUCell(input_size=16, hidden_size=16)
-    decoder = BeamSearchDecoder(
-        decoder_cell, start_token=0, end_token=1, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
-    )
-    encoder_output = paddle.ones((4, 8, 16), dtype=paddle.get_default_dtype())
-    outputs = dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=5)
-    output = outputs[0]
+    m = ModelGRUCell2()
+    a = paddle.load("model/model_grucell2")
+    m.set_state_dict(a)
     res = [
-        [[10, 10, 10, 10], [3, 3, 12, 3], [12, 12, 3, 12], [3, 3, 12, 3], [12, 3, 3, 3], [3, 3, 3, 12]],
-        [[10, 10, 10, 10], [3, 3, 12, 3], [12, 12, 3, 12], [3, 3, 12, 3], [12, 3, 3, 3], [3, 3, 3, 12]],
-        [[10, 10, 10, 10], [3, 3, 12, 3], [12, 12, 3, 12], [3, 3, 12, 3], [12, 3, 3, 3], [3, 3, 3, 12]],
-        [[10, 10, 10, 10], [3, 3, 12, 3], [12, 12, 3, 12], [3, 3, 12, 3], [12, 3, 3, 3], [3, 3, 3, 12]],
+        [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 13, 0], [13, 13, 0, 13], [0, 13, 13, 13], [13, 13, 13, 0]],
+        [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 13, 0], [13, 13, 0, 13], [0, 13, 13, 13], [13, 13, 13, 0]],
+        [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 13, 0], [13, 13, 0, 13], [0, 13, 13, 13], [13, 13, 13, 0]],
+        [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 13, 0], [13, 13, 0, 13], [0, 13, 13, 13], [13, 13, 13, 0]],
     ]
-    compare(np.array(output), res)
+
+    compare(m().numpy(), res)
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_parameters
@@ -350,28 +503,20 @@ def test_beamsearchdecoder5():
     """
     change the type of the output_layer
     """
-    paddle.seed(33)
-    trg_embeder = Embedding(100, 16)
-    output_layer = Softmax(-1)
-    # output_layer=Linear(16,16)
-    decoder_cell = GRUCell(input_size=16, hidden_size=16)
-
-    decoder = BeamSearchDecoder(
-        decoder_cell, start_token=0, end_token=1, beam_size=4, embedding_fn=trg_embeder, output_fn=output_layer
-    )
-    encoder_output = paddle.ones((4, 8, 16), dtype=paddle.get_default_dtype())
-    outputs = dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=5)
-    output = outputs[0]
+    m = ModelGRUCell3()
+    a = paddle.load("model/model_grucell3")
+    m.set_state_dict(a)
     res = [
-        [[1, 11, 0, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13]],
-        [[1, 11, 0, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13]],
-        [[1, 11, 0, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13]],
-        [[1, 11, 0, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13], [1, 13, 13, 13]],
+        [[14, 9, 0, 9], [9, 9, 9, 0], [9, 9, 9, 9], [9, 9, 9, 9], [9, 9, 9, 9], [9, 9, 9, 9]],
+        [[14, 9, 0, 9], [9, 9, 9, 0], [9, 9, 9, 9], [9, 9, 9, 9], [9, 9, 9, 9], [9, 9, 9, 9]],
+        [[14, 9, 0, 9], [9, 9, 9, 0], [9, 9, 9, 9], [9, 9, 9, 9], [9, 9, 9, 9], [9, 9, 9, 9]],
+        [[14, 9, 0, 9], [9, 9, 9, 0], [9, 9, 9, 9], [9, 9, 9, 9], [9, 9, 9, 9], [9, 9, 9, 9]],
     ]
-    compare(np.array(output), res)
+
+    compare(m().numpy(), res)
 
 
-@pytest.mark.api_nn_BeamSearchDecoder_parameters
+@pytest.mark.api_nn_BeamSearchDecoder_exception
 def test_beamsearchdecoder6():
     """
     error shape
@@ -395,7 +540,7 @@ def test_beamsearchdecoder6():
             raise Exception
 
 
-@pytest.mark.api_nn_BeamSearchDecoder_parameters
+@pytest.mark.api_nn_BeamSearchDecoder_exception
 def test_beamsearchdecoder7():
     """
     end_token out of range
@@ -418,6 +563,7 @@ def test_beamsearchdecoder7():
             raise Exception
 
 
+@pytest.mark.api_nn_BeamSearchDecoder_exception
 def test_beamsearchdecoder8():
     """
     Exception to the type of start_id
@@ -440,6 +586,7 @@ def test_beamsearchdecoder8():
             raise Exception
 
 
+@pytest.mark.api_nn_BeamSearchDecoder_exception
 def test_beamsearchdecoder9():
     """
     the size of each embedding vector mismatch the size of GRUCell
