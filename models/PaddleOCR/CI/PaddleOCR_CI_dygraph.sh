@@ -200,8 +200,16 @@ else
    echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 else
-   if [[ ${model} =~ "det_r50_vd_east" ]] || [[ ${model} =~ "sast" ]];then
+   if [[ ${model} =~ "det_r50_vd_east" ]] || [[ ${model} =~ "det_r50_vd_sast_totaltext" ]];then
       python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/"${model}"_v2.0_train/best_accuracy" Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
+      if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
+         echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
+      else
+         cat $log_path/infer/${model}.log
+         echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
+      fi
+   elif [[ ${model} =~ "det_r50_vd_sast_icdar15" ]];then
+      python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/"${model}"_v2.0_train/best_accuracy" Global.infer_img="./doc/imgs_en/254.jpg" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
       if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
          echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
       else
