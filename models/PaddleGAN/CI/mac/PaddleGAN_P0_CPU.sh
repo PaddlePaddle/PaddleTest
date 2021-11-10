@@ -76,6 +76,7 @@ if [[ ! ${line} =~ 'firstorder' ]]; then
       cat $log_path/eval/${model}.log
       echo -e "\033[31m evaluate of $model failed!\033[0m"| tee -a $log_path/result.log
    fi
+fi
 done
 
 #infer

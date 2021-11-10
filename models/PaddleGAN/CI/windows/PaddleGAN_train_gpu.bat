@@ -1,11 +1,16 @@
 @ echo off
 set log_path=log
-set params_dir=(output/*)
+set params_dir=(output/*) 
 @REM set 不能放在循环中
 md log
 rem data
 rd /s /q data
-mklink /j data %data_path%\PaddleGAN
+mklink /j data %data_path%\PaddleGAN 
+
+@REM configs/starganv2_celeba_hq.yaml   #报错
+@REM configs/ugatit_selfie2anime_light.yaml   #占满显存，不显示iter，减少数据集也没用
+@REM configs/cyclegan_horse2zebra.yaml
+@REM configs/cyclegan_cityscapes.yaml
 
 rem dependency
 python -m pip install -r requirements.txt
@@ -163,7 +168,7 @@ for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )
 findstr /s "FAIL" log/result.log
 rem echo %num%
 
-if %num%==0 (
+if %num%==0 ( 
  exit /b 0
 ) else (
  exit /b 1
