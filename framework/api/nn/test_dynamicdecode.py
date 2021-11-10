@@ -431,7 +431,7 @@ def test_dynamic_decode9():
 
 
 @pytest.mark.api_nn_dynamic_decode_exception
-def test_dynamic_decode9():
+def test_dynamic_decode10():
     """
     No parameters passed to inits
     """
@@ -454,7 +454,7 @@ def test_dynamic_decode9():
 
 
 @pytest.mark.api_nn_dynamic_decode_exception
-def test_dynamic_decode10():
+def test_dynamic_decode11():
     """
     the size of inits mismatch the size of the decoder
     """
