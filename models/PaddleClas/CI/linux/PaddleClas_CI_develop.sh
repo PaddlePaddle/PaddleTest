@@ -254,31 +254,34 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          -o Global.save_interval=5 \
          -o DataLoader.Train.sampler.batch_size=4  \
          > $log_path/train/${model}_1card.log 2>&1
-   else
-      python tools/train.py  \
-         -c $line -o Global.epochs=1 \
-         -o Global.output_dir=output \
-         -o DataLoader.Train.sampler.batch_size=1 \
-         -o DataLoader.Eval.sampler.batch_size=1  \
-         > $log_path/train/${model}_1card.log 2>&1
-   fi
-   params_dir=$(ls output)
-   echo "######  params_dir"
-   echo $params_dir
-   if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
-      echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
-      echo "training_single_exit_code: 0.0" >> $log_path/result.log
-   else
-      cat $log_path/train/${model}_1card.log
-      echo -e "\033[31m training single of $model failed!\033[0m"|tee -a $log_path/result.log
-      echo "training_single_exit_code: 1.0" >> $log_path/result.log
+   # else  #取消CI单卡训练
+   #    python tools/train.py  \
+   #       -c $line -o Global.epochs=1 \
+   #       -o Global.output_dir=output \
+   #       -o DataLoader.Train.sampler.batch_size=1 \
+   #       -o DataLoader.Eval.sampler.batch_size=1  \
+   #       > $log_path/train/${model}_1card.log 2>&1
+      params_dir=$(ls output)
+      echo "######  params_dir"
+      echo $params_dir
+      if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
+         echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
+         echo "training_single_exit_code: 0.0" >> $log_path/result.log
+      else
+         cat $log_path/train/${model}_1card.log
+         echo -e "\033[31m training single of $model failed!\033[0m"|tee -a $log_path/result.log
+         echo "training_single_exit_code: 1.0" >> $log_path/result.log
+      fi
    fi
 
-   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'RedNet' ]] ;then
+   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] \
+      || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'GhostNet' ]];then
       echo "######  use pretrain model"
       echo ${model}
+      wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${model}_pretrained.pdparams --no-proxy
       rm -rf output/$params_dir/latest.pdparams
-      cp -r dataset/pretrain_models/${model}_pretrained.pdparams output/$params_dir/latest.pdparams
+      cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
+      rm -rf ${model}_pretrained.pdparams
    fi
    sleep 3
 

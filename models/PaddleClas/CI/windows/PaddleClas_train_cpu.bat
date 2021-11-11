@@ -44,14 +44,17 @@ if not !errorlevel! == 0 (
         echo   training of !model! successfully!
 )
 
-echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 RedNet50 LeViT_128S"|findstr !model! >nul
+echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 RedNet50 LeViT_128S GhostNet_x1_3 ESNet_x1_0"|findstr !model! >nul
 if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!
     del "output\!model!\latest.pdparams"
-    echo f| xcopy /s /y /F "pretrain_models\!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
+    wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/!model!_pretrained.pdparams --no-proxy
+    echo f| xcopy /s /y /F "!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
+    del "!model!_pretrained.pdparams"
+
 ) else (
-    echo ###### not load pretrain
+    echo ######   not load pretrain
 )
 
 rem eval

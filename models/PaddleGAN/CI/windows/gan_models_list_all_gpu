@@ -8,7 +8,6 @@ configs/animeganv2.yaml
 configs/lapstyle_draft.yaml
 configs/edvr_l_w_tsa.yaml
 configs/realsr_bicubic_noise_x4_df2k.yaml
-configs/iconvsr_reds.yaml
 configs/edvr_m_w_tsa.yaml
 configs/drn_psnr_x4_div2k.yaml
 configs/dcgan_mnist.yaml
@@ -17,8 +16,6 @@ configs/esrgan_psnr_x4_div2k.yaml
 configs/lapstyle_rev_first.yaml
 configs/pix2pix_facades.yaml
 configs/makeup.yaml
-configs/ugatit_photo2cartoon.yaml
-configs/basicvsr_reds.yaml
 configs/lapstyle_rev_second.yaml
 configs/cond_dcgan_mnist.yaml
 configs/pix2pix_cityscapes.yaml

@@ -9,8 +9,11 @@ mklink /j data %data_path%\PaddleGAN
 
 @REM configs/starganv2_celeba_hq.yaml   #报错
 @REM configs/ugatit_selfie2anime_light.yaml   #占满显存，不显示iter，减少数据集也没用
+@REM configs/ugatit_photo2cartoon.yaml
 @REM configs/cyclegan_horse2zebra.yaml
 @REM configs/cyclegan_cityscapes.yaml
+@REM configs/iconvsr_reds.yaml #显存不够
+@REM configs/basicvsr_reds.yaml #显存不够
 
 rem dependency
 python -m pip install -r requirements.txt
@@ -151,15 +154,15 @@ if  !errorlevel! GTR 0 (
         echo   infer of psgan successfully!
 )
 
-echo vidieo restore
-python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > %log_path%/vidieo_restore_infer.log 2>&1
-if  !errorlevel! GTR 0 (
-        echo   vidieo restore,infer,FAIL  >> %log_path%\result.log
-        echo  infer of vidieo restore failed!
-) else (
-        echo   vidieo restore,infer,SUCCESS  >> %log_path%\result.log
-        echo   infer of vidieo restore successfully!
-)
+@REM echo vidieo restore #39环境GPU报错，38环境可以
+@REM python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > %log_path%/vidieo_restore_infer.log 2>&1
+@REM if  !errorlevel! GTR 0 (
+@REM         echo   vidieo restore,infer,FAIL  >> %log_path%\result.log
+@REM         echo  infer of vidieo restore failed!
+@REM ) else (
+@REM         echo   vidieo restore,infer,SUCCESS  >> %log_path%\result.log
+@REM         echo   infer of vidieo restore successfully!
+@REM )
 
 rmdir data /S /Q
 rem 清空数据文件防止效率云清空任务时删除原始文件

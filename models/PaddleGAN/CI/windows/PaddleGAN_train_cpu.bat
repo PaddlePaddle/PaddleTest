@@ -123,15 +123,15 @@ if  !errorlevel! GTR 0 (
         echo   infer of psgan successfully!
 )
 
-echo vidieo restore
-python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > %log_path%/vidieo_restore_infer.log 2>&1
-if  !errorlevel! GTR 0 (
-        echo   vidieo restore,infer,FAIL  >> %log_path%\result.log
-        echo  infer of vidieo restore failed!
-) else (
-        echo   vidieo restore,infer,SUCCESS  >> %log_path%\result.log
-        echo   infer of vidieo restore successfully!
-)
+@REM echo vidieo restore  不支持CPU
+@REM python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > %log_path%/vidieo_restore_infer.log 2>&1
+@REM if  !errorlevel! GTR 0 (
+@REM         echo   vidieo restore,infer,FAIL  >> %log_path%\result.log
+@REM         echo  infer of vidieo restore failed!
+@REM ) else (
+@REM         echo   vidieo restore,infer,SUCCESS  >> %log_path%\result.log
+@REM         echo   infer of vidieo restore successfully!
+@REM )
 
 
 rmdir data /S /Q
