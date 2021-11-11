@@ -1,5 +1,5 @@
 MODEL: "waybill_ie" # 模型名
-PRIORITY: P0
+PRIORITY: P0_2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -21,6 +21,9 @@ DATA_PROC:
     priority: p0
     tag: linux_download_data
     run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
@@ -142,6 +145,7 @@ TRAIN: # 训练步骤
     priority: p0
     tag: win_dy_gpu1_bigru_crf
     env: #去掉，自动调度
+      GLOG_v: 4
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
     run:

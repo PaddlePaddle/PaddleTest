@@ -39,9 +39,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 match_dssm_linux_dy_gpu1
 
     kpis: #kpi指标
-      pnr:
+      loss:
         latest: True
-        kpi_base: 0.9300
+        kpi_base: 0.3953
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -67,9 +67,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 match_dssm_linux_dy_gpu2
 
     kpis: #kpi指标
-      pnr:
+      loss:
         latest: True
-        kpi_base: 0.9300
+        kpi_base: 0.3953
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -92,9 +92,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_cpu match_dssm_linux_dy_cpu
 
     kpis: #kpi指标
-      pnr:
+      loss:
         latest: True
-        kpi_base: 0.9300
+        kpi_base: 0.3953
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -121,9 +121,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 match_dssm_linux_st_gpu1
 
     kpis: #kpi指标
-      pnr:
+      loss:
         latest: True
-        kpi_base: 0.9300
+        kpi_base: 0.3953
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -149,9 +149,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 match_dssm_linux_st_gpu2
 
     kpis: #kpi指标
-      pnr:
+      loss:
         latest: True
-        kpi_base: 0.9300
+        kpi_base: 0.3953
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -175,9 +175,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu match_dssm_linux_st_cpu
 
     kpis: #kpi指标
-      pnr:
+      loss:
         latest: True
-        kpi_base: 0.9300
+        kpi_base: 0.3953
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -204,9 +204,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1_con match_dssm_linux_dy_gpu1_con
 
     kpis: #kpi指标
-      pnr:
+      loss:
         latest: True
-        kpi_base: 0.9300
+        kpi_base: 0.3953
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -233,9 +233,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1_con match_dssm_linux_st_gpu1_con
 
     kpis: #kpi指标
-      pnr:
+      loss:
         latest: True
-        kpi_base: 0.9300
+        kpi_base: 0.3953
         threshold: 0.02
         actived: True
         evaluation: "+"

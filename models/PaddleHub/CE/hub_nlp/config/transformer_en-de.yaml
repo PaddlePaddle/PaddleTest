@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_install.sh transformer_en-de $HUB_CONFIG
+        cmd: bash nlp_install.sh transformer_en-de
     kpis:
       exit_code:
         latest: True

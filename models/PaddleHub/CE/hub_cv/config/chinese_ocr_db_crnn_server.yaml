@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_install.sh chinese_ocr_db_crnn_server $HUB_CONFIG
+        cmd: bash cv_install.sh chinese_ocr_db_crnn_server
     kpis:
       exit_code:
         latest: True

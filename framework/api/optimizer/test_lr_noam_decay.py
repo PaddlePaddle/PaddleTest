@@ -5,6 +5,7 @@
 test lr NoamDecay case
 """
 import paddle
+import pytest
 from lrbase import Runner
 
 
@@ -16,6 +17,7 @@ def naive_noam_decay(lr_last, lr_0, epoch, d_model=0.01, warmup_steps=100, **kwa
     return lr_last
 
 
+@pytest.mark.api_optimizer_noam_decay_vartype
 def test_noam_decay_1():
     """
     test NoamDecay base test

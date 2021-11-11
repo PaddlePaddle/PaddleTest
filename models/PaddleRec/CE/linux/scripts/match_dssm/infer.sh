@@ -55,8 +55,8 @@ elif [ "$1" = "linux_st_gpu1_con" ]; then
 fi
 
 # dssm模型功能运行
-sed -i "s/  epochs: 2/  epochs: 1/g" config_bigdata.yaml
-sed -i "s/  infer_end_epoch: 2/  infer_end_epoch: 1/g" config_bigdata.yaml
+#sed -i "s/  epochs: 2/  epochs: 1/g" config_bigdata.yaml
+#sed -i "s/  infer_end_epoch: 2/  infer_end_epoch: 1/g" config_bigdata.yaml
 
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml

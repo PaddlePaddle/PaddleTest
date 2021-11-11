@@ -5,6 +5,7 @@
 test lr ExponentialDecay case
 """
 import paddle
+import pytest
 from lrbase import Runner
 
 
@@ -16,6 +17,7 @@ def naive_exponential_decay(lr_last, lr_0, epoch, gamma, **kwargs):
     return lr_last
 
 
+@pytest.mark.api_optimizer_exponential_decay_vartype
 def test_exponential_decay_1():
     """
     test ExponentialDecay base test

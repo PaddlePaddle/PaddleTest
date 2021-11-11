@@ -4,15 +4,15 @@
 """
 test RMSProp case
 """
-
-
 import paddle
+import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
 from linear_dygraph_model import LinearNet
 import reader
 
 
+@pytest.mark.api_optimizer_rmsprop_vartype
 def test_rmsprop_base():
     """
     test rmsprop base test

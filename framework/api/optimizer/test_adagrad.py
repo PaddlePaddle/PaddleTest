@@ -4,9 +4,8 @@
 """
 test Adagrad case
 """
-
-
 import paddle
+import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
 from linear_dygraph_model import LinearNet
@@ -14,6 +13,7 @@ from conv2d_dygraph_model import Conv2DNet
 import reader
 
 
+@pytest.mark.api_optimizer_adagrad_vartype
 def test_adagrad_base():
     """
     test adagrad base test
@@ -46,6 +46,7 @@ def test_adagrad_base():
     runner.check(expect)
 
 
+@pytest.mark.api_optimizer_adagrad_parameters
 def test_adagrad_conv2d():
     """
     test adagrad opt with conv2d net test

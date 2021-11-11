@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_install.sh ultra_light_fast_generic_face_detector_1mb_640 $HUB_CONFIG
+        cmd: bash cv_install.sh ultra_light_fast_generic_face_detector_1mb_640
     kpis:
       exit_code:
         latest: True

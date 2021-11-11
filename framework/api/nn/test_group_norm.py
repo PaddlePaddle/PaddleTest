@@ -258,3 +258,25 @@ def test_group_norm7():
         epsilon=epsilon,
         data_format="NCHW",
     )
+
+
+@pytest.mark.api_nn_GroupNorm_parameters
+def test_group_norm8():
+    """
+    input_shape=(2, 14, 5, 1, 1, 2, 1, 1, 2), epsilon=1e-6,
+    num_channels=16, num_groups = 5, weight=None,
+    bias_attr=None, data_format='NCHW'
+    """
+    x_data = randtool("float", -1, 1, [2, 16, 5, 1, 1, 2, 1, 1, 2])
+    epsilon = 1e-6
+    num_groups = 5
+    obj.exception(
+        etype="InvalidArgumentError",
+        num_channels=16,
+        num_groups=num_groups,
+        weight_attr=None,
+        bias_attr=None,
+        data=x_data,
+        epsilon=epsilon,
+        data_format="NCHW",
+    )

@@ -32,9 +32,6 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
-@pytest.mark.jetson
-@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config
@@ -45,23 +42,9 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
-@pytest.mark.config_disablegpu_memory
-def test_disable_gpu():
-    """
-    test no gpu resources occupied after disable gpu
-    """
-    check_model_exist()
-    test_suite = InferenceTest()
-    test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
-    batch_size = 1
-    fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
-    input_data_dict = {"x": fake_input}
-    test_suite.disable_gpu_test(input_data_dict)
-
-
-@pytest.mark.p1
-@pytest.mark.trt_fp32_more_bz_precision
+@pytest.mark.win
+@pytest.mark.server
+@pytest.mark.trt_fp32
 def test_trt_fp32_more_bz():
     """
     compared trt fp32 batch_size=1-10 pcpvt_base outputs with true val
@@ -88,15 +71,14 @@ def test_trt_fp32_more_bz():
             model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
         )
         test_suite2.trt_more_bz_test(
-            input_data_dict, output_data_dict, max_batch_size=10, precision="trt_fp32", delta=1e-2
+            input_data_dict, output_data_dict, max_batch_size=batch_size, precision="trt_fp32", delta=1e-2
         )
 
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
 @pytest.mark.jetson
-@pytest.mark.trt_fp32_more_bz_precision
+@pytest.mark.trt_fp32
 def test_jetson_trt_fp32_more_bz():
     """
     compared trt fp32 batch_size=1-10 pcpvt_base outputs with true val
@@ -105,7 +87,7 @@ def test_jetson_trt_fp32_more_bz():
 
     file_path = "./pcpvt_base"
     images_size = 224
-    batch_size_pool = [1, 5, 10]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -123,15 +105,15 @@ def test_jetson_trt_fp32_more_bz():
             model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
         )
         test_suite2.trt_more_bz_test(
-            input_data_dict, output_data_dict, max_batch_size=10, precision="trt_fp32", delta=4e-1
+            input_data_dict, output_data_dict, max_batch_size=batch_size, precision="trt_fp32", delta=4e-1
         )
 
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.p1
-@pytest.mark.jetson
-@pytest.mark.trt_fp32_multi_thread_bz1_precision
+@pytest.mark.win
+@pytest.mark.server
+@pytest.mark.trt_fp32_multi_thread
 def test_trt_fp32_bz1_multi_thread():
     """
     compared trt fp32 batch_size=1 pcpvt_base multi_thread outputs with true val

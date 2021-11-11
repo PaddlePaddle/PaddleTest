@@ -4,12 +4,16 @@
 """
 test paddle.incubate.softmax_mask_fuse
 """
+import sys
 import os
 from apibase import APIBase
 from apibase import randtool
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../..")
+from utils.interceptor import skip_not_compile_gpu
 
 
 class TestIncubateSoftmaxMaskFuse(APIBase):
@@ -28,7 +32,6 @@ class TestIncubateSoftmaxMaskFuse(APIBase):
 
 
 obj = TestIncubateSoftmaxMaskFuse(paddle.incubate.softmax_mask_fuse)
-obj.places = [paddle.CUDAPlace(0)]
 
 
 def get_softmax(x, mask, dtype="float16"):
@@ -45,6 +48,7 @@ def get_softmax(x, mask, dtype="float16"):
     return rst
 
 
+@skip_not_compile_gpu
 @pytest.mark.api_base_abs_vartype
 def test_incubate_softmax_mask_fuse_base():
     """
@@ -52,6 +56,7 @@ def test_incubate_softmax_mask_fuse_base():
     np.float16
     x.shape=(2, 8, 8, 32)
     """
+    obj.places = [paddle.CUDAPlace(0)]
     x = randtool("float", -1, 1, (2, 8, 8, 32)).astype("float16")
     mask = np.random.randint(0, 2, (2, 1, 8, 32)).astype("float16")
     mask = np.where(mask == 1, -10000.0, mask)
@@ -59,12 +64,14 @@ def test_incubate_softmax_mask_fuse_base():
     obj.base(res=res, x=x, mask=mask)
 
 
+@skip_not_compile_gpu
 @pytest.mark.api_base_abs_parameters
 def test_incubate_softmax_mask_fuse_1():
     """
     np.float16
     x.shape=(2, 8, 8, 1020)
     """
+    obj.places = [paddle.CUDAPlace(0)]
     x = randtool("float", -1, 1, (2, 8, 8, 1020)).astype("float16")
     mask = np.random.randint(0, 2, (2, 1, 8, 1020)).astype("float16")
     mask = np.where(mask == 1, -10000.0, mask)
@@ -76,12 +83,14 @@ def test_incubate_softmax_mask_fuse_1():
     obj.rtol = 1e-7
 
 
+@skip_not_compile_gpu
 @pytest.mark.api_base_abs_parameters
 def test_incubate_softmax_mask_fuse_2():
     """
     np.float16
     x.shape=(6, 8, 8, 32)
     """
+    obj.places = [paddle.CUDAPlace(0)]
     x = randtool("float", -1, 1, (6, 8, 8, 32)).astype("float16")
     mask = np.random.randint(0, 2, (6, 1, 8, 32)).astype("float16")
     mask = np.where(mask == 1, -10000.0, mask)
@@ -89,12 +98,14 @@ def test_incubate_softmax_mask_fuse_2():
     obj.run(res=res, x=x, mask=mask)
 
 
+@skip_not_compile_gpu
 @pytest.mark.api_base_abs_parameters
 def test_incubate_softmax_mask_fuse_3():
     """
     np.float16
     x.shape=(7, 3, 5, 32)
     """
+    obj.places = [paddle.CUDAPlace(0)]
     x = randtool("float", -1, 1, (7, 3, 16, 32)).astype("float16")
     mask = np.random.randint(0, 2, (7, 1, 16, 32)).astype("float16")
     mask = np.where(mask == 1, -10000.0, mask)
