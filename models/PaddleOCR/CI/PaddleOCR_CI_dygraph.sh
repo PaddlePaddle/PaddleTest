@@ -71,6 +71,11 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
+num=`python -m pip list | grep fasttext | wc -l`
+if [ "${num}" -gt "0" ]; then
+   python -m pip install --ignore-installed pybind11 -i https://mirror.baidu.com/pypi/simple
+   python -m pip install --ignore-installed fasttext -i https://mirror.baidu.com/pypi/simple
+fi
 # paddleocr
 python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed gast==0.3.3 -i https://mirror.baidu.com/pypi/simple
@@ -90,13 +95,13 @@ done
 
 rm -rf models_list
 rm -rf models_list_all
-rm -rf models_list_det_db
+rm -rf models_list_det
 rm -rf models_list_rec
 
-find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}'| grep 'db' > models_list_det_db
-find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_r31_sar' | grep -v 'rec_resnet_stn_bilstm_att' > models_list_rec
+find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' > models_list_det
+find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_resnet_stn_bilstm_att' > models_list_rec
 
-shuf models_list_det_db > models_list_all
+shuf models_list_det > models_list_all
 shuf models_list_rec >> models_list_all
 
 if [[ ${model_flag} =~ 'CI_all' ]]; then
@@ -164,16 +169,25 @@ fi
 fi
 
 # eval
-if [[ ${model} =~ "sast" ]];then
-   sleep 0.01
+if [[ ${model} =~ "sast" ]] || [[ ${model} =~ "det_mv3_east" ]];then
+   head -5 ./train_data/icdar2015/text_localization/test_icdar2015_label.txt > test_icdar2015_label_5.txt
+   sed -i "s#./train_data/icdar2015/text_localization/test_icdar2015_label.txt#./test_icdar2015_label_5.txt#g" $line
+   python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/"$model"_v2.0_train/best_accuracy" > $log_path/eval/$model.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/$model.log) -eq 0 ]];then
+      echo -e "\033[33m eval of $model  successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/eval/$model.log
+      echo -e "\033[31m eval of $model failed!\033[0m" | tee -a $log_path/result.log
+   fi
+
 else
-python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest.pdparams" > $log_path/eval/$model.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/$model.log) -eq 0 ]];then
-   echo -e "\033[33m eval of $model  successfully!\033[0m" | tee -a $log_path/result.log
-else
-   cat $log_path/eval/$model.log
-   echo -e "\033[31m eval of $model failed!\033[0m" | tee -a $log_path/result.log
-fi
+   python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" > $log_path/eval/$model.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/$model.log) -eq 0 ]];then
+      echo -e "\033[33m eval of $model  successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/eval/$model.log
+      echo -e "\033[31m eval of $model failed!\033[0m" | tee -a $log_path/result.log
+   fi
 fi
 
 # infer
@@ -186,13 +200,41 @@ else
    echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 else
-python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
-   echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
-else
-   cat $log_path/infer/${model}.log
-   echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
-fi
+   if [[ ${model} =~ "det_r50_vd_east" ]] || [[ ${model} =~ "det_r50_vd_sast_totaltext" ]];then
+      python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/"${model}"_v2.0_train/best_accuracy" Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
+      if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
+         echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
+      else
+         cat $log_path/infer/${model}.log
+         echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
+      fi
+   elif [[ ${model} =~ "det_r50_vd_sast_icdar15" ]];then
+      python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/"${model}"_v2.0_train/best_accuracy" Global.infer_img="./doc/imgs_en/254.jpg" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
+      if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
+         echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
+      else
+         cat $log_path/infer/${model}.log
+         echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
+      fi
+   elif [[ ${model} =~ "det_r50_vd_pse" ]];then
+      mv ./doc/imgs_en/model_prod_flow_en.png ./
+      python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
+      if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
+         echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
+      else
+         cat $log_path/infer/${model}.log
+         echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
+      fi
+      mv ./model_prod_flow_en.png ./doc/imgs_en/
+   else
+   python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
+      echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/infer/${model}.log
+      echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
+   fi
+   fi
 fi
 
 # export_model
@@ -204,14 +246,14 @@ else
    echo -e "\033[31m export_model of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 
-# predict
+# predict屏蔽sast两个模型该功能
 if [ ${category} == "rec" ];then
 echo "######  rec"
 if [[ $(echo $model | grep -c "chinese") -eq 0 ]];then
 echo "######  none chinese"
 if [ ${algorithm} == "SRN" ];then
 echo "######  SRN"
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="1, 64,256" --rec_char_type="en" --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="1, 64,256" --rec_char_dict_path=./ppocr/utils/ic15_dict.txt --rec_algorithm=${algorithm} --use_space=False > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -220,7 +262,7 @@ else
 fi
 
 elif [ ${algorithm} == "SAR" ];then
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words/en/word_1.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 48, 48, 160" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words/en/word_1.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 48, 48, 160" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -234,7 +276,7 @@ if [[ $(echo $model | grep -c "lite") -eq 0 ]];then
 
 if [ -f "./models_inference/${model}/inference.pdiparams"  ];then
 # python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -244,14 +286,14 @@ fi
 
 else
 echo "######  have Teacher Student "
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Student" --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Student" --rec_image_shape="3, 32, 100" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m Student predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
    cat $log_path/predict/${model}.log
    echo -e "\033[31m Student predict of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Teacher" --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Teacher" --rec_image_shape="3, 32, 100" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m Teacher predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -265,7 +307,7 @@ else
 echo "######  multi_language"
 # multi_language
 language=`echo $model |awk -F '_' '{print $2}'`
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=${algorithm}  --rec_char_type=$language --rec_char_dict_path="ppocr/utils/dict/"$language"_dict.txt" > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_algorithm=${algorithm}  --rec_char_dict_path="ppocr/utils/dict/"$language"_dict.txt" > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -280,7 +322,7 @@ else
 echo "######  chinese"
 
 if [ -f "./models_inference/${model}/inference.pdiparams"  ];then
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    cat $log_path/predict/${model}.log
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
@@ -291,7 +333,7 @@ fi
 
 else
 echo "######  have Teacher Student "
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Teacher" --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Teacher" --rec_image_shape="3, 32, 100" --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    cat $log_path/predict/${model}.log
    echo -e "\033[33m Teacher predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
@@ -299,7 +341,7 @@ else
    cat $log_path/predict/${model}.log
    echo -e "\033[31m Teacher predict of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
-python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Student" --rec_image_shape="3, 32, 100" --rec_char_type="ch" --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model}"/Student" --rec_image_shape="3, 32, 100" --rec_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    cat $log_path/predict/${model}.log
    echo -e "\033[33m Student predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
@@ -313,6 +355,24 @@ fi
 
 else
 echo "######  det"
+if [[ $(echo $model | grep -c "ch") -eq 0 ]];then
+echo "######  none chinese"
+if [[ ${model} =~ "sast" ]];then
+   sleep 0.01
+else
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"${model} --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
+if [[ $? -eq 0 ]]; then
+   cat $log_path/predict/${model}.log
+   echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/predict/${model}.log
+   echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
+fi
+fi
+
+else
+echo "######  chinese"
+if [ -f "./models_inference/${model}/inference.pdiparams"  ];then
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"${model} --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    cat $log_path/predict/${model}.log
@@ -322,7 +382,40 @@ else
    echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 
+elif [ -d "./models_inference/${model}/Student2" ];then
+echo "######  have Student Student2"
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs/11.jpg" --det_model_dir="./models_inference/"${model}"/Student/" --det_algorithm="DB" > $log_path/predict/${model}.log 2>&1
+if [[ $? -eq 0 ]]; then
+   cat $log_path/predict/${model}.log
+   echo -e "\033[33m Student predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/predict/${model}.log
+   echo -e "\033[31m Student predict of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs/11.jpg" --det_model_dir="./models_inference/"${model}"/Student2/" --det_algorithm="DB" > $log_path/predict/${model}.log 2>&1
+if [[ $? -eq 0 ]]; then
+   cat $log_path/predict/${model}.log
+   echo -e "\033[33m Student2 predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/predict/${model}.log
+   echo -e "\033[31m Student2 predict of $model failed!\033[0m"| tee -a $log_path/result.log
+fi
+
+else
+echo "######  have Student"
+python tools/infer/predict_${category}.py --image_dir="./doc/imgs/11.jpg" --det_model_dir="./models_inference/"${model}"/Student/" --det_algorithm="DB" > $log_path/predict/${model}.log 2>&1
+if [[ $? -eq 0 ]]; then
+   cat $log_path/predict/${model}.log
+   echo -e "\033[33m Student predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/predict/${model}.log
+   echo -e "\033[31m Student predict of $model failed!\033[0m"| tee -a $log_path/result.log
+fi
+
+fi
+fi
+fi
+
 done
 
 # cls
