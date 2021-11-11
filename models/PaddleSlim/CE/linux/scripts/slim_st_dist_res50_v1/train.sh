@@ -26,7 +26,7 @@ if [ $1 -ne 0 ];then
     cp ${log_path}/$2.log ${log_path}/FAIL_$2.log
 else
     tail -1 ${log_path}/$2.log|grep epoch |grep top1 |awk -F ' ' \
-        '{print"top1:" $4"\ttop5:"$6}' | tr -d ',' >>${log_path}/$2.log
+        '{print"top1:" $6"\ttop5:"$8}' | tr -d ',' >>${log_path}/$2.log
     echo $2 log as follows
     cat ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
