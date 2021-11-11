@@ -38,6 +38,7 @@ def setup_module():
  tools/infer/utility.py"""
     )
 
+
 def setup_function():
     """
     clean process
