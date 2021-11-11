@@ -242,8 +242,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    #单卡
    ls output/$params_dir/
    sleep 3
-   rm -rf output #清空多卡cache
    if [[ ${model_flag} =~ "CE" ]]; then
+      rm -rf output #清空多卡cache
       python  tools/train.py -c $line  \
          -o Global.epochs=5  \
          -o Global.seed=1234 \
