@@ -30,11 +30,11 @@ def setup_module():
     """
     RepoInit(repo="PaddleOCR", branch="dygraph")
     RepoInstructions(
-        cmd="""
- sed -i '/config.enable_tensorrt_engine/i\\            config.collect_shape_range_info("shape_range.pbtxt")' \
+        cmd="""cd PaddleOCR;
+ sed -i '/config.enable_tensorrt_engine/i\\                config.collect_shape_range_info("shape_range.pbtxt")' \
  tools/infer/utility.py; \
  sed -i '/min_subgraph_size=args.min_subgraph_size)/a\\
-            config.enable_tuned_tensorrt_dynamic_shape("shape_range.pbtxt", True)' \
+                config.enable_tuned_tensorrt_dynamic_shape("shape_range.pbtxt", True)' \
  tools/infer/utility.py"""
     )
 
