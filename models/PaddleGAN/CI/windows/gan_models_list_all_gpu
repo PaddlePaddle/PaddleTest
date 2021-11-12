@@ -1,6 +1,5 @@
 configs/animeganv2.yaml
 configs/animeganv2_pretrain.yaml
-configs/basicvsr_reds.yaml
 configs/cond_dcgan_mnist.yaml
 configs/cyclegan_cityscapes.yaml
 configs/cyclegan_horse2zebra.yaml
@@ -15,7 +14,6 @@ configs/esrgan_x4_div2k.yaml
 configs/firstorder_fashion.yaml
 configs/firstorder_vox_256.yaml
 configs/firstorder_vox_mobile_256.yaml
-configs/iconvsr_reds.yaml
 configs/lapstyle_draft.yaml
 configs/lapstyle_rev_first.yaml
 configs/lapstyle_rev_second.yaml

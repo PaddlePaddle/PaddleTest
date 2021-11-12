@@ -49,10 +49,9 @@ if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!
     del "output\!model!\latest.pdparams"
-    wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/!model!_pretrained.pdparams --no-proxy
-    echo f| xcopy /s /y /F "!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
-    del "!model!_pretrained.pdparams"
-
+    wget -q -P tmp\ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/!model!_pretrained.pdparams --no-proxy
+    echo f| xcopy /s /y /F "tmp\!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
+    rmdir tmp /S /Q
 ) else (
     echo ######   not load pretrain
 )
@@ -62,10 +61,9 @@ if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!
     del "output\!model!\latest.pdparams"
-    wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/!model!_pretrained.pdparams --no-proxy
-    echo f| xcopy /s /y /F "!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
-    del "!model!_pretrained.pdparams"
-
+    wget -q -P tmp\ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/!model!_pretrained.pdparams --no-proxy
+    echo f| xcopy /s /y /F "tmp\!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
+    rmdir tmp /S /Q
 ) else (
     echo ######   not load pretrain
 )

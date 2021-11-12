@@ -16,28 +16,28 @@ VARIABLES:
 EXEC:
   exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
   exec_priority: [P1]
-  exec_tag: [function_test,train_linux_gpu1,train_linux_gpu2,infer_linux,eval_linux,infer_linux,predict_linux]
+  exec_tag: [function_test,train_linux_gpu1,train_linux_gpu2,eval_linux,infer_linux,predict_linux]
 
 #测试套
 FUNCTION: # 训练步骤
-  -
+  =
     tag: function_test
     priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      -
+      =
         path: $ROOT_PATH/$model_function_path
         cmd: sh PaddleClas_CI_develop.sh ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml
 
 TRAIN: # 训练步骤
-  -
+  =
     tag: train_linux_gpu1
     priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      -
+      =
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml train_linux_gpu1
     kpis: #kpi指标
@@ -46,16 +46,16 @@ TRAIN: # 训练步骤
         kpi_base: 6.502
         threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/CSPDarkNet53_1card.log
-  -
+  =
     tag: train_linux_gpu2
     priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      -
+      =
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml train_linux_gpu2
     kpis: #kpi指标
@@ -64,18 +64,18 @@ TRAIN: # 训练步骤
         kpi_base: 6.38639
         threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/CSPDarkNet53_2card.log
 
 EVAL: # 训练步骤
-  -
+  =
     tag: eval_linux
     priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      -
+      =
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml eval_linux
     kpis: #kpi指标
@@ -84,18 +84,18 @@ EVAL: # 训练步骤
         kpi_base: 6.38639
         threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/CSPDarkNet53_eval.log
 
 INFER: # 训练步骤
-  -
+  =
     tag: infer_linux
     priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      -
+      =
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml infer_linux
     kpis: #kpi指标
@@ -104,18 +104,18 @@ INFER: # 训练步骤
         kpi_base: 0.0
         threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/CSPDarkNet53_infer.log
 
 PREDICT: # 训练步骤
-  -
+  =
     tag: predict_linux
     priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      -
+      =
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml predict_linux
     kpis: #kpi指标
@@ -124,6 +124,6 @@ PREDICT: # 训练步骤
         kpi_base: 0.0
         threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/CSPDarkNet53_predict.log
