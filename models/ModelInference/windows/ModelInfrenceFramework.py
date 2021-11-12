@@ -43,7 +43,7 @@ class RepoInit:
         self.repo = repo
         self.branch = branch
         print("This is Repo Init!")
-        http_proxy=os.environ.get('http_proxy')
+        http_proxy = os.environ.get("http_proxy")
         cmd = """rd /s /q %s & set http_proxy=%s & set https_proxy=%s & \
 git clone https://github.com/paddlepaddle/%s.git & cd %s & \
 git checkout %s & python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple """ % (
