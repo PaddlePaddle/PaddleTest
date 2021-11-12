@@ -29,18 +29,27 @@ image(){
    for module in ${modules}
    do
    module_name=${module##*/}
-   module_rdme=${module}/README.md
-   echo ${module_rdme}
-   #生成python测试代码
-   $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
-   #运行python测试代码
-   #sed -i "s/flower.jpg/doc_img.jpeg/g" test_${module_name}.py
-   sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
-   #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
-   $py_cmd test_${module_name}.py
-   if [ $? -ne 0 ]; then
-       excption=$(expr ${excption} + 1)
-       echo ${module_name} >> fail_modules.log
+   if [ `grep -c ${module_name}__hub "ignore_modules.txt"` -ne '0' ];then
+       echo ${module_name} has been ignored......
+   else
+       module_rdme=${module}/README.md
+       echo ${module_rdme}
+       #生成python测试代码
+       $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
+       #判断模型是否需要输入特殊图片文件
+       if [ `grep -c ${module_name}__ "special_data_modules.txt"` -ne '0' ]; then
+           special_module_line=`grep ${module_name}__ "special_data_modules.txt"`
+           tail=${special_module_line##*__}
+           sed -i "s/\/PATH\/TO\/IMAGE/${module_name}.${tail}/g" test_${module_name}.py
+       else
+           sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
+       fi
+       #运行python测试代码
+       $py_cmd test_${module_name}.py
+       if [ $? -ne 0 ]; then
+           excption=$(expr ${excption} + 1)
+           echo ${module_name} >> fail_modules.log
+       fi
    fi
    done
    return ${excption}
@@ -48,19 +57,25 @@ image(){
 
 audio(){
    modules=`cat diff_audio.log`
+   excption=0
    for module in ${modules}
    do
    module_name=${module##*/}
-   module_rdme=${module}/README.md
-   echo ${module_rdme}
-   #生成python测试代码
-   $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
-   #运行python测试代码
-   #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
-   $py_cmd test_${module_name}.py
-   if [ $? -ne 0 ]; then
-       excption=$(expr ${excption} + 1)
-       echo ${module_name} >> fail_modules.log
+   if [ `grep -c ${module_name}__hub "ignore_modules.txt"` -ne '0' ];then
+       echo ${module_name} has been ignored......
+   else
+       module_rdme=${module}/README.md
+       echo ${module_rdme}
+       #生成python测试代码
+       $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
+       #运行python测试代码
+       sed -i "s/\/PATH\/TO\/AUDIO/doc_audio.wav/g" test_${module_name}.py
+       #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
+       $py_cmd test_${module_name}.py
+       if [ $? -ne 0 ]; then
+           excption=$(expr ${excption} + 1)
+           echo ${module_name} >> fail_modules.log
+       fi
    fi
    done
    return ${excption}
@@ -68,19 +83,25 @@ audio(){
 
 video(){
    modules=`cat diff_video.log`
+   excption=0
    for module in ${modules}
    do
    module_name=${module##*/}
-   module_rdme=${module}/README.md
-   echo ${module_rdme}
-   #生成python测试代码
-   $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
-   #运行python测试代码
-   #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
-   $py_cmd test_${module_name}.py
-   if [ $? -ne 0 ]; then
-       excption=$(expr ${excption} + 1)
-       echo ${module_name} >> fail_modules.log
+   if [ `grep -c ${module_name}__hub "ignore_modules.txt"` -ne '0' ];then
+       echo ${module_name} has been ignored......
+   else
+       module_rdme=${module}/README.md
+       echo ${module_rdme}
+       #生成python测试代码
+       $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
+       #运行python测试代码
+       sed -i "s/\/PATH\/TO\/VIDEO/doc_video.mp4/g" test_${module_name}.py
+       #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
+       $py_cmd test_${module_name}.py
+       if [ $? -ne 0 ]; then
+           excption=$(expr ${excption} + 1)
+           echo ${module_name} >> fail_modules.log
+       fi
    fi
    done
    return ${excption}
@@ -92,16 +113,19 @@ text(){
    for module in ${modules}
    do
    module_name=${module##*/}
-   module_rdme=${module}/README.md
-   echo ${module_rdme}
-   #生成python测试代码
-   $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
-   #运行python测试代码
-   #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
-   $py_cmd test_${module_name}.py
-   if [ $? -ne 0 ]; then
-       excption=$(expr ${excption} + 1)
-       echo ${module_name} >> bug_modules.log
+   if [ `grep -c ${module_name}__hub "ignore_modules.txt"` -ne '0' ];then
+       echo ${module_name} has been ignored......
+   else
+       module_rdme=${module}/README.md
+       echo ${module_rdme}
+       #生成python测试代码
+       $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
+       #运行python测试代码
+       $py_cmd test_${module_name}.py
+       if [ $? -ne 0 ]; then
+           excption=$(expr ${excption} + 1)
+           echo ${module_name} >> fail_modules.log
+       fi
    fi
    done
    return ${excption}
@@ -110,8 +134,8 @@ text(){
 ci(){
   text=True
   image=True
-  audio=False
-  video=False
+  audio=True
+  video=True
   #提取包含modules的路径
   modules=`cat diff.log | grep "modules"`
   for module in ${modules}

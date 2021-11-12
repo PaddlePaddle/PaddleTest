@@ -861,7 +861,7 @@ print_info $? ernie-csc_train
 sh run_sighan_predict.sh >${log_path}/ernie-csc_predict >>${log_path}/ernie-csc_predict 2>&1
 print_info $? ernie-csc_predict
 #export model
-python export_model.py --params_path ./checkpoints/best_model.pdparams --output_path ./infer_model/static_graph_params >${log_path}/ernie-csc_export >>${log_path}/ernie-csc_export 2>&1
+python export_model.py --params_path checkpoints/best_model.pdparams --output_path ./infer_model/static_graph_params >${log_path}/ernie-csc_export >>${log_path}/ernie-csc_export 2>&1
 print_info $? ernie-csc_export
 #python deploy
 python predict.py --model_file infer_model/static_graph_params.pdmodel --params_file infer_model/static_graph_params.pdiparams >${log_path}/ernie-csc_deploy >>${log_path}/ernie-csc_deploy 2>&1

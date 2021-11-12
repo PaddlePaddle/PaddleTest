@@ -46,13 +46,6 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 12100.89
-        threshold: 0.3
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -81,13 +74,6 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 12100.89
-        threshold: 0.3
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -113,13 +99,6 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 12100.89
-        threshold: 0.3
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -149,13 +128,6 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 12100.89
-        threshold: 0.3
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -183,13 +155,6 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 12100.89
-        threshold: 0.3
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -215,13 +180,6 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 12100.89
-        threshold: 0.3
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -250,13 +208,6 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 12100.89
-        threshold: 0.3
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -285,13 +236,6 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 12100.89
-        threshold: 0.3
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -321,13 +265,6 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 530.16
-        threshold: 0.2
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -356,13 +293,6 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 530.16
-        threshold: 0.2
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -388,13 +318,6 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 530.16
-        threshold: 0.2
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -421,13 +344,6 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 530.16
-        threshold: 0.2
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -456,13 +372,6 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 530.16
-        threshold: 0.2
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -487,13 +396,6 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 530.16
-        threshold: 0.2
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -521,13 +423,6 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 530.16
-        threshold: 0.2
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
@@ -555,13 +450,6 @@ INFER:
         actived: True
         evaluation: "+"
         unit_repr: None
-      time:
-        latest: True
-        kpi_base: 530.16
-        threshold: 0.2
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
       exit_code:
         latest: True
         kpi_base: 0
