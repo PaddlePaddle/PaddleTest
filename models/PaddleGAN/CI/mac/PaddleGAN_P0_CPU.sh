@@ -67,16 +67,16 @@ else
 fi
 sleep 5
 
-if [[ ! ${line} =~ 'firstorder' ]]; then
-   #eval
-   python tools/main.py -c $line --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams > $log_path/eval/${model}.log 2>&1
-   if [[ $? -eq 0 ]];then
-      echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
-   else
-      cat $log_path/eval/${model}.log
-      echo -e "\033[31m evaluate of $model failed!\033[0m"| tee -a $log_path/result.log
-   fi
+# if [[ ! ${line} =~ 'firstorder' ]]; then
+#eval
+python tools/main.py -c $line --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams > $log_path/eval/${model}.log 2>&1
+if [[ $? -eq 0 ]];then
+   echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/eval/${model}.log
+   echo -e "\033[31m evaluate of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
+# fi
 done
 
 #infer

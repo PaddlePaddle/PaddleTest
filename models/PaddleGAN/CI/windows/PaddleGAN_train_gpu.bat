@@ -10,6 +10,11 @@ mklink /j data %data_path%\PaddleGAN
 @REM configs/starganv2_celeba_hq.yaml   #报错
 @REM configs/basicvsr_reds.yaml  #小数据报错，全量数据可以train，eval夯住
 @REM configs/iconvsr_reds.yaml
+@REM configs/ugatit_photo2cartoon.yaml #训练显存不足
+@REM configs/ugatit_selfie2anime_light.yaml
+
+@REM styleganv2 infer显存不足
+
 
 rem dependency
 python -m pip install -r requirements.txt
@@ -33,7 +38,7 @@ echo !model!
 
 echo train
 rd /s /q output
-python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=2 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
+python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
 
 if not !errorlevel! == 0 (
         echo   !model!,train,FAIL  >> %log_path%\result.log
@@ -82,15 +87,15 @@ echo ----------------------------------------------------------------
 )
 
 echo infer
-echo styleganv2
-python -u applications/tools/styleganv2.py --output_path styleganv2_infer --model_type ffhq-config-f --seed 233 --size 1024 --style_dim 512 --n_mlp 8 --channel_multiplier 2 --n_row 3 --n_col 5 > %log_path%/styleganv2_infer.log 2>&1
-if  !errorlevel! GTR 0 (
-        echo   styleganv2,infer,FAIL  >> %log_path%\result.log
-        echo  infer of styleganv2 failed!
-) else (
-        echo   styleganv2,infer,SUCCESS  >> %log_path%\result.log
-        echo   infer of styleganv2 successfully!
-)
+@REM echo styleganv2
+@REM python -u applications/tools/styleganv2.py --output_path styleganv2_infer --model_type ffhq-config-f --seed 233 --size 1024 --style_dim 512 --n_mlp 8 --channel_multiplier 2 --n_row 3 --n_col 5 > %log_path%/styleganv2_infer.log 2>&1
+@REM if  !errorlevel! GTR 0 (
+@REM         echo   styleganv2,infer,FAIL  >> %log_path%\result.log
+@REM         echo  infer of styleganv2 failed!
+@REM ) else (
+@REM         echo   styleganv2,infer,SUCCESS  >> %log_path%\result.log
+@REM         echo   infer of styleganv2 successfully!
+@REM )
 
 @REM echo wav2lip
 @REM python applications/tools/wav2lip.py --face ./docs/imgs/mona7s.mp4 --audio ./docs/imgs/guangquan.m4a --outfile Wav2Lip_infer.mp4 > %log_path%/wav2lip_infer.log 2>&1

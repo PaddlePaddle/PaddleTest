@@ -29,7 +29,7 @@ echo !model!
 
 echo train
 rd /s /q output
-python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=2 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
+python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
 
 if not !errorlevel! == 0 (
         echo   !model!,train,FAIL  >> %log_path%\result.log

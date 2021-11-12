@@ -26,6 +26,4 @@ configs/realsr_bicubic_noise_x4_df2k.yaml
 configs/realsr_kernel_noise_x4_dped.yaml
 configs/starganv2_afhq.yaml
 configs/stylegan_v2_256_ffhq.yaml
-configs/ugatit_photo2cartoon.yaml
-configs/ugatit_selfie2anime_light.yaml
 configs/wgan_mnist.yaml
