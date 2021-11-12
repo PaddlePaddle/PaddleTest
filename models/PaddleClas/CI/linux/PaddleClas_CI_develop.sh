@@ -274,11 +274,19 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       fi
    fi
 
-   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] \
-      || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'GhostNet' ]];then
+   if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]];then
       echo "######  use pretrain model"
       echo ${model}
-      wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${model}_pretrained.pdparams --no-proxy
+      wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${model}_pretrained.pdparams --no-proxy
+      rm -rf output/$params_dir/latest.pdparams
+      cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
+      rm -rf ${model}_pretrained.pdparams
+   fi
+
+   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${line} =~ 'ESNet' ]] ;then
+      echo "######  use pretrain model"
+      echo ${model}
+      wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${model}_pretrained.pdparams --no-proxy
       rm -rf output/$params_dir/latest.pdparams
       cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
       rm -rf ${model}_pretrained.pdparams

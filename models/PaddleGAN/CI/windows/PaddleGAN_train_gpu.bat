@@ -14,6 +14,7 @@ mklink /j data %data_path%\PaddleGAN
 @REM configs/cyclegan_cityscapes.yaml
 @REM configs/iconvsr_reds.yaml #显存不够
 @REM configs/basicvsr_reds.yaml #显存不够
+@REM configs/drn_psnr_x4_div2k.yaml
 
 rem dependency
 python -m pip install -r requirements.txt

@@ -9,7 +9,6 @@ configs/lapstyle_draft.yaml
 configs/edvr_l_w_tsa.yaml
 configs/realsr_bicubic_noise_x4_df2k.yaml
 configs/edvr_m_w_tsa.yaml
-configs/drn_psnr_x4_div2k.yaml
 configs/dcgan_mnist.yaml
 configs/edvr_l_wo_tsa.yaml
 configs/esrgan_psnr_x4_div2k.yaml
