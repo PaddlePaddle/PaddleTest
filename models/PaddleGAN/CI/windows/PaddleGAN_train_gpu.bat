@@ -8,13 +8,6 @@ rd /s /q data
 mklink /j data %data_path%\PaddleGAN
 
 @REM configs/starganv2_celeba_hq.yaml   #报错
-@REM configs/ugatit_selfie2anime_light.yaml   #占满显存，不显示iter，减少数据集也没用
-@REM configs/ugatit_photo2cartoon.yaml
-@REM configs/cyclegan_horse2zebra.yaml
-@REM configs/cyclegan_cityscapes.yaml
-@REM configs/iconvsr_reds.yaml #显存不够
-@REM configs/basicvsr_reds.yaml #显存不够
-@REM configs/drn_psnr_x4_div2k.yaml
 
 rem dependency
 python -m pip install -r requirements.txt

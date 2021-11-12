@@ -215,11 +215,22 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
       echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
    fi
 
-   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'RedNet' ]] ;then
+   if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]];then
       echo "######  use pretrain model"
       echo ${model}
+      wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${model}_pretrained.pdparams --no-proxy
       rm -rf output/$params_dir/latest.pdparams
-      cp -r dataset/pretrain_models/${model}_pretrained.pdparams output/$params_dir/latest.pdparams
+      cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
+      rm -rf ${model}_pretrained.pdparams
+   fi
+
+   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${line} =~ 'ESNet' ]] ;then
+      echo "######  use pretrain model"
+      echo ${model}
+      wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${model}_pretrained.pdparams --no-proxy
+      rm -rf output/$params_dir/latest.pdparams
+      cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
+      rm -rf ${model}_pretrained.pdparams
    fi
    sleep 5
 
