@@ -20,24 +20,24 @@ EXEC:
 
 #测试套
 FUNCTION: # 训练步骤
-  =
+  -
     tag: function_test
     priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      =
+      -
         path: $ROOT_PATH/$model_function_path
         cmd: sh PaddleClas_CI_develop.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
 
 TRAIN: # 训练步骤
-  =
+  -
     tag: train_linux_gpu1
     priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      =
+      -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml train_linux_gpu1
     kpis: #kpi指标
@@ -49,13 +49,13 @@ TRAIN: # 训练步骤
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MobileNetV3_large_x1_0_1card.log
-  =
+  -
     tag: train_linux_gpu2
     priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      =
+      -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml train_linux_gpu2
     kpis: #kpi指标
@@ -69,13 +69,13 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/MobileNetV3_large_x1_0_2card.log
 
 EVAL: # 训练步骤
-  =
+  -
     tag: eval_linux
     priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      =
+      -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml eval_linux
     kpis: #kpi指标
@@ -89,13 +89,13 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/MobileNetV3_large_x1_0_eval.log
 
 INFER: # 训练步骤
-  =
+  -
     tag: infer_linux
     priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      =
+      -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml infer_linux
     kpis: #kpi指标
@@ -109,13 +109,13 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/MobileNetV3_large_x1_0_infer.log
 
 PREDICT: # 训练步骤
-  =
+  -
     tag: predict_linux
     priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
-      =
+      -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml predict_linux
     kpis: #kpi指标
