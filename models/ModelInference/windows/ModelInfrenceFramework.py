@@ -48,6 +48,8 @@ class RepoInit:
 git clone https://github.com/paddlepaddle/%s.git & cd %s & \
 git checkout %s & python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple """ % (
             self.repo,
+            http_proxy,
+            http_proxy,
             self.repo,
             self.repo,
             self.branch,
