@@ -46,7 +46,7 @@ TRAIN: # 训练步骤
         kpi_base: 5.61899
         threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_1card.log
   -
@@ -64,7 +64,7 @@ TRAIN: # 训练步骤
         kpi_base: 5.87418
         threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_2card.log
 
@@ -84,7 +84,7 @@ EVAL: # 训练步骤
         kpi_base: 5.87418
         threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_eval.log
 
