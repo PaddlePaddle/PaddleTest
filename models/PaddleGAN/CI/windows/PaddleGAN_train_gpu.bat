@@ -8,10 +8,14 @@ rd /s /q data
 mklink /j data %data_path%\PaddleGAN
 
 @REM configs/starganv2_celeba_hq.yaml   #报错
+
 @REM configs/basicvsr_reds.yaml  #小数据报错，全量数据可以train，eval夯住
 @REM configs/iconvsr_reds.yaml
+
 @REM configs/ugatit_photo2cartoon.yaml #训练显存不足
 @REM configs/ugatit_selfie2anime_light.yaml
+
+@REM configs/makeup.yaml  #训练格式和其它的不一样
 
 @REM styleganv2 infer显存不足
 

@@ -18,7 +18,6 @@ configs/lapstyle_draft.yaml
 configs/lapstyle_rev_first.yaml
 configs/lapstyle_rev_second.yaml
 configs/lesrcnn_psnr_x4_div2k.yaml
-configs/makeup.yaml
 configs/pan_psnr_x4_div2k.yaml
 configs/pix2pix_cityscapes.yaml
 configs/pix2pix_facades.yaml
