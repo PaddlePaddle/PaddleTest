@@ -1,15 +1,15 @@
 @ echo off
+@REM set model_flag=CE
 set log_path=log
 set gpu_flag=True
 if exist "log" (
    rmdir log /S /Q
+	md log
 ) else (
 	md log
 )
 cd dataset
 if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
-cd ..
-if not exist pretrain_models (mklink /j pretrain_models %data_path%\PaddleClas\pretrain_models)
 
 rem dependency
 python -m pip install -r requirements.txt
@@ -20,6 +20,7 @@ setlocal enabledelayedexpansion
 echo "CE"|findstr !model_flag! >nul
 if !errorlevel! equ 0 (
 	echo "CE step"
+	set FLAGS_cudnn_deterministic=True
 	echo %1 >clas_models_list_all_gpu
 ) 
 
@@ -51,6 +52,7 @@ if !errorlevel! equ 0 (
     python tools/train.py -c %%i -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o DataLoader.Eval.sampler.batch_size=1 > %log_path%/!model!_train.log 2>&1
 )
 if not !errorlevel! == 0 (
+        type   %log_path%\!model!_train.log
         echo   !model!,train,FAIL  >> %log_path%\result.log
         echo  training of !model! failed!
         echo "training_exit_code: 0.0" >> %log_path%\result.log
@@ -86,8 +88,9 @@ if !errorlevel! equ 0 (
 )
 
 rem eval
-python tools/eval.py -c %%i -o Global.pretrained_model="./output/!model!/latest" >%log_path%/!model!_eva.log 2>&1
+python tools/eval.py -c %%i -o Global.pretrained_model="./output/!model!/latest" >%log_path%/!model!_eval.log 2>&1
 if not !errorlevel! == 0 (
+        type   %log_path%\!model!_eval.log
         echo   !model!,eval,FAIL  >> %log_path%\result.log
         echo  evaling of !model! failed!
         echo "eval_exit_code: 0.0" >> %log_path%\result.log
@@ -100,6 +103,7 @@ if not !errorlevel! == 0 (
 rem infer
 python tools/infer.py -c %%i -o Global.pretrained_model="./output/!model!/latest" > %log_path%/!model!_infer.log 2>&1
 if not !errorlevel! == 0 (
+        type   %log_path%\!model!_infer.log
         echo   !model!,infer,FAIL  >> %log_path%\result.log
         echo  infering of !model! failed!
         echo "infer_exit_code: 0.0" >> %log_path%\result.log
@@ -112,6 +116,7 @@ if not !errorlevel! == 0 (
 rem export_model
 python tools/export_model.py -c  %%i -o Global.pretrained_model="./output/!model!/latest" -o Global.save_inference_dir=./inference/!model! >%log_path%/!model!_export_model.log 2>&1
 if not !errorlevel! == 0 (
+        type   %log_path%\!model!_export_model.log
         echo   !model!,export_model,FAIL  >> %log_path%\result.log
         echo  export_modeling of !model! failed!
         echo "export_exit_code: 0.0" >> %log_path%\result.log
@@ -125,6 +130,7 @@ cd deploy
 python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/!model!" > ../%log_path%/!model!_predict.log 2>&1
 rem python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/!model!"
 if not !errorlevel! == 0 (
+        type   ../%log_path%\!model!_predict.log
         echo   !model!,predict,FAIL  >> ../%log_path%\result.log
         echo  predicting of !model! failed!
         echo "predict_exit_code: 0.0" >> ../%log_path%\result.log
@@ -137,20 +143,16 @@ cd ..
 rem TIMEOUT /T 10
 )
 
-echo "CE"|findstr !model_flag! >nul
-if !errorlevel! equ 0 (
-    echo !model! DONE!
-) else (
-    @REM rmdir dataset /S /Q
-    rem 清空数据文件防止效率云清空任务时删除原始文件
-    set num=0
-    for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )
-    findstr /s "FAIL" log/result.log
-    rem echo %num%
+@REM rmdir dataset /S /Q
+rem 清空数据文件防止效率云清空任务时删除原始文件
+set num=0
+for /F %%i in ('findstr /s "FAIL" %log_path%/result.log') do ( set num=%%i )
+findstr /s "FAIL" %log_path%/result.log
+rem echo %num%
 
-    if %num%==0 (
-    exit /b 0
-    ) else (
-    exit /b 1
-    )
+if %num%==0 (
+exit /b 0
+) else (
+exit /b 1
 )
+

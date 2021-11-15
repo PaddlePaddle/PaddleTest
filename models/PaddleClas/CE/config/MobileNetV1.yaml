@@ -9,26 +9,36 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_function_path: linux/ #脚本的路径
+  model_function_path_linux: linux/ #脚本的路径
+  model_function_path_win: windows/ #脚本的路径
   model_scripts_path: scripts/ #脚本的路径
   model_log_path: log
 
 EXEC:
   exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
   exec_priority: [P0]
-  exec_tag: [function_test,train_linux_gpu1,train_linux_gpu2,eval_linux,infer_linux,predict_linux]
+  exec_tag: $EXEC_TAG
 
 #测试套
 FUNCTION: # 训练步骤
   -
-    tag: function_test
+    tag: linux_function_test
     priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
-        path: $ROOT_PATH/$model_function_path
-        cmd: sh PaddleClas_CI_develop.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleClas_CI_develop.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml
+  -
+    tag: win_function_test
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_win
+        cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml
 
 TRAIN: # 训练步骤
   -
@@ -39,7 +49,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml train_linux_gpu1
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml train_linux_gpu1
     kpis: #kpi指标
       loss:
         latest: True
@@ -57,7 +67,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml train_linux_gpu2
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml train_linux_gpu2
     kpis: #kpi指标
       loss:
         latest: True
@@ -67,6 +77,24 @@ TRAIN: # 训练步骤
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MobileNetV1_2card.log
+  -
+    tag: train_win_gpu
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml train_win_gpu
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.80237
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/MobileNetV1_train.log
 
 EVAL: # 训练步骤
   -
@@ -77,11 +105,29 @@ EVAL: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml eval_linux
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml eval_linux
     kpis: #kpi指标
       loss:
         latest: True
         kpi_base: 6.29338
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/MobileNetV1_eval.log
+  -
+    tag: eval_win
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml eval_win
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.80237
         threshold: 0.0
         actived: True
         evaluation: "="
@@ -97,7 +143,25 @@ INFER: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml infer_linux
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml infer_linux
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/MobileNetV1_infer.log
+  -
+    tag: infer_win
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml infer_win
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -117,7 +181,25 @@ PREDICT: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml predict_linux
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml predict_linux
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/MobileNetV1_predict.log
+  -
+    tag: predict_win
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml predict_win
     kpis: #kpi指标
       predict_exit_code:
         latest: True

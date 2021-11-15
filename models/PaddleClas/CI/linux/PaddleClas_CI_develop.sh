@@ -335,11 +335,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
    if [ $? -eq 0 ];then
       echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
-      echo "export_model_exit_code: 0.0" >> $log_path/result.log
+      echo "export_exit_code: 0.0" >> $log_path/result.log
    else
       cat $log_path/export_model/$model.log
       echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
-      echo "export_model_exit_code: 1.0" >> $log_path/result.log
+      echo "export_exit_code: 1.0" >> $log_path/result.log
    fi
 
    if [[ `expr $RANDOM % 2` -eq 0 ]] && ([[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]]);then

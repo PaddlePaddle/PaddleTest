@@ -3,6 +3,7 @@ set log_path=log
 set gpu_flag=False
 if exist "log" (
    rmdir log /S /Q
+	md log
 ) else (
     md log
 )
@@ -117,8 +118,8 @@ rem TIMEOUT /T 10
 @REM rmdir dataset /S /Q
 rem 清空数据文件防止效率云清空任务时删除原始文件
 set num=0
-for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )
-findstr /s "FAIL" log/result.log
+for /F %%i in ('findstr /s "FAIL" %log_path%/result.log') do ( set num=%%i )
+findstr /s "FAIL" %log_path%/result.log
 rem echo %num%
 
 if %num%==0 (
