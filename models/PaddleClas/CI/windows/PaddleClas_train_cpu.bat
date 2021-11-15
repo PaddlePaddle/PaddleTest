@@ -10,6 +10,7 @@ if exist "log" (
 rem data_set
 cd dataset
 if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
+cd ..
 
 rem dependency
 python -m pip install -r requirements.txt
