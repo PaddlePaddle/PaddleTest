@@ -1,5 +1,25 @@
 @ echo off
 @REM set model_flag=CE
+
+echo %1
+echo %data_path%
+echo %Project_path%
+echo %model_flag%
+
+echo "path before"
+chdir
+setlocal enabledelayedexpansion
+echo "CE"|findstr %model_flag% >nul
+if !errorlevel! equ 0 (
+	echo "CE step"
+	set FLAGS_cudnn_deterministic=True
+	cd %Project_path%
+	echo "path after"
+	echo %1 >clas_models_list_all_gpu
+	chdir
+	dir
+) 
+
 set log_path=log
 set gpu_flag=True
 if exist "log" (
@@ -15,14 +35,6 @@ rem dependency
 python -m pip install -r requirements.txt
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
-
-setlocal enabledelayedexpansion
-echo "CE"|findstr !model_flag! >nul
-if !errorlevel! equ 0 (
-	echo "CE step"
-	set FLAGS_cudnn_deterministic=True
-	echo %1 >clas_models_list_all_gpu
-) 
 
 for /f %%i in (clas_models_list_all_gpu) do (
 rem echo %%i
@@ -45,7 +57,7 @@ if exist "output" (
    echo "!model! output not exist"
 )
 
-echo "CE"|findstr !model_flag! >nul
+echo "CE"|findstr %model_flag% >nul
 if !errorlevel! equ 0 (
     python tools/train.py -c %%i -o Global.epochs=5 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o Global.seed=1234  -o DataLoader.Train.loader.num_workers=0 -o DataLoader.Train.sampler.shuffle=False -o Global.eval_during_train=False -o Global.save_interval=5 > %log_path%/!model!_train.log 2>&1
 ) else (

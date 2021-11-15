@@ -1,5 +1,8 @@
 @ echo off
 setlocal enabledelayedexpansion
+echo "grep log step"
+echo %Project_path%
+echo %1
 set target=%1
 rem echo !target!
 set target1=!target:*/=!
@@ -9,7 +12,7 @@ set target2=!target2:*/=!
 set model=!target2:.yaml=!
 echo !model!
 set log_path=log
-cd !Project_path!
+cd %Project_path%
 dir
 
 echo "train_win_gpu"|findstr %2 >nul
