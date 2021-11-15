@@ -2,7 +2,11 @@
 set log_path=log
 set params_dir=(output/*)
 @REM set 不能放在循环中
-md log
+if exist "log" (
+   rmdir log /S /Q
+) else (
+	md log
+)
 rem data
 rd /s /q data
 mklink /j data %data_path%\PaddleGAN
@@ -11,6 +15,8 @@ mklink /j data %data_path%\PaddleGAN
 
 @REM configs/basicvsr_reds.yaml  #小数据报错，全量数据可以train，eval夯住
 @REM configs/iconvsr_reds.yaml
+
+@REM configs/drn_psnr_x4_div2k.yaml  小数据集Py39 第4个iter夯住，大数据集正常（pass）
 
 @REM configs/ugatit_photo2cartoon.yaml #训练显存不足
 @REM configs/ugatit_selfie2anime_light.yaml
@@ -169,7 +175,7 @@ if  !errorlevel! GTR 0 (
 @REM         echo   infer of vidieo restore successfully!
 @REM )
 
-rmdir data /S /Q
+@REM rmdir data /S /Q
 rem 清空数据文件防止效率云清空任务时删除原始文件
 set num=0
 for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )

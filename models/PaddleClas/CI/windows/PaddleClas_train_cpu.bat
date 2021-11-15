@@ -1,12 +1,14 @@
 @ echo off
 set log_path=log
 set gpu_flag=False
-md log
+if exist "log" (
+   rmdir log /S /Q
+) else (
+    md log
+)
 rem data_set
 cd dataset
 if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
-cd ..
-if not exist pretrain_models (mklink /j pretrain_models %data_path%\PaddleClas\pretrain_models)
 
 rem dependency
 python -m pip install -r requirements.txt
@@ -112,7 +114,7 @@ cd ..
 rem TIMEOUT /T 10
 )
 
-rmdir dataset /S /Q
+@REM rmdir dataset /S /Q
 rem 清空数据文件防止效率云清空任务时删除原始文件
 set num=0
 for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )

@@ -2,7 +2,11 @@
 set log_path=log
 set params_dir=(output/*)
 @REM set 不能放在循环中
-md log
+if exist "log" (
+   rmdir log /S /Q
+) else (
+	md log
+)
 rem data
 rd /s /q data
 mklink /j data %data_path%\PaddleGAN
@@ -134,7 +138,7 @@ if  !errorlevel! GTR 0 (
 @REM )
 
 
-rmdir data /S /Q
+@REM rmdir data /S /Q
 rem 清空数据文件防止效率云清空任务时删除原始文件
 set num=0
 for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )
