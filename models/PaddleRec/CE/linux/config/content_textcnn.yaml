@@ -25,6 +25,20 @@ DATA_PROC:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh data_proc.sh senti_clas
+  -
+    tag: mac_down_data
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh data_proc.sh senti_clas
+  -
+    tag: win_down_data
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh data_proc.sh senti_clas
 
 TRAIN: # 训练步骤
   -
