@@ -1,5 +1,5 @@
 MODEL: "PPLCNet_x1_0" # 模型名
-PRIORITY: P1
+PRIORITY: P0
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -16,14 +16,14 @@ VARIABLES:
 
 EXEC:
   exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
-  exec_priority: [P1]
+  exec_priority: [P0]
   exec_tag: $EXEC_TAG
 
 #测试套
 FUNCTION: # 训练步骤
   -
     tag: linux_function_test
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -32,7 +32,7 @@ FUNCTION: # 训练步骤
         cmd: bash PaddleClas_CI_develop.sh ppcls/configs/ImageNet/PPLCNet/PPLCNet_x1_0.yaml
   -
     tag: win_function_test
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
@@ -43,7 +43,7 @@ FUNCTION: # 训练步骤
 TRAIN: # 训练步骤
   -
     tag: train_linux_gpu1
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -61,7 +61,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_1card.log
   -
     tag: train_linux_gpu2
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -79,7 +79,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_2card.log
   -
     tag: train_win_gpu
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -99,7 +99,7 @@ TRAIN: # 训练步骤
 EVAL: # 训练步骤
   -
     tag: eval_linux
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -117,7 +117,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_eval.log
   -
     tag: eval_win
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -137,7 +137,7 @@ EVAL: # 训练步骤
 INFER: # 训练步骤
   -
     tag: infer_linux
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -155,7 +155,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_infer.log
   -
     tag: infer_win
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -175,7 +175,7 @@ INFER: # 训练步骤
 PREDICT: # 训练步骤
   -
     tag: predict_linux
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -193,7 +193,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_predict.log
   -
     tag: predict_win
-    priority: P1
+    priority: P0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:

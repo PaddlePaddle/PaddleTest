@@ -29,7 +29,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_linux
-        cmd: bash PaddleClas_CI_develop.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml
+        cmd: bash PaddleClas_CI_develop.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml
   -
     tag: win_function_test
     priority: P0
@@ -38,7 +38,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
-        cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml
+        cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml
 
 TRAIN: # 训练步骤
   -
@@ -49,7 +49,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml train_linux_gpu1
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml train_linux_gpu1
     kpis: #kpi指标
       loss:
         latest: True
@@ -67,7 +67,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml train_linux_gpu2
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml train_linux_gpu2
     kpis: #kpi指标
       loss:
         latest: True
@@ -85,7 +85,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml train_win_gpu
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml train_win_gpu
     kpis: #kpi指标
       loss:
         latest: True
@@ -105,7 +105,7 @@ EVAL: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml eval_linux
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml eval_linux
     kpis: #kpi指标
       loss:
         latest: True
@@ -123,7 +123,7 @@ EVAL: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml eval_win
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml eval_win
     kpis: #kpi指标
       loss:
         latest: True
@@ -143,7 +143,7 @@ INFER: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml infer_linux
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml infer_linux
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -161,7 +161,7 @@ INFER: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml infer_win
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml infer_win
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -181,7 +181,7 @@ PREDICT: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml predict_linux
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml predict_linux
     kpis: #kpi指标
       predict_exit_code:
         latest: True
@@ -199,7 +199,7 @@ PREDICT: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd_vd.yaml predict_win
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml predict_win
     kpis: #kpi指标
       predict_exit_code:
         latest: True
