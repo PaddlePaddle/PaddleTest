@@ -495,10 +495,10 @@ python evaluate.py --pruned_model dy_threshold_models/model.pdparams \
 --data imagenet --use_gpu False >${log_path}/dy_threshold_prune_eval 2>&1
 print_info $? dy_threshold_prune_eval
 # cifar10
-#python train.py --data cifar10 --lr 0.05 \
-#--pruning_mode threshold \
-#--threshold 0.01 --use_gpu False >${log_path}/dy_unstructured_prune_threshold_prune_cifar10_T 2>&1
-#print_info $? dy_unstructured_prune_threshold_prune_cifar10_T
+python train.py --data cifar10 --lr 0.05 \
+--pruning_mode threshold --num_epochs 1 \
+--threshold 0.01 --use_gpu False  >${log_path}/dy_unstructured_prune_threshold_prune_cifar10_T 2>&1
+print_info $? dy_unstructured_prune_threshold_prune_cifar10_T
 
 }
 

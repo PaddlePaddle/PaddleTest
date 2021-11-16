@@ -16,3 +16,4 @@ beautifulsoup4
 pybind11
 lac
 zstandard
+baidubce
