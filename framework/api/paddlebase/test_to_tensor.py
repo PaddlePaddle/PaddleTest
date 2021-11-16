@@ -89,3 +89,22 @@ def test_to_tensor3():
                 res = paddle.to_tensor(exp, dtype=t, stop_gradient=s)
                 compare(np.array(exp).astype(t), res, delta=1e-20, rtol=1e-20)
                 assert res.stop_gradient is s
+
+
+@pytest.mark.api_base_to_tensor_parameters
+def test_to_tensor4():
+    """
+    test tensor.sum()
+    tensor.dtype is bool
+    """
+    a = np.random.random((2, 2, 1, 2, 1, 1, 2, 3, 5)) * 2 - 1
+    a_bool = a.astype(np.bool)
+    exp = a_bool.sum(2)
+    for d in devices:
+        paddle.set_device(d)
+        for s in [True, False]:
+            tmp = paddle.to_tensor(a_bool, stop_gradient=s)
+            res = tmp.sum(2)
+            compare(exp, res, delta=1e-20, rtol=1e-20)
+            assert res.stop_gradient is s
+            assert exp.dtype == res.numpy().dtype

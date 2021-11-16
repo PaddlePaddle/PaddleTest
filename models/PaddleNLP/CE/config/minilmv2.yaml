@@ -1,0 +1,210 @@
+MODEL: "minilmv2" # 模型名
+PRIORITY: P2
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $DGU_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/minilmv2/ #脚本的路径
+  model_log_path: log/minilmv2/
+
+EXEC:
+  exec_cases: [DATA_PROC, EVAL]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
+
+FINETUNE: # 训练步骤，还未提测
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash finetune.sh $XPU 'single' $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.7138
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash finetune.sh $XPU 'multi' $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.7138
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: finetune.bat $XPU
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.7138
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/finetune_$XPU.log
+
+EVAL:
+  -
+    priority: p0
+    tag: linux_dy_gpu1_AFQMC
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash eval.sh $XPU AFQMC
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.384716
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_AFQMC_$XPU.log
+
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_AFQMC
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: eval.bat $XPU AFQMC
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.584723
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_AFQMC_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_TNEWS
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash eval.sh $XPU TNEWS
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.686274
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_TNEWS_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_TNEWS
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: eval.bat $XPU TNEWS
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 2.691236
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_TNEWS_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1_IFLYTEK
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash eval.sh $XPU IFLYTEK
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 2.995393
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_IFLYTEK_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_IFLYTEK
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: eval.bat $XPU IFLYTEK
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 4.712101
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_IFLYTEK_$XPU.log
