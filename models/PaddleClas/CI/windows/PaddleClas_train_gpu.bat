@@ -58,6 +58,15 @@ if exist "output" (
    echo "!model! output not exist"
 )
 
+echo "GoogLeNet VGG11 ViT_small_patch16_224 PPLCNet_x1_0 MobileNetV3_large_x1_0"|findstr %model_flag% >nul
+if !errorlevel! equ 0 (
+	%sed% -i s/"learning_rate:"/"learning_rate: 0.0001 #"/g %%i
+	echo "change lr"
+)
+
+sed -i 's/learning_rate:/learning_rate: 0.0001 #/g' 
+echo "change lr"
+
 echo "CE"|findstr %model_flag% >nul
 if !errorlevel! equ 0 (
     python tools/train.py -c %%i -o Global.epochs=5 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o Global.seed=1234  -o DataLoader.Train.loader.num_workers=0 -o DataLoader.Train.sampler.shuffle=False -o Global.eval_during_train=False -o Global.save_interval=5 > %log_path%/!model!_train.log 2>&1
@@ -68,11 +77,11 @@ if not !errorlevel! == 0 (
         type   %log_path%\!model!_train.log
         echo   !model!,train,FAIL  >> %log_path%\result.log
         echo  training of !model! failed!
-        echo "training_exit_code: 0.0" >> %log_path%\result.log
+        echo "training_exit_code: 0.0" >> %log_path%/!model!_train.log.log
 ) else (
         echo   !model!,train,SUCCESS  >> %log_path%\result.log
         echo   training of !model! successfully!
-        echo "training_exit_code: 1.0" >> %log_path%\result.log
+        echo "training_exit_code: 1.0" >> %log_path%/!model!_train.log.log
 
 )
 
@@ -106,11 +115,11 @@ if not !errorlevel! == 0 (
         type   %log_path%\!model!_eval.log
         echo   !model!,eval,FAIL  >> %log_path%\result.log
         echo  evaling of !model! failed!
-        echo "eval_exit_code: 0.0" >> %log_path%\result.log
+        echo "eval_exit_code: 0.0" >> %log_path%/!model!_eval.log
 ) else (
         echo   !model!,eval,SUCCESS  >> %log_path%\result.log
         echo   evaling of !model! successfully!
-        echo "eval_exit_code: 1.0" >> %log_path%\result.log
+        echo "eval_exit_code: 1.0" >> %log_path%/!model!_eval.log
 )
 
 rem infer
@@ -119,24 +128,24 @@ if not !errorlevel! == 0 (
         type   %log_path%\!model!_infer.log
         echo   !model!,infer,FAIL  >> %log_path%\result.log
         echo  infering of !model! failed!
-        echo "infer_exit_code: 0.0" >> %log_path%\result.log
+        echo "infer_exit_code: 0.0" >> %log_path%/!model!_infer.log
 ) else (
         echo   !model!,infer,SUCCESS  >> %log_path%\result.log
         echo   infering of !model! successfully!
-        echo "infer_exit_code: 1.0" >> %log_path%\result.log
+        echo "infer_exit_code: 1.0" >> %log_path%/!model!_infer.log
 )
 
 rem export_model
-python tools/export_model.py -c  %%i -o Global.pretrained_model="./output/!model!/latest" -o Global.save_inference_dir=./inference/!model! >%log_path%/!model!_export_model.log 2>&1
+python tools/export_model.py -c  %%i -o Global.pretrained_model="./output/!model!/latest" -o Global.save_inference_dir=./inference/!model! >%log_path%/!model!_export.log 2>&1
 if not !errorlevel! == 0 (
-        type   %log_path%\!model!_export_model.log
+        type   %log_path%\!model!_export.log
         echo   !model!,export_model,FAIL  >> %log_path%\result.log
         echo  export_modeling of !model! failed!
-        echo "export_exit_code: 0.0" >> %log_path%\result.log
+        echo "export_exit_code: 0.0" >> %log_path%/!model!_export.log
 ) else (
         echo   !model!,export_model,SUCCESS  >> %log_path%\result.log
         echo   export_model of !model! successfully!
-        echo "export_exit_code: 1.0" >> %log_path%\result.log
+        echo "export_exit_code: 1.0" >> %log_path%/!model!_export.log
 )
 rem predict
 cd deploy
@@ -146,11 +155,11 @@ if not !errorlevel! == 0 (
         type   ../%log_path%\!model!_predict.log
         echo   !model!,predict,FAIL  >> ../%log_path%\result.log
         echo  predicting of !model! failed!
-        echo "predict_exit_code: 0.0" >> ../%log_path%\result.log
+        echo "predict_exit_code: 0.0" >> ../%log_path%/!model!_predict.log
 ) else (
         echo   !model!,predict,SUCCESS  >> ../%log_path%\result.log
         echo   predicting of !model! successfully!
-        echo "predict_exit_code: 1.0" >> ../%log_path%\result.log
+        echo "predict_exit_code: 1.0" >> ../%log_path%/!model!_predict.log
 )
 cd ..
 rem TIMEOUT /T 10
