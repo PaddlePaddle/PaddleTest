@@ -4,11 +4,14 @@
 """
 test to_tensor
 """
+import sys
 from apibase import compare
+
+sys.path.append("../..")
 import paddle
 import numpy as np
 import pytest
-
+from utils.interceptor import skip_platform_is_windows
 
 if paddle.device.is_compiled_with_cuda():
     devices = ["gpu", "cpu"]
@@ -91,6 +94,7 @@ def test_to_tensor3():
                 assert res.stop_gradient is s
 
 
+@skip_platform_is_windows
 @pytest.mark.api_base_to_tensor_parameters
 def test_to_tensor4():
     """
