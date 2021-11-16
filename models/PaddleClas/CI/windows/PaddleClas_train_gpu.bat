@@ -58,14 +58,11 @@ if exist "output" (
    echo "!model! output not exist"
 )
 
-echo "GoogLeNet VGG11 ViT_small_patch16_224 PPLCNet_x1_0 MobileNetV3_large_x1_0"|findstr %model_flag% >nul
+echo "GoogLeNet VGG11 ViT_small_patch16_224 PPLCNet_x1_0 MobileNetV3_large_x1_0"|findstr !model! >nul
 if !errorlevel! equ 0 (
 	%sed% -i s/"learning_rate:"/"learning_rate: 0.0001 #"/g %%i
 	echo "change lr"
 )
-
-sed -i 's/learning_rate:/learning_rate: 0.0001 #/g' 
-echo "change lr"
 
 echo "CE"|findstr %model_flag% >nul
 if !errorlevel! equ 0 (
