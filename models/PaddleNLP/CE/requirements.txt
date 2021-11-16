@@ -26,4 +26,5 @@ tqdm
 beautifulsoup4
 bs4
 pypinyin
+yacs
 pgl >= 2.1
