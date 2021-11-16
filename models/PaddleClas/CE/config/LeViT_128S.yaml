@@ -199,7 +199,7 @@ PREDICT: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml predict_win
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml predict_win
     kpis: #kpi指标
       predict_exit_code:
         latest: True

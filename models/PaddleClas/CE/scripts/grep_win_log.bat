@@ -25,8 +25,8 @@ if !errorlevel! equ 0 (
 echo "eval_win"|findstr %2 >nul
 if !errorlevel! equ 0 (
     echo '#####eval_win'
-    type %log_path%\!model!_train.log | findstr 5/5 | findstr Avg
-    type %log_path%\!model!_train.log | findstr 5/5 | findstr Avg > ..\%log_path%\!model!_eval.log
+    type %log_path%\!model!_eval.log | findstr 5/5 | findstr Avg
+    type %log_path%\!model!_eval.log | findstr 5/5 | findstr Avg > ..\%log_path%\!model!_eval.log
 )
 
 echo "infer_win"|findstr %2 >nul

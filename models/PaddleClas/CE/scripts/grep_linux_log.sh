@@ -19,8 +19,8 @@ elif [[ $2 == 'train_linux_gpu2' ]] ; then
 
 elif [[ $2 == 'eval_linux' ]] ; then
     echo '#####eval_linux'
-    cat ${log_path}/train/${model}_2card.log | grep Avg
-    cat ${log_path}/train/${model}_2card.log | grep Avg > ../${log_path}/${model}_eval.log
+    cat ${log_path}/eval/${model}.log | grep Avg
+    cat ${log_path}/eval/${model}.log | grep Avg > ../${log_path}/${model}_eval.log
 
 elif [[ $2 == 'infer_linux' ]] ; then
     echo '#####infer_linux'
