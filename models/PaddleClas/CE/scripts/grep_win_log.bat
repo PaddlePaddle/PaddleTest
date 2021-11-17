@@ -21,7 +21,7 @@ if !errorlevel! equ 0 (
     echo '#####train_win_gpu'
     type %log_path%\!model!_train.log | findstr Avg
     type %log_path%\!model!_train.log | findstr Train | findstr 5/5 | findstr Avg > ..\%log_path%\!model!_train.log
-    type %log_path%\!model!_train.log | findstr Eval | findstr Avg > ..\%log_path%\!model!_train.log
+    type %log_path%\!model!_train.log | findstr Eval | findstr Avg >> ..\%log_path%\!model!_train.log
     %sed% -i 2s/"loss"/"eval_loss"/ ..\%log_path%\!model!_train.log
 )
 
