@@ -847,7 +847,7 @@ python -m paddle.distributed.launch \
           --pruning_steps 100 \
           --stable_epochs 0 \
           --pruning_epochs 54 \
-          --tunning_epochs 54 \ResNet50
+          --tunning_epochs 54 \
           --last_epoch -1 \
           --pruning_strategy gmp \
           --skip_params_type exclude_conv1x1 ${log_path}/dy_unstructured_prune_ratio_gmp 2>&1
@@ -946,8 +946,28 @@ all_darts(){  # 2个模型
     #slimfacenet  需要删掉
 }
 
+demo_latency(){
+cd ${slim_dir}/demo/analysis  || catchException demo_latency
+model=latency_mobilenet_v1_fp32
+python latency_predictor.py --model mobilenet_v1 --data_type fp32 >${log_path}/${model} 2>&1
+print_info $? ${model}
+model=latency_mobilenet_v1_int8
+python latency_predictor.py --model mobilenet_v1 --data_type int8 >${log_path}/${model} 2>&1
+print_info $? ${model}
+model=latency_mobilenet_v2_fp32
+python latency_predictor.py --model mobilenet_v2 --data_type fp32 >${log_path}/${model} 2>&1
+print_info $? ${model}
+model=latency_mobilenet_v2_int8
+python latency_predictor.py --model mobilenet_v2 --data_type int8 >${log_path}/${model} 2>&1
+print_info $? ${model}
+}
+
+all_latency(){
+  demo_latency
+}
+
 ####################################
-export all_case_list=(all_distillation all_quant all_prune all_nas all_darts)
+export all_case_list=(all_distillation all_quant all_prune all_nas all_darts all_latency)
 
 export all_case_time=0
 declare -A all_P0case_dic
