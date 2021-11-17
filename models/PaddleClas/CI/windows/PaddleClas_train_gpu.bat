@@ -66,7 +66,7 @@ if !errorlevel! equ 0 (
 
 echo "CE"|findstr %model_flag% >nul
 if !errorlevel! equ 0 (
-    python tools/train.py -c %%i -o Global.epochs=5 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o Global.seed=1234  -o DataLoader.Train.loader.num_workers=0 -o DataLoader.Train.sampler.shuffle=False -o Global.eval_during_train=False -o Global.save_interval=5 > %log_path%\!model!_train.log 2>&1
+    python tools/train.py -c %%i -o Global.epochs=5 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o Global.seed=1234  -o DataLoader.Train.loader.num_workers=0 -o DataLoader.Train.sampler.shuffle=False -o Global.eval_interval=5 -o Global.save_interval=5 > %log_path%\!model!_train.log 2>&1
 ) else (
     python tools/train.py -c %%i -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o DataLoader.Eval.sampler.batch_size=1 > %log_path%\!model!_train.log 2>&1
 )

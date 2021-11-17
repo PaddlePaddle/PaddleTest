@@ -209,13 +209,14 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       sed -i 's/RandCropImage/ResizeImage/g' $line
       sed -ie '/RandFlipImage/d' $line
       sed -ie '/flip_code/d' $line
+         # -o Global.eval_during_train=False  \
       python -m paddle.distributed.launch tools/train.py -c $line  \
          -o Global.epochs=5  \
          -o Global.seed=1234 \
          -o Global.output_dir=output \
          -o DataLoader.Train.loader.num_workers=0 \
          -o DataLoader.Train.sampler.shuffle=False  \
-         -o Global.eval_during_train=False  \
+         -o Global.eval_interval=5  \
          -o Global.save_interval=5 \
          -o DataLoader.Train.sampler.batch_size=4 \
          > $log_path/train/${model}_2card.log 2>&1
@@ -250,7 +251,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          -o Global.output_dir=output \
          -o DataLoader.Train.loader.num_workers=0 \
          -o DataLoader.Train.sampler.shuffle=False  \
-         -o Global.eval_during_train=False  \
+         -o Global.eval_interval=5  \
          -o Global.save_interval=5 \
          -o DataLoader.Train.sampler.batch_size=4  \
          > $log_path/train/${model}_1card.log 2>&1
