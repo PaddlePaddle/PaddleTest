@@ -58,6 +58,13 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
+      eval_loss:
+        latest: True
+        kpi_base: 7.89285
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None        
     output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_1card.log
   -
     tag: train_linux_gpu2
@@ -76,6 +83,13 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
+      eval_loss:
+        latest: True
+        kpi_base: 7.89285
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None   
     output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_2card.log
   -
     tag: train_win_gpu
@@ -89,11 +103,18 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.81299
+        kpi_base: 6.81317
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
+      eval_loss:
+        latest: True
+        kpi_base: 190.68218
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None   
     output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_train.log
 
 EVAL: # 训练步骤
@@ -109,7 +130,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 143.35147
+        kpi_base: 7.89285
         threshold: 0.0
         actived: True
         evaluation: "="
@@ -127,7 +148,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.81299
+        kpi_base: 190.68218
         threshold: 0.0
         actived: True
         evaluation: "="

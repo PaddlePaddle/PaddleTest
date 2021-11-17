@@ -1,5 +1,6 @@
 @ echo off
 setlocal enabledelayedexpansion
+set sed="C:\Program Files\Git\usr\bin\sed.exe"
 echo "grep log step"
 echo %Project_path%
 echo %1
@@ -18,15 +19,17 @@ dir
 echo "train_win_gpu"|findstr %2 >nul
 if !errorlevel! equ 0 (
     echo '#####train_win_gpu'
-    type %log_path%\!model!_train.log | findstr 5/5 | findstr Avg
-    type %log_path%\!model!_train.log | findstr 5/5 | findstr Avg > ..\%log_path%\!model!_train.log
+    type %log_path%\!model!_train.log | findstr Avg
+    type %log_path%\!model!_train.log | findstr Train | findstr 5/5 | findstr Avg > ..\%log_path%\!model!_train.log
+    type %log_path%\!model!_train.log | findstr Eval | findstr Avg > ..\%log_path%\!model!_train.log
+    %sed% -i 2s/"loss"/"eval_loss"/ ..\%log_path%\!model!_train.log
 )
 
 echo "eval_win"|findstr %2 >nul
 if !errorlevel! equ 0 (
     echo '#####eval_win'
     type %log_path%\!model!_eval.log | findstr Avg
-    type %log_path%\!model!_eval.log | findstr Avg > ..\%log_path%\!model!_eval.log
+    type %log_path%\!model!_eval.log | findstr Eval | findstr Avg > ..\%log_path%\!model!_eval.log
 )
 
 echo "infer_win"|findstr %2 >nul
