@@ -1,0 +1,67 @@
+MODEL: "deeplabv3p_resnet50_os8_cityscapes_1024x512_80k" # 模型名
+PRIORITY: P00
+GIT:
+  addr: $REPO_PaddleSeg
+  path: $ROOT_PATH/PaddleSeg
+  branch: $BASE_BRANCH
+
+ENV:
+  http_proxy: $HTTP_PROXY
+  https_proxy: $HTTPS_PROXY
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: ./scripts/deeplabv3p_resnet50_os8_cityscapes_1024x512_80k/ #脚本的路径
+  model_log_path: log/deeplabv3p_resnet50_os8_cityscapes_1024x512_80k
+
+EXEC:
+  exec_cases: [TRAIN]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p1
+    tag: linux_dy_process_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu4
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA_CONVERGENCE  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      Iou:
+        latest: True
+        kpi_base: 80.36
+        threshold: 0.003 #0.001601
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/deeplabv3p_resnet50_os8_cityscapes_1024x512_80k_train_convergence.log
+
+
+
+
+
+
+
+
