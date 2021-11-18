@@ -58,7 +58,7 @@ if exist "output" (
    echo "!model! output not exist"
 )
 
-echo "GoogLeNet VGG11 ViT_small_patch16_224 PPLCNet_x1_0 MobileNetV3_large_x1_0 RedNet50 TNT_small"|findstr !model! >nul
+echo "GoogLeNet VGG11 ViT_small_patch16_224 PPLCNet_x1_0 MobileNetV3_large_x1_0 RedNet50 TNT_small LeViT_128S SwinTransformer_large_patch4_window12_384"|findstr !model! >nul
 if !errorlevel! equ 0 (
 	%sed% -i s/"learning_rate:"/"learning_rate: 0.0001 #"/g %%i
 	echo "change lr"
@@ -82,7 +82,7 @@ if not !errorlevel! == 0 (
 
 )
 
-echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 ESNet_x1_0 ResNet50"|findstr !model! >nul
+echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 ESNet_x1_0 ResNet50 ResNet50_vd"|findstr !model! >nul
 if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!
