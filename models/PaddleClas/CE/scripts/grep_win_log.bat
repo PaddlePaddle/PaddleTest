@@ -19,10 +19,11 @@ dir
 echo "train_win_gpu"|findstr %2 >nul
 if !errorlevel! equ 0 (
     echo '#####train_win_gpu'
-    type %log_path%\!model!_train.log | findstr Avg
-    type %log_path%\!model!_train.log | findstr Train | findstr 5/5 | findstr Avg > ..\%log_path%\!model!_train.log
-    type %log_path%\!model!_train.log | findstr Eval | findstr Avg >> ..\%log_path%\!model!_train.log
-    %sed% -i 2s/"loss"/"train_eval"/ ..\%log_path%\!model!_train.log
+    type log\ResNet50_vd_train.log | findstr Avg
+    type log\ResNet50_vd_train.log | findstr Train | findstr 5/5 | findstr Avg > tmp.log
+    type log\ResNet50_vd_train.log | findstr Eval | findstr Avg >> tmp.log
+    %sed% -i 2s/"loss"/"train_eval"/ tmp.log
+    (for /f "delims=" %%a in ('type "tmp.log"') do @set/p=" , %%a"<nul)> ..\%log_path%\!model!_train.log
 )
 
 echo "eval_win"|findstr %2 >nul

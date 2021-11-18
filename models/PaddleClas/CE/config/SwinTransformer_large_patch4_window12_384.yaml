@@ -58,9 +58,9 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-      eval_loss:
+      train_eval:
         latest: True
-        kpi_base: 7.7453	
+        kpi_base: 7.7453
         threshold: 0.10001
         actived: True
         evaluation: "-"
@@ -101,7 +101,7 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-      eval_loss:
+      train_eval:
         latest: True
         kpi_base: 190.68218
         threshold: 0.10001
