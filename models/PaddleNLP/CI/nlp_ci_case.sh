@@ -924,14 +924,7 @@ for p0case in ${P0case_list[*]};do
 done
 echo -e "\033[35m ---- end run P0case  \033[0m"
 
-cd ${nlp_dir}
-tar -zcvf logs.tar logs/
-mkdir upload
-mv logs.tar upload
-wget https://paddle-qa.bj.bcebos.com/paddlenlp/bos_conf.py
-wget https://paddle-qa.bj.bcebos.com/paddlenlp/upload.py
-python upload.py upload
-cd logs
+cd ${nlp_dir}/logs
 FF=`ls *_FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
     exit 1
