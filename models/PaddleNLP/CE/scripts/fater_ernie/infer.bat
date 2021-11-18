@@ -14,4 +14,3 @@ if %ERRORLEVEL% == 1 (
 ) else (
     echo "exit_code: 0.0" >> %logpath%/infer_%2_%1.log
 )
-

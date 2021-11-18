@@ -41,4 +41,3 @@ else
     python python_deploy.py --model_dir export/ --batch_size 1 > ${log_path}/python_infer_$2_$1.log 2>&1
     print_info $? python_infer_$2_$1
 fi
-

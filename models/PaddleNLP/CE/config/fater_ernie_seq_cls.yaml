@@ -1,5 +1,5 @@
 MODEL: "fater_ernie_seq" # 模型名
-PRIORITY: P0
+PRIORITY: P0_2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -173,4 +173,3 @@ CPP_INFER:
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/cpp_infer_seq_cls_$XPU.log
-

@@ -38,7 +38,7 @@ mkdir -p cpp_deploy/lib
 cd cpp_deploy/lib
 if nvcc -V | grep 10.2; then
     wget https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_Gpu_All_Linux_Gcc82_Cuda10.2_cudnn7.6_trt6018_Py38_Compile_H/latest/paddle_inference.tgz
-else 
+else
     wget https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_Gpu_All_Linux_Gcc82_Cuda10.2_cudnn7.6_trt6018_Py38_Compile_H/latest/paddle_inference.tgz
 fi
 tar -xzvf paddle_inference.tgz
@@ -53,5 +53,5 @@ cmake .. -DPADDLE_LIB=$DPADDLE_LIB \
     -DWITH_GPU=ON \
     -DWITH_STATIC_LIB=OFF
 make -j
-./$2_infer --model_file ../../export/inference.pdmodel --params_file ../../export/inference.pdiparams > cpp_infer_$2_$1.log 2>&1 
+./$2_infer --model_file ../../export/inference.pdmodel --params_file ../../export/inference.pdiparams > cpp_infer_$2_$1.log 2>&1
 print_info $? cpp_infer_$2_$1
