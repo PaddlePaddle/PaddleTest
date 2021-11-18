@@ -1,102 +1,31 @@
 home=$PWD
 python3.7 -m pip install pytest
 python3.7 -m pip install scipy
-# base
-cd paddlebase
-rm -rf ./result.txt
-echo "[paddlebase cases result]" >> result.txt
-bash ./run.sh
-paddlebase=$?
-echo ${paddlebase}
-cat ./result.txt
-cd $home
 
+case_dir_list=('fft' 'device' 'incubate' 'linalg' 'paddlebase' 'loss' 'nn' 'optimizer')
+result_array=()
+for case_dir in ${case_dir_list[@]}
+do
+rm -rf ${home}/$case_dir/result.txt
+python3.7 multithreading_case.py $case_dir
+result_array[${#result_array[@]}]=$?
+wait;
+done
 
-# nn
-cd nn
-rm -rf ./result.txt
-echo "[nn cases result]" >> result.txt
-bash ./run.sh
-nn=$?
-echo ${nn}
-cat ./result.txt
-cd $home
-
-# optimizer
-cd optimizer
-rm -rf ./result.txt
-echo "[optimizer cases result]" >> result.txt
-bash ./run.sh
-optimizer=$?
-echo ${optimizer}
-cat ./result.txt
-cd $home
-
-# loss
-cd loss
-rm -rf ./result.txt
-echo "[loss cases result]" >> result.txt
-bash ./run.sh
-loss=$?
-echo ${loss}
-cat ./result.txt
-cd $home
-
-# device
-cd device
-rm -rf ./result.txt
-echo "[device cases result]" >> result.txt
-bash ./run.sh
-device=$?
-echo ${device}
-cat ./result.txt
-cd $home
-
-# incubate
-cd incubate
-rm -rf ./result.txt
-echo "[incubate cases result]" >> result.txt
-bash ./run.sh
-incubate=$?
-echo ${incubate}
-cat ./result.txt
-cd $home
-
-# linalg
-cd linalg
-rm -rf ./result.txt
-echo "[linalg cases result]" >> result.txt
-bash ./run.sh
-linalg=$?
-echo ${linalg}
-cat ./result.txt
-cd $home
-
-# fft
-cd fft
-rm -rf ./result.txt
-echo "[fft cases result]" >> result.txt
-bash ./run.sh
-fft=$?
-echo ${fft}
-cat ./result.txt
-cd $home
 
 # result
 echo "=============== result ================="
-if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss} + ${device} + ${incubate} + ${linalg} + ${fft}` -eq 0 ]; then
-  result=`find . -name "result.txt"`
-  for file in ${result}
-    do
-      cat ${file}
-    done
-  echo "success!"
-else
-  result=`find . -name "result.txt"`
-  for file in ${result}
-    do
-      cat ${file}
-    done
-  echo "error!"
-  exit 8
-fi
+for case_dir in ${case_dir_list[@]}
+do
+echo "[$case_dir cases result]"
+cat ${home}/$case_dir/result.txt
+done
+
+for EXCODE in ${result_array[*]}
+do
+  echo $EXCODE
+  if [ ${EXCODE} -ne 0 ]; then
+    echo 'some case not success!'
+    exit 8
+  fi
+done
