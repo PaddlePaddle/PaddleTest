@@ -48,7 +48,7 @@ if not !errorlevel! == 0 (
         echo   training of !model! successfully!
 )
 
-echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 ESNet_x1_0"|findstr !model! >nul
+echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 ESNet_x1_0 ResNet50"|findstr !model! >nul
 if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!

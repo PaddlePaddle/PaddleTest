@@ -61,7 +61,7 @@ TRAIN: # 训练步骤
       eval_loss:
         latest: True
         kpi_base: 9.84755
-        threshold: 0.1
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None        
@@ -82,14 +82,7 @@ TRAIN: # 训练步骤
         threshold: 0.1
         actived: True
         evaluation: "-"
-        unit_repr: None
-      eval_loss:
-        latest: True
-        kpi_base: 9.84755
-        threshold: 0.1
-        actived: True
-        evaluation: "-"
-        unit_repr: None   
+        unit_repr: None 
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_2card.log
   -
     tag: train_win_gpu
@@ -111,7 +104,7 @@ TRAIN: # 训练步骤
       eval_loss:
         latest: True
         kpi_base: 7.45477
-        threshold: 0.1
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None   

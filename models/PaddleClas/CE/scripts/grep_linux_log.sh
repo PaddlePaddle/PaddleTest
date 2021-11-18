@@ -12,7 +12,7 @@ if [[ $2 == 'train_linux_gpu1' ]] ; then
     cat ${log_path}/train/${model}_1card.log  | grep Avg 
     cat ${log_path}/train/${model}_1card.log | grep Train | grep Avg | grep 'Epoch 5/5' > ../${log_path}/${model}_1card.log
     cat ${log_path}/train/${model}_1card.log | grep Eval | grep Avg >> ../${log_path}/${model}_1card.log
-    sed -i '2s/loss/eval_loss/' ../${log_path}/${model}_1card.log
+    sed -i '2s/loss/train_eval/' ../${log_path}/${model}_1card.log
 
 elif [[ $2 == 'train_linux_gpu2' ]] ; then
     echo '#####train_linux_gpu2'

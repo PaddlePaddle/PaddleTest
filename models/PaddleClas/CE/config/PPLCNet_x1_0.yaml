@@ -60,10 +60,10 @@ TRAIN: # 训练步骤
         unit_repr: None
       eval_loss:
         latest: True
-        kpi_base: 1.23323
-        threshold: 0.0
+        kpi_base: 6.95113
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None        
     output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_1card.log
   -
@@ -82,14 +82,7 @@ TRAIN: # 训练步骤
         threshold: 0.0
         actived: True
         evaluation: "="
-        unit_repr: None
-      eval_loss:
-        latest: True
-        kpi_base: 1.23323
-        threshold: 0.0
-        actived: True
-        evaluation: "="
-        unit_repr: None   
+        unit_repr: None 
     output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_2card.log
   -
     tag: train_win_gpu
@@ -110,10 +103,10 @@ TRAIN: # 训练步骤
         unit_repr: None
       eval_loss:
         latest: True
-        kpi_base: 1.24172
-        threshold: 0.0
+        kpi_base: 9.8212
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None   
     output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_train.log
 

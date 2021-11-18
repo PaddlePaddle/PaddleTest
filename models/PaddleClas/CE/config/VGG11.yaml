@@ -61,9 +61,9 @@ TRAIN: # 训练步骤
       eval_loss:
         latest: True
         kpi_base: 6.94173
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None        
     output: $ROOT_PATH/$model_log_path/VGG11_1card.log
   -
@@ -82,14 +82,7 @@ TRAIN: # 训练步骤
         threshold: 0.0
         actived: True
         evaluation: "="
-        unit_repr: None
-      eval_loss:
-        latest: True
-        kpi_base: 6.94173
-        threshold: 0.0
-        actived: True
-        evaluation: "="
-        unit_repr: None   
+        unit_repr: None 
     output: $ROOT_PATH/$model_log_path/VGG11_2card.log
   -
     tag: train_win_gpu
@@ -111,9 +104,9 @@ TRAIN: # 训练步骤
       eval_loss:
         latest: True
         kpi_base: 7.05581
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None   
     output: $ROOT_PATH/$model_log_path/VGG11_train.log
 

@@ -183,8 +183,6 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    model=${filename%.*}
    echo $model
 
-
-
    if [[ ${line} =~ 'fp16' ]];then
       echo "fp16"
       python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
@@ -284,7 +282,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       rm -rf ${model}_pretrained.pdparams
    fi
 
-   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${line} =~ 'ESNet' ]] ;then
+   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] \
+      || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50' ]];then
       echo "######  use pretrain model"
       echo ${model}
       wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${model}_pretrained.pdparams --no-proxy
@@ -310,7 +309,9 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    fi
 
    # infer
-   python tools/infer.py -c $line -o Global.pretrained_model=output/$params_dir/latest > $log_path/infer/$model.log 2>&1
+   python tools/infer.py -c $line \
+      -o Global.pretrained_model=output/$params_dir/latest \
+      > $log_path/infer/$model.log 2>&1
    if [ $? -eq 0 ];then
       echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
       echo "infer_exit_code: 0.0" >> $log_path/result.log

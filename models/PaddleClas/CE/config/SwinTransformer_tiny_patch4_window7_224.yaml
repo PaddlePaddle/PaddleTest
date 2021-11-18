@@ -60,8 +60,8 @@ TRAIN: # 训练步骤
         unit_repr: None
       eval_loss:
         latest: True
-        kpi_base: 7.89285
-        threshold: 0.1
+        kpi_base: 8.58133
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None        
@@ -82,14 +82,7 @@ TRAIN: # 训练步骤
         threshold: 0.1
         actived: True
         evaluation: "-"
-        unit_repr: None
-      eval_loss:
-        latest: True
-        kpi_base: 7.89285
-        threshold: 0.1
-        actived: True
-        evaluation: "-"
-        unit_repr: None   
+        unit_repr: None 
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_2card.log
   -
     tag: train_win_gpu
@@ -110,8 +103,8 @@ TRAIN: # 训练步骤
         unit_repr: None
       eval_loss:
         latest: True
-        kpi_base: 190.68218
-        threshold: 0.1
+        kpi_base: 7.51868
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None   
@@ -130,7 +123,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 7.89285
+        kpi_base: 8.58133
         threshold: 0.1
         actived: True
         evaluation: "-"
@@ -148,7 +141,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 190.68218
+        kpi_base: 7.51868
         threshold: 0.1
         actived: True
         evaluation: "-"
