@@ -94,7 +94,7 @@ if !errorlevel! equ 0 (
     echo ######   not load pretrain
 )
 
-echo "RedNet50 LeViT_128S GhostNet_x1_3"|findstr !model! >nul
+echo "RedNet50 LeViT_128S GhostNet_x1_3 RedNet50 TNT_small LeViT_128S SwinTransformer_large_patch4_window12_384"|findstr !model! >nul
 if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!
