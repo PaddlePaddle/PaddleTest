@@ -1,0 +1,176 @@
+MODEL: "fater_ernie_token" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $DGU_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/fater_ernie/ #脚本的路径
+  model_log_path: log/fater_ernie/
+
+EXEC:
+  exec_cases: [TRAIN, INFER, PYTHON_INFER, CPP_INFER]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+TRAIN: # 训练步骤，还未提测
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' token_cls
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.002620
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 0.929512
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_token_cls_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU token_cls
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.003569
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 0.939264
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_token_cls_$XPU.log
+
+INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU token_cls 1000
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_token_cls_$XPU.log
+
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU token_cls 2500
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_token_cls_$XPU.log
+
+PYTHON_INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash python_infer.sh $XPU token_cls 1000
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_token_cls_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: python_infer.bat $XPU token_cls 2500
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_token_cls_$XPU.log
+
+CPP_INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash cpp_infer.sh $XPU token_cls
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/cpp_infer_token_cls_$XPU.log
+
