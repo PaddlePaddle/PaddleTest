@@ -11,9 +11,20 @@ VARIABLES:
   model_log_path: log/fater_ernie/
 
 EXEC:
-  exec_cases: [TRAIN, INFER, PYTHON_INFER, CPP_INFER]
+  exec_cases: [COMPILE, TRAIN, INFER, PYTHON_INFER, CPP_INFER]
   exec_priority: [p0]
   exec_tag: $EXEC_TAG
+
+#测试套
+COMPILE:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
+
 
 TRAIN: # 训练步骤，还未提测
   -
