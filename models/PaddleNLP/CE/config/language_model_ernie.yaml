@@ -3,7 +3,7 @@ PRIORITY: P1_delay, Dy_con # P1没办法控制时长，Dy_con:收敛性
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $DGU_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:

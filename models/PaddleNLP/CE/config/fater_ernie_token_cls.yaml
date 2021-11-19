@@ -3,7 +3,7 @@ PRIORITY: P0_2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $DGU_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:
@@ -34,7 +34,7 @@ TRAIN: # 训练步骤，还未提测
         actived: True
         evaluation: "-"
         unit_repr: "s"
-      acc:
+      f1:
         latest: True
         kpi_base: 0.929512
         threshold: 0.05
@@ -56,14 +56,14 @@ TRAIN: # 训练步骤，还未提测
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.003569
+        kpi_base: 0.001055
         threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
-      acc:
+      f1:
         latest: True
-        kpi_base: 0.939264
+        kpi_base: 0.936391
         threshold: 0.05
         actived: True
         evaluation: "+"
