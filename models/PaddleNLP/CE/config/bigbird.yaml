@@ -3,7 +3,7 @@ PRIORITY: P1
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $BIGBIRD_BRANCH
+  branch: $BASE_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
