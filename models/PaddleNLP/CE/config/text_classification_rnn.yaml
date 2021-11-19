@@ -3,7 +3,7 @@ PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $text_classification_rnn_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:

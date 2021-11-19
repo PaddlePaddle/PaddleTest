@@ -4,13 +4,18 @@
 """
 paddle.nn.functional.margin_cross_entropy
 """
+import sys
 import paddle
 import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
 import numpy as np
 
+sys.path.append("../..")
+from utils.interceptor import skip_not_compile_gpu
 
+
+@skip_not_compile_gpu
 @pytest.mark.loss_margin_cross_entropy_vartype
 def test_margin_cross_entropy_base():
     """

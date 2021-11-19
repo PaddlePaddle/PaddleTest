@@ -3,7 +3,7 @@ PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $lexical_analysis_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:

@@ -4,10 +4,14 @@
 """
 test randint
 """
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../..")
+from utils.interceptor import skip_platform_not_linux
 
 
 class TestRandint(APIBase):
@@ -30,6 +34,7 @@ class TestRandint(APIBase):
 obj = TestRandint(paddle.randint)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_vartype
 def test_randint_base():
     """
@@ -39,6 +44,7 @@ def test_randint_base():
     obj.base(res=res, low=0, high=10, shape=[2, 2])
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_parameters
 def test_randint():
     """
@@ -48,6 +54,7 @@ def test_randint():
     obj.run(res=res, low=0, high=10, shape=[3, 3, 2])
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_parameters
 def test_randint1():
     """
@@ -58,6 +65,7 @@ def test_randint1():
     obj.run(res=res, low=0, high=10, shape=[2, 2])
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_exception
 def test_randint2():
     """
@@ -67,6 +75,7 @@ def test_randint2():
     obj.exception(etype=AttributeError, mode="python", low=0, high=10, shape="2")
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_parameters
 def test_randint3():
     """
@@ -77,6 +86,7 @@ def test_randint3():
     obj.run(res=res, low=0, high=10, shape=[2, 2], dtype=np.int64)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_exception
 def test_randint4():
     """
@@ -86,6 +96,7 @@ def test_randint4():
     obj.exception(etype="NotFoundError", low=0, high=10, shape=[2, 2], dtype=np.float32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_exception
 def test_randint5():
     """
@@ -95,6 +106,7 @@ def test_randint5():
     obj.exception(etype="InvalidArgumentError", low=100, high=10, shape=[2, 2])
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_exception
 def test_randint6():
     """

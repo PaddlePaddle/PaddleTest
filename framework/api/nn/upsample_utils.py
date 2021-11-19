@@ -19,7 +19,7 @@ class TestUpsample(APIBase):
         implement
         """
         self.types = [np.float32, np.float64]
-        self.debug = True
+        self.debug = False
         self.delta = 1e-3
         self.no_grad_var = ["scale_factor", "size"]
 

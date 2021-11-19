@@ -3,7 +3,7 @@ PRIORITY: P1
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $msra_ner_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:
