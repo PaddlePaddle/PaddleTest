@@ -26,8 +26,8 @@ def test_initializer_xavier_normal_base():
     compare(np.std(w, axis=0), np.ones(n2) * np.sqrt(2 / (n1 + n2)), delta=1e-1, rtol=1e-1)
     compare(np.std(w, axis=1), np.ones(n1) * np.sqrt(2 / (n1 + n2)), delta=1e-1, rtol=1e-1)
     compare(np.array(np.mean(w)), 0, delta=1e-2, rtol=1e-2)
-    compare(np.mean(w, axis=0), np.zeros(n2), delta=1e-1, rtol=1e-1)
-    compare(np.mean(w, axis=1), np.zeros(n1), delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=0), np.zeros(n2), delta=0.3, rtol=0.3)
+    compare(np.mean(w, axis=1), np.zeros(n1), delta=0.3, rtol=0.3)
 
 
 @pytest.mark.api_initializer_xavier_normal_parameters
@@ -45,8 +45,8 @@ def test_initializer_xavier_normal1():
     compare(np.std(w, axis=0), np.ones(n2) * np.sqrt(2 / (n1 + n2)), delta=1e-1, rtol=1e-1)
     compare(np.std(w, axis=1), np.ones(n1) * np.sqrt(2 / (n1 + n2)), delta=1e-1, rtol=1e-1)
     compare(np.array(np.mean(w)), 0, delta=1e-2, rtol=1e-2)
-    compare(np.mean(w, axis=0), np.zeros(n2), delta=1e-1, rtol=1e-1)
-    compare(np.mean(w, axis=1), np.zeros(n1), delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=0), np.zeros(n2), delta=0.3, rtol=0.3)
+    compare(np.mean(w, axis=1), np.zeros(n1), delta=0.3, rtol=0.3)
 
 
 @pytest.mark.api_initializer_xavier_normal_parameters
@@ -66,8 +66,8 @@ def test_initializer_xavier_normal2():
     compare(np.std(w, axis=0), np.ones(n2) * np.sqrt(2 / (fan_in + fan_out)), delta=1e-1, rtol=1e-1)
     compare(np.std(w, axis=1), np.ones(n1) * np.sqrt(2 / (fan_in + fan_out)), delta=1e-1, rtol=1e-1)
     compare(np.array(np.mean(w)), 0, delta=1e-2, rtol=1e-2)
-    compare(np.mean(w, axis=0), np.zeros(n2), delta=1e-1, rtol=1e-1)
-    compare(np.mean(w, axis=1), np.zeros(n1), delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=0), np.zeros(n2), delta=0.3, rtol=0.3)
+    compare(np.mean(w, axis=1), np.zeros(n1), delta=0.3, rtol=0.3)
 
 
 # @pytest.mark.api_initializer_xavier_normal_parameters

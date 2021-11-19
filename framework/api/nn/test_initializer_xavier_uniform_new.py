@@ -29,14 +29,15 @@ def test_initializer_xavier_uniform_base():
         np.minimum(w, np.ones((n1, n2)) * -np.sqrt(6.0 / (n1 + n2))) == np.ones((n1, n2)) * -np.sqrt(6.0 / (n1 + n2))
     ).all()
     compare(np.array(np.mean(w)), 0, delta=1e-2, rtol=1e-2)
-    compare(np.mean(w, axis=0), np.zeros(n2), delta=1e-1, rtol=1e-1)
-    compare(np.mean(w, axis=1), np.zeros(n1), delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=0), np.zeros(n2), delta=0.3, rtol=0.3)
+    compare(np.mean(w, axis=1), np.zeros(n1), delta=0.3, rtol=0.3)
 
 
 @pytest.mark.api_initializer_xavier_uniform_parameters
 def test_initializer_xavier_uniform_1():
     """
-    base
+    n1 = 16000
+    n2 = 15000
     """
     n1 = 16000
     n2 = 15000
@@ -51,14 +52,17 @@ def test_initializer_xavier_uniform_1():
         np.minimum(w, np.ones((n1, n2)) * -np.sqrt(6.0 / (n1 + n2))) == np.ones((n1, n2)) * -np.sqrt(6.0 / (n1 + n2))
     ).all()
     compare(np.array(np.mean(w)), 0, delta=1e-2, rtol=1e-2)
-    compare(np.mean(w, axis=0), np.zeros(n2), delta=1e-1, rtol=1e-1)
-    compare(np.mean(w, axis=1), np.zeros(n1), delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=0), np.zeros(n2), delta=0.3, rtol=0.3)
+    compare(np.mean(w, axis=1), np.zeros(n1), delta=0.3, rtol=0.3)
 
 
 @pytest.mark.api_initializer_xavier_uniform_parameters
 def test_initializer_xavier_uniform_2():
     """
-    base
+    n1 = 3000
+    n2 = 3500
+    fan_in = 1000.3
+    fan_out = 1200.5
     """
     n1 = 3000
     n2 = 3500
@@ -77,5 +81,5 @@ def test_initializer_xavier_uniform_2():
         == np.ones((n1, n2)) * -np.sqrt(6.0 / (fan_in + fan_out))
     ).all()
     compare(np.array(np.mean(w)), 0, delta=1e-2, rtol=1e-2)
-    compare(np.mean(w, axis=0), np.zeros(n2), delta=1e-1, rtol=1e-1)
-    compare(np.mean(w, axis=1), np.zeros(n1), delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=0), np.zeros(n2), delta=0.3, rtol=0.3)
+    compare(np.mean(w, axis=1), np.zeros(n1), delta=0.3, rtol=0.3)
