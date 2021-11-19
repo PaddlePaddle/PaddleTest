@@ -36,7 +36,8 @@ def test_initializer_xavier_uniform_base():
 @pytest.mark.api_initializer_xavier_uniform_parameters
 def test_initializer_xavier_uniform_1():
     """
-    base
+    n1 = 16000
+    n2 = 15000
     """
     n1 = 16000
     n2 = 15000
@@ -58,7 +59,10 @@ def test_initializer_xavier_uniform_1():
 @pytest.mark.api_initializer_xavier_uniform_parameters
 def test_initializer_xavier_uniform_2():
     """
-    base
+    n1 = 3000
+    n2 = 3500
+    fan_in = 1000.3
+    fan_out = 1200.5
     """
     n1 = 3000
     n2 = 3500
