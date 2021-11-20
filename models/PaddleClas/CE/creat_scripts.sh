@@ -445,7 +445,7 @@ elif [[ ${model} == 'Xception41_deeplab' ]]; then
     sed -i "" "s|6.46063|5.42839|g" $model.yaml #linux_train_多卡
     sed -i "" "s|0.93207|9.87746|g" $model.yaml #linux_eval
     sed -i "" "s|7.89285|9.87746|g" $model.yaml #linux_train_eval
-    sed -i "" "s|6.81317|6.81317|g" $model.yaml #windows_train
+    sed -i "" "s|6.81317|6.57439|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|9.81792|g" $model.yaml #windows_eval
     sed -i "" "s|190.68218|9.81792|g" $model.yaml #windows_train_eval
 

@@ -51,16 +51,16 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml train_linux_gpu1
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 5.44842
+        kpi_base: 0.0
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
-      train_eval:
+      exit_code:
         latest: True
-        kpi_base: 1.2112
+        kpi_base: 0.0
         threshold: 0.10001
         actived: True
         evaluation: "-"
@@ -76,9 +76,9 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml train_linux_gpu2
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 5.77167
+        kpi_base: 0.0
         threshold: 0.1
         actived: True
         evaluation: "-"
@@ -94,16 +94,16 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml train_win_gpu
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 6.81317
+        kpi_base: 0.0
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
-      train_eval:
+      exit_code:
         latest: True
-        kpi_base: 190.68218
+        kpi_base: 0.0
         threshold: 0.10001
         actived: True
         evaluation: "-"
@@ -121,9 +121,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml eval_linux
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 1.2112
+        kpi_base: 0.0
         threshold: 0.1
         actived: True
         evaluation: "-"
@@ -139,9 +139,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml eval_win
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 190.68218
+        kpi_base: 0.0
         threshold: 0.1
         actived: True
         evaluation: "-"

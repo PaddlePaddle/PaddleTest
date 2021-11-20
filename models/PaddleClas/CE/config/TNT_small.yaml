@@ -51,17 +51,17 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu1
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 8.5533
-        threshold: 0.0
+        kpi_base: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
-      train_eval:
+      exit_code:
         latest: True
-        kpi_base: 13.37703
-        threshold: 0.00001
+        kpi_base: 0.0
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None        
@@ -76,12 +76,12 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu2
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 6.91239
-        threshold: 0.0
+        kpi_base: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None 
     output: $ROOT_PATH/$model_log_path/TNT_small_2card.log
   -
@@ -94,17 +94,17 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/TNT/TNT_small.yaml train_win_gpu
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 6.81317
-        threshold: 0.0
+        kpi_base: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
-      train_eval:
+      exit_code:
         latest: True
-        kpi_base: 190.68218
-        threshold: 0.00001
+        kpi_base: 0.0
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None   
@@ -121,12 +121,12 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml eval_linux
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 13.37703
-        threshold: 0.0
+        kpi_base: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_eval.log
   -
@@ -139,12 +139,12 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/TNT/TNT_small.yaml eval_win
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 190.68218
-        threshold: 0.0
+        kpi_base: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_eval.log
 
@@ -162,9 +162,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_infer.log
   -
@@ -180,9 +180,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_infer.log
 
@@ -200,9 +200,9 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_predict.log
   -
@@ -218,8 +218,8 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_predict.log
