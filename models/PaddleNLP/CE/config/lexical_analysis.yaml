@@ -44,7 +44,7 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/scripts
-        cmd: compile_package.bat
+        cmd: python -m pip install paddlenlp
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: data_proc.bat
