@@ -155,8 +155,8 @@ elif [[ ${model} == 'HRNet_W18_C' ]]; then
     sed -i "" "s|P0|P0|g" $model.yaml #P0/1
     sed -i "" "s|6.48126|6.4628|g" $model.yaml #linux_train_单卡
     sed -i "" "s|6.46063|6.54288|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|9.84755|g" $model.yaml #linux_eval
-    sed -i "" "s|7.89285|9.84755|g" $model.yaml #linux_train_eval
+    sed -i "" "s|0.93207|11|g" $model.yaml #linux_eval
+    sed -i "" "s|7.89285|11|g" $model.yaml #linux_train_eval
     sed -i "" "s|6.81317|6.81282|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|7.45477|g" $model.yaml #windows_eval
     sed -i "" "s|190.68218|7.45477|g" $model.yaml #windows_train_eval
