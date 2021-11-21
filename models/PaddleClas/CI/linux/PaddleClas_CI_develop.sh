@@ -283,7 +283,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    fi
 
    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] \
-      || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50' ]];then
+      || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ 'ResNet50_vd.yaml' ]];then
       echo "######  use pretrain model"
       echo ${model}
       wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${model}_pretrained.pdparams --no-proxy
