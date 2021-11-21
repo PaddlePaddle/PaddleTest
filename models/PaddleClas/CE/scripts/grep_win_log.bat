@@ -24,8 +24,10 @@ if !errorlevel! equ 0 (
     type %log_path%\!model!_train.log | findstr Train | findstr 5/5 | findstr Avg > tmp.log
     type %log_path%\!model!_train.log | findstr Eval | findstr Avg >> tmp.log
     %sed% -i 2s/"loss"/"train_eval"/ tmp.log
+    type %log_path%\!model!_train.log | findstr exit_code
     type %log_path%\!model!_train.log | findstr exit_code >> tmp.log
     (for /f "delims=" %%a in ('type "tmp.log"') do @set/p=" , %%a"<nul)> ..\%log_path%\!model!_train.log
+    type ..\%log_path%\!model!_train.log
 )
 
 echo "eval_win"|findstr %2 >nul
@@ -34,8 +36,10 @@ if !errorlevel! equ 0 (
     type %log_path%\!model!_eval.log | findstr Avg
     type %log_path%\!model!_eval.log | findstr exit_code
     type %log_path%\!model!_eval.log | findstr Eval | findstr Avg > tmp_eval.log
+    type %log_path%\!model!_eval.log | findstr exit_code
     type %log_path%\!model!_eval.log | findstr exit_code >> tmp_eval.log
     (for /f "delims=" %%a in ('type "tmp_eval.log"') do @set/p=" , %%a"<nul)> ..\%log_path%\!model!_eval.log
+    type ..\%log_path%\!model!_eval.log
 )
 
 echo "infer_win"|findstr %2 >nul
@@ -43,6 +47,7 @@ if !errorlevel! equ 0 (
     echo '#####infer_win'
     type %log_path%\!model!_infer.log | findstr infer_exit_code
     type %log_path%\!model!_infer.log | findstr infer_exit_code > ..\%log_path%\!model!_infer.log
+    type ..\%log_path%\!model!_infer.log
 )
 
 echo "export_win"|findstr %2 >nul
@@ -50,6 +55,7 @@ if !errorlevel! equ 0 (
     echo '#####export_win'
     type %log_path%\!model!_export.log | findstr export_exit_code
     type %log_path%\!model!_export.log | findstr export_exit_code > ..\%log_path%\!model!_export.log
+    type ..\%log_path%\!model!_export.log
 )
 
 echo "predict_win"|findstr %2 >nul
@@ -57,4 +63,5 @@ if !errorlevel! equ 0 (
     echo '#####predict_win'
     type %log_path%\!model!_predict.log | findstr predict_exit_code
     type %log_path%\!model!_predict.log | findstr predict_exit_code > ..\%log_path%\!model!_predict.log
+    type ..\%log_path%\!model!_predict.log
 )

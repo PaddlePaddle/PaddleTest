@@ -127,9 +127,9 @@ elif [[ ${model} == 'GhostNet_x1_3' ]]; then
     sed -i "" "s|6.46063|6.8288|g" $model.yaml #linux_train_多卡
     sed -i "" "s|0.93207|1.05573|g" $model.yaml #linux_eval
     sed -i "" "s|7.89285|8.21487|g" $model.yaml #linux_train_eval
-    sed -i "" "s|6.81317|6.81317|g" $model.yaml #windows_train
+    sed -i "" "s|6.81317|6.76316|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|1.06047|g" $model.yaml #windows_eval
-    sed -i "" "s|190.68218|8.17441|g" $model.yaml #windows_train_eval
+    sed -i "" "s|190.68218|9339895.46667|g" $model.yaml #windows_train_eval
 
 elif [[ ${model} == 'GoogLeNet' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
@@ -455,7 +455,7 @@ elif [[ ${model} == 'Xception71' ]]; then
     sed -i "" "s|6.46063|5.79659|g" $model.yaml #linux_train_多卡
     sed -i "" "s|0.93207|11.7211|g" $model.yaml #linux_eval
     sed -i "" "s|7.89285|11.7211|g" $model.yaml #linux_train_eval
-    sed -i "" "s|6.81317|6.57439|g" $model.yaml #windows_train
+    sed -i "" "s|6.81317|6.60048|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|73.75383|g" $model.yaml #windows_eval
     sed -i "" "s|190.68218|73.75383|g" $model.yaml #windows_train_eval
 fi
