@@ -33,7 +33,7 @@ fi
 
 cd $code_path
 
-python export_model.py --save_dir=./checkpoint/model_$3/ --output_path=./export > ${log_path}/python_infer_$2_$1.log 2>&1
+python export_model.py --save_dir=./checkpoints/model_$3/ --output_path=./export > ${log_path}/python_infer_$2_$1.log 2>&1
 step_one_code=$?
 if [ $step_one_code -ne 0 ];then
     print_info $step_one_code python_infer_$2_$1

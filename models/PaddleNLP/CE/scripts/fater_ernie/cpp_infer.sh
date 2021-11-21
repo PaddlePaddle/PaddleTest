@@ -53,5 +53,5 @@ cmake .. -DPADDLE_LIB=$DPADDLE_LIB \
     -DWITH_GPU=ON \
     -DWITH_STATIC_LIB=OFF
 make -j
-./$2_infer --model_file ../../export/inference.pdmodel --params_file ../../export/inference.pdiparams > cpp_infer_$2_$1.log 2>&1
+./$2_infer --model_file ../../export/inference.pdmodel --params_file ../../export/inference.pdiparams > ${log_path}/cpp_infer_$2_$1.log 2>&1
 print_info $? cpp_infer_$2_$1
