@@ -35,7 +35,7 @@ class TestFusedFeedforward(APIBase):
 
 
 obj = TestFusedFeedforward(paddle.incubate.nn.functional.fused_feedforward)
-obj.places = [paddle.CUDAPlace(0)]
+# obj.places = [paddle.CUDAPlace(0)]
 
 
 def cal_fused_feedforward(
@@ -148,6 +148,7 @@ def test_fused_feedforward3():
     set linear1_bias and linear2_bias
     set ln2_scale and ln2_bias
     """
+    obj.enable_backward = False
     x = np.random.rand(1, 2, 2)
     w1 = np.random.rand(2, 4)
     b1 = np.random.rand(4)
@@ -180,6 +181,7 @@ def test_fused_feedforward4():
     pre_layer_norm = True
     set ln1_scale and ln1_bias
     """
+    obj.enable_backward = True
     x = np.random.rand(1, 2, 2)
     w1 = np.random.rand(2, 4)
     b1 = np.random.rand(4)
