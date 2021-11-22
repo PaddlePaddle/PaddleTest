@@ -16,5 +16,6 @@ beautifulsoup4
 pybind11
 lac
 zstandard
-baidubce
-protocol
+pypinyin
+pycryptodome
+bce-python-sdk
