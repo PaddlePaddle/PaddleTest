@@ -2,7 +2,12 @@
 set log_path=log
 set params_dir=(output/*)
 @REM set 不能放在循环中
-md log
+if exist "log" (
+   rmdir log /S /Q
+   md log
+) else (
+   md log
+)
 rem data
 rd /s /q data
 mklink /j data %data_path%\PaddleGAN
@@ -29,7 +34,7 @@ echo !model!
 
 echo train
 rd /s /q output
-python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=2 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
+python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
 
 if not !errorlevel! == 0 (
         echo   !model!,train,FAIL  >> %log_path%\result.log
@@ -123,22 +128,22 @@ if  !errorlevel! GTR 0 (
         echo   infer of psgan successfully!
 )
 
-echo vidieo restore
-python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > %log_path%/vidieo_restore_infer.log 2>&1
-if  !errorlevel! GTR 0 (
-        echo   vidieo restore,infer,FAIL  >> %log_path%\result.log
-        echo  infer of vidieo restore failed!
-) else (
-        echo   vidieo restore,infer,SUCCESS  >> %log_path%\result.log
-        echo   infer of vidieo restore successfully!
-)
+@REM echo vidieo restore  不支持CPU
+@REM python applications/tools/video-enhance.py --input data/Peking_input360p_clip_10_11.mp4 --process_order DAIN DeOldify EDVR --output video_restore_infer > %log_path%/vidieo_restore_infer.log 2>&1
+@REM if  !errorlevel! GTR 0 (
+@REM         echo   vidieo restore,infer,FAIL  >> %log_path%\result.log
+@REM         echo  infer of vidieo restore failed!
+@REM ) else (
+@REM         echo   vidieo restore,infer,SUCCESS  >> %log_path%\result.log
+@REM         echo   infer of vidieo restore successfully!
+@REM )
 
 
-rmdir data /S /Q
+@REM rmdir data /S /Q
 rem 清空数据文件防止效率云清空任务时删除原始文件
 set num=0
-for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )
-findstr /s "FAIL" log/result.log
+for /F %%i in ('findstr /s "FAIL" %log_path%/result.log') do ( set num=%%i )
+findstr /s "FAIL" %log_path%/result.log
 rem echo %num%
 
 if %num%==0 (

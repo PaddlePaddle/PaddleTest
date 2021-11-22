@@ -1,5 +1,5 @@
-MODEL: "HRNet_W18_C" # 模型名
-PRIORITY: P0
+MODEL: "SwinTransformer_tiny_patch4_window7_224" # 模型名
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -16,148 +16,148 @@ VARIABLES:
 
 EXEC:
   exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
-  exec_priority: [P0]
+  exec_priority: [P1]
   exec_tag: $EXEC_TAG
 
 #测试套
 FUNCTION: # 训练步骤
   -
     tag: linux_function_test
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_linux
-        cmd: bash PaddleClas_CI_develop.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml
+        cmd: bash PaddleClas_CI_develop.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml
   -
     tag: win_function_test
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
-        cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml
+        cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml
 
 TRAIN: # 训练步骤
   -
     tag: train_linux_gpu1
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml train_linux_gpu1
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml train_linux_gpu1
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.4628
+        kpi_base: 6.38868
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 11
+        kpi_base: 8.58133
         threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_1card.log
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_1card.log
   -
     tag: train_linux_gpu2
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml train_linux_gpu2
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml train_linux_gpu2
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.54288
+        kpi_base: 6.5769
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_2card.log
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_2card.log
   -
     tag: train_win_gpu
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml train_win_gpu
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml train_win_gpu
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.81282
+        kpi_base: 6.16726
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.45477
+        kpi_base: 7.51868
         threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_train.log
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_train.log
 
 EVAL: # 训练步骤
   -
     tag: eval_linux
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml eval_linux
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml eval_linux
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 11
+        kpi_base: 8.58133
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_eval.log
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_eval.log
   -
     tag: eval_win
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml eval_win
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml eval_win
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 7.45477
+        kpi_base: 7.51868
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_eval.log
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_eval.log
 
 INFER: # 训练步骤
   -
     tag: infer_linux
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml infer_linux
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml infer_linux
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -166,16 +166,16 @@ INFER: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_infer.log
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_infer.log
   -
     tag: infer_win
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml infer_win
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml infer_win
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -184,18 +184,18 @@ INFER: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_infer.log
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_infer.log
 
 PREDICT: # 训练步骤
   -
     tag: predict_linux
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml predict_linux
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml predict_linux
     kpis: #kpi指标
       predict_exit_code:
         latest: True
@@ -204,16 +204,16 @@ PREDICT: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_predict.log
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_predict.log
   -
     tag: predict_win
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml predict_win
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml predict_win
     kpis: #kpi指标
       predict_exit_code:
         latest: True
@@ -222,4 +222,4 @@ PREDICT: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_predict.log
+    output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_predict.log
