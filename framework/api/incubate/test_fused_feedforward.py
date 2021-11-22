@@ -4,17 +4,11 @@
 """
 test_fused_feedforward
 """
-import sys
 import copy
 from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
-
-
-sys.path.append("../../utils/")
-
-from interceptor import skip_not_compile_gpu
 
 
 class TestFusedFeedforward(APIBase):
@@ -35,7 +29,7 @@ class TestFusedFeedforward(APIBase):
 
 
 obj = TestFusedFeedforward(paddle.incubate.nn.functional.fused_feedforward)
-# obj.places = [paddle.CUDAPlace(0)]
+obj.places = [paddle.CUDAPlace(0)]
 
 
 def cal_fused_feedforward(
@@ -91,7 +85,7 @@ def cal_fused_feedforward(
     return src.numpy()
 
 
-@skip_not_compile_gpu
+# @skip_not_compile_gpu
 @pytest.mark.api_nn_fused_feedforward_parameters
 def test_fused_feedforward0():
     """
@@ -104,7 +98,7 @@ def test_fused_feedforward0():
     obj.run(res=res, x=x, linear1_weight=w1, linear2_weight=w2, dropout1_rate=0, dropout2_rate=0)
 
 
-@skip_not_compile_gpu
+# @skip_not_compile_gpu
 @pytest.mark.api_nn_fused_feedforward_parameters
 def test_fused_feedforward1():
     """
@@ -117,7 +111,7 @@ def test_fused_feedforward1():
     obj.run(res=res, x=x, linear1_weight=w1, linear2_weight=w2, dropout1_rate=0, dropout2_rate=0, pre_layer_norm=True)
 
 
-@skip_not_compile_gpu
+# @skip_not_compile_gpu
 @pytest.mark.api_nn_fused_feedforward_parameters
 def test_fused_feedforward2():
     """
@@ -141,7 +135,7 @@ def test_fused_feedforward2():
     )
 
 
-@skip_not_compile_gpu
+# @skip_not_compile_gpu
 @pytest.mark.api_nn_fused_feedforward_parameters
 def test_fused_feedforward3():
     """
@@ -173,7 +167,7 @@ def test_fused_feedforward3():
     )
 
 
-@skip_not_compile_gpu
+# @skip_not_compile_gpu
 @pytest.mark.api_nn_fused_feedforward_parameters
 def test_fused_feedforward4():
     """
@@ -216,7 +210,7 @@ def test_fused_feedforward4():
     )
 
 
-@skip_not_compile_gpu
+# @skip_not_compile_gpu
 @pytest.mark.api_nn_fused_feedforward_parameters
 def test_fused_feedforward5():
     """
