@@ -38,5 +38,3 @@ train_bisenet_convergence(){
 cd $cur_path/../../PaddleSeg
 train_bisenet_convergence
 kill -9 `ps afx | grep train | awk '{print $1}'`
-
-

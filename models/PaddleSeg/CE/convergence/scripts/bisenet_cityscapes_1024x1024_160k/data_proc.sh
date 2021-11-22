@@ -16,7 +16,3 @@ rm -rf $cur_path/../../PaddleSeg/data
 fi
 mkdir -P $cur_path/../../PaddleSeg/data https://paddleseg.bj.bcebos.com/dataset/cityscapes.tar
 tar xvf $cur_path/../../PaddleSeg/data/cityscapes.tar -C $cur_path/../../PaddleSeg/data/
-
-
-
-

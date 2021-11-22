@@ -57,10 +57,3 @@ TRAIN: # 训练步骤
         evaluation: "+"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/fcn_hrnetw18_cityscapes_1024x512_80k_train_convergence.log
-
-
-
-
-
-
-

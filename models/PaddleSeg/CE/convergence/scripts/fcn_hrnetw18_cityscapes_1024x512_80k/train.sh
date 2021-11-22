@@ -38,6 +38,3 @@ train_fcn_convergence(){
 cd $cur_path/../../PaddleSeg
 train_fcn_convergence
 kill -9 `ps afx | grep train | awk '{print $1}'`
-
-
-

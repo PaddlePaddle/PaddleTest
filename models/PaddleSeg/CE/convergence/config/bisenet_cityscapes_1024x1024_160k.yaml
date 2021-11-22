@@ -57,14 +57,3 @@ TRAIN: # 训练步骤
         evaluation: "+"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/bisenet_cityscapes_1024x1024_160k_train_convergence.log
-
-
-
-
-
-
-
-
-
-
-
