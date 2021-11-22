@@ -9,7 +9,7 @@ echo %model_flag%
 echo "path before"
 chdir
 setlocal enabledelayedexpansion
-echo "CE"|findstr %model_flag% >nul
+echo "CE"| findstr %model_flag% >nul
 if !errorlevel! equ 0 (
 	echo "CE step"
 	set FLAGS_cudnn_deterministic=True
@@ -18,7 +18,7 @@ if !errorlevel! equ 0 (
 	echo %1 >clas_models_list_all_gpu
 	chdir
 	dir
-) 
+)
 
 set log_path=log
 set gpu_flag=True
@@ -58,13 +58,13 @@ if exist "output" (
    echo "!model! output not exist"
 )
 
-echo "GoogLeNet VGG11 ViT_small_patch16_224 PPLCNet_x1_0 MobileNetV3_large_x1_0 RedNet50 TNT_small LeViT_128S GhostNet_x1_3"|findstr !model! >nul
+echo "GoogLeNet VGG11 ViT_small_patch16_224 PPLCNet_x1_0 MobileNetV3_large_x1_0 RedNet50 TNT_small LeViT_128S GhostNet_x1_3"| findstr !model! >nul
 if !errorlevel! equ 0 (
 	%sed% -i s/"learning_rate:"/"learning_rate: 0.0001 #"/g %%i
 	echo "change lr"
 )
 
-echo "CE"|findstr %model_flag% >nul
+echo "CE"| findstr %model_flag% >nul
 if !errorlevel! equ 0 (
     python tools/train.py -c %%i -o Global.epochs=5 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o Global.seed=1234  -o DataLoader.Train.loader.num_workers=0 -o DataLoader.Train.sampler.shuffle=False -o Global.eval_interval=5 -o Global.save_interval=5 > %log_path%\!model!_train.log 2>&1
 ) else (
@@ -82,7 +82,7 @@ if not !errorlevel! == 0 (
 
 )
 
-echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 ESNet_x1_0 ResNet50 ResNet50_vd"|findstr !model! >nul
+echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 ESNet_x1_0 ResNet50 ResNet50_vd"| findstr !model! >nul
 if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!
@@ -94,7 +94,7 @@ if !errorlevel! equ 0 (
     echo ######   not load pretrain
 )
 
-echo "RedNet50 LeViT_128S GhostNet_x1_3 RedNet50 TNT_small LeViT_128S SwinTransformer_large_patch4_window12_384"|findstr !model! >nul
+echo "RedNet50 LeViT_128S GhostNet_x1_3 RedNet50 TNT_small LeViT_128S SwinTransformer_large_patch4_window12_384"| findstr !model! >nul
 if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!
@@ -174,4 +174,3 @@ exit /b 0
 ) else (
 exit /b 1
 )
-

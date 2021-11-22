@@ -35,4 +35,4 @@ SET_MULTI_CUDA = "0,1"
 REPO_PaddleClas = "https://github.com/PaddlePaddle/PaddleClas.git"
 BASE_BRANCH = "develop"
 cls_BRANCH = "develop"
-EXEC_TAG = ["win_function_test","train_win_gpu","eval_win","infer_win","predict_win"]
+EXEC_TAG = ["win_function_test", "train_win_gpu", "eval_win", "infer_win", "predict_win"]

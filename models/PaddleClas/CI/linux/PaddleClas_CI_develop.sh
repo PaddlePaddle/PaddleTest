@@ -15,7 +15,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
    export FLAGS_cudnn_deterministic=True
 fi
 
-# <-> model_flag CI是效率云 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
+# <-> model_flag CI是效率云 step0是clas分类 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
 #     pr是TC，clas是分类，rec是识别，single是单独模型debug
 # <-> pr_num   随机跑pr的模型数
 # <-> python   python版本
@@ -119,15 +119,25 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'fp16' |grep -v 'distill' \
       > models_list_all
 
-   if [[ ${model_flag} =~ 'CI_step1' ]]; then
+   if [[ ${model_flag} =~ 'CI_step0' ]]; then
       cat models_list_all | while read line
       do
       if [[ ${line} =~ 'AlexNet' ]] ||[[ ${line} =~ 'DPN' ]] ||[[ ${line} =~ 'DarkNet' ]] ||[[ ${line} =~ 'DeiT' ]] \
          ||[[ ${line} =~ 'DenseNet' ]] ||[[ ${line} =~ 'EfficientNet' ]] ||[[ ${line} =~ 'GhostNet' ]] \
          ||[[ ${line} =~ 'HRNet' ]] ||[[ ${line} =~ 'HarDNet' ]] ||[[ ${line} =~ 'Inception' ]] \
          ||[[ ${line} =~ 'LeViT' ]] ||[[ ${line} =~ 'MixNet' ]] ||[[ ${line} =~ 'MobileNetV1' ]] \
-         ||[[ ${line} =~ 'MobileNetV2' ]] ||[[ ${line} =~ 'MobileNetV3' ]] ||[[ ${line} =~ 'PPLCNet' ]] \
-         ||[[ ${line} =~ 'ReXNet' ]] ||[[ ${line} =~ 'RedNet' ]] ||[[ ${line} =~ 'Res2Net' ]]; then
+         ||[[ ${line} =~ 'MobileNetV2' ]] ||[[ ${line} =~ 'MobileNetV3' ]]; then
+         echo ${line}  >> models_list
+      fi
+      done
+
+   elif [[ ${model_flag} =~ 'CI_step1' ]]; then
+      cat models_list_all | while read line
+      do
+      if [[ ${line} =~ 'PPLCNet' ]] || [[ ${line} =~ 'ReXNet' ]] ||[[ ${line} =~ 'RedNet' ]] \
+      ||[[ ${line} =~ 'Res2Net' ]] ||[[ ${line} =~ 'ResNeSt' ]] ||[[ ${line} =~ 'ResNeXt' ]]\
+      ||[[ ${line} =~ 'ResNeXt101_wsl' ]] ||[[ ${line} =~ 'ResNet' ]] ||[[ ${line} =~ 'SENet' ]]\
+      ||[[ ${line} =~ 'ShuffleNet' ]] ||[[ ${line} =~ 'ShuffleNet' ]] ||[[ ${line} =~ 'SqueezeNet' ]]; then
          echo ${line}  >> models_list
       fi
       done
@@ -147,7 +157,9 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       && [[ ! ${line} =~ 'Inception' ]] && [[ ! ${line} =~ 'LeViT' ]] && [[ ! ${line} =~ 'MixNet' ]] \
       && [[ ! ${line} =~ 'MobileNetV1' ]] && [[ ! ${line} =~ 'MobileNetV2' ]] && [[ ! ${line} =~ 'MobileNetV3' ]] \
       && [[ ! ${line} =~ 'PPLCNet' ]] && [[ ! ${line} =~ 'ReXNet' ]] && [[ ! ${line} =~ 'RedNet' ]] \
-      && [[ ! ${line} =~ 'Res2Net' ]]; then
+      && [[ ! ${line} =~ 'Res2Net' ]] && [[ ! ${line} =~ 'ResNeSt' ]] && [[ ! ${line} =~ 'ResNeXt' ]]\
+      && [[ ! ${line} =~ 'ResNeXt101_wsl' ]] && [[ ! ${line} =~ 'ResNet' ]] && [[ ! ${line} =~ 'SENet' ]]\
+      && [[ ! ${line} =~ 'ShuffleNet' ]] && [[ ! ${line} =~ 'SqueezeNet' ]]; then
          echo ${line}  >> models_list
       fi
       done
@@ -231,11 +243,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    echo $params_dir
    if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
       echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
-      echo "training_multi_exit_code: 0.0" >> $log_path/result.log
+      echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
    else
       cat $log_path/train/${model}_2card.log
       echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
-      echo "training_multi_exit_code: 1.0" >> $log_path/result.log
+      echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
    fi
 
    #单卡
@@ -265,11 +277,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       echo $params_dir
       if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
          echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
-         echo "training_single_exit_code: 0.0" >> $log_path/result.log
+         echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
       else
          cat $log_path/train/${model}_1card.log
          echo -e "\033[31m training single of $model failed!\033[0m"|tee -a $log_path/result.log
-         echo "training_single_exit_code: 1.0" >> $log_path/result.log
+         echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
       fi
    fi
 
@@ -283,7 +295,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    fi
 
    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] \
-      || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ 'ResNet50_vd.yaml' ]];then
+      || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ '/ResNet50_vd.yaml' ]];then
       echo "######  use pretrain model"
       echo ${model}
       wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${model}_pretrained.pdparams --no-proxy
@@ -301,11 +313,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       > $log_path/eval/$model.log 2>&1
    if [ $? -eq 0 ];then
       echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
-      echo "eval_exit_code: 0.0" >> $log_path/result.log
+      echo "eval_exit_code: 0.0" >> $log_path/eval/$model.log
    else
       cat $log_path/eval/$model.log
       echo -e "\033[31m eval of $model failed!\033[0m" | tee -a $log_path/result.log
-      echo "eval_exit_code: 1.0" >> $log_path/result.log
+      echo "eval_exit_code: 1.0" >> $log_path/eval/$model.log
    fi
 
    # infer
@@ -314,11 +326,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       > $log_path/infer/$model.log 2>&1
    if [ $? -eq 0 ];then
       echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
-      echo "infer_exit_code: 0.0" >> $log_path/result.log
+      echo "infer_exit_code: 0.0" >> $log_path/infer/$model.log
    else
       cat $log_path/infer/${model}_infer.log
       echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
-      echo "infer_exit_code: 1.0" >> $log_path/result.log
+      echo "infer_exit_code: 1.0" >> $log_path/infer/$model.log
    fi
 
    # export_model
@@ -337,11 +349,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
    if [ $? -eq 0 ];then
       echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
-      echo "export_exit_code: 0.0" >> $log_path/result.log
+      echo "export_exit_code: 0.0" >> $log_path/export_model/$model.log
    else
       cat $log_path/export_model/$model.log
       echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
-      echo "export_exit_code: 1.0" >> $log_path/result.log
+      echo "export_exit_code: 1.0" >> $log_path/export_model/$model.log
    fi
 
    if [[ `expr $RANDOM % 2` -eq 0 ]] && ([[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]]);then
@@ -379,11 +391,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          > ../$log_path/predict/$model.log 2>&1
       if [ $? -eq 0 ];then
          echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-         echo "predict_exit_code: 0.0" >> ../$log_path/result.log
+         echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
       else
          cat ../$log_path/predict/${model}.log
          echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-         echo "predict_exit_code: 1.0" >> ../$log_path/result.log
+         echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
       fi
 
       sed -i 's/size: 384/size: 224/g' configs/inference_cls.yaml
@@ -420,11 +432,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       fi
       if [ $? -eq 0 ];then
          echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-         echo "predict_exit_code: 0.0" >> ../$log_path/result.log
+         echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
       else
          cat ../$log_path/predict/${model}.log
          echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-         echo "predict_exit_code: 1.0" >> ../$log_path/result.log
+         echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
       fi
 
    fi
@@ -523,7 +535,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
       sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:2000\]'  ppcls/data/dataloader/vehicle_dataset.py
       sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:2000\]'  ppcls/data/dataloader/vehicle_dataset.py
    fi
-   
+
    # fi
 
     #echo $line

@@ -25,7 +25,7 @@ sed -i "" s/ResNet50/$model/g $model.yaml
 # ResNet50	7.89285	0	linux单卡训练时 评估
 
 # ResNet50	6.81317	0	windows训练
-# ResNet50	0.93661	0	windows评估 对于加载预训练模型的要单独评估 
+# ResNet50	0.93661	0	windows评估 对于加载预训练模型的要单独评估
 # ResNet50  190.68218	windows训练时 评估
 
 
@@ -371,7 +371,7 @@ elif [[ ${model} == 'SqueezeNet1_0' ]]; then
     sed -i "" "s|0.93661|7.01277|g" $model.yaml #windows_eval
     sed -i "" "s|190.68218|7.01277|g" $model.yaml #windows_train_eval
 
-# elif [[ ${model} == 'SwinTransformer_large_patch4_window12_384' ]]; then 
+# elif [[ ${model} == 'SwinTransformer_large_patch4_window12_384' ]]; then
 #     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
 #     sed -i "" "s|6.48126|6.62939|g" $model.yaml #linux_train_单卡
 #     sed -i "" "s|6.46063|6.82169|g" $model.yaml #linux_train_多卡
@@ -485,4 +485,3 @@ done
 
 # sed -i "" "s|function_test|linux_function_test|g" config/AlexNet.yaml
 # sed -i "" 's|exec_tag:|exec_tag: $EXEC_TAG #|g' config/AlexNet.yaml
-
