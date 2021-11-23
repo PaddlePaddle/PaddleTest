@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import os
 import ast
 import re
 import json
 import argparse
+import numpy as np
 
 "python infer accuracy case"
 
