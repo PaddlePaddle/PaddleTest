@@ -1,12 +1,15 @@
+#!/bin/env python
 # -*- coding: utf-8 -*-
+# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
+"""
+python infer accuracy case
+"""
 import os
 import ast
 import re
 import json
 import argparse
 import numpy as np
-
-"python infer accuracy case"
 
 
 def get_main_txt_data(log_file, model_type, model_name=None):
@@ -56,7 +59,6 @@ def get_main_txt_data(log_file, model_type, model_name=None):
                 return classid_list, confidence_list, boxcoordinates_list
         except:
             print("GRTTING data occur error from {}!".format(log_file))
-            # return None, None, None
     else:
         print("{} does not exist ,CHECK PLEASE!!!".format(log_file))
 
@@ -95,6 +97,15 @@ def get_main_json_data(json_file, model_name):
 
 
 def diff_list(model_name, sample_list, run_list, type_list, confid_thr=0, box_thr=0.00):
+    """
+    :param model_name: model_name
+    :param sample_list: sample_list
+    :param run_list:
+    :param type_list:
+    :param confid_thr:
+    :param box_thr:
+    :return:
+    """
     num_sample = len(sample_list)
     num_run = len(run_list)
     if num_sample == num_run:
@@ -139,6 +150,13 @@ def diff_list(model_name, sample_list, run_list, type_list, confid_thr=0, box_th
 
 
 def run_pip(model_sample, model_run, model_type, model_name):
+    """
+    :param model_sample: model_sample
+    :param model_run: model_run
+    :param model_type: model_type
+    :param model_name: model_name
+    :return:
+    """
     type_list = ["class_id", "confidence", "box", "kps", "rect"]
     if model_type == "keypoint":
         rectangular_sample, confidence_sample, kpcoordinates_sample = get_main_json_data(
