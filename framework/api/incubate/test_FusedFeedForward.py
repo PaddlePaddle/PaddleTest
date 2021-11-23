@@ -10,7 +10,6 @@ import paddle
 import pytest
 import numpy as np
 
-
 sys.path.append("../../utils/")
 from interceptor import skip_not_compile_gpu
 

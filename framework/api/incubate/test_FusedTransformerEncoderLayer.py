@@ -19,6 +19,7 @@ def cal_dynamic(input_data, mask_data, normalize_before=False, activation="relu"
     """
     calculate api dynamic result
     """
+    paddle.set_device("gpu:0")
     # encoder input: [batch_size, src_len, d_model]
     enc_input = paddle.to_tensor(input_data)
     # self attention mask: [batch_size, n_head, src_len, src_len]
@@ -41,6 +42,7 @@ def cal_static(input_data, mask_data, normalize_before=False, activation="relu")
     """
     calculate api static result
     """
+    place = paddle.CUDAPlace(0)
     paddle.enable_static()
     main_program, startup_program = paddle.static.Program(), paddle.static.Program()
     with paddle.utils.unique_name.guard():
@@ -60,7 +62,7 @@ def cal_static(input_data, mask_data, normalize_before=False, activation="relu")
             )
 
             output = encoder_layer(data0, data1)
-            exe = paddle.static.Executor()
+            exe = paddle.static.Executor(place)
             exe.run(startup_program)
             res = exe.run(main_program, feed=feed, fetch_list=[output])
             paddle.disable_static()
