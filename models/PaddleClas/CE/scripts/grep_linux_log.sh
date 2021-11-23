@@ -40,19 +40,19 @@ elif [[ $2 == 'eval_linux' ]] ; then
 
 elif [[ $2 == 'infer_linux' ]] ; then
     echo '#####infer_linux'
-    cat ${log_path}/result.log | grep infer_exit_code
-    cat ${log_path}/result.log | grep infer_exit_code >../${log_path}/${model}_infer.log
+    cat ${log_path}/infer/${model}.log | grep infer_exit_code
+    cat ${log_path}/infer/${model}.log | grep infer_exit_code >../${log_path}/${model}_infer.log
     cat ../${log_path}/${model}_infer.log
 
 elif [[ $2 == 'export_linux' ]] ; then
     echo '#####export_linux'
-    cat ${log_path}/result.log | grep export_exit_code
-    cat ${log_path}/result.log | grep export_exit_code >../${log_path}/${model}_export.log
+    cat ${log_path}/export_model/${model}.log | grep export_exit_code
+    cat ${log_path}/export_model/${model}.log | grep export_exit_code >../${log_path}/${model}_export.log
     cat ../${log_path}/${model}_export.log
 
 elif [[ $2 == 'predict_linux' ]] ; then
     echo '#####predict_linux'
-    cat ${log_path}/result.log | grep predict_exit_code
-    cat ${log_path}/result.log | grep predict_exit_code >../${log_path}/${model}_predict.log
+    cat ${log_path}/predict/${model}.log | grep predict_exit_code
+    cat ${log_path}/predict/${model}.log | grep predict_exit_code >../${log_path}/${model}_predict.log
     cat ../${log_path}/${model}_predict.log
 fi
