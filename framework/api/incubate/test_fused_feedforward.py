@@ -11,9 +11,7 @@ import paddle
 import pytest
 import numpy as np
 
-
 sys.path.append("../../utils/")
-
 from interceptor import skip_not_compile_gpu
 
 
@@ -59,6 +57,7 @@ def cal_fused_feedforward(
     """
     calculate fused_feedforward
     """
+    paddle.set_device("gpu:0")
     paddle.disable_static()
     x = paddle.to_tensor(x, dtype="float32")
     linear1_weight, linear2_weight = (
@@ -148,6 +147,7 @@ def test_fused_feedforward3():
     set linear1_bias and linear2_bias
     set ln2_scale and ln2_bias
     """
+    obj.enable_backward = False
     x = np.random.rand(1, 2, 2)
     w1 = np.random.rand(2, 4)
     b1 = np.random.rand(4)
@@ -180,6 +180,7 @@ def test_fused_feedforward4():
     pre_layer_norm = True
     set ln1_scale and ln1_bias
     """
+    obj.enable_backward = True
     x = np.random.rand(1, 2, 2)
     w1 = np.random.rand(2, 4)
     b1 = np.random.rand(4)
