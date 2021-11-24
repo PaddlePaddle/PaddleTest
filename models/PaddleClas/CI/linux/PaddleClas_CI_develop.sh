@@ -6,6 +6,8 @@ echo ${Data_path}
 echo ${Project_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
+export FLAGS_use_virtual_memory_auto_growth=1
+
 echo "path before"
 pwd
 if [[ ${model_flag} =~ 'CE' ]]; then
