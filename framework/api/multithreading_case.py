@@ -65,7 +65,7 @@ def runCETest(params):
     """runCETest"""
     path = params[0]
     case = params[1]
-    print("case file: %s" % case)
+    print("case: %s" % case)
     val = os.system("export FLAGS_call_stack_level= && cd %s && python3.7 -m pytest %s" % (path, case))
     retry_count = 0
     final_result = ""
@@ -77,7 +77,7 @@ def runCETest(params):
             final_result = "Failed"
     if final_result == "Failed":
         failed_ce_case_list.append(case)
-        os.system("%s >> %s/result.txt" % (case, path))
+        os.system('echo "%s" >> %s/result.txt' % (case, path))
 
 
 def doFun(params):
