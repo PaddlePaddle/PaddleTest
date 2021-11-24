@@ -13,13 +13,11 @@ import numpy as np
 
 
 @pytest.mark.api_nn_LSTMCell_vartype
-def test_lstmcell_base():
+def test_lstmcell_base0():
     """
     test_grucell_base
     """
     obj0 = RnnBase(paddle.nn.LSTMCell)
-    obj1 = RnnBase(paddle.nn.LSTMCell)
-    obj1.dtype = "float64"
     np.random.seed(22)
     x = np.random.rand(1, 2)
     res = np.array([[0.75616062, 0.75616062, 0.75616062]])
@@ -34,6 +32,18 @@ def test_lstmcell_base():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
+
+
+@pytest.mark.api_nn_LSTMCell_vartype
+def test_lstmcell_base1():
+    """
+    test_grucell_base
+    """
+    obj1 = RnnBase(paddle.nn.LSTMCell)
+    obj1.dtype = "float64"
+    np.random.seed(22)
+    x = np.random.rand(1, 2)
+    res = np.array([[0.75616062, 0.75616062, 0.75616062]])
     obj1.atol = 1e-4
     obj1.run(
         res,
