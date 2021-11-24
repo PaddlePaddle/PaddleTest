@@ -20,10 +20,8 @@ do
 echo "[$case_dir cases result]"
 cat ${home}/$case_dir/result.txt
 done
-
 for EXCODE in ${result_array[*]}
 do
-  echo $EXCODE
   if [ ${EXCODE} -ne 0 ]; then
     echo 'some case not success!'
     exit 8
