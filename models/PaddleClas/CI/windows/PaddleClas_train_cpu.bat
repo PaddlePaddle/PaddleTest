@@ -1,12 +1,16 @@
 @ echo off
 set log_path=log
 set gpu_flag=False
-md log
+if exist "log" (
+   rmdir log /S /Q
+	md log
+) else (
+    md log
+)
 rem data_set
 cd dataset
 if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
 cd ..
-if not exist pretrain_models (mklink /j pretrain_models %data_path%\PaddleClas\pretrain_models)
 
 rem dependency
 python -m pip install -r requirements.txt
@@ -44,15 +48,30 @@ if not !errorlevel! == 0 (
         echo   training of !model! successfully!
 )
 
-echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 RedNet50 LeViT_128S"|findstr !model! >nul
+echo "MobileNetV3_large_x1_0 PPLCNet_x1_0 ESNet_x1_0 ResNet50"|findstr !model! >nul
 if !errorlevel! equ 0 (
     echo ######  use pretrain model
     echo !model!
     del "output\!model!\latest.pdparams"
-    echo f| xcopy /s /y /F "pretrain_models\!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
+    wget -q -P tmp\ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/!model!_pretrained.pdparams --no-proxy
+    echo f| xcopy /s /y /F "tmp\!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
+    rmdir tmp /S /Q
 ) else (
-    echo ###### not load pretrain
+    echo ######   not load pretrain
 )
+
+echo "RedNet50 LeViT_128S GhostNet_x1_3"|findstr !model! >nul
+if !errorlevel! equ 0 (
+    echo ######  use pretrain model
+    echo !model!
+    del "output\!model!\latest.pdparams"
+    wget -q -P tmp\ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/!model!_pretrained.pdparams --no-proxy
+    echo f| xcopy /s /y /F "tmp\!model!_pretrained.pdparams" "output\!model!\latest.pdparams"
+    rmdir tmp /S /Q
+) else (
+    echo ######   not load pretrain
+)
+
 
 rem eval
 python tools/eval.py -c %%i -o Global.pretrained_model="./output/!model!/latest" -o Global.device=cpu >%log_path%/!model!_eva.log 2>&1
@@ -97,11 +116,11 @@ cd ..
 rem TIMEOUT /T 10
 )
 
-rmdir dataset /S /Q
+@REM rmdir dataset /S /Q
 rem 清空数据文件防止效率云清空任务时删除原始文件
 set num=0
-for /F %%i in ('findstr /s "FAIL" log/result.log') do ( set num=%%i )
-findstr /s "FAIL" log/result.log
+for /F %%i in ('findstr /s "FAIL" %log_path%/result.log') do ( set num=%%i )
+findstr /s "FAIL" %log_path%/result.log
 rem echo %num%
 
 if %num%==0 (
