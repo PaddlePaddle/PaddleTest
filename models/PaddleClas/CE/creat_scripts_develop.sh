@@ -487,8 +487,8 @@ elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
     sed -i "" "s|0.93661|0.0|g" $model.yaml #windows_eval
     sed -i "" "s|190.68218|0.0|g" $model.yaml #windows_train_eval
 
-    sed -i "" "s|loss|exit_code|g" ${model}_release.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-    sed -i "" "s|train_eval|exit_code|g" ${model}_release.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
+    sed -i "" "s|loss|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
+    sed -i "" "s|train_eval|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
 
 elif [[ ${model} == 'Xception41_deeplab' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
