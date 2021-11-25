@@ -479,7 +479,7 @@ elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
     # sed -i "" "s|0.93661|3955238406280.53320|g" ${model}_release.yaml #windows_eval
     # sed -i "" "s|190.68218|3955238406280.53320|g" ${model}_release.yaml #windows_train_eval
 
-    
+
     sed -i "" "s|6.48126|0.0|g" ${model}_release.yaml #linux_train_单卡
     sed -i "" "s|6.46063|0.0|g" ${model}_release.yaml #linux_train_多卡
     sed -i "" "s|0.93207|0.0|g" ${model}_release.yaml #linux_eval
