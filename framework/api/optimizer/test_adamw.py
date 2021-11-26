@@ -8,7 +8,6 @@ import paddle
 import pytest
 from runner import Runner
 from base_dygraph_model import Dygraph
-from linear_dygraph_model import LinearNet
 import reader
 
 
@@ -44,4 +43,4 @@ def test_adamw_base():
         2.5678285728715196,
         2.562237776702413,
     ]
-    runner.check(expect)
+    runner.check(expect, rtol=5 * 1e-04, atol=1e-05)
