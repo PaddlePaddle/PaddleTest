@@ -616,7 +616,7 @@ print_info $? ernie-ctm_eval
 # 20 distilbert
 distilbert (){
 cd ${nlp_dir}/examples/model_compression/distill_lstm/
-${nlp_dir}/examples/benchmark/glue/SST-2/* ./
+mv ${nlp_dir}/examples/benchmark/glue/SST-2/* ./
 time (
     python small.py \
     --task_name sst-2 \
