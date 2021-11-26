@@ -32,12 +32,7 @@ ignore_case_dir = {
     "incubate": [],
     "linalg": [],
     "loss": [],
-    "nn": [
-        "test_adaptive_avg_pool1D.py",
-        "test_adaptive_avg_pool2D.py",
-        "test_adaptive_avg_pool3D.py",
-        "test_beamsearchdecoder.py",
-    ],
+    "nn": [],
     "paddlebase": [],
     "optimizer": [],
 }
