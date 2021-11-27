@@ -6,6 +6,8 @@ echo ${Data_path}
 echo ${Project_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
+export FLAGS_use_virtual_memory_auto_growth=1
+
 echo "path before"
 pwd
 if [[ ${model_flag} =~ 'CE' ]]; then
@@ -13,6 +15,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
    echo "path after"
    pwd
    export FLAGS_cudnn_deterministic=True
+   unset FLAGS_use_virtual_memory_auto_growth
 fi
 
 # <-> model_flag CI是效率云 step0是clas分类 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
