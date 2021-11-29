@@ -8,7 +8,6 @@ if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
   wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
 fi
 
-sed -i '' 's/opencv-contrib-python==4.2.0.32/opencv-contrib-python==4.4.0.46/g' requirements.txt
 # sed -i '' 's/scikit-image==0.17.2/scikit-image/g' requirements.txt
 
 # data
