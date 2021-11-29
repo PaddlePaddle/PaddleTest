@@ -97,9 +97,15 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 6.5358
+<<<<<<< HEAD
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+=======
         threshold: 0.0
         actived: True
         evaluation: "="
+>>>>>>> upstream/develop
         unit_repr: None
       train_eval:
         latest: True
@@ -142,9 +148,15 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 10.16325
+<<<<<<< HEAD
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+=======
         threshold: 0.0
         actived: True
         evaluation: "="
+>>>>>>> upstream/develop
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/ResNeSt50_fast_1s1x64d_eval.log
 
