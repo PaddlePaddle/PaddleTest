@@ -33,22 +33,25 @@ image(){
        echo ${module_name} has been ignored......
    else
        module_rdme=${module}/README.md
-       echo ${module_rdme}
-       #生成python测试代码
-       $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
-       #判断模型是否需要输入特殊图片文件
-       if [ `grep -c ${module_name}__ "special_data_modules.txt"` -ne '0' ]; then
-           special_module_line=`grep ${module_name}__ "special_data_modules.txt"`
-           tail=${special_module_line##*__}
-           sed -i "s/\/PATH\/TO\/IMAGE/${module_name}.${tail}/g" test_${module_name}.py
-       else
-           sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
-       fi
-       #运行python测试代码
-       $py_cmd test_${module_name}.py
-       if [ $? -ne 0 ]; then
-           excption=$(expr ${excption} + 1)
-           echo ${module_name} >> fail_modules.log
+       #判断module/readme是否存在，以此断定module是否真为模型module，而不是其他文件夹
+       if [ -e ${module_rdme} ];then
+           echo ${module_rdme}
+           #生成python测试代码
+           $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
+           #判断模型是否需要输入特殊图片文件
+           if [ `grep -c ${module_name}__ "special_data_modules.txt"` -ne '0' ]; then
+               special_module_line=`grep ${module_name}__ "special_data_modules.txt"`
+               tail=${special_module_line##*__}
+               sed -i "s/\/PATH\/TO\/IMAGE/${module_name}.${tail}/g" test_${module_name}.py
+           else
+               sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
+           fi
+           #运行python测试代码
+           $py_cmd test_${module_name}.py
+           if [ $? -ne 0 ]; then
+               excption=$(expr ${excption} + 1)
+               echo ${module_name} >> fail_modules.log
+           fi
        fi
    fi
    done
@@ -65,16 +68,19 @@ audio(){
        echo ${module_name} has been ignored......
    else
        module_rdme=${module}/README.md
-       echo ${module_rdme}
-       #生成python测试代码
-       $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
-       #运行python测试代码
-       sed -i "s/\/PATH\/TO\/AUDIO/doc_audio.wav/g" test_${module_name}.py
-       #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
-       $py_cmd test_${module_name}.py
-       if [ $? -ne 0 ]; then
-           excption=$(expr ${excption} + 1)
-           echo ${module_name} >> fail_modules.log
+       #判断module/readme是否存在，以此断定module是否真为模型module，而不是其他文件夹
+       if [ -e ${module_rdme} ];then
+           echo ${module_rdme}
+           #生成python测试代码
+           $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
+           #运行python测试代码
+           sed -i "s/\/PATH\/TO\/AUDIO/doc_audio.wav/g" test_${module_name}.py
+           #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
+           $py_cmd test_${module_name}.py
+           if [ $? -ne 0 ]; then
+               excption=$(expr ${excption} + 1)
+               echo ${module_name} >> fail_modules.log
+           fi
        fi
    fi
    done
@@ -91,16 +97,19 @@ video(){
        echo ${module_name} has been ignored......
    else
        module_rdme=${module}/README.md
-       echo ${module_rdme}
-       #生成python测试代码
-       $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
-       #运行python测试代码
-       sed -i "s/\/PATH\/TO\/VIDEO/doc_video.mp4/g" test_${module_name}.py
-       #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
-       $py_cmd test_${module_name}.py
-       if [ $? -ne 0 ]; then
-           excption=$(expr ${excption} + 1)
-           echo ${module_name} >> fail_modules.log
+       #判断module/readme是否存在，以此断定module是否真为模型module，而不是其他文件夹
+       if [ -e ${module_rdme} ];then
+           echo ${module_rdme}
+           #生成python测试代码
+           $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
+           #运行python测试代码
+           sed -i "s/\/PATH\/TO\/VIDEO/doc_video.mp4/g" test_${module_name}.py
+           #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
+           $py_cmd test_${module_name}.py
+           if [ $? -ne 0 ]; then
+               excption=$(expr ${excption} + 1)
+               echo ${module_name} >> fail_modules.log
+           fi
        fi
    fi
    done
@@ -117,14 +126,17 @@ text(){
        echo ${module_name} has been ignored......
    else
        module_rdme=${module}/README.md
-       echo ${module_rdme}
-       #生成python测试代码
-       $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
-       #运行python测试代码
-       $py_cmd test_${module_name}.py
-       if [ $? -ne 0 ]; then
-           excption=$(expr ${excption} + 1)
-           echo ${module_name} >> fail_modules.log
+       #判断module/readme是否存在，以此断定module是否真为模型module，而不是其他文件夹
+       if [ -e ${module_rdme} ];then
+           echo ${module_rdme}
+           #生成python测试代码
+           $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
+           #运行python测试代码
+           $py_cmd test_${module_name}.py
+           if [ $? -ne 0 ]; then
+               excption=$(expr ${excption} + 1)
+               echo ${module_name} >> fail_modules.log
+           fi
        fi
    fi
    done
