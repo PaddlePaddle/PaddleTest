@@ -1,0 +1,295 @@
+faster_rcnn_r101_1x_coco:
+class_id:0 confidence:0.9959 box:409.75,89.06,508.46,285.35
+class_id:0 confidence:0.9931 box:267.80,88.63,298.63,168.24
+class_id:0 confidence:0.9992 box:104.38,45.60,127.81,93.77
+class_id:0 confidence:0.9853 box:379.00,41.40,394.98,83.88
+class_id:0 confidence:0.9936 box:327.93,38.19,346.47,81.26
+class_id:0 confidence:0.9892 box:581.40,113.61,612.91,192.81
+class_id:0 confidence:0.9845 box:364.06,57.94,382.63,114.73
+class_id:0 confidence:0.9450 box:464.86,15.49,472.62,33.85
+class_id:0 confidence:0.9713 box:348.70,44.82,366.61,99.21
+class_id:0 confidence:0.9995 box:505.47,112.25,596.37,271.36
+class_id:0 confidence:0.8863 box:279.82,80.40,296.42,111.96
+class_id:0 confidence:0.6320 box:187.04,45.38,199.64,61.36
+class_id:0 confidence:0.9202 box:169.95,46.91,178.40,61.22
+class_id:0 confidence:0.8907 box:57.52,135.53,103.69,174.22
+class_id:0 confidence:0.9934 box:161.13,82.12,198.27,164.73
+class_id:0 confidence:0.6089 box:410.67,19.84,417.95,33.69
+class_id:0 confidence:0.9170 box:26.86,118.05,59.71,155.04
+class_id:2 confidence:0.5678 box:620.04,6.28,637.56,12.69
+class_id:24 confidence:0.7139 box:100.74,153.60,120.14,169.22
+class_id:33 confidence:0.9940 box:166.62,85.54,507.60,347.56
+class_id:33 confidence:0.9112 box:375.00,168.99,510.71,197.57
+class_id:37 confidence:0.5056 box:470.00,174.16,624.46,191.64
+class_id:56 confidence:0.7659 box:98.45,130.75,117.19,152.65
+class_id:56 confidence:0.9678 box:76.92,120.30,106.23,157.61end
+
+blazeface_1000e:
+class_id:0 confidence:0.9780 box:527.89,120.52,542.31,138.42end
+
+fairmot_hrnetv2_w18_dlafpn_30e_576x320:
+1,1,157.34727478027344,80.52080535888672,46.56593322753906,88.5606918334961,0.6888297200202942,-1,-1,-1
+1,2,375.6878662109375,38.7869758605957,22.066131591796875,47.39993667602539,0.6785279512405396,-1,-1,-1
+1,3,262.5400695800781,84.68167877197266,39.785491943359375,86.7588882446289,0.6659685373306274,-1,-1,-1
+1,4,575.0440673828125,112.30764770507812,41.29791259765625,86.23162841796875,0.6425749659538269,-1,-1,-1
+1,5,494.1971130371094,106.92204284667969,101.33706665039062,173.7296600341797,0.6390206217765808,-1,-1,-1
+1,6,105.00906372070312,45.04806137084961,23.410507202148438,49.62149429321289,0.606211245059967,-1,-1,-1
+1,7,400.1861572265625,84.52388000488281,107.22134399414062,201.1796112060547,0.5958881974220276,-1,-1,-1
+1,8,325.68939208984375,37.239349365234375,21.320770263671875,44.523399353027344,0.5860797762870789,-1,-1,-1
+1,9,346.1192321777344,42.79609298706055,25.871978759765625,58.45725631713867,0.5730664730072021,-1,-1,-1
+1,10,361.1427307128906,64.60802459716797,24.14889526367187,47.85381317138672,0.5709466934204102,-1,-1,-1end
+
+cascade_mask_rcnn_r50_fpn_gn_2x_coco:
+class_id:0 confidence:0.9834 box:378.55,40.25,395.32,83.79
+class_id:0 confidence:0.9836 box:328.07,38.77,347.01,80.70
+class_id:0 confidence:0.8469 box:26.49,117.92,58.64,153.02
+class_id:0 confidence:0.9931 box:505.97,112.73,598.51,271.15
+class_id:0 confidence:0.9777 box:414.84,89.37,507.34,285.25
+class_id:0 confidence:0.8456 box:464.69,15.33,471.90,33.66
+class_id:0 confidence:0.9532 box:364.40,58.09,381.39,114.36
+class_id:0 confidence:0.8767 box:57.52,135.03,103.61,173.56
+class_id:0 confidence:0.9341 box:169.58,47.41,178.56,61.31
+class_id:0 confidence:0.9594 box:187.12,44.55,200.08,61.24
+class_id:0 confidence:0.5269 box:409.96,20.06,418.14,33.88
+class_id:0 confidence:0.5910 box:279.65,80.68,296.32,109.46
+class_id:0 confidence:0.9905 box:104.95,45.12,128.04,93.71
+class_id:0 confidence:0.9678 box:267.61,89.89,298.62,169.15
+class_id:0 confidence:0.9302 box:582.74,113.21,612.53,177.46
+class_id:0 confidence:0.9694 box:348.22,44.13,367.02,98.63
+class_id:0 confidence:0.9880 box:163.91,81.60,198.25,166.50
+class_id:24 confidence:0.6455 box:3.02,150.82,38.60,172.94
+class_id:29 confidence:0.5524 box:508.92,273.95,520.34,279.14
+class_id:33 confidence:0.9600 box:164.78,83.80,521.86,341.51
+class_id:56 confidence:0.8497 box:75.10,121.68,104.26,157.57
+class_id:56 confidence:0.7318 box:98.50,130.68,117.79,156.34end
+
+cascade_rcnn_r50_fpn_1x_coco:
+class_id:0 confidence:0.9964 box:104.69,45.43,127.65,93.75
+class_id:0 confidence:0.9727 box:378.48,40.54,395.45,84.22
+class_id:0 confidence:0.9808 box:268.24,86.36,298.51,168.58
+class_id:0 confidence:0.9554 box:580.25,112.83,612.69,190.24
+class_id:0 confidence:0.9124 box:364.17,58.36,381.98,114.47
+class_id:0 confidence:0.9881 box:506.18,113.13,597.45,271.62
+class_id:0 confidence:0.8587 box:414.63,90.14,506.18,284.29
+class_id:0 confidence:0.5721 box:56.82,135.99,104.03,173.51
+class_id:0 confidence:0.7859 box:186.97,44.87,200.13,61.26
+class_id:0 confidence:0.8733 box:169.46,47.40,178.45,61.46
+class_id:0 confidence:0.7735 box:26.34,118.03,59.08,153.19
+class_id:0 confidence:0.6344 box:279.63,80.89,296.29,110.30
+class_id:0 confidence:0.9798 box:328.03,39.02,347.07,80.59
+class_id:0 confidence:0.9820 box:157.36,81.27,198.09,166.29
+class_id:0 confidence:0.8988 box:464.46,15.24,472.06,33.76
+class_id:0 confidence:0.9296 box:348.07,44.30,366.81,98.41
+class_id:2 confidence:0.5176 box:621.83,6.12,638.54,12.72
+class_id:29 confidence:0.6187 box:508.87,274.07,520.60,279.50
+class_id:33 confidence:0.9685 box:165.02,81.26,450.26,347.77
+class_id:56 confidence:0.6295 box:75.16,121.94,104.24,157.92
+class_id:56 confidence:0.5705 box:98.22,130.56,117.62,156.70end
+
+faster_rcnn_enhance_3x_coco:
+class_id:0 confidence:0.9969 box:159.81,82.55,198.56,167.57
+class_id:0 confidence:0.9959 box:268.75,80.97,299.53,168.80
+class_id:0 confidence:0.9917 box:410.93,88.82,501.30,281.54
+class_id:0 confidence:0.9966 box:378.87,41.92,395.39,83.70
+class_id:0 confidence:0.9905 box:328.52,39.20,345.96,80.95
+class_id:0 confidence:0.9809 box:351.76,44.46,367.64,100.03
+class_id:0 confidence:0.9919 box:104.88,46.25,127.87,92.85
+class_id:0 confidence:0.9510 box:363.74,60.92,382.35,113.58
+class_id:0 confidence:0.5723 box:25.57,117.49,60.60,153.41
+class_id:0 confidence:0.8616 box:169.31,47.51,179.17,62.10
+class_id:0 confidence:0.9069 box:581.59,114.08,614.16,198.83
+class_id:0 confidence:0.8413 box:186.69,43.74,200.60,62.99
+class_id:0 confidence:0.9306 box:505.76,110.89,573.07,272.00
+class_id:0 confidence:0.8976 box:464.59,15.05,472.49,34.14
+class_id:24 confidence:0.8844 box:57.66,153.06,102.66,173.85
+class_id:24 confidence:0.7033 box:2.48,152.03,38.39,173.40
+class_id:24 confidence:0.6004 box:4.65,134.89,39.45,152.56
+class_id:24 confidence:0.7889 box:97.04,152.75,119.37,169.06
+class_id:24 confidence:0.5132 box:85.53,155.17,104.30,170.93
+class_id:33 confidence:0.5903 box:463.22,174.14,623.67,198.34
+class_id:33 confidence:0.8952 box:160.39,88.90,420.83,343.57end
+
+faster_rcnn_hrnetv2p_w18_1x_coco:
+class_id:0 confidence:0.9952 box:160.53,80.66,198.88,167.58
+class_id:0 confidence:0.9982 box:408.54,88.61,500.32,284.43
+class_id:0 confidence:0.9923 box:380.12,39.95,395.24,84.54
+class_id:0 confidence:0.9873 box:268.31,83.89,299.04,167.79
+class_id:0 confidence:0.9920 box:328.45,39.19,347.28,80.67
+class_id:0 confidence:0.9659 box:350.43,44.05,367.83,99.30
+class_id:0 confidence:0.9579 box:363.03,58.25,381.69,114.93
+class_id:0 confidence:0.9700 box:186.95,44.23,200.70,61.39
+class_id:0 confidence:0.9533 box:169.43,47.75,178.64,61.14
+class_id:0 confidence:0.9965 box:504.22,114.50,598.17,272.46
+class_id:0 confidence:0.9587 box:464.42,14.79,471.85,34.40
+class_id:0 confidence:0.9901 box:582.75,113.89,612.20,178.40
+class_id:0 confidence:0.5718 box:398.87,24.75,405.74,33.76
+class_id:0 confidence:0.6328 box:479.44,23.12,485.70,33.07
+class_id:0 confidence:0.9975 box:104.57,46.34,127.14,93.53
+class_id:0 confidence:0.8924 box:25.68,117.60,60.41,153.57
+class_id:0 confidence:0.5797 box:279.87,80.95,296.64,110.10
+class_id:24 confidence:0.7219 box:58.19,153.06,101.38,173.69
+class_id:33 confidence:0.9813 box:167.56,101.00,417.88,344.76
+class_id:56 confidence:0.8752 box:99.78,130.61,116.67,156.53
+class_id:56 confidence:0.5949 box:74.17,121.16,109.39,156.62end
+
+faster_rcnn_r101_1x_coco:
+class_id:0 confidence:0.9959 box:409.75,89.06,508.46,285.35
+class_id:0 confidence:0.9931 box:267.80,88.63,298.63,168.24
+class_id:0 confidence:0.9992 box:104.38,45.60,127.81,93.77
+class_id:0 confidence:0.9853 box:379.00,41.40,394.98,83.88
+class_id:0 confidence:0.9936 box:327.93,38.19,346.47,81.26
+class_id:0 confidence:0.9892 box:581.40,113.61,612.91,192.81
+class_id:0 confidence:0.9845 box:364.06,57.94,382.63,114.73
+class_id:0 confidence:0.9450 box:464.86,15.49,472.62,33.85
+class_id:0 confidence:0.9713 box:348.70,44.82,366.61,99.21
+class_id:0 confidence:0.9995 box:505.47,112.25,596.37,271.36
+class_id:0 confidence:0.8863 box:279.82,80.40,296.42,111.96
+class_id:0 confidence:0.6320 box:187.04,45.38,199.64,61.36
+class_id:0 confidence:0.9202 box:169.95,46.91,178.40,61.22
+class_id:0 confidence:0.8907 box:57.52,135.53,103.69,174.22
+class_id:0 confidence:0.9934 box:161.13,82.12,198.27,164.73
+class_id:0 confidence:0.6089 box:410.67,19.84,417.95,33.69
+class_id:0 confidence:0.9170 box:26.86,118.05,59.71,155.04
+class_id:2 confidence:0.5678 box:620.04,6.28,637.56,12.69
+class_id:24 confidence:0.7139 box:100.74,153.60,120.14,169.22
+class_id:33 confidence:0.9940 box:166.62,85.54,507.60,347.56
+class_id:33 confidence:0.9112 box:375.00,168.99,510.71,197.57
+class_id:37 confidence:0.5056 box:470.00,174.16,624.46,191.64
+class_id:56 confidence:0.7659 box:98.45,130.75,117.19,152.65
+class_id:56 confidence:0.9678 box:76.92,120.30,106.23,157.61end
+
+faster_rcnn_r50_fpn_1x_sniper_visdrone:
+class_id:0 confidence:0.9960 box:104.47,44.46,128.81,94.38
+class_id:0 confidence:0.9940 box:378.44,39.88,396.11,83.66
+class_id:0 confidence:0.9893 box:326.71,37.52,346.20,80.60
+class_id:0 confidence:0.9338 box:348.75,44.38,368.66,99.60
+class_id:0 confidence:0.7741 box:155.54,118.19,175.62,167.60
+class_id:0 confidence:0.9566 box:28.37,118.05,61.41,152.41
+class_id:0 confidence:0.9476 box:363.01,59.28,382.68,112.38
+class_id:0 confidence:0.8705 box:464.07,14.49,472.42,34.14
+class_id:0 confidence:0.9418 box:583.50,113.65,612.09,185.96
+class_id:0 confidence:0.5537 box:409.38,17.56,419.20,44.06
+class_id:0 confidence:0.5953 box:418.48,88.86,456.55,141.88end
+
+faster_rcnn_res2net50_vb_26w_4s_fpn_1x_coco:
+class_id:0 confidence:0.9906 box:159.33,81.69,198.69,167.45
+class_id:0 confidence:0.9903 box:267.80,85.27,298.60,169.21
+class_id:0 confidence:0.9927 box:410.22,88.18,499.12,287.22
+class_id:0 confidence:0.9889 box:582.51,113.19,612.15,177.46
+class_id:0 confidence:0.9901 box:509.60,113.54,594.76,272.31
+class_id:0 confidence:0.9565 box:464.61,15.72,471.53,33.68
+class_id:0 confidence:0.9762 box:328.12,38.98,346.81,81.43
+class_id:0 confidence:0.9609 box:364.93,57.96,383.28,115.02
+class_id:0 confidence:0.8675 box:25.62,117.67,58.72,152.90
+class_id:0 confidence:0.9497 box:187.28,44.16,199.59,61.54
+class_id:0 confidence:0.9118 box:169.67,47.63,178.71,61.05
+class_id:0 confidence:0.6364 box:279.93,81.24,296.45,110.79
+class_id:0 confidence:0.9973 box:103.93,45.48,128.08,93.38
+class_id:0 confidence:0.9766 box:378.81,41.21,395.29,83.29
+class_id:0 confidence:0.9345 box:349.12,43.72,366.80,98.03
+class_id:24 confidence:0.5926 box:65.35,134.93,84.40,154.52
+class_id:24 confidence:0.5082 box:100.55,153.03,119.23,169.11
+class_id:24 confidence:0.5380 box:57.03,152.96,96.76,173.13
+class_id:33 confidence:0.9749 box:163.50,94.32,449.63,344.96
+class_id:56 confidence:0.8609 box:74.73,121.76,109.72,157.39end
+
+fcos_dcn_r50_fpn_1x_coco:
+class_id:0 confidence:0.6699 box:104.55,45.60,127.64,93.60
+class_id:0 confidence:0.5881 box:506.01,112.44,596.46,272.78
+class_id:0 confidence:0.5754 box:327.95,39.28,347.43,80.37
+class_id:0 confidence:0.5730 box:158.96,81.17,199.04,166.05
+class_id:0 confidence:0.5671 box:378.99,40.85,395.37,83.81
+class_id:0 confidence:0.5145 box:349.15,44.34,367.11,99.49end
+
+mask_rcnn_r50_1x_coco:
+class_id:0 confidence:0.9975 box:161.17,81.85,199.44,166.88
+class_id:0 confidence:0.9665 box:25.50,118.13,59.92,153.25
+class_id:0 confidence:0.9934 box:379.10,40.05,395.01,83.93
+class_id:0 confidence:0.9966 box:328.25,38.45,346.97,80.49
+class_id:0 confidence:0.9954 box:267.56,85.87,298.94,168.35
+class_id:0 confidence:0.9988 box:413.52,88.49,507.12,286.00
+class_id:0 confidence:0.9998 box:104.16,45.61,128.39,93.89
+class_id:0 confidence:0.9510 box:464.76,14.76,471.76,34.01
+class_id:0 confidence:0.9876 box:349.76,44.10,366.71,99.49
+class_id:0 confidence:0.9971 box:582.14,113.26,611.86,178.77
+class_id:0 confidence:0.9995 box:505.88,111.73,594.82,272.02
+class_id:0 confidence:0.9412 box:187.07,44.99,199.81,61.16
+class_id:0 confidence:0.9679 box:169.75,47.41,177.87,61.57
+class_id:0 confidence:0.9447 box:56.92,135.18,105.12,173.60
+class_id:0 confidence:0.7056 box:410.44,18.09,418.68,33.76
+class_id:0 confidence:0.9858 box:364.57,57.55,381.81,114.67
+class_id:0 confidence:0.6066 box:235.75,0.51,265.67,30.82
+class_id:0 confidence:0.8973 box:278.80,81.22,296.47,108.17
+class_id:0 confidence:0.5626 box:414.01,88.74,510.02,183.23
+class_id:0 confidence:0.9144 box:503.80,112.96,555.07,180.42
+class_id:2 confidence:0.5366 box:618.21,6.77,637.88,12.39
+class_id:24 confidence:0.5487 box:3.65,135.16,41.96,152.26
+class_id:24 confidence:0.5429 box:59.43,154.13,102.91,173.51
+class_id:33 confidence:0.9933 box:162.73,84.39,507.86,343.74
+class_id:33 confidence:0.8350 box:163.94,82.95,299.71,290.58
+class_id:35 confidence:0.5629 box:100.55,153.24,119.60,169.17
+class_id:56 confidence:0.9306 box:75.69,121.24,108.51,155.65
+class_id:56 confidence:0.7598 box:99.07,130.33,117.93,157.25
+class_id:56 confidence:0.6361 box:74.61,121.94,100.59,144.78end
+
+picodet_s_320_coco:
+class_id:0 confidence:0.8077 box:501.51,113.21,598.64,278.18
+class_id:0 confidence:0.7514 box:106.46,45.89,126.71,92.07
+class_id:0 confidence:0.7408 box:266.72,78.60,299.90,168.01
+class_id:0 confidence:0.7080 box:158.56,82.34,197.06,165.53
+class_id:0 confidence:0.6975 box:582.15,112.48,614.80,198.34
+class_id:0 confidence:0.6271 box:406.48,90.05,523.22,285.11
+class_id:0 confidence:0.6130 box:329.27,43.22,342.37,79.14
+class_id:0 confidence:0.6065 box:378.58,41.05,395.05,82.08
+class_id:33 confidence:0.5412 box:161.00,95.64,441.12,342.33end
+
+ppyolo_r50vd_dcn_1x_coco:
+class_id:0 confidence:0.9524 box:163.02,81.65,198.24,167.39
+class_id:0 confidence:0.9486 box:103.69,45.28,126.47,92.35
+class_id:0 confidence:0.9312 box:410.78,84.70,502.05,286.10
+class_id:0 confidence:0.8681 box:580.39,113.48,611.41,200.91
+class_id:56 confidence:0.8621 box:74.18,121.54,102.48,153.12
+class_id:33 confidence:0.8588 box:158.66,99.47,617.07,340.79
+class_id:0 confidence:0.8221 box:267.17,84.56,292.16,167.22
+class_id:0 confidence:0.7898 box:348.60,43.86,364.36,97.95
+class_id:0 confidence:0.7675 box:506.55,115.51,595.37,272.54
+class_id:0 confidence:0.7648 box:328.97,38.42,345.94,79.58
+class_id:0 confidence:0.6631 box:169.35,47.09,177.86,60.08
+class_id:0 confidence:0.6353 box:364.05,57.55,380.32,108.11
+class_id:0 confidence:0.6339 box:27.25,117.73,59.93,152.64
+class_id:0 confidence:0.6178 box:378.28,39.15,394.21,83.74
+class_id:0 confidence:0.5254 box:186.38,44.48,198.98,59.78end
+
+ssdlite_mobilenet_v1_300_coco:
+class_id:0 confidence:0.8632 box:107.31,46.01,124.44,93.72
+class_id:0 confidence:0.8542 box:161.46,82.92,195.91,164.16
+class_id:0 confidence:0.7798 box:358.50,42.49,376.29,103.79
+class_id:0 confidence:0.7654 box:267.10,80.76,297.98,166.73
+class_id:0 confidence:0.7077 box:582.90,112.80,614.15,185.42
+class_id:0 confidence:0.6874 box:376.25,38.36,393.20,107.97
+class_id:0 confidence:0.6005 box:328.21,40.05,342.09,80.24
+class_id:0 confidence:0.5257 box:393.53,88.69,510.45,283.44
+class_id:33 confidence:0.9516 box:166.59,100.09,598.05,345.85end
+
+ttfnet_darknet53_1x_coco:
+class_id:0 confidence:0.6023 box:380.10,40.31,395.24,84.07
+class_id:0 confidence:0.5876 box:329.03,38.73,345.64,80.14
+class_id:0 confidence:0.5675 box:267.78,79.97,299.53,168.57
+class_id:0 confidence:0.5572 box:102.76,45.67,129.07,94.21
+class_id:0 confidence:0.5380 box:582.36,113.98,614.13,176.84
+class_id:0 confidence:0.5301 box:160.25,82.24,196.34,165.69
+class_id:0 confidence:0.5232 box:464.92,15.59,472.40,33.82end
+
+yolov3_darknet53_270e_coco:
+class_id:0 confidence:0.9779 box:504.96,116.26,595.31,270.82
+class_id:0 confidence:0.9754 box:417.11,89.57,496.79,285.45
+class_id:0 confidence:0.9512 box:161.92,82.33,197.45,164.95
+class_id:0 confidence:0.9225 box:579.85,114.82,612.78,200.28
+class_id:0 confidence:0.8665 box:104.73,45.57,125.76,93.67
+class_id:0 confidence:0.7939 box:348.08,45.07,364.52,99.01
+class_id:0 confidence:0.6801 box:268.60,89.99,293.71,167.87
+class_id:0 confidence:0.6703 box:366.87,59.03,381.20,113.22
+class_id:0 confidence:0.5343 box:376.34,39.54,394.54,81.40
+class_id:0 confidence:0.5294 box:26.21,118.48,57.53,151.52
+class_id:33 confidence:0.9207 box:140.87,96.64,629.89,346.63
+class_id:56 confidence:0.8187 box:73.62,121.56,102.12,152.81end

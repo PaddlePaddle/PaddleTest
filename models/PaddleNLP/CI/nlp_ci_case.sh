@@ -77,7 +77,7 @@ time (python -m paddle.distributed.launch  run_glue.py \
     --warmup_steps 1256    \
     --logging_steps 1    \
     --save_steps 1   \
-    --output_dir ./tmp/$TASK_NAME/    \
+    --output_dir ./$TASK_NAME/    \
     --device gpu  >${log_path}/glue_${TASK_NAME}_train) >>${log_path}/glue_${TASK_NAME}_train 2>&1
 print_info $? glue_${TASK_NAME}_train
 }
@@ -206,20 +206,31 @@ sed -i "s/python-config/python3.7m-config/g" Makefile
 cd ${nlp_dir}/examples/language_model/gpt/
 cp -r /ssd1/paddlenlp/download/gpt/* ./
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-time (python -m paddle.distributed.launch  run_pretrain.py \
+time (python -m paddle.distributed.launch run_pretrain.py \
     --model_type gpt \
     --model_name_or_path gpt2-en \
     --input_dir "./pre_data"\
     --output_dir "output"\
     --weight_decay 0.01\
     --grad_clip 1.0\
-    --max_steps 100\
-    --save_steps 100\
+    --max_steps 2\
+    --save_steps 2\
     --decay_steps 320000\
     --warmup_rate 0.01\
     --micro_batch_size 2 \
     --device gpu >${log_path}/gpt_pretrain) >>${log_path}/gpt_pretrain 2>&1
 print_info $? gpt_pretrain
+time (
+python export_model.py \
+    --model_type=gpt-cn \
+    --model_path=gpt-cpm-large-cn \
+    --output_path=./infer_model/model >${log_path}/gpt_export) >>${log_path}/gpt_export 2>&1
+print_info $? gpt_export
+time (
+python deploy/python/inference.py \
+    --model_type gpt-cn \
+    --model_path ./infer_model/model >${log_path}/gpt_p_depoly) >>${log_path}/gpt_p_depoly 2>&1
+print_info $? gpt_p_depoly
 # test acc
 # cd ${nlp_dir}/tests/examples/gpt/
 # time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
@@ -249,11 +260,10 @@ print_info $? gpt_C_FT
 cd ${nlp_dir}/examples/language_model/gpt/faster_gpt/
 python infer.py \
     --model_name_or_path gpt2-medium-en \
-    --decoding_lib ${nlp_dir}/paddlenlp/ops/build_gpt_so/lib/libdecoding_op.so \
     --batch_size 1 \
     --topk 4 \
     --topp 0.0 \
-    --max_out_len 32 \
+    --max_length 32 \
     --start_token "<|endoftext|>" \
     --end_token "<|endoftext|>" \
     --temperature 1.0  >${log_path}/gpt_deploy_P_FT >>${log_path}/gpt_deploy_P_FT 2>&1
@@ -262,11 +272,9 @@ print_info $? gpt_deploy_P_FT
 python export_model.py \
     --model_name_or_path gpt2-medium-en \
     --decoding_lib ${nlp_dir}/paddlenlp/ops/build_gpt_so/lib/libdecoding_op.so \
-    --topk 1 \
+    --topk 4 \
     --topp 0.0 \
     --max_out_len 32 \
-    --start_token "<|endoftext|>" \
-    --end_token "<|endoftext|>" \
     --temperature 1.0 \
     --inference_model_dir ./infer_model/
 mv infer_model/ ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
@@ -591,39 +599,51 @@ cp -r /ssd1/paddlenlp/download/ctm/data ./
 time (python -m paddle.distributed.launch  train.py \
     --max_seq_len 128 \
     --batch_size 8   \
-    --learning_rate 1e-4 \
+    --learning_rate 5e-5 \
     --num_train_epochs 1 \
     --logging_steps 1 \
-    --save_steps 15 \
-    --output_dir ./tmp/ \
+    --save_steps 100 \
+    --output_dir ./output/ \
     --device "gpu"   >${log_path}/ernie-ctm_train) >>${log_path}/ernie-ctm_train 2>&1
 print_info $? ernie-ctm_train
-time (python -u eval.py \
-    --max_seq_len 128 \
-    --batch_size 8   \
-    --init_ckpt_dir ./tmp/ernie_ctm_ft_model_15.pdparams \
+export CUDA_VISIBLE_DEVICES=${cudaid1}
+time (python -m paddle.distributed.launch predict.py \
+    --batch_size 32   \
+    --params_path ./output/model_125/model_state.pdparams \
     --device "gpu"   >${log_path}/ernie-ctm_eval) >>${log_path}/ernie-ctm_eval 2>&1
 print_info $? ernie-ctm_eval
 }
 # 20 distilbert
 distilbert (){
-cd /ssd1/paddlenlp/download/distilbert/
-rm -rf tmp/
-time (python -u ./run_glue_paddle.py \
-    --model_type distilbert \
-    --seed 250 \
-    --model_name_or_path distilbert-base-uncased \
-    --task_name mrpc \
-    --max_seq_length 128 \
-    --batch_size 4   \
-    --learning_rate 2e-5 \
-    --num_train_epochs 1 \
-    --max_steps 1 \
-    --logging_steps 1 \
-    --save_steps 1 \
-    --output_dir ./tmp/mrpc/ \
-    --device gpu  >${log_path}/distilbert_train) >>${log_path}/distilbert_train 2>&1
-print_info $? distilbert_train
+cd ${nlp_dir}/examples/model_compression/distill_lstm/
+mv ${nlp_dir}/examples/benchmark/glue/SST-2/* ./
+time (
+    python small.py \
+    --task_name sst-2 \
+    --vocab_size 30522 \
+    --max_epoch 1 \
+    --batch_size 64 \
+    --lr 1.0 \
+    --dropout_prob 0.4 \
+    --output_dir small_models/SST-2 \
+    --save_steps 10000 \
+    --embedding_name w2v.google_news.target.word-word.dim300.en >${log_path}/distilbert_small_train) >>${log_path}/distilbert_small_train 2>&1
+print_info $? distilbert_small_train
+time (
+    python bert_distill.py \
+    --task_name sst-2 \
+    --vocab_size 30522 \
+    --max_epoch 1 \
+    --lr 1.0 \
+    --task_name sst-2 \
+    --dropout_prob 0.2 \
+    --batch_size 128 \
+    --model_name bert-base-uncased \
+    --output_dir distilled_models/SST-2 \
+    --teacher_dir ./best_model_1 \
+    --save_steps 1000 \
+    --embedding_name w2v.google_news.target.word-word.dim300.en >${log_path}/distilbert_teacher_train) >>${log_path}/distilbert_teacher_train 2>&1
+print_info $? distilbert_teacher_train
 }
 # 21 stacl
 stacl() {
@@ -800,7 +820,7 @@ sed -i 's/batch_size: 16/batch_size: 8/g' configs/enwik8.yaml
 sed -i 's/max_step: 400000/max_step: 3/g' configs/enwik8.yaml
 python -m paddle.distributed.launch  train.py --config ./configs/enwik8.yaml >${log_path}/transformer-xl_train_enwik8) >>${log_path}/transformer-xl_train_enwik8 2>&1
 print_info $? transformer-xl_train_enwik8
-time (sed -i 's/batch_size: 8/batch_size: 4/g' configs/enwik8.yaml
+time (sed -i 's/batch_size: 8/batch_size: 2/g' configs/enwik8.yaml
 sed -i 's#init_from_params: "./trained_models/step_final/"#init_from_params: "./trained_models/step_3/"#g' configs/enwik8.yaml
 python eval.py --config ./configs/enwik8.yaml >${log_path}/transformer-xl_eval_enwik8) >>${log_path}/transformer-xl_eval_enwik8 2>&1
 print_info $? transformer-xl_eval_enwik8
@@ -861,7 +881,7 @@ print_info $? ernie-csc_train
 sh run_sighan_predict.sh >${log_path}/ernie-csc_predict >>${log_path}/ernie-csc_predict 2>&1
 print_info $? ernie-csc_predict
 #export model
-python export_model.py --params_path checkpoints/best_model.pdparams --output_path ./infer_model/static_graph_params >${log_path}/ernie-csc_export >>${log_path}/ernie-csc_export 2>&1
+python export_model.py --params_path ./checkpoints/best_model.pdparams --output_path ./infer_model/static_graph_params >${log_path}/ernie-csc_export >>${log_path}/ernie-csc_export 2>&1
 print_info $? ernie-csc_export
 #python deploy
 python predict.py --model_file infer_model/static_graph_params.pdmodel --params_file infer_model/static_graph_params.pdiparams >${log_path}/ernie-csc_deploy >>${log_path}/ernie-csc_deploy 2>&1
@@ -881,7 +901,7 @@ python -m paddle.distributed.launch  train.py \
     --output_dir ./output \
     --device "gpu" >${log_path}/nptag_train >>${log_path}/nptag_train 2>&1
 print_info $? nptag_train
-export CUDA_VISIBLE_DEVICES=${cudaid1}
+export CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch  predict.py \
     --device=gpu \
     --params_path ./output/model_100/model_state.pdparams >${log_path}/nptag_predict >>${log_path}/nptag_predict 2>&1
@@ -923,12 +943,10 @@ for p0case in ${P0case_list[*]};do
     let case_num++
 done
 echo -e "\033[35m ---- end run P0case  \033[0m"
-
-cd ${nlp_dir}
+cd ${nlp_dir}/
+cp -r /ssd1/paddlenlp/bos/* ./
 tar -zcvf logs.tar logs/
 mkdir upload && mv logs.tar upload
-wget https://paddle-qa.bj.bcebos.com/paddlenlp/bos_conf.py
-wget https://paddle-qa.bj.bcebos.com/paddlenlp/upload.py
 python upload.py upload
 cd logs
 FF=`ls *_FAIL*|wc -l`
