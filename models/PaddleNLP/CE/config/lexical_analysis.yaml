@@ -375,4 +375,11 @@ EVAL:
         actived: True
         evaluation: "+"
         unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/eval_$XPU.log
