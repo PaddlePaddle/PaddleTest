@@ -44,7 +44,7 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/models_repo
-        cmd: python -m pip install ./ 
+        cmd: python -m pip install ./
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: data_proc.bat
