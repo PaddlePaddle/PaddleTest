@@ -18,7 +18,6 @@ if [[ ${model_flag} =~ 'CE' ]]; then
    unset FLAGS_use_virtual_memory_auto_growth
 fi
 
-
 # <-> model_flag CI是效率云 step0是clas分类 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
 #     pr是TC，clas是分类，rec是识别，single是单独模型debug
 # <-> pr_num   随机跑pr的模型数
