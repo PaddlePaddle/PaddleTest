@@ -97,6 +97,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 6.76378
+<<<<<<< HEAD
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -104,6 +105,15 @@ TRAIN: # 训练步骤
       train_eval:
         latest: True
         kpi_base: 8671165.56667
+=======
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 1.06047
+>>>>>>> upstream/develop
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -142,9 +152,15 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 1.06047
+<<<<<<< HEAD
         threshold: 0.00001
         actived: True
         evaluation: "-"
+=======
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+>>>>>>> upstream/develop
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/GhostNet_x1_3_eval.log
 

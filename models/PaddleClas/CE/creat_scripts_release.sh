@@ -24,9 +24,15 @@ sed -i "" s/ResNet50/$model/g ${model}_release.yaml
 
 # ResNet50	7.89285	0	linux单卡训练时 评估
 
+<<<<<<< HEAD
 # ResNet50	6.81299	0	windows训练
 # ResNet50	0.93661	0	windows评估 对于加载预训练模型的要单独评估
 # ResNet50  99.26064	windows训练时 评估
+=======
+# ResNet50	6.81317	0	windows训练
+# ResNet50	0.93661	0	windows评估 对于加载预训练模型的要单独评估
+# ResNet50  190.68218	windows训练时 评估
+>>>>>>> upstream/develop
 
 
 if [[ ${model} == 'AlexNet' ]]; then
@@ -36,9 +42,15 @@ if [[ ${model} == 'AlexNet' ]]; then
     sed -i "" "s|0.93207|7.01663|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|7.01663|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.1872|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.49466|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.49466|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.1872|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.49466|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.49466|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'alt_gvt_small' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -47,9 +59,15 @@ elif [[ ${model} == 'alt_gvt_small' ]]; then
     sed -i "" "s|0.93207|8.01854|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|8.01854|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.17661|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|8.1301|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|8.1301|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.17661|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|8.1301|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|8.1301|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'CSPDarkNet53' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -58,9 +76,15 @@ elif [[ ${model} == 'CSPDarkNet53' ]]; then
     sed -i "" "s|0.93207|7.62891|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|7.62891|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.81513|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.57732|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.57732|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.81513|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.57732|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.57732|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'DarkNet53' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -69,9 +93,15 @@ elif [[ ${model} == 'DarkNet53' ]]; then
     sed -i "" "s|0.93207|16.3759|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|16.3759|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.54048|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|48202.04587|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|48202.04587|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|5.86856|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|48202.04587|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|48202.04587|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
     # sed -i "" "s|6.48126|6.54448|g" ${model}_release.yaml #21116模型原因导致改动一次
     # sed -i "" "s|6.46063|6.71827|g" ${model}_release.yaml
 
@@ -82,9 +112,15 @@ elif [[ ${model} == 'DeiT_tiny_patch16_224' ]]; then
     sed -i "" "s|0.93207|7.64618|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|7.64618|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|5.86856|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.52042|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.52042|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|5.86856|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.52042|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.52042|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'DenseNet121' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -93,9 +129,15 @@ elif [[ ${model} == 'DenseNet121' ]]; then
     sed -i "" "s|0.93207|9.38165|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|9.38165|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.80973|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.83215|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.83215|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.80973|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.83215|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.83215|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'DLA46_c' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -104,9 +146,15 @@ elif [[ ${model} == 'DLA46_c' ]]; then
     sed -i "" "s|0.93207|11.79067|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|11.79067|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.81275|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.40616|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.40616|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.81275|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.40616|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.40616|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'DPN107' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -115,9 +163,15 @@ elif [[ ${model} == 'DPN107' ]]; then
     sed -i "" "s|0.93207|12.88681|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|12.88681|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.53907|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.59987|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.59987|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.53907|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.59987|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.59987|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'EfficientNetB0' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -126,9 +180,15 @@ elif [[ ${model} == 'EfficientNetB0' ]]; then
     sed -i "" "s|0.93207|61.39692|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|61.39692|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|17.13339|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|35.08266|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|35.08266|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|17.13339|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|35.08266|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|35.08266|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'GhostNet_x1_3' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -137,9 +197,15 @@ elif [[ ${model} == 'GhostNet_x1_3' ]]; then
     sed -i "" "s|0.93207|1.05573|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|8.21487|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.76378|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|1.06047|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|8671165.56667|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.76378|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|1.06047|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|1.06047|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'GoogLeNet' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -148,9 +214,15 @@ elif [[ ${model} == 'GoogLeNet' ]]; then
     sed -i "" "s|0.93207|11.1699|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|11.1699|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|10.95292|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|11.14783|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|11.14783|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|10.95292|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|11.14783|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|11.14783|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'HarDNet68' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -159,9 +231,15 @@ elif [[ ${model} == 'HarDNet68' ]]; then
     sed -i "" "s|0.93207|7.61132|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|7.61132|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.81291|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.40502|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.40502|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.81291|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.40502|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.40502|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'HRNet_W18_C' ]]; then
     sed -i "" "s|P0|P0|g" ${model}_release.yaml #P0/1
@@ -170,9 +248,15 @@ elif [[ ${model} == 'HRNet_W18_C' ]]; then
     sed -i "" "s|0.93207|11|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|11|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.81282|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.45477|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.45477|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.81282|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.45477|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.45477|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
     sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}_release.yaml #bodong
     sed -i "" 's|"="|"-"|g' ${model}_release.yaml
 
@@ -183,9 +267,15 @@ elif [[ ${model} == 'InceptionV4' ]]; then
     sed -i "" "s|0.93207|14.40188|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|14.40188|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.53176|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|305.42481|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|305.42481|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.5685|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|117.75373|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|117.75373|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'LeViT_128S' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -195,18 +285,30 @@ elif [[ ${model} == 'LeViT_128S' ]]; then
     # sed -i "" "s|0.93207|1.2112|g" ${model}_release.yaml #linux_eval
     # sed -i "" "s|7.89285|10.03219|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     # sed -i "" "s|6.81299|6.81299|g" ${model}_release.yaml #windows_train
     # sed -i "" "s|0.93661|99.26064|g" ${model}_release.yaml #windows_eval
     # sed -i "" "s|99.26064|99.26064|g" ${model}_release.yaml #windows_train_eval
+=======
+    # sed -i "" "s|6.81317|6.81317|g" ${model}_release.yaml #windows_train
+    # sed -i "" "s|0.93661|190.68218|g" ${model}_release.yaml #windows_eval
+    # sed -i "" "s|190.68218|190.68218|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
     sed -i "" "s|6.48126|0.0|g" ${model}_release.yaml #linux_train_单卡
     sed -i "" "s|6.46063|0.0|g" ${model}_release.yaml #linux_train_多卡
     sed -i "" "s|0.93207|0.0|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|0.0|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|0.0|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|0.0|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|0.0|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|0.0|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|0.0|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|0.0|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
     sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}_release.yaml #bodong
     sed -i "" 's|"="|"-"|g' ${model}_release.yaml
@@ -220,9 +322,15 @@ elif [[ ${model} == 'MixNet_M' ]]; then
     sed -i "" "s|0.93207|25.94224|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|25.94224|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.8129|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|3482.32408|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|3482.32408|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.8129|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|3482.32408|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|3482.32408|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'MobileNetV1' ]]; then
     sed -i "" "s|P0|P0|g" ${model}_release.yaml #P0/1
@@ -231,9 +339,15 @@ elif [[ ${model} == 'MobileNetV1' ]]; then
     sed -i "" "s|0.93207|8.47801|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|8.47801|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.79994|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.50601|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.50601|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.79994|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.50601|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.50601|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'MobileNetV2' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -242,9 +356,15 @@ elif [[ ${model} == 'MobileNetV2' ]]; then
     sed -i "" "s|0.93207|7.80226|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|7.80226|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.49871|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.11413|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.11413|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.49871|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.11413|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.11413|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'MobileNetV3_large_x1_0' ]]; then
     sed -i "" "s|P0|P0|g" ${model}_release.yaml #P0/1
@@ -253,9 +373,15 @@ elif [[ ${model} == 'MobileNetV3_large_x1_0' ]]; then
     sed -i "" "s|0.93207|1.06482|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|7.00676|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.89218|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|1.06496|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|9.80644|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.89211|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|1.06495|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|10.93849|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'pcpvt_small' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -264,9 +390,15 @@ elif [[ ${model} == 'pcpvt_small' ]]; then
     sed -i "" "s|0.93207|8.0191|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|8.0191|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.16763|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.77322|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.77322|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.16763|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.77322|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.77322|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'PPLCNet_x1_0' ]]; then
     sed -i "" "s|P0|P0|g" ${model}_release.yaml #P0/1
@@ -275,9 +407,15 @@ elif [[ ${model} == 'PPLCNet_x1_0' ]]; then
     sed -i "" "s|0.93207|1.23323|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|6.95113|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.89862|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|1.24171|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|9.81729|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.89859|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|1.24172|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|9.8212|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'RedNet50' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -286,9 +424,15 @@ elif [[ ${model} == 'RedNet50' ]]; then
     sed -i "" "s|0.93207|0.94408|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|0.0|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.81482|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|0.93756|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|0.0|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.81482|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|0.93756|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|0.0|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
     sed -i "" "s|train_eval|exit_code|g" ${model}_release.yaml #训练后评估失败，改为搜集退出码exit_code
 
 elif [[ ${model} == 'Res2Net50_26w_4s' ]]; then
@@ -298,9 +442,15 @@ elif [[ ${model} == 'Res2Net50_26w_4s' ]]; then
     sed -i "" "s|0.93207|8.275|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|8.275|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.53976|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|44.75927|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|44.75927|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.53976|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|44.75927|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|44.75927|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'ResNeSt101' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -309,9 +459,15 @@ elif [[ ${model} == 'ResNeSt101' ]]; then
     sed -i "" "s|0.93207|32.30891|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|32.30891|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.53481|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|1640.71117|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|1640.71117|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.53481|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|1640.71117|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|1640.71117|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
     # sed -i "" "s|6.48126|6.62913|g" ${model}_release.yaml 211116模型原因导致改动一次
     # sed -i "" "s|6.46063|6.71608|g" ${model}_release.yaml
 
@@ -322,9 +478,15 @@ elif [[ ${model} == 'ResNeSt50_fast_1s1x64d' ]]; then
     sed -i "" "s|0.93207|21.06101|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|21.06101|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.5358|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|10.16325|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|10.16325|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.5358|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|10.16325|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|10.16325|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'ResNet50_vd' ]]; then
     sed -i "" "s|P0|P0|g" ${model}_release.yaml #P0/1
@@ -333,9 +495,15 @@ elif [[ ${model} == 'ResNet50_vd' ]]; then
     sed -i "" "s|0.93207|0.89191|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|13.1098|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.53573|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|0.88912|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|228.34249|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.53586|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|0.88911|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|159.97825|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
     sed -i "" "s|ResNet50_vd_vd|ResNet50_vd|g" ${model}_release.yaml #replace
 
 elif [[ ${model} == 'ResNeXt101_32x8d_wsl' ]]; then
@@ -345,9 +513,15 @@ elif [[ ${model} == 'ResNeXt101_32x8d_wsl' ]]; then
     sed -i "" "s|0.93207|11.77823|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|11.77823|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.81302|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|83.39121|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|83.39121|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.81302|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|83.39121|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|83.39121|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'ResNeXt152_64x4d' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -356,9 +530,15 @@ elif [[ ${model} == 'ResNeXt152_64x4d' ]]; then
     sed -i "" "s|0.93207|9.20373|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|9.20373|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.82732|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|111.75593|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|111.75593|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.82732|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|111.75593|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|111.75593|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'ReXNet_1_0' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -367,9 +547,15 @@ elif [[ ${model} == 'ReXNet_1_0' ]]; then
     sed -i "" "s|0.93207|8.71133|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|8.71133|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.31863|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|40.83091|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|40.83091|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.31863|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|40.83091|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|40.83091|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'SE_ResNet18_vd' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -378,9 +564,15 @@ elif [[ ${model} == 'SE_ResNet18_vd' ]]; then
     sed -i "" "s|0.93207|8.25886|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|8.25886|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.53548|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|23.05271|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|23.05271|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.53548|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|23.05271|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|23.05271|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'ShuffleNetV2_x1_0' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -389,9 +581,15 @@ elif [[ ${model} == 'ShuffleNetV2_x1_0' ]]; then
     sed -i "" "s|0.93207|7.36623|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|7.36623|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|7.67026|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|8.20635|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|8.20635|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|7.67026|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|8.20635|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|8.20635|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'SqueezeNet1_0' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -400,9 +598,15 @@ elif [[ ${model} == 'SqueezeNet1_0' ]]; then
     sed -i "" "s|0.93207|7.06601|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|7.06601|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.71265|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.00466|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.00466|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.71265|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.00466|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.00466|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 # elif [[ ${model} == 'SwinTransformer_large_patch4_window12_384' ]]; then
 #     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -411,9 +615,15 @@ elif [[ ${model} == 'SqueezeNet1_0' ]]; then
 #     sed -i "" "s|0.93207|7.7453|g" ${model}_release.yaml #linux_eval
 #     sed -i "" "s|7.89285|7.7453|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
 #     sed -i "" "s|6.81299|6.81299|g" ${model}_release.yaml #windows_train
 #     sed -i "" "s|0.93661|99.26064|g" ${model}_release.yaml #windows_eval
 #     sed -i "" "s|99.26064|99.26064|g" ${model}_release.yaml #windows_train_eval
+=======
+#     sed -i "" "s|6.81317|6.81317|g" ${model}_release.yaml #windows_train
+#     sed -i "" "s|0.93661|190.68218|g" ${model}_release.yaml #windows_eval
+#     sed -i "" "s|190.68218|190.68218|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 #     sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}_release.yaml #bodong
     # sed -i "" 's|"="|"-"|g' ${model}_release.yaml
 
@@ -424,9 +634,15 @@ elif [[ ${model} == 'SwinTransformer_tiny_patch4_window7_224' ]]; then
     sed -i "" "s|0.93207|8.58133|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|8.58133|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.16726|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.51868|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.51868|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.16726|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.51868|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.51868|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
     sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}_release.yaml #bodong
     sed -i "" 's|"="|"-"|g' ${model}_release.yaml
 
@@ -438,18 +654,30 @@ elif [[ ${model} == 'TNT_small' ]]; then
     # sed -i "" "s|0.93207|13.37703|g" ${model}_release.yaml #linux_eval
     # sed -i "" "s|7.89285|13.37703|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     # sed -i "" "s|6.81299|6.81299|g" ${model}_release.yaml #windows_train
     # sed -i "" "s|0.93661|99.26064|g" ${model}_release.yaml #windows_eval
     # sed -i "" "s|99.26064|99.26064|g" ${model}_release.yaml #windows_train_eval
+=======
+    # sed -i "" "s|6.81317|6.81317|g" ${model}_release.yaml #windows_train
+    # sed -i "" "s|0.93661|190.68218|g" ${model}_release.yaml #windows_eval
+    # sed -i "" "s|190.68218|190.68218|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
     sed -i "" "s|6.48126|0.0|g" ${model}_release.yaml #linux_train_单卡
     sed -i "" "s|6.46063|0.0|g" ${model}_release.yaml #linux_train_多卡
     sed -i "" "s|0.93207|0.0|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|0.0|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|0.0|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|0.0|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|0.0|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|0.0|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|0.0|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|0.0|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
     sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}_release.yaml #bodong
     sed -i "" 's|"="|"-"|g' ${model}_release.yaml
@@ -463,9 +691,15 @@ elif [[ ${model} == 'VGG11' ]]; then
     sed -i "" "s|0.93207|6.94173|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|6.94173|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.67848|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.05581|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|7.05581|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.67848|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|7.05581|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|7.05581|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -475,9 +709,15 @@ elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
     # sed -i "" "s|0.93207|166659050.24|g" ${model}_release.yaml #linux_eval
     # sed -i "" "s|7.89285|166659044.608|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     # sed -i "" "s|6.81299|1653146872261.061|g" ${model}_release.yaml #windows_train
     # sed -i "" "s|0.93661|3955238406280.53320|g" ${model}_release.yaml #windows_eval
     # sed -i "" "s|99.26064|3955238406280.53320|g" ${model}_release.yaml #windows_train_eval
+=======
+    # sed -i "" "s|6.81317|1653146872261.061|g" ${model}_release.yaml #windows_train
+    # sed -i "" "s|0.93661|3955238406280.53320|g" ${model}_release.yaml #windows_eval
+    # sed -i "" "s|190.68218|3955238406280.53320|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 
     sed -i "" "s|6.48126|0.0|g" ${model}_release.yaml #linux_train_单卡
@@ -485,9 +725,15 @@ elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
     sed -i "" "s|0.93207|0.0|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|0.0|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|0.0|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|0.0|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|0.0|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|0.0|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|0.0|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|0.0|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
     sed -i "" "s|loss|exit_code|g" ${model}_release.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
     sed -i "" "s|train_eval|exit_code|g" ${model}_release.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
@@ -499,9 +745,15 @@ elif [[ ${model} == 'Xception41_deeplab' ]]; then
     sed -i "" "s|0.93207|9.87746|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|9.87746|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.57439|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|9.81792|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|9.81792|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.57439|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|9.81792|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|9.81792|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 
 elif [[ ${model} == 'Xception71' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
@@ -510,9 +762,15 @@ elif [[ ${model} == 'Xception71' ]]; then
     sed -i "" "s|0.93207|11.7211|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|11.7211|g" ${model}_release.yaml #linux_train_eval
 
+<<<<<<< HEAD
     sed -i "" "s|6.81299|6.60048|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|73.75383|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|99.26064|73.75383|g" ${model}_release.yaml #windows_train_eval
+=======
+    sed -i "" "s|6.81317|6.60048|g" ${model}_release.yaml #windows_train
+    sed -i "" "s|0.93661|73.75383|g" ${model}_release.yaml #windows_eval
+    sed -i "" "s|190.68218|73.75383|g" ${model}_release.yaml #windows_train_eval
+>>>>>>> upstream/develop
 fi
 
 cd ..

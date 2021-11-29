@@ -97,9 +97,15 @@ TRAIN: # 训练步骤
       exit_code:
         latest: True
         kpi_base: 0.0
+<<<<<<< HEAD
         threshold: 0.00001
         actived: True
         evaluation: "-"
+=======
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+>>>>>>> upstream/develop
         unit_repr: None
       exit_code:
         latest: True
@@ -142,9 +148,15 @@ EVAL: # 训练步骤
       exit_code:
         latest: True
         kpi_base: 0.0
+<<<<<<< HEAD
         threshold: 0.00001
         actived: True
         evaluation: "-"
+=======
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+>>>>>>> upstream/develop
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_eval.log
 
