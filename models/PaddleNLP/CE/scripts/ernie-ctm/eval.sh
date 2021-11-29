@@ -25,7 +25,7 @@ cd examples/text_to_knowledge/ernie-ctm
 python -u eval.py \
     --max_seq_len 128 \
     --batch_size 32   \
-    --init_ckpt_dir ./tmp/ernie_ctm_ft_model_10.pdparams \
+    --init_ckpt_dir ./tmp/ernie_ctm_ft_model_100.pdparams \
     --device $1 > $log_path/eval_$1.log 2>&1
 
 print_info $? eval_$1
