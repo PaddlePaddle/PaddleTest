@@ -1,0 +1,7 @@
+configs/rec/ch_ppocr_v2.0/rec_chinese_common_train_v2.0.yml
+configs/rec/ch_ppocr_v2.0/rec_chinese_lite_train_v2.0.yml
+configs/rec/multi_language/rec_en_number_lite_train.yml
+configs/rec/multi_language/rec_french_lite_train.yml
+configs/rec/multi_language/rec_german_lite_train.yml
+configs/rec/multi_language/rec_japan_lite_train.yml
+configs/rec/multi_language/rec_korean_lite_train.yml
