@@ -22,8 +22,10 @@ if !errorlevel! equ 0 (
     type %log_path%\!model!_train.log | findstr Avg
     type %log_path%\!model!_train.log | findstr exit_code
     type %log_path%\!model!_train.log | findstr Train | findstr 5/5 | findstr Avg > tmp.log
-    type %log_path%\!model!_train.log | findstr Eval | findstr Avg >> tmp.log
-    %sed% -i 2s/"loss"/"train_eval"/ tmp.log
+    type %log_path%\!model!_train.log | findstr Eval | findstr Avg > tmp1.log
+    %sed% -i s/"loss"/"train_eval"/ tmp1.log
+    type tmp1.log
+    type tmp1.log >> tmp.log
     type %log_path%\!model!_train.log | findstr exit_code
     type %log_path%\!model!_train.log | findstr exit_code >> tmp.log
     (for /f "delims=" %%a in ('type "tmp.log"') do @set/p=" , %%a"<nul)> ..\%log_path%\!model!_train.log
