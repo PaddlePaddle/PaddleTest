@@ -97,7 +97,7 @@ TRAIN: # 训练步骤
       exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -142,7 +142,7 @@ EVAL: # 训练步骤
       exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None

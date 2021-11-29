@@ -97,9 +97,9 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 6.81482
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
       exit_code:
         latest: True
@@ -142,9 +142,9 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.93756
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/RedNet50_eval.log
 

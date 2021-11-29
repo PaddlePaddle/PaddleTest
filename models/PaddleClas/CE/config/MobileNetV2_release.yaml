@@ -97,9 +97,9 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 6.49871
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
@@ -142,9 +142,9 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 7.11413
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MobileNetV2_eval.log
 

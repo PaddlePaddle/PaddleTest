@@ -97,9 +97,9 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 6.53976
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
@@ -142,9 +142,9 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 44.75927
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/Res2Net50_26w_4s_eval.log
 

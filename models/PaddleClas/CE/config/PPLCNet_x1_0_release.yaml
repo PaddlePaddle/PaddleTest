@@ -96,14 +96,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.89859
-        threshold: 0.0
+        kpi_base: 6.89862
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 9.8212
+        kpi_base: 9.81729
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -141,10 +141,10 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.24172
-        threshold: 0.0
+        kpi_base: 1.24171
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_eval.log
 
