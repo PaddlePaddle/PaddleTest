@@ -8,7 +8,6 @@ code_path=$cur_path/../../models_repo/examples/text_to_knowledge/ernie-ctm/
 #临时环境更改
 cd $root_path/models_repo && ls
 cd $code_path
-#获取数据&模型逻辑
-#数据处理逻辑
-wget https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/wordtag_dataset.tar.gz
-tar -zxvf wordtag_dataset.tar.gz
+#获取数据&模型逻辑，数据处理逻辑
+wget https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/wordtag_dataset_v2.tar.gz
+tar -zxvf wordtag_dataset_v2.tar.gz

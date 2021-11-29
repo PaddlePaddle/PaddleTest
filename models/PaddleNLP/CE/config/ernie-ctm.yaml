@@ -29,8 +29,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -39,7 +37,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 124.396538
+        kpi_base: 26.07171
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -47,7 +45,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train_single_$XPU.log
 
   -
-    priority: p1
+    priority: p2
     tag: linux_dy_gpu2
     run:
       -
