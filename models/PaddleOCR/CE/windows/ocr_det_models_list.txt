@@ -1,0 +1,2 @@
+configs/det/det_mv3_db.yml
+configs/det/det_r50_vd_db.yml

@@ -127,6 +127,8 @@ if [[ ${1} =~ "pr" ]];then
    shuf -n 3 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
 echo "######  diff models_list"
+cp models_list models_list_backup
+cat models_list_backup | sort | uniq > models_list  #去重复
 wc -l models_list
 cat models_list
 
@@ -169,7 +171,10 @@ fi
 fi
 
 # eval
-if [[ ${model} =~ "sast" ]] || [[ ${model} =~ "det_mv3_east" ]];then
+if [[ ${model} =~ "det_r50_vd_east" ]];then   #eval时间不稳定
+   sleep 0.01
+
+elif [[ ${model} =~ "sast" ]] || [[ ${model} =~ "det_mv3_east" ]];then
    head -5 ./train_data/icdar2015/text_localization/test_icdar2015_label.txt > test_icdar2015_label_5.txt
    sed -i "s#./train_data/icdar2015/text_localization/test_icdar2015_label.txt#./test_icdar2015_label_5.txt#g" $line
    python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/"$model"_v2.0_train/best_accuracy" > $log_path/eval/$model.log 2>&1
@@ -246,7 +251,7 @@ else
    echo -e "\033[31m export_model of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 
-# predict屏蔽sast两个模型该功能
+# predict
 if [ ${category} == "rec" ];then
 echo "######  rec"
 if [[ $(echo $model | grep -c "chinese") -eq 0 ]];then
@@ -358,7 +363,7 @@ echo "######  det"
 if [[ $(echo $model | grep -c "ch") -eq 0 ]];then
 echo "######  none chinese"
 if [[ ${model} =~ "sast" ]];then
-   sleep 0.01
+   python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="pretrain_models/models_inference/"$model"_v2.0_train" --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 else
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"${model} --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
