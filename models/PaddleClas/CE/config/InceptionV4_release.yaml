@@ -96,7 +96,6 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-<<<<<<< HEAD
         kpi_base: 6.53176
         threshold: 0.00001
         actived: True
@@ -105,16 +104,6 @@ TRAIN: # 训练步骤
       train_eval:
         latest: True
         kpi_base: 305.42481
-=======
-        kpi_base: 6.5685
-        threshold: 0.0
-        actived: True
-        evaluation: "="
-        unit_repr: None
-      train_eval:
-        latest: True
-        kpi_base: 117.75373
->>>>>>> upstream/develop
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -152,17 +141,10 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-<<<<<<< HEAD
         kpi_base: 305.42481
         threshold: 0.00001
         actived: True
         evaluation: "-"
-=======
-        kpi_base: 117.75373
-        threshold: 0.0
-        actived: True
-        evaluation: "="
->>>>>>> upstream/develop
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/InceptionV4_eval.log
 
