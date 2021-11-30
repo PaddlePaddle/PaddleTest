@@ -1,4 +1,4 @@
-MODEL: "slim_st_quant_aware_v1" # 模型名
+MODEL: "st_quant_aware_mv1" # 模型名
 PRIORITY: P0
 GIT:
   addr: $REPO_PaddleSlim
@@ -42,15 +42,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc_top1:
         latest: True
-        kpi_base: 0.7048
-        threshold: 0
+        kpi_base: 0.703192
+        threshold: 0.000001
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.8938
-        threshold: 0
+        kpi_base: 0.910391
+        threshold: 0.000001
         actived: True
         evaluation: "+"
         unit_repr: None

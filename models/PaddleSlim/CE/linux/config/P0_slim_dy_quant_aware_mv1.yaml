@@ -1,4 +1,4 @@
-MODEL: "slim_dy_quant_v1" # 模型名
+MODEL: "dy_quant_aware_mv1" # 模型名
 PRIORITY: P0
 GIT:
   addr: $REPO_PaddleSlim
@@ -42,14 +42,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc_top1:
         latest: True
-        kpi_base: 0.718668
+        kpi_base: 0.703425
         threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.896563
+        kpi_base: 0.893329
         threshold: 0
         actived: True
         evaluation: "+"
@@ -75,14 +75,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc_top1:
         latest: True
-        kpi_base: 0.697867
+        kpi_base: 0.692007
         threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.899639
+        kpi_base: 0.891376
         threshold: 0
         actived: True
         evaluation: "+"
