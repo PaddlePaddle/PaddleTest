@@ -71,7 +71,7 @@ FINETUNE:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_finetune.sh ernie_gen True 300 2 test_module paddle_qa
+        cmd: nlp_finetune.bat ernie_gen True 300 2 test_module paddle_qa
 
     kpis:
       exit_code:
@@ -156,7 +156,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh test_module True 5
+        cmd: nlp_predict.bat test_module True 5
     kpis:
       exit_code:
         latest: True
@@ -177,7 +177,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh test_module False 5
+        cmd: nlp_predict.bat test_module False 5
     kpis:
       exit_code:
         latest: True
