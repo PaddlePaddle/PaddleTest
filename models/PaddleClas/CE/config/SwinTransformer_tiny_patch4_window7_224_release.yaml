@@ -97,11 +97,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 6.16726
-<<<<<<< HEAD
         threshold: 0.10001
-=======
-        threshold: 0.1
->>>>>>> upstream/develop
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -146,11 +142,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 7.51868
-<<<<<<< HEAD
         threshold: 0.10001
-=======
-        threshold: 0.1
->>>>>>> upstream/develop
         actived: True
         evaluation: "-"
         unit_repr: None

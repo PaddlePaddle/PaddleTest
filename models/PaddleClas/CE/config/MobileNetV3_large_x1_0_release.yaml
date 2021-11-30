@@ -96,7 +96,6 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-<<<<<<< HEAD
         kpi_base: 6.89218
         threshold: 0.00001
         actived: True
@@ -105,16 +104,6 @@ TRAIN: # 训练步骤
       train_eval:
         latest: True
         kpi_base: 9.80644
-=======
-        kpi_base: 6.89211
-        threshold: 0.0
-        actived: True
-        evaluation: "="
-        unit_repr: None
-      train_eval:
-        latest: True
-        kpi_base: 10.93849
->>>>>>> upstream/develop
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -152,17 +141,10 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-<<<<<<< HEAD
         kpi_base: 1.06496
         threshold: 0.00001
         actived: True
         evaluation: "-"
-=======
-        kpi_base: 1.06495
-        threshold: 0.0
-        actived: True
-        evaluation: "="
->>>>>>> upstream/develop
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MobileNetV3_large_x1_0_eval.log
 
