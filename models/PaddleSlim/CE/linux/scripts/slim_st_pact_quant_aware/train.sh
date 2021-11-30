@@ -15,6 +15,7 @@ log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #临时环境更改
 
+export FLAGS_cudnn_deterministic=True
 
 #访问RD程序
 print_info(){
@@ -42,8 +43,9 @@ if [ "$1" = "no_pact" ];then #单卡
 elif [ "$1" = "use_pact" ];then
     python train.py --model MobileNetV3_large_x1_0 \
     --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
-    --num_epochs 1 --lr 0.0001 --use_pact True --batch_size 64 --lr_strategy=piecewise_decay \
-    --step_epochs 1 --l2_decay 1e-5 >${log_path}/$2.log 2>&1
+    --num_epochs 1 --lr 0.0001 --use_pact True  \
+    --step_epochs 30 --l2_decay 1e-5 \
+    --ce_test=True >${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "load" ];then  # load
     python train.py --model MobileNetV3_large_x1_0 \

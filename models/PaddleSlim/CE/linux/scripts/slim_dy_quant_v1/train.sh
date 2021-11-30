@@ -15,6 +15,7 @@ log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #临时环境更改
 
+export FLAGS_cudnn_deterministic=True
 
 #访问RD程序
 print_info(){
@@ -38,20 +39,20 @@ cd $code_path
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     python train.py --model='mobilenet_v1' \
     --pretrained_model '../../pretrain/MobileNetV1_pretrained' \
-    --num_epochs 1 \
-    --batch_size 128 > ${log_path}/$2.log 2>&1
+    --num_epochs 30 \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
     python -m paddle.distributed.launch  \
     --log_dir="quant_v1_linux_dy_gpu2_dist_log" train.py \
     --model='mobilenet_v1' \
     --pretrained_model '../../pretrain/MobileNetV1_pretrained' \
-    --num_epochs 1 \
-    --batch_size 128 > ${log_path}/$2.log 2>&1
+    --num_epochs 30 \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
     mv $code_path/quant_v1_linux_dy_gpu2_dist_log $log_path/$2_dist_log
 
-elif [ "$1" = "linux_dy_con_gpu2" ];then # 多卡
+elif [ "$1" = "linux_dy_con_gpu2" ];then # 收敛性
     python -m paddle.distributed.launch  \
     --log_dir="quant_v1_linux_dy_gpu2_dist_log" train.py \
     --lr=0.001 \
