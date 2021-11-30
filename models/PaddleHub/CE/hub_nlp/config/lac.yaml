@@ -1,4 +1,4 @@
-MODEL: "lac" # 模型名称
+MODEL: "lac" #模型名称
 PRIORITY: P0
 GIT:
   addr: $REPO_PaddleHub
