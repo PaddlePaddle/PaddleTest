@@ -92,6 +92,7 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: mac_dy_cpu_24
+    run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash 24_train.sh $XPU
