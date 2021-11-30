@@ -585,8 +585,8 @@ SEQUENCE_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.638697
-        threshold: 0.05
+        kpi_base: 0.754475
+        threshold: 0.2
         actived: True
         evaluation: "-"
         unit_repr: "s"
