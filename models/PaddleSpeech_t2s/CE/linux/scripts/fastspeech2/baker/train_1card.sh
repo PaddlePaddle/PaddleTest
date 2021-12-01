@@ -3,12 +3,14 @@ cd ${Project_path}
 
 rm -rf ~/datasets
 ln -s ${Data_path}/train_data ~/datasets
+ls ~/datasets
 if [ ! -d "../log" ]; then
   mkdir ../log
 fi
 python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/csmsc/tts3
+pwd
 source path.sh
 source ${MAIN_ROOT}/utils/parse_options.sh
 conf_path=conf/default.yaml
