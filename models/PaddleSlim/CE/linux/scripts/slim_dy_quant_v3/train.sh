@@ -15,6 +15,7 @@ log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #临时环境更改
 
+export FLAGS_cudnn_deterministic=True
 
 #访问RD程序
 print_info(){
@@ -31,25 +32,26 @@ fi
 }
 
 
-
 cd $code_path
 
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     python train.py --lr=0.001 \
-    --batch_size 128 \
-    --use_pact=True --num_epochs=1 --l2_decay=2e-5 --ls_epsilon=0.1 \
+    --use_pact=True \
+     --l2_decay=2e-5 --ls_epsilon=0.1 \
     --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
-    --num_epochs 1 > ${log_path}/$2.log 2>&1
+    --ce_test=True \
+    --num_epochs 30 > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
     python -m paddle.distributed.launch  \
     --log_dir="quant_v3_linux_dy_gpu2_dist_log" train.py \
     --lr=0.001 \
     --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
-    --use_pact=True --num_epochs=1 \
+    --use_pact=True \
+    --num_epochs=30 \
     --l2_decay=2e-5 \
     --ls_epsilon=0.1 \
-    --batch_size=128 \
+    --ce_test=True \
     --model_save_dir output > ${log_path}/$2.log 2>&1
     print_info $? $2
     mv $code_path/quant_v3_linux_dy_gpu2_dist_log $log_path/$2_dist_log

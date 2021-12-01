@@ -1,4 +1,4 @@
-MODEL: "slim_dy_quant_v1" # 模型名
+MODEL: "dy_quant_aware_mv1" # 模型名
 PRIORITY: P0
 GIT:
   addr: $REPO_PaddleSlim
@@ -25,7 +25,7 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh data_proc.sh all
+        cmd: sh data_proc.sh demo
 
 TRAIN: # 训练步骤
   -
@@ -42,15 +42,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc_top1:
         latest: True
-        kpi_base: 0.718668
-        threshold: 0.03
+        kpi_base: 0.703425
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.896563
-        threshold: 0.03
+        kpi_base: 0.893329
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -75,15 +75,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc_top1:
         latest: True
-        kpi_base: 0.697867
-        threshold: 0.02
+        kpi_base: 0.692007
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.899639
-        threshold: 0.02
+        kpi_base: 0.891376
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -100,7 +100,7 @@ TRAIN: # 训练步骤
 
   -
     tag: linux_dy_con_gpu2
-    priority: p0
+    priority: p2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
