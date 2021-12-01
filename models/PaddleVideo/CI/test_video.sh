@@ -51,8 +51,8 @@ TRAIN(){
     mode=train
     python -m paddle.distributed.launch main.py \
               -c ${config} \
-              -o epochs=1 >log/${model}/${model}_train.log 2>&1 
-    print_result    
+              -o epochs=1 >log/${model}/${model}_train.log 2>&1
+    print_result
 }
 EVAL(){
     export CUDA_VISIBLE_DEVICES=$cudaid1
