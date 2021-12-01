@@ -221,12 +221,14 @@ python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
         if self.model in legendary_models:
             cmd = (
                 "cd PaddleClas; \
-                 wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams"
+                 wget -q \
+        https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams --no-proxy"
                 % self.model
             )
         else:
             cmd = (
-                "cd PaddleClas;wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams"
+                "cd PaddleClas; \
+                wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams --no-proxy"
                 % self.model
             )
         clas_result = subprocess.getstatusoutput(cmd)
@@ -562,7 +564,7 @@ class TestSegModel:
         seg_eval
         """
         cmd = (
-            "cd PaddleSeg; wget https://bj.bcebos.com/paddleseg/dygraph/cityscapes/%s/model.pdparams; \
+            "cd PaddleSeg; wget -p https://bj.bcebos.com/paddleseg/dygraph/cityscapes/%s/model.pdparams --no-proxy; \
              mv model.pdparams %s.pdparams; export HIP_VISIBLE_DEVICES=0,1,2,3; \
              python -m paddle.distributed.launch val.py --config %s --model_path=%s.pdparams"
             % (self.model, self.model, self.yaml, self.model)
