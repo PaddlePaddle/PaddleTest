@@ -14,6 +14,7 @@ export FLAGS_use_virtual_memory_auto_growth=1
 #<-> Data_path   数据路径
 #$1 <-> 自己定义single_yaml_debug  单独模型yaml字符
 
+
 # data
 echo "######  ----ln  data-----"
 rm -rf data
@@ -206,7 +207,7 @@ fi
   ;;
 *)
 
-if [[ ${line} =~ 'basicvsr' ]]; then
+if [[ ${line} =~ 'basicvsr' ]] || [[ ${line} =~ 'msvsr_l_reds' ]] || [[ ${line} =~ 'firstorder' ]]; then
    python  -m paddle.distributed.launch tools/main.py --config-file $line \
       -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
       > $log_path/train/${model}.log 2>&1
