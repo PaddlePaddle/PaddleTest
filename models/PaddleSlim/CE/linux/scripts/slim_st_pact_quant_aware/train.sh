@@ -45,6 +45,7 @@ elif [ "$1" = "use_pact" ];then
     --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
     --num_epochs 1 --lr 0.0001 --use_pact True  \
     --step_epochs 30 --l2_decay 1e-5 \
+    --batch_size 128
     --ce_test=True >${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "load" ];then  # load
