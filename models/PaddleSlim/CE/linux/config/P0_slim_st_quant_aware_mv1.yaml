@@ -68,6 +68,7 @@ TRAIN: # 训练步骤
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
+
   -
     tag: linux_st_cpu
     priority: p2
