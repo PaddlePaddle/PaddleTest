@@ -173,7 +173,9 @@ if [[ ${model_flag} =~ "pr" ]];then
    cat models_list_diff
    shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
-cat models_list | uniq > models_list_run  #去重复
+cat models_list | sort | uniq > models_list_run_tmp  #去重复
+shuf models_list_run_tmp > models_list_run
+rm -rf models_list_run_tmp
 echo "######  run models_list"
 wc -l models_list_run
 cat models_list_run
