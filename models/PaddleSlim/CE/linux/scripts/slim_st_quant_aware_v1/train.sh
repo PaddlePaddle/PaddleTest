@@ -38,7 +38,7 @@ if [ "$1" = "linux_dy_gpu1" ];then #单卡
     --pretrained_model ../../pretrain/MobileNetV1_pretrained \
     --checkpoint_dir ./output/mobilenetv1 \
     --num_epochs 30 \
-    --batch_size 128
+    --batch_size 128 \
     --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
