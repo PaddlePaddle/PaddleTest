@@ -1,4 +1,5 @@
 #!/bin/bash
+#env prepare
 mkdir run_env_py37
 ln -s $(which python3.7) run_env_py37/python
 ln -s $(which pip3.7) run_env_py37/pip
