@@ -14,6 +14,7 @@ export FLAGS_use_virtual_memory_auto_growth=1
 #<-> Data_path   数据路径
 #$1 <-> 自己定义single_yaml_debug  单独模型yaml字符
 
+
 # data
 echo "######  ----ln  data-----"
 rm -rf data
