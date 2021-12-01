@@ -118,8 +118,6 @@ python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
 python -m pip install  ppgan \
    -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
-python -m pip install --ignore-installed dlib \
-   -i https://pypi.tuna.tsinghua.edu.cn/simple
 # python -m pip install --ignore-installed  dlib
 python -m pip install  dlib \
    -i https://mirror.baidu.com/pypi/simple
@@ -173,13 +171,14 @@ if [[ ${model_flag} =~ "pr" ]];then
    echo "######  diff models_list_diff"
    wc -l models_list_diff
    cat models_list_diff
-   shuf -n 3 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
+   shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
-echo "######  diff models_list"
-wc -l models_list
-cat models_list
+cat models_list | uniq > models_list_run  #去重复
+echo "######  run models_list"
+wc -l models_list_run
+cat models_list_run
 
-cat models_list | while read line
+cat models_list_run | while read line
 do
 echo $line
 filename=${line##*/}
@@ -207,7 +206,7 @@ fi
   ;;
 *)
 
-if [[ ${line} =~ 'basicvsr' ]] || [[ ${line} =~ 'msvsr_l_reds' ]] || [[ ${line} =~ 'firstorder' ]]; then
+if [[ ${line} =~ 'basicvsr' ]] || [[ ${line} =~ 'msvsr' ]] || [[ ${line} =~ 'firstorder' ]]; then
    python  -m paddle.distributed.launch tools/main.py --config-file $line \
       -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
       > $log_path/train/${model}.log 2>&1
