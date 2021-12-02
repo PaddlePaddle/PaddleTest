@@ -221,14 +221,14 @@ python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
         if self.model in legendary_models:
             cmd = (
                 "cd PaddleClas; \
-                 wget -q \
+                 wget  \
         https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams "
                 % self.model
             )
         else:
             cmd = (
                 "cd PaddleClas; \
-                wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams "
+                wget  https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams "
                 % self.model
             )
         clas_result = subprocess.getstatusoutput(cmd)
