@@ -263,6 +263,7 @@ msvsr_l_reds)
 *)
 
 # echo $params_dir
+
   python tools/main.py --config-file $line \
    --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams \
    > $log_path/eval/${model}.log 2>&1
