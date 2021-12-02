@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_install.sh w2v_weibo_target_word-word_dim300 $HUB_CONFIG
+        cmd: bash nlp_install.sh w2v_weibo_target_word-word_dim300
     kpis:
       exit_code:
         latest: True
@@ -71,7 +71,7 @@ INSTALL:
 #    run:
 #      -
 #        path: $ROOT_PATH/$model_scripts_path
-#        cmd: bash nlp_finetune.sh w2v_weibo_target_word-word_dim300 text-matching dev True 8 1 LCQMC Adam 1e-5 128 1 save
+#        cmd: nlp_finetune.bat w2v_weibo_target_word-word_dim300 text-matching dev True 8 1 LCQMC Adam 1e-5 128 1 save
 #
 #    kpis:
 #      exit_code:
@@ -138,7 +138,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh w2v_weibo_target_word-word_dim300 True
+        cmd: nlp_predict.bat w2v_weibo_target_word-word_dim300 True
     kpis:
       exit_code:
         latest: True
@@ -159,7 +159,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh w2v_weibo_target_word-word_dim300 False
+        cmd: nlp_predict.bat w2v_weibo_target_word-word_dim300 False
     kpis:
       exit_code:
         latest: True

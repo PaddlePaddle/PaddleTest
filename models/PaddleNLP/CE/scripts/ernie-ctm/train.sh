@@ -37,30 +37,15 @@ fi
 #访问RD程序
 cd $code_path
 
-if [[ $2 == 'multi' ]];then #多卡
-    python -m paddle.distributed.launch --gpus "$3"  train.py \
-        --max_seq_len 128 \
-        --batch_size 32   \
-        --learning_rate 1e-4 \
-        --num_train_epochs 1 \
-        --logging_steps 10 \
-        --save_steps 10 \
-        --max_steps 10 \
-        --output_dir ./tmp/ \
-        --device $1 > $log_path/train_$2_$1.log 2>&1
-else #单卡
-    python -u train.py \
-        --max_seq_len 128 \
-        --batch_size 32   \
-        --learning_rate 1e-4 \
-        --num_train_epochs 1 \
-        --logging_steps 10 \
-        --save_steps 10 \
-        --max_steps 30 \
-        --output_dir ./tmp/ \
-        --device $1 > $log_path/train_$2_$1.log 2>&1
-
-fi
+python -m paddle.distributed.launch --gpus "$3"  train.py \
+    --max_seq_len 128 \
+    --batch_size 32   \
+    --learning_rate 5e-5 \
+    --num_train_epochs 1 \
+    --logging_steps 10 \
+    --save_steps 100 \
+    --output_dir ./tmp/ \
+    --device $1 > $log_path/train_$2_$1.log 2>&1
 
 export http_proxy=$HTTPPROXY
 export https_proxy=$HTTPSPROXY

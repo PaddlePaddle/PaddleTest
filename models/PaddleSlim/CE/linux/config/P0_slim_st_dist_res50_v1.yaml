@@ -1,5 +1,5 @@
 MODEL: "slim_st_dist_res50_v1" # 模型名
-PRIORITY: P0
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleSlim
   path: $ROOT_PATH/PaddleSlim
@@ -41,15 +41,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       top1:
         latest: True
-        kpi_base: 0.268003
-        threshold: 0.05
+        kpi_base: 0.258003
+        threshold: 0.1
         actived: True
         evaluation: "+"
         unit_repr: None
       top5:
         latest: True
-        kpi_base: 0.518522
-        threshold: 0.05
+        kpi_base: 0.508522
+        threshold: 0.1
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -76,14 +76,14 @@ TRAIN: # 训练步骤
       top1:
         latest: True
         kpi_base: 0.237818
-        threshold: 0.05
+        threshold: 0.1
         actived: True
         evaluation: "+"
         unit_repr: None
       top5:
         latest: True
         kpi_base: 0.471213
-        threshold: 0.05
+        threshold: 0.1
         actived: True
         evaluation: "+"
         unit_repr: None

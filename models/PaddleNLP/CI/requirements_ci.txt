@@ -13,3 +13,9 @@ pandas
 pyrouge
 nltk
 beautifulsoup4
+pybind11
+lac
+zstandard
+pypinyin
+pycryptodome
+bce-python-sdk

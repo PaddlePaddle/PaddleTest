@@ -32,8 +32,6 @@ def check_model_exist():
         tar.close()
 
 
-@pytest.mark.p0
-@pytest.mark.config_init_combined_model
 def test_config():
     """
     test combined model config
@@ -44,7 +42,8 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.p0
+@pytest.mark.win
+@pytest.mark.server
 @pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
@@ -60,12 +59,13 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.p1
+@pytest.mark.win
+@pytest.mark.server
 @pytest.mark.jetson
-@pytest.mark.gpu_bz1_precision
+@pytest.mark.gpu
 def test_gpu_bz1():
     """
-    compared gpu ocr_det_mv3_db outputs with true val
+    compared gpu bert outputs with true val
     """
     check_model_exist()
 

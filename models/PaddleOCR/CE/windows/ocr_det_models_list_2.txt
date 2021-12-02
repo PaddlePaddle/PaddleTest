@@ -1,0 +1,2 @@
+configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml
+configs/det/ch_ppocr_v2.0/ch_det_res18_db_v2.0.yml

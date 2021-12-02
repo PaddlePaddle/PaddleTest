@@ -1,9 +1,9 @@
 MODEL: "word_embedding" # 模型名
-PRIORITY: P0
+PRIORITY: P0_2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $word_embedding_BRANCH
+  branch: $BASE_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
@@ -131,7 +131,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.4706
+        kpi_base: 0.5155
         threshold: 0.05
         actived: True
         evaluation: "-"

@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_install.sh ernie_gen_poetry $HUB_CONFIG
+        cmd: bash nlp_install.sh ernie_gen_poetry
     kpis:
       exit_code:
         latest: True
@@ -71,7 +71,7 @@ INSTALL:
 #    run:
 #      -
 #        path: $ROOT_PATH/$model_scripts_path
-#        cmd: bash nlp_finetune.sh ernie_gen_poetry text-matching dev True 8 1 LCQMC Adam 1e-5 128 1 save
+#        cmd: nlp_finetune.bat ernie_gen_poetry text-matching dev True 8 1 LCQMC Adam 1e-5 128 1 save
 #
 #    kpis:
 #      exit_code:
@@ -113,7 +113,7 @@ PREDICT:
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    # use_gpu, line, word, beam_width
+    # use_gpu, beam_width
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -134,11 +134,11 @@ PREDICT:
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    # use_gpu, line, word, beam_width
+    # use_gpu, beam_width
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh ernie_gen_poetry True 5
+        cmd: nlp_predict.bat ernie_gen_poetry True 5
     kpis:
       exit_code:
         latest: True
@@ -155,11 +155,11 @@ PREDICT:
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    # use_gpu, line, word, beam_width
+    # use_gpu, beam_width
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh ernie_gen_poetry False 5
+        cmd: nlp_predict.bat ernie_gen_poetry False 5
     kpis:
       exit_code:
         latest: True
@@ -176,7 +176,7 @@ PREDICT:
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    # use_gpu, line, word, beam_width
+    # use_gpu, beam_width
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -197,7 +197,7 @@ PREDICT:
 #    env: #去掉，自动调度
 #      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 #
-#    # use_gpu, line, word, beam_width
+#    # use_gpu, beam_width
 #    run:
 #      -
 #        path: $ROOT_PATH/$model_scripts_path

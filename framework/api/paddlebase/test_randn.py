@@ -4,11 +4,15 @@
 """
 test randn
 """
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 from paddle import fluid
 import numpy as np
+
+sys.path.append("../..")
+from utils.interceptor import skip_platform_not_linux
 
 
 class TestRandn(APIBase):
@@ -32,6 +36,7 @@ class TestRandn(APIBase):
 obj = TestRandn(paddle.randn)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randn_vartype
 def test_randn_base():
     """
@@ -41,6 +46,7 @@ def test_randn_base():
     obj.base(res=res, shape=[2, 2])
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randn_parameters
 def test_randn():
     """
@@ -50,6 +56,7 @@ def test_randn():
     obj.run(res=res, shape=[2, 2], dtype=np.float32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randn_exception
 def test_randn1():
     """
@@ -60,6 +67,7 @@ def test_randn1():
     obj.exception(etype="NotFoundError", shape=[2, 2], dtype=np.int32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randn_parameters
 def test_randn2():
     """
@@ -70,6 +78,7 @@ def test_randn2():
     obj.run(res=res, shape=[2, 2], dtype=np.float32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randn_parameters
 def test_randn3():
     """
@@ -80,6 +89,7 @@ def test_randn3():
     obj.run(res=res, shape=(2, 2))
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randn_parameters
 def test_randn4():
     """
@@ -90,6 +100,7 @@ def test_randn4():
     obj.run(res=res, shape=np.array([2, 2]))
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randn_parameters
 def test_randn5():
     """

@@ -3,7 +3,7 @@ PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $TEXT_CLASSIFICATION_PRETRAINED_BRANCH
+  branch: $BASE_BRANCH
 
 VARIABLES:
   model_scripts_path: scripts/text_classification_pretrained/ #脚本的路径

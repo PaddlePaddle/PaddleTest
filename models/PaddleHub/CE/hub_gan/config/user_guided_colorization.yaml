@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_install.sh user_guided_colorization $HUB_CONFIG
+        cmd: bash cv_install.sh user_guided_colorization
     kpis:
       exit_code:
         latest: True
@@ -67,11 +67,11 @@ FINETUNE:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
     # use_gpu, batch_size, num_epoch, optimizer, learning_rate,
-    # target_size, use_vdl, pretrained, save_interval, checkpoint_dir
+    # use_vdl, pretrained, save_interval
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_finetune.sh user_guided_colorization True 8 1 Adam 1e-4 256 True None 1 save
+        cmd: cv_finetune.bat user_guided_colorization True 8 1 Adam 1e-4 True None 1
 
     kpis:
       exit_code:
@@ -81,7 +81,7 @@ FINETUNE:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/EXIT_user_guided_colorization_finetune_True_8_1_Adam_1e-4_256_True_None_1_save.log
+    output: $ROOT_PATH/$model_log_path/EXIT_user_guided_colorization_finetune_True_8_1_Adam_1e-4_True_None_1.log
 
   -
     priority: p1
@@ -138,7 +138,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_predict.sh user_guided_colorization False True True save output_dir .\..\..\img_gan4
+        cmd: cv_predict.bat user_guided_colorization False True True save output_dir .\..\..\img_gan4
     kpis:
       exit_code:
         latest: True
@@ -159,7 +159,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_predict.sh user_guided_colorization False False True save output_dir .\..\..\img_gan4
+        cmd: cv_predict.bat user_guided_colorization False False True save output_dir .\..\..\img_gan4
     kpis:
       exit_code:
         latest: True

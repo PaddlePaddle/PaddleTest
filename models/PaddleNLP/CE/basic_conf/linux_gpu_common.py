@@ -27,33 +27,6 @@ SET_MULTI_CUDA = "0,1"
 # PaddleNLP
 REPO_PaddleNLP = "https://github.com/PaddlePaddle/PaddleNLP.git"
 BASE_BRANCH = "develop"
-GPT2_BRANCH = BASE_BRANCH
-ELECTRA_BRANCH = BASE_BRANCH
-BERT_BRANCH = BASE_BRANCH
-EXPRESS_NER_BRANCH = BASE_BRANCH
-TRANSFORMER_BRANCH = BASE_BRANCH
-XLNET_BRANCH = BASE_BRANCH
-GLUE_BRANCH = BASE_BRANCH
-SQuAD_BRANCH = BASE_BRANCH
-TRANSFORMERXL_BRANCH = BASE_BRANCH
-DuReader_yesno_BRANCH = BASE_BRANCH
-BIGBIRD_BRANCH = BASE_BRANCH
-TCN_BRANCH = BASE_BRANCH
-TRANSFORMER_BRANCH = BASE_BRANCH
-word_embedding_BRANCH = BASE_BRANCH
-waybill_ie_BRANCH = BASE_BRANCH
-vae_seq2seq_BRANCH = BASE_BRANCH
-text_matching_simnet_BRANCH = BASE_BRANCH
-text_matching_finetune_BRANCH = BASE_BRANCH
-text_classification_rnn_BRANCH = BASE_BRANCH
-text_classification_finetune_BRANCH = BASE_BRANCH
-seq2seq_BRANCH = BASE_BRANCH
-rnnlm_BRANCH = BASE_BRANCH
-msra_ner_BRANCH = BASE_BRANCH
-lexical_analysis_BRANCH = BASE_BRANCH
-distill_lstm_BRANCH = BASE_BRANCH
-TEXT_CLASSIFICATION_PRETRAINED_BRANCH = BASE_BRANCH
-DGU_BRANCH = BASE_BRANCH
 # daily P0任务要跑的标签
 EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
@@ -129,4 +102,24 @@ EXEC_TAG = [
     "linux_dy_gpu2_sst-2",
     "linux_dy_gpu1_qqp",
     "linux_dy_gpu2_qqp",
+    "linux_dy_gpu1_imdb",
+    "linux_dy_gpu2_imdb",
+    "linux_dy_gpu1_hyp",
+    "linux_dy_gpu2_hyp",
+    "linux_dy_gpu2_iflytek",
+    "linux_dy_gpu1_thucnews",
+    "linux_dy_gpu2_thucnews",
+    "linux_dy_gpu1_dureader_robust",
+    "linux_dy_gpu2_dureader_robust",
+    "linux_dy_gpu1_drcd",
+    "linux_dy_gpu2_drcd",
+    "linux_dy_gpu1_cmrc2018",
+    "linux_dy_gpu2_cmrc2018",
+    "linux_dy_gpu1_LCQMC",
+    "linux_dy_gpu1_BQ_Corpus",
+    "linux_dy_gpu1_STS-B",
+    "linux_dy_gpu1_ATEC",
+    "linux_dy_gpu1_AFQMC",
+    "linux_dy_gpu1_TNEWS",
+    "linux_dy_gpu1_IFLYTEK",
 ]

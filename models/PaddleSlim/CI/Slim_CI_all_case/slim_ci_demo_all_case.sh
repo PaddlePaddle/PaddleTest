@@ -10,6 +10,7 @@ if [ $1 -ne 0 ];then
 else
     mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
     echo -e "\033[32m ${log_path}/SUCCESS_$2 \033[0m"
+    cat  ${log_path}/SUCCESS_$2.log
 fi
 }
 
@@ -192,7 +193,7 @@ python train.py --model MobileNetV3_large_x1_0 \
 print_info $? demo_quant_pact_quant_aware_v3_nopact
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 1 --lr 0.0001 --use_pact True --batch_size 128 --lr_strategy=piecewise_decay \
+--num_epochs 1 --lr 0.0001 --use_pact True --batch_size 64 --lr_strategy=piecewise_decay \
 --step_epochs 2 --l2_decay 1e-5 >${log_path}/demo_quant_pact_quant_aware_v3 2>&1
 print_info $? demo_quant_pact_quant_aware_v3
 # load
@@ -676,7 +677,7 @@ print_info $? st_unstructured_prune_threshold_T
 # eval
 python evaluate.py \
        --pruned_model=st_unstructured_models \
-       --data="imagenet"  >${log_path}/st_unstructured_prune_threshold_eval &
+       --data="imagenet"  >${log_path}/st_unstructured_prune_threshold_eval 2>&1
 print_info $? st_unstructured_prune_threshold_eval
 # load
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -695,13 +696,13 @@ python -m paddle.distributed.launch \
 --model_period 1 \
 --model_path st_unstructured_models \
 --pretrained_model st_unstructured_models \
---resume_epoch 1 >${log_path}/st_unstructured_prune_threshold_load 2>&1
+--last_epoch 1 >${log_path}/st_unstructured_prune_threshold_load 2>&1
 print_info $? st_unstructured_prune_threshold_load
 
 ## sparsity: -55%, accuracy: 67%+/87%+
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 python train.py \
---batch_size 512 \
+--batch_size 256 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode ratio \
@@ -733,8 +734,34 @@ print_info $? st_unstructured_prune_threshold_mnist_T
 # eval
 python evaluate.py \
        --pruned_model=st_unstructured_models_mnist \
-       --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval &
+       --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval 2>&1
 print_info $? st_unstructured_prune_threshold_mnist_eval
+
+export CUDA_VISIBLE_DEVICES=${cudaid2}
+python -m paddle.distributed.launch \
+          --log_dir="st_unstructured_prune_gmp_log" \
+          train.py \
+          --batch_size 64 \
+          --data imagenet \
+          --pruning_mode ratio \
+          --ratio 0.75 \
+          --lr 0.005 \
+          --model MobileNet \
+          --num_epochs 1 \
+          --test_period 5 \
+          --model_period 10 \
+          --pretrained_model ../pretrain/MobileNetV1_pretrained \
+          --model_path "./models" \
+          --step_epochs  71 88 \
+          --initial_ratio 0.15 \
+          --pruning_steps 100 \
+          --stable_epochs 0 \
+          --pruning_epochs 54 \
+          --tunning_epochs 54 \
+          --last_epoch -1 \
+          --skip_params_type exclude_conv1x1 \
+          --pruning_strategy gmp > ${log_path}/st_unstructured_prune_ratio_gmp 2>&1
+print_info $? st_unstructured_prune_ratio_gmp
 }
 demo_dygraph_unstructured_pruning(){
 # dy_threshold
@@ -773,7 +800,7 @@ python -m paddle.distributed.launch \
 --model_path dy_threshold_models >${log_path}/dy_threshold_prune_T 2>&1
 print_info $? dy_threshold_prune_T
 # eval
-python evaluate.py --pruned_model dy_threshold_models/model-pruned.pdparams \
+python evaluate.py --pruned_model dy_threshold_models/model.pdparams \
 --data imagenet >${log_path}/dy_threshold_prune_eval 2>&1
 print_info $? dy_threshold_prune_eval
 
@@ -791,8 +818,8 @@ python -m paddle.distributed.launch \
 --test_period 1 \
 --model_period 1 \
 --model_path dy_threshold_models_new \
---pretrained_model dy_threshold_models/model-pruned.pdparams \
---resume_epoch 1 >${log_path}/dy_threshold_prune_T_load 2>&1
+--pretrained_model dy_threshold_models/model.pdparams \
+--last_epoch 1 > ${log_path}/dy_threshold_prune_T_load 2>&1
 print_info $? dy_threshold_prune_T_load
 # cifar10
 python train.py --data cifar10 --lr 0.05 \
@@ -802,6 +829,29 @@ python train.py --data cifar10 --lr 0.05 \
 --num_epochs 2 >${log_path}/dy_threshold_prune_cifar10_T 2>&1
 print_info $? dy_threshold_prune_cifar10_T
 
+export CUDA_VISIBLE_DEVICES=${cudaid2}
+python -m paddle.distributed.launch \
+          --log_dir="dy_unstructured_prune_gmp_log" \
+          train.py \
+          --batch_size 64 \
+          --data imagenet \
+          --pruning_mode ratio \
+          --ratio 0.75 \
+          --lr 0.005 \
+          --num_epochs 1 \
+          --test_period 5 \
+          --model_period 10 \
+          --model_path "./models" \
+          --step_epochs 71 88 \
+          --initial_ratio 0.15 \
+          --pruning_steps 100 \
+          --stable_epochs 0 \
+          --pruning_epochs 54 \
+          --tunning_epochs 54 \
+          --last_epoch -1 \
+          --pruning_strategy gmp \
+          --skip_params_type exclude_conv1x1 ${log_path}/dy_unstructured_prune_ratio_gmp 2>&1
+print_info $? dy_unstructured_prune_ratio_gmp
 }
 
 ##################
@@ -896,8 +946,28 @@ all_darts(){  # 2个模型
     #slimfacenet  需要删掉
 }
 
+demo_latency(){
+cd ${slim_dir}/demo/analysis  || catchException demo_latency
+model=latency_mobilenet_v1_fp32
+python latency_predictor.py --model mobilenet_v1 --data_type fp32 >${log_path}/${model} 2>&1
+print_info $? ${model}
+model=latency_mobilenet_v1_int8
+python latency_predictor.py --model mobilenet_v1 --data_type int8 >${log_path}/${model} 2>&1
+print_info $? ${model}
+model=latency_mobilenet_v2_fp32
+python latency_predictor.py --model mobilenet_v2 --data_type fp32 >${log_path}/${model} 2>&1
+print_info $? ${model}
+model=latency_mobilenet_v2_int8
+python latency_predictor.py --model mobilenet_v2 --data_type int8 >${log_path}/${model} 2>&1
+print_info $? ${model}
+}
+
+all_latency(){
+  demo_latency
+}
+
 ####################################
-export all_case_list=(all_distillation all_quant all_prune all_nas all_darts)
+export all_case_list=(all_distillation all_quant all_prune all_nas all_darts all_latency)
 
 export all_case_time=0
 declare -A all_P0case_dic

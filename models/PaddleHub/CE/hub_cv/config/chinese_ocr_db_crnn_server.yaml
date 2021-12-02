@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_install.sh chinese_ocr_db_crnn_server $HUB_CONFIG
+        cmd: bash cv_install.sh chinese_ocr_db_crnn_server
     kpis:
       exit_code:
         latest: True
@@ -71,7 +71,7 @@ INSTALL:
 #    run:
 #      -
 #        path: $ROOT_PATH/$model_scripts_path
-#        cmd: bash cv_finetune.sh text-matching dev True 8 1 LCQMC Adam 1e-5 128 1 save
+#        cmd: cv_finetune.bat text-matching dev True 8 1 LCQMC Adam 1e-5 128 1 save
 #
 #    kpis:
 #      exit_code:
@@ -138,7 +138,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_predict.sh chinese_ocr_db_crnn_server True True 0.5 0.5 output_dir .\..\..\img_ocr1
+        cmd: cv_predict.bat chinese_ocr_db_crnn_server True True 0.5 0.5 output_dir .\..\..\img_ocr1
     kpis:
       exit_code:
         latest: True
@@ -159,7 +159,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_predict.sh chinese_ocr_db_crnn_server False True 0.5 0.5 output_dir .\..\..\img_ocr1
+        cmd: cv_predict.bat chinese_ocr_db_crnn_server False True 0.5 0.5 output_dir .\..\..\img_ocr1
     kpis:
       exit_code:
         latest: True

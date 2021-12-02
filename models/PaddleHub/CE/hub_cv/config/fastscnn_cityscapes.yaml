@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_install.sh fastscnn_cityscapes $HUB_CONFIG
+        cmd: bash cv_install.sh fastscnn_cityscapes
     kpis:
       exit_code:
         latest: True
@@ -67,11 +67,11 @@ FINETUNE:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
     # use_gpu, batch_size, num_epoch, optimizer, learning_rate,
-    # target_size, class_num, save_interval, checkpoint_dir
+    # target_size, class_num, save_interval
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_finetune.sh fastscnn_cityscapes True 8 1 Adam 0.01 512 2 1 save
+        cmd: cv_finetune.bat fastscnn_cityscapes True 8 1 Adam 0.01 512 2 1
 
     kpis:
       exit_code:
@@ -81,7 +81,7 @@ FINETUNE:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/EXIT_fastscnn_cityscapes_finetune_True_8_1_Adam_0.01_512_2_1_save.log
+    output: $ROOT_PATH/$model_log_path/EXIT_fastscnn_cityscapes_finetune_True_8_1_Adam_0.01_512_2_1.log
 
   -
     priority: p1
@@ -138,7 +138,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_predict.sh fastscnn_cityscapes False True True ./save output_dir ./../../img_data
+        cmd: cv_predict.bat fastscnn_cityscapes False True True .\save output_dir .\..\..\img_data
     kpis:
       exit_code:
         latest: True
@@ -159,7 +159,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_predict.sh fastscnn_cityscapes False False True ./save output_dir ./../../img_data
+        cmd: cv_predict.bat fastscnn_cityscapes False False True .\save output_dir .\..\..\img_data
     kpis:
       exit_code:
         latest: True

@@ -27,33 +27,6 @@ SET_MULTI_CUDA = "0,1"
 # PaddleNLP
 REPO_PaddleNLP = "https://github.com/PaddlePaddle/PaddleNLP.git"
 BASE_BRANCH = "develop"
-GPT2_BRANCH = BASE_BRANCH
-ELECTRA_BRANCH = BASE_BRANCH
-BERT_BRANCH = BASE_BRANCH
-EXPRESS_NER_BRANCH = BASE_BRANCH
-TRANSFORMER_BRANCH = BASE_BRANCH
-XLNET_BRANCH = BASE_BRANCH
-GLUE_BRANCH = BASE_BRANCH
-SQuAD_BRANCH = BASE_BRANCH
-TRANSFORMERXL_BRANCH = BASE_BRANCH
-DuReader_yesno_BRANCH = BASE_BRANCH
-BIGBIRD_BRANCH = BASE_BRANCH
-TCN_BRANCH = BASE_BRANCH
-TRANSFORMER_BRANCH = BASE_BRANCH
-word_embedding_BRANCH = BASE_BRANCH
-waybill_ie_BRANCH = BASE_BRANCH
-vae_seq2seq_BRANCH = BASE_BRANCH
-text_matching_simnet_BRANCH = BASE_BRANCH
-text_matching_finetune_BRANCH = BASE_BRANCH
-text_classification_rnn_BRANCH = BASE_BRANCH
-text_classification_finetune_BRANCH = BASE_BRANCH
-seq2seq_BRANCH = BASE_BRANCH
-rnnlm_BRANCH = BASE_BRANCH
-msra_ner_BRANCH = BASE_BRANCH
-lexical_analysis_BRANCH = BASE_BRANCH
-distill_lstm_BRANCH = BASE_BRANCH
-TEXT_CLASSIFICATION_PRETRAINED_BRANCH = BASE_BRANCH
-DGU_BRANCH = BASE_BRANCH
 # windows GPU 任务要跑的标签
 EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
@@ -90,4 +63,13 @@ EXEC_TAG = [
     "win_dy_gpu1_ernie_crf",
     "win_dy_gpu1_bigru_crf",
     "win_dy_gpu1_24",
+    "win_dy_gpu1_thucnews",
+    "win_dy_gpu1_imdb",
+    "win_dy_gpu1_hyp",
+    "win_dy_gpu1_dureader_robust",
+    "win_dy_gpu1_drcd",
+    "win_dy_gpu1_cmrc2018",
+    "win_dy_gpu1_AFQMC",
+    "win_dy_gpu1_IFLYTEK",
+    "win_dy_gpu1_TNEWS",
 ]

@@ -25,7 +25,7 @@ INSTALL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_install.sh bert-base-chinese $HUB_CONFIG
+        cmd: bash nlp_install.sh bert-base-chinese
     kpis:
       exit_code:
         latest: True
@@ -66,12 +66,11 @@ FINETUNE:
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    # task, train_data, use_gpu, batch_size, num_epoch, dataset,
-    # optimizer, learning_rate, max_seq_len, save_interval, checkpoint_dir
+    # task, train_data, use_gpu, batch_size, num_epoch, dataset, optimizer, save_interval
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_finetune.sh bert-base-chinese text-matching dev True 8 1 LCQMC Adam 1e-5 128 1 save
+        cmd: nlp_finetune.bat bert-base-chinese text-matching dev True 8 1 LCQMC Adam 1
 
     kpis:
       exit_code:
@@ -81,7 +80,7 @@ FINETUNE:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/EXIT_bert-base-chinese_finetune_text-matching_dev_True_8_1_LCQMC_Adam_1e-5_128_1_save.log
+    output: $ROOT_PATH/$model_log_path/EXIT_bert-base-chinese_finetune_text-matching_dev_True_8_1_LCQMC_Adam_1.log
 
   -
     priority: p1
@@ -138,7 +137,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh bert-base-chinese text-matching False True 128 1
+        cmd: nlp_predict.bat bert-base-chinese text-matching False True 128 1
     kpis:
       exit_code:
         latest: True
@@ -159,7 +158,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh bert-base-chinese text-matching False False 128 1
+        cmd: nlp_predict.bat bert-base-chinese text-matching False False 128 1
     kpis:
       exit_code:
         latest: True
