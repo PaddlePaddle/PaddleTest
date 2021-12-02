@@ -214,7 +214,7 @@ if [[ ${line} =~ 'basicvsr' ]] || [[ ${line} =~ 'msvsr' ]] || [[ ${line} =~ 'fir
       > $log_path/train/${model}.log 2>&1
 else
    python  -m paddle.distributed.launch tools/main.py --config-file $line \
-      -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
+      -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
       > $log_path/train/${model}.log 2>&1
 fi
 params_dir=$(ls output)
