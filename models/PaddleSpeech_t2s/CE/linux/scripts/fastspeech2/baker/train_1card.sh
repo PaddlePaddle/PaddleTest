@@ -11,7 +11,9 @@ python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/csmsc/tts3
 pwd
-source path.sh
+ls
+source ./path.sh
+source ${pwd}/path.sh
 source ${MAIN_ROOT}/utils/parse_options.sh
 conf_path=conf/default.yaml
 train_output_path=exp/default
