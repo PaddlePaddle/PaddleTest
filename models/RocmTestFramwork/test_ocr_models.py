@@ -33,8 +33,8 @@ def setup_module():
     RepoDataset(
         cmd="""cd PaddleOCR; ln -s /data train_data; \
 wget -P -q ./pretrain_models/ \
-https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams --no-proxy \
-wget -q https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar --no-proxy; \
+https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams ; \
+wget -q https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar ; \
 tar xf en_server_pgnetA.tar; mv en_server_pgnetA e2e_r50_vd_pg; \
 mkdir output; mv e2e_r50_vd_pg output; \
 mv output/e2e_r50_vd_pg/best_accuracy.pdparams output/e2e_r50_vd_pg/latest.pdparams; \
