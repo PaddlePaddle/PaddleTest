@@ -67,11 +67,11 @@ FINETUNE:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
     # use_gpu, batch_size, num_epoch, optimizer, learning_rate,
-    # target_size, use_vdl, pretrained, save_interval, checkpoint_dir
+    # target_size, use_vdl, pretrained, save_interval
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_finetune.sh rexnet_3_0_imagenet True 16 1 Adam 0.001 256 True None 1 save
+        cmd: cv_finetune.bat rexnet_3_0_imagenet True 16 1 Adam 0.001 True None 1
 
     kpis:
       exit_code:
@@ -81,7 +81,7 @@ FINETUNE:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/EXIT_rexnet_3_0_imagenet_finetune_True_16_1_Adam_0.001_256_True_None_1_save.log
+    output: $ROOT_PATH/$model_log_path/EXIT_rexnet_3_0_imagenet_finetune_True_16_1_Adam_0.001_True_None_1.log
 
   -
     priority: p1
@@ -138,7 +138,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_predict.sh rexnet_3_0_imagenet False True ./save ./../../img_data
+        cmd: cv_predict.bat rexnet_3_0_imagenet False True .\save .\..\..\img_data
     kpis:
       exit_code:
         latest: True
@@ -159,7 +159,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash cv_predict.sh rexnet_3_0_imagenet False False ./save ./../../img_data
+        cmd: cv_predict.bat rexnet_3_0_imagenet False False .\save .\..\..\img_data
     kpis:
       exit_code:
         latest: True
