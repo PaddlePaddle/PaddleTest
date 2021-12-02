@@ -1,5 +1,5 @@
 # paddle
-wget https://paddle-qa.bj.bcebos.com/rocm/$1/paddlepaddle_rocm-0.0.0-cp37-cp37m-linux_x86_64.whl
+wget https://paddle-qa.bj.bcebos.com/rocm/$1/paddlepaddle_rocm-0.0.0-cp37-cp37m-linux_x86_64.whl --no-proxy
 python -m pip uninstall -y paddlepaddle-rocm
 python -m pip install paddlepaddle_rocm-0.0.0-cp37-cp37m-linux_x86_64.whl
 echo 'paddle commit:'

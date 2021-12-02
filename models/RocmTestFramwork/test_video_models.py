@@ -36,12 +36,12 @@ def setup_module():
         cmd="""cd PaddleVideo; \
                cd data; rm -rf ucf101; ln -s /data/ucf101 ucf101;\
                rm -rf TSM_k400.pdparams; \
-               wget https://videotag.bj.bcebos.com/PaddleVideo-release2.1/TSM/TSM_k400.pdparams;\
+               wget -q https://videotag.bj.bcebos.com/PaddleVideo-release2.1/TSM/TSM_k400.pdparams ;\
                mkdir dataset;\
                cd dataset;\
                ln -s /data/bmn_data bmn_data; cd ..;\
-               wget https://videotag.bj.bcebos.com/PaddleVideo/SlowFast/SlowFast.pdparams;\
-               wget https://videotag.bj.bcebos.com/PaddleVideo-release2.2/TSN_k400.pdparams;\
+               wget -q https://videotag.bj.bcebos.com/PaddleVideo/SlowFast/SlowFast.pdparams ;\
+               wget -q https://videotag.bj.bcebos.com/PaddleVideo-release2.2/TSN_k400.pdparams ;\
                rm -rf k400; \
                ln -s /data/kinetics k400"""
     )
@@ -49,8 +49,8 @@ def setup_module():
         cmd="""cd models/PaddleCV/video;
                       cd data;
                       rm -rf AttentionLSTM.pdparams
-                      wget https://paddlemodels.bj.bcebos.com/video_classification/AttentionLSTM.pdparams
-                      wget https://paddlemodels.bj.bcebos.com/video_classification/STNET.pdparams
+                      wget -q https://paddlemodels.bj.bcebos.com/video_classification/AttentionLSTM.pdparams
+                      wget -q https://paddlemodels.bj.bcebos.com/video_classification/STNET.pdparams
                       cd ..
                       cd data/dataset
                       rm -rf youtube8m

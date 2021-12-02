@@ -98,6 +98,7 @@ python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl
    -i https://mirror.baidu.com/pypi/simple
 
 rm -rf models_list
+rm -rf models_list_run
 rm -rf models_list_all
 rm -rf models_list_rec
 
@@ -186,12 +187,15 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       cat models_list_diff
       shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
    fi
-   echo "######  diff models_list"
-   wc -l models_list
-   cat models_list
+   cat models_list | sort | uniq > models_list_run_tmp  #去重复
+   shuf models_list_run_tmp > models_list_run
+   rm -rf models_list_run_tmp
+   echo "######  run models_list"
+   wc -l models_list_run
+   cat models_list_run
 
    #开始循环
-   cat models_list | while read line
+   cat models_list_run | while read line
    do
    #echo $line
    filename=${line##*/}
@@ -451,6 +455,7 @@ fi
 if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'rec' ]]; then
    echo "######  rec step"
    rm -rf models_list
+   rm -rf models_list_run
 
    find ppcls/configs/Cartoonface/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec

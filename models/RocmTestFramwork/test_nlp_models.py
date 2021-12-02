@@ -124,7 +124,7 @@ def test_transformer():
     model.test_nlp_train(cmd=cmd)
 
 
-@pytest.mark.skip(reason="seq2seq train/eval too long, maybe hang")
+# @pytest.mark.skip(reason="seq2seq train/eval too long, maybe hang")
 def test_seq2seq():
     """
     seq2seq
@@ -144,7 +144,7 @@ def test_textcnn():
     """
     model = TestNlpModel(directory="examples/text_classification/rnn")
     cmd = """cd PaddleNLP/examples/text_classification/rnn; \
-           wget https://paddlenlp.bj.bcebos.com/data/senta_word_dict.txt; \
+           wget -q https://paddlenlp.bj.bcebos.com/data/senta_word_dict.txt ; \
            export HIP_VISIBLE_DEVICES=0,1,2,3; \
            python -m paddle.distributed.launch --gpus="0,1,2,3" train.py \
 --vocab_path=./senta_word_dict.txt --device=gpu  --network=cnn --lr=1e-4 --batch_size=64 \
@@ -158,7 +158,7 @@ def test_rnn():
     """
     model = TestNlpModel(directory="examples/text_classification/rnn")
     cmd = """cd PaddleNLP/examples/text_classification/rnn;
-           wget https://paddlenlp.bj.bcebos.com/data/senta_word_dict.txt
+           wget -q https://paddlenlp.bj.bcebos.com/data/senta_word_dict.txt
            export HIP_VISIBLE_DEVICES=0,1,2,3
            python -m paddle.distributed.launch --gpus="0,1,2,3" train.py --vocab_path=./senta_word_dict.txt \
 --device=gpu  --network=bilstm --lr=5e-4 --batch_size=64 --epochs=1 --save_dir=./checkpoints"""

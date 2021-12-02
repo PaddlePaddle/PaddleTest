@@ -221,12 +221,14 @@ python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
         if self.model in legendary_models:
             cmd = (
                 "cd PaddleClas; \
-                 wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams"
+                 wget -q \
+        https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams "
                 % self.model
             )
         else:
             cmd = (
-                "cd PaddleClas;wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams"
+                "cd PaddleClas; \
+                wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams "
                 % self.model
             )
         clas_result = subprocess.getstatusoutput(cmd)
@@ -547,7 +549,7 @@ class TestSegModel:
             'cd PaddleSeg; sed -i s/"iters: 80000"/"iters: 50"/g %s; rm -rf log; \
              export HIP_VISIBLE_DEVICES=0,1,2,3; \
              python -u -m paddle.distributed.launch --gpus="0,1,2,3" --log_dir=log_%s train.py --config %s \
---do_eval --use_vdl --num_workers 6 --save_dir log/%s --save_interval 50 --iters 50'
+--do_eval --use_vdl --num_workers 6 --save_dir log/%s --save_interval 50 --iters 50 --batch_size 1'
             % (self.yaml, self.model, self.yaml, self.model)
         )
         print(cmd)
@@ -562,9 +564,9 @@ class TestSegModel:
         seg_eval
         """
         cmd = (
-            "cd PaddleSeg; wget https://bj.bcebos.com/paddleseg/dygraph/cityscapes/%s/model.pdparams; \
+            "cd PaddleSeg; wget -p https://bj.bcebos.com/paddleseg/dygraph/cityscapes/%s/model.pdparams ; \
              mv model.pdparams %s.pdparams; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python -m paddle.distributed.launch val.py --config %s --model_path=%s.pdparams"
+             python -m paddle.distributed.launch val.py --config %s --model_path=%s.pdparams --batch_size 1"
             % (self.model, self.model, self.yaml, self.model)
         )
         detection_result = subprocess.getstatusoutput(cmd)
