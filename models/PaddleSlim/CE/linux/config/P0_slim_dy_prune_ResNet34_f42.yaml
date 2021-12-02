@@ -1,5 +1,5 @@
 MODEL: "slim_dy_prune_ResNet34_f42" # 模型名
-PRIORITY: P0,PreTest
+PRIORITY: P2,PreTest
 GIT:
   addr: $REPO_PaddleSlim
   path: $ROOT_PATH/PaddleSlim

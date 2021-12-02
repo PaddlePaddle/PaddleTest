@@ -43,3 +43,13 @@ if [ ! -d "MobileNetV1_pretrained" ];then
 done
 fi
 ls;
+
+#########目前的P0级别任务第一个执行的,需要安装slim
+echo "-------  install slim --------"
+cd ${root_path}/PaddleSlim
+python -m pip install pip==20.2.4
+python -m pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install -r requirements.txt
+python setup.py install
+echo "------- after install slim --------"
+python -m pip list | grep paddle;
