@@ -545,7 +545,8 @@ class TestSegModel:
         seg_train
         """
         cmd = (
-            'cd PaddleSeg; sed -i s/"iters: 80000"/"iters: 50"/g %s; sed -i s/"batch_size: 2"/"batch_size: 1"/g %s; rm -rf log; \
+            'cd PaddleSeg; sed -i s/"iters: 80000"/"iters: 50"/g %s; \
+            sed -i s/"batch_size: 2"/"batch_size: 1"/g %s; rm -rf log; \
              export HIP_VISIBLE_DEVICES=0,1,2,3; \
              python -u -m paddle.distributed.launch --gpus="0,1,2,3" --log_dir=log_%s train.py --config %s \
 --do_eval --use_vdl --num_workers 6 --save_dir log/%s --save_interval 50 --iters 50'
