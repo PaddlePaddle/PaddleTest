@@ -9,7 +9,7 @@ fi
 python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/csmsc/tts2
-source path.sh
+source ${PWD}/path.sh
 source ${MAIN_ROOT}/utils/parse_options.sh
 conf_path=conf/default.yaml
 train_output_path=exp/default
