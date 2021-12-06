@@ -1,4 +1,4 @@
-MODEL: "slim_st_prune_fpgm_res34" # 模型名
+MODEL: "st_prune_fpgm_res34" # 模型名
 PRIORITY: P1
 GIT:
   addr: $REPO_PaddleSlim
@@ -30,7 +30,7 @@ DATA_PROC:
 TRAIN: # 训练步骤
   -
     tag: linux_st_gpu1
-    priority: p2
+    priority: p0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
@@ -40,6 +40,13 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 slim_st_prune_fpgm_res34_linux_st_gpu1
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.4952
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
+        unit_repr: None
       acc_top1:
         latest: True
         kpi_base: 0.6126
@@ -74,6 +81,13 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 slim_st_prune_fpgm_res34_linux_st_gpu2
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.4952
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
+        unit_repr: None
       acc_top1:
         latest: True
         kpi_base: 0.6138
@@ -134,7 +148,7 @@ TRAIN: # 训练步骤
 EVAL: # 训练步骤
   -
     tag: linux_st_gpu1
-    priority: p2
+    priority: p0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
@@ -144,6 +158,13 @@ EVAL: # 训练步骤
         cmd: sh eval.sh linux_st_gpu1 slim_st_prune_fpgm_res34_linux_st_gpu1_eval
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.4952
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
+        unit_repr: None
       acc_top1:
         latest: True
         kpi_base: 0.6126
@@ -178,6 +199,13 @@ EVAL: # 训练步骤
         cmd: sh eval.sh linux_st_gpu2 slim_st_prune_fpgm_res34_linux_st_gpu2_eval
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.4952
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
+        unit_repr: None
       acc_top1:
         latest: True
         kpi_base: 0.6138

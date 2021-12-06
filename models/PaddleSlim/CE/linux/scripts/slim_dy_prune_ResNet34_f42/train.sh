@@ -34,6 +34,7 @@ fi
 
 cd $code_path
 
+export FLAGS_cudnn_deterministic=True
 
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     python train.py \
@@ -41,11 +42,12 @@ if [ "$1" = "linux_dy_gpu1" ];then #单卡
     --model="resnet34" \
     --data="imagenet" \
     --pruned_ratio=0.25 \
-    --num_epochs=2 \
+    --num_epochs=30 \
     --batch_size=128 \
     --lr_strategy="cosine_decay" \
     --criterion="fpgm" \
-    --model_path="./fpgm_resnet34_025_120_models" > ${log_path}/$2.log 2>&1
+    --model_path="./fpgm_resnet34_025_120_models" \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
     python -m paddle.distributed.launch  \
@@ -54,11 +56,12 @@ elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
     --model="resnet34" \
     --data="imagenet" \
     --pruned_ratio=0.25 \
-    --num_epochs=2 \
+    --num_epochs=30 \
     --batch_size=128 \
     --lr_strategy="cosine_decay" \
     --criterion="fpgm" \
-    --model_path="./fpgm_resnet34_025_120_models" > ${log_path}/$2.log 2>&1
+    --model_path="./fpgm_resnet34_025_120_models" \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
     mv $code_path/prune_r34_f42_linux_dy_gpu2_dist_log $log_path/$2_dist_log
 

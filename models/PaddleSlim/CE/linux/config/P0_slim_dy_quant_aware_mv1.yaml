@@ -1,5 +1,5 @@
 MODEL: "dy_quant_aware_mv1" # 模型名
-PRIORITY: P0
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleSlim
   path: $ROOT_PATH/PaddleSlim

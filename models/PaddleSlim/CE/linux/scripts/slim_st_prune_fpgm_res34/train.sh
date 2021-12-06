@@ -15,6 +15,7 @@ log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #临时环境更改
 
+export FLAGS_cudnn_deterministic=True
 
 #访问RD程序
 print_info(){
@@ -38,15 +39,12 @@ if [ "$1" = "linux_st_gpu1" ];then #单卡
     --pretrained_model="../pretrain/ResNet34_pretrained" \
     --data="imagenet" \
     --pruned_ratio=0.3125 \
-    --lr=0.001 \
-    --num_epochs=1 \
-    --test_period=1 \
-    --step_epochs 30 60 \
-    --l2_decay=1e-4 \
+    --num_epochs=30 \
     --lr_strategy="piecewise_decay" \
     --criterion="geometry_median" \
     --model_path="./fpgm_resnet34_models_gpu1" \
-    --save_inference True > ${log_path}/$2.log 2>&1
+    --save_inference True \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu2" ];then #单卡
@@ -56,15 +54,12 @@ elif [ "$1" = "linux_st_gpu2" ];then #单卡
     --pretrained_model="../pretrain/ResNet34_pretrained" \
     --data="imagenet" \
     --pruned_ratio=0.3125 \
-    --lr=0.001 \
-    --num_epochs=1 \
-    --test_period=1 \
-    --step_epochs 30 60 \
-    --l2_decay=1e-4 \
+    --num_epochs=30 \
     --lr_strategy="piecewise_decay" \
     --criterion="geometry_median" \
     --model_path="./fpgm_resnet34_models_gpu2" \
-    --save_inference True > ${log_path}/$2.log 2>&1
+    --save_inference True \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_cpu" ];then #单卡

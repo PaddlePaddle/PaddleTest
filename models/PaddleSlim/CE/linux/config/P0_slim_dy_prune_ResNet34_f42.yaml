@@ -1,5 +1,5 @@
-MODEL: "slim_dy_prune_ResNet34_f42" # 模型名
-PRIORITY: P2,PreTest
+MODEL: "dy_prune_ResNet34_f42" # 模型名
+PRIORITY: P0,PreTest
 GIT:
   addr: $REPO_PaddleSlim
   path: $ROOT_PATH/PaddleSlim
@@ -24,7 +24,7 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh data_proc.sh all
+        cmd: sh data_proc.sh demo
 
 TRAIN: # 训练步骤
   -
@@ -39,6 +39,13 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 prune_r34_f42_linux_dy_gpu1
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.4952
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
+        unit_repr: None
       acc_top1:
         latest: True
         kpi_base: 0.4952
@@ -74,6 +81,13 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 prune_r34_f42_linux_dy_gpu2
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.4952
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
+        unit_repr: None
       acc_top1:
         latest: True
         kpi_base: 0.5108
@@ -181,6 +195,13 @@ EVAL:
         cmd: sh eval.sh linux_dy_gpu1 prune_r34_f42_eval_linux_dy_gpu1
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.4952
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
+        unit_repr: None
       acc_top1:
         latest: True
         kpi_base: 0.5052
@@ -215,6 +236,13 @@ EVAL:
         cmd: sh eval.sh linux_dy_gpu2 prune_r34_f42_eval_linux_dy_gpu2
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.4952
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
+        unit_repr: None
       acc_top1:
         latest: True
         kpi_base: 0.5052
