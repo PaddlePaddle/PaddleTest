@@ -23,5 +23,4 @@ configs/pix2pix_cityscapes.yaml
 configs/pix2pix_facades.yaml
 configs/realsr_bicubic_noise_x4_df2k.yaml
 configs/realsr_kernel_noise_x4_dped.yaml
-configs/starganv2_afhq.yaml
 configs/wgan_mnist.yaml
