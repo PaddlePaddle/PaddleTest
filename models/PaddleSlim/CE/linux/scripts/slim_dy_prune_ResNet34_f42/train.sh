@@ -28,6 +28,8 @@ if [ $1 -ne 0 ];then
     cat ${log_path}/$2.log
     cp ${log_path}/$2.log ${log_path}/FAIL_$2.log
 else
+  #过滤loss行，同时只选取偶数行,奇数行为eval；
+    grep loss ${log_path}/$2.log | awk 'NR%2==0' >> ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
 fi
 }
