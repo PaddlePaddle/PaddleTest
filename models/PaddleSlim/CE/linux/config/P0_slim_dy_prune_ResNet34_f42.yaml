@@ -41,22 +41,22 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.4952
-        threshold: 0.2
+        kpi_base: 1.428
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.4952
-        threshold: 0.2
+        kpi_base: 0.711
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.7511
-        threshold: 0.2
+        kpi_base: 0.88
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -83,22 +83,22 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.4952
-        threshold: 0.2
+        kpi_base: 0.3668
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.5108
-        threshold: 0.2
+        kpi_base: 0.888
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.7576
-        threshold: 0.2
+        kpi_base: 0.966
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -195,24 +195,11 @@ EVAL:
         cmd: sh eval.sh linux_dy_gpu1 prune_r34_f42_eval_linux_dy_gpu1
 
     kpis: #kpi指标
-      loss:
-        latest: True
-        kpi_base: 0.4952
-        threshold: 0.2
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      acc_top1:
-        latest: True
-        kpi_base: 0.5052
-        threshold: 0.2
-        actived: True
-        evaluation: "+"
-        unit_repr: None
+
       acc_top5:
         latest: True
-        kpi_base: 0.7511
-        threshold: 0.2
+        kpi_base: 0.002
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -236,24 +223,10 @@ EVAL:
         cmd: sh eval.sh linux_dy_gpu2 prune_r34_f42_eval_linux_dy_gpu2
 
     kpis: #kpi指标
-      loss:
-        latest: True
-        kpi_base: 0.4952
-        threshold: 0.2
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      acc_top1:
-        latest: True
-        kpi_base: 0.5052
-        threshold: 0.2
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.7511
-        threshold: 0.2
+        kpi_base: 0.002
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None

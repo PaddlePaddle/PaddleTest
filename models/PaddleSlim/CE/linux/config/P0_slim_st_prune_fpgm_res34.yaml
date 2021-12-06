@@ -42,22 +42,22 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.4952
-        threshold: 0.2
+        kpi_base: 0.416169
+        threshold: 0.000001
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.6126
-        threshold: 0.02
+        kpi_base: 0.921875
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.8410
-        threshold: 0.02
+        kpi_base: 0.9765625
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -83,22 +83,22 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.4952
+        kpi_base: 0.381583
         threshold: 0.2
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.6138
-        threshold: 0.02
+        kpi_base: 0.9296875
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.8406
-        threshold: 0.02
+        kpi_base: 0.97265625
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -148,7 +148,7 @@ TRAIN: # 训练步骤
 EVAL: # 训练步骤
   -
     tag: linux_st_gpu1
-    priority: p0
+    priority: p2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
@@ -158,20 +158,6 @@ EVAL: # 训练步骤
         cmd: sh eval.sh linux_st_gpu1 slim_st_prune_fpgm_res34_linux_st_gpu1_eval
 
     kpis: #kpi指标
-      loss:
-        latest: True
-        kpi_base: 0.4952
-        threshold: 0.2
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      acc_top1:
-        latest: True
-        kpi_base: 0.6126
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       acc_top5:
         latest: True
         kpi_base: 0.8410
@@ -189,7 +175,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/slim_st_prune_fpgm_res34_linux_st_gpu1_eval.log
   -
     tag: linux_st_gpu2
-    priority: p0
+    priority: p2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
@@ -199,20 +185,7 @@ EVAL: # 训练步骤
         cmd: sh eval.sh linux_st_gpu2 slim_st_prune_fpgm_res34_linux_st_gpu2_eval
 
     kpis: #kpi指标
-      loss:
-        latest: True
-        kpi_base: 0.4952
-        threshold: 0.2
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      acc_top1:
-        latest: True
-        kpi_base: 0.6138
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
+
       acc_top5:
         latest: True
         kpi_base: 0.8406
