@@ -1,5 +1,5 @@
 MODEL: "st_prune_fpgm_res34" # 模型名
-PRIORITY: P1
+PRIORITY: P0
 GIT:
   addr: $REPO_PaddleSlim
   path: $ROOT_PATH/PaddleSlim
