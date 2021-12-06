@@ -39,6 +39,8 @@ cd $code_path
 export FLAGS_cudnn_deterministic=True
 
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
+    export FLAGS_cudnn_deterministic=True
+
     python train.py \
     --use_gpu=True \
     --model="resnet34" \
@@ -52,6 +54,8 @@ if [ "$1" = "linux_dy_gpu1" ];then #单卡
     --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
+    export FLAGS_cudnn_deterministic=True
+
     python -m paddle.distributed.launch  \
     --log_dir="prune_r34_f42_linux_dy_gpu2_dist_log" train.py \
     --use_gpu=True \

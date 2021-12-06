@@ -32,9 +32,10 @@ fi
 cd $code_path
 echo -e "\033[32m `pwd` train \033[0m";
 
-export FLAGS_cudnn_deterministic=True
 
 if [ "$1" = "linux_st_gpu1" ];then #单卡
+    export FLAGS_cudnn_deterministic=True
+
     python train.py \
     --model="ResNet34" \
     --pretrained_model="../pretrain/ResNet34_pretrained" \
@@ -49,6 +50,7 @@ if [ "$1" = "linux_st_gpu1" ];then #单卡
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu2" ];then #单卡
+    export FLAGS_cudnn_deterministic=True
 #v2 -50%
     python train.py \
     --model="ResNet34" \
