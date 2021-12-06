@@ -5,7 +5,7 @@ if not exist log\fater_ernie md log\fater_ernie
 
 set logpath=%cd%\log\fater_ernie
 
-cd models_repo\examples\experimental\faster_ernie\%2
+cd models_repo\examples\faster\faster_ernie\%2
 
 python predict.py --device %1 --save_dir checkpoints/model_%3 > %logpath%/infer_%2_%1.log 2>&1
 
