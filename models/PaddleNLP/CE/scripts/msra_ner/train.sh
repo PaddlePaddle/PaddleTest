@@ -52,7 +52,7 @@ else
         --logging_steps 10 \
         --save_steps 500 \
         --max_steps 1000 \
-        --output_dir ./tmp/msra_ner/multi \
+        --output_dir ./tmp/msra_ner_multi/ \
         --device ${DEVICE} >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
 fi
 #set http_proxy
