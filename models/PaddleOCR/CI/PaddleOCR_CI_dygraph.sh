@@ -353,6 +353,13 @@ if [[ $(echo $model | grep -c "ch") -eq 0 ]];then
 echo "######  none chinese"
 if [[ ${model} =~ "sast" ]] || [[ ${model} =~ "det_r50_vd_east" ]];then
    python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="pretrain_models/models_inference/"$model"_v2.0_train" --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
+   if [[ $? -eq 0 ]]; then
+      cat $log_path/predict/${model}.log
+      echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/predict/${model}.log
+      echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
+fi
 else
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"${model} --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
