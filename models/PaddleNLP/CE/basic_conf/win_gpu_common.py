@@ -72,4 +72,6 @@ EXEC_TAG = [
     "win_dy_gpu1_AFQMC",
     "win_dy_gpu1_IFLYTEK",
     "win_dy_gpu1_TNEWS",
+    "win_dy_gpu1_pair-wise",
+    "win_dy_gpu1_point-wise",
 ]

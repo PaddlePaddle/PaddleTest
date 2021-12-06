@@ -22,10 +22,9 @@ cd $root_path/models_repo
 cd examples/text_to_knowledge/ernie-ctm
 
 
-python -u eval.py \
-    --max_seq_len 128 \
-    --batch_size 32   \
-    --init_ckpt_dir ./tmp/ernie_ctm_ft_model_100.pdparams \
-    --device $1 > $log_path/eval_$1.log 2>&1
+python -m paddle.distributed.launch --gpus $2 predict.py \
+    --params_path ./output/model_100/model_state.pdparams \
+    --batch_size 32 \
+    --device $1 > $log_path/infer_$1.log 2>&1
 
-print_info $? eval_$1
+print_info $? infer_$1
