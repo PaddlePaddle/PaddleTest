@@ -15,9 +15,9 @@ unset https_proxy
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/experimental/faster_ernie/$2/
+code_path=$cur_path/../../models_repo/examples/faster/faster_ernie/$2/
 log_path=$root_path/log/$model_name/
-DPADDLE_LIB=$cur_path/../../models_repo/examples/experimental/faster_ernie/$2/cpp_deploy/lib/paddle_inference
+DPADDLE_LIB=$cur_path/../../models_repo/examples/faster/faster_ernie/$2/cpp_deploy/lib/paddle_inference
 
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
