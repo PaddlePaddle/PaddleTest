@@ -171,8 +171,14 @@ fi
 fi
 
 # eval
-if [[ ${model} =~ "det_r50_vd_east" ]];then   #eval时间不稳定
-   sleep 0.01
+if [[ ${model} =~ "det_r50_vd_east" ]];then
+   python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/"$model"_v2.0_train/best_accuracy" > $log_path/eval/$model.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/$model.log) -eq 0 ]];then
+      echo -e "\033[33m eval of $model  successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/eval/$model.log
+      echo -e "\033[31m eval of $model failed!\033[0m" | tee -a $log_path/result.log
+   fi
 
 elif [[ ${model} =~ "sast" ]] || [[ ${model} =~ "det_mv3_east" ]];then
    head -5 ./train_data/icdar2015/text_localization/test_icdar2015_label.txt > test_icdar2015_label_5.txt
@@ -205,7 +211,7 @@ else
    echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 else
-   if [[ ${model} =~ "det_r50_vd_east" ]] || [[ ${model} =~ "det_r50_vd_sast_totaltext" ]];then
+   if [[ ${model} =~ "det_r50_vd_east" ]] || [[ ${model} =~ "sast" ]];then
       python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/"${model}"_v2.0_train/best_accuracy" Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
       if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
          echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
@@ -213,24 +219,7 @@ else
          cat $log_path/infer/${model}.log
          echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
       fi
-   elif [[ ${model} =~ "det_r50_vd_sast_icdar15" ]];then
-      python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/"${model}"_v2.0_train/best_accuracy" Global.infer_img="./doc/imgs_en/254.jpg" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
-      if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
-         echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
-      else
-         cat $log_path/infer/${model}.log
-         echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
-      fi
-   elif [[ ${model} =~ "det_r50_vd_pse" ]];then
-      mv ./doc/imgs_en/model_prod_flow_en.png ./
-      python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
-      if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
-         echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
-      else
-         cat $log_path/infer/${model}.log
-         echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
-      fi
-      mv ./model_prod_flow_en.png ./doc/imgs_en/
+
    else
    python tools/infer_${category}.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest" Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1 > $log_path/infer/${model}.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
@@ -362,7 +351,7 @@ else
 echo "######  det"
 if [[ $(echo $model | grep -c "ch") -eq 0 ]];then
 echo "######  none chinese"
-if [[ ${model} =~ "sast" ]];then
+if [[ ${model} =~ "sast" ]] || [[ ${model} =~ "det_r50_vd_east" ]];then
    python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="pretrain_models/models_inference/"$model"_v2.0_train" --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 else
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"${model} --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
