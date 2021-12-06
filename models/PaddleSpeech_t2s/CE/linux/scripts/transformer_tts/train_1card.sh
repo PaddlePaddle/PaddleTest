@@ -14,7 +14,7 @@ source ${MAIN_ROOT}/utils/parse_options.sh
 conf_path=conf/default.yaml
 train_output_path=exp/default
 # data preprocess
-sed -i "s/python3/python/g" preprocess.sh
+sed -i "s/python3/python/g" ./local/preprocess.sh
 rm -rf dump
 ./local/preprocess.sh ${conf_path} > preprocess.log 2>&1
 if [ $? -eq 0 ];then

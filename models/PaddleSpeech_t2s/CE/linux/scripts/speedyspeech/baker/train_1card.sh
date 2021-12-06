@@ -30,7 +30,7 @@ else
 fi
 
 # train
-sed -i "s/max_epoch: 300/max_epoch: 10/g" ${conf_path}
+sed -i "s/max_epoch: 200/max_epoch: 50/g" ${conf_path}
 sed -i "s/python3/python/g" ./local/train.sh
 rm -rf exp
 ./local/train.sh ${conf_path} ${train_output_path} > train_1card.log 2>&1
@@ -41,5 +41,5 @@ else
    cat train_1card.log
    echo -e "\033[31m training_1card of speedyspeech failed! \033[0m"
 fi
-sed -i "s/max_epoch:10/max_epoch: 300/g" ${conf_path}
-cat train_1card.log | grep "3060/3060" | awk 'BEGIN{FS=","} {print $6}' > ../../../../log/speedyspeech_baker_1card.log
+sed -i "s/max_epoch:50/max_epoch: 200/g" ${conf_path}
+cat train_1card.log | grep "7650/7650" | awk 'BEGIN{FS=","} {print $6}' > ../../../../log/speedyspeech_baker_1card.log
