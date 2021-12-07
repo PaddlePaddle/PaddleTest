@@ -65,4 +65,4 @@ recall_mind_BRANCH = BASE_BRANCH
 # linux cpu下， P0的任务要跑的标签 daily
 EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["TRAIN", "INFER"]
-EXEC_TAG = ["linux_st_cpu", "linux_dy_cpu"]
+EXEC_TAG = ["linux_dy_cpu"]
