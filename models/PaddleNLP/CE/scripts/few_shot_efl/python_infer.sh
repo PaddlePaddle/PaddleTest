@@ -37,6 +37,6 @@ mkdir -p ./python_output/$4
 
 python export_model.py --params_path=./checkpoints/$4/$2/model_$5/model_state.pdparams --output_path=./python_output/$4
 
-python deploy/python/predict.py --model_dir=./python_output/$4 --device $1 > $log_path/python_infer_$4_$2_$1.log 2>&1
+python deploy/python/predict.py --model_dir=./python_output/$4 --device $1 --task_name $4 > $log_path/python_infer_$4_$2_$1.log 2>&1
 
 print_info $? python_infer_$4_$2_$1
