@@ -2,7 +2,7 @@ MODEL: "electra" # 模型名
 PRIORITY: P0 # 没有数据集
 GIT:
   addr: $REPO_PaddleNLP
-  path: $ROOT_PATH/electra
+  path: $ROOT_PATH/models_repo
   branch: $BASE_BRANCH
 
 ENV:
