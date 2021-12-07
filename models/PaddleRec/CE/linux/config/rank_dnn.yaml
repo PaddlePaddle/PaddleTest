@@ -150,8 +150,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
-        threshold: 0.02
+        kpi_base: 0.983982
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -223,7 +223,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/rank_dnn_linux_st_gpu2_dist_log/workerlog.0
 
   -
-    tag: linux_st_cpu # st_cpu
+    tag: linux_st_cpu
     priority: p0
     run:
       -
@@ -233,8 +233,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
-        threshold: 0.02
+        kpi_base: 0.983982
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -247,7 +247,162 @@ TRAIN: # 训练步骤
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_rank_dnn_linux_st_cpu.log
+# mac train(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_dy_cpu rank_dnn_mac_dy_cpu
 
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.983982
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_st_cpu rank_dnn_mac_st_cpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.983982
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_mac_st_cpu.log
+# win train(small data)
+  -
+    tag: win_dy_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_gpu rank_dnn_win_dy_gpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.983982
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_cpu rank_dnn_win_dy_cpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.983982
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_gpu rank_dnn_win_st_gpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.983982
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_cpu rank_dnn_win_st_cpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.983982
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -316,8 +471,8 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
-        threshold: 0.02
+        kpi_base: 0.936478
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -395,8 +550,8 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
-        threshold: 0.02
+        kpi_base: 0.936478
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -466,3 +621,159 @@ INFER:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_linux_st_gpu1_con.log
+# mac infer(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_dy_cpu rank_dnn_infer_mac_dy_cpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.936478
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_st_cpu rank_dnn_infer_mac_st_cpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.936478
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_mac_st_cpu.log
+# win infer(small data)
+  -
+    tag: win_dy_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_gpu rank_dnn_infer_win_dy_gpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.936478
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_cpu rank_dnn_infer_win_dy_cpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.936478
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_gpu rank_dnn_infer_win_st_gpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.936478
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_cpu rank_dnn_infer_win_st_cpu
+
+    kpis: #kpi指标
+      auc:
+        latest: True
+        kpi_base: 0.936478
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_win_st_cpu.log

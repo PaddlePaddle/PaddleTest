@@ -29,7 +29,6 @@ else
 fi
 }
 
-
 cd $code_path
 echo -e "\033[32m `pwd` train \033[0m";
 
@@ -57,7 +56,7 @@ sed -i "s/  infer_start_epoch: 19/  infer_start_epoch: 0/g" config_bigdata.yaml
 sed -i "s/  infer_end_epoch: 20/  infer_end_epoch: 1/g" config_bigdata.yaml
 
 rm -rf output
-
+# linux train
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_ncf_all_dy_gpu1" > ${log_path}/$2.log 2>&1
@@ -69,8 +68,7 @@ elif [ "$1" = "linux_dy_gpu2" ];then #多卡
     print_info $? $2
     mv $code_path/log $log_path/$2_dist_log
 elif [ "$1" = "linux_dy_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u ../../../tools/trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_ncf_all_dy_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/trainer.py -m config.yaml -o runner.model_save_path="output_model_ncf_all_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu1" ];then #单卡
@@ -85,9 +83,16 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
     mv $code_path/log $log_path/$2_dist_log
 
 elif [ "$1" = "linux_st_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u ../../../tools/static_trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_ncf_all_st_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.model_save_path="output_model_ncf_all_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
+# mac small_data train
+elif [ "$1" = "mac_dy_cpu" ];then
+    python -u ../../../tools/trainer.py -m config.yaml -o runner.model_save_path="output_model_ncf_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+elif [ "$1" = "mac_st_cpu" ];then
+    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.model_save_path="output_model_ncf_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
 else
     echo "$model_name train.sh  parameters error "
 fi
