@@ -1,4 +1,4 @@
-MODEL: "dy_prune_ResNet34_f42" # 模型名
+MODEL: "dy_prune_ResNet34" # 模型名
 PRIORITY: P0,PreTest
 GIT:
   addr: $REPO_PaddleSlim
@@ -41,21 +41,21 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.428
+        kpi_base: 0.5365
         threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.711
+        kpi_base: 0.86
         threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.88
+        kpi_base: 0.937
         threshold: 0
         actived: True
         evaluation: "+"
@@ -83,21 +83,21 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.5822
+        kpi_base: 1.6651
         threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.832
+        kpi_base: 0.562
         threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.93
+        kpi_base: 0.816
         threshold: 0
         actived: True
         evaluation: "+"
@@ -198,7 +198,7 @@ EVAL:
 
       acc_top5:
         latest: True
-        kpi_base: 0.002
+        kpi_base: 0.008
         threshold: 0
         actived: True
         evaluation: "+"
@@ -225,7 +225,7 @@ EVAL:
     kpis: #kpi指标
       acc_top5:
         latest: True
-        kpi_base: 0.002
+        kpi_base: 0.008
         threshold: 0
         actived: True
         evaluation: "+"
