@@ -129,6 +129,27 @@ FINETUNE:
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/single_fine-tune.log
 
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: finetune.bat $XPU
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.652223
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_$XPU.log
+
 INFER:
   -
     priority: p0
@@ -140,6 +161,27 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash infer.sh
     kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat
+
+    kpis: #kpi指标
       exit_code:
         latest: True
         kpi_base: 0

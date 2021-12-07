@@ -30,9 +30,6 @@ DATA_PROC:
     priority: p0
     tag: mac_download_data
     run:
-      # -
-      #   path: $ROOT_PATH/scripts
-      #   cmd: bash compile_package.sh
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh

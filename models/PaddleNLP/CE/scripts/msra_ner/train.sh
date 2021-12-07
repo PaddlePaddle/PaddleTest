@@ -28,7 +28,9 @@ MULTI=$2
 
 if [[ ${MULTI} == "single" ]]; then
     python -u ./train.py \
+        --model_type bert \
         --model_name_or_path bert-base-multilingual-uncased \
+        --dataset msra_ner \
         --max_seq_length 128 \
         --batch_size 32 \
         --learning_rate 2e-5 \
@@ -40,7 +42,9 @@ if [[ ${MULTI} == "single" ]]; then
         --device ${DEVICE} >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
 else
     python -m paddle.distributed.launch --gpus "$3" ./train.py \
+        --model_type bert \
         --model_name_or_path bert-base-multilingual-uncased \
+        --dataset msra_ner \
         --max_seq_length 128 \
         --batch_size 32 \
         --learning_rate 2e-5 \
@@ -48,7 +52,7 @@ else
         --logging_steps 10 \
         --save_steps 500 \
         --max_steps 1000 \
-        --output_dir ./tmp/msra_ner/ \
+        --output_dir ./tmp/msra_ner_multi/ \
         --device ${DEVICE} >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
 fi
 #set http_proxy

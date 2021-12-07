@@ -10,19 +10,7 @@ fi
 python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/csmsc/tts3
-pwd
-ls
-
-export MAIN_ROOT=`realpath ${PWD}/../../../`
-export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}
-export LC_ALL=C
-export PYTHONDONTWRITEBYTECODE=1
-# Use UTF-8 in Python to avoid UnicodeDecodeError when LC_ALL=C
-export PYTHONIOENCODING=UTF-8
-export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}
-MODEL=fastspeech2
-export BIN_DIR=${MAIN_ROOT}/paddlespeech/t2s/exps/${MODEL}
-
+source ${PWD}/path.sh
 source ${MAIN_ROOT}/utils/parse_options.sh
 conf_path=conf/default.yaml
 train_output_path=exp/default

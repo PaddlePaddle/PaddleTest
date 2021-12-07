@@ -1,5 +1,7 @@
 MODEL: "GPT-2" # 模型名
-PRIORITY: P0, Pre_test, Dy_con
+
+PRIORITY: P0, Pre_test, Dy_con, agile_ci
+
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
