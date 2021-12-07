@@ -45,7 +45,7 @@ TRAIN: # 训练步骤，还未提测
         actived: True
         evaluation: "-"
         unit_repr: "s"
-      accu:
+      accuracy:
         latest: True
         kpi_base: 0.91917
         threshold: 0.01
@@ -72,7 +72,7 @@ TRAIN: # 训练步骤，还未提测
         actived: True
         evaluation: "-"
         unit_repr: "s"
-      accu:
+      accuracy:
         latest: True
         kpi_base: 0.93000
         threshold: 0.05
