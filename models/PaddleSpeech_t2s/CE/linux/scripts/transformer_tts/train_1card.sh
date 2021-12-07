@@ -27,7 +27,7 @@ fi
 
 # train
 sed -i "s/max_epoch: 500/max_epoch: 1/g;s/batch_size: 16/batch_size: 2/g"  ${conf_path}
-sed -i "s/python3/python/g" ./local/train.sh
+sed -i "s/python3/python/g;s/ngpu=2/ngpu=1/g" ./local/train.sh
 rm -rf exp
 ./local/train.sh ${conf_path} ${train_output_path} > train_1card.log 2>&1
 if [ $? -eq 0 ];then
