@@ -35,14 +35,13 @@ echo -e "\033[32m `pwd` train \033[0m";
 
 if [ "$1" = "linux_st_gpu1" ];then #单卡
     export FLAGS_cudnn_deterministic=True
-    echo ------env variable----------
-    export | grep FLAGS_cudnn_deterministic
+
     python train.py \
     --model="ResNet34" \
     --pretrained_model="../pretrain/ResNet34_pretrained" \
     --data="imagenet" \
     --pruned_ratio=0.3125 \
-    --num_epochs=10 \
+    --num_epochs=30 \
     --lr_strategy="piecewise_decay" \
     --criterion="geometry_median" \
     --model_path="./fpgm_resnet34_models_gpu1" \
@@ -52,15 +51,13 @@ if [ "$1" = "linux_st_gpu1" ];then #单卡
 
 elif [ "$1" = "linux_st_gpu2" ];then #
     export FLAGS_cudnn_deterministic=True
-    echo ------env variable----------
-    export | grep FLAGS_cudnn_deterministic
 
     python train.py \
     --model="ResNet34" \
     --pretrained_model="../pretrain/ResNet34_pretrained" \
     --data="imagenet" \
     --pruned_ratio=0.3125 \
-    --num_epochs=10 \
+    --num_epochs=30 \
     --lr_strategy="piecewise_decay" \
     --criterion="geometry_median" \
     --model_path="./fpgm_resnet34_models_gpu2" \

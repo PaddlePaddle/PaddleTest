@@ -40,15 +40,13 @@ export FLAGS_cudnn_deterministic=True
 
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     export FLAGS_cudnn_deterministic=True
-    echo ------env variable----------
-    export | grep FLAGS_cudnn_deterministic
 
     python train.py \
     --use_gpu=True \
     --model="resnet34" \
     --data="imagenet" \
     --pruned_ratio=0.25 \
-    --num_epochs=10 \
+    --num_epochs=30 \
     --batch_size=128 \
     --lr_strategy="cosine_decay" \
     --criterion="fpgm" \
@@ -57,8 +55,6 @@ if [ "$1" = "linux_dy_gpu1" ];then #单卡
     print_info $? $2
 elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
     export FLAGS_cudnn_deterministic=True
-    echo ------env variable----------
-    export | grep FLAGS_cudnn_deterministic
 
     python -m paddle.distributed.launch  \
     --log_dir="prune_r34_f42_linux_dy_gpu2_dist_log" train.py \
@@ -66,7 +62,7 @@ elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
     --model="resnet34" \
     --data="imagenet" \
     --pruned_ratio=0.25 \
-    --num_epochs=10 \
+    --num_epochs=30 \
     --batch_size=128 \
     --lr_strategy="cosine_decay" \
     --criterion="fpgm" \
