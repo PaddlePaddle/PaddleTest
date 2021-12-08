@@ -181,6 +181,35 @@ print_info $? st_quant_post_${algo}_bc_eval2
 done
 }
 
+# 2.3 quant_post_hpo # 小数据集
+demo_quant_quant_post_hpo(){
+
+cd ${slim_dir}/demo/quant/quant_post_hpo || catchException demo_quant_quant_post_hpo
+export CUDA_VISIBLE_DEVICES=${cudaid1}
+# 1.导出模型
+python ../quant_post/export_model.py \
+--model "MobileNet" \
+--pretrained_model ../../pretrain/MobileNetV1_pretrained \
+--data imagenet > ${log_path}/st_quant_post__hpo_v1_export 2>&1
+print_info $? st_quant_post__hpo_v1_export
+# 2. quant_post_hpo 设置max_model_quant_count=2
+python quant_post_hpo.py  \
+--use_gpu=True     \
+--model_path="./inference_model/MobileNet/"   \
+--save_path="./inference_model/MobileNet_quant/"   \
+--model_filename="model"    \
+--params_filename="weights"  \
+--max_model_quant_count=2 > ${log_path}/st_quant_post_hpo 2>&1
+print_info $? st_quant_post_hpo
+# 3. 量化后eval
+python ../quant_post/eval.py \
+--model_path ./inference_model/MobileNet_quant \
+--model_name __model__ \
+--params_name __params__ > ${log_path}/st_quant_post_hpo_eval 2>&1
+print_info $? st_quant_post_hpo_eval
+
+}
+
 #2.4
 demo_quant_pact_quant_aware(){
 cd ${slim_dir}/demo/quant/pact_quant_aware || catchException demo_quant_pact_quant_aware
@@ -456,6 +485,7 @@ all_quant(){ # 10个模型
     demo_dygraph_quant    # 2个模型
     demo_quant_pact_quant_aware  # 1个模型
     ce_tests_dygraph_qat4  # 4个模型
+    demo_quant_quant_post_hpo
 }
 
 # 3 prune
