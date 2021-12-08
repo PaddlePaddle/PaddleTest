@@ -24,6 +24,7 @@ md log_err
 )
 
 echo test_start !
+set err_sign=0
 set absolute_path=%cd%
 for  /f %%i in (det_win_cpu_list) do (
 echo %%i
@@ -87,12 +88,18 @@ if !errorlevel! EQU 0 (
 )
 )
 
+if !err_sign! EQU 1 (
+exit /b
+)
+
+
 :train
 python tools/train.py -c !config_path! -o TrainReader.batch_size=1 epoch=2 use_gpu=false >log/!model!/!model!_train.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_train.log log_err\!model!\
 echo !model!, train, FAIL
+set err_sign=1
 ) else (
 echo !model!,train, SUCCESS
 )
@@ -108,6 +115,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_eval.log log_err\!model!\
 echo !model!, eval, FAIL
+set err_sign=1
 ) else (
 echo !model!,eval, SUCCESS
 )
@@ -122,6 +130,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
 echo !model!, infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,infer, SUCCESS
 )
@@ -131,6 +140,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
 echo !model!, infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,infer, SUCCESS
 )
@@ -139,7 +149,6 @@ goto:eof
 
 :export
 findstr /i /c:"!model!" "skip_export.txt" >tmp_export
-rem echo !model! | findstr /i "cascade" >tmp_export
 if !errorlevel! EQU 0 (
 echo !model! does not test export for some reason!
 ) else (
@@ -148,6 +157,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_export.log log_err\!model!\
 echo !model!, export_model, FAIL
+set err_sign=1
 ) else (
 echo !model!,export_model, SUCCESS
 )
@@ -162,6 +172,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
 )
@@ -171,6 +182,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
 )
