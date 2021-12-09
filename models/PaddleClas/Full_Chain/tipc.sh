@@ -6,7 +6,7 @@ set -ex
 
 REPO=$1
 DOCKER_IMAGE=registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82
-DOCKER_NAME=paddle_whole_chain_test
+DOCKER_NAME=paddle_whole_chain_test_clas
 COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
 
 # define version compare function
@@ -28,7 +28,7 @@ fi
 export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}
 
 
-docker rm -f ${DOCKER_NAME} || echo "remove docker paddle_whole_chain_test failed"
+docker rm -f ${DOCKER_NAME} || echo "remove docker paddle_whole_chain_test_clas failed"
 nvidia-docker run -i --rm \
                   --name ${DOCKER_NAME} \
                   --privileged \
