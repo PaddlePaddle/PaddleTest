@@ -70,7 +70,7 @@ python -m pip install --retries 10 paddleslim
 python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
-cp ../continuous_integration/tipc/tipc_run.sh .
+cp ../PaddleTest/models/PaddleClas/Full_Chain/tipc_run.sh .
 sh tipc_run.sh
 "
 
