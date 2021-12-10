@@ -5,9 +5,12 @@ set -ex
 #repo_list="PaddleOCR PaddleClas PaddleSeg PaddleNLP PaddleDetection PaddleRec DeepSpeech"
 
 REPO=$1
-DOCKER_IMAGE=registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82
-DOCKER_NAME=paddle_whole_chain_test_gan
-COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+# 参数作为配置文件传入
+# DOCKER_IMAGE=registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82
+# DOCKER_NAME=paddle_whole_chain_test_gan
+# # COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+# COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/890bd6266c1ba638ded7487e189fcf658e0579a1/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+# #1207 COMPILE_PATH
 
 # define version compare function
 function version_lt() { test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" != "$1"; }
