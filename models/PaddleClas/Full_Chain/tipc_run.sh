@@ -4,7 +4,7 @@
 test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
 
-cat full_chain_list_clas_unrun | while read config_file
+cat full_chain_list_clas_all | while read config_file
 do
 # for config_file in `find . -name "*train_infer_python.txt" | grep -v "LeViT_384"  | grep -v "DeiT_base_patch16_384"`; do
     for mode in $test_mode; do

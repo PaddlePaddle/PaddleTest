@@ -48,10 +48,6 @@ filename=${line##*/}
 model=${filename%.*}
 echo $model
 
-sed -i '' 's/epochs/total_iters/g' configs/cyclegan_cityscapes.yaml #将epcoh换为iter
-
-sed -ie '/- name: PairedRandomHorizontalFlip/{N;d;}' configs/esrgan_x4_div2k.yaml  #删除随机变量
-
 if [[ ${model_flag} =~ "CE" ]]; then
    if [[ ${line} =~ 'GoogLeNet' ]] || [[ ${line} =~ 'VGG' ]] || [[ ${line} =~ 'ViT' ]] || [[ ${line} =~ 'PPLCNet' ]] || [[ ${line} =~ 'MobileNetV3' ]]; then
    sed -i '' 's/learning_rate:/learning_rate: 0.0001 #/g' $line #将 学习率调低为0.0001
@@ -113,7 +109,7 @@ if [ $? -eq 0 ];then
 else
    cat $log_path/infer/${model}_infer.log
    echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
-   echo "infer_exit_code: 0.0" >> $log_path/infer/$model.log
+   echo "infer_exit_code: 1.0" >> $log_path/infer/$model.log
 fi
 
 # export_model
@@ -127,7 +123,7 @@ if [ $? -eq 0 ];then
 else
    cat $log_path/export_model/$model.log
    echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
-   echo "export_exit_code: 0.0" >> $log_path/export_model/$model.log
+   echo "export_exit_code: 1.0" >> $log_path/export_model/$model.log
 fi
 
 # predict
