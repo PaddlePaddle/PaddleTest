@@ -4,6 +4,7 @@ echo ${Project_path}
 echo "data_path"
 echo ${data_path}
 
+
 echo "path before"
 pwd
 if [[ ${model_flag} =~ 'CE' ]]; then
