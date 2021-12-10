@@ -1,6 +1,7 @@
 unset GREP_OPTIONS
 echo "Project_path"
 echo ${Project_path}
+echo "data_path"
 echo ${data_path}
 
 echo "path before"
