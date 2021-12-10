@@ -5,9 +5,11 @@ set -ex
 #repo_list="PaddleOCR PaddleClas PaddleSeg PaddleNLP PaddleDetection PaddleRec DeepSpeech"
 
 REPO=$1
-DOCKER_IMAGE=registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82
-DOCKER_NAME=paddle_whole_chain_test_clas
-COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+# 参数作为配置文件传入
+# DOCKER_IMAGE=registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82
+# DOCKER_NAME=paddle_whole_chain_test_clas
+# # COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+# COMPILE_PATH=COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
 
 # define version compare function
 function version_lt() { test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" != "$1"; }
@@ -28,7 +30,7 @@ fi
 export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}
 
 
-docker rm -f ${DOCKER_NAME} || echo "remove docker paddle_whole_chain_test_clas failed"
+docker rm -f ${DOCKER_NAME} || echo "remove docker ${DOCKER_NAME} failed"
 nvidia-docker run -i --rm \
                   --name ${DOCKER_NAME} \
                   --privileged \
@@ -72,6 +74,8 @@ python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
 cp ../PaddleTest/models/PaddleClas/Full_Chain/tipc_run.sh .
+cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_unrun .
+cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_all .
 sh tipc_run.sh
 "
 
