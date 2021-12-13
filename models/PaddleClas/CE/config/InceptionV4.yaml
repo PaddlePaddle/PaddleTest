@@ -131,19 +131,19 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.5685
+        kpi_base: 6.69099
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 117.75373
+        kpi_base: 7.21561
         threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/InceptionV4_train.log
+    output: $ROOT_PATH/$model_log_path/InceptionV4_cpu.log
 
 EVAL: # 训练步骤
   -
@@ -194,7 +194,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 117.75373
+        kpi_base: 7.21561
         threshold: 0.0
         actived: True
         evaluation: "="

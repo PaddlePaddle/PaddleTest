@@ -72,7 +72,7 @@ python -m pip install --retries 10 psutil
 python -m pip install --retries 10 GPUtil
 python -m pip install --retries 10 paddleslim
 python -m pip install --retries 10 -r requirements.txt
-python -m pip install -v -e .
+python -m pip install -v -e . #安装ppgan
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
 cp ../PaddleTest/models/PaddleGAN/Full_Chain/tipc_run.sh .
@@ -102,7 +102,7 @@ if [[ ! -f ${log_file} ]];then
 else
   number_lines=$(cat ${log_file} | wc -l)
   failed_line=$(grep -o "failed" ${log_file}|wc -l)
-  zero=0
+  zero=$(grep -o "The one-time configuration of analysis predictor failed" ${log_file}|wc -l)
   if [ $failed_line -ne $zero ]
   then
       echo " "

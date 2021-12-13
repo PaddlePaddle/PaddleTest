@@ -131,19 +131,19 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.81294
+        kpi_base: 7.01005
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.44571
+        kpi_base: 7.59464
         threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/DLA46_c_train.log
+    output: $ROOT_PATH/$model_log_path/DLA46_c_cpu.log
 
 EVAL: # 训练步骤
   -
@@ -194,7 +194,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 7.44571
+        kpi_base: 7.59464
         threshold: 0.0
         actived: True
         evaluation: "="
