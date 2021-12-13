@@ -143,7 +143,7 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/Res2Net50_26w_4s_train.log
+    output: $ROOT_PATH/$model_log_path/Res2Net50_26w_4s_cpu.log
 
 EVAL: # 训练步骤
   -

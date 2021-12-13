@@ -143,7 +143,7 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/GhostNet_x1_3_train.log
+    output: $ROOT_PATH/$model_log_path/GhostNet_x1_3_cpu.log
 
 EVAL: # 训练步骤
   -

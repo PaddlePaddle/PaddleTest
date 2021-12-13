@@ -167,16 +167,16 @@ elif [[ ${model} == 'HRNet_W18_C' ]]; then
     sed -i "" "s|P0|P0|g" $model.yaml #P0/1
     sed -i "" "s|6.43773|6.4628|g" $model.yaml #linux_train_单卡
     sed -i "" "s|6.44749|6.54288|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|11|g" $model.yaml #linux_eval
-    sed -i "" "s|18.21894|11|g" $model.yaml #linux_train_eval
+    sed -i "" "s|0.93207|16|g" $model.yaml #linux_eval
+    sed -i "" "s|18.21894|16|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.81282|g" $model.yaml #windows_train
-    sed -i "" "s|0.93661|11|g" $model.yaml #windows_eval
-    sed -i "" "s|190.68218|11|g" $model.yaml #windows_train_eval
+    sed -i "" "s|0.93661|16|g" $model.yaml #windows_eval
+    sed -i "" "s|190.68218|16|g" $model.yaml #windows_train_eval
 
     sed -i "" "s|6.81317|6.81282|g" $model.yaml #mac_train
-    sed -i "" "s|0.93661|11|g" $model.yaml #mac_eval
-    sed -i "" "s|190.68218|11|g" $model.yaml #mac_train_eval
+    sed -i "" "s|0.93661|16|g" $model.yaml #mac_eval
+    sed -i "" "s|190.68218|16|g" $model.yaml #mac_train_eval
     sed -i "" "s|threshold: 0.0|threshold: 0.1|g" $model.yaml #bodong
     sed -i "" 's|"="|"-"|g' $model.yaml
 

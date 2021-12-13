@@ -143,7 +143,7 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_train.log
+    output: $ROOT_PATH/$model_log_path/PPLCNet_x1_0_cpu.log
 
 EVAL: # 训练步骤
   -
