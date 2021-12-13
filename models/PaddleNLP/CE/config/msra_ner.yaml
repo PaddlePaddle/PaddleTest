@@ -202,7 +202,7 @@ EVAL:
     output: $ROOT_PATH/$model_log_path/eval_$XPU.log
 
   - #可以有多步
-    priority: p2  # 显卡不足，先关闭
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
@@ -211,25 +211,11 @@ EVAL:
         path: $ROOT_PATH/$model_scripts_path
         cmd: eval.bat $XPU
     kpis: #kpi指标
-      precision:
+      exit_code:
         latest: True
-        kpi_base: 0.809076
-        threshold: 0.02
+        kpi_base: 0
+        threshold: 0
         actived: True
-        evaluation: "+"
-        unit_repr: "s"
-      recall:
-        latest: True
-        kpi_base: 0.854042
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
-      f1:
-        latest: True
-        kpi_base: 0.830951
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
+        evaluation: "-"
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/eval_$XPU.log

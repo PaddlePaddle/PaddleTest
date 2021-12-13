@@ -122,8 +122,8 @@ done
 if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'CI_step0' ]] \
    || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
    find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; \
-      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'fp16' |grep -v 'distill' \
-      > models_list_all
+      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'fp16' |grep -v 'distill' |grep -v 'ResNeXt101_32x48d_wsl'\
+      > models_list_all #ResNeXt101_32x48d_wsl OOM   fp16 seresnet存在问题
 
    if [[ ${model_flag} =~ 'CI_step0' ]]; then
       cat models_list_all | while read line

@@ -1,5 +1,5 @@
 unset GREP_OPTIONS
-echo ${cudaid1}
+# echo ${cudaid1}
 echo ${cudaid2}
 echo ${Data_path}
 echo ${paddle_compile}

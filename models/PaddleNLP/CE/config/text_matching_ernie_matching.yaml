@@ -25,7 +25,7 @@ DATA_PROC:
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
   -
-    priority: p2
+    priority: p1
     tag: win_download_data
     run:
       -
@@ -70,7 +70,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train_point-wise_multi_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1_point-wise
     run:
       -
@@ -125,7 +125,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train_pair-wise_multi_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1_pair-wise
     run:
       -
@@ -179,7 +179,7 @@ INFER:
     output: $ROOT_PATH/$model_log_path/infer_pair-wise_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1_point-wise
     run:
       -
@@ -197,7 +197,7 @@ INFER:
     output: $ROOT_PATH/$model_log_path/infer_point-wise_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1_pair-wise
     run:
       -
@@ -251,7 +251,7 @@ PYTHON_INFER:
     output: $ROOT_PATH/$model_log_path/python_infer_pair-wise_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1_point-wise
     run:
       -
@@ -269,7 +269,7 @@ PYTHON_INFER:
     output: $ROOT_PATH/$model_log_path/python_infer_point-wise_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1_pair-wise
     run:
       -
