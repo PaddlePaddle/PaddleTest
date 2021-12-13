@@ -13,11 +13,9 @@
 ./test_tipc/config/VisionTransformer/ViT_small_patch16_224_train_infer_python.txt
 ./test_tipc/config/VisionTransformer/ViT_large_patch32_384_train_infer_python.txt
 ./test_tipc/config/VisionTransformer/ViT_base_patch16_224_train_infer_python.txt
-./test_tipc/config/VisionTransformer/ViT_huge_patch32_384_train_infer_python.txt
 ./test_tipc/config/VisionTransformer/ViT_base_patch32_384_train_infer_python.txt
 ./test_tipc/config/VisionTransformer/ViT_large_patch16_384_train_infer_python.txt
 ./test_tipc/config/VisionTransformer/ViT_base_patch16_384_train_infer_python.txt
-./test_tipc/config/VisionTransformer/ViT_huge_patch16_224_train_infer_python.txt
 ./test_tipc/config/DeiT/DeiT_base_patch16_384_train_infer_python.txt
 ./test_tipc/config/DeiT/DeiT_base_patch16_224_train_infer_python.txt
 ./test_tipc/config/DeiT/DeiT_small_patch16_224_train_infer_python.txt
