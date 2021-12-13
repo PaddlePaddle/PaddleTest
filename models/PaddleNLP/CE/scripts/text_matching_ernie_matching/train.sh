@@ -30,6 +30,7 @@ if [[ $4 == "point-wise" ]]; then
         --batch_size 32 \
         --epochs 1 \
         --save_step 1000 \
+        --max_step 1500 \
         --learning_rate 2E-5 >$log_path/train_$4_$2_$1.log 2>&1
 
 else
@@ -39,6 +40,7 @@ else
         --batch_size 32 \
         --epochs 1 \
         --save_step 1000 \
+        --max_step 1500 \
         --learning_rate 2E-5 >$log_path/train_$4_$2_$1.log 2>&1
 fi
 
