@@ -28,40 +28,7 @@ SET_MULTI_CUDA = "0,1"
 REPO_PaddleRec = "https://github.com/PaddlePaddle/PaddleRec.git"
 BASE_BRANCH = "master"
 # 27/28
-rank_dnn_BRANCH = BASE_BRANCH
-rank_lr_BRANCH = BASE_BRANCH
-rank_gatednn_BRANCH = BASE_BRANCH
-rank_fm_BRANCH = BASE_BRANCH
-rank_deepfm_BRANCH = BASE_BRANCH
-rank_xdeepfm_BRANCH = BASE_BRANCH
-rank_wide_deep_BRANCH = BASE_BRANCH
-rank_naml_BRANCH = BASE_BRANCH
-rank_ffm_BRANCH = BASE_BRANCH
-rank_dmr_BRANCH = BASE_BRANCH
-rank_bst_BRANCH = BASE_BRANCH
-rank_dcn_BRANCH = BASE_BRANCH
-rank_din_BRANCH = BASE_BRANCH
-rank_dien_BRANCH = BASE_BRANCH
-rank_deepfefm_BRANCH = BASE_BRANCH
-rank_dlrm_BRANCH = BASE_BRANCH
-
-rec_dy_dnn_BRANCH = BASE_BRANCH
-
-match_dssm_BRANCH = BASE_BRANCH
-match_pyramid_BRANCH = BASE_BRANCH
-match_simnet_BRANCH = BASE_BRANCH
-
-content_tagspace_BRANCH = BASE_BRANCH
-content_textcnn_BRANCH = BASE_BRANCH
-
-multitask_esmm_BRANCH = BASE_BRANCH
-multitask_mmoe_BRANCH = BASE_BRANCH
-multitask_ple_BRANCH = BASE_BRANCH
-multitask_sharebottom_BRANCH = BASE_BRANCH
-
-recall_ncf_BRANCH = BASE_BRANCH
-recall_word2vec_BRANCH = BASE_BRANCH
-recall_mind_BRANCH = BASE_BRANCH
+rec_BRANCH = BASE_BRANCH
 # linux gpu下， P0的任务要跑的收敛性标签
 EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]

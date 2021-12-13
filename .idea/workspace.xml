@@ -2,24 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6a0d3e8c-cd47-45cc-96c5-83703794c969" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_cpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_cpu_common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_gpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_gpu_common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_gpu_con_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_gpu_con_common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/mac_cpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/mac_cpu_common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/rec_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/rec_common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/win_cpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/win_cpu_common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/win_gpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/win_gpu_common.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/content_tagspace.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/content_tagspace.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/content_textcnn.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/content_textcnn.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_dssm.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_dssm.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_multiviewsimnet.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_multiviewsimnet.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_pyramid.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_pyramid.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_esmm.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_esmm.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_mmoe.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_mmoe.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_ple.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_ple.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_sharebottom.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_sharebottom.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_bst.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_bst.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_deepfm.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_deepfm.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_dmr.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_dmr.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_ffm.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_ffm.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_fm.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_fm.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_gatednn.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_gatednn.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_lr.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_lr.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_naml.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_naml.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_xdeepfm.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_xdeepfm.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/recall_mind.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/recall_mind.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/recall_word2vec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/recall_word2vec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CI/run_all_demo.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CI/run_all_demo.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CI/run_demo.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CI/run_demo.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CI/run_mac_demo.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CI/run_mac_demo.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +39,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="2052lTCwWLAxzM8lTvUahoIYe61" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -48,13 +59,16 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/models/PaddleRec/CI/linux" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/models/PaddleRec/CI/linux" />
+      <recent name="$PROJECT_DIR$/models/PaddleRec/CI/mac" />
+      <recent name="$PROJECT_DIR$/models/PaddleRec/CI/windows" />
+      <recent name="$PROJECT_DIR$/models/PaddleRec/CE/linux/config" />
       <recent name="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf" />
-      <recent name="$PROJECT_DIR$/models/PaddleRec/CI" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -69,7 +83,9 @@
       <workItem from="1635930433766" duration="91000" />
       <workItem from="1635931061213" duration="1060000" />
       <workItem from="1636362744731" duration="619000" />
-      <workItem from="1636613805381" duration="65335000" />
+      <workItem from="1636613805381" duration="71275000" />
+      <workItem from="1639377583959" duration="4743000" />
+      <workItem from="1639385916563" duration="363000" />
     </task>
     <servers />
   </component>
