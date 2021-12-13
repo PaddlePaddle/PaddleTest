@@ -4,11 +4,10 @@
 test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
 
-cat full_chain_list_clas_all | while read config_file
-do
+# cat full_chain_list_clas_all | while read config_file #手动定义
+# do
+for config_file in `find . -name "*train_infer_python.txt"`; do
 start=`date +%s`
-
-# for config_file in `find . -name "*train_infer_python.txt"`; do
     for mode in $test_mode; do
         mode=$(echo $mode | xargs)
         echo "step now"
