@@ -9,7 +9,7 @@ if not exist pretrain_models (mklink /j pretrain_models %data_path%\PaddleOCR\pr
 rem dependency
 python -m pip install -r requirements.txt
 
-set gpu_flag=True
+rem set gpu_flag=False
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 setlocal enabledelayedexpansion
 for /f %%i in (ocr_det_models_list.txt) do (

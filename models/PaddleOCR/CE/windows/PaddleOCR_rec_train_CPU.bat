@@ -1,6 +1,5 @@
 @ echo off
-rem set log_path=log
-set gpu_flag=True
+rem set gpu_flag=False
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
 set log_path=log
