@@ -74,7 +74,7 @@ python -m pip install --retries 10 paddleslim
 python -m pip install --retries 10 -r requirements.txt
 python -m pip install -v -e . #安装ppgan
 wget --no-proxy ${COMPILE_PATH}
-python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+python -m pip install ./${COMPILE_PATH##*/}
 cp ../PaddleTest/models/PaddleGAN/Full_Chain/tipc_run.sh .
 cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_unrun .
 cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_all .
