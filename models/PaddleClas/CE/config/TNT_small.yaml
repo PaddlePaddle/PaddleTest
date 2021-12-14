@@ -131,19 +131,19 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       exit_code:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 7.01005
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
       exit_code:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 7.59464
         threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/TNT_small_train.log
+    output: $ROOT_PATH/$model_log_path/TNT_small_cpu.log
 
 EVAL: # 训练步骤
   -
@@ -194,7 +194,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       exit_code:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 7.59464
         threshold: 0.1
         actived: True
         evaluation: "-"
