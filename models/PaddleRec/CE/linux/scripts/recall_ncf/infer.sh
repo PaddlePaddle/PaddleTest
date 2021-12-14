@@ -10,7 +10,7 @@ echo "$2 infer"
 #路径配置
 root_path=$cur_path/../../
 code_path=$cur_path/../../PaddleRec/models/recall/${temp_path}/
-log_path=$root_path/log/recall/
+log_path=$root_path/log/recall_ncf/
 mkdir -p $log_path
 #临时环境更改
 

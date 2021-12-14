@@ -1,4 +1,4 @@
-MODEL: "rank_lr" # 模型名
+MODEL: "rank_logistic_regression" # 模型名
 PRIORITY: P1
 GIT:
   addr: $REPO_PaddleRec
@@ -10,7 +10,7 @@ ENV:
 
 VARIABLES:
   model_scripts_path: scripts/rank/ #脚本的路径
-  model_log_path: log/rank_lr/
+  model_log_path: log/rank_logistic_regression/
 
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]

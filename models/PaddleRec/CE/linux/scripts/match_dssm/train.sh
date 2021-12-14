@@ -10,7 +10,7 @@ echo "$2 train"
 #路径配置
 root_path=$cur_path/../../
 code_path=$cur_path/../../PaddleRec/models/match/dssm/
-log_path=$root_path/log/$model_name/
+log_path=$root_path/log/match_dssm/
 mkdir -p $log_path
 #临时环境更改
 
@@ -22,7 +22,7 @@ if [ $1 -ne 0 ];then
     mv ${log_path}/$2.log ${log_path}/F_$2.log
     echo -e "\033[31m ${log_path}/F_$2 \033[0m"
 else
-#    cat ${log_path}/$2.log
+    cat ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
     mv ${log_path}/$2.log ${log_path}/S_$2.log
     tail ${log_path}/S_$2.log|grep loss|grep done |awk -F ' ' '{print$9}'|tr -d '[],' >>${log_path}/S_$2.log

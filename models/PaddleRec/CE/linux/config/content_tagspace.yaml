@@ -10,7 +10,7 @@ ENV:
 
 VARIABLES:
   model_scripts_path: scripts/content/ #脚本的路径
-  model_log_path: log/content/
+  model_log_path: log/content_tagspace/
 
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]

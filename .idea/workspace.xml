@@ -3,26 +3,36 @@
   <component name="ChangeListManager">
     <list default="true" id="6a0d3e8c-cd47-45cc-96c5-83703794c969" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_cpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_cpu_common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_gpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_gpu_common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_gpu_con_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/linux_gpu_con_common.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/mac_cpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/mac_cpu_common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/rec_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/rec_common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/win_cpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/win_cpu_common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/win_gpu_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/basic_conf/win_gpu_common.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/content_tagspace.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/content_tagspace.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/content_textcnn.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/content_textcnn.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_dssm.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_dssm.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_multiviewsimnet.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_multiviewsimnet.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_pyramid.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/match_pyramid.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_esmm.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_esmm.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_mmoe.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_mmoe.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_ple.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_ple.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_sharebottom.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/multitask_sharebottom.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_bst.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_bst.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CI/run_all_demo.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CI/run_all_demo.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CI/run_demo.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CI/run_demo.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CI/run_mac_demo.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CI/run_mac_demo.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_gatednn.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_gatenet.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_lr.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/config/rank_logistic_regression.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/content/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/content/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/content/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/content/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_dssm/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_dssm/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_dssm/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_dssm/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_pyramid/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_pyramid/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_pyramid/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_pyramid/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_simnet/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_simnet/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_simnet/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/match_simnet/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/multitask/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/multitask/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/multitask/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/multitask/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank_bst/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank_bst/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank_bst/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank_bst/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank_wide_deep/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank_wide_deep/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank_wide_deep/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/rank_wide_deep/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_mind/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_mind/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_mind/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_mind/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_ncf/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_ncf/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_ncf/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_ncf/train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_word2vec/infer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_word2vec/infer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_word2vec/train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/models/PaddleRec/CE/linux/scripts/recall_word2vec/train.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,11 +95,22 @@
       <workItem from="1636362744731" duration="619000" />
       <workItem from="1636613805381" duration="71275000" />
       <workItem from="1639377583959" duration="4743000" />
-      <workItem from="1639385916563" duration="363000" />
+      <workItem from="1639385916563" duration="9580000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

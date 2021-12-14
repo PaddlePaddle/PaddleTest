@@ -10,7 +10,7 @@ ENV:
 
 VARIABLES:
   model_scripts_path: scripts/multitask/ #脚本的路径
-  model_log_path: log/multitask/
+  model_log_path: log/multitask_ple/
 
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]

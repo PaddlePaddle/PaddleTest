@@ -1,4 +1,4 @@
-MODEL: "rank_gatednn" # 模型名
+MODEL: "rank_gatenet" # 模型名
 PRIORITY: P1
 GIT:
   addr: $REPO_PaddleRec
@@ -10,7 +10,7 @@ ENV:
 
 VARIABLES:
   model_scripts_path: scripts/rank/ #脚本的路径
-  model_log_path: log/rank_gatednn/
+  model_log_path: log/rank_gatenet/
 
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
@@ -37,7 +37,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_dy_gpu1 rank_gatednn_linux_dy_gpu1
+        cmd: sh train.sh linux_dy_gpu1 rank_gatenet_linux_dy_gpu1
 
     kpis: #kpi指标
       auc:
@@ -55,7 +55,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_linux_dy_gpu1.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_linux_dy_gpu1.log
   -
     tag: linux_dy_gpu2  # dy_gpu2
     priority: p1
@@ -65,7 +65,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_dy_gpu2 rank_gatednn_linux_dy_gpu2
+        cmd: sh train.sh linux_dy_gpu2 rank_gatenet_linux_dy_gpu2
 
     kpis: #kpi指标
       auc:
@@ -83,14 +83,14 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_gatednn_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/rank_gatenet_linux_dy_gpu2_dist_log/workerlog.0
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_dy_cpu rank_gatednn_linux_dy_cpu
+        cmd: sh train.sh linux_dy_cpu rank_gatenet_linux_dy_cpu
 
     kpis: #kpi指标
       auc:
@@ -108,7 +108,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_linux_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_linux_dy_cpu.log
 
   -
     tag: linux_st_gpu1  # st_gpu1
@@ -119,7 +119,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_st_gpu1 rank_gatednn_linux_st_gpu1
+        cmd: sh train.sh linux_st_gpu1 rank_gatenet_linux_st_gpu1
     kpis: #kpi指标
       auc:
         latest: True
@@ -136,7 +136,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_linux_st_gpu1.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_linux_st_gpu1.log
   -
     tag: linux_st_gpu2  # st_gpu2
     priority: p1
@@ -146,7 +146,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_st_gpu2 rank_gatednn_linux_st_gpu2
+        cmd: sh train.sh linux_st_gpu2 rank_gatenet_linux_st_gpu2
 
     kpis: #kpi指标
       auc:
@@ -164,7 +164,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_gatednn_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/rank_gatenet_linux_st_gpu2_dist_log/workerlog.0
 
   -
     tag: linux_st_cpu
@@ -172,7 +172,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_st_cpu rank_gatednn_linux_st_cpu
+        cmd: sh train.sh linux_st_cpu rank_gatenet_linux_st_cpu
 
     kpis: #kpi指标
       auc:
@@ -190,7 +190,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_linux_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_linux_st_cpu.log
 # mac train(small data)
   -
     tag: mac_dy_cpu
@@ -198,7 +198,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh mac_dy_cpu rank_gatednn_mac_dy_cpu
+        cmd: sh train.sh mac_dy_cpu rank_gatenet_mac_dy_cpu
 
     kpis: #kpi指标
       auc:
@@ -216,7 +216,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_mac_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_mac_dy_cpu.log
 
   -
     tag: mac_st_cpu
@@ -224,7 +224,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh mac_st_cpu rank_gatednn_mac_st_cpu
+        cmd: sh train.sh mac_st_cpu rank_gatenet_mac_st_cpu
 
     kpis: #kpi指标
       auc:
@@ -242,7 +242,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_mac_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_mac_st_cpu.log
 # win train(small data)
   -
     tag: win_dy_gpu
@@ -250,7 +250,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu rank_gatednn_win_dy_gpu
+        cmd: sh train.sh win_dy_gpu rank_gatenet_win_dy_gpu
 
     kpis: #kpi指标
       auc:
@@ -268,7 +268,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -276,7 +276,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu rank_gatednn_win_dy_cpu
+        cmd: sh train.sh win_dy_cpu rank_gatenet_win_dy_cpu
 
     kpis: #kpi指标
       auc:
@@ -294,7 +294,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -302,7 +302,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu rank_gatednn_win_st_gpu
+        cmd: sh train.sh win_st_gpu rank_gatenet_win_st_gpu
 
     kpis: #kpi指标
       auc:
@@ -320,7 +320,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -328,7 +328,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu rank_gatednn_win_st_cpu
+        cmd: sh train.sh win_st_cpu rank_gatenet_win_st_cpu
 
     kpis: #kpi指标
       auc:
@@ -346,7 +346,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -355,7 +355,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_dy_gpu1 rank_gatednn_infer_linux_dy_gpu1
+        cmd: sh infer.sh linux_dy_gpu1 rank_gatenet_infer_linux_dy_gpu1
 
     kpis: #kpi指标
       auc:
@@ -373,7 +373,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_linux_dy_gpu1.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_linux_dy_gpu1.log
   -
     tag: linux_dy_gpu2
     priority: p1
@@ -383,7 +383,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_dy_gpu2 rank_gatednn_infer_linux_dy_gpu2
+        cmd: sh infer.sh linux_dy_gpu2 rank_gatenet_infer_linux_dy_gpu2
 
     kpis: #kpi指标
       auc:
@@ -401,14 +401,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_gatednn_infer_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/rank_gatenet_infer_linux_dy_gpu2_dist_log/workerlog.0
   -
     tag: linux_dy_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_dy_cpu rank_gatednn_infer_linux_dy_cpu
+        cmd: sh infer.sh linux_dy_cpu rank_gatenet_infer_linux_dy_cpu
 
     kpis: #kpi指标
       auc:
@@ -426,14 +426,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_linux_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_linux_dy_cpu.log
   - #可以有多步
     tag: linux_st_gpu1
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_st_gpu1 rank_gatednn_infer_linux_st_gpu1
+        cmd: sh infer.sh linux_st_gpu1 rank_gatenet_infer_linux_st_gpu1
 
     kpis: #kpi指标
       auc:
@@ -451,7 +451,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_linux_st_gpu1.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_linux_st_gpu1.log
   -
     tag: linux_st_gpu2
     priority: p1
@@ -461,7 +461,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_st_gpu2 rank_gatednn_infer_linux_st_gpu2
+        cmd: sh infer.sh linux_st_gpu2 rank_gatenet_infer_linux_st_gpu2
 
     kpis: #kpi指标
       auc:
@@ -479,14 +479,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_gatednn_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/rank_gatenet_infer_linux_st_gpu2_dist_log/workerlog.0
   -
     tag: linux_st_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_st_cpu rank_gatednn_infer_linux_st_cpu
+        cmd: sh infer.sh linux_st_cpu rank_gatenet_infer_linux_st_cpu
 
 
     kpis: #kpi指标
@@ -505,7 +505,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_linux_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_linux_st_cpu.log
 # mac infer(small data)
   -
     tag: mac_dy_cpu
@@ -513,7 +513,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh mac_dy_cpu rank_gatednn_infer_mac_dy_cpu
+        cmd: sh infer.sh mac_dy_cpu rank_gatenet_infer_mac_dy_cpu
 
 
     kpis: #kpi指标
@@ -532,7 +532,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_mac_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_mac_dy_cpu.log
 
   -
     tag: mac_st_cpu
@@ -540,7 +540,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh mac_st_cpu rank_gatednn_infer_mac_st_cpu
+        cmd: sh infer.sh mac_st_cpu rank_gatenet_infer_mac_st_cpu
 
 
     kpis: #kpi指标
@@ -559,7 +559,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_mac_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_mac_st_cpu.log
 # win infer(small data)
   -
     tag: win_dy_gpu
@@ -567,7 +567,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu rank_gatednn_infer_win_dy_gpu
+        cmd: sh infer.sh win_dy_gpu rank_gatenet_infer_win_dy_gpu
 
 
     kpis: #kpi指标
@@ -586,7 +586,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -594,7 +594,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu rank_gatednn_infer_win_dy_cpu
+        cmd: sh infer.sh win_dy_cpu rank_gatenet_infer_win_dy_cpu
 
 
     kpis: #kpi指标
@@ -613,7 +613,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -621,7 +621,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu rank_gatednn_infer_win_st_gpu
+        cmd: sh infer.sh win_st_gpu rank_gatenet_infer_win_st_gpu
 
 
     kpis: #kpi指标
@@ -640,7 +640,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -648,7 +648,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu rank_gatednn_infer_win_st_cpu
+        cmd: sh infer.sh win_st_cpu rank_gatenet_infer_win_st_cpu
 
 
     kpis: #kpi指标
@@ -667,4 +667,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_gatednn_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_gatenet_infer_win_st_cpu.log

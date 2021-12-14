@@ -10,15 +10,15 @@ echo "$2 infer"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../PaddleRec/models/match/match-pyramid/
-log_path=$root_path/log/match-pyramid/
+code_path=$cur_path/../../PaddleRec/models/match/match_pyramid/
+log_path=$root_path/log/match_pyramid/
 mkdir -p $log_path
 #临时环境更改
 
 #访问RD程序,包含eval过程
 print_info(){
 if [ $1 -ne 0 ];then
-#    cat ${log_path}/$2.log
+    cat ${log_path}/$2.log
     echo "exit_code: 1.0" >> ${log_path}/$2.log
     mv ${log_path}/$2.log ${log_path}/F_$2.log
     echo -e "\033[31m ${log_path}/F_$2 \033[0m"
@@ -91,5 +91,5 @@ else
     echo "$model_name infer.sh  parameter error "
 fi
 
-python eval.py > ${log_path}/$2_eval.log 2>&1
-print_info $? $2_eval
+python eval.py > ${log_path}/$2.log 2>&1
+print_info $? $2
