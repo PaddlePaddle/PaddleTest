@@ -1,0 +1,7 @@
+configs/rec/rec_icdar15_train.yml
+configs/rec/rec_mv3_none_bilstm_ctc.yml
+configs/rec/rec_mv3_none_none_ctc.yml
+configs/rec/rec_mv3_tps_bilstm_ctc.yml
+configs/rec/rec_r34_vd_none_bilstm_ctc.yml
+configs/rec/rec_r34_vd_none_none_ctc.yml
+configs/rec/rec_r34_vd_tps_bilstm_ctc.yml

@@ -2,295 +2,152 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-paddle.nn.RNN float32测试
+test_rnn
 """
-import copy
 
-from apibase import APIBase
+from rnn_base import RnnBase
 import paddle
+import paddle.nn.initializer as initializer
 import pytest
 import numpy as np
 
-from rnn_numpy import SimpleRNNCell, RNN
 
-
-class TestRNN(APIBase):
+@pytest.mark.api_nn_BiRNN_vartype
+def test_birnn_base():
     """
-    test RNN float32
+    default
     """
-
-    def hook(self):
-        """
-        implement
-        """
-        self.types = [np.float32]
-        self.seed = 100
-        self.delta = 0.0001
-        self.forward_kwargs = {}  # 前向传播参数
-        paddle.set_default_dtype("float32")
-
-    def _static_forward(self, res, data=None, **kwargs):
-        """
-        _static_forward
-        """
-
-        main_program = paddle.static.Program()
-        startup_program = paddle.static.Program()
-        main_program.random_seed = self.seed
-
-        cell = kwargs["cell"]
-
-        with paddle.utils.unique_name.guard():
-            with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
-                if data is not None:
-                    data = data.astype(self.dtype)
-                    self.data = paddle.static.data(name="data", shape=data.shape, dtype=self.dtype)
-                    self.data.stop_gradient = False
-                data = dict({"data": data}, **kwargs)
-
-                static_cell = paddle.nn.SimpleRNNCell(cell.input_size, cell.hidden_size)
-                parameters = {}
-                for k, v in kwargs["cell"].named_parameters():
-                    parameters[k] = v
-
-                obj = self.func(
-                    static_cell,
-                    is_reverse=self.kwargs.get("is_reverse", False),
-                    time_major=self.kwargs.get("time_major", False),
-                )
-
-                output, h = obj(self.data)
-
-                if self.enable_backward:
-                    loss = paddle.mean(output)
-                    g = paddle.static.gradients(loss, self.data)
-                    exe = paddle.static.Executor(self.place)
-                    exe.run(startup_program)
-
-                    for k, v in static_cell.named_parameters():
-                        v.set_value(parameters[k])
-
-                    res = exe.run(main_program, feed=data, fetch_list=[output, h, g], return_numpy=True)
-                    grad = {"data": res[2]}
-                    return res[0:2], grad
-                else:
-                    exe = paddle.static.Executor(self.place)
-                    exe.run(startup_program)
-                    for k, v in static_cell.named_parameters():
-                        v.set_value(parameters[k])
-                    res = exe.run(main_program, feed=data, fetch_list=[output, h], return_numpy=True)
-                    return res
-
-    def _dygraph_forward(self):
-        """
-        _dygraph_forward
-        """
-        cell = copy.deepcopy(self.kwargs.get("cell"))
-        obj = self.func(
-            cell=cell, is_reverse=self.kwargs.get("is_reverse", False), time_major=self.kwargs.get("time_major", False)
-        )
-        res = obj(
-            self.data,
-            initial_states=self.forward_kwargs.get("initial_states", None),
-            sequence_length=self.forward_kwargs.get("sequence_length", None),
-        )
-        return res
+    obj0 = RnnBase(paddle.nn.RNN)
+    obj0.enable_static = False
+    np.random.seed(22)
+    x = np.random.rand(1, 1, 2)
+    res = np.array([[[0.76156908, 0.76156908, 0.76156908, 0.76156908]]])
+    cell = paddle.nn.LSTMCell(
+        2,
+        4,
+        weight_ih_attr=initializer.Constant(4),
+        weight_hh_attr=initializer.Constant(4),
+        bias_ih_attr=initializer.Constant(4),
+        bias_hh_attr=initializer.Constant(4),
+    )
+    obj0.atol = 1e-4
+    obj0.run(res, x, cell=cell)
 
 
-obj = TestRNN(paddle.nn.RNN)
-
-
-def copy_cell_params(np_cell, paddle_cell, dtype="float32"):
+@pytest.mark.api_nn_BiRNN_parameters
+def test_birnn0():
     """
-    将np_cell的参数复制到paddle_cell中
+    time_major = True
     """
-    paddle.disable_static()
-    state = np_cell.parameters
-    for k, v in paddle_cell.named_parameters():
-        t = state[k].astype(dtype)
-        v.set_value(t)
-    return paddle_cell
+    obj2 = RnnBase(paddle.nn.RNN)
+    obj2.enable_static = False
+    np.random.seed(22)
+    x = np.random.rand(2, 1, 2)
+    res = np.array(
+        [[[0.76156908, 0.76156908, 0.76156908, 0.76156908]], [[0.96402603, 0.96402603, 0.96402603, 0.96402603]]]
+    )
+    cell = paddle.nn.LSTMCell(
+        2,
+        4,
+        weight_ih_attr=initializer.Constant(4),
+        weight_hh_attr=initializer.Constant(4),
+        bias_ih_attr=initializer.Constant(4),
+        bias_hh_attr=initializer.Constant(4),
+    )
+    obj2.atol = 1e-4
+    obj2.run(res, x, cell=cell, time_major=True)
 
 
-@pytest.mark.api_nn_RNN_vartype
-def test_rnn_base():
+@pytest.mark.api_nn_BiRNN_parameters
+def test_birnn1():
     """
-    base测试，包括动态度、静态图、cpu/gpu，grad，动态静态图的结果一致性
+    time_major = True
     """
-    paddle.set_default_dtype("float32")
-    np.random.seed(obj.seed)
-    inputs = np.random.random((2, 3, 4))
-    np_cell = SimpleRNNCell(4, 8)
-    rnn = RNN(cell=np_cell)
-    res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float32"), res_final_states.astype("float32")]
-    paddle.disable_static()
-    cell = paddle.nn.SimpleRNNCell(4, 8)
-    cell = copy_cell_params(np_cell, cell)
-    obj.base(res, data=inputs, cell=cell)
+    obj3 = RnnBase(paddle.nn.RNN)
+    obj3.enable_static = False
+    np.random.seed(22)
+    x = np.random.rand(2, 1, 2)
+    res = np.array(
+        [[[0.96402740, 0.96402740, 0.96402740, 0.96402740]], [[0.76159179, 0.76159179, 0.76159179, 0.76159179]]]
+    )
+    cell = paddle.nn.LSTMCell(
+        2,
+        4,
+        weight_ih_attr=initializer.Constant(4),
+        weight_hh_attr=initializer.Constant(4),
+        bias_ih_attr=initializer.Constant(4),
+        bias_hh_attr=initializer.Constant(4),
+    )
+
+    obj3.run(res, x, cell=cell, is_reverse=True, time_major=True)
 
 
-@pytest.mark.api_nn_RNN_parameters
-def test_rnn1():
+@pytest.mark.api_nn_BiRNN_parameters
+def test_birnn2():
     """
-    测试默认参数
+    set initial_states
     """
-    paddle.set_default_dtype("float32")
-    # numpy
-    np.random.seed(obj.seed)
-    inputs = np.random.random((10, 8, 16))
-    np_cell = SimpleRNNCell(16, 32)
-    rnn = RNN(cell=np_cell)
-    res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float32"), res_final_states.astype("float32")]
+    obj4 = RnnBase(paddle.nn.RNN)
+    obj4.enable_static = False
+    np.random.seed(22)
+    x_data = np.random.rand(1, 1, 2)
+    h_data = np.random.rand(1, 4)
+    c_data = np.random.rand(1, 4)
 
-    paddle.disable_static()
+    res = np.array([[[0.85394204, 0.93427968, 0.83977348, 0.94802976]]])
+    cell = paddle.nn.LSTMCell(
+        2,
+        4,
+        weight_ih_attr=initializer.Constant(4),
+        weight_hh_attr=initializer.Constant(4),
+        bias_ih_attr=initializer.Constant(4),
+        bias_hh_attr=initializer.Constant(4),
+    )
+    obj4.atol = 1e-5
+    obj4.run(res, x_data, (h_data, c_data), cell=cell)
 
-    cell = paddle.nn.SimpleRNNCell(16, 32)
-    cell = copy_cell_params(np_cell, cell)
-    obj.run(res, data=inputs, cell=cell)
 
-
-@pytest.mark.apt_nn_RNN_parameters
-def test_rnn2():
+@pytest.mark.api_nn_BiRNN_parameters
+def test_birnn3():
     """
-    测试 is_reverse=True
+    cell: GRUCell
+    set initial_states
     """
-    paddle.set_default_dtype("float32")
-    # numpy
-    np.random.seed(obj.seed)
-    inputs = np.random.random((20, 10, 32))
-    np_cell = SimpleRNNCell(32, 16)
-    rnn = RNN(cell=np_cell, is_reverse=True)
-    res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float32"), res_final_states.astype("float32")]
+    obj5 = RnnBase(paddle.nn.RNN)
+    obj5.enable_static = False
+    np.random.seed(22)
+    x_data = np.random.rand(1, 1, 2)
+    h_data = np.random.rand(1, 4)
+    res = np.array([[[0.42053807, 0.85918200, 0.17116153, 0.33886397]]])
+    cell = paddle.nn.GRUCell(
+        2,
+        4,
+        weight_ih_attr=initializer.Constant(4),
+        weight_hh_attr=initializer.Constant(4),
+        bias_ih_attr=initializer.Constant(4),
+        bias_hh_attr=initializer.Constant(4),
+    )
+    obj5.run(res, x_data, h_data, cell=cell)
 
-    paddle.disable_static()
 
-    cell = paddle.nn.SimpleRNNCell(32, 16)
-    cell = copy_cell_params(np_cell, cell)
-    obj.run(res, data=inputs, cell=cell, is_reverse=True)
-
-
-@pytest.mark.apt_nn_RNN_parameters
-def test_rnn3():
+@pytest.mark.api_nn_BiRNN_parameters
+def test_birnn4():
     """
-    测试 time_major = True
+    cell:  -> SimpleRNNCell
+    set initial_states
     """
-    paddle.set_default_dtype("float32")
-    # numpy
-    np.random.seed(obj.seed)
-    inputs = np.random.random((10, 4, 128))
-    np_cell = SimpleRNNCell(128, 32)
-    rnn = RNN(cell=np_cell, time_major=True)
-    res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float32"), res_final_states.astype("float32")]
-
-    paddle.disable_static()
-
-    cell = paddle.nn.SimpleRNNCell(128, 32)
-    cell = copy_cell_params(np_cell, cell)
-
-    obj.run(res, data=inputs, cell=cell, time_major=True)
-
-
-class TestRNN64(TestRNN):
-    """
-    test RNN float64
-    """
-
-    def hook(self):
-        """
-        implement
-        """
-        self.types = [np.float64]
-        self.seed = 100
-        self.delta = 0.0001
-        self.forward_kwargs = {}  # 前向传播参数
-        paddle.set_default_dtype("float64")
-
-
-obj64 = TestRNN64(paddle.nn.RNN)
-
-
-@pytest.mark.api_nn_RNN_vartype
-def test_rnn_base_64():
-    """
-    float64 base测试，包括动态度、静态图、cpu/gpu，grad，动态静态图的结果一致性
-    """
-    paddle.set_default_dtype("float64")
-    np.random.seed(obj64.seed)
-    inputs = np.random.random((2, 3, 4))
-    np_cell = SimpleRNNCell(4, 8)
-    rnn = RNN(cell=np_cell)
-    res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float64"), res_final_states.astype("float64")]
-    paddle.disable_static()
-    cell = paddle.nn.SimpleRNNCell(4, 8)
-    cell = copy_cell_params(np_cell, cell, dtype="float64")
-    obj64.base(res, data=inputs, cell=cell)
-
-
-@pytest.mark.api_nn_RNN_parameters
-def test_rnn1_64():
-    """
-    测试默认参数
-    """
-    paddle.set_default_dtype("float64")
-    # numpy
-    np.random.seed(obj64.seed)
-    inputs = np.random.random((10, 8, 16))
-    np_cell = SimpleRNNCell(16, 32)
-    rnn = RNN(cell=np_cell)
-    res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float64"), res_final_states.astype("float64")]
-
-    paddle.disable_static()
-
-    cell = paddle.nn.SimpleRNNCell(16, 32)
-    cell = copy_cell_params(np_cell, cell, dtype="float64")
-    obj64.run(res, data=inputs, cell=cell)
-
-
-#
-@pytest.mark.apt_nn_RNN_parameters
-def test_rnn2_64():
-    """
-    测试 is_reverse=True
-    """
-    paddle.set_default_dtype("float64")
-    # numpy
-    np.random.seed(obj64.seed)
-    inputs = np.random.random((20, 10, 32))
-    np_cell = SimpleRNNCell(32, 16)
-    rnn = RNN(cell=np_cell, is_reverse=True)
-    res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float64"), res_final_states.astype("float64")]
-
-    paddle.disable_static()
-
-    cell = paddle.nn.SimpleRNNCell(32, 16)
-    cell = copy_cell_params(np_cell, cell, dtype="float64")
-    obj64.run(res, data=inputs, cell=cell, is_reverse=True)
-
-
-@pytest.mark.apt_nn_RNN_parameters
-def test_rnn3_64():
-    """
-    测试 time_major = True
-    """
-    paddle.set_default_dtype("float64")
-    # numpy
-    np.random.seed(obj64.seed)
-    inputs = np.random.random((10, 4, 128))
-    np_cell = SimpleRNNCell(128, 32)
-    rnn = RNN(cell=np_cell, time_major=True)
-    res_outputs, res_final_states = rnn(inputs)
-    res = [res_outputs.astype("float64"), res_final_states.astype("float64")]
-
-    paddle.disable_static()
-
-    cell = paddle.nn.SimpleRNNCell(128, 32)
-    cell = copy_cell_params(np_cell, cell, dtype="float64")
-
-    obj64.run(res, data=inputs, cell=cell, time_major=True)
+    obj6 = RnnBase(paddle.nn.RNN)
+    obj6.enable_static = False
+    np.random.seed(22)
+    x_data = np.random.rand(1, 1, 2)
+    h_data = np.random.rand(1, 4)
+    res = np.array([[[1.0, 1.0, 1.0, 1.0]]])
+    cell = paddle.nn.SimpleRNNCell(
+        2,
+        4,
+        weight_ih_attr=initializer.Constant(4),
+        weight_hh_attr=initializer.Constant(4),
+        bias_ih_attr=initializer.Constant(4),
+        bias_hh_attr=initializer.Constant(4),
+    )
+    obj6.run(res, x_data, h_data, cell=cell)

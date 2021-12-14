@@ -3,9 +3,8 @@ cases="test_yolov3_gpu.py \
        test_yolov3_mkldnn.py \
        test_ppyolo_gpu.py \
        test_ppyolo_mkldnn.py \
-       test_ppyolov2_gpu.py \
-       test_ppyolov2_mkldnn.py
-       test_solov2_gpu.py
+       test_ppyolov2_mkldnn.py \
+       test_solov2_gpu.py \
        test_solov2_mkldnn.py"
 bug=0
 

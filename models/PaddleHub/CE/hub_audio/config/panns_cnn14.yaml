@@ -1,0 +1,219 @@
+MODEL: "panns_cnn14" # 模型名称
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleHub
+  path: $ROOT_PATH/PaddleHub
+  branch: $NLP_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/audio2/ #脚本的路径
+  model_log_path: log/panns_cnn14
+
+EXEC:
+  exec_cases: [INSTALL, FINETUNE, PREDICT, UNINSTALL]
+  exec_priority: [p0, p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+INSTALL:
+  -
+    priority: p0
+    tag: install_module
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash audio_install.sh panns_cnn14
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn14_install.log
+
+FINETUNE:
+  -
+    priority: p0
+    tag: linux_mini-finetune_mini-epoch_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # task, use_gpu, batch_size, num_epoch, learning_rate, save_interval, checkpoint_dir
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash audio_finetune.sh panns_cnn14 sound-cls True 16 10 5e-5 2 save
+
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn14_finetune_sound-cls_True_16_10_5e-5_2.log
+
+  -
+    priority: p0
+    tag: win_mini-finetune_mini-epoch_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # task, use_gpu, batch_size, num_epoch, learning_rate, save_interval, checkpoint_dir
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: audio_finetune.bat panns_cnn14 sound-cls True 16 10 5e-5 2 save
+
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn14_finetune_sound-cls_True_16_10_5e-5_2.log
+
+  -
+    priority: p1
+    tag: linux_finetune_mini-epoch_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # task, use_gpu, batch_size, num_epoch, learning_rate, save_interval, checkpoint_dir
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash audio_finetune.sh panns_cnn14 sound-cls True 16 20 5e-5 4 save
+
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn14_finetune_sound-cls_True_16_20_5e-5_4.log
+
+PREDICT:
+  -
+    priority: p0
+    tag: linux_predict_without_model_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # task, use_finetune_model, use_gpu, checkpoint_dir, audio_path
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash audio_predict.sh panns_cnn14 sound-cls False True ./save ./../../audio_data
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn14_predict_sound-cls_False_True.log
+
+  -
+    priority: p0
+    tag: win_predict_without_model_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # task, use_finetune_model, use_gpu, checkpoint_dir, audio_path
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: cv_predict.bat panns_cnn14 sound-cls False True .\save .\..\..\audio_data
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn14_predict_sound-cls_False_True.log
+
+  -
+    priority: p0
+    tag: win_predict_without_model_cpu
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # task, use_finetune_model, use_gpu, checkpoint_dir, audio_path
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: cv_predict.bat panns_cnn14 sound-cls False False .\save .\..\..\audio_data
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn14_predict_sound-cls_False_False.log
+
+  -
+    priority: p0
+    tag: mac_predict_without_model_cpu
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # task, use_finetune_model, use_gpu, checkpoint_dir, audio_path
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash audio_predict.sh panns_cnn14 sound-cls False False ./save ./../../audio_data
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn14_predict_sound-cls_False_False.log
+
+  -
+    priority: p1
+    tag: linux_predict_with_model_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # task, use_finetune_model, use_gpu, checkpoint_dir, audio_path
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash audio_predict.sh panns_cnn14 sound-cls True True ./save ./../../audio_data
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_panns_cnn14_predict_sound-cls_True_True.log
+
+UNINSTALL:
+  -
+    priority: p0
+    tag: uninstall_module
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: hub uninstall panns_cnn14

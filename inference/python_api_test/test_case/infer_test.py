@@ -342,7 +342,7 @@ class InferenceTest(object):
         max_batch_size=3,
         min_subgraph_size=10,
         precision="fp32",
-        use_static=False,
+        use_static=True,
         use_calib_mode=False,
         dynamic=False,
         tuned=False,

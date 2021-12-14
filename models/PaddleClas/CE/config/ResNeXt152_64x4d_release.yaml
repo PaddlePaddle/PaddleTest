@@ -1,0 +1,314 @@
+MODEL: "ResNeXt152_64x4d" # 模型名
+PRIORITY: P1_release
+GIT:
+  addr: $REPO_PaddleClas
+  path: $ROOT_PATH/PaddleClas
+  branch: $cls_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_function_path_linux: linux/ #脚本的路径
+  model_function_path_win: windows/ #脚本的路径
+  model_function_path_mac: mac/ #脚本的路径
+  model_scripts_path: scripts/ #脚本的路径
+  model_log_path: log
+
+EXEC:
+  exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
+  exec_priority: [P1_release]
+  exec_tag: $EXEC_TAG
+
+#测试套
+FUNCTION: # 训练步骤
+  -
+    tag: linux_function_test
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleClas_CI_develop.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml
+  -
+    tag: win_function_test
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_win
+        cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml
+  -
+    tag: mac_function_test
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_mac
+        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml
+
+TRAIN: # 训练步骤
+  -
+    tag: train_linux_gpu1
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml train_linux_gpu1
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.41659
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 9.20373
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_1card.log
+  -
+    tag: train_linux_gpu2
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.55609
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_2card.log
+  -
+    tag: train_win_gpu
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml train_win_gpu
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.82732
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 111.75593
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_train.log
+  -
+    tag: train_mac_cpu
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml train_mac_cpu
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 7.01005
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 7.59464
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_cpu.log
+
+EVAL: # 训练步骤
+  -
+    tag: eval_linux
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 9.20373
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_eval.log
+  -
+    tag: eval_win
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml eval_win
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 111.75593
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_eval.log
+  -
+    tag: eval_mac
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml eval_mac
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 7.59464
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_eval.log
+
+INFER: # 训练步骤
+  -
+    tag: infer_linux
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml infer_linux
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_infer.log
+  -
+    tag: infer_win
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml infer_win
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_infer.log
+  -
+    tag: infer_mac
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml infer_mac
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_infer.log
+
+PREDICT: # 训练步骤
+  -
+    tag: predict_linux
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml predict_linux
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_predict.log
+  -
+    tag: predict_win
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml predict_win
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_predict.log
+  -
+    tag: predict_mac
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml predict_mac
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ResNeXt152_64x4d_predict.log
