@@ -28,7 +28,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train_1card.sh
+        cmd: bash train_1card.sh
 
     kpis: #kpi指标
       loss:
@@ -47,7 +47,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train_2card.sh
+        cmd: bash train_2card.sh
 
     kpis: #kpi指标
       loss:
