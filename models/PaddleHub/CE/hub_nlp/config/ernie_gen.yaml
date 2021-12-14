@@ -60,28 +60,28 @@ FINETUNE:
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/EXIT_ernie_gen_finetune_True_300_2_test_module_paddle_qa.log
 
-#  -
-#    priority: p0
-#    tag: win_mini-finetune_mini-epoch_gpu1
-#    env: #去掉，自动调度
-#      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-#
-#    # use_gpu, max_steps, batch_size,
-#    # module_name, author
-#    run:
-#      -
-#        path: $ROOT_PATH/$model_scripts_path
-#        cmd: bash nlp_finetune.sh ernie_gen True 300 2 test_module paddle_qa
-#
-#    kpis:
-#      exit_code:
-#        latest: True
-#        kpi_base: 0
-#        threshold: 0
-#        actived: True
-#        evaluation: "-"
-#        unit_repr: None
-#    output: $ROOT_PATH/$model_log_path/EXIT_ernie_gen_finetune_True_300_2_test_module_paddle_qa.log
+  -
+    priority: p0
+    tag: win_mini-finetune_mini-epoch_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    # use_gpu, max_steps, batch_size,
+    # module_name, author
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: nlp_finetune.bat ernie_gen True 300 2 test_module paddle_qa
+
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/EXIT_ernie_gen_finetune_True_300_2_test_module_paddle_qa.log
 
 #  -
 #    priority: p1
@@ -156,7 +156,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh test_module True 5
+        cmd: nlp_predict.bat test_module True 5
     kpis:
       exit_code:
         latest: True
@@ -177,7 +177,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash nlp_predict.sh test_module False 5
+        cmd: nlp_predict.bat test_module False 5
     kpis:
       exit_code:
         latest: True

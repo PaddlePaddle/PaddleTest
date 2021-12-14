@@ -3,7 +3,7 @@ PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $DGU_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:
@@ -104,8 +104,8 @@ EVAL:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.384716
-        threshold: 0.05
+        kpi_base: 0.461773
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -145,8 +145,8 @@ EVAL:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.686274
-        threshold: 0.05
+        kpi_base: 1.985658
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -183,8 +183,8 @@ EVAL:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.995393
-        threshold: 0.05
+        kpi_base: 4.148392
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: None

@@ -3,7 +3,7 @@ PRIORITY: P1
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $DGU_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:
@@ -51,8 +51,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.43566
-        threshold: 0.05
+        kpi_base: 0.43669
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -92,8 +92,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 0.5858
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -112,8 +112,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.69870
-        threshold: 0.05
+        kpi_base: 0.96382
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -298,8 +298,8 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.573542
-        threshold: 0.05
+        kpi_base: 0.61999
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -585,8 +585,8 @@ SEQUENCE_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.638697
-        threshold: 0.05
+        kpi_base: 0.754475
+        threshold: 0.2
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -604,7 +604,7 @@ SEQUENCE_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.322155
+        kpi_base: 0.38958
         threshold: 0.05
         actived: True
         evaluation: "-"

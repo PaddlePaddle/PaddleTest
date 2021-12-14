@@ -1,7 +1,8 @@
 @echo off
 @setlocal enabledelayedexpansion
 set CUDA_VISIBLE_DEVICES=''
-set sed="C:\Program Files\Git\usr\bin\sed.exe"
+rem set sed="C:\Program Files\Git\usr\bin\sed.exe"
+set sed="C:\Program Files (x86)\Git\usr\bin\sed.exe"
 %sed% -i '/samples in file/i\        records = records[:30]' ppdet/data/source/coco.py
 %sed% -i 's#~/.cache/paddle/weights#D:/ce_data/paddledetection/det_pretrained#g' ppdet/utils/download.py
 %sed% -i '/for step_id, data in enumerate(self.loader):/i\            max_step_id =20' ppdet/engine/trainer.py
@@ -24,6 +25,7 @@ md log_err
 )
 
 echo test_start !
+set err_sign=0
 set absolute_path=%cd%
 for  /f %%i in (det_win_cpu_list) do (
 echo %%i
@@ -87,12 +89,18 @@ if !errorlevel! EQU 0 (
 )
 )
 
+if !err_sign! EQU 1 (
+exit /b
+)
+
+
 :train
 python tools/train.py -c !config_path! -o TrainReader.batch_size=1 epoch=2 use_gpu=false >log/!model!/!model!_train.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_train.log log_err\!model!\
 echo !model!, train, FAIL
+set err_sign=1
 ) else (
 echo !model!,train, SUCCESS
 )
@@ -108,6 +116,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_eval.log log_err\!model!\
 echo !model!, eval, FAIL
+set err_sign=1
 ) else (
 echo !model!,eval, SUCCESS
 )
@@ -122,6 +131,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
 echo !model!, infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,infer, SUCCESS
 )
@@ -131,6 +141,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
 echo !model!, infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,infer, SUCCESS
 )
@@ -139,7 +150,6 @@ goto:eof
 
 :export
 findstr /i /c:"!model!" "skip_export.txt" >tmp_export
-rem echo !model! | findstr /i "cascade" >tmp_export
 if !errorlevel! EQU 0 (
 echo !model! does not test export for some reason!
 ) else (
@@ -148,6 +158,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_export.log log_err\!model!\
 echo !model!, export_model, FAIL
+set err_sign=1
 ) else (
 echo !model!,export_model, SUCCESS
 )
@@ -162,6 +173,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
 )
@@ -171,6 +183,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
 )

@@ -3,7 +3,7 @@ PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $vae_seq2seq_BRANCH
+  branch: $BASE_BRANCH
 
 VARIABLES:
   model_scripts_path: scripts/vae-seq2seq/ #脚本的路径

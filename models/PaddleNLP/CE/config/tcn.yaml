@@ -3,7 +3,7 @@ PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $TCN_BRANCH
+  branch: $BASE_BRANCH
 
 VARIABLES:
   model_scripts_path: scripts/tcn/ #脚本的路径

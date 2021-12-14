@@ -45,7 +45,7 @@ def test_config():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.jetson
-@pytest.mark.trt_fp32
+@pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
     compared gpu solov2 batch size = [1] outputs with true val
@@ -85,6 +85,9 @@ def test_trt_fp16_more_bz():
         test_suite.trt_more_bz_test(
             input_data_dict, output_data_dict, repeat=1, delta=1e-5, precision="trt_fp16", dynamic=True, tuned=True
         )
+        del test_suite
+        test_suite = InferenceTest()
+        test_suite.load_config(model_file="./solov2/model.pdmodel", params_file="./solov2/model.pdiparams")
         test_suite.trt_more_bz_test(
             input_data_dict, output_data_dict, repeat=1, delta=1e-5, precision="trt_fp16", dynamic=True, tuned=False
         )

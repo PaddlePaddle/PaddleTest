@@ -33,6 +33,11 @@ skip_platform_not_windows = pytest.mark.skipif(
 skip_platform_not_mac = pytest.mark.skipif(
     platform.system() != "Darwin", reason="skip cases because system is not Darwin"
 )
+skip_platform_is_linux = pytest.mark.skipif(platform.system() == "Linux", reason="skip cases because system is Linux")
+skip_platform_is_windows = pytest.mark.skipif(
+    platform.system() == "Windows", reason="skip cases because system is Windows"
+)
+skip_platform_is_mac = pytest.mark.skipif(platform.system() == "Darwin", reason="skip cases because system is Darwin")
 
 
 @skip_branch_not_develop

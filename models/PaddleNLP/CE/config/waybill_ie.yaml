@@ -1,9 +1,9 @@
 MODEL: "waybill_ie" # 模型名
-PRIORITY: P0
+PRIORITY: P0_2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $waybill_ie_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:
@@ -11,7 +11,7 @@ VARIABLES:
   model_log_path: log/waybill_ie/
 
 EXEC:
-  exec_cases: [DATA_PROC,TRAIN,INFER]
+  exec_cases: [DATA_PROC, TRAIN, PYTHON_INFER]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
@@ -139,7 +139,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train_gpu_ernie_crf.log
 
   -
-    priority: p0
+    priority: p1
     tag: win_dy_gpu1_bigru_crf
     env: #去掉，自动调度
       GLOG_v: 4
@@ -151,31 +151,24 @@ TRAIN: # 训练步骤
         cmd: train.bat $XPU bigru_crf
 
     kpis: #kpi指标
-      Precision:
+      Loss:
         latest: True
-        kpi_base: 0.264113
+        kpi_base: 6.957651
         threshold: 0.08
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: None
-      Recall:
+      exit_code:
         latest: True
-        kpi_base: 0.220353
-        threshold: 0.08
+        kpi_base: 0
+        threshold: 0
         actived: True
-        evaluation: "+"
-        unit_repr: None
-      F1:
-        latest: True
-        kpi_base: 0.240257
-        threshold: 0.08
-        actived: True
-        evaluation: "+"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/train_bigru_crf_$XPU.log
 
   -
-    priority: p2 # 显卡不足，关闭
+    priority: p1
     tag: win_dy_gpu1_ernie
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
@@ -186,17 +179,24 @@ TRAIN: # 训练步骤
         cmd: train.bat $XPU ernie
 
     kpis: #kpi指标
-      acc:
+      Loss:
         latest: True
-        kpi_base: 0.5091743119266054
-        threshold: 0.01
+        kpi_base: 0.059347
+        threshold: 0.08
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/train_ernie_$XPU.log
 
   -
-    priority: p2 # 显卡不足，关闭
+    priority: p1
     tag: win_dy_gpu1_ernie_crf
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
@@ -207,11 +207,139 @@ TRAIN: # 训练步骤
         cmd: train.bat $XPU ernie_crf
 
     kpis: #kpi指标
-      acc:
+      Loss:
         latest: True
-        kpi_base: 0.5091743119266054
-        threshold: 0.01
+        kpi_base: 0.497895
+        threshold: 0.08
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/train_ernie_crf_$XPU.log
+
+PYTHON_INFER:
+  -
+    priority: p0
+    tag: linux_gpu1_ernie
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash python_infer.sh $XPU ernie
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_ernie_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_gpu1_ernie_crf
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash python_infer.sh $XPU ernie_crf
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_ernie_crf_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_gpu1_bigru_crf
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash python_infer.sh $XPU bigru_crf
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_bigru_crf_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: python_infer.bat $XPU ernie
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_ernie_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: python_infer.bat $XPU ernie_crf
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_ernie_crf_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: python_infer.bat $XPU bigru_crf
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_bigru_crf_$XPU.log

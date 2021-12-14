@@ -11,7 +11,7 @@ VARIABLES:
   model_log_path: log/text_matching_ernie_matching/
 
 EXEC:
-  exec_cases: [DATA_PROC, TRAIN, INFER]
+  exec_cases: [DATA_PROC, TRAIN, INFER, PYTHON_INFER]
   exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
@@ -24,6 +24,13 @@ DATA_PROC:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
+  -
+    priority: p1
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
 
 TRAIN: # 训练步骤
   -
@@ -62,6 +69,24 @@ TRAIN: # 训练步骤
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/train_point-wise_multi_$XPU.log
 
+  -
+    priority: p1
+    tag: win_dy_gpu1_point-wise
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA point-wise
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 79.329269
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_point-wise_$XPU.log
+
 
   -
     priority: p0
@@ -99,6 +124,24 @@ TRAIN: # 训练步骤
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/train_pair-wise_multi_$XPU.log
 
+  -
+    priority: p1
+    tag: win_dy_gpu1_pair-wise
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA pair-wise
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 79.329269
+        threshold: 0.01
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_pair-wise_$XPU.log
+
 INFER:
   -
     priority: p1
@@ -134,3 +177,110 @@ INFER:
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer_pair-wise_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_point-wise
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA point-wise
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_point-wise_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_pair-wise
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA pair-wise
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_pair-wise_$XPU.log
+
+PYTHON_INFER:
+  -
+    priority: p1
+    tag: linux_dy_gpu1_point-wise
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash python_infer.sh $XPU $SET_CUDA point-wise
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_point-wise_$XPU.log
+
+
+  -
+    priority: p1
+    tag: linux_dy_gpu1_pair-wise
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash python_infer.sh $XPU $SET_CUDA pair-wise
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_pair-wise_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_point-wise
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: python_infer.bat $XPU $SET_CUDA point-wise
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_point-wise_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1_pair-wise
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: python_infer.bat $XPU $SET_CUDA pair-wise
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_pair-wise_$XPU.log
