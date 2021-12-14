@@ -116,7 +116,7 @@ if [[ ${mode} == 'trt_int8' ]];then
 else
     trt_calib_mode=False
 fi
-if [[ ${mode} == 'trt_int8' ]] && [[ -n `echo "${config_skip_trt8}" | grep -w "${config}"` ]];then 
+if [[ ${mode} == 'trt_int8' ]] && [[ -n `echo "${config_skip_trt8}" | grep -w "${config}"` ]];then
     echo -e "***skip trt_int8 for ${config}"
 else
     python_trt

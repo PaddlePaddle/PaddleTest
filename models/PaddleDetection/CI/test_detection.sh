@@ -53,7 +53,7 @@ sh scripts/build.sh
 cd ../..
 #compile op
 cd ppdet/ext_op
-python setup.py install 
+python setup.py install
 cd ../..
 # prepare dynamic data
 sed -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
@@ -343,7 +343,7 @@ fi
 EXPORT
 if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "skip model ${model} for python_infer"
-elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then    
+elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
     PYTHON_INFER_KEYPOINT
 else
     PYTHON_INFER
