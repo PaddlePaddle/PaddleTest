@@ -264,7 +264,7 @@ if [ ! -f "waveflow_ljspeech_ckpt_0.3.zip" ]; then
    wget https://paddlespeech.bj.bcebos.com/Parakeet/released_models/waveflow/waveflow_ljspeech_ckpt_0.3.zip
    unzip waveflow_ljspeech_ckpt_0.3.zip
 fi
-ckpt_name=snapshot_iter_403.pdz
+ckpt_name=snapshot_iter_1612.pdz
 head -3 ./dump/test/norm/metadata.jsonl > ./metadata_3.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_3.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/transformer_tts.log 2>&1
