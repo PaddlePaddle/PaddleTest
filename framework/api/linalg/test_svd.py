@@ -43,7 +43,10 @@ def cal_svd_api(x, dtype, place, full_matrices=False):
     paddle.disable_static()
 
     for i in range(3):
-        assert np.allclose(dynamic_res[i].numpy(), static_res[i])
+        if i == 0 or i == 2:
+            assert np.allclose(np.abs(dynamic_res[i].numpy()), np.abs(static_res[i]))
+        else:
+            assert np.allclose(dynamic_res[i].numpy(), static_res[i])
 
     return static_res
 
