@@ -51,7 +51,7 @@ image(){
                sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
            fi
            #运行python测试代码
-           sed -i "s/use_gpu=False/use_gpu=${g}/g" test_${module_name}.py
+           sed -i "s/use_gpu=False/use_gpu=${use_gpu}/g" test_${module_name}.py
            $py_cmd test_${module_name}.py
            if [ $? -ne 0 ]; then
                excption=$(expr ${excption} + 1)
