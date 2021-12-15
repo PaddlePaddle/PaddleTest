@@ -43,8 +43,8 @@ DATA_PROC:
     tag: win_download_data_cpu
     run:
       -
-        path: $ROOT_PATH/scripts
-        cmd: python -m pip install paddlenlp
+        path: $ROOT_PATH/models_repo
+        cmd: python -m pip install ./
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: data_proc.bat
@@ -356,23 +356,30 @@ EVAL:
     kpis: #kpi指标
       precision:
         latest: True
-        kpi_base: 0.367204
-        threshold: 0.05
+        kpi_base: 0.202226
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
       recall:
         latest: True
-        kpi_base: 0.466904
-        threshold: 0.05
+        kpi_base: 0.237302
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
       f1:
         latest: True
-        kpi_base: 0.411096
-        threshold: 0.05
+        kpi_base: 0.227345
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/eval_$XPU.log

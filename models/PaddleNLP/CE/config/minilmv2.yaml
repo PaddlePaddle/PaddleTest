@@ -93,7 +93,7 @@ FINETUNE: # 训练步骤，还未提测
 EVAL:
   -
     priority: p0
-    tag: linux_dy_gpu1_AFQMC
+    tag: linux_dy_gpu1_afqmc
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -114,7 +114,7 @@ EVAL:
 
   -
     priority: p0
-    tag: win_dy_gpu1_AFQMC
+    tag: win_dy_gpu1_afqmc
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -134,7 +134,7 @@ EVAL:
 
   -
     priority: p0
-    tag: linux_dy_gpu1_TNEWS
+    tag: linux_dy_gpu1_tnews
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -154,7 +154,7 @@ EVAL:
 
   -
     priority: p0
-    tag: win_dy_gpu1_TNEWS
+    tag: win_dy_gpu1_tnews
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -173,7 +173,7 @@ EVAL:
 
   -
     priority: p0
-    tag: linux_dy_gpu1_IFLYTEK
+    tag: linux_dy_gpu1_iflytek
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -192,7 +192,7 @@ EVAL:
 
   -
     priority: p0
-    tag: win_dy_gpu1_IFLYTEK
+    tag: win_dy_gpu1_iflytek
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:

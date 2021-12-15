@@ -11,7 +11,7 @@ VARIABLES:
   model_log_path: log/ernie-ctm/
 
 EXEC:
-  exec_cases: [DATA_PROC, TRAIN, EVAL]
+  exec_cases: [DATA_PROC, TRAIN, INFER]
   exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
@@ -63,16 +63,14 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
 
 
-EVAL:
+INFER:
   -
     priority: p1
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-        CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash eval.sh $XPU
+        cmd: bash infer.sh $XPU $SET_CUDA
     kpis:
       exit_code:
         latest: True
@@ -81,4 +79,4 @@ EVAL:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/eval_$XPU.log
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log

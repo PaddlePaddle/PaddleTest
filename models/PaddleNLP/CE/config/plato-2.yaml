@@ -40,13 +40,13 @@ DATA_PROC:
         path: $ROOT_PATH/$model_scripts_path
         cmd: data_proc.bat
 
-  -
-    priority: p0
-    tag: win_download_data_cpu
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: data_proc.bat
+  # -
+  #   priority: p0
+  #   tag: win_download_data_cpu
+  #   run:
+  #     -
+  #       path: $ROOT_PATH/$model_scripts_path
+  #       cmd: data_proc.bat
 
 TRAIN: # 训练步骤
   -
@@ -127,23 +127,24 @@ TRAIN: # 训练步骤
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/train_24_$XPU.log
 
-  -
-    priority: p0
-    tag: win_dy_cpu_24
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: 24_train.bat $XPU
+  # -
+  #   priority: p0
+  #   tag: win_dy_cpu_24 # 关闭，不支持python36，之后升级可以打开
+  #   run:
+  #   run:
+  #     -
+  #       path: $ROOT_PATH/$model_scripts_path
+  #       cmd: 24_train.bat $XPU
 
-    kpis:
-      exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-    output: $ROOT_PATH/$model_log_path/train_24_$XPU.log
+  #   kpis:
+  #     exit_code:
+  #       latest: True
+  #       kpi_base: 0
+  #       threshold: 0
+  #       actived: True
+  #       evaluation: "-"
+  #       unit_repr: None
+  #   output: $ROOT_PATH/$model_log_path/train_24_$XPU.log
 
   -
     priority: p1

@@ -1,4 +1,5 @@
 PyYAML
 scipy
 sklearn
-faiss
+faiss-cpu
+faiss-gpu

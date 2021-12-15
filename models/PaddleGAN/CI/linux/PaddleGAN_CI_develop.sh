@@ -14,6 +14,7 @@ export FLAGS_use_virtual_memory_auto_growth=1
 #<-> Data_path   数据路径
 #$1 <-> 自己定义single_yaml_debug  单独模型yaml字符
 
+
 # data
 echo "######  ----ln  data-----"
 rm -rf data
@@ -117,8 +118,6 @@ python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
 python -m pip install  ppgan \
    -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
-python -m pip install --ignore-installed dlib \
-   -i https://pypi.tuna.tsinghua.edu.cn/simple
 # python -m pip install --ignore-installed  dlib
 python -m pip install  dlib \
    -i https://mirror.baidu.com/pypi/simple
@@ -172,13 +171,16 @@ if [[ ${model_flag} =~ "pr" ]];then
    echo "######  diff models_list_diff"
    wc -l models_list_diff
    cat models_list_diff
-   shuf -n 3 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
+   shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 fi
-echo "######  diff models_list"
-wc -l models_list
-cat models_list
+cat models_list | sort | uniq > models_list_run_tmp  #去重复
+shuf models_list_run_tmp > models_list_run
+rm -rf models_list_run_tmp
+echo "######  run models_list"
+wc -l models_list_run
+cat models_list_run
 
-cat models_list | while read line
+cat models_list_run | while read line
 do
 echo $line
 filename=${line##*/}
@@ -206,7 +208,7 @@ fi
   ;;
 *)
 
-if [[ ${line} =~ 'basicvsr' ]]; then
+if [[ ! ${line} =~ 'makeup' ]]; then
    python  -m paddle.distributed.launch tools/main.py --config-file $line \
       -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
       > $log_path/train/${model}.log 2>&1
@@ -255,9 +257,13 @@ stylegan_v2_256_ffhq)
 makeup)
   sleep 0.01
   ;;
+msvsr_l_reds)
+  sleep 0.01
+  ;;
 *)
 
 # echo $params_dir
+
   python tools/main.py --config-file $line \
    --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams \
    > $log_path/eval/${model}.log 2>&1

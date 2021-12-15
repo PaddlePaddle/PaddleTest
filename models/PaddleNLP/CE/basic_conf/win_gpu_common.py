@@ -69,7 +69,7 @@ EXEC_TAG = [
     "win_dy_gpu1_dureader_robust",
     "win_dy_gpu1_drcd",
     "win_dy_gpu1_cmrc2018",
-    "win_dy_gpu1_AFQMC",
-    "win_dy_gpu1_IFLYTEK",
-    "win_dy_gpu1_TNEWS",
+    "win_dy_gpu1_afqmc",
+    "win_dy_gpu1_pair-wise",
+    "win_dy_gpu1_point-wise",
 ]

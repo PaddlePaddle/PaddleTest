@@ -1,0 +1,59 @@
+MODEL: "transformer_tts" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleSpeech_t2s
+  path: $ROOT_PATH/PaddleSpeech
+  branch: $PaddleSpeech_t2s_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/transformer_tts/ #脚本的路径
+  model_log_path: log
+
+EXEC:
+  exec_cases: [TRAIN]
+  exec_priority: [P0]
+  exec_tag: [linux_dy_gpu1,linux_dy_gpu2]
+
+#测试套
+TRAIN: # 训练步骤
+  -
+    priority: P0  # dy_gpu1
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train_1card.sh
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.631600 # 4.123021
+        threshold: 1 # 0.9
+        actived: True
+        evaluation: "-"
+    output: $ROOT_PATH/$model_log_path/transformer_tts_1card.log
+  -
+    priority: P0  # dy_gpu1
+    tag: linux_dy_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train_2card.sh
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.776691 # 4.210940
+        threshold: 1 # 0.9
+        actived: True
+        evaluation: "-"
+    output: $ROOT_PATH/$model_log_path/transformer_tts_2card.log

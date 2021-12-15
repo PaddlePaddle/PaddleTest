@@ -18,6 +18,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
    unset FLAGS_use_virtual_memory_auto_growth
 fi
 
+
 # <-> model_flag CI是效率云 step0是clas分类 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
 #     pr是TC，clas是分类，rec是识别，single是单独模型debug
 # <-> pr_num   随机跑pr的模型数
@@ -97,6 +98,7 @@ python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl
    -i https://mirror.baidu.com/pypi/simple
 
 rm -rf models_list
+rm -rf models_list_run
 rm -rf models_list_all
 rm -rf models_list_rec
 
@@ -117,10 +119,11 @@ fi
 done
 
 #找到diff yaml  &  拆分任务  &  定义要跑的model list
-if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
+if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'CI_step0' ]] \
+   || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
    find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; \
-      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'fp16' |grep -v 'distill' \
-      > models_list_all
+      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'fp16' |grep -v 'distill' |grep -v 'ResNeXt101_32x48d_wsl'\
+      > models_list_all #ResNeXt101_32x48d_wsl OOM   fp16 seresnet存在问题
 
    if [[ ${model_flag} =~ 'CI_step0' ]]; then
       cat models_list_all | while read line
@@ -185,12 +188,15 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       cat models_list_diff
       shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
    fi
-   echo "######  diff models_list"
-   wc -l models_list
-   cat models_list
+   cat models_list | sort | uniq > models_list_run_tmp  #去重复
+   shuf models_list_run_tmp > models_list_run
+   rm -rf models_list_run_tmp
+   echo "######  run models_list"
+   wc -l models_list_run
+   cat models_list_run
 
    #开始循环
-   cat models_list | while read line
+   cat models_list_run | while read line
    do
    #echo $line
    filename=${line##*/}
@@ -450,6 +456,7 @@ fi
 if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'rec' ]]; then
    echo "######  rec step"
    rm -rf models_list
+   rm -rf models_list_run
 
    find ppcls/configs/Cartoonface/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
    find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
