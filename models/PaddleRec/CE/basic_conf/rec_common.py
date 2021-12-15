@@ -27,37 +27,8 @@ SET_MULTI_CUDA = "0,1"
 # PaddleRec
 REPO_PaddleRec = "https://github.com/PaddlePaddle/PaddleRec.git"
 BASE_BRANCH = "master"
-# 16/17
-rank_dnn_BRANCH = BASE_BRANCH
-rank_lr_BRANCH = BASE_BRANCH
-rank_gatednn_BRANCH = BASE_BRANCH
-rank_fm_BRANCH = BASE_BRANCH
-rank_deepfm_BRANCH = BASE_BRANCH
-rank_xdeepfm_BRANCH = BASE_BRANCH
-rank_wide_deep_BRANCH = BASE_BRANCH
-rank_naml_BRANCH = BASE_BRANCH
-rank_ffm_BRANCH = BASE_BRANCH
-rank_dmr_BRANCH = BASE_BRANCH
-rank_bst_BRANCH = BASE_BRANCH
-
-rec_dy_dnn_BRANCH = BASE_BRANCH
-
-match_dssm_BRANCH = BASE_BRANCH
-match_pyramid_BRANCH = BASE_BRANCH
-match_simnet_BRANCH = BASE_BRANCH
-
-content_tagspace_BRANCH = BASE_BRANCH
-content_textcnn_BRANCH = BASE_BRANCH
-
-multitask_esmm_BRANCH = BASE_BRANCH
-multitask_mmoe_BRANCH = BASE_BRANCH
-multitask_ple_BRANCH = BASE_BRANCH
-multitask_sharebottom_BRANCH = BASE_BRANCH
-
-recall_ncf_BRANCH = BASE_BRANCH
-recall_word2vec_BRANCH = BASE_BRANCH
-recall_mind_BRANCH = BASE_BRANCH
-
+# 27/28
+rec_BRANCH = BASE_BRANCH
 # linux gpu下 P0的任务要跑的标签 daily  PaddleRec_Py37_Linux_Cuda10.2_FuncTest_P0_D
 # 当daily为True，任务只跑日级别功能验证；当daily为False，任务切换为月级别收敛性任务
 daily = True

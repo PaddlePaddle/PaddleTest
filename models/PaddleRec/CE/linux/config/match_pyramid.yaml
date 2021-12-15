@@ -3,7 +3,7 @@ PRIORITY: P1
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
-  branch: $match_pyramid_BRANCH
+  branch: $rec_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
@@ -15,7 +15,7 @@ VARIABLES:
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p1]
-  exec_tag: $EXEC_TAG_LINUX_GPU2
+  exec_tag: $EXEC_TAG
 
 #测试套
 DATA_PROC:
@@ -93,10 +93,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_cpu match_pyramid_linux_dy_cpu
 
     kpis: #kpi指标
-      map:
+      loss:
         latest: True
-        kpi_base: 0.39
-        threshold: 0.02
+        kpi_base: 0.9995837
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -176,10 +176,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu match_pyramid_linux_st_cpu
 
     kpis: #kpi指标
-      map:
+      loss:
         latest: True
-        kpi_base: 0.39
-        threshold: 0.02
+        kpi_base: 0.9995837
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -193,6 +193,162 @@ TRAIN: # 训练步骤
 
     output: $ROOT_PATH/$model_log_path/S_match_pyramid_linux_st_cpu.log
 
+# mac train(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_dy_cpu match_pyramid_mac_dy_cpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.9995837
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_st_cpu match_pyramid_mac_st_cpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.9995837
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_mac_st_cpu.log
+# win train(small data)
+  -
+    tag: win_dy_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_gpu match_pyramid_win_dy_gpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.9995837
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_cpu match_pyramid_win_dy_cpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.9995837
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_gpu match_pyramid_win_st_gpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.9995837
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_cpu match_pyramid_win_st_cpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.9995837
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -219,7 +375,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_dy_gpu1_eval.log
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_dy_gpu1.log
   -
     tag: linux_dy_gpu2
     priority: p1
@@ -246,7 +402,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_dy_gpu2_eval.log
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu
     priority: p1
@@ -256,10 +412,10 @@ INFER:
         cmd: sh infer.sh linux_dy_cpu match_pyramid_infer_linux_dy_cpu
 
     kpis: #kpi指标
-      map:
+      prediction:
         latest: True
-        kpi_base: 0.39
-        threshold: 0.02
+        kpi_base: 0.00029275
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -271,7 +427,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_dy_cpu_eval.log
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_dy_cpu.log
   - #可以有多步
     tag: linux_st_gpu1
     priority: p1
@@ -296,7 +452,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_st_gpu1_eval.log
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_st_gpu1.log
   -
     tag: linux_st_gpu2
     priority: p1
@@ -324,7 +480,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_st_gpu2_eval.log
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_st_gpu2.log
   -
     tag: linux_st_cpu
     priority: p1
@@ -334,10 +490,10 @@ INFER:
         cmd: sh infer.sh linux_st_cpu match_pyramid_infer_linux_st_cpu
 
     kpis: #kpi指标
-      map:
+      prediction:
         latest: True
-        kpi_base: 0.39
-        threshold: 0.02
+        kpi_base: 0.00029275
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -349,4 +505,160 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_st_cpu_eval.log
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_linux_st_cpu.log
+# mac infer(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_dy_cpu match_pyramid_infer_mac_dy_cpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.00029275
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_st_cpu match_pyramid_infer_mac_st_cpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.00029275
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_mac_st_cpu.log
+# win infer(small data)
+  -
+    tag: win_dy_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_gpu match_pyramid_infer_win_dy_gpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.00029275
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_cpu match_pyramid_infer_win_dy_cpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.00029275
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_gpu match_pyramid_infer_win_st_gpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.00029275
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_cpu match_pyramid_infer_win_st_cpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.00029275
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_win_st_cpu.log

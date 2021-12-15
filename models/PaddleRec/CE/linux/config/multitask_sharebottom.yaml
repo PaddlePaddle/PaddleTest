@@ -3,19 +3,19 @@ PRIORITY: P1
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
-  branch: $multitask_sharebottom_BRANCH
+  branch: $rec_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
   model_scripts_path: scripts/multitask/ #脚本的路径
-  model_log_path: log/multitask/
+  model_log_path: log/multitask_sharebottom/
 
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p1]
-  exec_tag: $EXEC_TAG_LINUX_GPU2
+  exec_tag: $EXEC_TAG
 
 #测试套
 DATA_PROC:
@@ -95,8 +95,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.992199
-        threshold: 0.02
+        kpi_base: 0.652778
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -178,8 +178,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.992199
-        threshold: 0.02
+        kpi_base: 0.652778
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -192,6 +192,162 @@ TRAIN: # 训练步骤
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_linux_st_cpu.log
+# mac train(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_dy_cpu multitask_sharebottom_mac_dy_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.652778
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_st_cpu multitask_sharebottom_mac_st_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.652778
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_mac_st_cpu.log
+# win train(small data)
+  -
+    tag: win_dy_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_gpu multitask_sharebottom_win_dy_gpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.652778
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_cpu multitask_sharebottom_win_dy_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.652778
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_gpu multitask_sharebottom_win_st_gpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.652778
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_cpu multitask_sharebottom_win_st_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.652778
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -260,8 +416,8 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.992199
-        threshold: 0.02
+        kpi_base: 0.740741
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -339,8 +495,8 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.992199
-        threshold: 0.02
+        kpi_base: 0.740741
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -353,3 +509,159 @@ INFER:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_infer_linux_st_cpu.log
+# mac infer(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_dy_cpu multitask_sharebottom_infer_mac_dy_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.740741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_infer_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_st_cpu multitask_sharebottom_infer_mac_st_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.740741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_infer_mac_st_cpu.log
+# win infer(small data)
+  -
+    tag: win_dy_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_gpu multitask_sharebottom_infer_win_dy_gpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.740741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_infer_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_cpu multitask_sharebottom_infer_win_dy_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.740741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_infer_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_gpu multitask_sharebottom_infer_win_st_gpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.740741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_infer_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_cpu multitask_sharebottom_infer_win_st_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.740741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_infer_win_st_cpu.log

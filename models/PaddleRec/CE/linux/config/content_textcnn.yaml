@@ -3,7 +3,7 @@ PRIORITY: P0,PreTest
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
-  branch: $content_textcnn_BRANCH
+  branch: $rec_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
@@ -15,7 +15,7 @@ VARIABLES:
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p0]
-  exec_tag: $EXEC_TAG_LINUX_ALL
+  exec_tag: $EXEC_TAG
 #测试套
 DATA_PROC:
   -
@@ -25,8 +25,24 @@ DATA_PROC:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh data_proc.sh senti_clas
+# mac/win download dataset
+#  -
+#    tag: mac_down_data
+#    priority: p0
+#    run:
+#      -
+#        path: $ROOT_PATH/$model_scripts_path
+#        cmd: sh data_proc.sh senti_clas
+#  -
+#    tag: win_down_data
+#    priority: p0
+#    run:
+#      -
+#        path: $ROOT_PATH/$model_scripts_path
+#        cmd: sh data_proc.sh senti_clas
 
 TRAIN: # 训练步骤
+# linux train
   -
     tag: linux_dy_gpu1
     priority: p0  # dy_gpu1
@@ -95,8 +111,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.817673
-        threshold: 0.02
+        kpi_base: 0.98
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1003128
+        threshold: 0.0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -178,8 +201,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.875
-        threshold: 0.02
+        kpi_base: 0.98
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1003128
+        threshold: 0.0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -192,7 +222,7 @@ TRAIN: # 训练步骤
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_content_textcnn_linux_st_cpu.log
-
+# linux con train
   - # 单卡动态图收敛性训练step
     tag: linux_dy_gpu1_con
     priority: p0  # dy_gpu1
@@ -250,9 +280,207 @@ TRAIN: # 训练步骤
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_content_textcnn_linux_st_gpu1_con.log
+# mac train(small data)
+  -
+    tag: mac_dy_cpu # mac_dy
+    priority: p0 # mac_dy
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_dy_cpu content_textcnn_mac_dy_cpu
 
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.98
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1003128
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu # mac_st
+    priority: p0 # mac_st
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_st_cpu content_textcnn_mac_st_cpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.98
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1003128
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_mac_st_cpu.log
+# win train(small data)
+  -
+    tag: win_dy_gpu # dy_gpu
+    priority: p0 # dy_gpu
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_gpu content_textcnn_win_dy_gpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.98
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1003128
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu # dy_cpu
+    priority: p0 # dy_cpu
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_cpu content_textcnn_win_dy_cpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.98
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1003128
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu # st_gpu
+    priority: p0 # st_gpu
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_gpu content_textcnn_win_st_gpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.98
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1003128
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_win_st_gpu.log
+
+  -
+    tag: win_st_cpu # st_cpu
+    priority: p0 # st_cpu
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_cpu content_textcnn_win_st_cpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.98
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1003128
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_win_st_cpu.log
 
 INFER:
+# linux infer
   - #可以有多步
     tag: linux_dy_gpu1
     priority: p0
@@ -319,8 +547,8 @@ INFER:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.888021
-        threshold: 0.02
+        kpi_base: 0.856667
+        threshold: 0.0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -398,8 +626,8 @@ INFER:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.888021
-        threshold: 0.02
+        kpi_base: 0.856667
+        threshold: 0.0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -412,7 +640,7 @@ INFER:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_linux_st_cpu.log
-
+# linux con infer
   - # textcnn模型单卡动态图收敛性预测step
     tag: linux_dy_gpu1_con
     priority: p0
@@ -462,3 +690,159 @@ INFER:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_linux_st_gpu1_con.log
+# mac infer(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_dy_cpu content_textcnn_infer_mac_dy_cpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.856667
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_st_cpu content_textcnn_infer_mac_st_cpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.856667
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_mac_st_cpu.log
+# win infer(small data)
+  -
+    tag: win_dy_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_gpu content_textcnn_infer_win_dy_gpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.856667
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_cpu content_textcnn_infer_win_dy_cpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.856667
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_gpu content_textcnn_infer_win_st_gpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.856667
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_cpu content_textcnn_infer_win_st_cpu
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.856667
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_win_st_cpu.log

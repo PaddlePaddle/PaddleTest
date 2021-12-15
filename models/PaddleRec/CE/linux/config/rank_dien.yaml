@@ -1,5 +1,5 @@
-MODEL: "rank_dnn" # 模型名
-PRIORITY: P0
+MODEL: "rank_dien" # 模型名
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
@@ -10,94 +10,39 @@ ENV:
 
 VARIABLES:
   model_scripts_path: scripts/rank/ #脚本的路径
-  model_log_path: log/rank_dnn/
+  model_log_path: log/rank_dien/
 
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
-  exec_priority: [p0]
+  exec_priority: [p1]
   exec_tag: $EXEC_TAG
+
 #测试套
 DATA_PROC:
   -
     tag: linux_down_data
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh data_proc.sh criteo
+        cmd: sh data_proc.sh amazonElec_Din
 
 TRAIN: # 训练步骤
   -
-    tag: linux_dy_gpu1_con # 单卡动态图收敛性step
-    priority: p0
-    env: # 去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_dy_gpu1_con rank_dnn_linux_dy_gpu1_con
-
-    kpis: # kpi指标
-      auc:
-        latest: True
-        kpi_base: 0.795229
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_linux_dy_gpu1_con.log
-  -
-    tag: linux_st_gpu1_con # 单卡静态图收敛性step
-    priority: p0
-    env: # 去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      - path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_st_gpu1_con rank_dnn_linux_st_gpu1_con
-
-    kpis: # kpi指标
-      auc:
-        latest: True
-        kpi_base: 0.795229
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_linux_st_gpu1_con.log
-
-  -
-    tag: linux_dy_gpu1
-    priority: p0
+    tag: linux_dy_gpu1 # dy_gpu1
+    priority: p1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_dy_gpu1 rank_dnn_linux_dy_gpu1
+        cmd: sh train.sh linux_dy_gpu1 rank_dien_linux_dy_gpu1
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
+        kpi_base: 0.82
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -110,22 +55,22 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_linux_dy_gpu1.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_linux_dy_gpu1.log
   -
-    tag: linux_dy_gpu2
-    priority: p0
+    tag: linux_dy_gpu2  # dy_gpu2
+    priority: p1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_dy_gpu2 rank_dnn_linux_dy_gpu2
+        cmd: sh train.sh linux_dy_gpu2 rank_dien_linux_dy_gpu2
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
+        kpi_base: 0.82
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -138,19 +83,19 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_dnn_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/rank_dien_linux_dy_gpu2_dist_log/workerlog.0
   -
-    tag: linux_dy_cpu
-    priority: p0   # dy_cpu
+    tag: linux_dy_cpu   # dy_cpu
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_dy_cpu rank_dnn_linux_dy_cpu
+        cmd: sh train.sh linux_dy_cpu rank_dien_linux_dy_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.983982
+        kpi_base: 0.550998
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -163,23 +108,23 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_linux_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_linux_dy_cpu.log
 
   -
     tag: linux_st_gpu1  # st_gpu1
-    priority: p0
+    priority: p1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_st_gpu1 rank_dnn_linux_st_gpu1
+        cmd: sh train.sh linux_st_gpu1 rank_dien_linux_st_gpu1
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
+        kpi_base: 0.82
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -192,22 +137,22 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_linux_st_gpu1.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_linux_st_gpu1.log
   -
     tag: linux_st_gpu2  # st_gpu2
-    priority: p0
+    priority: p1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_st_gpu2 rank_dnn_linux_st_gpu2
+        cmd: sh train.sh linux_st_gpu2 rank_dien_linux_st_gpu2
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
+        kpi_base: 0.82
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -220,20 +165,20 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_dnn_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/rank_dien_linux_st_gpu2_dist_log/workerlog.0
 
   -
     tag: linux_st_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh linux_st_cpu rank_dnn_linux_st_cpu
+        cmd: sh train.sh linux_st_cpu rank_dien_linux_st_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.983982
+        kpi_base: 0.550998
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -246,20 +191,20 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_linux_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_linux_st_cpu.log
 # mac train(small data)
   -
     tag: mac_dy_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh mac_dy_cpu rank_dnn_mac_dy_cpu
+        cmd: sh train.sh mac_dy_cpu rank_dien_mac_dy_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.983982
+        kpi_base: 0.550998
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -272,20 +217,20 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_mac_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_mac_dy_cpu.log
 
   -
     tag: mac_st_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh mac_st_cpu rank_dnn_mac_st_cpu
+        cmd: sh train.sh mac_st_cpu rank_dien_mac_st_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.983982
+        kpi_base: 0.550998
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -298,20 +243,20 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_mac_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_mac_st_cpu.log
 # win train(small data)
   -
     tag: win_dy_gpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu rank_dnn_win_dy_gpu
+        cmd: sh train.sh win_dy_gpu rank_dien_win_dy_gpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.983982
+        kpi_base: 0.550998
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -324,20 +269,20 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu rank_dnn_win_dy_cpu
+        cmd: sh train.sh win_dy_cpu rank_dien_win_dy_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.983982
+        kpi_base: 0.550998
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -350,20 +295,20 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_win_dy_cpu.log
 
   -
     tag: win_st_gpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu rank_dnn_win_st_gpu
+        cmd: sh train.sh win_st_gpu rank_dien_win_st_gpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.983982
+        kpi_base: 0.550998
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -376,20 +321,20 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_win_st_gpu.log
 
   -
     tag: win_st_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu rank_dnn_win_st_cpu
+        cmd: sh train.sh win_st_cpu rank_dien_win_st_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.983982
+        kpi_base: 0.550998
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -402,23 +347,21 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_win_st_cpu.log
 
 INFER:
   - #可以有多步
     tag: linux_dy_gpu1
-    priority: p0
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_dy_gpu1 rank_dnn_infer_linux_dy_gpu1
+        cmd: sh infer.sh linux_dy_gpu1 rank_dien_infer_linux_dy_gpu1
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
+        kpi_base: 0.82
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -431,22 +374,21 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_linux_dy_gpu1.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_linux_dy_gpu1.log
   -
     tag: linux_dy_gpu2
-    priority: p0
+    priority: p1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_dy_gpu2 rank_dnn_infer_linux_dy_gpu2
-
+        cmd: sh infer.sh linux_dy_gpu2 rank_dien_infer_linux_dy_gpu2
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
+        kpi_base: 0.82
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -459,19 +401,19 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_dnn_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/rank_dien_infer_linux_dy_gpu2_dist_log/workerlog.0
   -
     tag: linux_dy_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_dy_cpu rank_dnn_infer_linux_dy_cpu
+        cmd: sh infer.sh linux_dy_cpu rank_dien_infer_linux_dy_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.936478
+        kpi_base: 0.996528
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -484,21 +426,19 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_linux_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_linux_dy_cpu.log
   - #可以有多步
     tag: linux_st_gpu1
-    priority: p0
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_st_gpu1 rank_dnn_infer_linux_st_gpu1
+        cmd: sh infer.sh linux_st_gpu1 rank_dien_infer_linux_st_gpu1
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
+        kpi_base: 0.82
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -511,21 +451,22 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_linux_st_gpu1.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_linux_st_gpu1.log
   -
     tag: linux_st_gpu2
-    priority: p0
+    priority: p1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_st_gpu2 rank_dnn_infer_linux_st_gpu2
+        cmd: sh infer.sh linux_st_gpu2 rank_dien_infer_linux_st_gpu2
+
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.795229
+        kpi_base: 0.82
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -538,19 +479,19 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_dnn_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/rank_dien_infer_linux_st_gpu2_dist_log/workerlog.0
   -
     tag: linux_st_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_st_cpu rank_dnn_infer_linux_st_cpu
+        cmd: sh infer.sh linux_st_cpu rank_dien_infer_linux_st_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.936478
+        kpi_base: 0.996528
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -563,77 +504,20 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_linux_st_cpu.log
-
-  -
-    tag: linux_dy_gpu1_con # 单卡动态图预测收敛性step
-    priority: p0
-    env: # 去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_dy_gpu1_con rank_dnn_infer_linux_dy_gpu1_con
-
-    kpis: # kpi指标
-      auc:
-        latest: True
-        kpi_base: 0.795229
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_linux_dy_gpu1_con.log
-  -
-    tag: linux_st_gpu1_con # 单卡静态图预测收敛性step
-    priority: p0
-    env: # 去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh linux_st_gpu1_con rank_dnn_infer_linux_st_gpu1_con
-
-    kpis: # kpi指标
-      auc:
-        latest: True
-        kpi_base: 0.795229
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      exit_code:
-        latest: True
-        kpi_base: 0
-        threshold: 0
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_linux_st_gpu1_con.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_linux_st_cpu.log
 # mac infer(small data)
   -
     tag: mac_dy_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh mac_dy_cpu rank_dnn_infer_mac_dy_cpu
+        cmd: sh infer.sh mac_dy_cpu rank_dien_infer_mac_dy_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.936478
+        kpi_base: 0.996528
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -646,20 +530,20 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_mac_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_mac_dy_cpu.log
 
   -
     tag: mac_st_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh mac_st_cpu rank_dnn_infer_mac_st_cpu
+        cmd: sh infer.sh mac_st_cpu rank_dien_infer_mac_st_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.936478
+        kpi_base: 0.996528
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -672,20 +556,20 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_mac_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_mac_st_cpu.log
 # win infer(small data)
   -
     tag: win_dy_gpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu rank_dnn_infer_win_dy_gpu
+        cmd: sh infer.sh win_dy_gpu rank_dien_infer_win_dy_gpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.936478
+        kpi_base: 0.996528
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -698,20 +582,20 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu rank_dnn_infer_win_dy_cpu
+        cmd: sh infer.sh win_dy_cpu rank_dien_infer_win_dy_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.936478
+        kpi_base: 0.996528
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -724,20 +608,20 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_win_dy_cpu.log
 
   -
     tag: win_st_gpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu rank_dnn_infer_win_st_gpu
+        cmd: sh infer.sh win_st_gpu rank_dien_infer_win_st_gpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.936478
+        kpi_base: 0.996528
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -750,20 +634,20 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_win_st_gpu.log
 
   -
     tag: win_st_cpu
-    priority: p0
+    priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu rank_dnn_infer_win_st_cpu
+        cmd: sh infer.sh win_st_cpu rank_dien_infer_win_st_cpu
 
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.936478
+        kpi_base: 0.996528
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -776,4 +660,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dnn_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/S_rank_dien_infer_win_st_cpu.log
