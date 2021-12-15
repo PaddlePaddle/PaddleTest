@@ -10,7 +10,7 @@ echo "$2 infer"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../PaddleRec/models/match/match_pyramid/
+code_path=$cur_path/../../PaddleRec/models/match/match-pyramid/
 log_path=$root_path/log/match_pyramid/
 mkdir -p $log_path
 #临时环境更改

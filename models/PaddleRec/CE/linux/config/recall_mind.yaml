@@ -493,7 +493,7 @@ INFER:
     kpis: #kpi指标
       recall:
         latest: True
-        kpi_base: 0.00469
+        kpi_base: 0.01270
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -599,7 +599,7 @@ INFER:
     kpis: #kpi指标
       recall:
         latest: True
-        kpi_base: 0.00469
+        kpi_base: 0.01270
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -625,7 +625,7 @@ INFER:
     kpis: #kpi指标
       recall:
         latest: True
-        kpi_base: 0.00469
+        kpi_base: 0.01270
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -650,7 +650,7 @@ INFER:
     kpis: #kpi指标
       recall:
         latest: True
-        kpi_base: 0.00469
+        kpi_base: 0.01270
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -676,7 +676,7 @@ INFER:
     kpis: #kpi指标
       recall:
         latest: True
-        kpi_base: 0.00469
+        kpi_base: 0.01270
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -701,7 +701,7 @@ INFER:
     kpis: #kpi指标
       recall:
         latest: True
-        kpi_base: 0.00469
+        kpi_base: 0.01270
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -726,7 +726,7 @@ INFER:
     kpis: #kpi指标
       recall:
         latest: True
-        kpi_base: 0.00469
+        kpi_base: 0.01270
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -751,7 +751,7 @@ INFER:
     kpis: #kpi指标
       recall:
         latest: True
-        kpi_base: 0.00469
+        kpi_base: 0.01270
         threshold: 0.001
         actived: True
         evaluation: "+"
