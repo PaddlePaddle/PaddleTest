@@ -53,7 +53,7 @@ call:python_infer
 )
 )
 if !err_sign! EQU 1 (
-exit /b
+exit /b 1
 )
 
 
