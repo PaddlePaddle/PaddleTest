@@ -29,7 +29,7 @@ else
 fi
 }
 
-# 输出当前路径
+# 输出路径
 cd $code_path
 echo -e "\033[32m `pwd` infer \033[0m";
 
