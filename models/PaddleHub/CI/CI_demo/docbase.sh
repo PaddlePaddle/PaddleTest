@@ -2,7 +2,7 @@
 
 cur_path=`pwd`
 
-while getopts ":b:p:t:" opt
+while getopts ":b:p:t:g:" opt
 do
     case $opt in
         b)
@@ -20,6 +20,10 @@ do
         t)
         echo "task=$OPTARG"
         task=$OPTARG
+        ;;
+        g)
+        echo "use gpu=$OPTARG"
+        use_gpu=$OPTARG
         ;;
         ?)
         echo "未知参数"
