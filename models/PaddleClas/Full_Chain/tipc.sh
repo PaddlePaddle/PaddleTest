@@ -78,7 +78,7 @@ python -m pip install ./${COMPILE_PATH##*/}
 cp ../PaddleTest/models/PaddleClas/Full_Chain/tipc_run.sh .
 cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_unrun .
 cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_all .
-sh tipc_run.sh
+bash tipc_run.sh
 "
 
 
