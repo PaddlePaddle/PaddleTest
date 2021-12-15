@@ -45,6 +45,7 @@ nvidia-docker run -i --rm \
                   -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
                   -e "TIPC_MODE=${TIPC_MODE}" \
                   -e "grep_v_models=${grep_v_models}" \
+                  -e "grep_models=${grep_models}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
 unset http_proxy
