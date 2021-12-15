@@ -4,7 +4,13 @@
 test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
 
-for config_file in `find . -name "*train_infer_python.txt"`; do
+find . -name "*train_infer_python.txt" > full_chain_list_gan_all_tmp
+cat full_chain_list_gan_all_tmp | sort | uniq > full_chain_list_gan_all  #去重复
+
+cat full_chain_list_gan_all | while read config_file #手动定义
+do
+
+# for config_file in `find . -name "*train_infer_python.txt"`; do
 start=`date +%s`
 
     for mode in $test_mode; do
