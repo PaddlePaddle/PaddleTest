@@ -5,7 +5,7 @@ test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
 
 find . -name "*train_infer_python.txt" > full_chain_list_clas_all_tmp
-cat full_chain_list_clas_all_tmp | sort | uniq |grep -v PPLCNet_x0_75 > full_chain_list_clas_all  #去重复
+cat full_chain_list_clas_all_tmp | sort | uniq |grep -v ${grep_v_models} > full_chain_list_clas_all  #去重复
 
 cat full_chain_list_clas_all | while read config_file #手动定义
 do
