@@ -13,6 +13,10 @@ do
         echo "py version=$OPTARG"
         py_cmd=$OPTARG
         ;;
+        gpu)
+        echo "use gpu=$OPTARG"
+        use_gpu=$OPTARG
+        ;;
         t)
         echo "task=$OPTARG"
         task=$OPTARG
@@ -47,6 +51,7 @@ image(){
                sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
            fi
            #运行python测试代码
+           sed -i "s/use_gpu=False/use_gpu=${use_gpu}/g" test_${module_name}.py
            $py_cmd test_${module_name}.py
            if [ $? -ne 0 ]; then
                excption=$(expr ${excption} + 1)
@@ -75,6 +80,7 @@ audio(){
            $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
            #运行python测试代码
            sed -i "s/\/PATH\/TO\/AUDIO/doc_audio.wav/g" test_${module_name}.py
+           sed -i "s/use_gpu=False/use_gpu=${use_gpu}/g" test_${module_name}.py
            #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
            $py_cmd test_${module_name}.py
            if [ $? -ne 0 ]; then
@@ -103,6 +109,7 @@ video(){
            #生成python测试代码
            $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
            #运行python测试代码
+           sed -i "s/use_gpu=False/use_gpu=${use_gpu}/g" test_${module_name}.py
            sed -i "s/\/PATH\/TO\/VIDEO/doc_video.mp4/g" test_${module_name}.py
            #$py_cmd test_${module_name}.py 2>&1 | tee -a predict_${module_name}.log
            $py_cmd test_${module_name}.py
@@ -132,6 +139,7 @@ text(){
            #生成python测试代码
            $py_cmd docbase.py --path ${cur_path}/${module_rdme} --name ${module_name}
            #运行python测试代码
+           sed -i "s/use_gpu=False/use_gpu=${use_gpu}/g" test_${module_name}.py
            $py_cmd test_${module_name}.py
            if [ $? -ne 0 ]; then
                excption=$(expr ${excption} + 1)
