@@ -2,7 +2,7 @@
 
 cur_path=`pwd`
 
-while getopts ":b:p:t:" opt
+while getopts ":b:p:t:g:" opt
 do
     case $opt in
         b)
@@ -13,13 +13,13 @@ do
         echo "py version=$OPTARG"
         py_cmd=$OPTARG
         ;;
-        gpu)
-        echo "use gpu=$OPTARG"
-        use_gpu=$OPTARG
-        ;;
         t)
         echo "task=$OPTARG"
         task=$OPTARG
+        ;;
+        g)
+        echo "use gpu=$OPTARG"
+        use_gpu=$OPTARG
         ;;
         ?)
         echo "未知参数"
@@ -51,7 +51,7 @@ image(){
                sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
            fi
            #运行python测试代码
-           sed -i "s/use_gpu=False/use_gpu=${use_gpu}/g" test_${module_name}.py
+           sed -i "s/use_gpu=False/use_gpu=${g}/g" test_${module_name}.py
            $py_cmd test_${module_name}.py
            if [ $? -ne 0 ]; then
                excption=$(expr ${excption} + 1)
