@@ -22,6 +22,9 @@ skip_not_compile_gpu = pytest.mark.skipif(
 skip_branch_not_develop = pytest.mark.skipif(
     os.getenv("AGILE_COMPILE_BRANCH") != "develop", reason="skip cases because branch!=develop"
 )
+skip_branch_is_2_2 = pytest.mark.skipif(
+    os.getenv("AGILE_COMPILE_BRANCH") == "release/2.2", reason="skip cases because branch==release/2.2"
+)
 
 # 检测平台
 skip_platform_not_linux = pytest.mark.skipif(
