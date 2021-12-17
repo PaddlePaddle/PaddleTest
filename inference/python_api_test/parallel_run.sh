@@ -1,5 +1,4 @@
 home=$PWD
-
 run_dirs=(test_class_model test_det_model test_ocr_model test_nlp_model) 
 #run_dirs=(test_class_mode) 
 if [[ -z $1 ]];then
@@ -16,7 +15,7 @@ function caught_error() {
     for job in `jobs -p`; do
         echo "PID => ${job}"
         if ! wait ${job} ; then
-            echo "At least one test failed with exit code => $?" ;
+            echo "At least one test failed with exit code => $?";
             EXIT_CODE=1;
         fi
     done
@@ -32,7 +31,7 @@ do
         else
            echo "${run_dirs[i+j]}"
           #run_case ${run_dirs[i+j]} $j &
-          cd $home/${run_dirs[i+j]}/ && bash run.sh $j 2>&1 & 
+           cd $home/${run_dirs[i+j]}/ && bash run.sh $j 2>&1 & 
         fi 
     done
     wait
