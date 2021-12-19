@@ -150,9 +150,16 @@ fi
 echo "######  category"
 echo $category
 
+
 if [ ${category} == "rec" ];then
-  if [[${model} =~ "rec_resnet_stn_bilstm_att"]]; then
+  if [[${model} == "rec_resnet_stn_bilstm_att"]]; then
      python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=256 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=256 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
+     if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
+       echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
+    else
+       cat $log_path/train/$model.log
+       echo -e "\033[31m training of $model failed!\033[0m" | tee -a $log_path/result.log
+    fi
   else
     python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
     if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
@@ -162,7 +169,6 @@ if [ ${category} == "rec" ];then
        echo -e "\033[31m training of $model failed!\033[0m" | tee -a $log_path/result.log
     fi
   fi
-
 else
 python -m paddle.distributed.launch  tools/train.py -c $line  -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir="output/"${model}  > $log_path/train/$model.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
