@@ -10,7 +10,7 @@ echo "$2 infer"
 #路径配置
 root_path=$cur_path/../../
 code_path=$cur_path/../../PaddleRec/models/recall/${temp_path}/
-log_path=$root_path/log/recall/
+log_path=$root_path/log/recall_mind/
 mkdir -p $log_path
 #临时环境更改
 
@@ -29,6 +29,7 @@ else
 fi
 }
 
+# 输出路径
 cd $code_path
 echo -e "\033[32m `pwd` infer \033[0m";
 
@@ -53,7 +54,7 @@ fi
 sed -i "s/  epochs: 20/  epochs: 1/g" config_bigdata.yaml
 sed -i "s/  infer_start_epoch: 19/  infer_start_epoch: 0/g" config_bigdata.yaml
 sed -i "s/  infer_end_epoch: 20/  infer_end_epoch: 1/g" config_bigdata.yaml
-
+# linux infer
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_dy_gpu1" > ${log_path}/$2.log 2>&1
@@ -66,8 +67,7 @@ elif [ "$1" = "linux_dy_gpu2" ];then #多卡
     print_info $? $2
 
 elif [ "$1" = "linux_dy_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_dy_cpu" > ${log_path}/$2.log 2>&1
+    python -u infer.py -m config.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu1" ];then #单卡
@@ -82,9 +82,16 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
     print_info $? $2
 
 elif [ "$1" = "linux_st_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u static_infer.py -m config_bigdata.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_st_cpu" > ${log_path}/$2.log 2>&1
+    python -u static_infer.py -m config.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
+# mac small_data infer
+elif [ "$1" = "mac_dy_cpu" ];then
+    python -u infer.py -m config.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+elif [ "$1" = "mac_st_cpu" ];then
+    python -u static_infer.py -m config.yaml -top_n 50 -o runner.infer_load_path="output_model_mind_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
 else
     echo "$model_name infer.sh  parameter error "
 fi

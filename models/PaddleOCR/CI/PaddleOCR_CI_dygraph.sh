@@ -150,16 +150,25 @@ fi
 echo "######  category"
 echo $category
 
+
 if [ ${category} == "rec" ];then
-
-python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
-   echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
-else
-   cat $log_path/train/$model.log
-   echo -e "\033[31m training of $model failed!\033[0m" | tee -a $log_path/result.log
-fi
-
+  if [[ ${model} =~ "rec_resnet_stn_bilstm_att" ]]; then
+     python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=256 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=256 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
+     if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
+       echo -e "\033[33m training of $model rec_resnet_stn_bilstm_att successfully!\033[0m" | tee -a $log_path/result.log
+    else
+       cat $log_path/train/$model.log
+       echo -e "\033[31m training of $model rec_resnet_stn_bilstm_att failed!\033[0m" | tee -a $log_path/result.log
+    fi
+  else
+    python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
+    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
+       echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
+    else
+       cat $log_path/train/$model.log
+       echo -e "\033[31m training of $model failed!\033[0m" | tee -a $log_path/result.log
+    fi
+  fi
 else
 python -m paddle.distributed.launch  tools/train.py -c $line  -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir="output/"${model}  > $log_path/train/$model.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
@@ -353,6 +362,13 @@ if [[ $(echo $model | grep -c "ch") -eq 0 ]];then
 echo "######  none chinese"
 if [[ ${model} =~ "sast" ]] || [[ ${model} =~ "det_r50_vd_east" ]];then
    python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="pretrain_models/models_inference/"$model"_v2.0_train" --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
+   if [[ $? -eq 0 ]]; then
+      cat $log_path/predict/${model}.log
+      echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/predict/${model}.log
+      echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
+fi
 else
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"${model} --det_algorithm=${algorithm} > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then

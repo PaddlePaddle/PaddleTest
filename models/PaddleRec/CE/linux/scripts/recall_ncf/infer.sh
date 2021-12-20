@@ -10,7 +10,7 @@ echo "$2 infer"
 #路径配置
 root_path=$cur_path/../../
 code_path=$cur_path/../../PaddleRec/models/recall/${temp_path}/
-log_path=$root_path/log/recall/
+log_path=$root_path/log/recall_ncf/
 mkdir -p $log_path
 #临时环境更改
 
@@ -44,7 +44,7 @@ if [ "$1" = "linux_dy_gpu1_con" ]; then
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_dy_all" > ${log_path}/$2.log 2>&1
     print_info $? $2
-#    rm -rf result.txt;
+    rm -rf result.txt;
     cp ${log_path}/S_$2.log result.txt
 
 # 单卡静态图预测收敛性
@@ -53,7 +53,7 @@ elif [ "$1" = "linux_st_gpu1_con" ]; then
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_st_all" > ${log_path}/$2.log 2>&1
     print_info $? $2
-#    rm -rf result.txt;
+    rm -rf result.txt;
     cp ${log_path}/S_$2.log result.txt
 
 fi
@@ -62,12 +62,12 @@ fi
 sed -i "s/  epochs: 20/  epochs: 1/g" config_bigdata.yaml
 sed -i "s/  infer_start_epoch: 19/  infer_start_epoch: 0/g" config_bigdata.yaml
 sed -i "s/  infer_end_epoch: 20/  infer_end_epoch: 1/g" config_bigdata.yaml
-
+# linux infer
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_all_dy_gpu1" > ${log_path}/$2.log 2>&1
     print_info $? $2
-#    rm -rf result.txt;
+    rm -rf result.txt;
     cp ${log_path}/S_$2.log result.txt
 
 elif [ "$1" = "linux_dy_gpu2" ];then #多卡
@@ -75,21 +75,20 @@ elif [ "$1" = "linux_dy_gpu2" ];then #多卡
     # 多卡的运行方式
     python -m paddle.distributed.launch ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_all_dy_gpu2" > ${log_path}/$2.log 2>&1
     print_info $? $2
-#    rm -rf result.txt;
+    rm -rf result.txt;
     cp log/wokerlog.0 result.txt;
 
 elif [ "$1" = "linux_dy_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_all_dy_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_ncf_all_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-#    rm -rf result.txt;
+    rm -rf result.txt;
     cp ${log_path}/S_$2.log result.txt
 
 elif [ "$1" = "linux_st_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_all_st_gpu1" > ${log_path}/$2.log 2>&1
     print_info $? $2
-#    rm -rf result.txt;
+    rm -rf result.txt;
     cp ${log_path}/S_$2.log result.txt
 
 elif [ "$1" = "linux_st_gpu2" ];then #多卡
@@ -97,16 +96,27 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
     # 多卡的运行方式
     python -m paddle.distributed.launch ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_all_st_gpu2" > ${log_path}/$2.log 2>&1
     print_info $? $2
-#    rm -rf result.txt;
+    rm -rf result.txt;
     cp log/wokerlog.0 result.txt;
     mv $code_path/log $log_path/$2_dist_log
 
 elif [ "$1" = "linux_st_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_all_st_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_ncf_all_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-#    rm -rf result.txt;
+    rm -rf result.txt;
     cp ${log_path}/S_$2.log result.txt
+# mac small_data infer
+elif [ "$1" = "mac_dy_cpu" ];then
+    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_ncf_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+    rm -rf result.txt;
+    cp ${log_path}/S_$2.log result.txt
+elif [ "$1" = "mac_st_cpu" ];then
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_ncf_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+    rm -rf result.txt;
+    cp ${log_path}/S_$2.log result.txt
+
 else
     echo "$model_name infer.sh  parameter error "
 fi

@@ -15,7 +15,7 @@ unset https_proxy
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/experimental/faster_ernie/$3/
+code_path=$cur_path/../../models_repo/examples/faster/faster_ernie/$3/
 log_path=$root_path/log/$model_name/
 
 if [ ! -d $log_path ]; then

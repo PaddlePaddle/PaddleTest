@@ -9,7 +9,7 @@ fi
 python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/ljspeech/voc0
-source path.sh
+source ${PWD}/path.sh
 source ${MAIN_ROOT}/utils/parse_options.sh
 preprocess_path=preprocessed_ljspeech
 train_output_path=output

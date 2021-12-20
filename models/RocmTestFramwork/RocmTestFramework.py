@@ -202,7 +202,7 @@ class TestClassModel:
             """cd PaddleClas; export HIP_VISIBLE_DEVICES=0,1,2,3; \
 python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
 -o DataLoader.Train.dataset.cls_label_path="./dataset/flowers102/train_list.txt" \
--o DataLoader.Train.dataset.image_root="./dataset/flowers102/"
+-o DataLoader.Train.dataset.image_root="./dataset/flowers102/" \
 -o DataLoader.Eval.dataset.cls_label_path="./dataset/flowers102/val_list.txt" \
 -o DataLoader.Eval.dataset.image_root="./dataset/flowers102/" -o Global.epochs=2 \
 -o DataLoader.Train.sampler.batch_size=32 -o DataLoader.Eval.sampler.batch_size=32"""
@@ -221,14 +221,13 @@ python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
         if self.model in legendary_models:
             cmd = (
                 "cd PaddleClas; \
-                 wget -q \
-        https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams "
+                 wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams"
                 % self.model
             )
         else:
             cmd = (
                 "cd PaddleClas; \
-                wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams "
+                wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams"
                 % self.model
             )
         clas_result = subprocess.getstatusoutput(cmd)
@@ -546,11 +545,12 @@ class TestSegModel:
         seg_train
         """
         cmd = (
-            'cd PaddleSeg; sed -i s/"iters: 80000"/"iters: 50"/g %s; rm -rf log; \
+            'cd PaddleSeg; sed -i s/"iters: 80000"/"iters: 50"/g %s; \
+            sed -i s/"batch_size: 2"/"batch_size: 1"/g %s; rm -rf log; \
              export HIP_VISIBLE_DEVICES=0,1,2,3; \
              python -u -m paddle.distributed.launch --gpus="0,1,2,3" --log_dir=log_%s train.py --config %s \
---do_eval --use_vdl --num_workers 6 --save_dir log/%s --save_interval 50 --iters 50 --batch_size 1'
-            % (self.yaml, self.model, self.yaml, self.model)
+--do_eval --use_vdl --num_workers 6 --save_dir log/%s --save_interval 50 --iters 50'
+            % (self.yaml, self.yaml, self.model, self.yaml, self.model)
         )
         print(cmd)
         detection_result = subprocess.getstatusoutput(cmd)

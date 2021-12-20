@@ -37,8 +37,7 @@ python -m paddle.distributed.launch --gpus "$3" run_du.py \
     --warmup_proportion 0.1 \
     --weight_decay 0.01 \
     --output_dir ./dureader-yesno/ \
-    --device $1 \
-    --max_step 10 > $log_path/finetune_$2_$1.log 2>&1
+    --device $1 > $log_path/finetune_$2_$1.log 2>&1
 #cat $model_name-base_finetune.log
 export http_proxy=$HTTPPROXY
 export https_proxy=$HTTPSPROXY

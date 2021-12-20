@@ -11,6 +11,7 @@ ENV:
 VARIABLES:
   model_function_path_linux: linux/ #脚本的路径
   model_function_path_win: windows/ #脚本的路径
+  model_function_path_mac: mac/ #脚本的路径
   model_scripts_path: scripts/ #脚本的路径
   model_log_path: log
 
@@ -39,6 +40,15 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_win
         cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml
+  -
+    tag: mac_function_test
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_mac
+        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml
 
 TRAIN: # 训练步骤
   -
@@ -109,6 +119,31 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/alt_gvt_small_train.log
+  -
+    tag: train_mac_cpu
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml train_mac_cpu
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 7.01005
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 7.59464
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/alt_gvt_small_cpu.log
 
 EVAL: # 训练步骤
   -
@@ -142,6 +177,24 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 8.1301
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/alt_gvt_small_eval.log
+  -
+    tag: eval_mac
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml eval_mac
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 7.59464
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -185,6 +238,24 @@ INFER: # 训练步骤
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/alt_gvt_small_infer.log
+  -
+    tag: infer_mac
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml infer_mac
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/alt_gvt_small_infer.log
 
 PREDICT: # 训练步骤
   -
@@ -214,6 +285,24 @@ PREDICT: # 训练步骤
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml predict_win
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/alt_gvt_small_predict.log
+  -
+    tag: predict_mac
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml predict_mac
     kpis: #kpi指标
       predict_exit_code:
         latest: True

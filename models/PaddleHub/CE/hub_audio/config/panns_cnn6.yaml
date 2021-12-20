@@ -69,7 +69,7 @@ FINETUNE:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash audio_finetune.sh panns_cnn6 sound-cls True 16 10 5e-5 2 save
+        cmd: audio_finetune.bat panns_cnn6 sound-cls True 16 10 5e-5 2 save
 
     kpis:
       exit_code:
@@ -135,7 +135,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash audio_predict.sh panns_cnn6 sound-cls False True .\save .\..\..\audio_data
+        cmd: cv_predict.bat panns_cnn6 sound-cls False True .\save .\..\..\audio_data
     kpis:
       exit_code:
         latest: True
@@ -156,7 +156,7 @@ PREDICT:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash audio_predict.sh panns_cnn6 sound-cls False False .\save .\..\..\audio_data
+        cmd: cv_predict.bat panns_cnn6 sound-cls False False .\save .\..\..\audio_data
     kpis:
       exit_code:
         latest: True

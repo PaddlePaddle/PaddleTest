@@ -11,7 +11,7 @@ VARIABLES:
   model_log_path: log/skep/
 
 EXEC:
-  exec_cases: [TRAIN,INFER]
+  exec_cases: [TRAIN, INFER, PYTHON_INFER]
   exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
@@ -55,7 +55,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.29442
-        threshold: 0.05
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -69,7 +69,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
 
   -
-    priority: p2  # 显卡不足，关闭
+    priority: p1
     tag: win_dy_gpu1
     run:
       -
@@ -79,15 +79,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.24225
-        threshold: 0.01
+        kpi_base: 0.19717
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
       accu:
         latest: True
-        kpi_base: 0.90833
-        threshold: 0.05
+        kpi_base: 0.92583
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -114,7 +114,7 @@ INFER:
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
 
   -
-    priority: p2 #显卡不足，关闭，之后换机器可以打开
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
         CUDA_VISIBLE_DEVICES: $SET_CUDA
@@ -131,3 +131,43 @@ INFER:
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+
+PYTHON_INFER:
+  -
+    priority: p1
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash python_infer.sh $XPU
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: python_infer.bat $XPU
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_$XPU.log

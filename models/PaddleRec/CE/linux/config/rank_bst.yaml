@@ -3,7 +3,7 @@ PRIORITY: P3 # 数据处理脚本需要单独写
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
-  branch: $rank_bst_BRANCH
+  branch: $rec_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
@@ -15,7 +15,7 @@ VARIABLES:
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p1]
-  exec_tag: $EXEC_TAG_LINUX_GPU2
+  exec_tag: $EXEC_TAG
 
 #测试套
 DATA_PROC:

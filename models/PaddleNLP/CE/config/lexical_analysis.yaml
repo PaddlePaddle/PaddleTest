@@ -363,7 +363,7 @@ EVAL:
         unit_repr: "s"
       recall:
         latest: True
-        kpi_base: 0.259588
+        kpi_base: 0.237302
         threshold: 0.08
         actived: True
         evaluation: "+"

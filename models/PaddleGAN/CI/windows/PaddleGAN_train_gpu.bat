@@ -14,6 +14,9 @@ mklink /j data %data_path%\PaddleGAN
 
 @REM configs/starganv2_celeba_hq.yaml   #报错
 
+@REM configs/stylegan_v2_256_ffhq.yaml 夯住
+@REM configs/starganv2_afhq.yaml 夯住
+
 @REM configs/basicvsr_reds.yaml  #小数据报错，全量数据可以train，eval夯住
 @REM configs/iconvsr_reds.yaml
 
