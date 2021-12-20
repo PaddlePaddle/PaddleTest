@@ -5,7 +5,7 @@ export PYTHONPATH=$PWD/PaddleScience:$PYTHONPATH
 pip3.7 install -r PaddleScience/requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 
-cases=`find ./framework_test/paddlescience_monitor/ -maxdepth 1 -name "test_*.py" | sort `
+cases=`find ./paddlescience_ci/ -maxdepth 1 -name "test_*.py" | sort `
 ignore=""
 
 for file in ${cases}
@@ -17,6 +17,6 @@ if [[ ${ignore} =~ ${file##*/} ]]; then
 
 else
 
-    python3.7 -m pytest ${file} --alluredir=report
+    python3.7 -m pytest ${file}
 fi
 done
