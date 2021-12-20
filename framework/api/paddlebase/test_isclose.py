@@ -6,11 +6,15 @@
 test_isclose
 """
 
+import sys
 from apibase import APIBase
 
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../../utils/")
+from interceptor import skip_branch_is_2_2
 
 
 class TestIsClose(APIBase):
@@ -31,6 +35,7 @@ class TestIsClose(APIBase):
 obj = TestIsClose(paddle.isclose)
 
 
+@skip_branch_is_2_2
 @pytest.mark.api_base_isclose_vartype
 def test_isclose_base():
     """
@@ -42,6 +47,7 @@ def test_isclose_base():
     obj.base(res=res, x=x, y=y)
 
 
+@skip_branch_is_2_2
 @pytest.mark.api_base_isclose_parameters
 def test_isclose0():
     """
@@ -53,6 +59,7 @@ def test_isclose0():
     obj.run(res=res, x=x, y=y)
 
 
+@skip_branch_is_2_2
 @pytest.mark.api_base_isclose_parameters
 def test_isclose1():
     """
