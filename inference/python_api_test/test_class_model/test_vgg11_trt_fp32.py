@@ -71,7 +71,6 @@ def test_trt_fp32_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.win
 @pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.trt_fp32
