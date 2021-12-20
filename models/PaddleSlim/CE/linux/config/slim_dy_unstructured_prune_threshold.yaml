@@ -13,7 +13,7 @@ VARIABLES:
   model_log_path: log/slim_dy_unstructured_prune_threshold/
 
 EXEC:
-  exec_cases: [TRAIN,EVAL,TRAIN_LOAD]
+  exec_cases: [DATA_PROC,TRAIN,EVAL]
   exec_priority: $EXEC_PRIORITY
   exec_tag: $EXEC_TAG
 
