@@ -1,8 +1,7 @@
 set -m
 home=$PWD
 EXIT_CODE=0
-run_dirs=(test_class_model test_det_model test_ocr_model test_nlp_model) 
-#run_dirs=(test_class_mode) 
+run_dirs=(test_class_model test_det_model test_ocr_model test_nlp_model)
 if [[ -z $1 ]];then
     card_number=1
 else
@@ -32,16 +31,15 @@ do
             break
         else
            echo "${run_dirs[i+j]}"
-          #run_case ${run_dirs[i+j]} $j &
-           cd $home/${run_dirs[i+j]}/ && bash run.sh $j 2>&1 & 
-        fi 
+           cd $home/${run_dirs[i+j]}/ && bash run.sh $j 2>&1 &
+        fi
     done
     wait
 done
-
-#展示结果并设置返回值,因为执行需要多轮，直接从result.txt check是否有case失败
+#展示结果并设置返回值
 cd $home
 echo "show me the result"
+#TODO 展示错误case
 if [[ $EXIT_CODE -gt 0 ]];
 then
      exit 8
