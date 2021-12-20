@@ -1,4 +1,6 @@
+set -m
 home=$PWD
+EXIT_CODE=0
 run_dirs=(test_class_model test_det_model test_ocr_model test_nlp_model) 
 #run_dirs=(test_class_mode) 
 if [[ -z $1 ]];then
@@ -16,7 +18,7 @@ function caught_error() {
         echo "PID => ${job}"
         if ! wait ${job} ; then
             echo "At least one test failed with exit code => $?";
-            EXIT_CODE=1;
+            EXIT_CODE=8;
         fi
     done
 }
@@ -40,5 +42,4 @@ done
 #展示结果并设置返回值,因为执行需要多轮，直接从result.txt check是否有case失败
 cd $home
 echo "show me the result"
-find . -name "result.txt" 
 exit $EXIT_CODE
