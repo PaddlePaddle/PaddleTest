@@ -26,6 +26,7 @@ if [ $1 -ne 0 ];then
     cat ${log_path}/$2.log
     cp ${log_path}/$2.log ${log_path}/FAIL_$2.log
 else
+    cat ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
 fi
 }
