@@ -18,7 +18,7 @@ function caught_error() {
         echo "PID => ${job}"
         if ! wait ${job} ; then
             echo "At least one test failed with exit code => $?";
-            EXIT_CODE=8;
+            let EXIT_CODE=EXIT_CODE+1;
         fi
     done
 }
@@ -42,4 +42,9 @@ done
 #展示结果并设置返回值,因为执行需要多轮，直接从result.txt check是否有case失败
 cd $home
 echo "show me the result"
-exit $EXIT_CODE
+if [[ $EXIT_CODE -gt 0 ]];
+then
+     exit 8
+else
+     exit 0
+fi
