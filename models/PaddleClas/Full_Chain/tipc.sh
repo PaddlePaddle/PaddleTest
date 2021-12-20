@@ -43,6 +43,8 @@ nvidia-docker run -i --rm \
                   -e "FLAGS_fraction_of_gpu_memory_to_use=0.01" \
                   -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
                   -e "TIPC_MODE=${TIPC_MODE}" \
+                  -e "grep_v_models=${grep_v_models}" \
+                  -e "grep_models=${grep_models}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
 unset http_proxy
@@ -76,7 +78,7 @@ python -m pip install ./${COMPILE_PATH##*/}
 cp ../PaddleTest/models/PaddleClas/Full_Chain/tipc_run.sh .
 cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_unrun .
 cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_all .
-sh tipc_run.sh
+bash tipc_run.sh
 "
 
 

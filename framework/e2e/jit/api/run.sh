@@ -12,7 +12,8 @@ test_less_than.py \
 test_logical_and.py \
 test_logical_not.py \
 test_logical_or.py \
-test_logical_xor.py"
+test_logical_xor.py \
+test_not_equal.py"
 bug=0
 
 echo "============ failed cases =============" >> result.txt
