@@ -13,6 +13,10 @@ do
         echo "py version=$OPTARG"
         py_cmd=$OPTARG
         ;;
+        gpu)
+        echo "use gpu=$OPTARG"
+        use_gpu=$OPTARG
+        ;;
         t)
         echo "task=$OPTARG"
         task=$OPTARG

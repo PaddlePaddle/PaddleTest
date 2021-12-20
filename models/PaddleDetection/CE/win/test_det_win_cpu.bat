@@ -90,7 +90,7 @@ if !errorlevel! EQU 0 (
 )
 
 if !err_sign! EQU 1 (
-exit /b
+exit /b 1
 )
 
 
