@@ -15,6 +15,7 @@ log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #临时环境更改
 
+export FLAGS_cudnn_deterministic=True
 
 #访问RD程序
 print_info(){
@@ -48,20 +49,19 @@ if [ "$1" = "linux_st_gpu1" ];then #单卡
     --model_path st_unstructured_models > ${log_path}/$2.log 2>&1
     print_info $? $2
 
-elif [ "$1" = "linux_st_gpu2" ];then #单卡
-    python train.py \
-    --batch_size 256 \
-    --pretrained_model ../pretrain/MobileNetV1_pretrained \
-    --lr 0.05 \
-    --pruning_mode threshold \
-    --threshold 0.01 \
-    --data imagenet \
-    --lr_strategy piecewise_decay \
-    --step_epochs 1 2 3 \
-    --num_epochs 1 \
-    --test_period 1 \
-    --model_period 1 \
-    --model_path st_unstructured_models > ${log_path}/$2.log 2>&1
+elif [ "$1" = "linux_st_gpu2" ];then
+    python -m paddle.distributed.launch \
+          train.py \
+          --batch_size 64 \
+          --data cifar10 \
+          --pruning_mode threshold \
+          --lr 0.005 \
+          --model MobileNet \
+          --num_epochs 20 \
+          --step_epochs  13 17 \
+          --last_epoch -1 \
+          --prune_params_type 'conv1x1_only' \
+          --ce_test True > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_cpu" ];then #单卡
