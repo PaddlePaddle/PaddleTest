@@ -23,14 +23,20 @@ fi
 #访问RD程序
 cd $code_path
 
-python run_classifier.py --model_name_or_path bigbird-base-uncased \
-    --output_dir "output" \
-    --batch_size 2 \
-    --learning_rate 5e-6 \
-    --max_steps 50 \
+python -m paddle.distributed.launch --gpus $2 run_glue.py \
+    --model_type bigbird \
+    --model_name_or_path bigbird-base-uncased \
+    --task_name SST-2 \
+    --max_encoder_length 128 \
+    --batch_size 32   \
+    --learning_rate 1e-5 \
+    --epochs 1 \
+    --logging_steps 1 \
     --save_steps 10 \
-    --logging_steps 10 \
-    --max_encoder_length 3072 >$log_path/finetune_gpu.log 2>&1
+    --max_steps 30 \
+    --output_dir ./tmp/ \
+    --device $1 >$log_path/run_glue_$1.log 2>&1
 
 export http_proxy=$HTTPPROXY
 export https_proxy=$HTTPSPROXY
+
