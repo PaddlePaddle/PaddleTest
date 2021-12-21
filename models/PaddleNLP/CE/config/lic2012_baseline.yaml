@@ -107,4 +107,3 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/finetune_$XPU.log
-
