@@ -93,7 +93,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_cpu match_multiviewsimnet_linux_dy_cpu
 
     kpis: #kpi指标
-      acc:
+      Acc:
         latest: True
         kpi_base: 0.5
         threshold: 0.0
@@ -183,7 +183,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu match_multiviewsimnet_linux_st_cpu
 
     kpis: #kpi指标
-      acc:
+      Acc:
         latest: True
         kpi_base: 0.5
         threshold: 0.0
@@ -217,7 +217,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh mac_dy_cpu match_multiviewsimnet_mac_dy_cpu
 
     kpis: #kpi指标
-      acc:
+      Acc:
         latest: True
         kpi_base: 0.5
         threshold: 0.0
@@ -250,7 +250,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh mac_st_cpu match_multiviewsimnet_mac_st_cpu
 
     kpis: #kpi指标
-      acc:
+      Acc:
         latest: True
         kpi_base: 0.5
         threshold: 0.0
@@ -283,7 +283,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh win_dy_gpu match_multiviewsimnet_win_dy_gpu
 
     kpis: #kpi指标
-      acc:
+      Acc:
         latest: True
         kpi_base: 0.5
         threshold: 0.0
@@ -316,7 +316,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh win_dy_cpu match_multiviewsimnet_win_dy_cpu
 
     kpis: #kpi指标
-      acc:
+      Acc:
         latest: True
         kpi_base: 0.5
         threshold: 0.0
@@ -349,7 +349,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh win_st_gpu match_multiviewsimnet_win_st_gpu
 
     kpis: #kpi指标
-      acc:
+      Acc:
         latest: True
         kpi_base: 0.5
         threshold: 0.0
@@ -382,7 +382,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh win_st_cpu match_multiviewsimnet_win_st_cpu
 
     kpis: #kpi指标
-      acc:
+      Acc:
         latest: True
         kpi_base: 0.5
         threshold: 0.0

@@ -491,7 +491,7 @@ INFER:
         cmd: sh infer.sh linux_dy_cpu recall_mind_infer_linux_dy_cpu
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
         kpi_base: 0.01270
         threshold: 0.001
@@ -597,7 +597,7 @@ INFER:
         cmd: sh infer.sh linux_st_cpu recall_mind_infer_linux_st_cpu
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
         kpi_base: 0.01270
         threshold: 0.001
@@ -623,7 +623,7 @@ INFER:
         cmd: sh infer.sh mac_dy_cpu recall_mind_infer_mac_dy_cpu
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
         kpi_base: 0.01270
         threshold: 0.001
@@ -648,7 +648,7 @@ INFER:
         cmd: sh infer.sh mac_st_cpu recall_mind_infer_mac_st_cpu
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
         kpi_base: 0.01270
         threshold: 0.001
@@ -674,7 +674,7 @@ INFER:
         cmd: sh infer.sh win_dy_gpu recall_mind_infer_win_dy_gpu
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
         kpi_base: 0.01270
         threshold: 0.001
@@ -699,7 +699,7 @@ INFER:
         cmd: sh infer.sh win_dy_cpu recall_mind_infer_win_dy_cpu
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
         kpi_base: 0.01270
         threshold: 0.001
@@ -724,7 +724,7 @@ INFER:
         cmd: sh infer.sh win_st_gpu recall_mind_infer_win_st_gpu
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
         kpi_base: 0.01270
         threshold: 0.001
@@ -749,7 +749,7 @@ INFER:
         cmd: sh infer.sh win_st_cpu recall_mind_infer_win_st_cpu
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
         kpi_base: 0.01270
         threshold: 0.001
