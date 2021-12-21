@@ -42,8 +42,6 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.win
-@pytest.mark.server
 @pytest.mark.trt_fp16_multi_thread
 def test_trt_fp16_more_bz_multi_thread():
     """
@@ -108,7 +106,7 @@ def test_trt_fp16_more_bz():
 
     file_path = "./yolov3"
     images_size = 608
-    batch_size_pool = [1, 5, 10]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()

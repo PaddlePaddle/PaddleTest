@@ -76,7 +76,7 @@ def test_gpu_more_bz():
 
     file_path = "./yolov3"
     images_size = 608
-    batch_size_pool = [1, 4, 8]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
