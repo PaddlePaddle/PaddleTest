@@ -39,4 +39,3 @@ python -m paddle.distributed.launch --gpus $2 run_glue.py \
 
 export http_proxy=$HTTPPROXY
 export https_proxy=$HTTPSPROXY
-
