@@ -73,8 +73,6 @@ def test_trt_fp16_bz1():
     del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.win
-@pytest.mark.server
 @pytest.mark.trt_fp16_multi_thread
 def test_trt_fp16_bz1_multi_thread():
     """

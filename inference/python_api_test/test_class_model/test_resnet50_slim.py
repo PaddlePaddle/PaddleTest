@@ -69,8 +69,8 @@ def test_int8_more_bz():
 
     file_path = "./resnet50_quant"
     images_size = 224
-    batch_size_pool = [1, 5, 10]
-    max_batch_size = 10
+    batch_size_pool = [1, 2]
+    max_batch_size = 2
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         if "win" in sys.platform:
