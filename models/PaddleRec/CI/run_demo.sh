@@ -21,7 +21,7 @@ fi
 }
 
 ###########
-demo19(){
+demo27(){
 #必须先声明
 declare -A dic
 dic=([dnn]='models/rank/dnn' [wide_deep]='models/rank/wide_deep' [deepfm]='models/rank/deepfm' [fm]='models/rank/fm' [gatenet]='models/rank/gatenet' \
