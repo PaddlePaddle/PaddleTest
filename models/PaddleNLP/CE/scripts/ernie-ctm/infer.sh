@@ -23,7 +23,7 @@ cd examples/text_to_knowledge/ernie-ctm
 
 
 python -m paddle.distributed.launch --gpus $2 predict.py \
-    --params_path ./output/model_100/model_state.pdparams \
+    --params_path ./tmp/model_100/model_state.pdparams \
     --batch_size 32 \
     --device $1 > $log_path/infer_$1.log 2>&1
 

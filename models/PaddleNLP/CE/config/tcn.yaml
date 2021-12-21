@@ -32,6 +32,14 @@ DATA_PROC:
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
 
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
+
 TRAIN: # 训练步骤
   -
     priority: p0
@@ -76,24 +84,24 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
 
   -
-    priority: p2
-    tag: linux_dy_gpu1
+    priority: p0
+    tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh 'recv' $XPU
-
+        cmd: train.bat $XPU
     kpis: #kpi指标
       loss:
-        kpi_base: 7.376870
-        threshold: 0.01
+        latest: True
+        kpi_base: 0.6581
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_recover.log
+    output: $ROOT_PATH/$model_log_path/train_$XPU.log
 
   -
     priority: p0
@@ -141,6 +149,25 @@ INFER:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash infer.sh $XPU
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU
     kpis:
       exit_code:
         latest: True
