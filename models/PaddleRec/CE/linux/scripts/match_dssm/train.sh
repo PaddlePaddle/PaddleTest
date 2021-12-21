@@ -25,7 +25,6 @@ else
     echo "exit_code: 0.0" >> ${log_path}/$2.log
     cat ${log_path}/$2.log
     mv ${log_path}/$2.log ${log_path}/S_$2.log
-#    tail ${log_path}/S_$2.log|grep loss|grep done |awk -F ' ' '{print$9}'|tr -d '[],' >>${log_path}/S_$2.log
     echo -e "\033[32m ${log_path}/S_$2 \033[0m"
 fi
 }
