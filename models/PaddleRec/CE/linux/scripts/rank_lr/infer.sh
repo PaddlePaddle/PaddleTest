@@ -6,12 +6,12 @@ cur_path=`pwd`
 model_name=$2
 temp_path=$(echo $2|awk -F '_' '{print $2}')
 
-echo "$2 train"
+echo "$2 infer"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../PaddleRec/models/rank/${temp_path}
-log_path=$root_path/log/rank_${temp_path}/
+code_path=$cur_path/../../PaddleRec/models/rank/logistic_regression
+log_path=$root_path/log/rank_lr/
 mkdir -p $log_path
 #临时环境更改
 
@@ -30,68 +30,67 @@ else
 fi
 }
 
-cd $code_path/
-echo -e "\033[32m `pwd` train \033[0m";
+cd $code_path
+echo -e "\033[32m `pwd` infer \033[0m";
 
 # rank模型收敛性运行
-# 单卡动态图收敛性训练
-if [ "$1" = "linux_dy_gpu1_con" ]; then
+# 单卡动态图预测收敛性
+if [ "$1" = "linux_dy_gpu1_con" ];then
     # 修改use_gpu选项
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
-    python -u ../../../tools/trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_dnn_dy_all" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_lr_dy_all" > ${log_path}/$2.log 2>&1
     print_info $? $2
 
-# 单卡静态图收敛性训练
-elif [ "$1" = "linux_st_gpu1_con" ]; then
+# 单卡静态图预测收敛性
+elif [ "$1" = "linux_st_gpu1_con" ];then
     # 修改use_gpu选项
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
-    python -u ../../../tools/static_trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_dnn_st_all" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_lr_st_all" > ${log_path}/$2.log 2>&1
     print_info $? $2
+
 fi
 
 # rank模型功能运行
 sed -i "s/  epochs: 4/  epochs: 1/g" config_bigdata.yaml
 sed -i "s/  infer_end_epoch: 4/  infer_end_epoch: 1/g" config_bigdata.yaml
-
-rm -rf output
-# linux train
+# linux infer
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
-    python -u ../../../tools/trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_dnn_all_dy_gpu1" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_lr_all_dy_gpu1" > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "linux_dy_gpu2" ];then #多卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     # 多卡的运行方式
-    python -m paddle.distributed.launch ../../../tools/trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_dnn_all_dy_gpu2" > ${log_path}/$2.log 2>&1
+    python -m paddle.distributed.launch ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_lr_all_dy_gpu2" > ${log_path}/$2.log 2>&1
     print_info $? $2
     mv $code_path/log $log_path/$2_dist_log
 elif [ "$1" = "linux_dy_cpu" ];then
-    python -u ../../../tools/trainer.py -m config.yaml -o runner.model_save_path="output_model_dnn_all_dy_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_lr_all_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
-    python -u ../../../tools/static_trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_dnn_all_st_gpu1" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_lr_all_st_gpu1" > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "linux_st_gpu2" ];then #多卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     # 多卡的运行方式
-    python -ms paddle.distributed.launch ../../../tools/static_trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_dnn_all_st_gpu2" > ${log_path}/$2.log 2>&1
+    python -m paddle.distributed.launch ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_lr_all_st_gpu2" > ${log_path}/$2.log 2>&1
     print_info $? $2
     mv $code_path/log $log_path/$2_dist_log
 
 elif [ "$1" = "linux_st_cpu" ];then
-    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.model_save_path="output_model_dnn_all_st_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_lr_all_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-# mac small_data train
+# mac small_data infer
 elif [ "$1" = "mac_dy_cpu" ];then
-    python -u ../../../tools/trainer.py -m config.yaml -o runner.model_save_path="output_model_dnn_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_lr_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "mac_st_cpu" ];then
-    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.model_save_path="output_model_dnn_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_lr_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 else
-    echo "$model_name train.sh  parameters error "
+    echo "$model_name infer.sh  parameter error "
 fi
