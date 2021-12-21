@@ -1,4 +1,4 @@
-MODEL: "slim_dy_unstructured_prune_threshold" # 模型名
+MODEL: "dy_unstructured_prune_threshold" # 模型名
 PRIORITY: P1
 GIT:
   addr: $REPO_PaddleSlim
@@ -76,22 +76,22 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.6502
-        threshold: 0.02
+        kpi_base: 0.002079959
+        threshold: 0.00000001
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.6502
-        threshold: 0.02
+        kpi_base: 1.0
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.8660
-        threshold: 0.02
+        kpi_base: 1.0
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
