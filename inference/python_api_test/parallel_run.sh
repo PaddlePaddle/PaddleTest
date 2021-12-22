@@ -39,6 +39,7 @@ done
 #展示结果并设置返回值
 cd $home
 echo "show me the result"
+find . -name result.txt | xargs cat
 #TODO 展示错误case
 if [[ $EXIT_CODE -gt 0 ]];
 then
