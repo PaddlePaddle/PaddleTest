@@ -122,7 +122,7 @@ done
 if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'CI_step0' ]] \
    || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
    find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; \
-      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' | grep -v 'fp16' |grep -v 'distill' |grep -v 'ResNeXt101_32x48d_wsl'\
+      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' |grep -v 'distill' |grep -v 'ResNeXt101_32x48d_wsl'\
       > models_list_all #ResNeXt101_32x48d_wsl OOM   fp16 seresnet存在问题
 
    if [[ ${model_flag} =~ 'CI_step0' ]]; then
@@ -218,6 +218,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    if [ -d "output" ]; then
       rm -rf output
    fi
+
    #train
    #多卡
    if [[ ${model_flag} =~ "CE" ]]; then
@@ -240,23 +241,46 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          -o DataLoader.Train.sampler.batch_size=4 \
          > $log_path/train/${model}_2card.log 2>&1
    else
-      python -m paddle.distributed.launch tools/train.py  \
-         -c $line -o Global.epochs=1 \
-         -o Global.output_dir=output \
-         -o DataLoader.Train.sampler.batch_size=1 \
-         -o DataLoader.Eval.sampler.batch_size=1  \
-         > $log_path/train/${model}_2card.log 2>&1
+      if [[ ! ${line} =~ "fp16.yaml" ]]; then
+         python -m paddle.distributed.launch tools/train.py  \
+            -c $line -o Global.epochs=1 \
+            -o Global.output_dir=output \
+            -o DataLoader.Train.sampler.batch_size=1 \
+            -o DataLoader.Eval.sampler.batch_size=1  \
+            > $log_path/train/${model}_2card.log 2>&1
+      else
+         python -m paddle.distributed.launch ppcls/static/train.py  \
+            -c $line -o Global.epochs=1 \
+            -o Global.output_dir=output \
+            -o DataLoader.Train.sampler.batch_size=1 \
+            -o DataLoader.Eval.sampler.batch_size=1  \
+            > $log_path/train/${model}_2card.log 2>&1
+      fi
    fi
    params_dir=$(ls output)
    echo "######  params_dir"
    echo $params_dir
-   if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
-      echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
-      echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
+
+   if [[ ! ${line} =~ "fp16.yaml" ]]; then
+      if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
+         echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
+         echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
+      else
+         cat $log_path/train/${model}_2card.log
+         echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
+         echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
+      fi
    else
-      cat $log_path/train/${model}_2card.log
-      echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
-      echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
+      if [[ -f "output/$params_dir/0/ppcls.pdmodel" ]] && [[ $? -eq 0 ]];then
+         echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
+         echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
+         exit 0
+      else
+         cat $log_path/train/${model}_2card.log
+         echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
+         echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
+         exit 1
+      fi
    fi
 
    #单卡
