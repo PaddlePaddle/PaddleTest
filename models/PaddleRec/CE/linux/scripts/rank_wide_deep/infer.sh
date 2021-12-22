@@ -29,7 +29,7 @@ else
     echo -e "\033[32m ${log_path}/S_$2 \033[0m"
 fi
 }
-
+# 切到code路径
 cd $code_path
 echo -e "\033[32m `pwd` infer \033[0m";
 
