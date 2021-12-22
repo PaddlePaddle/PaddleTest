@@ -89,7 +89,7 @@ def test_trt_fp16_more_bz_multi_thread():
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
         test_suite.trt_bz1_multi_thread_test(
-            input_data_dict, output_data_dict, repeat=1, delta=1e-4, precision="trt_fp16"
+            input_data_dict, output_data_dict, repeat=1, delta=6e-2, precision="trt_fp16"
         )
 
         del test_suite  # destroy class to save memory
@@ -143,7 +143,7 @@ def test_trt_fp16_more_bz():
 
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.trt_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4, precision="trt_fp16")
+        test_suite.trt_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=6e-2, precision="trt_fp16")
 
         del test_suite  # destroy class to save memory
 
