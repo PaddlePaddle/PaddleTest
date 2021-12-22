@@ -293,14 +293,14 @@ TRAIN: # 训练步骤
       acc:
         latest: True
         kpi_base: 0.98
-        threshold: 0.0
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
       loss:
         latest: True
-        kpi_base: 0.1003128
-        threshold: 0.0
+        kpi_base: 0.08499578
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -326,14 +326,14 @@ TRAIN: # 训练步骤
       acc:
         latest: True
         kpi_base: 0.98
-        threshold: 0.0
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
       loss:
         latest: True
-        kpi_base: 0.1003128
-        threshold: 0.0
+        kpi_base: 0.08499578
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -702,7 +702,7 @@ INFER:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.856667
+        kpi_base: 0.86
         threshold: 0.0
         actived: True
         evaluation: "+"
@@ -728,7 +728,7 @@ INFER:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.856667
+        kpi_base: 0.86
         threshold: 0.0
         actived: True
         evaluation: "+"
