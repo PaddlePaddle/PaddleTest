@@ -1,5 +1,5 @@
 MODEL: "rank_naml" # 模型名
-PRIORITY: P3
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec

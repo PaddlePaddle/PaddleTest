@@ -47,13 +47,12 @@ elif [ "$1" = "linux_st_gpu1_con" ];then
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_bst_st_all" > ${log_path}/$2.log 2>&1
     print_info $? $2
-
 fi
 
 # rank模型功能运行
 sed -i "s/  epochs: 4/  epochs: 1/g" config_bigdata.yaml
 sed -i "s/  infer_end_epoch: 4/  infer_end_epoch: 1/g" config_bigdata.yaml
-
+# linux infer
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_bst_all_dy_gpu1" > ${log_path}/$2.log 2>&1
@@ -65,8 +64,7 @@ elif [ "$1" = "linux_dy_gpu2" ];then #多卡
     print_info $? $2
     mv $code_path/log $log_path/$2_dist_log
 elif [ "$1" = "linux_dy_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_bst_all_dy_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_bst_all_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu1" ];then #单卡
@@ -81,8 +79,14 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
     mv $code_path/log $log_path/$2_dist_log
 
 elif [ "$1" = "linux_st_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_bst_all_st_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_bst_all_st_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+# mac small_data infer
+elif [ "$1" = "mac_dy_cpu" ];then
+    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_bst_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+elif [ "$1" = "mac_st_cpu" ];then
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_bst_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 else
     echo "$model_name infer.sh  parameter error "
