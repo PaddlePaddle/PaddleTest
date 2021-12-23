@@ -1,8 +1,7 @@
 pip3.7 install pytest
 export FLAGS_call_stack_level=2
 cases=`find . -name "test*.py" | sort`
-ignore="test_isclose.py \
-test_Tensor_isclose.py"
+ignore=""
 bug=0
 
 echo "============ failed cases =============" >> result.txt
