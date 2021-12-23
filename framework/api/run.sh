@@ -3,10 +3,7 @@ echo "branch is ${AGILE_COMPILE_BRANCH}"
 python3.7 -m pip install pytest
 python3.7 -m pip install scipy
 
-# test
-cd paddlebase
-python3.7 -m pytest test_Tensor_isclose.py
-cd $home
+
 # base
 cd paddlebase
 rm -rf ./result.txt
