@@ -29,7 +29,7 @@ else
     echo -e "\033[32m ${log_path}/S_$2 \033[0m"
 fi
 }
-
+# 切到code路径
 cd $code_path
 echo -e "\033[32m `pwd` infer \033[0m";
 
@@ -84,11 +84,11 @@ elif [ "$1" = "linux_st_cpu" ];then
     python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_wide_deep_all_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 # mac small_data infer
-elif [ "$1" = "linux_dy_cpu" ];then
-    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_wide_deep_all_dy_cpu" > ${log_path}/$2.log 2>&1
+elif [ "$1" = "mac_dy_cpu" ];then
+    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_wide_deep_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-elif [ "$1" = "linux_st_cpu" ];then
-    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_wide_deep_all_st_cpu" > ${log_path}/$2.log 2>&1
+elif [ "$1" = "mac_st_cpu" ];then
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_wide_deep_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 else

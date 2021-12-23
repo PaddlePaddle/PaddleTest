@@ -280,7 +280,7 @@ TRAIN: # 训练步骤
         unit_repr: None
       loss:
         latest: True
-        kpi_base: 0.30295599
+        kpi_base: 0.3029403
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -313,7 +313,7 @@ TRAIN: # 训练步骤
         unit_repr: None
       loss:
         latest: True
-        kpi_base: 0.30295599
+        kpi_base: 0.3029403
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -686,7 +686,7 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.750000
+        kpi_base: 0.752315
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -712,7 +712,7 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.750000
+        kpi_base: 0.752315
         threshold: 0.001
         actived: True
         evaluation: "+"
