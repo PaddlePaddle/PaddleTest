@@ -6,6 +6,7 @@ python3.7 -m pip install scipy
 # test
 cd paddlebase
 python3.7 -m pytest test_Tensor_isclose.py
+cd $home
 # base
 cd paddlebase
 rm -rf ./result.txt
