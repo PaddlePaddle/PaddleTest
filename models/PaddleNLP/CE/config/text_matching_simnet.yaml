@@ -134,4 +134,3 @@ INFER:
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
-
