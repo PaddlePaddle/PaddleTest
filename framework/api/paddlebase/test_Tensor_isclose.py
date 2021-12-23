@@ -17,7 +17,7 @@ sys.path.append("../../utils/")
 from interceptor import skip_branch_is_2_2
 import os
 
-print(os.getenv("AGILE_COMPILE_BRANCH")）
+print(os.getenv("AGILE_COMPILE_BRANCH"))
 
 
 class TestIsClose(APIBase):
