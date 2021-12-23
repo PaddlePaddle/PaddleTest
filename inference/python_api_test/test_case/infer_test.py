@@ -346,6 +346,7 @@ class InferenceTest(object):
         use_calib_mode=False,
         dynamic=False,
         tuned=False,
+        result_sort=False,
     ):
         """
         test enable_tensorrt_engine()
@@ -410,6 +411,9 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
+            if result_sort:
+                output_data = np.sort(output_data)
+                output_data_truth_val = np.sort(output_data_truth_val)
             for j, out_data in enumerate(output_data):
                 diff = sig_fig_compare(out_data, output_data_truth_val[j])
                 assert (
