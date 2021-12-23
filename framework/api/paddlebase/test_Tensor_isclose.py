@@ -17,9 +17,6 @@ sys.path.append("../..")
 from utils.interceptor import skip_branch_is_2_2
 import os
 
-print(os.getenv("AGILE_COMPILE_BRANCH"))
-print(skip_branch_is_2_2)
-
 
 class TestIsClose(APIBase):
     """
@@ -35,8 +32,8 @@ class TestIsClose(APIBase):
         # enable check grad
         self.enable_backward = False
 
-
-obj = TestIsClose(paddle.Tensor.isclose)
+if os.getenv("AGILE_COMPILE_BRANCH") != "release/2.2":
+    obj = TestIsClose(paddle.Tensor.isclose)
 
 
 @skip_branch_is_2_2
