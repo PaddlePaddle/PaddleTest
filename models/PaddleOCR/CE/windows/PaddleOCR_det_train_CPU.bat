@@ -131,6 +131,7 @@ echo -----------------------------------------------------------
 rem call PaddleOCR_rec_train.bat
 
 rem exit
-for /F %%i in ('grep -rc FAIL  log/result.log') do ( set num=%%i)
-echo %num%
+set num=0
+for /F %%i in ('findstr /s "FAIL" %log_path%/result.log') do ( set num=%%i )
+findstr /s "FAIL" %log_path%/result.log
 if %num%==0 (exit /b 0)else (exit /b 1)
