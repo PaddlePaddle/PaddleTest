@@ -1,0 +1,216 @@
+MODEL: "PP-MiniLM" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/PP-MiniLM/ #脚本的路径
+  model_log_path: log/PP-MiniLM/
+
+EXEC:
+  exec_cases: [DATA_PROC, FINETUNE, OFA, QUANTIZATION, INFER]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
+
+FINETUNE: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash finetune.sh $XPU $SET_CUDA TNEWS 1e-4 32 128
+
+    kpis: #kpi指标
+      eval loss:
+        latest: True
+        kpi_base: 0.531758
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 0.5665
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/finetune_TNEWS_1e-4_32_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: finetune.bat $XPU $SET_CUDA TNEWS 1e-4 32 128
+    kpis: #kpi指标
+      eval loss:
+        latest: True
+        kpi_base: 0.574509
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 0.5674
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/finetune_TNEWS_1e-4_32_$XPU.log
+
+OFA: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash ofa.sh $XPU $SET_CUDA TNEWS 1e-4 32 128
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.5636
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ofa_TNEWS_1e-4_32_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: ofa.bat $XPU $SET_CUDA TNEWS 1e-4 32 128
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.5679
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ofa_TNEWS_1e-4_32_$XPU.log
+
+QUANTIZATION:
+  -
+    priority: p0
+    tag: linux_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash quantization.sh $XPU $SET_CUDA TNEWS 1e-4 32 128
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/quantization_TNEWS_1e-4_32_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: quantization.bat $XPU $SET_CUDA TNEWS 1e-4 32 128
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/quantization_TNEWS_1e-4_32_$XPU.log
+
+INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU $SET_CUDA TNEWS 1e-4 32 128
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_TNEWS_1e-4_32_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_tnews
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA TNEWS 1e-4 32 128
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_TNEWS_1e-4_32_$XPU.log

@@ -7,7 +7,7 @@ ln -s $(which pip3.7) run_env_py37/pip;
 export PATH=$(pwd)/run_env_py37:${PATH};
 python -m pip install pip==20.2.4 --ignore-installed;
 export no_proxy=bcebos.com;
-python -m pip install ${paddle_whl} --no-cache-dir
+python -m pip install ${paddle_whl} --no-cache-dir --ignore-installed;
 export http_proxy=${proxy}
 export https_proxy=${proxy}
 apt-get update

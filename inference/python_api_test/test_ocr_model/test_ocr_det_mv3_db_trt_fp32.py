@@ -44,8 +44,6 @@ def test_config():
     test_suite.config_test()
 
 
-@pytest.mark.win
-@pytest.mark.server
 @pytest.mark.trt_fp32_multi_thread
 def test_trt_fp32_bz1_dynamic_multi_thread():
     """
@@ -158,8 +156,8 @@ def test_trtfp32_more_bz_dynamic_bz():
 
     file_path = "./ocr_det_mv3_db"
     images_size = 640
-    batch_size_pool = [1, 5]
-    max_batch_size = 5
+    batch_size_pool = [1, 2]
+    max_batch_size = 2
     names = [
         "x",
         "conv2d_92.tmp_0",

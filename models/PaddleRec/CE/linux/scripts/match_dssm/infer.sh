@@ -22,8 +22,8 @@ if [ $1 -ne 0 ];then
     mv ${log_path}/$2.log ${log_path}/F_$2.log
     echo -e "\033[31m ${log_path}/F_$2 \033[0m"
 else
-    cat ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
+    cat ${log_path}/$2.log
     mv ${log_path}/$2.log ${log_path}/S_$2.log
     echo -e "\033[32m ${log_path}/S_$2 \033[0m"
 fi
@@ -76,8 +76,6 @@ elif [ "$1" = "linux_dy_gpu2" ];then #多卡
 elif [ "$1" = "linux_dy_cpu" ];then
     python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_dssm_all_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    rm -rf result.txt;
-    cp ${log_path}/S_$2.log result.txt
 
 elif [ "$1" = "linux_st_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
@@ -98,27 +96,26 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
 elif [ "$1" = "linux_st_cpu" ];then
     python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_dssm_all_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    rm -rf result.txt;
-    cp ${log_path}/S_$2.log result.txt
 
 # mac small_data infer
 elif [ "$1" = "mac_dy_cpu" ];then
     python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_dssm_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    rm -rf result.txt;
-    cp ${log_path}/S_$2.log result.txt
 
 elif [ "$1" = "mac_st_cpu" ];then
     python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_dssm_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    rm -rf result.txt;
-    cp ${log_path}/S_$2.log result.txt
 
 else
     echo "$model_name infer.sh  parameter error "
 fi
 
-python transform.py > ${log_path}/$2_transform.log 2>&1
-print_info $? $2_transform
-python ../../../tools/cal_pos_neg.py pair.txt > ${log_path}/$2_pair.log 2>&1
-print_info $? $2_pair
+if [[ "$1" =~ "cpu" ]];then
+    echo "small data cpu infer "
+
+else
+    python transform.py > ${log_path}/$2_transform.log 2>&1
+    print_info $? $2_transform
+    python ../../../tools/cal_pos_neg.py pair.txt > ${log_path}/$2_pair.log 2>&1
+    print_info $? $2_pair
+fi

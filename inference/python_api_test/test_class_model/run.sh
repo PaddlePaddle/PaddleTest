@@ -1,3 +1,4 @@
+[[ -n $1 ]] && export CUDA_VISIBLE_DEVICES=$1
 export FLAGS_call_stack_level=2
 cases="./test_resnet50_gpu.py \
        ./test_resnet50_mkldnn.py \

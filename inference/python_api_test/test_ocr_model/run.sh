@@ -1,3 +1,4 @@
+[[ -n $1 ]] && export CUDA_VISIBLE_DEVICES=$1
 export FLAGS_call_stack_level=2
 cases="test_ocr_det_mv3_db_gpu.py \
        test_ocr_det_mv3_db_mkldnn.py

@@ -74,7 +74,7 @@ def test_gpu_more_bz():
 
     file_path = "./ocr_det_mv3_db"
     images_size = 640
-    batch_size_pool = [1, 5, 10]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(

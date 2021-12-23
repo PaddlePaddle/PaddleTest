@@ -1,11 +1,11 @@
 #!/bin/bash
 
-git clone -b develop https://github.com/PaddlePaddle/PaddleScience.git
-export PYTHONPATH=$PWD/PaddleScience:$PYTHONPATH
-pip3.7 install -r PaddleScience/requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
+#git clone -b develop https://github.com/PaddlePaddle/PaddleScience.git
+#export PYTHONPATH=$PWD/PaddleScience:$PYTHONPATH
+#pip3.7 install -r PaddleScience/requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
+#
 
-
-cases=`find ./paddlescience_ci/ -maxdepth 1 -name "test_*.py" | sort `
+cases=`find ./PaddleTest/framework/e2e/paddlescience-ci -maxdepth 1 -name "test_*.py" | sort `
 ignore=""
 
 for file in ${cases}

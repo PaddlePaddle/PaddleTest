@@ -53,7 +53,7 @@ def test_trt_fp32_more_bz():
 
     file_path = "./pcpvt_base"
     images_size = 224
-    batch_size_pool = [1, 5]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -111,8 +111,6 @@ def test_jetson_trt_fp32_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.win
-@pytest.mark.server
 @pytest.mark.trt_fp32_multi_thread
 def test_trt_fp32_bz1_multi_thread():
     """
