@@ -20,7 +20,7 @@ import os
 print(os.getenv("AGILE_COMPILE_BRANCH"))
 print(skip_branch_is_2_2)
 
-
+@skip_branch_is_2_2
 class TestIsClose(APIBase):
     """
     test Tensor.isclose
@@ -35,7 +35,7 @@ class TestIsClose(APIBase):
         # enable check grad
         self.enable_backward = False
 
-
+@skip_branch_is_2_2
 obj = TestIsClose(paddle.Tensor.isclose)
 
 
