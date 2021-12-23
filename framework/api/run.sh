@@ -1,4 +1,5 @@
 home=$PWD
+echo "branch is ${AGILE_COMPILE_BRANCH}"
 python3.7 -m pip install pytest
 python3.7 -m pip install scipy
 # base
