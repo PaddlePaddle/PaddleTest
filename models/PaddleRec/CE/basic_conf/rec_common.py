@@ -39,7 +39,7 @@ if daily:
         "linux_st_gpu1",
         # "linux_st_gpu2",
         # "linux_st_cpu",
-        # "linux_dy_gpu1",
+        "linux_dy_gpu1",
         # "linux_dy_gpu2",
         # "linux_dy_cpu",
         "linux_down_data",

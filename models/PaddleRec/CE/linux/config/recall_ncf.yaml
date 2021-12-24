@@ -40,7 +40,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 recall_ncf_linux_dy_gpu1
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.3021
         threshold: 0.03
@@ -68,7 +68,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 recall_ncf_linux_dy_gpu2
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.3021
         threshold: 0.03
@@ -122,9 +122,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 recall_ncf_linux_st_gpu1
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
-        kpi_base: 0.3021
+        kpi_base: 0.3082
         threshold: 0.03
         actived: True
         evaluation: "+"
@@ -150,7 +150,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 recall_ncf_linux_st_gpu2
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.3021
         threshold: 0.03
@@ -412,13 +412,6 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1 recall_ncf_infer_linux_dy_gpu1
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
         kpi_base: 0.33
@@ -445,13 +438,6 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh linux_dy_gpu2 recall_ncf_infer_linux_dy_gpu2
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
         kpi_base: 0.33
@@ -502,13 +488,6 @@ INFER:
         cmd: sh infer.sh linux_st_gpu1 recall_ncf_infer_linux_st_gpu1
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
         kpi_base: 0.33
@@ -537,13 +516,6 @@ INFER:
         cmd: sh infer.sh linux_st_gpu2 recall_ncf_infer_linux_st_gpu2
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
         kpi_base: 0.33
@@ -594,13 +566,6 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1_con recall_ncf_infer_linux_dy_gpu1_con
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
         kpi_base: 0.33
@@ -626,13 +591,6 @@ INFER:
         cmd: sh infer.sh linux_st_gpu1_con recall_ncf_infer_linux_st_gpu1_con
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
         kpi_base: 0.33
