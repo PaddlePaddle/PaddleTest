@@ -28,7 +28,7 @@ FINETUNE:
       acc:
         latest: True
         kpi_base: 0.49655963302752293
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -126,14 +126,14 @@ FINETUNE:
       pearson:
         latest: True
         kpi_base: 0.34083571853619427
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
       spearman:
         latest: True
         kpi_base: 0.36727046367576166
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -205,14 +205,14 @@ FINETUNE:
       acc:
         latest: True
         kpi_base: 0.6332673757111056
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
       f1:
         latest: True
         kpi_base: 0.1542410586960242
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"

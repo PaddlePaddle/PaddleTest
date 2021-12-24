@@ -1,9 +1,3 @@
-#unset http_proxy
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
-
 #外部传入参数说明
 # $1:  $XPU = gpu or cpu
 #获取当前路径
@@ -82,6 +76,3 @@ else
         --embedding_name w2v.google_news.target.word-word.dim300.en >$log_path/distill_$3_$2_${DEVICE}.log 2>&1
     print_info $? distill_$3_$2_${DEVICE}
 fi
-#set http_proxy
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY
