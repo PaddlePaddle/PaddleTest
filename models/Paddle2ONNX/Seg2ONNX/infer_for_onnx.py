@@ -9,7 +9,7 @@ import argparse
 import codecs
 import os
 import sys
-# import auto_log
+
 
 LOCAL_PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(LOCAL_PATH, "..", ".."))
@@ -158,24 +158,6 @@ class Predictor:
             self._init_gpu_config()
 
         self.predictor = create_predictor(self.pred_cfg)
-
-        # if hasattr(args, "benchmark") and args.benchmark:
-        #
-        #     pid = os.getpid()
-        #     self.autolog = auto_log.AutoLogger(
-        #         model_name=args.model_name,
-        #         model_precision=args.precision,
-        #         batch_size=args.batch_size,
-        #         data_shape="dynamic",
-        #         save_path=None,
-        #         inference_config=self.pred_cfg,
-        #         pids=pid,
-        #         process_name=None,
-        #         gpu_ids=0,
-        #         time_keys=["preprocess_time", "inference_time", "postprocess_time"],
-        #         warmup=0,
-        #         logger=logger,
-        #     )
 
     def _init_base_config(self):
         """
