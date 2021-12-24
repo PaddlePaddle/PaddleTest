@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cases=`find . -name "*.py" | sort`
-ignore="darcy2d.py"
+ignore=""
 bug=0
 
 echo "" >  result.txt
