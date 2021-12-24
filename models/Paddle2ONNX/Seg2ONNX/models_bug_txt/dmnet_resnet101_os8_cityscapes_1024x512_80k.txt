@@ -1,9 +1,0 @@
-model_name::dmnet
-yaml::SegForONNX/configs/dmnet/dmnet_resnet101_os8_cityscapes_1024x512_80k.yml
-pretrain_link::https://bj.bcebos.com/paddleseg/dygraph/cityscapes/dmnet_resnet101_os8_cityscapes_1024x512_80k/model.pdparams
-test_data::https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/seg_data/seg_data.tar
-opt_ver::11
-opt_ver::11
-atol::1e-5
-rtol::1e-8
-diff_per::0.000001
