@@ -403,7 +403,7 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-        if tuned:  #collect_shape_range_info收集动态shape需要predictor后再退出
+        if tuned:  # collect_shape_range_info收集动态shape需要predictor后再退出
             return 0
         output_names = predictor.get_output_names()
         for i, output_data_name in enumerate(output_names):
