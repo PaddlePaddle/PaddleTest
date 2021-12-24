@@ -3,6 +3,8 @@ cd ..
 
 cd models_repo
 
+del /s /q  C:\Python39\Lib\site-packages\~umpy-1.21.5.dist-info
+
 python setup.py bdist_wheel
 
 for %%i in (".\dist\*.whl") do (
