@@ -33,4 +33,4 @@ rec_BRANCH = BASE_BRANCH
 EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
 # EXEC_TAG = ["mac_st_cpu", "mac_dy_cpu", "mac_down_data"]
-EXEC_TAG = ["mac_dy_cpu"]
+EXEC_TAG = ["mac_st_cpu"]
