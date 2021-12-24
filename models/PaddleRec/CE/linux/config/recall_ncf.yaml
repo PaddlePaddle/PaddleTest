@@ -490,7 +490,7 @@ INFER:
     kpis: #kpi指标
       ndcg:
         latest: True
-        kpi_base: 0.33
+        kpi_base: 0.24
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -518,7 +518,7 @@ INFER:
     kpis: #kpi指标
       ndcg:
         latest: True
-        kpi_base: 0.33
+        kpi_base: 0.24
         threshold: 0.02
         actived: True
         evaluation: "+"
