@@ -15,6 +15,7 @@ import numpy as np
 
 sys.path.append("../../utils/")
 from interceptor import skip_branch_is_2_2
+import os
 
 
 class TestIsClose(APIBase):
