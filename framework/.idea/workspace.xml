@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a389d4de-920f-4bb0-8a67-7f415dd76416" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/ce_run.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/.idea/dbnavigator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/.idea/examples.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/darcy2d/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/darcy2d/darcy2d.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/laplace2d/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/laplace2d/laplace2d.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/ldc2d/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/ldc2d/ldc2d.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/ldc2d/openfoam/openfoam_u_100.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/ldc2d/openfoam/openfoam_u_400.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/ldc2d/openfoam/openfoam_v_100.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../models/PaddleScience/examples/ldc2d/openfoam/openfoam_v_400.npy" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="22aKFlE8Nvv6IVewzeTeWI7rzBr" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a389d4de-920f-4bb0-8a67-7f415dd76416" name="Changes" comment="" />
+      <created>1640070157154</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1640070157154</updated>
+    </task>
+    <servers />
+  </component>
+</project>
