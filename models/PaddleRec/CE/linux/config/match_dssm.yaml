@@ -175,7 +175,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu match_dssm_linux_st_cpu
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.6477209
         threshold: 0.0
@@ -554,7 +554,7 @@ INFER:
     kpis: #kpi指标
       query_doc_sim:
         latest: True
-        kpi_base: 0.78475714
+        kpi_base: [0.7847573]
         threshold: 0.001
         actived: True
         evaluation: "+"

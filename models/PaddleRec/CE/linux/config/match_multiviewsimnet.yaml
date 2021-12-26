@@ -190,7 +190,7 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.1000087
         threshold: 0.001
@@ -551,7 +551,7 @@ INFER:
     kpis: #kpi指标
       query_pt_sim:
         latest: True
-        kpi_base: 0.2187728
+        kpi_base: [0.21877281]
         threshold: 0.001
         actived: True
         evaluation: "+"

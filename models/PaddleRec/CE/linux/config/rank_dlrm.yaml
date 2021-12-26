@@ -178,7 +178,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.318078
+        kpi_base: 0.31884058
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -491,7 +491,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.504916
+        kpi_base: 0.537376
         threshold: 0.001
         actived: True
         evaluation: "+"

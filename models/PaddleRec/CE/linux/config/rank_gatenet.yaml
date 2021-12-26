@@ -177,7 +177,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.892449
+        kpi_base: 0.86727689
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -488,11 +488,10 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh linux_st_cpu rank_gatenet_infer_linux_st_cpu
 
-
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.989321
+        kpi_base: 0.9809305
         threshold: 0.001
         actived: True
         evaluation: "+"

@@ -176,7 +176,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu recall_ncf_linux_st_cpu
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.53728294
         threshold: 0.001
@@ -543,7 +543,7 @@ INFER:
     kpis: #kpi指标
       prediction:
         latest: True
-        kpi_base: 0.34032416
+        kpi_base: [0.34032416]
         threshold: 0.001
         actived: True
         evaluation: "+"

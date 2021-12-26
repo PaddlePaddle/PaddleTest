@@ -176,9 +176,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu multitask_esmm_linux_st_cpu
 
     kpis: #kpi指标
-      loss:
+      cost:
         latest: True
-        kpi_base: 0.07118973
+        kpi_base: 0.0719007
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -491,7 +491,7 @@ INFER:
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.965278
+        kpi_base: 1.0
         threshold: 0.001
         actived: True
         evaluation: "+"
