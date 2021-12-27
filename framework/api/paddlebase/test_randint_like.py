@@ -6,12 +6,17 @@
 test_randint_like
 """
 
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
 
+sys.path.append("../../utils/")
+from interceptor import skip_branch_is_2_2
 
+
+@skip_branch_is_2_2
 def cal_randint_like(x, dtype="float32", low=0, high=None):
     """
     calculate api
@@ -36,6 +41,7 @@ def cal_randint_like(x, dtype="float32", low=0, high=None):
     return dynamic_res.numpy()
 
 
+@skip_branch_is_2_2
 @pytest.mark.api_nn_randint_like_parameters
 def test_randint_like0():
     """
@@ -46,6 +52,7 @@ def test_randint_like0():
     assert res.shape == (4,)
 
 
+@skip_branch_is_2_2
 @pytest.mark.api_nn_randint_like_parameters
 def test_randint_like1():
     """
@@ -56,6 +63,7 @@ def test_randint_like1():
     assert res.shape == (4, 5)
 
 
+@skip_branch_is_2_2
 @pytest.mark.api_nn_randint_like_parameters
 def test_randint_like2():
     """
@@ -66,6 +74,7 @@ def test_randint_like2():
     assert res.shape == (2, 4, 5)
 
 
+@skip_branch_is_2_2
 @pytest.mark.api_nn_randint_like_parameters
 def test_randint_like3():
     """
@@ -76,6 +85,7 @@ def test_randint_like3():
     assert res.shape == (2, 2, 4, 5)
 
 
+@skip_branch_is_2_2
 @pytest.mark.api_nn_randint_like_parameters
 def test_randint_like4():
     """
