@@ -91,7 +91,7 @@ TRAIN: # 训练步骤
         kpi_base: 6.92049
         threshold: 0.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MobileNetV3_large_x1_0_2card.log
   -
@@ -129,19 +129,12 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml train_mac_cpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 10.16403
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
-        unit_repr: None
-      train_eval:
-        latest: True
-        kpi_base: 7.17929
-        threshold: 0.00001
-        actived: True
-        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MobileNetV3_large_x1_0_cpu.log
 
@@ -159,7 +152,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 1.06482
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
         evaluation: "="
         unit_repr: None
@@ -177,9 +170,9 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 1.06495
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MobileNetV3_large_x1_0_eval.log
   -
@@ -192,9 +185,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml eval_mac
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 7.17929
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
