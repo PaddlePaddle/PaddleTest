@@ -13,8 +13,9 @@ import paddle
 import pytest
 import numpy as np
 
-sys.path.append("../../utils/")
-from interceptor import skip_branch_is_2_2
+sys.path.append("../..")
+from utils.interceptor import skip_branch_is_2_2
+import os
 
 
 class TestIsClose(APIBase):
@@ -31,8 +32,8 @@ class TestIsClose(APIBase):
         # enable check grad
         self.enable_backward = False
 
-
-obj = TestIsClose(paddle.Tensor.isclose)
+if os.getenv("AGILE_COMPILE_BRANCH") != "release/2.2":
+    obj = TestIsClose(paddle.Tensor.isclose)
 
 
 @skip_branch_is_2_2

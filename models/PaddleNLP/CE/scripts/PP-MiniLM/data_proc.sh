@@ -10,4 +10,4 @@ code_path=$cur_path/../../models_repo/examples/model_compression/pp-minilm/gener
 #准备数据
 cd $code_path
 
-cp -r /workspace/task/datasets/PP-MiniLM/*  /workspace/task/models_repo/examples/model_compression/pp-minilm/general_distill/
+cp -r /workspace/task/datasets/PP-MiniLM/*  ./

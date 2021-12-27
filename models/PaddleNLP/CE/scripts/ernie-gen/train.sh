@@ -7,12 +7,6 @@ model_name=${PWD##*/}
 
 echo "$model_name 模型训练阶段"
 
-#取消代理
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
-
 #路径配置
 root_path=$cur_path/../../
 code_path=$cur_path/../../models_repo/examples/text_generation/ernie-gen/
@@ -24,7 +18,9 @@ fi
 
 print_info(){
 if [ $1 -ne 0 ];then
-    cat ${log_path}/$2.log
+    echo "exit_code: 1.0" >> ${log_path}/$2.log
+else
+    echo "exit_code: 0.0" >> ${log_path}/$2.log
 fi
 }
 

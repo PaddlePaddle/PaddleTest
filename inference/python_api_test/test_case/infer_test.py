@@ -346,6 +346,7 @@ class InferenceTest(object):
         use_calib_mode=False,
         dynamic=False,
         tuned=False,
+        result_sort=False,
     ):
         """
         test enable_tensorrt_engine()
@@ -373,7 +374,6 @@ class InferenceTest(object):
         if dynamic:
             if tuned:
                 self.pd_config.collect_shape_range_info("shape_range.pbtxt")
-                return 0
             else:
                 self.pd_config.enable_tensorrt_engine(
                     workspace_size=1 << 30,
@@ -403,13 +403,17 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-
+        if tuned:  # collect_shape_range_info收集动态shape需要predictor后再退出
+            return 0
         output_names = predictor.get_output_names()
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
+            if result_sort:
+                output_data = np.sort(output_data)
+                output_data_truth_val = np.sort(output_data_truth_val)
             for j, out_data in enumerate(output_data):
                 diff = sig_fig_compare(out_data, output_data_truth_val[j])
                 assert (
