@@ -41,7 +41,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3953
+        kpi_base: 0.3920
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -69,7 +69,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3953
+        kpi_base: 0.3920
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -121,9 +121,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 match_dssm_linux_st_gpu1
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
-        kpi_base: 0.3953
+        kpi_base: 0.4045
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -149,9 +149,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 match_dssm_linux_st_gpu2
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
-        kpi_base: 0.3953
+        kpi_base: 0.4045
         threshold: 0.02
         actived: True
         evaluation: "+"

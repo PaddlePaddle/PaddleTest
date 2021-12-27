@@ -351,10 +351,10 @@ done
 run_demo(){
 mkdir ${repo_path}/demo_log
 export log_path=${repo_path}/demo_log
-demo19
+demo27
 recall_demo word2vec
 recall_demo mind
-#dnn_all
+dnn_all
 }
 ################################################
 run_con(){

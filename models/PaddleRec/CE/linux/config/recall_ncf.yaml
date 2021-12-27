@@ -40,9 +40,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 recall_ncf_linux_dy_gpu1
 
     kpis: #kpi指标
-      Loss:
+      loss:
         latest: True
-        kpi_base: 0.3021
+        kpi_base: 0.3111
         threshold: 0.03
         actived: True
         evaluation: "+"
@@ -68,9 +68,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 recall_ncf_linux_dy_gpu2
 
     kpis: #kpi指标
-      Loss:
+      loss:
         latest: True
-        kpi_base: 0.3021
+        kpi_base: 0.3111
         threshold: 0.03
         actived: True
         evaluation: "+"
@@ -414,7 +414,7 @@ INFER:
     kpis: #kpi指标
       ndcg:
         latest: True
-        kpi_base: 0.33
+        kpi_base: 0.24
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -440,7 +440,7 @@ INFER:
     kpis: #kpi指标
       ndcg:
         latest: True
-        kpi_base: 0.33
+        kpi_base: 0.24
         threshold: 0.02
         actived: True
         evaluation: "+"
