@@ -1,5 +1,5 @@
 MODEL: "pointer_summarizer"
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/pointer_summarizer
