@@ -14,7 +14,7 @@ echo "$model_name 模型训练阶段"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/language_model/ernie/
+code_path=$cur_path/../../models_repo/examples/language_model/ernie-1.0/
 log_path=$root_path/log/$model_name/
 
 if [ ! -d $log_path ]; then
@@ -22,75 +22,53 @@ if [ ! -d $log_path ]; then
 fi
 
 DEVICE=$1
-if [[ ${DEVICE} == "gpu" ]]; then
-N_GPU=1
-else
-N_GPU=0
-fi
-MULTI=$2
-if [[ ${MULTI} == "multi" ]]; then
-N_GPU=2
-fi
-
 #访问RD程序
 cd $code_path
 
 if [[ $4 == 'con' ]]; then
-  NUM_STEPS=1000000
-  SAVE_STEPS=100000
+  MAX_STEPS=4000000
+  SAVE_STEPS=50000
 else
-  NUM_STEPS=100
-  SAVE_STEPS=10
+  MAX_STEPS=100
+  SAVE_STEPS=20
+fi
+
+if [[ $2 == 'single' ]]; then
+  DP_DEGREE=1
+  GLOBAL_BATCH_SIZE=32
+else
+  DP_DEGREE=2
+  GLOBAL_BATCH_SIZE=64
 fi
 
 mkdir -p output_dir/${MULTI}
 
-if [[ ${MULTI} == "single" ]]; then
-    python -m paddle.distributed.fleet.launch \
-        --gpus $3 \
-        --log_dir ./output_dir/log \
-        run_pretraining.py \
-        --global_bsz 64 \
-        --micro_bsz 1 \
-        --max_seq_len 512 \
-        --ernie_config_file config/ernie_base_config.json \
-        --learning_rate 1e-4 \
-        --log_steps 1 \
-        --num_train_steps ${NUM_STEPS} \
-        --save_steps ${SAVE_STEPS} \
-        --output_dir ./output_dir/${MULTI} \
-        --use_recompute true \
-        --use_sharding true \
-        --use_sop false \
-        --num_mp=1 \
-        --num_sharding=$N_GPU \
-        --num_pp=1 \
-        --num_dp=1  >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
-
-else
-    python -m paddle.distributed.fleet.launch \
-        --gpus $3 \
-        --log_dir ./output_dir/log \
-        run_pretraining.py \
-        --global_bsz 64 \
-        --micro_bsz 1 \
-        --max_seq_len 512 \
-        --ernie_config_file config/ernie_base_config.json \
-        --learning_rate 1e-4 \
-        --log_steps 1 \
-        --num_train_steps ${NUM_STEPS} \
-        --save_steps ${SAVE_STEPS} \
-        --output_dir ./output_dir/${MULTI} \
-        --use_recompute true \
-        --use_sharding true \
-        --use_sop false \
-        --num_mp=1 \
-        --num_sharding=$N_GPU \
-        --num_pp=1 \
-        --num_dp=1  >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
-
-fi
-
-#set http_proxy
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY
+python -u  -m paddle.distributed.launch  \
+    --gpus "$3" \
+    --log_dir "./log" \
+    run_pretrain_static.py \
+    --model_type "ernie" \
+    --model_name_or_path "ernie-1.0" \
+    --input_dir "./data/" \
+    --output_dir "./output/" \
+    --max_seq_len 512 \
+    --micro_batch_size 32 \
+    --global_batch_size $GLOBAL_BATCH_SIZE \
+    --sharding_degree 1 \
+    --dp_degree $DP_DEGREE \
+    --use_sharding false \
+    --use_amp true \
+    --use_recompute false \
+    --max_lr 0.0001 \
+    --min_lr 0.00001 \
+    --max_steps $MAX_STEPS \
+    --save_steps $SAVE_STEPS \
+    --checkpoint_steps 5000 \
+    --decay_steps 3960000 \
+    --weight_decay 0.01 \
+    --warmup_rate 0.0025 \
+    --grad_clip 1.0 \
+    --logging_freq 20\
+    --num_workers 2 \
+    --eval_freq 1000 \
+    --device $1 >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
