@@ -34,7 +34,7 @@ DATA_PROC:
         path: $ROOT_PATH/scripts
         cmd: compile_package.bat
 
-TRAIN: # 训练步骤
+TRAIN: # 训练步骤, 会hang，暂时关闭训练
   -
     priority: p0
     tag: linux_dy_gpu1
