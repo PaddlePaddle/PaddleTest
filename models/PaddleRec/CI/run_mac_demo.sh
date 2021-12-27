@@ -105,23 +105,23 @@ yaml_mode=config_bigdata
 fi
 # dygraph
 echo -e "\033[31m start dy train 20 ${model} \n \033[0m "
-python -u ../../../tools/trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=False
+python -u ../../../tools/trainer.py -m ${yaml_mode}.yaml
 print_info $? ${model}_dy_train
 
 echo -e "\033[31m start dy infer 20 ${model} \n \033[0m "
-python -u infer.py -m ${yaml_mode}.yaml -o runner.use_gpu=False
+python -u infer.py -m ${yaml_mode}.yaml
 print_info $? ${model}_dy_infer
 
 rm -rf output_model_*
 
 # 静态图训练
 echo -e "\033[31m start st train 20 ${model} \n \033[0m "
-python -u ../../../tools/static_trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=False
+python -u ../../../tools/static_trainer.py -m ${yaml_mode}.yaml
 print_info $? ${model}_st_train
 
 # 静态图预测
 echo -e "\033[31m start st infer 20 ${model} \n \033[0m "
-python -u static_infer.py -m ${yaml_mode}.yaml -o runner.use_gpu=False
+python -u static_infer.py -m ${yaml_mode}.yaml
 print_info $? ${model}_st_infer
 
 }
