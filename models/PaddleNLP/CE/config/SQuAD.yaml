@@ -1,5 +1,5 @@
 MODEL: "SQuAD" # 模型名
-PRIORITY: P0
+PRIORITY: P0_hang
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo

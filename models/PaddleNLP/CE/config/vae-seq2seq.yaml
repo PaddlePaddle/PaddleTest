@@ -10,19 +10,10 @@ VARIABLES:
   model_log_path: log/vae-seq2seq/
 
 EXEC:
-  exec_cases: [DATA_PROC,TRAIN,INFER]
+  exec_cases: [TRAIN,INFER]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
-#测试套
-DATA_PROC:
-  -
-    priority: p2
-    tag: linux_download_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
 
 TRAIN: # 训练步骤
   -
@@ -99,6 +90,32 @@ TRAIN: # 训练步骤
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/train_single_$XPU.log
 
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU
+    kpis: #kpi指标
+      nll:
+        latest: True
+        kpi_base: 105.8586
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 89.6983
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_$XPU.log
+
 INFER:
   -
     priority: p0
@@ -127,6 +144,24 @@ INFER:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash infer.sh $XPU
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU
     kpis:
       exit_code:
         latest: True

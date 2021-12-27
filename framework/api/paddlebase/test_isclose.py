@@ -15,6 +15,7 @@ import numpy as np
 
 sys.path.append("../../utils/")
 from interceptor import skip_branch_is_2_2
+import os
 
 
 class TestIsClose(APIBase):
@@ -31,8 +32,8 @@ class TestIsClose(APIBase):
         # enable check grad
         self.enable_backward = False
 
-
-obj = TestIsClose(paddle.isclose)
+if os.getenv("AGILE_COMPILE_BRANCH") != "release/2.2":
+    obj = TestIsClose(paddle.isclose)
 
 
 @skip_branch_is_2_2
