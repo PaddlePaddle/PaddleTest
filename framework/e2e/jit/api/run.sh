@@ -13,7 +13,12 @@ test_logical_and.py \
 test_logical_not.py \
 test_logical_or.py \
 test_logical_xor.py \
-test_not_equal.py"
+test_not_equal.py \
+test_is_empty.py \
+test_is_tensor.py \
+test_isfinite.py \
+test_isinf.py \
+test_isnan.py"
 bug=0
 
 echo "============ failed cases =============" >> result.txt
