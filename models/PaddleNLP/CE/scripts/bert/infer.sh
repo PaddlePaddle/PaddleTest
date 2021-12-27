@@ -35,4 +35,3 @@ python -u ./predict_glue.py \
     --max_seq_length 128 > $log_path/bert_predict.log 2>&1
 
 print_info $? "bert_predict"
-
