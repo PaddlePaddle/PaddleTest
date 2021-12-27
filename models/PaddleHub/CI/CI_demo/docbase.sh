@@ -51,8 +51,10 @@ image(){
                special_module_line=`grep ${module_name}__ "special_data_modules.txt"`
                tail=${special_module_line##*__}
                sed -i "s/\/PATH\/TO\/IMAGE/${module_name}.${tail}/g" test_${module_name}.py
+               sed -i "s/\/PATH\/TO\/VIDEO/doc_video.mp4/g" test_${module_name}.py
            else
                sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module_name}.py
+               sed -i "s/\/PATH\/TO\/VIDEO/doc_video.mp4/g" test_${module_name}.py
            fi
            #运行python测试代码
            sed -i "s/use_gpu=False/use_gpu=${use_gpu}/g" test_${module_name}.py
