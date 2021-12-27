@@ -39,7 +39,7 @@ python -m pip install -r requirements.txt
 
 python tools/train.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.epoch_num=2 > log/ch_det_mv3_db_v2.0_1card.log 2>&1
 echo "========train.log========"
-cat log/ch_det_res18_db_v2.0_1card.log
+cat log/ch_det_mv3_db_v2.0_1card.log
 cat log/ch_det_mv3_db_v2.0_1card.log | grep "2/2" > ../log/ch_det_mv3_db_v2.0_1card.log
 echo "========loss.log========"
-cat log/ch_det_res18_db_v2.0_1card.log
+cat ../log/ch_det_mv3_db_v2.0_1card.log
