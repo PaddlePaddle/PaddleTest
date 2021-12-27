@@ -17,7 +17,7 @@ echo ${file_name}
         cd ${file_dir}
         python ${file_name} --alluredir=report
         if [ $? -ne 0 ]; then
-            echo ${file} >> result.txt
+            echo ${file_name} >> result.txt
             bug=`expr ${bug} + 1`
         fi
         cd -
