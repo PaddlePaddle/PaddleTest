@@ -13,7 +13,7 @@ sentencepiece
 termcolor
 gensim
 tqdm
-nltk
+nltk==3.5
 easydict
 multiprocess
 sklearn
