@@ -154,7 +154,7 @@ EVAL: # 训练步骤
         kpi_base: 1.06482
         threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MobileNetV3_large_x1_0_eval.log
   -

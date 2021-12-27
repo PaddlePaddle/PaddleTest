@@ -154,7 +154,7 @@ EVAL: # 训练步骤
         kpi_base: 9.85302
         threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/Res2Net50_26w_4s_eval.log
   -
