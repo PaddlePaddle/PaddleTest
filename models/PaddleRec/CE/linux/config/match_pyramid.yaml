@@ -229,7 +229,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh mac_st_cpu match_pyramid_mac_st_cpu
 
     kpis: #kpi指标
-      loss:
+      cost:
         latest: True
         kpi_base: 0.99960077
         threshold: 0.001
@@ -544,7 +544,7 @@ INFER:
     kpis: #kpi指标
       prediction:
         latest: True
-        kpi_base: 0.00043069
+        kpi_base: [0.00043069]
         threshold: 0.001
         actived: True
         evaluation: "+"

@@ -284,7 +284,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh mac_st_cpu recall_ncf_mac_st_cpu
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.5460826
         threshold: 0.001
@@ -644,7 +644,7 @@ INFER:
     kpis: #kpi指标
       prediction:
         latest: True
-        kpi_base: 0.3516687
+        kpi_base: [0.3516687]
         threshold: 0.001
         actived: True
         evaluation: "+"
