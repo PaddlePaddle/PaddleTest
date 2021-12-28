@@ -86,7 +86,9 @@ seg(){
       without_argmax=True
       fi
       #download pretrained model and test data
+      set +x
       wget -P models/${model_name}/${argmax_opt}/pretrain_model ${premodel_link}
+      set -x
       echo ++++++++++++++++++++++${model_name} from pretrained model export infer model!!!++++++++++++++++++++++
       if [ ${argmax_opt} == 'with_argmax' ]; then
       $py_cmd SegForONNX/export.py \
