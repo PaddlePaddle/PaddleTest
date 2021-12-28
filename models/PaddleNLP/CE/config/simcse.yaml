@@ -32,7 +32,7 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        cmd: data_proc.bat
 
 TRAIN:
   -
