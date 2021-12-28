@@ -154,7 +154,7 @@ EVAL: # 训练步骤
         kpi_base: 7.64618
         threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/DeiT_tiny_patch16_224_eval.log
   -

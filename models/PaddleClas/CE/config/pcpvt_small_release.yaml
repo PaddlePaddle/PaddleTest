@@ -154,7 +154,7 @@ EVAL: # 训练步骤
         kpi_base: 8.0191
         threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/pcpvt_small_eval.log
   -
