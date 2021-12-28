@@ -1,39 +1,58 @@
-MODEL: "seq2seq" # 模型名
-PRIORITY: P0
+MODEL: "nptag" # 模型名
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
   branch: $BASE_BRANCH
 
-ENV:
-  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: scripts/seq2seq/ #脚本的路径
-  model_log_path: log/seq2seq/
+  model_scripts_path: scripts/nptag/ #脚本的路径
+  model_log_path: log/nptag/
 
 EXEC:
-  exec_cases: [DATA_PROC,TRAIN,INFER,InferFram]
-  exec_priority: [p0,p1]
+  exec_cases: [DATA_PROC, TRAIN, INFER, PYTHON_INFER]
+  exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
 
 TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh $XPU "single"
+        cmd: bash train.sh $XPU 'single' $SET_CUDA
 
     kpis: #kpi指标
-      Perplexity:
+      loss:
         latest: True
-        kpi_base: 24.3417
-        threshold: 0.03
+        kpi_base: 0.00934
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 0.93600
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -41,63 +60,63 @@ TRAIN: # 训练步骤
 
   -
     priority: p0
-    tag: linux_dy_gpu2
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-
+    tag: win_dy_gpu1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh $XPU "multi"
+        cmd: train.bat $XPU $SET_CUDA
 
     kpis: #kpi指标
-      Perplexity:
+      loss:
         latest: True
-        kpi_base: 24.7879
-        threshold: 0.03
+        kpi_base: 0.00934
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 0.93600
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.00932
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 0.93686
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
 
-  -
-    priority: p0
-    tag: win_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: train.bat $XPU
-
-    kpis: #kpi指标
-      Perplexity:
-        latest: True
-        kpi_base: 25.2148
-        threshold: 0.03
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
-      loss:
-        latest: True
-        kpi_base: 163.5950
-        threshold: 0.08
-        actived: True
-        evaluation: "-"
-        unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_$XPU.log
 
 INFER:
   -
-    priority: p0
+    priority: p1
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-        CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh $XPU
+        cmd: bash infer.sh $XPU $SET_CUDA
     kpis:
       exit_code:
         latest: True
@@ -109,14 +128,12 @@ INFER:
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
 
   -
-    priority: p0
+    priority: p1
     tag: win_dy_gpu1
-    env: #去掉，自动调度
-        CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: infer.bat $XPU
+        cmd: infer.bat $XPU $SET_CUDA
     kpis:
       exit_code:
         latest: True
@@ -127,16 +144,16 @@ INFER:
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
 
-InferFram:
+PYTHON_INFER:
   -
-    priority: p0
+    priority: p1
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh InferFram.sh $XPU
+        cmd: bash python_infer.sh $XPU $SET_CUDA
     kpis:
       exit_code:
         latest: True
@@ -145,17 +162,17 @@ InferFram:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/inferfram_$XPU.log
+    output: $ROOT_PATH/$model_log_path/python_infer_$XPU.log
 
   -
-    priority: p0
+    priority: p1
     tag: win_dy_gpu1
-    env: #去掉，自动调度
-        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: InferFram.bat $XPU
+        cmd: python_infer.bat $XPU $SET_CUDA
     kpis:
       exit_code:
         latest: True
@@ -164,4 +181,4 @@ InferFram:
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/inferfram_$XPU.log
+    output: $ROOT_PATH/$model_log_path/python_infer_$XPU.log

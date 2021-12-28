@@ -1,5 +1,5 @@
 MODEL: "language_model_ernie" # 模型名
-PRIORITY: P1_delay, Dy_con # P1没办法控制时长，Dy_con:收敛性
+PRIORITY: P0, Dy_con
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -34,27 +34,13 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash train.sh $XPU "single" $SET_CUDA
 
-    kpis: #kpi指标
+    kpis:
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 7.857423
+        threshold: 0.05
         actived: True
         evaluation: "-"
-        unit_repr: "s"
-      acc:
-        latest: True
-        kpi_base: 0.572782
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
-      speed:
-        latest: True
-        kpi_base: 0.546637
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_single_$XPU.log
   -
@@ -66,27 +52,13 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash train.sh $XPU "multi" $SET_MULTI_CUDA
 
-    kpis: #kpi指标
+    kpis:
       loss:
         latest: True
-        kpi_base: 0.522773
-        threshold: 0.01
+        kpi_base: 7.768193245
+        threshold: 0.05
         actived: True
         evaluation: "-"
-        unit_repr: "s"
-      acc:
-        latest: True
-        kpi_base: 0.572782
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
-      speed:
-        latest: True
-        kpi_base: 0.546637
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
 
@@ -106,19 +78,5 @@ TRAIN: # 训练步骤
         threshold: 0.01
         actived: True
         evaluation: "-"
-        unit_repr: "s"
-      acc:
-        latest: True
-        kpi_base: 0.572782
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
-      speed:
-        latest: True
-        kpi_base: 0.546637
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
