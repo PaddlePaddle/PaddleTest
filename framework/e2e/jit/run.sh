@@ -3,7 +3,6 @@ echo "branch is ${AGILE_COMPILE_BRANCH}"
 python3.7 -m pip install pytest
 python3.7 -m pip install scipy
 
-
 # jit/api
 cd api
 rm -rf ./result.txt
@@ -14,7 +13,6 @@ echo ${jit_api}
 cat ./result.txt
 cd $home
 
-
 # jit/layer
 cd layer
 rm -rf ./result.txt
@@ -24,7 +22,6 @@ jit_layer=$?
 echo ${jit_layer}
 cat ./result.txt
 cd $home
-
 
 # jit/scene
 cd scene
