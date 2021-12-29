@@ -22,6 +22,7 @@ if [ ! -d $log_path ]; then
 fi
 
 DEVICE=$1
+MULTI=$2
 #访问RD程序
 cd $code_path
 

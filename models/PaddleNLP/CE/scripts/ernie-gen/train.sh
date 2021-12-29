@@ -36,7 +36,7 @@ if [[ $2 == 'multi' ]];then #多卡
         --num_epochs 1 \
         --logging_steps 10 \
         --save_steps 1000 \
-        --output_dir ./tmp/ \
+        --output_dir ./tmp/$2/ \
         --device $1 > $log_path/train_$2_$1.log 2>&1
 else #单卡
     python -u ./train.py \
@@ -48,7 +48,7 @@ else #单卡
         --num_epochs 1 \
         --logging_steps 10 \
         --save_steps 1000 \
-        --output_dir ./tmp/ \
+        --output_dir ./tmp/$2/ \
         --device $1 > $log_path/train_$2_$1.log 2>&1
 
 fi
