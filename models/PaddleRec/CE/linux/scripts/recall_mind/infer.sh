@@ -33,9 +33,6 @@ fi
 cd $code_path
 echo -e "\033[32m `pwd` infer \033[0m";
 # mind模型功能运行
-sed -i "s/  epochs: 20/  epochs: 1/g" config_bigdata.yaml
-sed -i "s/  infer_start_epoch: 19/  infer_start_epoch: 0/g" config_bigdata.yaml
-sed -i "s/  infer_end_epoch: 20/  infer_end_epoch: 1/g" config_bigdata.yaml
 # linux infer
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml

@@ -40,9 +40,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 match_pyramid_linux_dy_gpu1
 
     kpis: #kpi指标
-      map:
+      loss:
         latest: True
-        kpi_base: 0.39
+        kpi_base: 0.09079
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -68,9 +68,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 match_pyramid_linux_dy_gpu2
 
     kpis: #kpi指标
-      map:
+      loss:
         latest: True
-        kpi_base: 0.39
+        kpi_base: 0.09079
         threshold: 0.02
         actived: True
         evaluation: "+"

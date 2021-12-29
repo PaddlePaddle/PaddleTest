@@ -42,7 +42,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.83
+        kpi_base: 0.919548
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -70,7 +70,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.83
+        kpi_base: 0.919548
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -124,7 +124,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.83
+        kpi_base: 0.919548
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -152,7 +152,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.83
+        kpi_base: 0.919548
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -361,7 +361,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.83
+        kpi_base: 0.83109
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -388,7 +388,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.83
+        kpi_base: 0.83109
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -438,7 +438,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.83
+        kpi_base: 0.83109
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -466,7 +466,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.83
+        kpi_base: 0.83109
         threshold: 0.02
         actived: True
         evaluation: "+"

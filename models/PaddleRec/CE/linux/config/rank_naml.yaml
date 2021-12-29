@@ -25,7 +25,7 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh data_proc.sh criteo
+        cmd: sh data_proc.sh MIND/data
 
 TRAIN: # 训练步骤
   -

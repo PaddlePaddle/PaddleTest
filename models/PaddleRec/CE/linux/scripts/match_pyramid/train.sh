@@ -33,6 +33,7 @@ cd $code_path
 echo -e "\033[32m `pwd` train \033[0m";
 
 sed -i "s/  epochs: 2/  epochs: 1/g" config_bigdata.yaml
+sed -i "s/  infer_start_epoch: 1/  infer_start_epoch: 0/g" config_bigdata.yaml
 sed -i "s/  infer_end_epoch: 2/  infer_end_epoch: 1/g" config_bigdata.yaml
 # linux train
 if [ "$1" = "linux_dy_gpu1" ];then #单卡

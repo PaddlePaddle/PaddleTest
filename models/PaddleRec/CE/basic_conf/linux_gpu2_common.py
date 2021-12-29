@@ -33,4 +33,4 @@ rec_BRANCH = BASE_BRANCH
 EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
 # EXEC_TAG = ["linux_st_gpu2", "linux_dy_gpu2", "linux_down_data"]
-EXEC_TAG = ["linux_dy_gpu2", "linux_down_data"]
+EXEC_TAG = ["linux_st_gpu2", "linux_down_data"]
