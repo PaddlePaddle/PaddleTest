@@ -25,8 +25,11 @@ esac
 python -c "import sys; print('python version:',sys.version_info[:])";
 
 echo "######  ----install  paddle-----"
+python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip uninstall paddlepaddle-gpu -y
 python -m pip install $4 #paddle_compile
+echo "######  ----paddle version-----"
+python -c "import paddle; print(paddle.version.commit)";
 
 #system
 if [ -d "/etc/redhat-release" ]; then
@@ -38,7 +41,6 @@ fi
 # env
 #export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
-python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 
 # dir

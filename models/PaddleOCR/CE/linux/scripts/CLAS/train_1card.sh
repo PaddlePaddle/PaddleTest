@@ -16,12 +16,4 @@ fi
 python -m pip install -r requirements.txt
 
 python tools/train.py -c configs/cls/cls_mv3.yml -o Global.epoch_num=10 > log/cls_mv3_1card.log 2>&1
-cat log/cls_mv3_1card.log | grep "10/10" > ../log/cls_mv3_1card_temp.log
-
-linenum=`cat ../log/cls_mv3_1card_temp.log | wc -l`
-linenum_last1=`expr $linenum - 1`
-if [ $linenum_last1 -eq 0 ]
-  then cp ../log/cls_mv3_1card_temp.log ../log/cls_mv3_1card.log
-  else sed ''1,"$linenum_last1"'d' ../log/cls_mv3_1card_temp.log > ../log/cls_mv3_1card.log
-fi
-rm -rf ../log/cls_mv3_1card_temp.log
+cat log/cls_mv3_1card.log | grep "10/10" > ../log/cls_mv3_1card.log
