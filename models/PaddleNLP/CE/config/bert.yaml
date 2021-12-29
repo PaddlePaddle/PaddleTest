@@ -331,7 +331,7 @@ FINETUNE:
       pearson:
         latest: True
         kpi_base: 0.277777
-        threshold: 0.01
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -409,7 +409,7 @@ FINETUNE:
       acc:
         latest: True
         kpi_base: 0.39338
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
