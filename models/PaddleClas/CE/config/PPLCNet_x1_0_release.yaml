@@ -88,7 +88,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.91006
+        kpi_base: 6.91007
         threshold: 0.0
         actived: True
         evaluation: "="

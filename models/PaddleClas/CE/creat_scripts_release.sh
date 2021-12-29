@@ -290,7 +290,7 @@ elif [[ ${model} == 'pcpvt_small' ]]; then
 elif [[ ${model} == 'PPLCNet_x1_0' ]]; then
     sed -i "" "s|P0|P0|g" ${model}_release.yaml #P0/1
     sed -i "" "s|6.48126|6.88368|g" ${model}_release.yaml #linux_train_单卡
-    sed -i "" "s|6.46063|6.91006|g" ${model}_release.yaml #linux_train_多卡
+    sed -i "" "s|6.46063|6.91007|g" ${model}_release.yaml #linux_train_多卡
     sed -i "" "s|0.93207|1.23323|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|6.95113|g" ${model}_release.yaml #linux_train_eval
 
