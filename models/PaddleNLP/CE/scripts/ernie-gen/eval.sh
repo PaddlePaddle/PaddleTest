@@ -19,6 +19,7 @@ fi
 print_info(){
 if [ $1 -ne 0 ];then
     echo "exit_code: 1.0" >> ${log_path}/$2.log
+    cat ${log_path}/$2.log
 else
     echo "exit_code: 0.0" >> ${log_path}/$2.log
 fi
@@ -31,7 +32,7 @@ python -u ./eval.py \
     --max_encode_len 24 \
     --max_decode_len 72 \
     --batch_size 48   \
-    --init_checkpoint ./tmp/model_10000/model_state.pdparams \
+    --init_checkpoint ./tmp/single/model_1000/model_state.pdparams \
     --device $1 > $log_path/eval_$1.log 2>&1
 
 print_info $? eval_$1

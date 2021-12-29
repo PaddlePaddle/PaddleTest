@@ -6,7 +6,7 @@ echo "$model_name 模型裁剪阶段"
 #路径配置
 root_path=$cur_path/../../
 code_path=$cur_path/../../models_repo/examples/model_compression/pp-minilm
-output_path=$cur_path/../../models_repo/examples/model_compression/pp-minilm/general_distill/ernie-batchbatch-50w_400000/
+output_path=$cur_path/../../models_repo/examples/model_compression/pp-minilm/finetuning/ppminilm-6l-768h/
 log_path=$root_path/log/$model_name/
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
