@@ -5,9 +5,9 @@ ln -s ${data_path} data
 
 # env
 python -m pip install --upgrade pip -i
-python -m pip install -r requirements.txt
 python -m pip install -v -e .
 python -m pip install dlib
+python -m pip install -r requirements.txt
 
 
 sed -i '' 's/epochs/total_iters/g' configs/cyclegan_cityscapes.yaml #将epcoh换为iter
