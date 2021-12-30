@@ -25,6 +25,8 @@ esac
 python -c "import sys; print('python version:',sys.version_info[:])";
 
 echo "######  ----install  paddle-----"
+unset http_proxy
+unset https_proxy
 python -m pip uninstall paddlepaddle-gpu -y
 python -m pip install $4 #paddle_compile
 echo "######  ----paddle version-----"
