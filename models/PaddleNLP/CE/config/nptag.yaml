@@ -84,7 +84,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: linux_dy_gpu2
     run:
       -
