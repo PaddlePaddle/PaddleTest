@@ -89,8 +89,8 @@ TRAIN: # 训练步骤
         unit_repr: "s"
       Recall:
         latest: True
-        kpi_base: 0.90664
-        threshold: 0.01
+        kpi_base: 0.89487
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
