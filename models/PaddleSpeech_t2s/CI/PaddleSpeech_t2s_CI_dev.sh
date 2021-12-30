@@ -40,6 +40,8 @@ fi
 # env
 #export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
+unset http_proxy
+unset https_proxy
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 
