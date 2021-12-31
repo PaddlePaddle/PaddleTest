@@ -33,8 +33,8 @@ bug_list = []
 file_dir = get_files()
 
 for dir, file in file_dir:
-    print("==" * 20 + file + "==" * 20)
     os.chdir(dir)
+    print("==" * 20 + file + "==" * 20)
     if os.system(sys.argv[1] + " " + file):
         bug += 1
         bug_list.append(file)
@@ -45,3 +45,6 @@ print("==" * 40)
 print("bug: %d" % bug)
 for f in bug_list:
     print(f)
+
+if bug:
+    sys.exit(1)
