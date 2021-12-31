@@ -42,8 +42,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.02
+        kpi_base: 0.01588707
+        threshold: 0.1
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -70,8 +70,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.02
+        kpi_base: 0.01588707
+        threshold: 0.1
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -122,7 +122,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 match_pyramid_linux_st_gpu1
 
     kpis: #kpi指标
-      map:
+      cost:
         latest: True
         kpi_base: 0.0
         threshold: 0.02
@@ -150,7 +150,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 match_pyramid_linux_st_gpu2
 
     kpis: #kpi指标
-      map:
+      cost:
         latest: True
         kpi_base: 0.0
         threshold: 0.02
@@ -362,7 +362,7 @@ INFER:
     kpis: #kpi指标
       map:
         latest: True
-        kpi_base: 0.411
+        kpi_base: 0.4181
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -389,7 +389,7 @@ INFER:
     kpis: #kpi指标
       map:
         latest: True
-        kpi_base: 0.411
+        kpi_base: 0.4181
         threshold: 0.02
         actived: True
         evaluation: "+"
