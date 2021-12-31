@@ -20,6 +20,3 @@ if %ERRORLEVEL% == 1 (
 ) else (
     echo "exit_code: 0.0" >> %logpath%/python_infer_%3_%1.log
 )
-
-
-python deploy/python/predict.py --model_dir=./python_output/iflytek --task_name iflytek --batch_size 4
