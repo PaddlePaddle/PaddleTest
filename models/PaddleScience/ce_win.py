@@ -34,7 +34,7 @@ file_dir = get_files()
 
 for dir, file in file_dir:
     os.chdir(dir)
-    print("==" * 20 + file + "==" * 20)
+    os.system("echo ============ %s ============" % file)
     if os.system(sys.argv[1] + " " + file):
         bug += 1
         bug_list.append(file)
