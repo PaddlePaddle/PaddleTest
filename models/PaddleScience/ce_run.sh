@@ -24,6 +24,7 @@ echo ${file_name}
         fi
         cd -
     fi
+echo ============================= ${file_name}  end! =============================
 done
 echo "total bugs: "${bug} >> result.txt
 cat result.txt
