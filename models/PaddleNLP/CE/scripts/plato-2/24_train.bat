@@ -9,6 +9,9 @@ set logpath=%cd%\log\plato-2
 
 cd models_repo\examples\dialogue\plato-2\
 
+set sed="C:\Program Files\Git\usr\bin\sed.exe"
+
+%sed% -i '1 i\# -*- coding: utf-8 -*- ' interaction.py
 
 python interaction.py --vocab_path ./data/vocab.txt --spm_model_file ./data/spm.model --num_layers 24 --init_from_ckpt ./24L.pdparams < input.txt  > %logpath%/train_24_%1.log 2>&1
 

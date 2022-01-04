@@ -90,11 +90,11 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install  -r requirements.txt  \
-   -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
    -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
+   -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
 
 rm -rf models_list
@@ -261,26 +261,17 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    echo "######  params_dir"
    echo $params_dir
 
-   if [[ ! ${line} =~ "fp16.yaml" ]]; then
-      if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
-         echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
-         echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
-      else
-         cat $log_path/train/${model}_2card.log
-         echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
-         echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
-      fi
+   if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
+      echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
+      echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
    else
-      if [[ -f "output/$params_dir/0/ppcls.pdmodel" ]] && [[ $? -eq 0 ]];then
-         echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
-         echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
-         exit 0
-      else
-         cat $log_path/train/${model}_2card.log
-         echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
-         echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
-         exit 1
-      fi
+      cat $log_path/train/${model}_2card.log
+      echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
+      echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
+   fi
+
+   if [[ ${line} =~ "fp16.yaml" ]]; then
+      break
    fi
 
    #单卡
@@ -318,7 +309,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       fi
    fi
 
-   if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]];then
+   if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]] || [[ ${line} =~ 'ResNet152' ]] || [[ ${line} =~ 'DLA169' ]];then
       echo "######  use pretrain model"
       echo ${model}
       wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${model}_pretrained.pdparams --no-proxy
