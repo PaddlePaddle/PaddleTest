@@ -271,7 +271,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    fi
 
    if [[ ${line} =~ "fp16.yaml" ]]; then
-      break
+      continue
    fi
 
    #单卡
