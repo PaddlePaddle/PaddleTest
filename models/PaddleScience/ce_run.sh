@@ -2,7 +2,7 @@
 
 root_dir=$PWD
 cases=`find . -name "*.py" | sort`
-ignore=""
+ignore="ce_win.py"
 bug=0
 
 echo "" >  ${root_dir}/result.txt
