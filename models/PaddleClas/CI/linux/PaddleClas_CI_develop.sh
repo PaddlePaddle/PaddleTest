@@ -576,6 +576,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     fi
     echo $model
 
+    sleep 3
+
     if [[ ${line} =~ 'Aliproduct' ]]; then
          python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
@@ -624,6 +626,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
         cat $log_path/train/${category}_${model}.log
         echo -e "\033[31m training of ${category}_${model} failed!\033[0m"|tee -a $log_path/result.log
     fi
+
+    sleep 3
 
     # eval
     python tools/eval.py -c $line \
