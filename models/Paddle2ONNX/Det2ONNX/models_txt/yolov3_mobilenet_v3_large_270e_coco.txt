@@ -1,0 +1,7 @@
+model_name::yolov3
+yaml::DetForONNX/configs/yolov3/yolov3_mobilenet_v3_large_270e_coco.yml
+pretrain_link::https://paddledet.bj.bcebos.com/models/yolov3_mobilenet_v3_large_270e_coco.pdparams
+opt_ver::11
+opt_ver::11
+atol::3e-4
+rtol::1e-8
