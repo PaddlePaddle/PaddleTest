@@ -173,7 +173,7 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh train.sh linux_st_cpu rank_wide_deep_linux_st_cpu
     kpis: #kpi指标
-      loss:
+      cost:
         latest: True
         kpi_base: 0.4842078
         threshold: 0.001
@@ -278,7 +278,7 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh train.sh mac_st_cpu rank_wide_deep_mac_st_cpu
     kpis: #kpi指标
-      loss:
+      cost:
         latest: True
         kpi_base: 0.53932154
         threshold: 0.001
@@ -537,7 +537,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.778032
+        kpi_base: 0.777650
         threshold: 0.001
         actived: True
         evaluation: "+"

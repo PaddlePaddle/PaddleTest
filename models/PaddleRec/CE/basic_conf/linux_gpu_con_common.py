@@ -32,4 +32,5 @@ rec_BRANCH = BASE_BRANCH
 # linux gpu下， P0的任务要跑的收敛性标签
 EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
-EXEC_TAG = ["linux_dy_gpu1_con", "linux_st_gpu1_con", "linux_down_data"]
+# EXEC_TAG = ["linux_dy_gpu1_con", "linux_st_gpu1_con", "linux_down_data"]
+EXEC_TAG = ["linux_dy_gpu1_con", "linux_down_data"]

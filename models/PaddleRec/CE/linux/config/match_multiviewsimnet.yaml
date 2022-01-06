@@ -40,10 +40,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 match_multiviewsimnet_linux_dy_gpu1
 
     kpis: #kpi指标
-      pnr:
+      Acc:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.86015624
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -68,10 +68,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 match_multiviewsimnet_linux_dy_gpu2
 
     kpis: #kpi指标
-      pnr:
+      Acc:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.86015624
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -131,8 +131,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       pnr:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.86015624
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -159,8 +159,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       pnr:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.86015624
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -190,7 +190,7 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.1000087
         threshold: 0.001
@@ -257,7 +257,7 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.10000869
         threshold: 0.001
@@ -419,9 +419,9 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1 match_multiviewsimnet_infer_linux_dy_gpu1
 
     kpis: #kpi指标
-      pnr:
+      PNR:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.806
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -446,9 +446,9 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh linux_dy_gpu2 match_multiviewsimnet_infer_linux_dy_gpu2
     kpis: #kpi指标
-      pnr:
+      PNR:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.806
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -551,7 +551,7 @@ INFER:
     kpis: #kpi指标
       query_pt_sim:
         latest: True
-        kpi_base: 0.2187728
+        kpi_base: [0.21877281]
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -604,7 +604,7 @@ INFER:
     kpis: #kpi指标
       query_pt_sim:
         latest: True
-        kpi_base: 0.21680668
+        kpi_base: [0.21680667]
         threshold: 0.001
         actived: True
         evaluation: "+"
