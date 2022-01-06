@@ -92,8 +92,8 @@ python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
    -i https://mirror.baidu.com/pypi/simple
-python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
-   -i https://mirror.baidu.com/pypi/simple
+# python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
+#    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
 
