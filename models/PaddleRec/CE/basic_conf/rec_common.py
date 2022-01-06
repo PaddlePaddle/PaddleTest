@@ -10,7 +10,7 @@
 Creators: paddlepaddle-qa
 Date:    2021/02/17 14:33:27
 """
-
+# 本文件后续将废弃
 import os
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
