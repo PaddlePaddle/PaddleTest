@@ -1,10 +1,12 @@
 #!/bin/bash
 
+root_dir=$PWD
 cases=`find . -name "*.py" | sort`
-ignore=""
+ignore="ce_win.py"
 bug=0
 
-echo "" >  result.txt
+echo "" >  ${root_dir}/result.txt
+echo "========= bug file list =========" > ${root_dir}/result.txt
 for file in ${cases}
 do
 file_name=`basename $file`
@@ -17,12 +19,13 @@ echo ${file_name}
         cd ${file_dir}
         python ${file_name} --alluredir=report
         if [ $? -ne 0 ]; then
-            echo ${file} >> result.txt
+            echo ${file_name} >> ${root_dir}/result.txt
             bug=`expr ${bug} + 1`
         fi
         cd -
     fi
+echo ============================= ${file_name}  end! =============================
 done
-echo "total bugs: "${bug} >> result.txt
-cat result.txt
+echo "total bugs: "${bug} >> ${root_dir}/result.txt
+cat ${root_dir}/result.txt
 exit ${bug}

@@ -107,9 +107,9 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 10.95292
-        threshold: 0.00001
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
@@ -129,19 +129,12 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/Inception/GoogLeNet.yaml train_mac_cpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 9.89023
-        threshold: 0.00001
+        kpi_base: 0.0
+        threshold: 0.0
         actived: True
-        evaluation: "-"
-        unit_repr: None
-      train_eval:
-        latest: True
-        kpi_base: 7.59464
-        threshold: 0.00001
-        actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/GoogLeNet_cpu.log
 
@@ -159,9 +152,9 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 11.1699
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/GoogLeNet_eval.log
   -
@@ -192,12 +185,12 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/Inception/GoogLeNet.yaml eval_mac
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 7.59464
-        threshold: 0.00001
+        kpi_base: 0.0
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/GoogLeNet_eval.log
 

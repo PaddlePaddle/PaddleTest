@@ -1,5 +1,5 @@
 MODEL: "SQuAD" # 模型名
-PRIORITY: P0_hang
+PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -13,7 +13,7 @@ VARIABLES:
   model_log_path: log/SQuAD/
 
 EXEC:
-  exec_cases: [DATA_PROC,TRAIN]
+  exec_cases: [DATA_PROC, TRAIN]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
@@ -34,7 +34,7 @@ DATA_PROC:
         path: $ROOT_PATH/scripts
         cmd: compile_package.bat
 
-TRAIN: # 训练步骤
+TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu1
@@ -59,8 +59,8 @@ TRAIN: # 训练步骤
       #   unit_repr: "s"
       f1:
         latest: True
-        kpi_base: 15.69993
-        threshold: 0.05
+        kpi_base: 14.81597
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"

@@ -111,8 +111,6 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed  --upgrade pip \
    -i https://mirror.baidu.com/pypi/simple
-python -m pip install -r requirements.txt  \
-   -i https://mirror.baidu.com/pypi/simple
 echo "######  install ppgan "
 python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
 python -m pip install  ppgan \
@@ -124,6 +122,9 @@ python -m pip install  dlib \
 # python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
 python -c 'import dlib'
+python -m pip install -r requirements.txt  \
+   -i https://mirror.baidu.com/pypi/simple
+
 echo "######  install done "
 
 

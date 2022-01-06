@@ -31,9 +31,9 @@ mklink /j data %data_path%\PaddleGAN
 
 
 rem dependency
-python -m pip install -r requirements.txt
 python -m pip install -v -e .
 python -m pip install dlib
+python -m pip install -r requirements.txt
 python -m pip list
 
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
