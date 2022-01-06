@@ -29,6 +29,11 @@ unset http_proxy
 unset https_proxy
 python -m pip uninstall paddlepaddle-gpu -y
 python -m pip install $4 #paddle_compile
+num=`python -m pip list | grep paddlepaddle | wc -l`
+if [ "${num}" -eq "0" ]; then
+   wget https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxCentos_Gcc82_Cuda10.2_Trton_Py37_Compile_D_Develop/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+   python -m pip install paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+fi
 echo "######  ----paddle version-----"
 python -c "import paddle; print(paddle.version.commit)";
 
@@ -45,7 +50,7 @@ fi
 unset http_proxy
 unset https_proxy
 python -m pip install --ignore-installed --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install --ignore-installed --retries 50 -r requirements.txt -i https://mirror.baidu.com/pypi/simple
+python -m pip install --ignore-installed --retries 50 -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # dir
 log_path=log

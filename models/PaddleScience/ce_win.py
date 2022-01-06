@@ -38,6 +38,7 @@ for dir, file in file_dir:
     if os.system(sys.argv[1] + " " + file):
         bug += 1
         bug_list.append(file)
+    os.system("echo ============ %s end! ============" % file)
     os.chdir(pwd)
 
 

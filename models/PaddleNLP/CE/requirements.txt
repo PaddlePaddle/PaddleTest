@@ -20,7 +20,6 @@ sklearn
 paddleslim
 visualdl
 pyrouge
-nltk
 chardet
 tqdm
 beautifulsoup4

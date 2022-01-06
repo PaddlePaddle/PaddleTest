@@ -261,7 +261,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    echo "######  params_dir"
    echo $params_dir
 
-   if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]];then
+   if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]];then
       echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
       echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
    else
@@ -271,7 +271,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    fi
 
    if [[ ${line} =~ "fp16.yaml" ]]; then
-      break
+      continue
    fi
 
    #单卡
@@ -309,7 +309,10 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       fi
    fi
 
-   if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]] || [[ ${line} =~ 'ResNet152' ]] || [[ ${line} =~ 'DLA169' ]];then
+   if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]] \
+      || [[ ${line} =~ 'ResNet152' ]] || [[ ${line} =~ 'DLA169' ]] || [[ ${line} =~ 'ResNeSt101' ]] \
+      || [[ ${line} =~ 'ResNeXt152_vd_64x4d' ]] || [[ ${line} =~ 'ResNeXt152_64x4d' ]] || [[ ${line} =~ 'ResNet101' ]] \
+      || [[ ${line} =~ 'ResNet200_vd' ]] ;then
       echo "######  use pretrain model"
       echo ${model}
       wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${model}_pretrained.pdparams --no-proxy
@@ -576,6 +579,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     fi
     echo $model
 
+    sleep 3
+
     if [[ ${line} =~ 'Aliproduct' ]]; then
          python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
@@ -624,6 +629,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
         cat $log_path/train/${category}_${model}.log
         echo -e "\033[31m training of ${category}_${model} failed!\033[0m"|tee -a $log_path/result.log
     fi
+
+    sleep 3
 
     # eval
     python tools/eval.py -c $line \

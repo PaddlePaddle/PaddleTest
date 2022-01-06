@@ -359,8 +359,8 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.663830
-        threshold: 0.05
+        kpi_base: 1.768226
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"

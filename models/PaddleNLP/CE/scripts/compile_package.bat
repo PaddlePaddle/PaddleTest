@@ -1,9 +1,8 @@
 @echo off
 cd ..
-
+python -m pip uninstall Pillow
+python -m pip install Pillow==8.4.0
 cd models_repo
-
-del /s /q  C:\Python39\Lib\site-packages\~umpy-1.21.5.dist-info
 
 python setup.py bdist_wheel
 
