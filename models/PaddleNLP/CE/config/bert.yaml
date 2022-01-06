@@ -462,10 +462,10 @@ FINETUNE:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.888690
-        threshold: 0.1
+        kpi_base: 0.88869
+        threshold: 0.5
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/finetune_win_$XPU.log
 
