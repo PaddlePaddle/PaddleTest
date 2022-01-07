@@ -6,10 +6,9 @@ set logpath=%cd%\log\few_shot_efl
 cd models_repo\examples\few_shot\efl\
 
 md python_output\%3
-
-python export_model.py --params_path=./checkpoints/%3/model_%4/model_state.pdparams --output_path=./python_output/%3
-
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
+set PYTHONIOENCODING=utf-8
+python export_model.py --params_path=./checkpoints/%3/model_%4/model_state.pdparams --output_path=./python_output/%3
 
 %sed% -i '1 i\# -*- coding: utf-8 -*- ' deploy/python/predict.py
 
