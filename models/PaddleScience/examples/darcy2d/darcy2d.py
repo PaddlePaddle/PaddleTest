@@ -86,6 +86,6 @@ root_square_error = np.linalg.norm(diff, ord=2)
 mean_square_error = root_square_error * root_square_error / geo.get_domain_size()
 print("mean_sqeare_error: ", mean_square_error)
 
-assert mean_square_error < 0.00085, (
+assert mean_square_error < 0.01, (
     "The accuracy of mean_square_error is not enough;" "\n mean_square_error: %f" % mean_square_error
 )

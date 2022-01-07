@@ -40,23 +40,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 recall_mind_linux_dy_gpu1
 
     kpis: #kpi指标
-      recall:
+      loss:
         latest: True
-        kpi_base: 0.0843
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.1328
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      hr:
-        latest: True
-        kpi_base: 0.1722
+        kpi_base: 7.4619083
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -82,23 +68,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 recall_mind_linux_dy_gpu2
 
     kpis: #kpi指标
-      recall:
+      loss:
         latest: True
-        kpi_base: 0.0843
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.1328
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      hr:
-        latest: True
-        kpi_base: 0.1722
+        kpi_base: 7.4619083
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -150,23 +122,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 recall_mind_linux_st_gpu1
 
     kpis: #kpi指标
-      recall:
+      Loss:
         latest: True
-        kpi_base: 0.0843
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.1328
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      hr:
-        latest: True
-        kpi_base: 0.1722
+        kpi_base: 7.4619083
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -192,23 +150,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 recall_mind_linux_st_gpu2
 
     kpis: #kpi指标
-      recall:
+      Loss:
         latest: True
-        kpi_base: 0.0843
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.1328
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      hr:
-        latest: True
-        kpi_base: 0.1722
+        kpi_base: 7.4619083
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -411,23 +355,9 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1 recall_mind_infer_linux_dy_gpu1
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
-        kpi_base: 0.0843
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.1328
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      hr:
-        latest: True
-        kpi_base: 0.1722
+        kpi_base: 0.02707
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -452,23 +382,9 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh linux_dy_gpu2 recall_mind_infer_linux_dy_gpu2
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
-        kpi_base: 0.0843
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.1328
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      hr:
-        latest: True
-        kpi_base: 0.1722
+        kpi_base: 0.02707
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -516,23 +432,9 @@ INFER:
         cmd: sh infer.sh linux_st_gpu1 recall_mind_infer_linux_st_gpu1
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
-        kpi_base: 0.0843
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.1328
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      hr:
-        latest: True
-        kpi_base: 0.1722
+        kpi_base: 0.02707
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -558,23 +460,9 @@ INFER:
         cmd: sh infer.sh linux_st_gpu2 recall_mind_infer_linux_st_gpu2
 
     kpis: #kpi指标
-      recall:
+      recall@50:
         latest: True
-        kpi_base: 0.0843
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.1328
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      hr:
-        latest: True
-        kpi_base: 0.1722
+        kpi_base: 0.02707
         threshold: 0.02
         actived: True
         evaluation: "+"

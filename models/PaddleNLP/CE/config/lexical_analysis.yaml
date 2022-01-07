@@ -139,8 +139,8 @@ TRAIN: # 训练步骤
         unit_repr: None
       recall:
         latest: True
-        kpi_base: 0.26255
-        threshold: 0.05
+        kpi_base: 0.247446
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -315,8 +315,8 @@ EVAL:
         unit_repr: None
       recall:
         latest: True
-        kpi_base: 0.26255
-        threshold: 0.05
+        kpi_base: 0.247446
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
