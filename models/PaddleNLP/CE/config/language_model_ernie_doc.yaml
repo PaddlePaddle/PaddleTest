@@ -92,8 +92,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.67503
-        threshold: 0.08
+        kpi_base: 0.83216
+        threshold: 0.5
         actived: True
         evaluation: "-"
         unit_repr: "s"
