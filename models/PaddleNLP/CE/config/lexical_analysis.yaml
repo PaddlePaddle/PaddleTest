@@ -356,8 +356,8 @@ EVAL:
     kpis: #kpi指标
       precision:
         latest: True
-        kpi_base: 0.202226
-        threshold: 0.08
+        kpi_base: 0.184215
+        threshold: 0.1
         actived: True
         evaluation: "+"
         unit_repr: "s"
