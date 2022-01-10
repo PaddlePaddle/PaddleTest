@@ -56,12 +56,12 @@ main(){
             ;;
         (seg)
             excption=0
-#            rm -rf SegForONNX
-#            git clone -b ${branch} https://github.com/PaddlePaddle/PaddleSeg.git SegForONNX
-#            $py_cmd -m pip install -r SegForONNX/requirements.txt
-#            cd SegForONNX
-#            $py_cmd setup.py install
-#            cd -
+            rm -rf SegForONNX
+            git clone -b ${branch} https://github.com/PaddlePaddle/PaddleSeg.git SegForONNX
+            $py_cmd -m pip install -r SegForONNX/requirements.txt
+            cd SegForONNX
+            $py_cmd setup.py install
+            cd -
             rm -rf models && rm -rf seg_data && rm -rf log
             wget https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/seg_data/seg_data.tar && tar -xf seg_data.tar && rm -rf seg_data.tar
             #cd SegForONNX
