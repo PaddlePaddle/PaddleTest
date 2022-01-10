@@ -131,7 +131,7 @@ main(){
                 echo ${model_name}/${argmax_opt} export to onnx Success!!! >> log/whole_test.log
                 fi
 #                #push test_data into infer model and get output
-#                $py_cmd infer_for_onnx_clas.py \
+#                $py_cmd infer_for_onnx.py \
 #                     --config models/${model_name}/${argmax_opt}/infer_model/*.yaml \
 #                     --image_path seg_data \
 #                     --save_dir models/${model_name}/${argmax_opt}/infer_output_image \
