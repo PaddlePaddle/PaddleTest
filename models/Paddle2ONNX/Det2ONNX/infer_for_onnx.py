@@ -153,7 +153,7 @@ class Detector(object):
         if add_timer:
             self.det_times.preprocess_time_s.start()
         inputs = self.preprocess(image_list)
-        print("input_tensor is: ", inputs)
+        print("inputs is: ", inputs)
         np.save(os.path.join(FLAGS.input_np, "input_" + str(img_idx)), inputs["image"])
         np.save(os.path.join(FLAGS.input_np, "im_shape_" + str(img_idx)), inputs["im_shape"])
         np.save(os.path.join(FLAGS.input_np, "scale_factor_" + str(img_idx)), inputs["scale_factor"])
@@ -347,7 +347,7 @@ class DetectorPicoDet(Detector):
         self.det_times = Timer()
         self.cpu_mem, self.gpu_mem, self.gpu_util = 0, 0, 0
 
-    def predict(self, image, threshold=0.5, repeats=1, add_timer=True):
+    def predict(self, image, threshold=0.5, repeats=1, add_timer=True, img_idx=0):
         """
         Args:
             image (str/np.ndarray): path of image/ np.ndarray read by cv2
@@ -362,6 +362,10 @@ class DetectorPicoDet(Detector):
         if add_timer:
             self.det_times.preprocess_time_s.start()
         inputs = self.preprocess(image)
+        print("inputs is: ", inputs)
+        np.save(os.path.join(FLAGS.input_np, "input_" + str(img_idx)), inputs["image"])
+        np.save(os.path.join(FLAGS.input_np, "im_shape_" + str(img_idx)), inputs["im_shape"])
+        np.save(os.path.join(FLAGS.input_np, "scale_factor_" + str(img_idx)), inputs["scale_factor"])
         input_names = self.predictor.get_input_names()
         for i, value in enumerate(input_names):
             input_tensor = self.predictor.get_input_handle(input_names[i])
@@ -398,6 +402,7 @@ class DetectorPicoDet(Detector):
         np_boxes, np_boxes_num = self.postprocess(np_score_list, np_boxes_list)
         if add_timer:
             self.det_times.postprocess_time_s.end()
+        print(dict(boxes=np_boxes, boxes_num=np_boxes_num))
         return dict(boxes=np_boxes, boxes_num=np_boxes_num)
 
 

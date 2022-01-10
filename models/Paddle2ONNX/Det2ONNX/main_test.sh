@@ -62,7 +62,10 @@ main(){
             cd DetForONNX
             $py_cmd setup.py install
             cd -
+            rm -rf DetForONNX/deploy/python/infer_for_onnx.py
+            rm -rf DetForONNX/deploy/python/key_infer_for_onnx.py
             cp -r infer_for_onnx.py DetForONNX/deploy/python
+            cp -r key_infer_for_onnx.py DetForONNX/deploy/python
             rm -rf DetForONNX/deploy/python/utils.py && cp -r utils_for_onnx.py DetForONNX/deploy/python/utils.py
             rm -rf models && rm -rf det_data && rm -rf log
             wget https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/det_data/det_data.tar && tar -xf det_data.tar && rm -rf det_data.tar
@@ -83,6 +86,7 @@ main(){
                 atol=`use_key_get_value atol ${model_txt}`
                 rtol=`use_key_get_value rtol ${model_txt}`
                 diff_per=`use_key_get_value diff_per ${model_txt}`
+                model_type=`use_key_get_value model_type ${model_txt}`
                 #download pretrained model and test data
                 wget -P models/${model_name}/pretrain_model ${premodel_link} > download_data.log 2>&1
                 mv models/${model_name}/pretrain_model/*.pdparams models/${model_name}/pretrain_model/model.pdparams
@@ -122,7 +126,12 @@ main(){
                 else
                 use_device=CPU
                 fi
-                $py_cmd DetForONNX/deploy/python/infer_for_onnx.py \
+                if [ ${model_type} == 'KeyPoint' ]; then
+                infer_script=key_infer_for_onnx.py
+                else
+                infer_script=infer_for_onnx.py
+                fi
+                $py_cmd DetForONNX/deploy/python/${infer_script} \
                      --model_dir=./models/${model_name}/infer_model/${model_name} \
                      --image_dir=./det_data \
                      --output_dir=./models/${model_name}/infer_output_image \
