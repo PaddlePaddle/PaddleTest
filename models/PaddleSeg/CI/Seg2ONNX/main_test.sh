@@ -56,12 +56,12 @@ main(){
             ;;
         (seg)
             excption=0
-#            rm -rf SegForONNX
-#            git clone -b ${branch} https://github.com/PaddlePaddle/PaddleSeg.git SegForONNX
-#            $py_cmd -m pip install -r SegForONNX/requirements.txt
-#            cd SegForONNX
-#            $py_cmd setup.py install
-#            cd -
+            rm -rf SegForONNX
+            git clone -b ${branch} https://github.com/PaddlePaddle/PaddleSeg.git SegForONNX
+            $py_cmd -m pip install -r SegForONNX/requirements.txt
+            cd SegForONNX
+            $py_cmd setup.py install
+            cd -
             rm -rf models && rm -rf seg_data && rm -rf log
             wget https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/seg_data/seg_data.tar && tar -xf seg_data.tar && rm -rf seg_data.tar
             #cd SegForONNX
@@ -131,7 +131,7 @@ main(){
                 echo ${model_name}/${argmax_opt} export to onnx Success!!! >> log/whole_test.log
                 fi
 #                #push test_data into infer model and get output
-#                $py_cmd infer_for_onnx.py \
+#                $py_cmd infer_for_onnx_clas.py \
 #                     --config models/${model_name}/${argmax_opt}/infer_model/*.yaml \
 #                     --image_path seg_data \
 #                     --save_dir models/${model_name}/${argmax_opt}/infer_output_image \
