@@ -50,7 +50,8 @@ fi
 unset http_proxy
 unset https_proxy
 python -m pip install --ignore-installed --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install --ignore-installed --retries 50 -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install --ignore-installed -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # dir
 log_path=log
