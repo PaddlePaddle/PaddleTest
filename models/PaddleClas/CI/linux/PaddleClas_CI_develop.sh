@@ -7,6 +7,7 @@ echo ${Project_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1
+export FLAGS_use_stream_safe_cuda_allocator=1
 
 echo "path before"
 pwd
@@ -16,6 +17,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
    pwd
    export FLAGS_cudnn_deterministic=True
    unset FLAGS_use_virtual_memory_auto_growth
+   unset FLAGS_use_stream_safe_cuda_allocator
 fi
 
 
@@ -103,9 +105,6 @@ rm -rf models_list_run
 rm -rf models_list_all
 rm -rf models_list_rec
 
-if [ -d "log" ]; then
-   rm -rf log
-fi
 # dir
 log_path=log
 phases='train eval infer export_model model_clip predict'
@@ -123,7 +122,7 @@ done
 if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'CI_step0' ]] \
    || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
    find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; \
-      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' |grep -v 'distill' |grep -v 'ResNeXt101_32x48d_wsl'\
+      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' |grep -v 'distill' |grep -v 'ResNeXt101_32x48d_wsl' |grep -v 'ResNeSt101' \
       > models_list_all #ResNeXt101_32x48d_wsl OOM   fp16 seresnet存在问题
 
    if [[ ${model_flag} =~ 'CI_step0' ]]; then
@@ -596,7 +595,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.epochs=1 \
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
-            -o DataLoader.Train.sampler.batch_size=64 \
+            -o DataLoader.Train.sampler.batch_size=32 \
             -o DataLoader.Train.dataset.image_root=./dataset/Aliproduct/ \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt \
             -o Global.output_dir="./output/"${category}_${model} \
