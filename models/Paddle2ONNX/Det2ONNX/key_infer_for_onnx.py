@@ -31,7 +31,7 @@ from keypoint_postprocess import HrHRNetPostProcess, HRNetPostProcess
 from visualize import draw_pose
 from paddle.inference import Config
 from paddle.inference import create_predictor
-from utils import argsparser, Timer, get_current_memory_mb
+from utils import argsparser, Timer
 from benchmark_utils import PaddleInferBenchmark
 from infer import Detector, get_test_images, print_arguments
 
@@ -279,11 +279,11 @@ def predict_image(detector, image_list):
             detector.predict([img_file], FLAGS.threshold, repeats=10, add_timer=False)
             # run benchmark
             detector.predict([img_file], FLAGS.threshold, repeats=10, add_timer=True)
-            cm, gm, gu = get_current_memory_mb()
-            detector.cpu_mem += cm
-            detector.gpu_mem += gm
-            detector.gpu_util += gu
-            print("Test iter {}, file name:{}".format(i, img_file))
+            # cm, gm, gu = get_current_memory_mb()
+            # detector.cpu_mem += cm
+            # detector.gpu_mem += gm
+            # detector.gpu_util += gu
+            # print("Test iter {}, file name:{}".format(i, img_file))
         else:
             results = detector.predict([img_file], FLAGS.threshold)
             if not os.path.exists(FLAGS.output_dir):
