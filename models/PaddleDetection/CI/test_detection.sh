@@ -313,6 +313,8 @@ if [[ -n `echo "${model_s2anet}" | grep -w "${model}"` ]];then
     image=demo/P0072__1.0__0___0.png
 elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
     image=demo/hrnet_demo.jpg
+else
+    image=demo/000000570688.jpg
 fi
 config=`cat model_list_ci | grep ${model}`
 cd log && mkdir ${model} && cd ..
