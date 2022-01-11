@@ -26,7 +26,7 @@ DATA_PROC:
         cmd: bash data_proc.sh
 
   -
-    priority: p2
+    priority: p1
     tag: win_download_data
     run:
       -
@@ -74,7 +74,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
@@ -117,7 +117,7 @@ INFER:
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
@@ -160,7 +160,7 @@ EVAL:
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/eval_$XPU.log
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
