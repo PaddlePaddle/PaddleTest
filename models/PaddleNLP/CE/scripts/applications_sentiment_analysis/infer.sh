@@ -38,5 +38,3 @@ python predict.py \
     --cls_max_seq_len 256 > $log_path/infer_$1.log 2>&1
 
 print_info $? infer_$1
-
-

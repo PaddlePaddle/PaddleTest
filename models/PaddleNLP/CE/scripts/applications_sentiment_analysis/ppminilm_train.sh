@@ -44,5 +44,3 @@ python train.py \
     --checkpoints "../checkpoints/pp_checkpoints/" > $log_path/ppminilm_train_$2_$1.log 2>&1
 
 print_info $? ppminilm_train_$2_$1
-
-

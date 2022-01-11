@@ -27,7 +27,7 @@ cd $code_path
 python  export_model.py \
     --model_type "extraction" \
     --model_path "./checkpoints/ext_checkpoints/best.pdparams" \
-    --save_path "./checkpoints/ext_checkpoints/static/infer" 
+    --save_path "./checkpoints/ext_checkpoints/static/infer"
 python  export_model.py \
     --model_type "classification" \
     --model_path "./checkpoints/cls_checkpoints/best.pdparams" \
@@ -46,5 +46,3 @@ python predict.py \
     --cls_max_seq_len 256 > $log_path/python_infer_$1.log 2>&1
 
 print_info $? python_infer_$1
-
-

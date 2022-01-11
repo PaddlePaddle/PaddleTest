@@ -43,5 +43,3 @@ python train.py \
     --checkpoints "../checkpoints/ext_checkpoints/" > $log_path/extraction_train_$2_$1.log 2>&1
 
 print_info $? extraction_train_$2_$1
-
-

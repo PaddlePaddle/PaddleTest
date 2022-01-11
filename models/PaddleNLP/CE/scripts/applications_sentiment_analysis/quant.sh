@@ -56,5 +56,3 @@ python performance_test.py \
     --eval > $log_path/quant_$1.log 2>&1
 
 print_info $? quant_$1
-
-

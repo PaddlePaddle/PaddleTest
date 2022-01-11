@@ -43,5 +43,3 @@ python train.py \
     --checkpoints "../checkpoints/cls_checkpoints" > $log_path/classification_train_$2_$1.log 2>&1
 
 print_info $? classification_train_$2_$1
-
-

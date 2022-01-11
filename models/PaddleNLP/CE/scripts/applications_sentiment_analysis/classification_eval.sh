@@ -33,5 +33,3 @@ python evaluate.py \
     --max_seq_len 256 > $log_path/classification_eval_$1.log 2>&1
 
 print_info $? classification_eval_$1
-
-
