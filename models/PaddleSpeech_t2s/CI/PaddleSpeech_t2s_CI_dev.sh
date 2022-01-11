@@ -98,7 +98,7 @@ if [ ! -f "pwg_baker_ckpt_0.4.zip" ]; then
 fi
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 ckpt_name=snapshot_iter_76.pdz
-sed -i "s#test-metadata=dump/test/norm/metadata.jsonl#test-metadata=./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
+sed -i "s#test_metadata=dump/test/norm/metadata.jsonl#test_metadata=./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/fastspeech2.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m synthesize of fastspeech2_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
