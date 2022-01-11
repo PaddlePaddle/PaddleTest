@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-python -m pip install pip==20.2.4 --ignore-installed;
+python -m pip install --upgrade pip
 pip install Cython --ignore-installed;
 pip install -r requirements.txt --ignore-installed;
 pip install cython_bbox --ignore-installed;
@@ -22,10 +22,6 @@ if [ -d "log_err" ];then rm -rf log_err
 fi
 mkdir log_err
 
-#compile op
-cd ppdet/ext_op
-python setup.py install
-cd ../..
 # prepare dynamic data
 sed -i "" "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 # modify dynamic_train_iter
@@ -191,4 +187,6 @@ fi
 done
 if [ "${err_sign}" = true ];then
     exit 1
+else
+    exit 0
 fi
