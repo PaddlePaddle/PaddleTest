@@ -33,7 +33,7 @@ fi
 #访问RD程序
 cd $code_path
 
-python export_model.py --params_path ./checkpoints/$3/single/model_1000/model_state.pdparams --output_path=./output_$3
+python export_model.py --params_path ./checkpoints/$3/single/model_80/model_state.pdparams --output_path=./output_$3
 python deploy/python/predict.py --model_dir ./output_$3 --device $1 > $log_path/python_infer_$3_$1.log 2>&1
 
 print_info $? python_infer_$3_$1

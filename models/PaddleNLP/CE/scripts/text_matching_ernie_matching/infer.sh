@@ -37,7 +37,7 @@ if [[ $3 == "point-wise" ]]; then
     python -u -m paddle.distributed.launch --gpus $2 \
         predict_pointwise.py \
         --device $1 \
-        --params_path "./checkpoints/$3/single/model_1000/model_state.pdparams"\
+        --params_path "./checkpoints/$3/single/model_80/model_state.pdparams"\
         --batch_size 128 \
         --max_seq_length 64 \
         --input_file 'test.tsv' >$log_path/infer_$3_$1.log 2>&1
@@ -48,7 +48,7 @@ else
     python -u -m paddle.distributed.launch --gpus $2 \
         predict_pairwise.py \
         --device $1 \
-        --params_path "./checkpoints/$3/single/model_1000/model_state.pdparams"\
+        --params_path "./checkpoints/$3/single/model_80/model_state.pdparams"\
         --batch_size 128 \
         --max_seq_length 64 \
         --input_file 'test.tsv' >$log_path/infer_$3_$1.log 2>&1
