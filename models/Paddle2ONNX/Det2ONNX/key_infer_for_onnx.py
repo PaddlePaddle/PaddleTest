@@ -26,7 +26,7 @@ from keypoint_postprocess import HrHRNetPostProcess, HRNetPostProcess
 from visualize import draw_pose
 from utils import argsparser, Timer
 from benchmark_utils import PaddleInferBenchmark
-from infer import Detector, get_test_images, print_arguments
+from infer_for_onnx import Detector, get_test_images, print_arguments
 
 # Global dictionary
 KEYPOINT_SUPPORT_MODELS = {"HigherHRNet": "keypoint_bottomup", "HRNet": "keypoint_topdown"}
