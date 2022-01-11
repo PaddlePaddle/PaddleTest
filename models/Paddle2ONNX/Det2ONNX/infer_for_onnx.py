@@ -1,4 +1,4 @@
-# Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
+# Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ from benchmark_utils import PaddleInferBenchmark
 from picodet_postprocess import PicoDetPostProcess
 from preprocess import preprocess, Resize, NormalizeImage, Permute, PadStride, LetterBoxResize, WarpAffine
 from visualize import visualize_box_mask
-from utils import argsparser, Timer, get_current_memory_mb
+from utils import argsparser, Timer
 
 # Global dictionary
 SUPPORT_MODELS = {
@@ -667,11 +667,11 @@ def predict_image(detector, image_list, batch_size=1):
             # run benchmark
             detector.predict(batch_image_list, FLAGS.threshold, repeats=10, add_timer=True)
 
-            cm, gm, gu = get_current_memory_mb()
-            detector.cpu_mem += cm
-            detector.gpu_mem += gm
-            detector.gpu_util += gu
-            print("Test iter {}".format(i))
+            # cm, gm, gu = get_current_memory_mb()
+            # detector.cpu_mem += cm
+            # detector.gpu_mem += gm
+            # detector.gpu_util += gu
+            # print("Test iter {}".format(i))
         else:
             results = detector.predict(batch_image_list, FLAGS.threshold, img_idx=i)
             visualize(
