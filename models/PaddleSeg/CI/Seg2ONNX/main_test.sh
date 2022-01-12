@@ -62,7 +62,7 @@ main(){
 #            cd SegForONNX
 #            $py_cmd setup.py install
 #            cd -
-            rm -rf models && rm -rf seg_data && rm -rf log
+            rm -rf models && rm -rf seg_data && rm -rf onnx_log
             wget https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/seg_data/seg_data.tar && tar -xf seg_data.tar && rm -rf seg_data.tar
             #cd SegForONNX
             argmax_situation="with_argmax"
@@ -76,7 +76,7 @@ main(){
                 mkdir -p models/${model_name}/${argmax_opt}/pretrain_model && mkdir -p models/${model_name}/${argmax_opt}/infer_model && mkdir -p models/${model_name}/${argmax_opt}/onnx_model
                 mkdir -p models/${model_name}/${argmax_opt}/test_data && mkdir -p models/${model_name}/${argmax_opt}/input_np
                 mkdir -p models/${model_name}/${argmax_opt}/infer_output_np && mkdir -p models/${model_name}/${argmax_opt}/onnx_output_np
-                mkdir -p log/${model_name}/${argmax_opt}
+                mkdir -p onnx_log/${model_name}/${argmax_opt}
 
                 yaml_path=`use_key_get_value yaml ${model_txt}`
                 premodel_link=`use_key_get_value pretrain_link ${model_txt}`
@@ -93,21 +93,21 @@ main(){
                 wget -P models/${model_name}/${argmax_opt}/pretrain_model ${premodel_link} > download_data.log 2>&1
                 echo ++++++++++++++++++++++${model_name} ${argmax_opt} from pretrained model export infer model!!!++++++++++++++++++++++
                 if [ ${argmax_opt} == 'with_argmax' ]; then
-                $py_cmd SegForONNX/export.py \
+                $py_cmd export.py \
                      --config ${yaml_path} \
                      --model_path models/${model_name}/${argmax_opt}/pretrain_model/model.pdparams \
-                     --save_dir models/${model_name}/${argmax_opt}/infer_model >> log/${model_name}/${argmax_opt}/export.log 2>&1
+                     --save_dir models/${model_name}/${argmax_opt}/infer_model >> onnx_log/${model_name}/${argmax_opt}/export.log 2>&1
                 else
-                $py_cmd SegForONNX/export.py \
+                $py_cmd export.py \
                      --config ${yaml_path} \
                      --model_path models/${model_name}/${argmax_opt}/pretrain_model/model.pdparams \
                      --save_dir models/${model_name}/${argmax_opt}/infer_model \
-                     --without_argmax >> log/${model_name}/${argmax_opt}/export.log 2>&1
+                     --without_argmax >> onnx_log/${model_name}/${argmax_opt}/export.log 2>&1
                 fi
                 if [ $? -ne 0 ];then
                 echo ++++++++++++++++++++++${model_name} ${argmax_opt} export Failed!!!++++++++++++++++++++++
-                echo ${model_name}/${argmax_opt} export Failed!!! >> log/whole_test.log
-                cat log/${model_name}/${argmax_opt}/export.log
+                echo ${model_name}/${argmax_opt} export Failed!!! >> onnx_log/whole_test.log
+                cat onnx_log/${model_name}/${argmax_opt}/export.log
                 excption=$(expr ${excption} + 1)
                 continue
                 else
@@ -119,16 +119,16 @@ main(){
                      --model_filename model.pdmodel \
                      --params_filename model.pdiparams \
                      --opset_version ${opt_ver} \
-                     --save_file models/${model_name}/${argmax_opt}/onnx_model/model.onnx >> log/${model_name}/${argmax_opt}/to_onnx.log 2>&1
+                     --save_file models/${model_name}/${argmax_opt}/onnx_model/model.onnx >> onnx_log/${model_name}/${argmax_opt}/to_onnx.log 2>&1
                 if [ $? -ne 0 ];then
                 echo ++++++++++++++++++++++${model_name} ${argmax_opt} to_onnx Failed!!!++++++++++++++++++++++
-                echo ${model_name}/${argmax_opt} to_onnx Failed!!! >> log/whole_test.log
-                cat log/${model_name}/${argmax_opt}/to_onnx.log
+                echo ${model_name}/${argmax_opt} to_onnx Failed!!! >> onnx_log/whole_test.log
+                cat onnx_log/${model_name}/${argmax_opt}/to_onnx.log
                 excption=$(expr ${excption} + 1)
                 continue
                 else
                 echo ++++++++++++++++++++++${model_name} ${argmax_opt} to_onnx Success!!!++++++++++++++++++++++
-                echo ${model_name}/${argmax_opt} export to onnx Success!!! >> log/whole_test.log
+                echo ${model_name}/${argmax_opt} export to onnx Success!!! >> onnx_log/whole_test.log
                 fi
 #                #push test_data into infer model and get output
 #                $py_cmd infer_for_onnx.py \
@@ -185,7 +185,7 @@ main(){
             echo "================================== final-results =================================="
             all_error=${excption}
             #echo ${exit_code}
-            cat log/whole_test.log
+            cat onnx_log/whole_test.log
             exit ${all_error}
             ;;
         (*)
