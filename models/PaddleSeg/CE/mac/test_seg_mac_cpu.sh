@@ -25,6 +25,7 @@ print_result(){
             mkdir ${model}
         fi
         cd ../${model_type_path}
+        cat ${log_dir}/log/${model}/${model}_${mode}.log
         mv ${log_dir}/log/${model}/${model}_${mode}.log ${log_dir}/log_err/${model}/
         err_sign=true
         #exit 1
