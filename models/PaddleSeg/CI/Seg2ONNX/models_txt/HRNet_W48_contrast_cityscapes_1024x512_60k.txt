@@ -1,5 +1,5 @@
 model_name::HRNet_W48
-yaml::SegForONNX/configs/hrnet_w48_contrast/HRNet_W48_contrast_cityscapes_1024x512_60k.yml
+yaml::configs/hrnet_w48_contrast/HRNet_W48_contrast_cityscapes_1024x512_60k.yml
 pretrain_link::https://bj.bcebos.com/paddleseg/dygraph/cityscapes/HRNet_W48_contrast_cityscapes_1024x512_60k/model.pdparams
 test_data::https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/seg_data/seg_data.tar
 opt_ver::11

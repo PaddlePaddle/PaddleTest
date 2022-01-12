@@ -63,7 +63,7 @@ main(){
 #            $py_cmd setup.py install
 #            cd -
             rm -rf models && rm -rf seg_data && rm -rf onnx_log
-            wget https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/seg_data/seg_data.tar && tar -xf seg_data.tar && rm -rf seg_data.tar
+#            wget https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/seg_data/seg_data.tar && tar -xf seg_data.tar && rm -rf seg_data.tar
             #cd SegForONNX
             argmax_situation="with_argmax"
             for model_txt in ./models_txt/*
