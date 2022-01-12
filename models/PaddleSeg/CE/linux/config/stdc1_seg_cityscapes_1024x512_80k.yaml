@@ -1,16 +1,18 @@
-MODEL: "hardnet_cityscapes_1024x1024_160k" # 模型名
-PRIORITY: P2
+MODEL: "stdc1_seg_cityscapes_1024x512_80k" # 模型名
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleSeg
   path: $ROOT_PATH/PaddleSeg
   branch: $BASE_BRANCH
 
 ENV:
+  http_proxy: $HTTP_PROXY
+  https_proxy: $HTTPS_PROXY
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: ./scripts/hardnet_cityscapes_1024x1024_160k/ #脚本的路径
-  model_log_path: log/hardnet_cityscapes_1024x1024_160k
+  model_scripts_path: ./scripts/stdc1_seg_cityscapes_1024x512_80k/ #脚本的路径
+  model_log_path: log/stdc1_seg_cityscapes_1024x512_80k
 
 EXEC:
   exec_cases: [TRAIN,EVAL]
@@ -42,14 +44,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.8129
+        kpi_base: 5.6281
         threshold: 0.5
         actived: True
         evaluation: "-"
         unit_repr: None
       ips:
         latest: True
-        kpi_base: 3.8486
+        kpi_base: 3.2966
         threshold: 0.9
         actived: True
         evaluation: "+"
@@ -61,7 +63,7 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/hardnet_cityscapes_1024x1024_160k_train_multi.log
+    output: $ROOT_PATH/$model_log_path/stdc1_seg_cityscapes_1024x512_80k_train_multi.log
 
   -
     priority: p0
@@ -77,14 +79,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.1101
+        kpi_base: 6.1182
         threshold: 0.5
         actived: True
         evaluation: "-"
         unit_repr: None
       ips:
         latest: True
-        kpi_base: 4.2878
+        kpi_base: 3.7457
         threshold: 0.9
         actived: True
         evaluation: "+"
@@ -96,7 +98,7 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/hardnet_cityscapes_1024x1024_160k_train_single.log
+    output: $ROOT_PATH/$model_log_path/stdc1_seg_cityscapes_1024x512_80k_train_single.log
 
 
 EVAL:
@@ -119,7 +121,7 @@ EVAL:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/hardnet_cityscapes_1024x1024_160k_eval_single.log
+    output: $ROOT_PATH/$model_log_path/stdc1_seg_cityscapes_1024x512_80k_eval_single.log
 
   - #可以有多步
     priority: p1
@@ -140,4 +142,4 @@ EVAL:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/hardnet_cityscapes_1024x1024_160k_eval_multi.log
+    output: $ROOT_PATH/$model_log_path/stdc1_seg_cityscapes_1024x512_80k_eval_multi.log
