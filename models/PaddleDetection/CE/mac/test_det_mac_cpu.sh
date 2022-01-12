@@ -41,6 +41,7 @@ print_result(){
             mkdir ${model}
         fi
         cd ../
+        cat log/${model}/${model}_${model_type}_${mode}.log
         mv log/${model}/${model}_${model_type}_${mode}.log log_err/${model}/
         err_sign=true
     else
