@@ -31,5 +31,5 @@ mkdir ppminilm-6l-768h
 sh run_clue.sh ${TASK} ${LR} ${BS} 1 ${MAX_SEQ_LEN} $2 ppminilm-6l-768h > ${log_path}/finetune_${TASK}_${LR}_${BS}_$1.log
 print_info $? finetune_${TASK}_${LR}_${BS}_$1
 #导出模型，失败则覆盖原来的退出码
-python export_model.py --model_type ppminilm --model_path ppminilm-6l-768h/models/${TASK}/${LR}_${BS}  --output_path fine_tuned_infer_model/${TASK}/float 2>&1
+python export_model.py --task_name ${TASK} --output_dir ppminilm-6l-768h/models/${TASK}/${LR}_${BS}
 print_info $? finetune_${TASK}_${LR}_${BS}_$1

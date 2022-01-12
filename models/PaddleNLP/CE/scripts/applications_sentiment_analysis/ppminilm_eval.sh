@@ -6,7 +6,7 @@ echo "$model_name 模型训练阶段"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../applications/sentiment_analysis/pp_minilm/
+code_path=$cur_path/../../models_repo/applications/sentiment_analysis/pp_minilm/
 log_path=$root_path/log/$model_name/
 
 if [ ! -d $log_path ]; then

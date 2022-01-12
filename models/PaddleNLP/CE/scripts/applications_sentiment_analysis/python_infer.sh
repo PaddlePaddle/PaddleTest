@@ -6,7 +6,7 @@ echo "$model_name 模型训练阶段"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../applications/sentiment_analysis/
+code_path=$cur_path/../../models_repo/applications/sentiment_analysis/
 log_path=$root_path/log/$model_name/
 
 if [ ! -d $log_path ]; then
@@ -24,7 +24,7 @@ fi
 
 #访问RD程序
 cd $code_path
-python  export_model.py \
+python export_model.py \
     --model_type "extraction" \
     --model_path "./checkpoints/ext_checkpoints/best.pdparams" \
     --save_path "./checkpoints/ext_checkpoints/static/infer"
