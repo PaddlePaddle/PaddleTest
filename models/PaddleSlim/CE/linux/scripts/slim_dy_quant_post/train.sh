@@ -10,7 +10,7 @@ echo "$model_name 模型train阶段"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../PaddleSlim/demo/quant/quant_post
+code_path=$cur_path/../../PaddleSlim/demo/dygraph/post_quant
 log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #临时环境更改
