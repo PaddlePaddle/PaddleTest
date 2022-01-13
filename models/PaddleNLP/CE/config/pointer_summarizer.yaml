@@ -60,6 +60,7 @@ TRAIN:
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA
       CUDA_LAUNCH_BLOCKING: 1
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
