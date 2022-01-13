@@ -42,7 +42,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3021
+        kpi_base: 0.3111
         threshold: 0.03
         actived: True
         evaluation: "+"
@@ -70,7 +70,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3021
+        kpi_base: 0.3111
         threshold: 0.03
         actived: True
         evaluation: "+"
@@ -95,8 +95,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3021
-        threshold: 0.03
+        kpi_base: 0.53728294
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -122,9 +122,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 recall_ncf_linux_st_gpu1
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
-        kpi_base: 0.3021
+        kpi_base: 0.3082
         threshold: 0.03
         actived: True
         evaluation: "+"
@@ -150,7 +150,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 recall_ncf_linux_st_gpu2
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
         kpi_base: 0.3021
         threshold: 0.03
@@ -176,10 +176,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu recall_ncf_linux_st_cpu
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
-        kpi_base: 0.3021
-        threshold: 0.03
+        kpi_base: 0.53728294
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -249,7 +249,158 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/S_recall_ncf_linux_st_gpu1_con.log
+# mac train(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_dy_cpu recall_ncf_mac_dy_cpu
 
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.5460826
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_mac_dy_cpu.log
+  -
+    tag: mac_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_st_cpu recall_ncf_mac_st_cpu
+
+    kpis: #kpi指标
+      Loss:
+        latest: True
+        kpi_base: 0.5460826
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_mac_st_cpu.log
+# win train(small data)
+  -
+    tag: win_dy_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_gpu recall_ncf_win_dy_gpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.53728294
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_win_dy_gpu.log
+  -
+    tag: win_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_dy_cpu recall_ncf_win_dy_cpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.53728294
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_win_dy_cpu.log
+  -
+    tag: win_st_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_gpu recall_ncf_win_st_gpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.53728294
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_win_st_gpu.log
+  -
+    tag: win_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh win_st_cpu recall_ncf_win_st_cpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.53728294
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -261,16 +412,9 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1 recall_ncf_infer_linux_dy_gpu1
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
-        kpi_base: 0.33
+        kpi_base: 0.24
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -294,16 +438,9 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh linux_dy_gpu2 recall_ncf_infer_linux_dy_gpu2
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
-        kpi_base: 0.33
+        kpi_base: 0.24
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -326,17 +463,10 @@ INFER:
         cmd: sh infer.sh linux_dy_cpu recall_ncf_infer_linux_dy_cpu
 
     kpis: #kpi指标
-      hr:
+      prediction:
         latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.33
-        threshold: 0.02
+        kpi_base: 0.34032416
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -348,7 +478,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_dy_cpu_evaluate.log
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_dy_cpu.log
   - #可以有多步
     tag: linux_st_gpu1
     priority: p0
@@ -358,16 +488,9 @@ INFER:
         cmd: sh infer.sh linux_st_gpu1 recall_ncf_infer_linux_st_gpu1
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
-        kpi_base: 0.33
+        kpi_base: 0.24
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -393,16 +516,9 @@ INFER:
         cmd: sh infer.sh linux_st_gpu2 recall_ncf_infer_linux_st_gpu2
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
-        kpi_base: 0.33
+        kpi_base: 0.24
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -425,17 +541,10 @@ INFER:
         cmd: sh infer.sh linux_st_cpu recall_ncf_infer_linux_st_cpu
 
     kpis: #kpi指标
-      hr:
+      prediction:
         latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
-      ndcg:
-        latest: True
-        kpi_base: 0.33
-        threshold: 0.02
+        kpi_base: [0.34032416]
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -447,7 +556,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_st_cpu_evaluate.log
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_st_cpu.log
 
   -
     tag: linux_dy_gpu1_con
@@ -457,13 +566,6 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1_con recall_ncf_infer_linux_dy_gpu1_con
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
         kpi_base: 0.33
@@ -489,13 +591,6 @@ INFER:
         cmd: sh infer.sh linux_st_gpu1_con recall_ncf_infer_linux_st_gpu1_con
 
     kpis: #kpi指标
-      hr:
-        latest: True
-        kpi_base: 0.58
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       ndcg:
         latest: True
         kpi_base: 0.33
@@ -512,3 +607,155 @@ INFER:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_linux_st_gpu1_con_evaluate.log
+# mac infer(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_dy_cpu recall_ncf_infer_mac_dy_cpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.3516687
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_mac_dy_cpu.log
+  -
+    tag: mac_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_st_cpu recall_ncf_infer_mac_st_cpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: [0.3516687]
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_mac_st_cpu.log
+# win infer(small data)
+  -
+    tag: win_dy_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_gpu recall_ncf_infer_win_dy_gpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.34032416
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_win_dy_gpu.log
+  -
+    tag: win_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_dy_cpu recall_ncf_infer_win_dy_cpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.34032416
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_win_dy_cpu.log
+  -
+    tag: win_st_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_gpu recall_ncf_infer_win_st_gpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.34032416
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_win_st_gpu.log
+  -
+    tag: win_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh win_st_cpu recall_ncf_infer_win_st_cpu
+
+    kpis: #kpi指标
+      prediction:
+        latest: True
+        kpi_base: 0.34032416
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_recall_ncf_infer_win_st_cpu.log

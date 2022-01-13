@@ -25,8 +25,17 @@ esac
 python -c "import sys; print('python version:',sys.version_info[:])";
 
 echo "######  ----install  paddle-----"
+unset http_proxy
+unset https_proxy
 python -m pip uninstall paddlepaddle-gpu -y
 python -m pip install $4 #paddle_compile
+num=`python -m pip list | grep paddlepaddle | wc -l`
+if [ "${num}" -eq "0" ]; then
+   wget https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxCentos_Gcc82_Cuda10.2_Trton_Py37_Compile_D_Develop/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+   python -m pip install paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+fi
+echo "######  ----paddle version-----"
+python -c "import paddle; print(paddle.version.commit)";
 
 #system
 if [ -d "/etc/redhat-release" ]; then
@@ -38,8 +47,11 @@ fi
 # env
 #export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
-python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
+unset http_proxy
+unset https_proxy
+python -m pip install --ignore-installed --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install --ignore-installed -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # dir
 log_path=log
@@ -86,7 +98,7 @@ if [ ! -f "pwg_baker_ckpt_0.4.zip" ]; then
 fi
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 ckpt_name=snapshot_iter_76.pdz
-sed -i "s#test-metadata=dump/test/norm/metadata.jsonl#test-metadata=./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
+sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/fastspeech2.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m synthesize of fastspeech2_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
@@ -96,7 +108,7 @@ else
 fi
 
 head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt
-sed -i "s#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g" ./local/synthesize_e2e.sh
+sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/synthesize_e2e.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/fastspeech2.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m synthesize_e2e of fastspeech2_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
@@ -105,7 +117,7 @@ else
    echo -e "\033[31m synthesize_e2e of fastspeech2_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
-sed -i "s#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g" ./local/inference.sh
+sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/fastspeech2.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m inference of fastspeech2_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
@@ -174,7 +186,7 @@ if [ ! -f "pwg_baker_ckpt_0.4.zip" ]; then
 fi
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 ckpt_name=snapshot_iter_76.pdz
-sed -i "s#test-metadata=dump/test/norm/metadata.jsonl#test-metadata=./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
+sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/speedyspeech.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m synthesize of speedyspeech_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
@@ -184,7 +196,7 @@ else
 fi
 
 head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt
-sed -i "s#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g" ./local/synthesize_e2e.sh
+sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/synthesize_e2e.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/speedyspeech.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m synthesize_e2e of speedyspeech_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
@@ -193,7 +205,7 @@ else
    echo -e "\033[31m synthesize_e2e of speedyspeech_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
-sed -i "s#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g" ./local/inference.sh
+sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/speedyspeech.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m inference of speedyspeech_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
@@ -225,7 +237,7 @@ fi
 
 rm -rf exp
 head -3 ${BIN_DIR}/../sentences_en.txt > sentences_en3.txt
-sed -i "s#python3#python#g;s#${BIN_DIR}/../sentences_en.txt#./sentences_en3.txt#g" ./local/synthesize.sh
+sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences_en.txt#./sentences_en3.txt#g' ./local/synthesize.sh
 ckpt_name=step-10
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/tacotron2.log 2>&1
 if [ $? -eq 0 ];then
@@ -257,9 +269,6 @@ else
    echo -e "\033[31m training of transformer tts failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
-#ln -s $3/pretrain_models/transformer_tts_ljspeech_ckpt_0.4/ ./
-#mkdir -p exp/default/checkpoints
-#cp transformer_tts_ljspeech_ckpt_0.4/snapshot_iter_201500.pdz exp/default/checkpoints/
 if [ ! -f "waveflow_ljspeech_ckpt_0.3.zip" ]; then
    wget https://paddlespeech.bj.bcebos.com/Parakeet/released_models/waveflow/waveflow_ljspeech_ckpt_0.3.zip
    unzip waveflow_ljspeech_ckpt_0.3.zip
@@ -276,7 +285,7 @@ else
 fi
 
 head -3 ${BIN_DIR}/../sentences_en.txt > sentences_en3.txt
-sed -i "s#python3#python#g;s#${BIN_DIR}/../sentences_en.txt#./sentences_en3.txt#g" ./local/synthesize_e2e.sh
+sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences_en.txt#./sentences_en3.txt#g' ./local/synthesize_e2e.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/transformer_tts.log 2>&1
 if [ $? -eq 0 ];then
    echo -e "\033[33m synthesize_e2e of transformer tts successfully! \033[0m" | tee -a ../../../$log_path/result.log

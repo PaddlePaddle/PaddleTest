@@ -23,13 +23,12 @@ if [ $1 -ne 0 ];then
     mv ${log_path}/$2.log ${log_path}/F_$2.log
     echo -e "\033[31m ${log_path}/F_$2 \033[0m"
 else
-    cat ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
+    cat ${log_path}/$2.log
     mv ${log_path}/$2.log ${log_path}/S_$2.log
     echo -e "\033[32m ${log_path}/S_$2 \033[0m"
 fi
 }
-
 
 cd $code_path/
 echo -e "\033[32m `pwd` train \033[0m";
@@ -48,11 +47,11 @@ elif [ "$1" = "linux_st_gpu1_con" ]; then
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/static_trainer.py -m config_bigdata.yaml -o runner.model_save_path="output_model_dnn_st_all" > ${log_path}/$2.log 2>&1
     print_info $? $2
-
 fi
 
 # rank模型功能运行
 sed -i "s/  epochs: 4/  epochs: 1/g" config_bigdata.yaml
+sed -i "s/  infer_start_epoch: 3/  infer_start_epoch: 0/g" config_bigdata.yaml
 sed -i "s/  infer_end_epoch: 4/  infer_end_epoch: 1/g" config_bigdata.yaml
 
 rm -rf output

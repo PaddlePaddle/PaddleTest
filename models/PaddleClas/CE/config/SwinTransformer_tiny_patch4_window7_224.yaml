@@ -129,17 +129,10 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml train_mac_cpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 7.01005
+        kpi_base: 0.0
         threshold: 0.1
-        actived: True
-        evaluation: "-"
-        unit_repr: None
-      train_eval:
-        latest: True
-        kpi_base: 7.59464
-        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -159,7 +152,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 8.58133
-        threshold: 0.1
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -177,7 +170,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 7.51868
-        threshold: 0.1
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -192,9 +185,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml eval_mac
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 7.59464
+        kpi_base: 0.0
         threshold: 0.1
         actived: True
         evaluation: "-"

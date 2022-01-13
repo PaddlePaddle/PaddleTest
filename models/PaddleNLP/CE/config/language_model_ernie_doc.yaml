@@ -1,5 +1,5 @@
 MODEL: "language_model_ernie_doc" # 模型名
-PRIORITY: P1
+PRIORITY: P3
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -92,8 +92,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.5858
-        threshold: 0.08
+        kpi_base: 0.83216
+        threshold: 0.5
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -279,7 +279,7 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.704417
+        kpi_base: 2.54583
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -298,8 +298,8 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.61999
-        threshold: 0.08
+        kpi_base: 0.856103
+        threshold: 0.2
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -359,8 +359,8 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.663830
-        threshold: 0.05
+        kpi_base: 1.768226
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -401,8 +401,8 @@ MRC_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.93235
-        threshold: 0.05
+        kpi_base: 2.855367
+        threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: "s"

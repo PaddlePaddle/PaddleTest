@@ -15,7 +15,6 @@ ppcls/configs/ImageNet/MobileNetV2/MobileNetV2.yaml
 ppcls/configs/ImageNet/ReXNet/ReXNet_1_0.yaml
 ppcls/configs/ImageNet/RedNet/RedNet50.yaml
 ppcls/configs/ImageNet/Res2Net/Res2Net50_26w_4s.yaml
-ppcls/configs/ImageNet/ResNeSt/ResNeSt101.yaml
 ppcls/configs/ImageNet/ResNeSt/ResNeSt50_fast_1s1x64d.yaml
 ppcls/configs/ImageNet/ResNeXt/ResNeXt152_64x4d.yaml
 ppcls/configs/ImageNet/ResNeXt101_wsl/ResNeXt101_32x8d_wsl.yaml

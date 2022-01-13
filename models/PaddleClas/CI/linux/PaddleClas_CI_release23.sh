@@ -91,11 +91,11 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install  -r requirements.txt  \
-   -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
    -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
+   -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
 
 rm -rf models_list
@@ -105,7 +105,7 @@ rm -rf models_list_rec
 #找到diff yaml  &  拆分任务  &  定义要跑的model list
 if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'clas' ]]; then
    find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \; \
-      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' |grep -v 'distill' \
+      | awk '{print $NF;}'| grep -v 'eval' | grep -v 'kunlun' |grep -v 'distill' |grep -v 'fp16' \
       > models_list_all
 
    if [[ ${model_flag} =~ 'CI_step1' ]]; then

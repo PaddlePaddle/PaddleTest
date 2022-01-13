@@ -20,9 +20,22 @@ rm -rf dataset
 ln -s ${data_path} dataset
 
 # env
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m pip install paddleslim
+# python -m pip install --upgrade pip
+# python -m pip install paddleslim
+# python -m pip install -r requirements.txt
+
+unset http_proxy
+unset https_proxy
+# env
+export FLAGS_fraction_of_gpu_memory_to_use=0.8
+python -m pip install --ignore-installed --upgrade \
+   pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install  --ignore-installed paddleslim \
+   -i https://mirror.baidu.com/pypi/simple
+# python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
+#    -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -r requirements.txt  \
+   -i https://mirror.baidu.com/pypi/simple
 
 if [ -d "log" ]; then
    rm -rf log

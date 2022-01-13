@@ -21,10 +21,10 @@ fi
 }
 
 ###########
-demo19(){
+demo27(){
 #必须先声明
 declare -A dic
-dic=([dnn]='models/rank/dnn' [wide_deep]='models/rank/wide_deep' [deepfm]='models/rank/deepfm' [fm]='models/rank/fm' [gateDnn]='models/rank/gateDnn' \
+dic=([dnn]='models/rank/dnn' [wide_deep]='models/rank/wide_deep' [deepfm]='models/rank/deepfm' [fm]='models/rank/fm' [gatenet]='models/rank/gatenet' \
 [logistic_regression]='models/rank/logistic_regression' [naml]='models/rank/naml' [ffm]='models/rank/ffm' [xdeepfm]='models/rank/xdeepfm' \
 [bst]='models/rank/bst' [dcn]='models/rank/dcn' [deepfefm]='models/rank/deepfefm' [dien]='models/rank/dien' \
 [din]='models/rank/din' [dlrm]='models/rank/dlrm' [dmr]='models/rank/dmr' [difm]='models/rank/difm' \
@@ -351,10 +351,10 @@ done
 run_demo(){
 mkdir ${repo_path}/demo_log
 export log_path=${repo_path}/demo_log
-demo19
+demo27
 recall_demo word2vec
 recall_demo mind
-#dnn_all
+dnn_all
 }
 ################################################
 run_con(){

@@ -331,7 +331,7 @@ FINETUNE:
       pearson:
         latest: True
         kpi_base: 0.277777
-        threshold: 0.01
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -409,7 +409,7 @@ FINETUNE:
       acc:
         latest: True
         kpi_base: 0.39338
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -460,12 +460,12 @@ FINETUNE:
         cmd: finetune.bat $XPU $SET_CUDA
 
     kpis: #kpi指标
-      acc:
+      loss:
         latest: True
-        kpi_base: 0.49197
-        threshold: 0.05
+        kpi_base: 0.88869
+        threshold: 0.5
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/finetune_win_$XPU.log
 

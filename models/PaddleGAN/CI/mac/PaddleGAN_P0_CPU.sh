@@ -4,11 +4,27 @@ rm -rf data
 ln -s ${data_path} data
 
 # env
-python -m pip install --upgrade pip -i
-python -m pip install -r requirements.txt
-python -m pip install -v -e .
-python -m pip install dlib
-
+# python -m pip install --upgrade pip -i
+# python -m pip install -v -e .
+# python -m pip install dlib
+# python -m pip install -r requirements.txt
+unset http_proxy
+unset https_proxy
+python -m pip install --ignore-installed  --upgrade pip \
+   -i https://mirror.baidu.com/pypi/simple
+echo "######  install ppgan "
+python -m pip install  ppgan \
+   -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
+echo "######  install dlib "
+# python -m pip install --ignore-installed  dlib
+python -m pip install  dlib \
+   -i https://mirror.baidu.com/pypi/simple
+# python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
+# python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
+python -c 'import dlib'
+python -m pip install -r requirements.txt  \
+   -i https://mirror.baidu.com/pypi/simple
 
 sed -i '' 's/epochs/total_iters/g' configs/cyclegan_cityscapes.yaml #将epcoh换为iter
 sed -i '' 's/decay_total_iters/decay_epochs/g' configs/cyclegan_cityscapes.yaml #恢复学习率衰减字段

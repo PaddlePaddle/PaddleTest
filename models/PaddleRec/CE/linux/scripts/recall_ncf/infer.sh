@@ -9,7 +9,7 @@ echo "$2 infer"
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../PaddleRec/models/recall/${temp_path}/
+code_path=$cur_path/../../PaddleRec/models/recall/ncf/
 log_path=$root_path/log/recall_ncf/
 mkdir -p $log_path
 #临时环境更改
@@ -81,8 +81,6 @@ elif [ "$1" = "linux_dy_gpu2" ];then #多卡
 elif [ "$1" = "linux_dy_cpu" ];then
     python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_ncf_all_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    rm -rf result.txt;
-    cp ${log_path}/S_$2.log result.txt
 
 elif [ "$1" = "linux_st_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
@@ -103,23 +101,22 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
 elif [ "$1" = "linux_st_cpu" ];then
     python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_ncf_all_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    rm -rf result.txt;
-    cp ${log_path}/S_$2.log result.txt
 # mac small_data infer
 elif [ "$1" = "mac_dy_cpu" ];then
     python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_ncf_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    rm -rf result.txt;
-    cp ${log_path}/S_$2.log result.txt
 elif [ "$1" = "mac_st_cpu" ];then
     python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_ncf_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    rm -rf result.txt;
-    cp ${log_path}/S_$2.log result.txt
 
 else
     echo "$model_name infer.sh  parameter error "
 fi
 
-python evaluate.py > ${log_path}/$2_evaluate.log 2>&1
-print_info $? $2_evaluate
+if [[ "$1" =~ "cpu" ]];then
+    echo "small data cpu infer "
+
+else
+    python evaluate.py > ${log_path}/$2_evaluate.log 2>&1
+    print_info $? $2_evaluate
+fi

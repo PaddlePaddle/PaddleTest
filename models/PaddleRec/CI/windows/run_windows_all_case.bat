@@ -105,7 +105,7 @@ goto :eof
 echo 4 rank(8/21)
 :rank_demo
 echo start run rank
-for  %%I in (deepfm dnn fm logistic_regression wide_deep gateDnn xdeepfm ffm) do (
+for  %%I in (deepfm dnn fm logistic_regression wide_deep gatenet xdeepfm ffm naml bst dcn dien din deepfefm dlrm dmr difm) do (
 python -u tools/trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_train
 python -u tools/infer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 
-python -m pip install pip==20.2.4 --ignore-installed;
-pip install Cython --ignore-installed;
-pip install -r requirements.txt --ignore-installed;
-pip install cython_bbox --ignore-installed;
+python -m pip install --upgrade pip
+python -m pip install Cython --ignore-installed;
+python -m pip install -r requirements.txt --ignore-installed;
+python -m pip install cython_bbox --ignore-installed;
 #brew update
 brew install guile
 brew install libidn
@@ -22,10 +22,6 @@ if [ -d "log_err" ];then rm -rf log_err
 fi
 mkdir log_err
 
-#compile op
-cd ppdet/ext_op
-python setup.py install
-cd ../..
 # prepare dynamic data
 sed -i "" "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 # modify dynamic_train_iter
@@ -45,6 +41,7 @@ print_result(){
             mkdir ${model}
         fi
         cd ../
+        cat log/${model}/${model}_${model_type}_${mode}.log
         mv log/${model}/${model}_${model_type}_${mode}.log log_err/${model}/
         err_sign=true
     else
@@ -191,4 +188,6 @@ fi
 done
 if [ "${err_sign}" = true ];then
     exit 1
+else
+    exit 0
 fi

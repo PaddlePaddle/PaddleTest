@@ -5,6 +5,7 @@ echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1
+export FLAGS_use_stream_safe_cuda_allocator=1
 
 #<-> model_flag CI是效率云  pr是TC，all是全量，single是单独模型debug
 #<-> pr_num   随机跑pr的模型数
@@ -111,12 +112,10 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed  --upgrade pip \
    -i https://mirror.baidu.com/pypi/simple
-python -m pip install -r requirements.txt  \
-   -i https://mirror.baidu.com/pypi/simple
 echo "######  install ppgan "
-python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
 python -m pip install  ppgan \
    -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
 # python -m pip install --ignore-installed  dlib
 python -m pip install  dlib \
@@ -124,6 +123,9 @@ python -m pip install  dlib \
 # python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
 # python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
 python -c 'import dlib'
+python -m pip install -r requirements.txt  \
+   -i https://mirror.baidu.com/pypi/simple
+
 echo "######  install done "
 
 
@@ -147,7 +149,7 @@ rm -rf models_list
 rm -rf models_list_all
 
 find configs/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'\
-   | grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' \
+   | grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' | grep -v 'msvsr_l_reds' \
    > models_list_all
 
 if [[ ${model_flag} =~ 'CI_all' ]]; then

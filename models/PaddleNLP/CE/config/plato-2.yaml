@@ -1,5 +1,5 @@
 MODEL: "plato-2" # 模型名
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -112,6 +112,7 @@ TRAIN: # 训练步骤
     tag: win_dy_gpu1_24
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path

@@ -1,0 +1,8 @@
+model_name::hrnet
+yaml::DetForONNX/configs/keypoint/tiny_pose/tinypose_128x96.yml
+pretrain_link::https://bj.bcebos.com/v1/paddledet/models/keypoint/tinypose_128x96.pdparams
+model_type::KeyPoint
+opt_ver::11
+opt_ver::11
+atol::3e-4
+rtol::1e-8

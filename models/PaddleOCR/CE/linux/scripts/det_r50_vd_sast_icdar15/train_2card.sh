@@ -38,12 +38,4 @@ fi
 python -m pip install -r requirements.txt
 
 python -m paddle.distributed.launch tools/train.py -c configs/det/det_r50_vd_sast_icdar15.yml -o Global.epoch_num=2 > log/det_r50_vd_sast_icdar15_2card.log 2>&1
-cat log/det_r50_vd_sast_icdar15_2card.log | grep "2/2" > ../log/det_r50_vd_sast_icdar15_2card_tmp.log
-
-linenum=`cat ../log/det_r50_vd_sast_icdar15_2card_tmp.log | wc -l`
-linenum_last1=`expr $linenum - 1`
-if [ $linenum_last1 -eq 0 ]
-  then cp ../log/det_r50_vd_sast_icdar15_2card_tmp.log ../log/det_r50_vd_sast_icdar15_2card.log
-  else sed ''1,"$linenum_last1"'d' ../log/det_r50_vd_sast_icdar15_2card_tmp.log > ../log/det_r50_vd_sast_icdar15_2card.log
-fi
-rm -rf ../log/det_r50_vd_sast_icdar15_2card_tmp.log
+cat log/det_r50_vd_sast_icdar15_2card.log | grep "2/2" > ../log/det_r50_vd_sast_icdar15_2card.log
