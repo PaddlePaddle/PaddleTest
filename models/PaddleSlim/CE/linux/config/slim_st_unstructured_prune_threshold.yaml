@@ -1,5 +1,5 @@
 MODEL: "st_unstructured_prune_threshold" # 模型名
-PRIORITY: P3
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleSlim
   path: $ROOT_PATH/PaddleSlim
