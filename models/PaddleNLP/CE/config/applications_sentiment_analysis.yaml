@@ -45,8 +45,8 @@ EXTRACTION_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.149914
-        threshold: 0.08
+        kpi_base: 0.16325
+        threshold: 0.2
         actived: True
         evaluation: "-"
         unit_repr: None
