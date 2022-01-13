@@ -36,7 +36,7 @@ print_result(){
 
 
 # run dynamic models
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 log_dir=.
 model_type_path=
 sed -i '' "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
