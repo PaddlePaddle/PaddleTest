@@ -72,7 +72,7 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 num=`python -m pip list | grep fasttext | wc -l`
-if [ "${num}" -gt "0" ]; then
+if [ "${num}" -eq "0" ]; then
    python -m pip install --ignore-installed pybind11 -i https://mirror.baidu.com/pypi/simple
    python -m pip install --ignore-installed fasttext -i https://mirror.baidu.com/pypi/simple
 fi

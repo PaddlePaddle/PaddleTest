@@ -54,7 +54,7 @@ def test_trt_fp32_more_bz():
 
     file_path = "./TNT_small"
     images_size = 224
-    batch_size_pool = [1, 5]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(

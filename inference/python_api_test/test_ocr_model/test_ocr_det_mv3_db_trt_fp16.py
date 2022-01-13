@@ -55,8 +55,8 @@ def test_trt_fp16_more_bz():
 
     file_path = "./ocr_det_mv3_db"
     images_size = 640
-    batch_size_pool = [1, 5, 10]
-    max_batch_size = 10
+    batch_size_pool = [1, 2]
+    max_batch_size = 2
     names = [
         "x",
         "conv2d_92.tmp_0",
@@ -159,7 +159,7 @@ def test_jetson_trt_fp16_more_bz():
     file_path = "./ocr_det_mv3_db"
     images_size = 640
     batch_size_pool = [1]
-    max_batch_size = 10
+    max_batch_size = 2
     names = [
         "x",
         "conv2d_92.tmp_0",
@@ -251,8 +251,6 @@ def test_jetson_trt_fp16_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.win
-@pytest.mark.server
 @pytest.mark.trt_fp16_multi_thread
 def test_trtfp16_bz1_multi_thread():
     """

@@ -91,7 +91,7 @@ TRAIN: # 训练步骤
         kpi_base: 6.69692
         threshold: 0.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/ShuffleNetV2_x1_0_2card.log
   -
@@ -129,19 +129,12 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ShuffleNet/ShuffleNetV2_x1_0.yaml train_mac_cpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 7.01005
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
-        unit_repr: None
-      train_eval:
-        latest: True
-        kpi_base: 7.59464
-        threshold: 0.00001
-        actived: True
-        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/ShuffleNetV2_x1_0_cpu.log
 
@@ -159,9 +152,9 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 7.36083
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/ShuffleNetV2_x1_0_eval.log
   -
@@ -177,9 +170,9 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 8.21201
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/ShuffleNetV2_x1_0_eval.log
   -
@@ -192,9 +185,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ShuffleNet/ShuffleNetV2_x1_0.yaml eval_mac
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 7.59464
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="

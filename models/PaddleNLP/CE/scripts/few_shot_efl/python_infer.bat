@@ -6,10 +6,12 @@ set logpath=%cd%\log\few_shot_efl
 cd models_repo\examples\few_shot\efl\
 
 md python_output\%3
-
+set sed="C:\Program Files\Git\usr\bin\sed.exe"
 python export_model.py --params_path=./checkpoints/%3/model_%4/model_state.pdparams --output_path=./python_output/%3
 
-python deploy/python/predict.py --model_dir=./python_output/%3 --task_name %3 > %logpath%/python_infer_%3_%1.log 2>&1
+%sed% -i '1 i\# -*- coding: utf-8 -*- ' deploy/python/predict.py
+
+python deploy/python/predict.py --model_dir=./python_output/%3 --task_name %3 --batch_size 4 > %logpath%/python_infer_%3_%1.log 2>&1
 
 if %ERRORLEVEL% == 1 (
     echo "exit_code: 1.0" >> %logpath%/python_infer_%3_%1.log

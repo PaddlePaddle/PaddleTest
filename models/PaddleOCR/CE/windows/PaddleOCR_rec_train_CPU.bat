@@ -28,6 +28,7 @@ echo !model!
 rem nvidia-smi
 rem train
 del %log_path%\result.log
+type nul > %log_path%\result.log
 python  tools/train.py -c %%i -o Global.use_gpu=False Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir="output/"!model! Train.loader.batch_size_per_card=16 > %log_path%/!model!_train.log 2>&1
 if not !errorlevel! == 0 (
         echo   !model!,train,FAIL  >> %log_path%\result.log

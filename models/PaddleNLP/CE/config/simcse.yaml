@@ -1,5 +1,5 @@
 MODEL: "simcse" # 模型名
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -26,6 +26,13 @@ DATA_PROC:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
 
 TRAIN:
   -
@@ -47,6 +54,23 @@ TRAIN:
 
   -
     priority: p0
+    tag: win_dy_gpu1_LCQMC
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA LCQMC
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.02554
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_LCQMC_$XPU.log
+
+  -
+    priority: p0
     tag: linux_dy_gpu1_BQ_Corpus
     run:
       -
@@ -61,6 +85,23 @@ TRAIN:
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_single_BQ_Corpus_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_BQ_Corpus
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA BQ_Corpus
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.05477
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_BQ_Corpus_$XPU.log
 
   -
     priority: p0
@@ -81,6 +122,23 @@ TRAIN:
 
   -
     priority: p0
+    tag: win_dy_gpu1_STS-B
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA STS-B
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.13980
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_STS-B_$XPU.log
+
+  -
+    priority: p0
     tag: linux_dy_gpu1_ATEC
     run:
       -
@@ -96,6 +154,23 @@ TRAIN:
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_single_ATEC_$XPU.log
 
+  -
+    priority: p0
+    tag: win_dy_gpu1_ATEC
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU $SET_CUDA ATEC
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.13818
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_ATEC_$XPU.log
+
 
 INFER:
   -
@@ -105,6 +180,23 @@ INFER:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash infer.sh $XPU $SET_CUDA LCQMC 80
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_LCQMC_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_LCQMC
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA LCQMC 80
     kpis:
       exit_code:
         latest: True
@@ -134,6 +226,23 @@ INFER:
 
   -
     priority: p0
+    tag: win_dy_gpu1_BQ_Corpus
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA BQ_Corpus 80
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_BQ_Corpus_$XPU.log
+
+  -
+    priority: p0
     tag: linux_dy_gpu1_STS-B
     run:
       -
@@ -151,11 +260,45 @@ INFER:
 
   -
     priority: p0
+    tag: win_dy_gpu1_STS-B
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA STS-B 80
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_STS-B_$XPU.log
+
+  -
+    priority: p0
     tag: linux_dy_gpu1_ATEC
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash infer.sh $XPU $SET_CUDA ATEC 80
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_ATEC_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1_ATEC
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU $SET_CUDA ATEC 80
     kpis:
       exit_code:
         latest: True

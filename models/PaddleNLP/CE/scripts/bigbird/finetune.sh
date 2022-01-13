@@ -23,13 +23,14 @@ fi
 #访问RD程序
 cd $code_path
 
-python run_classifier.py --model_name_or_path bigbird-base-uncased-finetune \
+python run_classifier.py --model_name_or_path bigbird-base-uncased \
     --output_dir "output" \
     --batch_size 2 \
-    --learning_rate 1e-5 \
-    --max_steps 100 \
-    --save_steps 50 \
-    --max_encoder_length 3072 >$log_path/bigbird-base-uncased-finetune.log 2>&1
+    --learning_rate 5e-6 \
+    --max_steps 50 \
+    --save_steps 10 \
+    --logging_steps 10 \
+    --max_encoder_length 3072 >$log_path/finetune_gpu.log 2>&1
 
 export http_proxy=$HTTPPROXY
 export https_proxy=$HTTPSPROXY

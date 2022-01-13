@@ -10,7 +10,7 @@
 Creators: paddlepaddle-qa
 Date:    2021/02/17 14:33:27
 """
-
+# 本文件后续将废弃
 import os
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -39,7 +39,7 @@ if daily:
         "linux_st_gpu1",
         # "linux_st_gpu2",
         # "linux_st_cpu",
-        # "linux_dy_gpu1",
+        "linux_dy_gpu1",
         # "linux_dy_gpu2",
         # "linux_dy_cpu",
         "linux_down_data",

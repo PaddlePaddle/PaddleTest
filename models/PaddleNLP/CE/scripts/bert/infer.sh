@@ -10,8 +10,7 @@ mkdir -p $log_path
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
-echo "当前CUDA配置"
-echo $CUDA_VISIBLE_DEVICES
+
 cd $code_path
 
 print_info(){
@@ -36,4 +35,3 @@ python -u ./predict_glue.py \
     --max_seq_length 128 > $log_path/bert_predict.log 2>&1
 
 print_info $? "bert_predict"
-#cat $log_path/bert_predict.log

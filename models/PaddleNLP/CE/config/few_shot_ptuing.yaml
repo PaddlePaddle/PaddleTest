@@ -1,5 +1,5 @@
 MODEL: "few_shot_ptuing" # 模型名 不支持多卡
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -28,8 +28,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 3.39592
-        threshold: 0.05
+        kpi_base: 3.83844
+        threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: "s"

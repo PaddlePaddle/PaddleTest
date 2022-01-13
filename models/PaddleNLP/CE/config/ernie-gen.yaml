@@ -11,7 +11,7 @@ VARIABLES:
   model_log_path: log/ernie-gen/
 
 EXEC:
-  exec_cases: [DATA_PROC, TRAIN]
+  exec_cases: [DATA_PROC, TRAIN, INFER, EVAL]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
@@ -24,6 +24,14 @@ DATA_PROC:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
+
+  -
+    priority: p1
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
 
 TRAIN: # 训练步骤
   -
@@ -40,8 +48,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 11.921639
-        threshold: 0.001
+        kpi_base: 13.641063
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -58,9 +66,116 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
+        kpi_base: 13.198288
+        threshold: 0.3
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU
+
+    kpis: #kpi指标
+      loss:
+        latest: True
         kpi_base: 11.921639
         threshold: 0.001
         actived: True
         evaluation: "-"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
+    output: $ROOT_PATH/$model_log_path/train_$XPU.log
+
+INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+
+EVAL:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash eval.sh $XPU
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_$XPU.log
+  -
+    priority: p1
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: eval.bat $XPU
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_$XPU.log

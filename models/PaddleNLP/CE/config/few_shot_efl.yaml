@@ -1,5 +1,5 @@
 MODEL: "few_shot_efl" # 模型名 不支持多卡
-PRIORITY: P1
+PRIORITY: P3
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -11,10 +11,19 @@ VARIABLES:
   model_log_path: log/few_shot_efl/
 
 EXEC:
-  exec_cases: [TRAIN, INFER, PYTHON_INFER]
+  exec_cases: [DATA_PROC, TRAIN, INFER, PYTHON_INFER]
   exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
 
 TRAIN: # 训练步骤
   -
@@ -30,8 +39,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.21761
-        threshold: 0.08
+        kpi_base: 0.24478
+        threshold: 0.2
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -106,8 +115,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.56255
-        threshold: 0.05
+        kpi_base: 0.64084
+        threshold: 0.2
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -131,8 +140,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       dev_accuracy:
         latest: True
-        kpi_base: 53.115
-        threshold: 0.01
+        kpi_base: 48.689
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -174,8 +183,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       dev_accuracy:
         latest: True
-        kpi_base: 54.176
-        threshold: 0.01
+        kpi_base: 51.129
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -278,8 +287,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.71065
-        threshold: 0.05
+        kpi_base: 0.76788
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -328,8 +337,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.0724
-        threshold: 0.05
+        kpi_base: 0.45908
+        threshold: 0.6
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -353,8 +362,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       dev_accuracy:
         latest: True
-        kpi_base: 52.664
-        threshold: 0.01
+        kpi_base: 50.922
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -371,8 +380,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.61396
-        threshold: 0.05
+        kpi_base: 0.73639
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -414,8 +423,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.24330
-        threshold: 0.05
+        kpi_base: 0.2724
+        threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -758,6 +767,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: win_dy_gpu1_iflytek
+    env:
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -792,6 +803,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: win_dy_gpu1_tnews
+    env:
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -894,6 +907,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: win_dy_gpu1_ocnli
+    env:
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -1030,6 +1045,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: win_dy_gpu1_chid
+    env:
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path

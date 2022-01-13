@@ -63,14 +63,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.2827
+        kpi_base: 6.79468
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.81478
+        kpi_base: 6.91984
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -88,10 +88,10 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.42552
+        kpi_base: 6.84902
         threshold: 0.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/alt_gvt_small_2card.log
   -
@@ -129,19 +129,12 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml train_mac_cpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 7.01005
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
-        unit_repr: None
-      train_eval:
-        latest: True
-        kpi_base: 7.59464
-        threshold: 0.00001
-        actived: True
-        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/alt_gvt_small_cpu.log
 
@@ -158,10 +151,10 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 7.81478
-        threshold: 0.0
+        kpi_base: 7.02673
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/alt_gvt_small_eval.log
   -
@@ -177,9 +170,9 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 7.90485
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/alt_gvt_small_eval.log
   -
@@ -192,9 +185,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml eval_mac
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 7.59464
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
