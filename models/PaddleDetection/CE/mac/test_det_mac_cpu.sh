@@ -2,9 +2,9 @@
 
 
 python -m pip install --upgrade pip
-pip install Cython --ignore-installed;
-pip install -r requirements.txt --ignore-installed;
-pip install cython_bbox --ignore-installed;
+python -m pip install Cython --ignore-installed;
+python -m pip install -r requirements.txt --ignore-installed;
+python -m pip install cython_bbox --ignore-installed;
 #brew update
 brew install guile
 brew install libidn
