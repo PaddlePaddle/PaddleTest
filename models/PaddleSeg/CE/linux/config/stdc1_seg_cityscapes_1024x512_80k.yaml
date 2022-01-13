@@ -6,8 +6,6 @@ GIT:
   branch: $BASE_BRANCH
 
 ENV:
-  http_proxy: $HTTP_PROXY
-  https_proxy: $HTTPS_PROXY
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
