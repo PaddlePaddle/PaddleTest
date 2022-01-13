@@ -149,7 +149,7 @@ rm -rf models_list
 rm -rf models_list_all
 
 find configs/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'\
-   | grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' \
+   | grep -v 'wav2lip' | grep -v 'edvr_l_blur_wo_tsa' | grep -v 'edvr_l_blur_w_tsa' | grep -v 'mprnet_deblurring' | grep -v 'msvsr_l_reds' \
    > models_list_all
 
 if [[ ${model_flag} =~ 'CI_all' ]]; then
