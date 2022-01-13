@@ -1,5 +1,5 @@
 MODEL: "slim_st_unstructured_prune_mnist" # 模型名
-PRIORITY: P2
+PRIORITY: P3
 GIT:
   addr: $REPO_PaddleSlim
   path: $ROOT_PATH/PaddleSlim

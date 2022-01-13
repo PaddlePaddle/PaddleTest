@@ -14,6 +14,7 @@ code_path=$cur_path/../../PaddleSlim/demo/quant/quant_post
 log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #临时环境更改
+export FLAGS_cudnn_deterministic=True
 
 
 #访问RD程序
@@ -44,7 +45,8 @@ elif [ "$1" = "quant_post" ];then
     python quant_post.py --model_path ./inference_model/MobileNet \
     --save_path ./quant_model_train/MobileNet \
     --model_filename model \
-    --params_filename weights  > ${log_path}/$2.log 2>&1
+    --params_filename weights \
+    --ce_test True > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "eval1" ];then
     python eval.py --model_path ./quant_model_train/MobileNet \

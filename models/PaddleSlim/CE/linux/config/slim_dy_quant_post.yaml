@@ -1,0 +1,88 @@
+MODEL: "dy_quant_post" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleSlim
+  path: $ROOT_PATH/PaddleSlim
+  branch: $slim_st_quant_post_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/slim_dy_quant_post/ #脚本的路径
+  model_log_path: log/slim_dy_quant_post/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN,EVAL]
+  exec_priority: $EXEC_PRIORITY
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    tag: linux_down_data
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh data_proc.sh demo
+
+TRAIN: # 训练步骤
+  -
+    tag: linux_st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh quant_post slim_dy_quant_post_linux_dy_quant_post
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_dy_quant_post_linux_dy_quant_post.log
+
+
+EVAL: # 训练步骤
+  -
+    tag: linux_st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh eval slim_dy_quant_post_linux_dy_eval
+
+    kpis: #kpi指标
+      top1:
+        latest: True
+        kpi_base: 0.7110
+        threshold: 0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      top5:
+        latest: True
+        kpi_base: 0.9070
+        threshold: 0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/slim_dy_quant_post_linux_dy_eval.log
+
