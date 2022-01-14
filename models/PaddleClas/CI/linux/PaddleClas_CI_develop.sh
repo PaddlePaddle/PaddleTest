@@ -269,9 +269,9 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
    fi
 
-   # if [[ ${line} =~ "fp16.yaml" ]]; then #无单独fp16的yaml了
-   #    continue
-   # fi
+   if [[ ${line} =~ "fp16.yaml" ]]; then #无单独fp16的yaml了
+      continue
+   fi
 
    #单卡
    ls output/$params_dir/
@@ -360,10 +360,18 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    fi
 
    # export_model
-   python tools/export_model.py -c $line \
-      -o Global.pretrained_model=output/$params_dir/latest \
-      -o Global.save_inference_dir=./inference/$model \
-      > $log_path/export_model/$model.log 2>&1
+   if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'amp' ]];then
+      python tools/export_model.py -c $line \
+         -o Global.pretrained_model=output/$params_dir/latest \
+         -o Global.save_inference_dir=./inference/$model \
+         -o Arch.data_format="NCHW" \
+         > $log_path/export_model/$model.log 2>&1
+   else
+      python tools/export_model.py -c $line \
+         -o Global.pretrained_model=output/$params_dir/latest \
+         -o Global.save_inference_dir=./inference/$model \
+         > $log_path/export_model/$model.log 2>&1
+   fi
 
    if [ $? -eq 0 ];then
       echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
