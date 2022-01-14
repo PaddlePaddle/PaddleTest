@@ -6,7 +6,7 @@ model_name=${PWD##*/}
 echo "$model_name 模型数据预处理阶段"
 #配置目标数据存储路径
 root_path=$cur_path/../../
-code_path=$cur_path/../../PaddleSlim/demo/unstructured_prune/
+code_path=$cur_path/../../PaddleSlim/demo/dygraph/post_quant
 #临时环境更改
 
 #获取数据逻辑
@@ -27,6 +27,7 @@ fi
 # download pretrain model
 cd ${root_path}/PaddleSlim/demo
 root_url="http://paddle-imagenet-models-name.bj.bcebos.com"
+#pre_models="MobileNetV1 MobileNetV3_large_x1_0_ssld"
 pre_models="MobileNetV1 MobileNetV2 MobileNetV3_large_x1_0_ssld ResNet101_vd MobileNetV2 ResNet34 ResNet50 ResNet50_vd"
 if [ ! -d "pretrain" ];then
     mkdir pretrain;
@@ -43,7 +44,6 @@ done
 fi
 ls;
 
-#########目前的P0级别任务第一个执行的,需要安装slim
 echo "-------  install slim --------"
 cd ${root_path}/PaddleSlim
 python -m pip install pip==20.2.4

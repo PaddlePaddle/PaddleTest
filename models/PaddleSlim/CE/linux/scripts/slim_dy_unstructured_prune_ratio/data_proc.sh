@@ -6,7 +6,7 @@ model_name=${PWD##*/}
 echo "$model_name 模型数据预处理阶段"
 #配置目标数据存储路径
 root_path=$cur_path/../../
-code_path=$cur_path/../../PaddleSlim/demo/unstructured_prune/
+code_path=$cur_path/../../PaddleSlim/demo/dygraph/unstructured_pruning/
 #临时环境更改
 
 #获取数据逻辑
