@@ -59,7 +59,8 @@ TRAIN:
     tag: win_dy_gpu1
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA
-
+      CUDA_LAUNCH_BLOCKING: 1
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -69,7 +70,7 @@ TRAIN:
       avg loss:
         latest: True
         kpi_base: 7.81670762
-        threshold: 0.05
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"

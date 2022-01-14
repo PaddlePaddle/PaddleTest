@@ -29,18 +29,19 @@ if [[ $4 == "point-wise" ]]; then
         --save_dir ./checkpoints/$4/$2 \
         --batch_size 32 \
         --epochs 1 \
-        --save_step 1000 \
-        --max_step 1500 \
+        --save_step 10 \
+        --max_step 100 \
         --learning_rate 2E-5 >$log_path/train_$4_$2_$1.log 2>&1
 
 else
     python -u -m paddle.distributed.launch --gpus $3 train_pairwise.py \
+        --margin 2 \
         --device $1 \
         --save_dir ./checkpoints/$4/$2 \
         --batch_size 32 \
         --epochs 1 \
-        --save_step 1000 \
-        --max_step 1500 \
+        --save_step 10 \
+        --max_step 100 \
         --learning_rate 2E-5 >$log_path/train_$4_$2_$1.log 2>&1
 fi
 

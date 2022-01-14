@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+
 echo "P0case_list:" ${P0case_list[*]}
 echo "enter slim_ci.sh, params:" $1,$2,$3,$4,$5,$6
+
 # set python env
 case $1 in
 27)
@@ -66,6 +68,7 @@ fi
 mkdir /workspace/logs
 export log_path=/workspace/logs
 ####################################
+
 # run p0case
 bash slim_ci_p0case.sh $5 $6;
 P0case_EXCODE=$? || true

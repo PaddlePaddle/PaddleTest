@@ -256,8 +256,8 @@ CPP_INFER_KEYPOINT(){
         --output_dir=cpp_infer_output/${model} >log/${model}/${model}_${model_type}_${mode}.log 2>&1
     print_result
 }
-model_list='ppyolov2_r50vd_dcn_365e_coco yolov3_darknet53_270e_coco solov2_r50_fpn_1x_coco mask_rcnn_r50_1x_coco cascade_rcnn_r50_fpn_1x_coco s2anet_conv_2x_dota hrnet_w32_256x192 fairmot_dla34_30e_1088x608'
-model_mask='mask_rcnn_r50_1x_coco'
+model_list='ppyolov2_r50vd_dcn_365e_coco yolov3_darknet53_270e_coco solov2_r50_fpn_1x_coco cascade_mask_rcnn_r50_fpn_1x_coco s2anet_conv_2x_dota hrnet_w32_256x192 fairmot_dla34_30e_1088x608 picodet_m_416_coco'
+model_mask='cascade_mask_rcnn_r50_fpn_1x_coco'
 model_s2anet='s2anet_conv_2x_dota'
 model_solov2='solov2_r50_fpn_1x_coco'
 model_mot='fairmot_dla34_30e_1088x608'
@@ -313,6 +313,8 @@ if [[ -n `echo "${model_s2anet}" | grep -w "${model}"` ]];then
     image=demo/P0072__1.0__0___0.png
 elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
     image=demo/hrnet_demo.jpg
+else
+    image=demo/000000570688.jpg
 fi
 config=`cat model_list_ci | grep ${model}`
 cd log && mkdir ${model} && cd ..

@@ -767,6 +767,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: win_dy_gpu1_iflytek
+    env:
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -801,6 +803,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: win_dy_gpu1_tnews
+    env:
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -903,6 +907,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: win_dy_gpu1_ocnli
+    env:
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -1039,6 +1045,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: win_dy_gpu1_chid
+    env:
+      PYTHONIOENCODING: utf-8
     run:
       -
         path: $ROOT_PATH/$model_scripts_path

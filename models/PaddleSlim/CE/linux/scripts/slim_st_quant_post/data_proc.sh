@@ -6,7 +6,7 @@ model_name=${PWD##*/}
 echo "$model_name 模型数据预处理阶段"
 #配置目标数据存储路径
 root_path=$cur_path/../../
-code_path=$cur_path/../../PaddleSlim/demo/prune/
+code_path=$cur_path/../../PaddleSlim/demo/quant/quant_post
 #临时环境更改
 
 #获取数据逻辑
@@ -43,3 +43,12 @@ if [ ! -d "MobileNetV1_pretrained" ];then
 done
 fi
 ls;
+
+echo "-------  install slim --------"
+cd ${root_path}/PaddleSlim
+python -m pip install pip==20.2.4
+python -m pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install -r requirements.txt
+python setup.py install
+echo "------- after install slim --------"
+python -m pip list | grep paddle;

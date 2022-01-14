@@ -31,7 +31,7 @@ python -u ./predict.py \
     --max_encode_len 24 \
     --max_decode_len 72 \
     --batch_size 48   \
-    --init_checkpoint ./tmp/single/model_1000/model_state.pdparams \
+    --init_checkpoint ./tmp/single/model_100/model_state.pdparams \
     --device $1 > $log_path/infer_$1.log 2>&1
 
 print_info $? infer_$1

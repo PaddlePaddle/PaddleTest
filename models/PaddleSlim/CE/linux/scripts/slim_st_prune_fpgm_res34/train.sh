@@ -15,7 +15,6 @@ log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #临时环境更改
 
-
 #访问RD程序
 print_info(){
 if [ $1 -ne 0 ];then
@@ -25,6 +24,7 @@ if [ $1 -ne 0 ];then
     cat ${log_path}/$2.log
     cp ${log_path}/$2.log ${log_path}/FAIL_$2.log
 else
+    cat ${log_path}/$2.log | grep loss >> ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
 fi
 }
@@ -32,39 +32,37 @@ fi
 cd $code_path
 echo -e "\033[32m `pwd` train \033[0m";
 
+
 if [ "$1" = "linux_st_gpu1" ];then #单卡
+    export FLAGS_cudnn_deterministic=True
+
     python train.py \
     --model="ResNet34" \
     --pretrained_model="../pretrain/ResNet34_pretrained" \
     --data="imagenet" \
     --pruned_ratio=0.3125 \
-    --lr=0.001 \
-    --num_epochs=1 \
-    --test_period=1 \
-    --step_epochs 30 60 \
-    --l2_decay=1e-4 \
+    --num_epochs=30 \
     --lr_strategy="piecewise_decay" \
     --criterion="geometry_median" \
     --model_path="./fpgm_resnet34_models_gpu1" \
-    --save_inference True > ${log_path}/$2.log 2>&1
+    --save_inference True \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
 
-elif [ "$1" = "linux_st_gpu2" ];then #单卡
-#v2 -50%
+elif [ "$1" = "linux_st_gpu2" ];then #
+    export FLAGS_cudnn_deterministic=True
+
     python train.py \
     --model="ResNet34" \
     --pretrained_model="../pretrain/ResNet34_pretrained" \
     --data="imagenet" \
     --pruned_ratio=0.3125 \
-    --lr=0.001 \
-    --num_epochs=1 \
-    --test_period=1 \
-    --step_epochs 30 60 \
-    --l2_decay=1e-4 \
+    --num_epochs=30 \
     --lr_strategy="piecewise_decay" \
     --criterion="geometry_median" \
     --model_path="./fpgm_resnet34_models_gpu2" \
-    --save_inference True > ${log_path}/$2.log 2>&1
+    --save_inference True \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_cpu" ];then #单卡

@@ -29,6 +29,8 @@ fi
 
 cd $code_path
 
+export FLAGS_cudnn_deterministic=True
+
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     python eval.py \
     --checkpoint=./fpgm_resnet34_025_120_models/1 \
