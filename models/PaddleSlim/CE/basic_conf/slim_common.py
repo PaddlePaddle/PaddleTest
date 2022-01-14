@@ -67,7 +67,6 @@ slim_dy_unstructured_prune_cifar10_BRANCH = BASE_BRANCH
 slim_st_sa_nas_BRANCH = BASE_BRANCH
 slim_st_darts_BRANCH = BASE_BRANCH
 
-
 # linux下 P0的任务要跑的标签 daily
 daily = True
 if daily:

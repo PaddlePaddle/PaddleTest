@@ -26,7 +26,7 @@ DATA_PROC:
         cmd: bash data_proc.sh
 
   -
-    priority: p2
+    priority: p1
     tag: win_download_data
     run:
       -
@@ -48,8 +48,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 11.921639
-        threshold: 0.001
+        kpi_base: 13.641063
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -66,15 +66,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 11.921639
-        threshold: 0.001
+        kpi_base: 13.198288
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
@@ -117,7 +117,7 @@ INFER:
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
 
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
@@ -160,7 +160,7 @@ EVAL:
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/eval_$XPU.log
   -
-    priority: p2
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA

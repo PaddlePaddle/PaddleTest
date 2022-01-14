@@ -52,7 +52,7 @@ def im2col(input_data, kh, kw, stride=1, pad=0, dilation=1):
 
 
 @pytest.mark.api_nn_unfold_vartype
-def test_flatten_base():
+def test_unfold_base():
     """
     base
     """
@@ -62,7 +62,7 @@ def test_flatten_base():
 
 
 @pytest.mark.api_nn_unfold_parameters
-def test_flatten0():
+def test_unfold0():
     """
     default
     """
@@ -72,7 +72,7 @@ def test_flatten0():
 
 
 @pytest.mark.api_nn_unfold_parameters
-def test_flatten1():
+def test_unfold1():
     """
     paddings=1
     """
@@ -82,7 +82,7 @@ def test_flatten1():
 
 
 @pytest.mark.api_nn_unfold_parameters
-def test_flatten2():
+def test_unfold2():
     """
     kh != kw
     paddings=1
@@ -93,7 +93,7 @@ def test_flatten2():
 
 
 @pytest.mark.api_nn_unfold_parameters
-def test_flatten3():
+def test_unfold3():
     """
     kh != kw
     paddings=1

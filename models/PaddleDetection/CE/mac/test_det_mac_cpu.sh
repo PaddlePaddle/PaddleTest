@@ -1,14 +1,23 @@
 #!/bin/bash
 
 
-python -m pip install pip==20.2.4 --ignore-installed;
-pip install Cython --ignore-installed;
-pip install -r requirements.txt --ignore-installed;
-pip install cython_bbox --ignore-installed;
+python -m pip install --upgrade pip
+python -m pip install Cython --ignore-installed;
+python -m pip install -r requirements.txt --ignore-installed;
+python -m pip install cython_bbox --ignore-installed;
 #brew update
 brew install guile
 brew install libidn
 brew install ffmpeg
+
+function i_sed()
+{
+    if [[ -e /usr/local/bin/gsed ]];then
+        gsed -i "$@"
+    else
+        sed -i '' "$@"
+    fi
+}
 
 echo -e '*****************paddle_version*****'
 python -c 'import paddle;print(paddle.version.commit)'
@@ -22,20 +31,16 @@ if [ -d "log_err" ];then rm -rf log_err
 fi
 mkdir log_err
 
-#compile op
-cd ppdet/ext_op
-python setup.py install
-cd ../..
 # prepare dynamic data
-sed -i "" "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
+i_sed -i "" "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 # modify dynamic_train_iter
-sed -i '' 's/for step_id, data in enumerate(self.loader):/for step_id, data in enumerate(self.loader):\n                if step_id == 10: break/g' ppdet/engine/trainer.py
-sed -i '' 's/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
-sed -i '' 's/for step_id, data in enumerate(dataloader):/for step_id, data in enumerate(dataloader):\n            if step_id == 10: break/g' ppdet/engine/tracker.py
+i_sed -i '' 's/for step_id, data in enumerate(self.loader):/for step_id, data in enumerate(self.loader):\n                if step_id == 10: break/g' ppdet/engine/trainer.py
+i_sed -i '' 's/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
+i_sed -i '' 's/for step_id, data in enumerate(dataloader):/for step_id, data in enumerate(dataloader):\n            if step_id == 10: break/g' ppdet/engine/tracker.py
 #modify coco images
-sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/coco.py
-sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/keypoint_coco.py
-sed -i '' 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
+i_sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/coco.py
+i_sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/keypoint_coco.py
+i_sed -i '' 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
 
 print_result(){
     if [ $? -ne 0 ];then
@@ -45,6 +50,7 @@ print_result(){
             mkdir ${model}
         fi
         cd ../
+        cat log/${model}/${model}_${model_type}_${mode}.log
         mv log/${model}/${model}_${model_type}_${mode}.log log_err/${model}/
         err_sign=true
     else
@@ -191,4 +197,6 @@ fi
 done
 if [ "${err_sign}" = true ];then
     exit 1
+else
+    exit 0
 fi

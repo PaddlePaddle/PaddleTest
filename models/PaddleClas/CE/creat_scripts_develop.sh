@@ -325,18 +325,18 @@ elif [[ ${model} == 'Res2Net50_26w_4s' ]]; then
     sed -i "" "s|0.93661|31.71620|g" $model.yaml #windows_eval
     sed -i "" "s|190.68218|31.71620|g" $model.yaml #windows_train_eval
 
-elif [[ ${model} == 'ResNeSt101' ]]; then
-    sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43773|6.62199|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.44749|6.71942|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|14.58329|g" $model.yaml #linux_eval
-    sed -i "" "s|18.21894|14.58329|g" $model.yaml #linux_train_eval
+# elif [[ ${model} == 'ResNeSt101' ]]; then
+#     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
+#     sed -i "" "s|6.43773|6.62199|g" $model.yaml #linux_train_单卡
+#     sed -i "" "s|6.44749|6.71942|g" $model.yaml #linux_train_多卡
+#     sed -i "" "s|0.93207|14.58329|g" $model.yaml #linux_eval
+#     sed -i "" "s|18.21894|14.58329|g" $model.yaml #linux_train_eval
 
-    sed -i "" "s|6.81317|6.53606|g" $model.yaml #windows_train
-    sed -i "" "s|0.93661|1374.60004|g" $model.yaml #windows_eval
-    sed -i "" "s|190.68218|1374.60004|g" $model.yaml #windows_train_eval
-    # sed -i "" "s|6.43773|6.62913|g" $model.yaml 211116模型原因导致改动一次
-    # sed -i "" "s|6.44749|6.71608|g" $model.yaml
+#     sed -i "" "s|6.81317|6.53606|g" $model.yaml #windows_train
+#     sed -i "" "s|0.93661|1374.60004|g" $model.yaml #windows_eval
+#     sed -i "" "s|190.68218|1374.60004|g" $model.yaml #windows_train_eval
+#     # sed -i "" "s|6.43773|6.62913|g" $model.yaml 211116模型原因导致改动一次
+#     # sed -i "" "s|6.44749|6.71608|g" $model.yaml
 
 elif [[ ${model} == 'ResNeSt50_fast_1s1x64d' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
