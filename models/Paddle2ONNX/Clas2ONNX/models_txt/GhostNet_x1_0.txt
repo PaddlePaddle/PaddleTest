@@ -1,0 +1,6 @@
+model_name::EfficientNetB7
+yaml::ClasForONNX/ppcls/configs/ImageNet/GhostNet/GhostNet_x1_0.yaml
+pretrain_link::https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/GhostNet_x1_0_pretrained.pdparams
+opt_ver::11
+atol::1e-5
+rtol::1e-8
