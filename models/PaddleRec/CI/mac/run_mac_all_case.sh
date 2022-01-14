@@ -136,6 +136,30 @@ echo -e "\033[31m start st infer ${model} \n \033[0m "
 python -u static_infer.py -m ${yaml_mode}.yaml
 print_info $? ${model}_st_infer
 }
+
+recall_ncf(){
+cd ${repo_path}/models/recall/$1
+echo -e "\033[31m -------------$PWD-------------  \033[0m"
+model=demo_$1
+yaml_mode=config
+# 动态图训练
+echo -e "\033[31m start dy train ${model} \n \033[0m "
+python -u ../../../tools/trainer.py -m ${yaml_mode}.yaml
+print_info $? ${model}_dy_train
+# 动态图预测
+echo -e "\033[31m start dy infer ${model} \n \033[0m "
+python -u ../../../tools/infer.py -m ${yaml_mode}.yaml
+print_info $? ${model}_dy_infer
+rm -rf output_model_*
+# 静态图训练
+echo -e "\033[31m start st train ${model} \n \033[0m "
+python -u ../../../tools/static_trainer.py -m ${yaml_mode}.yaml
+print_info $? ${model}_st_train
+# 静态图预测
+echo -e "\033[31m start st infer ${model} \n \033[0m "
+python -u ../../../tools/static_infer.py -m ${yaml_mode}.yaml
+print_info $? ${model}_st_infer
+}
 ################################################
 run_demo(){
 mkdir ${repo_path}/demo_log
@@ -173,6 +197,7 @@ contentunderstanding_demo textcnn
 # recall
 recall_demo word2vec
 recall_demo mind
+recall_ncf ncf
 }
 ################################################
 run_demo
