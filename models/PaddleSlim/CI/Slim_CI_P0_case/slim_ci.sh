@@ -66,6 +66,7 @@ fi
 mkdir /workspace/logs
 export log_path=/workspace/logs
 ####################################
+
 # run p0case
 bash slim_ci_p0case.sh $5 $6;
 P0case_EXCODE=$? || true
