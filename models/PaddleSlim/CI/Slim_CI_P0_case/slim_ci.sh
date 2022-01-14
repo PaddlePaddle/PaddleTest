@@ -2,6 +2,7 @@
 
 echo "P0case_list:" ${P0case_list[*]}
 echo "enter slim_ci.sh, params:" $1,$2,$3,$4,$5,$6
+
 # set python env
 case $1 in
 27)
