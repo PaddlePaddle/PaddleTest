@@ -10,6 +10,14 @@ brew install guile
 brew install libidn
 brew install ffmpeg
 
+function i_sed()
+{
+    if [[ -e /usr/local/bin/gsed ]];then
+        gsed "$@"
+    else
+        sed "$@"
+    fi
+}
 echo -e '*****************paddle_version*****'
 python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************detection_version****'
@@ -27,15 +35,15 @@ cd ppdet/ext_op
 python setup.py install
 cd ../..
 # prepare dynamic data
-sed -i "" "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
+i_sed -i "" "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 # modify dynamic_train_iter
-sed -i '' 's/for step_id, data in enumerate(self.loader):/for step_id, data in enumerate(self.loader):\n                if step_id == 10: break/g' ppdet/engine/trainer.py
-sed -i '' 's/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
-sed -i '' 's/for step_id, data in enumerate(dataloader):/for step_id, data in enumerate(dataloader):\n            if step_id == 10: break/g' ppdet/engine/tracker.py
+i_sed -i '' 's/for step_id, data in enumerate(self.loader):/for step_id, data in enumerate(self.loader):\n                if step_id == 10: break/g' ppdet/engine/trainer.py
+i_sed -i '' 's/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
+i_sed -i '' 's/for step_id, data in enumerate(dataloader):/for step_id, data in enumerate(dataloader):\n            if step_id == 10: break/g' ppdet/engine/tracker.py
 #modify coco images
-sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/coco.py
-sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/keypoint_coco.py
-sed -i '' 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
+i_sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/coco.py
+i_sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/keypoint_coco.py
+i_sed -i '' 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
 
 print_result(){
     if [ $? -ne 0 ];then
