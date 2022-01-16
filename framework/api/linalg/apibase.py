@@ -99,7 +99,6 @@ class APIBase(object):
                 self.run(res, data, **kwargs)
             except Exception as e:
                 e = str(e)
-                print(e)
                 if etype in e:
                     assert True
                 else:
@@ -108,7 +107,7 @@ class APIBase(object):
         if mode == "python":
             with pytest.raises(etype):
                 self.run(res, data, **kwargs)
-                print(excinfo.value)
+                # print(excinfo.value)
                 # assert "!23" in excinfo.value
 
     def run(self, res, data=None, **kwargs):
