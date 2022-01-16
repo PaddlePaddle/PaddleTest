@@ -52,7 +52,7 @@ class TestAlphaDropout(APIBase):
                 logging.info("[test dtype] " + self.__class__.__name__ + str(dtype))
                 try:
                     self.dtype = dtype
-                    if str(place) in ["Place(cpu)", "CPUPlace"]:
+                    if isinstance(place, paddle.CPUPlace):
                         self._baserun(res[0], data, **kwargs)
                     else:
                         self._baserun(res[1], data, **kwargs)
@@ -81,7 +81,7 @@ class TestAlphaDropout(APIBase):
             # start run paddle dygraph
             if self.dygraph:
                 paddle.disable_static(self.place)
-                if str(self.place) in ["Place(cpu)", "CPUPlace"]:
+                if isinstance(self.place, paddle.CPUPlace):
                     paddle.set_device("cpu")
                 else:
                     paddle.set_device("gpu:0")
@@ -144,7 +144,7 @@ class TestAlphaDropout(APIBase):
             # start run paddle dygraph
             logging.info("[start] run " + self.__class__.__name__ + " dygraph")
             paddle.disable_static(self.place)
-            if str(self.place) in ["Place(cpu)", "CPUPlace"]:
+            if isinstance(self.place, paddle.CPUPlace):
                 paddle.set_device("cpu")
             else:
                 paddle.set_device("gpu:0")
@@ -207,7 +207,7 @@ class TestAlphaDropout(APIBase):
         for place in self.places:
             self.place = place
             paddle.disable_static(self.place)
-            if str(self.place) in ["Place(cpu)", "CPUPlace"]:
+            if isinstance(self.place, paddle.CPUPlace):
                 paddle.set_device("cpu")
                 res = res_list[0]
             else:
