@@ -109,7 +109,7 @@ class RnnBase(object):
         run test case
         """
         for place in self.places:
-            if str(place) == "Place(cpu)":
+            if str(place) in ["Place(cpu)", "CPUPlace"]:
                 paddle.set_device("cpu")
             else:
                 paddle.set_device("gpu:0")
