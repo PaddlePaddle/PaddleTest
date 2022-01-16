@@ -99,6 +99,7 @@ class APIBase(object):
                 self.run(res, data, **kwargs)
             except Exception as e:
                 e = str(e)
+                print(e)
                 if etype in e:
                     assert True
                 else:
@@ -107,7 +108,7 @@ class APIBase(object):
         if mode == "python":
             with pytest.raises(etype):
                 self.run(res, data, **kwargs)
-                # print(excinfo.value)
+                print(excinfo.value)
                 # assert "!23" in excinfo.value
 
     def run(self, res, data=None, **kwargs):
@@ -133,7 +134,7 @@ class APIBase(object):
                 # start run paddle dygraph
                 if self.dygraph:
                     paddle.disable_static(self.place)
-                    if str(self.place) == "CPUPlace":
+                    if str(self.place) == "Place(cpu)":
                         paddle.set_device("cpu")
                     else:
                         paddle.set_device("gpu:0")
@@ -198,7 +199,7 @@ class APIBase(object):
             for place in self.places:
                 self.place = place
                 paddle.disable_static(self.place)
-                if str(self.place) == "CPUPlace":
+                if str(self.place) == "Place(cpu)":
                     paddle.set_device("cpu")
                 else:
                     paddle.set_device("gpu:0")
@@ -258,7 +259,7 @@ class APIBase(object):
             # start run paddle dygraph
             if self.dygraph:
                 paddle.disable_static(self.place)
-                if str(self.place) == "CPUPlace":
+                if str(self.place) == "Place(cpu)":
                     paddle.set_device("cpu")
                 else:
                     paddle.set_device("gpu:0")
@@ -321,7 +322,7 @@ class APIBase(object):
             # start run paddle dygraph
             logging.info("[start] run " + self.__class__.__name__ + " dygraph")
             paddle.disable_static(self.place)
-            if str(self.place) == "CPUPlace":
+            if str(self.place) == "Place(cpu)":
                 paddle.set_device("cpu")
             else:
                 paddle.set_device("gpu:0")
