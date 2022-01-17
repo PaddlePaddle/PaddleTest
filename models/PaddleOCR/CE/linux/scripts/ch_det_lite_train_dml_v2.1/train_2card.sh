@@ -2,15 +2,15 @@ export FLAGS_cudnn_deterministic=True
 cd ${Project_path}
 
 if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
+  wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/MobileNetV3_large_x0_5_pretrained.pdparams
 fi
 
 if [ ! -f "pretrain_models/ResNet18_vd_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet18_vd_pretrained.pdparams
+  wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/ResNet18_vd_pretrained.pdparams
 fi
 
 if [ ! -f "pretrain_models/ResNet50_vd_ssld_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet50_vd_ssld_pretrained.pdparams
+  wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/ResNet50_vd_ssld_pretrained.pdparams
 fi
 
 if [ ! -f "pretrain_models/ResNet50_vd_pretrained.pdparams" ]; then
