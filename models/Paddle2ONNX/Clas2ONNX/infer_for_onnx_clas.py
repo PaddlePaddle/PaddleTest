@@ -16,7 +16,8 @@ infer for class to onnx test
 """
 import os
 import sys
-import auto_log
+
+# import auto_log
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.abspath(os.path.join(__dir__, "../")))
@@ -50,25 +51,25 @@ class ClsPredictor(Predictor):
 
         # for whole_chain project to test each repo of paddle
         self.benchmark = config["Global"].get("benchmark", False)
-        if self.benchmark:
-            # import auto_log
-            # import os
+        # if self.benchmark:
+        # import auto_log
+        # import os
 
-            pid = os.getpid()
-            size = config["PreProcess"]["transform_ops"][1]["CropImage"]["size"]
-            self.auto_logger = auto_log.AutoLogger(
-                model_name=config["Global"].get("model_name", "cls"),
-                model_precision="fp16" if config["Global"]["use_fp16"] else "fp32",
-                batch_size=config["Global"].get("batch_size", 1),
-                data_shape=[3, size, size],
-                save_path=config["Global"].get("save_log_path", "./auto_log.log"),
-                inference_config=self.config,
-                pids=pid,
-                process_name=None,
-                gpu_ids=None,
-                time_keys=["preprocess_time", "inference_time", "postprocess_time"],
-                warmup=2,
-            )
+        # pid = os.getpid()
+        # size = config["PreProcess"]["transform_ops"][1]["CropImage"]["size"]
+        # self.auto_logger = auto_log.AutoLogger(
+        #     model_name=config["Global"].get("model_name", "cls"),
+        #     model_precision="fp16" if config["Global"]["use_fp16"] else "fp32",
+        #     batch_size=config["Global"].get("batch_size", 1),
+        #     data_shape=[3, size, size],
+        #     save_path=config["Global"].get("save_log_path", "./auto_log.log"),
+        #     inference_config=self.config,
+        #     pids=pid,
+        #     process_name=None,
+        #     gpu_ids=None,
+        #     time_keys=["preprocess_time", "inference_time", "postprocess_time"],
+        #     warmup=2,
+        # )
 
     def predict(self, images, img_idx=0):
         """
