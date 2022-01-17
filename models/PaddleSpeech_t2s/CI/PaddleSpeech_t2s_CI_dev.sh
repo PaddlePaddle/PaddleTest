@@ -55,7 +55,6 @@ python -m pip install --upgrade --force --ignore-installed . -i https://pypi.tun
 
 # dir
 log_path=log
-rm -rf log/
 stage_list='train synthesize synthesize_e2e inference'
 for stage in  ${stage_list}
 do
