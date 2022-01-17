@@ -51,7 +51,7 @@ unset http_proxy
 unset https_proxy
 python -m pip install --ignore-installed --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install . --ignore-installed -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install --upgrade --force --ignore-installed . -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # dir
 log_path=log
@@ -68,6 +68,16 @@ done
 echo "`python -m pip list | grep paddle`" |tee -a ${log_path}/result.log
 python -c 'import paddle;print(paddle.version.commit)' |tee -a ${log_path}/result.log
 
+echo -e "fastspeech2\nparallelwavegan\nspeedyspeech\ntacotron2\ntransformertts\nwaveflow" > models_list_all
+shuf models_list_all > models_list_shuf
+head -n 2 models_list_shuf > models_list
+
+cat models_list | while read line
+do
+echo $line
+case $line in
+
+fastspeech2)
 # fastspeech2_csmsc
 cd examples/csmsc/tts3
 mkdir ~/datasets
@@ -126,7 +136,9 @@ else
    echo -e "\033[31m inference of fastspeech2_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
+;;
 
+parallelwavegan)
 # parallel_wavegan_csmsc
 cd examples/csmsc/voc1
 
@@ -134,6 +146,8 @@ source path.sh
 source ${MAIN_ROOT}/utils/parse_options.sh
 gpus=$2
 
+conf_path=conf/default.yaml
+train_output_path=exp/default
 rm -rf ./dump
 ln -s $3/preprocess_data/pwg/dump/ ./
 
@@ -159,7 +173,9 @@ else
    echo -e "\033[31m synthesize of parallel_wavegan failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
+;;
 
+speedyspeech)
 # speedyspeech_csmsc
 cd examples/csmsc/tts2
 
@@ -167,6 +183,8 @@ source path.sh
 source ${MAIN_ROOT}/utils/parse_options.sh
 gpus=$2
 
+conf_path=conf/default.yaml
+train_output_path=exp/default
 rm -rf ./dump
 ln -s $3/preprocess_data/speedyspeech/dump/ ./
 sed -i "s/max_epoch: 200/max_epoch: 1/g" ./conf/default.yaml
@@ -214,7 +232,9 @@ else
    echo -e "\033[31m inference of speedyspeech_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
+;;
 
+tacotron2)
 # tacotron2
 cd examples/ljspeech/tts0
 
@@ -247,7 +267,9 @@ else
    echo -e "\033[31m synthesize of tacotron2 failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
+;;
 
+transformertts)
 # transformer tts
 cd examples/ljspeech/tts1
 
@@ -255,9 +277,10 @@ source path.sh
 source ${MAIN_ROOT}/utils/parse_options.sh
 gpus=$2
 
+conf_path=conf/default.yaml
+train_output_path=exp/default
 rm -rf ./dump
 ln -s $3/preprocess_data/transformer_tts/dump ./dump
-train_output_path=exp/default
 rm -rf ./exp
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 sed -i "s/max_epoch: 500/max_epoch: 1/g;s/batch_size: 16/batch_size: 4/g"  ./conf/default.yaml
@@ -294,7 +317,9 @@ else
    echo -e "\033[31m synthesize_e2e of transformer tts failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
+;;
 
+waveflow)
 # waveflow
 cd examples/ljspeech/voc0
 
@@ -328,6 +353,10 @@ else
    echo -e "\033[31m synthesize of waveflow failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
+;;
+
+esac
+done
 
 # result
 num=`cat $log_path/result.log | grep "failed" | wc -l`
