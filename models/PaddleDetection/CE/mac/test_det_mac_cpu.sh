@@ -32,15 +32,15 @@ fi
 mkdir log_err
 
 # prepare dynamic data
-i_sed -i "" "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
+i_sed "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 # modify dynamic_train_iter
-i_sed -i '' 's/for step_id, data in enumerate(self.loader):/for step_id, data in enumerate(self.loader):\n                if step_id == 10: break/g' ppdet/engine/trainer.py
-i_sed -i '' 's/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
-i_sed -i '' 's/for step_id, data in enumerate(dataloader):/for step_id, data in enumerate(dataloader):\n            if step_id == 10: break/g' ppdet/engine/tracker.py
+i_sed 's/for step_id, data in enumerate(self.loader):/for step_id, data in enumerate(self.loader):\n                if step_id == 10: break/g' ppdet/engine/trainer.py
+i_sed 's/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
+i_sed 's/for step_id, data in enumerate(dataloader):/for step_id, data in enumerate(dataloader):\n            if step_id == 10: break/g' ppdet/engine/tracker.py
 #modify coco images
-i_sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/coco.py
-i_sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/keypoint_coco.py
-i_sed -i '' 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
+i_sed 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/coco.py
+i_sed 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/keypoint_coco.py
+i_sed 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
 
 print_result(){
     if [ $? -ne 0 ];then
