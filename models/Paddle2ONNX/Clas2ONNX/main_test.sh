@@ -70,8 +70,8 @@ main(){
 #            mv ClasForONNX/deploy/python/utils/utils_config_for_onnx.py ClasForONNX/deploy/python/utils/config.py
 #            rm -rf ClasForONNX/deploy/configs/inference_for_onnx_clas.yaml && cp -r inference_for_onnx_clas.yaml ClasForONNX/deploy/configs
 ##            rm -rf ClasForONNX/deploy/python/utils.py && cp -r utils_for_onnx.py ClasForONNX/deploy/python/utils.py
-            rm -rf models && rm -rf det_data && rm -rf log
-#            wget https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/det_data/det_data.tar && tar -xf det_data.tar && rm -rf det_data.tar
+            rm -rf models && rm -rf clas_data && rm -rf log
+            wget https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/clas_data/clas_data.tar && tar -xf clas_data.tar && rm -rf clas_data.tar
 
             for model_txt in ./models_txt/*
             do
