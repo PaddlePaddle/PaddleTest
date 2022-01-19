@@ -1,0 +1,6 @@
+model_name::ResNeXt50_vd_64x4d
+yaml::ClasForONNX/ppcls/configs/ImageNet/ResNeXt/ResNeXt50_vd_64x4d.yaml
+pretrain_link::https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNeXt50_vd_64x4d_pretrained.pdparams
+opt_ver::11
+atol::1e-5
+rtol::1e-8
