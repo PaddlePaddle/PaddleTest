@@ -8,6 +8,7 @@ export http_proxy=${proxy}
 export https_proxy=${proxy}
 export no_proxy=bcebos.com
 python -m pip install pip==20.2.4 --ignore-installed
+python -m pip install Cython --ignore-installed
 pip install -r requirements.txt --ignore-installed
 python -m pip  install ${paddle_whl} --no-cache-dir
 echo -e '*****************paddle_version*****'

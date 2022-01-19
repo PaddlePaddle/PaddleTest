@@ -133,7 +133,7 @@ class APIBase(object):
                 # start run paddle dygraph
                 if self.dygraph:
                     paddle.disable_static(self.place)
-                    if str(self.place) == "CPUPlace":
+                    if isinstance(self.place, paddle.CPUPlace):
                         paddle.set_device("cpu")
                     else:
                         paddle.set_device("gpu:0")
@@ -202,7 +202,7 @@ class APIBase(object):
                 # (1) start run paddle dygraph
                 if self.dygraph:
                     paddle.disable_static(self.place)
-                    if str(self.place) == "CPUPlace":
+                    if isinstance(self.place, paddle.CPUPlace):
                         paddle.set_device("cpu")
                     else:
                         paddle.set_device("gpu:0")
@@ -276,7 +276,7 @@ class APIBase(object):
             # start run paddle dygraph
             if self.dygraph:
                 paddle.disable_static(self.place)
-                if str(self.place) == "CPUPlace":
+                if isinstance(self.place, paddle.CPUPlace):
                     paddle.set_device("cpu")
                 else:
                     paddle.set_device("gpu:0")
@@ -339,7 +339,7 @@ class APIBase(object):
             # (1) start run paddle dygraph
             if self.dygraph:
                 paddle.disable_static(self.place)
-                if str(self.place) == "CPUPlace":
+                if isinstance(self.place, paddle.CPUPlace):
                     paddle.set_device("cpu")
                 else:
                     paddle.set_device("gpu:0")
