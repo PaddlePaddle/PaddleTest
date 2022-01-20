@@ -1,7 +1,7 @@
 ppcls/configs/ImageNet/AlexNet/AlexNet.yaml
 ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml
 ppcls/configs/ImageNet/DLA/DLA46_c.yaml
-ppcls/configs/ImageNet/DPN/DPN107.yaml
+ppcls/configs/ImageNet/DPN/DPN92.yaml
 ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml
 ppcls/configs/ImageNet/DeiT/DeiT_tiny_patch16_224.yaml
 ppcls/configs/ImageNet/DenseNet/DenseNet121.yaml
