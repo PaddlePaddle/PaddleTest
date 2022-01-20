@@ -43,4 +43,6 @@ else
    echo -e "\033[31m training_1card of fastspeech2_baker failed! \033[0m"
 fi
 sed -i "s/max_epoch: 5/max_epoch: 1000/g;s/batch_size: 16/batch_size: 64/g" ${conf_path}
-cat train_1card.log | grep "3060/3060" | awk 'BEGIN{FS=","} {print $7}' > ../../../../log/fastspeech2_baker_1card.log
+cat train_1card.log | grep "3060/3060" | awk 'BEGIN{FS=","} {print $7}' > tmp_1card.log
+cat train_1card.log | grep "3060/3060" | awk 'BEGIN{FS=","} {print $11}' >> tmp_1card.log
+cat tmp_1card.log | tr '\n' ',' > ../../../../log/fastspeech2_baker_1card.log

@@ -37,6 +37,12 @@ TRAIN: # 训练步骤
         threshold: 1 # 0.9
         actived: True
         evaluation: "-"
+      avg_ips:
+        latest: True
+        kpi_base: 150
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
     output: $ROOT_PATH/$model_log_path/speedyspeech_baker_1card.log
   -
     priority: P1  # dy_gpu1
@@ -56,4 +62,10 @@ TRAIN: # 训练步骤
         threshold: 1 # 0.9
         actived: True
         evaluation: "-"
+      avg_ips:
+        latest: True
+        kpi_base: 150
+        threshold: 0.2
+        actived: True
+        evaluation: "+"
     output: $ROOT_PATH/$model_log_path/speedyspeech_baker_2card.log
