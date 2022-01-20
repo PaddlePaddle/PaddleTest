@@ -51,6 +51,7 @@ unset http_proxy
 unset https_proxy
 python -m pip install --ignore-installed --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install seqeval -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install --upgrade --force --ignore-installed . -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # dir
