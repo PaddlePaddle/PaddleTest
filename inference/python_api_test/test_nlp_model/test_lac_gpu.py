@@ -44,7 +44,7 @@ def test_config():
 
 @pytest.mark.win
 @pytest.mark.server
-@pytest.mark.mkldnn
+@pytest.mark.gpu
 def test_mkldnn():
     """
     compared mkldnn lac outputs with true val
@@ -62,6 +62,6 @@ def test_mkldnn():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./lac/inference.pdmodel", params_file="./lac/inference.pdiparams")
-    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
 
     del test_suite2  # destroy class to save memory
