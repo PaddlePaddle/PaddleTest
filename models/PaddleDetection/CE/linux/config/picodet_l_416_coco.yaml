@@ -1,0 +1,123 @@
+MODEL: "picodet_l_416_coco" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleDetection
+  path: $ROOT_PATH/PaddleDetection
+  branch: $BASE_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: ./scripts/picodet_l_416_coco/ #脚本的路径
+  model_log_path: log/picodet_l_416_coco
+
+EXEC:
+  exec_cases: [TRAIN]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p1
+    tag: linux_dy_process_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh 'multi'
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 2.3059
+        threshold: 0.5 #0.0071
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      ips:
+        latest: True
+        kpi_base: 13.3977
+        threshold: 0.9 #0.010904
+        actived: True
+        evaluation: "+"
+        unit_repr: "images/s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/picodet_l_416_coco_train_multi.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh 'single'
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 2.4208
+        threshold: 0.5 #0.000528
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      ips:
+        latest: True
+        kpi_base: 19.4316
+        threshold: 0.9
+        actived: True
+        evaluation: "+"
+        unit_repr: "images/s"
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/picodet_l_416_coco_train_single.log
+
+
+EVAL:
+  - #可以有多步
+    priority: p1
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash eval.sh 'single'
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 1.354209
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/picodet_l_416_coco_eval_single.log
+
