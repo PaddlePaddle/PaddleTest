@@ -59,7 +59,7 @@ def test_mkldnn_more_bz():
 
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./mask_rcnn/model.pdmodel", params_file="./mask_rcnn/model.pdiparams")
-        images_list, images_origin_list  = test_suite.get_images_npy(
+        images_list, images_origin_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det", with_true_data=False
         )
 
