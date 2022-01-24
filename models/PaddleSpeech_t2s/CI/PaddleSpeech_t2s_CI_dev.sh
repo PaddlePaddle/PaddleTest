@@ -4,38 +4,28 @@ echo ${cudaid2}
 echo ${Data_path}
 echo ${paddle_compile}
 
-echo "######  ---python  env -----"
-rm -rf /usr/local/python2.7.15/bin/python
-rm -rf /usr/local/bin/python
-export PATH=/usr/local/bin/python:${PATH}
-case $1 in #python
-36)
-ln -s /usr/local/bin/python3.6 /usr/local/bin/python
-;;
-37)
-ln -s /usr/local/bin/python3.7 /usr/local/bin/python
-;;
-38)
-ln -s /usr/local/bin/python3.8 /usr/local/bin/python
-;;
-39)
-ln -s /usr/local/bin/python3.9 /usr/local/bin/python
-;;
-esac
-python -c "import sys; print('python version:',sys.version_info[:])";
-
-echo "######  ----install  paddle-----"
-unset http_proxy
-unset https_proxy
-python -m pip uninstall paddlepaddle-gpu -y
-python -m pip install $4 #paddle_compile
-num=`python -m pip list | grep paddlepaddle | wc -l`
-if [ "${num}" -eq "0" ]; then
-   wget https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxCentos_Gcc82_Cuda10.2_Trton_Py37_Compile_D_Develop/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
-   python -m pip install paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+mkdir run_env_py37;
+ln -s $(which python3.7) run_env_py37/python;
+ln -s $(which pip3.7) run_env_py37/pip;
+export PATH=$(pwd)/run_env_py37:${PATH};
+export http_proxy=${http_proxy}
+export https_proxy=${https_proxy}
+export no_proxy=bcebos.com;
+python -m pip install pip==20.2.4 --ignore-installed;
+python -m pip install $4 --no-cache-dir --ignore-installed;
+apt-get update
+apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
+pushd tools; make virtualenv.done; popd
+if [ $? -ne 0 ];then
+    exit 1
 fi
-echo "######  ----paddle version-----"
-python -c "import paddle; print(paddle.version.commit)";
+source tools/venv/bin/activate
+python -m pip install pip==20.2.4 --ignore-installed;
+python -m pip install $4 --no-cache-dir
+python -m pip install numpy==1.20.1 --ignore-installed
+python -m pip install pyparsing==2.4.7 --ignore-installed
+pip install -e .
+python -c "import sys; print('python version:',sys.version_info[:])";
 
 #system
 if [ -d "/etc/redhat-release" ]; then
@@ -43,16 +33,6 @@ if [ -d "/etc/redhat-release" ]; then
 else
    echo "######  system linux"
 fi
-
-# env
-#export FLAGS_fraction_of_gpu_memory_to_use=0.8
-# dependency
-unset http_proxy
-unset https_proxy
-python -m pip install --ignore-installed --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install seqeval -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install --upgrade --force --ignore-installed . -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # dir
 log_path=log
