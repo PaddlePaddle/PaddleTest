@@ -29,7 +29,7 @@ class ParamFileReader(object):
         self.epoch_num = len(self.params_exp_list)
         file_check = len(self.params_exp_list) == len(self.params_exp_list)
         if file_check is False:
-            raise Exception("num of exp pdparams_file is not equal num of res pdparams_file!!")
+            raise Exception("num of pdparams_exp file is not equal to pdparams_res file!!")
 
     def __iter__(self):
         """
@@ -71,7 +71,10 @@ class ParamDictReader(object):
         self.key_num = len(self.exp_key_list)
         key_num_check = self.key_num == len(list(self.params_res.keys()))
         if key_num_check is False:
-            raise Exception("num of exp pdparams_key is not equal num of res pdparams_key!!")
+            raise Exception(
+                "num of pdparams_exp's layer key is not equal to num of pdparams_res's layer key!! "
+                "Maybe your pdparams_exp path or pdparams_res path is wrong."
+            )
 
     def __iter__(self):
         """
