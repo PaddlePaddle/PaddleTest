@@ -14,6 +14,7 @@ def ernie_data(data_path):
        examples(list): array in list
     """
     import paddlenlp as ppnlp  # 仅nlp case会触发载入
+
     max_seq_length = 128
     examples = []
     with open(data_path, "r", encoding="utf-8") as f:
