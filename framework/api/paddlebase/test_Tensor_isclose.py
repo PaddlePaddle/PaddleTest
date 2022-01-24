@@ -32,6 +32,7 @@ class TestIsClose(APIBase):
         # enable check grad
         self.enable_backward = False
 
+
 if os.getenv("AGILE_COMPILE_BRANCH") != "release/2.2":
     obj = TestIsClose(paddle.Tensor.isclose)
 

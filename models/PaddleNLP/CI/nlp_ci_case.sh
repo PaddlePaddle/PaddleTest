@@ -201,7 +201,7 @@ print_info $? electra_pretrain
 # 8 gpt
 gpt(){
 #data process
-cd ${nlp_dir}/examples/language_model/data_tools/   
+cd ${nlp_dir}/examples/language_model/data_tools/
 sed -i "s/python3/python/g" Makefile
 sed -i "s/python-config/python3.7m-config/g" Makefile
 #pretrain
@@ -257,7 +257,7 @@ cd ../
 #c++
 mkdir build_gpt_cc
 cd build_gpt_cc/
-cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON  
+cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON
 make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
 print_info $? gpt_C_FT
 #depoly python
@@ -271,8 +271,8 @@ python infer.py \
     --start_token "<|endoftext|>" \
     --end_token "<|endoftext|>" \
     --temperature 1.0  >${log_path}/gpt_deploy_P_FT >>${log_path}/gpt_deploy_P_FT 2>&1
-print_info $? gpt_deploy_P_FT 
-#depoly C++  
+print_info $? gpt_deploy_P_FT
+#depoly C++
 python export_model.py \
     --model_name_or_path gpt2-medium-en \
     --decoding_lib ${nlp_dir}/paddlenlp/ops/build_gpt_so/lib/libdecoding_op.so \
@@ -284,7 +284,7 @@ python export_model.py \
 mv infer_model/ ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
 cd ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
 ./gpt -batch_size 1 -gpu_id 0 -model_dir ./infer_model -vocab_file ./infer_model/vocab.txt -start_token "<|endoftext|>" -end_token "<|endoftext|>"  >${log_path}/gpt_deploy_C_FT >>${log_path}/gpt_deploy_C_FT 2>&1
-print_info $? gpt_deploy_C_FT 
+print_info $? gpt_deploy_C_FT
 }
 # 9 ernie-1.0
 ernie-1.0 (){
@@ -722,10 +722,10 @@ cd ../
 #C++ op
 mkdir build_tr_cc
 cd build_tr_cc/
-cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON 
+cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON
 make -j >${log_path}/transformer_C_FT >>${log_path}/transformer_C_FT 2>&1
 print_info $? transformer_C_FT
-#deploy python 
+#deploy python
 cd ${nlp_dir}/examples/machine_translation/transformer/faster_transformer/
 sed -i "s#./trained_models/step_final/#./base_trained_models/step_final/#g" ../configs/transformer.base.yaml
 wget https://paddlenlp.bj.bcebos.com/models/transformers/transformer/transformer-base-wmt_ende_bpe.tar.gz
@@ -929,13 +929,13 @@ python -m paddle.distributed.launch  --log_dir output run_classifier.py  \
    --save_steps 2 \
    --max_steps 2 \
    --output_dir output \
-   --logging_steps 1  
+   --logging_steps 1
 }
 # #32 bart
 # bart{
 # cd ${nlp_dir}/examples/text_summarization/bart
 # }
-#33 
+#33
 ####################################
 export P0case_list=()
 export P0case_time=0
