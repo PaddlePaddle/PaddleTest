@@ -120,4 +120,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/fairmot_dla34_30e_1088x608_eval_single.log
-

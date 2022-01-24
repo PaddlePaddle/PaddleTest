@@ -120,4 +120,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/picodet_l_416_coco_eval_single.log
-

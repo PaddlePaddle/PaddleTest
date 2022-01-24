@@ -120,4 +120,3 @@ EVAL:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/tinypose_128x96_eval_single.log
-
