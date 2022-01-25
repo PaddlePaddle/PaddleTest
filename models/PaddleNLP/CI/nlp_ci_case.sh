@@ -930,11 +930,6 @@ python -m paddle.distributed.launch  --log_dir output run_classifier.py  \
    --logging_steps 1  >${log_path}/ernie-m >>${log_path}/ernie-m 2>&1
 print_info $? ernie-m
 }
-# #32 bart
-# bart{
-# cd ${nlp_dir}/examples/text_summarization/bart
-# }
-#33
 ####################################
 export P0case_list=()
 export P0case_time=0
