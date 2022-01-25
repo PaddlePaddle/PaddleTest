@@ -19,3 +19,4 @@ zstandard
 pypinyin
 pycryptodome
 bce-python-sdk
+packaging
