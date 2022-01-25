@@ -111,6 +111,7 @@ class InferenceTest(object):
             npy_list(list): npy array in list
         """
         images_path = os.path.join(file_path, "images")
+        npy_path = os.path.join(file_path, "result")
         if not os.path.exists(images_path):
             raise Exception(f"{images_path} not find")
         if with_true_data:
