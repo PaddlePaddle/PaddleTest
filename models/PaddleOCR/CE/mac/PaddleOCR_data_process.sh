@@ -12,6 +12,7 @@ if [ ! -f "pretrain_models/en_server_pgnetA/best_accuracy.pdparams" ]; then
   wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar
   cd pretrain_models
   tar -xf en_server_pgnetA.tar
+  cd ../
 fi
 
 # sed -i '' 's/scikit-image==0.17.2/scikit-image/g' requirements.txt
