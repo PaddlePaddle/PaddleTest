@@ -89,11 +89,5 @@ def test_trt_fp32_more_bz():
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./fast_rcnn/model.pdmodel", params_file="./fast_rcnn/model.pdiparams")
         test_suite.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            repeat=1,
-            delta=2e-5,
-            precision="trt_fp32",
-            dynamic=True,
-            tuned=False,
+            input_data_dict, output_data_dict, repeat=1, delta=2e-5, precision="trt_fp32", dynamic=True, tuned=False
         )
