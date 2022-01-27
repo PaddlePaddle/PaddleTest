@@ -98,6 +98,9 @@ python -m pip install  --ignore-installed paddleslim \
 python -m pip install  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
 
+python -m pip install -i --ignore-installed opencv-python==4.4.0.46 \
+   -i https://mirror.baidu.com/pypi/simple
+python -m pip list |grep opencv
 
 rm -rf models_list
 rm -rf models_list_all
