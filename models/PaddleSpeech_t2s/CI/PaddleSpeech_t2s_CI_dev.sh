@@ -49,7 +49,7 @@ done
 echo "`python -m pip list | grep paddle`" |tee -a ${log_path}/result.log
 python -c 'import paddle;print(paddle.version.commit)' |tee -a ${log_path}/result.log
 
-echo -e "fastspeech2\nparallelwavegan\nspeedyspeech\ntacotron2\ntransformertts\nwaveflow" > models_list_all
+echo -e "fastspeech2\nparallelwavegan\nspeedyspeech\ntransformertts\nwaveflow" > models_list_all
 shuf models_list_all > models_list_shuf
 head -n 2 models_list_shuf > models_list
 
@@ -211,41 +211,6 @@ if [ $? -eq 0 ];then
 else
    cat ../../../$log_path/inference/speedyspeech.log
    echo -e "\033[31m inference of speedyspeech_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
-fi
-cd ../../..
-;;
-
-tacotron2)
-# tacotron2
-cd examples/ljspeech/tts0
-
-source path.sh
-source ${MAIN_ROOT}/utils/parse_options.sh
-gpus=$2
-
-rm -rf ./preprocessed_ljspeech
-ln -s $3/preprocess_data/tacotron2/preprocessed_ljspeech/ ./
-train_output_path=output
-rm -rf ${train_output_path}
-export CUDA_VISIBLE_DEVICES=${gpus}
-python ${BIN_DIR}/train.py --data=preprocessed_ljspeech --output=${train_output_path} --ngpu=2 --opts data.batch_size 2 training.max_iteration 10 training.valid_interval 10 training.save_interval 10 > ../../../$log_path/train/tacotron2.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of tacotron2 successfully! \033[0m" | tee -a ../../../$log_path/result.log
-else
-   cat ../../../$log_path/train/tacotron2.log
-   echo -e "\033[31m training of tacotron2 failed! \033[0m" | tee -a ../../../$log_path/result.log
-fi
-
-rm -rf exp
-head -3 ${BIN_DIR}/../sentences_en.txt > sentences_en3.txt
-sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences_en.txt#./sentences_en3.txt#g' ./local/synthesize.sh
-ckpt_name=step-10
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/tacotron2.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of tacotron2 successfully! \033[0m" | tee -a ../../../$log_path/result.log
-else
-   cat ../../../$log_path/synthesize/tacotron2.log
-   echo -e "\033[31m synthesize of tacotron2 failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
