@@ -329,7 +329,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]] \
       || [[ ${line} =~ 'ResNet152' ]] || [[ ${line} =~ 'DLA169' ]] || [[ ${line} =~ 'ResNeSt101' ]] \
       || [[ ${line} =~ 'ResNeXt152_vd_64x4d' ]] || [[ ${line} =~ 'ResNeXt152_64x4d' ]] || [[ ${line} =~ 'ResNet101' ]] \
-      || [[ ${line} =~ 'ResNet200_vd' ]] || [[ ${line} =~ 'DLA102' ]] ;then
+      || [[ ${line} =~ 'ResNet200_vd' ]] || [[ ${line} =~ 'DLA102' ]] || [[ ${model} =~ 'InceptionV4' ]];then
       echo "######  use pretrain model"
       echo ${model}
       wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${model}_pretrained.pdparams --no-proxy
@@ -338,7 +338,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       rm -rf ${model}_pretrained.pdparams
    fi
 
-   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'InceptionV4' ]] \
+   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] \
       || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ '/ResNet50_vd.yaml' ]];then
       echo "######  use pretrain model"
       echo ${model}
