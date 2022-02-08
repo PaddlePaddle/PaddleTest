@@ -43,7 +43,7 @@ def test_cov_base():
 
 
 @pytest.mark.api_linalg_cov_parameters
-def test_diff0():
+def test_cov0():
     """
     default
     """
@@ -53,7 +53,7 @@ def test_diff0():
 
 
 @pytest.mark.api_linalg_cov_parameters
-def test_diff1():
+def test_cov1():
     """
     rowvar: True
     """
@@ -63,7 +63,7 @@ def test_diff1():
 
 
 @pytest.mark.api_linalg_cov_parameters
-def test_diff2():
+def test_cov2():
     """
     rowvar: True
     ddof: True
