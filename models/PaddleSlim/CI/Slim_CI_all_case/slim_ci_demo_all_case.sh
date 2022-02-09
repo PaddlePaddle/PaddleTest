@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 ##################
 #bash slim_ci_demo_all_case.sh $5 $6;
-#quant_embedding case failed 临时解决方式
-export FLAGS_run_pten_kernel=0
+
 
 print_info(){
 if [ $1 -ne 0 ];then
