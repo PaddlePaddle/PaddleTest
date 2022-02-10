@@ -999,7 +999,7 @@ all_latency(){
 }
 
 ####################################
-export all_case_list=(all_distillation all_quant all_prune all_nas all_darts all_latency)
+export all_case_list=(all_distillation all_quant all_prune all_nas all_darts )
 
 export all_case_time=0
 declare -A all_P0case_dic
