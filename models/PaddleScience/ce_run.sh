@@ -11,7 +11,7 @@ api_bug=0
 echo "" >  ${root_dir}/result.txt
 echo "========= bug file list =========" > ${root_dir}/result.txt
 
-echo "====examples bugs:" > ${root_dir}/result.txt
+echo "====examples bugs:" >> ${root_dir}/result.txt
 for file in ${cases}
 do
 file_name=`basename $file`
@@ -59,6 +59,7 @@ echo ============================= ${file_name}  end! ==========================
 done
 
 echo "api bug numbers: "${api_bug} >> ${root_dir}/result.txt
+echo "************************** api test finished **************************" >> ${root_dir}/result.txt
 
 bug=$[$example_bug+$api_bug]
 echo "total bug: $bug"
