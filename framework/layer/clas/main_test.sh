@@ -17,26 +17,26 @@
 unset GREP_OPTIONS
 cur_path=`pwd`
 
-while getopts ":paddle:branch:py_cmd:task:upload:" opt
+while getopts ":P:b:p:t:u:" opt
 do
     case $opt in
-        paddle)
+        P)
         echo "test paddle=$OPTARG"
         paddle=$OPTARG
         ;;
-        branch)
+        b)
         echo "test branch=$OPTARG"
         branch=$OPTARG
         ;;
-        py_cmd)
+        p)
         echo "py version=$OPTARG"
         py_cmd=$OPTARG
         ;;
-        task)
+        t)
         echo "repo=$OPTARG"
         repo=$OPTARG
         ;;
-        upload)
+        u)
         echo "upload=$OPTARG"
         upload=$OPTARG
         ;;
