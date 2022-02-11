@@ -17,18 +17,22 @@
 unset GREP_OPTIONS
 cur_path=`pwd`
 
-while getopts ":b:p:t:upload:g:" opt
+while getopts ":paddle:branch:py_cmd:task:upload:" opt
 do
     case $opt in
-        b)
+        paddle)
+        echo "test paddle=$OPTARG"
+        paddle=$OPTARG
+        ;;
+        branch)
         echo "test branch=$OPTARG"
         branch=$OPTARG
         ;;
-        p)
+        py_cmd)
         echo "py version=$OPTARG"
         py_cmd=$OPTARG
         ;;
-        t)
+        task)
         echo "repo=$OPTARG"
         repo=$OPTARG
         ;;
@@ -36,17 +40,23 @@ do
         echo "upload=$OPTARG"
         upload=$OPTARG
         ;;
-        g)
-        echo "use gpu=$OPTARG"
-        use_gpu=$OPTARG
-        ;;
         ?)
         echo "未知参数"
         usage
     esac
 done
 
+build_env(){
+    $py_cmd -m pip install --upgrade pip
+    $py_cmd -m pip install ${paddle}
+
+}
+
+
 build_clas(){
+
+    build_env
+
     #download Layer_CE_code from bos. These code is from PaddleClas and has been fixed by paddle-qa for layer test
     wget https://paddle-qa.bj.bcebos.com/PaddleLayerTest/paddleclas/Layer_CE_code.tar
     tar -xzf Layer_CE_code.tar && mv Layer_CE_code/* . && rm -rf Layer_CE_code.tar && rm -rf Layer_CE_code
@@ -62,9 +72,9 @@ build_clas(){
     mv PaddleClasLayerTest/ppcls/engine/evaluation/Layer_CE_classification.py PaddleClasLayerTest/ppcls/engine/evaluation/classification.py
     rm -rf PaddleClasLayerTest/ppcls/engine/engine.py
     cp -r Layer_CE_engine.py PaddleClasLayerTest/ppcls/engine
-    mv PaddleClasLayerTest/ppcls/engine/Layer_CE_engine.py PaddleClasLayerTest/ppcls/engine/en
+    mv PaddleClasLayerTest/ppcls/engine/Layer_CE_engine.py PaddleClasLayerTest/ppcls/engine/engine.py
 
-    \cp -f paddleclas_model_py/* PaddleClasLayerTest/ppcls/arch/backbone/legendary_m
+    \cp -f paddleclas_model_py/* PaddleClasLayerTest/ppcls/arch/backbone/legendary_models
 
     wget https://paddle-qa.bj.bcebos.com/PaddleLayerTest/paddleclas/ILSVRC2012.tar
     tar -xf ILSVRC2012.tar -C PaddleClasLayerTest/dataset && rm -rf ILSVRC2012.tar
@@ -75,6 +85,7 @@ main(){
     case $repo in
         (build_clas_case)
             train_excption=0
+            train_fail_list=0
             export FLAGS_cudnn_deterministic=True
 
             build_clas
@@ -98,12 +109,13 @@ main(){
                 if [ $? -ne 0 ];then
                 echo ++++++++++++++++++++++ ${model_case} train Failed!!!++++++++++++++++++++++
                 train_excption=$(expr ${train_excption} + 1)
+                train_fail_list="${train_fail_list} ${model_case}"
                 continue
                 else
                 echo ++++++++++++++++++++++ ${model_case} train Success!!!++++++++++++++++++++++
                 fi
 
-                if [[ ${upload} != True ]]; then
+                if [[ ${upload} = exp ]]; then
                 #change backward and forward name
                 mv ${pdparams_output}/${model_arch}/backward ${pdparams_output}/${model_arch}/backward_exp
                 mv ${pdparams_output}/${model_arch}/forward ${pdparams_output}/${model_arch}/forward_exp
@@ -117,6 +129,7 @@ main(){
 
             done
             echo "train_excption = ${train_excption}"
+            echo "train_fail_list is: ${train_fail_list}"
             ;;
         (paddleclas)
             train_excption=0
@@ -232,13 +245,19 @@ main(){
 
 #                rm -rf ${pdparams_output}/${model_arch}
             done
-            tar -czf clas_layer_${run_time}.tar log
 
+            error_code=$(expr ${train_excption} + ${forward_excption} + ${backward_excption})
 
             echo ++++++++++++++++++++++ upload ${run_time}.log to bos !!!++++++++++++++++++++++
+            tar -czf clas_layer_${run_time}.tar log
             wget -q --no-proxy https://xly-devops.bj.bcebos.com/home/bos_new.tar.gz
             tar -xzf bos_new.tar.gz
             $py_cmd BosClient.py clas_layer_${run_time}.tar paddle-qa/PaddleLayerTest/log/paddleclas/Linux/V100/py37 https://paddle-qa.bj.bcebos.com/PaddleLayerTest/log/paddleclas/Linux/V100/py37
+
+            if [[ ${upload} = res ]] && [[ ${error_code} != 0 ]]; then
+            echo "backward_excption = ${backward_excption}"
+            tar -czf output_${run_time}.tar output
+            fi
 
             echo "================================== final-results =================================="
             cat log/whole_fail.log
@@ -246,7 +265,7 @@ main(){
             echo "train_fail_list is: ${train_fail_list}"
             echo "forward_excption = ${forward_excption}"
             echo "backward_excption = ${backward_excption}"
-            error_code=$(expr ${train_excption} + ${forward_excption} + ${backward_excption})
+
             exit ${error_code}
             ;;
         (*)
