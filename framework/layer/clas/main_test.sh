@@ -234,6 +234,7 @@ main(){
             done
             tar -czf clas_layer_${run_time}.tar log
 
+
             echo ++++++++++++++++++++++ upload ${run_time}.log to bos !!!++++++++++++++++++++++
             wget -q --no-proxy https://xly-devops.bj.bcebos.com/home/bos_new.tar.gz
             tar -xzf bos_new.tar.gz
