@@ -178,7 +178,6 @@ main(){
                 fail_list=`grep "failed file list:" log/${model_case}/forward.log | awk -F':  ' '{print $2}'`
                 succ_list=`grep "Success file list:" log/${model_case}/forward.log | awk -F':  ' '{print $2}'`
 
-
                 if [[ ${fail_count} != "0" ]] || [[ "${fail_count}" = "" ]];then
                 echo ++++++++++++++++++++++ ${model_case} forward testing Failed!!!++++++++++++++++++++++
                 forward_excption=$(expr ${forward_excption} + 1)
