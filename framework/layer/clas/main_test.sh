@@ -115,7 +115,7 @@ main(){
                 echo ++++++++++++++++++++++ ${model_case} train Success!!!++++++++++++++++++++++
                 fi
 
-                if [[ ${upload} = True ]]; then
+                if [[ ${upload} = exp ]]; then
                 #change backward and forward name
                 mv ${pdparams_output}/${model_arch}/backward ${pdparams_output}/${model_arch}/backward_exp
                 mv ${pdparams_output}/${model_arch}/forward ${pdparams_output}/${model_arch}/forward_exp
@@ -245,13 +245,19 @@ main(){
 
 #                rm -rf ${pdparams_output}/${model_arch}
             done
-            tar -czf clas_layer_${run_time}.tar log
 
+            error_code=$(expr ${train_excption} + ${forward_excption} + ${backward_excption})
 
             echo ++++++++++++++++++++++ upload ${run_time}.log to bos !!!++++++++++++++++++++++
+            tar -czf clas_layer_${run_time}.tar log
             wget -q --no-proxy https://xly-devops.bj.bcebos.com/home/bos_new.tar.gz
             tar -xzf bos_new.tar.gz
             $py_cmd BosClient.py clas_layer_${run_time}.tar paddle-qa/PaddleLayerTest/log/paddleclas/Linux/V100/py37 https://paddle-qa.bj.bcebos.com/PaddleLayerTest/log/paddleclas/Linux/V100/py37
+
+            if [[ ${upload} = res ]] && [[ ${error_code} != 0 ]]; then
+            echo "backward_excption = ${backward_excption}"
+            tar -czf output_${run_time}.tar output
+            fi
 
             echo "================================== final-results =================================="
             cat log/whole_fail.log
@@ -259,7 +265,7 @@ main(){
             echo "train_fail_list is: ${train_fail_list}"
             echo "forward_excption = ${forward_excption}"
             echo "backward_excption = ${backward_excption}"
-            error_code=$(expr ${train_excption} + ${forward_excption} + ${backward_excption})
+
             exit ${error_code}
             ;;
         (*)
