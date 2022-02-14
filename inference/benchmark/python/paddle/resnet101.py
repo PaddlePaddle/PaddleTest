@@ -1,15 +1,20 @@
+"""
+# -*- coding: utf-8 -*-
+# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
+"""
+
 import os
 import time
-import wget
 import tarfile
 import logging
 import argparse
+
+import wget
 import numpy as np
 
 from paddle.inference import Config
 from paddle.inference import create_predictor
 from paddle.inference import PrecisionType
-
 
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -31,7 +36,9 @@ def check_model_exist():
 
 def init_predictor(args):
     """
-    build predictor
+    Args:
+        args : input args
+
     """
     config = Config("./ResNet101/inference.pdmodel", "./ResNet101/inference.pdiparams")
 
@@ -58,7 +65,9 @@ def init_predictor(args):
 
 def run(predictor, img):
     """
-    run predictor
+    Args:
+        predictor : paddle predictor
+        img : numpy random array
     """
     input_names = predictor.get_input_names()
     for i, name in enumerate(input_names):
@@ -118,10 +127,9 @@ def summary_config(args, infer_time: float):
 
 
 if __name__ == "__main__":
-   
-    FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    logging.basicConfig(level=logging.INFO, format=FORMAT)
-    logger = logging.getLogger(__name__)
+    """
+    main case
+    """
     check_model_exist()
     args = parse_args()
     pred = init_predictor(args)
