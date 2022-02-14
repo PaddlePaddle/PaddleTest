@@ -89,7 +89,6 @@ main(){
             export FLAGS_cudnn_deterministic=True
 
             build_clas
-
             rm -rf log && rm -rf output
 
             wget -q --no-proxy https://xly-devops.bj.bcebos.com/home/bos_new.tar.gz
