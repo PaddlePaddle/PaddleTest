@@ -59,7 +59,7 @@ build_clas(){
     build_env
 
     #download Layer_CE_code from bos. These code is from PaddleClas and has been fixed by paddle-qa for layer test
-    wget https://paddle-qa.bj.bcebos.com/PaddleLayerTest/paddleclas/Layer_CE_code.tar
+    wget -q --no-proxy https://paddle-qa.bj.bcebos.com/PaddleLayerTest/paddleclas/Layer_CE_code.tar
     tar -xzf Layer_CE_code.tar && mv Layer_CE_code/* . && rm -rf Layer_CE_code.tar && rm -rf Layer_CE_code
 
     rm -rf PaddleClasLayerTest
@@ -77,7 +77,7 @@ build_clas(){
 
     \cp -f paddleclas_model_py/* PaddleClasLayerTest/ppcls/arch/backbone/legendary_models
 
-    wget https://paddle-qa.bj.bcebos.com/PaddleLayerTest/paddleclas/ILSVRC2012.tar
+    wget -q --no-proxy https://paddle-qa.bj.bcebos.com/PaddleLayerTest/paddleclas/ILSVRC2012.tar
     tar -xf ILSVRC2012.tar -C PaddleClasLayerTest/dataset && rm -rf ILSVRC2012.tar
 
 }
@@ -162,7 +162,7 @@ main(){
                 mkdir -p ${pdparams_output}/${model_arch}
 
                 echo ++++++++++++++++++++++ ${model_case} start testing !!!++++++++++++++++++++++
-                wget https://paddle-qa.bj.bcebos.com/PaddleLayerTest/${repo}/Linux/V100/py37/${model_case}.tar > wget_tmp.log 2>&1
+                wget -q --no-proxy https://paddle-qa.bj.bcebos.com/PaddleLayerTest/${repo}/Linux/V100/py37/${model_case}.tar
                 tar -xzf ${model_case}.tar -C ${pdparams_output} && rm -rf ${model_case}.tar
 
                 echo "======================> ${model_case} conclusion: " >> log/whole_test.log
