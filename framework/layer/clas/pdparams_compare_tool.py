@@ -45,8 +45,8 @@ class ParamFileReader(object):
         next
         """
         if self.count < self.epoch_num:
-            print("exp path is: ", os.path.join(self.params_exp_path, self.params_exp_list[self.count]))
-            print("res path is: ", os.path.join(self.params_res_path, self.params_res_list[self.count]))
+            # print("exp path is: ", os.path.join(self.params_exp_path, self.params_exp_list[self.count]))
+            # print("res path is: ", os.path.join(self.params_res_path, self.params_res_list[self.count]))
             res_filename = self.params_res_list[self.count]
             res_dict = paddle.load(os.path.join(self.params_res_path, self.params_res_list[self.count]))
             exp_filename = self.params_exp_list[self.count]
@@ -75,8 +75,8 @@ class ParamDictReader(object):
         self.key_num = len(self.exp_key_list)
         key_num_check = self.key_num == len(list(self.params_res.keys()))
         if key_num_check is False:
-            print("exp_key_list is: ", self.exp_key_list)
-            print("res_key_list is: ", self.res_key_list)
+            # print("exp_key_list is: ", self.exp_key_list)
+            # print("res_key_list is: ", self.res_key_list)
             raise Exception(
                 "num of pdparams_exp's layer key is not equal to num of pdparams_res's layer key!! "
                 "Maybe your pdparams_exp path or pdparams_res path is wrong."
