@@ -148,8 +148,6 @@ main(){
 
             echo "======================> python version: "
             python -c 'import sys; print(sys.version_info[:])'
-#            git clone -b develop https://github.com/PaddlePaddle/PaddleTest.git
-#            cp -r PaddleTest/framework/e2e/paddle_layer_test/clas/* .
 
             rm -rf log && rm -rf output
 
@@ -260,12 +258,13 @@ main(){
             fi
 
             echo "================================== final-results =================================="
+            if [[ -e "log/whole_fail.log" ]]; then
             cat log/whole_fail.log
+            fi
             echo "train_excption = ${train_excption}"
             echo "train_fail_list is: ${train_fail_list}"
             echo "forward_excption = ${forward_excption}"
             echo "backward_excption = ${backward_excption}"
-
             exit ${error_code}
             ;;
         (*)
