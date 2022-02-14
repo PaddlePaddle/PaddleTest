@@ -135,7 +135,7 @@ main(){
             forward_excption=0
             backward_excption=0
             train_fail_list=
-            run_time=`date +"%Y-%m-%d_%H:%M:%S"`
+            run_time=`date +"%Y_%m_%d_%H_%M_%S"`
             export FLAGS_cudnn_deterministic=True
 
             echo "======================> run time is ${run_time} "
