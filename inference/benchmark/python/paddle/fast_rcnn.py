@@ -142,10 +142,12 @@ if __name__ == "__main__":
     img = np.random.randint(0, 255, (args.batch_size, 3, 640, 640)).astype("float32")
 
     for batch in range(args.batch_size):
-        scale_factor = np.array([im_size * 1. / img.shape[0], im_size * 1. / img.shape[1]]).reshape((1, 2)).astype(np.float32)
+        scale_factor = (
+            np.array([im_size * 1.0 / img.shape[0], im_size * 1.0 / img.shape[1]]).reshape((1, 2)).astype(np.float32)
+        )
         scale_factor_pool.append(scale_factor)
     scale_factor_pool = np.array(scale_factor_pool).reshape((args.batch_size, 2))
-    
+
     for batch in range(args.batch_size):
         im_shape = np.array([im_size, im_size]).reshape((1, 2)).astype(np.float32)
         im_shape_pool.append(im_shape)
