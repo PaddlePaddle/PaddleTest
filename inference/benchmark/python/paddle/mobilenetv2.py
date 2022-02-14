@@ -28,7 +28,7 @@ def check_model_exist():
     """
     mobilenetv2_url = "https://paddle-qa.bj.bcebos.com/inference_benchmark/paddle/model/MobileNetV2.tgz"
     if not os.path.exists("./MobileNetV2/inference.pdiparams"):
-        wget.download(vgg16_url, out="./")
+        wget.download(mobilenetv2_url, out="./")
         tar = tarfile.open("MobileNetV2.tgz")
         tar.extractall()
         tar.close()
