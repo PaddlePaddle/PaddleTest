@@ -48,6 +48,7 @@ done
 
 build_env(){
     $py_cmd -m pip install --upgrade pip
+    $py_cmd -m pip install pytest
     $py_cmd -m pip install ${paddle}
 
 }
@@ -138,6 +139,8 @@ main(){
             run_time=`date +"%Y_%m_%d_%H_%M_%S"`
             export FLAGS_cudnn_deterministic=True
 
+            build_clas
+
             echo "======================> run time is ${run_time} "
 
             echo "======================> paddle version commit: "
@@ -147,8 +150,6 @@ main(){
             python -c 'import sys; print(sys.version_info[:])'
 #            git clone -b develop https://github.com/PaddlePaddle/PaddleTest.git
 #            cp -r PaddleTest/framework/e2e/paddle_layer_test/clas/* .
-
-            build_clas
 
             rm -rf log && rm -rf output
 
@@ -161,7 +162,7 @@ main(){
                 mkdir -p ${pdparams_output}/${model_arch}
 
                 echo ++++++++++++++++++++++ ${model_case} start testing !!!++++++++++++++++++++++
-                wget https://paddle-qa.bj.bcebos.com/PaddleLayerTest/${repo}/Linux/V100/py37/${model_case}.tar
+                wget https://paddle-qa.bj.bcebos.com/PaddleLayerTest/${repo}/Linux/V100/py37/${model_case}.tar > wget_tmp.log 2>&1
                 tar -xzf ${model_case}.tar -C ${pdparams_output} && rm -rf ${model_case}.tar
 
                 echo "======================> ${model_case} conclusion: " >> log/whole_test.log
