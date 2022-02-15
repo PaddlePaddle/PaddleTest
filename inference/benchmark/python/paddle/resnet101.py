@@ -43,7 +43,7 @@ def init_predictor(args):
     use_calib_mode = False
     if args.trt_precision == "int8":
         use_calib_mode = True
-        
+
     config = Config("./ResNet101/inference.pdmodel", "./ResNet101/inference.pdiparams")
 
     config.enable_memory_optim()
@@ -100,10 +100,10 @@ def parse_args():
     parser.add_argument("--repeats", type=int, default=1000, help="repeats.")
     parser.add_argument("--device", type=str, default="gpu", help="[gpu,cpu,xpu]")
     parser.add_argument("--use_trt", type=bool, default=False, help="Whether use trt.")
-    parser.add_argument("--trt_precision", type=str, default="fp32", help="trt precision, choice = ['fp32', 'fp16', 'int8']")
     parser.add_argument(
-        "--use_mkldnn", type=int, default=False, help="use mkldnn"
+        "--trt_precision", type=str, default="fp32", help="trt precision, choice = ['fp32', 'fp16', 'int8']"
     )
+    parser.add_argument("--use_mkldnn", type=int, default=False, help="use mkldnn")
     return parser.parse_args()
 
 

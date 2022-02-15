@@ -43,7 +43,7 @@ def init_predictor(args):
     use_calib_mode = False
     if args.trt_precision == "int8":
         use_calib_mode = True
-    
+
     config = Config("./VGG16/inference.pdmodel", "./VGG16/inference.pdiparams")
 
     config.enable_memory_optim()
