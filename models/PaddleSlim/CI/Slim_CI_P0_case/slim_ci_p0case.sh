@@ -961,7 +961,8 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
 done
 }
 set -e
-get_diff_TO_P0case
+#get_diff_TO_P0case
+P0case_list=(distillation quant prune nas unstructured_prune darts ce_tests_demo)
 echo -e "\033[35m ---- P0case_list length: ${#P0case_list[*]}, cases: ${P0case_list[*]} \033[0m"
 echo -e "\033[35m ---- P0case_time: $P0case_time min \033[0m"
 set +e
