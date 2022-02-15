@@ -38,21 +38,37 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    export CUDA_VISIBLE_DEVICES=${cudaid2} #cudaid2
 
    echo "######  ---py37  env -----"
-   rm -rf /usr/local/python2.7.15/bin/python
-   rm -rf /usr/local/bin/python
-   export PATH=/usr/local/bin/python:${PATH}
+   # rm -rf /usr/local/python2.7.15/bin/python
+   # rm -rf /usr/local/bin/python
+   # export PATH=/usr/local/bin/python:${PATH}
    case ${python} in #python
    36)
-   ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+   # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+   mkdir run_env_py36;
+   ln -s $(which python3.6) run_env_py36/python;
+   ln -s $(which pip3.6) run_env_py36/pip;
+   export PATH=$(pwd)/run_env_py36:${PATH};
    ;;
    37)
-   ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+   # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+   mkdir run_env_py37;
+   ln -s $(which python3.7) run_env_py37/python;
+   ln -s $(which pip3.7) run_env_py37/pip;
+   export PATH=$(pwd)/run_env_py37:${PATH};
    ;;
    38)
-   ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+   # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+   mkdir run_env_py38;
+   ln -s $(which python3.8) run_env_py38/python;
+   ln -s $(which pip3.8) run_env_py38/pip;
+   export PATH=$(pwd)/run_env_py38:${PATH};
    ;;
    39)
-   ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+   # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+   mkdir run_env_py39;
+   ln -s $(which python3.9) run_env_py39/python;
+   ln -s $(which pip3.9) run_env_py39/pip;
+   export PATH=$(pwd)/run_env_py39:${PATH};
    ;;
    esac
 
@@ -194,7 +210,7 @@ sed -i '1s/epochs/total_iters/' $line
 # animeganv2
 sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 case ${model} in
-lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second)
+lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal)
 python tools/main.py --config-file $line \
    -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
    > $log_path/train/${model}.log 2>&1

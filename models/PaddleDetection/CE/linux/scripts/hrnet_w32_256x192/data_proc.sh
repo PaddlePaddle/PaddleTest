@@ -19,7 +19,18 @@ if [ -d "$cur_path/../../PaddleDetection/dataset/voc" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/voc
 fi
 ln -s /ssd2/ce_data/PaddleSeg/pascalvoc $cur_path/../../PaddleDetection/dataset/voc
-
+if [ -d "$cur_path/../../PaddleDetection/dataset/mot" ];then
+rm -rf $cur_path/../../PaddleDetection/dataset/mot
+fi
+ln -s /ssd2/ce_data/PaddleDetection/data/mot $cur_path/../../PaddleDetection/dataset/mot
+if [ -d "$cur_path/../../PaddleDetection/dataset/AIchallenge" ];then
+rm -rf $cur_path/../../PaddleDetection/dataset/AIchallenge
+fi
+ln -s /ssd2/ce_data/PaddleDetection/data/AIchallenge $cur_path/../../PaddleDetection/dataset/AIchallenge
+if [ -d "$cur_path/../../PaddleDetection/dataset/aic_coco_train_cocoformat.json" ];then
+rm -rf $cur_path/../../PaddleDetection/dataset/aic_coco_train_cocoformat.json
+fi
+ln -s /ssd2/ce_data/PaddleDetection/data/aic_coco_train_cocoformat.json $cur_path/../../PaddleDetection/dataset/aic_coco_train_cocoformat.json
 
 #train config process
 max_iters=121 #2500 #1000

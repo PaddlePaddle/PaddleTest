@@ -4,6 +4,7 @@ print_info(){
 if [ $1 -ne 0 ];then
     mv ${log_path}/$2 ${log_path}/$2_FAIL.log
     echo -e "\033[31m ${log_path}/$2_FAIL \033[0m"
+    cat ${log_path}/$2_FAIL.log
 else
     mv ${log_path}/$2 ${log_path}/$2_SUCCESS.log
     echo -e "\033[32m ${log_path}/$2_SUCCESS \033[0m"
@@ -13,7 +14,6 @@ fi
 # 1 waybill_ie (无可控参数，数据集外置)
 waybill_ie(){
 cd ${nlp_dir}/examples/information_extraction/waybill_ie/
-cp -r /ssd1/paddlenlp/download/waybill_ie/* ${nlp_dir}/examples/information_extraction/waybill_ie/data/
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 # BiGRU +CRF star training
 time (
@@ -33,13 +33,16 @@ cd ${nlp_dir}/examples/information_extraction/msra_ner/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 ## train
 time (python -m paddle.distributed.launch  ./train.py \
+    --model_type bert  \
     --model_name_or_path bert-base-multilingual-uncased \
+    --dataset msra_ner \
     --max_seq_length 128 \
     --batch_size 16 \
     --learning_rate 2e-5 \
     --num_train_epochs 1 \
     --logging_steps 1 \
-    --save_steps 700 \
+    --max_steps 2 \
+    --save_steps 2 \
     --output_dir ./tmp/msra_ner/ \
     --device gpu >${log_path}/msra_ner_train) >>${log_path}/msra_ner_train 2>&1
 print_info $? msra_ner_train
@@ -49,7 +52,7 @@ time (python -u ./eval.py \
     --max_seq_length 128 \
     --batch_size 16 \
     --device gpu \
-    --init_checkpoint_path tmp/msra_ner/model_700.pdparams >${log_path}/msra_ner_eval) >>${log_path}/msra_ner_eval 2>&1
+    --init_checkpoint_path tmp/msra_ner/model_2.pdparams >${log_path}/msra_ner_eval) >>${log_path}/msra_ner_eval 2>&1
 print_info $? msra_ner_eval
 ## predict
 time (python -u ./predict.py \
@@ -57,7 +60,7 @@ time (python -u ./predict.py \
     --max_seq_length 128 \
     --batch_size 16 \
     --device gpu \
-    --init_checkpoint_path tmp/msra_ner/model_700.pdparams >${log_path}/msra_ner_predict) >>${log_path}/msra_ner_predict 2>&1
+    --init_checkpoint_path tmp/msra_ner/model_2.pdparams >${log_path}/msra_ner_predict) >>${log_path}/msra_ner_predict 2>&1
 print_info $? msra_ner_predict
 }
 # 3 glue
@@ -219,7 +222,7 @@ time (python -m paddle.distributed.launch run_pretrain.py \
     --micro_batch_size 2 \
     --device gpu >${log_path}/gpt_pretrain) >>${log_path}/gpt_pretrain 2>&1
 print_info $? gpt_pretrain
-# OOM
+# # OOM
 # time (
 # python export_model.py \
 #     --model_type=gpt-cn \
@@ -629,6 +632,22 @@ time (
     --save_steps 10000 \
     --embedding_name w2v.google_news.target.word-word.dim300.en >${log_path}/distilbert_small_train) >>${log_path}/distilbert_small_train 2>&1
 print_info $? distilbert_small_train
+time (
+    python bert_distill.py \
+    --task_name sst-2 \
+    --vocab_size 30522 \
+    --max_epoch 1 \
+    --lr 1.0 \
+    --task_name sst-2 \
+    --dropout_prob 0.2 \
+    --batch_size 128 \
+    --model_name bert-base-uncased \
+    --output_dir distilled_models/SST-2 \
+    --teacher_dir ./sst-2_ft_model_1.pdparams/ \
+    --save_steps 1000 \
+    --n_iter 1 \
+    --embedding_name w2v.google_news.target.word-word.dim300.en >${log_path}/distilbert_teacher_train) >>${log_path}/distilbert_teacher_train 2>&1
+print_info $? distilbert_teacher_train
 }
 # 21 stacl
 stacl() {
@@ -642,38 +661,66 @@ sed -i "s/max_iter: None/max_iter: 3/g" config/transformer.yaml
 sed -i "s/batch_size: 4096/batch_size: 500/g" config/transformer.yaml
 python -m paddle.distributed.launch train.py --config ./config/transformer.yaml  >${log_path}/stacl_wk-1) >>${log_path}/stacl_wk-1 2>&1
 print_info $? stacl_wk-1
+
+time (
+sed -i "s/waitk: -1/waitk: 3/g" config/transformer.yaml
+sed -i 's/save_model: "trained_models"/save_model: "trained_models_3"/g' config/transformer.yaml
+sed -i 's#init_from_checkpoint: ""#init_from_checkpoint: "./trained_models/step_1/"#g' config/transformer.yaml
+python -m paddle.distributed.launch  train.py --config ./config/transformer.yaml >${log_path}/stacl_wk3) >>${log_path}/stacl_wk3 2>&1
+print_info $? stacl_wk3
+
+time (sed -i "s/waitk: 3/waitk: 5/g" config/transformer.yaml
+sed -i 's/save_model: "trained_models_3"/save_model: "trained_models_5"/g' config/transformer.yaml
+sed -i 's#init_from_checkpoint: "./trained_models/step_1/"#init_from_checkpoint: "./trained_models_3/step_1/"#g' config/transformer.yaml
+python -m paddle.distributed.launch train.py --config ./config/transformer.yaml >${log_path}/stacl_wk5) >>${log_path}/stacl_wk5 2>&1
+print_info $? stacl_wk5
+
 time (sed -i "s/batch_size: 500/batch_size: 100/g" config/transformer.yaml
-sed -i 's#init_from_params: "trained_models/step_final/"#init_from_params: "./trained_models/step_1/"#g' config/transformer.yaml
+sed -i 's#init_from_params: "trained_models/step_final/"#init_from_params: "./trained_models_5/step_1/"#g' config/transformer.yaml
 python predict.py --config ./config/transformer.yaml >${log_path}/stacl_predict) >>${log_path}/stacl_predict 2>&1
 print_info $? stacl_predict
 }
 # 22 transformer
 transformer (){
 cd ${nlp_dir}/examples/machine_translation/transformer/
+cp -r /ssd1/paddlenlp/download/transformer/WMT14.en-de.partial.tar.gz  ./
+tar -xzvf WMT14.en-de.partial.tar.gz
 time (
 sed -i "s/save_step: 10000/save_step: 1/g" configs/transformer.base.yaml
 sed -i "s/print_step: 100/print_step: 1/g" configs/transformer.base.yaml
 sed -i "s/epoch: 30/epoch: 1/g" configs/transformer.base.yaml
 sed -i "s/max_iter: None/max_iter: 2/g" configs/transformer.base.yaml
 sed -i "s/batch_size: 4096/batch_size: 1000/g" configs/transformer.base.yaml
-python -m paddle.distributed.launch train.py --config ./configs/transformer.base.yaml >${log_path}/transformer_train) >>${log_path}/transformer_train 2>&1
+
+python train.py --config ./configs/transformer.base.yaml \
+    --train_file ./WMT14.en-de.partial/train.tok.clean.bpe.en ./WMT14.en-de.partial/train.tok.clean.bpe.de \
+    --dev_file ./WMT14.en-de.partial/dev.tok.bpe.en ./WMT14.en-de.partial/dev.tok.bpe.de \
+    --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
+    --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"  >${log_path}/transformer_train) >>${log_path}/transformer_train 2>&1
 print_info $? transformer_train
-# time (
-# #predict
-# sed -i 's#init_from_params: "./trained_models/step/"#init_from_params: "./trained_models/step_1/"#g' configs/transformer.base.yaml
-# python predict.py --config ./configs/transformer.base.yaml >${log_path}/transformer_predict) >>${log_path}/transformer_predict 2>&1
-# print_info $? transformer_predict
-# #export
-# time (python export_model.py --config ./configs/transformer.base.yaml >${log_path}/transformer_export) >>${log_path}/transformer_export 2>&1
-# print_info $? transformer_export
-# #infer
-# time (cd ./deploy/python/
-# python inference.py \
-#         --config ../../configs/transformer.base.yaml \
-#         --batch_size 8 \
-#         --device gpu \
-#         --model_dir ../../infer_model/ >${log_path}/transformer_infer) >>${log_path}/transformer_infer 2>&1
-# print_info $? transformer_infer
+#predict
+time (
+sed -i 's#init_from_params: "./trained_models/step/"#init_from_params: "./trained_models/step_final/"#g' configs/transformer.base.yaml
+python predict.py --config ./configs/transformer.base.yaml  \
+    --test_file ./WMT14.en-de.partial/test.tok.bpe.en ./WMT14.en-de.partial/test.tok.bpe.de \
+    --without_ft \
+    --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
+    --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"  >${log_path}/transformer_predict) >>${log_path}/transformer_predict 2>&1
+print_info $? transformer_predict
+#export
+time (
+python export_model.py --config ./configs/transformer.base.yaml \
+    --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
+    --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_export) >>${log_path}/transformer_export 2>&1
+print_info $? transformer_export
+#infer
+time (
+python ./deploy/python/inference.py --config ./configs/transformer.base.yaml \
+    --profile \
+    --test_file ./WMT14.en-de.partial/test.tok.bpe.en ./WMT14.en-de.partial/test.tok.bpe.de  \
+    --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
+    --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_infer) >>${log_path}/transformer_infer 2>&1
+print_info $? transformer_infer
 # FT
 export CC=/usr/local/gcc-8.2/bin/gcc
 export CXX=/usr/local/gcc-8.2/bin/g++
@@ -773,14 +820,14 @@ cd ${nlp_dir}/examples/language_model/ernie-doc/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 time (python -m paddle.distributed.launch  --log_dir hyp run_classifier.py --epochs 15 --layerwise_decay 0.7 --learning_rate 5e-5 --batch_size 4 --save_steps 100 --max_steps 100  --dataset hyp --output_dir hyp >${log_path}/ernie-doc_hyp) >>${log_path}/ernie-doc_hyp 2>&1
 print_info $? ernie-doc_hyp
-# time (python -m paddle.distributed.launch  --log_dir cmrc2018 run_mrc.py --batch_size 4 --layerwise_decay 0.8 --dropout 0.2 --learning_rate 4.375e-5 --epochs 1 --save_steps 100 --max_steps 100  --dataset cmrc2018 --output_dir cmrc2018  >${log_path}/ernie-doc_cmrc2018) >>${log_path}/ernie-doc_cmrc2018 2>&1
-# print_info $?  ernie-doc_cmrc2018
-# time (python -m paddle.distributed.launch  --log_dir c3 run_mcq.py --learning_rate 6.5e-5 --epochs 1 --save_steps 100 --max_steps 100  --output_dir c3 >${log_path}/ernie-doc_c3) >>${log_path}/ernie-doc_c3 2>&1
-# print_info $? ernie-doc_c3
-# time (python -m paddle.distributed.launch  --log_dir cail/ run_semantic_matching.py --epochs 1 --layerwise_decay 0.8 --learning_rate 1.25e-5 --batch_size 4  --save_steps 100 --max_steps 100 --output_dir cail >${log_path}/ernie-doc_cail) >>${log_path}/ernie-doc_cail 2>&1
-# print_info $? ernie-doc_cail
-# time (python -m paddle.distributed.launch  --log_dir msra run_sequence_labeling.py --learning_rate 3e-5 --epochs 1 --save_steps 100 --max_steps 100  --output_dir msra  >${log_path}/ernie-doc_msar) >>${log_path}/ernie-doc_msar 2>&1
-# print_info $? ernie-doc_msar
+time (python -m paddle.distributed.launch  --log_dir cmrc2018 run_mrc.py --batch_size 4 --layerwise_decay 0.8 --dropout 0.2 --learning_rate 4.375e-5 --epochs 1 --save_steps 100 --max_steps 100  --dataset cmrc2018 --output_dir cmrc2018  >${log_path}/ernie-doc_cmrc2018) >>${log_path}/ernie-doc_cmrc2018 2>&1
+print_info $?  ernie-doc_cmrc2018
+time (python -m paddle.distributed.launch  --log_dir c3 run_mcq.py --learning_rate 6.5e-5 --epochs 1 --save_steps 100 --max_steps 100  --output_dir c3 >${log_path}/ernie-doc_c3) >>${log_path}/ernie-doc_c3 2>&1
+print_info $? ernie-doc_c3
+time (python -m paddle.distributed.launch  --log_dir cail/ run_semantic_matching.py --epochs 1 --layerwise_decay 0.8 --learning_rate 1.25e-5 --batch_size 4  --save_steps 100 --max_steps 100 --output_dir cail >${log_path}/ernie-doc_cail) >>${log_path}/ernie-doc_cail 2>&1
+print_info $? ernie-doc_cail
+time (python -m paddle.distributed.launch  --log_dir msra run_sequence_labeling.py --learning_rate 3e-5 --epochs 1 --save_steps 100 --max_steps 100  --output_dir msra  >${log_path}/ernie-doc_msar) >>${log_path}/ernie-doc_msar 2>&1
+print_info $? ernie-doc_msar
 }
 #26 transformer-xl
 transformer-xl (){
@@ -793,10 +840,10 @@ sed -i 's/batch_size: 16/batch_size: 8/g' configs/enwik8.yaml
 sed -i 's/max_step: 400000/max_step: 3/g' configs/enwik8.yaml
 python -m paddle.distributed.launch  train.py --config ./configs/enwik8.yaml >${log_path}/transformer-xl_train_enwik8) >>${log_path}/transformer-xl_train_enwik8 2>&1
 print_info $? transformer-xl_train_enwik8
-# time (sed -i 's/batch_size: 8/batch_size: 1/g' configs/enwik8.yaml
-# sed -i 's#init_from_params: "./trained_models/step_final/"#init_from_params: "./trained_models/step_3/"#g' configs/enwik8.yaml
-# python eval.py --config ./configs/enwik8.yaml >${log_path}/transformer-xl_eval_enwik8) >>${log_path}/transformer-xl_eval_enwik8 2>&1
-# print_info $? transformer-xl_eval_enwik8
+time (sed -i 's/batch_size: 8/batch_size: 1/g' configs/enwik8.yaml
+sed -i 's#init_from_params: "./trained_models/step_final/"#init_from_params: "./trained_models/step_3/"#g' configs/enwik8.yaml
+python eval.py --config ./configs/enwik8.yaml >${log_path}/transformer-xl_eval_enwik8) >>${log_path}/transformer-xl_eval_enwik8 2>&1
+print_info $? transformer-xl_eval_enwik8
 }
 #27 pointer_summarizer
 pointer_summarizer() {
@@ -884,6 +931,20 @@ print_info $? nptag_export
 python deploy/python/predict.py --model_dir=./export >${log_path}/nptag_depoly >>${log_path}/nptag_deploy 2>&1
 print_info $? nptag_depoly
 }
+#31 ernie-m
+ernie-m() {
+export CUDA_VISIBLE_DEVICES=${cudaid2}
+cd ${nlp_dir}/examples/language_model/ernie-m
+python -m paddle.distributed.launch  --log_dir output run_classifier.py  \
+   --task_type cross-lingual-transfer  \
+   --batch_size 8    \
+   --model_name_or_path ernie-m-base \
+   --save_steps 2 \
+   --max_steps 2 \
+   --output_dir output \
+   --logging_steps 1  >${log_path}/ernie-m >>${log_path}/ernie-m 2>&1
+print_info $? ernie-m
+}
 ####################################
 export P0case_list=()
 export P0case_time=0
@@ -892,14 +953,14 @@ declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["squad"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
-  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5)
+  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5)
 get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
 done
 P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie-1.0 xlnet ofa albert squad tinybert lexical_analysis seq2seq \
 pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
-nptag)
+nptag ernie-m )
 P0case_time=${all_P0case_time}
 }
 set -e
@@ -916,6 +977,7 @@ for p0case in ${P0case_list[*]};do
     let case_num++
 done
 echo -e "\033[35m ---- end run P0case  \033[0m"
+
 cd ${nlp_dir}/
 cp -r /ssd1/paddlenlp/bos/* ./
 tar -zcvf logs.tar logs/

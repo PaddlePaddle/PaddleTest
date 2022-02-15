@@ -93,10 +93,14 @@ python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
    -i https://mirror.baidu.com/pypi/simple
-python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
-   -i https://mirror.baidu.com/pypi/simple
+# python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
+#    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
+
+python -m pip install -i --ignore-installed opencv-python==4.4.0.46 \
+   -i https://mirror.baidu.com/pypi/simple
+python -m pip list |grep opencv
 
 rm -rf models_list
 rm -rf models_list_all
@@ -215,7 +219,10 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
       echo -e "\033[31m training of $model failed!\033[0m"|tee -a $log_path/result.log
    fi
 
-   if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]];then
+   if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]] \
+      || [[ ${line} =~ 'ResNet152' ]] || [[ ${line} =~ 'DLA169' ]] || [[ ${line} =~ 'ResNeSt101' ]] \
+      || [[ ${line} =~ 'ResNeXt152_vd_64x4d' ]] || [[ ${line} =~ 'ResNeXt152_64x4d' ]] || [[ ${line} =~ 'ResNet101' ]] \
+      || [[ ${line} =~ 'ResNet200_vd' ]] || [[ ${line} =~ 'DLA102' ]] || [[ ${model} =~ 'InceptionV4' ]];then
       echo "######  use pretrain model"
       echo ${model}
       wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${model}_pretrained.pdparams --no-proxy
@@ -224,7 +231,8 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
       rm -rf ${model}_pretrained.pdparams
    fi
 
-   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${line} =~ 'ESNet' ]] ;then
+   if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] \
+      || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ '/ResNet50_vd.yaml' ]];then
       echo "######  use pretrain model"
       echo ${model}
       wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${model}_pretrained.pdparams --no-proxy

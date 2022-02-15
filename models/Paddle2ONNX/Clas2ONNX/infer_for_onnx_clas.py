@@ -17,8 +17,6 @@ infer for class to onnx test
 import os
 import sys
 
-# import auto_log
-
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.abspath(os.path.join(__dir__, "../")))
 
@@ -52,34 +50,40 @@ class ClsPredictor(Predictor):
         # for whole_chain project to test each repo of paddle
         self.benchmark = config["Global"].get("benchmark", False)
         # if self.benchmark:
-        # import auto_log
-        # import os
-
-        # pid = os.getpid()
-        # size = config["PreProcess"]["transform_ops"][1]["CropImage"]["size"]
-        # self.auto_logger = auto_log.AutoLogger(
-        #     model_name=config["Global"].get("model_name", "cls"),
-        #     model_precision="fp16" if config["Global"]["use_fp16"] else "fp32",
-        #     batch_size=config["Global"].get("batch_size", 1),
-        #     data_shape=[3, size, size],
-        #     save_path=config["Global"].get("save_log_path", "./auto_log.log"),
-        #     inference_config=self.config,
-        #     pids=pid,
-        #     process_name=None,
-        #     gpu_ids=None,
-        #     time_keys=["preprocess_time", "inference_time", "postprocess_time"],
-        #     warmup=2,
-        # )
+        #     import auto_log
+        #     import os
+        #
+        #     pid = os.getpid()
+        #     size = config["PreProcess"]["transform_ops"][1]["CropImage"]["size"]
+        #     self.auto_logger = auto_log.AutoLogger(
+        #         model_name=config["Global"].get("model_name", "cls"),
+        #         model_precision="fp16" if config["Global"]["use_fp16"] else "fp32",
+        #         batch_size=config["Global"].get("batch_size", 1),
+        #         data_shape=[3, size, size],
+        #         save_path=config["Global"].get("save_log_path", "./auto_log.log"),
+        #         inference_config=self.config,
+        #         pids=pid,
+        #         process_name=None,
+        #         gpu_ids=None,
+        #         time_keys=["preprocess_time", "inference_time", "postprocess_time"],
+        #         warmup=2,
+        #     )
 
     def predict(self, images, img_idx=0):
         """
         default
         """
-        input_names = self.paddle_predictor.get_input_names()
-        input_tensor = self.paddle_predictor.get_input_handle(input_names[0])
+        use_onnx = self.args.get("use_onnx", False)
+        if not use_onnx:
+            input_names = self.predictor.get_input_names()
+            input_tensor = self.predictor.get_input_handle(input_names[0])
 
-        output_names = self.paddle_predictor.get_output_names()
-        output_tensor = self.paddle_predictor.get_output_handle(output_names[0])
+            output_names = self.predictor.get_output_names()
+            output_tensor = self.predictor.get_output_handle(output_names[0])
+        else:
+            input_names = self.predictor.get_inputs()[0].name
+            output_names = self.predictor.get_outputs()[0].name
+
         if self.benchmark:
             self.auto_logger.times.start()
         if not isinstance(images, (list,)):
@@ -91,13 +95,17 @@ class ClsPredictor(Predictor):
         if self.benchmark:
             self.auto_logger.times.stamp()
 
-        print("No.{} input np.array is: {}".format(img_idx, image))
-        np.save(os.path.join(args.model_name, "input_np", "input_" + str(img_idx)), image)
-        input_tensor.copy_from_cpu(image)
-        self.paddle_predictor.run()
-        batch_output = output_tensor.copy_to_cpu()
-        print("No.{} output np.array is: {}".format(img_idx, batch_output))
-        np.save(os.path.join(args.model_name, "infer_output_np", "output_" + str(img_idx)), batch_output)
+        if not use_onnx:
+            print("No.{} input np.array is: {}".format(img_idx, image))
+            np.save(os.path.join(args.model_name, "input_np", "input_" + str(img_idx)), image)
+            input_tensor.copy_from_cpu(image)
+            self.predictor.run()
+            batch_output = output_tensor.copy_to_cpu()
+            print("No.{} output np.array is: {}".format(img_idx, batch_output))
+            np.save(os.path.join(args.model_name, "infer_output_np", "output_" + str(img_idx)), batch_output)
+        else:
+            batch_output = self.predictor.run(output_names=[output_names], input_feed={input_names: image})[0]
+
         if self.benchmark:
             self.auto_logger.times.stamp()
         if self.postprocess is not None:
@@ -133,7 +141,7 @@ def main(config):
         if cnt % config["Global"]["batch_size"] == 0 or (idx + 1) == len(image_list):
             if len(batch_imgs) == 0:
                 continue
-            batch_results = cls_predictor.predict(batch_imgs, img_idx=idx)
+            batch_results = cls_predictor.predict(batch_imgs)
             for number, result_dict in enumerate(batch_results):
                 filename = batch_names[number]
                 clas_ids = result_dict["class_ids"]

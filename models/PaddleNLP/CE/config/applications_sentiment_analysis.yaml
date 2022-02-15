@@ -103,8 +103,8 @@ CLASSIFICATION_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.000224
-        threshold: 0.08
+        kpi_base: 0.000433
+        threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -142,8 +142,8 @@ PPMINILM_TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.001235
-        threshold: 0.08
+        kpi_base: 0.00146
+        threshold: 0.2
         actived: True
         evaluation: "-"
         unit_repr: None
