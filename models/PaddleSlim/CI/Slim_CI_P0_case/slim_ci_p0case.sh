@@ -705,7 +705,7 @@ print_info $? st_unstructured_prune_threshold_eval
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch \
 --log_dir="st_unstructured_prune_threshold_load_gpu2_log" train.py \
---batch_size 512 \
+--batch_size 256 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode threshold \
