@@ -6,6 +6,8 @@ print_info(){
 if [ $1 -ne 0 ];then
     mv ${log_path}/$2 ${log_path}/FAIL_$2.log
     echo -e "\033[31m ${log_path}/FAIL_$2 \033[0m"
+    echo "fail log as belows"
+    cat ${log_path}/$2_FAIL.log
 else
     mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
     echo -e "\033[32m ${log_path}/SUCCESS_$2 \033[0m"
