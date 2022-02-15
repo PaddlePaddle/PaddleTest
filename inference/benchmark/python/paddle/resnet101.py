@@ -40,6 +40,10 @@ def init_predictor(args):
         args : input args
 
     """
+    use_calib_mode = False
+    if args.trt_precision == "int8":
+        use_calib_mode = True
+
     config = Config("./ResNet101/inference.pdmodel", "./ResNet101/inference.pdiparams")
 
     config.enable_memory_optim()
@@ -50,10 +54,10 @@ def init_predictor(args):
             config.enable_tensorrt_engine(
                 1 << 30,  # workspace_size
                 10,  # max_batch_size
-                30,  # min_subgraph_size
+                3,  # min_subgraph_size
                 trt_precision_map[args.trt_precision],  # precision
-                True,  # use_static
-                False,  # use_calib_mode
+                False,  # use_static
+                use_calib_mode,  # use_calib_mode
             )
     elif args.device == "cpu" and args.use_mkldnn:
         config.enable_mkldnn()
@@ -96,10 +100,10 @@ def parse_args():
     parser.add_argument("--repeats", type=int, default=1000, help="repeats.")
     parser.add_argument("--device", type=str, default="gpu", help="[gpu,cpu,xpu]")
     parser.add_argument("--use_trt", type=bool, default=False, help="Whether use trt.")
-    parser.add_argument("--trt_precision", type=str, default="fp32", help="Whether use gpu.")
     parser.add_argument(
-        "--use_mkldnn", type=int, default=False, help="trt precision, choice = ['fp32', 'fp16', 'int8']"
+        "--trt_precision", type=str, default="fp32", help="trt precision, choice = ['fp32', 'fp16', 'int8']"
     )
+    parser.add_argument("--use_mkldnn", type=int, default=False, help="use mkldnn")
     return parser.parse_args()
 
 
