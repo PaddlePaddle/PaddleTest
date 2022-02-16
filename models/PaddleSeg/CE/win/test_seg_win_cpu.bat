@@ -39,7 +39,7 @@ if !errorlevel! GTR 0 (
 ) else (
     set predict_pic="leverkusen_000029_000019_leftImg8bit.png"
     if not exist seg_pretrained\!model!\model.pdparams (
-        wget -P seg_pretrained\!model! https://paddleseg.bj.bcebos.com/dygraph/cityscapes/!model!/model.pdparams --no-check-certificate
+        wget -P seg_pretrained\!model! https://bj.bcebos.com/paddleseg/dygraph/cityscapes/!model!/model.pdparams --no-check-certificate
     )
 )
 if not exist seg_pretrained\!model!\model.pdparams (
