@@ -723,7 +723,7 @@ print_info $? st_unstructured_prune_threshold_load
 ## sparsity: -55%, accuracy: 67%+/87%+
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 python train.py \
---batch_size 512 \
+--batch_size 256 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode ratio \
