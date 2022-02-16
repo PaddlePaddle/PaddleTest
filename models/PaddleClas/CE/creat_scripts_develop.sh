@@ -45,10 +45,10 @@ if [[ ${model} == 'AlexNet' ]]; then
 
 elif [[ ${model} == 'alt_gvt_small' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43773|6.25399|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.44749|6.47014|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|8.01598|g" $model.yaml #linux_eval
-    sed -i "" "s|18.21894|8.01598|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43773|6.2541|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.44749|6.50772|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|7.96769|g" $model.yaml #linux_eval
+    sed -i "" "s|18.21894|7.96769|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.14774|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|7.91598|g" $model.yaml #windows_eval
@@ -278,10 +278,10 @@ elif [[ ${model} == 'MobileNetV3_large_x1_0' ]]; then
 
 elif [[ ${model} == 'pcpvt_small' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43773|6.2849|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.44749|6.37076|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|8.16077|g" $model.yaml #linux_eval
-    sed -i "" "s|18.21894|8.16077|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43773|6.28069|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.44749|6.37232|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|7.79441|g" $model.yaml #linux_eval
+    sed -i "" "s|18.21894|7.79441|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.12982|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|7.7351|g" $model.yaml #windows_eval
