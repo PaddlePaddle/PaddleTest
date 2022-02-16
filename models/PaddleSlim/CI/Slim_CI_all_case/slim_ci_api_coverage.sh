@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
+echo "enter slim_ci_api_coverage, params:" $1,$2
 
 print_info(){
 if [ $1 -ne 0 ];then
     mv ${log_path}/$2 ${log_path}/$2_FAIL.log
     echo -e "\033[31m ${log_path}/$2_FAIL \033[0m"
-    echo "fail log as belows"
-    cat ${log_path}/$2_FAIL.log
 else
     mv ${log_path}/$2 ${log_path}/$2_SUCCESS.log
     echo -e "\033[32m ${log_path}/$2_SUCCESS \033[0m"
 fi
 }
-
 cudaid1=$1;
 cudaid2=$2;
 echo "cudaid1,cudaid2", ${cudaid1}, ${cudaid2}
 export CUDA_VISIBLE_DEVICES=${cudaid1}
+
 # install lcov
 curl -o /lcov-1.14.tar.gz -s https://paddle-ci.gz.bcebos.com/coverage%2Flcov-1.14.tar.gz
 tar -xf /lcov-1.14.tar.gz -C /
@@ -32,18 +31,25 @@ PADDLE_ROOT=${slim_dir}
 test_num=1
 static_test_num=`ls test_*.py|wc -l`
 dygraph_test_num=`ls dygraph/test_*.py|wc -l`
-p1_api_case_static_num=`ls ${slim_dir}/p1_api_case_static/test_*.py|wc -l`
-all_test_num=`expr ${static_test_num} + ${dygraph_test_num} + ${p1_api_case_static_num}`
+all_test_num=`expr ${static_test_num} + ${dygraph_test_num}`
 run_api_case(){
+cases=`find ./ -name "test*.py" | sort`
+#ignore="test_analysis_helper.py"
+ignore=""
 for line in `ls test_*.py`
 do
     name=`echo ${line} | cut -d \. -f 1`
     echo ${test_num}_"/"_${all_test_num}_${name}
-    python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_${name} 2>&1
-    print_info $? ${test_num}_${name}
+    if [[ ${ignore} =~ ${line##*/} ]]; then
+        echo "skip" ${line##*/}
+    else
+       python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_${name} 2>&1
+       print_info $? ${test_num}_${name}
+    fi
     let test_num++
 done
 }
+run_api_case
 run_api_case_dygraph(){
 if [ -d ${slim_dir}/tests/dygraph ];then
 cd ${slim_dir}/tests/dygraph
@@ -59,27 +65,7 @@ else
     echo -e "\033[31m no tests/dygraph \033[0m"
 fi
 }
-
-run_p1_api_case_static(){
-if [ -d ${slim_dir}/p1_api_case_static ];then
-cd ${slim_dir}/p1_api_case_static
-for line in `ls test_*.py`
-do
-    name=`echo ${line} | cut -d \. -f 1`
-    echo ${test_num}_"/"_${all_test_num}_dygraph_${name}
-    python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_p1_api_${name} 2>&1
-    print_info $? ${test_num}_p1_api_${name}
-    let test_num++
-done
-else
-    echo -e "\033[31m no p1_api_case_static \033[0m"
-fi
-}
-
-
-run_api_case
 run_api_case_dygraph
-run_p1_api_case_static
 
 cd ${slim_dir}/tests
 
@@ -121,7 +107,7 @@ gen_python_full_html_report_all || true
 # python diff html report
 function gen_python_diff_html_report() {
     if [ "${GIT_PR_ID}" != "" ]; then
-        COVERAGE_DIFF_PATTERN="`python ${PADDLE_ROOT}/coverage/pull_request.py files ${GIT_PR_ID}`"
+        COVERAGE_DIFF_PATTERN=`python ${PADDLE_ROOT}/coverage/pull_request.py files ${GIT_PR_ID}`
         echo -e "\033[35m ----COVERAGE_DIFF_PATTERN \033[0m" ${COVERAGE_DIFF_PATTERN}
         python ${PADDLE_ROOT}/coverage/pull_request.py diff ${GIT_PR_ID} > python-git-diff.out
     fi
