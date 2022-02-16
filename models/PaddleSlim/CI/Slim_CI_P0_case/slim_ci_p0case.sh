@@ -249,7 +249,7 @@ output_dir=$PWD/output_models
 for model in mobilenet_v1
 do
 
-    if [ $1 == nopact ];then
+    if [[ $1 == "nopact" ]];then
         # 1 quant train
         echo "------1 nopact train--------", ${model}
         export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -282,7 +282,7 @@ do
         --data_dir=${data_path} \
         --test_samples=${test_samples} \
         --batch_size=${batch_size} > cpu_eval_after_save_${model} 2>&1
-    elif [ $1 == pact ];then
+    elif [[ $1 == "pact" ]];then
     # 1 pact quant train
         echo "------1 pact train--------", ${model}
         export CUDA_VISIBLE_DEVICES=${cudaid1}
