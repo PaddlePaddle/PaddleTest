@@ -45,21 +45,37 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    echo "######  model_flag pr"
 
    echo "######  ---py37  env -----"
-   rm -rf /usr/local/python2.7.15/bin/python
-   rm -rf /usr/local/bin/python
-   export PATH=/usr/local/bin/python:${PATH}
+   # rm -rf /usr/local/python2.7.15/bin/python
+   # rm -rf /usr/local/bin/python
+   # export PATH=/usr/local/bin/python:${PATH}
    case ${python} in #python
    36)
-   ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+   # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+   mkdir run_env_py36;
+   ln -s $(which python3.6) run_env_py36/python;
+   ln -s $(which pip3.6) run_env_py36/pip;
+   export PATH=$(pwd)/run_env_py36:${PATH};
    ;;
    37)
-   ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+   # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+   mkdir run_env_py37;
+   ln -s $(which python3.7) run_env_py37/python;
+   ln -s $(which pip3.7) run_env_py37/pip;
+   export PATH=$(pwd)/run_env_py37:${PATH};
    ;;
    38)
-   ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+   # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+   mkdir run_env_py38;
+   ln -s $(which python3.8) run_env_py38/python;
+   ln -s $(which pip3.8) run_env_py38/pip;
+   export PATH=$(pwd)/run_env_py38:${PATH};
    ;;
    39)
-   ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+   # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+   mkdir run_env_py39;
+   ln -s $(which python3.9) run_env_py39/python;
+   ln -s $(which pip3.9) run_env_py39/pip;
+   export PATH=$(pwd)/run_env_py39:${PATH};
    ;;
    esac
 
@@ -98,6 +114,8 @@ python -m pip install  --ignore-installed paddleslim \
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
+
+python -m pip list |grep opencv
 
 rm -rf models_list
 rm -rf models_list_run
@@ -269,9 +287,9 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
    fi
 
-   # if [[ ${line} =~ "fp16.yaml" ]]; then #无单独fp16的yaml了
-   #    continue
-   # fi
+   if [[ ${line} =~ "fp16.yaml" ]]; then #无单独fp16的yaml了
+      continue
+   fi
 
    #单卡
    ls output/$params_dir/
@@ -311,7 +329,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]] \
       || [[ ${line} =~ 'ResNet152' ]] || [[ ${line} =~ 'DLA169' ]] || [[ ${line} =~ 'ResNeSt101' ]] \
       || [[ ${line} =~ 'ResNeXt152_vd_64x4d' ]] || [[ ${line} =~ 'ResNeXt152_64x4d' ]] || [[ ${line} =~ 'ResNet101' ]] \
-      || [[ ${line} =~ 'ResNet200_vd' ]] ;then
+      || [[ ${line} =~ 'ResNet200_vd' ]] || [[ ${line} =~ 'DLA102' ]] || [[ ${model} =~ 'InceptionV4' ]];then
       echo "######  use pretrain model"
       echo ${model}
       wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${model}_pretrained.pdparams --no-proxy
@@ -329,6 +347,16 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
       rm -rf ${model}_pretrained.pdparams
    fi
+
+   if [[ ${model} =~ 'amp' ]];then
+      echo "######  use amp pretrain model"
+      echo ${model}
+      wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/ResNet50_pretrained.pdparams --no-proxy
+      rm -rf output/$params_dir/latest.pdparams
+      cp -r ResNet50_pretrained.pdparams output/$params_dir/latest.pdparams
+      rm -rf ResNet50_pretrained.pdparams
+   fi
+
    sleep 3
 
    ls output/$params_dir/
@@ -360,10 +388,18 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    fi
 
    # export_model
-   python tools/export_model.py -c $line \
-      -o Global.pretrained_model=output/$params_dir/latest \
-      -o Global.save_inference_dir=./inference/$model \
-      > $log_path/export_model/$model.log 2>&1
+   if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'amp' ]];then
+      python tools/export_model.py -c $line \
+         -o Global.pretrained_model=output/$params_dir/latest \
+         -o Global.save_inference_dir=./inference/$model \
+         -o Arch.data_format="NCHW" \
+         > $log_path/export_model/$model.log 2>&1
+   else
+      python tools/export_model.py -c $line \
+         -o Global.pretrained_model=output/$params_dir/latest \
+         -o Global.save_inference_dir=./inference/$model \
+         > $log_path/export_model/$model.log 2>&1
+   fi
 
    if [ $? -eq 0 ];then
       echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log

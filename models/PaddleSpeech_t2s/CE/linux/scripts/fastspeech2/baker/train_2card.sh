@@ -26,4 +26,6 @@ else
    cat train_2card.log
    echo -e "\033[31m training_2card of fastspeech2_baker failed! \033[0m"
 fi
-cat train_2card.log | grep "612/612" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $7}' > ../../../../log/fastspeech2_baker_2card.log
+cat train_2card.log | grep "612/612" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $7}' > tmp_2card.log
+cat train_2card.log | grep "612/612" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $11}' >> tmp_2card.log
+cat tmp_2card.log | tr '\n' ',' > ../../../../log/fastspeech2_baker_2card.log

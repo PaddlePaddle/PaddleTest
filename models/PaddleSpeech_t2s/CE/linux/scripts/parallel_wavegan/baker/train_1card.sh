@@ -43,4 +43,6 @@ else
    echo -e "\033[31m training_1card of parallel wavegan failed! \033[0m"
 fi
 sed -i "s/train_max_steps: 500/train_max_steps: 400000/g;s/save_interval_steps: 500/save_interval_steps: 5000/g;s/eval_interval_steps: 500/eval_interval_steps: 1000/g;s/batch_size: 2/batch_size: 8/g"  ${conf_path}
-cat train_1card.log | grep "500/500" | awk 'BEGIN{FS=","} {print $5}' > ../../../../log/parallel_wavegan_baker_1card.log
+cat train_1card.log | grep "500/500" | awk 'BEGIN{FS=","} {print $5}' > tmp_1card.log
+cat train_1card.log | grep "500/500" | awk 'BEGIN{FS=","} {print $9}' >> tmp_1card.log
+cat tmp_1card.log | tr '\n' ',' > ../../../../log/parallel_wavegan_baker_1card.log

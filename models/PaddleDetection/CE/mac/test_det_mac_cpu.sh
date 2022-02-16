@@ -32,15 +32,15 @@ fi
 mkdir log_err
 
 # prepare dynamic data
-i_sed -i "" "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
+i_sed "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 # modify dynamic_train_iter
-i_sed -i '' 's/for step_id, data in enumerate(self.loader):/for step_id, data in enumerate(self.loader):\n                if step_id == 10: break/g' ppdet/engine/trainer.py
-i_sed -i '' 's/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
-i_sed -i '' 's/for step_id, data in enumerate(dataloader):/for step_id, data in enumerate(dataloader):\n            if step_id == 10: break/g' ppdet/engine/tracker.py
+i_sed 's/for step_id, data in enumerate(self.loader):/for step_id, data in enumerate(self.loader):\n                if step_id == 10: break/g' ppdet/engine/trainer.py
+i_sed 's/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
+i_sed 's/for step_id, data in enumerate(dataloader):/for step_id, data in enumerate(dataloader):\n            if step_id == 10: break/g' ppdet/engine/tracker.py
 #modify coco images
-i_sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/coco.py
-i_sed -i '' 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/keypoint_coco.py
-i_sed -i '' 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
+i_sed 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/coco.py
+i_sed 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/keypoint_coco.py
+i_sed 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
 
 print_result(){
     if [ $? -ne 0 ];then
@@ -123,7 +123,7 @@ PYTHON_INFER(){
     python deploy/python/infer.py \
            --model_dir=inference_model/${model} \
            --image_file=${image} \
-           --run_mode=fluid \
+           --run_mode=paddle \
            --device=CPU \
            --threshold=0.5 \
            --output_dir=python_infer_output/${model}/ >log/${model}/${model}_${model_type}_${mode}.log 2>&1
@@ -150,7 +150,7 @@ POSE_PYTHON_INFER(){
     print_result
 }
 
-model_list='ppyolov2_r50vd_dcn_365e_coco yolov3_darknet53_270e_coco solov2_r50_fpn_1x_coco faster_rcnn_r50_fpn_1x_coco mask_rcnn_r50_1x_coco cascade_rcnn_r50_fpn_1x_coco s2anet_conv_2x_dota ssd_mobilenet_v1_300_120e_voc ttfnet_darknet53_1x_coco fcos_r50_fpn_1x_coco hrnet_w32_256x192 fairmot_dla34_30e_1088x608'
+model_list='ppyolov2_r50vd_dcn_365e_coco yolov3_darknet53_270e_coco solov2_r50_fpn_1x_coco faster_rcnn_r50_fpn_1x_coco mask_rcnn_r50_1x_coco cascade_rcnn_r50_fpn_1x_coco ssd_mobilenet_v1_300_120e_voc ttfnet_darknet53_1x_coco fcos_r50_fpn_1x_coco hrnet_w32_256x192 fairmot_dla34_30e_1088x608'
 model_s2anet='s2anet_conv_2x_dota'
 model_mot='fairmot_dla34_30e_1088x608'
 model_keypoint='hrnet_w32_256x192'

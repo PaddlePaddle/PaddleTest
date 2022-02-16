@@ -96,13 +96,16 @@ class InferenceTest(object):
             output_data_dict[output_data_name] = output_data
         return output_data_dict
 
-    def get_images_npy(self, file_path: str, images_size: int, center=True, model_type="class") -> list:
+    def get_images_npy(
+        self, file_path: str, images_size: int, center=True, model_type="class", with_true_data=True
+    ) -> list:
         """
         get images and npy truth value
         Args:
             file_path(str): images and npy saved path
             images_size(int): images size
-            center(bool):
+            center(bool): images in center
+            with_true_data(bool): with true data or not
         Returns:
             images_list(list): images array in list
             npy_list(list): npy array in list
@@ -111,16 +114,22 @@ class InferenceTest(object):
         npy_path = os.path.join(file_path, "result")
         if not os.path.exists(images_path):
             raise Exception(f"{images_path} not find")
-        if not os.path.exists(npy_path):
-            raise Exception(f"{npy_path} not find")
-
-        npy_list = read_npy_path(npy_path)
+        if with_true_data:
+            if not os.path.exists(npy_path):
+                raise Exception(f"{npy_path} not find")
+            npy_list = read_npy_path(npy_path)
         if model_type == "class":
             images_list = read_images_path(images_path, images_size, center=True, model_type="class")
-            return images_list, npy_list
+            if with_true_data:
+                return images_list, npy_list
+            else:
+                return images_list
         elif model_type == "det":
             images_list, images_origin_list = read_images_path(images_path, images_size, center=False, model_type="det")
-            return images_list, images_origin_list, npy_list
+            if with_true_data:
+                return images_list, images_origin_list, npy_list
+            else:
+                return images_list, images_origin_list
 
     def get_text_npy(self, file_path: str) -> list:
         """

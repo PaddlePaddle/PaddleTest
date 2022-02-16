@@ -422,7 +422,7 @@ INFER:
       PNR:
         latest: True
         kpi_base: 0.806
-        threshold: 0.02
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -449,7 +449,7 @@ INFER:
       PNR:
         latest: True
         kpi_base: 0.806
-        threshold: 0.02
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -499,7 +499,7 @@ INFER:
       pnr:
         latest: True
         kpi_base: 0.82
-        threshold: 0.02
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -527,7 +527,7 @@ INFER:
       pnr:
         latest: True
         kpi_base: 0.82
-        threshold: 0.02
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None

@@ -83,7 +83,7 @@ TRAIN: # 训练步骤
       Precision:
         latest: True
         kpi_base: 0.87076
-        threshold: 0.02
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -97,7 +97,7 @@ TRAIN: # 训练步骤
       F1:
         latest: True
         kpi_base: 0.88834
-        threshold: 0.02
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
