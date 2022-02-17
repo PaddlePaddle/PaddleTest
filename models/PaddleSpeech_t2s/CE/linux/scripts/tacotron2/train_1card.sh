@@ -30,7 +30,7 @@ else
 fi
 
 # train
-sed -i "s/max_epoch: 200/max_epoch: 10/g" ${conf_path}
+sed -i "s/max_epoch: 200/max_epoch: 5/g" ${conf_path}
 sed -i "s/python3/python/g" ./local/train.sh
 rm -rf exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > train_1card.log 2>&1
@@ -41,5 +41,5 @@ else
    cat train_1card.log
    echo -e "\033[31m training_1card of tacotron2 failed! \033[0m"
 fi
-sed -i "s/max_epoch: 10/max_epoch: 200/g" ${conf_path}
-cat train_1card.log | grep "1530/1530" | awk 'BEGIN{FS=","} {print $4}' > ../../../../log/tacotron2_1card.log
+sed -i "s/max_epoch: 5/max_epoch: 200/g" ${conf_path}
+cat train_1card.log | grep "765/765" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $7}' > ../../../../log/tacotron2_1card.log
