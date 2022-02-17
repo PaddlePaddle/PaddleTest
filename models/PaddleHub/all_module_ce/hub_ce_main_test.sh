@@ -128,10 +128,10 @@ main(){
                 echo ++++++++++++++++++++++ ${hub_module} predict Success!!!++++++++++++++++++++++
                 hub_success=$(expr ${hub_success} + 1)
             fi
+            rm -rf /root/.paddlehub/modules
+            rm -rf /root/.paddlehub/tmp
 
             sleep 5
-            rm -rf /root/.paddlehub/modules/*
-            rm -rf /root/.paddlehub/tmp
             done
 
             echo "================================== final-results =================================="
