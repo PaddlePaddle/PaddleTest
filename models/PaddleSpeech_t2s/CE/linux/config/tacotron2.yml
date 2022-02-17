@@ -1,5 +1,5 @@
 MODEL: "tacotron2" # 模型名
-PRIORITY: P1
+PRIORITY: P0
 GIT:
   addr: $REPO_PaddleSpeech_t2s
   path: $ROOT_PATH/PaddleSpeech
