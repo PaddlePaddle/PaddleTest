@@ -30,6 +30,8 @@ chinese_ocr_db_crnn_mobile
 chinese_ocr_db_crnn_server
 chinese_text_detection_db_mobile
 chinese_text_detection_db_server
+cnn10
+cnn14
 cnn6
 cyclegan_cityscapes
 darknet53_imagenet
@@ -38,8 +40,6 @@ DDParser
 deeplabv3p_resnet50_cityscapes
 deeplabv3p_resnet50_voc
 deeplabv3p_xception65_humanseg
-deepspeech2_aishell
-deepspeech2_librispeech
 densenet121_imagenet
 densenet161_imagenet
 densenet169_imagenet
@@ -74,7 +74,6 @@ ernie_gen_lover_words
 ernie_gen_poetry
 ernie
 ernie_skep_sentiment_analysis
-ernie_tiny_couplet
 ernie_tiny
 ernie_v2_eng_base
 ernie_v2_eng_large
