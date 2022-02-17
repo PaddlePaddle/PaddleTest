@@ -3,7 +3,7 @@
 unset GREP_OPTIONS
 cur_path=`pwd`
 
-while getopts ":P:b:p:t:g:L:" opt
+while getopts ":P:b:p:t:g:L:h:" opt
 do
     case $opt in
         P)
@@ -30,6 +30,9 @@ do
         echo "Linux sys=$OPTARG"
         linux_sys=$OPTARG
         ;;
+        h)
+        hub_config=$OPTARG
+        ;;
         ?)
         echo "未知参数"
         usage
@@ -43,14 +46,14 @@ build_env(){
     $py_cmd -m pip install pytest
     $py_cmd -m pip install ${paddle}
 
-#    hub config server==${hub_config}
-
     rm -rf Hub_all_module_ce_test
     git clone -b ${branch} https://github.com/PaddlePaddle/PaddleHub.git Hub_all_module_ce_test
     cd Hub_all_module_ce_test
     $py_cmd -m pip install -r requirements.txt
     $py_cmd setup.py install
     cd -
+
+    hub config server==${hub_config}
 
 #    $py_cmd -m pip install Cython
 #    $py_cmd -m pip install imageio
@@ -108,7 +111,7 @@ main(){
             do
 
             # 修改为CPU预测
-            if [[ ${use_gpu} = False ]]; then
+            if [[ ${use_gpu} = "False" ]]; then
             sed -i "s/paddle.set_device('gpu')/paddle.set_device('cpu')/g" hub_all_py/test_${hub_module}.py
             sed -i "s/use_gpu=True/use_gpu=False/g" hub_all_py/test_${hub_module}.py
             fi
