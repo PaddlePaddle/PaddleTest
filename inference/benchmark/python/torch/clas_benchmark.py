@@ -9,8 +9,9 @@ import sys
 import time
 
 import cv2
+import numpy as np
 import torch
-import trtorch
+import torch_tensorrt
 import torchvision.models as models
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -95,15 +96,19 @@ def forward_benchmark(args):
     Returns:
         infernce benchmark time
     """
-
-    image_tensor = torch.randn((1, 3, 224, 224)).to("cuda")
-    logger.info("input image tensor shape : {}".format(image_tensor.shape))
-    # set running device on
-    predictor = Predictor()
     if args.device == "gpu":
         device = torch.device("cuda:0")
     else:
         device = torch.device("cpu")
+    np.random.seed(15)
+    img = np.random.randint(0, 255, (args.batch_size, 3, 224, 224)).astype("float32")
+    # input_data = np.random.randint(0, 256, size=(args.batch_size, 3, 224, 224), dtype=np.float32)
+    image_tensor = torch.from_numpy(img).to(device)
+    # image_tensor = torch.randn((args.batch_size, 3, 224, 224)).to("cuda")
+    print(image_tensor.dtype)
+    logger.info("input image tensor shape : {}".format(image_tensor.shape))
+    # set running device on
+    predictor = Predictor()
     image_tensor = image_tensor.to(device)
     predictor = torch.jit.script(predictor).to(device)
     with torch.no_grad():
@@ -136,14 +141,16 @@ def trt_benchmark(args):
     traced_model = torch.jit.trace(predictor.to(device), [image_tensor]).to(device)
 
     # Compile module
-    compiled_trt_model = trtorch.compile(
-        traced_model, {"input_shapes": [image_tensor.shape], "op_precision": torch.half}  # Run in FP16
+    compiled_trt_model = torch_tensorrt.compile(
+        traced_model,
+        inputs=[torch_tensorrt.Input(image_tensor.shape)],
+        enabled_precisions={torch.float32},  # Run in FP32
     )
     for i in range(args.warmup_times):
-        results = compiled_trt_model(image_tensor.half())
+        results = compiled_trt_model(image_tensor)
     time1 = time.time()
     for i in range(args.repeats):
-        results = compiled_trt_model(image_tensor.half())
+        results = compiled_trt_model(image_tensor)
     time2 = time.time()
     total_inference_cost = (time2 - time1) * 1000  # total latency, ms
     return total_inference_cost, results
