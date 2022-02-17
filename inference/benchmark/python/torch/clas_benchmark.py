@@ -163,7 +163,7 @@ def summary_config(args, infer_time: float):
         infer_time : inference time
     """
     logger.info("----------------------- Model info ----------------------")
-    logger.info("Model name: {0}, Model type: {1}".format("alexnet", "torch_model"))
+    logger.info("Model name: {0}, Model type: {1}".format(args.model_name, "torch_model"))
     logger.info("----------------------- Data info -----------------------")
     logger.info("Batch size: {0}, Num of samples: {1}".format(args.batch_size, args.repeats))
     logger.info("----------------------- Conf info -----------------------")
