@@ -55,6 +55,9 @@ build_env(){
 
     hub config server==${hub_config}
 
+    mkdir hub
+    export HUB_HOME=hub
+
 #    $py_cmd -m pip install Cython
 #    $py_cmd -m pip install imageio
 #    $py_cmd -m pip install imageio-ffmpeg
@@ -128,8 +131,22 @@ main(){
                 echo ++++++++++++++++++++++ ${hub_module} predict Success!!!++++++++++++++++++++++
                 hub_success=$(expr ${hub_success} + 1)
             fi
-            rm -rf /root/.paddlehub/modules
-            rm -rf /root/.paddlehub/tmp
+
+            rm -rf hub/.paddlehub/modules
+            rm -rf hub/.paddlehub/tmp
+
+            rm -rf hub/.paddlenlp/*
+            rm -rf hub/.paddleocr/*
+            rm -rf hub/.paddleseg/*
+            rm -rf hub/.paddlespeech/*
+
+#            rm -rf /root/.paddlehub/modules
+#            rm -rf /root/.paddlehub/tmp
+#
+#            rm -rf /root/.paddlenlp/*
+#            rm -rf /root/.paddleocr/*
+#            rm -rf /root/.paddleseg/*
+#            rm -rf /root/.paddlespeech/*
 
             sleep 5
             done
