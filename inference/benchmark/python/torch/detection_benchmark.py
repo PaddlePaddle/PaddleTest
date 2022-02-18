@@ -12,7 +12,7 @@ import cv2
 import wget
 import numpy as np
 import torch
-import trtorch
+from torch2trt import torch2trt
 import torchvision.models as models
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -65,10 +65,8 @@ def parse_args():
     Returns: Args
     """
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model_name", type=str, default="yolov3", choices=["yolov3, faster_rcnn"])
-    parser.add_argument(
-        "--trt_precision", type=str, default="fp32", help="trt precision", choices=["fp32", "fp16", "int8"]
-    )
+    parser.add_argument("--model_name", type=str, default="yolov3", choices=["yolov3", "faster_rcnn"])
+    parser.add_argument("--trt_precision", type=str, default="fp32", help="trt precision", choices=["fp32", "fp16"])
     parser.add_argument("--device", default="gpu", type=str, choices=["gpu", "cpu"])
     parser.add_argument("--use_trt", dest="use_trt", action="store_true")
     parser.add_argument("--batch_size", type=int, default=1, help="batch size")
@@ -91,51 +89,62 @@ def forward_benchmark(args):
         device = torch.device("cpu")
     np.random.seed(15)
     img = np.random.randint(0, 255, (args.batch_size, 3, 640, 640)).astype("float32")
-    input_data = torch.from_numpy(img).to(device)
-    logger.info("input image tensor shape : {}".format(input_data.shape))
+    # input_data = np.random.randint(0, 256, size=(args.batch_size, 3, 224, 224), dtype=np.float32)
+    image_tensor = torch.from_numpy(img).to(device)
+    # image_tensor = torch.randn((args.batch_size, 3, 224, 224)).to("cuda")
     # set running device on
-    predictor = Predictor()
-    predictor = predictor.to(device)
+    predictor = Predictor().to(device)
+    # predictor = torch.jit.script(predictor).to(device)
+    if args.use_trt:
+        if args.trt_precision == "fp16":
+            image_tensor = image_tensor.half()
+            predictor = predictor.half()
+            predictor = torch2trt(predictor, [image_tensor], fp16_mode=True, max_batch_size=args.batch_size)
+        else:
+            predictor = torch2trt(predictor, [image_tensor], max_batch_size=args.batch_size)
+    print(image_tensor.dtype)
+    logger.info("input image tensor shape : {}".format(image_tensor.shape))
+
     with torch.no_grad():
         # warm up
         for i in range(args.warmup_times):
-            output = predictor(input_data)
+            output = predictor(image_tensor)
 
         time1 = time.time()
         for i in range(args.repeats):
-            output = predictor(input_data)
+            output = predictor(image_tensor)
         time2 = time.time()
         total_inference_cost = (time2 - time1) * 1000  # total latency, ms
     return total_inference_cost, output
 
 
-def trt_benchmark(args):
-    """
-    trt forward inference
-    Args:
-        args
-    Returns:
-        infernce trt benchmark time
-    """
-    # Compile module
-    predictor = Predictor()
-    device = torch.device("cuda:0")
-    image_tensor = torch.randn((1, 3, 224, 224)).to(device)
-    # Trace the module with example data
-    traced_model = torch.jit.trace(predictor.to(device), [image_tensor]).to(device)
-
-    # Compile module
-    compiled_trt_model = trtorch.compile(
-        traced_model, {"input_shapes": [image_tensor.shape], "op_precision": torch.half}  # Run in FP16
-    )
-    for i in range(args.warmup_times):
-        results = compiled_trt_model(image_tensor.half())
-    time1 = time.time()
-    for i in range(args.repeats):
-        results = compiled_trt_model(image_tensor.half())
-    time2 = time.time()
-    total_inference_cost = (time2 - time1) * 1000  # total latency, ms
-    return total_inference_cost, results
+# def trt_benchmark(args):
+#     """
+#     trt forward inference
+#     Args:
+#         args
+#     Returns:
+#         infernce trt benchmark time
+#     """
+#     # Compile module
+#     predictor = Predictor()
+#     device = torch.device("cuda:0")
+#     image_tensor = torch.randn((1, 3, 224, 224)).to(device)
+#     # Trace the module with example data
+#     traced_model = torch.jit.trace(predictor.to(device), [image_tensor]).to(device)
+#
+#     # Compile module
+#     compiled_trt_model = trtorch.compile(
+#         traced_model, {"input_shapes": [image_tensor.shape], "op_precision": torch.half}  # Run in FP16
+#     )
+#     for i in range(args.warmup_times):
+#         results = compiled_trt_model(image_tensor.half())
+#     time1 = time.time()
+#     for i in range(args.repeats):
+#         results = compiled_trt_model(image_tensor.half())
+#     time2 = time.time()
+#     total_inference_cost = (time2 - time1) * 1000  # total latency, ms
+#     return total_inference_cost, results
 
 
 def summary_config(args, infer_time: float):
@@ -166,10 +175,7 @@ def run_demo():
     run_demo
     """
     args = parse_args()
-    if args.use_trt:
-        total_time = trt_benchmark(args)[0]
-    else:
-        total_time = forward_benchmark(args)[0]
+    total_time = forward_benchmark(args)[0]
     summary_config(args, total_time)
 
 
