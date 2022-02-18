@@ -103,7 +103,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.1964
+        kpi_base: 0.40293
         threshold: 0.2
         actived: True
         evaluation: "-"
@@ -442,7 +442,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: infer.bat $XPU $SET_CUDA tnews 60
+        cmd: infer.bat $XPU $SET_CUDA tnews 120
     kpis:
       exit_code:
         latest: True
