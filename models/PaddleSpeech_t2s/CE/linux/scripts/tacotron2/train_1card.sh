@@ -20,7 +20,7 @@ if [ ! -f "baker_alignment_tone.tar.gz" ]; then
 fi
 sed -i "s/python3/python/g" ./local/preprocess.sh
 rm -rf dump
-./local/preprocess.sh ${preprocess_path} > preprocess.log 2>&1
+./local/preprocess.sh ${conf_path} > preprocess.log 2>&1
 if [ $? -eq 0 ];then
    cat preprocess.log
    echo -e "\033[33m data preprocess of tacotron2 successfully! \033[0m"
