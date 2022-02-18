@@ -42,5 +42,3 @@ python clas_keras_benchmark.py --model_name=VGG16 --batch_size=8 --use_gpu --use
 python clas_keras_benchmark.py --model_name=MobileNetV2 --batch_size=1 --use_gpu --use_trt --trt_precision=fp16
 python clas_keras_benchmark.py --model_name=MobileNetV2 --batch_size=4 --use_gpu --use_trt --trt_precision=fp16
 python clas_keras_benchmark.py --model_name=MobileNetV2 --batch_size=8 --use_gpu --use_trt --trt_precision=fp16
-
-
