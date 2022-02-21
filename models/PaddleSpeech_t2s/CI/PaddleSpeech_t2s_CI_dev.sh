@@ -49,7 +49,7 @@ done
 echo "`python -m pip list | grep paddle`" |tee -a ${log_path}/result.log
 python -c 'import paddle;print(paddle.version.commit)' |tee -a ${log_path}/result.log
 
-echo -e "newTacotron2\nspeedyspeech\nfastspeech2\nparallelwavegan\nStyleMelGAN\nHiFiGAN\nWaveRNN\ntransformertts" > models_list_all
+echo -e "newTacotron2\nspeedyspeech\nfastspeech2\nparallelwavegan\nStyleMelGAN\nHiFiGAN\nWaveRNN\ntransformertts\nwaveflow" > models_list_all
 shuf models_list_all > models_list_shuf
 head -n 2 models_list_shuf > models_list
 
@@ -471,6 +471,44 @@ if [ $? -eq 0 ];then
 else
    cat ../../../$log_path/synthesize_e2e/transformer_tts.log
    echo -e "\033[31m synthesize_e2e of transformer tts failed! \033[0m" | tee -a ../../../$log_path/result.log
+fi
+cd ../../..
+;;
+
+
+waveflow)
+# waveflow
+cd examples/ljspeech/voc0
+
+source path.sh
+source ${MAIN_ROOT}/utils/parse_options.sh
+gpus=$2
+
+rm -rf ./preprocessed_ljspeech
+ln -s $3/preprocess_data/waveflow/preprocessed_ljspeech/ ./
+preprocess_path=preprocessed_ljspeech
+train_output_path=output
+rm -rf output
+sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
+export CUDA_VISIBLE_DEVICES=${gpus}
+python ${BIN_DIR}/train.py --data=${preprocess_path} --output=${train_output_path} --ngpu=2 --opts data.batch_size 2 training.max_iteration 10 training.valid_interval 10 training.save_interval 10 > ../../../$log_path/train/waveflow.log 2>&1
+if [ $? -eq 0 ];then
+   echo -e "\033[33m training of waveflow successfully! \033[0m" | tee -a ../../../$log_path/result.log
+else
+   cat ../../../$log_path/train/waveflow.log
+   echo -e "\033[31m training of waveflow failed! \033[0m" | tee -a ../../../$log_path/result.log
+fi
+
+ln -s $3/mel_test/ ./
+input_mel_path=mel_test/
+ckpt_name=step-10
+sed -i "s/python3/python/g" ./local/synthesize.sh
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${input_mel_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/waveflow.log 2>&1
+if [ $? -eq 0 ];then
+   echo -e "\033[33m synthesize of waveflow successfully! \033[0m" | tee -a ../../../$log_path/result.log
+else
+   cat ../../../$log_path/synthesize/waveflow.log
+   echo -e "\033[31m synthesize of waveflow failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
