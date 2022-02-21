@@ -8,6 +8,9 @@ docker pull nvcr.io/nvidia/pytorch:22.01-py3
 ## 相关依赖
 ```shell
 python -m pip install opencv-python
+git clone https://github.com/NVIDIA-AI-IOT/torch2trt
+cd torch2trt
+sudo python setup.py install --plugins
 ```
 
 ## 执行方式
