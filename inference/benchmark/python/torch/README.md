@@ -12,5 +12,8 @@ python -m pip install opencv-python
 
 ## 执行方式
 ```shell
+python clas_benchmark.py --model_name resnet101 --device cpu --batch_size 1
+python clas_benchmark.py --model_name resnet101 --device gpu --batch_size 1
 python clas_benchmark.py --model_name resnet101 --device gpu --batch_size 1 --use_trt --trt_precision fp32
+python clas_benchmark.py --model_name resnet101 --device gpu --batch_size 1 --use_trt --trt_precision fp16
 ```
