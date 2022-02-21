@@ -70,6 +70,11 @@ build_env(){
     fi
 
     $py_cmd -m pip install librosa
+
+    $py_cmd -m pip install sentencepiece
+    $py_cmd -m pip install pypinyin --upgrade
+    $py_cmd -m pip install paddlex==1.3.11
+
 #
 #    $py_cmd -m pip install ruamel.yaml
 #    git clone -b release/v0.1 https://github.com/PaddlePaddle/Parakeet && cd Parakeet && $py_cmd -m pip install -e .
