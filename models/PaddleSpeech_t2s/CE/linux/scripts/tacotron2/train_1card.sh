@@ -8,15 +8,19 @@ if [ ! -d "../log" ]; then
 fi
 python -m pip install --ignore-installed -r requirements.txt
 
-cd examples/ljspeech/tts0
+cd examples/csmsc/tts0
 source ${PWD}/path.sh
 source ${MAIN_ROOT}/utils/parse_options.sh
-preprocess_path=preprocessed_ljspeech
-train_output_path=output
+conf_path=conf/default.yaml
+train_output_path=exp/default
 # data preprocess
+if [ ! -f "baker_alignment_tone.tar.gz" ]; then
+   wget https://paddlespeech.bj.bcebos.com/MFA/BZNSYP/with_tone/baker_alignment_tone.tar.gz
+   tar -xf baker_alignment_tone.tar.gz
+fi
 sed -i "s/python3/python/g" ./local/preprocess.sh
-rm -rf preprocessed_ljspeech
-./local/preprocess.sh ${preprocess_path} > preprocess.log 2>&1
+rm -rf dump
+./local/preprocess.sh ${conf_path} > preprocess.log 2>&1
 if [ $? -eq 0 ];then
    cat preprocess.log
    echo -e "\033[33m data preprocess of tacotron2 successfully! \033[0m"
@@ -26,8 +30,10 @@ else
 fi
 
 # train
-rm -rf output
-python ${BIN_DIR}/train.py --data=${preprocess_path} --output=${train_output_path} --ngpu=1 --opts data.batch_size 2 training.max_iteration 500 training.valid_interval 500 training.save_interval 500 > train_1card.log 2>&1
+sed -i "s/max_epoch: 200/max_epoch: 5/g" ${conf_path}
+sed -i "s/python3/python/g" ./local/train.sh
+rm -rf exp
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > train_1card.log 2>&1
 if [ $? -eq 0 ];then
    cat train_1card.log
    echo -e "\033[33m training_1card of tacotron2 successfully! \033[0m"
@@ -35,4 +41,5 @@ else
    cat train_1card.log
    echo -e "\033[31m training_1card of tacotron2 failed! \033[0m"
 fi
-cat train_1card.log | grep "step: 500" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $4}' > ../../../../log/tacotron2_1card.log
+sed -i "s/max_epoch: 5/max_epoch: 200/g" ${conf_path}
+cat train_1card.log | grep "765/765" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $7}' > ../../../../log/tacotron2_1card.log

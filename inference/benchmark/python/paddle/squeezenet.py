@@ -26,10 +26,10 @@ def check_model_exist():
     """
     check model exist
     """
-    mobilenetv2_url = "https://paddle-qa.bj.bcebos.com/inference_benchmark/paddle/model/MobileNetV2.tgz"
-    if not os.path.exists("./MobileNetV2/inference.pdiparams"):
-        wget.download(mobilenetv2_url, out="./")
-        tar = tarfile.open("MobileNetV2.tgz")
+    squeezenet_url = "https://paddle-qa.bj.bcebos.com/inference_benchmark/paddle/model/squeezenet.tgz"
+    if not os.path.exists("./squeezenet/inference.pdiparams"):
+        wget.download(squeezenet_url, out="./")
+        tar = tarfile.open("squeezenet.tgz")
         tar.extractall()
         tar.close()
 
@@ -44,7 +44,7 @@ def init_predictor(args):
     if args.trt_precision == "int8":
         use_calib_mode = True
 
-    config = Config("./MobileNetV2/inference.pdmodel", "./MobileNetV2/inference.pdiparams")
+    config = Config("./squeezenet/inference.pdmodel", "./squeezenet/inference.pdiparams")
 
     config.enable_memory_optim()
     trt_precision_map = {"fp32": PrecisionType.Float32, "fp16": PrecisionType.Half, "int8": PrecisionType.Int8}
@@ -114,7 +114,7 @@ def summary_config(args, infer_time: float):
         infer_time : inference time
     """
     logger.info("----------------------- Model info ----------------------")
-    logger.info("Model name: {0}, Model type: {1}".format("mobilenetv2", "paddle_model"))
+    logger.info("Model name: {0}, Model type: {1}".format("squeezenet", "paddle_model"))
     logger.info("----------------------- Data info -----------------------")
     logger.info("Batch size: {0}, Num of samples: {1}".format(args.batch_size, args.repeats))
     logger.info("----------------------- Conf info -----------------------")
