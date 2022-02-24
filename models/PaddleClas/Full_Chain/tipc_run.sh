@@ -27,6 +27,7 @@ start=`date +%s`
         echo "======="$mode"==========="
         bash test_tipc/prepare.sh $config_file $mode
         bash test_tipc/test_train_inference_python.sh $config_file $mode
+        bash -x upload.sh ${config_file} || echo "upload model error on"`pwd`
         sleep 3
     done
 
