@@ -30,7 +30,7 @@ if [ ! -d ${output_dir} ]; then
     echo "output_dir not found"
     exit 1
 fi
-# copy model file
+# copy model files
 \cp test_tipc/output/norm_train_gpus_0,1_autocast_null/inference.pdiparams ${output_dir}
 \cp test_tipc/output/norm_train_gpus_0,1_autocast_null/inference.pdiparams.info ${output_dir}
 \cp test_tipc/output/norm_train_gpus_0,1_autocast_null/inference.pdmodel ${output_dir}
