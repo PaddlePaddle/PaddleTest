@@ -53,8 +53,8 @@ mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-python -m pip install  --retries 50 --upgrade pip
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
+python -m pip install  --retries 50 --upgrade pip
 cd ./AutoLog
 python -m pip install --retries 10 -r requirements.txt
 python setup.py bdist_wheel
