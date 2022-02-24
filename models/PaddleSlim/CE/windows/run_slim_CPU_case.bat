@@ -116,6 +116,14 @@ call :all_nas
 rem echo 6 dygraph_qat
 rem call :all_dygraph_qat
 
+cd %log_path%
+for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
+echo %result:~-1%
+
+for /f "delims=" %%i in (' echo %result:~-1% ') do set exitcode=%%i
+echo -----exitcode:%exitcode%---------
+exit %exitcode%
+
 echo -----------------run P0case:end -------------------------
 goto :eof
 
