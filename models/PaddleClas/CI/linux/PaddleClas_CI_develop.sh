@@ -38,7 +38,7 @@ cd deploy
 rm -rf recognition_demo_data_v1.0
 rm -rf recognition_demo_data_v1.1
 rm -rf models
-ln -s ${Data_path}/* .
+ln -s ${Data_path}/rec_demo/* .
 cd ..
 
 if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
@@ -549,50 +549,6 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
    cat models_list | while read line
    do
 
-   \cp ppcls/data/dataloader/icartoon_dataset.py ppcls/data/dataloader/icartoon_dataset_org.py #保留原始文件
-   \cp ppcls/data/dataloader/imagenet_dataset.py ppcls/data/dataloader/imagenet_dataset_org.py
-   \cp ppcls/data/dataloader/vehicle_dataset.py ppcls/data/dataloader/vehicle_dataset_org.py
-
-   # if [[ ! ${model_flag} =~ 'CI' ]]; then #全量不修改  #因为时间原因，对于所有数据都进行修改
-
-   # # small data
-   # # icartoon_dataset
-   sed -ie '/self.images = self.images\[:2000\]/d'  \ppcls/data/dataloader/icartoon_dataset.py
-   sed -ie '/self.labels = self.labels\[:2000\]/d'  ppcls/data/dataloader/icartoon_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:2000\]'  ppcls/data/dataloader/icartoon_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:2000\]'  ppcls/data/dataloader/icartoon_dataset.py
-
-   if [[ ${line} =~ 'reid' ]] || ([[ ${line} =~ 'ReID' ]] && [[ ${line} =~ 'Vehicle' ]]) || [[ ${line} =~ 'Logo' ]]; then
-      echo "non change vehicle_dataset"
-      echo ${line}
-   else
-      echo "change vehicle_dataset"
-      # product_dataset
-      sed -ie '/self.images = self.images\[:2000\]/d'  ppcls/data/dataloader/imagenet_dataset.py
-      sed -ie '/self.labels = self.labels\[:2000\]/d'  ppcls/data/dataloader/imagenet_dataset.py
-      sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:2000\]'  ppcls/data/dataloader/imagenet_dataset.py
-      sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:2000\]'  ppcls/data/dataloader/imagenet_dataset.py
-
-      # vehicle_dataset
-      sed -ie '/self.images = self.images\[:2000\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-      sed -ie '/self.labels = self.labels\[:2000\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-      sed -ie '/self.bboxes = self.bboxes\[:2000\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-      sed -ie '/self.cameras = self.cameras\[:2000\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-
-      numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
-      number1=`echo $numbers |cut -d' ' -f1`
-      sed -i "`echo $number1` a\        self.bboxes = self.bboxes\[:2000\]" ppcls/data/dataloader/vehicle_dataset.py
-
-      numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
-      number2=`echo $numbers |cut -d' ' -f2`
-      sed -i "`echo $number2` a\        self.cameras = self.cameras\[:2000\]" ppcls/data/dataloader/vehicle_dataset.py
-
-      sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:2000\]'  ppcls/data/dataloader/vehicle_dataset.py
-      sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:2000\]'  ppcls/data/dataloader/vehicle_dataset.py
-   fi
-
-   # fi
-
     #echo $line
     filename=${line##*/}
     #echo $filename
@@ -727,10 +683,6 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     ;;
     esac
     cd ..
-
-   \cp ppcls/data/dataloader/icartoon_dataset_org.py ppcls/data/dataloader/icartoon_dataset.py
-   \cp ppcls/data/dataloader/imagenet_dataset_org.py ppcls/data/dataloader/imagenet_dataset.py
-   \cp ppcls/data/dataloader/vehicle_dataset_org.py ppcls/data/dataloader/vehicle_dataset.py
 
     done
 fi
