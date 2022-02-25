@@ -280,7 +280,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu match_multiviewsimnet_win_dy_gpu
+        cmd: train.bat win_dy_gpu match_multiviewsimnet_win_dy_gpu multiview-simnet
 
     kpis: #kpi指标
       Acc:
@@ -305,7 +305,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -313,7 +313,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu match_multiviewsimnet_win_dy_cpu
+        cmd: train.bat win_dy_cpu match_multiviewsimnet_win_dy_cpu multiview-simnet
 
     kpis: #kpi指标
       Acc:
@@ -338,7 +338,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -346,7 +346,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu match_multiviewsimnet_win_st_gpu
+        cmd: train.bat win_st_gpu match_multiviewsimnet_win_st_gpu multiview-simnet
 
     kpis: #kpi指标
       Acc:
@@ -371,7 +371,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_win_st_gpu.log
 
   -
     tag: win_st_cpu # st_cpu
@@ -379,7 +379,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu match_multiviewsimnet_win_st_cpu
+        cmd: train.bat win_st_cpu match_multiviewsimnet_win_st_cpu multiview-simnet
 
     kpis: #kpi指标
       Acc:
@@ -404,7 +404,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_win_st_cpu.log
 
 
 INFER:
@@ -625,7 +625,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu match_multiviewsimnet_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu match_multiviewsimnet_infer_win_dy_gpu multiview-simnet
 
     kpis: #kpi指标
       query_pt_sim:
@@ -643,7 +643,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_win_dy_gpu_pair.log
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_infer_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -651,7 +651,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu match_multiviewsimnet_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu match_multiviewsimnet_infer_win_dy_cpu multiview-simnet
 
     kpis: #kpi指标
       query_pt_sim:
@@ -669,7 +669,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_infer_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -677,7 +677,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu match_multiviewsimnet_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu match_multiviewsimnet_infer_win_st_gpu multiview-simnet
 
     kpis: #kpi指标
       query_pt_sim:
@@ -695,7 +695,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_win_st_gpu_pair.log
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_infer_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -703,7 +703,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu match_multiviewsimnet_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu match_multiviewsimnet_infer_win_st_cpu multiview-simnet
 
     kpis: #kpi指标
       query_pt_sim:
@@ -721,4 +721,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_infer_win_st_cpu.log

@@ -252,7 +252,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu content_tagspace_win_dy_gpu
+        cmd: train.bat win_dy_gpu content_tagspace_win_dy_gpu tagspace
 
     kpis: #kpi指标
       ACC:
@@ -270,7 +270,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_win_dy_gpu.log
 
   -
     tag: win_dy_cpu # dy_cpu
@@ -278,7 +278,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu content_tagspace_win_dy_cpu
+        cmd: train.bat win_dy_cpu content_tagspace_win_dy_cpu tagspace
 
     kpis: #kpi指标
       ACC:
@@ -296,7 +296,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_win_dy_cpu.log
 
   -
     tag: win_st_gpu # st_gpu
@@ -304,7 +304,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu content_tagspace_win_st_gpu
+        cmd: train.bat win_st_gpu content_tagspace_win_st_gpu tagspace
 
     kpis: #kpi指标
       ACC:
@@ -322,7 +322,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_win_st_gpu.log
 
   -
     tag: win_st_cpu # st_cpu
@@ -330,7 +330,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu content_tagspace_win_st_cpu
+        cmd: train.bat win_st_cpu content_tagspace_win_st_cpu tagspace
 
     kpis: #kpi指标
       ACC:
@@ -348,7 +348,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -563,7 +563,7 @@ INFER:
     priority: p1 # dy_gpu
     run:
       - path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu content_tagspace_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu content_tagspace_infer_win_dy_gpu tagspace
 
     kpis: #kpi指标
       ACC:
@@ -581,14 +581,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_infer_win_dy_gpu.log
 
   -
     tag: win_dy_cpu # dy_cpu
     priority: p1 # dy_cpu
     run:
       - path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu content_tagspace_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu content_tagspace_infer_win_dy_cpu tagspace
 
     kpis: #kpi指标
       ACC:
@@ -606,14 +606,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_infer_win_dy_cpu.log
 
   -
     tag: win_st_gpu # st_gpu
     priority: p1 # st_gpu
     run:
       - path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu content_tagspace_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu content_tagspace_infer_win_st_gpu tagspace
 
     kpis: #kpi指标
       ACC:
@@ -631,14 +631,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_infer_win_st_gpu.log
 
   -
     tag: win_st_cpu # st_cpu
     priority: p1 # st_cpu
     run:
       - path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu content_tagspace_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu content_tagspace_infer_win_st_cpu tagspace
 
     kpis: #kpi指标
       ACC:
@@ -656,4 +656,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_infer_win_st_cpu.log

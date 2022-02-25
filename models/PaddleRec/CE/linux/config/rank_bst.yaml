@@ -249,7 +249,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: train.bat win_dy_gpu rank_bst_win_dy_gpu
+        cmd: train.bat win_dy_gpu rank_bst_win_dy_gpu bst
 
     kpis: #kpi指标
       auc:
@@ -274,7 +274,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: train.bat win_dy_cpu rank_bst_win_dy_cpu
+        cmd: train.bat win_dy_cpu rank_bst_win_dy_cpu bst
 
     kpis: #kpi指标
       auc:
@@ -299,7 +299,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: train.bat win_st_gpu rank_bst_win_st_gpu
+        cmd: train.bat win_st_gpu rank_bst_win_st_gpu bst
 
     kpis: #kpi指标
       auc:
@@ -324,7 +324,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: train.bat win_st_cpu rank_bst_win_st_cpu
+        cmd: train.bat win_st_cpu rank_bst_win_st_cpu bst
 
     kpis: #kpi指标
       auc:
@@ -559,7 +559,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: infer.bat win_dy_gpu rank_bst_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu rank_bst_infer_win_dy_gpu bst
 
     kpis: #kpi指标
       auc:
@@ -584,7 +584,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: infer.bat win_dy_cpu rank_bst_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu rank_bst_infer_win_dy_cpu bst
 
     kpis: #kpi指标
       auc:
@@ -609,7 +609,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: infer.bat win_st_gpu rank_bst_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu rank_bst_infer_win_st_gpu bst
 
     kpis: #kpi指标
       auc:
@@ -634,7 +634,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: infer.bat win_st_cpu rank_bst_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu rank_bst_infer_win_st_cpu bst
 
     kpis: #kpi指标
       auc:

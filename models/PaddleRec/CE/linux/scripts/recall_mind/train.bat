@@ -1,8 +1,17 @@
 @echo off
 cd ../..
-if not exist log\bert md log\bert
-set logpath=%cd%\log\bert
+if not exist log\recall_%3 md log\recall_%3
+set logpath=%cd%\log\recall_%3
 
-cd models_repo\examples\language_model\bert\
-
-python -m paddle.distributed.launch --gpus %2 run_pretrain.py --model_type bert --model_name_or_path bert-base-uncased --max_predictions_per_seq 20 --batch_size 32   --learning_rate 1e-4 --weight_decay 1e-2 --adam_epsilon 1e-6 --warmup_steps 10000 --num_train_epochs 1 --input_dir data/ --output_dir pretrained_models/ --logging_steps 1 --save_steps 1 --max_steps 1 --device %1 --use_amp False > %logpath%\train_win_%1.log 2>&1
+cd PaddleRec\models\recall\%3\
+echo "%1, %2, %3:" %1, %2, %3
+if %1 equ "win_dy_cpu" (
+    python -u ..\..\..\tools\trainer.py -m config.yaml > %logpath%\%2.log 2>&1
+) else if %1 equ "win_st_cpu" (
+    python -u ..\..\..\tools\static_trainer.py -m config.yaml > %logpath%\%2.log 2>&1
+)
+if %ERRORLEVEL% == 1 (
+    echo "exit_code: 1.0" >> %logpath%\%2.log
+) else (
+    echo "exit_code: 0.0" >> %logpath%\%2.log
+)
