@@ -22,11 +22,11 @@ cd -
 cd /workspace
 paddle_commit=`git rev-parse HEAD`
 cd -
-model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}'`
+model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}' | head -n 1`
 echo ${model_name}
 output_dir="test_tipc/output/norm_train_gpus_0,1_autocast_null/${model_name}"
 echo ${output_dir}
-if [ ! -d ${output_dir} ]; then
+if [ ! -d "${output_dir}" ]; then
     echo "output_dir not found"
     exit 1
 fi
@@ -44,3 +44,4 @@ python2 ${push_file} ${model_tar_name} paddle-qa/fullchain_ce_test
 exit_code=$?
 rm -rf ${model_tar_name}
 exit $exit_code
+
