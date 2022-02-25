@@ -22,7 +22,7 @@ cd -
 cd /workspace
 paddle_commit=`git rev-parse HEAD`
 cd -
-model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}'`
+model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}' | head -n 1`
 echo ${model_name}
 output_dir="test_tipc/output/norm_train_gpus_0,1_autocast_null/${model_name}"
 echo ${output_dir}
