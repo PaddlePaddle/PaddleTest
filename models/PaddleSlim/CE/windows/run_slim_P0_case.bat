@@ -49,8 +49,8 @@ set https_proxy=%2
 
 echo git clone slim branch: %1
 cd %repo_path%
-git config --global http.sslVerify "false"
-git clone -b %1 https://github.com/PaddlePaddle/PaddleSlim.git
+:: git config --global http.sslVerify "false"
+git clone https://github.com/PaddlePaddle/PaddleSlim.git -b %1
 
 echo -----------------install paddleslim-----------------
 python -m pip uninstall paddleslim -y
