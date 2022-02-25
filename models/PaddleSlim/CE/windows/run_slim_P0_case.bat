@@ -46,8 +46,7 @@ dir
 
 set http_proxy=%2
 set https_proxy=%2
-echo %http_proxy%
-echo %https_proxy%
+
 echo git clone slim branch: %1
 cd %repo_path%
 git config --global http.sslVerify "false"
