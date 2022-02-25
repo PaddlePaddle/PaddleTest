@@ -44,4 +44,3 @@ python2 ${push_file} ${model_tar_name} paddle-qa/fullchain_ce_test
 exit_code=$?
 rm -rf ${model_tar_name}
 exit $exit_code
-
