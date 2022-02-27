@@ -33,6 +33,8 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    fi
 fi
 
+python -m pip install --ignore-installed  --upgrade pip \
+   -i https://mirror.baidu.com/pypi/simple
 if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=${cudaid2} #cudaid2
@@ -126,8 +128,6 @@ fi
 unset http_proxy
 unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
-python -m pip install --ignore-installed  --upgrade pip \
-   -i https://mirror.baidu.com/pypi/simple
 echo "######  install ppgan "
 python -m pip install  ppgan \
    -i https://mirror.baidu.com/pypi/simple
