@@ -29,8 +29,6 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    cd ..
 fi
 
-python -m pip install --ignore-installed --upgrade \
-   pip -i https://mirror.baidu.com/pypi/simple
 if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=${cudaid2} #cudaid
@@ -58,6 +56,8 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"
+   python -m pip install --ignore-installed --upgrade \
+      pip -i https://mirror.baidu.com/pypi/simple
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install ${paddle_compile} #paddle_compile
    echo "######  paddle version"
@@ -91,6 +91,8 @@ unset http_proxy
 unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
+python -m pip install --ignore-installed --upgrade \
+   pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
    -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
