@@ -543,6 +543,10 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
    cat models_list | while read line
    do
 
+    if [[ ${line} =~ 'Gallery2FC_PPLCNet_x2_5' ]]; then
+      echo "have Gallery2FC_PPLCNet_x2_5"
+      continue
+
     #echo $line
     filename=${line##*/}
     #echo $filename
