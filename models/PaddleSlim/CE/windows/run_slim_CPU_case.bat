@@ -665,13 +665,13 @@ call :printInfo  %errorlevel%
 
 echo run st_unstructured_prune_threshold_load
 set model=st_unstructured_prune_threshold_load
-python train.py ^
-    --batch_size 128 --pretrained_model ../pretrain/MobileNetV1_pretrained --use_gpu=False ^
-    --lr 0.05 --pruning_mode threshold ^--threshold 0.01 --data imagenet ^
-    --lr_strategy piecewise_decay --step_epochs 1 2 3 --num_epochs 3 --test_period 1 ^
-    --model_path ./st_unstructured_models ^
-    --last_epoch 1 >%log_path%\%model%.log 2>&1
-call :printInfo  %errorlevel%
+::python train.py ^
+::    --batch_size 128 --pretrained_model ../pretrain/MobileNetV1_pretrained --use_gpu=False ^
+::    --lr 0.05 --pruning_mode threshold ^--threshold 0.01 --data imagenet ^
+::   --lr_strategy piecewise_decay --step_epochs 1 2 3 --num_epochs 3 --test_period 1 ^
+::    --model_path ./st_unstructured_models ^
+::    --last_epoch 1 >%log_path%\%model%.log 2>&1
+::call :printInfo  %errorlevel%
 
 echo run st_ratio_prune_ratio
 set model=st_unstructured_prune_ratio
