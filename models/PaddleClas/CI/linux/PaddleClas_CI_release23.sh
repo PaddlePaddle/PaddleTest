@@ -22,9 +22,6 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    ls dataset
 
    cd deploy
-   rm -rf recognition_demo_data_v1.0
-   rm -rf recognition_demo_data_v1.1
-   rm -rf models
    ln -s  ${Data_path}/* .
    cd ..
 fi
@@ -69,9 +66,6 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    ls dataset
    cd deploy
 
-   rm -rf recognition_demo_data_v1.0
-   rm -rf recognition_demo_data_v1.1
-   rm -rf models
    ln -s ${Data_path}/* .
    cd ..
 fi
@@ -198,11 +192,6 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
       python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
       --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
    fi
-
-   #visualdl
-   echo "######  visualdl "
-   ls /root/.visualdl/conf
-   rm -rf /root/.visualdl/conf
 
    #train
    python -m paddle.distributed.launch tools/train.py  \

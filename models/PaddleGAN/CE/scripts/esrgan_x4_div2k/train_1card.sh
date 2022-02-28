@@ -13,5 +13,6 @@ if [ ! -d "../log" ]; then
   mkdir ../log
 fi
 python -m pip install -r requirements.txt
-python tools/main.py -c configs/esrgan_x4_div2k.yaml -o total_iters=100 log_config.interval=10 > log/esrgan_x4_div2k_1card.log 2>&1
+python tools/main.py -c configs/esrgan_x4_div2k.yaml -o total_iters=100 log_config.interval=20 log_config.visiual_interval=999999 snapshot_config.interval=999999 dataset.train.batch_size=1 > log/esrgan_1card.log 2>&1
+# python tools/main.py -c configs/esrgan_x4_div2k.yaml -o total_iters=100 log_config.interval=10 > log/esrgan_x4_div2k_1card.log 2>&1
 cat log/esrgan_x4_div2k_1card.log | grep " INFO: Iter: 100/100" > ../log/esrgan_x4_div2k_1card.log

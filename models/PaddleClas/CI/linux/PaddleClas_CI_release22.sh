@@ -22,9 +22,6 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    ls dataset
 
    cd deploy
-   rm -rf recognition_demo_data_v1.0
-   rm -rf recognition_demo_data_v1.1
-   rm -rf models
    ln -s  ${Data_path}/* .
    cd ..
 fi
