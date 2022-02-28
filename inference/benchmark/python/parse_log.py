@@ -21,7 +21,6 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--log_path", type=str, default="./logs", help="benchmark log path")
     parser.add_argument("--output_name", type=str, default="benchmark_excel.xlsx", help="output excel file name")
-    parser.add_argument("--process_trt", dest="process_trt", action="store_true")
     return parser.parse_args()
 
 
