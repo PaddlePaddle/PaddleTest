@@ -105,7 +105,7 @@ goto :eof
 :all_distillation
 call :dist_res50_v1
 call :dist_MobileNetV2_x0_25
-call :dml_mv1_mv1
+::call :dml_mv1_mv1
 call :dml_mv1_res50
 goto :eof
 
