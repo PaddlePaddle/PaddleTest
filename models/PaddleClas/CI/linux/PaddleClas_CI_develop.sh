@@ -546,6 +546,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     if [[ ${line} =~ 'Gallery2FC' ]]; then
       echo "have Gallery2FC"
       continue
+    fi
 
     #echo $line
     filename=${line##*/}
