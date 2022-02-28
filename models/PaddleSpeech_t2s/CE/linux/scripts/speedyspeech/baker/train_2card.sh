@@ -6,7 +6,6 @@ ln -s ${Data_path}/train_data ~/datasets
 if [ ! -d "../log" ]; then
   mkdir ../log
 fi
-python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/csmsc/tts2
 source ${PWD}/path.sh
