@@ -26,7 +26,7 @@ def test_multinomial0():
         assert np.sum(res[i]) == 10
     assert np.allclose(multinomial.mean.numpy(), np.array([2, 3, 5]))
     assert np.allclose(multinomial.variance.numpy(), np.array([1.60000002, 2.09999990, 2.50000000]))
-    assert multinomial.prob(paddle.to_tensor([0, 1, 2])).numpy()[0] == 0.225
+    assert np.allclose(multinomial.prob(paddle.to_tensor([0, 1, 2])), np.array([0.225]))
     assert np.allclose(multinomial.entropy().numpy(), np.array(3.34121895))
 
 
