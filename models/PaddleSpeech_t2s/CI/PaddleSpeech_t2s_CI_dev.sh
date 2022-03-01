@@ -15,7 +15,8 @@ export no_proxy=bcebos.com;
 python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install $4 --no-cache-dir --ignore-installed;
 apt-get update
-if [[ $5 == 'all' ]];then
+if [[ ${model_flag} =~ 'all' ]]; then
+   echo "#### model_flag all"
    apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
 fi
 pushd tools; make virtualenv.done; popd
@@ -54,7 +55,7 @@ echo "`python -m pip list | grep paddle`" |tee -a ${log_path}/result.log
 python -c 'import paddle;print(paddle.version.commit)' |tee -a ${log_path}/result.log
 
 echo -e "newTacotron2\nspeedyspeech\nfastspeech2\nparallelwavegan\nStyleMelGAN\nHiFiGAN\nWaveRNN\ntransformertts\nwaveflow" > models_list_all
-if [[ $5 == 'pr' ]];then
+if [[ ${model_flag} =~ 'pr' ]]; then
    echo "#### model_flag pr"
    shuf models_list_all > models_list_shuf
    head -n 2 models_list_shuf > models_list
