@@ -581,6 +581,13 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     else
+      if [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]]; then
+         python -m paddle.distributed.launch tools/train.py  -c $line \
+            -o Global.epochs=1 \
+            -o Global.save_interval=1 \
+            -o Global.eval_interval=1 \
+            -o DataLoader.Train.sampler.batch_size=64
+
          python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
             -o Global.save_interval=1 \
@@ -588,6 +595,15 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o DataLoader.Train.sampler.batch_size=64 \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
+      else
+         python -m paddle.distributed.launch tools/train.py  -c $line \
+            -o Global.epochs=1 \
+            -o Global.save_interval=1 \
+            -o Global.eval_interval=1 \
+            -o DataLoader.Train.sampler.batch_size=64 \
+            -o Global.output_dir="./output/"${category}_${model} \
+            > $log_path/train/${category}_${model}.log 2>&1
+      fi
     fi
 
     params_dir=$(ls output/${category}_${model})
