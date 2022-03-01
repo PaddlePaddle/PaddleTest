@@ -415,7 +415,7 @@ INFER:
     kpis: #kpi指标
       ACC:
         latest: True
-        kpi_base: 0.8
+        kpi_base: 1.0
         threshold: 0.0
         actived: True
         evaluation: "+"
