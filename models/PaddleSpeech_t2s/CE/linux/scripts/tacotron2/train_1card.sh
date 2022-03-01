@@ -6,7 +6,6 @@ ln -s ${Data_path}/train_data ~/datasets
 if [ ! -d "../log" ]; then
   mkdir ../log
 fi
-python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/csmsc/tts0
 source ${PWD}/path.sh
@@ -33,7 +32,7 @@ fi
 sed -i "s/max_epoch: 200/max_epoch: 5/g" ${conf_path}
 sed -i "s/python3/python/g" ./local/train.sh
 rm -rf exp
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > train_1card.log 2>&1
+./local/train.sh ${conf_path} ${train_output_path} > train_1card.log 2>&1
 if [ $? -eq 0 ];then
    cat train_1card.log
    echo -e "\033[33m training_1card of tacotron2 successfully! \033[0m"

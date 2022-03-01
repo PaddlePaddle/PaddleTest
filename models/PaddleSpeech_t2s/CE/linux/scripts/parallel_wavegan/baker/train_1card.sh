@@ -6,7 +6,6 @@ mkdir log
 if [ ! -d "../log" ]; then
   mkdir ../log
 fi
-python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/csmsc/voc1
 source ${PWD}/path.sh
