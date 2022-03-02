@@ -127,7 +127,9 @@ for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
 echo %result:~-1%
 
 for /f "delims=" %%i in (' echo %result:~-1% ') do set exitcode=%%i
-echo -----exitcode:%exitcode%---------
+
+echo -----fail case:%exitcode%---------
+echo -----exit code:%exitcode%---------
 exit %exitcode%
 
 goto :eof
