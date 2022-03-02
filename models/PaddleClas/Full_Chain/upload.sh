@@ -1,6 +1,13 @@
 #!/bin/bash
 
 config_file=$1
+mode=$2
+
+# skip other modes
+if [ ${mode} != "lite_train_lite_infer" ]; then
+    echo "upload model only in lite_train_lite_infer"
+    exit 0
+fi
 
 # prepare SDK
 push_dir=$PWD
