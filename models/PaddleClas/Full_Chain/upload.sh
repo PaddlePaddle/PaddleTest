@@ -42,16 +42,18 @@ if [ ! -d ${output_dir} ]; then
     exit 1
 fi
 # copy model files
-\cp test_tipc/output/norm_train_gpus_0,1_autocast_null/inference.pdiparams ${output_dir}
-\cp test_tipc/output/norm_train_gpus_0,1_autocast_null/inference.pdiparams.info ${output_dir}
-\cp test_tipc/output/norm_train_gpus_0,1_autocast_null/inference.pdmodel ${output_dir}
-\cp ${config_file} ${output_dir}
+upload_dir="${output_dir}_upload"
+mkdir -p ${upload_dir}
+\cp test_tipc/output/norm_train_gpus_0,1_autocast_null/inference.pdiparams ${upload_dir}
+\cp test_tipc/output/norm_train_gpus_0,1_autocast_null/inference.pdiparams.info ${upload_dir}
+\cp test_tipc/output/norm_train_gpus_0,1_autocast_null/inference.pdmodel ${upload_dir}
+\cp ${config_file} ${upload_dir}
 
 # upload model
 model_tar_name="${time_stamp}^${REPO}^${model_name}^${paddle_commit}^${repo_commit}.tgz"
 models_link_file="tipc_models_url.txt"
 model_url="https://paddle-qa.bj.bcebos.com/fullchain_ce_test/${model_tar_name}"
-path_suffix=${output_dir##*/}
+path_suffix=${upload_dir##*/}
 tar -zcvf ${model_tar_name} -C test_tipc/output/norm_train_gpus_0,1_autocast_null ${path_suffix}
 python2 ${push_file} ${model_tar_name} paddle-qa/fullchain_ce_test
 exit_code=$?
@@ -60,4 +62,5 @@ if [ ${exit_code} == 0 ]; then
     python2 ${push_file} ${models_link_file} paddle-qa/fullchain_ce_test/model_download_link
 fi
 rm -rf ${model_tar_name}
+rm -rf ${upload_dir}
 exit $exit_code
