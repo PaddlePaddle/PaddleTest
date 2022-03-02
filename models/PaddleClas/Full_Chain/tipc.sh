@@ -53,8 +53,9 @@ mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-python -m pip install  --retries 50 --upgrade pip
+export REPO=$REPO
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
+python -m pip install  --retries 50 --upgrade pip
 cd ./AutoLog
 python -m pip install --retries 10 -r requirements.txt
 python setup.py bdist_wheel
@@ -73,9 +74,11 @@ python -m pip install --retries 10 psutil
 python -m pip install --retries 10 GPUtil
 python -m pip install --retries 10 paddleslim
 python -m pip install --retries 10 -r requirements.txt
+python2 -m pip install --retries 10 pycrypto -i https://mirror.baidu.com/pypi/simple
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./${COMPILE_PATH##*/}
 cp ../PaddleTest/models/PaddleClas/Full_Chain/tipc_run.sh .
+cp ../PaddleTest/models/PaddleClas/Full_Chain/upload.sh .
 cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_unrun .
 cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_all .
 bash tipc_run.sh

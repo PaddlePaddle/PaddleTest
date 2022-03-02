@@ -74,7 +74,7 @@ if !errorlevel! equ 0 (
 
 
 rem eval
-python tools/eval.py -c %%i -o Global.pretrained_model="./output/!model!/latest" -o Global.device=cpu >%log_path%/!model!_eva.log 2>&1
+python tools/eval.py -c %%i -o Global.pretrained_model="./output/!model!/latest" -o DataLoader.Eval.sampler.batch_size=1 -o Global.device=cpu >%log_path%/!model!_eva.log 2>&1
 if not !errorlevel! == 0 (
         echo   !model!,eval,FAIL  >> %log_path%\result.log
         echo  evaling of !model! failed!
