@@ -41,7 +41,6 @@ develop)
   unset http_proxy
   unset https_proxy
 #  python -m pip install paddlepaddle-gpu==0.0.0.post102 -f https://www.paddlepaddle.org.cn/whl/linux/gpu/develop.html
-# 安装最新版paddle
   wget https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxCentos_Gcc82_Cuda10.2_Trton_Py37_Compile_D_Develop/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
   python -m pip install paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
   export http_proxy=$3;
