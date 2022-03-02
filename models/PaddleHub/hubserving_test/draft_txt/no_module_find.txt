@@ -1,0 +1,14 @@
+chinese_bert_wwm
+chinese_bert_wwm_ext
+chinese_electra_base
+chinese_electra_small
+electra_base
+electra_large
+electra_small
+en-de
+zh-en
+plato2_en_base
+plato2_en_large
+unified_transformer-12L-cn-luge
+unified_transformer-12L-cn
+
