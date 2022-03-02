@@ -1,5 +1,5 @@
 MODEL: "rank_bst" # 模型名
-PRIORITY: P1
+PRIORITY: P4
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
@@ -95,7 +95,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.356921
+        kpi_base: 0.35803  # 0.356921
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -203,7 +203,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.358030
+        kpi_base: 0.356921  # 0.358030
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -249,7 +249,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu rank_bst_win_dy_gpu
+        cmd: train.bat win_dy_gpu rank_bst_win_dy_gpu bst
 
     kpis: #kpi指标
       auc:
@@ -267,14 +267,14 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_bst_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/rank_bst_win_dy_gpu.log
   -
     tag: win_dy_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu rank_bst_win_dy_cpu
+        cmd: train.bat win_dy_cpu rank_bst_win_dy_cpu bst
 
     kpis: #kpi指标
       auc:
@@ -292,14 +292,14 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_bst_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/rank_bst_win_dy_cpu.log
   -
     tag: win_st_gpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu rank_bst_win_st_gpu
+        cmd: train.bat win_st_gpu rank_bst_win_st_gpu bst
 
     kpis: #kpi指标
       auc:
@@ -317,14 +317,14 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_bst_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/rank_bst_win_st_gpu.log
   -
     tag: win_st_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu rank_bst_win_st_cpu
+        cmd: train.bat win_st_cpu rank_bst_win_st_cpu bst
 
     kpis: #kpi指标
       auc:
@@ -342,7 +342,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_bst_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/rank_bst_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -409,7 +409,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.510870
+        kpi_base: 0.5  # 0.510870
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -513,7 +513,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.5
+        kpi_base: 0.521739  # 0.5
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -559,7 +559,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu rank_bst_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu rank_bst_infer_win_dy_gpu bst
 
     kpis: #kpi指标
       auc:
@@ -577,14 +577,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_bst_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/rank_bst_infer_win_dy_gpu.log
   -
     tag: win_dy_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu rank_bst_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu rank_bst_infer_win_dy_cpu bst
 
     kpis: #kpi指标
       auc:
@@ -602,14 +602,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_bst_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/rank_bst_infer_win_dy_cpu.log
   -
     tag: win_st_gpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu rank_bst_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu rank_bst_infer_win_st_gpu bst
 
     kpis: #kpi指标
       auc:
@@ -627,14 +627,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_bst_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/rank_bst_infer_win_st_gpu.log
   -
     tag: win_st_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu rank_bst_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu rank_bst_infer_win_st_cpu bst
 
     kpis: #kpi指标
       auc:
@@ -652,4 +652,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_bst_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/rank_bst_infer_win_st_cpu.log

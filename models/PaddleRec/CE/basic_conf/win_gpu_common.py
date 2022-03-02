@@ -32,4 +32,5 @@ rec_BRANCH = BASE_BRANCH
 # windows GPU 任务要跑的标签
 EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
-EXEC_TAG = ["win_st_gpu1", "win_st_gpu1_con", "win_dy_gpu1", "win_dy_gpu1_con", "win_down_data"]
+# EXEC_TAG = ["win_st_gpu1", "win_st_gpu1_con", "win_dy_gpu1", "win_dy_gpu1_con", "win_down_data"]
+EXEC_TAG = ["win_dy_gpu"]

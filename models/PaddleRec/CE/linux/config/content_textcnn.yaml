@@ -353,7 +353,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu content_textcnn_win_dy_gpu
+        cmd: train.bat win_dy_gpu content_textcnn_win_dy_gpu textcnn
 
     kpis: #kpi指标
       acc:
@@ -378,7 +378,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_textcnn_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_textcnn_win_dy_gpu.log
 
   -
     tag: win_dy_cpu # dy_cpu
@@ -386,7 +386,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu content_textcnn_win_dy_cpu
+        cmd: train.bat win_dy_cpu content_textcnn_win_dy_cpu textcnn
 
     kpis: #kpi指标
       acc:
@@ -411,7 +411,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_textcnn_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_textcnn_win_dy_cpu.log
 
   -
     tag: win_st_gpu # st_gpu
@@ -419,7 +419,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu content_textcnn_win_st_gpu
+        cmd: train.bat win_st_gpu content_textcnn_win_st_gpu textcnn
 
     kpis: #kpi指标
       acc:
@@ -444,7 +444,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_textcnn_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_textcnn_win_st_gpu.log
 
   -
     tag: win_st_cpu # st_cpu
@@ -452,7 +452,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu content_textcnn_win_st_cpu
+        cmd: train.bat win_st_cpu content_textcnn_win_st_cpu textcnn
 
     kpis: #kpi指标
       acc:
@@ -477,7 +477,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_textcnn_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_textcnn_win_st_cpu.log
 
 INFER:
 # linux infer
@@ -749,7 +749,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu content_textcnn_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu content_textcnn_infer_win_dy_gpu textcnn
 
     kpis: #kpi指标
       acc:
@@ -767,7 +767,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_textcnn_infer_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -775,7 +775,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu content_textcnn_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu content_textcnn_infer_win_dy_cpu textcnn
 
     kpis: #kpi指标
       acc:
@@ -793,7 +793,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_textcnn_infer_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -801,7 +801,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu content_textcnn_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu content_textcnn_infer_win_st_gpu textcnn
 
     kpis: #kpi指标
       acc:
@@ -819,7 +819,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_textcnn_infer_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -827,7 +827,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu content_textcnn_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu content_textcnn_infer_win_st_cpu textcnn
 
     kpis: #kpi指标
       acc:
@@ -845,4 +845,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_textcnn_infer_win_st_cpu.log
