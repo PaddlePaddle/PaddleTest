@@ -22,11 +22,12 @@ echo ${file_name}
         echo "skip"
     else
         cd ${file_dir}
-        python ${file_name} --alluredir=report
+        python ${file_name} >> ${file_name%.*}.log
         if [ $? -ne 0 ]; then
             echo ${file_name} >> ${root_dir}/result.txt
             example_bug=`expr ${example_bug} + 1`
         fi
+        cat ${file_name%.*}.log
         cd -
     fi
 echo ============================= ${file_name}  end! =============================

@@ -3,6 +3,7 @@ unset GREP_OPTIONS
 echo ${cudaid2}
 echo ${Data_path}
 echo ${paddle_compile}
+echo ${model_flag}
 
 mkdir run_env_py37;
 ln -s $(which python3.7) run_env_py37/python;
@@ -14,7 +15,9 @@ export no_proxy=bcebos.com;
 python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install $4 --no-cache-dir --ignore-installed;
 apt-get update
-apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
+if [[ $5 == 'all' ]];then
+   apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
+fi
 pushd tools; make virtualenv.done; popd
 if [ $? -ne 0 ];then
     exit 1
@@ -24,7 +27,8 @@ python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install $4 --no-cache-dir
 python -m pip install numpy==1.20.1 --ignore-installed
 python -m pip install pyparsing==2.4.7 --ignore-installed
-pip install -e .
+#pip install -e .
+pip install .
 python -c "import sys; print('python version:',sys.version_info[:])";
 
 #system
@@ -50,8 +54,14 @@ echo "`python -m pip list | grep paddle`" |tee -a ${log_path}/result.log
 python -c 'import paddle;print(paddle.version.commit)' |tee -a ${log_path}/result.log
 
 echo -e "newTacotron2\nspeedyspeech\nfastspeech2\nparallelwavegan\nStyleMelGAN\nHiFiGAN\nWaveRNN\ntransformertts\nwaveflow" > models_list_all
-shuf models_list_all > models_list_shuf
-head -n 2 models_list_shuf > models_list
+if [[ $5 == 'pr' ]];then
+   echo "#### model_flag pr"
+   shuf models_list_all > models_list_shuf
+   head -n 2 models_list_shuf > models_list
+else
+   echo "#### model_flag all"
+   shuf models_list_all > models_list
+fi
 
 cat models_list | while read line
 do
@@ -515,6 +525,22 @@ cd ../../..
 
 esac
 done
+
+if [[ $5 == 'all' ]];then
+   # test_cli
+   cd tests/unit/cli
+   python -m pip uninstall importlib-metadata -y
+   python -m pip install importlib-metadata==2.0.0
+   export CUDA_VISIBLE_DEVICES=${gpus}
+   bash test_cli.sh > ../../../$log_path/test_cli.log 2>&1
+   if [ $? -eq 0 ];then
+      echo -e "\033[33m test_cli successfully! \033[0m" | tee -a ../../../$log_path/result.log
+   else
+      cat ../../../$log_path/test_cli.log
+      echo -e "\033[31m test_cli failed! \033[0m" | tee -a ../../../$log_path/result.log
+   fi
+   cd ../../..
+fi
 
 # result
 num=`cat $log_path/result.log | grep "failed" | wc -l`

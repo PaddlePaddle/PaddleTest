@@ -35,10 +35,7 @@ rm -rf dataset
 ln -s ${Data_path} dataset
 ls dataset
 cd deploy
-rm -rf recognition_demo_data_v1.0
-rm -rf recognition_demo_data_v1.1
-rm -rf models
-ln -s ${Data_path}/* .
+ln -s ${Data_path}/rec_demo/* .
 cd ..
 
 if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
@@ -82,8 +79,10 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"
+   python -m pip install --ignore-installed --upgrade \
+      pip -i https://mirror.baidu.com/pypi/simple
    python -m pip uninstall paddlepaddle-gpu -y
-   python -m pip install ${paddle_compile} #paddle_compile
+   python -m pip install ${paddle_compile} -i https://mirror.baidu.com/pypi/simple #paddle_compile
 
 fi
 
@@ -226,11 +225,6 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
       --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
    fi
-
-   #visualdl
-   echo "######  visualdl "
-   ls /root/.visualdl/conf
-   rm -rf /root/.visualdl/conf
 
    if [ -d "output" ]; then
       rm -rf output
@@ -508,7 +502,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
    find ppcls/configs/Products/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec
    find ppcls/configs/Vehicle/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec
    find ppcls/configs/slim/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成slim
-   find ppcls/configs/GeneralRecognition/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成slim
+   find ppcls/configs/GeneralRecognition/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' |grep -v 'Gallery2FC_PPLCNet_x2_5' >> models_list_rec #后续改成slim
 
    if [[ ${model_flag} =~ 'pr' ]]; then
       shuf -n ${pr_num} models_list_rec > models_list
@@ -535,7 +529,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
       git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
          | grep diff|grep yaml|grep configs|grep slim|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
       git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
-         | grep diff|grep yaml|grep configs|grep GeneralRecognition|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
+         | grep diff|grep yaml|grep configs|grep GeneralRecognition|awk -F 'b/' '{print$2}' |tee -a  models_list_diff_rec
       shuf -n 3 models_list_diff_rec >> models_list #防止diff yaml文件过多导致pr时间过长
       echo "######  diff models_list_diff"
       wc -l models_list_diff_rec
@@ -549,49 +543,10 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
    cat models_list | while read line
    do
 
-   \cp ppcls/data/dataloader/icartoon_dataset.py ppcls/data/dataloader/icartoon_dataset_org.py #保留原始文件
-   \cp ppcls/data/dataloader/imagenet_dataset.py ppcls/data/dataloader/imagenet_dataset_org.py
-   \cp ppcls/data/dataloader/vehicle_dataset.py ppcls/data/dataloader/vehicle_dataset_org.py
-
-   # if [[ ! ${model_flag} =~ 'CI' ]]; then #全量不修改  #因为时间原因，对于所有数据都进行修改
-
-   # # small data
-   # # icartoon_dataset
-   sed -ie '/self.images = self.images\[:2000\]/d'  \ppcls/data/dataloader/icartoon_dataset.py
-   sed -ie '/self.labels = self.labels\[:2000\]/d'  ppcls/data/dataloader/icartoon_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:2000\]'  ppcls/data/dataloader/icartoon_dataset.py
-   sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:2000\]'  ppcls/data/dataloader/icartoon_dataset.py
-
-   if [[ ${line} =~ 'reid' ]] || ([[ ${line} =~ 'ReID' ]] && [[ ${line} =~ 'Vehicle' ]]) || [[ ${line} =~ 'Logo' ]]; then
-      echo "non change vehicle_dataset"
-      echo ${line}
-   else
-      echo "change vehicle_dataset"
-      # product_dataset
-      sed -ie '/self.images = self.images\[:2000\]/d'  ppcls/data/dataloader/imagenet_dataset.py
-      sed -ie '/self.labels = self.labels\[:2000\]/d'  ppcls/data/dataloader/imagenet_dataset.py
-      sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:2000\]'  ppcls/data/dataloader/imagenet_dataset.py
-      sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:2000\]'  ppcls/data/dataloader/imagenet_dataset.py
-
-      # vehicle_dataset
-      sed -ie '/self.images = self.images\[:2000\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-      sed -ie '/self.labels = self.labels\[:2000\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-      sed -ie '/self.bboxes = self.bboxes\[:2000\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-      sed -ie '/self.cameras = self.cameras\[:2000\]/d'  ppcls/data/dataloader/vehicle_dataset.py
-
-      numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
-      number1=`echo $numbers |cut -d' ' -f1`
-      sed -i "`echo $number1` a\        self.bboxes = self.bboxes\[:2000\]" ppcls/data/dataloader/vehicle_dataset.py
-
-      numbers=`grep -n 'assert os.path.exists(self.images\[-1\])' ppcls/data/dataloader/vehicle_dataset.py |awk -F: '{print $1}'`
-      number2=`echo $numbers |cut -d' ' -f2`
-      sed -i "`echo $number2` a\        self.cameras = self.cameras\[:2000\]" ppcls/data/dataloader/vehicle_dataset.py
-
-      sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.images = self.images\[:2000\]'  ppcls/data/dataloader/vehicle_dataset.py
-      sed -i '/assert os.path.exists(self.images\[-1\])/a\        self.labels = self.labels\[:2000\]'  ppcls/data/dataloader/vehicle_dataset.py
-   fi
-
-   # fi
+    if [[ ${line} =~ 'Gallery2FC' ]]; then
+      echo "have Gallery2FC"
+      continue
+    fi
 
     #echo $line
     filename=${line##*/}
@@ -607,17 +562,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     echo $model
 
     sleep 3
-
-    if [[ ${line} =~ 'Aliproduct' ]]; then
-         python -m paddle.distributed.launch tools/train.py  -c $line \
-            -o Global.epochs=1 \
-            -o Global.save_interval=1 \
-            -o Global.eval_interval=1 \
-            -o DataLoader.Train.sampler.batch_size=64 \
-            -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt \
-            -o Global.output_dir="./output/"${category}_${model} \
-            > $log_path/train/${category}_${model}.log 2>&1
-    elif [[ ${line} =~ 'GeneralRecognition' ]]; then
+    if [[ ${line} =~ 'GeneralRecognition' ]]; then
          python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
             -o Global.save_interval=1 \
@@ -636,6 +581,13 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     else
+      if [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]]; then
+         python -m paddle.distributed.launch tools/train.py  -c $line \
+            -o Global.epochs=1 \
+            -o Global.save_interval=1 \
+            -o Global.eval_interval=1 \
+            -o DataLoader.Train.sampler.batch_size=64
+
          python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
             -o Global.save_interval=1 \
@@ -643,6 +595,15 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o DataLoader.Train.sampler.batch_size=64 \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
+      else
+         python -m paddle.distributed.launch tools/train.py  -c $line \
+            -o Global.epochs=1 \
+            -o Global.save_interval=1 \
+            -o Global.eval_interval=1 \
+            -o DataLoader.Train.sampler.batch_size=64 \
+            -o Global.output_dir="./output/"${category}_${model} \
+            > $log_path/train/${category}_${model}.log 2>&1
+      fi
     fi
 
     params_dir=$(ls output/${category}_${model})
@@ -727,10 +688,6 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     ;;
     esac
     cd ..
-
-   \cp ppcls/data/dataloader/icartoon_dataset_org.py ppcls/data/dataloader/icartoon_dataset.py
-   \cp ppcls/data/dataloader/imagenet_dataset_org.py ppcls/data/dataloader/imagenet_dataset.py
-   \cp ppcls/data/dataloader/vehicle_dataset_org.py ppcls/data/dataloader/vehicle_dataset.py
 
     done
 fi
