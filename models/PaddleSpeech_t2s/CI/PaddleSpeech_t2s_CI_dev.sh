@@ -15,7 +15,9 @@ export no_proxy=bcebos.com;
 python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install $4 --no-cache-dir --ignore-installed;
 apt-get update
-apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
+if [[ $5 == 'all' ]];then
+   apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
+fi
 pushd tools; make virtualenv.done; popd
 if [ $? -ne 0 ];then
     exit 1
@@ -25,7 +27,8 @@ python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install $4 --no-cache-dir
 python -m pip install numpy==1.20.1 --ignore-installed
 python -m pip install pyparsing==2.4.7 --ignore-installed
-pip install -e .
+#pip install -e .
+pip install .
 python -c "import sys; print('python version:',sys.version_info[:])";
 
 #system

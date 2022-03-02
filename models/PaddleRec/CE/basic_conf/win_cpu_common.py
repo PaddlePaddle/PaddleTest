@@ -32,4 +32,5 @@ rec_BRANCH = BASE_BRANCH
 # Windows gpu下， P0的任务要跑的标签 daily
 EXEC_PRIORITY = ["p0", "p1"]
 EXEC_CASES = ["DATA_PROC", "TRAIN", "INFER"]
-EXEC_TAG = ["win_st_cpu", "win_dy_cpu"]
+# EXEC_TAG = ["win_st_cpu", "win_dy_cpu"]
+EXEC_TAG = ["win_st_cpu"]
