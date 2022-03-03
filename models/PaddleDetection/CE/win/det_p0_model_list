@@ -1,0 +1,8 @@
+configs/cascade_rcnn/cascade_rcnn_r50_fpn_1x_coco.yml
+configs/mot/fairmot/fairmot_dla34_30e_1088x608.yml
+configs/fcos/fcos_dcn_r50_fpn_1x_coco.yml
+configs/mask_rcnn/mask_rcnn_r50_fpn_1x_coco.yml
+configs/ppyolo/ppyolo_r50vd_dcn_1x_coco.yml
+configs/solov2/solov2_r50_fpn_1x_coco.yml
+configs/yolov3/yolov3_darknet53_270e_coco.yml
+configs/keypoint/tiny_pose/tinypose_128x96.yml
