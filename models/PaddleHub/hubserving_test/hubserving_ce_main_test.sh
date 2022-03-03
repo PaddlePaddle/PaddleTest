@@ -93,7 +93,7 @@ main(){
             ;;
         (hubserving_test)
 
-#            build_env
+            build_env
 
             install_excption=0
             install_success=0
