@@ -370,7 +370,6 @@ model_skip_pyinfer='retinanet_r50_fpn_mstrain_1x_coco retinanet_r50_fpn_1x_coco 
 model_skip_cpp='centernet_shufflenetv2_1x_140e_coco centernet_mbv3_small_1x_140e_coco centernet_mbv3_large_1x_140e_coco centernet_mbv1_1x_140e_coco centernet_r50_140e_coco centernet_dla34_140e_coco solov2_r50_fpn_1x_coco solov2_r50_fpn_3x_coco solov2_r101_vd_fpn_3x_coco solov2_r50_enhance_coco faster_rcnn_r101_fpn_1x_coco ppyolov2_r50vd_dcn_voc yolov3_darknet53_270e_voc yolov3_darknet53_original_270e_coco tood_r50_fpn_1x_coco'
 err_sign=false
 model_type=dynamic
-sleep 3600
 for config in `cat config_list`
 do
 tmp=${config##*/}
