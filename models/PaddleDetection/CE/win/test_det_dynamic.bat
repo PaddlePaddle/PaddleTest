@@ -21,12 +21,14 @@ rem change the pretrained model dir
 
 rem create log dir
 if exist log (
+rem del /f /s /q log/*.*
 rd /s /q log
 md log
 ) else (
 md log
 )
 if exist log_err (
+rem del /f /s /q log/*.*
 rd /s /q log_err
 md log_err
 ) else (
@@ -39,11 +41,12 @@ python setup.py install
 cd ../..
 
 rem start test
+set err_sign=0
 if exist det_dynamic_list (
 del /f det_dynamic_list
 )
 for /r configs %%i in (*.yml) do (
-echo %%i | findstr /i .yml | findstr /v /i "_base_" | findstr /v /i "kunlun" | findstr /v /i "reader" | findstr /v /i "test" | findstr /v /i "oidv5" | findstr /v /i "datasets" | findstr /v /i "runtime" | findstr /v /i "slim" | findstr /v /i "roadsign" | findstr /v /i "minicoco" | findstr /v /i "deepsort" | findstr /v /i "gfl" | findstr /v /i "picodet" | findstr /v /i "pruner" | findstr /v /i "pedestrian_detection" | findstr /v /i "tiny_pose" >>det_dynamic_list
+echo %%i | findstr /i .yml | findstr /v /i "_base_" | findstr /v /i "kunlun" | findstr /v /i "reader" | findstr /v /i "test" | findstr /v /i "oidv5" | findstr /v /i "datasets" | findstr /v /i "runtime" | findstr /v /i "slim" | findstr /v /i "roadsign" | findstr /v /i "minicoco" | findstr /v /i "mot" | findstr /v /i "pruner" | findstr /v /i "pedestrian_detection" | findstr /v /i "keypoint" >>det_dynamic_list
 )
 echo test_start !
 set absolute_path=%cd%
@@ -82,7 +85,7 @@ if !errorlevel! EQU 0 (
     echo !model! does not upload bos！
     break
 ) else (
-echo !model! | findstr /i "pedestrian"
+echo !model! | findstr /i "pedestrian_yolov3_darknet"
 if !errorlevel! EQU 0 (
     xcopy %absolute_path%\configs\pedestrian\demo\001.png %absolute_path%\demo
     set infer_img=./demo/001.png
@@ -90,7 +93,7 @@ if !errorlevel! EQU 0 (
     call:export
     call:python_infer
 )
-echo !model! | findstr /i "vehicle"
+echo !model! | findstr /i "vehicle_yolov3_darknet"
 if !errorlevel! EQU 0 (
     xcopy %absolute_path%\configs\vehicle\demo\003.png %absolute_path%\demo
     set infer_img=./demo/003.png
@@ -114,14 +117,26 @@ echo end
 )
 )
 
+if !err_sign! EQU 1 (
+exit /b 1
+) else (
+exit /b 0
+)
+
 :train
+findstr /i /c:"!model!" "model_skip_train.txt" >tmp_trian
+if !errorlevel! EQU 0 (
+echo !model! does not test train for some reason!
+) else (
 python tools/train.py -c !config_path! -o TrainReader.batch_size=1 epoch=2 >log/!model!/!model!_train.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_train.log log_err\!model!\
 echo !model!, train, FAIL
+set err_sign=1
 ) else (
 echo !model!,train, SUCCESS
+)
 )
 goto:eof
 
@@ -135,6 +150,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_eval.log log_err\!model!\
 echo !model!, eval, FAIL
+set err_sign=1
 ) else (
 echo !model!,eval, SUCCESS
 )
@@ -149,17 +165,24 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
 echo !model!, infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,infer, SUCCESS
 )
+) else (
+findstr /i /c:"!model!" "skip_infer.txt" >tmp_infer
+if !errorlevel! EQU 0 (
+echo !model! does not test infer for some reason!
 ) else (
 python tools/!infer_method!.py -c !config_path! --infer_img=!infer_img! --output_dir=./infer_output/!model!/ -o weights=!url! >log/!model!/!model!_infer.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
 echo !model!, infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,infer, SUCCESS
+)
 )
 )
 goto:eof
@@ -174,6 +197,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_export.log log_err\!model!\
 echo !model!, export_model, FAIL
+set err_sign=1
 ) else (
 echo !model!,export_model, SUCCESS
 )
@@ -183,22 +207,24 @@ goto:eof
 :python_infer
 findstr /i /c:"!model!" "mot_model.txt" >tmp_mot
 if !errorlevel! EQU 0 (
-python deploy/python/!python_infer_method!.py --model_dir=./inference_model/!model! --video_file=./test_demo.mp4 --device=GPU --run_mode=fluid --threshold=0.5 --output_dir=python_infer_output/!model!/ >log/!model!/!model!_python_infer.log 2>&1
+set PYTHONPATH=%cd% python deploy/python/!python_infer_method!.py --model_dir=./inference_model/!model! --video_file=./test_demo.mp4 --device=GPU --run_mode=fluid --threshold=0.5 --output_dir=python_infer_output/!model!/ >log/!model!/!model!_python_infer.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
 )
 ) else (
 findstr /i /c:"!model!" "model_skip_python_infer.txt" >tmp_python_infer
-if !errorlevel! EQU 0 (
-python deploy/python/!python_infer_method!.py --model_dir=./inference_model/!model! --image_file=!infer_img! --device=GPU --run_mode=fluid --threshold=0.5 --output_dir=python_infer_output/!model!/ >log/!model!/!model!_python_infer.log 2>&1
+if !errorlevel! GTR 0 (
+python deploy/python/!python_infer_method!.py --model_dir=./inference_model/!model! --image_file=!infer_img! --device=GPU --run_mode=fluid --threshold=0.5 --output_dir=python_infer_output/!model!/ --batch_size=1 >log/!model!/!model!_python_infer.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
 )

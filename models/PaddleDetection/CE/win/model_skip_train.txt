@@ -1,0 +1,4 @@
+pedestrian_yolov3_darknet
+vehicle_yolov3_darknet
+faster_rcnn_enhance_3x_coco
+faster_rcnn_r101_1x_coco
