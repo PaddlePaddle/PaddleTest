@@ -3,7 +3,7 @@
 unset GREP_OPTIONS
 cur_path=`pwd`
 
-while getopts ":P:b:p:t:g:L:h:H:" opt
+while getopts ":P:b:p:t:g:L:h:H:I:" opt
 do
     case $opt in
         P)
