@@ -23,6 +23,9 @@ ln -s ${data_path}/cityscape data/cityscapes
 if [ -d "data/VOCdevkit" ]; then rm -rf data/VOCdevkit
 fi
 ln -s ${data_path}/pascalvoc/VOCdevkit data/VOCdevkit
+if [ -d "data/ADEChallengeData2016" ]; then rm -rf data/ADEChallengeData2016
+fi
+ln -s ${data_path}/ADEChallengeData2016 data/ADEChallengeData2016
 if [ -d "seg_dynamic_pretrain" ];then rm -rf seg_dynamic_pretrain
 fi
 ln -s ${data_path}/seg_dynamic_pretrain seg_dynamic_pretrain
@@ -173,8 +176,21 @@ if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model
         EXPORT_DYNAMIC
         PYTHON_INFER_DYNAMIC
     fi
-elif [[ -z `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
+elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/cityscapes/${model}/model.pdparams
+    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
+        echo "${model} url is bad!"
+    else
+        TRAIN_MUlTI_DYNAMIC
+        TRAIN_SINGLE_DYNAMIC_BS1
+        TRAIN_SINGLE_DYNAMIC
+        EVAL_DYNAMIC
+        PREDICT_DYNAMIC
+        EXPORT_DYNAMIC
+        PYTHON_INFER_DYNAMIC
+    fi
+elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
+    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/ade20k/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} url is bad!"
     else
@@ -196,8 +212,6 @@ else
     PYTHON_INFER_DYNAMIC
 fi
 done
-
-
 
 if [ "${err_sign}" = true ];then
     exit 1
