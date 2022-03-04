@@ -212,11 +212,6 @@ else
 fi
 done
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> upstream/develop
 if [ "${err_sign}" = true ];then
     exit 1
 else
