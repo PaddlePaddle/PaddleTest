@@ -999,8 +999,8 @@ all_latency(){
 }
 
 ####################################
-export all_case_list=(all_distillation all_quant all_prune all_nas  )
-
+#export all_case_list=(all_distillation all_quant all_prune all_nas  )
+export all_case_list=(all_distillation)
 export all_case_time=0
 declare -A all_P0case_dic
 all_case_dic=(["all_distillation"]=5 ["all_quant"]=15 ["all_prune"]=1 ["all_nas"]=30 ["all_darts"]=30 ['unstructured_prune']=15 ['dy_qat1']=1)
