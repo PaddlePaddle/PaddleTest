@@ -36,6 +36,9 @@ do
         H)
         http_proxy=$OPTARG
         ;;
+        I)
+        task_id=$OPTARG
+        ;;
         ?)
         echo "未知参数"
         usage
@@ -93,7 +96,11 @@ main(){
             ;;
         (hubserving_test)
 
-#            build_env
+            build_env
+
+            install_excption=0
+            install_success=0
+            install_fail_list=
 
             serving_excption=0
             serving_success=0
@@ -104,9 +111,11 @@ main(){
             predict_fail_list=
             run_time=`date +"%Y-%m-%d_%H:%M:%S"`
 
+            port=${task_id}000
+
             rm -rf all_module_log
             mkdir all_module_log
-            mkdir -p all_module_log/serving && mkdir -p all_module_log/predict
+            mkdir -p all_module_log/serving && mkdir -p all_module_log/predict && mkdir -p all_module_log/install
 
             echo "======================> run time is ${run_time} "
 
@@ -122,8 +131,11 @@ main(){
             wget -q --no-proxy https://paddle-qa.bj.bcebos.com/PaddleHub/hubserving_test/hubserving_py.tar
             tar -xzf hubserving_py.tar && rm -rf hubserving_py.tar
 
-            for hub_module in `cat hubserving_all.txt`
+            for hub_module in `cat hubserving_all_${task_id}.txt`
             do
+
+            port=$(expr ${port} + 1)
+            sed -i "s/:8866/:${port}/g" hubserving_py/test_${hub_module}.py
 
             # 修改为CPU预测
             if [[ ${use_gpu} = "False" ]]; then
@@ -135,33 +147,51 @@ main(){
             export https_proxy=${http_proxy}
             export http_proxy=${http_proxy}
             export no_proxy=bcebos.com
-            hub install ${hub_module}
+            hub install ${hub_module} >> all_module_log/install/install_${hub_module}.log
+
+            if [ $? -ne 0 ];then
+                echo ++++++++++++++++++++++ ${hub_module} install Failed!!!++++++++++++++++++++++
+                install_excption=$(expr ${install_excption} + 1)
+                install_fail_list="${install_fail_list} ${hub_module}"
+                cat all_module_log/install/install_${hub_module}.log
+                else
+                echo ++++++++++++++++++++++ ${hub_module} install Success!!!++++++++++++++++++++++
+                install_success=$(expr ${install_success} + 1)
+            fi
+
 
             echo ++++++++++++++++++++++ ${hub_module} start serving !!!++++++++++++++++++++++
             unset https_proxy
             unset http_proxy
-            nohup hub serving start -m ${hub_module} 2>&1 & # >> all_module_log/serving/${hub_module}.log
+            nohup hub serving start -m ${hub_module} -p ${port} 2>&1 & # >> all_module_log/serving/${hub_module}.log
+#            hub serving start -m ${hub_module}
 
-            if [ $? -ne 0 ];then
-                echo ++++++++++++++++++++++ ${hub_module} serving Failed!!!++++++++++++++++++++++
-                serving_excption=$(expr ${serving_excption} + 1)
-                serving_fail_list="${serving_fail_list} ${hub_module}"
-                cat all_module_log/serving/${hub_module}.log
-                else
-                echo ++++++++++++++++++++++ ${hub_module} serving Success!!!++++++++++++++++++++++
-                serving_success=$(expr ${serving_success} + 1)
-            fi
+#            if [ $? -ne 0 ];then
+#                echo ++++++++++++++++++++++ ${hub_module} serving Failed!!!++++++++++++++++++++++
+#                serving_excption=$(expr ${serving_excption} + 1)
+#                serving_fail_list="${serving_fail_list} ${hub_module}"
+#                mv nohup.out serving_${hub_module}.log && mv serving_${hub_module}.log all_module_log/serving
+#                cat all_module_log/serving/serving_${hub_module}.log
+#                else
+#                echo ++++++++++++++++++++++ ${hub_module} serving Success!!!++++++++++++++++++++++
+#                serving_success=$(expr ${serving_success} + 1)
+#                mv nohup.out serving_${hub_module}.log && mv serving_${hub_module}.log all_module_log/serving
+#            fi
 
-            sleep 10
+
+            sleep 120
+
+#            mv nohup.out serving_${hub_module}.log && mv serving_${hub_module}.log all_module_log/serving
+#            cat all_module_log/serving/serving_${hub_module}.log
 
             echo ++++++++++++++++++++++ ${hub_module} start predicting !!!++++++++++++++++++++++
-            $py_cmd hubserving_py/test_${hub_module}.py # >> all_module_log/predict/${hub_module}.log
+            $py_cmd hubserving_py/test_${hub_module}.py >> all_module_log/predict/predict_${hub_module}.log
 
             if [ $? -ne 0 ];then
                 echo ++++++++++++++++++++++ ${hub_module} predict Failed!!!++++++++++++++++++++++
                 predict_excption=$(expr ${predict_excption} + 1)
                 predict_fail_list="${predict_fail_list} ${hub_module}"
-                cat all_module_log/predict/${hub_module}.log
+                cat all_module_log/predict/predict_${hub_module}.log
                 else
                 echo ++++++++++++++++++++++ ${hub_module} predict Success!!!++++++++++++++++++++++
                 predict_success=$(expr ${predict_success} + 1)
@@ -170,15 +200,8 @@ main(){
             sleep 2
 
             echo ++++++++++++++++++++++ ${hub_module} stop serving !!!++++++++++++++++++++++
-            hub serving stop -m ${hub_module}
-
-#            rm -rf hub/.paddlehub/modules
-#            rm -rf hub/.paddlehub/tmp
-#
-#            rm -rf hub/.paddlenlp/*
-#            rm -rf hub/.paddleocr/*
-#            rm -rf hub/.paddleseg/*
-#            rm -rf hub/.paddlespeech/*
+            hub serving stop -m ${hub_module} -p ${port}
+            sleep 10
 
             rm -rf /root/.paddlehub/modules
             rm -rf /root/.paddlehub/tmp
@@ -192,20 +215,21 @@ main(){
             done
 
             echo "================================== final-results =================================="
-#            if [[ -e "log/whole_fail.log" ]]; then
-#            cat log/whole_fail.log
-#            fi
+            echo "install_success = ${install_success}"
+            echo "install_excption = ${install_excption}"
 
-            echo "serving_success = ${serving_success}"
-            echo "serving_excption = ${serving_excption}"
+#            echo "serving_success = ${serving_success}"
+#            echo "serving_excption = ${serving_excption}"
 
             echo "predict_success = ${predict_success}"
             echo "predict_excption = ${predict_excption}"
 
-            echo "serving_fail_list is: ${serving_fail_list}"
+            echo "inistall_fail_list is: ${inistall_fail_list}"
+#            echo "serving_fail_list is: ${serving_fail_list}"
             echo "predict_fail_list is: ${predict_fail_list}"
 
-            error_code=$(expr ${serving_excption} + ${predict_excption})
+#            error_code=$(expr ${install_excption} + ${serving_excption} + ${predict_excption})
+            error_code=$(expr ${install_excption} + ${predict_excption})
 
             exit ${error_code}
 
