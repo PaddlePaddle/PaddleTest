@@ -46,7 +46,6 @@ print_result(){
         echo -e "${model},${mode},SUCCESS"
     fi
 }
-
 # run dynamic models
 pip install -r requirements.txt
 log_dir=.
