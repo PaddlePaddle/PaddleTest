@@ -36,6 +36,9 @@ do
         H)
         http_proxy=$OPTARG
         ;;
+        I)
+        task_id=$OPTARG
+        ;;
         ?)
         echo "未知参数"
         usage
@@ -108,7 +111,7 @@ main(){
             predict_fail_list=
             run_time=`date +"%Y-%m-%d_%H:%M:%S"`
 
-            port=7000
+            port=${task_id}000
 
             rm -rf all_module_log
             mkdir all_module_log
@@ -128,7 +131,7 @@ main(){
             wget -q --no-proxy https://paddle-qa.bj.bcebos.com/PaddleHub/hubserving_test/hubserving_py.tar
             tar -xzf hubserving_py.tar && rm -rf hubserving_py.tar
 
-            for hub_module in `cat hubserving_all.txt`
+            for hub_module in `cat hubserving_all_${task_id}.txt`
             do
 
             port=$(expr ${port} + 1)
@@ -178,7 +181,7 @@ main(){
 
             sleep 120
 
-            mv nohup.out serving_${hub_module}.log && mv serving_${hub_module}.log all_module_log/serving
+#            mv nohup.out serving_${hub_module}.log && mv serving_${hub_module}.log all_module_log/serving
 #            cat all_module_log/serving/serving_${hub_module}.log
 
             echo ++++++++++++++++++++++ ${hub_module} start predicting !!!++++++++++++++++++++++
