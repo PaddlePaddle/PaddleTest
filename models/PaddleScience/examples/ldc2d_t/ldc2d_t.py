@@ -74,24 +74,6 @@ def GenIC(txy, ic_index):
     return ic_value
 
 
-# Generate IC weight
-def GenICWeight(txy, ic_index):
-    """
-    GenICWeight
-    """
-    ic_weight = np.zeros((len(ic_index), 2)).astype(np.float32)
-    len4 = len(ic_index)
-    for i in range(len4):
-        id = ic_index[i]
-        if abs(txy[id][2] - 0.05) < 1e-4:
-            ic_weight[i][0] = 1.0 - 20 * abs(txy[id][1])
-            ic_weight[i][1] = 1.0
-        else:
-            ic_weight[i][0] = 1.0
-            ic_weight[i][1] = 1.0
-    return ic_weight
-
-
 if __name__ == "__main__":
     # Geometry
     geo = psci.geometry.Rectangular(
@@ -117,10 +99,7 @@ if __name__ == "__main__":
 
     # Loss, TO rename
     bc_weight = GenBCWeight(geo.domain, geo.bc_index)
-    ic_weight = GenICWeight(geo.domain, geo.ic_index)
-    loss = psci.loss.L2(
-        pdes=pdes, geo=geo, eq_weight=0.01, bc_weight=bc_weight, ic_weight=ic_weight, synthesis_method="norm"
-    )
+    loss = psci.loss.L2(pdes=pdes, geo=geo, eq_weight=0.01, bc_weight=bc_weight, synthesis_method="norm")
 
     # Algorithm
     algo = psci.algorithm.PINNs(net=net, loss=loss)
@@ -143,12 +122,12 @@ if __name__ == "__main__":
     psci.visu.save_vtk(geo, v, filename="rslt_v")
     psci.visu.save_vtk(geo, u_and_v, filename="u_and_v")
 
-    openfoam_u = np.load("./openfoam/openfoam_u_100.npy")
+    openfoam_u = np.load("../ldc2d/openfoam/openfoam_u_100.npy")
     diff_u = u - openfoam_u
     RSE_u = np.linalg.norm(diff_u, ord=2)
     MSE_u = RSE_u * RSE_u / geo.get_domain_size()
     print("MSE_u: ", MSE_u)
-    openfoam_v = np.load("./openfoam/openfoam_v_100.npy")
+    openfoam_v = np.load("../ldc2d/openfoam/openfoam_v_100.npy")
     diff_v = v - openfoam_v
     RSE_v = np.linalg.norm(diff_v, ord=2)
     MSE_v = RSE_v * RSE_v / geo.get_domain_size()
