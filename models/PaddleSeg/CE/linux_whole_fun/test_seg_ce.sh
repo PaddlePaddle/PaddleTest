@@ -15,6 +15,7 @@ fi
 mkdir log_err
 if [ -d "output" ];then rm -rf output
 fi
+
 # prepare dynamic data
 mkdir data
 if [ -d "data/cityscapes" ];then rm -rf data/cityscapes
