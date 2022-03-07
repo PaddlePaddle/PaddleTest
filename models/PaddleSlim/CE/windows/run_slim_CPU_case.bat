@@ -96,7 +96,7 @@ rem     move ut_logs\%%~ni.txt ut_logs\S_%%~ni.txt )
 rem )
 rem goto :eof
 
-echo -----------------run P0case:start ------------------------
+echo -----------------run CPU case:start ------------------------
 
 echo 1 distillion
 call :all_distillation
@@ -113,8 +113,10 @@ call :all_nas
 ::echo 5 darts
 ::call :darts_1
 
-rem echo 6 dygraph_qat
-rem call :all_dygraph_qat
+::echo 6 dygraph_qat
+::call :all_dygraph_qat
+
+echo -----------------run CPU case:end -------------------------
 
 cd %log_path%
 for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
@@ -124,8 +126,6 @@ for /f "delims=" %%i in (' echo %result:~-1% ') do set exitcode=%%i
 echo -----fail case:%exitcode%---------
 echo -----exit code:%exitcode%---------
 exit %exitcode%
-
-echo -----------------run P0case:end -------------------------
 goto :eof
 
 
