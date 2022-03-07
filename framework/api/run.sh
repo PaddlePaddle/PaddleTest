@@ -107,7 +107,7 @@ cd $home
 
 # result
 echo "=============== result ================="
-if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss} + ${device} + ${incubate} + ${linalg} + ${ffti} +${utils} +${distribution}` -eq 0 ]; then
+if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss} + ${device} + ${incubate} + ${linalg} + ${fft} +${utils} +${distribution}` -eq 0 ]; then
   result=`find . -name "result.txt"`
   for file in ${result}
     do
