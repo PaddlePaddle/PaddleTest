@@ -6,6 +6,7 @@ echo -e '*****************paddle_version*****'
 echo -e '*****************detection_version****'
     git rev-parse HEAD
 
+
 err_sign=false
 if [ -d "log" ];then rm -rf log
 fi
@@ -29,7 +30,6 @@ ln -s ${data_path}/ADEChallengeData2016 data/ADEChallengeData2016
 if [ -d "seg_dynamic_pretrain" ];then rm -rf seg_dynamic_pretrain
 fi
 ln -s ${data_path}/seg_dynamic_pretrain seg_dynamic_pretrain
-
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
@@ -60,6 +60,7 @@ cat dynamic_config_segformer dynamic_config_deeplabv3 >>dynamic_config_all_temp
 else
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v segformer | grep -v test_tipc | grep -v benchmark | tee dynamic_config_all_temp
 fi
+
 sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
 skip_export_model='enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k dmnet_resnet101_os8_cityscapes_1024x512_80k gscnn_resnet50_os8_cityscapes_1024x512_80k'
 # dynamic fun
