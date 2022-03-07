@@ -70,6 +70,7 @@ if !errorlevel! equ 0 (
 ) else (
     python tools/train.py -c %%i -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o DataLoader.Eval.sampler.batch_size=1 > %log_path%\!model!_train.log 2>&1
 )
+
 if not !errorlevel! == 0 (
         type   %log_path%\!model!_train.log
         echo   !model!,train,FAIL  >> %log_path%\result.log

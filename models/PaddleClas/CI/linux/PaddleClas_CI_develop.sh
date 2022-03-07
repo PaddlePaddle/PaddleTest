@@ -614,9 +614,16 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     sleep 3
 
     # eval
-    python tools/eval.py -c $line \
-      -o Global.pretrained_model=output/${category}_${model}/$params_dir/latest \
-      > $log_path/eval/${category}_${model}.log 2>&1
+    if [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
+      python tools/eval.py -c $line \
+         -o Global.pretrained_model=output/${category}_${model}/$params_dir/latest \
+         -o DataLoader.Eval.sampler.batch_size=64 \
+         > $log_path/eval/${category}_${model}.log 2>&1
+    else
+      python tools/eval.py -c $line \
+         -o Global.pretrained_model=output/${category}_${model}/$params_dir/latest \
+         > $log_path/eval/${category}_${model}.log 2>&1
+   fi
     if [ $? -eq 0 ];then
         echo -e "\033[33m eval of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
     else
