@@ -15,7 +15,6 @@ fi
 mkdir log_err
 if [ -d "output" ];then rm -rf output
 fi
-
 # prepare dynamic data
 mkdir data
 if [ -d "data/cityscapes" ];then rm -rf data/cityscapes
@@ -47,7 +46,6 @@ print_result(){
         echo -e "${model},${mode},SUCCESS"
     fi
 }
-
 # run dynamic models
 pip install -r requirements.txt
 log_dir=.
