@@ -100,7 +100,7 @@ rem     move ut_logs\%%~ni.txt ut_logs\S_%%~ni.txt )
 rem )
 rem goto :eof
 
-echo -----------------run P0case:start ------------------------
+echo -----------------run P1 case:start ------------------------
 
 echo 1 distillion
 call :all_distillation
@@ -120,7 +120,7 @@ call :darts_1
 echo 6 dygraph_qat
 call :all_ce_tests_dygraph_quant
 
-echo -----------------run P0case:end -------------------------
+echo -----------------run P1 case:end -------------------------
 
 cd %log_path%
 for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
