@@ -22,9 +22,9 @@ python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************paddleseg_version****'
 git rev-parse HEAD
 
-git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib | grep -v test_tipc | awk '{print $NF}' | tee dynamic_config_list_temp
+git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib | grep -v test_tipc | awk '{print $NF}' | tee dynamic_config_list
 echo =================
-cat dynamic_config_list_temp
+cat dynamic_config_list
 echo =================
 seg_model_sign=False
 success_num=0
@@ -77,12 +77,11 @@ print_result(){
 pip install -r requirements.txt
 log_dir=.
 model_type_path=
-dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
+dynamic_config_num=`cat dynamic_config_list | wc -l`
 if [ ${dynamic_config_num} -eq 0 ];then
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v contrib | grep -v setr | tee dynamic_config_all
-shuf dynamic_config_all -n 2 -o dynamic_config_list_temp
+shuf dynamic_config_all -n 2 -o dynamic_config_list
 fi
-grep -F -v -f no_upload dynamic_config_list_temp | sort | uniq | tee dynamic_config_list
 sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
 skip_export_model='gscnn_resnet50_os8_cityscapes_1024x512_80k'
 # dynamic fun
@@ -157,7 +156,6 @@ PYTHON_INFER_DYNAMIC(){
         print_result
     fi
 }
-
 for config in `cat dynamic_config_list`
 do
 tmp=${config##*/}
@@ -172,8 +170,7 @@ fi
 if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/pascal_voc12/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} doesn't upload bos !!!"
-        seg_model_sign=True
+        echo "${model} doesn't upload bos, so skip basis case!"
     else
         TRAIN_MUlTI_DYNAMIC
         TRAIN_SINGLE_DYNAMIC
@@ -185,8 +182,7 @@ if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model
 elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/cityscapes/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} doesn't upload bos !!!"
-        seg_model_sign=True
+        echo "${model} doesn't upload bos, so skip basis case!"
     else
         TRAIN_MUlTI_DYNAMIC
         TRAIN_SINGLE_DYNAMIC
@@ -198,8 +194,7 @@ elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/
 elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/ade20k/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} doesn't upload bos !!!"
-        seg_model_sign=True
+        echo "${model} doesn't upload bos, so skip basis case!"
     else
         TRAIN_MUlTI_DYNAMIC
         TRAIN_SINGLE_DYNAMIC
