@@ -37,7 +37,7 @@ from preprocess import preprocess, NormalizeImage, Permute
 from keypoint_preprocess import EvalAffine, TopDownEvalAffine, expand_crop
 from keypoint_postprocess import HrHRNetPostProcess, HRNetPostProcess
 from visualize import visualize_pose
-from utils import argsparser, Timer, get_current_memory_mb
+from utils import argsparser, Timer
 from benchmark_utils import PaddleInferBenchmark
 from infer_for_onnx import Detector, get_test_images, print_arguments
 
@@ -212,10 +212,10 @@ class KeyPointDetector(Detector):
                 self.det_times.postprocess_time_s.end()
                 self.det_times.img_num += len(batch_image_list)
 
-                cm, gm, gu = get_current_memory_mb()
-                self.cpu_mem += cm
-                self.gpu_mem += gm
-                self.gpu_util += gu
+                # cm, gm, gu = get_current_memory_mb()
+                # self.cpu_mem += cm
+                # self.gpu_mem += gm
+                # self.gpu_util += gu
 
             else:
                 # preprocess
