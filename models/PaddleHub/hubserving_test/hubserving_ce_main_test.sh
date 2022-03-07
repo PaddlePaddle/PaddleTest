@@ -3,7 +3,7 @@
 unset GREP_OPTIONS
 cur_path=`pwd`
 
-while getopts ":P:b:p:t:g:L:h:H:" opt
+while getopts ":P:b:p:t:g:L:h:H:I:" opt
 do
     case $opt in
         P)
@@ -80,6 +80,8 @@ build_env(){
     $py_cmd -m pip install sentencepiece
     $py_cmd -m pip install pypinyin --upgrade
     $py_cmd -m pip install paddlex==1.3.11
+
+    $py_cmd -m pip install paddleocr
 #
 #    $py_cmd -m pip install ruamel.yaml
 #    git clone -b release/v0.1 https://github.com/PaddlePaddle/Parakeet && cd Parakeet && $py_cmd -m pip install -e .
