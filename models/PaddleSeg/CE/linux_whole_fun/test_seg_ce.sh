@@ -6,7 +6,6 @@ echo -e '*****************paddle_version*****'
 echo -e '*****************detection_version****'
     git rev-parse HEAD
 
-
 err_sign=false
 if [ -d "log" ];then rm -rf log
 fi
@@ -30,7 +29,6 @@ ln -s ${data_path}/ADEChallengeData2016 data/ADEChallengeData2016
 if [ -d "seg_dynamic_pretrain" ];then rm -rf seg_dynamic_pretrain
 fi
 ln -s ${data_path}/seg_dynamic_pretrain seg_dynamic_pretrain
-
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
