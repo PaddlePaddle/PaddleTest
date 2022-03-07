@@ -3,7 +3,7 @@
 root_dir=$PWD
 cases=`find ./examples -name "*.py" | sort`
 
-ignore=""
+ignore="log.py"
 example_bug=0
 
 echo "" >  ${root_dir}/result.txt
