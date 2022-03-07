@@ -6,6 +6,7 @@ echo -e '*****************paddle_version*****'
 echo -e '*****************detection_version****'
     git rev-parse HEAD
 
+
 err_sign=false
 if [ -d "log" ];then rm -rf log
 fi
