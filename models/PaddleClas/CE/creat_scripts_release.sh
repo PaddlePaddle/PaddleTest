@@ -187,7 +187,7 @@ elif [[ ${model} == 'InceptionV4' ]]; then
     sed -i "" "s|P0|P0|g" ${model}_release.yaml #P0/1
     sed -i "" "s|6.48126|6.42081|g" ${model}_release.yaml #linux_train_单卡
     sed -i "" "s|6.46063|6.31414|g" ${model}_release.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|14.40188|g" ${model}_release.yaml #linux_eval
+    sed -i "" "s|0.93207|0.91722|g" ${model}_release.yaml #linux_eval
     sed -i "" "s|7.89285|14.40188|g" ${model}_release.yaml #linux_train_eval
 
     sed -i "" "s|6.81299|6.53176|g" ${model}_release.yaml #windows_train
