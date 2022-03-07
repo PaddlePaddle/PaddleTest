@@ -6,6 +6,7 @@ echo -e '*****************paddle_version*****'
 echo -e '*****************detection_version****'
     git rev-parse HEAD
 
+
 err_sign=false
 if [ -d "log" ];then rm -rf log
 fi
@@ -29,7 +30,6 @@ ln -s ${data_path}/ADEChallengeData2016 data/ADEChallengeData2016
 if [ -d "seg_dynamic_pretrain" ];then rm -rf seg_dynamic_pretrain
 fi
 ln -s ${data_path}/seg_dynamic_pretrain seg_dynamic_pretrain
-
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
@@ -46,21 +46,23 @@ print_result(){
         echo -e "${model},${mode},SUCCESS"
     fi
 }
+
 # run dynamic models
 pip install -r requirements.txt
 log_dir=.
 model_type_path=
 if [ "$1" == 'develop_d1' ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v segformer | grep -v test_tipc | grep -v deeplabv3 | grep -v benchmark | tee dynamic_config_all
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v segformer | grep -v test_tipc | grep -v deeplabv3 ｜grep -v benchmark | tee dynamic_config_all_temp
 elif [ "$1" == 'develop_d2' ];then
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep segformer | grep -v contrib | grep -v EISeg | grep -v test_tipc | grep -v benchmark | tee dynamic_config_segformer
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep deeplabv3 | grep -v contrib | grep -v EISeg | grep -v test_tipc | grep -v benchmark | tee dynamic_config_deeplabv3
-cat dynamic_config_segformer dynamic_config_deeplabv3 >>dynamic_config_all
+cat dynamic_config_segformer dynamic_config_deeplabv3 >>dynamic_config_all_temp
 else
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v segformer | grep -v test_tipc | grep -v benchmark | tee dynamic_config_all
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v segformer | grep -v test_tipc | grep -v benchmark | tee dynamic_config_all_temp
 fi
+
 sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
-skip_export_model='enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k dmnet_resnet101_os8_cityscapes_1024x512_80k gscnn_resnet50_os8_cityscapes_1024x512_80k pointrend_resnet101_os8_cityscapes_1024×512_80k pointrend_resnet101_os8_voc12aug_512×512_40k pointrend_resnet50_os8_cityscapes_1024×512_80k pointrend_resnet50_os8_voc12aug_512×512_40k'
+skip_export_model='enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k dmnet_resnet101_os8_cityscapes_1024x512_80k gscnn_resnet50_os8_cityscapes_1024x512_80k'
 # dynamic fun
 TRAIN_MUlTI_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
@@ -140,7 +142,7 @@ EXPORT_DYNAMIC(){
 }
 PYTHON_INFER_DYNAMIC(){
     mode=python_infer_dynamic
-    if [[ ${model} =~ 'dnlnet' || ${model} =~ 'gscnn' || ${model} =~ 'pointrend' || ${model} =~ 'espnet' || ${model} =~ 'dmnet' || ${model} =~ 'enet' || ${model} =~ 'segnet' ]];then
+    if [[ ${model} =~ 'gscnn' || ${model} =~ 'dmnet' || ${model} =~ 'enet' || ${model} =~ 'segnet' ]];then
         echo -e "${model} does not test python_infer！"
     else
         export PYTHONPATH=`pwd`
@@ -151,6 +153,7 @@ PYTHON_INFER_DYNAMIC(){
         print_result
     fi
 }
+grep -F -v -f no_upload dynamic_config_all_temp | sort | uniq | tee dynamic_config_all
 for config in `cat dynamic_config_all`
 do
 tmp=${config##*/}
@@ -166,6 +169,7 @@ if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/pascal_voc12/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} url is bad!"
+        err_sign=true
     else
         TRAIN_MUlTI_DYNAMIC
         TRAIN_SINGLE_DYNAMIC_BS1
@@ -179,6 +183,7 @@ elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/cityscapes/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} url is bad!"
+        err_sign=true
     else
         TRAIN_MUlTI_DYNAMIC
         TRAIN_SINGLE_DYNAMIC_BS1
@@ -192,6 +197,7 @@ elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${mo
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/ade20k/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} url is bad!"
+        err_sign=true
     else
         TRAIN_MUlTI_DYNAMIC
         TRAIN_SINGLE_DYNAMIC_BS1
