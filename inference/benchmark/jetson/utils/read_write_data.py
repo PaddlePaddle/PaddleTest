@@ -12,25 +12,25 @@ class read_write_data():
         self.end_valid_time = 0
     def benchmark_csv(self, read_index):
         data = pd.read_csv(self.csv_file_path)
-        model_name = data['ModelName'][read_index]
-        self.framework = data['FrameWork'][read_index]
-        self.num_devices = data['Devices'][read_index]
-        ws_gpu = data['WS_GPU'][read_index]
-        ws_dla = data['WS_DLA'][read_index]
-        model_input = data['input'][read_index]
-        model_output = data['output'][read_index]
-        batch_size_gpu = data['BatchSizeGPU'][read_index]
-        batch_size_dla = int(data['BatchSizeDLA'][read_index])
+        model_name = data["ModelName"][read_index]
+        self.framework = data["FrameWork"][read_index]
+        self.num_devices = data["Devices"][read_index]
+        ws_gpu = data["WS_GPU"][read_index]
+        ws_dla = data["WS_DLA"][read_index]
+        model_input = data["input"][read_index]
+        model_output = data["output"][read_index]
+        batch_size_gpu = data["BatchSizeGPU"][read_index]
+        batch_size_dla = int(data["BatchSizeDLA"][read_index])
         return model_name, self.framework, self.num_devices, ws_gpu, ws_dla, model_input, model_output, batch_size_gpu, batch_size_dla
     def __len__(self):
         return len(pd.read_csv(self.csv_file_path))
     def framework2ext(self):
-        if self.framework == 'caffe':
-            return str('prototxt')
-        if self.framework == 'onnx':
-            return str('onnx')
-        if self.framework == 'tensorrt':
-            return str('uff')
+        if self.framework == "caffe":
+            return str("prototxt")
+        if self.framework == "onnx":
+            return str("onnx")
+        if self.framework == "tensorrt":
+            return str("uff")
 
     def read_window_results(self, models):
         self.time_value_window = []
@@ -38,7 +38,7 @@ class read_write_data():
         thread_start_time = [datetime.datetime(1940, 12, 1, 23, 59, 59)]*3
         thread_end_time = [datetime.datetime(2040, 12, 1, 23, 59, 59)] * 3
         for e_id in range(0, self.num_devices):
-            read_file = os.path.join(self.model_path, str(models[e_id]) + '.txt')
+            read_file = os.path.join(self.model_path, str(models[e_id]) + ".txt")
             thread_start_time[e_id], thread_end_time[e_id], thread_time_stamps, thread_latency = self.read_perf_time(read_file)
             self.time_value_window.append([thread_time_stamps, thread_latency])
         try:
@@ -74,12 +74,12 @@ class read_write_data():
         add_time = 0
         start_time = datetime.datetime(1940, 12, 1, 23, 59, 59)
         end_time = datetime.datetime(2040, 12, 1, 23, 59, 59)
-        with open(read_file, 'r') as f:
+        with open(read_file, "r") as f:
             for line in f:
                 if "Starting" in line:
-                    match_start = re.search(r'\d{2}/\d{2}/\d{4}-\d{2}:\d{2}:\d{2}', line)
+                    match_start = re.search(r"\d{2}/\d{2}/\d{4}-\d{2}:\d{2}:\d{2}", line)
                     if match_start:
-                        start_time = datetime.datetime.strptime(match_start.group(), '%m/%d/%Y-%H:%M:%S')
+                        start_time = datetime.datetime.strptime(match_start.group(), "%m/%d/%Y-%H:%M:%S")
                 elif "Average on" in line:
                     matches = re.search(r"Average\s+on\s+(\d+)\s+runs.*?"
                                         r"GPU\s+latency:\s+(\d+\.\d+)\s+.*?"
@@ -120,7 +120,7 @@ class read_write_data():
                 elif e_id ==1 or e_id == 2:
                     FPS += batch_size_dla * (1000 / latency_device[e_id])
             else:
-                print('Error in Build, Please check the log in: {}'.format(self.model_path))
+                print("Error in Build, Please check the log in: {}".format(self.model_path))
                 error_read = 1
                 continue
         if any(latency is 0 for latency in latency_device[0:self.num_devices]):
@@ -132,7 +132,7 @@ class read_write_data():
 
     def plot_perf(self, latency_each_model):
         import matplotlib
-        matplotlib.use('Gtk3Agg')
+        matplotlib.use("Gtk3Agg")
         import matplotlib.pyplot as plt
         name = []
         fps = []
@@ -141,9 +141,9 @@ class read_write_data():
             name.append(latency_each_model[models][len(latency_each_model[0]) - 1])
         plt.bar(name, fps)
         plt.figure(figsize=(20, 7))
-        plt.bar(name, fps, color='Green')
-        plt.ylabel('FPS')
-        plt.title('Benchmark Analysis on Jetson')
+        plt.bar(name, fps, color="Green")
+        plt.ylabel("FPS")
+        plt.title("Benchmark Analysis on Jetson")
         plt.grid()
-        plt.savefig(str(os.path.join(self.model_path, str('perf_results.png'))))
-        print('Please find benchmark results in {}'.format(self.model_path)) 
+        plt.savefig(str(os.path.join(self.model_path, str("perf_results.png"))))
+        print("Please find benchmark results in {}".format(self.model_path)) 

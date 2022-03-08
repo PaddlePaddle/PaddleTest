@@ -12,10 +12,10 @@ class run_benchmark_models():
     def execute(self, read_index):
         wall_start_t0 = time.time()
         self.model_name, _framework, num_devices, ws_gpu, ws_dla, model_input, model_output, self.batch_size_gpu, self.batch_size_dla = self.benchmark_data.benchmark_csv(read_index)
-        print('------------Executing {}------------\n'.format(self.model_name))
+        print("------------Executing {}------------\n".format(self.model_name))
         framework = self.benchmark_data.framework2ext()
         # Save, Load and Delete Engine
-        model_ext = str(self.model_name) + '.' + str(framework)
+        model_ext = str(self.model_name) + "." + str(framework)
         self.trt_engine = load_store_engine(model_path=self.model_path, model_name=model_ext, num_devices=num_devices,
                                             batch_size_gpu=self.batch_size_gpu, batch_size_dla=self.batch_size_dla,
                                             precision=self.precision, ws_gpu=ws_gpu, ws_dla=ws_dla,
@@ -35,13 +35,13 @@ class run_benchmark_models():
 
     def report(self):
         latency_fps, error_log = self.benchmark_data.calculate_fps(models=self.models, batch_size_gpu=self.batch_size_gpu, batch_size_dla=self.batch_size_dla)
-        print('--------------------------\n')
-        print('Model Name: {} \nFPS:{:.2f} \n'.format(self.model_name, latency_fps[3]))
-        print('--------------------------\n')
+        print("--------------------------\n")
+        print("Model Name: {} \nFPS:{:.2f} \n".format(self.model_name, latency_fps[3]))
+        print("--------------------------\n")
         latency_fps[len(latency_fps) - 1] = self.model_name
         return latency_fps, error_log
 
     def remove(self):
         self.trt_engine.remove_all(models=self.models)
-        print('Wall Time for running model (secs): {}\n'.format(self.wall_time))
+        print("Wall Time for running model (secs): {}\n".format(self.wall_time))
 

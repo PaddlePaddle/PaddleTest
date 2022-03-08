@@ -46,13 +46,13 @@ def main():
                     model.remove()
             del gc.garbage[:]
             system_check.clear_ram_space()
-        benchmark_table = pd.DataFrame(latency_each_model, columns=['GPU (ms)', 'DLA0 (ms)', 'DLA1 (ms)', 'FPS', 'Model Name'], dtype=float)
+        benchmark_table = pd.DataFrame(latency_each_model, columns=["GPU (ms)", "DLA0 (ms)", "DLA1 (ms)", "FPS", "Model Name"], dtype=float)
         # Note: GPU, DLA latencies are measured in miliseconds, FPS = Frames per Second
-        print(benchmark_table[['Model Name', 'FPS']])
+        print(benchmark_table[["Model Name", "FPS"]])
         if args.plot:
             benchmark_data.plot_perf(latency_each_model)
 
-    elif args.model_name == 'inception_v4':
+    elif args.model_name == "inception_v4":
         model = run_benchmark_models(csv_file_path=csv_file_path, model_path=model_path, precision=precision, benchmark_data=benchmark_data)
         download_err = model.execute(read_index=0)
         if not download_err:
@@ -60,7 +60,7 @@ def main():
             if not error_log:
                 model.remove()
 
-    elif args.model_name == 'vgg19':
+    elif args.model_name == "vgg19":
         model = run_benchmark_models(csv_file_path=csv_file_path, model_path=model_path, precision=precision, benchmark_data=benchmark_data)
         download_err = model.execute(read_index=1)
         if not download_err:
@@ -68,7 +68,7 @@ def main():
             if not error_log:
                 model.remove()
 
-    elif args.model_name == 'super_resolution':
+    elif args.model_name == "super_resolution":
         model = run_benchmark_models(csv_file_path=csv_file_path, model_path=model_path, precision=precision, benchmark_data=benchmark_data)
         download_err = model.execute(read_index=2)
         if not download_err:
@@ -76,7 +76,7 @@ def main():
             if not error_log:
                 model.remove()
 
-    elif args.model_name == 'unet':
+    elif args.model_name == "unet":
         model = run_benchmark_models(csv_file_path=csv_file_path, model_path=model_path, precision=precision, benchmark_data=benchmark_data)
         download_err = model.execute(read_index=3)
         if not download_err:
@@ -84,7 +84,7 @@ def main():
             if not error_log:
                 model.remove()
 
-    elif args.model_name == 'pose_estimation':
+    elif args.model_name == "pose_estimation":
         model = run_benchmark_models(csv_file_path=csv_file_path, model_path=model_path, precision=precision, benchmark_data=benchmark_data)
         download_err = model.execute(read_index=4)
         if not download_err:
@@ -92,7 +92,7 @@ def main():
             if not error_log:
                 model.remove()
 
-    elif args.model_name == 'tiny-yolov3':
+    elif args.model_name == "tiny-yolov3":
         model = run_benchmark_models(csv_file_path=csv_file_path, model_path=model_path, precision=precision, benchmark_data=benchmark_data)
         download_err = model.execute(read_index=5)
         if not download_err:
@@ -100,7 +100,7 @@ def main():
             if not error_log:
                 model.remove()
 
-    elif args.model_name == 'resnet':
+    elif args.model_name == "resnet":
         model = run_benchmark_models(csv_file_path=csv_file_path, model_path=model_path, precision=precision, benchmark_data=benchmark_data)
         download_err = model.execute(read_index=6)
         if not download_err:
@@ -108,7 +108,7 @@ def main():
             if not error_log:
                 model.remove()
 
-    elif args.model_name == 'ssd-mobilenet-v1':
+    elif args.model_name == "ssd-mobilenet-v1":
         model = run_benchmark_models(csv_file_path=csv_file_path, model_path=model_path, precision=precision, benchmark_data=benchmark_data)
         download_err = model.execute(read_index=7)
         if not download_err:
