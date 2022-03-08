@@ -7,10 +7,10 @@ https://github.com/NVIDIA-AI-IOT/jetson_benchmarks
 ```
 
 ## 环境要求
-JetPack 4.4 / 4.5 / 4.6
-TensorRT 7 / 8
-cuda
-cudnn
+* JetPack 4.4 / 4.5 / 4.6
+* TensorRT 7 / 8
+* cuda
+* cudnn
 
 ## 前置条件
 ```shell
