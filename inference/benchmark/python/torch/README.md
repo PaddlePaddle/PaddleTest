@@ -1,4 +1,4 @@
-# TensorFlow Inference Benchmark
+# Pytorch Inference Benchmark
 
 ## 镜像
 ```shell

@@ -16,7 +16,7 @@ mkdir log_err
 
 echo "$1"
 if [ "$1" != 'release' ];then
-python -m pip install pip==20.2.4 --ignore-installed;
+python -m pip install --upgrade pip --ignore-installed;
 pip install Cython --ignore-installed;
 pip install -r requirements.txt --ignore-installed;
 pip install cython_bbox --ignore-installed;
@@ -24,7 +24,7 @@ rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
 rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
 yum install ffmpeg ffmpeg-devel -y
 else
-python -m pip install pip==20.2.4 --ignore-installed;
+python -m pip install --upgrade pip --ignore-installed;
 pip install Cython --ignore-installed;
 pip install -r requirements.txt --ignore-installed;
 pip install cython_bbox --ignore-installed;
@@ -40,8 +40,10 @@ export http_proxy=${http_proxy}
 export https_proxy=${http_proxy}
 tar xvf paddle_inference.tgz
 sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
+sed -i "s|WITH_TENSORRT=OFF|WITH_TENSORRT=ON|g" scripts/build.sh
 sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh
 sed -i "s|/path/to/paddle_inference|../paddle_inference_install_dir|g" scripts/build.sh
+sed -i "s|TENSORRT_LIB_DIR=/path/to/tensorrt/lib|TENSORRT_LIB_DIR=/usr/local/TensorRT-6.0.1.8/lib|g" scripts/build.sh
 sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh
 sh scripts/build.sh
 cd ../..
@@ -66,6 +68,18 @@ ln -s ${data_path}/data/DOTA_1024_s2anet dataset/DOTA_1024_s2anet
 if [ -d "dataset/VisDrone2019_coco" ];then rm -rf dataset/VisDrone2019_coco
 fi
 ln -s ${data_path}/data/VisDrone2019_coco dataset/VisDrone2019_coco
+if [ -d "dataset/mainbody" ];then rm -rf dataset/mainbody
+fi
+ln -s ${data_path}/data/mainbody dataset/mainbody
+if [ -d "dataset/aic_coco_train_cocoformat.json" ];then rm -f dataset/aic_coco_train_cocoformat.json
+fi
+ln -s ${data_path}/data/aic_coco_train_cocoformat.json dataset/aic_coco_train_cocoformat.json
+if [ -d "dataset/AIchallenge" ];then rm -rf dataset/AIchallenge
+fi
+ln -s ${data_path}/data/AIchallenge dataset/AIchallenge
+if [ -d "dataset/spine_coco" ];then rm -rf dataset/spine_coco
+fi
+ln -s ${data_path}/data/spine_coco dataset/spine_coco
 if [ -d "/root/.cache/paddle/weights" ];then rm -rf /root/.cache/paddle/weights
 fi
 ln -s ${data_path}/data/ppdet_pretrained /root/.cache/paddle/weights
@@ -92,13 +106,22 @@ sed -i '/for step_id, data in enumerate(dataloader):/i\        max_step_id=1' pp
 sed -i '/for step_id, data in enumerate(dataloader):/a\            if step_id == max_step_id: break' ppdet/engine/tracker.py
 
 if [ "$1" == 'develop_d1' ];then
-find . | grep .yml | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | awk '{print $NF}' | tee config_list
+find . | grep .yml | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep -v mask_rcnn | awk '{print $NF}' | tee config_list
 elif [ "$1" == 'develop_d2' ];then
-find . | grep .yml | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep mot | awk '{print $NF}' | tee mot_list
+find . | grep .yml | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep yolov3 | awk '{print $NF}' | tee config_list1
+find . | grep .yml | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep faster_rcnn | awk '{print $NF}' | tee config_list2
+cat config_list1 config_list2 >>config_list
+elif [ "$1" == 'develop_d3' ];then
+find . | grep .yml | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep mot | awk '{print $NF}' | tee config_list3
+find . | grep .yml | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep ssd | awk '{print $NF}' | tee config_list4
+find . | grep .yml | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep mask_rcnn | awk '{print $NF}' | tee mask_list
+cat  mask_list config_list3 config_list4 >>config_list
+elif [ "$1" == 'develop_d4' ];then
 find . | grep .yml | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep cascade_rcnn | awk '{print $NF}' | tee cascade_list
 find . | grep .yml | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep centernet | awk '{print $NF}' | tee centernet_list
 find . | grep .yml | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep picodet | awk '{print $NF}' | tee picodet_list
-cat mot_list cascade_list centernet_list picodet_list >>config_list
+find . | grep .yml | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep dcn | awk '{print $NF}' | tee config_list5
+cat cascade_list centernet_list picodet_list config_list5 >>config_list
 else
 find . | grep .yml | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep  -v minicoco | grep -v deepsort | grep -v gfl | awk '{print $NF}' | tee config_list
 fi
@@ -270,7 +293,7 @@ PYTHON_INFER(){
             python deploy/python/infer.py \
                    --model_dir=inference_model/${model} \
                    --image_file=${image} \
-                   --run_mode=fluid \
+                   --run_mode=paddle \
                    --device=GPU \
                    --threshold=0.5 \
                    --output_dir=python_infer_output/${model}/ >log/${model}/${model}_${model_type}_${mode}.log 2>&1
@@ -327,7 +350,7 @@ CPP_INFER(){
                     --model_dir=inference_model/${model} \
                     --image_file=${image} \
                     --device=GPU \
-                    --run_mode=fluid \
+                    --run_mode=paddle \
                     --threshold=0.5 \
                     --output_dir=cpp_infer_output/${model} >log/${model}/${model}_${model_type}_${mode}.log 2>&1
                 print_result
@@ -343,8 +366,8 @@ find . | grep configs | grep yml | grep mot | grep -v datasets | grep -v _base_ 
 find . | grep configs | grep yml | grep keypoint | grep -v datasets | grep -v _base_ | grep -v static >model_keypoint
 model_s2anet='s2anet_conv_1x_dota s2anet_1x_dota s2anet_1x_spine s2anet_alignconv_2x_dota s2anet_conv_2x_dota'
 model_skip_export='fairmot_enhance_hardnet85_30e_1088x608 tood_r50_fpn_1x_coco sparse_rcnn_r50_fpn_3x_pro100_coco sparse_rcnn_r50_fpn_3x_pro300_coco detr_r50_1x_coco gflv2_r50_fpn_1x_coco deformable_detr_r50_1x_coco faster_rcnn_swin_tiny_fpn_1x_coco faster_rcnn_swin_tiny_fpn_2x_coco faster_rcnn_swin_tiny_fpn_3x_coco'
-model_skip_pyinfer='picodet_s_320_pedestrian'
-model_skip_cpp='centernet_r50_140e_coco centernet_dla34_140e_coco solov2_r50_fpn_1x_coco solov2_r50_fpn_3x_coco solov2_r101_vd_fpn_3x_coco solov2_r50_enhance_coco faster_rcnn_r101_fpn_1x_coco ppyolov2_r50vd_dcn_voc yolov3_darknet53_270e_voc yolov3_darknet53_original_270e_coco tood_r50_fpn_1x_coco'
+model_skip_pyinfer='retinanet_r50_fpn_mstrain_1x_coco retinanet_r50_fpn_1x_coco picodet_s_320_pedestrian'
+model_skip_cpp='centernet_mbv3_small_140e_coco centernet_mbv3_large_140e_coco centernet_shufflenetv2_140e_coco centernet_mbv1_140e_coco centernet_shufflenetv2_1x_140e_coco centernet_mbv3_small_1x_140e_coco centernet_mbv3_large_1x_140e_coco centernet_mbv1_1x_140e_coco centernet_r50_140e_coco centernet_dla34_140e_coco solov2_r50_fpn_1x_coco solov2_r50_fpn_3x_coco solov2_r101_vd_fpn_3x_coco solov2_r50_enhance_coco faster_rcnn_r101_fpn_1x_coco ppyolov2_r50vd_dcn_voc yolov3_darknet53_270e_voc yolov3_darknet53_original_270e_coco tood_r50_fpn_1x_coco'
 err_sign=false
 model_type=dynamic
 for config in `cat config_list`
@@ -400,4 +423,6 @@ fi
 done
 if [ "${err_sign}" == true ];then
     exit 1
+else
+    exit 0
 fi

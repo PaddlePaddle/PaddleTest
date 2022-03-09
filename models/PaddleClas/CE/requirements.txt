@@ -4,3 +4,4 @@ pillow
 tqdm
 PyYAML
 scipy
+wget

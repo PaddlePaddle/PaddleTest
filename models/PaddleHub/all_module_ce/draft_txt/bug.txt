@@ -1,0 +1,7 @@
+deeplabv3p_resnet50_cityscapes
+deeplabv3p_resnet50_voc
+fcn_hrnetw48_cityscapes
+fcn_hrnetw48_voc
+plato2_en_base
+unet_cityscapes
+w2v_baidu_encyclopedia_context_word-wordPosition_dim300

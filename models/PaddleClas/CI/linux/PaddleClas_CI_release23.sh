@@ -20,12 +20,8 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    rm -rf dataset
    ln -s ${Data_path} dataset
    ls dataset
-
    cd deploy
-   rm -rf recognition_demo_data_v1.0
-   rm -rf recognition_demo_data_v1.1
-   rm -rf models
-   ln -s  ${Data_path}/* .
+   ln -s ${Data_path}/rec_demo/* .
    cd ..
 fi
 
@@ -56,6 +52,8 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"
+   python -m pip install --ignore-installed --upgrade \
+      pip -i https://mirror.baidu.com/pypi/simple
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install ${paddle_compile} #paddle_compile
    echo "######  paddle version"
@@ -63,14 +61,10 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
 
    echo "######  ----ln  data-----"
    rm -rf dataset
-   ln -s ${Data_path} dataset #data_path
+   ln -s ${Data_path} dataset
    ls dataset
    cd deploy
-
-   rm -rf recognition_demo_data_v1.0
-   rm -rf recognition_demo_data_v1.1
-   rm -rf models
-   ln -s ${Data_path}/* .
+   ln -s ${Data_path}/rec_demo/* .
    cd ..
 fi
 
@@ -196,11 +190,6 @@ if [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${model_flag} =~ 'CI_step2' ]] || [[ 
       python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
       --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
    fi
-
-   #visualdl
-   echo "######  visualdl "
-   ls /root/.visualdl/conf
-   rm -rf /root/.visualdl/conf
 
    #train
    python -m paddle.distributed.launch tools/train.py  \
@@ -479,6 +468,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=64 \
+            -o DataLoader.Eval.sampler.batch_size=64 \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
@@ -488,16 +478,18 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=64 \
+            -o DataLoader.Eval.sampler.batch_size=64 \
             -o DataLoader.Train.dataset.image_root=./dataset/Aliproduct/ \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
-    elif [[ ${line} =~ 'quantization' ]]; then
+    elif [[ ${line} =~ 'quantization' ]] || [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
          python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=32 \
+            -o DataLoader.Eval.sampler.batch_size=32 \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     else
@@ -506,6 +498,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=64 \
+            -o DataLoader.Eval.sampler.batch_size=64 \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     fi

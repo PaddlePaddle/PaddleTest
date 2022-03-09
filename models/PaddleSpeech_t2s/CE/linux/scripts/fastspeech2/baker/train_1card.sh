@@ -7,7 +7,10 @@ ls ~/datasets
 if [ ! -d "../log" ]; then
   mkdir ../log
 fi
-python -m pip install --ignore-installed -r requirements.txt
+python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install --ignore-installed numpy==1.20.0
+python -m pip list | grep numpy
 
 cd examples/csmsc/tts3
 source ${PWD}/path.sh
