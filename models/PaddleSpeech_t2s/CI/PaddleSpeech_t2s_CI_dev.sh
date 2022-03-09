@@ -83,12 +83,12 @@ train_output_path=exp/default
 sed -i "s/max_epoch: 200/max_epoch: 1/g" ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/tacotron2_csmsc.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of tacotron2_csmsc successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/tacotron2_csmsc.log
-   echo -e "\033[31m training of tacotron2_csmsc failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 if [ ! -f "pwg_baker_ckpt_0.4.zip" ]; then
@@ -99,31 +99,31 @@ head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 ckpt_name=snapshot_iter_76.pdz
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 # synthesize, vocoder is pwgan
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/tacotron2_csmsc.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of tacotron2_csmsc successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/tacotron2_csmsc.log
-   echo -e "\033[31m synthesize of tacotron2_csmsc failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/synthesize_e2e.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/tacotron2_csmsc.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize_e2e of tacotron2_csmsc successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize_e2e/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize_e2e of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize_e2e/tacotron2_csmsc.log
-   echo -e "\033[31m synthesize_e2e of tacotron2_csmsc failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize_e2e/$line.log
+   echo -e "\033[31m synthesize_e2e of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/tacotron2_csmsc.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m inference of tacotron2_csmsc successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/inference/$line.log) -eq 0 ]];then
+   echo -e "\033[33m inference of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/inference/tacotron2_csmsc.log
-   echo -e "\033[31m inference of tacotron2_csmsc failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/inference/$line.log
+   echo -e "\033[31m inference of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -144,12 +144,12 @@ ln -s $3/preprocess_data/speedyspeech/dump/ ./
 sed -i "s/max_epoch: 200/max_epoch: 1/g" ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path}  > ../../../$log_path/train/speedyspeech.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of speedyspeech_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path}  > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/speedyspeech.log
-   echo -e "\033[31m training of speedyspeech_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 if [ ! -f "pwg_baker_ckpt_0.4.zip" ]; then
@@ -159,31 +159,31 @@ fi
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 ckpt_name=snapshot_iter_76.pdz
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/speedyspeech.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of speedyspeech_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/speedyspeech.log
-   echo -e "\033[31m synthesize of speedyspeech_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/synthesize_e2e.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/speedyspeech.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize_e2e of speedyspeech_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize_e2e/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize_e2e of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize_e2e/speedyspeech.log
-   echo -e "\033[31m synthesize_e2e of speedyspeech_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize_e2e/$line.log
+   echo -e "\033[31m synthesize_e2e of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/speedyspeech.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m inference of speedyspeech_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/inference/$line.log) -eq 0 ]];then
+   echo -e "\033[33m inference of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/inference/speedyspeech.log
-   echo -e "\033[31m inference of speedyspeech_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/inference/$line.log
+   echo -e "\033[31m inference of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -206,12 +206,12 @@ train_output_path=exp/default
 sed -i "s/max_epoch: 1000/max_epoch: 1/g" ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path}  > ../../../$log_path/train/fastspeech2.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of fastspeech2_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path}  > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/fastspeech2.log
-   echo -e "\033[31m training of fastspeech2_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 if [ ! -f "pwg_baker_ckpt_0.4.zip" ]; then
@@ -221,31 +221,31 @@ fi
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 ckpt_name=snapshot_iter_76.pdz
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/fastspeech2.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of fastspeech2_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/fastspeech2.log
-   echo -e "\033[31m synthesize of fastspeech2_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/synthesize_e2e.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/fastspeech2.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize_e2e of fastspeech2_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize_e2e/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize_e2e of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize_e2e/fastspeech2.log
-   echo -e "\033[31m synthesize_e2e of fastspeech2_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize_e2e/$line.log
+   echo -e "\033[31m synthesize_e2e of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/fastspeech2.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m inference of fastspeech2_baker successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/inference/$line.log) -eq 0 ]];then
+   echo -e "\033[33m inference of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/inference/fastspeech2.log
-   echo -e "\033[31m inference of fastspeech2_baker failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/inference/$line.log
+   echo -e "\033[31m inference of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -266,23 +266,23 @@ ln -s $3/preprocess_data/pwg/dump/ ./
 sed -i "s/train_max_steps: 400000/train_max_steps: 10/g;s/save_interval_steps: 5000/save_interval_steps: 10/g;s/eval_interval_steps: 1000/eval_interval_steps: 10/g"  ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/pwg.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of parallel_wavegan successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/pwg.log
-   echo -e "\033[31m training of parallel_wavegan failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 ckpt_name=snapshot_iter_10.pdz
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/pwg.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of parallel_wavegan successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/pwg.log
-   echo -e "\033[31m synthesize of parallel_wavegan failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -303,23 +303,23 @@ ln -s $3/preprocess_data/pwg/dump/ ./
 sed -i "s/train_max_steps: 1000000/train_max_steps: 10/g;s/save_interval_steps: 5000/save_interval_steps: 10/g;s/eval_interval_steps: 1000/eval_interval_steps: 10/g"  ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/MultiBand_MelGAN.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of MultiBand_MelGAN successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/MultiBand_MelGAN.log
-   echo -e "\033[31m training of MultiBand_MelGAN failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 ckpt_name=snapshot_iter_10.pdz
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/MultiBand_MelGAN.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of MultiBand_MelGAN successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/MultiBand_MelGAN.log
-   echo -e "\033[31m synthesize of MultiBand_MelGAN failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -340,23 +340,23 @@ ln -s $3/preprocess_data/pwg/dump/ ./
 sed -i "s/train_max_steps: 1500000/train_max_steps: 10/g;s/save_interval_steps: 5000/save_interval_steps: 10/g;s/eval_interval_steps: 1000/eval_interval_steps: 10/g;s/batch_size: 32/batch_size: 16/g"  ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/Style_MelGAN.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of Style_MelGAN successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/Style_MelGAN.log
-   echo -e "\033[31m training of Style_MelGAN failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 ckpt_name=snapshot_iter_10.pdz
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/Style_MelGAN.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of Style_MelGAN successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/Style_MelGAN.log
-   echo -e "\033[31m synthesize of Style_MelGAN failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -377,23 +377,23 @@ ln -s $3/preprocess_data/pwg/dump/ ./
 sed -i "s/train_max_steps: 2500000/train_max_steps: 10/g;s/save_interval_steps: 5000/save_interval_steps: 10/g;s/eval_interval_steps: 1000/eval_interval_steps: 10/g"  ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/HiFiGAN.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of HiFiGAN successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/HiFiGAN.log
-   echo -e "\033[31m training of HiFiGAN failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 ckpt_name=snapshot_iter_10.pdz
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/HiFiGAN.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of HiFiGAN successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/HiFiGAN.log
-   echo -e "\033[31m synthesize of HiFiGAN failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -414,23 +414,23 @@ ln -s $3/preprocess_data/pwg/dump/ ./
 sed -i "s/train_max_steps: 400000/train_max_steps: 10/g;s/save_interval_steps: 5000/save_interval_steps: 10/g;s/eval_interval_steps: 1000/eval_interval_steps: 10/g;s/batch_size: 64/batch_size: 32/g"  ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/WaveRNN.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of WaveRNN successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/WaveRNN.log
-   echo -e "\033[31m training of WaveRNN failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 ckpt_name=snapshot_iter_10.pdz
 head -3 ./dump/test/norm/metadata.jsonl > ./metadata_3.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_3.jsonl#g;s#python3#python#g" ./local/synthesize.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/WaveRNN.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of WaveRNN successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/WaveRNN.log
-   echo -e "\033[31m synthesize of WaveRNN failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -451,12 +451,12 @@ ln -s $3/preprocess_data/transformer_tts/dump ./dump
 rm -rf ./exp
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 sed -i "s/max_epoch: 500/max_epoch: 1/g;s/batch_size: 16/batch_size: 4/g"  ./conf/default.yaml
-CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/transformer_tts.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of transformer tts successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/transformer_tts.log
-   echo -e "\033[31m training of transformer tts failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 if [ ! -f "waveflow_ljspeech_ckpt_0.3.zip" ]; then
@@ -466,22 +466,22 @@ fi
 ckpt_name=snapshot_iter_1612.pdz
 head -3 ./dump/test/norm/metadata.jsonl > ./metadata_3.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_3.jsonl#g;s#python3#python#g" ./local/synthesize.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/transformer_tts.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of transformer tts successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/transformer_tts.log
-   echo -e "\033[31m synthesize of transformer tts failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 head -3 ${BIN_DIR}/../sentences_en.txt > sentences_en3.txt
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences_en.txt#./sentences_en3.txt#g' ./local/synthesize_e2e.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/transformer_tts.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize_e2e of transformer tts successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize_e2e/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize_e2e of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize_e2e/transformer_tts.log
-   echo -e "\033[31m synthesize_e2e of transformer tts failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize_e2e/$line.log
+   echo -e "\033[31m synthesize_e2e of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -502,24 +502,24 @@ train_output_path=output
 rm -rf output
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 export CUDA_VISIBLE_DEVICES=${gpus}
-python ${BIN_DIR}/train.py --data=${preprocess_path} --output=${train_output_path} --ngpu=2 --opts data.batch_size 2 training.max_iteration 10 training.valid_interval 10 training.save_interval 10 > ../../../$log_path/train/waveflow.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m training of waveflow successfully! \033[0m" | tee -a ../../../$log_path/result.log
+python ${BIN_DIR}/train.py --data=${preprocess_path} --output=${train_output_path} --ngpu=2 --opts data.batch_size 2 training.max_iteration 10 training.valid_interval 10 training.save_interval 10 > ../../../$log_path/train/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
+   echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/train/waveflow.log
-   echo -e "\033[31m training of waveflow failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/train/$line.log
+   echo -e "\033[31m training of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 
 ln -s $3/mel_test/ ./
 input_mel_path=mel_test/
 ckpt_name=step-10
 sed -i "s/python3/python/g" ./local/synthesize.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${input_mel_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/waveflow.log 2>&1
-if [ $? -eq 0 ];then
-   echo -e "\033[33m synthesize of waveflow successfully! \033[0m" | tee -a ../../../$log_path/result.log
+CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${input_mel_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
+   echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
-   cat ../../../$log_path/synthesize/waveflow.log
-   echo -e "\033[31m synthesize of waveflow failed! \033[0m" | tee -a ../../../$log_path/result.log
+   cat ../../../$log_path/synthesize/$line.log
+   echo -e "\033[31m synthesize of $line failed! \033[0m" | tee -a ../../../$log_path/result.log
 fi
 cd ../../..
 ;;
@@ -534,7 +534,7 @@ if [[ $5 == 'all' ]];then
    python -m pip install importlib-metadata==2.0.0
    export CUDA_VISIBLE_DEVICES=${gpus}
    bash test_cli.sh > ../../../$log_path/test_cli.log 2>&1
-   if [ $? -eq 0 ];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/test_cli.log) -eq 0 ]];then
       echo -e "\033[33m test_cli successfully! \033[0m" | tee -a ../../../$log_path/result.log
    else
       cat ../../../$log_path/test_cli.log
