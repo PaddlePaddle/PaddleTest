@@ -84,7 +84,7 @@ sed -i "s/max_epoch: 200/max_epoch: 1/g" ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -100,7 +100,7 @@ ckpt_name=snapshot_iter_76.pdz
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 # synthesize, vocoder is pwgan
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -110,7 +110,7 @@ fi
 head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/synthesize_e2e.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize_e2e/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize_e2e/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize_e2e of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize_e2e/$line.log
@@ -119,7 +119,7 @@ fi
 
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/inference/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/inference/$line.log) -eq 0 ]];then
    echo -e "\033[33m inference of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/inference/$line.log
@@ -145,7 +145,7 @@ sed -i "s/max_epoch: 200/max_epoch: 1/g" ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path}  > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -160,7 +160,7 @@ head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 ckpt_name=snapshot_iter_76.pdz
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -170,7 +170,7 @@ fi
 head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/synthesize_e2e.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize_e2e/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize_e2e/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize_e2e of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize_e2e/$line.log
@@ -179,7 +179,7 @@ fi
 
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/inference/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/inference/$line.log) -eq 0 ]];then
    echo -e "\033[33m inference of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/inference/$line.log
@@ -207,7 +207,7 @@ sed -i "s/max_epoch: 1000/max_epoch: 1/g" ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path}  > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -222,7 +222,7 @@ head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 ckpt_name=snapshot_iter_76.pdz
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -232,7 +232,7 @@ fi
 head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/synthesize_e2e.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize_e2e/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize_e2e/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize_e2e of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize_e2e/$line.log
@@ -241,7 +241,7 @@ fi
 
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/inference/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/inference/$line.log) -eq 0 ]];then
    echo -e "\033[33m inference of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/inference/$line.log
@@ -267,7 +267,7 @@ sed -i "s/train_max_steps: 400000/train_max_steps: 10/g;s/save_interval_steps: 5
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -278,7 +278,7 @@ ckpt_name=snapshot_iter_10.pdz
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -304,7 +304,7 @@ sed -i "s/train_max_steps: 1000000/train_max_steps: 10/g;s/save_interval_steps: 
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -315,7 +315,7 @@ ckpt_name=snapshot_iter_10.pdz
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -341,7 +341,7 @@ sed -i "s/train_max_steps: 1500000/train_max_steps: 10/g;s/save_interval_steps: 
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -352,7 +352,7 @@ ckpt_name=snapshot_iter_10.pdz
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -378,7 +378,7 @@ sed -i "s/train_max_steps: 2500000/train_max_steps: 10/g;s/save_interval_steps: 
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -389,7 +389,7 @@ ckpt_name=snapshot_iter_10.pdz
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -415,7 +415,7 @@ sed -i "s/train_max_steps: 400000/train_max_steps: 10/g;s/save_interval_steps: 5
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -426,7 +426,7 @@ ckpt_name=snapshot_iter_10.pdz
 head -3 ./dump/test/norm/metadata.jsonl > ./metadata_3.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_3.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -452,7 +452,7 @@ rm -rf ./exp
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 sed -i "s/max_epoch: 500/max_epoch: 1/g;s/batch_size: 16/batch_size: 4/g"  ./conf/default.yaml
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -467,7 +467,7 @@ ckpt_name=snapshot_iter_1612.pdz
 head -3 ./dump/test/norm/metadata.jsonl > ./metadata_3.jsonl
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_3.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -477,7 +477,7 @@ fi
 head -3 ${BIN_DIR}/../sentences_en.txt > sentences_en3.txt
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences_en.txt#./sentences_en3.txt#g' ./local/synthesize_e2e.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize_e2e/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize_e2e/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize_e2e of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize_e2e/$line.log
@@ -503,7 +503,7 @@ rm -rf output
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 export CUDA_VISIBLE_DEVICES=${gpus}
 python ${BIN_DIR}/train.py --data=${preprocess_path} --output=${train_output_path} --ngpu=2 --opts data.batch_size 2 training.max_iteration 10 training.valid_interval 10 training.save_interval 10 > ../../../$log_path/train/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/train/$line.log) -eq 0 ]];then
    echo -e "\033[33m training of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/train/$line.log
@@ -515,7 +515,7 @@ input_mel_path=mel_test/
 ckpt_name=step-10
 sed -i "s/python3/python/g" ./local/synthesize.sh
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${input_mel_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/synthesize/$line.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
    cat ../../../$log_path/synthesize/$line.log
@@ -534,7 +534,7 @@ if [[ $5 == 'all' ]];then
    python -m pip install importlib-metadata==2.0.0
    export CUDA_VISIBLE_DEVICES=${gpus}
    bash test_cli.sh > ../../../$log_path/test_cli.log 2>&1
-   if [ $? -eq 0 ];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/test_cli.log) -eq 0 ]];then
       echo -e "\033[33m test_cli successfully! \033[0m" | tee -a ../../../$log_path/result.log
    else
       cat ../../../$log_path/test_cli.log
