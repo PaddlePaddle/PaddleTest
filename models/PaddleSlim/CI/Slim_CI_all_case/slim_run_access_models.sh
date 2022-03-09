@@ -53,9 +53,7 @@ python setup.py install
 echo ------finish install paddleslim -----
 python -m pip list | grep paddleslim
 
-echo ------slim ocr------
-
-slim_ocr_prune_MobileNetV3{
+slim_ocr_prune_MobileNetV3(){
 	cd ${repo_path}/PaddleOCR
 	python deploy/slim/prune/sensitivity_anal.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml \
 -o Global.pretrained_model=./pretrain_models/MobileNetV3_large_x0_5_pretrained \
@@ -64,7 +62,7 @@ Global.save_model_dir=./output/prune_model/ Global.epoch_num=1 > ${log_path}/sli
 print_info $? slim_ocr_prune_MobileNetV3
 }
 
-slim_ocr_quant_best_accuracy{
+slim_ocr_quant_best_accuracy(){
 	cd ${repo_path}/PaddleOCR
 	python deploy/slim/quantization/quant.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml \
 -o Global.pretrained_model=./ch_ppocr_mobile_v2.0_det_train/best_accuracy \
@@ -126,7 +124,7 @@ python bert_distill.py \
 print_info $? slim_nlp_distill_lstm_sst2_distill 
 }
 
-slim_nlp_distill_minilmv2{
+slim_nlp_distill_minilmv2(){
 	cd ${repo_path}/PaddleNLP//model_compression/minilmv2/
 	wget https://paddlenlp.bj.bcebos.com/models/general_distill/minilmv2_6l_768d_ch.tar.gz
     tar -zxf minilmv2_6l_768d_ch.tar.gz
@@ -257,7 +255,7 @@ slim_det_prune
 #slim_det_quant
 }
 
-slim_clas_quant{
+slim_clas_quant(){
 	cd ${repo_path}/PaddleClas
 	python -m paddle.distributed.launch \
     --gpus=${cudaid2} tools/train.py \
@@ -267,7 +265,7 @@ slim_clas_quant{
 print_info $? slim_clas_quant
 }
 
-slim_clas_post_quant{
+slim_clas_post_quant(){
 	cd ${repo_path}/PaddleClas
 	wget -P ./cls_pretrain/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/ResNet50_vd_pretrained.pdparams
 
@@ -279,7 +277,7 @@ print_info $? slim_clas_post_quant
 
 }
 
-slim_clas_prune{
+slim_clas_prune(){
 	cd ${repo_path}/PaddleClas
 	python -m paddle.distributed.launch \
     --gpus=${cudaid2} tools/train.py \
@@ -288,7 +286,7 @@ slim_clas_prune{
 print_info $? slim_clas_prune
 }
 
-slim_clas{
+slim_clas(){
 	mkdir ${all_log_path}/slim_clas_log
     export log_path=${all_log_path}/slim_clas_log
     cd ${repo_path}/PaddleClas
