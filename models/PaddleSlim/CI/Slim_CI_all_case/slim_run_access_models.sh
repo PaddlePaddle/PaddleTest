@@ -328,7 +328,7 @@ slim_nlp
 echo -------start run clas----
 slim_clas
 echo -------start run detection----
-slim_detection
+#slim_detection
 
 echo -------finish run case----
 
