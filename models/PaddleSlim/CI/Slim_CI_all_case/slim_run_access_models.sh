@@ -205,6 +205,7 @@ export FT_MODELS=../finetuning/ppminilm-6l-768h/models/CLUEWSC2020/1e-4_32
 sh prune.sh CLUEWSC2020 1e-4 32 1 128 0 ${FT_MODELS} 0.75 > ${log_path}/slim_nlp_pp_minilm_prune 2>&1
 print_info $? slim_nlp_pp_minilm_prune
 
+export MODEL_PATH=pruned_models
 export TASK_NAME=CLUEWSC2020
 sh export.sh ${MODEL_PATH} ${TASK_NAME} > ${log_path}/nlp_pp_minilm_export_model_after_prune 2>&1
 print_info $? nlp_pp_minilm_export_model_after_prune
