@@ -20,7 +20,6 @@ if [ $1 -ne 0 ];then
 else
     mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
     echo -e "\033[32m ${log_path}/SUCCESS_$2 \033[0m"
-    cat  ${log_path}/SUCCESS_$2.log
 fi
 }
 
