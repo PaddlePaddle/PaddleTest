@@ -163,7 +163,7 @@ python -u run_glue.py \
     --num_train_epochs 3 \
     --logging_steps 1 \
     --save_steps 500 \
-    --max_steps 100 \
+    --max_steps 10 \
     --output_dir ./tmp/$TASK_NAME/  \
     --device gpu > ${log_path}/slim_nlp_bert_Finetuning 2>&1
 print_info $? slim_nlp_bert_Finetuning 
@@ -175,7 +175,7 @@ python -u ./run_glue_ofa.py --model_type bert \
           --max_seq_length 128     \
           --batch_size 32       \
           --learning_rate 2e-5     \
-          --num_train_epochs 6     \
+          --num_train_epochs 1     \
           --logging_steps 10     \
           --save_steps 50     \
           --output_dir ./tmp/$TASK_NAME \
