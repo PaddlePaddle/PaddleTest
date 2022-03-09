@@ -79,7 +79,7 @@ cd ${repo_path}/PaddleOCR
 python -m pip install -r requirements.txt
 
 #数据准备
-wget -nc -P ./train_data/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/icdar2015.ta
+wget -nc -P ./train_data/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/icdar2015.tar
 cd ./train_data/ && tar xf icdar2015.tar && cd ../
 #预训练模型
 wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/MobileNetV3_large_x0_5_pretrained.pdparams
@@ -257,11 +257,12 @@ slim_det_prune
 
 slim_clas_quant(){
 	cd ${repo_path}/PaddleClas
+	CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch \
-    --gpus=${cudaid2} tools/train.py \
-     -c ppcls/configs/slim/ResNet50_vd_quantization.yaml \
-	 -o Global.epochs=1 \
-	 -o DataLoader.Train.sampler.batch_size=32 > ${log_path}/slim_clas_quant 2>&1
+        tools/train.py \
+        -c ppcls/configs/slim/ResNet50_vd_quantization.yaml \
+	-o Global.epochs=1 \
+	-o DataLoader.Train.sampler.batch_size=32 > ${log_path}/slim_clas_quant 2>&1
 print_info $? slim_clas_quant
 }
 
@@ -279,9 +280,10 @@ print_info $? slim_clas_post_quant
 
 slim_clas_prune(){
 	cd ${repo_path}/PaddleClas
+	CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch \
-    --gpus=${cudaid2} tools/train.py \
-    -c ppcls/configs/slim/ResNet50_vd_prune.yaml \
+        tools/train.py \
+        -c ppcls/configs/slim/ResNet50_vd_prune.yaml \
 	-o Global.epochs=1 > ${log_path}/slim_clas_prune 2>&1
 print_info $? slim_clas_prune
 }
