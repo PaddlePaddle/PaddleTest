@@ -52,6 +52,7 @@ fi
 done
 echo "`python -m pip list | grep paddle`" |tee -a ${log_path}/result.log
 python -c 'import paddle;print(paddle.version.commit)' |tee -a ${log_path}/result.log
+python -c 'import paddle;print(paddle.version.commit)'
 
 echo -e "newTacotron2\nspeedyspeech\nfastspeech2\nparallelwavegan\nStyleMelGAN\nHiFiGAN\nWaveRNN\ntransformertts\nwaveflow" > models_list_all
 if [[ $5 == 'pr' ]];then
