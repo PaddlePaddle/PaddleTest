@@ -10,7 +10,7 @@ ls
 if [[ $2 == 'train_mac_cpu' ]] ; then
     echo '#####train_mac_cpu'
     # cat ${log_path}/train/${model}_cpu.log | grep Avg
-    # cat ${log_path}/train/${model}_cpu.log | grep Train | grep Avg | grep '2/2' > tmp_cpu.log
+    # cat ${log_path}/train/${model}_cpu.log | grep Train | grep Avg | grep '1/1' > tmp_cpu.log
     # cat ${log_path}/train/${model}_cpu.log | grep Eval | grep Avg > tmp_cpu1.log
     # sed -i '' 's/loss/train_eval/g' tmp_cpu1.log
     # cat tmp_cpu1.log

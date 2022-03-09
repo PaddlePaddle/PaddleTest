@@ -466,7 +466,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
       fi
 
-      if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'amp' ]];then
+      if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
       python python/predict_cls.py -c configs/inference_cls_ch4.yaml  \
          -o Global.infer_imgs="./images"  \
          -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"$model \

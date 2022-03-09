@@ -72,20 +72,20 @@ if [[ ${model_flag} =~ "CE" ]]; then
    sed -ie '/flip_code/d' $line
       # -o Global.eval_during_train=False  \
    python tools/train.py -c $line  \
-      -o Global.epochs=2  \
+      -o Global.epochs=1  \
       -o Global.seed=1234 \
       -o Global.output_dir=$output_path \
       -o DataLoader.Train.loader.num_workers=0 \
       -o DataLoader.Train.sampler.shuffle=False  \
-      -o Global.eval_interval=2  \
-      -o Global.save_interval=2 \
+      -o Global.eval_interval=1  \
+      -o Global.save_interval=1 \
       -o DataLoader.Train.sampler.batch_size=32 \
       -o DataLoader.Eval.sampler.batch_size=32 \
       -o Global.device=cpu \
       > $log_path/train/${model}_cpu.log 2>&1
 else
    python tools/train.py  -c $line \
-      -o Global.epochs=2 \
+      -o Global.epochs=1 \
       -o DataLoader.Train.sampler.batch_size=32 \
       -o DataLoader.Eval.sampler.batch_size=32 \
       -o Global.device=cpu > $log_path/train/${model}_cpu.log 2>&1
