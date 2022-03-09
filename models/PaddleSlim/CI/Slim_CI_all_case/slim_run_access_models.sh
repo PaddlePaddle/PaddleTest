@@ -40,7 +40,6 @@ if [ -d "$PWD/logs" ];then
     rm -rf $PWD/logs;
 fi
 mkdir $PWD/logs
-touch $PWD/logs/result.log
 export all_log_path=$PWD/logs
 
 echo --------- env variable-----
