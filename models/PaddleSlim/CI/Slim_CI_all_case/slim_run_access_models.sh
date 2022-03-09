@@ -269,12 +269,16 @@ slim_clas_post_quant(){
 	cd ${repo_path}/PaddleClas
 	wget -P ./cls_pretrain/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/ResNet50_vd_pretrained.pdparams
 
+        python tools/export_model.py -c ./ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml   \
+	-o Global.pretrained_model=./cls_pretrain/ResNet50_vd_pretrained   \
+	-o Global.save_inference_dir=./deploy/models/class_ResNet50_vd_ImageNet_infer > ${log_path}/clas_export_model 2>&1
+print_info $? clas_export_model	
+
 	python deploy/slim/quant_post_static.py -c ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml \
 	 -o Global.save_inference_dir=./deploy/models/class_ResNet50_vd_ImageNet_infer \
 	 -o Global.epochs=1 \
 	 -o Global.pretrained_model=./cls_pretrain/ResNet50_vd_pretrained > ${log_path}/slim_clas_post_quant 2>&1
 print_info $? slim_clas_post_quant
-
 }
 
 slim_clas_prune(){
