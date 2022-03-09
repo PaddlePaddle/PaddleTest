@@ -148,7 +148,7 @@ EXPORT_DYNAMIC(){
 }
 PYTHON_INFER_DYNAMIC(){
     mode=python_infer_dynamic
-    if [[ ${model} =~ 'gscnn' || ${model} =~ 'dmnet' || ${model} =~ 'enet' || ${model} =~ 'segnet' ]];then
+    if [[ ${model} =~ 'gscnn' || ${model} =~ 'dmnet' || ${model} =~ 'enet' || ${model} =~ 'segnet' || ${model} =~ 'espnetv1' ]];then
         echo -e "${model} does not test python_infer！"
     else
         export PYTHONPATH=`pwd`
