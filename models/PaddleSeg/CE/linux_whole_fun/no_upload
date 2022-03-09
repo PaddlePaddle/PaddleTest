@@ -26,3 +26,4 @@
 ./configs/pp_humanseg_lite/pp_humanseg_lite_export_398x224.yml
 ./configs/fcn/fcn_hrnetw18_pphumanseg14k.yml
 ./configs/pp_humanseg_lite/pp_humanseg_lite_mini_supervisely.yml
+
