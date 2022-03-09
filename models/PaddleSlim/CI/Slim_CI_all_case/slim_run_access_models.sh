@@ -231,7 +231,7 @@ slim_nlp_pp_minilm
 
 slim_det_prune(){
 	cd ${repo_path}/PaddleDetection
-	python tools/train.py -c configs/yolov3/yolov3_mobilenet_v1_270e_voc.yml -o  epoch=1  batch_size=1 \
+	python tools/train.py -c configs/yolov3/yolov3_mobilenet_v1_270e_voc.yml -o  epoch=1 TrainReader.batch_size=1 \
 	--slim_config configs/slim/prune/yolov3_prune_l1_norm.yml > ${log_path}/slim_det_prune 2>&1
 print_info $? slim_det_prune
 }
@@ -248,7 +248,13 @@ slim_detection(){
 mkdir ${all_log_path}/slim_detection_log
 export log_path=${all_log_path}/slim_detection_log
 cd ${repo_path}/PaddleDetection
+python -m pip install -U pip Cython
 python -m pip install -r requirements.txt
+
+cd dataset/voc/
+python download_voc.py
+python create_list.py
+cd ../..
 
 slim_det_prune
 #slim_det_quant
@@ -322,7 +328,7 @@ slim_nlp
 echo -------start run clas----
 slim_clas
 echo -------start run detection----
-#slim_detection
+slim_detection
 
 echo -------finish run case----
 
