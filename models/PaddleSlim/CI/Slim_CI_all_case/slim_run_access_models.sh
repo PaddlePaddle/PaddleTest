@@ -212,8 +212,8 @@ print_info $? nlp_pp_minilm_export_model_after_prune
 
 cd ../quantization/
 export MODEL_DIR=../pruning/pruned_models/
-python quant_post.py --task_name $TASK_NAME --input_dir ${MODEL_DIR}/${TASK_NAME}/0.75/sub_static > ${log_path}/nlp_pp_minilm_quant 2>&1
-print_info $? nlp_pp_minilm_quant
+python quant_post.py --task_name $TASK_NAME --input_dir ${MODEL_DIR}/${TASK_NAME}/0.75/sub_static > ${log_path}/slim_nlp_pp_minilm_quant 2>&1
+print_info $? slim_nlp_pp_minilm_quant
 }
 
 slim_nlp(){
