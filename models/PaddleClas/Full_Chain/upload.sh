@@ -61,6 +61,7 @@ if [ ${exit_code} == 0 ]; then
     echo ${model_url} >> ${models_link_file}
     python2 ${push_file} ${models_link_file} paddle-qa/fullchain_ce_test/model_download_link
 fi
+# rm model file
 rm -rf ${model_tar_name}
 rm -rf ${upload_dir}
 rm -rf ${output_dir}
