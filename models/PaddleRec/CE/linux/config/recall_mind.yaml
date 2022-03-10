@@ -95,8 +95,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 4.906812
-        threshold: 0.001
+        kpi_base: 5.293708
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -204,8 +204,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 4.901364
-        threshold: 0.001
+        kpi_base: 5.283447
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -250,7 +250,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu recall_mind_win_dy_gpu
+        cmd: train.bat win_dy_gpu recall_mind_win_dy_gpu mind
 
     kpis: #kpi指标
       loss:
@@ -268,14 +268,14 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_mind_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/recall_mind_win_dy_gpu.log
   -
     tag: win_dy_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu recall_mind_win_dy_cpu
+        cmd: train.bat win_dy_cpu recall_mind_win_dy_cpu mind
 
     kpis: #kpi指标
       loss:
@@ -293,14 +293,14 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_mind_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/recall_mind_win_dy_cpu.log
   -
     tag: win_st_gpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu recall_mind_win_st_gpu
+        cmd: train.bat win_st_gpu recall_mind_win_st_gpu mind
 
     kpis: #kpi指标
       loss:
@@ -318,14 +318,14 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_mind_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/recall_mind_win_st_gpu.log
   -
     tag: win_st_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu recall_mind_win_st_cpu
+        cmd: train.bat win_st_cpu recall_mind_win_st_cpu mind
 
     kpis: #kpi指标
       loss:
@@ -343,7 +343,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_mind_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/recall_mind_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -409,8 +409,8 @@ INFER:
     kpis: #kpi指标
       recall@50:
         latest: True
-        kpi_base: 0.01270
-        threshold: 0.001
+        kpi_base: 0.00723
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -513,8 +513,8 @@ INFER:
     kpis: #kpi指标
       recall@50:
         latest: True
-        kpi_base: 0.00645
-        threshold: 0.001
+        kpi_base: 0.00417
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -559,7 +559,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu recall_mind_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu recall_mind_infer_win_dy_gpu mind
 
     kpis: #kpi指标
       recall@50:
@@ -577,14 +577,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_mind_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/recall_mind_infer_win_dy_gpu.log
   -
     tag: win_dy_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu recall_mind_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu recall_mind_infer_win_dy_cpu mind
 
     kpis: #kpi指标
       recall@50:
@@ -602,14 +602,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_mind_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/recall_mind_infer_win_dy_cpu.log
   -
     tag: win_st_gpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu recall_mind_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu recall_mind_infer_win_st_gpu mind
 
     kpis: #kpi指标
       recall@50:
@@ -627,14 +627,14 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_mind_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/recall_mind_infer_win_st_gpu.log
   -
     tag: win_st_cpu
     priority: p1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu recall_mind_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu recall_mind_infer_win_st_cpu mind
 
     kpis: #kpi指标
       recall@50:
@@ -652,4 +652,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_recall_mind_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/recall_mind_infer_win_st_cpu.log

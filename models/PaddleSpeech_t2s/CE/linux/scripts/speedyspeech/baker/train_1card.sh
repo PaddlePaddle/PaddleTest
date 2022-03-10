@@ -8,6 +8,7 @@ if [ ! -d "../log" ]; then
 fi
 python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip list | grep numpy
 
 cd examples/csmsc/tts2
 source ${PWD}/path.sh

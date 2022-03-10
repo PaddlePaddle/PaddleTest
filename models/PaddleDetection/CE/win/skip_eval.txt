@@ -1,2 +1,3 @@
 mask_rcnn_x101_vd_64x4d_fpn_2x_coco
 detr_r50_1x_coco
+pedestrian_yolov3_darknet

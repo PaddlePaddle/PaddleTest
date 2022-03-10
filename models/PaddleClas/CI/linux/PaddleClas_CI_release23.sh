@@ -20,9 +20,8 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    rm -rf dataset
    ln -s ${Data_path} dataset
    ls dataset
-
    cd deploy
-   ln -s  ${Data_path}/* .
+   ln -s ${Data_path}/rec_demo/* .
    cd ..
 fi
 
@@ -62,11 +61,10 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
 
    echo "######  ----ln  data-----"
    rm -rf dataset
-   ln -s ${Data_path} dataset #data_path
+   ln -s ${Data_path} dataset
    ls dataset
    cd deploy
-
-   ln -s ${Data_path}/* .
+   ln -s ${Data_path}/rec_demo/* .
    cd ..
 fi
 
@@ -470,6 +468,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=64 \
+            -o DataLoader.Eval.sampler.batch_size=64 \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
@@ -479,16 +478,18 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=64 \
+            -o DataLoader.Eval.sampler.batch_size=64 \
             -o DataLoader.Train.dataset.image_root=./dataset/Aliproduct/ \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
-    elif [[ ${line} =~ 'quantization' ]]; then
+    elif [[ ${line} =~ 'quantization' ]] || [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
          python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=32 \
+            -o DataLoader.Eval.sampler.batch_size=32 \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     else
@@ -497,6 +498,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=64 \
+            -o DataLoader.Eval.sampler.batch_size=64 \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     fi

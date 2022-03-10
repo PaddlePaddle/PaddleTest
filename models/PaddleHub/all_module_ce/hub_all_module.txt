@@ -37,8 +37,6 @@ cyclegan_cityscapes
 darknet53_imagenet
 dcscn
 DDParser
-deeplabv3p_resnet50_cityscapes
-deeplabv3p_resnet50_voc
 deeplabv3p_xception65_humanseg
 densenet121_imagenet
 densenet161_imagenet
@@ -94,7 +92,6 @@ fcn_hrnetw18_cityscapes
 FCN_HRNet_W18_Face_Seg
 fcn_hrnetw18_voc
 fcn_hrnetw48_cityscapes
-fcn_hrnetw48_voc
 first_order_motion
 french_ocr_db_crnn_mobile
 ge2e_fastspeech2_pwgan
@@ -157,7 +154,6 @@ ocrnet_hrnetw18_voc
 Photo2Cartoon
 photo_restoration
 pixel2style2pixel
-plato2_en_base
 plato-mini
 pnasnet_imagenet
 porn_detection_cnn
@@ -261,7 +257,6 @@ UGATIT_83w
 UGATIT_92w
 ultra_light_fast_generic_face_detector_1mb_320
 ultra_light_fast_generic_face_detector_1mb_640
-unet_cityscapes
 unified_transformer-12L-cn-luge
 unified_transformer-12L-cn
 user_guided_colorization
@@ -275,7 +270,6 @@ w2v_baidu_encyclopedia_context_word-character_char1-4_dim300
 w2v_baidu_encyclopedia_context_word-ngram_1-3_dim300
 w2v_baidu_encyclopedia_context_word-word_dim300
 w2v_baidu_encyclopedia_context_word-wordLR_dim300
-w2v_baidu_encyclopedia_context_word-wordPosition_dim300
 w2v_baidu_encyclopedia_target_bigram-char_dim300
 w2v_baidu_encyclopedia_target_word-character_char1-1_dim300
 w2v_baidu_encyclopedia_target_word-character_char1-2_dim300
