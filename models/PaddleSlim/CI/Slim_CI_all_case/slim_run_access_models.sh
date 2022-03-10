@@ -1,6 +1,6 @@
 #!/bin/bash
 export repo_path=$PWD
-##$1:cudaid1 $2:cudaid2 $3:proxy $4:slim_branch
+##$1:cudaid1 $2:cudaid2 $3:proxy $4:slim_branch $5:det_data_path
 
 cudaid1=$1
 cudaid2=$2
@@ -10,6 +10,9 @@ echo -------cudaid1:${cudaid1}, cudaid2:${cudaid2}---
 export https_proxy=$3
 export http_proxy=$3
 export no_proxy=localhost,bj.bcebos.com,su.bcebos.com
+
+export det_data_path=$5
+echo ----${det_data_path}----
 
 print_info(){
 if [ $1 -ne 0 ];then
@@ -231,7 +234,7 @@ slim_nlp_pp_minilm
 
 slim_det_prune(){
 	cd ${repo_path}/PaddleDetection
-	python tools/train.py -c configs/yolov3/yolov3_mobilenet_v1_270e_voc.yml -o  epoch=1 TrainReader.batch_size=1 \
+	python tools/train.py -c configs/yolov3/yolov3_mobilenet_v1_270e_voc.yml -o  epoch=1 TrainReader.batch_size=8 \
 	--slim_config configs/slim/prune/yolov3_prune_l1_norm.yml > ${log_path}/slim_det_prune 2>&1
 print_info $? slim_det_prune
 }
@@ -239,8 +242,7 @@ print_info $? slim_det_prune
 slim_det_quant(){
 	cd ${repo_path}/PaddleDetection
 	python tools/post_quant.py -c configs/ppyolo/ppyolo_mbv3_large_coco.yml \
-	 --slim_config=configs/slim/post_quant/ppyolo_mbv3_large_ptq.yml > ${log_path}/slim_det_quant 2>&1
- > ${log_path}/slim_det_prune 2>&1
+        --slim_config=configs/slim/post_quant/ppyolo_mbv3_large_ptq.yml > ${log_path}/slim_det_quant 2>&1
 print_info $? slim_det_quant
 }
 
@@ -252,12 +254,17 @@ python -m pip install -U pip Cython
 python -m pip install -r requirements.txt
 
 cd dataset/voc/
-python download_voc.py
-python create_list.py
-cd ../..
+ln -s ${det_data_path}/pascalvoc/trainval.txt trainval.txt
+ln -s ${det_data_path}/pascalvoc/test.txt test.txt
+ln -s ${det_data_path}/pascalvoc/VOCdevkit VOCdevkit
+
+cd ../coco/
+ln -s ${det_data_path}/coco/val2017 val2017
+ln -s ${det_data_path}/coco/annotations annotations
+ln -s ${det_data_path}/coco/train2017 train2017
 
 slim_det_prune
-#slim_det_quant
+slim_det_quant
 }
 
 slim_clas_quant(){
@@ -321,14 +328,14 @@ slim_clas_prune
 
 echo -------start run case----
 
+echo -------start run detection----
+slim_detection
 echo -------start run ocr----
 slim_ocr
 echo -------start run nlp----
 slim_nlp
 echo -------start run clas----
 slim_clas
-echo -------start run detection----
-#slim_detection
 
 echo -------finish run case----
 
