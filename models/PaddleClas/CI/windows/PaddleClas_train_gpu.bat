@@ -32,8 +32,25 @@ cd dataset
 if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
 cd ..
 
+rem install paddle & get yaml list
+
+echo "pr"| findstr %model_flag% >nul
+if !errorlevel! equ 0 (
+   echo "######  model_flag pr"
+
+   echo "######  ----install  paddle-----"
+   python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
+   python -m pip uninstall paddlepaddle-gpu -y
+   python -m pip install %paddle_compile% #paddle_compile
+
+   echo ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml >clas_models_list_all_gpu
+
+) else (
+   echo "model_flag not pr"
+)
+
 rem dependency
-python -m pip install -r requirements.txt
+python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
