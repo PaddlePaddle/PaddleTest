@@ -6,8 +6,8 @@ echo ${Data_path}
 echo ${Project_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-export FLAGS_use_virtual_memory_auto_growth=1
-export FLAGS_use_stream_safe_cuda_allocator=1
+export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
+export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
 
 echo "path before"
 pwd
@@ -273,7 +273,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    echo $params_dir
 
    if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
-      && [[ $(grep -c -i "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
+      && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
       echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
       echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
    else
@@ -311,7 +311,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       params_dir=$(ls output)
       echo "######  params_dir"
       echo $params_dir
-      if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
+      if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
          echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
          echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
       else
@@ -360,7 +360,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       -o Global.pretrained_model=output/$params_dir/latest \
       -o DataLoader.Eval.sampler.batch_size=1 \
       > $log_path/eval/$model.log 2>&1
-   if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
       echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
       echo "eval_exit_code: 0.0" >> $log_path/eval/$model.log
    else
@@ -373,7 +373,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
    python tools/infer.py -c $line \
       -o Global.pretrained_model=output/$params_dir/latest \
       > $log_path/infer/$model.log 2>&1
-   if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/infer/${model}.log) -eq 0 ]];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/${model}.log) -eq 0 ]];then
       echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
       echo "infer_exit_code: 0.0" >> $log_path/infer/$model.log
    else
@@ -396,7 +396,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          > $log_path/export_model/$model.log 2>&1
    fi
 
-   if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/export_model/${model}.log) -eq 0 ]];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/export_model/${model}.log) -eq 0 ]];then
       echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
       echo "export_exit_code: 0.0" >> $log_path/export_model/$model.log
    else
@@ -411,7 +411,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       python model_clip.py --path_prefix="./inference/$model/inference" \
          --output_model_path="./inference/$model/inference" \
          > $log_path/model_clip/$model.log 2>&1
-      if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/model_clip/${model}.log) -eq 0 ]];then
+      if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/model_clip/${model}.log) -eq 0 ]];then
          echo -e "\033[33m model_clip of $model  successfully!\033[0m"| tee -a $log_path/result.log
       else
          cat $log_path/model_clip/$model.log
@@ -426,7 +426,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       python python/predict_cls.py -c configs/inference_cls.yaml \
          -o Global.inference_model_dir="../inference/"$model \
          > ../$log_path/predict/$model.log 2>&1
-      if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/predict/${model}.log) -eq 0 ]];then
+      if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
          echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
       else
          cat ../$log_path/predict/${model}.log
@@ -438,7 +438,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          -o Global.batch_size=4 \
          -o Global.inference_model_dir="../inference/"$model \
          > ../$log_path/predict/$model.log 2>&1
-      if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/predict/${model}.log) -eq 0 ]];then
+      if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
          echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
          echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
       else
@@ -460,7 +460,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             > ../$log_path/predict/$model.log 2>&1
       fi
 
-      if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/predict/${model}.log) -eq 0 ]];then
+      if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
          echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
       else
          cat ../$log_path/predict/${model}.log
@@ -479,7 +479,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
          -o Global.inference_model_dir="../inference/"$model \
          > ../$log_path/predict/$model.log 2>&1
       fi
-      if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/predict/${model}.log) -eq 0 ]];then
+      if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
          echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
          echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
       else
@@ -604,7 +604,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     echo "######  params_dir"
     echo $params_dir
 
-    if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
+    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
       && [[ -f "output/${category}_${model}/$params_dir/latest.pdparams" ]];then
         echo -e "\033[33m training of ${category}_${model}  successfully!\033[0m"|tee -a $log_path/result.log
     else
@@ -625,7 +625,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
          -o Global.pretrained_model=output/${category}_${model}/$params_dir/latest \
          > $log_path/eval/${category}_${model}.log 2>&1
    fi
-    if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/eval/${category}_${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${category}_${model}.log) -eq 0 ]];then
         echo -e "\033[33m eval of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
     else
         cat $log_path/eval/${category}_${model}.log
@@ -637,7 +637,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
       -o Global.pretrained_model=output/${category}_${model}/$params_dir/latest  \
       -o Global.save_inference_dir=./inference/${category}_${model} \
       > $log_path/export_model/${category}_${model}.log 2>&1
-    if [[ $? -eq 0 ]] && [[ $(grep -c -i "Error" $log_path/export_model/${category}_${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/export_model/${category}_${model}.log) -eq 0 ]];then
         echo -e "\033[33m export_model of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
     else
         cat $log_path/export_model/${category}_${model}.log

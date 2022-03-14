@@ -19,13 +19,21 @@ fi
 rm -rf dataset
 ln -s ${data_path} dataset
 
-# env
-# python -m pip install --upgrade pip
-# python -m pip install paddleslim
-# python -m pip install -r requirements.txt
-
 unset http_proxy
 unset https_proxy
+
+# install paddle & get yaml list
+if [[ ${model_flag} =~ "pr" ]]; then
+   echo "######  model_flag pr"
+
+   echo "######  ----install  paddle-----"
+   python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
+   python -m pip uninstall paddlepaddle-gpu -y
+   python -m pip install %paddle_compile% #paddle_compile
+
+   echo ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml >clas_models_list_P0
+fi
+
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade \
