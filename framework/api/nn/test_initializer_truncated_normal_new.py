@@ -36,10 +36,25 @@ def test_initializer_truncated_normal1():
     w_init = paddle.nn.initializer.TruncatedNormal(mean=-2.0, std=5.0)
     Linear = paddle.nn.Linear(10000, 10000, weight_attr=w_init)
     w = Linear._parameters["weight"].numpy()
+    compare(np.array(np.std(w)), 1.139, delta=1e-2, rtol=1e-2)
+    compare(np.std(w, axis=0), np.ones(10000) * 1.139, delta=1e-1, rtol=1e-1)
+    compare(np.std(w, axis=1), np.ones(10000) * 1.139, delta=1e-1, rtol=1e-1)
+    compare(np.array(np.mean(w)), -0.104, delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=0), np.ones(10000) * -0.104, delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=1), np.ones(10000) * -0.104, delta=1e-1, rtol=1e-1)
 
-    compare(np.array(np.std(w)), 0.879 * 5, delta=1e-2, rtol=1e-2)
-    compare(np.std(w, axis=0), np.ones(10000) * 0.879 * 5, delta=1e-1, rtol=1e-1)
-    compare(np.std(w, axis=1), np.ones(10000) * 0.879 * 5, delta=1e-1, rtol=1e-1)
-    compare(np.array(np.mean(w)), -2.0, delta=1e-1, rtol=1e-1)
-    compare(np.mean(w, axis=0), np.ones(10000) * -2.0, delta=1e-1, rtol=1e-1)
-    compare(np.mean(w, axis=1), np.ones(10000) * -2.0, delta=1e-1, rtol=1e-1)
+
+@pytest.mark.api_initializer_truncated_normal_parameters
+def test_initializer_truncated_normal2():
+    """
+    base
+    """
+    w_init = paddle.nn.initializer.TruncatedNormal(mean=1.0, std=2.0)
+    Linear = paddle.nn.Linear(10000, 10000, weight_attr=w_init)
+    w = Linear._parameters["weight"].numpy()
+    compare(np.array(np.std(w)), 1.0587, delta=1e-2, rtol=1e-2)
+    compare(np.std(w, axis=0), np.ones(10000) * 1.0587, delta=1e-1, rtol=1e-1)
+    compare(np.std(w, axis=1), np.ones(10000) * 1.0587, delta=1e-1, rtol=1e-1)
+    compare(np.array(np.mean(w)), 0.2874, delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=0), np.ones(10000) * 0.2874, delta=1e-1, rtol=1e-1)
+    compare(np.mean(w, axis=1), np.ones(10000) * 0.2874, delta=1e-1, rtol=1e-1)
