@@ -35,16 +35,19 @@ def find_all_logs(path_walk: str):
                 yield file_name, full_path
 
 
-def process_log(file_name: str) -> dict:
+def process_log(file_name: str, iden: str) -> list:
     """
-    process log to dict
+    process log to List<dict>
     """
-    output_dict = {}
+    output_list = []
     with open(file_name, "r") as f:
+        log_data_list = f.read().split(iden)
+    for log_data in log_data_list:
+        if "Perf info" not in log_data:
+            continue
+        output_dict = {}
         try:
-            for i, data in enumerate(f.readlines()):
-                if i == 0:
-                    continue
+            for i, data in enumerate(log_data.split("\n")):
                 line_lists = data.split(" ")
                 if "name:" in line_lists and "type:" in line_lists:
                     pos_buf = line_lists.index("name:")
@@ -53,7 +56,7 @@ def process_log(file_name: str) -> dict:
                 if "Num" in line_lists and "size:" in line_lists:
                     pos_buf = line_lists.index("size:")
                     output_dict["batch_size"] = line_lists[pos_buf + 1].split(",")[0]
-                if "device:" in line_lists:
+                if "device:" in line_lists and "INFO" in line_lists:
                     pos_buf = line_lists.index("device:")
                     output_dict["device"] = line_lists[pos_buf + 1].strip()
                 if "QPS:" in line_lists and "latency(ms):" in line_lists:
@@ -65,9 +68,10 @@ def process_log(file_name: str) -> dict:
                 if "trt_precision:" in line_lists:
                     output_dict["trt_precision"] = line_lists[-1].strip()
         except Exception:
-            output_dict["model_name"] = file_name
+            output_dict = {}
+        output_list.append(output_dict)
 
-    return output_dict
+    return output_list
 
 
 def set_style(diff_excel):
@@ -106,9 +110,12 @@ def main():
         columns=["frame_work", "model_name", "batch_size", "device", "trt_precision", "Average_latency(ms)", "QPS"]
     )
 
+    iden = "----------------------- Model info ----------------------"
     for file_name, full_path in find_all_logs(args.log_path):
-        dict_log = process_log(full_path)
-        origin_df = origin_df.append(dict_log, ignore_index=True)
+        list_log = process_log(full_path, iden)
+        for dict_log in list_log:
+            if dict_log != {}:
+                origin_df = origin_df.append(dict_log, ignore_index=True)
 
     raw_df = origin_df.sort_values(by=["frame_work", "model_name", "batch_size", "device", "trt_precision"])
     raw_df.to_excel(args.output_name)
