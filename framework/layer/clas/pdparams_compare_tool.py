@@ -143,7 +143,7 @@ class PdparamsCompareTool(object):
         if isinstance(result, np.ndarray):
             expect = np.array(expect)
             res = np.allclose(result, expect, atol=atol, rtol=rtol, equal_nan=True)
-            # 出错打印错误数据
+            # 出错打印错误数据,
             if res is False:
                 if self.debug is True:
                     print("the error result is {}".format(result))
