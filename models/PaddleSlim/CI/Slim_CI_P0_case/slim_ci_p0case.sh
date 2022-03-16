@@ -192,17 +192,17 @@ export CUDA_VISIBLE_DEVICES=${cudaid1}
 # 2.1版本时默认BS=128 会报显存不足，故暂时修改成64
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 1 --lr 0.0001 --use_pact False --batch_size 128 >${log_path}/pact_quant_aware1 2>&1
+--num_epochs 1 --lr 0.0001 --use_pact False --batch_size 64 >${log_path}/pact_quant_aware1 2>&1
 print_info $? pact_quant_aware1
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 1 --lr 0.0001 --use_pact True --batch_size 128 --lr_strategy=piecewise_decay \
+--num_epochs 1 --lr 0.0001 --use_pact True --batch_size 64 --lr_strategy=piecewise_decay \
 --step_epochs 2 --l2_decay 1e-5 >${log_path}/pact_quant_aware2 2>&1
 print_info $? pact_quant_aware2
 # load
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 2 --lr 0.0001 --use_pact True --batch_size 128 --lr_strategy=piecewise_decay \
+--num_epochs 2 --lr 0.0001 --use_pact True --batch_size 64 --lr_strategy=piecewise_decay \
 --step_epochs 20 --l2_decay 1e-5 \
 --checkpoint_dir ./output/MobileNetV3_large_x1_0/0 \
 --checkpoint_epoch 0 >${log_path}/pact_quant_aware_load 2>&1
