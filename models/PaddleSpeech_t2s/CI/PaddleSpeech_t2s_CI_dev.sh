@@ -80,7 +80,7 @@ source ${MAIN_ROOT}/utils/parse_options.sh
 gpus=$2
 conf_path=conf/default.yaml
 train_output_path=exp/default
-sed -i "s/max_epoch: 200/max_epoch: 1/g" ./conf/default.yaml
+sed -i "s/max_epoch: 200/max_epoch: 1/g;s/batch_size: 64/batch_size: 32/g" ./conf/default.yaml
 sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh
 rm -rf ./exp
 CUDA_VISIBLE_DEVICES=${gpus} ./local/train.sh ${conf_path} ${train_output_path} > ../../../$log_path/train/$line.log 2>&1
