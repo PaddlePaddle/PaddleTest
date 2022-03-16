@@ -94,8 +94,8 @@ class ParamDictReader(object):
         next
         """
         if self.count < self.key_num:
-            print("exp keys are: ", self.exp_key_list)
-            print("res keys are: ", self.res_key_list)
+            # print("exp keys are: ", self.exp_key_list)
+            # print("res keys are: ", self.res_key_list)
             res_key = self.res_key_list[self.count]
             exp_key = self.exp_key_list[self.count]
             res_value = self.params_res[res_key]
@@ -143,7 +143,7 @@ class PdparamsCompareTool(object):
         if isinstance(result, np.ndarray):
             expect = np.array(expect)
             res = np.allclose(result, expect, atol=atol, rtol=rtol, equal_nan=True)
-            # 出错打印错误数据
+            # 出错打印错误数据,
             if res is False:
                 if self.debug is True:
                     print("the error result is {}".format(result))
