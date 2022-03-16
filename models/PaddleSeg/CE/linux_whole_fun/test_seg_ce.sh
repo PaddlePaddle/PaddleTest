@@ -96,6 +96,7 @@ TRAIN_SINGLE_DYNAMIC(){
            --config ${config} \
            --save_interval 100 \
            --iters 10 \
+           --batch_size 1 \
            --num_workers 8 \
            --save_dir output/${model} >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
         print_result
