@@ -94,8 +94,8 @@ class ParamDictReader(object):
         next
         """
         if self.count < self.key_num:
-            print("exp keys are: ", self.exp_key_list)
-            print("res keys are: ", self.res_key_list)
+            # print("exp keys are: ", self.exp_key_list)
+            # print("res keys are: ", self.res_key_list)
             res_key = self.res_key_list[self.count]
             exp_key = self.exp_key_list[self.count]
             res_value = self.params_res[res_key]
