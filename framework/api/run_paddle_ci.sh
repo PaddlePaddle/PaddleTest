@@ -2,7 +2,7 @@ home=$PWD
 python3.7 -m pip install pytest
 python3.7 -m pip install scipy
 
-case_dir_list=('fft' 'device' 'incubate' 'linalg' 'paddlebase' 'loss' 'nn' 'optimizer')
+case_dir_list=('fft' 'device' 'incubate' 'linalg' 'paddlebase' 'loss' 'nn' 'optimizer' 'utils' 'distribution')
 result_array=()
 for case_dir in ${case_dir_list[@]}
 do
