@@ -29,7 +29,7 @@ if [[ ${model_flag} =~ "pr" ]]; then
    echo "######  ----install  paddle-----"
    python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
    python -m pip uninstall paddlepaddle-gpu -y
-   python -m pip install %paddle_compile% #paddle_compile
+   python -m pip install ${paddle_compile}
 
    echo ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml >clas_models_list_P0
 fi

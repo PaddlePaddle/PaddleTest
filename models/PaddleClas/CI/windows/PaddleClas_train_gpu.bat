@@ -5,6 +5,7 @@ echo %1
 echo %data_path%
 echo %Project_path%
 echo %model_flag%
+echo %paddle_compile%
 
 echo "path before"
 chdir
@@ -41,7 +42,7 @@ if !errorlevel! equ 0 (
    echo "######  ----install  paddle-----"
    python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
    python -m pip uninstall paddlepaddle-gpu -y
-   python -m pip install %paddle_compile% #paddle_compile
+   python -m pip install %paddle_compile%
 
    echo ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml >clas_models_list_all_gpu
 
