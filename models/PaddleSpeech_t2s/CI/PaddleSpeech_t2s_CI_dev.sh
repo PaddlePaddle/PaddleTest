@@ -96,7 +96,7 @@ if [ ! -f "pwg_baker_ckpt_0.4.zip" ]; then
    unzip pwg_baker_ckpt_0.4.zip
 fi
 head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl
-ckpt_name=snapshot_iter_76.pdz
+ckpt_name=snapshot_iter_153.pdz
 sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh
 # synthesize, vocoder is pwgan
 CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize/$line.log 2>&1
