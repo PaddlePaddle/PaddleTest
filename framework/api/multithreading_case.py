@@ -32,9 +32,16 @@ ignore_case_dir = {
     "incubate": [],
     "linalg": [],
     "loss": [],
-    "nn": ["test_functional_celu.py", "test_CELU.py", "test_initializer_truncated_normal_new.py", "test_initializer_truncated_normal.py"],
+    "nn": [
+        "test_functional_celu.py",
+        "test_CELU.py",
+        "test_initializer_truncated_normal_new.py",
+        "test_initializer_truncated_normal.py",
+    ],
     "paddlebase": [],
     "optimizer": [],
+    "distribution": [],
+    "utils": [],
 }
 
 
@@ -87,7 +94,7 @@ def main(path):
     dirs = os.listdir(path)
     case_dir = path.split("/")[-1]
     os.system('echo "============ failed cases =============" >> %s/result.txt' % path)
-    ignore_case_list = ignore_case_dir[case_dir]
+    ignore_case_list = ignore_case_dir.get(case_dir, [])
     pool = threadPool(13)
     for i in range(pool.__len__()):
         pool[i].start()
