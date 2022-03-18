@@ -40,6 +40,7 @@ if [[ ${MULTI} == "single" ]]; then
         --max_steps 1000 \
         --output_dir ./tmp/msra_ner/ \
         --device ${DEVICE} >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
+        cat $log_path/train_${MULTI}_${DEVICE}.log
 else
     python -m paddle.distributed.launch --gpus "$3" ./train.py \
         --model_type bert \
@@ -54,6 +55,7 @@ else
         --max_steps 1000 \
         --output_dir ./tmp/msra_ner_multi/ \
         --device ${DEVICE} >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
+        cat $log_path/train_${MULTI}_${DEVICE}.log
 fi
 #set http_proxy
 export http_proxy=$HTTPPROXY
