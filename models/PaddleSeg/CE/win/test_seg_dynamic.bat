@@ -4,6 +4,7 @@ set CUDA_VISIBLE_DEVICES=0
 
 rem create log dir
 if exist log (
+rem del /f /s /q log/*.*
 rd /s /q log
 rd /s /q log_err
 md log
@@ -18,9 +19,10 @@ if exist dynamic_list (
 del /f dynamic_list
  )
 for /r configs %%i in (*.yml) do (
-echo %%i | findstr /i .yml | findstr /v /i "quick_start" | findstr /v /i "_base_" | findstr /v /i "contrib"  >>dynamic_list
+echo %%i | findstr /i .yml | findstr /v /i "quick_start" | findstr /v /i "_base_" | findstr /v /i "contrib" | findstr /v /i "segformer" >>dynamic_list
 )
 echo test_start
+set err_sign=0
 for  /f %%i in (dynamic_list)do (
 echo %%i
 set config_path=%%i
@@ -42,7 +44,7 @@ if !errorlevel! GTR 0 (
 ) else (
     set predict_pic="leverkusen_000029_000019_leftImg8bit.png"
     if not exist seg_pretrained\!model!\model.pdparams (
-        wget -P seg_pretrained\!model! https://paddleseg.bj.bcebos.com/dygraph/cityscapes/!model!/model.pdparams --no-check-certificate
+        wget -P seg_pretrained\!model! https://bj.bcebos.com/paddleseg/dygraph/cityscapes/!model!/model.pdparams --no-check-certificate
     )
 )
 if not exist seg_pretrained\!model!\model.pdparams (
@@ -56,6 +58,12 @@ call:python_infer
 )
 )
 
+if !err_sign! EQU 1 (
+exit /b 1
+) else (
+exit /b 0
+)
+
 :train
 findstr /i /c:"!model!" "skip_train.txt" >tmp_train
 if !errorlevel! EQU 0 (
@@ -66,6 +74,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_train.log log_err\!model!\
 echo !model!, train, FAIL
+set err_sign=1
 ) else (
 echo !model!, train, SUCCESS
 )
@@ -82,6 +91,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_eval.log log_err\!model!\
 echo !model!, eval, FAIL
+set err_sign=1
 ) else (
 echo !model!, eval, SUCCESS
 )
@@ -98,6 +108,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_predict.log log_err\!model!\
 echo !model!, predict, FAIL
+set err_sign=1
 ) else (
 echo !model!, predict, SUCCESS
 )
@@ -114,6 +125,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_export.log log_err\!model!\
 echo !model!, export, FAIL
+set err_sign=1
 ) else (
 echo !model!, export, SUCCESS
 )
@@ -130,6 +142,7 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+set err_sign=1
 ) else (
 echo !model!, python_infer, SUCCESS
 )

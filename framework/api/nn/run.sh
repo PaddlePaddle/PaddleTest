@@ -5,7 +5,9 @@ ignore="test_adaptive_avg_pool1D.py \
 test_adaptive_avg_pool2D.py \
 test_functional_celu.py \
 test_CELU.py \
-test_adaptive_avg_pool3D.py"
+test_adaptive_avg_pool3D.py \
+test_initializer_truncated_normal_new.py \
+test_initializer_truncated_normal.py"
 bug=0
 
 echo "============ failed cases =============" >> result.txt

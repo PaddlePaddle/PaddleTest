@@ -41,6 +41,15 @@ FUNCTION: # 训练步骤
         path: $ROOT_PATH/$model_function_path_win
         cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/ResNeSt/ResNeSt50_fast_1s1x64d.yaml
   -
+    tag: win_cpu_function_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_win
+        cmd: PaddleClas_train_cpu.bat ppcls/configs/ImageNet/ResNeSt/ResNeSt50_fast_1s1x64d.yaml
+  -
     tag: mac_function_test
     priority: P1
     env: #去掉，自动调度
@@ -104,19 +113,30 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNeSt/ResNeSt50_fast_1s1x64d.yaml train_win_gpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 6.53579
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
-      train_eval:
+    output: $ROOT_PATH/$model_log_path/ResNeSt50_fast_1s1x64d_train.log
+  -
+    tag: train_win_cpu
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNeSt/ResNeSt50_fast_1s1x64d.yaml train_win_cpu
+    kpis: #kpi指标
+      training_exit_code:
         latest: True
-        kpi_base: 68.72889
-        threshold: 0.00001
+        kpi_base: 0.0
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/ResNeSt50_fast_1s1x64d_train.log
   -
@@ -167,12 +187,12 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNeSt/ResNeSt50_fast_1s1x64d.yaml eval_win
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 68.72889
-        threshold: 0.00001
+        kpi_base: 0.0
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/ResNeSt50_fast_1s1x64d_eval.log
   -
