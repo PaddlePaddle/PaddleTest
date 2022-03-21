@@ -57,7 +57,7 @@ TRAIN:
       #   unit_repr: "s"
       f1:
         latest: True
-        kpi_base: 14.81597
+        kpi_base: 9.68371
         threshold: 0.08
         actived: True
         evaluation: "+"
