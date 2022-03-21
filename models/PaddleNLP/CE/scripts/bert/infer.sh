@@ -28,7 +28,7 @@ python -u ./export_model.py \
     --output_path ./infer_model/model
 
 python -u ./predict_glue.py \
-    --task_name SST-2 \
+    --task_name SST2 \
     --model_type bert \
     --model_path ./infer_model/model \
     --batch_size 32 \
