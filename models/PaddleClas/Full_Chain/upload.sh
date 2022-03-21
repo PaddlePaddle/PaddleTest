@@ -51,7 +51,7 @@ mkdir -p ${upload_dir}
 
 # upload model
 model_tar_name="${time_stamp}^${REPO}^${model_name}^${paddle_commit}^${repo_commit}.tgz"
-models_link_file="tipc_models_url.txt"
+models_link_file="tipc_models_url_${REPO}.txt"
 model_url="https://paddle-qa.bj.bcebos.com/fullchain_ce_test/${model_tar_name}"
 path_suffix=${upload_dir##*/}
 tar -zcvf ${model_tar_name} -C test_tipc/output/${model_name} ${path_suffix}
