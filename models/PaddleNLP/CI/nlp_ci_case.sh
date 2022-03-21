@@ -6,7 +6,7 @@ if [ $1 -ne 0 ];then
     echo -e "\033[31m ${log_path}/$2_FAIL \033[0m"
     cat ${log_path}/$2_FAIL.log
 else
-    mv ${log_path}/$2 ${log_path}/$2_SUCCESS.log
+    # mv ${log_path}/$2 ${log_path}/$2_SUCCESS.log
     echo -e "\033[32m ${log_path}/$2_SUCCESS \033[0m"
 fi
 }
@@ -52,7 +52,7 @@ time (python -u ./eval.py \
     --max_seq_length 128 \
     --batch_size 16 \
     --device gpu \
-    --init_checkpoint_path tmp/msra_ner/model_2.pdparams >${log_path}/msra_ner_eval) >>${log_path}/msra_ner_eval 2>&1
+    --init_checkpoint_path ./tmp/msra_ner/model_2.pdparams >${log_path}/msra_ner_eval) >>${log_path}/msra_ner_eval 2>&1
 print_info $? msra_ner_eval
 ## predict
 time (python -u ./predict.py \
@@ -60,7 +60,7 @@ time (python -u ./predict.py \
     --max_seq_length 128 \
     --batch_size 16 \
     --device gpu \
-    --init_checkpoint_path tmp/msra_ner/model_2.pdparams >${log_path}/msra_ner_predict) >>${log_path}/msra_ner_predict 2>&1
+    --init_checkpoint_path ./tmp/msra_ner/model_2.pdparams >${log_path}/msra_ner_predict) >>${log_path}/msra_ner_predict 2>&1
 print_info $? msra_ner_predict
 }
 # 3 glue
@@ -109,7 +109,7 @@ print_info $? bert_pretrain
 time (python -m paddle.distributed.launch run_glue.py \
     --model_type bert \
     --model_name_or_path bert-base-uncased \
-    --task_name SST-2 \
+    --task_name SST2 \
     --max_seq_length 128 \
     --batch_size 32   \
     --learning_rate 2e-5 \
@@ -127,7 +127,7 @@ time (python -u ./export_model.py \
     --output_path ./infer_model/model >${log_path}/bert_export) >>${log_path}/bert_export 2>&1
 print_info $? bert_export
 time (python -u ./predict_glue.py \
-    --task_name SST-2 \
+    --task_name SST2 \
     --model_type bert \
     --model_path ./infer_model/model \
     --batch_size 32 \
@@ -201,7 +201,7 @@ print_info $? electra_pretrain
 # 8 gpt
 gpt(){
 #data process
-cd ${nlp_dir}/examples/language_model/data_tools/
+cd ${nlp_dir}/examples/language_model/data_tools/   
 sed -i "s/python3/python/g" Makefile
 sed -i "s/python-config/python3.7m-config/g" Makefile
 #pretrain
@@ -256,7 +256,7 @@ cd ../
 #c++
 mkdir build_gpt_cc
 cd build_gpt_cc/
-cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON
+cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON  
 make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
 print_info $? gpt_C_FT
 #depoly python
@@ -270,8 +270,8 @@ python infer.py \
     --start_token "<|endoftext|>" \
     --end_token "<|endoftext|>" \
     --temperature 1.0  >${log_path}/gpt_deploy_P_FT >>${log_path}/gpt_deploy_P_FT 2>&1
-print_info $? gpt_deploy_P_FT
-#depoly C++
+print_info $? gpt_deploy_P_FT 
+#depoly C++  
 python export_model.py \
     --model_name_or_path gpt2-medium-en \
     --decoding_lib ${nlp_dir}/paddlenlp/ops/build_gpt_so/lib/libdecoding_op.so \
@@ -283,7 +283,7 @@ python export_model.py \
 mv infer_model/ ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
 cd ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
 ./gpt -batch_size 1 -gpu_id 0 -model_dir ./infer_model -vocab_file ./infer_model/vocab.txt -start_token "<|endoftext|>" -end_token "<|endoftext|>"  >${log_path}/gpt_deploy_C_FT >>${log_path}/gpt_deploy_C_FT 2>&1
-print_info $? gpt_deploy_C_FT
+print_info $? gpt_deploy_C_FT 
 }
 # 9 ernie-1.0
 ernie-1.0 (){
@@ -735,10 +735,10 @@ cd ../
 #C++ op
 mkdir build_tr_cc
 cd build_tr_cc/
-cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON
+cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON 
 make -j >${log_path}/transformer_C_FT >>${log_path}/transformer_C_FT 2>&1
 print_info $? transformer_C_FT
-#deploy python
+#deploy python 
 cd ${nlp_dir}/examples/machine_translation/transformer/faster_transformer/
 sed -i "s#./trained_models/step_final/#./base_trained_models/step_final/#g" ../configs/transformer.base.yaml
 wget https://paddlenlp.bj.bcebos.com/models/transformers/transformer/transformer-base-wmt_ende_bpe.tar.gz
@@ -828,6 +828,8 @@ time (python -m paddle.distributed.launch  --log_dir cail/ run_semantic_matching
 print_info $? ernie-doc_cail
 time (python -m paddle.distributed.launch  --log_dir msra run_sequence_labeling.py --learning_rate 3e-5 --epochs 1 --save_steps 100 --max_steps 100  --output_dir msra  >${log_path}/ernie-doc_msar) >>${log_path}/ernie-doc_msar 2>&1
 print_info $? ernie-doc_msar
+time (python run_mrc.py  --model_name_or_path ernie-doc-base-zh  --dataset dureader_robust  --batch_size 8 --learning_rate 2.75e-4 --epochs 1 --save_steps 10 --max_steps 2 --logging_steps 10 --device gpu >${log_path}/ernie-doc_dureader_robust) >>${log_path}/ernie-doc_dureader_robust 2>&1
+print_info $? ernie-doc_dureader_robust
 }
 #26 transformer-xl
 transformer-xl (){
@@ -945,6 +947,11 @@ python -m paddle.distributed.launch  --log_dir output run_classifier.py  \
    --logging_steps 1  >${log_path}/ernie-m >>${log_path}/ernie-m 2>&1
 print_info $? ernie-m
 }
+# #32 bart
+# bart{
+# cd ${nlp_dir}/examples/text_summarization/bart
+# }
+#33 
 ####################################
 export P0case_list=()
 export P0case_time=0
