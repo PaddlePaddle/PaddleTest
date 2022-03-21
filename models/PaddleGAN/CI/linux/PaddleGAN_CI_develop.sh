@@ -219,7 +219,8 @@ python tools/main.py --config-file $line \
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
-if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
+# if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
+if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]];then
    echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
    cat $log_path/train/${model}.log
@@ -240,7 +241,8 @@ fi
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
-if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
+# if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
+if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]];then
    echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
    cat $log_path/train/${model}.log
@@ -258,7 +260,8 @@ stylegan_v2_256_ffhq)
    --net-name gen_ema \
    --output stylegan_extract.pdparams \
    > $log_path/eval/${model}_extract_weight.log 2>&1
-  if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+#   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+  if [[ $? -eq 0 ]];then
      echo -e "\033[33m extract_weight of $model  successfully!\033[0m"| tee -a $log_path/result.log
   else
      cat $log_path/eval/${model}.log
@@ -268,7 +271,8 @@ stylegan_v2_256_ffhq)
    --weight_path stylegan_extract.pdparams \
    --size 256 \
    > $log_path/eval/${model}.log 2>&1
-  if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+#   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+  if [[ $? -eq 0 ]];then
      echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
   else
      cat $log_path/eval/${model}.log
@@ -288,7 +292,8 @@ msvsr_l_reds)
   python tools/main.py --config-file $line \
    --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams \
    > $log_path/eval/${model}.log 2>&1
-  if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+#   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+  if [[ $? -eq 0 ]];then
      echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
   else
      cat $log_path/eval/${model}.log

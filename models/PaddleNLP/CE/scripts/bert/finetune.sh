@@ -31,6 +31,6 @@ python -m paddle.distributed.launch --gpus $2 run_glue.py\
     --output_dir ./$1/ \
     --device gpu \
     --max_steps 20\
-    --use_amp False > $log_path/$1-_$3_fine-tune.log 2>&1
+    --use_amp False > $log_path/$1_$3_fine-tune.log 2>&1
 
 print_info $? $1-_fine-tune
