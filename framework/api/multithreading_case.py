@@ -32,7 +32,12 @@ ignore_case_dir = {
     "incubate": [],
     "linalg": [],
     "loss": [],
-    "nn": ["test_functional_celu.py", "test_CELU.py", "test_initializer_truncated_normal_new.py", "test_initializer_truncated_normal.py"],
+    "nn": [
+        "test_functional_celu.py",
+        "test_CELU.py",
+        "test_initializer_truncated_normal_new.py",
+        "test_initializer_truncated_normal.py",
+    ],
     "paddlebase": [],
     "optimizer": [],
 }
