@@ -47,7 +47,8 @@ if [ "$1" = "linux_st_gpu1" ];then #单卡
     --num_epochs 1 \
     --test_period 1 \
     --model_period 1 \
-    --model_path st_unstructured_models > ${log_path}/$2.log 2>&1
+    --model_path st_unstructured_models \
+    --ce_test True > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu2" ];then
