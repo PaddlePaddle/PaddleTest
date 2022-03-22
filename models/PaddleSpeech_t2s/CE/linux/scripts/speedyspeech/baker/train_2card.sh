@@ -6,7 +6,6 @@ ln -s ${Data_path}/train_data ~/datasets
 if [ ! -d "../log" ]; then
   mkdir ../log
 fi
-python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/csmsc/tts2
 source ${PWD}/path.sh
@@ -26,4 +25,6 @@ else
    cat train_2card.log
    echo -e "\033[31m training_2card of speedyspeech failed! \033[0m"
 fi
-cat train_2card.log | grep "3800/3800" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $6}' > ../../../../log/speedyspeech_baker_2card.log
+cat train_2card.log | grep "3800/3800" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $6}' > tmp_2card.log
+cat train_2card.log | grep "3800/3800" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $10}' >> tmp_2card.log
+cat tmp_2card.log | tr '\n' ',' > ../../../../log/speedyspeech_baker_2card.log

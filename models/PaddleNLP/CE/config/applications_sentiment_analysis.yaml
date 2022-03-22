@@ -1,0 +1,468 @@
+MODEL: "applications_sentiment_analysis" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/applications_sentiment_analysis/ #脚本的路径
+  model_log_path: log/applications_sentiment_analysis/
+
+EXEC:
+  exec_cases: [DATA_PROC, EXTRACTION_TRAIN, CLASSIFICATION_TRAIN, PPMINILM_TRAIN, EXTRACTION_EVAL, CLASSIFICATION_EVAL, PPMINILM_EVAL, INFER, PYTHON_INFER, QUANT]
+  exec_priority: [p0,p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+  -
+    priority: p0
+    tag: win_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: data_proc.bat
+
+EXTRACTION_TRAIN:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash extraction_train.sh $XPU single
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.16325
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/extraction_train_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: extraction_train.bat $XPU
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.018965
+        threshold: 0.1
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/extraction_train_$XPU.log
+
+CLASSIFICATION_TRAIN:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classification_train.sh $XPU single
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.000091
+        threshold: 0.5
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/classification_train_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: classification_train.bat $XPU
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.000433
+        threshold: 0.1
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/classification_train_$XPU.log
+
+PPMINILM_TRAIN:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash ppminilm_train.sh $XPU single
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.001100
+        threshold: 0.5
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/ppminilm_train_single_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: ppminilm_train.bat $XPU
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.00146
+        threshold: 0.2
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ppminilm_train_$XPU.log
+
+EXTRACTION_EVAL:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash extraction_eval.sh $XPU
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.73670
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.83183
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.78138
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/extraction_eval_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: extraction_eval.bat $XPU
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.77746
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.80781
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.79234
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/extraction_eval_$XPU.log
+
+CLASSIFICATION_EVAL:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classification_eval.sh $XPU
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.98810
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.97647
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.98225
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/classification_eval_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: classification_eval.bat $XPU
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.96471
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.96471
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.96471
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/classification_eval_$XPU.log
+
+PPMINILM_EVAL:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash ppminilm_eval.sh $XPU
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.97647
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.97647
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.97647
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ppminilm_eval_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: ppminilm_eval.bat $XPU
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.96296
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.91765
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      recall:
+        latest: True
+        kpi_base: 0.93976
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ppminilm_eval_$XPU.log
+
+INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+PYTHON_INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash python_infer.sh $XPU
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: python_infer.bat $XPU
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_$XPU.log
+
+QUANT:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash quant.sh $XPU
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/quant_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env:
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: quant.bat $XPU
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/quant_$XPU.log

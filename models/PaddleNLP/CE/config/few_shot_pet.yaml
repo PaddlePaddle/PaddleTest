@@ -1,5 +1,5 @@
 MODEL: "few_shot_pet" # 模型名 不支持多卡
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -53,8 +53,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.63120
-        threshold: 0.05
+        kpi_base: 3.82004
+        threshold: 0.5
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -78,8 +78,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 4.28092
-        threshold: 0.05
+        kpi_base: 4.74553
+        threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: "None"
@@ -103,7 +103,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.1964
+        kpi_base: 0.40293
         threshold: 0.2
         actived: True
         evaluation: "-"
@@ -128,7 +128,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       test_accuracy:
         latest: True
-        kpi_base: 58.689
+        kpi_base: 51.639
         threshold: 0.08
         actived: True
         evaluation: "+"
@@ -146,8 +146,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       test_accuracy:
         latest: True
-        kpi_base: 58.689
-        threshold: 0.01
+        kpi_base: 58.033
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -272,8 +272,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.32999
-        threshold: 0.05
+        kpi_base: 2.54298
+        threshold: 0.09
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -340,8 +340,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       test_accuracy:
         latest: True
-        kpi_base: 49.795
-        threshold: 0.05
+        kpi_base: 46.619
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -442,7 +442,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: infer.bat $XPU $SET_CUDA tnews 60
+        cmd: infer.bat $XPU $SET_CUDA tnews 120
     kpis:
       exit_code:
         latest: True

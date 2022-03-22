@@ -10,8 +10,7 @@ mkdir -p $log_path
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
-echo "当前CUDA配置"
-echo $CUDA_VISIBLE_DEVICES
+
 cd $code_path
 
 print_info(){
@@ -29,11 +28,10 @@ python -u ./export_model.py \
     --output_path ./infer_model/model
 
 python -u ./predict_glue.py \
-    --task_name SST-2 \
+    --task_name SST2 \
     --model_type bert \
     --model_path ./infer_model/model \
     --batch_size 32 \
     --max_seq_length 128 > $log_path/bert_predict.log 2>&1
 
 print_info $? "bert_predict"
-#cat $log_path/bert_predict.log

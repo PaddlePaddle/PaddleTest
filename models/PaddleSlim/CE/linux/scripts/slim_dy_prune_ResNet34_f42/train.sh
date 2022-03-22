@@ -28,37 +28,46 @@ if [ $1 -ne 0 ];then
     cat ${log_path}/$2.log
     cp ${log_path}/$2.log ${log_path}/FAIL_$2.log
 else
+  #过滤loss行，同时只选取偶数行,奇数行为eval；
+    grep loss ${log_path}/$2.log | awk 'NR%2==0' >> ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
 fi
 }
 
 cd $code_path
 
+export FLAGS_cudnn_deterministic=True
 
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
+    export FLAGS_cudnn_deterministic=True
+
     python train.py \
     --use_gpu=True \
     --model="resnet34" \
     --data="imagenet" \
     --pruned_ratio=0.25 \
-    --num_epochs=2 \
+    --num_epochs=30 \
     --batch_size=128 \
     --lr_strategy="cosine_decay" \
     --criterion="fpgm" \
-    --model_path="./fpgm_resnet34_025_120_models" > ${log_path}/$2.log 2>&1
+    --model_path="./fpgm_resnet34_025_120_models" \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "linux_dy_gpu2" ];then # 多卡
+    export FLAGS_cudnn_deterministic=True
+
     python -m paddle.distributed.launch  \
     --log_dir="prune_r34_f42_linux_dy_gpu2_dist_log" train.py \
     --use_gpu=True \
     --model="resnet34" \
     --data="imagenet" \
     --pruned_ratio=0.25 \
-    --num_epochs=2 \
+    --num_epochs=30 \
     --batch_size=128 \
     --lr_strategy="cosine_decay" \
     --criterion="fpgm" \
-    --model_path="./fpgm_resnet34_025_120_models" > ${log_path}/$2.log 2>&1
+    --model_path="./fpgm_resnet34_025_120_models" \
+    --ce_test=True > ${log_path}/$2.log 2>&1
     print_info $? $2
     mv $code_path/prune_r34_f42_linux_dy_gpu2_dist_log $log_path/$2_dist_log
 

@@ -1,5 +1,5 @@
 MODEL: "msra_ner" # 模型名
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -87,7 +87,7 @@ TRAIN: # 训练步骤
       f1:
         latest: True
         kpi_base: 0.875852
-        threshold: 0.02
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"

@@ -1,6 +1,9 @@
 home=$PWD
+echo "branch is ${AGILE_COMPILE_BRANCH}"
 python3.7 -m pip install pytest
 python3.7 -m pip install scipy
+
+
 # base
 cd paddlebase
 rm -rf ./result.txt
@@ -82,9 +85,29 @@ echo ${fft}
 cat ./result.txt
 cd $home
 
+# utils
+cd utils
+rm -rf ./result.txt
+echo "[utils cases result]" >> result.txt
+bash ./run.sh
+utils=$?
+echo ${utils}
+cat ./result.txt
+cd $home
+
+# distribution
+cd distribution
+rm -rf ./result.txt
+echo "[distribution cases result]" >> result.txt
+bash ./run.sh
+distribution=$?
+echo ${distribution}
+cat ./result.txt
+cd $home
+
 # result
 echo "=============== result ================="
-if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss} + ${device} + ${incubate} + ${linalg} + ${fft}` -eq 0 ]; then
+if [ `expr ${paddlebase} + ${nn} + ${optimizer} + ${loss} + ${device} + ${incubate} + ${linalg} + ${fft} + ${utils} + ${distribution}` -eq 0 ]; then
   result=`find . -name "result.txt"`
   for file in ${result}
     do

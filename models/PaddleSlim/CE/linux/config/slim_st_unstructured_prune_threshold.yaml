@@ -1,4 +1,4 @@
-MODEL: "slim_st_unstructured_prune_threshold" # 模型名
+MODEL: "st_unstructured_prune_threshold" # 模型名
 PRIORITY: P1
 GIT:
   addr: $REPO_PaddleSlim
@@ -25,12 +25,12 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh data_proc.sh all
+        cmd: sh data_proc.sh demo
 
 TRAIN: # 训练步骤
   -
     tag: linux_st_gpu1
-    priority: p0
+    priority: p2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
@@ -64,7 +64,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/slim_st_unstructured_prune_threshold_linux_st_gpu1.log
   -
     tag: linux_st_gpu2
-    priority: p2
+    priority: p0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
@@ -74,17 +74,24 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 slim_st_unstructured_prune_threshold_linux_st_gpu2
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.178907483
+        threshold: 0.0000001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.6342
-        threshold: 0.02
+        kpi_base: 0.96875
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.8508
-        threshold: 0.02
+        kpi_base: 1.0
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -134,7 +141,7 @@ TRAIN: # 训练步骤
 EVAL: # 训练步骤
   -
     tag: linux_st_gpu1
-    priority: p0
+    priority: p2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
@@ -272,7 +279,7 @@ TRAIN_LOAD: # 训练步骤
     output: $ROOT_PATH/$model_log_path/slim_st_unstructured_prune_threshold_load_linux_st_gpu1.log
   -
     tag: linux_st_gpu2
-    priority: p0
+    priority: p2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 

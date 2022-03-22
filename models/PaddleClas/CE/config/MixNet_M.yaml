@@ -41,6 +41,15 @@ FUNCTION: # 训练步骤
         path: $ROOT_PATH/$model_function_path_win
         cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/MixNet/MixNet_M.yaml
   -
+    tag: win_cpu_function_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_win
+        cmd: PaddleClas_train_cpu.bat ppcls/configs/ImageNet/MixNet/MixNet_M.yaml
+  -
     tag: mac_function_test
     priority: P1
     env: #去掉，自动调度
@@ -63,14 +72,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.50224
+        kpi_base: 6.61655
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 25.94225
+        kpi_base: 7.1193
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -88,10 +97,10 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.58454
+        kpi_base: 6.52804
         threshold: 0.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MixNet_M_2card.log
   -
@@ -104,19 +113,30 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/MixNet/MixNet_M.yaml train_win_gpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 6.81291
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
-      train_eval:
+    output: $ROOT_PATH/$model_log_path/MixNet_M_train.log
+  -
+    tag: train_win_cpu
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/MixNet/MixNet_M.yaml train_win_cpu
+    kpis: #kpi指标
+      training_exit_code:
         latest: True
-        kpi_base: 940.94432
-        threshold: 0.00001
+        kpi_base: 0.0
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MixNet_M_train.log
   -
@@ -129,19 +149,12 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/MixNet/MixNet_M.yaml train_mac_cpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 7.01005
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
-        unit_repr: None
-      train_eval:
-        latest: True
-        kpi_base: 7.59464
-        threshold: 0.00001
-        actived: True
-        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MixNet_M_cpu.log
 
@@ -158,10 +171,10 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 25.94225
-        threshold: 0.0
+        kpi_base: 7.1193
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/MixNet_M_eval.log
   -
@@ -174,9 +187,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/MixNet/MixNet_M.yaml eval_win
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 940.94432
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
@@ -192,9 +205,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/MixNet/MixNet_M.yaml eval_mac
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 7.59464
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="

@@ -74,7 +74,7 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: finetune.bat $XPU SST-2
+        cmd: finetune.bat $XPU SST-2 32
 
     kpis: #kpi指标
       loss:
@@ -135,12 +135,12 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: finetune.bat $XPU QNLI
+        cmd: finetune.bat $XPU QNLI 16
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.746587
+        kpi_base: 0.694963
         threshold: 0.001
         actived: True
         evaluation: "-"
@@ -196,7 +196,7 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: finetune.bat $XPU CoLA
+        cmd: finetune.bat $XPU CoLA 32
 
     kpis: #kpi指标
       loss:
@@ -257,7 +257,7 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: finetune.bat $XPU MRPC
+        cmd: finetune.bat $XPU MRPC 32
 
     kpis: #kpi指标
       loss:
@@ -282,8 +282,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.697236
-        threshold: 0.001
+        kpi_base: 0.729422
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -302,8 +302,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.697235
-        threshold: 0.001
+        kpi_base: 0.729422
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -317,7 +317,7 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: finetune.bat $XPU QQP
+        cmd: finetune.bat $XPU QQP 32
 
     kpis: #kpi指标
       loss:
@@ -378,7 +378,7 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: finetune.bat $XPU MNLI
+        cmd: finetune.bat $XPU MNLI 32
 
     kpis: #kpi指标
       loss:
@@ -439,7 +439,7 @@ FINETUNE: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: finetune.bat $XPU RTE
+        cmd: finetune.bat $XPU RTE 32
 
     kpis: #kpi指标
       loss:

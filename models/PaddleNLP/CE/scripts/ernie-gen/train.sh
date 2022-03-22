@@ -7,12 +7,6 @@ model_name=${PWD##*/}
 
 echo "$model_name 模型训练阶段"
 
-#取消代理
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
-
 #路径配置
 root_path=$cur_path/../../
 code_path=$cur_path/../../models_repo/examples/text_generation/ernie-gen/
@@ -24,7 +18,9 @@ fi
 
 print_info(){
 if [ $1 -ne 0 ];then
-    cat ${log_path}/$2.log
+    echo "exit_code: 1.0" >> ${log_path}/$2.log
+else
+    echo "exit_code: 0.0" >> ${log_path}/$2.log
 fi
 }
 
@@ -39,8 +35,9 @@ if [[ $2 == 'multi' ]];then #多卡
         --learning_rate 2e-5 \
         --num_epochs 1 \
         --logging_steps 10 \
-        --save_steps 1000 \
-        --output_dir ./tmp/ \
+        --max_steps 100 \
+        --save_steps 10 \
+        --output_dir ./tmp/$2/ \
         --device $1 > $log_path/train_$2_$1.log 2>&1
 else #单卡
     python -u ./train.py \
@@ -51,8 +48,9 @@ else #单卡
         --learning_rate 2e-5 \
         --num_epochs 1 \
         --logging_steps 10 \
-        --save_steps 1000 \
-        --output_dir ./tmp/ \
+        --max_steps 100 \
+        --save_steps 10 \
+        --output_dir ./tmp/$2/ \
         --device $1 > $log_path/train_$2_$1.log 2>&1
 
 fi

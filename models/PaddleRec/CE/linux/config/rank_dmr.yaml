@@ -42,7 +42,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.6434
+        kpi_base: 0.619165
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -70,7 +70,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.6434
+        kpi_base: 0.619165
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -130,7 +130,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.6434
+        kpi_base: 0.619165
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -158,7 +158,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.6434
+        kpi_base: 0.619165
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -184,14 +184,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.458974
+        kpi_base: 0.45909688
         threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
-      loss:
+      cost:
         latest: True
-        kpi_base: 1.6857445
+        kpi_base: 1.685745
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -224,7 +224,7 @@ TRAIN: # 训练步骤
         unit_repr: None
       loss:
         latest: True
-        kpi_base: 1.6857445
+        kpi_base: 1.685744
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -250,14 +250,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.458974
+        kpi_base: 0.45909688
         threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
-      loss:
+      cost:
         latest: True
-        kpi_base: 1.6857445
+        kpi_base: 1.6857443
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -278,7 +278,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu rank_dmr_win_dy_gpu
+        cmd: train.bat win_dy_gpu rank_dmr_win_dy_gpu dmr
 
     kpis: #kpi指标
       auc:
@@ -303,7 +303,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dmr_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/rank_dmr_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -311,7 +311,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu rank_dmr_win_dy_cpu
+        cmd: train.bat win_dy_cpu rank_dmr_win_dy_cpu dmr
 
     kpis: #kpi指标
       auc:
@@ -336,7 +336,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dmr_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/rank_dmr_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -344,7 +344,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu rank_dmr_win_st_gpu
+        cmd: train.bat win_st_gpu rank_dmr_win_st_gpu dmr
 
     kpis: #kpi指标
       auc:
@@ -369,7 +369,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dmr_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/rank_dmr_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -377,7 +377,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu rank_dmr_win_st_cpu
+        cmd: train.bat win_st_cpu rank_dmr_win_st_cpu dmr
 
     kpis: #kpi指标
       auc:
@@ -402,7 +402,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dmr_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/rank_dmr_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -544,11 +544,10 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh linux_st_cpu rank_dmr_infer_linux_st_cpu
 
-
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.775602
+        kpi_base: 0.78514057
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -570,7 +569,6 @@ INFER:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh mac_dy_cpu rank_dmr_infer_mac_dy_cpu
-
 
     kpis: #kpi指标
       auc:
@@ -598,11 +596,10 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh mac_st_cpu rank_dmr_infer_mac_st_cpu
 
-
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.775602
+        kpi_base: 0.7851405
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -623,7 +620,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu rank_dmr_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu rank_dmr_infer_win_dy_gpu dmr
 
 
     kpis: #kpi指标
@@ -642,7 +639,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dmr_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/rank_dmr_infer_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -650,7 +647,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu rank_dmr_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu rank_dmr_infer_win_dy_cpu dmr
 
 
     kpis: #kpi指标
@@ -669,7 +666,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dmr_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/rank_dmr_infer_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -677,7 +674,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu rank_dmr_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu rank_dmr_infer_win_st_gpu dmr
 
 
     kpis: #kpi指标
@@ -696,7 +693,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dmr_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/rank_dmr_infer_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -704,7 +701,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu rank_dmr_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu rank_dmr_infer_win_st_cpu dmr
 
 
     kpis: #kpi指标
@@ -723,4 +720,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_rank_dmr_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/rank_dmr_infer_win_st_cpu.log

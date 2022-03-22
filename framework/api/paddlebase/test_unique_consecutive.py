@@ -63,7 +63,7 @@ def test_uique_consecutive1():
     # excepct result
     res = np.array([[0, 1, 0], [0, 0, 1, 2]])
     for place in obj.places:
-        if str(place) == "CPUPlace":
+        if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
         else:
             paddle.set_device("gpu:0")
@@ -90,7 +90,7 @@ def test_uique_consecutive2():
     # excepct result
     res = np.array([[0, 1, 0], [0, 0, 1, 2, 2, 2], [2, 1, 3]])
     for place in obj.places:
-        if str(place) == "CPUPlace":
+        if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
         else:
             paddle.set_device("gpu:0")
@@ -119,7 +119,7 @@ def test_uique_consecutive3():
     # excepct result
     res = np.array(([[0, 2, 2, 0], [0, 2, 2, 1]], [0, 0, 0, 1, 1, 1], [3, 3]))
     for place in obj.places:
-        if str(place) == "CPUPlace":
+        if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
         else:
             paddle.set_device("gpu:0")
@@ -188,7 +188,7 @@ def test_uique_consecutive7():
     """
     res = np.array([[0, 1, 0], [0, 0, 1, 2]])
     for place in obj.places:
-        if str(place) == "CPUPlace":
+        if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
         else:
             paddle.set_device("gpu:0")
@@ -229,7 +229,7 @@ def test_uique_consecutive8():
     x = np.array([[0], [0], [1], [0], [0], [0]])
     res = np.array([[0, 1, 0], [0, 0, 1, 2, 2, 2], [2, 1, 3]])
     for place in obj.places:
-        if str(place) == "CPUPlace":
+        if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
         else:
             paddle.set_device("gpu:0")
@@ -272,7 +272,7 @@ def test_uique_consecutive9():
     # excepct result
     res = np.array(([[0, 2, 2, 0], [0, 2, 2, 1]], [0, 0, 0, 1, 1, 1], [3, 3]))
     for place in obj.places:
-        if str(place) == "CPUPlace":
+        if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
         else:
             paddle.set_device("gpu:0")

@@ -20,14 +20,30 @@ echo "train_win_gpu"|findstr %2 >nul
 if !errorlevel! equ 0 (
     echo '#####train_win_gpu'
     type %log_path%\!model!_train.log | findstr Avg
-    type %log_path%\!model!_train.log | findstr exit_code
-    type %log_path%\!model!_train.log | findstr Train | findstr 5/5 | findstr Avg > tmp.log
+    type %log_path%\!model!_train.log | findstr training_exit_code
+    type %log_path%\!model!_train.log | findstr Train | findstr 1/1 | findstr Avg > tmp.log
     type %log_path%\!model!_train.log | findstr Eval | findstr Avg > tmp1.log
     %sed% -i s/"loss"/"train_eval"/ tmp1.log
     type tmp1.log
     type tmp1.log >> tmp.log
-    type %log_path%\!model!_train.log | findstr exit_code
-    type %log_path%\!model!_train.log | findstr exit_code >> tmp.log
+    type %log_path%\!model!_train.log | findstr training_exit_code
+    type %log_path%\!model!_train.log | findstr training_exit_code >> tmp.log
+    (for /f "delims=" %%a in ('type "tmp.log"') do @set/p=" , %%a"<nul)> ..\%log_path%\!model!_train.log
+    type ..\%log_path%\!model!_train.log
+)
+
+echo "train_win_cpu"|findstr %2 >nul
+if !errorlevel! equ 0 (
+    echo '#####train_win_cpu'
+    type %log_path%\!model!_train.log | findstr Avg
+    type %log_path%\!model!_train.log | findstr training_exit_code
+    type %log_path%\!model!_train.log | findstr Train | findstr 1/1 | findstr Avg > tmp.log
+    type %log_path%\!model!_train.log | findstr Eval | findstr Avg > tmp1.log
+    %sed% -i s/"loss"/"train_eval"/ tmp1.log
+    type tmp1.log
+    type tmp1.log >> tmp.log
+    type %log_path%\!model!_train.log | findstr training_exit_code
+    type %log_path%\!model!_train.log | findstr training_exit_code >> tmp.log
     (for /f "delims=" %%a in ('type "tmp.log"') do @set/p=" , %%a"<nul)> ..\%log_path%\!model!_train.log
     type ..\%log_path%\!model!_train.log
 )
@@ -36,10 +52,10 @@ echo "eval_win"|findstr %2 >nul
 if !errorlevel! equ 0 (
     echo '#####eval_win'
     type %log_path%\!model!_eval.log | findstr Avg
-    type %log_path%\!model!_eval.log | findstr exit_code
+    type %log_path%\!model!_eval.log | findstr eval_exit_code
     type %log_path%\!model!_eval.log | findstr Eval | findstr Avg > tmp_eval.log
-    type %log_path%\!model!_eval.log | findstr exit_code
-    type %log_path%\!model!_eval.log | findstr exit_code >> tmp_eval.log
+    type %log_path%\!model!_eval.log | findstr eval_exit_code
+    type %log_path%\!model!_eval.log | findstr eval_exit_code >> tmp_eval.log
     (for /f "delims=" %%a in ('type "tmp_eval.log"') do @set/p=" , %%a"<nul)> ..\%log_path%\!model!_eval.log
     type ..\%log_path%\!model!_eval.log
 )

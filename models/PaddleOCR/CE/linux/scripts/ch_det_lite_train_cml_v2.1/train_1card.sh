@@ -7,15 +7,15 @@ cd ${Project_path}
 pwd;
 
 if [ ! -f "pretrain_models/MobileNetV3_large_x0_5_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
+  wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/MobileNetV3_large_x0_5_pretrained.pdparams
 fi
 
 if [ ! -f "pretrain_models/ResNet18_vd_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet18_vd_pretrained.pdparams
+  wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/ResNet18_vd_pretrained.pdparams
 fi
 
 if [ ! -f "pretrain_models/ResNet50_vd_ssld_pretrained.pdparams" ]; then
-  wget -P ./pretrain_models/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/ResNet50_vd_ssld_pretrained.pdparams
+  wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/ResNet50_vd_ssld_pretrained.pdparams
 fi
 
 if [ ! -f "pretrain_models/ResNet50_vd_pretrained.pdparams" ]; then
@@ -43,13 +43,4 @@ fi
 python -m pip install -r requirements.txt
 
 python tools/train.py -c configs/det/ch_ppocr_v2.1/ch_det_lite_train_cml_v2.1.yml -o Global.epoch_num=2 > log/ch_det_lite_train_cml_v2.1_1card.log 2>&1
-cat log/ch_det_lite_train_cml_v2.1_1card.log | grep "2/2" > ../log/ch_det_lite_train_cml_v2.1_1card_tmp.log
-
-linenum=`cat ../log/ch_det_lite_train_cml_v2.1_1card_tmp.log | wc -l`
-linenum_last1=`expr $linenum - 1`
-if [ $linenum_last1 -eq 0 ]
-  then cp ../log/ch_det_lite_train_cml_v2.1_1card_tmp.log ../log/ch_det_lite_train_cml_v2.1_1card.log
-  else sed ''1,"$linenum_last1"'d' ../log/ch_det_lite_train_cml_v2.1_1card_tmp.log > ../log/ch_det_lite_train_cml_v2.1_1card.log
-fi
-rm -rf ../log/ch_det_lite_train_cml_v2.1_1card_tmp.log
-cat log/ch_det_lite_train_cml_v2.1_1card.log
+cat log/ch_det_lite_train_cml_v2.1_1card.log | grep "2/2" > ../log/ch_det_lite_train_cml_v2.1_1card.log

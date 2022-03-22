@@ -22,9 +22,6 @@ if [[ ${model_flag} =~ 'CI' ]]; then
    ls dataset
 
    cd deploy
-   rm -rf recognition_demo_data_v1.0
-   rm -rf recognition_demo_data_v1.1
-   rm -rf models
    ln -s  ${Data_path}/* .
    cd ..
 fi
@@ -56,6 +53,8 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"
+   python -m pip install --ignore-installed --upgrade \
+      pip -i https://mirror.baidu.com/pypi/simple
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install ${paddle_compile} #paddle_compile
    echo "######  paddle version"
@@ -91,11 +90,11 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install  -r requirements.txt  \
-   -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
    -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
+   -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
 
 rm -rf models_list

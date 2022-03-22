@@ -96,13 +96,16 @@ class InferenceTest(object):
             output_data_dict[output_data_name] = output_data
         return output_data_dict
 
-    def get_images_npy(self, file_path: str, images_size: int, center=True, model_type="class") -> list:
+    def get_images_npy(
+        self, file_path: str, images_size: int, center=True, model_type="class", with_true_data=True
+    ) -> list:
         """
         get images and npy truth value
         Args:
             file_path(str): images and npy saved path
             images_size(int): images size
-            center(bool):
+            center(bool): images in center
+            with_true_data(bool): with true data or not
         Returns:
             images_list(list): images array in list
             npy_list(list): npy array in list
@@ -111,16 +114,22 @@ class InferenceTest(object):
         npy_path = os.path.join(file_path, "result")
         if not os.path.exists(images_path):
             raise Exception(f"{images_path} not find")
-        if not os.path.exists(npy_path):
-            raise Exception(f"{npy_path} not find")
-
-        npy_list = read_npy_path(npy_path)
+        if with_true_data:
+            if not os.path.exists(npy_path):
+                raise Exception(f"{npy_path} not find")
+            npy_list = read_npy_path(npy_path)
         if model_type == "class":
             images_list = read_images_path(images_path, images_size, center=True, model_type="class")
-            return images_list, npy_list
+            if with_true_data:
+                return images_list, npy_list
+            else:
+                return images_list
         elif model_type == "det":
             images_list, images_origin_list = read_images_path(images_path, images_size, center=False, model_type="det")
-            return images_list, images_origin_list, npy_list
+            if with_true_data:
+                return images_list, images_origin_list, npy_list
+            else:
+                return images_list, images_origin_list
 
     def get_text_npy(self, file_path: str) -> list:
         """
@@ -346,6 +355,7 @@ class InferenceTest(object):
         use_calib_mode=False,
         dynamic=False,
         tuned=False,
+        result_sort=False,
     ):
         """
         test enable_tensorrt_engine()
@@ -373,7 +383,6 @@ class InferenceTest(object):
         if dynamic:
             if tuned:
                 self.pd_config.collect_shape_range_info("shape_range.pbtxt")
-                return 0
             else:
                 self.pd_config.enable_tensorrt_engine(
                     workspace_size=1 << 30,
@@ -403,13 +412,17 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-
+        if tuned:  # collect_shape_range_info收集动态shape需要predictor后再退出
+            return 0
         output_names = predictor.get_output_names()
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
+            if result_sort:
+                output_data = np.sort(output_data)
+                output_data_truth_val = np.sort(output_data_truth_val)
             for j, out_data in enumerate(output_data):
                 diff = sig_fig_compare(out_data, output_data_truth_val[j])
                 assert (

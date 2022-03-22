@@ -94,14 +94,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.615741
+        kpi_base: 0.5
         threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
       loss:
         latest: True
-        kpi_base: 0.30295599
+        kpi_base: 9.21024
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -184,12 +184,12 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.615741
+        kpi_base: 0.56970165
         threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
-      loss:
+      cost:
         latest: True
         kpi_base: 0.30295599
         threshold: 0.001
@@ -273,14 +273,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.615741
+        kpi_base: 0.5
         threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
       loss:
         latest: True
-        kpi_base: 0.30295599
+        kpi_base: 9.21024
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -306,14 +306,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.615741
+        kpi_base: 0.56893004
         threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
-      loss:
+      cost:
         latest: True
-        kpi_base: 0.30295599
+        kpi_base: 0.30378443
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -334,7 +334,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu multitask_mmoe_win_dy_gpu
+        cmd: train.bat win_dy_gpu multitask_mmoe_win_dy_gpu mmoe
 
     kpis: #kpi指标
       auc_marital:
@@ -359,7 +359,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -367,7 +367,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu multitask_mmoe_win_dy_cpu
+        cmd: train.bat win_dy_cpu multitask_mmoe_win_dy_cpu mmoe
 
     kpis: #kpi指标
       auc_marital:
@@ -392,7 +392,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -400,7 +400,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu multitask_mmoe_win_st_gpu
+        cmd: train.bat win_st_gpu multitask_mmoe_win_st_gpu mmoe
 
     kpis: #kpi指标
       auc_marital:
@@ -425,7 +425,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -433,7 +433,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu multitask_mmoe_win_st_cpu
+        cmd: train.bat win_st_cpu multitask_mmoe_win_st_cpu mmoe
 
     kpis: #kpi指标
       auc_marital:
@@ -458,7 +458,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -526,7 +526,7 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.750000
+        kpi_base: 0.5
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -605,7 +605,7 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.750000
+        kpi_base: 0.6103877
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -686,7 +686,7 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.750000
+        kpi_base: 0.5
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -712,7 +712,7 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.750000
+        kpi_base: 0.609953703
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -733,7 +733,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu multitask_mmoe_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu multitask_mmoe_infer_win_dy_gpu mmoe
 
     kpis: #kpi指标
       auc_marital:
@@ -751,7 +751,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -759,7 +759,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu multitask_mmoe_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu multitask_mmoe_infer_win_dy_cpu mmoe
 
     kpis: #kpi指标
       auc_marital:
@@ -777,7 +777,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -785,7 +785,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu multitask_mmoe_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu multitask_mmoe_infer_win_st_gpu mmoe
 
     kpis: #kpi指标
       auc_marital:
@@ -803,7 +803,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -811,7 +811,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu multitask_mmoe_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu multitask_mmoe_infer_win_st_cpu mmoe
 
     kpis: #kpi指标
       auc_marital:
@@ -829,4 +829,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_win_st_cpu.log

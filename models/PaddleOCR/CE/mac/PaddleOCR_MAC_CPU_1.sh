@@ -51,7 +51,11 @@ else
 fi
 
 #eval
+if [[ $model =~ "e2e" ]];then
+python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="pretrain_models/en_server_pgnetA/best_accuracy.pdparams" > $log_path/eval/$model.log 2>&1
+else
 python tools/eval.py -c $line  -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest.pdparams" > $log_path/eval/$model.log 2>&1
+fi
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/$model.log) -eq 0 ]];then
    echo -e "\033[33m eval of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
@@ -109,10 +113,10 @@ fi
 #export
 echo "export"
 python tools/export_model.py -c $line -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest"  Global.save_inference_dir="./models_inference/"${model} >  $log_path/export/${model}.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/${model}.log) -eq 0 ]];then
+if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/${model}.log) -eq 0 ]];then
    echo -e "\033[33m export of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
-   cat $log_path/infer/${model}.log
+   cat $log_path/export/${model}.log
    echo -e "\033[31m export of $model failed!\033[0m"| tee -a $log_path/result.log
 fi
 

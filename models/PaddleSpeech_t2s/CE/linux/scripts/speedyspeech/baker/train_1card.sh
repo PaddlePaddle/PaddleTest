@@ -6,7 +6,9 @@ ln -s ${Data_path}/train_data ~/datasets
 if [ ! -d "../log" ]; then
   mkdir ../log
 fi
-python -m pip install --ignore-installed -r requirements.txt
+python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip list | grep numpy
 
 cd examples/csmsc/tts2
 source ${PWD}/path.sh
@@ -42,4 +44,6 @@ else
    echo -e "\033[31m training_1card of speedyspeech failed! \033[0m"
 fi
 sed -i "s/max_epoch:50/max_epoch: 200/g" ${conf_path}
-cat train_1card.log | grep "7650/7650" | awk 'BEGIN{FS=","} {print $6}' > ../../../../log/speedyspeech_baker_1card.log
+cat train_1card.log | grep "7650/7650" | awk 'BEGIN{FS=","} {print $6}' > tmp_1card.log
+cat train_1card.log | grep "7650/7650" | awk 'BEGIN{FS=","} {print $10}' >> tmp_1card.log
+cat tmp_1card.log | tr '\n' ',' > ../../../../log/speedyspeech_baker_1card.log

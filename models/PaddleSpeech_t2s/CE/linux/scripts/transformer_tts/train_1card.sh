@@ -6,7 +6,6 @@ ln -s ${Data_path}/train_data ~/datasets
 if [ ! -d "../log" ]; then
   mkdir ../log
 fi
-python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/ljspeech/tts1
 source ${PWD}/path.sh
@@ -38,4 +37,6 @@ else
    echo -e "\033[31m training_1card of transformer_tts failed! \033[0m"
 fi
 sed -i "s/max_epoch: 1/max_epoch: 500/g;s/batch_size: 2/batch_size: 16/g"  ${conf_path}
-cat train_1card.log | grep "6450/6450" | awk 'BEGIN{FS=","} {print $9}' > ../../../../log/transformer_tts_1card.log
+cat train_1card.log | grep "6450/6450" | awk 'BEGIN{FS=","} {print $9}' > tmp_1card.log
+cat train_1card.log | grep "6450/6450" | awk 'BEGIN{FS=","} {print $13}' >> tmp_1card.log
+cat tmp_1card.log | tr '\n' ',' > ../../../../log/transformer_tts_1card.log

@@ -25,6 +25,7 @@ print_result(){
             mkdir ${model}
         fi
         cd ../${model_type_path}
+        cat ${log_dir}/log/${model}/${model}_${mode}.log
         mv ${log_dir}/log/${model}/${model}_${mode}.log ${log_dir}/log_err/${model}/
         err_sign=true
         #exit 1
@@ -35,7 +36,7 @@ print_result(){
 
 
 # run dynamic models
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 log_dir=.
 model_type_path=
 sed -i '' "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
@@ -115,7 +116,7 @@ if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model
         PYTHON_INFER_DYNAMIC
     fi
 elif [[ -z `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
-    wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/cityscapes/${model}/model.pdparams
+    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/cityscapes/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} url is bad!"
     else
@@ -136,4 +137,6 @@ done
 
 if [ "${err_sign}" = true ];then
     exit 1
+else
+    exit 0
 fi

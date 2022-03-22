@@ -53,7 +53,7 @@ def test_more_bz_mkldnn():
 
     file_path = "./ppyolov2"
     images_size = 640
-    batch_size_pool = [1, 5, 10]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()

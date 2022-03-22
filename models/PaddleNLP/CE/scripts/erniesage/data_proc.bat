@@ -10,4 +10,5 @@ set sed="C:\Program Files\Git\usr\bin\sed.exe"
 %sed% -i "s/epoch: 30/epoch: 1/g" ./config/erniesage_link_prediction.yaml
 
 md graph_workdir
+
 python ./preprocessing/dump_graph.py --conf ./config/erniesage_link_prediction.yaml

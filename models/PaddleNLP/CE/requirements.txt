@@ -1,5 +1,6 @@
-numpy
+numpy>=1.14.5
 sentencepiece==0.1.95
+datasets
 regex
 jieba
 colorlog
@@ -13,14 +14,13 @@ sentencepiece
 termcolor
 gensim
 tqdm
-nltk
+nltk==3.5
 easydict
 multiprocess
 sklearn
 paddleslim
 visualdl
 pyrouge
-nltk
 chardet
 tqdm
 beautifulsoup4

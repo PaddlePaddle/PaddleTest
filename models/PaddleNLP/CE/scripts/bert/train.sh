@@ -3,11 +3,6 @@ cur_path=`pwd`
 model_name=${PWD##*/}
 
 echo "$model_name 模型训练阶段"
-#取消代理
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
 
 #路径配置
 root_path=$cur_path/../../
@@ -18,10 +13,8 @@ if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
 
-echo $CUDA_VISIBLE_DEVICES
 #访问RD程序
 cd $code_path
-unset CUDA_VISIBLE_DEVICES
 
 print_info(){
 if [ $1 -ne 0 ];then
@@ -93,6 +86,3 @@ else # cpu
         --use_amp False > $log_path/train_$2_$1.log 2>&1
     print_info $? train_$2_$1
 fi
-
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY

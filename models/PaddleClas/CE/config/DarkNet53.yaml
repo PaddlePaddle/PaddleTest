@@ -41,6 +41,15 @@ FUNCTION: # 训练步骤
         path: $ROOT_PATH/$model_function_path_win
         cmd: PaddleClas_train_gpu.bat ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml
   -
+    tag: win_cpu_function_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_win
+        cmd: PaddleClas_train_cpu.bat ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml
+  -
     tag: mac_function_test
     priority: P1
     env: #去掉，自动调度
@@ -91,7 +100,7 @@ TRAIN: # 训练步骤
         kpi_base: 6.72895
         threshold: 0.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/DarkNet53_2card.log
   -
@@ -104,19 +113,30 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml train_win_gpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 6.54048
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
-      train_eval:
+    output: $ROOT_PATH/$model_log_path/DarkNet53_train.log
+  -
+    tag: train_win_cpu
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml train_win_cpu
+    kpis: #kpi指标
+      training_exit_code:
         latest: True
-        kpi_base: 48202.04587
-        threshold: 0.00001
+        kpi_base: 0.0
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/DarkNet53_train.log
   -
@@ -129,19 +149,12 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml train_mac_cpu
     kpis: #kpi指标
-      loss:
+      training_exit_code:
         latest: True
-        kpi_base: 7.01005
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
-        unit_repr: None
-      train_eval:
-        latest: True
-        kpi_base: 7.59464
-        threshold: 0.00001
-        actived: True
-        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/DarkNet53_cpu.log
 
@@ -159,9 +172,9 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 18.12492
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/DarkNet53_eval.log
   -
@@ -174,9 +187,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: grep_win_log.bat ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml eval_win
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 48202.04587
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
@@ -192,9 +205,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml eval_mac
     kpis: #kpi指标
-      loss:
+      eval_exit_code:
         latest: True
-        kpi_base: 7.59464
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="

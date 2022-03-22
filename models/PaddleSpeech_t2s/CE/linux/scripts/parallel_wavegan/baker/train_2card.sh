@@ -6,7 +6,6 @@ mkdir log
 if [ ! -d "../log" ]; then
   mkdir ../log
 fi
-python -m pip install --ignore-installed -r requirements.txt
 
 cd examples/csmsc/voc1
 source ${PWD}/path.sh
@@ -26,4 +25,6 @@ else
    cat train_2card.log
    echo -e "\033[31m training_2card of parallel wavegan failed! \033[0m"
 fi
-cat train_2card.log | grep "500/500" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $5}' > ../../../../log/parallel_wavegan_baker_2card.log
+cat train_2card.log | grep "500/500" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $5}' > tmp_2card.log
+cat train_2card.log | grep "500/500" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $9}' >> tmp_2card.log
+cat tmp_2card.log | tr '\n' ',' > ../../../../log/parallel_wavegan_baker_2card.log

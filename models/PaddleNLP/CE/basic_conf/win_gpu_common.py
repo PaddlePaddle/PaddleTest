@@ -72,4 +72,9 @@ EXEC_TAG = [
     "win_dy_gpu1_afqmc",
     "win_dy_gpu1_pair-wise",
     "win_dy_gpu1_point-wise",
+    "win_dy_gpu1_ATEC",
+    "win_dy_gpu1_STS-B",
+    "win_dy_gpu1_BQ_Corpus",
+    "win_dy_gpu1_LCQMC",
+    "win_dy_gpu1_sst-2",
 ]

@@ -15,11 +15,6 @@ fi
 #删除分布式日志重新记录
 rm -rf $code_path/log/workerlog.0
 
-print_info(){
-if [ $1 -ne 0 ];then
-    cat ${log_path}/$2.log
-fi
-}
 
 cd $code_path
 unset CUDA_VISIBLE_DEVICES
@@ -36,8 +31,6 @@ python -m paddle.distributed.launch --gpus $2 run_glue.py\
     --output_dir ./$1/ \
     --device gpu \
     --max_steps 20\
-    --use_amp False > $log_path/$1-_$3_fine-tune.log 2>&1
+    --use_amp False > $log_path/$1_$3_fine-tune.log 2>&1
 
 print_info $? $1-_fine-tune
-#cat $log_path/$1-_fine-tune.log
-#cat $code_path/log/workerlog.0

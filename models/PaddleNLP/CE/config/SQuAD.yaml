@@ -13,7 +13,7 @@ VARIABLES:
   model_log_path: log/SQuAD/
 
 EXEC:
-  exec_cases: [DATA_PROC,TRAIN]
+  exec_cases: [DATA_PROC, TRAIN]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
@@ -34,17 +34,15 @@ DATA_PROC:
         path: $ROOT_PATH/scripts
         cmd: compile_package.bat
 
-TRAIN: # 训练步骤
+TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh gpu 1.1
+        cmd: sh train.sh gpu 1.1 $SET_CUDA
       -
         path: $PROJECT_ROOT/utils
         cmd: python process_log.py --log_path=$ROOT_PATH/$model_log_path/train_gpu_1.1.log --reg='"' --obj=""
@@ -59,8 +57,8 @@ TRAIN: # 训练步骤
       #   unit_repr: "s"
       f1:
         latest: True
-        kpi_base: 15.69993
-        threshold: 0.05
+        kpi_base: 9.68371
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -69,13 +67,10 @@ TRAIN: # 训练步骤
   -
     priority: p1
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh gpu 2.0
+        cmd: sh train.sh gpu 2.0 $SET_CUDA
     kpis:
       exit_code:
         latest: True

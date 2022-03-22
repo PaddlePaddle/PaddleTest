@@ -40,7 +40,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 content_tagspace_linux_dy_gpu1
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.97
         threshold: 0.02
@@ -68,7 +68,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 content_tagspace_linux_dy_gpu2
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.97
         threshold: 0.02
@@ -93,7 +93,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_cpu content_tagspace_linux_dy_cpu
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 1.0
         threshold: 0.0
@@ -122,7 +122,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 content_tagspace_linux_st_gpu1
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.97
         threshold: 0.02
@@ -150,7 +150,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 content_tagspace_linux_st_gpu2
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.97
         threshold: 0.02
@@ -176,7 +176,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu content_tagspace_linux_st_cpu
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 1.0
         threshold: 0.0
@@ -203,7 +203,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh mac_dy_cpu content_tagspace_mac_dy_cpu
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 1.0
         threshold: 0.0
@@ -229,7 +229,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh mac_st_cpu content_tagspace_mac_st_cpu
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 1.0
         threshold: 0.0
@@ -252,10 +252,10 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu content_tagspace_win_dy_gpu
+        cmd: train.bat win_dy_gpu content_tagspace_win_dy_gpu tagspace
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 1.0
         threshold: 0.0
@@ -270,7 +270,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_win_dy_gpu.log
 
   -
     tag: win_dy_cpu # dy_cpu
@@ -278,10 +278,10 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu content_tagspace_win_dy_cpu
+        cmd: train.bat win_dy_cpu content_tagspace_win_dy_cpu tagspace
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 1.0
         threshold: 0.0
@@ -296,7 +296,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_win_dy_cpu.log
 
   -
     tag: win_st_gpu # st_gpu
@@ -304,10 +304,10 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu content_tagspace_win_st_gpu
+        cmd: train.bat win_st_gpu content_tagspace_win_st_gpu tagspace
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 1.0
         threshold: 0.0
@@ -322,7 +322,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_win_st_gpu.log
 
   -
     tag: win_st_cpu # st_cpu
@@ -330,10 +330,10 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu content_tagspace_win_st_cpu
+        cmd: train.bat win_st_cpu content_tagspace_win_st_cpu tagspace
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 1.0
         threshold: 0.0
@@ -348,7 +348,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -360,7 +360,7 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1 content_tagspace_infer_linux_dy_gpu1
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.97
         threshold: 0.02
@@ -388,7 +388,7 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu2 content_tagspace_infer_linux_dy_gpu2
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.97
         threshold: 0.02
@@ -413,9 +413,9 @@ INFER:
         cmd: sh infer.sh linux_dy_cpu content_tagspace_infer_linux_dy_cpu
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
-        kpi_base: 0.8
+        kpi_base: 1.0
         threshold: 0.0
         actived: True
         evaluation: "+"
@@ -438,7 +438,7 @@ INFER:
         cmd: sh infer.sh linux_st_gpu1 content_tagspace_infer_linux_st_gpu1
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.97
         threshold: 0.02
@@ -465,7 +465,7 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh linux_st_gpu2 content_tagspace_infer_linux_st_gpu2
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.97
         threshold: 0.02
@@ -490,7 +490,7 @@ INFER:
         cmd: sh infer.sh linux_st_cpu content_tagspace_infer_linux_st_cpu
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.8
         threshold: 0.0
@@ -516,7 +516,7 @@ INFER:
         cmd: sh infer.sh mac_dy_cpu content_tagspace_infer_mac_dy_cpu
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.8
         threshold: 0.0
@@ -541,7 +541,7 @@ INFER:
         cmd: sh infer.sh mac_st_cpu content_tagspace_infer_mac_st_cpu
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.8
         threshold: 0.0
@@ -563,10 +563,10 @@ INFER:
     priority: p1 # dy_gpu
     run:
       - path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu content_tagspace_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu content_tagspace_infer_win_dy_gpu tagspace
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.8
         threshold: 0.0
@@ -581,17 +581,17 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_infer_win_dy_gpu.log
 
   -
     tag: win_dy_cpu # dy_cpu
     priority: p1 # dy_cpu
     run:
       - path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu content_tagspace_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu content_tagspace_infer_win_dy_cpu tagspace
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.8
         threshold: 0.0
@@ -606,17 +606,17 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_infer_win_dy_cpu.log
 
   -
     tag: win_st_gpu # st_gpu
     priority: p1 # st_gpu
     run:
       - path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu content_tagspace_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu content_tagspace_infer_win_st_gpu tagspace
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.8
         threshold: 0.0
@@ -631,17 +631,17 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_infer_win_st_gpu.log
 
   -
     tag: win_st_cpu # st_cpu
     priority: p1 # st_cpu
     run:
       - path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu content_tagspace_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu content_tagspace_infer_win_st_cpu tagspace
 
     kpis: #kpi指标
-      acc:
+      ACC:
         latest: True
         kpi_base: 0.8
         threshold: 0.0
@@ -656,4 +656,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_content_tagspace_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/content_tagspace_infer_win_st_cpu.log

@@ -5,7 +5,11 @@ cases="test_bert_gpu.py \
        test_bert_trt_fp32.py \
        test_ernie_gpu.py \
        test_ernie_mkldnn.py \
-       test_ernie_trt_fp32.py
+       test_ernie_trt_fp32.py \
+       test_lac_mkldnn.py \
+       test_lac_gpu.py \
+       test_lac_trt_fp32.py \
+       test_lac_trt_fp16.py \
       "
 bug=0
 

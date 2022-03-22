@@ -40,10 +40,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 match_pyramid_linux_dy_gpu1
 
     kpis: #kpi指标
-      map:
+      loss:
         latest: True
-        kpi_base: 0.39
-        threshold: 0.02
+        kpi_base: 0.01588707
+        threshold: 0.1
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -68,10 +68,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 match_pyramid_linux_dy_gpu2
 
     kpis: #kpi指标
-      map:
+      loss:
         latest: True
-        kpi_base: 0.39
-        threshold: 0.02
+        kpi_base: 0.01588707
+        threshold: 0.1
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -122,9 +122,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 match_pyramid_linux_st_gpu1
 
     kpis: #kpi指标
-      map:
+      cost:
         latest: True
-        kpi_base: 0.39
+        kpi_base: 0.0
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -150,9 +150,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 match_pyramid_linux_st_gpu2
 
     kpis: #kpi指标
-      map:
+      cost:
         latest: True
-        kpi_base: 0.39
+        kpi_base: 0.0
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -176,7 +176,7 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu match_pyramid_linux_st_cpu
 
     kpis: #kpi指标
-      loss:
+      cost:
         latest: True
         kpi_base: 0.9995837
         threshold: 0.001
@@ -205,7 +205,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.9995837
+        kpi_base: 0.99960077
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -229,9 +229,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh mac_st_cpu match_pyramid_mac_st_cpu
 
     kpis: #kpi指标
-      loss:
+      cost:
         latest: True
-        kpi_base: 0.9995837
+        kpi_base: 0.99960077
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -252,7 +252,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_gpu match_pyramid_win_dy_gpu
+        cmd: train.bat win_dy_gpu match_pyramid_win_dy_gpu match-pyramid
 
     kpis: #kpi指标
       loss:
@@ -270,7 +270,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/match_pyramid_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -278,7 +278,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_dy_cpu match_pyramid_win_dy_cpu
+        cmd: train.bat win_dy_cpu match_pyramid_win_dy_cpu match-pyramid
 
     kpis: #kpi指标
       loss:
@@ -296,7 +296,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/match_pyramid_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -304,7 +304,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_gpu match_pyramid_win_st_gpu
+        cmd: train.bat win_st_gpu match_pyramid_win_st_gpu match-pyramid
 
     kpis: #kpi指标
       loss:
@@ -322,7 +322,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/match_pyramid_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -330,7 +330,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh win_st_cpu match_pyramid_win_st_cpu
+        cmd: train.bat win_st_cpu match_pyramid_win_st_cpu match-pyramid
 
     kpis: #kpi指标
       loss:
@@ -348,7 +348,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/match_pyramid_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -362,7 +362,7 @@ INFER:
     kpis: #kpi指标
       map:
         latest: True
-        kpi_base: 0.39
+        kpi_base: 0.4181
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -389,7 +389,7 @@ INFER:
     kpis: #kpi指标
       map:
         latest: True
-        kpi_base: 0.39
+        kpi_base: 0.4181
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -439,7 +439,7 @@ INFER:
     kpis: #kpi指标
       map:
         latest: True
-        kpi_base: 0.39
+        kpi_base: 0.411
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -467,7 +467,7 @@ INFER:
     kpis: #kpi指标
       map:
         latest: True
-        kpi_base: 0.39
+        kpi_base: 0.411
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -492,7 +492,7 @@ INFER:
     kpis: #kpi指标
       prediction:
         latest: True
-        kpi_base: 0.00029275
+        kpi_base: [0.00029275]
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -518,7 +518,7 @@ INFER:
     kpis: #kpi指标
       prediction:
         latest: True
-        kpi_base: 0.00029275
+        kpi_base: 0.00043069
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -544,7 +544,7 @@ INFER:
     kpis: #kpi指标
       prediction:
         latest: True
-        kpi_base: 0.00029275
+        kpi_base: [0.00043069]
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -565,7 +565,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_gpu match_pyramid_infer_win_dy_gpu
+        cmd: infer.bat win_dy_gpu match_pyramid_infer_win_dy_gpu match-pyramid
 
     kpis: #kpi指标
       prediction:
@@ -583,7 +583,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_win_dy_gpu.log
+    output: $ROOT_PATH/$model_log_path/match_pyramid_infer_win_dy_gpu.log
 
   -
     tag: win_dy_cpu
@@ -591,7 +591,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_dy_cpu match_pyramid_infer_win_dy_cpu
+        cmd: infer.bat win_dy_cpu match_pyramid_infer_win_dy_cpu match-pyramid
 
     kpis: #kpi指标
       prediction:
@@ -609,7 +609,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_win_dy_cpu.log
+    output: $ROOT_PATH/$model_log_path/match_pyramid_infer_win_dy_cpu.log
 
   -
     tag: win_st_gpu
@@ -617,7 +617,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_gpu match_pyramid_infer_win_st_gpu
+        cmd: infer.bat win_st_gpu match_pyramid_infer_win_st_gpu match-pyramid
 
     kpis: #kpi指标
       prediction:
@@ -635,7 +635,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_win_st_gpu.log
+    output: $ROOT_PATH/$model_log_path/match_pyramid_infer_win_st_gpu.log
 
   -
     tag: win_st_cpu
@@ -643,7 +643,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh win_st_cpu match_pyramid_infer_win_st_cpu
+        cmd: infer.bat win_st_cpu match_pyramid_infer_win_st_cpu match-pyramid
 
     kpis: #kpi指标
       prediction:
@@ -661,4 +661,4 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_pyramid_infer_win_st_cpu.log
+    output: $ROOT_PATH/$model_log_path/match_pyramid_infer_win_st_cpu.log

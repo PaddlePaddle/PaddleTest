@@ -9,24 +9,32 @@ ls
 
 if [[ $2 == 'train_mac_cpu' ]] ; then
     echo '#####train_mac_cpu'
-    cat ${log_path}/train/${model}_cpu.log | grep Avg
-    cat ${log_path}/train/${model}_cpu.log | grep Train | grep Avg | grep '2/2' > tmp_cpu.log
-    cat ${log_path}/train/${model}_cpu.log | grep Eval | grep Avg > tmp_cpu1.log
-    sed -i '' 's/loss/train_eval/g' tmp_cpu1.log
-    cat tmp_cpu1.log
-    cat tmp_cpu1.log >> tmp_cpu.log
-    cat ${log_path}/train/${model}_cpu.log | grep exit_code
-    cat ${log_path}/train/${model}_cpu.log | grep exit_code >> tmp_cpu.log
-    cat tmp_cpu.log | tr '\n' ',' > ../${log_path}/${model}_cpu.log
+    # cat ${log_path}/train/${model}_cpu.log | grep Avg
+    # cat ${log_path}/train/${model}_cpu.log | grep Train | grep Avg | grep '1/1' > tmp_cpu.log
+    # cat ${log_path}/train/${model}_cpu.log | grep Eval | grep Avg > tmp_cpu1.log
+    # sed -i '' 's/loss/train_eval/g' tmp_cpu1.log
+    # cat tmp_cpu1.log
+    # cat tmp_cpu1.log >> tmp_cpu.log
+    # cat ${log_path}/train/${model}_cpu.log | grep exit_code
+    # cat ${log_path}/train/${model}_cpu.log | grep exit_code >> tmp_cpu.log
+    # cat tmp_cpu.log | tr '\n' ',' > ../${log_path}/${model}_cpu.log
+    # cat ../${log_path}/${model}_cpu.log
+
+    cat ${log_path}/train/${model}_cpu.log | grep training_exit_code
+    cat ${log_path}/train/${model}_cpu.log | grep training_exit_code >../${log_path}/${model}_cpu.log
     cat ../${log_path}/${model}_cpu.log
 
 elif [[ $2 == 'eval_mac' ]] ; then
     echo '#####eval_mac'
-    cat ${log_path}/eval/${model}.log | grep Avg
-    cat ${log_path}/eval/${model}.log | grep Eval | grep Avg > tmp_eval.log
-    cat ${log_path}/eval/${model}.log | grep exit_code
-    cat ${log_path}/eval/${model}.log | grep exit_code  >> tmp_eval.log
-    cat tmp_eval.log | tr '\n' ',' > ../${log_path}/${model}_eval.log
+    # cat ${log_path}/eval/${model}.log | grep Avg
+    # cat ${log_path}/eval/${model}.log | grep Eval | grep Avg > tmp_eval.log
+    # cat ${log_path}/eval/${model}.log | grep exit_code
+    # cat ${log_path}/eval/${model}.log | grep exit_code  >> tmp_eval.log
+    # cat tmp_eval.log | tr '\n' ',' > ../${log_path}/${model}_eval.log
+    # cat ../${log_path}/${model}_eval.log
+
+    cat ${log_path}/eval/${model}.log | grep eval_exit_code
+    cat ${log_path}/eval/${model}.log | grep eval_exit_code >../${log_path}/${model}_eval.log
     cat ../${log_path}/${model}_eval.log
 
 elif [[ $2 == 'infer_mac' ]] ; then
