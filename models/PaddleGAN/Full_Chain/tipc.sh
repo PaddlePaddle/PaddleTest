@@ -80,9 +80,9 @@ python -m pip install -v -e . #安装ppgan
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./${COMPILE_PATH##*/}
 cp ../PaddleTest/models/PaddleGAN/Full_Chain/tipc_run.sh .
-cp ../PaddleTest/models/PaddleClas/Full_Chain/upload.sh .
-cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_unrun .
-cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_all .
+cp ../PaddleTest/models/PaddleGAN/Full_Chain/upload.sh .
+cp ../PaddleTest/models/PaddleGAN/Full_Chain/full_chain_list_clas_unrun .
+cp ../PaddleTest/models/PaddleGAN/Full_Chain/full_chain_list_clas_all .
 bash tipc_run.sh
 "
 
