@@ -656,10 +656,10 @@ TRAIN: # 训练步骤
         cmd:  train.bat $XPU $SET_CUDA
 
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
-        kpi_base: 0.973310
-        threshold: 0.001
+        kpi_base: 0
+        threshold: 0
         actived: True
         evaluation: "-"
         unit_repr: "s"
