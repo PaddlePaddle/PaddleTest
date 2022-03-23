@@ -716,7 +716,7 @@ python -m paddle.distributed.launch \
 --num_epochs 1 \
 --test_period 1 \
 --model_path st_unstructured_models \
-----pretrained_model st_unstructured_models \
+--pretrained_model st_unstructured_models \
 --last_epoch 1 > ${log_path}/st_unstructured_prune_threshold_load 2>&1
 print_info $? st_unstructured_prune_threshold_load
 
