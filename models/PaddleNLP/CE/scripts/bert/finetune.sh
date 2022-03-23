@@ -17,7 +17,7 @@ rm -rf $code_path/log/workerlog.0
 
 print_info(){
   cat ${log_path}/$2.log
-if [ $1 -ne 0 ];then 
+if [ $1 -ne 0 ];then
     echo "exit_code: 1.0" >> ${log_path}/$2.log
 else
     echo "exit_code: 0.0" >> ${log_path}/$2.log
