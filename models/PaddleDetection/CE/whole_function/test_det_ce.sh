@@ -5,7 +5,6 @@ python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************detection_version****'
 git rev-parse HEAD
 
-
 #create log dir
 if [ -d "log" ];then rm -rf log
 fi
