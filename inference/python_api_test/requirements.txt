@@ -1,7 +1,7 @@
 wget
 psutil
 pytest
-pynvml
+pynvml==11.0.0
 opencv-python
 paddlenlp==2.2.1
 sentencepiece==0.1.96
