@@ -6,6 +6,8 @@ echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1
 export FLAGS_use_stream_safe_cuda_allocator=1
+export NCCL_SOCKET_IFNAME=xgbe0
+export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
 
 #<-> model_flag CI是效率云  pr是TC，all是全量，single是单独模型debug
 #<-> pr_num   随机跑pr的模型数

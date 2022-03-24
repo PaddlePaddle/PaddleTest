@@ -8,6 +8,7 @@ echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
+export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
 
 echo "path before"
 pwd
@@ -504,6 +505,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
    find ppcls/configs/Vehicle/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec
    find ppcls/configs/slim/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成slim
    find ppcls/configs/GeneralRecognition/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' |grep -v 'Gallery2FC_PPLCNet_x2_5' >> models_list_rec #后续改成slim
+   find ppcls/configs/DeepHash/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成deephash
 
    if [[ ${model_flag} =~ 'pr' ]]; then
       shuf -n ${pr_num} models_list_rec > models_list
@@ -531,6 +533,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
          | grep diff|grep yaml|grep configs|grep slim|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
       git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
          | grep diff|grep yaml|grep configs|grep GeneralRecognition|awk -F 'b/' '{print$2}' |tee -a  models_list_diff_rec
+      git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
+         | grep diff|grep yaml|grep configs|grep DeepHash|awk -F 'b/' '{print$2}' |tee -a  models_list_diff_rec
       shuf -n 3 models_list_diff_rec >> models_list #防止diff yaml文件过多导致pr时间过长
       echo "######  diff models_list_diff"
       wc -l models_list_diff_rec
