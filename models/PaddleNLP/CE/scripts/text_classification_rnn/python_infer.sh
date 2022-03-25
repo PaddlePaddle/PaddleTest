@@ -33,7 +33,7 @@ fi
 }
 
 python export_model.py \
-  --vocab_path=./senta_word_dict.txt \
+  --vocab_path=./vocab.json \
   --network=bilstm \
   --params_path=./checkpoints/final.pdparams \
   --output_path=./static_graph_params

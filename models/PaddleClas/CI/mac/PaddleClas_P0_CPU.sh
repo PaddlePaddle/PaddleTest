@@ -19,13 +19,21 @@ fi
 rm -rf dataset
 ln -s ${data_path} dataset
 
-# env
-# python -m pip install --upgrade pip
-# python -m pip install paddleslim
-# python -m pip install -r requirements.txt
-
 unset http_proxy
 unset https_proxy
+
+# install paddle & get yaml list
+if [[ ${model_flag} =~ "pr" ]]; then
+   echo "######  model_flag pr"
+
+   echo "######  ----install  paddle-----"
+   python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
+   python -m pip uninstall paddlepaddle-gpu -y
+   python -m pip install ${paddle_compile}
+
+   echo ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml >clas_models_list_P0
+fi
+
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade \
@@ -72,20 +80,20 @@ if [[ ${model_flag} =~ "CE" ]]; then
    sed -ie '/flip_code/d' $line
       # -o Global.eval_during_train=False  \
    python tools/train.py -c $line  \
-      -o Global.epochs=2  \
+      -o Global.epochs=1  \
       -o Global.seed=1234 \
       -o Global.output_dir=$output_path \
       -o DataLoader.Train.loader.num_workers=0 \
       -o DataLoader.Train.sampler.shuffle=False  \
-      -o Global.eval_interval=2  \
-      -o Global.save_interval=2 \
+      -o Global.eval_interval=1  \
+      -o Global.save_interval=1 \
       -o DataLoader.Train.sampler.batch_size=32 \
       -o DataLoader.Eval.sampler.batch_size=32 \
       -o Global.device=cpu \
       > $log_path/train/${model}_cpu.log 2>&1
 else
    python tools/train.py  -c $line \
-      -o Global.epochs=2 \
+      -o Global.epochs=1 \
       -o DataLoader.Train.sampler.batch_size=32 \
       -o DataLoader.Eval.sampler.batch_size=32 \
       -o Global.device=cpu > $log_path/train/${model}_cpu.log 2>&1

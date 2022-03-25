@@ -24,8 +24,8 @@ cd $root_path/models_repo
 cd $code_path
 
 print_info(){
+cat ${log_path}/$2.log
 if [ $1 -ne 0 ];then
-    cat ${log_path}/$2.log
     echo "exit_code: 1.0" >> ${log_path}/$2.log
 else
     echo "exit_code: 0.0" >> ${log_path}/$2.log
@@ -36,7 +36,7 @@ DEVICE=$1
 DATASET=$2
 if [[ ${DATASET} == "1.1" ]]
 then
-  python -u ./run_squad.py \
+  python -m paddle.distributed.launch --gpus $3 run_squad.py \
     --model_type bert \
     --model_name_or_path bert-base-uncased \
     --max_seq_length 384 \
@@ -45,17 +45,17 @@ then
     --num_train_epochs 1 \
     --logging_steps 10 \
     --save_steps 10 \
+    --max_steps 30 \
     --warmup_proportion 0.1 \
     --weight_decay 0.01 \
     --output_dir ./tmp/squad/ \
     --do_train \
     --do_predict \
-    --max_steps 100 \
     --device ${DEVICE} >$log_path/train_${DEVICE}_${DATASET}.log 2>&1
   print_info $? train_${DEVICE}_${DATASET}
 elif [[ ${DATASET} == "2.0" ]]
 then
-  python -u ./run_squad.py \
+  python -m paddle.distributed.launch --gpus $3 run_squad.py \
     --model_type bert \
     --model_name_or_path bert-base-uncased \
     --max_seq_length 384 \
@@ -69,8 +69,8 @@ then
     --output_dir ./tmp/squad/ \
     --device ${DEVICE} \
     --do_train \
-    --do_pred \
-    --max_steps 100 \
+    --do_predict \
+    --max_steps 30 \
     --version_2_with_negative >$log_path/train_${DEVICE}_${DATASET}.log 2>&1
   print_info $? train_${DEVICE}_${DATASET}
 fi

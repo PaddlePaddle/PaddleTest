@@ -6,6 +6,8 @@ echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1
 export FLAGS_use_stream_safe_cuda_allocator=1
+export NCCL_SOCKET_IFNAME=xgbe0
+export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
 
 #<-> model_flag CI是效率云  pr是TC，all是全量，single是单独模型debug
 #<-> pr_num   随机跑pr的模型数
@@ -219,7 +221,8 @@ python tools/main.py --config-file $line \
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
-if [ -f "output/$params_dir/iter_20_checkpoint.pdparams" ];then
+# if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
+if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]];then
    echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
    cat $log_path/train/${model}.log
@@ -240,7 +243,8 @@ fi
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
-if [ -f "output/$params_dir/iter_20_checkpoint.pdparams" ];then
+# if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
+if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]];then
    echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
    cat $log_path/train/${model}.log
@@ -258,6 +262,7 @@ stylegan_v2_256_ffhq)
    --net-name gen_ema \
    --output stylegan_extract.pdparams \
    > $log_path/eval/${model}_extract_weight.log 2>&1
+#   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
   if [[ $? -eq 0 ]];then
      echo -e "\033[33m extract_weight of $model  successfully!\033[0m"| tee -a $log_path/result.log
   else
@@ -268,6 +273,7 @@ stylegan_v2_256_ffhq)
    --weight_path stylegan_extract.pdparams \
    --size 256 \
    > $log_path/eval/${model}.log 2>&1
+#   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
   if [[ $? -eq 0 ]];then
      echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
   else
@@ -288,6 +294,7 @@ msvsr_l_reds)
   python tools/main.py --config-file $line \
    --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams \
    > $log_path/eval/${model}.log 2>&1
+#   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
   if [[ $? -eq 0 ]];then
      echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
   else
@@ -311,7 +318,7 @@ if [[ ! ${model_flag} =~ "single" ]];then
       --n_row 3 \
       --n_col 5 \
       > $log_path/infer/styleganv2.log 2>&1
-   if [[ $? -eq 0 ]];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/styleganv2.log) -eq 0 ]];then
       echo -e "\033[33m infer of styleganv2  successfully!\033[0m"| tee -a $log_path/result.log
    else
       cat $log_path/infer/styleganv2.log
@@ -329,7 +336,7 @@ if [[ ! ${model_flag} =~ "single" ]];then
    python applications/tools/animeganv2.py \
       --input_image ./docs/imgs/animeganv2_test.jpg \
       > $log_path/infer/animeganv2.log 2>&1
-   if [[ $? -eq 0 ]];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/animeganv2.log) -eq 0 ]];then
       echo -e "\033[33m infer of animeganv2  successfully!\033[0m"| tee -a $log_path/result.log
    else
       cat $log_path/infer/animeganv2.log
@@ -343,7 +350,7 @@ if [[ ! ${model_flag} =~ "single" ]];then
       --relative \
       --adapt_scale \
       > $log_path/infer/fist_order_motion_model.log 2>&1
-   if [[ $? -eq 0 ]];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/fist_order_motion_model.log) -eq 0 ]];then
       echo -e "\033[33m infer of fist order motion model  successfully!\033[0m"| tee -a $log_path/result.log
    else
       cat $log_path/infer/fist_order_motion_model.log
@@ -360,17 +367,17 @@ if [[ ! ${model_flag} =~ "single" ]];then
          --adapt_scale \
          --multi_person \
          > $log_path/infer/fist_order_motion_model_multi_person.log 2>&1
-      if [[ $? -eq 0 ]];then
+      if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/fist_order_motion_model_multi_person.log) -eq 0 ]];then
          echo -e "\033[33m infer of fist order motion model  multi_person successfully!\033[0m"| tee -a $log_path/result.log
       else
-         cat $log_path/infer/fist_order_motion_model.log
+         cat $log_path/infer/fist_order_motion_model_multi_person.log
          echo -e "\033[31m infer of fist order motion model multi_person failed!\033[0m"| tee -a $log_path/result.log
       fi
    fi
 
    # face_parse
    python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-   if [[ $? -eq 0 ]];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
       echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
    else
       cat $log_path/infer/face_parse.log
@@ -383,7 +390,7 @@ if [[ ! ${model_flag} =~ "single" ]];then
       --reference_dir docs/imgs/ref \
       --evaluate-only \
       > $log_path/infer/psgan.log 2>&1
-   if [[ $? -eq 0 ]];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/psgan.log) -eq 0 ]];then
       echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
    else
       cat $log_path/infer/psgan.log
@@ -396,7 +403,7 @@ if [[ ! ${model_flag} =~ "single" ]];then
       --process_order DAIN DeOldify EDVR \
       --output video_restore_infer \
       > $log_path/infer/video_restore.log 2>&1
-   if [[ $? -eq 0 ]];then
+   if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/video_restore.log) -eq 0 ]];then
       echo -e "\033[33m infer of video restore  successfully!\033[0m"| tee -a $log_path/result.log
    else
       cat $log_path/infer/video_restore.log

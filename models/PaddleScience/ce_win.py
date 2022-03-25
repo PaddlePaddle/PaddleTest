@@ -17,11 +17,11 @@ def get_files():
     """
     get files
     """
-
     file_dir = []
+    skip_list = ["log.py"]
     for root, dirs, files in os.walk(".", topdown=False):
         for name in files:
-            if name == sys.argv[0]:
+            if name == sys.argv[0] or name in skip_list:
                 continue
             if os.path.splitext(name)[1] == ".py":
                 file_dir.append((root, name))
