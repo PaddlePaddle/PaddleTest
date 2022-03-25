@@ -15,6 +15,7 @@ else
     cat full_chain_list_gan_all_tmp | sort | uniq |grep -v ${grep_v_models} |grep ${grep_models} > full_chain_list_gan_all  #去重复
 fi
 
+cat full_chain_list_gan_all
 cat full_chain_list_gan_all | while read config_file #手动定义
 do
 

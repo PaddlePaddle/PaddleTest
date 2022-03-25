@@ -33,7 +33,9 @@ if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
 cd ..
 
 rem dependency
-python -m pip install -r requirements.txt
+set http_proxy=
+set https_proxy=
+python -m pip install -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
