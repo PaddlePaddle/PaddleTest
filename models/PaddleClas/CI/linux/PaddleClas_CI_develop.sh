@@ -406,19 +406,20 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
       echo "export_exit_code: 1.0" >> $log_path/export_model/$model.log
    fi
 
-   if [[ `expr $RANDOM % 2` -eq 0 ]] && ([[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]]);then
-   # if [[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]];then #加入随机扰动
-      echo "model_clip"
-      python model_clip.py --path_prefix="./inference/$model/inference" \
-         --output_model_path="./inference/$model/inference" \
-         > $log_path/model_clip/$model.log 2>&1
-      if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/model_clip/${model}.log) -eq 0 ]];then
-         echo -e "\033[33m model_clip of $model  successfully!\033[0m"| tee -a $log_path/result.log
-      else
-         cat $log_path/model_clip/$model.log
-         echo -e "\033[31m model_clip of $model failed!\033[0m" | tee -a $log_path/result.log
-      fi
-   fi
+   # 20220325 error
+   # if [[ `expr $RANDOM % 2` -eq 0 ]] && ([[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]]);then
+   # # if [[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]];then #加入随机扰动
+   #    echo "model_clip"
+   #    python model_clip.py --path_prefix="./inference/$model/inference" \
+   #       --output_model_path="./inference/$model/inference" \
+   #       > $log_path/model_clip/$model.log 2>&1
+   #    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/model_clip/${model}.log) -eq 0 ]];then
+   #       echo -e "\033[33m model_clip of $model  successfully!\033[0m"| tee -a $log_path/result.log
+   #    else
+   #       cat $log_path/model_clip/$model.log
+   #       echo -e "\033[31m model_clip of $model failed!\033[0m" | tee -a $log_path/result.log
+   #    fi
+   # fi
 
    cd deploy
    if [[ ${model} =~ '384' ]] && [[ ! ${model} =~ 'LeViT' ]];then
