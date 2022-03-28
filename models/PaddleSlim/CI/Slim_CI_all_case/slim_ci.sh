@@ -34,6 +34,17 @@ python -m pip install --upgrade pip
 python -m pip install $2;
 python -c 'import paddle; print(paddle.version.commit)';
 set +x;
+
+########
+#set _in_eager_mode_ = True
+echo -----set _in_eager_mode_ = True-----
+python -c 'from distutils.sysconfig import get_python_lib;
+print(get_python_lib())'
+
+echo ${python_install_path}
+sed -i '77c  _in_eager_mode_ = True' ${python_install_path}/paddle/fluid/framework.py
+cat ${python_install_path}/paddle/fluid/framework.py | grep '_in_eager_mode_'
+
 ####################################
 # for paddleslim env
 slim1_install (){
