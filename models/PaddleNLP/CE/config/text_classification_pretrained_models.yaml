@@ -10,22 +10,20 @@ VARIABLES:
   model_log_path: log/text_classification_pretrained/
 
 EXEC:
-  exec_cases: $EXEC_CASES
-  exec_priority: $EXEC_PRIORITY
+  exec_cases: [TRAIN,INFER]
+  exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
 
 TRAIN: # 训练步骤
   -
     priority: p0
-    tag: "linux_dy_gpu1"
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    tag: linux_dy_gpu1
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "single"
+        cmd: bash train.sh $XPU "single" $SET_CUDA
 
     kpis: #kpi指标
       loss:
@@ -39,14 +37,11 @@ TRAIN: # 训练步骤
 
   -
     priority: p1
-    tag: "linux_dy_gpu2"
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-
+    tag: linux_dy_gpu2
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "multi"
+        cmd: bash train.sh $XPU "multi" $SET_MULTI_CUDA
 
     kpis: #kpi指标
       loss:

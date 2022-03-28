@@ -20,7 +20,7 @@ def test_orthogonal0():
     x = linear.weight.numpy()
     orth = np.dot(x, x.T)
     res = np.diag([1.0] * 2)
-    assert np.allclose(res, orth, atol=1e-7)
+    assert np.allclose(res, orth, atol=1e-4)
 
 
 @pytest.mark.api_nn_Orthogonal_parameters
@@ -33,7 +33,7 @@ def test_orthogonal1():
     x = linear.weight.numpy()
     orth = np.dot(x, x.T)
     res = np.diag([1.0] * 10)
-    assert np.allclose(res, orth, atol=1e-6)
+    assert np.allclose(res, orth, atol=1e-4)
 
 
 @pytest.mark.api_nn_Orthogonal_parameters
@@ -46,7 +46,7 @@ def test_orthogonal2():
     x = linear.weight.numpy()
     orth = np.dot(x.T, x)
     res = np.diag([1.0] * 10)
-    assert np.allclose(res, orth, atol=1e-6)
+    assert np.allclose(res, orth, atol=1e-4)
 
 
 @pytest.mark.api_nn_Orthogonal_parameters
@@ -59,4 +59,4 @@ def test_orthogonal3():
     x = conv.weight.numpy().reshape(3, 8)
     orth = np.dot(x, x.T)
     res = np.diag([1.0] * 3)
-    assert np.allclose(res, orth, atol=1e-6)
+    assert np.allclose(res, orth, atol=1e-4)

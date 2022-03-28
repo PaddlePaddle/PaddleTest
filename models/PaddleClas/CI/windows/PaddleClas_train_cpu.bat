@@ -33,7 +33,9 @@ if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
 cd ..
 
 rem dependency
-python -m pip install -r requirements.txt
+set http_proxy=
+set https_proxy=
+python -m pip install -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
@@ -66,9 +68,9 @@ if !errorlevel! equ 0 (
 
 echo "CE"| findstr %model_flag% >nul
 if !errorlevel! equ 0 (
-    python tools/train.py -c %%i -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1 -o Global.output_dir=output -o Global.seed=1234  -o DataLoader.Train.loader.num_workers=0 -o DataLoader.Train.sampler.shuffle=False -o Global.eval_interval=2 -o Global.save_interval=2  -o Global.device=cpu > %log_path%\!model!_train.log 2>&1
+    python tools/train.py -c %%i -o Global.epochs=1 -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1 -o Global.output_dir=output -o Global.seed=1234  -o DataLoader.Train.loader.num_workers=0 -o DataLoader.Train.sampler.shuffle=False -o Global.eval_interval=1 -o Global.save_interval=1  -o Global.device=cpu > %log_path%\!model!_train.log 2>&1
 ) else (
-    python tools/train.py -c %%i -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o DataLoader.Eval.sampler.batch_size=1  -o Global.device=cpu> %log_path%\!model!_train.log 2>&1
+    python tools/train.py -c %%i -o Global.epochs=1 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o DataLoader.Eval.sampler.batch_size=1  -o Global.device=cpu> %log_path%\!model!_train.log 2>&1
 )
 
 if not !errorlevel! == 0 (

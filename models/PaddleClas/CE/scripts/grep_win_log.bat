@@ -21,7 +21,7 @@ if !errorlevel! equ 0 (
     echo '#####train_win_gpu'
     type %log_path%\!model!_train.log | findstr Avg
     type %log_path%\!model!_train.log | findstr training_exit_code
-    type %log_path%\!model!_train.log | findstr Train | findstr 5/5 | findstr Avg > tmp.log
+    type %log_path%\!model!_train.log | findstr Train | findstr 1/1 | findstr Avg > tmp.log
     type %log_path%\!model!_train.log | findstr Eval | findstr Avg > tmp1.log
     %sed% -i s/"loss"/"train_eval"/ tmp1.log
     type tmp1.log
@@ -37,7 +37,7 @@ if !errorlevel! equ 0 (
     echo '#####train_win_cpu'
     type %log_path%\!model!_train.log | findstr Avg
     type %log_path%\!model!_train.log | findstr training_exit_code
-    type %log_path%\!model!_train.log | findstr Train | findstr 2/2 | findstr Avg > tmp.log
+    type %log_path%\!model!_train.log | findstr Train | findstr 1/1 | findstr Avg > tmp.log
     type %log_path%\!model!_train.log | findstr Eval | findstr Avg > tmp1.log
     %sed% -i s/"loss"/"train_eval"/ tmp1.log
     type tmp1.log

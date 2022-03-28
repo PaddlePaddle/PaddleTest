@@ -7,6 +7,6 @@ configs/ssd/ssd_mobilenet_v1_300_120e_voc.yml
 configs/ttfnet/ttfnet_darknet53_1x_coco.yml
 configs/fcos/fcos_r50_fpn_1x_coco.yml
 configs/cascade_rcnn/cascade_mask_rcnn_r50_fpn_1x_coco.yml
-configs/picodet/picodet_m_416_coco.yml
+configs/picodet/legacy_model/picodet_m_416_coco.yml
 configs/keypoint/hrnet/hrnet_w32_256x192.yml
 configs/mot/fairmot/fairmot_dla34_30e_1088x608.yml

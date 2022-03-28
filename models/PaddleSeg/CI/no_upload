@@ -19,3 +19,10 @@
 ./configs/segformer/segformer_b0_cityscapes_1024x512_160k.yml
 ./configs/segformer/segformer_b4_cityscapes_1024x512_160k.yml
 ./configs/segformer/segformer_b1_cityscapes_1024x512_160k.yml
+./configs/unet/unet_chasedb1_128x128_40k.yml
+./configs/unet/unet_drive_128x128_40k.yml
+./configs/unet/unet_hrf_256x256_40k.yml
+./configs/unet/unet_stare_128x128_40k.yml
+./configs/pp_humanseg_lite/pp_humanseg_lite_export_398x224.yml
+./configs/fcn/fcn_hrnetw18_pphumanseg14k.yml
+./configs/pp_humanseg_lite/pp_humanseg_lite_mini_supervisely.yml

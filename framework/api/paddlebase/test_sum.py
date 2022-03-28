@@ -112,6 +112,16 @@ def test_sum7():
     obj.base(res=res, x=x, axis=0, keepdim=True)
 
 
+@pytest.mark.api_base_sum_parameters
+def test_sum8():
+    """
+    keepdim=True
+    """
+    x = np.random.uniform(-1, 1, [2, 3, 4, 5])
+    res = np.sum(x).reshape((1, 1, 1, 1))
+    obj.run(res=res, x=x, keepdim=True)
+
+
 class TestSum1(APIBase):
     """
     test sum
@@ -129,7 +139,7 @@ obj1 = TestSum1(paddle.sum)
 
 
 @pytest.mark.api_base_sum_parameters
-def test_sum8():
+def test_sum9():
     """
     input is int32, int64
     """

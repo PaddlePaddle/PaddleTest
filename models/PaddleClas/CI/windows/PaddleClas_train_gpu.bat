@@ -5,6 +5,7 @@ echo %1
 echo %data_path%
 echo %Project_path%
 echo %model_flag%
+echo %paddle_compile%
 
 echo "path before"
 chdir
@@ -32,8 +33,28 @@ cd dataset
 if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
 cd ..
 
+rem install paddle & get yaml list
+
+echo "pr"| findstr %model_flag% >nul
+if !errorlevel! equ 0 (
+   echo "######  model_flag pr"
+
+   echo "######  ----install  paddle-----"
+   python -m pip install %paddle_compile%
+   set http_proxy=
+   set https_proxy=
+
+   python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
+   python -m pip uninstall paddlepaddle-gpu -y
+
+   echo ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml >clas_models_list_all_gpu
+
+) else (
+   echo "model_flag not pr"
+)
+
 rem dependency
-python -m pip install -r requirements.txt
+python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
@@ -66,9 +87,9 @@ if !errorlevel! equ 0 (
 
 echo "CE"| findstr %model_flag% >nul
 if !errorlevel! equ 0 (
-    python tools/train.py -c %%i -o Global.epochs=5 -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1 -o Global.output_dir=output -o Global.seed=1234  -o DataLoader.Train.loader.num_workers=0 -o DataLoader.Train.sampler.shuffle=False -o Global.eval_interval=5 -o Global.save_interval=5 > %log_path%\!model!_train.log 2>&1
+    python tools/train.py -c %%i -o Global.epochs=1 -o DataLoader.Train.sampler.batch_size=1 -o DataLoader.Eval.sampler.batch_size=1 -o Global.output_dir=output -o Global.seed=1234  -o DataLoader.Train.loader.num_workers=0 -o DataLoader.Train.sampler.shuffle=False -o Global.eval_interval=1 -o Global.save_interval=1 > %log_path%\!model!_train.log 2>&1
 ) else (
-    python tools/train.py -c %%i -o Global.epochs=2 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o DataLoader.Eval.sampler.batch_size=1 > %log_path%\!model!_train.log 2>&1
+    python tools/train.py -c %%i -o Global.epochs=1 -o DataLoader.Train.sampler.batch_size=1 -o Global.output_dir=output -o DataLoader.Eval.sampler.batch_size=1 > %log_path%\!model!_train.log 2>&1
 )
 
 if not !errorlevel! == 0 (
