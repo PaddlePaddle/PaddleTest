@@ -363,7 +363,7 @@ all_quant(){
   demo_quant_aware
   demo_quant_embedding
   demo_st_quant_post
-  demo_quant_pact_quant_aware
+  # demo_quant_pact_quant_aware
   demo_dygraph_quant
   demo_dy_qat1
 
