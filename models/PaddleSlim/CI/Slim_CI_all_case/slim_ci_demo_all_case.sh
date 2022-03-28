@@ -711,25 +711,6 @@ python evaluate.py \
        --pruned_model=st_unstructured_models \
        --data="imagenet"  >${log_path}/st_unstructured_prune_threshold_eval 2>&1
 print_info $? st_unstructured_prune_threshold_eval
-# load
-export CUDA_VISIBLE_DEVICES=${cudaid2}
-python -m paddle.distributed.launch \
---log_dir="st_unstructured_prune_threshold_load_gpu2_log" train.py \
---batch_size 256 \
---pretrained_model ../pretrain/MobileNetV1_pretrained \
---lr 0.05 \
---pruning_mode threshold \
---threshold 0.01 \
---data imagenet \
---lr_strategy piecewise_decay \
---step_epochs 1 2 3 \
---num_epochs 3 \
---test_period 1 \
---model_period 1 \
---model_path st_unstructured_models \
---pretrained_model st_unstructured_models \
---last_epoch 1 >${log_path}/st_unstructured_prune_threshold_load 2>&1
-print_info $? st_unstructured_prune_threshold_load
 
 ## sparsity: -55%, accuracy: 67%+/87%+
 export CUDA_VISIBLE_DEVICES=${cudaid1}
