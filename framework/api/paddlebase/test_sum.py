@@ -122,6 +122,20 @@ def test_sum8():
     obj.run(res=res, x=x, keepdim=True)
 
 
+@pytest.mark.api_base_sum_parameters
+def test_sum9():
+    """
+    keepdim=True
+    shape num > 65535
+    """
+    x = np.random.uniform(-1, 1, [66416, 20, 5])
+    nsum = np.sum(x, axis=1, keepdims=True)
+    paddle.disable_static()
+    pdata = paddle.to_tensor(x)
+    psum = paddle.sum(pdata, axis=1, keepdim=True)
+    assert np.allclose(nsum[66000], psum[66000])
+
+
 class TestSum1(APIBase):
     """
     test sum
@@ -139,7 +153,7 @@ obj1 = TestSum1(paddle.sum)
 
 
 @pytest.mark.api_base_sum_parameters
-def test_sum9():
+def test_sum10():
     """
     input is int32, int64
     """
