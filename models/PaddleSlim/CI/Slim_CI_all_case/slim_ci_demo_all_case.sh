@@ -24,6 +24,8 @@ cudaid1=$1;
 cudaid2=$2;
 echo "cudaid1,cudaid2", ${cudaid1}, ${cudaid2}
 export CUDA_VISIBLE_DEVICES=${cudaid1}
+#分布式log输出方式
+export PADDLE_LOG_LEVEL=debug
 
 export FLAGS_fraction_of_gpu_memory_to_use=0.98
 # data PaddleSlim/demo/data/ILSVRC2012
