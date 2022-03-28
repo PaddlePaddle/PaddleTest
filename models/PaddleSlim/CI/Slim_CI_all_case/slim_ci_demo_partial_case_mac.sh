@@ -514,7 +514,7 @@ all_prune(){
 # 4.1 sa_nas_mobilenetv2
 demo_nas(){
 cd ${slim_dir}/demo/nas || catchException demo_nas
-python sa_nas_mobilenetv2.py --search_steps 1 --port 8881 --use_gpu False >${log_path}/sa_nas_v2_T_1card 2>&1
+python sa_nas_mobilenetv2.py --search_steps 1 --port 8881 --retain_epoch 1 --use_gpu False >${log_path}/sa_nas_v2_T_1card 2>&1
 print_info $? sa_nas_v2_T_1card
 
 # 4.4 parl_nas
