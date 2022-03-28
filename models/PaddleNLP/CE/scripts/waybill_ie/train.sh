@@ -17,8 +17,15 @@ root_path=$cur_path/../../
 code_path=$cur_path/../../models_repo/examples/information_extraction/waybill_ie/
 log_path=$root_path/log/$model_name/
 mkdir -p $log_path
-#临时环境更改
-cd $root_path/models_repo
+
+print_info(){
+    cat ${log_path}/$2.log
+if [ $1 -ne 0 ];then
+    echo "exit_code: 1.0" >> ${log_path}/$2.log
+else
+    echo "exit_code: 0.0" >> ${log_path}/$2.log
+fi
+}
 
 #访问RD程序
 cd $code_path
@@ -35,6 +42,8 @@ elif [[ ${MODEL} == "ernie_crf" ]]
 then
     python run_ernie_crf.py > $log_path/train_${DEVICE}_${MODEL}.log 2>&1
 fi
+
+print_info $? train_${DEVICE}_${MODEL}
 
 #set http_proxy
 export http_proxy=$HTTPPROXY
