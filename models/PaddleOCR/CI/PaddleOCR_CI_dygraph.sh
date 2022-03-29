@@ -45,6 +45,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
    python -m pip install $5 #paddle_compile
+   python -c 'import paddle;print(paddle.version.commit)'
 
    echo "######  ----ln  data-----"
    rm -rf pretrain_models
