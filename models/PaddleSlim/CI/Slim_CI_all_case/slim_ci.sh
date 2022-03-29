@@ -37,13 +37,13 @@ set +x;
 
 ########
 #set _in_eager_mode_ = True
-echo -----set _in_eager_mode_ = True-----
-python_install_path=$(python -c 'from distutils.sysconfig import get_python_lib;
-print(get_python_lib())')
+#echo -----set _in_eager_mode_ = True-----
+#python_install_path=$(python -c 'from distutils.sysconfig import get_python_lib;
+#print(get_python_lib())')
 
-echo ${python_install_path}
-sed -i '77c  _in_eager_mode_ = True' ${python_install_path}/paddle/fluid/framework.py
-cat ${python_install_path}/paddle/fluid/framework.py | grep '_in_eager_mode_'
+#echo ${python_install_path}
+#sed -i '77c  _in_eager_mode_ = True' ${python_install_path}/paddle/fluid/framework.py
+#cat ${python_install_path}/paddle/fluid/framework.py | grep '_in_eager_mode_'
 
 ####################################
 # for paddleslim env
