@@ -1,5 +1,5 @@
 model_name::picodet
-yaml::DetForONNX/configs/picodet/picodet_l_416_coco.yml
+yaml::DetForONNX/configs/picodet/legacy_model/picodet_l_416_coco.yml
 pretrain_link::https://paddledet.bj.bcebos.com/models/picodet_l_416_coco.pdparams
 model_type::BaseDet
 opt_ver::11
