@@ -11,3 +11,5 @@ cd $root_path/models_repo && ls
 cd $code_path
 #获取数据&模型逻辑
 #数据处理逻辑
+# 跑之前先修改下包的代码：
+sed -i '549,553d' /usr/local/lib/python3.8/dist-packages/datasets/builder.py

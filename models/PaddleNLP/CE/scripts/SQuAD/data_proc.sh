@@ -11,3 +11,4 @@ cd $root_path/models_repo && ls
 cd $code_path
 #获取数据&模型逻辑
 #数据处理逻辑
+sed -i '549,553d' /opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/datasets/builder.py
