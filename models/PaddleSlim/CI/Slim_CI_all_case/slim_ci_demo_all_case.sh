@@ -774,7 +774,7 @@ python -m paddle.distributed.launch \
           --pruning_epochs 54 \
           --tunning_epochs 54 \
           --last_epoch -1 \
-          --skip_params_type conv1x1_only \
+          --prune_params_type conv1x1_only \
           --pruning_strategy gmp > ${log_path}/st_unstructured_prune_ratio_gmp 2>&1
 print_info $? st_unstructured_prune_ratio_gmp
 }
