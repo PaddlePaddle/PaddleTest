@@ -35,6 +35,8 @@ elif [[ $2 == 'train_linux_gpu2' ]] ; then
 
 elif [[ $2 == 'eval_linux' ]] ; then
     echo '#####eval_linux'
+    tail -n 5 ${log_path}/eval/${model}.log
+
     cat ${log_path}/eval/${model}.log | grep Avg
     cat ${log_path}/eval/${model}.log | grep Eval | grep Avg > tmp_eval.log
     cat ${log_path}/eval/${model}.log | grep exit_code
@@ -44,6 +46,8 @@ elif [[ $2 == 'eval_linux' ]] ; then
 
 elif [[ $2 == 'infer_linux' ]] ; then
     echo '#####infer_linux'
+    tail -n 5 ${log_path}/infer/${model}.log
+
     cat ${log_path}/infer/${model}.log | grep infer_exit_code
     cat ${log_path}/infer/${model}.log | grep infer_exit_code >../${log_path}/${model}_infer.log
     cat ../${log_path}/${model}_infer.log
@@ -56,7 +60,13 @@ elif [[ $2 == 'export_linux' ]] ; then
 
 elif [[ $2 == 'predict_linux' ]] ; then
     echo '#####predict_linux'
+    tail -n 5 ${log_path}/predict/${model}.log
+
     cat ${log_path}/predict/${model}.log | grep predict_exit_code
     cat ${log_path}/predict/${model}.log | grep predict_exit_code >../${log_path}/${model}_predict.log
     cat ../${log_path}/${model}_predict.log
+
+else
+    echo '##### Error error'
+
 fi
