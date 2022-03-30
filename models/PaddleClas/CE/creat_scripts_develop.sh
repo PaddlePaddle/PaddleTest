@@ -67,10 +67,10 @@ elif [[ ${model} == 'CSPDarkNet53' ]]; then
 
 elif [[ ${model} == 'DarkNet53' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.62999|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.72895|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|18.12492|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|18.12492|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.6109|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.73945|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|31.5522|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|31.5522|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.54048|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|48202.04587|g" $model.yaml #windows_eval

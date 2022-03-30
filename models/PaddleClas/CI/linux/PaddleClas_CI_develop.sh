@@ -17,6 +17,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     echo "path after"
     pwd
     export FLAGS_cudnn_deterministic=True
+    export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
@@ -382,7 +383,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "infer_exit_code: 0.0" >> $log_path/infer/$model.log
     else
-        cat $log_path/infer/${model}_infer.log
+        cat $log_path/infer/${model}.log
         echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
         echo "infer_exit_code: 1.0" >> $log_path/infer/$model.log
     fi
