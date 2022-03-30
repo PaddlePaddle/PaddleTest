@@ -1,5 +1,5 @@
 MODEL: "photopen" # 模型名
-PRIORITY: P1_release_release
+PRIORITY: P1_release
 GIT:
   addr: $REPO_PaddleGAN
   path: $ROOT_PATH/PaddleGAN

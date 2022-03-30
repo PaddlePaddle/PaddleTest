@@ -1,5 +1,5 @@
 MODEL: "msvsr_reds" # 模型名
-PRIORITY: P0_release_release
+PRIORITY: P0_release
 GIT:
   addr: $REPO_PaddleGAN
   path: $ROOT_PATH/PaddleGAN
