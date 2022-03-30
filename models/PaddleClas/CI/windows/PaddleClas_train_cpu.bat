@@ -13,6 +13,10 @@ echo "CE"| findstr %model_flag% >nul
 if !errorlevel! equ 0 (
 	echo "CE step"
 	set FLAGS_cudnn_deterministic=True
+
+        set FLAGS_enable_eager_mode=1
+        rem #验证天宇 220329 pr
+
 	cd %Project_path%
 	echo "path after"
 	echo %1 >clas_models_list_P0_cpu

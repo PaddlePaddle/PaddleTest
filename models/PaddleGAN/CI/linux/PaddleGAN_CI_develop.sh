@@ -4,9 +4,9 @@ echo ${cudaid2}
 echo ${Data_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-export FLAGS_use_virtual_memory_auto_growth=1
-export FLAGS_use_stream_safe_cuda_allocator=1
-export NCCL_SOCKET_IFNAME=xgbe0  #nccl解决无效
+export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
+export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
+# export NCCL_SOCKET_IFNAME=xgbe0  #nccl解决无效
 export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
 
 echo "path before"
