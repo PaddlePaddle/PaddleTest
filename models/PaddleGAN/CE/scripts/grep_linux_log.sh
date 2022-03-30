@@ -37,6 +37,5 @@ elif [[ $2 == 'eval_linux' ]] ; then
     cat ../${log_path}/${model}_eval.log
 
 else
-    echo '##### Error error'
-    
+    echo '##### unknown type'
 fi

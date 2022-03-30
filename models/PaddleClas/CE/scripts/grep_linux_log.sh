@@ -67,6 +67,5 @@ elif [[ $2 == 'predict_linux' ]] ; then
     cat ../${log_path}/${model}_predict.log
 
 else
-    echo '##### Error error'
-
+    echo '##### unknown type'
 fi

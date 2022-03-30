@@ -24,6 +24,5 @@ elif [[ $2 == 'eval_mac' ]] ; then
     cat ../${log_path}/${model}_eval.log
 
 else
-    echo '##### Error error'
-    
+    echo '##### unknown type'
 fi
