@@ -245,7 +245,7 @@ def test_clip17():
     """
     x = np.array([1, 2, 3])
     min = np.array([1])
-    max = np.array([2, 2])
+    max = np.array([2])
     res = np.clip(a=x, a_min=min, a_max=np.array([2]))
     obj.run(res=res, x=x, min=min, max=max)
 
