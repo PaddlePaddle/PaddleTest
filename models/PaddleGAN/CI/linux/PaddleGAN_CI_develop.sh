@@ -2,6 +2,7 @@ unset GREP_OPTIONS
 echo ${cudaid1}
 echo ${cudaid2}
 echo ${Data_path}
+echo ${Project_path}
 echo ${paddle_compile}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
@@ -16,6 +17,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     echo "path after"
     pwd
     export FLAGS_cudnn_deterministic=True
+    export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
@@ -235,11 +237,11 @@ echo $params_dir
 # if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]];then
     echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
-    echo "training_single_exit_code: 0.0" >> $log_path/train/${model}.log
+    echo "training_exit_code: 0.0" >> $log_path/train/${model}.log
 else
     cat $log_path/train/${model}.log
     echo -e "\033[31m train of $model failed!\033[0m"| tee -a $log_path/result.log
-    echo "training_single_exit_code: 1.0" >> $log_path/train/${model}.log
+    echo "training_exit_code: 1.0" >> $log_path/train/${model}.log
 fi
     ;;
 *)
@@ -259,11 +261,11 @@ echo $params_dir
 # if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]];then
     echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
-    echo "training_single_exit_code: 0.0" >> $log_path/train/${model}.log
+    echo "training_exit_code: 0.0" >> $log_path/train/${model}.log
 else
     cat $log_path/train/${model}.log
     echo -e "\033[31m train of $model failed!\033[0m"| tee -a $log_path/result.log
-    echo "training_single_exit_code: 1.0" >> $log_path/train/${model}.log
+    echo "training_exit_code: 1.0" >> $log_path/train/${model}.log
 fi
   ;;
 esac
