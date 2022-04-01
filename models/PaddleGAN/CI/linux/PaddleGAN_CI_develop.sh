@@ -17,7 +17,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     echo "path after"
     pwd
     export FLAGS_cudnn_deterministic=True
-    export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr
+    # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr  #在任务重插入
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
@@ -35,7 +35,7 @@ fi
 echo "######  ----ln  data-----"
 rm -rf data
 ln -s ${Data_path} data
-ls data
+ls data |head -n 2
 
 if [[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'CE' ]]; then
     rm -rf /root/.cache/paddle/dataset/mnist
@@ -102,6 +102,7 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
 
 else
     # ppgan
+    set +x
     echo "######  ffmpeg"
     yum update -y
     yum install epel-release -y
@@ -110,15 +111,16 @@ else
     yum install boost -y
     yum install opencv -y
     yum install ffmpeg -y
-    ffmpeg
     #install  dlib
     echo "######  gcc"
     yum install gcc -y
     yum install centos-release-scl -y
     yum install devtoolset-8-gcc -y
-    ls /opt/rh/devtoolset-8/enable
     source /opt/rh/devtoolset-8/enable
+    set -x
+
     gcc -v
+    ffmpeg
     echo "######  cmake"
     yum install cmake -y
     cmake -version
@@ -162,7 +164,7 @@ python -m pip install -r requirements.txt  \
 echo "######  install done "
 
 
-pip list
+#pip list
 echo "######  pip list"
 
 # dir
@@ -271,7 +273,7 @@ fi
 esac
 
 # evaluate
-ls output/$params_dir/
+ls output/$params_dir/ |head -n 2
 echo "model is ${model}"
 case ${model} in
 stylegan_v2_256_ffhq)
@@ -434,13 +436,14 @@ if [[ ! ${model_flag} =~ "single" ]] && [[ ! ${model_flag} =~ "CE" ]];then
     fi
 fi
 
-# result
 num=`cat $log_path/result.log | grep "failed" | wc -l`
 if [ "${num}" -gt "0" ];then
-echo -e "-----------------------------base cases-----------------------------"
-cat $log_path/result.log | grep "failed"
-echo -e "--------------------------------------------------------------------"
-exit 1
-else
-exit 0
+    if [[ ! ${model_flag} =~ 'CE' ]]; then
+        echo -e "-----------------------------base cases-----------------------------"
+        cat $log_path/result.log | grep "failed"
+        echo -e "--------------------------------------------------------------------"
+    fi
+    exit 1
+    else
+    exit 0
 fi
