@@ -60,7 +60,7 @@ def test_jit_assign_1():
     runner.run()
 
 
-@pytest.mark.jit_assign_parameters
+@pytest.mark.jit_assign_vartype
 def test_jit_assign_2():
     """
     @paddle.jit.to_static
@@ -78,6 +78,7 @@ def test_jit_assign_2():
         return paddle.assign(inputs)
 
     inps = randtool("float", -2, 2, shape=[3, 6, 2, 2, 2, 1, 5, 4, 2])
+    inps = np.array([1.5, 2.1, 3.2])
     runner = Runner(func=func, name="assign_2", dtype=["float32"], ftype="func")
     runner.add_kwargs_to_dict("params_group1", inputs=inps)
     runner.run()

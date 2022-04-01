@@ -3,18 +3,22 @@ echo "branch is ${AGILE_COMPILE_BRANCH}"
 python3.7 -m pip install pytest
 python3.7 -m pip install scipy
 
-
-# api
-cd api
-bash ./run.sh
-api=$?
-echo ${api}
-cd $home
-
+## api
+#cd api
+#bash ./run.sh
+#api=$?
+#echo ${api}
+#cd $home
 
 # jit
 cd e2e
 cd jit
+cd api
+dir ./
+python3.7 -m pytest test_assign.py
+
+
+exit 0
 bash ./run.sh
 jit=$?
 echo ${jit}
