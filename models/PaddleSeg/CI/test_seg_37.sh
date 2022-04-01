@@ -74,7 +74,7 @@ print_result(){
 }
 
 # run dynamic models
-pip install -r requirements.txt
+pip install -r requirements.txt --ignore-installed
 log_dir=.
 model_type_path=
 dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
