@@ -17,7 +17,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     echo "path after"
     pwd
     export FLAGS_cudnn_deterministic=True
-    export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr
+    # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr  在任务重插入
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
@@ -35,7 +35,7 @@ fi
 echo "######  ----ln  data-----"
 rm -rf dataset
 ln -s ${Data_path} dataset
-ls dataset
+ls dataset |head -n 2
 cd deploy
 ln -s ${Data_path}/rec_demo/* .
 cd ..
@@ -292,7 +292,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     fi
 
     #单卡
-    ls output/$params_dir/
+    ls output/$params_dir/ |head -n 2
     sleep 3
     if [[ ${model_flag} =~ "CE" ]]; then
         rm -rf output #清空多卡cache
@@ -360,7 +360,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
     sleep 3
 
-    ls output/$params_dir/
+    ls output/$params_dir/ |head -n 2
     # eval
     python tools/eval.py -c $line \
         -o Global.pretrained_model=output/$params_dir/latest \
@@ -706,10 +706,12 @@ fi
 
 num=`cat $log_path/result.log | grep "failed" | wc -l`
 if [ "${num}" -gt "0" ];then
-echo -e "-----------------------------base cases-----------------------------"
-cat $log_path/result.log | grep "failed"
-echo -e "--------------------------------------------------------------------"
-exit 1
-else
-exit 0
+    if [[ ! ${model_flag} =~ 'CE' ]]; then
+        echo -e "-----------------------------base cases-----------------------------"
+        cat $log_path/result.log | grep "failed"
+        echo -e "--------------------------------------------------------------------"
+    fi
+    exit 1
+    else
+    exit 0
 fi
