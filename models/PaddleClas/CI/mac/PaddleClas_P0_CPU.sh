@@ -3,6 +3,10 @@ echo "Project_path"
 echo ${Project_path}
 echo "data_path"
 echo ${data_path}
+echo "model_flag"
+echo ${model_flag}
+echo "paddle_compile"
+echo ${paddle_compile}
 
 echo "path before"
 pwd
@@ -11,8 +15,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     echo "path after"
     pwd
     export FLAGS_cudnn_deterministic=True
-    export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr
-
+    # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr
     unset FLAGS_use_virtual_memory_auto_growth
     echo $1 > clas_models_list_P0 #传入参数
 fi
