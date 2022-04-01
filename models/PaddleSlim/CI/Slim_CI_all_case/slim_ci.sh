@@ -31,7 +31,7 @@ echo "python="$1
 set -x
 echo -e "\033[35m ---- install paddle: python=$1, paddle= $2   \033[0m"
 python -m pip install --upgrade pip
-python -m pip install $2;
+python -m pip install $2 --no-cache-dir
 python -c 'import paddle; print(paddle.version.commit)';
 set +x;
 
