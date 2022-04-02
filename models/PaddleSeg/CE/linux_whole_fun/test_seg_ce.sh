@@ -74,7 +74,7 @@ skip_export_model='enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k d
 TRAIN_MUlTI_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
     mode=train_multi_dynamic
-    if [[ ${model} =~ 'segformer' ]];then
+    if [[ ${model} =~ 'segformer' || ${model} =~ 'encnet' ]];then
         echo -e "${model} does not test multi_train！"
     else
         python -m paddle.distributed.launch train.py \
@@ -105,7 +105,7 @@ TRAIN_SINGLE_DYNAMIC(){
 TRAIN_SINGLE_DYNAMIC_BS1(){
     export CUDA_VISIBLE_DEVICES=$cudaid1
     mode=train_single_dynamic_bs1
-    if [[ ${model} =~ 'segformer' ]];then
+    if [[ ${model} =~ 'segformer' || ${model} =~ 'encnet' ]];then
         echo -e "${model} does not test single_dynamic_bs1_train！"
     else
         python train.py \
