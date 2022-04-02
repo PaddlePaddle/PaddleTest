@@ -28,17 +28,17 @@ echo "python="$1
 ####################################
 # for paddle env
 set -x
-python -m pip install --ignore-installed --upgrade pip
-python -m pip install $2;
+# python -m pip install --ignore-installed --upgrade pip
+# python -m pip install $2;
 python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 ####################################
-mkdir /ssd1
-cd /ssd1
-mkdir paddlenlp
-cd /workspace
-export PPNLP_HOME=/ssd1/paddlenlp
-export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
-ln -s /home/data/cfs/models_ce/PaddleNLP/*  /ssd1/paddlenlp/
+# mkdir /ssd1
+# cd /ssd1
+# mkdir paddlenlp
+# cd /workspace
+# export PPNLP_HOME=/ssd1/paddlenlp
+# export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
+# ln -s /home/data/cfs/models_ce/PaddleNLP/*  /ssd1/paddlenlp/
 ####################################
 # for paddlenlp env
 nlp1_build (){
@@ -59,9 +59,6 @@ $3
 python -m pip install -r requirements_ci.txt
 unset http_proxy && unset https_proxy
 python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install $2;
-export http_proxy=$4;
-export https_proxy=$4;
 python -c 'from visualdl import LogWriter'
 pip list
 set +x

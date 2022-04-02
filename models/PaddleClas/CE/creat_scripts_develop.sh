@@ -45,10 +45,10 @@ if [[ ${model} == 'AlexNet' ]]; then
 
 elif [[ ${model} == 'alt_gvt_small' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.2541|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.50772|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|7.96769|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|7.96769|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.29283|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.44081|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|8.08099|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|8.08099|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.14774|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|7.91598|g" $model.yaml #windows_eval
@@ -67,10 +67,10 @@ elif [[ ${model} == 'CSPDarkNet53' ]]; then
 
 elif [[ ${model} == 'DarkNet53' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.62999|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.72895|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|18.12492|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|18.12492|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.6109|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.73945|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|31.5522|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|31.5522|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.54048|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|48202.04587|g" $model.yaml #windows_eval
@@ -80,10 +80,10 @@ elif [[ ${model} == 'DarkNet53' ]]; then
 
 elif [[ ${model} == 'DeiT_tiny_patch16_224' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.08465|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.24591|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|7.79663|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|7.79663|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.02845|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.21715|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|7.67821|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|7.67821|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|5.76597|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|8.00662|g" $model.yaml #windows_eval
@@ -113,10 +113,10 @@ elif [[ ${model} == 'DLA46_c' ]]; then
 
 elif [[ ${model} == 'DPN107' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.50796|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.55144|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|12.88681|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|12.88681|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.50921|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.56134|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|11.15285|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|11.15285|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.53907|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|7.59987|g" $model.yaml #windows_eval
@@ -124,10 +124,10 @@ elif [[ ${model} == 'DPN107' ]]; then
 
 elif [[ ${model} == 'EfficientNetB0' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|12.68369|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|12.72219|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|26.49224|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|26.49224|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|18.2399|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|12.83394|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|20.80327|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|20.80327|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|11.95185|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|12.37311|g" $model.yaml #windows_eval
@@ -135,10 +135,10 @@ elif [[ ${model} == 'EfficientNetB0' ]]; then
 
 elif [[ ${model} == 'GhostNet_x1_3' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|7.0379|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.82252|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|6.43611|7.03784|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.82463|g" $model.yaml #linux_train_多卡
     sed -i "" "s|0.93207|1.05573|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|8.16799|g" $model.yaml #linux_train_eval
+    sed -i "" "s|16.04218|21.81742|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.76389|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|1.06047|g" $model.yaml #windows_eval
@@ -185,10 +185,10 @@ elif [[ ${model} == 'HRNet_W18_C' ]]; then
 
 elif [[ ${model} == 'InceptionV4' ]]; then
     sed -i "" "s|P0|P0|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.47594|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.375|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|6.43611|6.46977|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.34793|g" $model.yaml #linux_train_多卡
     sed -i "" "s|0.93207|0.91722|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|10.55219|g" $model.yaml #linux_train_eval
+    sed -i "" "s|16.04218|15.86348|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.5685|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|117.75373|g" $model.yaml #windows_eval
@@ -263,10 +263,10 @@ elif [[ ${model} == 'MobileNetV2' ]]; then
 
 elif [[ ${model} == 'MobileNetV3_large_x1_0' ]]; then
     sed -i "" "s|P0|P0|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.91331|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.91901|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|6.43611|6.91278|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.9184|g" $model.yaml #linux_train_多卡
     sed -i "" "s|0.93207|1.06482|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|6.98202|g" $model.yaml #linux_train_eval
+    sed -i "" "s|16.04218|6.93002|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.8921|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|1.06495|g" $model.yaml #windows_eval
@@ -278,10 +278,10 @@ elif [[ ${model} == 'MobileNetV3_large_x1_0' ]]; then
 
 elif [[ ${model} == 'pcpvt_small' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.28069|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.37232|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|7.79441|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|7.79441|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.26105|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.38915|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|7.70332|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|7.70332|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.12982|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|7.7351|g" $model.yaml #windows_eval
@@ -289,10 +289,10 @@ elif [[ ${model} == 'pcpvt_small' ]]; then
 
 elif [[ ${model} == 'PPLCNet_x1_0' ]]; then
     sed -i "" "s|P0|P0|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.88421|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.91023|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|6.43611|6.88318|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.91012|g" $model.yaml #linux_train_多卡
     sed -i "" "s|0.93207|1.23323|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|6.9502|g" $model.yaml #linux_train_eval
+    sed -i "" "s|16.04218|6.95014|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.89855|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|1.24172|g" $model.yaml #windows_eval
@@ -316,10 +316,10 @@ elif [[ ${model} == 'RedNet50' ]]; then
 
 elif [[ ${model} == 'Res2Net50_26w_4s' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.52324|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.64367|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|9.85302|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|9.85302|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.50202|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.63189|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|10.67332|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|10.67332|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.53969|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|31.71620|g" $model.yaml #windows_eval
@@ -340,10 +340,10 @@ elif [[ ${model} == 'Res2Net50_26w_4s' ]]; then
 
 elif [[ ${model} == 'ResNeSt50_fast_1s1x64d' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.59088|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.72539|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|30.90008|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|30.90008|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.606|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.71334|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|14.74579|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|14.74579|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.53579|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|68.72889|g" $model.yaml #windows_eval
@@ -351,10 +351,10 @@ elif [[ ${model} == 'ResNeSt50_fast_1s1x64d' ]]; then
 
 elif [[ ${model} == 'ResNet50_vd' ]]; then
     sed -i "" "s|P0|P0|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.50555|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.634|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|6.43611|6.55064|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.56253|g" $model.yaml #linux_train_多卡
     sed -i "" "s|0.93207|0.89191|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|15.16626|g" $model.yaml #linux_train_eval
+    sed -i "" "s|16.04218|7.53029|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.53586|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|0.88911|g" $model.yaml #windows_eval
@@ -400,10 +400,10 @@ elif [[ ${model} == 'ReXNet_1_0' ]]; then
 
 elif [[ ${model} == 'SE_ResNet18_vd' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.3886|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.36124|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|8.58754|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|8.58754|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.42953|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.34557|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|8.17827|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|8.17827|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.5366|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|12.56845|g" $model.yaml #windows_eval
@@ -523,10 +523,10 @@ elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
 
 elif [[ ${model} == 'Xception41_deeplab' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|5.43198|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|5.32851|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|11.19004|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|11.19004|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|5.77681|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|5.37061|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|17.78094|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|17.78094|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.57439|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|9.81792|g" $model.yaml #windows_eval
@@ -534,10 +534,10 @@ elif [[ ${model} == 'Xception41_deeplab' ]]; then
 
 elif [[ ${model} == 'Xception71' ]]; then
     sed -i "" "s|P0|P1|g" $model.yaml #P0/1
-    sed -i "" "s|6.43611|6.09203|g" $model.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|5.80298|g" $model.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|13.61897|g" $model.yaml #linux_eval
-    sed -i "" "s|16.04218|13.61897|g" $model.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.11912|g" $model.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|5.77516|g" $model.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|11.60848|g" $model.yaml #linux_eval
+    sed -i "" "s|16.04218|11.60848|g" $model.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.60048|g" $model.yaml #windows_train
     sed -i "" "s|0.93661|73.75383|g" $model.yaml #windows_eval

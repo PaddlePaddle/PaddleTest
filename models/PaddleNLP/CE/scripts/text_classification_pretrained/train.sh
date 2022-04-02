@@ -34,10 +34,11 @@ fi
 }
 
 if [[ $1 == 'gpu' ]];then #GPU
-    python -m paddle.distributed.launch train.py\
+    python -m paddle.distributed.launch --gpus "$3" train.py\
         --batch_size 8\
         --epochs 1 \
         --save_dir ./checkpoints\
+        --use_amp False \
         --device $1 > $log_path/train_$2_$1.log 2>&1
     print_info $? train_$2_$1
 else #CPU
@@ -45,6 +46,7 @@ else #CPU
         --batch_size 8\
         --epochs 1 \
         --save_dir ./checkpoints\
+        --use_amp False \
         --device $1 > $log_path/train_$1.log 2>&1
     print_info $? train_$1
 fi
