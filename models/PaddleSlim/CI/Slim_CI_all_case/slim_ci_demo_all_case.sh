@@ -559,6 +559,7 @@ print_info $? slim_prune_fpgm_v2_T
 python eval.py --model "MobileNetV2" --data "imagenet" \
 --model_path "./output/fpgm_mobilenetv2_models/0" >${log_path}/slim_prune_fpgm_v2_eval 2>&1
 print_info $? slim_prune_fpgm_v2_eval
+
 # ResNet34 -50
 # export CUDA_VISIBLE_DEVICES=${cudaid1}
 # python train.py \
@@ -575,11 +576,12 @@ print_info $? slim_prune_fpgm_v2_eval
 #     --criterion="geometry_median" \
 #     --model_path="./output/fpgm_resnet34_50_models" \
 #     --save_inference True >${log_path}/slim_prune_fpgm_resnet34_50_T 2>&1
-print_info $? slim_prune_fpgm_resnet34_50_T
-python eval.py --model "ResNet34" --data "imagenet" \
---model_path "./output/fpgm_resnet34_50_models/0" >${log_path}/slim_prune_fpgm_resnet34_50_eval 2>&1
-print_info $? slim_prune_fpgm_resnet34_50_eval
-# ResNet34 -42 slim_prune_fpgm_resnet34_42_T
+# print_info $? slim_prune_fpgm_resnet34_50_T
+# python eval.py --model "ResNet34" --data "imagenet" \
+# --model_path "./output/fpgm_resnet34_50_models/0" >${log_path}/slim_prune_fpgm_resnet34_50_eval 2>&1
+# print_info $? slim_prune_fpgm_resnet34_50_eval
+# # ResNet34 -42 slim_prune_fpgm_resnet34_42_T
+
 cd ${slim_dir}/demo/prune
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 python train.py \
