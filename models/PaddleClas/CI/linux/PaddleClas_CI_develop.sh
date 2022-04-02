@@ -426,76 +426,50 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     #    fi
     # fi
 
+    size_tmp=`cat ${line} |grep image_shape|cut -d "," -f2|cut -d " " -f2` #获取train的shape保持和predict一致
     cd deploy
-    if [[ ${model} =~ '384' ]] && [[ ! ${model} =~ 'LeViT' ]];then
-        sed -i 's/size: 224/size: 384/g' configs/inference_cls.yaml
-        sed -i 's/resize_short: 256/resize_short: 384/g' configs/inference_cls.yaml
+    # sed -i 's/size: 224/size: 384/g' configs/inference_cls.yaml
+    sed -i 's/size: 224/size: '${size_tmp}'/g' configs/inference_cls.yaml
+    # sed -i 's/resize_short: 256/resize_short: 384/g' configs/inference_cls.yaml
+    sed -i 's/resize_short: 256/resize_short: '${size_tmp}'/g' configs/inference_cls.yaml
+    if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
+        python python/predict_cls.py -c configs/inference_cls_ch4.yaml \
+            -o Global.inference_model_dir="../inference/"$model \
+            > ../$log_path/predict/$model.log 2>&1
+    else
         python python/predict_cls.py -c configs/inference_cls.yaml \
             -o Global.inference_model_dir="../inference/"$model \
             > ../$log_path/predict/$model.log 2>&1
-        if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
-            echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-        else
-            cat ../$log_path/predict/${model}.log
-            echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-        fi
+    fi
 
-        python python/predict_cls.py -c configs/inference_cls.yaml \
+    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
+        echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
+    else
+        cat ../$log_path/predict/${model}.log
+        echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+    fi
+
+    if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
+        python python/predict_cls.py -c configs/inference_cls_ch4.yaml  \
+            -o Global.infer_imgs="./images"  \
+            -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"$model \
+            > ../$log_path/predict/$model.log 2>&1
+    else
+        python python/predict_cls.py -c configs/inference_cls.yaml  \
             -o Global.infer_imgs="./images"  \
             -o Global.batch_size=4 \
             -o Global.inference_model_dir="../inference/"$model \
             > ../$log_path/predict/$model.log 2>&1
-        if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
-            echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-            echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
-        else
-            cat ../$log_path/predict/${model}.log
-            echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-            echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
-        fi
-
-        sed -i 's/size: 384/size: 224/g' configs/inference_cls.yaml
-        sed -i 's/resize_short: 384/resize_short: 256/g' configs/inference_cls.yaml
-    else
-        if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
-            python python/predict_cls.py -c configs/inference_cls_ch4.yaml \
-                -o Global.inference_model_dir="../inference/"$model \
-                > ../$log_path/predict/$model.log 2>&1
-        else
-            python python/predict_cls.py -c configs/inference_cls.yaml \
-                -o Global.inference_model_dir="../inference/"$model \
-                > ../$log_path/predict/$model.log 2>&1
-        fi
-
-        if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
-            echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-        else
-            cat ../$log_path/predict/${model}.log
-            echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-        fi
-
-        if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
-            python python/predict_cls.py -c configs/inference_cls_ch4.yaml  \
-                -o Global.infer_imgs="./images"  \
-                -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"$model \
-                > ../$log_path/predict/$model.log 2>&1
-        else
-            python python/predict_cls.py -c configs/inference_cls.yaml  \
-                -o Global.infer_imgs="./images"  \
-                -o Global.batch_size=4 \
-                -o Global.inference_model_dir="../inference/"$model \
-                > ../$log_path/predict/$model.log 2>&1
-        fi
-        if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
-            echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-            echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
-        else
-            cat ../$log_path/predict/${model}.log
-            echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-            echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
-        fi
-
     fi
+    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
+        echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
+        echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
+    else
+        cat ../$log_path/predict/${model}.log
+        echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+        echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
+    fi
+
     cd ..
     done
 fi
