@@ -99,7 +99,7 @@ rm -rf models_list_all
 rm -rf models_list_det
 rm -rf models_list_rec
 
-find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' > models_list_det
+find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'det_mv3_east' > models_list_det
 find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_resnet_stn_bilstm_att' > models_list_rec
 
 shuf models_list_det > models_list_all
