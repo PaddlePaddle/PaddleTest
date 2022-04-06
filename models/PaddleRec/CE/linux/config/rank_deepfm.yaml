@@ -413,7 +413,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.998051
+        kpi_base: 0.998474
         threshold: 0.001
         actived: True
         evaluation: "+"
@@ -517,7 +517,7 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.998093
+        kpi_base: 0.997966
         threshold: 0.001
         actived: True
         evaluation: "+"
