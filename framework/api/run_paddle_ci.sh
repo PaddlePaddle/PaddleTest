@@ -1,6 +1,7 @@
 home=$PWD
 python3.7 -m pip install pytest
 python3.7 -m pip install scipy
+export FLAGS_use_curand=1
 
 case_dir_list=('fft' 'device' 'incubate' 'linalg' 'paddlebase' 'loss' 'nn' 'optimizer')
 result_array=()

@@ -55,12 +55,12 @@ TRAIN:
       #   actived: True
       #   evaluation: "-"
       #   unit_repr: "s"
-      f1:
+      loss:
         latest: True
-        kpi_base: 9.68371
+        kpi_base: 4.60107
         threshold: 0.08
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_gpu_1.1.log
 

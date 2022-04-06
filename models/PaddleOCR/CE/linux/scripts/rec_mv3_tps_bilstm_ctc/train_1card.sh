@@ -16,4 +16,5 @@ python -m pip install -r requirements.txt
 sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' configs/rec/rec_mv3_tps_bilstm_ctc.yml
 
 python tools/train.py -c configs/rec/rec_mv3_tps_bilstm_ctc.yml -o Global.epoch_num=10 > log/rec_mv3_tps_bilstm_ctc_1card.log 2>&1
+cat log/rec_mv3_tps_bilstm_ctc_1card.log
 cat log/rec_mv3_tps_bilstm_ctc_1card.log | grep "10/10" > ../log/rec_mv3_tps_bilstm_ctc_1card.log

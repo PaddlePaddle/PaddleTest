@@ -64,7 +64,7 @@ def test_randn1():
     """
     obj.seed = 1
     # res = np.array([[0, 7], [6, 0]])
-    obj.exception(etype="NotFoundError", shape=[2, 2], dtype=np.int32)
+    obj.exception(etype="NotFound", shape=[2, 2], dtype=np.int32)
 
 
 @skip_platform_not_linux
@@ -108,5 +108,5 @@ def test_randn5():
     """
     obj.places = [fluid.CUDAPlace(0)]
     obj.seed = 1
-    res = np.array([[-4.080414, -1.3719953], [0.2568497, 1.2351426]])
+    res = np.array([[-0.296278, 2.676448], [-0.14084621, -0.84409523]])
     obj.run(res=res, shape=np.array([2, 2]))

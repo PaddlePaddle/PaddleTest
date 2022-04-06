@@ -14,4 +14,5 @@ fi
 python -m pip install -r requirements.txt
 
 python -m paddle.distributed.launch tools/train.py -c configs/e2e/e2e_r50_vd_pg.yml  -o Global.epoch_num=10 > log/e2e_r50_vd_pgnet_2card.log 2>&1
+cat log/e2e_r50_vd_pgnet_2card.log
 cat log/e2e_r50_vd_pgnet_2card.log | grep "10/10" > ../log/e2e_r50_vd_pgnet_2card.log

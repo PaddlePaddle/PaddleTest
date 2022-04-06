@@ -9,50 +9,182 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
-  model_scripts_path: scripts/starganv2_celeba_hq/ #脚本的路径
+  model_function_path_linux: linux/ #脚本的路径
+  model_function_path_win: windows/ #脚本的路径
+  model_function_path_mac: mac/ #脚本的路径
+  model_scripts_path: scripts/ #脚本的路径
   model_log_path: log
 
 EXEC:
-  exec_cases: [TRAIN]
+  exec_cases: [FUNCTION,TRAIN,EVAL]
   exec_priority: [P1]
-  exec_tag: [linux_dy_gpu1,linux_dy_gpu2]
+  exec_tag: $EXEC_TAG
+
 #测试套
-TRAIN: # 训练步骤
+FUNCTION: # 训练步骤
   -
-    priority: P1  # dy_gpu1
-    tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train_1card.sh
-
-    kpis: #kpi指标
-      D/latent_real:
-        latest: True
-        kpi_base: 1 #0.5
-        threshold: 1 # 0.3
-        actived: True
-        evaluation: "-"
-    output: $ROOT_PATH/$model_log_path/starganv2_celeba_hq_1card.log
-  -
-    priority: P1  # dy_gpu1
-    tag: linux_dy_gpu2
+    tag: linux_function_test
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleGAN_CI_develop.sh configs/starganv2_celeba_hq.yaml
+  -
+    tag: win_function_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_win
+        cmd: PaddleGAN_train_gpu.bat configs/starganv2_celeba_hq.yaml
+  -
+    tag: win_cpu_function_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_win
+        cmd: PaddleGAN_train_cpu.bat configs/starganv2_celeba_hq.yaml
+  -
+    tag: mac_function_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_mac
+        cmd: bash PaddleGAN_P1_CPU.sh configs/starganv2_celeba_hq.yaml
 
+TRAIN: # 训练步骤
+  -
+    tag: train_linux_gpu2
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train_2card.sh
-
+        cmd: bash grep_linux_log.sh configs/starganv2_celeba_hq.yaml train_linux_gpu2
     kpis: #kpi指标
-      D/latent_real:
+      training_exit_code:
         latest: True
-        kpi_base: 1 #0.5
-        threshold: 1 # 0.3
+        kpi_base: 0.0
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/starganv2_celeba_hq_2card.log
+  -
+    tag: train_win_gpu
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat configs/starganv2_celeba_hq.yaml train_win_gpu
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/starganv2_celeba_hq_train.log
+  -
+    tag: train_win_cpu
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat configs/starganv2_celeba_hq.yaml train_win_cpu
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/starganv2_celeba_hq_train.log
+  -
+    tag: train_mac_cpu
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh configs/starganv2_celeba_hq.yaml train_mac_cpu
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/starganv2_celeba_hq_cpu.log
+
+EVAL: # 训练步骤
+  -
+    tag: eval_linux
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/starganv2_celeba_hq.yaml eval_linux
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/starganv2_celeba_hq_eval.log
+  -
+    tag: eval_win
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat configs/starganv2_celeba_hq.yaml eval_win
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/starganv2_celeba_hq_eval.log
+  -
+    tag: eval_mac
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh configs/starganv2_celeba_hq.yaml eval_mac
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/starganv2_celeba_hq_eval.log

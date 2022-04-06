@@ -132,7 +132,7 @@ PYTHON_INFER(){
 MOT_PYTHON_INFER(){
     mode=mot_python_infer
     export PYTHONPATH=`pwd`
-    python deploy/python/mot_jde_infer.py \
+    python deploy/pptracking/python/mot_jde_infer.py \
            --model_dir=./inference_model/${model} \
            --video_file=test_demo.mp4 \
            --device=CPU \
