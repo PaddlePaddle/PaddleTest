@@ -58,6 +58,7 @@ def test_dependency_parsing():
 
 def test_sentiment_analysis():
     skep = Taskflow
+    print("skep", skep)
 
 
 if __name__ == "__main__":
