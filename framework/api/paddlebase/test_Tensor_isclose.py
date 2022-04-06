@@ -5,7 +5,7 @@
 """
 test_Tensor_isclose
 """
-
+import os
 import sys
 from apibase import APIBase
 
@@ -15,7 +15,7 @@ import numpy as np
 
 sys.path.append("../..")
 from utils.interceptor import skip_branch_is_2_2
-import os
+
 
 
 class TestIsClose(APIBase):
