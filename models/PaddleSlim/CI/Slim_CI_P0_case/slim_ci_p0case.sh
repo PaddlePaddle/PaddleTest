@@ -85,8 +85,8 @@ print_info $? ${model}
 
 all_distillation(){ # 大数据 5个模型
 distillation
-distillation2
-dml
+#distillation2
+#dml
 }
 # 2.1 quant/quant_aware 使用小数据集即可
 quant_aware(){
@@ -155,7 +155,8 @@ print_info $? st_quant_post_v1_eval1
 
 # 3 离线量化
 # 4 量化后eval
-for algo in hist avg mse
+#for algo in hist avg mse
+for algo in hist
 do
 ## 不带bc 离线量化
 echo "quant_post train no bc " ${algo}
@@ -518,10 +519,8 @@ all_quant(){ # 10个模型
     st_quant_post
     pact_quant_aware
     dy_quant
-    dy_qat4
-    if [ "${is_develop}" == "True" ];then
-        ce_tests_dygraph_ptq4
-    fi
+    #dy_qat4
+
 }
 
 # 3 prune
@@ -819,8 +818,8 @@ prune(){
 all_prune(){ # 7个模型
     prune_v1
     slim_prune_fpgm_v1_T
-    slim_prune_fpgm_v2_T
-    slim_prune_fpgm_resnet34_42_T
+    #slim_prune_fpgm_v2_T
+    #slim_prune_fpgm_resnet34_42_T
     slim_prune_fpgm_resnet34_50_T
     prune_ResNet50
     dy_prune_ResNet34_f42
@@ -850,7 +849,7 @@ print_info $? ${model}
 #print_info $? ${model}
 }
 all_nas(){ # 3 个模型
-    nas
+    #nas
 }
 # 5 darts
 # search 1card # DARTS一阶近似搜索方法
@@ -949,7 +948,7 @@ done
 }
 set -e
 #get_diff_TO_P0case
-P0case_list=(distillation quant prune nas unstructured_prune darts ce_tests_demo)
+P0case_list=(distillation quant prune unstructured_prune )
 echo -e "\033[35m ---- P0case_list length: ${#P0case_list[*]}, cases: ${P0case_list[*]} \033[0m"
 echo -e "\033[35m ---- P0case_time: $P0case_time min \033[0m"
 set +e
