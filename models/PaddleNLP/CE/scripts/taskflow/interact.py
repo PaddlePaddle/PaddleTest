@@ -7,6 +7,9 @@ from paddlenlp import Taskflow
 
 
 def test_knowledge_mining():
+    """
+    test knowledge mining
+    """
     wordtag = Taskflow("knowledge_mining", model="wordtag", batch_size=2, max_seq_len=128, linking=True)
     wordtag("《孤女》是2010年九州出版社出版的小说，作者是余兼羽。")
 
@@ -15,6 +18,9 @@ def test_knowledge_mining():
 
 
 def test_name_entity_recognition():
+    """
+    test name entity recognition
+    """
     ner = Taskflow("ner", batch_size=2)
     ner("《长津湖》收尾，北美是最大海外票仓")
     ner_fast = Taskflow("ner", mode="fast")
@@ -24,6 +30,9 @@ def test_name_entity_recognition():
 
 
 def test_word_segmetation():
+    """
+    test word segmetation
+    """
     seg = Taskflow("word_segmentation", batch_size=2)
     seg(["第十四届全运会在西安举办", "三亚是一个美丽的城市"])
     seg_fast = Taskflow("word_segmentation", mode="fast")
@@ -33,16 +42,25 @@ def test_word_segmetation():
 
 
 def test_pos_tagging():
+    """
+    test pos tagging
+    """
     tag = Taskflow("pos_tagging", batch_size=2)
     tag("第十四届全运会在西安举办")
 
 
 def test_corrector():
+    """
+    test corrector
+    """
     corrector = Taskflow("text_correction", batch_size=2)
     corrector("遇到逆竟时，我们必须勇于面对，而且要愈挫愈勇，这样我们才能朝著成功之路前进。")
 
 
 def test_dependency_parsing():
+    """
+    test dependency parsing
+    """
     ddp = Taskflow("dependency_parsing", model="ddparser")
     print(ddp("9月9日上午纳达尔在亚瑟·阿什球场击败俄罗斯球员梅德韦杰夫"))
     print(ddp.from_segments([["9月9日", "上午", "纳达尔", "在", "亚瑟·阿什球场", "击败", "俄罗斯", "球员", "梅德韦杰夫"]]))
@@ -57,6 +75,9 @@ def test_dependency_parsing():
 
 
 def test_sentiment_analysis():
+    """
+    test sentiment analysis
+    """
     skep = Taskflow
     print("skep", skep)
 
