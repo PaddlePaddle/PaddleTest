@@ -6,7 +6,7 @@ slim_prepare_env_mac.sh $1 $2 $3
 slim_prepare_data_mac.sh
 
 # cudaid1、cudaid2
-slim_run_case_mac.sh $4 $5
+slim_run_case_mac.sh
 
 
 cd ${slim_dir}/logs
