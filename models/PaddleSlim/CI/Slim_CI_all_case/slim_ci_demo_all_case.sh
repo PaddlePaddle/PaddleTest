@@ -152,34 +152,16 @@ demo_quant_quant_post(){
 # 20210425 新增4种离线量化方法
 cd ${slim_dir}/demo/quant/quant_post || catchException demo_quant_quant_post
 export CUDA_VISIBLE_DEVICES=${cudaid1}
-# 1 导出模型
-python export_model.py --model "MobileNet" --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---data imagenet >${log_path}/st_quant_post_v1_export 2>&1
-print_info $? st_quant_post_v1_export
-# 量化前eval
-python eval.py --model_path ./inference_model/MobileNet --model_name model \
---params_name weights >${log_path}/st_quant_post_v1_eval1 2>&1
-print_info $? st_quant_post_v1_eval1
 
-# 3 离线量化
-# 4 量化后eval
-for algo in hist avg mse
+wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+cd inference_model/
+tar -xf MobileNetV1_infer.tar
+cd ..
+
+for algo in hist avg mse emd
 do
-## 不带bc 离线量化
-echo "quant_post train no bc " ${algo}
-python quant_post.py --model_path ./inference_model/MobileNet \
---save_path ./quant_model/${algo}/MobileNet \
---model_filename model --params_filename weights --algo ${algo} >${log_path}/st_quant_post_v1_T_${algo} 2>&1
-print_info $? st_quant_post_v1_T_${algo}
-# 量化后eval
-echo "quant_post eval no bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}/MobileNet --model_name __model__ \
---params_name __params__ > ${log_path}/st_quant_post_${algo}_eval2 2>&1
-print_info $? st_quant_post_${algo}_eval2
-
-# 带bc参数的 离线量化
-echo "quant_post train bc " ${algo}
-python quant_post.py --model_path ./inference_model/MobileNet \
+# 带bc参数、指定algo、且为新存储格式的离线量化
+python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
 --save_path ./quant_model/${algo}_bc/MobileNet \
 --model_filename model --params_filename weights \
 --algo ${algo} --bias_correction True >${log_path}/st_quant_post_T_${algo}_bc 2>&1
@@ -189,10 +171,11 @@ print_info $? st_quant_post_T_${algo}_bc
 echo "quant_post eval bc " ${algo}
 python eval.py --model_path ./quant_model/${algo}_bc/MobileNet --model_name __model__ \
 --params_name __params__ > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
-print_info $? st_quant_post_${algo}_bc_eval2
+print_info $? st_quant_post_${algo}_bc_eval
 
 done
 }
+
 
 # 2.3 quant_post_hpo # 小数据集
 demo_quant_quant_post_hpo(){
