@@ -121,6 +121,7 @@ ci(){
   hub_success_list="${hub_success_list} ${hub_module}"
   fi
 
+
   done
 
   echo ----------------------- num of bug modules is ${hub_excption} -----------------------
