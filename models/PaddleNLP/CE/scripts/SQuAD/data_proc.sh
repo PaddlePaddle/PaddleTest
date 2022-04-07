@@ -10,4 +10,9 @@ code_path=$cur_path/../../models_repo/examples/machine_reading_comprehension/SQu
 cd $root_path/models_repo && ls
 cd $code_path
 #获取数据&模型逻辑
-#数据处理逻辑
+# 删除之前先打印出来
+echo "删除之前先打印出来"
+cat /opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/datasets/builder.py
+sed -i '549,553d' /opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/datasets/builder.py
+echo "删除之后再打印出来"
+cat /opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/datasets/builder.py

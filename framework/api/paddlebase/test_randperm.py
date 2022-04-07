@@ -12,7 +12,7 @@ import pytest
 import numpy as np
 
 sys.path.append("../..")
-from utils.interceptor import skip_platform_not_linux
+from utils.interceptor import skip_platform_not_linux, skip_not_compile_gpu
 
 
 class TestRandperm(APIBase):
@@ -40,18 +40,21 @@ def test_randperm_base():
     """
     base
     """
+    obj.places = [paddle.CPUPlace()]
     res = np.array([0, 1, 4, 3, 2, 5])
     n = 6
     obj.base(res=res, n=n)
 
 
+@skip_not_compile_gpu
 @skip_platform_not_linux
 @pytest.mark.api_base_randperm_parameters
 def test_randperm():
     """
     default
     """
-    res = np.array([9, 1, 7, 8, 2, 5, 6, 4, 3, 0])
+    obj.places = [paddle.CUDAPlace(0)]
+    res = np.array([9, 4, 0, 7, 1, 5, 2, 3, 6, 8])
     n = 10
     obj.run(res=res, n=n)
 
@@ -62,20 +65,23 @@ def test_randperm1():
     """
     seed = 1
     """
+    obj.places = [paddle.CPUPlace()]
     obj.seed = 1
     res = np.array([6, 3, 7, 8, 9, 2, 1, 5, 4, 0])
     n = 10
     obj.run(res=res, n=n)
 
 
+@skip_not_compile_gpu
 @skip_platform_not_linux
 @pytest.mark.api_base_randperm_parameters
 def test_randperm2():
     """
     dtype = np.float32
     """
+    obj.places = [paddle.CUDAPlace(0)]
     obj.seed = 33
-    res = np.array([9.0, 1.0, 7.0, 8.0, 2.0, 5.0, 6.0, 4.0, 3.0, 0.0])
+    res = np.array([9.0, 4.0, 0.0, 7.0, 1.0, 5.0, 2.0, 3.0, 6.0, 8.0])
     n = 10
     obj.run(res=res, n=n, dtype=np.float32)
 
@@ -89,7 +95,7 @@ def test_randperm3():
     obj.seed = 33
     # res = np.array([0.0, 1.0, 6.0, 2.0, 9.0, 3.0, 5.0, 7.0, 4.0, 8.0])
     n = -1
-    obj.exception(etype="InvalidArgumentError", n=n, dtype=np.float32)
+    obj.exception(etype="InvalidArgument", n=n, dtype=np.float32)
 
 
 @skip_platform_not_linux
@@ -101,4 +107,4 @@ def test_randperm4():
     obj.seed = 33
     # res = np.array([0.0, 1.0, 6.0, 2.0, 9.0, 3.0, 5.0, 7.0, 4.0, 8.0])
     n = -1
-    obj.exception(etype="NotFoundError", n=n, dtype=np.int8)
+    obj.exception(etype="NotFound", n=n, dtype=np.int8)

@@ -55,44 +55,44 @@ rd /s /q output
 python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
 
 if not !errorlevel! == 0 (
-        echo   !model!,train,FAIL  >> %log_path%\result.log
-        echo  training of !model! failed!
+    echo   !model!,train,FAIL  >> %log_path%\result.log
+    echo  training of !model! failed!
 ) else (
-        echo   !model!,train,SUCCESS  >> %log_path%\result.log
-        echo   training of !model! successfully!
+    echo   !model!,train,SUCCESS  >> %log_path%\result.log
+    echo   training of !model! successfully!
 )
 
 echo eval
 if !model!==stylegan_v2_256_ffhq (
-        for /d %%j in %params_dir% do (
+    for /d %%j in %params_dir% do (
         echo %%j
         python tools/extract_weight.py output/%%j/iter_20_checkpoint.pdparams --net-name gen_ema --output stylegan_extract.pdparams > %log_path%/!model!_extract_weight.log 2>&1
         if not !errorlevel! == 0 (
-                echo   !model!,extract_weight,FAIL  >> %log_path%\result.log
-                echo  extract_weight of !model! failed!
+            echo   !model!,extract_weight,FAIL  >> %log_path%\result.log
+            echo  extract_weight of !model! failed!
         ) else (
-                echo   !model!,extract_weight,SUCCESS  >> %log_path%\result.log
-                echo   extract_weight of !model! successfully!
+            echo   !model!,extract_weight,SUCCESS  >> %log_path%\result.log
+            echo   extract_weight of !model! successfully!
         )
         python applications/tools/styleganv2.py --output_path stylegan_infer --weight_path stylegan_extract.pdparams --size 256 > %log_path%/!model!_eval.log 2>&1
         if not !errorlevel! == 0 (
-                echo   !model!,eval,FAIL  >> %log_path%\result.log
-                echo  eval of !model! failed!
+            echo   !model!,eval,FAIL  >> %log_path%\result.log
+            echo  eval of !model! failed!
         ) else (
-                echo   !model!,eval,SUCCESS  >> %log_path%\result.log
-                echo   eval of !model! successfully!
+            echo   !model!,eval,SUCCESS  >> %log_path%\result.log
+            echo   eval of !model! successfully!
         )
         )
-) else (
-        for /d %%j in %params_dir% do (
+)   else (
+    for /d %%j in %params_dir% do (
         echo %%j
         python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams > %log_path%/!model!_eval.log 2>&1
         if not !errorlevel! == 0 (
-                echo   !model!,eval,FAIL  >> %log_path%\result.log
-                echo  eval of !model! failed!
+            echo   !model!,eval,FAIL  >> %log_path%\result.log
+            echo  eval of !model! failed!
         ) else (
-                echo   !model!,eval,SUCCESS  >> %log_path%\result.log
-                echo   eval of !model! successfully!
+            echo   !model!,eval,SUCCESS  >> %log_path%\result.log
+            echo   eval of !model! successfully!
         )
         )
 )
@@ -124,11 +124,11 @@ echo infer
 echo animeganv2
 python applications/tools/animeganv2.py --input_image ./docs/imgs/animeganv2_test.jpg > %log_path%/animeganv2_infer.log 2>&1
 if  !errorlevel! GTR 0 (
-        echo   animeganv2,infer,FAIL  >> %log_path%\result.log
-        echo  infer of animeganv2 failed!
+    echo   animeganv2,infer,FAIL  >> %log_path%\result.log
+    echo  infer of animeganv2 failed!
 ) else (
-        echo   animeganv2,infer,SUCCESS  >> %log_path%\result.log
-        echo   infer of animeganv2 successfully!
+    echo   animeganv2,infer,SUCCESS  >> %log_path%\result.log
+    echo   infer of animeganv2 successfully!
 )
 echo first order motion
 python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image.png --ratio 0.4 --relative --adapt_scale > %log_path%/first_order_motion_single_person_infer.log 2>&1
@@ -153,20 +153,20 @@ if  !errorlevel! GTR 0 (
 echo face parse
 python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > %log_path%/face_parse_infer.log 2>&1
 if  !errorlevel! GTR 0 (
-        echo   face_parse,infer,FAIL  >> %log_path%\result.log
-        echo  infer of face_parse failed!
+    echo   face_parse,infer,FAIL  >> %log_path%\result.log
+    echo  infer of face_parse failed!
 ) else (
-        echo   face_parse,infer,SUCCESS  >> %log_path%\result.log
-        echo   infer of face_parse successfully!
+    echo   face_parse,infer,SUCCESS  >> %log_path%\result.log
+    echo   infer of face_parse successfully!
 )
 echo psgan
 python tools/psgan_infer.py --config-file configs/makeup.yaml --source_path  docs/imgs/ps_source.png --reference_dir docs/imgs/ref --evaluate-only > %log_path%/psgan_infer.log 2>&1
 if  !errorlevel! GTR 0 (
-        echo   psgan,infer,FAIL  >> %log_path%\result.log
-        echo  infer of psgan failed!
+    echo   psgan,infer,FAIL  >> %log_path%\result.log
+    echo  infer of psgan failed!
 ) else (
-        echo   psgan,infer,SUCCESS  >> %log_path%\result.log
-        echo   infer of psgan successfully!
+    echo   psgan,infer,SUCCESS  >> %log_path%\result.log
+    echo   infer of psgan successfully!
 )
 
 @REM echo vidieo restore #39环境GPU报错，38环境可以

@@ -13,6 +13,10 @@ echo "CE"| findstr %model_flag% >nul
 if !errorlevel! equ 0 (
 	echo "CE step"
 	set FLAGS_cudnn_deterministic=True
+
+        rem set FLAGS_enable_eager_mode=1
+        rem #验证天宇 220329 pr
+
 	cd %Project_path%
 	echo "path after"
 	echo %1 >clas_models_list_P0_cpu
@@ -33,7 +37,9 @@ if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
 cd ..
 
 rem dependency
-python -m pip install -r requirements.txt
+set http_proxy=
+set https_proxy=
+python -m pip install -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 

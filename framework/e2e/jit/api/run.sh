@@ -57,7 +57,9 @@ test_trace.py \
 test_var.py \
 test_floor_divide.py \
 test_min.py \
-test_prod.py"
+test_prod.py \
+test_assign.py \
+test_to_tensor.py"
 bug=0
 
 echo "============ failed cases =============" >> result.txt
