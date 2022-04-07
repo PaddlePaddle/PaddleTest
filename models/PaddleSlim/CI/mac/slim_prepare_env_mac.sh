@@ -50,8 +50,9 @@ python -c 'import paddle; print(paddle.version.commit)';
 # export log_path=${slim_dir}/logs;
 ####################################
 # for paddleslim env
-echo ---install paddleslim---
+echo ---start install paddleslim---
 python -m pip uninstall paddleslim -y
+cd ${slim_dir}
 slim1_install (){
     python -m pip install -U paddleslim
 }
