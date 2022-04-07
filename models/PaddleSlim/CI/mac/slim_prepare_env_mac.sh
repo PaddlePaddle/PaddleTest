@@ -40,14 +40,14 @@ echo ---paddle commit:---
 python -c 'import paddle; print(paddle.version.commit)';
 
 ####################################
-# for logs env
-export slim_dir=$PWD/PaddleSlim;
-cd ${slim_dir}
-if [ -d "logs" ];then
-    rm -rf logs;
-fi
-mkdir logs
-export log_path=${slim_dir}/logs;
+# # for logs env
+# export slim_dir=$PWD/PaddleSlim;
+# cd ${slim_dir}
+# if [ -d "logs" ];then
+#     rm -rf logs;
+# fi
+# mkdir logs
+# export log_path=${slim_dir}/logs;
 ####################################
 # for paddleslim env
 echo ---install paddleslim---
