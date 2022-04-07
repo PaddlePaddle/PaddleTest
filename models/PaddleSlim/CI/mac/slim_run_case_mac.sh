@@ -37,40 +37,16 @@ all_distillation(){
 
 demo_st_quant_aware(){
 cd ${slim_dir}/demo/quant/quant_aware || catchException demo_st_quant_aware
-if [ -d "output" ];then
-    rm -rf output
-fi
-python train.py --model MobileNet \
---pretrained_model ../../pretrain/MobileNetV1_pretrained \
---checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 128 --use_gpu False >${log_path}/quant_aware_v1_T 2>&1
-print_info $? quant_aware_v1_T
-}
 
-demo_st_quant_post(){
-cd ${slim_dir}/demo/quant/quant_post
-python export_model.py --model "MobileNet" --use_gpu False --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---data imagenet >${log_path}/st_quant_post_v1_export 2>&1
-print_info $? st_quant_post_v1_export
+wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+cd inference_model/
+tar -xf MobileNetV1_infer.tar
+cd ..
 
-# 3 离线量化
-# 4 量化后eval
-for algo in hist
+for algo in hist avg mse emd
 do
-#不带bc 离线量化
-echo "quant_post train no bc " ${algo}
-python quant_post.py --model_path ./inference_model/MobileNet \
---save_path ./quant_model/${algo}/MobileNet \
---model_filename model --params_filename weights --algo ${algo} --use_gpu False >${log_path}/st_quant_post_v1_T_${algo} 2>&1
-print_info $? st_quant_post_v1_T_${algo}
-# 量化后eval
-echo "quant_post eval no bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}/MobileNet --model_name __model__ \
---params_name __params__ --use_gpu False > ${log_path}/st_quant_post_${algo}_eval2 2>&1
-print_info $? st_quant_post_${algo}_eval2
-
-# 带bc参数的 离线量化
-echo "quant_post train bc " ${algo}
-python quant_post.py --model_path ./inference_model/MobileNet \
+# 带bc参数、指定algo、且为新存储格式的离线量化
+python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
 --save_path ./quant_model/${algo}_bc/MobileNet \
 --model_filename model --params_filename weights \
 --algo ${algo} --bias_correction True --use_gpu False >${log_path}/st_quant_post_T_${algo}_bc 2>&1
@@ -80,7 +56,8 @@ print_info $? st_quant_post_T_${algo}_bc
 echo "quant_post eval bc " ${algo}
 python eval.py --model_path ./quant_model/${algo}_bc/MobileNet --model_name __model__ \
 --params_name __params__ --use_gpu False > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
-print_info $? st_quant_post_${algo}_bc_eval2
+print_info $? st_quant_post_${algo}_bc_eval
+
 done
 }
 
