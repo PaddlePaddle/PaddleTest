@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 echo "enter run slim api, params:" $1,$2,$3,$4,$5
 
-#p ython version、paddle_compile_path、slim_install_method
-slim_prepare_env.sh $1 $2 $3
+# set slim_dir and logs path
+# workspace == PaddleSlim/
+export slim_dir=/workspace
+if [ -d "/workspace/logs" ];then
+    rm -rf /workspace/logs;
+fi
+mkdir /workspace/logs
+export log_path=/workspace/logs
+
+#python version、paddle_compile_path、slim_install_method
+bash slim_prepare_env.sh $1 $2 $3
 
 # cudaid1、cudaid2
 bash slim_ci_api_coverage.sh $4 $5;
@@ -43,7 +52,7 @@ if [ $UT_EXCODE -eq 0 ];then
     echo -e "\033[32m ---- unit test Success  \033[0m"
 elif [ $UT_EXCODE -eq 1 ]; then
     echo -e "\033[31m ---- unit test Failed  \033[0m"
-    cd ${slim_dir}/logs
+    cd ${log_path}
     ls *_FAIL*
     exit $UT_EXCODE
 elif [ $UT_EXCODE -eq 9 ]; then
