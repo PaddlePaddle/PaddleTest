@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
+
+# set slim_dir and logs path
+# workspace == PaddleSlim/
+export slim_dir=/workspace
+if [ -d "/workspace/logs" ];then
+    rm -rf /workspace/logs;
+fi
+mkdir /workspace/logs
+export log_path=/workspace/logs
+
+
 #python version、paddle_compile_path、slim_install_method
 slim_prepare_env.sh $1 $2 $3
 
@@ -9,7 +20,7 @@ slim_prepare_data.sh
 slim_run_case.sh $4 $5 $6
 
 
-cd ${slim_dir}/logs
+cd ${log_path}
 FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
     exit 1
