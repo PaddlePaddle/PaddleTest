@@ -14,6 +14,10 @@ echo "CE"| findstr %model_flag% >nul
 if !errorlevel! equ 0 (
 	echo "CE step"
 	set FLAGS_cudnn_deterministic=True
+
+        rem set FLAGS_enable_eager_mode=1
+        rem #验证天宇 220329 pr
+
 	cd %Project_path%
 	echo "path after"
 	echo %1 >clas_models_list_all_gpu
@@ -40,9 +44,12 @@ if !errorlevel! equ 0 (
    echo "######  model_flag pr"
 
    echo "######  ----install  paddle-----"
+   python -m pip install %paddle_compile%
+   set http_proxy=
+   set https_proxy=
+
    python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
    python -m pip uninstall paddlepaddle-gpu -y
-   python -m pip install %paddle_compile%
 
    echo ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml >clas_models_list_all_gpu
 

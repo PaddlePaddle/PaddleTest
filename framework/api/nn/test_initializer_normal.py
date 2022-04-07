@@ -36,6 +36,7 @@ def test_initializer_normal_base():
     base
     weight_attr=paddle.nn.initializer.Normal(mean=0.0, std=2.0)
     """
+    obj.static = False
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
     out_channels = 1
@@ -43,7 +44,7 @@ def test_initializer_normal_base():
     stride = 1
     padding = 0
     res = np.array(
-        [[[[9.696032, 6.2314734], [4.5925426, 19.060331]]], [[[14.223241, 13.581673], [6.131522, 9.923124]]]]
+        [[[[2.0433278, -0.2727771], [0.41961208, -5.5582423]]], [[[-1.3874869, -5.1710925], [3.2667, -2.1549852]]]]
     )
     if paddle.device.is_compiled_with_cuda() is True:
         obj.base(
@@ -65,6 +66,7 @@ def test_initializer_normal1():
     kernel_size = [2, 2] stride = 2 padding=0 groups=3
     weight_attr=paddle.nn.initializer.Normal(mean=0.0, std=2.0)
     """
+    obj.dygraph = False
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
@@ -100,6 +102,7 @@ def test_initializer_normal2():
     kernel_size = [3, 3] stride = 1 padding=1 w=0.7 b=-0.3 data_format="NHWC"
     weight_attr=paddle.nn.initializer.Normal(mean=0.0, std=2.0)
     """
+    obj.static = False
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4]).transpose(0, 2, 3, 1)
     in_channels = 3
@@ -110,8 +113,8 @@ def test_initializer_normal2():
     data_format = "NHWC"
     res = np.array(
         [
-            [[[9.696032, 0.757347], [6.2314734, 1.9067024]], [[4.5925426, 0.7299702], [19.060331, 4.5685883]]],
-            [[[14.223241, 6.7473884], [13.581673, 4.739414]], [[6.131522, 1.6402493], [9.923124, 0.7511649]]],
+            [[[2.0433278, -8.995044], [-0.2727771, -1.7580405]], [[0.41961208, -8.936554], [-5.5582423, -10.978077]]],
+            [[[-1.3874869, -18.076727], [-5.1710925, -6.579859]], [[3.2667, -10.983443], [-2.1549852, -11.922855]]],
         ]
     )
     if paddle.device.is_compiled_with_cuda() is True:
@@ -135,6 +138,7 @@ def test_initializer_normal3():
     padding_mode = "reflect"
     weight_attr=paddle.nn.initializer.Normal(mean=0.0, std=2.0)
     """
+    obj.dygraph = False
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
@@ -170,6 +174,7 @@ def test_initializer_normal4():
     padding_mode = "replicate"
     weight_attr=paddle.nn.initializer.Normal(mean=-1.0, std=2.0)
     """
+    obj.static = False
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
@@ -180,8 +185,8 @@ def test_initializer_normal4():
     padding_mode = "replicate"
     res = np.array(
         [
-            [[[-0.25635287, 0.6774132, -3.2480803, -7.2378592], [-3.132905, -8.737241, 5.810273, -1.7762027]]],
-            [[[0.8862386, -0.61035603, 4.994542, -5.26088], [-6.272961, -9.037898, -3.7375047, -1.8376815]]],
+            [[[-19.855627, -16.224363, -5.913007, -7.2382164], [-9.950214, -12.91017, -18.8083, -12.357948]]],
+            [[[-9.542725, -13.213186, -14.944015, -10.585907], [-19.823824, -11.902721, -15.815616, -10.774846]]],
         ]
     )
     if paddle.device.is_compiled_with_cuda() is True:
@@ -205,6 +210,7 @@ def test_initializer_normal5():
     padding_mode = "circular"
     weight_attr=paddle.nn.initializer.Normal(mean=2.0, std=5.0)
     """
+    obj.dygraph = False
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
@@ -240,6 +246,7 @@ def test_initializer_normal6():
     padding_mode = "zeros" dilation = (2, 2)  padding = [1, 2]
     weight_attr=paddle.nn.initializer.Normal(mean=-0.2, std=1.99)
     """
+    obj.static = False
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
@@ -249,7 +256,9 @@ def test_initializer_normal6():
     padding = [1, 2]
     dilation = (2, 2)
     padding_mode = "zeros"
-    res = np.array([[[[6.9537334, 3.4081156, 2.5187492, 6.7148337]]], [[[3.6040933, 3.8371656, 2.5087252, 6.355131]]]])
+    res = np.array(
+        [[[[-5.971743, 0.11934806, -5.1818447, -9.398735]]], [[[-5.281911, -2.1525862, -6.082208, -7.7175527]]]]
+    )
     if paddle.device.is_compiled_with_cuda() is True:
         obj.run(
             res=res,
