@@ -8,7 +8,8 @@ if [ -d "logs" ];then
 fi
 mkdir logs
 export log_path=${slim_dir}/logs;
-
+cd -
+ls 
 bash slim_prepare_env_mac.sh $1 $2 $3
 
 #下载小数据集及预训练模型
