@@ -779,15 +779,15 @@ goto :eof
 
 :all_nas
 call :sa_nas_v2_T_1card
-call :block_sa_nas_v2_T_1card
-call :rl_nas_v2_T_1card
+::call :block_sa_nas_v2_T_1card
+::call :rl_nas_v2_T_1card
 goto :eof
 
 ::nas
 :sa_nas_v2_T_1card
 cd %repo_path%/PaddleSlim/demo/nas
 set model=sa_nas_v2_T_1card
-python sa_nas_mobilenetv2.py --search_steps 1 >%log_path%\%model%.log 2>&1
+python sa_nas_mobilenetv2.py --search_steps 1 --retain_epoch 1 >%log_path%\%model%.log 2>&1
 call :printInfo  %errorlevel%
 goto :eof
 
