@@ -26,3 +26,5 @@ do
         tar xf ${model}_pretrained.tar
     fi
 done
+
+echo ---data and pretrain models finished-----
