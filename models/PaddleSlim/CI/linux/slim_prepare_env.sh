@@ -29,6 +29,7 @@ python -c 'import sys; print(sys.version_info[:])'
 
 ####################################
 # for paddle env
+python -m pip uninstall paddlepaddle-gpu -y
 python -m pip install --upgrade pip
 python -m pip install $2 --no-cache-dir
 echo ---paddle commit:---
@@ -36,6 +37,8 @@ python -c 'import paddle; print(paddle.version.commit)';
 
 ####################################
 # for paddleslim env
+cd ${slim_dir}
+python -m pip uninstall paddleslim -y
 slim1_install (){
     python -m pip install -U paddleslim
 }
