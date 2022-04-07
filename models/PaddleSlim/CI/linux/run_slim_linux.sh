@@ -11,19 +11,21 @@ export log_path=/workspace/logs
 
 
 #python version、paddle_compile_path、slim_install_method
-slim_prepare_env.sh $1 $2 $3
+bash slim_prepare_env.sh $1 $2 $3
 
 #下载小数据集及预训练模型
-slim_prepare_data.sh
+bash slim_prepare_data.sh
 
 # run_CI/run_CE/ALL 、cudaid1、cudaid2
-slim_run_case.sh $4 $5 $6
+bash slim_run_case.sh $4 $5 $6
 
 
 cd ${log_path}
 FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
+    echo ---fail case: ${FF}
     exit 1
 else
+    echo ---all case pass---
     exit 0
 fi
