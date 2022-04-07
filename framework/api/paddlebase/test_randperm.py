@@ -14,6 +14,8 @@ import numpy as np
 sys.path.append("../..")
 from utils.interceptor import skip_platform_not_linux
 
+is_in_eager = paddle.fluid.framework._in_eager_without_dygraph_check()
+
 
 class TestRandperm(APIBase):
     """
@@ -89,7 +91,8 @@ def test_randperm3():
     obj.seed = 33
     # res = np.array([0.0, 1.0, 6.0, 2.0, 9.0, 3.0, 5.0, 7.0, 4.0, 8.0])
     n = -1
-    obj.exception(etype="InvalidArgumentError", n=n, dtype=np.float32)
+    etype = "PreconditionNotMetError" if is_in_eager else "InvalidArgumentError"
+    obj.exception(etype=etype, n=n, dtype=np.float32)
 
 
 @skip_platform_not_linux
