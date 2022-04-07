@@ -53,16 +53,3 @@ slim3_build_whl (){
 $3
 echo ---installed paddleslim---
 python -m pip list | grep paddleslim
-
-# set slim_dir and logs path
-# workspace == PaddleSlim/
-export slim_dir=/workspace
-if [ -d "/workspace/logs" ];then
-    rm -rf /workspace/logs;
-fi
-mkdir /workspace/logs
-export log_path=/workspace/logs
-
-echo ---set slim dir and logs---
-env | grep  slim_dir
-env | grep  log_path
