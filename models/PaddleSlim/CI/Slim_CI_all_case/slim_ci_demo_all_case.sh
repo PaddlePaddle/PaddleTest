@@ -498,7 +498,7 @@ all_quant(){ # 10个模型
     fi
     demo_quant_quant_aware    # 2个模型
     demo_quant_quant_embedding  # 1个模型
-    demo_quant_quant_post   # 4个策略
+    #demo_quant_quant_post   # 4个策略
     demo_dygraph_quant    # 2个模型
     demo_quant_pact_quant_aware  # 1个模型
     ce_tests_dygraph_qat  # 4个模型
@@ -976,22 +976,6 @@ print_info $? ${model}
 all_darts(){  # 2个模型
     demo_darts
     #slimfacenet  需要删掉
-}
-
-demo_latency(){
-cd ${slim_dir}/demo/analysis  || catchException demo_latency
-model=latency_mobilenet_v1_fp32
-python latency_predictor.py --model mobilenet_v1 --data_type fp32 >${log_path}/${model} 2>&1
-print_info $? ${model}
-model=latency_mobilenet_v1_int8
-python latency_predictor.py --model mobilenet_v1 --data_type int8 >${log_path}/${model} 2>&1
-print_info $? ${model}
-model=latency_mobilenet_v2_fp32
-python latency_predictor.py --model mobilenet_v2 --data_type fp32 >${log_path}/${model} 2>&1
-print_info $? ${model}
-model=latency_mobilenet_v2_int8
-python latency_predictor.py --model mobilenet_v2 --data_type int8 >${log_path}/${model} 2>&1
-print_info $? ${model}
 }
 
 all_latency(){
