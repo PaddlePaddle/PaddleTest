@@ -71,8 +71,8 @@ fi
 mkdir /workspace/logs
 export log_path=/workspace/logs
 ####################################
-#bash slim_ci_api_coverage.sh $5 $6;
-UT_EXCODE=0 || true
+bash slim_ci_api_coverage.sh $5 $6;
+UT_EXCODE=$? || true
 echo -e "\033[35m ---- UT_EXCODE: $UT_EXCODE  \033[0m"
 ####################################
 # run all case
