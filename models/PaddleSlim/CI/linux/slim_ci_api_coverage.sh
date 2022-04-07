@@ -23,7 +23,7 @@ cd /lcov-1.14
 make install
 
 cd ${slim_dir}/tests
-pip install coverage
+python -m pip install coverage
 
 export COVERAGE_FILE=`pwd`/python-coverage.data
 source=${slim_dir}
