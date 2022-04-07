@@ -6,6 +6,7 @@ ln -s /usr/local/bin/python3.7 /usr/local/python2.7.15/bin/python
 ln -s /usr/local/bin/pip3.7 /usr/local/python2.7.15/bin/pip
 export PYTHONPATH=`pwd`
 
+
 python -m pip install --upgrade pip --ignore-installed
 # python -m pip install --upgrade numpy --ignore-installed
 python -m pip uninstall paddlepaddle-gpu -y
