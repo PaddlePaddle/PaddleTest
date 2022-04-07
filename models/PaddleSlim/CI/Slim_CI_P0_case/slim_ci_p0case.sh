@@ -849,7 +849,7 @@ print_info $? ${model}
 #print_info $? ${model}
 }
 all_nas(){ # 3 个模型
-    #nas
+    nas
 }
 # 5 darts
 # search 1card # DARTS一阶近似搜索方法
