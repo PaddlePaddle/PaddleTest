@@ -504,7 +504,7 @@ ce_tests_demo(){
 
 quant(){
     quant_aware
-    st_quant_post
+    #st_quant_post
     pact_quant_aware
     dy_quant
 }
