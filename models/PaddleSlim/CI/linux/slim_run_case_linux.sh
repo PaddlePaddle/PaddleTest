@@ -90,7 +90,7 @@ all_distill_CE(){
 }
 
 all_distill_ALL(){ 
-	demo_distill_01
+    demo_distill_01
     demo_distill_02
     #demo_distill_03
     demo_deep_mutual_learning_01
@@ -147,57 +147,51 @@ print_info $? st_quant_em_afteri_nfer
 
 demo_st_quant_post_hist(){
 cd ${slim_dir}/demo/quant/quant_post || catchException demo_st_quant_post_hist
-# 1 导出模型
-python export_model.py --model "MobileNet" --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---data imagenet > ${log_path}/st_quant_post_v1_export 2>&1
-print_info $? st_quant_post_v1_export
 
-python quant_post.py --model_path ./inference_model/MobileNet \
---save_path ./quant_model/hist/MobileNet \
---model_filename model --params_filename weights --algo hist >${log_path}/st_quant_post_v1_hist 2>&1
-print_info $? st_quant_post_v1_hist
+wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+cd inference_model/
+tar -xf MobileNetV1_infer.tar
+cd ..
 
-python eval.py --model_path ./quant_model/hist/MobileNet --model_name __model__ \
---params_name __params__ > ${log_path}/st_quant_post_hist_eval 2>&1
-print_info $? st_quant_post_hist_eval
-}
-
-demo_st_quant_post(){
-cd ${slim_dir}/demo/quant/quant_post || catchException demo_st_quant_post
-# 1 导出模型
-python export_model.py --model "MobileNet" --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---data imagenet > ${log_path}/st_quant_post_v1_export 2>&1
-print_info $? st_quant_post_v1_export
-
-# 2.离线量化并量化后eval (hist CI阶段覆盖)
-for algo in avg mse
+for algo in hist
 do
-## 不带bc 离线量化
-echo "quant_post train no bc " ${algo}
-python quant_post.py --model_path ./inference_model/MobileNet \
---save_path ./quant_model/${algo}/MobileNet \
---model_filename model --params_filename weights --algo ${algo} >${log_path}/st_quant_post_v1_T_${algo} 2>&1
-print_info $? st_quant_post_v1_T_${algo}
-# 量化后eval
-echo "quant_post eval no bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}/MobileNet --model_name __model__ \
---params_name __params__ > ${log_path}/st_quant_post_${algo}_eval2 2>&1
-print_info $? st_quant_post_${algo}_eval2
-
-# 带bc参数的 离线量化
-echo "quant_post train bc " ${algo}
-python quant_post.py --model_path ./inference_model/MobileNet \
---save_path ./quant_model/${algo}_bc/MobileNet \
+# 带bc参数、指定algo、且为新存储格式的离线量化
+python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
+--save_path ./quant_model/${algo}_bc/MobileNetV1 \
 --model_filename model --params_filename weights \
 --algo ${algo} --bias_correction True >${log_path}/st_quant_post_T_${algo}_bc 2>&1
 print_info $? st_quant_post_T_${algo}_bc
 
 # 量化后eval
 echo "quant_post eval bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}_bc/MobileNet --model_name __model__ \
+python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1 --model_name __model__ \
 --params_name __params__ > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
-print_info $? st_quant_post_${algo}_bc_eval2
+print_info $? st_quant_post_${algo}_bc_eval
+done
+}
 
+demo_st_quant_post(){
+cd ${slim_dir}/demo/quant/quant_post || catchException demo_st_quant_post
+
+wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+cd inference_model/
+tar -xf MobileNetV1_infer.tar
+cd ..
+
+for algo in hist avg mse emd
+do
+# 带bc参数、指定algo、且为新存储格式的离线量化
+python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
+--save_path ./quant_model/${algo}_bc/MobileNetV1 \
+--model_filename model --params_filename weights \
+--algo ${algo} --bias_correction True >${log_path}/st_quant_post_T_${algo}_bc 2>&1
+print_info $? st_quant_post_T_${algo}_bc
+
+# 量化后eval
+echo "quant_post eval bc " ${algo}
+python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1 --model_name __model__ \
+--params_name __params__ > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
+print_info $? st_quant_post_${algo}_bc_eval
 done
 }
 
@@ -254,11 +248,11 @@ print_info $? st_quant_pact_quant_aware_v3_load
 all_st_quant_CI(){ 
     demo_st_quant_aware_v1
     demo_st_quant_post_hist
-    demo_st_quant_post_hpo_v1
     demo_st_pact_quant_aware_v3
 }
 
 all_st_quant_CE(){ 
+    demo_st_quant_post_hpo_v1
     demo_st_quant_aware_ResNet34
     demo_st_quant_embedding
     demo_st_quant_post
@@ -406,7 +400,7 @@ all_dy_quant_CE(){
 }
 
 all_dy_quant_ALL(){ 
-	demo_dy_quant_v1
+    demo_dy_quant_v1
     demo_dy_quant_v3
     ce_tests_dy_qat4
     ce_tests_dy_ptq4
@@ -643,14 +637,14 @@ all_dy_prune_CI(){
 all_dy_prune_CE(){ 
 	demo_dy_pruning_v1
 	demo_dy_pruning_v2
-    demo_dy_pruning_ResNet34_f42
+        demo_dy_pruning_ResNet34_f42
 }
 
 
 all_dy_prune_ALL(){ 
     demo_dy_pruning_resnet34
     demo_dy_pruning_v1
-	demo_dy_pruning_v2
+    demo_dy_pruning_v2
     demo_dy_pruning_ResNet34_f42
 }
 
@@ -726,10 +720,10 @@ print_info $? st_unstructured_prune_ratio_gmp
 
 all_st_unstr_prune_CI(){ 
     demo_st_unstructured_prune_threshold
-    demo_st_unstructured_prune_ratio
 }
 
 all_st_unstr_prune_CE(){ 
+    demo_st_unstructured_prune_ratio
     demo_st_unstructured_prune_ratio_gmp
 }
 
@@ -828,10 +822,10 @@ print_info $? dy_unstructured_prune_ratio_gmp
 
 all_dy_unstr_prune_CI(){ 
     demo_dy_unstructured_pruning_ratio
-    demo_dy_unstructured_pruning_threshold
 }
 
 all_dy_unstr_prune_CE(){ 
+    demo_dy_unstructured_pruning_threshold
     demo_dy_unstructured_pruning_ratio_gmp
 }
 
@@ -844,7 +838,7 @@ all_dy_unstr_prune_ALL(){
 demo_sa_nas(){
 cd ${slim_dir}/demo/nas  || catchException demo_nas
 model=demo_nas_sa_nas_v2_T_1card
-CUDA_VISIBLE_DEVICES=${cudaid1} python sa_nas_mobilenetv2.py --search_steps 1 --port 8881 >${log_path}/${model} 2>&1
+CUDA_VISIBLE_DEVICES=${cudaid1} python sa_nas_mobilenetv2.py --search_steps 1 --port 8881 --retain_epoch 1>${log_path}/${model} 2>&1
 print_info $? ${model}
 }
 
@@ -863,7 +857,6 @@ model=rl_nas_v2_T_1card
 CUDA_VISIBLE_DEVICES=${cudaid1}  python rl_nas_mobilenetv2.py --search_steps 1 --port 8885 >${log_path}/${model} 2>&1
 print_info $? ${model}
 }
-
 
 
 
