@@ -18,7 +18,7 @@ bash slim_prepare_data_mac.sh
 bash slim_run_case_mac.sh
 
 
-cd ${slim_dir}/logs
+cd ${log_path}
 FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
     echo ---failed---
