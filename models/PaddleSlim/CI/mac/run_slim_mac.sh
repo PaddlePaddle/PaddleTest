@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 #python version、paddle_compile_path、slim_install_method
+# for logs env
+export slim_dir=$PWD/PaddleSlim;
+cd ${slim_dir}
+if [ -d "logs" ];then
+    rm -rf logs;
+fi
+mkdir logs
+export log_path=${slim_dir}/logs;
+
 bash slim_prepare_env_mac.sh $1 $2 $3
 
 #下载小数据集及预训练模型
