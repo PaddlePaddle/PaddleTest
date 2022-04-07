@@ -193,4 +193,5 @@ def test_histogram12():
     """
     x = randtool("float", -4, 2, [4, 4])
     # res = cal_hisgogram(x, bins=4, min=0)
-    obj.exception(IndexError, mode="python", input=x, bins=-4, max=-1)
+    # New Eager mode raise ValueError instead of IndexError
+    obj.exception((IndexError, ValueError), mode="python", input=x, bins=-4, max=-1)
