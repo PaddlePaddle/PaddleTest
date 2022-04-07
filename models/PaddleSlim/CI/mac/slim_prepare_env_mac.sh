@@ -23,6 +23,11 @@ case $1 in
   export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
   export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
   ;;
+39)
+  unlink /usr/local/bin/python; 
+  ln -s /usr/local/bin/python3.9 /usr/local/bin/python;
+  export PATH=/usr/local/bin:${PATH};
+  ;;
 esac
 echo ---python version:$1---
 python -c 'import sys; print(sys.version_info[:])'
