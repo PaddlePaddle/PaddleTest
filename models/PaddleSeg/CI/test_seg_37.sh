@@ -49,6 +49,9 @@ ln -s ${file_path}/data/pascalvoc/VOCdevkit data/VOCdevkit
 if [ -d "data/ADEChallengeData2016" ]; then rm -rf data/ADEChallengeData2016
 fi
 ln -s ${file_path}/data/ADEChallengeData2016 data/ADEChallengeData2016
+if [ -d "data/camvid" ]; then rm -rf data/camvid
+fi
+ln -s ${file_path}/data/camvid data/camvid
 if [ -d "seg_dynamic_pretrain" ];then rm -rf seg_dynamic_pretrain
 fi
 ln -s ${file_path}/data/seg_dynamic_pretrain seg_dynamic_pretrain
@@ -197,6 +200,19 @@ elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/
     fi
 elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/ade20k/${model}/model.pdparams
+    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
+        echo "${model} doesn't upload bos !!!"
+        seg_model_sign=True
+    else
+        TRAIN_MUlTI_DYNAMIC
+        TRAIN_SINGLE_DYNAMIC
+        EVAL_DYNAMIC
+        PREDICT_DYNAMIC
+        EXPORT_DYNAMIC
+        PYTHON_INFER_DYNAMIC
+    fi
+elif [[ -n `echo ${model} | grep camvid` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
+    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/camvid/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} doesn't upload bos !!!"
         seg_model_sign=True
