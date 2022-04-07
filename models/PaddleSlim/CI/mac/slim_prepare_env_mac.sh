@@ -32,6 +32,8 @@ python -c 'import sys; print(sys.version_info[:])'
 
 ####################################
 # for paddle env
+echo ---install paddle---
+python -m pip uninstall paddlepaddle -y
 python -m pip install --upgrade pip
 python -m pip install $2 --no-cache-dir
 echo ---paddle commit:---
@@ -48,6 +50,8 @@ mkdir logs
 export log_path=${slim_dir}/logs;
 ####################################
 # for paddleslim env
+echo ---install paddleslim---
+python -m pip uninstall paddleslim -y
 slim1_install (){
     python -m pip install -U paddleslim
 }
