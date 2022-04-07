@@ -14,9 +14,8 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     cd ${Project_path}
     echo "path after"
     pwd
-    set FLAGS_cudnn_deterministic=True
+    export FLAGS_cudnn_deterministic=True
     # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr
-    unset FLAGS_use_virtual_memory_auto_growth
     echo $1 > clas_models_list_P0 #传入参数
 fi
 
