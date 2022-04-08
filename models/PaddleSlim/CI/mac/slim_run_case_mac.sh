@@ -48,15 +48,13 @@ for algo in hist
 do
 # 带bc参数、指定algo、且为新存储格式的离线量化
 python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
---save_path ./quant_model/${algo}_bc/MobileNet \
---model_filename model --params_filename weights \
+--save_path ./quant_model/${algo}_bc/MobileNetV1 \
 --algo ${algo} --bias_correction True --use_gpu False >${log_path}/st_quant_post_T_${algo}_bc 2>&1
 print_info $? st_quant_post_T_${algo}_bc
 
 # 量化后eval
 echo "quant_post eval bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}_bc/MobileNet --model_name __model__ \
---params_name __params__ --use_gpu False > ${log_path}/st_quant_post_${algo}_bc_eval 2>&1
+python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1  --use_gpu False > ${log_path}/st_quant_post_${algo}_bc_eval 2>&1
 print_info $? st_quant_post_${algo}_bc_eval
 
 done
