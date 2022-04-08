@@ -63,8 +63,8 @@ cd ${slim_dir}/demo/quant/pact_quant_aware
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
 --num_epochs 1 --lr 0.0001 --use_pact True --batch_size 128 --lr_strategy=piecewise_decay \
---step_epochs 2 --l2_decay 1e-5 --use_gpu False >${log_path}/demo_quant_pact_quant_aware_v3 2>&1
-print_info $? demo_quant_pact_quant_aware_v3
+--step_epochs 2 --l2_decay 1e-5 --use_gpu False >${log_path}/st_pact_quant_aware_v3 2>&1
+print_info $? st_pact_quant_aware_v3
 }
 
 demo_dygraph_quant(){
