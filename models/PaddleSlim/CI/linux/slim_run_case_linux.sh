@@ -158,14 +158,12 @@ do
 # 带bc参数、指定algo、且为新存储格式的离线量化
 python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
 --save_path ./quant_model/${algo}_bc/MobileNetV1 \
---model_filename model --params_filename weights \
 --algo ${algo} --bias_correction True >${log_path}/st_quant_post_T_${algo}_bc 2>&1
 print_info $? st_quant_post_T_${algo}_bc
 
 # 量化后eval
 echo "quant_post eval bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1 --model_name __model__ \
---params_name __params__ > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
+python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1 > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
 print_info $? st_quant_post_${algo}_bc_eval
 done
 }
@@ -183,14 +181,12 @@ do
 # 带bc参数、指定algo、且为新存储格式的离线量化
 python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
 --save_path ./quant_model/${algo}_bc/MobileNetV1 \
---model_filename model --params_filename weights \
 --algo ${algo} --bias_correction True >${log_path}/st_quant_post_T_${algo}_bc 2>&1
 print_info $? st_quant_post_T_${algo}_bc
 
 # 量化后eval
 echo "quant_post eval bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1 --model_name __model__ \
---params_name __params__ > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
+python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1  > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
 print_info $? st_quant_post_${algo}_bc_eval
 done
 }
