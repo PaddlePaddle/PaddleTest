@@ -17,7 +17,7 @@ bash slim_prepare_env.sh $1 $2 $3
 bash slim_prepare_data.sh
 
 # run_CI/run_CE/ALL 、cudaid1、cudaid2
-bash slim_run_case.sh $4 $5 $6
+bash slim_run_case_linux.sh $4 $5 $6
 
 
 cd ${log_path}
