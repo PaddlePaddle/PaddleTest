@@ -7,6 +7,10 @@ model_name=${PWD##*/}
 root_path=$cur_path/../../
 log_path=$root_path/log/taskflow/
 
+if [ ! -d $log_path ]; then
+  mkdir -p $log_path
+fi
+
 print_info(){
 if [ $1 -ne 0 ];then
     cat ${log_path}/$2.log
@@ -17,4 +21,3 @@ fi
 }
 
 python interact.py > $log_path/train_gpu.log 2>&1
-print_info $? train_gpu
