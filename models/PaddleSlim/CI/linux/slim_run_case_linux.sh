@@ -11,7 +11,7 @@ if [ $1 -ne 0 ];then
 else
     mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
     #echo ---${log_path}/SUCCESS_$2---
-    cat  ${log_path}/SUCCESS_$2.log
+    #cat  ${log_path}/SUCCESS_$2.log
 fi
 }
 
@@ -428,8 +428,8 @@ python train.py \
     --lr_strategy="piecewise_decay" \
     --criterion="geometry_median" \
     --model_path="./fpgm_mobilenetv1_models" \
-    --save_inference True  >${log_path}/demo_st_prune_fpgm_v1 2>&1
-print_info $? demo_st_prune_fpgm_v1
+    --save_inference True  >${log_path}/st_prune_fpgm_v1 2>&1
+print_info $? st_prune_fpgm_v1
 }
 
 demo_st_prune_fpgm_v2(){
@@ -450,8 +450,8 @@ python train.py \
     --lr_strategy="piecewise_decay" \
     --criterion="geometry_median" \
     --model_path="./output/fpgm_mobilenetv2_models" \
-    --save_inference True >${log_path}/demo_st_prune_fpgm_v2 2>&1
-print_info $? demo_st_prune_fpgm_v2
+    --save_inference True >${log_path}/st_prune_fpgm_v2 2>&1
+print_info $? st_prune_fpgm_v2
 python eval.py --model "MobileNetV2" --data "imagenet" \
 --model_path "./output/fpgm_mobilenetv2_models/0" >${log_path}/st_prune_fpgm_v2_eval 2>&1
 print_info $? st_prune_fpgm_v2_eval
@@ -809,7 +809,7 @@ python -m paddle.distributed.launch \
           --tunning_epochs 54 \
           --last_epoch -1 \
           --pruning_strategy gmp \
-          --prune_params_type conv1x1_only ${log_path}/dy_unstructured_prune_ratio_gmp 2>&1
+          --prune_params_type conv1x1_only > ${log_path}/dy_unstructured_prune_ratio_gmp 2>&1
 print_info $? dy_unstructured_prune_ratio_gmp
 }
 
