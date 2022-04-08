@@ -57,7 +57,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml
+        cmd: bash PaddleClas_P1_release_CPU.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml
 
 TRAIN: # 训练步骤
   -
@@ -213,6 +213,7 @@ EVAL: # 训练步骤
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_eval.log
+
 
 INFER: # 训练步骤
   -

@@ -57,7 +57,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/DenseNet/DenseNet121.yaml
+        cmd: bash PaddleClas_P1_release_CPU.sh ppcls/configs/ImageNet/DenseNet/DenseNet121.yaml
 
 TRAIN: # 训练步骤
   -
@@ -72,14 +72,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.33331
+        kpi_base: 6.45391
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 9.38165
+        kpi_base: 8.53125
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -97,10 +97,10 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.38427
+        kpi_base: 6.40143
         threshold: 0.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/DenseNet121_2card.log
   -
@@ -171,7 +171,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 9.38165
+        kpi_base: 8.53125
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -213,6 +213,7 @@ EVAL: # 训练步骤
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/DenseNet121_eval.log
+
 
 INFER: # 训练步骤
   -
