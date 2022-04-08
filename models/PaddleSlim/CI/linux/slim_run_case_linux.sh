@@ -100,8 +100,8 @@ if [ -d "output" ];then
 fi
 
 python train.py --model MobileNet --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 128 >${log_path}/st_st_quant_aware_v1 2>&1
-print_info $? st_st_quant_aware_v1
+--checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 64 >${log_path}/st_quant_aware_v1 2>&1
+print_info $? st_quant_aware_v1
 }
 
 demo_st_quant_aware_ResNet34(){
@@ -217,7 +217,7 @@ cd ${slim_dir}/demo/quant/pact_quant_aware || catchException demo_st_pact_quant_
 
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 1 --lr 0.0001 --use_pact False --batch_size 128 >${log_path}/st_pact_quant_aware_v3_no_pact 2>&1
+--num_epochs 1 --lr 0.0001 --use_pact False --batch_size 64 >${log_path}/st_pact_quant_aware_v3_no_pact 2>&1
 print_info $? st_pact_quant_aware_v3_no_pact
 
 python train.py --model MobileNetV3_large_x1_0 \
@@ -231,8 +231,8 @@ python train.py --model MobileNetV3_large_x1_0 \
 --num_epochs 2 --lr 0.0001 --use_pact True --batch_size 64 --lr_strategy=piecewise_decay \
 --step_epochs 20 --l2_decay 1e-5 \
 --checkpoint_dir ./output/MobileNetV3_large_x1_0/0 \
---checkpoint_epoch 0 >${log_path}/st_quant_pact_quant_aware_v3_load 2>&1
-print_info $? st_quant_pact_quant_aware_v3_load
+--checkpoint_epoch 0 >${log_path}/st_pact_quant_aware_v3_load 2>&1
+print_info $? st_pact_quant_aware_v3_load
 }
 
 #cd demo/quant/quant_aware_with_infermodel/ 所需训练时间较长，UT中自定义model覆盖
