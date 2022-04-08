@@ -1,5 +1,5 @@
 MODEL: "cblue" # 模型名
-PRIORITY: P3
+PRIORITY: P4
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -11,10 +11,19 @@ VARIABLES:
   model_log_path: log/cblue/
 
 EXEC:
-  exec_cases: [CLASSIFICATION_TRAIN, IDENTIFY_TRAIN, EXTRACT_TRAIN, INFER]
+  exec_cases: [DATA_PROC, CLASSIFICATION_TRAIN, IDENTIFY_TRAIN, EXTRACT_TRAIN, INFER]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
 
 CLASSIFICATION_TRAIN: # 分类训练
   -
