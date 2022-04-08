@@ -24,6 +24,7 @@ cd ${log_path}
 FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
     echo ---fail case: ${FF}
+    ls *FAIL*|wc -l
     exit 1
 else
     echo ---all case pass---
