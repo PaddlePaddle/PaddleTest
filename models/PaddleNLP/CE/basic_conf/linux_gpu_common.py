@@ -120,4 +120,6 @@ EXEC_TAG = [
     "linux_dy_gpu1_STS-B",
     "linux_dy_gpu1_ATEC",
     "linux_dy_gpu1_afqmc",
+    "linux_dy_gpu2_CHIP-STS",
+    "linux_dy_gpu1_CHIP-STS",
 ]
