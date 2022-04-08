@@ -21,9 +21,10 @@ bash slim_run_case_mac.sh
 cd ${log_path}
 FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
-    echo ---failed---
+    echo ---failed case：${FF}---
+    ls *FAIL*|wc -l
     exit 1
 else
-    echo ---passed---
+    echo ---all case passed---
     exit 0
 fi
