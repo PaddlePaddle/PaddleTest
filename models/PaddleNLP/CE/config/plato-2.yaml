@@ -31,7 +31,7 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        cmd: bash mac_data_proc.sh
   -
     priority: p0
     tag: win_download_data
