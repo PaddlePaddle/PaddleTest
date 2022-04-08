@@ -315,6 +315,7 @@ do
         --output_dir=$PWD/output_models_pact/ \
         --enable_quant \
         --use_pact > dy_qat_pact_qat_${model}_gpu1_nw1 2>&1
+	print_info $? dy_qat_pact_qat_${model}_gpu1_nw1
         # 2 eval before save quant
         echo "--------2 eval before save pact quant -------------", ${model}
         python ./src/eval.py \
@@ -322,16 +323,19 @@ do
         --data_dir=${data_path} \
         --test_samples=${test_samples} \
         --batch_size=${batch_size} > dy_qat_pact_eval_before_pact_save_${model} 2>&1
+	print_info $? dy_qat_pact_eval_before_pact_save_${model}
         echo "--------3  save pact quant -------------", ${model}
         python src/save_quant_model.py \
           --load_model_path output_models_pact/quant_dygraph/${model} \
           --save_model_path int8_models_pact/${model} > dy_qat_pact_save_pact_quant_${model} 2>&1
         echo "--------4 CPU eval after save pact quant -------------", ${model}
+	print_info $? dy_qat_pact_save_pact_quant_${model}
         python ./src/eval.py \
         --model_path=./int8_models_pact/${model} \
         --data_dir=${data_path} \
         --test_samples=${test_samples} \
         --batch_size=${batch_size} > dy_qat_pact_cpu_eval_after_pact_save_${model} 2>&1
+	print_info $? dy_qat_pact_cpu_eval_after_pact_save_${model}
 done
 }
 
@@ -355,7 +359,7 @@ do
         --arch=${model} \
         --quant_batch_num=${quant_batch_num} \
         --quant_batch_size=${quant_batch_size} \
-        --output_dir=${output_dir} > ${log_path}/ptq_${model} 2>&1
+        --output_dir=${output_dir} > ${log_path}/dy_ptq_${model} 2>&1
         print_info $? dy_ptq_${model}
 
     echo "-------- eval fp32_infer model -------------", ${model}
@@ -365,7 +369,7 @@ do
         --batch_size=${batch_size} \
         --use_gpu=True \
         --test_samples=${test_samples} \
-        --ir_optim=False > ${log_path}/ptq_eval_fp32_${model} 2>&1
+        --ir_optim=False > ${log_path}/dy_ptq_eval_fp32_${model} 2>&1
         print_info $? dy_ptq_eval_fp32_${model}
 
     echo "-------- eval int8_infer model -------------", ${model}
@@ -375,7 +379,7 @@ do
         --batch_size=${batch_size} \
         --use_gpu=False \
         --test_samples=${test_samples} \
-        --ir_optim=False > ${log_path}/ptq_eval_int8_${model} 2>&1
+        --ir_optim=False > ${log_path}/dy_ptq_eval_int8_${model} 2>&1
         print_info $? dy_ptq_eval_int8_${model}
 done
 }
