@@ -712,11 +712,12 @@ print_info $? st_unstructured_prune_ratio_gmp
 
 all_st_unstr_prune_CI(){ 
     demo_st_unstructured_prune_threshold
+    demo_st_unstructured_prune_ratio_gmp
 }
 
 all_st_unstr_prune_CE(){ 
     demo_st_unstructured_prune_ratio
-    demo_st_unstructured_prune_ratio_gmp
+    
 }
 
 all_st_unstr_prune_ALL(){ 
@@ -813,12 +814,12 @@ print_info $? dy_unstructured_prune_ratio_gmp
 }
 
 all_dy_unstr_prune_CI(){ 
-    demo_dy_unstructured_pruning_ratio
+    demo_dy_unstructured_pruning_threshold
+    demo_dy_unstructured_pruning_ratio_gmp
 }
 
 all_dy_unstr_prune_CE(){ 
-    demo_dy_unstructured_pruning_threshold
-    demo_dy_unstructured_pruning_ratio_gmp
+    demo_dy_unstructured_pruning_ratio
 }
 
 all_dy_unstr_prune_ALL(){ 
@@ -830,7 +831,7 @@ all_dy_unstr_prune_ALL(){
 demo_sa_nas(){
 cd ${slim_dir}/demo/nas  || catchException demo_nas
 model=demo_nas_sa_nas_v2_T_1card
-CUDA_VISIBLE_DEVICES=${cudaid1} python sa_nas_mobilenetv2.py --search_steps 1 --port 8881 --retain_epoch 1>${log_path}/${model} 2>&1
+CUDA_VISIBLE_DEVICES=${cudaid1} python sa_nas_mobilenetv2.py --search_steps 1  --retain_epoch 1 --port 8881 >${log_path}/${model} 2>&1
 print_info $? ${model}
 }
 
@@ -854,7 +855,7 @@ print_info $? ${model}
 
 if [ "$1" = "run_CI" ];then   
 	# CI任务的case
-    export all_case_list=(all_distill_CI all_st_quant_CI all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI demo_sa_nas)
+    export all_case_list=(all_distill_CI all_st_quant_CI all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
 elif [ "$1" = "run_CE" ];then   
 	# CE任务的case
     export all_case_list=(all_distill_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
