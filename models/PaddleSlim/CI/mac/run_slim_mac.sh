@@ -14,7 +14,7 @@ bash slim_prepare_env_mac.sh $1 $2 $3
 #下载小数据集及预训练模型
 bash slim_prepare_data_mac.sh
 
-# cudaid1、cudaid2
+# CPU
 bash slim_run_case_mac.sh
 
 
