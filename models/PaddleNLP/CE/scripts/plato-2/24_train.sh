@@ -33,8 +33,6 @@ fi
 #访问RD程序
 cd $code_path
 
-wget https://paddlenlp.bj.bcebos.com/models/transformers/plato2/24L.pdparams
-
 cp -r $cur_path/input.txt  $code_path/input.txt
 
 if [[ $1 == "gpu" ]]; then
