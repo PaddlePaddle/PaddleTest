@@ -59,3 +59,26 @@ def test_one_hot0():
     x_data = np.random.randint(0, 6, (2, 3, 4, 6))
     res = cal_one_hot(x_data, 10)
     obj.run(res=res, x=x_data, num_classes=10)
+
+
+@pytest.mark.skipif(paddle.is_compiled_with_cuda() is True, reason="skip cases because paddle is compiled with CUDA")
+@pytest.mark.api_nn_one_hot_exception
+def test_one_hot1():
+    """
+    num_classes < class
+    """
+    x_data = np.random.randint(0, 10, (10, 20))
+    # res = cal_one_hot(x_data, 4)
+    obj.exception(ValueError, mode="python", x=x_data, num_classes=4)
+
+
+@pytest.mark.skipif(
+    paddle.is_compiled_with_cuda() is not True, reason="skip cases because paddle is not compiled with CUDA"
+)
+@pytest.mark.api_nn_one_hot_exception
+def test_one_hot2():
+    """
+    num_classes < class
+    """
+    x_data = np.random.randint(0, 10, (10, 20))
+    obj.exception("CUDA error", mode="c", x=x_data, num_classes=4)
