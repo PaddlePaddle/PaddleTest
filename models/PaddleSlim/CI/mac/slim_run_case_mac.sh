@@ -37,11 +37,12 @@ all_distillation(){
 
 demo_st_quant_post(){
 cd ${slim_dir}/demo/quant/quant_post | catchException demo_st_quant_post
-
+pwd
 wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
 cd inference_model/
 tar -xf MobileNetV1_infer.tar
 cd ..
+pwd
 
 for algo in hist
 do
@@ -77,6 +78,14 @@ python train.py --model='mobilenet_v1' \
 --num_epochs 1 \
 --batch_size 128 --use_gpu False > ${log_path}/dy_quant_v1 2>&1
 print_info $? dy_quant_v1
+}
+
+demo_st_quant_aware(){
+cd ${slim_dir}/demo/quant/quant_aware || catchException demo_st_quant_aware
+python train.py --model MobileNet \
+--pretrained_model ../../pretrain/MobileNetV1_pretrained \
+--checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 128 --use_gpu False >${log_path}/quant_aware_v1_T 2>&1
+print_info $? quant_aware_v1_T
 }
 
 all_quant(){
