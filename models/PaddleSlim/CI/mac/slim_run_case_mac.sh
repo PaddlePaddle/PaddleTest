@@ -82,8 +82,8 @@ demo_st_quant_aware(){
 cd ${slim_dir}/demo/quant/quant_aware || catchException demo_st_quant_aware
 python train.py --model MobileNet \
 --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 128 --use_gpu False >${log_path}/quant_aware_v1_T 2>&1
-print_info $? quant_aware_v1_T
+--checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 128 --use_gpu False >${log_path}/st_quant_aware_v1_T 2>&1
+print_info $? st_quant_aware_v1_T
 }
 
 all_quant(){
@@ -100,8 +100,8 @@ if [ -d "models" ];then
     rm -rf models
 fi
 python train.py --model "MobileNet" --pruned_ratio 0.31 --data "imagenet" \
---pretrained_model ../pretrain/MobileNetV1_pretrained/ --num_epochs 1 --use_gpu False >${log_path}/prune_v1_T 2>&1
-print_info $? prune_v1_T
+--pretrained_model ../pretrain/MobileNetV1_pretrained/ --num_epochs 1 --use_gpu False >${log_path}/st_prune_MobileNetV1_T 2>&1
+print_info $? st_prune_MobileNetV1_T
 }
 
 demo_prune_fpgm_v2_T (){
@@ -119,11 +119,11 @@ python train.py \
     --lr_strategy="piecewise_decay" \
     --criterion="geometry_median" \
     --model_path="./output/fpgm_mobilenetv2_models" \
-    --save_inference True --use_gpu False >${log_path}/slim_prune_fpgm_v2_T 2>&1
-print_info $? slim_prune_fpgm_v2_T
+    --save_inference True --use_gpu False >${log_path}/st_prune_fpgm_v2_T 2>&1
+print_info $? st_prune_fpgm_v2_T
 python eval.py --model "MobileNetV2" --data "imagenet" \
---model_path "./output/fpgm_mobilenetv2_models/0" --use_gpu False >${log_path}/slim_prune_fpgm_v2_eval 2>&1
-print_info $? slim_prune_fpgm_v2_eval
+--model_path "./output/fpgm_mobilenetv2_models/0" --use_gpu False >${log_path}/st_prune_fpgm_v2_eval 2>&1
+print_info $? st_prune_fpgm_v2_eval
 }
 
 # dygraph_prune
@@ -193,8 +193,8 @@ python  train.py \
 --num_epochs 1 \
 --test_period 1 \
 --model_period 1 \
---model_path dy_threshold_models --use_gpu False >${log_path}/dy_threshold_prune_T 2>&1
-print_info $? dy_threshold_prune_T
+--model_path dy_threshold_models --use_gpu False >${log_path}/dy_unstructured_prune_T 2>&1
+print_info $? dy_unstructured_prune_T
 
 }
 
