@@ -7,7 +7,7 @@ GIT:
 
 
 VARIABLES:
-  model_scripts_path: scripts/cblue/ #脚本的路径
+  model_scripts_path: scripts/cblue/
   model_log_path: log/cblue/
 
 EXEC:
