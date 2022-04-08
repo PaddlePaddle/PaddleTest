@@ -32,8 +32,8 @@ if [ -d "output" ];then
     rm -rf output
 fi
 
-python distill.py --num_epochs 1 --save_inference True > ${log_path}/demo_distill_ResNet50_vd_MobileNet 2>&1
-print_info $? demo_distill_ResNet50_vd_MobileNet
+python distill.py --num_epochs 1 --save_inference True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+print_info $? st_distill_ResNet50_vd_MobileNet
 }
 
 demo_distill_02(){
@@ -44,8 +44,8 @@ fi
 
 python distill.py --num_epochs 1 --batch_size 64 --save_inference True \
 --model ResNet50 --teacher_model ResNet101_vd \
---teacher_pretrained_model ../pretrain/ResNet101_vd_pretrained > ${log_path}/demo_distill_ResNet101_vd_ResNet50 2>&1
-print_info $? demo_distill_ResNet101_vd_ResNet50
+--teacher_pretrained_model ../pretrain/ResNet101_vd_pretrained > ${log_path}/st_distill_ResNet101_vd_ResNet50 2>&1
+print_info $? st_distill_ResNet101_vd_ResNet50
 }
 
 demo_distill_03(){
@@ -56,25 +56,21 @@ fi
 
 python distill.py --num_epochs 1 --batch_size 64 --save_inference True \
 --model MobileNetV2_x0_25 --teacher_model MobileNetV2 \
---teacher_pretrained_model ../pretrain/MobileNetV2_pretrained >${log_path}/demo_distill_MobileNetV2_MobileNetV2_x0_25 2>&1
-print_info $? demo_distill_MobileNetV2_MobileNetV2_x0_25
+--teacher_pretrained_model ../pretrain/MobileNetV2_pretrained >${log_path}/st_distill_MobileNetV2_MobileNetV2_x0_25 2>&1
+print_info $? st_distill_MobileNetV2_MobileNetV2_x0_25
 }
 
 demo_deep_mutual_learning_01(){
-cd ${slim_dir}/demo/deep_mutual_learning || catchException demo_deep_mutual_learning_01
+cd ${slim_dir}/demo/deep_mutual_learning || catchException st_dml_mv1_mv1
 python dml_train.py --epochs 1 >${log_path}/dml_mv1_mv1 2>&1
-print_info $? dml_mv1_mv1
+print_info $? st_dml_mv1_mv1
 
-model=dml_mv1_res50
-CUDA_VISIBLE_DEVICES=${cudaid1}
-python dml_train.py --models='mobilenet-resnet50' --batch_size 128 --epochs 1 >${log_path}/${model} 2>&1
-print_info $? ${model}
 }
 
 demo_deep_mutual_learning_02(){
 cd ${slim_dir}/demo/deep_mutual_learning || catchException demo_deep_mutual_learning_02
-python dml_train.py --models='mobilenet-resnet50' --batch_size 128 --epochs 1 >${log_path}/dml_mv1_res50 2>&1
-print_info $? dml_mv1_res50
+python dml_train.py --models='mobilenet-resnet50' --batch_size 128 --epochs 1 >${log_path}/st_dml_mv1_res50 2>&1
+print_info $? st_dml_mv1_res50
 }
 
 # distill + dml 共计5个case
@@ -104,8 +100,8 @@ if [ -d "output" ];then
 fi
 
 python train.py --model MobileNet --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 128 >${log_path}/demo_st_quant_aware_v1 2>&1
-print_info $? demo_st_quant_aware_v1
+--checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 128 >${log_path}/st_st_quant_aware_v1 2>&1
+print_info $? st_st_quant_aware_v1
 }
 
 demo_st_quant_aware_ResNet34(){
@@ -116,8 +112,8 @@ fi
 
 python train.py --model ResNet34 \
 --pretrained_model ../../pretrain/ResNet34_pretrained \
---checkpoint_dir ./output/ResNet34 --num_epochs 1 >${log_path}/demo_st_quant_aware_ResNet34 2>&1
-print_info $? demo_st_quant_aware_ResNet34
+--checkpoint_dir ./output/ResNet34 --num_epochs 1 >${log_path}/st_quant_aware_ResNet34 2>&1
+print_info $? st_quant_aware_ResNet34
 }
 
 demo_st_quant_embedding(){
@@ -163,7 +159,7 @@ print_info $? st_quant_post_T_${algo}_bc
 
 # 量化后eval
 echo "quant_post eval bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1 > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
+python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1 > ${log_path}/st_quant_post_${algo}_bc_eval 2>&1
 print_info $? st_quant_post_${algo}_bc_eval
 done
 }
@@ -176,7 +172,7 @@ cd inference_model/
 tar -xf MobileNetV1_infer.tar
 cd ..
 
-for algo in hist avg mse emd
+for algo in avg mse emd
 do
 # 带bc参数、指定algo、且为新存储格式的离线量化
 python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
@@ -744,8 +740,8 @@ python -m paddle.distributed.launch \
 --num_epochs 1 \
 --test_period 1 \
 --model_period 1 \
---model_path dy_ratio_models >${log_path}/dy_prune_ratio_T 2>&1
-print_info $? dy_prune_ratio_T
+--model_path dy_ratio_models >${log_path}/dy_unstructured_prune_ratio_T 2>&1
+print_info $? dy_unstructured_prune_ratio_T
 }
 
 demo_dy_unstructured_pruning_threshold(){
@@ -858,7 +854,7 @@ print_info $? ${model}
 
 if [ "$1" = "run_CI" ];then   
 	# CI任务的case
-    export all_case_list=(all_distill_CI all_st_quant_CI all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI)
+    export all_case_list=(all_distill_CI all_st_quant_CI all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI demo_sa_nas)
 elif [ "$1" = "run_CE" ];then   
 	# CE任务的case
     export all_case_list=(all_distill_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
