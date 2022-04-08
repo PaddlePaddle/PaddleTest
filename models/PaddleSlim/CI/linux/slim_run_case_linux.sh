@@ -10,7 +10,7 @@ if [ $1 -ne 0 ];then
     cat  ${log_path}/FAIL_$2.log
 else
     mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
-    #echo ---${log_path}/SUCCESS_$2---
+    echo ---${log_path}/SUCCESS_$2---
     #cat  ${log_path}/SUCCESS_$2.log
 fi
 }
