@@ -33,6 +33,9 @@ ln -s ${data_path}/mini_supervisely data/mini_supervisely
 if [ -d "data/PP-HumanSeg14K" ]; then rm -rf data/PP-HumanSeg14K
 fi
 ln -s ${data_path}/PP-HumanSeg14K data/PP-HumanSeg14K
+if [ -d "data/camvid" ]; then rm -rf data/camvid
+fi
+ln -s ${data_path}/camvid data/camvid
 if [ -d "seg_dynamic_pretrain" ];then rm -rf seg_dynamic_pretrain
 fi
 ln -s ${data_path}/seg_dynamic_pretrain seg_dynamic_pretrain
