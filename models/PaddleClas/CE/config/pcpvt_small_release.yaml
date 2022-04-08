@@ -57,7 +57,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/Twins/pcpvt_small.yaml
+        cmd: bash PaddleClas_P1_release_CPU.sh ppcls/configs/ImageNet/Twins/pcpvt_small.yaml
 
 TRAIN: # 训练步骤
   -
@@ -72,14 +72,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.24672
+        kpi_base: 6.26105
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 8.0191
+        kpi_base: 7.70332
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -97,10 +97,10 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.36709
+        kpi_base: 6.38915
         threshold: 0.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/pcpvt_small_2card.log
   -
@@ -171,7 +171,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 8.0191
+        kpi_base: 7.70332
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -213,6 +213,7 @@ EVAL: # 训练步骤
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/pcpvt_small_eval.log
+
 
 INFER: # 训练步骤
   -
