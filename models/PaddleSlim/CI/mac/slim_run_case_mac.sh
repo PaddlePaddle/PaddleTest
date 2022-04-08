@@ -35,15 +35,15 @@ all_distillation(){
     demo_distillation
 }
 
-demo_st_quant_aware(){
-cd ${slim_dir}/demo/quant/quant_aware || catchException demo_st_quant_aware
+demo_st_quant_post(){
+cd ${slim_dir}/demo/quant/quant_post | catchException demo_st_quant_post
 
 wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
 cd inference_model/
 tar -xf MobileNetV1_infer.tar
 cd ..
 
-for algo in hist avg mse emd
+for algo in hist
 do
 # 带bc参数、指定algo、且为新存储格式的离线量化
 python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
@@ -55,7 +55,7 @@ print_info $? st_quant_post_T_${algo}_bc
 # 量化后eval
 echo "quant_post eval bc " ${algo}
 python eval.py --model_path ./quant_model/${algo}_bc/MobileNet --model_name __model__ \
---params_name __params__ --use_gpu False > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
+--params_name __params__ --use_gpu False > ${log_path}/st_quant_post_${algo}_bc_eval 2>&1
 print_info $? st_quant_post_${algo}_bc_eval
 
 done
