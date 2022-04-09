@@ -52,5 +52,3 @@ else # cpu
 
 fi
 
-# 训练完毕删除数据
-rm -rf 24L.pdparams
