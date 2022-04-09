@@ -51,4 +51,3 @@ else # cpu
     print_info $? train_24_$1
 
 fi
-
