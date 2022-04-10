@@ -51,6 +51,3 @@ else # cpu
     print_info $? train_24_$1
 
 fi
-
-# 训练完毕删除数据
-rm -rf 24L.pdparams
