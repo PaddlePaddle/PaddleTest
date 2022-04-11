@@ -75,9 +75,9 @@ goto :eof
 cd %repo_path%/PaddleSlim/demo/quant/quant_post
 set model=quant_post_v1_T_hist
 
-wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar --no-check-certificate
 cd inference_model/
-tar -xf MobileNetV1_infer.tar
+tar -xf MobileNetVcd1_infer.tar
 cd ..
 
 python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
