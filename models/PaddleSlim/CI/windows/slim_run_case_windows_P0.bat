@@ -199,6 +199,7 @@ goto :eof
 if %1 == 1 (
     move %log_path%\%model%.log %log_path%\FAIL_%model%.log
     echo  FAIL_%model%.log
+    type %log_path%\FAIL_%model%.log
     echo  FAIL_%model%.log >> %log_path%\result.log
 ) else (
     move %log_path%\%model%.log %log_path%\SUCCESS_%model%.log
