@@ -200,15 +200,11 @@ python quant_post_hpo.py  \
 --use_gpu=True     \
 --model_path=./inference_model/MobileNetV1_infer/   \
 --save_path=./inference_model/MobileNet_quant/  \
---model_filename="model"    \
---params_filename="weights"  \
 --max_model_quant_count=2 > ${log_path}/st_quant_post_hpo 2>&1
 print_info $? st_quant_post_hpo
 # 3. 量化后eval
 python ../quant_post/eval.py \
---model_path= ./inference_model/MobileNet_quant/ \
---model_name __model__ \
---params_name __params__ > ${log_path}/st_quant_post_hpo_eval 2>&1
+--model_path= ./inference_model/MobileNet_quant/ > ${log_path}/st_quant_post_hpo_eval 2>&1
 print_info $? st_quant_post_hpo_eval
 }
 
