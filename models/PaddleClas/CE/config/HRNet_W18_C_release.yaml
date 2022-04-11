@@ -73,14 +73,14 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 6.4628
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
         kpi_base: 16
-        threshold: 0.00001
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -98,7 +98,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 6.54288
-        threshold: 0.0
+        threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -116,9 +116,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_train.log
   -
@@ -134,9 +134,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_train.log
   -
@@ -152,9 +152,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_cpu.log
 
@@ -172,7 +172,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 16
-        threshold: 0.00001
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -190,9 +190,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_eval.log
   -
@@ -208,9 +208,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_eval.log
 
@@ -229,9 +229,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_infer.log
   -
@@ -247,9 +247,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_infer.log
   -
@@ -265,9 +265,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_infer.log
 
@@ -285,9 +285,9 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_predict.log
   -
@@ -303,9 +303,9 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_predict.log
   -
@@ -321,8 +321,8 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/HRNet_W18_C_predict.log
