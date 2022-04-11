@@ -51,7 +51,15 @@ dir
 :: compile_path slim_branch
 slim_prepare_env.bat %1 %2
 
-slim_run_case_windows_P0.bat
+if "%3" == "run_P0"(
+	slim_run_case_windows_P0.bat
+)else if "%3" == "run_P1"(
+	slim_run_case_windows_P1.bat
+)else if "%3" == "run_CPU"(
+	slim_run_case_windows_CPU.bat
+)else(
+	echo ---skip run case with windows---
+)
 
 
 cd %log_path%
