@@ -195,3 +195,14 @@ python sa_nas_mobilenetv2.py --search_steps 1 --retain_epoch 1 >%log_path%\%mode
 call :printInfo  %errorlevel%
 goto :eof
 
+:printInfo
+if %1 == 1 (
+    move %log_path%\%model%.log %log_path%\FAIL_%model%.log
+    echo  FAIL_%model%.log
+    echo  FAIL_%model%.log >> %log_path%\result.log
+) else (
+    move %log_path%\%model%.log %log_path%\SUCCESS_%model%.log
+    echo SUCCESS_%model%.log
+    echo SUCCESS_%model%.log >> %log_path%\result.log
+)
+goto :eof
