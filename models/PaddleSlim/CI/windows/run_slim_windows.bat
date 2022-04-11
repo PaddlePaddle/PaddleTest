@@ -1,4 +1,6 @@
 @echo off
+set root_path=%cd%
+echo %root_path%
 
 ::存放 PaddleSlim repo代码
 if exist ./repos rd /s /q repos
@@ -51,7 +53,7 @@ dir
 :: compile_path slim_branch
 call slim_prepare_env.bat %1 %2
 
-
+cd %root_path%
 if "%3"=="run_P0" (
 	echo ----run P0 case ---
 	call  slim_run_case_windows_P0.bat
@@ -65,7 +67,7 @@ if "%3"=="run_P0" (
     	echo ---skip run case with windows---
 )
 
-
+cd %root_path%
 cd %log_path%
 for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
 echo %result:~-1%
