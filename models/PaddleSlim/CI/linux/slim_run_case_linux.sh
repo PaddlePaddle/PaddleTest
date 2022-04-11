@@ -119,6 +119,7 @@ print_info $? st_quant_aware_ResNet34
 }
 
 demo_st_quant_embedding(){
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/quant/quant_embedding || catchException demo_st_quant_embedding
 
 if [ -d "data" ];then
@@ -144,6 +145,7 @@ print_info $? st_quant_em_afteri_nfer
 }
 
 demo_st_quant_post_hist(){
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/quant/quant_post || catchException demo_st_quant_post_hist
 
 wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
@@ -167,6 +169,7 @@ done
 }
 
 demo_st_quant_post(){
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/quant/quant_post || catchException demo_st_quant_post
 
 wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
@@ -189,8 +192,9 @@ print_info $? st_quant_post_${algo}_bc_eval
 done
 }
 
-demo_st_quant_post_hpo_v1(){
-cd ${slim_dir}/demo/quant/quant_post_hpo || catchException demo_st_quant_post_hpo_v1
+demo_st_quant_post_hpo(){
+CUDA_VISIBLE_DEVICES=${cudaid1}
+cd ${slim_dir}/demo/quant/quant_post_hpo || catchException demo_st_quant_post_hpo
 
 wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
 cd inference_model/
@@ -206,12 +210,12 @@ python quant_post_hpo.py  \
 print_info $? st_quant_post_hpo
 # 3. 量化后eval
 python ../quant_post/eval.py \
---model_path= ./inference_model/MobileNet_quant/ > ${log_path}/st_quant_post_hpo_eval 2>&1
+--model_path=./inference_model/MobileNet_quant/ > ${log_path}/st_quant_post_hpo_eval 2>&1
 print_info $? st_quant_post_hpo_eval
 }
 
 demo_st_pact_quant_aware_v3(){
-export CUDA_VISIBLE_DEVICES=${cudaid1}
+CUDA_VISIBLE_DEVICES=${cudaid1}
 
 cd ${slim_dir}/demo/quant/pact_quant_aware || catchException demo_st_pact_quant_aware_v3
 
@@ -244,7 +248,7 @@ all_st_quant_CI(){
 }
 
 all_st_quant_CE(){ 
-    demo_st_quant_post_hpo_v1
+    #demo_st_quant_post_hpo
     demo_st_quant_aware_ResNet34
     demo_st_quant_embedding
     demo_st_quant_post
@@ -292,51 +296,59 @@ print_info $? dy_pact_quant_v3_gpu2
 
 ce_tests_dy_qat4(){
 cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dy_qat4
+
 ln -s ${slim_dir}/demo/data/ILSVRC2012
-test_samples=1000  # if set as -1, use all test samples
+# if set as -1, use all test samples
+test_samples=1000  
 data_path='./ILSVRC2012/'
-batch_size=16
 epoch=1
 lr=0.0001
-num_workers=1
-output_dir=$PWD/output_models
+batch_size=32
+num_workers=3
+output_dir=$PWD/output_qat
+
 
 for model in mobilenet_v1 mobilenet_v2 resnet50 vgg16
 do
-        echo "------1 pact train--------", ${model}
-        export CUDA_VISIBLE_DEVICES=${cudaid1}
-        python ./src/qat.py \
+    echo "---qat quant model: ${model}---"
+    python ./src/qat.py \
         --arch=${model} \
         --data=${data_path} \
         --epoch=${epoch} \
-        --batch_size=32 \
+        --batch_size=${batch_size} \
         --num_workers=${num_workers} \
         --lr=${lr} \
-        --output_dir=$PWD/output_models_pact/ \
-        --enable_quant \
-        --use_pact > ${log_path}/dy_qat_pact_qat_${model}_gpu1_nw1 2>&1
-	print_info $? dy_qat_pact_qat_${model}_gpu1_nw1
-        # 2 eval before save quant
-        echo "--------2 eval before save pact quant -------------", ${model}
-        python ./src/eval.py \
-        --model_path=./output_models_pact/quant_dygraph/${model} \
-        --data_dir=${data_path} \
-        --test_samples=${test_samples} \
-        --batch_size=${batch_size} > ${log_path}/dy_qat_pact_eval_before_pact_save_${model} 2>&1
-	print_info $? dy_qat_pact_eval_before_pact_save_${model}
-        echo "--------3  save pact quant -------------", ${model}
-        python src/save_quant_model.py \
-          --load_model_path output_models_pact/quant_dygraph/${model} \
-          --save_model_path int8_models_pact/${model} > ${log_path}/dy_qat_pact_save_pact_quant_${model} 2>&1
-        echo "--------4 CPU eval after save pact quant -------------", ${model}
-	print_info $? dy_qat_pact_save_pact_quant_${model}
-        python ./src/eval.py \
-        --model_path=./int8_models_pact/${model} \
-        --data_dir=${data_path} \
-        --test_samples=${test_samples} \
-        --batch_size=${batch_size} > ${log_path}/dy_qat_pact_cpu_eval_after_pact_save_${model} 2>&1
-	print_info $? dy_qat_pact_cpu_eval_after_pact_save_${model}
+        --output_dir=${output_dir} \
+        --enable_quant > ${log_path}/dy_qat_${model} 2>&1
+    print_info $? dy_qat_${model}
+
+    echo "---save qat int8: ${model}---"
+    python src/save_quant_model.py \
+    --load_model_path output_qat/${model}  \
+    --save_model_path int8_qat_models/${model}  > dy_qat_save_${model} 2>&1
+    print_info $? dy_qat_save_${model}
+
+    echo "---eval qat fp32_infer : ${model}---"
+    python ./src/test.py \
+   	--model_path=output_qat/${model}  \
+   	--data_dir=${data_path} \
+   	--test_samples=-1 \
+   	--batch_size=32 \
+   	--use_gpu=True \
+   	--ir_optim=False > dy_qat_eval_fp32_${model} 2>&1
+    print_info $? dy_qat_eval_fp32_${model}
+
+    echo "---eval qat int8_infer : ${model}---"
+    python ./src/test.py \
+   	--model_path=int8_qat_models/${model}  \
+   	--data_dir=${data_path} \
+   	--test_samples=-1 \
+   	--batch_size=32 \
+   	--use_gpu=False \
+   	--ir_optim=False  > dy_qat_eval_int8_${model} 2>&1
+    print_info $? dy_qat_eval_int8_${model}
 done
+
 }
 
 ce_tests_dy_ptq4(){
