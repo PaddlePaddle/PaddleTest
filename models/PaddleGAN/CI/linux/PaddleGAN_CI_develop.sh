@@ -399,7 +399,7 @@ if [[ ! ${model_flag} =~ "single" ]] && [[ ! ${model_flag} =~ "CE" ]];then
 
     # face_parse
     python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/${model}.log) -eq 0 ]];then
         echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
     else
         cat $log_path/infer/face_parse.log

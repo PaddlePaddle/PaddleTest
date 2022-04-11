@@ -70,14 +70,14 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu1
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
         kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
-      train_eval:
+      exit_code:
         latest: True
         kpi_base: 0.0
         threshold: 0.00001
@@ -95,7 +95,7 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu2
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
         kpi_base: 0.0
         threshold: 0.0
@@ -169,7 +169,7 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml eval_linux
     kpis: #kpi指标
-      loss:
+      exit_code:
         latest: True
         kpi_base: 0.0
         threshold: 0.00001
