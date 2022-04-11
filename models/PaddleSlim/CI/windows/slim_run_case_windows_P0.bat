@@ -77,11 +77,11 @@ set model=quant_post_v1_T_hist
 
 wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar --no-check-certificate
 cd inference_model/
-tar -xf MobileNetVcd1_infer.tar
+tar -xf MobileNetV1_infer.tar
 cd ..
 
-python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
---save_path ./quant_model/hist_bc/MobileNetV1 \
+python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ ^
+--save_path ./quant_model/hist_bc/MobileNetV1 ^
 --bias_correction True >%log_path%\%model%.log 2>&1
 call :printInfo  %errorlevel%
 goto :eof
