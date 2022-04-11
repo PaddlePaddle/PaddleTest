@@ -29,7 +29,8 @@ else
 fi
 
 # train
-sed -i "s/max_epoch: 200/max_epoch: 5/g" ${conf_path}
+sed -i "s/max_epoch: 200/max_epoch: 5/g;s/batch_size: 64/batch_size: 32/g" ${conf_path}
+cat ${conf_path}
 sed -i "s/python3/python/g" ./local/train.sh
 rm -rf exp
 ./local/train.sh ${conf_path} ${train_output_path} > train_1card.log 2>&1
