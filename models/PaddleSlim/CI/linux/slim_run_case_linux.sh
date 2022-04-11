@@ -310,7 +310,7 @@ do
         --lr=${lr} \
         --output_dir=$PWD/output_models_pact/ \
         --enable_quant \
-        --use_pact > dy_qat_pact_qat_${model}_gpu1_nw1 2>&1
+        --use_pact > ${log_path}/dy_qat_pact_qat_${model}_gpu1_nw1 2>&1
 	print_info $? dy_qat_pact_qat_${model}_gpu1_nw1
         # 2 eval before save quant
         echo "--------2 eval before save pact quant -------------", ${model}
@@ -318,19 +318,19 @@ do
         --model_path=./output_models_pact/quant_dygraph/${model} \
         --data_dir=${data_path} \
         --test_samples=${test_samples} \
-        --batch_size=${batch_size} > dy_qat_pact_eval_before_pact_save_${model} 2>&1
+        --batch_size=${batch_size} > ${log_path}/dy_qat_pact_eval_before_pact_save_${model} 2>&1
 	print_info $? dy_qat_pact_eval_before_pact_save_${model}
         echo "--------3  save pact quant -------------", ${model}
         python src/save_quant_model.py \
           --load_model_path output_models_pact/quant_dygraph/${model} \
-          --save_model_path int8_models_pact/${model} > dy_qat_pact_save_pact_quant_${model} 2>&1
+          --save_model_path int8_models_pact/${model} > ${log_path}/dy_qat_pact_save_pact_quant_${model} 2>&1
         echo "--------4 CPU eval after save pact quant -------------", ${model}
 	print_info $? dy_qat_pact_save_pact_quant_${model}
         python ./src/eval.py \
         --model_path=./int8_models_pact/${model} \
         --data_dir=${data_path} \
         --test_samples=${test_samples} \
-        --batch_size=${batch_size} > dy_qat_pact_cpu_eval_after_pact_save_${model} 2>&1
+        --batch_size=${batch_size} > ${log_path}/dy_qat_pact_cpu_eval_after_pact_save_${model} 2>&1
 	print_info $? dy_qat_pact_cpu_eval_after_pact_save_${model}
 done
 }
