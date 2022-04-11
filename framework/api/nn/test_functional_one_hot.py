@@ -81,4 +81,4 @@ def test_one_hot2():
     num_classes < class
     """
     x_data = np.random.randint(0, 10, (10, 20))
-    obj.exception("CUDA error", mode="c", x=x_data, num_classes=4)
+    obj.exception("InvalidArgumentError", mode="c", x=x_data, num_classes=4)
