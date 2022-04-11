@@ -805,8 +805,8 @@ python -m paddle.distributed.launch \
           --initial_ratio 0.15 \
           --pruning_steps 2 \
           --stable_epochs 0 \
-          --pruning_epochs 2 \
-          --tunning_epochs 2 \
+          --pruning_epochs 100 \
+          --tunning_epochs 54 \
           --last_epoch -1 \
           --pruning_strategy gmp \
           --prune_params_type conv1x1_only > ${log_path}/dy_unstructured_prune_ratio_gmp 2>&1
