@@ -94,6 +94,8 @@ all_distill_ALL(){
 }
 
 demo_st_quant_aware_v1(){
+export CUDA_VISIBLE_DEVICES=${cudaid1}
+
 cd ${slim_dir}/demo/quant/quant_aware || catchException demo_st_quant_aware_v1
 if [ -d "output" ];then
     rm -rf output
@@ -209,6 +211,8 @@ print_info $? st_quant_post_hpo_eval
 }
 
 demo_st_pact_quant_aware_v3(){
+export CUDA_VISIBLE_DEVICES=${cudaid1}
+
 cd ${slim_dir}/demo/quant/pact_quant_aware || catchException demo_st_pact_quant_aware_v3
 
 python train.py --model MobileNetV3_large_x1_0 \
@@ -855,7 +859,7 @@ print_info $? ${model}
 
 if [ "$1" = "run_CI" ];then   
 	# CI任务的case
-    export all_case_list=(all_distill_CI all_st_quant_CI all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
+    export all_case_list=(all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
 elif [ "$1" = "run_CE" ];then   
 	# CE任务的case
     export all_case_list=(all_distill_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
