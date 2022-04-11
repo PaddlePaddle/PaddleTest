@@ -94,7 +94,7 @@ all_distill_ALL(){
 }
 
 demo_st_quant_aware_v1(){
-export CUDA_VISIBLE_DEVICES=${cudaid1}
+CUDA_VISIBLE_DEVICES=${cudaid1}
 
 cd ${slim_dir}/demo/quant/quant_aware || catchException demo_st_quant_aware_v1
 if [ -d "output" ];then
@@ -107,6 +107,7 @@ print_info $? st_quant_aware_v1
 }
 
 demo_st_quant_aware_ResNet34(){
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/quant/quant_aware || catchException demo_st_quant_aware_ResNet34
 if [ -d "output" ];then
     rm -rf output
@@ -325,7 +326,7 @@ do
     echo "---save qat int8: ${model}---"
     python src/save_quant_model.py \
     --load_model_path output_qat/${model}  \
-    --save_model_path int8_qat_models/${model}  > dy_qat_save_${model} 2>&1
+    --save_model_path int8_qat_models/${model}  > ${log_path}/dy_qat_save_${model} 2>&1
     print_info $? dy_qat_save_${model}
 
     echo "---eval qat fp32_infer : ${model}---"
@@ -335,7 +336,7 @@ do
    	--test_samples=-1 \
    	--batch_size=32 \
    	--use_gpu=True \
-   	--ir_optim=False > dy_qat_eval_fp32_${model} 2>&1
+   	--ir_optim=False > ${log_path}/dy_qat_eval_fp32_${model} 2>&1
     print_info $? dy_qat_eval_fp32_${model}
 
     echo "---eval qat int8_infer : ${model}---"
@@ -345,7 +346,7 @@ do
    	--test_samples=-1 \
    	--batch_size=32 \
    	--use_gpu=False \
-   	--ir_optim=False  > dy_qat_eval_int8_${model} 2>&1
+   	--ir_optim=False  > ${log_path}/dy_qat_eval_int8_${model} 2>&1
     print_info $? dy_qat_eval_int8_${model}
 done
 
