@@ -1,3 +1,5 @@
+@echo off
+
 cd %repo_path%/PaddleSlim/demo
 mkdir data && cd data
 mklink /J ILSVRC2012 %data_path%\ILSVRC2012_data_demo\ILSVRC2012
