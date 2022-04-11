@@ -107,7 +107,7 @@ print_info $? st_quant_aware_v1
 }
 
 demo_st_quant_aware_ResNet34(){
-CUDA_VISIBLE_DEVICES=${cudaid1}
+export CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/quant/quant_aware || catchException demo_st_quant_aware_ResNet34
 if [ -d "output" ];then
     rm -rf output
