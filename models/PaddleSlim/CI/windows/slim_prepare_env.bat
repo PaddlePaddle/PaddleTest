@@ -3,7 +3,7 @@
 echo ----install paddle-------
 python -m pip uninstall paddlepaddle-gpu -y
 python -m pip uninstall paddlepaddle -y
-python -m pip install %1
+python -m pip install %1 --no-cache-dir
 echo ----paddle commit:----
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)";
 
