@@ -80,7 +80,7 @@ all_distill_CI(){
 
 all_distill_CE(){ 
     demo_distill_02
-    #demo_distill_03
+    demo_distill_03
     #demo_deep_mutual_learning_01
     #demo_deep_mutual_learning_02
 }
@@ -88,8 +88,8 @@ all_distill_CE(){
 all_distill_ALL(){ 
     demo_distill_01
     demo_distill_02
-    #demo_distill_03
-    demo_deep_mutual_learning_01
+    demo_distill_03
+    #demo_deep_mutual_learning_01
     #demo_deep_mutual_learning_02
 }
 
