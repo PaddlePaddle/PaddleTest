@@ -48,7 +48,6 @@ elif [ "$1" = "quant_post" ];then
     cd ..
     python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
     --save_path ./quant_model/MobileNet \
-    python quant_post.py --model_path ./inference_model/MobileNet \
     --ce_test True > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "eval1" ];then
