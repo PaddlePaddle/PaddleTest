@@ -50,9 +50,9 @@ if [[ ${MULTI} == "single" ]]; then
         --batch_size 8\
         --learning_rate 2.75e-4 \
         --epochs 1\
-        --save_steps 100 \
-        --max_steps 100 \
-        --logging_steps 10\
+        --save_steps 30 \
+        --max_steps 30 \
+        --logging_steps 1\
         --device ${DEVICE} > $log_path/train_${MULTI}_${TASKNAME}_${DEVICE}.log 2>&1
     print_info $? train_${MULTI}_${TASKNAME}_${DEVICE}
 else
@@ -62,9 +62,9 @@ else
         --batch_size 8 \
         --learning_rate 2.75e-4  \
         --epochs 1\
-        --save_steps 100 \
-        --max_steps 100 \
-        --logging_steps 10\
+        --save_steps 30 \
+        --max_steps 30 \
+        --logging_steps 1\
         --device ${DEVICE} > $log_path/train_${MULTI}_${TASKNAME}_${DEVICE}.log 2>&1
     print_info $? train_${MULTI}_${TASKNAME}_${DEVICE}
 fi
