@@ -551,15 +551,16 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     fi
     echo $model
 
-    sleep 3
+    # sleep 3
+
     if [[ ${line} =~ 'GeneralRecognition' ]]; then
         python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=32 \
-            -o DataLoader.Train.dataset.image_root=./dataset/Aliproduct/ \
-            -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt \
+            -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
+            -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     elif [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
@@ -569,6 +570,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.eval_interval=1 \
             -o DataLoader.Eval.sampler.batch_size=64 \
             -o DataLoader.Train.sampler.batch_size=64 \
+            -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
+            -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     elif [[ ${line} =~ 'quantization' ]] ; then
@@ -601,7 +604,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
         echo -e "\033[31m training of ${category}_${model} failed!\033[0m"|tee -a $log_path/result.log
     fi
 
-    sleep 3
+    # sleep 3
 
     # eval
     if [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then

@@ -6,6 +6,7 @@ ln -s /usr/local/bin/python3.7 /usr/local/python2.7.15/bin/python
 ln -s /usr/local/bin/pip3.7 /usr/local/python2.7.15/bin/pip
 export PYTHONPATH=`pwd`
 
+
 python -m pip install --upgrade pip --ignore-installed
 # python -m pip install --upgrade numpy --ignore-installed
 python -m pip uninstall paddlepaddle-gpu -y
@@ -22,7 +23,8 @@ python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************paddleseg_version****'
 git rev-parse HEAD
 
-git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib |  grep -v Matting |  grep -v test_tipc | grep -v benchmark | awk '{print $NF}' | tee dynamic_config_list_temp
+
+git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep -v quick_start | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib |  grep -v Matting |  grep -v test_tipc | grep -v benchmark | awk '{print $NF}' | tee dynamic_config_list_temp
 echo =================
 cat dynamic_config_list_temp
 echo =================

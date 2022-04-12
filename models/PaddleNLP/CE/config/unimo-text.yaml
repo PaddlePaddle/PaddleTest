@@ -1,5 +1,5 @@
 MODEL: "unimo-text" # 模型名
-PRIORITY: P3
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo

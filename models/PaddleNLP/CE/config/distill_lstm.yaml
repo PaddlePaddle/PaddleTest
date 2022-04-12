@@ -1,5 +1,5 @@
 MODEL: "distill_lstm" # 模型名
-PRIORITY: P2
+PRIORITY: P3
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -23,9 +23,6 @@ DATA_PROC:
     priority: p0
     tag: linux_download_data
     run:
-      -
-        path: $ROOT_PATH/scripts
-        cmd: bash compile_package.sh
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh

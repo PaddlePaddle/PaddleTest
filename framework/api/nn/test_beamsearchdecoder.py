@@ -604,7 +604,7 @@ def test_beamsearchdecoder9():
         dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=5)
     except Exception as e:
         # print(e)
-        if "[operator < matmul_v2 > error]" in e.args[0]:
+        if "[operator < matmul_v2 > error]" in e.args[0] or "phi::MatmulKernel" in e.args[0]:
             pass
         else:
             raise Exception

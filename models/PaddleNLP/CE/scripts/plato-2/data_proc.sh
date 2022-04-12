@@ -10,7 +10,4 @@ code_path=$cur_path/../../models_repo/examples/dialogue/plato-2/
 cd $root_path/models_repo && ls
 cd $code_path
 
-wget https://paddlenlp.bj.bcebos.com/models/transformers/plato2/data.tar.gz
-tar -zxf data.tar.gz
-#获取数据&模型逻辑
-#数据处理逻辑
+cp -r /workspace/task/datasets/plato-2/*  .

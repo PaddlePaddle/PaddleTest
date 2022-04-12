@@ -17,3 +17,8 @@ rm -rf $code_path/data
 mkdir -p $code_path/data
 wget -P $code_path/data  https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy
 wget -P $code_path/data  https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz
+
+# 拷贝数据集
+cd $code_path
+cp -r /workspace/task/datasets/gpt/wikitext-103-v1.zip  .
+unzip wikitext-103-v1.zip
