@@ -58,7 +58,6 @@ goto :eof
 :all_quant
 call :st_quant_aware_v2_ResNet34
 call :st_pact_quant_aware
-call :dy_quant
 call :dy_quant_v1
 goto :eof
 
@@ -72,7 +71,7 @@ goto :eof
 
 
 :st_pact_quant_aware
-call :pact_quant_aware_not_usepact
+call :st_pact_quant_aware_not_usepact
 call :pact_quant_aware_usepact
 call :pact_quant_aware_load
 goto :eof
@@ -124,7 +123,8 @@ call :st_prune_fpgm_MobileNetV2
 call :st_prune_fpgm_resnet34_50
 call :st_prune_fpgm_resnet34_42
 
-call :unstructured_prune
+call :st_unstructured_prune_ratio
+call :dy_unstructured_prune_threshold
 goto :eof
 
 :st_prune_fpgm_MobileNetV2
