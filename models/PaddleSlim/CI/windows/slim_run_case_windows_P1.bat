@@ -76,7 +76,7 @@ call :pact_quant_aware_usepact
 call :pact_quant_aware_load
 goto :eof
 
-:st_pact_quant_aware
+:st_pact_quant_aware_not_usepact
 cd %repo_path%/PaddleSlim/demo/quant/pact_quant_aware
 set model=st_pact_quant_aware_not_usepact
 cd %repo_path%/PaddleSlim/demo/quant/pact_quant_aware
@@ -228,6 +228,18 @@ python -m paddle.distributed.launch ^
 --last_epoch 1 >%log_path%\%model%.log 2>&1
 call :printInfo  %errorlevel%
 goto :eof
+
+:all_nas
+call :block_sa_nas_v2
+goto :eof
+
+:block_sa_nas_v2
+cd %repo_path%/PaddleSlim/demo/nas
+set model=block_sa_nas_v2_T_1card
+python block_sa_nas_mobilenetv2.py --search_steps 1 --retain_epoch 1 --port 8883 >${log_path}/${model} 2>&1
+call :printInfo  %errorlevel%
+goto :eof
+
 
 :printInfo
 if %1 == 1 (
