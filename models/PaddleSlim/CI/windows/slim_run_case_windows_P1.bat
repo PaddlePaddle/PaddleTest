@@ -227,12 +227,6 @@ python -m paddle.distributed.launch ^
 --pretrained_model "./dy_threshold_models/model.pdparams" ^
 --last_epoch 1 >%log_path%\%model%.log 2>&1
 call :printInfo  %errorlevel%
-
-set model=dy_threshold_prune_cifar10_T
-python train.py --data cifar10 --lr 0.05 ^
---pruning_mode threshold --num_epochs 30 ^
---threshold 0.01 >%log_path%\%model%.log 2>&1
-call :printInfo  %errorlevel%
 goto :eof
 
 :printInfo
