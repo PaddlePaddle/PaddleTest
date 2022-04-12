@@ -27,6 +27,7 @@ call :dist_MobileNetV2_x0_25
 ::call :dml_mv1_res50
 goto :eof
 
+
 :dist_MobileNetV2_x0_25
 cd %repo_path%/PaddleSlim/demo/distillation
 set model=dist_MobileNetV2_x0_25
