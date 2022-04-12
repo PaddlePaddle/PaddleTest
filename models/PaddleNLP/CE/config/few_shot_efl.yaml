@@ -1,5 +1,5 @@
 MODEL: "few_shot_efl" # 模型名 不支持多卡
-PRIORITY: P3
+PRIORITY: P0_2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -15,15 +15,6 @@ EXEC:
   exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
-#测试套
-DATA_PROC:
-  -
-    priority: p0
-    tag: linux_download_data
-    run:
-      -
-        path: $ROOT_PATH/scripts
-        cmd: bash compile_package.sh
 
 TRAIN: # 训练步骤
   -
