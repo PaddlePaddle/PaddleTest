@@ -23,7 +23,7 @@ echo -----------------run P1case:end -------------------------
 ::distillion
 :all_distillation
 call :dist_MobileNetV2_x0_25
-call :dml_mv1_mv1
+::call :dml_mv1_mv1
 ::call :dml_mv1_res50
 goto :eof
 
