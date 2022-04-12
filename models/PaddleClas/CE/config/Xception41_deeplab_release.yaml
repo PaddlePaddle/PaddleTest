@@ -57,7 +57,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/Xception/Xception41_deeplab.yaml
+        cmd: bash PaddleClas_P1_release_CPU.sh ppcls/configs/ImageNet/Xception/Xception41_deeplab.yaml
 
 TRAIN: # 训练步骤
   -
@@ -72,14 +72,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 5.62125
+        kpi_base: 5.77681
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 9.87746
+        kpi_base: 17.78094
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -97,10 +97,10 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 5.42839
+        kpi_base: 5.37061
         threshold: 0.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/Xception41_deeplab_2card.log
   -
@@ -171,7 +171,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 9.87746
+        kpi_base: 17.78094
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -213,6 +213,7 @@ EVAL: # 训练步骤
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/Xception41_deeplab_eval.log
+
 
 INFER: # 训练步骤
   -

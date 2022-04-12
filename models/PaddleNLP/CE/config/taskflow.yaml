@@ -1,0 +1,52 @@
+MODEL: "taskflow" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/taskflow/ #脚本的路径
+  model_log_path: log/taskflow/
+
+EXEC:
+  exec_cases: [INTERACT]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+INTERACT:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash interact.sh $XPU
+
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_gpu.log
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: interact.bat
+
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train_win.log

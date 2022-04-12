@@ -21,8 +21,8 @@ fi
 cd $root_path/models_repo
 cd examples/language_model/gpt
 
-wget https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip
-unzip wikitext-103-v1.zip
+# wget https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip
+# unzip wikitext-103-v1.zip
 
 python run_eval.py --model_name gpt2-en \
     --eval_path ./wikitext-103/wiki.valid.tokens \

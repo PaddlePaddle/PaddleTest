@@ -87,11 +87,6 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
     ;;
     esac
 
-    apt-get update
-    apt-get install ffmpeg -y
-    apt-get install cmake -y
-    apt-get install gcc -y
-
     unset http_proxy
     unset https_proxy
     echo "######  ----install  paddle-----"
@@ -99,8 +94,20 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
         -i https://mirror.baidu.com/pypi/simple
     python -m pip uninstall paddlepaddle-gpu -y
     python -m pip install ${paddle_compile} #paddle_compile
+fi
 
-else
+# paddle
+echo "######  paddle version"
+python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
+
+# python
+python -c 'import sys; print(sys.version_info[:])'
+echo "######  python version"
+
+# env
+# dependency
+if [ -f "/etc/redhat-release" ]; then
+    echo "######  system centos"
     # ppgan
     set +x
     echo "######  ffmpeg"
@@ -124,22 +131,12 @@ else
     echo "######  cmake"
     yum install cmake -y
     cmake -version
-fi
-
-# paddle
-echo "######  paddle version"
-python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
-
-# python
-python -c 'import sys; print(sys.version_info[:])'
-echo "######  python version"
-
-# env
-# dependency
-if [ -d "/etc/redhat-release" ]; then
-    echo "######  system centos"
 else
     echo "######  system linux"
+    apt-get update
+    apt-get install ffmpeg -y
+    apt-get install cmake -y
+    apt-get install gcc -y
 fi
 
 unset http_proxy
@@ -402,7 +399,7 @@ if [[ ! ${model_flag} =~ "single" ]] && [[ ! ${model_flag} =~ "CE" ]];then
 
     # face_parse
     python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/${model}.log) -eq 0 ]];then
         echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
     else
         cat $log_path/infer/face_parse.log
