@@ -42,17 +42,18 @@ if [ "$1" = "export_model" ];then #单卡
     --data imagenet  > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "quant_post" ];then
+    wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/ResNet50_infer.tar
+    cd inference_model/
+    tar -xf ResNet50_infer.tar
+    cd ..
+    python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
+    --save_path ./quant_model/MobileNet \
     python quant_post.py --model_path ./inference_model/MobileNet \
-    --save_path ./quant_model_train/MobileNet \
-    --model_filename model \
-    --params_filename weights \
     --ce_test True > ${log_path}/$2.log 2>&1
     print_info $? $2
 elif [ "$1" = "eval1" ];then
-    python eval.py --model_path ./quant_model_train/MobileNet \
-    --model_name __model__ --params_name __params__  > ${log_path}/$2.log 2>&1
-    tail -1 ${log_path}/$2.log | grep top1_acc | tr -d '[' | tr -d ']' \
-        | awk -F ' ' '{print"top1:" $2"\ttop5:"$3}' >>${log_path}/$2.log
+    python eval.py --model_path ./quant_model/MobileNet/  > ${log_path}/$2.log 2>&1
+    tail -1 ${log_path}/$2.log | grep top1_acc | tr -d '[' | tr -d ']' | awk -F '=' '{print $2}' | awk -F ' ' '{print "top1:" $1"\ttop5:"$2}' >>${log_path}/$2.log
     print_info $? $2
 elif [ "$1" = "quant_post_bc" ];then
     python quant_post.py --model_path ./inference_model/MobileNet \
