@@ -206,12 +206,14 @@ cd ..
 python quant_post_hpo.py  \
 --use_gpu=True     \
 --model_path=./inference_model/MobileNetV1_infer/   \
---save_path=./inference_model/MobileNet_quant/  \
---max_model_quant_count=2 > ${log_path}/st_quant_post_hpo 2>&1
+--save_path=./inference_model/MobileNetV1_quant/  \
+--model_filename="inference.pdmodel" \
+--params_filename="inference.pdiparams" \
+--max_model_quant_count=1 > ${log_path}/st_quant_post_hpo 2>&1
 print_info $? st_quant_post_hpo
 # 3. 量化后eval
 python ../quant_post/eval.py \
---model_path=./inference_model/MobileNet_quant/ > ${log_path}/st_quant_post_hpo_eval 2>&1
+--model_path=./inference_model/MobileNetV1_quant/ > ${log_path}/st_quant_post_hpo_eval 2>&1
 print_info $? st_quant_post_hpo_eval
 }
 
@@ -243,20 +245,20 @@ print_info $? st_pact_quant_aware_v3_load
 #cd demo/quant/quant_aware_with_infermodel/ 所需训练时间较长，UT中自定义model覆盖
 
 all_st_quant_CI(){ 
-    demo_st_quant_aware_v1
+    demo_st_quant_aware
     demo_st_quant_post_hist
     demo_st_pact_quant_aware_v3
 }
 
 all_st_quant_CE(){ 
-    #demo_st_quant_post_hpo
+    demo_st_quant_post_hpo
     #demo_st_quant_aware_ResNet34
     demo_st_quant_embedding
     demo_st_quant_post
 }
 
 all_st_quant_ALL(){ 
-    demo_st_quant_aware_v1
+    demo_st_quant_post_hpo
     demo_st_quant_post_hist
     demo_st_quant_post_hpo
     #demo_st_pact_quant_aware_v3
