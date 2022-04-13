@@ -84,7 +84,7 @@ TRAIN: # 训练步骤
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/content_tagspace_linux_dy_gpu2_dist_log/workerlog.0
-  -
+  -  # 小数据集精度
     tag: linux_dy_cpu   # dy_cpu
     priority: p1
     run:
