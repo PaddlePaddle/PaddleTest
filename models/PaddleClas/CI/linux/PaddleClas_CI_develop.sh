@@ -362,10 +362,23 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
     ls output/$params_dir/ |head -n 2
     # eval
+
+    if
+    cp ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra_tmp.yaml #220413 fix tingquan
+    cp ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra.yaml ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra_tmp.yaml
+    sed -i '/output_fp16: True/d' ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
+    sed -i '/output_fp16: True/d' ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra.yaml
+
     python tools/eval.py -c $line \
         -o Global.pretrained_model=output/$params_dir/latest \
         -o DataLoader.Eval.sampler.batch_size=1 \
         > $log_path/eval/$model.log 2>&1
+
+    rm -rf ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
+    rm -rf ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra.yaml
+    mv ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra_tmp.yaml ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
+    mv ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra_tmp.yaml ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra.yaml
+
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
         echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "eval_exit_code: 0.0" >> $log_path/eval/$model.log
