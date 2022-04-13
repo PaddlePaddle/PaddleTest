@@ -105,7 +105,7 @@ EVAL1: # 训练步骤
     kpis: #kpi指标
       top1:
         latest: True
-        kpi_base: 0.73222656
+        kpi_base: 0.72636719
         threshold: 0
         actived: True
         evaluation: "+"
