@@ -107,7 +107,7 @@ print_info $? st_quant_aware_v1
 }
 
 demo_st_quant_aware_ResNet34(){
-export CUDA_VISIBLE_DEVICES=${cudaid1}
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/quant/quant_aware || catchException demo_st_quant_aware_ResNet34
 if [ -d "output" ];then
     rm -rf output
@@ -245,14 +245,14 @@ print_info $? st_pact_quant_aware_v3_load
 #cd demo/quant/quant_aware_with_infermodel/ 所需训练时间较长，UT中自定义model覆盖
 
 all_st_quant_CI(){ 
-    demo_st_quant_aware
+    demo_st_quant_aware_v1
     demo_st_quant_post_hist
     demo_st_pact_quant_aware_v3
 }
 
 all_st_quant_CE(){ 
     demo_st_quant_post_hpo
-    #demo_st_quant_aware_ResNet34
+    demo_st_quant_aware_ResNet34
     demo_st_quant_embedding
     demo_st_quant_post
 }
@@ -261,7 +261,8 @@ all_st_quant_ALL(){
     demo_st_quant_post_hpo
     demo_st_quant_post_hist
     demo_st_quant_post_hpo
-    #demo_st_pact_quant_aware_v3
+    demo_st_quant_aware_v1
+    demo_st_pact_quant_aware_v3
     demo_st_quant_aware_ResNet34
     demo_st_quant_embedding
     demo_st_quant_post
