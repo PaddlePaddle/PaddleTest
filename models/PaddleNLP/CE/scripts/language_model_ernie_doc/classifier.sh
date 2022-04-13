@@ -49,9 +49,9 @@ if [[ ${MULTI} == "single" ]]; then
       --model_name_or_path ${MODELNAME} \
       --dataset ${TASKNAME}\
       --epochs 1\
-      --save_steps 100 \
-      --max_steps 100 \
-      --logging_steps 10\
+      --save_steps 20 \
+      --max_steps 20 \
+      --logging_steps 1\
       --device ${DEVICE} > $log_path/train_${MULTI}_${TASKNAME}_${DEVICE}.log 2>&1
     print_info $? train_${MULTI}_${TASKNAME}_${DEVICE}
 else
@@ -60,9 +60,9 @@ else
     --model_name_or_path ${MODELNAME}\
     --dataset ${TASKNAME}\
     --epochs 1\
-    --save_steps 100 \
-    --max_steps 100 \
-    --logging_steps 10\
+    --save_steps 20 \
+    --max_steps 20 \
+    --logging_steps 1\
     --device ${DEVICE} > $log_path/train_${MULTI}_${TASKNAME}_${DEVICE}.log 2>&1
     print_info $? train_${MULTI}_${TASKNAME}_${DEVICE}
 fi

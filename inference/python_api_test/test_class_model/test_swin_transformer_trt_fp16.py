@@ -48,7 +48,7 @@ def test_config():
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
-    compared trt fp32 batch_size=1-10 swin_transformer outputs with true val
+    compared trt fp16 batch_size=1-10 swin_transformer outputs with true val
     """
     check_model_exist()
 
@@ -75,7 +75,7 @@ def test_trt_fp16_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=1,
-            delta=1e-4,
+            delta=2e-4,
             min_subgraph_size=40,
             precision="trt_fp16",
             max_batch_size=batch_size,
