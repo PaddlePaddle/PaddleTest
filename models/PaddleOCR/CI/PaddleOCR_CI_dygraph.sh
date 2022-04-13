@@ -17,7 +17,7 @@ if [[ ${model_flag} =~ 'CI' ]]; then
 fi
 
 if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_flag
-   echo "######  model_flag pr" 
+   echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
 
    echo "######  ---py37  env -----"
