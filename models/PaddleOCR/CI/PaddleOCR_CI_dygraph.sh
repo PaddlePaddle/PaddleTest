@@ -454,7 +454,7 @@ if [[ ${model_flag} =~ 'CI_all' ]]; then
    fi
 fi
 
-# 根据修改文件判断slim case的运行与否
+# 根据修改文件判断slim case的运行与否(全量默认跑)
 prune_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep deploy/slim/prune | wc -l`
 quant_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep deploy/slim/quant | wc -l`
 if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
