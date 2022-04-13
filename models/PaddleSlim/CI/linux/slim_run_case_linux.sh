@@ -250,7 +250,7 @@ all_st_quant_CI(){
 
 all_st_quant_CE(){ 
     #demo_st_quant_post_hpo
-    demo_st_quant_aware_ResNet34
+    #demo_st_quant_aware_ResNet34
     demo_st_quant_embedding
     demo_st_quant_post
 }
@@ -258,8 +258,8 @@ all_st_quant_CE(){
 all_st_quant_ALL(){ 
     demo_st_quant_aware_v1
     demo_st_quant_post_hist
-    demo_st_quant_post_hpo_v1
-    demo_st_pact_quant_aware_v3
+    demo_st_quant_post_hpo
+    #demo_st_pact_quant_aware_v3
     demo_st_quant_aware_ResNet34
     demo_st_quant_embedding
     demo_st_quant_post
