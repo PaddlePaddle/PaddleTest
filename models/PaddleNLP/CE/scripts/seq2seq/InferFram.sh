@@ -48,7 +48,7 @@ python export_model.py \
 print_info $? inferfram_${DEVICE}
 
 cd deploy/python
-python3.7 infer.py \
+python infer.py \
     --export_path ../../Infer_model/model \
     --device ${DEVICE} \
     --batch_size 128 \
