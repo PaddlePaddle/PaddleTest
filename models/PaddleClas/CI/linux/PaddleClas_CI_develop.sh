@@ -363,7 +363,6 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     ls output/$params_dir/ |head -n 2
     # eval
 
-    if
     cp ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra_tmp.yaml #220413 fix tingquan
     cp ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra.yaml ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra_tmp.yaml
     sed -i '/output_fp16: True/d' ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
