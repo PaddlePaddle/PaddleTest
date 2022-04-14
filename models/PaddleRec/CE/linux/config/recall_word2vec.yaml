@@ -1,5 +1,5 @@
 MODEL: "recall_word2vec" # 模型名
-PRIORITY: P5
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
