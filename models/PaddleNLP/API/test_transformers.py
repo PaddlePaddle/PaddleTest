@@ -33,8 +33,8 @@ def test_transformers():
             model = AutoModel.from_pretrained(model_temp)
             tokenizer = AutoTokenizer.from_pretrained(model_temp)
             with io.open("./transformer_success.log", "a+", encoding="utf-8") as flog:
-                flog.write(type(model) + "\r\n")
-                flog.write(type(tokenizer) + "\r\n")
+                flog.write("Pretrained Weight:{}".format(model_temp) + "\r\n")
+                flog.write("Model:{},tokenizer:{}".format(type(model), tokenizer) + "\r\n")
         except Exception as e:
             with io.open("./transformer_error.log", "a+", encoding="utf-8") as flog:
                 flog.write("{}: {}".format(model_temp, e) + "\r\n")
