@@ -44,7 +44,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    unset https_proxy
    echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
-   python -m pip install $5 #paddle_compile
+   python -m pip install $5 -i https://mirror.baidu.com/pypi/simple #paddle_compile
    python -c 'import paddle;print(paddle.version.commit)'
 
    echo "######  ----ln  data-----"
