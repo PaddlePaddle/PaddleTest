@@ -16,7 +16,7 @@ nlp2_build (){
     python setup.py bdist_wheel
     python -m pip install dist/paddlenlp****.whl
 }
-$2;
+$1;
 python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 pip list
 set +x
@@ -30,7 +30,7 @@ mkdir /workspace/logs
 export log_path=/workspace/logs
 ####################################
 # run api case
-python test_trainsformers.py
+python test_transformers.py
 P0case_EXCODE=$? || true
 ####################################
 # upload log to bos
