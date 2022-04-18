@@ -468,8 +468,10 @@ if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
       cat $log_path/train/prune_ch_det_mv3_db_v2.0.log
       echo -e "\033[31m training of prune failed!\033[0m" | tee -a $log_path/result.log
    fi
+   echo "======prune output directory======"
+   ls ./output/prune_model/
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/sen.pickle
-   python deploy/slim/prune/export_prune_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./output/prune_model/best_accuracy  Global.save_inference_dir=./prune/prune_inference_model > $log_path/export/prune_ch_det_mv3_db_v2.0.log 2>&1
+   python deploy/slim/prune/export_prune_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./output/prune_model/latest Global.save_inference_dir=./prune/prune_inference_model > $log_path/export/prune_ch_det_mv3_db_v2.0.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/prune_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
       echo -e "\033[33m export_model of prune successfully!\033[0m" | tee -a $log_path/result.log
    else
