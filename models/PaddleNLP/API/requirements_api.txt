@@ -20,5 +20,3 @@ pycryptodome
 bce-python-sdk
 packaging
 psutil
-pynvml
-GPUtil

@@ -58,7 +58,7 @@ if [[ $2 == "enum" ]]; then
         --train_data ./data/DuEE-Fin/$2/train.tsv \
         --dev_data ./data/DuEE-Fin/$2/dev.tsv \
         --test_data ./data/DuEE-Fin/$2/test.tsv \
-        --predict_data ./data/DuEE-Fin/sentence/test.json \
+        --predict_data ./data/DuEE-Fin/sentence/dev.json \
         --do_train False \
         --do_predict True \
         --max_seq_len 300 \
@@ -78,7 +78,7 @@ else
             --train_data ./data/DuEE-Fin/$2/train.tsv \
             --dev_data ./data/DuEE-Fin/$2/dev.tsv \
             --test_data ./data/DuEE-Fin/$2/test.tsv \
-            --predict_data ./data/DuEE-Fin/sentence/test.json \
+            --predict_data ./data/DuEE-Fin/sentence/dev.json \
             --do_train False \
             --do_predict True \
             --max_seq_len 300 \
