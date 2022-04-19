@@ -1,4 +1,4 @@
-"""Test_transformer is used to check Auto API test case."""
+"""Test_transformer is used to check Auto API."""
 import io
 import re
 import warnings
@@ -14,7 +14,7 @@ def getModelList():
     """
     model_list = []
     keyword = ["|``"]
-    with open("../../../docs/model_zoo/transformers.rst") as f:
+    with open("./docs/model_zoo/transformers.rst") as f:
         for line in f:
             if any(word in line for word in keyword):
                 reg = re.compile(r"\``+.*?\``")
