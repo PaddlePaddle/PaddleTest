@@ -25,21 +25,6 @@ DATA_PROC:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh data_proc.sh senti_clas
-# mac/win download dataset
-#  -
-#    tag: mac_down_data
-#    priority: p0
-#    run:
-#      -
-#        path: $ROOT_PATH/$model_scripts_path
-#        cmd: sh data_proc.sh senti_clas
-#  -
-#    tag: win_down_data
-#    priority: p0
-#    run:
-#      -
-#        path: $ROOT_PATH/$model_scripts_path
-#        cmd: sh data_proc.sh senti_clas
 
 TRAIN: # 训练步骤
 # linux train
@@ -99,7 +84,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/content_textcnn_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p0   # dy_cpu
@@ -188,7 +173,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/content_textcnn_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu
@@ -535,7 +520,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/content_textcnn_infer_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu
     priority: p0
@@ -614,7 +599,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/content_textcnn_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_content_textcnn_infer_linux_st_gpu2.log
   -
     tag: linux_st_cpu
     priority: p0

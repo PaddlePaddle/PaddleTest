@@ -40,12 +40,13 @@ if [ "$1" = "linux_dy_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/trainer.py -m config_bigdata.yaml > ${log_path}/$2.log 2>&1
     print_info $? $2
+
 elif [ "$1" = "linux_dy_gpu2" ];then #多卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     # 多卡的运行方式
-    python -u paddle.distributed.launch ../../../tools/trainer.py -m config_bigdata.yaml > ${log_path}/$2.log 2>&1
+    python -m paddle.distributed.launch ../../../tools/trainer.py -m config_bigdata.yaml > ${log_path}/$2.log 2>&1
     print_info $? $2
-    mv $code_path/log $log_path/$2_dist_log
+
 elif [ "$1" = "linux_dy_cpu" ];then
     python -u ../../../tools/trainer.py -m config.yaml > ${log_path}/$2.log 2>&1
     print_info $? $2
@@ -54,16 +55,17 @@ elif [ "$1" = "linux_st_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/static_trainer.py -m config_bigdata.yaml > ${log_path}/$2.log 2>&1
     print_info $? $2
+
 elif [ "$1" = "linux_st_gpu2" ];then #多卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     # 多卡的运行方式
-    python -u paddle.distributed.launch ../../../tools/static_trainer.py -m config_bigdata.yaml > ${log_path}/$2.log 2>&1
+    python -m paddle.distributed.launch ../../../tools/static_trainer.py -m config_bigdata.yaml > ${log_path}/$2.log 2>&1
     print_info $? $2
-    mv $code_path/log $log_path/$2_dist_log
 
 elif [ "$1" = "linux_st_cpu" ];then
     python -u ../../../tools/static_trainer.py -m config.yaml > ${log_path}/$2.log 2>&1
     print_info $? $2
+
 # mac small_data train
 elif [ "$1" = "mac_dy_cpu" ];then
     python -u ../../../tools/trainer.py -m config.yaml > ${log_path}/$2.log 2>&1
