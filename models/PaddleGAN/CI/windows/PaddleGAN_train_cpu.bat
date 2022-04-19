@@ -62,6 +62,7 @@ rd /s /q output
 python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
 
 if not !errorlevel! == 0 (
+    type %log_path%/!model!_train.log
     echo   !model!,train,FAIL  >> %log_path%\result.log
     echo  training of !model! failed!
     echo "training_exit_code: 1.0" >> %log_path%\!model!_train.log
@@ -76,6 +77,7 @@ for /d %%j in %params_dir% do (
 echo %%j
 python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams > %log_path%/!model!_eval.log 2>&1
 if not !errorlevel! == 0 (
+    type %log_path%/!model!_eval.log
     echo   !model!,eval,FAIL  >> %log_path%\result.log
     echo  eval of !model! failed!
     echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
