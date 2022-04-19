@@ -325,9 +325,9 @@ msvsr_l_reds)
     fi
     ;;
 esac
-done
 
-if [[ ! ${model_flag} =~ "single" ]] && [[ ! ${model_flag} =~ "CE" ]];then
+#infer
+if [[ ! ${model_flag} =~ "single" ]] && [[ ${line} =~ "edvr_m_wo_tsa" ]];then
     #infer
     python -u applications/tools/styleganv2.py \
         --output_path styleganv2_infer \
@@ -432,6 +432,7 @@ if [[ ! ${model_flag} =~ "single" ]] && [[ ! ${model_flag} =~ "CE" ]];then
         echo -e "\033[31m infer of video restore failed!\033[0m"| tee -a $log_path/result.log
     fi
 fi
+done
 
 num=`cat $log_path/result.log | grep "failed" | wc -l`
 if [ "${num}" -gt "0" ];then
