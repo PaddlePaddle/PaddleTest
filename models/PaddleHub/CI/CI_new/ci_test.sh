@@ -139,6 +139,12 @@ ci(){
 
   done
 
+  if [ ! -d "Modules/files" ]
+  then
+  echo Modules/files is empty!!!!!!
+  hub_excption=$(expr ${hub_excption} + 1)
+  fi
+
   echo ----------------------- num of bug modules is ${hub_excption} -----------------------
   echo fail modules are: ${hub_fail_list}
   echo success modules are: ${hub_success_list}
