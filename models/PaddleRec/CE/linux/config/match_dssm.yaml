@@ -42,7 +42,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.3920
-        threshold: 0.02
+        threshold: 0.04
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -82,7 +82,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_dssm_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p0
@@ -164,7 +164,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_dssm_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu

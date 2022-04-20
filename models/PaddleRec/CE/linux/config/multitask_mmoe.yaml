@@ -82,7 +82,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_mmoe_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p0
@@ -171,7 +171,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_mmoe_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu
@@ -514,7 +514,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu
     priority: p0
@@ -593,7 +593,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_st_gpu2.log
   -
     tag: linux_st_cpu
     priority: p0
