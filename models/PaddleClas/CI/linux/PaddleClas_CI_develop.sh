@@ -5,6 +5,7 @@ echo ${model_flag}
 echo ${Data_path}
 echo ${Project_path}
 echo ${paddle_compile}
+echo ${py_paddle_flag}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
@@ -40,7 +41,7 @@ cd deploy
 ln -s ${Data_path}/rec_demo/* .
 cd ..
 
-if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
+if ([[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]) &&  [[ ! ${py_paddle_flag} ]]; then #model_flag
     echo "######  model_flag pr"
 
     echo "######  ---py37  env -----"
