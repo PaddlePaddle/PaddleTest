@@ -3,7 +3,7 @@
 unset GREP_OPTIONS
 cur_path=`pwd`
 
-while getopts ":P:p:t:g:L:h:" opt
+while getopts ":P:p:t:g:L:h:o:H:" opt
 do
     case $opt in
         P)
@@ -32,6 +32,9 @@ do
         o)
         echo "pr_id=$OPTARG"
         pr_id=$OPTARG
+        ;;
+        H)
+        http_proxy=$OPTARG
         ;;
         ?)
         echo "未知参数"
@@ -81,6 +84,8 @@ build_env(){
     cd -
 
     hub config server==${hub_config}
+    export http_proxy=${http_proxy}
+    export https_proxy=${http_proxy}
 }
 
 ci(){
