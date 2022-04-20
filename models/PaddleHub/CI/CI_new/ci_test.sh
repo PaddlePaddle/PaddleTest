@@ -111,6 +111,18 @@ ci(){
   cd Modules/tars
   tar -xzf ${module}*
   hub install ${module}
+
+  if [ $? -ne 0 ];then
+  echo ++++++++++++++++++++++${module} predict Failed!!!++++++++++++++++++++++
+  hub_excption=$(expr ${hub_excption} + 1)
+  install_fail_list="${hub_fail_list} ${module}"
+  continue
+  else
+  echo ++++++++++++++++++++++${module} predict Success!!!++++++++++++++++++++++
+  #hub_success=$(expr ${hub_success} + 1)
+  install_success_list="${hub_success_list} ${module}"
+  fi
+
   cd -
 
   $py_cmd docbase.py --path ${module_path}/README.md --name ${module}
@@ -133,12 +145,12 @@ ci(){
   if [ $? -ne 0 ];then
   echo ++++++++++++++++++++++${module} predict Failed!!!++++++++++++++++++++++
   hub_excption=$(expr ${hub_excption} + 1)
-  hub_fail_list="${hub_fail_list} ${hub_module}"
+  hub_fail_list="${hub_fail_list} ${module}"
   continue
   else
   echo ++++++++++++++++++++++${module} predict Success!!!++++++++++++++++++++++
   hub_success=$(expr ${hub_success} + 1)
-  hub_success_list="${hub_success_list} ${hub_module}"
+  hub_success_list="${hub_success_list} ${module}"
   fi
 
 
@@ -151,7 +163,9 @@ ci(){
   fi
 
   echo ----------------------- num of bug modules is ${hub_excption} -----------------------
+  echo install_fail_list: ${install_fail_list}
   echo fail modules are: ${hub_fail_list}
+  echo install_fail_list: ${install_fail_list}
   echo success modules are: ${hub_success_list}
   exit ${hub_excption}
 }
