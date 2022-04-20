@@ -62,6 +62,7 @@ rd /s /q output
 python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
 
 if not !errorlevel! == 0 (
+    type %log_path%/!model!_train.log
     echo   !model!,train,FAIL  >> %log_path%\result.log
     echo  training of !model! failed!
     echo "training_exit_code: 1.0" >> %log_path%\!model!_train.log
@@ -77,7 +78,8 @@ if !model!==stylegan_v2_256_ffhq (
     echo %%j
     python tools/extract_weight.py output/%%j/iter_20_checkpoint.pdparams --net-name gen_ema --output stylegan_extract.pdparams > %log_path%/!model!_extract_weight.log 2>&1
     if not !errorlevel! == 0 (
-        echo   !model!,extract_weight,FAIL  >> %log_path%\result.log
+        type %log_path%/!model!_extract_weight.log
+        echo  !model!,extract_weight,FAIL  >> %log_path%\result.log
         echo  extract_weight of !model! failed!
     ) else (
         echo   !model!,extract_weight,SUCCESS  >> %log_path%\result.log
@@ -85,6 +87,7 @@ if !model!==stylegan_v2_256_ffhq (
     )
     python applications/tools/styleganv2.py --output_path stylegan_infer --weight_path stylegan_extract.pdparams --size 256 > %log_path%/!model!_eval.log 2>&1
     if not !errorlevel! == 0 (
+        type %log_path%/!model!_eval.log
         echo   !model!,eval,FAIL  >> %log_path%\result.log
         echo  eval of !model! failed!
     ) else (
@@ -97,6 +100,7 @@ if !model!==stylegan_v2_256_ffhq (
     echo %%j
     python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams > %log_path%/!model!_eval.log 2>&1
     if not !errorlevel! == 0 (
+        type %log_path%/!model!_eval.log
         echo   !model!,eval,FAIL  >> %log_path%\result.log
         echo  eval of !model! failed!
         echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
