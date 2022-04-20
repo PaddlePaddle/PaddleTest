@@ -16,6 +16,7 @@ EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p0]
   exec_tag: $EXEC_TAG
+
 #测试套
 DATA_PROC:
   -
@@ -41,7 +42,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3920
+        kpi_base: 0.380
         threshold: 0.04
         actived: True
         evaluation: "+"
