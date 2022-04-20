@@ -16,6 +16,7 @@ EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p0]
   exec_tag: $EXEC_TAG
+
 #测试套
 DATA_PROC:
   -
