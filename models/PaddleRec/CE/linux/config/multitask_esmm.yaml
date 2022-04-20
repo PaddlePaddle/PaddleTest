@@ -167,7 +167,7 @@ TRAIN: # 训练步骤
 
     output: $ROOT_PATH/$model_log_path/S_multitask_esmm_linux_st_gpu2.log
 
-  -
+  - # 静态图小数据集
     tag: linux_st_cpu # st_cpu
     priority: p1
     run:
