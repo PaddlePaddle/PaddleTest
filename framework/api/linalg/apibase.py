@@ -120,11 +120,10 @@ class APIBase(object):
             Assertion
         """
         # 取默认type
-        if self.dtype is None:
-            if np.float64 in self.types:
-                self.dtype = np.float64
-            else:
-                self.dtype = self.types[0]
+        if np.float64 in self.types:
+            self.dtype = np.float64
+        else:
+            self.dtype = self.types[0]
         if self.debug:
             for place in self.places:
                 self.place = place
