@@ -16,7 +16,7 @@ do
         ;;
         t)
         echo "repo=$OPTARG"
-        repo=$OPTARG
+        task=$OPTARG
         ;;
         g)
         echo "use gpu=$OPTARG"
@@ -28,6 +28,10 @@ do
         ;;
         h)
         hub_config=$OPTARG
+        ;;
+        o)
+        echo "pr_id=$OPTARG"
+        pr_id=$OPTARG
         ;;
         ?)
         echo "未知参数"
@@ -41,12 +45,18 @@ build_env(){
     $py_cmd -m pip install pytest
     $py_cmd -m pip install ${paddle}
 
+    git clone -b develop https://github.com/PaddlePaddle/PaddleHub.git
     cd PaddleHub
+    git remote add upstream https://github.com/PaddlePaddle/PaddleHub
     $py_cmd -m pip install -r requirements.txt
-    $py_cmd setup.py install
+    # $py_cmd setup.py install
     cd -
 
-    hub config server==${hub_config}
+    $py_cmd -m pip install librosa
+
+    $py_cmd -m pip install sentencepiece
+    $py_cmd -m pip install pypinyin --upgrade
+    $py_cmd -m pip install paddlex==1.3.11
 
     if [[ ${linux_sys} = "ubuntu" ]]; then
     apt-get install libsndfile1 -y
@@ -55,17 +65,22 @@ build_env(){
     yum install -y libsndfile
     fi
 
-    $py_cmd -m pip install librosa
-
-    $py_cmd -m pip install sentencepiece
-    $py_cmd -m pip install pypinyin --upgrade
-    $py_cmd -m pip install paddlex==1.3.11
-
     export PYTHONPATH='.'
 
+    unset https_proxy
+    unset http_proxy
     git clone http://gitlab.baidu.com/chenxiaojie06/new_module_tool.git
     mv new_module_tool/* .
 
+    echo start to auto_fill_content!!!!
+    sed -i "s/PaddleHub\/pull\/1816/PaddleHub\/pull\/${pr_id}/g" data/auto_fill_content.py
+    $py_cmd data/auto_fill_content.py
+
+    cd PaddleHub
+    $py_cmd setup.py install
+    cd -
+
+    hub config server==${hub_config}
 }
 
 ci(){
@@ -78,7 +93,7 @@ ci(){
   hub_fail_list=
   hub_success_list=
 
-  $py_cmd data/auto_fill_content.py
+  # $py_cmd data/auto_fill_content.py
 
   wget -q --no-proxy https://paddle-qa.bj.bcebos.com/PaddleHub/data/hub_CI_data.tar
   tar -xzf hub_CI_data.tar && mv hub_CI_data/* . && rm -rf hub_CI_data.tar
@@ -132,6 +147,9 @@ ci(){
 
 main(){
     case $task in
+        (build_env)
+            build_env
+            ;;
         (ci)
             ci
             ;;
