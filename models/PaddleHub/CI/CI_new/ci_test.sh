@@ -76,8 +76,9 @@ build_env(){
     mv new_module_tool/* .
 
     echo start to auto_fill_content!!!!
-    sed -i "s/PaddleHub\/pull\/1816/PaddleHub\/pull\/${pr_id}/g" data/auto_fill_content.py
-    $py_cmd data/auto_fill_content.py
+    $py_cmd build_resource.py --pr_id ${pr_id}
+    # sed -i "s/PaddleHub\/pull\/1816/PaddleHub\/pull\/${pr_id}/g" data/auto_fill_content.py
+    # $py_cmd data/auto_fill_content.py
 
     cd PaddleHub
     $py_cmd setup.py install
@@ -165,7 +166,7 @@ ci(){
   echo ----------------------- num of bug modules is ${hub_excption} -----------------------
   echo install_fail_list: ${install_fail_list}
   echo fail modules are: ${hub_fail_list}
-  echo install_fail_list: ${install_fail_list}
+  echo install_success_list: ${install_success_list}
   echo success modules are: ${hub_success_list}
   exit ${hub_excption}
 }
