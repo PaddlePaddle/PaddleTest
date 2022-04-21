@@ -101,6 +101,7 @@ def test_repeat_interleave5():
     type: int
     """
     obj.types = [np.int32, np.int64]
+    obj.enable_backward = False
     x = randtool("int", -2, 2, (4, 2, 4, 4, 5))
     res = np.repeat(x, 2, axis=3)
     obj.run(res=res, x=x, repeats=2, axis=3)
