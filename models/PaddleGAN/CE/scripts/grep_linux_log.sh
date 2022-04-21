@@ -20,12 +20,20 @@ ls
 #     cat tmp_1card.log | tr '\n' ',' > ../${log_path}/${model}_1card.log
 #     cat ../${log_path}/${model}_1card.log
 
-if [[ $2 == 'train_linux_gpu2' ]] ; then
+if [[ $2 == 'train_linux_gpu1' ]] ; then
+    echo '#####train_linux_gpu2'
+    tail -n 5 ${log_path}/train/${model}_1card.log
+
+    cat ${log_path}/train/${model}_1card.log | grep training_exit_code
+    cat ${log_path}/train/${model}_1card.log | grep training_exit_code >../${log_path}/${model}_1card.log
+    cat ../${log_path}/${model}_1card.log
+
+elif [[ $2 == 'train_linux_gpu2' ]] ; then
     echo '#####train_linux_gpu2'
     tail -n 5 ${log_path}/train/${model}.log
 
-    cat ${log_path}/train/${model}.log | grep training_exit_code
-    cat ${log_path}/train/${model}.log | grep training_exit_code >../${log_path}/${model}_2card.log
+    cat ${log_path}/train/${model}_2card.log | grep training_exit_code
+    cat ${log_path}/train/${model}_2card.log | grep training_exit_code >../${log_path}/${model}_2card.log
     cat ../${log_path}/${model}_2card.log
 
 elif [[ $2 == 'eval_linux' ]] ; then
