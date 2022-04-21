@@ -34,7 +34,7 @@ elif [[ ${model} == 'realsr_kernel_noise_x4_dped' ]]; then
 elif [[ ${model} == 'pix2pix_cityscapes_2gpus' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'pix2pix_facades' ]]; then
-    sed -i "" "s|P0|P0|g" ${model}.yaml
+    sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'firstorder_vox_mobile_256' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'pan_psnr_x4_div2k' ]]; then
