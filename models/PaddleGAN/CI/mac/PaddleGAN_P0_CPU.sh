@@ -99,7 +99,7 @@ else
 fi
 # fi
 
-if [[ ${line} =~ "edvr_m_wo_tsa" ]];then
+if [[ ${model} =~ "edvr_m_wo_tsa" ]];then
     #infer
     python -u applications/tools/styleganv2.py --output_path styleganv2_infer --model_type ffhq-config-f --seed 233 --size 1024 --style_dim 512 --n_mlp 8 --channel_multiplier 2 --n_row 3 --n_col 5 > $log_path/infer/styleganv2.log 2>&1
     if [[ $? -eq 0 ]];then

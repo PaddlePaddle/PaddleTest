@@ -354,7 +354,7 @@ msvsr_l_reds)
 esac
 
 #infer
-if [[ ! ${model_flag} =~ "single" ]] && [[ ${line} =~ "edvr_m_wo_tsa" ]];then
+if [[ ! ${model_flag} =~ "single" ]] && [[ ${model} =~ "edvr_m_wo_tsa" ]];then
     #infer
     python -u applications/tools/styleganv2.py \
         --output_path styleganv2_infer \
