@@ -93,7 +93,7 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
     python -m pip install --ignore-installed  --upgrade pip \
         -i https://mirror.baidu.com/pypi/simple
     python -m pip uninstall paddlepaddle-gpu -y
-    python -m pip install ${paddle_compile} #paddle_compile
+    python -m pip install ${paddle_compile} -i https://mirror.baidu.com/pypi/simple #paddle_compile
 fi
 
 # paddle
