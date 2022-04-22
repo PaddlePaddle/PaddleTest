@@ -39,8 +39,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.670724
-        threshold: 0.001
+        kpi_base: 0.70504
+        threshold: 0.01
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -59,8 +59,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.670723
-        threshold: 0.001
+        kpi_base: 0.70504
+        threshold: 0.01
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -282,8 +282,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.729422
-        threshold: 0.05
+        kpi_base: 0.784392
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -302,8 +302,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.729422
-        threshold: 0.05
+        kpi_base: 0.784392
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -342,8 +342,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.102121
-        threshold: 0.001
+        kpi_base: 1.104095
+        threshold: 0.01
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -362,8 +362,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.102121
-        threshold: 0.001
+        kpi_base: 1.104095
+        threshold: 0.01
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -403,8 +403,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.64666
-        threshold: 0.001
+        kpi_base: 0.692344
+        threshold: 0.01
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -423,8 +423,8 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.64666
-        threshold: 0.001
+        kpi_base: 0.692344
+        threshold: 0.01
         actived: True
         evaluation: "-"
         unit_repr: "s"

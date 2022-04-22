@@ -32,8 +32,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.5091743119266054
-        threshold: 0.01
+        kpi_base: 0.473624
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -53,8 +53,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.5091743119266054
-        threshold: 0.01
+        kpi_base: 0.473624
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: "s"
