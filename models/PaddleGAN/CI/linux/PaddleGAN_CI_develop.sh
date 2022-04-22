@@ -294,6 +294,8 @@ if [[ ${model_flag} =~ "CE" ]]; then
         echo -e "\033[31m train single of $model failed!\033[0m"| tee -a $log_path/result.log
         echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
     fi
+fi
+
   ;;
 esac
 
