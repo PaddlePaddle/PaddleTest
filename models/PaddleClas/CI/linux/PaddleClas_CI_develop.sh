@@ -5,6 +5,7 @@ echo ${model_flag}
 echo ${Data_path}
 echo ${Project_path}
 echo ${paddle_compile}
+echo ${py_paddle_flag}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
@@ -40,7 +41,7 @@ cd deploy
 ln -s ${Data_path}/rec_demo/* .
 cd ..
 
-if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
+if ([[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]) &&  [[ ! ${py_paddle_flag} ]]; then #model_flag
     echo "######  model_flag pr"
 
     echo "######  ---py37  env -----"
@@ -207,6 +208,29 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         wc -l models_list_diff
         cat models_list_diff
         shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
+
+        #增加静态图验证 只跑一个不放在循环中
+        python -m paddle.distributed.launch ppcls/static/train.py  \
+            -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml \
+            -o Global.epochs=1 \
+            -o DataLoader.Train.sampler.batch_size=1 \
+            -o DataLoader.Eval.sampler.batch_size=1  \
+            -o Global.output_dir=output \
+            > $log_path/train/ResNet50_static.log 2>&1
+        params_dir=$(ls output)
+        echo "######  params_dir"
+        echo $params_dir
+
+        if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
+            && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
+            echo -e "\033[33m training multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
+            echo "training_static_exit_code: 0.0" >> $log_path/train/ResNet50_static.log
+        else
+            cat $log_path/train/ResNet50_static.log
+            echo -e "\033[31m training multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
+            echo "training_static_exit_code: 1.0" >> $log_path/train/ResNet50_static.log
+        fi
+
     fi
     cat models_list | sort | uniq > models_list_run_tmp  #去重复
     shuf models_list_run_tmp > models_list_run
@@ -362,10 +386,21 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
     ls output/$params_dir/ |head -n 2
     # eval
+    if [[ ${line} =~ 'ultra' ]];then
+        cp ${line} ${line}_tmp #220413 fix tingquan
+        sed -i '/output_fp16: True/d' ${line}
+    fi
+
     python tools/eval.py -c $line \
         -o Global.pretrained_model=output/$params_dir/latest \
         -o DataLoader.Eval.sampler.batch_size=1 \
         > $log_path/eval/$model.log 2>&1
+
+    if [[ ${line} =~ 'ultra' ]];then
+        rm -rf ${line}
+        mv ${line}_tmp ${line} #220413 fix tingquan
+    fi
+
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
         echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "eval_exit_code: 0.0" >> $log_path/eval/$model.log

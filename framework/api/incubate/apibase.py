@@ -121,11 +121,10 @@ class APIBase(object):
             Assertion
         """
         # 取默认type
-        if self.dtype is None:
-            if np.float64 in self.types:
-                self.dtype = np.float64
-            else:
-                self.dtype = self.types[0]
+        if np.float64 in self.types:
+            self.dtype = np.float64
+        else:
+            self.dtype = self.types[0]
         if self.debug:
             for place in self.places:
                 self.place = place
@@ -142,7 +141,7 @@ class APIBase(object):
                     self._check_params(res, data, **kwargs)
                     dygraph_forward_res = self._dygraph_forward()
                     logging.info("dygraph forward result is :")
-                    if isinstance(dygraph_forward_res, (list)):
+                    if isinstance(dygraph_forward_res, (list, tuple)):
                         compare(dygraph_forward_res, res, self.delta, self.rtol)
                         logging.info(dygraph_forward_res)
                     else:
@@ -197,52 +196,70 @@ class APIBase(object):
         else:
             for place in self.places:
                 self.place = place
-                paddle.disable_static(self.place)
-                if isinstance(self.place, paddle.CPUPlace):
-                    paddle.set_device("cpu")
-                else:
-                    paddle.set_device("gpu:0")
                 logging.info("[Place] is ===============================>>>>>>>>" + str(self.place))
-                # start run paddle dygraph
-                logging.info("[start] run " + self.__class__.__name__ + " dygraph")
-                paddle.disable_static(self.place)
-                paddle.seed(self.seed)
-                self._check_params(res, data, **kwargs)
-                dygraph_forward_res = self._dygraph_forward()
-                if isinstance(dygraph_forward_res, (list)):
-                    compare(dygraph_forward_res, res, self.delta, self.rtol)
-                else:
-                    compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
+
+                # (1) start run paddle dygraph
+                if self.dygraph:
+                    paddle.disable_static(self.place)
+                    if isinstance(self.place, paddle.CPUPlace):
+                        paddle.set_device("cpu")
+                    else:
+                        paddle.set_device("gpu:0")
+                    logging.info("[start] run " + self.__class__.__name__ + " dygraph")
+                    # paddle.disable_static(self.place)
+                    paddle.seed(self.seed)
+                    self._check_params(res, data, **kwargs)
+
+                    # ① calculate forward result
+                    dygraph_forward_res = self._dygraph_forward()
+                    # ② compare forward result
+                    if isinstance(dygraph_forward_res, (list, tuple)):
+                        compare(dygraph_forward_res, res, self.delta, self.rtol)
+                    else:
+                        compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
+                    # ③ calculate backward result
+                    if self.enable_backward:
+                        dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
+
+                # (2) start run paddle static
+                if self.static:
+                    paddle.enable_static()
+                    logging.info("[start] run " + self.__class__.__name__ + " static")
+                    # ① calculate forward and backward result
+                    if self.enable_backward:
+                        static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
+                    else:
+                        static_forward_res = self._static_forward(res, data, **kwargs)
+                    # ② compare forward result
+                    compare(static_forward_res, res, self.delta, self.rtol)
+
+                # (3) check gradients
                 if self.enable_backward:
-                    dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
-                paddle.enable_static()
-                # start run paddle static
-                logging.info("[start] run " + self.__class__.__name__ + " static")
-                if self.enable_backward:
-                    static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
-                else:
-                    static_forward_res = self._static_forward(res, data, **kwargs)
-                compare(static_forward_res, res, self.delta, self.rtol)
-                # start run torch
-                if self.enable_backward:
+                    # ① calculate numerical gradient
                     grad = self.compute_grad(res, data, **kwargs)
-                    compare_grad(static_backward_res, dygraph_backward_res, mode="both", no_grad_var=self.no_grad_var)
-                    compare_grad(
-                        dygraph_backward_res,
-                        grad,
-                        mode="dygraph",
-                        delta=self.delta,
-                        rtol=self.rtol,
-                        no_grad_var=self.no_grad_var,
-                    )
-                    compare_grad(
-                        static_backward_res,
-                        grad,
-                        mode="static",
-                        delta=self.delta,
-                        rtol=self.rtol,
-                        no_grad_var=self.no_grad_var,
-                    )
+                    # ② compare  gradient
+                    if self.static and self.dygraph:
+                        compare_grad(
+                            static_backward_res, dygraph_backward_res, mode="both", no_grad_var=self.no_grad_var
+                        )
+                    if self.dygraph:
+                        compare_grad(
+                            dygraph_backward_res,
+                            grad,
+                            mode="dygraph",
+                            delta=self.delta,
+                            rtol=self.rtol,
+                            no_grad_var=self.no_grad_var,
+                        )
+                    if self.static:
+                        compare_grad(
+                            static_backward_res,
+                            grad,
+                            mode="static",
+                            delta=self.delta,
+                            rtol=self.rtol,
+                            no_grad_var=self.no_grad_var,
+                        )
 
     def _baserun(self, res, data=None, **kwargs):
         """
@@ -267,7 +284,7 @@ class APIBase(object):
                 self._check_params(res, data, **kwargs)
                 dygraph_forward_res = self._dygraph_forward()
                 logging.info("dygraph forward result is :")
-                if isinstance(dygraph_forward_res, (list)):
+                if isinstance(dygraph_forward_res, (list, tuple)):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
                     logging.info(dygraph_forward_res)
                 else:
@@ -318,50 +335,65 @@ class APIBase(object):
                         no_grad_var=self.no_grad_var,
                     )
         else:
-            # start run paddle dygraph
-            logging.info("[start] run " + self.__class__.__name__ + " dygraph")
-            paddle.disable_static(self.place)
-            if isinstance(self.place, paddle.CPUPlace):
-                paddle.set_device("cpu")
-            else:
-                paddle.set_device("gpu:0")
-            paddle.seed(self.seed)
-            self._check_params(res, data, **kwargs)
-            dygraph_forward_res = self._dygraph_forward()
-            if isinstance(dygraph_forward_res, (list)):
-                compare(dygraph_forward_res, res, self.delta, self.rtol)
-            else:
-                compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
+            # (1) start run paddle dygraph
+            if self.dygraph:
+                paddle.disable_static(self.place)
+                if isinstance(self.place, paddle.CPUPlace):
+                    paddle.set_device("cpu")
+                else:
+                    paddle.set_device("gpu:0")
+                paddle.seed(self.seed)
+                logging.info("[start] run " + self.__class__.__name__ + " dygraph")
+                self._check_params(res, data, **kwargs)
+
+                # ① calculate forward result
+                dygraph_forward_res = self._dygraph_forward()
+                # ② check forward result
+                if isinstance(dygraph_forward_res, (list, tuple)):
+                    compare(dygraph_forward_res, res, self.delta, self.rtol)
+                else:
+                    compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
+                # ③ calculate backward result
+                if self.enable_backward:
+                    dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
+
+            # (2) start run paddle static
+            if self.static:
+                paddle.enable_static()
+                logging.info("[start] run " + self.__class__.__name__ + " static")
+                # ① calculate forward and backward result
+                if self.enable_backward:
+                    static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
+                else:
+                    static_forward_res = self._static_forward(res, data, **kwargs)
+                # ② compare forward result
+                compare(static_forward_res, res, self.delta, self.rtol)
+
+            # (3) check gradient
             if self.enable_backward:
-                dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
-            paddle.enable_static()
-            # start run paddle static
-            logging.info("[start] run " + self.__class__.__name__ + " static")
-            if self.enable_backward:
-                static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
-            else:
-                static_forward_res = self._static_forward(res, data, **kwargs)
-            compare(static_forward_res, res, self.delta, self.rtol)
-            # start run torch
-            if self.enable_backward:
+                # ① calculate numerical gradient
                 grad = self.compute_grad(res, data, **kwargs)
-                compare_grad(static_backward_res, dygraph_backward_res, mode="both", no_grad_var=self.no_grad_var)
-                compare_grad(
-                    dygraph_backward_res,
-                    grad,
-                    mode="dygraph",
-                    delta=self.delta,
-                    rtol=self.rtol,
-                    no_grad_var=self.no_grad_var,
-                )
-                compare_grad(
-                    static_backward_res,
-                    grad,
-                    mode="static",
-                    delta=self.delta,
-                    rtol=self.rtol,
-                    no_grad_var=self.no_grad_var,
-                )
+                # ② compare gradient
+                if self.dygraph and self.static:
+                    compare_grad(static_backward_res, dygraph_backward_res, mode="both", no_grad_var=self.no_grad_var)
+                if self.dygraph:
+                    compare_grad(
+                        dygraph_backward_res,
+                        grad,
+                        mode="dygraph",
+                        delta=self.delta,
+                        rtol=self.rtol,
+                        no_grad_var=self.no_grad_var,
+                    )
+                if self.static:
+                    compare_grad(
+                        static_backward_res,
+                        grad,
+                        mode="static",
+                        delta=self.delta,
+                        rtol=self.rtol,
+                        no_grad_var=self.no_grad_var,
+                    )
 
     def _check_dtype(self, res, data, **kwargs):
         """
@@ -420,11 +452,21 @@ class APIBase(object):
                 else:
                     self.kwargs[k] = to_tensor(v.astype(self.dtype))
                 # enable compute gradient
-                self.kwargs[k].stop_gradient = False
+                if self.enable_backward is True:
+                    self.kwargs[k].stop_gradient = False
+
+            elif isinstance(v, (list, tuple)) and isinstance(v[0], (np.generic, np.ndarray)):
+                len_v = len(v)
+                for i in range(len_v):
+                    self.kwargs[k][i] = to_tensor(v[i].astype(self.dtype))
+                    if self.enable_backward is True:
+                        self.kwargs[k][i].stop_gradient = False
+
         if data is not None:
             self.data = to_tensor(data.astype(self.dtype))
             # enable compute gradient
-            self.data.stop_gradient = False
+            if self.enable_backward is True:
+                self.data.stop_gradient = False
         self.res = res
 
     def compute_grad(self, res, data=None, **kwargs):
@@ -441,35 +483,40 @@ class APIBase(object):
         loss = self._numeric_grad()
         self.kwargs = copy.deepcopy(kwargs)
         numeric_grad = {}
-        for k, v in self.kwargs.items():
-            if isinstance(v, (np.generic, np.ndarray)):
-                # no_grad_Var不需要转换类型
-                if self.no_grad_var is not None and k in self.no_grad_var:
-                    self.kwargs[k] = to_tensor(v)
-                else:
-                    self.kwargs[k] = to_tensor(v.astype(self.dtype))
-                # enable compute gradient
-                self.kwargs[k].stop_gradient = False
+        # for k, v in self.kwargs.items():
+        #     if isinstance(v, (np.generic, np.ndarray)):
+        #         # no_grad_Var不需要转换类型
+        #         if self.no_grad_var is not None and k in self.no_grad_var:
+        #             self.kwargs[k] = to_tensor(v)
+        #         else:
+        #             self.kwargs[k] = to_tensor(v.astype(self.dtype))
+        #         # enable compute gradient
+        #         if self.enable_backward is True:
+        #             self.kwargs[k].stop_gradient = False
+        self._check_params(res, data, **self.kwargs)
         if data is None:
             for k, v in self.kwargs.items():
                 if isinstance(v, paddle.Tensor):
                     grad = []
                     shape = v.numpy().shape
                     for i in range(len(v.numpy().flatten())):
-                        tmp = v.numpy().flatten()
-                        tmp[i] = tmp[i] + self.gap
-                        tmp = tmp.reshape(shape)
-                        # print(tmp)
-                        self.kwargs[k] = to_tensor(tmp.astype(self.dtype))
-                        # enable compute gradient
-                        self.kwargs[k].stop_gradient = False
-                        loss_delta = self._numeric_grad()
-                        g = (loss_delta - loss) / self.gap
-                        # print("-----> {}".format(g))
+                        g = self._get_sigle_grad(v, i, k)
                         grad.append(g[0])
-                        # recover v to self.kwargs
                         self.kwargs[k] = v
                     numeric_grad[k] = np.array(grad).reshape(shape)
+                elif isinstance(v, (list, tuple)) and isinstance(v[0], paddle.Tensor):
+                    tmp = []
+                    len_v = len(v)
+                    for n in range(len_v):
+                        grad = []
+                        shape = v[n].shape
+                        for i in range(len(v[n].flatten())):
+                            g = self._get_sigle_grad(v[n], i, k, n)
+                            grad.append(g[0])
+                            self.kwargs[k][n] = v[n]
+                        tmp.append(np.array(grad).reshape(shape))
+                    numeric_grad[k] = tmp
+
         else:
             # change data to correct dtype
             data = data.astype(self.dtype)
@@ -481,7 +528,8 @@ class APIBase(object):
                 tmp = tmp.reshape(shape)
                 self.data = to_tensor(tmp.astype(self.dtype))
                 # enable compute gradient
-                self.data.stop_gradient = False
+                if self.enable_backward is True:
+                    self.data.stop_gradient = False
                 loss_delta = self._numeric_grad()
                 g = (loss_delta - loss) / self.gap
                 grad.append(g[0])
@@ -491,6 +539,29 @@ class APIBase(object):
         paddle.enable_static()
         return numeric_grad
 
+    def _get_sigle_grad(self, t, idx, k, n=None):
+        assert isinstance(t, paddle.fluid.framework.Variable), "The first argument t must be Tensor."
+        assert isinstance(idx, int), "The second argument idx must be an int number."
+
+        dtype = t.dtype
+        flat_t = paddle.reshape(t, [-1])
+        orig = flat_t.__getitem__(idx)
+        flat_t.__setitem__(idx, orig + self.gap)
+        x_pos = flat_t.reshape(t.shape).astype(dtype)
+        if isinstance(n, int):
+            self.kwargs[k][n] = x_pos
+        else:
+            self.kwargs[k] = x_pos
+        loss_pos = self._numeric_grad()
+        flat_t.__setitem__(idx, orig - self.gap)
+        x_neg = flat_t.reshape(t.shape).astype(dtype)
+        if isinstance(n, int):
+            self.kwargs[k][n] = x_neg
+        else:
+            self.kwargs[k] = x_neg
+        loss_neg = self._numeric_grad()
+        return (loss_pos - loss_neg) / self.gap / 2
+
     def _numeric_grad(self):
         """
         _numeric_grad
@@ -499,12 +570,18 @@ class APIBase(object):
         """
         if self.__layertype == "func":
             res = self.func(**self.kwargs)
-            loss = paddle.mean(res).numpy()
+            if isinstance(res, (list, tuple)):
+                loss = paddle.mean(res[0]).numpy()
+            else:
+                loss = paddle.mean(res).numpy()
             return loss
         elif self.__layertype == "class":
             obj = self.func(**self.kwargs)
             res = obj(self.data)
-            loss = paddle.mean(res).numpy()
+            if isinstance(res, (list, tuple)):
+                loss = paddle.mean(res[0]).numpy()
+            else:
+                loss = paddle.mean(res).numpy()
             return loss
 
     def _dygraph_forward(self):
@@ -527,13 +604,23 @@ class APIBase(object):
         Args:
             res ([variable]): forward_res
         """
-        loss = paddle.mean(res)
+        if isinstance(res, (list, tuple)):
+            loss = paddle.mean(res[0])
+        else:
+            loss = paddle.mean(res)
         loss.backward()
         grad = {}
         for k, v in self.kwargs.items():
             # 判断是不是Variable类型
             if isinstance(v, paddle.Tensor):
                 grad[k] = v.gradient()
+            elif isinstance(v, (list, tuple)) and isinstance(v[0], paddle.Tensor):
+                tmp = []
+                len_v = len(v)
+                for i in range(len_v):
+                    tmp.append(v[i].gradient())
+                grad[k] = tmp
+
         if self.__layertype == "class":
             grad["data"] = self.data.gradient()
         # grad["res"] = res.gradient()
@@ -559,6 +646,12 @@ class APIBase(object):
                                 kwargs[k] = v
                             else:
                                 kwargs[k] = v.astype(self.dtype)
+                        elif isinstance(v, (list, tuple)) and isinstance(v[0], (np.generic, np.ndarray)):
+                            len_v = len(v)
+                            for i in range(len_v):
+                                v[i] = v[i].astype(self.dtype)
+
+                    feed = {}
                     for k, v in params.items():
                         if isinstance(v, (np.generic, np.ndarray)):
                             # no_grad_Var不需要转换类型
@@ -566,31 +659,55 @@ class APIBase(object):
                                 params[k] = paddle.static.data(name=k, shape=v.shape, dtype=v.dtype)
                             else:
                                 params[k] = paddle.static.data(name=k, shape=v.shape, dtype=self.dtype)
+                                feed[k] = v.astype(self.dtype)
                             xyz.append(k)
                             # enable compute gradient
-                            params[k].stop_gradient = False
+                            if self.enable_backward is True:
+                                params[k].stop_gradient = False
+
+                        elif isinstance(v, (list, tuple)) and isinstance(v[0], (np.generic, np.ndarray)):
+                            tmp = []
+                            len_v = len(v)
+                            for i in range(len_v):
+                                tmp.append(paddle.static.data(name=k + str(i), shape=v[i].shape, dtype=self.dtype))
+                                feed[k + str(i)] = v[i].astype(self.dtype)
+                                if self.enable_backward is True:
+                                    tmp[i].stop_gradient = False
+                            params[k] = tmp
+                            xyz.append(k)
+
                     output = self.func(**params)
+
+                    exe = paddle.static.Executor(self.place)
+                    exe.run(startup_program)
+                    res = exe.run(main_program, feed=feed, fetch_list=[output], return_numpy=True)
                     if self.enable_backward:
                         loss = paddle.mean(output)
                         grad_var = {}
+                        spec_var = {}
+                        logging.info(xyz)
                         for k in xyz:
-                            grad_var[k] = paddle.static.gradients(loss, params[k])
+                            if isinstance(params[k], (list, tuple)) and isinstance(
+                                params[k][0], paddle.fluid.framework.Variable
+                            ):
+                                grad_tmp = []
+                                for i in range(len(params[k])):
+                                    grad_tmp.append(paddle.static.gradients(loss, params[k][i]))
+                                spec_var[k] = grad_tmp
+                            else:
+                                grad_var[k] = paddle.static.gradients(loss, params[k])
+                        #
                         exe = paddle.static.Executor(self.place)
                         exe.run(startup_program)
-                        # print(list(grad_var.values()))
-                        # print([output] + list(grad_var.values()))
-                        res = exe.run(
-                            main_program, feed=kwargs, fetch_list=[output] + list(grad_var.values()), return_numpy=True
-                        )
-                        # combine grad
-                        grad = dict(zip(xyz, res[1:]))
+                        grad = {}
+                        logging.info(spec_var)
+                        for k, v in spec_var.items():
+                            grad[k] = exe.run(main_program, feed=feed, fetch_list=v, return_numpy=True)
+                        for k, v in grad_var.items():
+                            grad[k] = exe.run(main_program, feed=feed, fetch_list=[v], return_numpy=True)[0]
+
                         return res[0], grad
                     else:
-                        exe = paddle.static.Executor(self.place)
-                        exe.run(startup_program)
-                        # print(list(grad_var.values()))
-                        # print([output] + list(grad_var.values()))
-                        res = exe.run(main_program, feed=kwargs, fetch_list=[output], return_numpy=True)
                         return res[0]
         elif self.__layertype == "class":
             main_program = paddle.static.Program()
@@ -616,11 +733,13 @@ class APIBase(object):
                             else:
                                 params[k] = paddle.static.data(name=k, shape=v.shape, dtype=self.dtype)
                             # enable compute gradient
-                            params[k].stop_gradient = False
+                            if self.enable_backward is True:
+                                params[k].stop_gradient = False
                     if data is not None:
                         data = data.astype(self.dtype)
                         self.data = paddle.static.data(name="data", shape=data.shape, dtype=self.dtype)
-                        self.data.stop_gradient = False
+                        if self.enable_backward is True:
+                            self.data.stop_gradient = False
                     data = dict({"data": data}, **kwargs)
                     obj = self.func(**params)
                     output = obj(self.data)
@@ -676,6 +795,7 @@ def compare(result, expect, delta=1e-6, rtol=1e-5):
     :param delta: 误差值
     :return:
     """
+
     if isinstance(result, np.ndarray):
         expect = np.array(expect)
         res = np.allclose(result, expect, atol=delta, rtol=rtol, equal_nan=True)
@@ -687,23 +807,13 @@ def compare(result, expect, delta=1e-6, rtol=1e-5):
         assert res
         # tools.assert_equal(result.shape, expect.shape)
         assert result.shape == expect.shape
-    elif isinstance(result, list):
+    elif isinstance(result, (list, tuple)):
         for i, j in enumerate(result):
             if isinstance(j, (np.generic, np.ndarray)):
                 compare(j, expect[i], delta, rtol)
             else:
                 compare(j.numpy(), expect[i], delta, rtol)
-        # result = np.array(result)
-        # expect = np.array(expect)
-        # res = np.allclose(result, expect, atol=delta)
-        # # 出错打印错误数据
-        # if res is False:
-        #     print("the result is {}".format(result))
-        #     print("the expect is {}".format(expect))
-        # # tools.assert_true(res)
-        # assert res
-        # # tools.assert_equal(result.shape, expect.shape)
-        # assert result.shape == expect.shape
+
     elif isinstance(result, str):
         res = result == expect
         if res is False:

@@ -1,6 +1,6 @@
 #shell
-# cat models_list_gan_testP0_release | while read line
-# cat models_list_gan_testP1_release | while read line
+# cat models_list_gan_testP0_release_release | while read line
+# cat models_list_gan_testP1_release_release | while read line
 cat models_list_gan_test_all | while read line
 do
 echo $line
@@ -32,17 +32,17 @@ if [[ ${model} == 'ugatit_photo2cartoon' ]]; then
 elif [[ ${model} == 'realsr_kernel_noise_x4_dped' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'pix2pix_cityscapes_2gpus' ]]; then
-    sed -i "" "s|P0_release|P0_release|g" ${model}_release.yaml
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'pix2pix_facades' ]]; then
-    sed -i "" "s|P0_release|P0_release|g" ${model}_release.yaml
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'firstorder_vox_mobile_256' ]]; then
-    sed -i "" "s|P0_release|P0_release|g" ${model}_release.yaml
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'pan_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'drn_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'esrgan_psnr_x4_div2k' ]]; then
-    sed -i "" "s|P0_release|P0_release|g" ${model}_release.yaml
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'animeganv2_pretrain' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'animeganv2' ]]; then
@@ -50,7 +50,7 @@ elif [[ ${model} == 'animeganv2' ]]; then
 elif [[ ${model} == 'basicvsr_reds' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'edvr_m_w_tsa' ]]; then
-    sed -i "" "s|P0_release|P0_release|g" ${model}_release.yaml
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'esrgan_x4_div2k' ]]; then
     sed -i "" "s|P0_release|P0_release|g" ${model}_release.yaml
 elif [[ ${model} == 'singan_finetune' ]]; then
@@ -86,7 +86,7 @@ elif [[ ${model} == 'lesrcnn_psnr_x4_div2k' ]]; then
 elif [[ ${model} == 'ugatit_selfie2anime_light' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'edvr_l_wo_tsa' ]]; then
-    sed -i "" "s|P0_release|P0_release|g" ${model}_release.yaml
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'realsr_bicubic_noise_x4_df2k' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'lapstyle_rev_second' ]]; then
@@ -100,7 +100,7 @@ elif [[ ${model} == 'msvsr_vimeo90k_BD' ]]; then
 elif [[ ${model} == 'iconvsr_reds' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'edvr_l_w_tsa' ]]; then
-    sed -i "" "s|P0_release|P0_release|g" ${model}_release.yaml
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'lapstyle_rev_first' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'cyclegan_cityscapes' ]]; then
@@ -114,10 +114,10 @@ elif [[ ${model} == 'starganv2_celeba_hq' ]]; then
 elif [[ ${model} == 'mprnet_denoising' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'firstorder_vox_256' ]]; then
-    sed -i "" "s|P0_release|P0_release|g" ${model}_release.yaml
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 
 # elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
-#     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
+#     sed -i "" "s|P0_release_release|P1_release_release|g" ${model}_release.yaml
 #     sed -i "" "s|6.43611|0.0|g" ${model}_release.yaml #linux_train_单卡
 #     sed -i "" "s|6.62874|0.0|g" ${model}_release.yaml #linux_train_多卡
 #     sed -i "" "s|0.93207|0.0|g" ${model}_release.yaml #linux_eval

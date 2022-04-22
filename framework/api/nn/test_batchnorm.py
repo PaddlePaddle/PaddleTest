@@ -269,7 +269,7 @@ def test_batchnorm12():
     dtype = float64
     x: 4-D tensor
     """
-    obj.dtype = np.float64
+    obj.types = [np.float64]
     x = randtool("float", -4, 4, (3, 4, 5, 6))
     res = cal_batchnorm(x, num_channels=4)
     obj.run(res=res, num_channels=4, dtype="float64", data=x)

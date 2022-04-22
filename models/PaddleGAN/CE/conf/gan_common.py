@@ -35,4 +35,4 @@ SET_MULTI_CUDA = "0,1"
 REPO_PaddleGAN = "https://github.com/PaddlePaddle/PaddleGAN.git"
 BASE_BRANCH = "develop"
 gan_BRANCH = "develop"
-EXEC_TAG = ["linux_function_test", "train_linux_gpu2", "eval_linux"]
+EXEC_TAG = ["linux_function_test", "train_linux_gpu1", "train_linux_gpu2", "eval_linux"]

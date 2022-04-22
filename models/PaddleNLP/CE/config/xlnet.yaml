@@ -211,7 +211,7 @@ FINETUNE:
         unit_repr: "s"
       f1:
         latest: True
-        kpi_base: 0.015588876
+        kpi_base: 0.002279
         threshold: 0.05
         actived: True
         evaluation: "+"
@@ -284,8 +284,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.5342960288808665
-        threshold: 0.01
+        kpi_base: 0.476534
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: "s"
