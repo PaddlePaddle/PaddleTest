@@ -532,9 +532,9 @@ if [[ $5 == 'all' ]];then
    cd tests/unit/cli
    python -m pip uninstall importlib-metadata -y
    python -m pip install importlib-metadata==2.0.0
-   cd ../../../audio
-   python -m pip install .
-   cd -
+#   cd ../../../audio
+#   python -m pip install .
+#   cd -
    echo ${gpus}
    export CUDA_VISIBLE_DEVICES=${gpus}
    bash test_cli.sh > ../../../$log_path/test_cli.log 2>&1
