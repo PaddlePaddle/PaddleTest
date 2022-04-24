@@ -57,7 +57,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/RedNet/RedNet50.yaml
+        cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/RedNet/RedNet50.yaml
 
 TRAIN: # 训练步骤
   -
@@ -72,7 +72,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.09878
+        kpi_base: 6.00765
         threshold: 0.0
         actived: True
         evaluation: "="
@@ -97,7 +97,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.20561
+        kpi_base: 6.2255
         threshold: 0.0
         actived: True
         evaluation: "-"
