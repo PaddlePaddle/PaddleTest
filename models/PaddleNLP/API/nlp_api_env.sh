@@ -36,8 +36,9 @@ P0case_EXCODE=$? || true
 # upload log to bos
 cd ${nlp_dir}/
 cp -r /ssd1/paddlenlp/bos/* ./
-tar -zcvf logs_models.tar logs/
-mkdir upload && mv logs_models.tar upload
+mv *.log logs/
+tar -zcvf logs_api.tar logs/
+mkdir upload && mv logs_api.tar upload
 python upload.py upload
 ####################################
 echo -e "\033[35m ---- result: \033[0m"

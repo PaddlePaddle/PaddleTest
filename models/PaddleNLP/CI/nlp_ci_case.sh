@@ -965,7 +965,7 @@ get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
 done
-P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie-1.0 xlnet ofa albert squad tinybert lexical_analysis seq2seq \
+P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie-1.0 xlnet ofa squad tinybert lexical_analysis seq2seq \
 pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
 nptag ernie-m )
 P0case_time=${all_P0case_time}
@@ -988,7 +988,7 @@ echo -e "\033[35m ---- end run P0case  \033[0m"
 cd ${nlp_dir}/
 cp -r /ssd1/paddlenlp/bos/* ./
 tar -zcvf logs.tar logs/
-mkdir upload && mv logs.tar upload
+mkdir upload && mv logs_models.tar upload
 python upload.py upload
 cd logs
 FF=`ls *_FAIL*|wc -l`
