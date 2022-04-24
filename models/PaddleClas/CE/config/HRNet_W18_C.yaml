@@ -57,7 +57,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P0_CPU.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml
+        cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml
 
 TRAIN: # 训练步骤
   -

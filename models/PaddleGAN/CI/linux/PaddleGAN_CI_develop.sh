@@ -18,6 +18,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     pwd
     export FLAGS_cudnn_deterministic=True
     # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr  #在任务重插入
+    unset FLAGS_enable_eager_mode
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
@@ -237,12 +238,12 @@ echo $params_dir
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
     echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
-    echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
+    echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
 else
     cat $log_path/train/${model}_1card.log
     echo -e "\033[31m train of $model failed!\033[0m"| tee -a $log_path/result.log
     echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
-    echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
+    echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
 fi
     ;;
 *)
@@ -426,7 +427,7 @@ if [[ ! ${model_flag} =~ "single" ]] && [[ ${model} =~ "edvr_m_wo_tsa" ]];then
 
     # face_parse
     python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/face_parse.log) -eq 0 ]];then
         echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
     else
         cat $log_path/infer/face_parse.log

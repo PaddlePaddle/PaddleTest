@@ -57,7 +57,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleGAN_P1_release_CPU.sh configs/dcgan_mnist.yaml
+        cmd: bash PaddleGAN_train_cpu.sh configs/dcgan_mnist.yaml
 
 TRAIN: # 训练步骤
   -

@@ -57,7 +57,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleGAN_P1_CPU.sh configs/realsr_kernel_noise_x4_dped.yaml
+        cmd: bash PaddleGAN_train_cpu.sh configs/realsr_kernel_noise_x4_dped.yaml
 
 TRAIN: # 训练步骤
   -

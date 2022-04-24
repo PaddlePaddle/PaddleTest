@@ -57,7 +57,7 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/Res2Net/Res2Net50_26w_4s.yaml
+        cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/Res2Net/Res2Net50_26w_4s.yaml
 
 TRAIN: # 训练步骤
   -
@@ -72,14 +72,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.50202
+        kpi_base: 6.50464
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 10.67332
+        kpi_base: 24.27187
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -97,7 +97,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.63189
+        kpi_base: 6.62286
         threshold: 0.0
         actived: True
         evaluation: "-"
@@ -171,7 +171,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 10.67332
+        kpi_base: 24.27187
         threshold: 0.00001
         actived: True
         evaluation: "-"
