@@ -39,7 +39,7 @@ ignore_case_dir = {
         "test_initializer_truncated_normal.py",
     ],
     "paddlebase": [],
-    "optimizer": ["test_MultiplicativeDecay.py"],
+    "optimizer": [],
     "distribution": [],
     "utils": [],
 }
