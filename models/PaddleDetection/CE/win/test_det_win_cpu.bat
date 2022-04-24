@@ -1,8 +1,8 @@
 @echo off
 @setlocal enabledelayedexpansion
 set CUDA_VISIBLE_DEVICES=''
-rem set sed="C:\Program Files\Git\usr\bin\sed.exe"
-set sed="C:\Program Files (x86)\Git\usr\bin\sed.exe"
+set sed="C:\Program Files\Git\usr\bin\sed.exe"
+rem set sed="C:\Program Files (x86)\Git\usr\bin\sed.exe"
 %sed% -i '/samples in file/i\        records = records[:30]' ppdet/data/source/coco.py
 %sed% -i 's#~/.cache/paddle/weights#D:/ce_data/paddledetection/det_pretrained#g' ppdet/utils/download.py
 %sed% -i '/for step_id, data in enumerate(self.loader):/i\            max_step_id =20' ppdet/engine/trainer.py

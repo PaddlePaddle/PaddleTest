@@ -22,7 +22,6 @@ elif [[ $2 == 'eval_mac' ]] ; then
     cat ${log_path}/eval/${model}.log | grep eval_exit_code
     cat ${log_path}/eval/${model}.log | grep eval_exit_code >../${log_path}/${model}_eval.log
     cat ../${log_path}/${model}_eval.log
-
 else
     echo '##### unknown type'
 fi
