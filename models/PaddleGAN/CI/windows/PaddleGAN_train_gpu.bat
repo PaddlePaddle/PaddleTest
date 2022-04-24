@@ -198,7 +198,7 @@ if  !errorlevel! GTR 0 (
 @REM )
 
 ) else (
-    echo "other models
+    echo "other models"
 )
 
 )
