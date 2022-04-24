@@ -224,11 +224,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
         if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
             && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
-            echo -e "\033[33m training multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
+            echo -e "\033[33m training static multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
             echo "training_static_exit_code: 0.0" >> $log_path/train/ResNet50_static.log
         else
             cat $log_path/train/ResNet50_static.log
-            echo -e "\033[31m training multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
+            echo -e "\033[31m training static multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
             echo "training_static_exit_code: 1.0" >> $log_path/train/ResNet50_static.log
         fi
 
