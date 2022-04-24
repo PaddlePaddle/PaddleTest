@@ -532,9 +532,8 @@ if [[ $5 == 'all' ]];then
    cd tests/unit/cli
    python -m pip uninstall importlib-metadata -y
    python -m pip install importlib-metadata==2.0.0
-   cd ../../../paddleaudio
+   cd ../../../audio
    python -m pip install .
-   python -m pip install pathos
    cd -
    echo ${gpus}
    export CUDA_VISIBLE_DEVICES=${gpus}
