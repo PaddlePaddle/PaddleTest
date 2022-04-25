@@ -44,7 +44,7 @@ move %log_path_rec% %log_path_rec%_demo
 goto :eof
 
 ::########################################################################
-
+::update func
 :rec_demo
 cd %repo_path%
 call :contentunderstanding_demo
