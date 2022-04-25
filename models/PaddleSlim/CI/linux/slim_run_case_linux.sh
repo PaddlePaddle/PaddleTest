@@ -916,6 +916,7 @@ print_info $? auto_mbv2_ptq_hpo
 }
 
 demo_auto_bert_asp_dis(){
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/auto-compression/
 sed -i 's/epochs: 3/epochs: 1/' ./configs/NLP/bert_asp_dis.yaml
 wget https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/static_bert_models.tar.gz
