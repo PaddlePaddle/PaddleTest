@@ -58,14 +58,14 @@ goto :eof
 :contentunderstanding_demo
 echo start run contentunderstanding
 for  %%I in (tagspace textcnn) do (
-python -u tools/trainer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
+python -u tools/trainer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
+python -u tools/infer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
+python -u tools/static_trainer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_infer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
+python -u tools/static_infer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_infer
 )
 goto :eof
@@ -74,14 +74,14 @@ echo 2 match(3/3)
 :match_demo
 echo start run match
 for  %%I in (dssm match-pyramid multiview-simnet) do (
-python -u tools/trainer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
+python -u tools/trainer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
+python -u tools/infer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
+python -u tools/static_trainer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_infer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
+python -u tools/static_infer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_infer
 )
 goto :eof
@@ -90,14 +90,14 @@ echo 3 multitask (4/4)
 :multitask_demo
 echo start run multitask
 for  %%I in (esmm mmoe ple share_bottom) do (
-python -u tools/trainer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
+python -u tools/trainer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
+python -u tools/infer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
+python -u tools/static_trainer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_trainer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
+python -u tools/static_trainer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_infer
 )
 goto :eof
@@ -106,14 +106,14 @@ echo 4 rank(8/21)
 :rank_demo
 echo start run rank
 for  %%I in (deepfm dnn fm logistic_regression wide_deep gatenet xdeepfm ffm naml bst dcn dien din deepfefm dlrm dmr difm) do (
-python -u tools/trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
+python -u tools/trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
+python -u tools/infer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
+python -u tools/static_trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
+python -u tools/static_trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_infer
 )
 goto :eof
@@ -122,14 +122,14 @@ echo 5 recall(3/21)
 :recall_demo
 echo start run recall
 for  %%I in (word2vec ncf mind) do (
-python -u tools/trainer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
+python -u tools/trainer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
+python -u tools/infer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
+python -u tools/static_trainer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_infer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
+python -u tools/static_infer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_infer
 )
 goto :eof
@@ -138,14 +138,14 @@ echo 5 recall_word2vec
 :recall_word2vec
 echo start run word2vec
 for  %%I in (word2vec) do (
-python -u tools/trainer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
+python -u tools/trainer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_train
-python -u %repo_path%/models/recall/%%I/infer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo 2>&1
+python -u %repo_path%/models/recall/%%I/infer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
+python -u tools/static_trainer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_train
-python -u %repo_path%/models/recall/%%I/static_infer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo 2>&1
+python -u %repo_path%/models/recall/%%I/static_infer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_infer
 )
 goto :eof
