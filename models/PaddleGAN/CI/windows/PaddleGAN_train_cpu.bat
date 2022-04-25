@@ -63,7 +63,7 @@ python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.int
 
 if not !errorlevel! == 0 (
     echo  %log_path%/!model!_train.log
-    type %log_path%/!model!_train.log
+    type  "%log_path%/!model!_train.log"
     echo   !model!,train,FAIL  >> %log_path%\result.log
     echo  training of !model! failed!
     echo "training_exit_code: 1.0" >> %log_path%\!model!_train.log
@@ -80,7 +80,7 @@ python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter
 if not !errorlevel! == 0 (
 
     echo  %log_path%/!model!_eval.log
-    type %log_path%/!model!_eval.log
+    type  "%log_path%/!model!_eval.log"
     echo   !model!,eval,FAIL  >> %log_path%\result.log
     echo  eval of !model! failed!
     echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
