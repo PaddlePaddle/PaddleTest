@@ -44,7 +44,7 @@ move %log_path_rec% %log_path_rec%_demo
 goto :eof
 
 ::########################################################################
-
+::update func
 :rec_demo
 cd %repo_path%
 call :contentunderstanding_demo
@@ -52,7 +52,6 @@ call :match_demo
 call :multitask_demo
 call :rank_demo
 call :recall_demo
-call :recall_word2vec
 goto :eof
 
 :contentunderstanding_demo
@@ -134,21 +133,6 @@ call :printInfo %errorlevel% %%I_demo_st_infer
 )
 goto :eof
 
-echo 5 recall_word2vec
-:recall_word2vec
-echo start run word2vec
-for  %%I in (word2vec) do (
-python -u tools/trainer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train.log 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_train
-python -u %repo_path%/models/recall/%%I/infer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo.log 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_infer
-
-python -u tools/static_trainer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train.log 2>&1
-call :printInfo %errorlevel% %%I_demo_st_train
-python -u %repo_path%/models/recall/%%I/static_infer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo.log 2>&1
-call :printInfo %errorlevel% %%I_demo_st_infer
-)
-goto :eof
 ::########################################################################
 :rec_con
 echo ----------------- starting run con cpu -------------------------
