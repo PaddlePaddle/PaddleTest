@@ -882,17 +882,79 @@ CUDA_VISIBLE_DEVICES=${cudaid1}  python rl_nas_mobilenetv2.py --search_steps 1 -
 print_info $? ${model}
 }
 
+demo_auto_mbv2_qat_dis(){
+cd ${slim_dir}/demo/auto-compression/
+wget https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/infermodel_mobilenetv2.tar
+tar -xf infermodel_mobilenetv2.tar
 
+python demo_imagenet.py \
+    --model_dir='infermodel_mobilenetv2' \
+    --model_filename='inference.pdmodel' \
+    --params_filename='./inference.pdiparams' \
+    --save_dir='./save_qat_mbv2/' \
+    --devices='gpu' \
+    --batch_size=128 \
+    --data_dir='../data/ILSVRC2012/' \
+    --config_path='./configs/CV/mbv2_qat_dis.yaml' > ${log_path}/auto_mbv2_qat_dis 2>&1
+print_info $? auto_mbv2_qat_dis
+}
+
+demo_auto_mbv2_ptq_hpo(){
+cd ${slim_dir}/demo/auto-compression/
+sed -i 's/max_quant_count: 20/max_quant_count: 1/' ./configs/CV/mbv2_ptq_hpo.yaml
+
+python demo_imagenet.py \
+    --model_dir='infermodel_mobilenetv2' \
+    --model_filename='inference.pdmodel' \
+    --params_filename='./inference.pdiparams' \
+    --save_dir='./save_ptq_mbv2/' \
+    --devices='gpu' \
+    --batch_size=128 \
+    --data_dir='../data/ILSVRC2012/' \
+    --config_path='./configs/CV/mbv2_ptq_hpo.yaml' > ${log_path}/auto_mbv2_ptq_hpo 2>&1
+print_info $? auto_mbv2_ptq_hpo
+}
+
+demo_auto_bert_asp_dis(){
+cd ${slim_dir}/demo/auto-compression/
+sed -i 's/epochs: 3/epochs: 1/' ./configs/NLP/bert_asp_dis.yaml
+wget https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/static_bert_models.tar.gz
+tar -xf static_bert_models.tar.gz
+python -m pip install paddlenlp
+
+python demo_glue.py \
+    --model_dir='./static_bert_models/' \
+    --model_filename='bert.pdmodel' \
+    --params_filename='bert.pdiparams' \
+    --save_dir='./save_asp_bert/' \
+    --devices='gpu' \
+    --batch_size=64 \
+    --task='sst-2' \
+    --config_path='./configs/NLP/bert_asp_dis.yaml' ${log_path}/auto_bert_asp_dis 2>&1
+print_info $? auto_bert_asp_dis
+}
+
+all_auto_CE(){ 
+    demo_auto_mbv2_qat_dis
+    demo_auto_mbv2_ptq_hpo
+    demo_auto_bert_asp_dis
+}
+
+all_auto_ALL(){ 
+    demo_auto_mbv2_qat_dis
+    demo_auto_mbv2_ptq_hpo
+    demo_auto_bert_asp_dis
+}
 
 if [ "$1" = "run_CI" ];then   
 	# CI任务的case
     export all_case_list=(all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
 elif [ "$1" = "run_CE" ];then   
 	# CE任务的case
-    export all_case_list=(all_distill_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
+    export all_case_list=(all_auto_CE all_distill_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
 elif [ "$1" = "ALL" ];then   
 	# 全量case
-    export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas) 
+    export all_case_list=(all_auto_ALL all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas) 
 fi
 
 echo --- start run case ---
