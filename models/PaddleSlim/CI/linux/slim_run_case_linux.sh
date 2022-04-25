@@ -159,13 +159,25 @@ do
 # 带bc参数、指定algo、且为新存储格式的离线量化
 python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
 --save_path ./quant_model/${algo}_bc/MobileNetV1 \
---algo ${algo} --bias_correction True >${log_path}/st_quant_post_T_${algo}_bc 2>&1
-print_info $? st_quant_post_T_${algo}_bc
+--algo ${algo} --bias_correction True \
+--onnx_format=True  --ce_test=True  --is_full_quantize=True >${log_path}/st_quant_post_T_${algo}_bc_onnx_format 2>&1
+print_info $? st_quant_post_T_${algo}_bc_onnx_format
 
 # 量化后eval
 echo "quant_post eval bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1 > ${log_path}/st_quant_post_${algo}_bc_eval 2>&1
-print_info $? st_quant_post_${algo}_bc_eval
+python eval.py --model_path ./quant_model/${algo}_bc/MobileNetV1 > ${log_path}/st_quant_post_${algo}_bc_onnx_format_eval 2>&1
+print_info $? st_quant_post_${algo}_bc_onnx_format_eval
+
+#old 存储格式
+python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
+--save_path ./quant_model/${algo}_bc_adaround/MobileNetV1 \
+--algo ${algo} --bias_correction True \
+--round_type=adaround >${log_path}/st_quant_post_T_${algo}_bc_old_format 2>&1
+print_info $? st_quant_post_T_${algo}_bc_old_format
+
+python eval.py ./quant_model/${algo}_bc_adaround/MobileNetV1 > ${log_path}/st_quant_post_${algo}_bc_old_format_eval 2>&1
+print_info $? st_quant_post_${algo}_bc_old_format_eval
+
 done
 }
 
