@@ -285,10 +285,10 @@ goto :eof
 :printInfo
 echo "%1, %2:" %1, %2
 if %1 == 1 (
-    move %log_path_rec%\%2 %log_path_rec%\FAIL_%2.log
+    move %log_path_rec%\%2.log %log_path_rec%\FAIL_%2.log
     echo  FAIL_%2.log >> %log_path_rec%\result_%result_time%.log
 ) else (
-    move %log_path_rec%\%2 %log_path_rec%\SUCCESS_%2.log
+    move %log_path_rec%\%2.log %log_path_rec%\SUCCESS_%2.log
     echo SUCCESS_%2.log >> %log_path_rec%\result_%result_time%.log
 )
 goto :eof
