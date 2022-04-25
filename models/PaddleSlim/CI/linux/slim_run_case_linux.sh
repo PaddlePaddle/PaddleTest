@@ -175,7 +175,7 @@ python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
 --round_type=adaround >${log_path}/st_quant_post_T_${algo}_bc_old_format 2>&1
 print_info $? st_quant_post_T_${algo}_bc_old_format
 
-python eval.py ./quant_model/${algo}_bc_adaround/MobileNetV1 > ${log_path}/st_quant_post_${algo}_bc_old_format_eval 2>&1
+python eval.py --model_path ./quant_model/${algo}_bc_adaround/MobileNetV1 > ${log_path}/st_quant_post_${algo}_bc_old_format_eval 2>&1
 print_info $? st_quant_post_${algo}_bc_old_format_eval
 
 done
@@ -930,7 +930,7 @@ python demo_glue.py \
     --devices='gpu' \
     --batch_size=64 \
     --task='sst-2' \
-    --config_path='./configs/NLP/bert_asp_dis.yaml' ${log_path}/auto_bert_asp_dis 2>&1
+    --config_path='./configs/NLP/bert_asp_dis.yaml' > ${log_path}/auto_bert_asp_dis 2>&1
 print_info $? auto_bert_asp_dis
 }
 
