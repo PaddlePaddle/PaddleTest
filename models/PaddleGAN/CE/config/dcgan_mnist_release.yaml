@@ -57,20 +57,38 @@ FUNCTION: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleGAN_P1_release_CPU.sh configs/dcgan_mnist.yaml
+        cmd: bash PaddleGAN_train_cpu.sh configs/dcgan_mnist.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_gpu1
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/dcgan_mnist.yaml train_linux_gpu1
+    kpis: #kpi指标
+      training_single_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/dcgan_mnist_1card.log
   -
     tag: train_linux_gpu2
     priority: P1_release
     env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/dcgan_mnist.yaml train_linux_gpu2
     kpis: #kpi指标
-      training_exit_code:
+      training_multi_exit_code:
         latest: True
         kpi_base: 0.0
         threshold: 0.0
@@ -82,7 +100,7 @@ TRAIN: # 训练步骤
     tag: train_win_gpu
     priority: P1_release
     env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -100,7 +118,7 @@ TRAIN: # 训练步骤
     tag: train_win_cpu
     priority: P1_release
     env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -118,7 +136,7 @@ TRAIN: # 训练步骤
     tag: train_mac_cpu
     priority: P1_release
     env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -138,7 +156,7 @@ EVAL: # 训练步骤
     tag: eval_linux
     priority: P1_release
     env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -156,7 +174,7 @@ EVAL: # 训练步骤
     tag: eval_win
     priority: P1_release
     env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -174,7 +192,7 @@ EVAL: # 训练步骤
     tag: eval_mac
     priority: P1_release
     env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path

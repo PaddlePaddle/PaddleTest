@@ -30,7 +30,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.24478
+        kpi_base: 0.40108
         threshold: 0.2
         actived: True
         evaluation: "-"
@@ -131,7 +131,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       dev_accuracy:
         latest: True
-        kpi_base: 48.689
+        kpi_base: 43.77
         threshold: 0.08
         actived: True
         evaluation: "+"
@@ -217,8 +217,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       dev_accuracy:
         latest: True
-        kpi_base: 33.254
-        threshold: 0.01
+        kpi_base: 32.341
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: "s"

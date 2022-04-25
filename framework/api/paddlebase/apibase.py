@@ -121,11 +121,10 @@ class APIBase(object):
             Assertion
         """
         # 取默认type
-        if self.dtype is None:
-            if np.float64 in self.types:
-                self.dtype = np.float64
-            else:
-                self.dtype = self.types[0]
+        if np.float64 in self.types:
+            self.dtype = np.float64
+        else:
+            self.dtype = self.types[0]
         if self.debug:
             for place in self.places:
                 self.place = place
@@ -142,7 +141,7 @@ class APIBase(object):
                     self._check_params(res, data, **kwargs)
                     dygraph_forward_res = self._dygraph_forward()
                     logging.info("dygraph forward result is :")
-                    if isinstance(dygraph_forward_res, (list)):
+                    if isinstance(dygraph_forward_res, (list, tuple)):
                         compare(dygraph_forward_res, res, self.delta, self.rtol)
                         logging.info(dygraph_forward_res)
                     else:
@@ -214,7 +213,7 @@ class APIBase(object):
                     # ① calculate forward result
                     dygraph_forward_res = self._dygraph_forward()
                     # ② compare forward result
-                    if isinstance(dygraph_forward_res, (list)):
+                    if isinstance(dygraph_forward_res, (list, tuple)):
                         compare(dygraph_forward_res, res, self.delta, self.rtol)
                     else:
                         compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
@@ -285,7 +284,7 @@ class APIBase(object):
                 self._check_params(res, data, **kwargs)
                 dygraph_forward_res = self._dygraph_forward()
                 logging.info("dygraph forward result is :")
-                if isinstance(dygraph_forward_res, (list)):
+                if isinstance(dygraph_forward_res, (list, tuple)):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
                     logging.info(dygraph_forward_res)
                 else:
@@ -350,7 +349,7 @@ class APIBase(object):
                 # ① calculate forward result
                 dygraph_forward_res = self._dygraph_forward()
                 # ② check forward result
-                if isinstance(dygraph_forward_res, (list)):
+                if isinstance(dygraph_forward_res, (list, tuple)):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
                 else:
                     compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
@@ -442,7 +441,7 @@ class APIBase(object):
         Returns:
             None
         """
-        if not isinstance(res, (list, np.generic, np.ndarray)):
+        if not isinstance(res, (list, tuple, np.generic, np.ndarray)):
             raise TypeError("res must be numpy")
         self.kwargs = copy.deepcopy(kwargs)
         for k, v in self.kwargs.items():
@@ -728,7 +727,7 @@ def compare(result, expect, delta=1e-6, rtol=1e-5):
         assert res
         # tools.assert_equal(result.shape, expect.shape)
         assert result.shape == expect.shape
-    elif isinstance(result, list):
+    elif isinstance(result, (list, tuple)):
         for i, j in enumerate(result):
             if isinstance(j, (np.generic, np.ndarray)):
                 compare(j, expect[i], delta, rtol)

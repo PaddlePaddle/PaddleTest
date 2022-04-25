@@ -70,8 +70,8 @@ echo $model
 if [ -d "output" ]; then
     rm -rf output
 fi
-# sed -i '' 's/epochs/total_iters/g' $line #将epcoh换为iter
-# sed -i '' 's/decay_total_iters/decay_epochs/g' $line #恢复学习率衰减字段
+sed -i '' 's/epochs/total_iters/g' $line #将epcoh换为iter
+sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 #train
 python tools/main.py -c $line -o total_iters=20 log_config.interval=20 log_config.visiual_interval=1 snapshot_config.interval=10 output_dir=output > $log_path/train/$model.log 2>&1
 params_dir=$(ls output)
@@ -99,7 +99,7 @@ else
 fi
 # fi
 
-if [[ ${line} =~ "edvr_m_wo_tsa" ]];then
+if [[ ${model} =~ "edvr_m_wo_tsa" ]];then
     #infer
     python -u applications/tools/styleganv2.py --output_path styleganv2_infer --model_type ffhq-config-f --seed 233 --size 1024 --style_dim 512 --n_mlp 8 --channel_multiplier 2 --n_row 3 --n_col 5 > $log_path/infer/styleganv2.log 2>&1
     if [[ $? -eq 0 ]];then

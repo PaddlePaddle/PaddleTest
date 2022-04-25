@@ -1,4 +1,29 @@
 @ echo off
+@REM set model_flag=CE
+
+echo %1
+echo %data_path%
+echo %Project_path%
+echo %model_flag%
+
+echo "path before"
+chdir
+setlocal enabledelayedexpansion
+echo "CE"| findstr %model_flag% >nul
+if !errorlevel! equ 0 (
+	echo "CE step"
+	set FLAGS_cudnn_deterministic=True
+
+        rem set FLAGS_enable_eager_mode=1
+        rem #验证天宇 220329 pr
+
+	cd %Project_path%
+	echo "path after"
+	echo %1 >gan_models_list_P0_gpu
+	chdir
+	dir
+)
+
 set log_path=log
 set params_dir=(output/*)
 @REM set 不能放在循环中
@@ -12,24 +37,6 @@ rem data
 rd /s /q data
 mklink /j data %data_path%\PaddleGAN
 
-@REM configs/starganv2_celeba_hq.yaml   #报错
-
-@REM configs/stylegan_v2_256_ffhq.yaml 夯住
-@REM configs/starganv2_afhq.yaml 夯住
-
-@REM configs/basicvsr_reds.yaml  #小数据报错，全量数据可以train，eval夯住
-@REM configs/iconvsr_reds.yaml
-
-@REM configs/drn_psnr_x4_div2k.yaml  小数据集Py39 第4个iter夯住，大数据集正常（pass）
-
-@REM configs/ugatit_photo2cartoon.yaml #训练显存不足
-@REM configs/ugatit_selfie2anime_light.yaml
-
-@REM configs/makeup.yaml  #训练格式和其它的不一样
-
-@REM styleganv2 infer显存不足
-
-
 rem dependency
 python -m pip install -v -e .
 python -m pip install dlib
@@ -38,7 +45,7 @@ python -m pip list
 
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 setlocal enabledelayedexpansion
-for /f %%i in (gan_models_list_all_gpu) do (
+for /f %%i in (gan_models_list_P0_gpu) do (
 echo %%i
 set target=%%i
 rem echo !target!
@@ -55,54 +62,61 @@ rd /s /q output
 python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
 
 if not !errorlevel! == 0 (
-    type  %log_path%/!model!_train.log
+    echo  %log_path%/!model!_train.log
+    type %log_path%/!model!_train.log
     echo   !model!,train,FAIL  >> %log_path%\result.log
     echo  training of !model! failed!
+    echo "training_exit_code: 1.0" >> %log_path%\!model!_train.log
 ) else (
     echo   !model!,train,SUCCESS  >> %log_path%\result.log
     echo   training of !model! successfully!
+    echo "training_exit_code: 0.0" >> %log_path%\!model!_train.log
 )
 
 echo eval
 if !model!==stylegan_v2_256_ffhq (
     for /d %%j in %params_dir% do (
-        echo %%j
-        python tools/extract_weight.py output/%%j/iter_20_checkpoint.pdparams --net-name gen_ema --output stylegan_extract.pdparams > %log_path%/!model!_extract_weight.log 2>&1
-        if not !errorlevel! == 0 (
-            type  %log_path%/!model!_extract_weight.log
-            echo   !model!,extract_weight,FAIL  >> %log_path%\result.log
-            echo  extract_weight of !model! failed!
-        ) else (
-            echo   !model!,extract_weight,SUCCESS  >> %log_path%\result.log
-            echo   extract_weight of !model! successfully!
-        )
-        python applications/tools/styleganv2.py --output_path stylegan_infer --weight_path stylegan_extract.pdparams --size 256 > %log_path%/!model!_eval.log 2>&1
-        if not !errorlevel! == 0 (
-            type  %log_path%/!model!_eval.log
-            echo   !model!,eval,FAIL  >> %log_path%\result.log
-            echo  eval of !model! failed!
-        ) else (
-            echo   !model!,eval,SUCCESS  >> %log_path%\result.log
-            echo   eval of !model! successfully!
-        )
-        )
-)   else (
+    echo %%j
+    python tools/extract_weight.py output/%%j/iter_20_checkpoint.pdparams --net-name gen_ema --output stylegan_extract.pdparams > %log_path%/!model!_extract_weight.log 2>&1
+    if not !errorlevel! == 0 (
+        type %log_path%/!model!_extract_weight.log
+        echo  !model!,extract_weight,FAIL  >> %log_path%\result.log
+        echo  extract_weight of !model! failed!
+    ) else (
+        echo   !model!,extract_weight,SUCCESS  >> %log_path%\result.log
+        echo   extract_weight of !model! successfully!
+    )
+    python applications/tools/styleganv2.py --output_path stylegan_infer --weight_path stylegan_extract.pdparams --size 256 > %log_path%/!model!_eval.log 2>&1
+    if not !errorlevel! == 0 (
+        type %log_path%/!model!_eval.log
+        echo   !model!,eval,FAIL  >> %log_path%\result.log
+        echo  eval of !model! failed!
+    ) else (
+        echo   !model!,eval,SUCCESS  >> %log_path%\result.log
+        echo   eval of !model! successfully!
+    )
+    )
+) else (
     for /d %%j in %params_dir% do (
-        echo %%j
-        python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams > %log_path%/!model!_eval.log 2>&1
-        if not !errorlevel! == 0 (
-            type  %log_path%/!model!_eval.log
-            echo   !model!,eval,FAIL  >> %log_path%\result.log
-            echo  eval of !model! failed!
-        ) else (
-            echo   !model!,eval,SUCCESS  >> %log_path%\result.log
-            echo   eval of !model! successfully!
-        )
-        )
+    echo %%j
+    python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams > %log_path%/!model!_eval.log 2>&1
+    if not !errorlevel! == 0 (
+
+        echo  %log_path%/!model!_eval.log
+        type %log_path%/!model!_eval.log
+        echo   !model!,eval,FAIL  >> %log_path%\result.log
+        echo  eval of !model! failed!
+        echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
+    ) else (
+        echo   !model!,eval,SUCCESS  >> %log_path%\result.log
+        echo   eval of !model! successfully!
+        echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+    )
+    )
 )
 
 echo ----------------------------------------------------------------
-)
+if !model!==edvr_m_wo_tsa (
 
 echo infer
 @REM echo styleganv2
@@ -137,21 +151,21 @@ if  !errorlevel! GTR 0 (
 echo first order motion
 python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image.png --ratio 0.4 --relative --adapt_scale > %log_path%/first_order_motion_single_person_infer.log 2>&1
 if  !errorlevel! GTR 0 (
-        echo   first_order_motion_single_person,infer,FAIL  >> %log_path%\result.log
-        echo  infer of first_order_motion_single_person failed!
+    echo   first_order_motion_single_person,infer,FAIL  >> %log_path%\result.log
+    echo  infer of first_order_motion_single_person failed!
 ) else (
-        echo   first_order_motion_single_person,infer,SUCCESS  >> %log_path%\result.log
-        echo   infer of first_order_motion_single_person successfully!
+    echo   first_order_motion_single_person,infer,SUCCESS  >> %log_path%\result.log
+    echo   infer of first_order_motion_single_person successfully!
 )
 
 echo first order motion multi
 python -u applications/tools/first-order-demo.py --driving_video ./docs/imgs/fom_dv.mp4 --source_image ./docs/imgs/fom_source_image_multi_person.jpg --ratio 0.4 --relative --adapt_scale --multi_person > %log_path%/first_order_motion_multi_person_infer.log 2>&1
 if  !errorlevel! GTR 0 (
-        echo   first_order_motion_multi_person,infer,FAIL  >> %log_path%\result.log
-        echo  infer of first_order_motion_multi_person failed!
+    echo   first_order_motion_multi_person,infer,FAIL  >> %log_path%\result.log
+    echo  infer of first_order_motion_multi_person failed!
 ) else (
-        echo   first_order_motion_multi_person,infer,SUCCESS  >> %log_path%\result.log
-        echo   infer of first_order_motion_multi_person successfully!
+    echo   first_order_motion_multi_person,infer,SUCCESS  >> %log_path%\result.log
+    echo   infer of first_order_motion_multi_person successfully!
 )
 
 echo face parse
@@ -182,6 +196,12 @@ if  !errorlevel! GTR 0 (
 @REM         echo   vidieo restore,infer,SUCCESS  >> %log_path%\result.log
 @REM         echo   infer of vidieo restore successfully!
 @REM )
+
+) else (
+    echo "other models"
+)
+
+)
 
 @REM rmdir data /S /Q
 rem 清空数据文件防止效率云清空任务时删除原始文件

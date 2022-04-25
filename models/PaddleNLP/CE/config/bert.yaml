@@ -183,8 +183,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.6797
-        threshold: 0.01
+        kpi_base: 0.6631887
+        threshold: 0.02
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -201,8 +201,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.6994
-        threshold: 0.01
+        kpi_base: 0.676002
+        threshold: 0.02
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -305,7 +305,7 @@ FINETUNE:
     kpis: #kpi指标
       pearson:
         latest: True
-        kpi_base: 0.184965
+        kpi_base: 0.150857
         threshold: 0.05
         actived: True
         evaluation: "+"
@@ -355,8 +355,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.631288647044274
-        threshold: 0.001
+        kpi_base: 0.6297551
+        threshold: 0.01
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -427,7 +427,7 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.5776
+        kpi_base: 0.47292
         threshold: 0.05
         actived: True
         evaluation: "+"
@@ -445,8 +445,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.55596
-        threshold: 0.01
+        kpi_base: 0.52708
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
