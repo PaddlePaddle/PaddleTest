@@ -741,6 +741,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: linux_dy_gpu1_iflytek
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -777,6 +779,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: linux_dy_gpu1_tnews
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -813,6 +817,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: linux_dy_gpu1_eprstmt
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -847,6 +853,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: linux_dy_gpu1_bustm
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -881,6 +889,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: linux_dy_gpu1_ocnli
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -917,6 +927,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: linux_dy_gpu1_csl
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -951,6 +963,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: linux_dy_gpu1_csldcp
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -985,6 +999,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: linux_dy_gpu1_cluewsc
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -1019,6 +1035,8 @@ PYTHON_INFER:
   -
     priority: p1
     tag: linux_dy_gpu1_chid
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
