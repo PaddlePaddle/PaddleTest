@@ -115,7 +115,10 @@ elif [[ ${model} == 'mprnet_denoising' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 elif [[ ${model} == 'firstorder_vox_256' ]]; then
     sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
-
+elif [[ ${model} == 'stylegan_v2_256_ffhq' ]]; then
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
+elif [[ ${model} == 'makeup' ]]; then
+    sed -i "" "s|P0_release|P1_release|g" ${model}_release.yaml
 # elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
 #     sed -i "" "s|P0_release_release|P1_release_release|g" ${model}_release.yaml
 #     sed -i "" "s|6.43611|0.0|g" ${model}_release.yaml #linux_train_单卡

@@ -42,3 +42,5 @@ configs/singan_animation.yaml
 configs/starganv2_celeba_hq.yaml
 configs/mprnet_denoising.yaml
 configs/firstorder_vox_256.yaml
+configs/stylegan_v2_256_ffhq.yaml
+configs/makeup.yaml

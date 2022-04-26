@@ -332,6 +332,7 @@ stylegan_v2_256_ffhq)
     ;;
 makeup)
     echo "skip eval makeup"
+    echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
     sleep 0.01
     ;;
 msvsr_l_reds)
