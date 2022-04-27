@@ -19,6 +19,7 @@ dir
 echo "train_win_gpu"|findstr %2 >nul
 if !errorlevel! equ 0 (
     echo '#####train_win_gpu'
+    type %log_path%\!model!_train.log
     type %log_path%\!model!_train.log | findstr training_exit_code
     type %log_path%\!model!_train.log | findstr training_exit_code > ..\%log_path%\!model!_train.log
     type ..\%log_path%\!model!_train.log
@@ -27,6 +28,7 @@ if !errorlevel! equ 0 (
 echo "train_win_cpu"|findstr %2 >nul
 if !errorlevel! equ 0 (
     echo '#####train_win_cpu'
+    type %log_path%\!model!_train.log
     type %log_path%\!model!_train.log | findstr training_exit_code
     type %log_path%\!model!_train.log | findstr training_exit_code > ..\%log_path%\!model!_train.log
     type ..\%log_path%\!model!_train.log
@@ -35,6 +37,7 @@ if !errorlevel! equ 0 (
 echo "eval_win"|findstr %2 >nul
 if !errorlevel! equ 0 (
     echo '#####eval_win'
+    type %log_path%\!model!_eval.log
     type %log_path%\!model!_eval.log | findstr eval_exit_code
     type %log_path%\!model!_eval.log | findstr eval_exit_code > ..\%log_path%\!model!_eval.log
     type ..\%log_path%\!model!_eval.log
