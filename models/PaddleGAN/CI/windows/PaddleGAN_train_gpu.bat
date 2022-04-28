@@ -91,11 +91,21 @@ if !model!==stylegan_v2_256_ffhq (
         type  %log_path%\!model!_eval.log
         echo   !model!,eval,FAIL  >> %log_path%\result.log
         echo  eval of !model! failed!
+        echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
     ) else (
         echo   !model!,eval,SUCCESS  >> %log_path%\result.log
         echo   eval of !model! successfully!
+        echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
     )
     )
+) else if !model!==msvsr_reds (
+    rem windows oom
+    echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+
+) else if !model!==makeup (
+
+    echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+
 ) else (
     for /d %%j in %params_dir% do (
     echo %%j

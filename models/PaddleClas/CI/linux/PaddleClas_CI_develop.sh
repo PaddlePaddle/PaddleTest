@@ -78,6 +78,13 @@ if ([[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]) &&  [[ ! ${p
     ln -s $(which pip3.9) run_env_py39/pip;
     export PATH=$(pwd)/run_env_py39:${PATH};
     ;;
+    310)
+    # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+    mkdir run_env_py310;
+    ln -s $(which python3.10) run_env_py310/python;
+    ln -s $(which pip3.10) run_env_py310/pip;
+    export PATH=$(pwd)/run_env_py310:${PATH};
+    ;;
     esac
 
     unset http_proxy
