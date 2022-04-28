@@ -149,8 +149,8 @@ python -u tools/trainer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_dem
 call :printInfo !errorlevel! %%I_demo_dy_train
 python -u models/recall/%%I/infer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_dy_infer.log 2>&1
 call :printInfo !errorlevel! %%I_demo_dy_infer
-::st_model
-python -u tools/static_trainer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_st_train.log 2>&1 
+
+python -u tools/static_trainer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_st_train.log 2>&1
 call :printInfo !errorlevel! %%I_demo_st_train
 python -u models/recall/%%I/static_infer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_st_infer.log 2>&1
 call :printInfo !errorlevel! %%I_demo_st_infer
@@ -169,12 +169,6 @@ if %1 == 0 (
     echo  FAIL_%2.log >> %log_path%\result.log
 )
 goto :eof
-
-
-
-
-
-
 
 ::########################################################################
 :rec_con
@@ -310,7 +304,6 @@ goto :eof
 
 ::########################################################################
 
-
 :printInfo_old
 echo "%1, %2:" %1, %2
 if %1 == 1 (
@@ -336,6 +329,5 @@ echo start run gpu : python -m paddlerec.run -m %1_gpu_config.yaml
 python -m paddlerec.run -m %1_gpu_config.yaml >%log_path%\%1_gpu1 2>&1
 call :printInfo !errorlevel! %1_gpu1
 goto :eof
-
 
 ::#######################################################################
