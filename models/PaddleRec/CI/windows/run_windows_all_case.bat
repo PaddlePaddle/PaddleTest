@@ -13,7 +13,7 @@ set repos_path=%cd%
 echo %repos_path%
 cd ..
 
-:: log文件统一存储
+::log文件统一存储
 if exist ./logs rd /s /q logs
 mkdir logs && cd logs
 set log_path=%cd%
