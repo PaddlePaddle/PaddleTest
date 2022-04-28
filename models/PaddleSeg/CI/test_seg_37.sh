@@ -84,7 +84,7 @@ log_dir=.
 model_type_path=
 dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
 if [ ${dynamic_config_num} -eq 0 ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v contrib | grep -v Matting | grep -v setr | grep -v test_tipc | tee dynamic_config_all
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v contrib | grep -v Matting | grep -v setr | grep -v test_tipc | grep -v benchmark | tee dynamic_config_all
 shuf dynamic_config_all -n 2 -o dynamic_config_list_temp
 fi
 grep -F -v -f no_upload dynamic_config_list_temp | sort | uniq | tee dynamic_config_list
