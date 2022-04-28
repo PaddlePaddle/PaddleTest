@@ -149,7 +149,7 @@ python -u tools/trainer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_dem
 call :printInfo !errorlevel! %%I_demo_dy_train
 python -u models/recall/%%I/infer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_dy_infer.log 2>&1
 call :printInfo !errorlevel! %%I_demo_dy_infer
-
+::st_model
 python -u tools/static_trainer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_st_train.log 2>&1 
 call :printInfo !errorlevel! %%I_demo_st_train
 python -u models/recall/%%I/static_infer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_st_infer.log 2>&1
