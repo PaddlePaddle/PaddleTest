@@ -154,7 +154,7 @@ def test_split8():
     obj1.exception(mode="c", etype="InvalidArgument", x=x, num_or_sections=num_or_sections, axis=axis)
 
 
-@pytest.mark.api_base_split_exception
+@pytest.mark.api_base_split_parameters
 def test_split9():
     """
     num_or_sections include 0
