@@ -1,0 +1,34 @@
+Tanh:
+  desc: "Tanh激活层"
+  paddle:
+    api_name: "paddle.nn.Tanh"
+    inputs:
+      x:
+        random: true
+        dtype: "float32"
+        shape: [ 1, 1, 1, 4 ]
+        range: [ -1, 1 ]
+#    params:
+  pytorch:
+    api_name: "torch.nn.Tanh"
+    mapping:
+      ins: {x: input}
+
+
+fft:
+  desc: "一维离散傅里叶变换fft"
+  paddle:
+    api_name: "paddle.fft.fft"
+    inputs:
+      x:
+        random: true
+        dtype: "float32"
+        shape: [ 1, 1, 1, 4 ]
+        range: [ -1, 1 ]
+    params:
+      n: 3
+      norm: "forward"
+  pytorch:
+    api_name: "torch.fft.fft"
+    mapping:
+      ins: { x: input, n: "n", norm: "norm"}
