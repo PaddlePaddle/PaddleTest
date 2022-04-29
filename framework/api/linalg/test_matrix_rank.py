@@ -84,7 +84,6 @@ def test_matrix_rank_3():
     x = np.array([[-2.0, 2.0, 1.0, 2.0], [-2.0, 2.0, 1.0, 2.0], [1.0, 3.0, 4.0, 1.0], [-4.0, 4.0, 2.0, 4.0]])
     res = np.linalg.matrix_rank(x, tol=tol_n, hermitian=hermitian)
 
-    obj.static = False  # have a bug: tol cannot be set fp64 on static graph
     obj.types = [np.float64]
     obj.run(res=res, x=x, tol=tol_n, hermitian=hermitian)
 

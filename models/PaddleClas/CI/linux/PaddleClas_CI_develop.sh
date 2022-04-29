@@ -19,6 +19,7 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     pwd
     export FLAGS_cudnn_deterministic=True
     # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr  在任务重插入
+    unset FLAGS_enable_eager_mode
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
@@ -76,6 +77,13 @@ if ([[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]) &&  [[ ! ${p
     ln -s $(which python3.9) run_env_py39/python;
     ln -s $(which pip3.9) run_env_py39/pip;
     export PATH=$(pwd)/run_env_py39:${PATH};
+    ;;
+    310)
+    # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+    mkdir run_env_py310;
+    ln -s $(which python3.10) run_env_py310/python;
+    ln -s $(which pip3.10) run_env_py310/pip;
+    export PATH=$(pwd)/run_env_py310:${PATH};
     ;;
     esac
 
@@ -223,11 +231,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
         if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
             && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
-            echo -e "\033[33m training multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
+            echo -e "\033[33m training static multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
             echo "training_static_exit_code: 0.0" >> $log_path/train/ResNet50_static.log
         else
             cat $log_path/train/ResNet50_static.log
-            echo -e "\033[31m training multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
+            echo -e "\033[31m training static multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
             echo "training_static_exit_code: 1.0" >> $log_path/train/ResNet50_static.log
         fi
 

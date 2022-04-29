@@ -364,6 +364,7 @@ elif [[ ${model} == 'ResNet50_vd' ]]; then
     # sed -i "" "s|7.59464|7.4469|g" ${model}_release.yaml #mac_eval
     # sed -i "" "s|7.59464|7.4469|g" ${model}_release.yaml #mac_train_eval
     sed -i "" "s|ResNet50_vd_vd|ResNet50_vd|g" ${model}_release.yaml #replace
+    sed -i "" "s|ResNet50_vd_vd_vd|ResNet50_vd|g" ${model}_release.yaml #replace
 
 elif [[ ${model} == 'ResNeXt101_32x8d_wsl' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1

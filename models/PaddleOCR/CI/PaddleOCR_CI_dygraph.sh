@@ -71,6 +71,7 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 num=`python -m pip list | grep fasttext | wc -l`
 if [ "${num}" -eq "0" ]; then
@@ -458,7 +459,6 @@ fi
 prune_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep deploy/slim/prune | wc -l`
 quant_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep deploy/slim/quant | wc -l`
 if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
-   python -m pip install paddleslim
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
    tar -xf ch_ppocr_mobile_v2.0_det_train.tar
    python -m paddle.distributed.launch deploy/slim/prune/sensitivity_anal.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model="ch_ppocr_mobile_v2.0_det_train/best_accuracy" Global.save_model_dir=./output/prune_model/ Global.epoch_num=1 > $log_path/train/prune_ch_det_mv3_db_v2.0.log 2>&1
@@ -481,7 +481,6 @@ if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
 fi
 
 if [[ ${quant_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
-   python -m pip install paddleslim
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
    tar -xf ch_ppocr_mobile_v2.0_det_train.tar
    python deploy/slim/quantization/quant.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./ch_ppocr_mobile_v2.0_det_train/best_accuracy   Global.save_model_dir=./output/quant_model Global.epoch_num=1 > $log_path/train/quant_ch_det_mv3_db_v2.0.log 2>&1

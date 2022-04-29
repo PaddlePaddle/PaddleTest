@@ -85,6 +85,7 @@ TRAIN_MUlTI_DYNAMIC(){
            --save_interval 100 \
            --iters 10 \
            --num_workers 8 \
+           --batch_size 1 \
            --save_dir output/${model} >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
         print_result
     fi
@@ -178,46 +179,16 @@ if [[ -n `echo ${model} | grep voc12` ]];then
 fi
 if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/pascal_voc12/${model}/model.pdparams
-    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} url is bad!"
-        err_sign=true
-    else
-        TRAIN_MUlTI_DYNAMIC
-        TRAIN_SINGLE_DYNAMIC_BS1
-        TRAIN_SINGLE_DYNAMIC
-        EVAL_DYNAMIC
-        PREDICT_DYNAMIC
-        EXPORT_DYNAMIC
-        PYTHON_INFER_DYNAMIC
-    fi
 elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/cityscapes/${model}/model.pdparams
-    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} url is bad!"
-        err_sign=true
-    else
-        TRAIN_MUlTI_DYNAMIC
-        TRAIN_SINGLE_DYNAMIC_BS1
-        TRAIN_SINGLE_DYNAMIC
-        EVAL_DYNAMIC
-        PREDICT_DYNAMIC
-        EXPORT_DYNAMIC
-        PYTHON_INFER_DYNAMIC
-    fi
 elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/ade20k/${model}/model.pdparams
-    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} url is bad!"
-        err_sign=true
-    else
-        TRAIN_MUlTI_DYNAMIC
-        TRAIN_SINGLE_DYNAMIC_BS1
-        TRAIN_SINGLE_DYNAMIC
-        EVAL_DYNAMIC
-        PREDICT_DYNAMIC
-        EXPORT_DYNAMIC
-        PYTHON_INFER_DYNAMIC
-    fi
+elif [[ -n `echo ${model} | grep camvid` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
+    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/camvid/${model}/model.pdparams
+fi
+if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
+    echo "${model} url is bad!"
+    err_sign=true
 else
     TRAIN_MUlTI_DYNAMIC
     TRAIN_SINGLE_DYNAMIC_BS1

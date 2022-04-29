@@ -34,8 +34,6 @@ FUNCTION: # 训练步骤
   -
     tag: win_function_test
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
@@ -43,8 +41,6 @@ FUNCTION: # 训练步骤
   -
     tag: win_cpu_function_test
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
@@ -52,19 +48,15 @@ FUNCTION: # 训练步骤
   -
     tag: mac_function_test
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleGAN_P1_release_CPU.sh configs/lapstyle_draft.yaml
+        cmd: bash PaddleGAN_train_cpu.sh configs/lapstyle_draft.yaml
 
 TRAIN: # 训练步骤
   -
     tag: train_linux_gpu1
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -81,8 +73,6 @@ TRAIN: # 训练步骤
   -
     tag: train_linux_gpu2
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -99,8 +89,6 @@ TRAIN: # 训练步骤
   -
     tag: train_win_gpu
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -117,8 +105,6 @@ TRAIN: # 训练步骤
   -
     tag: train_win_cpu
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -135,8 +121,6 @@ TRAIN: # 训练步骤
   -
     tag: train_mac_cpu
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -155,8 +139,6 @@ EVAL: # 训练步骤
   -
     tag: eval_linux
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -173,8 +155,6 @@ EVAL: # 训练步骤
   -
     tag: eval_win
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -191,8 +171,6 @@ EVAL: # 训练步骤
   -
     tag: eval_mac
     priority: P1_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path

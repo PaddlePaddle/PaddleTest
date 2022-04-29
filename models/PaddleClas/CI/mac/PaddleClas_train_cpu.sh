@@ -79,9 +79,9 @@ if [[ ${model_flag} =~ "CE" ]]; then
     sed -i '' 's/learning_rate:/learning_rate: 0.0001 #/g' $line #将 学习率调低为0.0001
     echo "change lr"
     fi
-    sed -i '' 's/RandCropImage/ResizeImage/g' $line
-    sed -ie '/RandFlipImage/d' $line
-    sed -ie '/flip_code/d' $line
+    # sed -i '' 's/RandCropImage/ResizeImage/g' $line
+    # sed -ie '/RandFlipImage/d' $line
+    # sed -ie '/flip_code/d' $line
         # -o Global.eval_during_train=False  \
     python tools/train.py -c $line  \
         -o Global.epochs=1  \
