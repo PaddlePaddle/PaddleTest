@@ -20,6 +20,9 @@ case $1 in
   ;;
 esac
 python -c 'import sys; print(sys.version_info[:])'
+python -m pip install faiss-cpu
+python -m pip install faiss-gpu
+python -m pip list | grep faiss
 echo "python="$1
 ####################################
 # for paddle env
