@@ -42,7 +42,7 @@ TRAIN:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh gpu 1.1 $SET_CUDA
+        cmd: bash train.sh gpu 1.1 $SET_CUDA
       -
         path: $PROJECT_ROOT/utils
         cmd: python process_log.py --log_path=$ROOT_PATH/$model_log_path/train_gpu_1.1.log --reg='"' --obj=""
@@ -70,7 +70,7 @@ TRAIN:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh gpu 2.0 $SET_CUDA
+        cmd: bash train.sh gpu 2.0 $SET_CUDA
     kpis:
       exit_code:
         latest: True
