@@ -79,7 +79,7 @@ TRAIN: # 训练步骤
         kpi_base: 0.5660423040
         threshold: 0.000001
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: None
       acc_top1:
         latest: True
