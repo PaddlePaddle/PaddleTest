@@ -45,10 +45,10 @@ if [[ ${model} == 'AlexNet' ]]; then
 
 elif [[ ${model} == 'alt_gvt_small' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
-    sed -i "" "s|6.43611|6.29283|g" ${model}_release.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.44081|g" ${model}_release.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|8.08099|g" ${model}_release.yaml #linux_eval
-    sed -i "" "s|16.04218|8.08099|g" ${model}_release.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.17294|g" ${model}_release.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.41927|g" ${model}_release.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|8.46421|g" ${model}_release.yaml #linux_eval
+    sed -i "" "s|16.04218|8.46421|g" ${model}_release.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.14774|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.91598|g" ${model}_release.yaml #windows_eval
@@ -80,10 +80,10 @@ elif [[ ${model} == 'DarkNet53' ]]; then
 
 elif [[ ${model} == 'DeiT_tiny_patch16_224' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
-    sed -i "" "s|6.43611|6.02845|g" ${model}_release.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.21715|g" ${model}_release.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|7.67821|g" ${model}_release.yaml #linux_eval
-    sed -i "" "s|16.04218|7.67821|g" ${model}_release.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.34939|g" ${model}_release.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.48434|g" ${model}_release.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|7.94151|g" ${model}_release.yaml #linux_eval
+    sed -i "" "s|16.04218|7.94151|g" ${model}_release.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|5.76597|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|8.00662|g" ${model}_release.yaml #windows_eval
@@ -278,10 +278,10 @@ elif [[ ${model} == 'MobileNetV3_large_x1_0' ]]; then
 
 elif [[ ${model} == 'pcpvt_small' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
-    sed -i "" "s|6.43611|6.26105|g" ${model}_release.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.38915|g" ${model}_release.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|7.70332|g" ${model}_release.yaml #linux_eval
-    sed -i "" "s|16.04218|7.70332|g" ${model}_release.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.35917|g" ${model}_release.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.45379|g" ${model}_release.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|7.69966|g" ${model}_release.yaml #linux_eval
+    sed -i "" "s|16.04218|7.69966|g" ${model}_release.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.12982|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.7351|g" ${model}_release.yaml #windows_eval
@@ -447,16 +447,16 @@ elif [[ ${model} == 'SqueezeNet1_0' ]]; then
 
 elif [[ ${model} == 'SwinTransformer_tiny_patch4_window7_224' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1
-    sed -i "" "s|6.43611|6.38868|g" ${model}_release.yaml #linux_train_单卡
-    sed -i "" "s|6.62874|6.5769|g" ${model}_release.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|8.58133|g" ${model}_release.yaml #linux_eval
-    sed -i "" "s|16.04218|8.58133|g" ${model}_release.yaml #linux_train_eval
+    sed -i "" "s|6.43611|6.43404|g" ${model}_release.yaml #linux_train_单卡
+    sed -i "" "s|6.62874|6.54192|g" ${model}_release.yaml #linux_train_多卡
+    sed -i "" "s|0.93207|7.71512|g" ${model}_release.yaml #linux_eval
+    sed -i "" "s|16.04218|7.71512|g" ${model}_release.yaml #linux_train_eval
 
     sed -i "" "s|6.81317|6.16726|g" ${model}_release.yaml #windows_train
     sed -i "" "s|0.93661|7.51868|g" ${model}_release.yaml #windows_eval
     sed -i "" "s|190.68218|7.51868|g" ${model}_release.yaml #windows_train_eval
-    sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}_release.yaml #bodong
-    sed -i "" 's|"="|"-"|g' ${model}_release.yaml
+    #sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}_release.yaml #bodong #220503change
+    #sed -i "" 's|"="|"-"|g' ${model}_release.yaml
 
 elif [[ ${model} == 'TNT_small' ]]; then
     sed -i "" "s|P0|P1|g" ${model}_release.yaml #P0/1

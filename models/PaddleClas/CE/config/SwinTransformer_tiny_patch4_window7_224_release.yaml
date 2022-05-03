@@ -64,15 +64,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.38868
-        threshold: 0.1
+        kpi_base: 6.43404
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 8.58133
-        threshold: 0.10001
+        kpi_base: 7.71512
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -87,8 +87,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.5769
-        threshold: 0.1
+        kpi_base: 6.54192
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -104,9 +104,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_train.log
   -
@@ -120,9 +120,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_train.log
   -
@@ -136,9 +136,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_cpu.log
 
@@ -153,8 +153,8 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 8.58133
-        threshold: 0.10001
+        kpi_base: 7.71512
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -170,9 +170,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_eval.log
   -
@@ -186,9 +186,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_eval.log
 
@@ -205,9 +205,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_infer.log
   -
@@ -221,9 +221,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_infer.log
   -
@@ -237,9 +237,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_infer.log
 
@@ -255,9 +255,9 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_predict.log
   -
@@ -271,9 +271,9 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_predict.log
   -
@@ -287,8 +287,8 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_predict.log
