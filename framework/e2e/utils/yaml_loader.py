@@ -33,7 +33,7 @@ class YamlLoader(object):
         get case info
         """
         # self.logger.get_log().info("get ->{}<- case profile".format(case_name))
-        return self.yml.get(case_name)
+        return {"info": self.yml.get(case_name), "name": case_name}
 
     def get_all_case_name(self):
         """

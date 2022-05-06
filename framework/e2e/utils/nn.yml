@@ -960,7 +960,7 @@ GRU:
   desc: "门控循环单元网络"
   paddle:
     api_name: "paddle.nn.GRU"
-    params:
+    inputs:
       data0:
         random: true
         type: "Tensor"
@@ -973,6 +973,7 @@ GRU:
         dtype: "float32"
         shape: [2, 4, 32]
         range: [ -1, 1]
+    params:
       input_size: 16
       hidden_size: 32
       num_layers: 2
@@ -1005,7 +1006,7 @@ SimpleRNN:
   desc: "简单循环神经网络"
   paddle:
     api_name: "paddle.nn.SimpleRNN"
-    params:
+    inputs:
       data0:
         random: true
         type: "Tensor"
@@ -1018,6 +1019,7 @@ SimpleRNN:
         dtype: "float32"
         shape: [2, 4, 32]
         range: [ -1, 1]
+    params:
       input_size: 16
       hidden_size: 32
       num_layers: 2
