@@ -12,19 +12,21 @@ sys.path.append(os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "uti
 from utils.yaml_loader import YamlLoader
 from jittrans import JitTrans
 
-yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "utils", "nn.yml")
+yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "utils", "base.yml")
+
+case_name = "digamma"
 
 
 # loading yaml
-def test():
-    """
-    unit test func
-    """
-    yml = YamlLoader(yaml_path)
-    jit_case = JitTrans(yml.get_case_info("GRUCell"), logger=yml.logger)
-    jit_case.jit_run()
+# def test():
+#     """
+#     unit test func
+#     """
+#     yml = YamlLoader(yaml_path)
+#     jit_case = JitTrans(yml.get_case_info("GRUCell"), logger=yml.logger)
+#     jit_case.jit_run()
 
 
 yml = YamlLoader(yaml_path)
-jit_case = JitTrans(yml.get_case_info("SimpleRNN"))
+jit_case = JitTrans(yml.get_case_info(case_name))
 jit_case.jit_run()

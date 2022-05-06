@@ -32,7 +32,8 @@ class WeakTrans(object):
         initialize
         """
         np.random.seed(seed)
-        self.case = case
+        self.case = case["info"]
+        self.case_name = case["name"]
         self.default_type = default_type
         self.params = dict()
         self.logger = logger

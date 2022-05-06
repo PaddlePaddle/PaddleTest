@@ -108,6 +108,16 @@ class JitTrans(WeakTrans):
         super(JitTrans, self).__init__(case, default_type=np.float32, seed=None)
         self.atol = 1e-5
         self.rtol = 1e-6
+        # 忽略全部测试的api
+        self.ignore_api = ["paddle.add_n", "paddle.all"]
+        # 忽略全部测试的某些api的某些case
+        self.ignore_case = []
+        # 忽略jit_load测试的api
+        self.ignore_api_jit_load = ["paddle.allclose", "paddle.any"]
+        # 忽略jit_load测试的某些api的某些case
+        self.ignore_case_jit_load = ["conj0"]
+        # InputSpec测试时, 设定输入Tensor[0].shape=None, 但以下api的Tensor[0].shape保持原数值
+        self.ignore_none_shape_api = ["paddle.addmm", "paddle.nn.GRU", "paddle.nn.SimpleRNN"]
         # self.in_tensor, self.in_params, self.func = self.get_func_params("paddle")
         self.in_tensor = self.get_inputs("paddle")
         self.none_shape_tensor_list = []
@@ -151,7 +161,7 @@ class JitTrans(WeakTrans):
         for k, v in self.in_tensor.items():
             v_shape = v.shape
             v_dtype = v.dtype
-            if k in self.none_shape_tensor_list:
+            if k in self.none_shape_tensor_list and self.func not in self.ignore_none_shape_api:
                 v_shape[0] = None
             input_spec_dict[k] = InputSpec(shape=v_shape, dtype=v_dtype, name=k)
         return input_spec_dict
@@ -162,7 +172,7 @@ class JitTrans(WeakTrans):
         for k, v in self.in_tensor.items():
             v_shape = v.shape
             v_dtype = v.dtype
-            if k in self.none_shape_tensor_list:
+            if k in self.none_shape_tensor_list and self.func not in self.ignore_none_shape_api:
                 v_shape[0] = None
             input_spec_list.append(InputSpec(shape=v_shape, dtype=v_dtype, name=k))
         return input_spec_list
@@ -279,13 +289,16 @@ class JitTrans(WeakTrans):
 
     def jit_run(self):
         """测试运行流程"""
-        if self.func_type == "class":
-            self.test_method(method="BuildClass")
-            self.test_method(method="BuildClassWithInputSpec")  # 需要进一步排查，涉及到某些有问题的api
+        if self.func not in self.ignore_api and self.case_name not in self.ignore_case:
+            if self.func_type == "class":
+                self.test_method(method="BuildClass")
+                self.test_method(method="BuildClassWithInputSpec")  # 需要进一步排查，涉及到某些有问题的api
+            else:
+                self.test_method(method="naive_func")
+                self.test_method(method="BuildFunc")
+                self.test_method(method="BuildFuncWithInputSpec")
         else:
-            self.test_method(method="naive_func")
-            self.test_method(method="BuildFunc")
-            self.test_method(method="BuildFuncWithInputSpec")
+            self.logger.get_log().info("(api: {}) (case: {}) ignore all test...".format(self.func, self.case_name))
 
     def test_method(self, method):
         """jit test method"""
@@ -296,21 +309,26 @@ class JitTrans(WeakTrans):
         self.logger.get_log().info("exp is: {}".format(exp))
         to_static_res = self.mk_res(obj=obj, method=method)
         self.logger.get_log().info("to_static_res is: {}".format(to_static_res))
-        self.jit_save(obj=obj, method=method)
-        load_res = self.jit_load(method=method)
-        self.logger.get_log().info("load_res is: {}".format(load_res))
         self.logger.get_log().info(
             "start acc comparing ==========> case: {} test_method: {} compare: {} ".format(
-                self.case, method, "to_static_res and exp"
+                self.case_name, method, "to_static_res and exp"
             )
         )
         compare(to_static_res, exp, self.atol, self.rtol)
-        self.logger.get_log().info(
-            "start acc comparing ==========> case: {} test_method: {} compare: {} ".format(
-                self.case, method, "load_res and exp"
+        self.jit_save(obj=obj, method=method)
+
+        if self.func not in self.ignore_api_jit_load and self.case_name not in self.ignore_case_jit_load:
+            load_res = self.jit_load(method=method)
+            self.logger.get_log().info("load_res is: {}".format(load_res))
+            self.logger.get_log().info(
+                "start acc comparing ==========> case: {} test_method: {} compare: {} ".format(
+                    self.case_name, method, "load_res and exp"
+                )
             )
-        )
-        compare(load_res, exp, self.atol, self.rtol)
+            compare(load_res, exp, self.atol, self.rtol)
+        else:
+            self.logger.get_log().info("(api: {}) (case: {}) ignore jit_load test...".format(self.func, self.case_name))
+
         # 若是nn.Layer组网且有参数pdiparams的情况，则需要进一步测试推理部署结果
         if self.func_type == "class" and os.path.exists(
             os.path.join(self.jit_save_path, self.get_func("paddle") + ".pdiparams")
@@ -321,7 +339,7 @@ class JitTrans(WeakTrans):
                 exp = exp[0]
             self.logger.get_log().info(
                 "start acc comparing ==========> case: {} test_method: {} compare: {} ".format(
-                    self.case, method, "infer_res and exp"
+                    self.case_name, method, "infer_res and exp"
                 )
             )
             compare(infer_res, exp, self.atol, self.rtol)

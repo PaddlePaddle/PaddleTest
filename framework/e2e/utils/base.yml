@@ -1,0 +1,287 @@
+abs:
+  desc: "求绝对值"
+  paddle:
+    api_name: "paddle.abs"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
+acos:
+  desc: "arccosine函数"
+  paddle:
+    api_name: "paddle.acos"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
+add:
+  desc: "逐元素相加算子"
+  paddle:
+    api_name: "paddle.add"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
+# 暂不支持list[Tensor, Tensor]输入
+#add_n:
+#  desc: "逐元素相加算子"
+#  paddle:
+#    api_name: "paddle.add_n"
+#    inputs:
+#      x:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [2, 3, 4, 4]
+#        range: [ -1, 1]
+#      y:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [2, 3, 4, 4]
+#        range: [ -1, 1]
+
+addmm:
+  desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
+  paddle:
+    api_name: "paddle.addmm"
+    inputs:
+      input:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [5, 5]
+        range: [ -1, 1]
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [5, 2]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 5]
+        range: [ -1, 1]
+    params:
+      alpha: 1.0
+      beta: 1.0
+
+## weaktrans不支持bool输入
+#all:
+#  desc: "对指定维度上的Tensor元素进行逻辑与运算，并输出相应的计算结果"
+#  paddle:
+#    api_name: "paddle.all"
+#    inputs:
+#      x:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [2, 3, 4, 4]
+#        range: [ -1, 1]
+
+allclose:
+  desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
+  paddle:
+    api_name: "paddle.allclose"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -1, 1]
+    params:
+      rtol: 0.00001
+      atol: 0.00000001
+
+any:
+  desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.any"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "bool"
+        value: [[True, False], [False, True]]
+
+asin:
+  desc: "arcsin函数"
+  paddle:
+    api_name: "paddle.asin"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
+atan:
+  desc: "arctangent函数"
+  paddle:
+    api_name: "paddle.atan"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
+atan2:
+  desc: "对x/y进行逐元素的arctangent运算，通过符号确定象限"
+  paddle:
+    api_name: "paddle.atan2"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
+ceil:
+  desc: "向上取整运算函数"
+  paddle:
+    api_name: "paddle.ceil"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+
+clip:
+  desc: "向上取整运算函数"
+  paddle:
+    api_name: "paddle.clip"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      min: -4
+      max: 6
+
+conj:
+  desc: "是逐元素计算Tensor的共轭运算"
+  paddle:
+    api_name: "paddle.conj"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -2, 2]
+
+conj0:
+  desc: "是逐元素计算Tensor的共轭运算"
+  paddle:
+    api_name: "paddle.conj"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "complex64"
+        shape: [2, 3, 4, 4]
+        range: [ -2, 2]
+
+cos:
+  desc: "余弦函数"
+  paddle:
+    api_name: "paddle.cos"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -2, 2]
+
+cosh:
+  desc: "双曲余弦函数"
+  paddle:
+    api_name: "paddle.cosh"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -2, 2]
+
+cumsum:
+  desc: "沿给定 axis 计算张量 x 的累加和"
+  paddle:
+    api_name: "paddle.cumsum"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
+cumprod:
+  desc: "沿给定 axis 计算张量 x 的累乘"
+  paddle:
+    api_name: "paddle.cumprod"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -2, 2]
+    params:
+      dim: -1
+
+digamma:
+  desc: "逐元素计算输入Tensor的digamma函数值"
+  paddle:
+    api_name: "paddle.digamma"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -2, 2]
