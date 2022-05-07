@@ -339,13 +339,13 @@ MaxUnPool2D:
         dtype: "float32"
         shape: [2, 3, 5, 5]
         range: [ -1, 1]
-    params:
       indices:
         random: true
         type: "Tensor"
         dtype: "int32"
         shape: [2, 3, 5, 5]
         range: [ 0, 20]
+    params:
       kernel_size: 2
       stride: 2
       padding: 0

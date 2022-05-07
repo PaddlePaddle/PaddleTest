@@ -126,6 +126,9 @@ class WeakTrans(object):
         elif dtype in ["complex", "complex64", "complex128"]:
             data = low + (high - low) * np.random.random(shape) + (low + (high - low) * np.random.random(shape)) * 1j
             return data if dtype == "complex" or "complex128" else data.astype(np.complex64)
+        elif dtype == "bool":
+            data = np.random.randint(0, 2, shape).astype("bool")
+            return data
         else:
             assert False, "dtype is not supported"
 
