@@ -310,7 +310,7 @@ equal:
     api_name: "paddle.equal"
     inputs:
       x:
-
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [[[2.3, 4.5, -2.], [2., 0., 2.]], [[1., -4., -2.], [2., 1.1, 2.]]]
