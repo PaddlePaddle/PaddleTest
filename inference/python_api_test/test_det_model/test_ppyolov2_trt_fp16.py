@@ -96,7 +96,7 @@ def test_trt_fp16_more_bz():
             output_data_dict,
             min_subgraph_size=10,
             repeat=1,
-            delta=1,
+            delta=1.2,
             precision="trt_fp16",
             result_sort=True,
         )
