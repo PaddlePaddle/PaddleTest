@@ -233,6 +233,9 @@ fi
 sed -i '1s/epochs/total_iters/' $line
 # animeganv2
 sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
+
+#多卡训练
+sleep 3
 case ${model} in
 #只支持单卡
 lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal|prenet)
@@ -254,8 +257,6 @@ else
 fi
     ;;
 *)
-
-#多卡
 if [[ ! ${line} =~ 'makeup' ]]; then
     python  -m paddle.distributed.launch tools/main.py --config-file $line \
         -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
@@ -277,7 +278,7 @@ else
     echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
 fi
 
-#单卡
+#单卡训练
 ls output/$params_dir/ |head -n 2
 sleep 3
 if [[ ${model_flag} =~ "CE" ]]; then
