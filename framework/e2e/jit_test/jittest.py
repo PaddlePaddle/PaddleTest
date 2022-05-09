@@ -14,7 +14,7 @@ from jittrans import JitTrans
 
 yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "utils", "base.yml")
 
-case_name = "triu"
+case_name = "kthvalue"
 
 
 # loading yaml
@@ -32,5 +32,9 @@ jit_case = JitTrans(yml.get_case_info(case_name))
 jit_case.jit_run()
 
 # 排查case：
-# 报错: median
-# 精度diff: tanh_, bernoulli, multinomial, normal, rand, randint, randint_like, randn, randperm, uniform, standard_normal
+# 报错: median, put_along_axis
+# 精度diff:
+# tanh_, erfinv_,
+# bernoulli, multinomial, normal, rand, randint, randint_like, randn, randperm, uniform, standard_normal, poisson
+# shape出现diff：unsqueeze_
+# 第0维度shape为none或-1时报错：expand_as
