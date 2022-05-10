@@ -5,12 +5,12 @@ git rev-parse HEAD
 
 unset http_proxy
 unset https_proxy
-python -m pip install --upgrade --force --ignore-installed  paddleslim  -i https://mirror.baidu.com/pypi/simple   
-python -m pip install --upgrade --force --ignore-installed  -r requirements.txt  -i https://mirror.baidu.com/pypi/simple   
+python -m pip install --upgrade --force --ignore-installed  paddleslim  -i https://mirror.baidu.com/pypi/simple
+python -m pip install --upgrade --force --ignore-installed  -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
 python -m pip list
 
 
-#需要商榷  ls先找到hadoop的路径，再进行软链  
+#需要商榷  ls先找到hadoop的路径，再进行软链
 # cd dataset
 # ls
 # wget http://10.89.242.17:8903/ssd1/gry_data/ILSVRC2012_w.tar >download_ILSVRC2012.log 2>&1
@@ -41,7 +41,7 @@ unset PYTHONPATH
 
 nvidia-smi
 
-# python -m paddle.distributed.launch tools/train.py -c $1  > $model.log 
+# python -m paddle.distributed.launch tools/train.py -c $1  > $model.log
 
 python -m paddle.distributed.launch tools/train.py -c $1 \
     -o DataLoader.Train.dataset.cls_label_path="./dataset/flowers102/train_list.txt" \
