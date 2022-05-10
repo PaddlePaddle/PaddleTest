@@ -65,14 +65,14 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       top1:
         latest: True
-        kpi_base: 0.7110
+        kpi_base: 0.715
         threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       top5:
         latest: True
-        kpi_base: 0.9070
+        kpi_base: 0.91
         threshold: 0
         actived: True
         evaluation: "+"
