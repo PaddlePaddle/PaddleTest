@@ -10,6 +10,7 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
 export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
+export FLAGS_enable_gpu_memory_usage_log=1 #输出显卡占用峰值
 
 echo "path before"
 pwd
@@ -233,10 +234,12 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
             echo -e "\033[33m training static multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
             echo "training_static_exit_code: 0.0" >> $log_path/train/ResNet50_static.log
+            cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
         else
             cat $log_path/train/ResNet50_static.log
             echo -e "\033[31m training static multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
             echo "training_static_exit_code: 1.0" >> $log_path/train/ResNet50_static.log
+            cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
         fi
 
     fi
@@ -313,10 +316,12 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
         echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
         echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
+        cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
     else
         cat $log_path/train/${model}_2card.log
         echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
         echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
+        cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
     fi
 
     if [[ ${line} =~ "fp16.yaml" ]]; then #无单独fp16的yaml了
@@ -352,10 +357,12 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
             echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
             echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
+            cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
         else
             cat $log_path/train/${model}_1card.log
             echo -e "\033[31m training single of $model failed!\033[0m"|tee -a $log_path/result.log
             echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
+            cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
         fi
     fi
 
@@ -642,9 +649,11 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
         && [[ -f "output/${category}_${model}/$params_dir/latest.pdparams" ]];then
         echo -e "\033[33m training of ${category}_${model}  successfully!\033[0m"|tee -a $log_path/result.log
+        cat $log_path/train/${category}_${model}.log | grep "Memory Usage (MB)"
     else
         cat $log_path/train/${category}_${model}.log
         echo -e "\033[31m training of ${category}_${model} failed!\033[0m"|tee -a $log_path/result.log
+        cat $log_path/train/${category}_${model}.log | grep "Memory Usage (MB)"
     fi
 
     # sleep 3
