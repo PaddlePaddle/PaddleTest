@@ -75,7 +75,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       Perplexity:
         latest: True
-        kpi_base: 29.7444
+        kpi_base: 25.1912
         threshold: 0.05
         actived: True
         evaluation: "+"
