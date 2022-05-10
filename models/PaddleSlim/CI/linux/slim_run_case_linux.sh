@@ -883,7 +883,7 @@ print_info $? ${model}
 }
 
 demo_auto_mbv2_qat_dis(){
-cd ${slim_dir}/demo/auto-compression/
+cd ${slim_dir}/demo/auto_compression/
 wget https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/infermodel_mobilenetv2.tar
 tar -xf infermodel_mobilenetv2.tar
 
@@ -900,7 +900,7 @@ print_info $? auto_mbv2_qat_dis
 }
 
 demo_auto_mbv2_ptq_hpo(){
-cd ${slim_dir}/demo/auto-compression/
+cd ${slim_dir}/demo/auto_compression/
 sed -i 's/max_quant_count: 20/max_quant_count: 1/' ./configs/CV/mbv2_ptq_hpo.yaml
 
 python demo_imagenet.py \
@@ -917,7 +917,7 @@ print_info $? auto_mbv2_ptq_hpo
 
 demo_auto_bert_asp_dis(){
 CUDA_VISIBLE_DEVICES=${cudaid1}
-cd ${slim_dir}/demo/auto-compression/
+cd ${slim_dir}/demo/auto_compression/
 sed -i 's/epochs: 3/epochs: 1/' ./configs/NLP/bert_asp_dis.yaml
 wget https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/static_bert_models.tar.gz
 tar -xf static_bert_models.tar.gz
