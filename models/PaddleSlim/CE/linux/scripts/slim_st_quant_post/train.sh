@@ -52,7 +52,7 @@ elif [ "$1" = "quant_post" ];then
     print_info $? $2
 elif [ "$1" = "eval1" ];then
     python eval.py --model_path ./quant_model/MobileNetV1  > ${log_path}/$2.log 2>&1
-    tail -1 ${log_path}/$2.log | grep top1_acc | tr -d '[' | tr -d ']' | awk -F '=' '{print $2}' | awk -F ' ' '{print "top1:" $1"\ttop5:"$2}' >>${log_path}/$2.log
+    tail -10 ${log_path}/$2.log | grep top1_acc | tr -d '[' | tr -d ']' | awk -F '=' '{print $2}' | awk -F ' ' '{print "top1:" $1"\ttop5:"$2}' >>${log_path}/$2.log
     print_info $? $2
 elif [ "$1" = "quant_post_bc" ];then
     python quant_post.py --model_path ./inference_model/MobileNet \
