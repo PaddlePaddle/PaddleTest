@@ -42,14 +42,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.422400236
-        threshold: 0.000001
+        kpi_base: 1.4248168468
+        threshold: 0.0000001
         actived: True
         evaluation: "-"
         unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.69140625
+        kpi_base: 0.6796875
         threshold: 0
         actived: True
         evaluation: "+"
