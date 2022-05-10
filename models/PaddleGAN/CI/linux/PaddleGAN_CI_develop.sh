@@ -9,6 +9,7 @@ export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
 # export NCCL_SOCKET_IFNAME=xgbe0  #nccl解决无效
 export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
+export FLAGS_enable_gpu_memory_usage_log=1 #输出显卡占用峰值
 
 echo "path before"
 pwd
@@ -249,11 +250,13 @@ if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "E
     echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
     echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
+    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
 else
     cat $log_path/train/${model}_1card.log
     echo -e "\033[31m train of $model failed!\033[0m"| tee -a $log_path/result.log
     echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
     echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
+    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
 fi
     ;;
 *)
@@ -272,10 +275,12 @@ echo $params_dir
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
     echo -e "\033[33m train multi of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
+    cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 else
     cat $log_path/train/${model}_2card.log
     echo -e "\033[31m train multi of $model failed!\033[0m"| tee -a $log_path/result.log
     echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
+    cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 fi
 
 #单卡训练
@@ -298,10 +303,12 @@ if [[ ${model_flag} =~ "CE" ]]; then
     if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
         echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
+    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
     else
         cat $log_path/train/${model}_1card.log
         echo -e "\033[31m train single of $model failed!\033[0m"| tee -a $log_path/result.log
         echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
+    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
     fi
 fi
 
