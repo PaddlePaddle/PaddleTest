@@ -30,11 +30,11 @@ fi
 
 ###################
 echo --------- git repo -----
-git clone https://github.com/PaddlePaddle/PaddleSlim.git -b $4
-git clone https://github.com/PaddlePaddle/PaddleClas.git -b develop
-git clone https://github.com/PaddlePaddle/PaddleDetection.git -b develop
-git clone https://github.com/PaddlePaddle/PaddleOCR.git -b dygraph
-git clone https://github.com/PaddlePaddle/PaddleNLP.git -b develop
+git clone --depth 10 https://github.com/PaddlePaddle/PaddleSlim.git -b $4
+git clone --depth 10 https://github.com/PaddlePaddle/PaddleClas.git -b develop
+git clone --depth 10 https://github.com/PaddlePaddle/PaddleDetection.git -b develop
+git clone --depth 10 https://github.com/PaddlePaddle/PaddleOCR.git -b dygraph
+git clone --depth 10 https://github.com/PaddlePaddle/PaddleNLP.git -b develop
 
 echo --------- repo list -----
 ls
