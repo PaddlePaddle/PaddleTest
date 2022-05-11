@@ -24,6 +24,10 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
 
+#check 新动态图
+echo "set FLAGS_enable_eager_mode"
+echo $FLAGS_enable_eager_mode
+
 #<-> model_flag CI是效率云  pr是TC，all是全量，single是单独模型debug
 #<-> pr_num   随机跑pr的模型数
 #<-> python   python版本
@@ -246,17 +250,16 @@ python tools/main.py --config-file $line \
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
+cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
     echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
     echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
-    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
 else
     cat $log_path/train/${model}_1card.log
     echo -e "\033[31m train of $model failed!\033[0m"| tee -a $log_path/result.log
     echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
     echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
-    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
 fi
     ;;
 *)
@@ -272,15 +275,14 @@ fi
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
+cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
     echo -e "\033[33m train multi of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
-    cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 else
     cat $log_path/train/${model}_2card.log
     echo -e "\033[31m train multi of $model failed!\033[0m"| tee -a $log_path/result.log
     echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
-    cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 fi
 
 #单卡训练
@@ -300,15 +302,14 @@ if [[ ${model_flag} =~ "CE" ]]; then
     params_dir=$(ls output)
     echo "######  params_dir"
     echo $params_dir
+    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
     if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
         echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
-    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
     else
         cat $log_path/train/${model}_1card.log
         echo -e "\033[31m train single of $model failed!\033[0m"| tee -a $log_path/result.log
         echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
-    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
     fi
 fi
 
