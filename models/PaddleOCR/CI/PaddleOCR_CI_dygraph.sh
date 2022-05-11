@@ -461,6 +461,7 @@ if [[ ${model_flag} =~ 'CI_all' ]]; then
    tar -xf ./pretrain_models/train_step1.tar
    python -m paddle.distributed.launch tools/train.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.pretrained_model=./pretrain_models/train_step1/best_accuracy  Global.load_static_weights=False > $log_path/train/e2e_r50_vd_pg.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/e2e_r50_vd_pg.log) -eq 0 ]];then
+      cat $log_path/train/e2e_r50_vd_pg.log
       echo -e "\033[33m training of e2e_r50_vd_pg  successfully!\033[0m" | tee -a $log_path/result.log
    else
       cat  $log_path/train/e2e_r50_vd_pg.log
