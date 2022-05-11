@@ -11,6 +11,8 @@ export https_proxy=$3
 export http_proxy=$3
 export no_proxy=localhost,bj.bcebos.com,su.bcebos.com
 
+yum install -y unzip zip 
+
 export det_data_path=$5
 echo ----${det_data_path}----
 
@@ -253,15 +255,20 @@ cd ${repo_path}/PaddleDetection
 python -m pip install -U pip Cython
 python -m pip install -r requirements.txt
 
-cd dataset/voc/
-ln -s ${det_data_path}/pascalvoc/trainval.txt trainval.txt
-ln -s ${det_data_path}/pascalvoc/test.txt test.txt
-ln -s ${det_data_path}/pascalvoc/VOCdevkit VOCdevkit
+cd dataset
+rm -rf coco
+wget https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
+unzip coco.zip
 
-cd ../coco/
-ln -s ${det_data_path}/coco/val2017 val2017
-ln -s ${det_data_path}/coco/annotations annotations
-ln -s ${det_data_path}/coco/train2017 train2017
+# cd dataset/voc/
+# ln -s ${det_data_path}/pascalvoc/trainval.txt trainval.txt
+# ln -s ${det_data_path}/pascalvoc/test.txt test.txt
+# ln -s ${det_data_path}/pascalvoc/VOCdevkit VOCdevkit
+
+# cd ../coco/
+# ln -s ${det_data_path}/coco/val2017 val2017
+# ln -s ${det_data_path}/coco/annotations annotations
+# ln -s ${det_data_path}/coco/train2017 train2017
 
 slim_det_prune
 slim_det_quant
