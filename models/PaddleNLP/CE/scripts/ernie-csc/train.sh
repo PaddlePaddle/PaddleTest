@@ -11,6 +11,7 @@ if [ ! -d $log_path ]; then
 fi
 
 print_info(){
+cat ${log_path}/$2.log
 if [ $1 -ne 0 ];then
     echo "exit_code: 1.0" >> ${log_path}/$2.log
 else
