@@ -57,7 +57,7 @@ python -m pip list | grep paddleslim
 
 slim_ocr_prune_MobileNetV3(){
 	cd ${repo_path}/PaddleOCR
-    wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/MobileNetV3_large_x0_5_pretrained.pdparams
+    wget -qP ./pretrain_models/ https://paddleocr.bj.bcebos.com/pretrained/MobileNetV3_large_x0_5_pretrained.pdparams
 	python deploy/slim/prune/sensitivity_anal.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml \
 -o Global.pretrained_model=./pretrain_models/MobileNetV3_large_x0_5_pretrained \
 Global.save_model_dir=./output/prune_model \
@@ -111,7 +111,7 @@ if [ "$1" == "run_CI" ];then
     slim_ocr_quant_ocr_mobile_v2
 elif [ "$1" == "run_ALL" ];then
     slim_ocr_prune_MobileNetV3
-    slim_ocr_quant_best_accuracy
+    slim_ocr_quant_ocr_mobile_v2
     slim_ocr_quant_distill_mobile_v2
 else
     echo ---only run_CI or run_ALL---
@@ -154,7 +154,7 @@ print_info $? slim_nlp_distill_lstm_sst2_distill
 
 slim_nlp_distill_minilmv2(){
 	cd ${repo_path}/PaddleNLP//model_compression/minilmv2/
-	wget https://paddlenlp.bj.bcebos.com/models/general_distill/minilmv2_6l_768d_ch.tar.gz
+	wget -q https://paddlenlp.bj.bcebos.com/models/general_distill/minilmv2_6l_768d_ch.tar.gz
     tar -zxf minilmv2_6l_768d_ch.tar.gz
 
     python -m paddle.distributed.launch --gpus ${cudaid2} general_distill.py \
