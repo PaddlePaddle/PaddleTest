@@ -1,6 +1,6 @@
 #!/bin/bash
 ####################################
-export CUDA_VISIBLE_DEVICES=0
+
 export all_data=/paddle/all_data/rec
 #运行目录 PaddleRec/
 export repo_path=$PWD
