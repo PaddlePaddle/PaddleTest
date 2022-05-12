@@ -44,7 +44,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    unset https_proxy
    echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
-   python -m pip install $5 #paddle_compile
+   python -m pip install $5 -i https://mirror.baidu.com/pypi/simple #paddle_compile
    python -c 'import paddle;print(paddle.version.commit)'
 
    echo "######  ----ln  data-----"
@@ -71,6 +71,7 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 num=`python -m pip list | grep fasttext | wc -l`
 if [ "${num}" -eq "0" ]; then
@@ -451,6 +452,92 @@ if [[ ${model_flag} =~ 'CI_all' ]]; then
    else
       cat $log_path/infer/cls_mv3.log
       echo -e "\033[31m infer of cls_mv3 failed!\033[0m"| tee -a $log_path/result.log
+   fi
+fi
+
+# e2e
+if [[ ${model_flag} =~ 'CI_all' ]]; then
+   wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/train_step1.tar
+   tar -xf ./pretrain_models/train_step1.tar
+   python -m paddle.distributed.launch tools/train.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.pretrained_model=./pretrain_models/train_step1/best_accuracy  Global.load_static_weights=False > $log_path/train/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/e2e_r50_vd_pg.log) -eq 0 ]];then
+      cat $log_path/train/e2e_r50_vd_pg.log
+      echo -e "\033[33m training of e2e_r50_vd_pg  successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat  $log_path/train/e2e_r50_vd_pg.log
+      echo -e "\033[31m training of e2e_r50_vd_pg failed!\033[0m" | tee -a $log_path/result.log
+   fi
+   python tools/eval.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.checkpoints=output/pgnet_r50_vd_totaltext/latest > $log_path/eval/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/e2e_r50_vd_pg.log) -eq 0 ]];then
+      echo -e "\033[33m eval of e2e_r50_vd_pg  successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/eval/e2e_r50_vd_pg.log
+      echo -e "\033[31m eval of e2e_r50_vd_pg failed!\033[0m" | tee -a $log_path/result.log
+   fi
+   python tools/infer_e2e.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.infer_img="./doc/imgs_en/img_10.jpg" Global.pretrained_model="./output/e2e_r50_vd_pg/latest" Global.load_static_weights=false > $log_path/infer/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/e2e_r50_vd_pg.log) -eq 0 ]];then
+      echo -e "\033[33m infer of e2e_r50_vd_pg  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/infer/e2e_r50_vd_pg.log
+      echo -e "\033[31m infer of e2e_r50_vd_pg failed!\033[0m"| tee -a $log_path/result.log
+   fi
+   python tools/export_model.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.pretrained_model=./output/e2e_r50_vd_pg/latest Global.load_static_weights=False Global.save_inference_dir=./inference/e2e > $log_path/export/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/e2e_r50_vd_pg.log) -eq 0 ]];then
+      echo -e "\033[33m export_model of e2e_r50_vd_pg  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/export/e2e_r50_vd_pg.log
+      echo -e "\033[31m export_model of e2e_r50_vd_pg failed!\033[0m"| tee -a $log_path/result.log
+   fi
+   python tools/infer/predict_e2e.py --e2e_algorithm="PGNet" --image_dir="./doc/imgs_en/img_10.jpg" --e2e_model_dir="./inference/e2e/"  --e2e_pgnet_valid_set="partvgg" --e2e_pgnet_valid_set="totaltext" > $log_path/predict/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/predict/e2e_r50_vd_pg.log) -eq 0 ]];then
+      echo -e "\033[33m predict of e2e_r50_vd_pg  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/predict/e2e_r50_vd_pg.log
+      echo -e "\033[31m predict of e2e_r50_vd_pg failed!\033[0m"| tee -a $log_path/result.log
+   fi
+fi
+
+# 根据修改文件判断slim case的运行与否(全量默认都跑)
+prune_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep deploy/slim/prune | wc -l`
+quant_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep deploy/slim/quant | wc -l`
+if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
+   wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
+   tar -xf ch_ppocr_mobile_v2.0_det_train.tar
+   python -m paddle.distributed.launch deploy/slim/prune/sensitivity_anal.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model="ch_ppocr_mobile_v2.0_det_train/best_accuracy" Global.save_model_dir=./output/prune_model/ Global.epoch_num=1 > $log_path/train/prune_ch_det_mv3_db_v2.0.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/prune_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
+      echo -e "\033[33m training of prune successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/train/prune_ch_det_mv3_db_v2.0.log
+      echo -e "\033[31m training of prune failed!\033[0m" | tee -a $log_path/result.log
+   fi
+   echo "======prune output directory======"
+   ls ./output/prune_model/
+   wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/sen.pickle
+   python deploy/slim/prune/export_prune_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./output/prune_model/latest Global.save_inference_dir=./prune/prune_inference_model > $log_path/export/prune_ch_det_mv3_db_v2.0.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/prune_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
+      echo -e "\033[33m export_model of prune successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/export/prune_ch_det_mv3_db_v2.0.log
+      echo -e "\033[31m export_model of prune failed!\033[0m" | tee -a $log_path/result.log
+   fi
+fi
+
+if [[ ${quant_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
+   wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
+   tar -xf ch_ppocr_mobile_v2.0_det_train.tar
+   python deploy/slim/quantization/quant.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./ch_ppocr_mobile_v2.0_det_train/best_accuracy   Global.save_model_dir=./output/quant_model Global.epoch_num=1 > $log_path/train/quant_ch_det_mv3_db_v2.0.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/quant_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
+      echo -e "\033[33m training of quant successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/train/quant_ch_det_mv3_db_v2.0.log
+      echo -e "\033[31m training of quant failed!\033[0m" | tee -a $log_path/result.log
+   fi
+   python deploy/slim/quantization/export_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.checkpoints=output/quant_model/latest Global.save_inference_dir=./output/quant_inference_model > $log_path/export/quant_ch_det_mv3_db_v2.0.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/quant_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
+      echo -e "\033[33m export_model of quant successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/export/quant_ch_det_mv3_db_v2.0.log
+      echo -e "\033[31m export_model of quant failed!\033[0m" | tee -a $log_path/result.log
    fi
 fi
 

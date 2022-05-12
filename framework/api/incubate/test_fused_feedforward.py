@@ -181,6 +181,7 @@ def test_fused_feedforward4():
     set ln1_scale and ln1_bias
     """
     obj.enable_backward = True
+    obj.delta = 1e-2
     x = np.random.rand(1, 2, 2)
     w1 = np.random.rand(2, 4)
     b1 = np.random.rand(4)

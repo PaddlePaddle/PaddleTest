@@ -1,5 +1,5 @@
 MODEL: "esrgan_psnr_x4_div2k" # 模型名
-PRIORITY: P0
+PRIORITY: P1
 GIT:
   addr: $REPO_PaddleGAN
   path: $ROOT_PATH/PaddleGAN
@@ -17,14 +17,14 @@ VARIABLES:
 
 EXEC:
   exec_cases: [FUNCTION,TRAIN,EVAL]
-  exec_priority: [P0]
+  exec_priority: [P1]
   exec_tag: $EXEC_TAG
 
 #测试套
 FUNCTION: # 训练步骤
   -
     tag: linux_function_test
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -33,44 +33,52 @@ FUNCTION: # 训练步骤
         cmd: bash PaddleGAN_CI_develop.sh configs/esrgan_psnr_x4_div2k.yaml
   -
     tag: win_function_test
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
         cmd: PaddleGAN_train_gpu.bat configs/esrgan_psnr_x4_div2k.yaml
   -
     tag: win_cpu_function_test
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
         cmd: PaddleGAN_train_cpu.bat configs/esrgan_psnr_x4_div2k.yaml
   -
     tag: mac_function_test
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleGAN_P0_CPU.sh configs/esrgan_psnr_x4_div2k.yaml
+        cmd: bash PaddleGAN_train_cpu.sh configs/esrgan_psnr_x4_div2k.yaml
 
 TRAIN: # 训练步骤
   -
+    tag: train_linux_gpu1
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/esrgan_psnr_x4_div2k.yaml train_linux_gpu1
+    kpis: #kpi指标
+      training_single_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/esrgan_psnr_x4_div2k_1card.log
+  -
     tag: train_linux_gpu2
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/esrgan_psnr_x4_div2k.yaml train_linux_gpu2
     kpis: #kpi指标
-      training_exit_code:
+      training_multi_exit_code:
         latest: True
         kpi_base: 0.0
         threshold: 0.0
@@ -80,9 +88,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/esrgan_psnr_x4_div2k_2card.log
   -
     tag: train_win_gpu
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -98,9 +104,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/esrgan_psnr_x4_div2k_train.log
   -
     tag: train_win_cpu
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -116,9 +120,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/esrgan_psnr_x4_div2k_train.log
   -
     tag: train_mac_cpu
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -136,9 +138,7 @@ TRAIN: # 训练步骤
 EVAL: # 训练步骤
   -
     tag: eval_linux
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -154,9 +154,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/esrgan_psnr_x4_div2k_eval.log
   -
     tag: eval_win
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -172,9 +170,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/esrgan_psnr_x4_div2k_eval.log
   -
     tag: eval_mac
-    priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path

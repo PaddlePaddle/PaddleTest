@@ -32,17 +32,17 @@ if [[ ${model} == 'ugatit_photo2cartoon' ]]; then
 elif [[ ${model} == 'realsr_kernel_noise_x4_dped' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'pix2pix_cityscapes_2gpus' ]]; then
-    sed -i "" "s|P0|P0|g" ${model}.yaml
+    sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'pix2pix_facades' ]]; then
-    sed -i "" "s|P0|P0|g" ${model}.yaml
+    sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'firstorder_vox_mobile_256' ]]; then
-    sed -i "" "s|P0|P0|g" ${model}.yaml
+    sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'pan_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'drn_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'esrgan_psnr_x4_div2k' ]]; then
-    sed -i "" "s|P0|P0|g" ${model}.yaml
+    sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'animeganv2_pretrain' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'animeganv2' ]]; then
@@ -50,7 +50,7 @@ elif [[ ${model} == 'animeganv2' ]]; then
 elif [[ ${model} == 'basicvsr_reds' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'edvr_m_w_tsa' ]]; then
-    sed -i "" "s|P0|P0|g" ${model}.yaml
+    sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'esrgan_x4_div2k' ]]; then
     sed -i "" "s|P0|P0|g" ${model}.yaml
 elif [[ ${model} == 'singan_finetune' ]]; then
@@ -86,7 +86,7 @@ elif [[ ${model} == 'lesrcnn_psnr_x4_div2k' ]]; then
 elif [[ ${model} == 'ugatit_selfie2anime_light' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'edvr_l_wo_tsa' ]]; then
-    sed -i "" "s|P0|P0|g" ${model}.yaml
+    sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'realsr_bicubic_noise_x4_df2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'lapstyle_rev_second' ]]; then
@@ -100,7 +100,7 @@ elif [[ ${model} == 'msvsr_vimeo90k_BD' ]]; then
 elif [[ ${model} == 'iconvsr_reds' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'edvr_l_w_tsa' ]]; then
-    sed -i "" "s|P0|P0|g" ${model}.yaml
+    sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'lapstyle_rev_first' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'cyclegan_cityscapes' ]]; then
@@ -114,7 +114,12 @@ elif [[ ${model} == 'starganv2_celeba_hq' ]]; then
 elif [[ ${model} == 'mprnet_denoising' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
 elif [[ ${model} == 'firstorder_vox_256' ]]; then
-    sed -i "" "s|P0|P0|g" ${model}.yaml
+    sed -i "" "s|P0|P1|g" ${model}.yaml
+elif [[ ${model} == 'stylegan_v2_256_ffhq' ]]; then
+    sed -i "" "s|P0|P1|g" ${model}.yaml
+elif [[ ${model} == 'makeup' ]]; then
+    sed -i "" "s|P0|P1|g" ${model}.yaml
+
 # elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
 #     sed -i "" "s|P0|P1|g" ${model}.yaml
 #     sed -i "" "s|6.43611|0.0|g" ${model}.yaml #linux_train_单卡

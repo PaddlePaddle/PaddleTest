@@ -3,7 +3,7 @@ cd ../..
 
 if not exist log\distill_lstm md log\distill_lstm
 set logpath=%cd%\log\distill_lstm
-set model_path=C:\Users\paddle-ci\.paddlenlp\models\bert-base-uncased\bert-base-uncased-vocab.txt
+set model_path=C:\Users\Administrator\.paddlenlp\models\bert-base-uncased\bert-base-uncased-vocab.txt
 
 cd models_repo\examples\model_compression\distill_lstm\
 if "%2"=="sst-2" (

@@ -33,8 +33,6 @@ fi
 #访问RD程序
 cd $code_path
 
-wget https://paddlenlp.bj.bcebos.com/models/transformers/plato2/24L.pdparams
-
 cp -r $cur_path/input.txt  $code_path/input.txt
 
 if [[ $1 == "gpu" ]]; then
@@ -53,6 +51,3 @@ else # cpu
     print_info $? train_24_$1
 
 fi
-
-# 训练完毕删除数据
-rm -rf 24L.pdparams

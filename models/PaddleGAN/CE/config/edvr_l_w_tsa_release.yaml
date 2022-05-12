@@ -1,5 +1,5 @@
 MODEL: "edvr_l_w_tsa" # 模型名
-PRIORITY: P0_release
+PRIORITY: P1_release
 GIT:
   addr: $REPO_PaddleGAN
   path: $ROOT_PATH/PaddleGAN
@@ -17,14 +17,14 @@ VARIABLES:
 
 EXEC:
   exec_cases: [FUNCTION,TRAIN,EVAL]
-  exec_priority: [P0_release]
+  exec_priority: [P1_release]
   exec_tag: $EXEC_TAG
 
 #测试套
 FUNCTION: # 训练步骤
   -
     tag: linux_function_test
-    priority: P0_release
+    priority: P1_release
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
@@ -33,44 +33,52 @@ FUNCTION: # 训练步骤
         cmd: bash PaddleGAN_CI_develop.sh configs/edvr_l_w_tsa.yaml
   -
     tag: win_function_test
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
         cmd: PaddleGAN_train_gpu.bat configs/edvr_l_w_tsa.yaml
   -
     tag: win_cpu_function_test
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
         cmd: PaddleGAN_train_cpu.bat configs/edvr_l_w_tsa.yaml
   -
     tag: mac_function_test
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleGAN_P0_release_CPU.sh configs/edvr_l_w_tsa.yaml
+        cmd: bash PaddleGAN_train_cpu.sh configs/edvr_l_w_tsa.yaml
 
 TRAIN: # 训练步骤
   -
+    tag: train_linux_gpu1
+    priority: P1_release
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/edvr_l_w_tsa.yaml train_linux_gpu1
+    kpis: #kpi指标
+      training_single_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/edvr_l_w_tsa_1card.log
+  -
     tag: train_linux_gpu2
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/edvr_l_w_tsa.yaml train_linux_gpu2
     kpis: #kpi指标
-      training_exit_code:
+      training_multi_exit_code:
         latest: True
         kpi_base: 0.0
         threshold: 0.0
@@ -80,9 +88,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/edvr_l_w_tsa_2card.log
   -
     tag: train_win_gpu
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -98,9 +104,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/edvr_l_w_tsa_train.log
   -
     tag: train_win_cpu
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -116,9 +120,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/edvr_l_w_tsa_train.log
   -
     tag: train_mac_cpu
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -136,9 +138,7 @@ TRAIN: # 训练步骤
 EVAL: # 训练步骤
   -
     tag: eval_linux
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -154,9 +154,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/edvr_l_w_tsa_eval.log
   -
     tag: eval_win
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -172,9 +170,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/edvr_l_w_tsa_eval.log
   -
     tag: eval_mac
-    priority: P0_release
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    priority: P1_release
     run:
       -
         path: $ROOT_PATH/$model_scripts_path

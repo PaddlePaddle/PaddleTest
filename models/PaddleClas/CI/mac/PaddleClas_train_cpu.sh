@@ -14,9 +14,8 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     cd ${Project_path}
     echo "path after"
     pwd
-    set FLAGS_cudnn_deterministic=True
+    export FLAGS_cudnn_deterministic=True
     # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr
-    unset FLAGS_use_virtual_memory_auto_growth
     echo $1 > clas_models_list_P0 #传入参数
 fi
 
@@ -43,11 +42,12 @@ fi
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple
+python -m pip uninstall opencv-python
 python -m pip install  --ignore-installed paddleslim \
 -   i https://mirror.baidu.com/pypi/simple
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple
-python -m pip install  -r requirements.txt  \
+python -m pip install --ignore-installed -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple
 
 if [ -d "log" ]; then
@@ -80,9 +80,9 @@ if [[ ${model_flag} =~ "CE" ]]; then
     sed -i '' 's/learning_rate:/learning_rate: 0.0001 #/g' $line #将 学习率调低为0.0001
     echo "change lr"
     fi
-    sed -i '' 's/RandCropImage/ResizeImage/g' $line
-    sed -ie '/RandFlipImage/d' $line
-    sed -ie '/flip_code/d' $line
+    # sed -i '' 's/RandCropImage/ResizeImage/g' $line
+    # sed -ie '/RandFlipImage/d' $line
+    # sed -ie '/flip_code/d' $line
         # -o Global.eval_during_train=False  \
     python tools/train.py -c $line  \
         -o Global.epochs=1  \

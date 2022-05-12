@@ -26,3 +26,5 @@
 ./configs/pp_humanseg_lite/pp_humanseg_lite_export_398x224.yml
 ./configs/fcn/fcn_hrnetw18_pphumanseg14k.yml
 ./configs/pp_humanseg_lite/pp_humanseg_lite_mini_supervisely.yml
+./configs/pp_liteseg/pp_liteseg_stdc1_camvid_960x720_10k_for_test.yml
+./configs/pp_liteseg/pp_liteseg_stdc2_camvid_960x720_10k_for_test.yml

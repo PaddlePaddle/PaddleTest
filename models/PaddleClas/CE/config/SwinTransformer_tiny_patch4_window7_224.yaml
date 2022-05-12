@@ -34,8 +34,6 @@ FUNCTION: # 训练步骤
   -
     tag: win_function_test
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
@@ -43,8 +41,6 @@ FUNCTION: # 训练步骤
   -
     tag: win_cpu_function_test
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
@@ -52,19 +48,15 @@ FUNCTION: # 训练步骤
   -
     tag: mac_function_test
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml
+        cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/SwinTransformer/SwinTransformer_tiny_patch4_window7_224.yaml
 
 TRAIN: # 训练步骤
   -
     tag: train_linux_gpu1
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -72,15 +64,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.38868
-        threshold: 0.1
+        kpi_base: 6.3451
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 8.58133
-        threshold: 0.10001
+        kpi_base: 8.74345
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -88,8 +80,6 @@ TRAIN: # 训练步骤
   -
     tag: train_linux_gpu2
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -97,8 +87,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.5769
-        threshold: 0.1
+        kpi_base: 6.80341
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -106,8 +96,6 @@ TRAIN: # 训练步骤
   -
     tag: train_win_gpu
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -116,16 +104,14 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_train.log
   -
     tag: train_win_cpu
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -134,16 +120,14 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_train.log
   -
     tag: train_mac_cpu
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -152,9 +136,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_cpu.log
 
@@ -162,8 +146,6 @@ EVAL: # 训练步骤
   -
     tag: eval_linux
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -171,8 +153,8 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 8.58133
-        threshold: 0.10001
+        kpi_base: 8.74345
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -180,8 +162,6 @@ EVAL: # 训练步骤
   -
     tag: eval_win
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -190,16 +170,14 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_eval.log
   -
     tag: eval_mac
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -208,9 +186,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_eval.log
 
@@ -219,8 +197,6 @@ INFER: # 训练步骤
   -
     tag: infer_linux
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -229,16 +205,14 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_infer.log
   -
     tag: infer_win
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -247,16 +221,14 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_infer.log
   -
     tag: infer_mac
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -265,9 +237,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_infer.log
 
@@ -275,8 +247,6 @@ PREDICT: # 训练步骤
   -
     tag: predict_linux
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -285,16 +255,14 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_predict.log
   -
     tag: predict_win
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -303,16 +271,14 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_predict.log
   -
     tag: predict_mac
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -321,8 +287,8 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/SwinTransformer_tiny_patch4_window7_224_predict.log

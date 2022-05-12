@@ -79,13 +79,13 @@ def test_matrix_rank_3():
     tol = paddle.to_tensor(np.array([4.4]).astype(np.float32))
     hermitian = True
     """
-    tol_n = np.array([4.4]).astype(np.float32)
+    tol_n = np.array([4.4])
     hermitian = True
     x = np.array([[-2.0, 2.0, 1.0, 2.0], [-2.0, 2.0, 1.0, 2.0], [1.0, 3.0, 4.0, 1.0], [-4.0, 4.0, 2.0, 4.0]])
     res = np.linalg.matrix_rank(x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = np.float32
+
+    obj.types = [np.float64]
     obj.run(res=res, x=x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = None
 
 
 @pytest.mark.api_linalg_matrix_rank_parameters
@@ -95,7 +95,7 @@ def test_matrix_rank_4():
     tol = paddle.to_tensor(np.array([4.4]).astype(np.float32))
     hermitian = True
     """
-    tol_n = np.array([4.4]).astype(np.float32)
+    tol_n = np.array([4.4])
     hermitian = True
     x = np.array(
         [
@@ -112,19 +112,17 @@ def test_matrix_rank_4():
         ]
     )
     res = np.linalg.matrix_rank(x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = np.float32
     obj.run(res=res, x=x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = None
 
 
 @pytest.mark.api_linalg_matrix_rank_parameters
 def test_matrix_rank_5():
     """
     x.shape=[2, 3, 4, 4]
-    tol = paddle.to_tensor(np.array([[4.4, 4.5, 4.4],[4.4, 4.5, 4.4]]).astype(np.float32))
+    tol = paddle.to_tensor(np.array([[4.4, 4.5, 4.4],[4.4, 4.5, 4.4]])
     hermitian = True
     """
-    tol_n = np.array([[4.4, 4.5, 4.4], [4.4, 4.5, 4.4]]).astype(np.float32)
+    tol_n = np.array([[4.4, 4.5, 4.4], [4.4, 4.5, 4.4]])
     hermitian = True
     x = np.array(
         [
@@ -141,9 +139,7 @@ def test_matrix_rank_5():
         ]
     )
     res = np.linalg.matrix_rank(x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = np.float32
     obj.run(res=res, x=x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = None
 
 
 @pytest.mark.api_linalg_matrix_rank_parameters
@@ -168,9 +164,7 @@ def test_matrix_rank_6():
         ]
     )
     res = np.linalg.matrix_rank(x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = np.float32
     obj.run(res=res, x=x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = None
 
 
 @pytest.mark.api_linalg_matrix_rank_parameters
@@ -199,9 +193,7 @@ def test_matrix_rank_7():
         ]
     )
     res = np.linalg.matrix_rank(x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = np.float32
     obj.run(res=res, x=x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = None
 
 
 @pytest.mark.api_linalg_matrix_rank_parameters
@@ -270,9 +262,7 @@ def test_matrix_rank_8():
         ]
     )
     res = np.linalg.matrix_rank(x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = np.float32
     obj.run(res=res, x=x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = None
 
 
 @pytest.mark.api_linalg_matrix_rank_parameters
@@ -301,9 +291,7 @@ def test_matrix_rank_9():
         ]
     )
     res = np.linalg.matrix_rank(x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = np.float32
     obj.run(res=res, x=x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = None
 
 
 @pytest.mark.api_linalg_matrix_rank_parameters
@@ -332,6 +320,4 @@ def test_matrix_rank_11():
         ]
     )
     res = np.linalg.matrix_rank(x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = np.float32
     obj.run(res=res, x=x, tol=tol_n, hermitian=hermitian)
-    obj.dtype = None

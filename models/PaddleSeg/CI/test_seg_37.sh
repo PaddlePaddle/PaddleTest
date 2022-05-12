@@ -6,6 +6,7 @@ ln -s /usr/local/bin/python3.7 /usr/local/python2.7.15/bin/python
 ln -s /usr/local/bin/pip3.7 /usr/local/python2.7.15/bin/pip
 export PYTHONPATH=`pwd`
 
+
 python -m pip install --upgrade pip --ignore-installed
 # python -m pip install --upgrade numpy --ignore-installed
 python -m pip uninstall paddlepaddle-gpu -y
@@ -22,7 +23,8 @@ python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************paddleseg_version****'
 git rev-parse HEAD
 
-git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib |  grep -v Matting |  grep -v test_tipc | grep -v benchmark | awk '{print $NF}' | tee dynamic_config_list_temp
+
+git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep -v quick_start | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib |  grep -v Matting |  grep -v test_tipc | grep -v benchmark | awk '{print $NF}' | tee dynamic_config_list_temp
 echo =================
 cat dynamic_config_list_temp
 echo =================
@@ -49,6 +51,9 @@ ln -s ${file_path}/data/pascalvoc/VOCdevkit data/VOCdevkit
 if [ -d "data/ADEChallengeData2016" ]; then rm -rf data/ADEChallengeData2016
 fi
 ln -s ${file_path}/data/ADEChallengeData2016 data/ADEChallengeData2016
+if [ -d "data/camvid" ]; then rm -rf data/camvid
+fi
+ln -s ${file_path}/data/camvid data/camvid
 if [ -d "seg_dynamic_pretrain" ];then rm -rf seg_dynamic_pretrain
 fi
 ln -s ${file_path}/data/seg_dynamic_pretrain seg_dynamic_pretrain
@@ -79,7 +84,7 @@ log_dir=.
 model_type_path=
 dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
 if [ ${dynamic_config_num} -eq 0 ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v contrib | grep -v Matting | grep -v setr | grep -v test_tipc | tee dynamic_config_all
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v contrib | grep -v Matting | grep -v setr | grep -v test_tipc | grep -v benchmark | tee dynamic_config_all
 shuf dynamic_config_all -n 2 -o dynamic_config_list_temp
 fi
 grep -F -v -f no_upload dynamic_config_list_temp | sort | uniq | tee dynamic_config_list
@@ -197,6 +202,19 @@ elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/
     fi
 elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/ade20k/${model}/model.pdparams
+    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
+        echo "${model} doesn't upload bos !!!"
+        seg_model_sign=True
+    else
+        TRAIN_MUlTI_DYNAMIC
+        TRAIN_SINGLE_DYNAMIC
+        EVAL_DYNAMIC
+        PREDICT_DYNAMIC
+        EXPORT_DYNAMIC
+        PYTHON_INFER_DYNAMIC
+    fi
+elif [[ -n `echo ${model} | grep camvid` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
+    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/camvid/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} doesn't upload bos !!!"
         seg_model_sign=True

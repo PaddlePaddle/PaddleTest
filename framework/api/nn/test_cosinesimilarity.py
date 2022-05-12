@@ -205,7 +205,7 @@ def test_cosinesimilarity6():
         cos_sim_func(x1_tensor, x2_tensor)
     except Exception as e:
         # print(e)
-        if "[operator < reduce_sum > error]" in e.args[0]:
+        if "[operator < reduce_sum > error]" in e.args[0] or "phi::SumRawInferMeta" in e.args[0]:
             pass
         else:
             raise Exception
@@ -233,7 +233,7 @@ def test_cosinesimilarity7():
         cos_sim_func(x1_tensor, x2_tensor)
     except Exception as e:
         # print(e)
-        if "[operator < elementwise_mul > error]" in e.args[0]:
+        if "[operator < elementwise_mul > error]" in e.args[0] or "phi::MultiplyRawKernel" in e.args[0]:
             pass
         else:
             raise Exception

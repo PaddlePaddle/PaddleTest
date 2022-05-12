@@ -34,8 +34,6 @@ FUNCTION: # 训练步骤
   -
     tag: win_function_test
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
@@ -43,8 +41,6 @@ FUNCTION: # 训练步骤
   -
     tag: win_cpu_function_test
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
@@ -52,19 +48,15 @@ FUNCTION: # 训练步骤
   -
     tag: mac_function_test
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P0_CPU.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
+        cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
 
 TRAIN: # 训练步骤
   -
     tag: train_linux_gpu1
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -72,14 +64,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.91278
+        kpi_base: 6.91073
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 6.93002
+        kpi_base: 6.91593
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -88,8 +80,6 @@ TRAIN: # 训练步骤
   -
     tag: train_linux_gpu2
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -97,7 +87,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.9184
+        kpi_base: 6.90942
         threshold: 0.0
         actived: True
         evaluation: "-"
@@ -106,8 +96,6 @@ TRAIN: # 训练步骤
   -
     tag: train_win_gpu
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -124,8 +112,6 @@ TRAIN: # 训练步骤
   -
     tag: train_win_cpu
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -142,8 +128,6 @@ TRAIN: # 训练步骤
   -
     tag: train_mac_cpu
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -162,8 +146,6 @@ EVAL: # 训练步骤
   -
     tag: eval_linux
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -180,8 +162,6 @@ EVAL: # 训练步骤
   -
     tag: eval_win
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -198,8 +178,6 @@ EVAL: # 训练步骤
   -
     tag: eval_mac
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -219,8 +197,6 @@ INFER: # 训练步骤
   -
     tag: infer_linux
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -237,8 +213,6 @@ INFER: # 训练步骤
   -
     tag: infer_win
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -255,8 +229,6 @@ INFER: # 训练步骤
   -
     tag: infer_mac
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -275,8 +247,6 @@ PREDICT: # 训练步骤
   -
     tag: predict_linux
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -293,8 +263,6 @@ PREDICT: # 训练步骤
   -
     tag: predict_win
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -311,8 +279,6 @@ PREDICT: # 训练步骤
   -
     tag: predict_mac
     priority: P0
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path

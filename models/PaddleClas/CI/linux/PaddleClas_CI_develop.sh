@@ -5,10 +5,12 @@ echo ${model_flag}
 echo ${Data_path}
 echo ${Project_path}
 echo ${paddle_compile}
+echo ${py_paddle_flag}
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
 export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
+export FLAGS_enable_gpu_memory_usage_log=1 #输出显卡占用峰值
 
 echo "path before"
 pwd
@@ -18,10 +20,14 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     pwd
     export FLAGS_cudnn_deterministic=True
     # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr  在任务重插入
+    unset FLAGS_enable_eager_mode
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
 
+#check 新动态图
+echo "set FLAGS_enable_eager_mode"
+echo $FLAGS_enable_eager_mode
 
 # <-> model_flag CI是效率云 step0是clas分类 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
 #     pr是TC，clas是分类，rec是识别，single是单独模型debug
@@ -40,7 +46,7 @@ cd deploy
 ln -s ${Data_path}/rec_demo/* .
 cd ..
 
-if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_flag
+if ([[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]) &&  [[ ! ${py_paddle_flag} ]]; then #model_flag
     echo "######  model_flag pr"
 
     echo "######  ---py37  env -----"
@@ -75,6 +81,13 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
     ln -s $(which python3.9) run_env_py39/python;
     ln -s $(which pip3.9) run_env_py39/pip;
     export PATH=$(pwd)/run_env_py39:${PATH};
+    ;;
+    310)
+    # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+    mkdir run_env_py310;
+    ln -s $(which python3.10) run_env_py310/python;
+    ln -s $(which pip3.10) run_env_py310/pip;
+    export PATH=$(pwd)/run_env_py310:${PATH};
     ;;
     esac
 
@@ -207,6 +220,30 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         wc -l models_list_diff
         cat models_list_diff
         shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
+
+        #增加静态图验证 只跑一个不放在循环中
+        python -m paddle.distributed.launch ppcls/static/train.py  \
+            -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml \
+            -o Global.epochs=1 \
+            -o DataLoader.Train.sampler.batch_size=1 \
+            -o DataLoader.Eval.sampler.batch_size=1  \
+            -o Global.output_dir=output \
+            > $log_path/train/ResNet50_static.log 2>&1
+        params_dir=$(ls output)
+        echo "######  params_dir"
+        echo $params_dir
+        cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
+
+        if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
+            && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
+            echo -e "\033[33m training static multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
+            echo "training_static_exit_code: 0.0" >> $log_path/train/ResNet50_static.log
+        else
+            cat $log_path/train/ResNet50_static.log
+            echo -e "\033[31m training static multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
+            echo "training_static_exit_code: 1.0" >> $log_path/train/ResNet50_static.log
+        fi
+
     fi
     cat models_list | sort | uniq > models_list_run_tmp  #去重复
     shuf models_list_run_tmp > models_list_run
@@ -276,6 +313,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     params_dir=$(ls output)
     echo "######  params_dir"
     echo $params_dir
+    cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 
     if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
         && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
@@ -316,6 +354,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         params_dir=$(ls output)
         echo "######  params_dir"
         echo $params_dir
+        cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
         if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]] \
             && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
             echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
@@ -352,7 +391,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     if [[ ${model} =~ 'amp' ]];then
         echo "######  use amp pretrain model"
         echo ${model}
-        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/ResNet50_pretrained.pdparams --no-proxy
+        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${params_dir}_pretrained.pdparams --no-proxy
         rm -rf output/$params_dir/latest.pdparams
         cp -r ResNet50_pretrained.pdparams output/$params_dir/latest.pdparams
         rm -rf ResNet50_pretrained.pdparams
@@ -362,10 +401,21 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
     ls output/$params_dir/ |head -n 2
     # eval
+    if [[ ${line} =~ 'ultra' ]];then
+        cp ${line} ${line}_tmp #220413 fix tingquan
+        sed -i '/output_fp16: True/d' ${line}
+    fi
+
     python tools/eval.py -c $line \
         -o Global.pretrained_model=output/$params_dir/latest \
         -o DataLoader.Eval.sampler.batch_size=1 \
         > $log_path/eval/$model.log 2>&1
+
+    if [[ ${line} =~ 'ultra' ]];then
+        rm -rf ${line}
+        mv ${line}_tmp ${line} #220413 fix tingquan
+    fi
+
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
         echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "eval_exit_code: 0.0" >> $log_path/eval/$model.log
@@ -551,15 +601,16 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     fi
     echo $model
 
-    sleep 3
+    # sleep 3
+
     if [[ ${line} =~ 'GeneralRecognition' ]]; then
         python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
             -o Global.save_interval=1 \
             -o Global.eval_interval=1 \
             -o DataLoader.Train.sampler.batch_size=32 \
-            -o DataLoader.Train.dataset.image_root=./dataset/Aliproduct/ \
-            -o DataLoader.Train.dataset.cls_label_path=./dataset/Aliproduct/val_list.txt \
+            -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
+            -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     elif [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
@@ -569,6 +620,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.eval_interval=1 \
             -o DataLoader.Eval.sampler.batch_size=64 \
             -o DataLoader.Train.sampler.batch_size=64 \
+            -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
+            -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
             -o Global.output_dir="./output/"${category}_${model} \
             > $log_path/train/${category}_${model}.log 2>&1
     elif [[ ${line} =~ 'quantization' ]] ; then
@@ -592,6 +645,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     params_dir=$(ls output/${category}_${model})
     echo "######  params_dir"
     echo $params_dir
+    cat $log_path/train/${category}_${model}.log | grep "Memory Usage (MB)"
 
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
         && [[ -f "output/${category}_${model}/$params_dir/latest.pdparams" ]];then
@@ -601,7 +655,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
         echo -e "\033[31m training of ${category}_${model} failed!\033[0m"|tee -a $log_path/result.log
     fi
 
-    sleep 3
+    # sleep 3
 
     # eval
     if [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then

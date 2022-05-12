@@ -9,6 +9,7 @@ export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
 # export NCCL_SOCKET_IFNAME=xgbe0  #nccl解决无效
 export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
+export FLAGS_enable_gpu_memory_usage_log=1 #输出显卡占用峰值
 
 echo "path before"
 pwd
@@ -18,9 +19,14 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     pwd
     export FLAGS_cudnn_deterministic=True
     # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr  #在任务重插入
+    unset FLAGS_enable_eager_mode
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
+
+#check 新动态图
+echo "set FLAGS_enable_eager_mode"
+echo $FLAGS_enable_eager_mode
 
 #<-> model_flag CI是效率云  pr是TC，all是全量，single是单独模型debug
 #<-> pr_num   随机跑pr的模型数
@@ -85,12 +91,14 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
     ln -s $(which pip3.9) run_env_py39/pip;
     export PATH=$(pwd)/run_env_py39:${PATH};
     ;;
+    310)
+    # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+    mkdir run_env_py310;
+    ln -s $(which python3.10) run_env_py310/python;
+    ln -s $(which pip3.10) run_env_py310/pip;
+    export PATH=$(pwd)/run_env_py310:${PATH};
+    ;;
     esac
-
-    apt-get update
-    apt-get install ffmpeg -y
-    apt-get install cmake -y
-    apt-get install gcc -y
 
     unset http_proxy
     unset https_proxy
@@ -98,9 +106,21 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
     python -m pip install --ignore-installed  --upgrade pip \
         -i https://mirror.baidu.com/pypi/simple
     python -m pip uninstall paddlepaddle-gpu -y
-    python -m pip install ${paddle_compile} #paddle_compile
+    python -m pip install ${paddle_compile} -i https://mirror.baidu.com/pypi/simple #paddle_compile
+fi
 
-else
+# paddle
+echo "######  paddle version"
+python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
+
+# python
+python -c 'import sys; print(sys.version_info[:])'
+echo "######  python version"
+
+# env
+# dependency
+if [ -f "/etc/redhat-release" ]; then
+    echo "######  system centos"
     # ppgan
     set +x
     echo "######  ffmpeg"
@@ -124,22 +144,12 @@ else
     echo "######  cmake"
     yum install cmake -y
     cmake -version
-fi
-
-# paddle
-echo "######  paddle version"
-python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
-
-# python
-python -c 'import sys; print(sys.version_info[:])'
-echo "######  python version"
-
-# env
-# dependency
-if [ -d "/etc/redhat-release" ]; then
-    echo "######  system centos"
 else
     echo "######  system linux"
+    apt-get update
+    apt-get install ffmpeg -y
+    apt-get install cmake -y
+    apt-get install gcc -y
 fi
 
 unset http_proxy
@@ -228,47 +238,81 @@ fi
 sed -i '1s/epochs/total_iters/' $line
 # animeganv2
 sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
+
+#多卡训练
+sleep 3
 case ${model} in
-lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal)
+#只支持单卡
+lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal|prenet)
 python tools/main.py --config-file $line \
     -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
-    > $log_path/train/${model}.log 2>&1
+    > $log_path/train/${model}_1card.log 2>&1
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
-# if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
-if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]];then
-    echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
-    echo "training_exit_code: 0.0" >> $log_path/train/${model}.log
+cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
+if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
+    echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
+    echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
+    echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
 else
-    cat $log_path/train/${model}.log
+    cat $log_path/train/${model}_1card.log
     echo -e "\033[31m train of $model failed!\033[0m"| tee -a $log_path/result.log
-    echo "training_exit_code: 1.0" >> $log_path/train/${model}.log
+    echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
+    echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
 fi
     ;;
 *)
-
 if [[ ! ${line} =~ 'makeup' ]]; then
     python  -m paddle.distributed.launch tools/main.py --config-file $line \
         -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
-        > $log_path/train/${model}.log 2>&1
+        > $log_path/train/${model}_2card.log 2>&1
 else
     python  -m paddle.distributed.launch tools/main.py --config-file $line \
         -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
-        > $log_path/train/${model}.log 2>&1
+        > $log_path/train/${model}_2card.log 2>&1
 fi
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
-# if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}.log) -eq 0 ]];then
-if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]];then
-    echo -e "\033[33m train of $model  successfully!\033[0m"| tee -a $log_path/result.log
-    echo "training_exit_code: 0.0" >> $log_path/train/${model}.log
+cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
+if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
+    echo -e "\033[33m train multi of $model  successfully!\033[0m"| tee -a $log_path/result.log
+    echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
 else
-    cat $log_path/train/${model}.log
-    echo -e "\033[31m train of $model failed!\033[0m"| tee -a $log_path/result.log
-    echo "training_exit_code: 1.0" >> $log_path/train/${model}.log
+    cat $log_path/train/${model}_2card.log
+    echo -e "\033[31m train multi of $model failed!\033[0m"| tee -a $log_path/result.log
+    echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
 fi
+
+#单卡训练
+ls output/$params_dir/ |head -n 2
+sleep 3
+if [[ ${model_flag} =~ "CE" ]]; then
+    rm -rf output #清空多卡cache
+    if [[ ! ${line} =~ 'makeup' ]]; then
+        python tools/main.py --config-file $line \
+            -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
+            > $log_path/train/${model}_1card.log 2>&1
+    else
+        python tools/main.py --config-file $line \
+            -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
+            > $log_path/train/${model}_1card.log 2>&1
+    fi
+    params_dir=$(ls output)
+    echo "######  params_dir"
+    echo $params_dir
+    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
+    if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
+        echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
+        echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
+    else
+        cat $log_path/train/${model}_1card.log
+        echo -e "\033[31m train single of $model failed!\033[0m"| tee -a $log_path/result.log
+        echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
+    fi
+fi
+
   ;;
 esac
 
@@ -282,7 +326,6 @@ stylegan_v2_256_ffhq)
         --output stylegan_extract.pdparams \
         > $log_path/eval/${model}.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
-   #   if [[ $? -eq 0 ]];then
         echo -e "\033[33m extract_weight of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
    else
@@ -295,7 +338,6 @@ stylegan_v2_256_ffhq)
         --size 256 \
         > $log_path/eval/${model}.log 2>&1
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
-    #   if [[ $? -eq 0 ]];then
         echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
     else
@@ -306,10 +348,11 @@ stylegan_v2_256_ffhq)
     ;;
 makeup)
     echo "skip eval makeup"
+    echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
     sleep 0.01
     ;;
 msvsr_l_reds)
-    echo "skip eval msvsr_l_reds"
+    echo "skip eval msvsr_l_reds because OOM"
     sleep 0.01
     ;;
 *)
@@ -318,7 +361,6 @@ msvsr_l_reds)
         --evaluate-only --load output/$params_dir/iter_20_checkpoint.pdparams \
         > $log_path/eval/${model}.log 2>&1
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
-    #   if [[ $? -eq 0 ]];then
         echo -e "\033[33m evaluate of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
     else
@@ -328,9 +370,9 @@ msvsr_l_reds)
     fi
     ;;
 esac
-done
 
-if [[ ! ${model_flag} =~ "single" ]] && [[ ! ${model_flag} =~ "CE" ]];then
+#infer
+if [[ ! ${model_flag} =~ "single" ]] && [[ ${model} =~ "edvr_m_wo_tsa" ]];then
     #infer
     python -u applications/tools/styleganv2.py \
         --output_path styleganv2_infer \
@@ -402,7 +444,7 @@ if [[ ! ${model_flag} =~ "single" ]] && [[ ! ${model_flag} =~ "CE" ]];then
 
     # face_parse
     python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/face_parse.log) -eq 0 ]];then
         echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
     else
         cat $log_path/infer/face_parse.log
@@ -435,6 +477,7 @@ if [[ ! ${model_flag} =~ "single" ]] && [[ ! ${model_flag} =~ "CE" ]];then
         echo -e "\033[31m infer of video restore failed!\033[0m"| tee -a $log_path/result.log
     fi
 fi
+done
 
 num=`cat $log_path/result.log | grep "failed" | wc -l`
 if [ "${num}" -gt "0" ];then
