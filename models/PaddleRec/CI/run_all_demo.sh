@@ -100,22 +100,22 @@ for model in $(echo ${!dic[*]});do
     # dy_gpu2
     echo -e "\033[31m start _dy_train_gpu2 ${model}  \033[0m "
     # sed -i '/runner:/a\  use_fleet: True' config.yaml
-    fleetrun ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+    fleetrun ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true > ${log_path}/${i}_${model}_dy_train_gpu2 2>&1
     print_info $? ${i}_${model}_dy_train_gpu2
     mv log ${i}_${model}_dy_train_gpu2_dist_logs
     echo -e "\033[31m start _dy_infer_gpu2 ${model}  \033[0m "
-    fleetrun ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+    fleetrun ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true > ${log_path}/${i}_${model}_dy_infer_gpu2 2>&1
     print_info $? ${i}_${model}_dy_infer_gpu2
     mv log ${i}_${model}_dy_infer_gpu2_dist_logs
     rm -rf output_model_*
 
     # st_gpu2
     echo -e "\033[31m start _st_train_gpu2 ${model}  \033[0m "
-    fleetrun ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=true runner.use_fleet=true > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+    fleetrun ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=true runner.use_fleet=true > ${log_path}/${i}_${model}_st_train_gpu2 2>&1
     print_info $? ${i}_${model}_st_train_gpu2
     mv log ${i}_${model}_st_train_gpu2_dist_logs
     echo -e "\033[31m start _st_infer_gpu2 ${model}  \033[0m "
-    fleetrun ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+    fleetrun ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true > ${log_path}/${i}_${model}_st_infer_gpu2 2>&1
     print_info $? ${i}_${model}_st_infer_gpu2
     mv log ${i}_${model}_st_infer_gpu2_dist_logs
     let i+=1
@@ -134,23 +134,23 @@ yaml_mode=config_bigdata
 fi
 # dygraph
 echo -e "\033[31m start dy train 16 ${model} \n \033[0m "
-python -u ../../../tools/trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+python -u ../../../tools/trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True > ${log_path}/${model}_dy_train 2>&1
 print_info $? ${model}_dy_train
 
 echo -e "\033[31m start dy infer 16 ${model} \n \033[0m "
-python -u infer.py -m ${yaml_mode}.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+python -u infer.py -m ${yaml_mode}.yaml > ${log_path}/{model}_dy_infer 2>&1
 print_info $? ${model}_dy_infer
 
 rm -rf output_model_*
 
 # 静态图训练
 echo -e "\033[31m start st train 16 ${model} \n \033[0m "
-python -u ../../../tools/static_trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+python -u ../../../tools/static_trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True > ${log_path}/${model}_st_train 2>&1
 print_info $? ${model}_st_train
 
 # 静态图预测
 echo -e "\033[31m start st infer 16 ${model} \n \033[0m "
-python -u static_infer.py -m ${yaml_mode}.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+python -u static_infer.py -m ${yaml_mode}.yaml > ${log_path}/${model}_st_infer 2>&1
 print_info $? ${model}_st_infer
 
 }
