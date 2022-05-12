@@ -28,12 +28,12 @@ fi
 
 ###################
 echo --------- git repo -----
-git clone https://github.com/PaddlePaddle/PaddleSlim.git -b $4
-git clone https://github.com/PaddlePaddle/PaddleClas.git -b develop
-git clone https://github.com/PaddlePaddle/PaddleDetection.git -b develop
-git clone https://github.com/PaddlePaddle/PaddleOCR.git -b dygraph
-git clone https://github.com/PaddlePaddle/PaddleNLP.git -b develop
-git clone https://github.com/PaddlePaddle/PaddleSeg.git -b develop
+git clone --depth=10 https://github.com/PaddlePaddle/PaddleSlim.git -b $4
+git clone --depth=10 https://github.com/PaddlePaddle/PaddleClas.git -b develop
+git clone --depth=10 https://github.com/PaddlePaddle/PaddleDetection.git -b develop
+git clone --depth=10 https://github.com/PaddlePaddle/PaddleOCR.git -b dygraph
+git clone --depth=10 https://github.com/PaddlePaddle/PaddleNLP.git -b develop
+git clone --depth=10 https://github.com/PaddlePaddle/PaddleSeg.git -b develop
 
 echo --------- repo list -----
 ls
@@ -315,15 +315,11 @@ cd ${repo_path}/PaddleDetection
 python -m pip install -U pip Cython
 python -m pip install -r requirements.txt
 
-cd dataset/voc/
-ln -s ${det_data_path}/pascalvoc/trainval.txt trainval.txt
-ln -s ${det_data_path}/pascalvoc/test.txt test.txt
-ln -s ${det_data_path}/pascalvoc/VOCdevkit VOCdevkit
-
-cd ../coco/
-ln -s ${det_data_path}/coco/val2017 val2017
-ln -s ${det_data_path}/coco/annotations annotations
-ln -s ${det_data_path}/coco/train2017 train2017
+cd dataset
+rm -rf coco
+wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
+yum install -y unzip zip
+unzip coco.zip
 
 if [ "$1" == "run_CI" ];then
     slim_det_prune_yolov3_mv1
