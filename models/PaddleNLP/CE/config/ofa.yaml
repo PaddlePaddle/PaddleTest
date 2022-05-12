@@ -1,5 +1,5 @@
 MODEL: "ofa" # 模型名
-PRIORITY: P0_close
+PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
