@@ -209,7 +209,7 @@ demo_st_quant_post_hpo(){
 CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/quant/quant_post_hpo || catchException demo_st_quant_post_hpo
 
-wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+wget -qP inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
 cd inference_model/
 tar -xf MobileNetV1_infer.tar
 cd ..
