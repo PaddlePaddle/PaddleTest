@@ -14,7 +14,7 @@ unset https_proxy
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/biomedical/cblue/
+code_path=$cur_path/../../models_repo/examples/benchmark/cblue/
 log_path=$root_path/log/$model_name/
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
@@ -26,8 +26,8 @@ cd $code_path
 unset CUDA_VISIBLE_DEVICES
 
 print_info(){
+cat ${log_path}/$2.log
 if [ $1 -ne 0 ];then
-    cat ${log_path}/$2.log
     echo "exit_code: 1.0" >> ${log_path}/$2.log
 else
     echo "exit_code: 0.0" >> ${log_path}/$2.log

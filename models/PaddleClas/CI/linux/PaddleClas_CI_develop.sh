@@ -10,6 +10,7 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
 export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
+export FLAGS_enable_gpu_memory_usage_log=1 #输出显卡占用峰值
 
 echo "path before"
 pwd
@@ -24,6 +25,9 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
 
+#check 新动态图
+echo "set FLAGS_enable_eager_mode"
+echo $FLAGS_enable_eager_mode
 
 # <-> model_flag CI是效率云 step0是clas分类 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
 #     pr是TC，clas是分类，rec是识别，single是单独模型debug
@@ -228,6 +232,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         params_dir=$(ls output)
         echo "######  params_dir"
         echo $params_dir
+        cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
 
         if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
             && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
@@ -308,6 +313,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     params_dir=$(ls output)
     echo "######  params_dir"
     echo $params_dir
+    cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 
     if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
         && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
@@ -348,6 +354,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         params_dir=$(ls output)
         echo "######  params_dir"
         echo $params_dir
+        cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
         if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]] \
             && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
             echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
@@ -384,7 +391,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     if [[ ${model} =~ 'amp' ]];then
         echo "######  use amp pretrain model"
         echo ${model}
-        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/ResNet50_pretrained.pdparams --no-proxy
+        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${params_dir}_pretrained.pdparams --no-proxy
         rm -rf output/$params_dir/latest.pdparams
         cp -r ResNet50_pretrained.pdparams output/$params_dir/latest.pdparams
         rm -rf ResNet50_pretrained.pdparams
@@ -638,6 +645,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     params_dir=$(ls output/${category}_${model})
     echo "######  params_dir"
     echo $params_dir
+    cat $log_path/train/${category}_${model}.log | grep "Memory Usage (MB)"
 
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
         && [[ -f "output/${category}_${model}/$params_dir/latest.pdparams" ]];then

@@ -9,6 +9,7 @@ export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
 # export NCCL_SOCKET_IFNAME=xgbe0  #nccl解决无效
 export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
+export FLAGS_enable_gpu_memory_usage_log=1 #输出显卡占用峰值
 
 echo "path before"
 pwd
@@ -22,6 +23,10 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
+
+#check 新动态图
+echo "set FLAGS_enable_eager_mode"
+echo $FLAGS_enable_eager_mode
 
 #<-> model_flag CI是效率云  pr是TC，all是全量，single是单独模型debug
 #<-> pr_num   随机跑pr的模型数
@@ -233,15 +238,19 @@ fi
 sed -i '1s/epochs/total_iters/' $line
 # animeganv2
 sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
+
+#多卡训练
+sleep 3
 case ${model} in
 #只支持单卡
-lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal)
+lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal|prenet)
 python tools/main.py --config-file $line \
     -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
     > $log_path/train/${model}_1card.log 2>&1
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
+cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
     echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
@@ -254,8 +263,6 @@ else
 fi
     ;;
 *)
-
-#多卡
 if [[ ! ${line} =~ 'makeup' ]]; then
     python  -m paddle.distributed.launch tools/main.py --config-file $line \
         -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
@@ -268,6 +275,7 @@ fi
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
+cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
     echo -e "\033[33m train multi of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
@@ -277,7 +285,7 @@ else
     echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
 fi
 
-#单卡
+#单卡训练
 ls output/$params_dir/ |head -n 2
 sleep 3
 if [[ ${model_flag} =~ "CE" ]]; then
@@ -294,6 +302,7 @@ if [[ ${model_flag} =~ "CE" ]]; then
     params_dir=$(ls output)
     echo "######  params_dir"
     echo $params_dir
+    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
     if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
         echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log

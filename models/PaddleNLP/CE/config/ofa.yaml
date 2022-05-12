@@ -271,7 +271,7 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.159348
+        kpi_base: 1.321229
         threshold: 0.01
         actived: True
         evaluation: "-"
@@ -291,7 +291,7 @@ FINETUNE: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.159348
+        kpi_base: 1.321229
         threshold: 0.01
         actived: True
         evaluation: "-"
