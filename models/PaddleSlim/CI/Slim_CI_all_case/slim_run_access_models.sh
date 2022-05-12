@@ -479,7 +479,7 @@ slim_detection $6
 
 slim_ocr $6
 
-#slim_nlp $6
+slim_nlp $6
 
 slim_clas $6
 
