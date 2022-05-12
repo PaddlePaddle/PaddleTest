@@ -884,7 +884,7 @@ print_info $? ${model}
 
 demo_auto_mbv2_qat_dis(){
 cd ${slim_dir}/demo/auto_compression/
-wget https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/infermodel_mobilenetv2.tar
+wget -q https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/infermodel_mobilenetv2.tar
 tar -xf infermodel_mobilenetv2.tar
 
 python demo_imagenet.py \
@@ -919,7 +919,7 @@ demo_auto_bert_asp_dis(){
 CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/auto_compression/
 sed -i 's/epochs: 3/epochs: 1/' ./configs/NLP/bert_asp_dis.yaml
-wget https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/static_bert_models.tar.gz
+wget -q https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/static_bert_models.tar.gz
 tar -xf static_bert_models.tar.gz
 python -m pip install paddlenlp
 
