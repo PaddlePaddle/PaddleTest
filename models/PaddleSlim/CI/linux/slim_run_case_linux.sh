@@ -149,7 +149,7 @@ demo_st_quant_post_hist(){
 CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/quant/quant_post || catchException demo_st_quant_post_hist
 
-wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+wget -qP inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
 cd inference_model/
 tar -xf MobileNetV1_infer.tar
 cd ..
@@ -185,7 +185,7 @@ demo_st_quant_post(){
 CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/quant/quant_post || catchException demo_st_quant_post
 
-wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+wget -qP inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
 cd inference_model/
 tar -xf MobileNetV1_infer.tar
 cd ..
