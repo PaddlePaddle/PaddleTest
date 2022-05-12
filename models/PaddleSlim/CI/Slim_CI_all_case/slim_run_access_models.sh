@@ -267,11 +267,11 @@ fi
 #slim_nlp_distill_lstm
 }
 
-slim_det_prune_yolov3_mv1(){
+slim_det_prune_yolov3_mv3(){
 	cd ${repo_path}/PaddleDetection
-	python tools/train.py -c configs/yolov3/yolov3_mobilenet_v1_270e_voc.yml -o  epoch=1 TrainReader.batch_size=8 \
-	--slim_config configs/slim/prune/yolov3_prune_l1_norm.yml > ${log_path}/slim_det_prune_yolov3_mv1 2>&1
-print_info $? slim_det_prune_yolov3_mv1
+	python tools/train.py -c configs/ppyolo/ppyolo_mbv3_large_coco.yml -o  epoch=1 TrainReader.batch_size=8 \
+	--slim_config configs/slim/prune/ppyolo_mbv3_large_prune_fpgm.yml > ${log_path}/slim_det_prune_yolov3_mv3 2>&1
+print_info $? slim_det_prune_yolov3_mv3
 }
 
 slim_det_post_quant_ppyolo_mbv3(){
@@ -322,10 +322,10 @@ yum install -y unzip zip
 unzip coco.zip
 
 if [ "$1" == "run_CI" ];then
-    slim_det_prune_yolov3_mv1
+    slim_det_prune_yolov3_mv3
     slim_det_post_quant_ppyolo_mbv3
 elif [ "$1" == "run_ALL" ];then
-    slim_det_prune_yolov3_mv1
+    slim_det_prune_yolov3_mv3
     slim_det_post_quant_ppyolo_mbv3
     slim_det_pact_quant_ppyolo_r50vd
     slim_det_normal_quant_ppyolo_mbv3
