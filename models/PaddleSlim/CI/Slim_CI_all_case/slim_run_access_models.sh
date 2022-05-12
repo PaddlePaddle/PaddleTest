@@ -71,7 +71,7 @@ print_info $? slim_ocr_prune_MobileNetV3
 
 slim_ocr_quant_ocr_mobile_v2(){
 	cd ${repo_path}/PaddleOCR
-    wget https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
+    wget -q https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
     tar -xf ch_ppocr_mobile_v2.0_det_train.tar
 	python deploy/slim/quantization/quant.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml \
 -o Global.pretrained_model=./ch_ppocr_mobile_v2.0_det_train/best_accuracy \
@@ -84,7 +84,7 @@ print_info $? slim_ocr_quant_ocr_mobile_v2
 # V100 16G 会OOM、设置batch_size_per_card=4 可解决；
 slim_ocr_quant_distill_mobile_v2(){
     cd ${repo_path}/PaddleOCR
-    wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_distill_train.tar
+    wget -q https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_distill_train.tar
     tar xf ch_PP-OCRv3_det_distill_train.tar
     python deploy/slim/quantization/quant.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml \
 -o Global.pretrained_model='./ch_PP-OCRv3_det_distill_train/best_accuracy' \
@@ -103,7 +103,7 @@ cd ${repo_path}/PaddleOCR
 python -m pip install -r requirements.txt
 
 #准备数据
-wget -nc -P ./train_data/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/icdar2015.tar
+wget -qnc -P ./train_data/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/icdar2015.tar
 cd ./train_data/ && tar xf icdar2015.tar && cd ../
 
 if [ "$1" == "run_CI" ];then
@@ -121,8 +121,8 @@ fi
 
 slim_nlp_distill_lstm(){
 	cd ${repo_path}/PaddleNLP/examples/model_compression/distill_lstm
-	wget https://bj.bcebos.com/paddlenlp/data/senta_word_dict.txt
-	wget https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/best_model_610.tar.gz
+	wget -q https://bj.bcebos.com/paddlenlp/data/senta_word_dict.txt
+	wget -q https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/best_model_610.tar.gz
     tar -xvf best_model_610.tar.gz
 python small.py \
     --task_name sst-2 \
@@ -361,7 +361,7 @@ print_info $? slim_clas_quant_ResNet50_vd_gpu1
 
 slim_clas_post_quant_ResNet50_vd(){
 	cd ${repo_path}/PaddleClas
-	wget -P ./cls_pretrain/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/ResNet50_vd_pretrained.pdparams
+	wget -qP ./cls_pretrain/ https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/ResNet50_vd_pretrained.pdparams
 
     python tools/export_model.py -c ./ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml   \
 	-o Global.pretrained_model=./cls_pretrain/ResNet50_vd_pretrained   \
@@ -401,7 +401,7 @@ slim_clas(){
 
 cd dataset
 rm -rf ILSVRC2012
-wget -nc https://paddle-imagenet-models-name.bj.bcebos.com/data/whole_chain/whole_chain_CIFAR100.tar
+wget -qnc https://paddle-imagenet-models-name.bj.bcebos.com/data/whole_chain/whole_chain_CIFAR100.tar
 tar xf whole_chain_CIFAR100.tar
 ln -s whole_chain_CIFAR100 ILSVRC2012
 cd ILSVRC2012
@@ -436,7 +436,7 @@ print_info $? seg_BiseNetV2_output
     --model_path output_fp32/best_model/model.pdparams \
     --learning_rate 0.001 --do_eval --use_vdl \
     --save_interval 250 --save_dir output_quant \
-    --iters 100 ${log_path}/slim_seg_quant_BiseNetV2 2>&1
+    --iters 100 > ${log_path}/slim_seg_quant_BiseNetV2 2>&1
 print_info $? slim_seg_quant_BiseNetV2
 }
 
