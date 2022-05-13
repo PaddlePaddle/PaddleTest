@@ -296,6 +296,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     else
         if [[ ! ${line} =~ "fp16.yaml" ]]; then
             if [[ `cat ${line} |grep MultiScaleSampler|wc -l` -gt "0"  ]]; then #for tingquan 220513 change
+                echo "have MultiScaleSampler"
                 python -m paddle.distributed.launch tools/train.py  \
                     -c $line -o Global.epochs=1 \
                     -o Global.output_dir=output \
@@ -387,7 +388,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         rm -rf ${model}_pretrained.pdparams
     fi
 
-    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] \
+    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'PPHGNet' ]] \
         || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ '/ResNet50_vd.yaml' ]];then
         echo "######  use pretrain model"
         echo ${model}
