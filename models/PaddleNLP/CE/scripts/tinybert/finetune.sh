@@ -11,7 +11,7 @@ unset https_proxy
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/model_compression/tinybert/
+code_path=$cur_path/../../models_repo/model_zoo/tinybert/
 log_path=$root_path/log/$model_name/
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
@@ -21,7 +21,7 @@ fi
 cd $code_path
 
 
-cd ../../benchmark/glue/
+cd ../../examples/benchmark/glue/
 
 python -u ./run_glue.py \
     --model_type bert \

@@ -5,7 +5,7 @@ model_name=${PWD##*/}
 echo "$model_name 模型数据预处理阶段"
 #配置目标数据存储路径
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/language_model/gpt/
+code_path=$cur_path/../../models_repo/model_zoo/gpt/
 modle_path=$cur_path/../../models_repo/
 py_path=$code_path/py_gpu_mem.py
 

@@ -19,7 +19,7 @@ fi
 
 #访问RD程序
 cd $root_path/models_repo
-cd examples/language_model/gpt
+cd model_zoo/gpt
 
 # wget https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip
 # unzip wikitext-103-v1.zip
