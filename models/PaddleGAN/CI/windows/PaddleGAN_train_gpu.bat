@@ -37,10 +37,13 @@ rem data
 rd /s /q data
 mklink /j data %data_path%\PaddleGAN
 
+set http_proxy=
+set https_proxy=
 rem dependency
-python -m pip install -v -e .
-python -m pip install dlib
-python -m pip install -r requirements.txt
+python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install -v -e . -i https://mirror.baidu.com/pypi/simple
+python -m pip install dlib -i https://mirror.baidu.com/pypi/simple
+python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 python -m pip list
 
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
