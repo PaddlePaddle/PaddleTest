@@ -5,7 +5,7 @@ md log\electra
 
 set logpath=%cd%\log\electra
 
-cd models_repo\examples\language_model\electra
+cd models_repo\model_zoo\electra
 
 set DATA_DIR=%cd%\BookCorpus\
 
