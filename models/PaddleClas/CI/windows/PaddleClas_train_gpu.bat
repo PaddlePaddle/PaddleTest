@@ -57,6 +57,8 @@ if !errorlevel! equ 0 (
    echo "model_flag not pr"
 )
 
+set http_proxy=
+set https_proxy=
 rem dependency
 python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"

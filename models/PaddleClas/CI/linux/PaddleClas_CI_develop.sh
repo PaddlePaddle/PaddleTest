@@ -295,12 +295,21 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             > $log_path/train/${model}_2card.log 2>&1
     else
         if [[ ! ${line} =~ "fp16.yaml" ]]; then
-            python -m paddle.distributed.launch tools/train.py  \
-                -c $line -o Global.epochs=1 \
-                -o Global.output_dir=output \
-                -o DataLoader.Train.sampler.batch_size=1 \
-                -o DataLoader.Eval.sampler.batch_size=1  \
-                > $log_path/train/${model}_2card.log 2>&1
+            if [[ `cat ${line} |grep MultiScaleSampler|wc -l` -gt "0"  ]]; then #for tingquan 220513 change
+                python -m paddle.distributed.launch tools/train.py  \
+                    -c $line -o Global.epochs=1 \
+                    -o Global.output_dir=output \
+                    -o DataLoader.Train.sampler.first_bs=1 \
+                    -o DataLoader.Eval.sampler.batch_size=1  \
+                    > $log_path/train/${model}_2card.log 2>&1
+            else
+                python -m paddle.distributed.launch tools/train.py  \
+                    -c $line -o Global.epochs=1 \
+                    -o Global.output_dir=output \
+                    -o DataLoader.Train.sampler.batch_size=1 \
+                    -o DataLoader.Eval.sampler.batch_size=1  \
+                    > $log_path/train/${model}_2card.log 2>&1
+            fi
         else
             python -m paddle.distributed.launch ppcls/static/train.py  \
                 -c $line -o Global.epochs=1 \
