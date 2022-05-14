@@ -89,37 +89,44 @@ if __name__ == "__main__":
     exit_code = 0
     try:
         test_knowledge_mining()
-    except:
+    except Exception as e:
         exit_code = 1
         print("test_knowledge_mining Failed")
+        print(e)
     try:
         test_name_entity_recognition()
-    except:
+    except Exception as e:
         exit_code = 1
         print("test_name_entity_recognition Failed")
+        print(e)
     try:
         test_pos_tagging()
-    except:
+    except Exception as e:
         exit_code = 1
         print("test_pos_tagging Failed")
+        print(e)
     try:
         test_corrector()
-    except:
+    except Exception as e:
         exit_code = 1
         print("test_corrector Failed")
+        print(e)
     try:
         test_word_segmetation()
-    except:
+    except Exception as e:
         exit_code = 1
         print("test_word_segmetation Failed")
+        print(e)
     try:
         test_dependency_parsing()
-    except:
+    except Exception as e:
         exit_code = 1
         print("test_dependency_parsing Failed")
+        print(e)
     try:
         test_sentiment_analysis()
-    except:
+    except Exception as e:
         exit_code = 1
         print("test_sentiment_analysis Failed")
+        print(e)
     print("exit_code: %s" % exit_code)
