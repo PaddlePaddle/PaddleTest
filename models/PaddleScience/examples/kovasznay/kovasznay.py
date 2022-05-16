@@ -8,8 +8,8 @@ import paddle
 paddle.seed(1)
 np.random.seed(1)
 
-# paddle.enable_static()
-paddle.disable_static()
+paddle.enable_static()
+# paddle.disable_static()
 
 # constants
 Re = 40.0
