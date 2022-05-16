@@ -9,8 +9,8 @@ bug=0
 echo "" >  ${root_dir}/result.txt
 echo "========= serial bug file list =========" >> ${root_dir}/result.txt
 for file in ${cases}
-echo ${file}
 do
+echo ${file}
 file_name=`basename $file`
 file_dir=`dirname $file`
 echo ============================= serial ${file_name} start ============================
