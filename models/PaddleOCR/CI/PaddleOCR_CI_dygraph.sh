@@ -474,14 +474,14 @@ if [[ ${model_flag} =~ 'CI_all' ]]; then
       cat $log_path/eval/e2e_r50_vd_pg.log
       echo -e "\033[31m eval of e2e_r50_vd_pg failed!\033[0m" | tee -a $log_path/result.log
    fi
-   python tools/infer_e2e.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.infer_img="./doc/imgs_en/img_10.jpg" Global.pretrained_model="./output/e2e_r50_vd_pg/latest" Global.load_static_weights=false > $log_path/infer/e2e_r50_vd_pg.log 2>&1
+   python tools/infer_e2e.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.infer_img="./doc/imgs_en/img_10.jpg" Global.pretrained_model="./output/pgnet_r50_vd_totaltext/latest" Global.load_static_weights=false > $log_path/infer/e2e_r50_vd_pg.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/e2e_r50_vd_pg.log) -eq 0 ]];then
       echo -e "\033[33m infer of e2e_r50_vd_pg  successfully!\033[0m"| tee -a $log_path/result.log
    else
       cat $log_path/infer/e2e_r50_vd_pg.log
       echo -e "\033[31m infer of e2e_r50_vd_pg failed!\033[0m"| tee -a $log_path/result.log
    fi
-   python tools/export_model.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.pretrained_model=./output/e2e_r50_vd_pg/latest Global.load_static_weights=False Global.save_inference_dir=./inference/e2e > $log_path/export/e2e_r50_vd_pg.log 2>&1
+   python tools/export_model.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.pretrained_model=./output/pgnet_r50_vd_totaltext/latest Global.load_static_weights=False Global.save_inference_dir=./inference/e2e > $log_path/export/e2e_r50_vd_pg.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/e2e_r50_vd_pg.log) -eq 0 ]];then
       echo -e "\033[33m export_model of e2e_r50_vd_pg  successfully!\033[0m"| tee -a $log_path/result.log
    else
