@@ -41,7 +41,7 @@ echo ============================= distributed ${file_name} start ==============
         echo "skip"
     else
         cd ${file_dir}
-        python -m paddle.distributed.launch --gpu=0,1 ${file_name} >> dst_${file_name%.*}.log
+        python -m paddle.distributed.launch --devices=0,1 ${file_name} >> dst_${file_name%.*}.log
         if [ $? -ne 0 ]; then
             echo ${file_name} >> ${root_dir}/result.txt
             bug=`expr ${bug} + 1`
