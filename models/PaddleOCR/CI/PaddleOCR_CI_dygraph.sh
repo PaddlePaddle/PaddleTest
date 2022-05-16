@@ -459,7 +459,7 @@ fi
 if [[ ${model_flag} =~ 'CI_all' ]]; then
    wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/train_step1.tar
    tar -xf ./pretrain_models/train_step1.tar
-   python -m paddle.distributed.launch tools/train.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.pretrained_model=./pretrain_models/train_step1/best_accuracy  Global.load_static_weights=False > $log_path/train/e2e_r50_vd_pg.log 2>&1
+   python -m paddle.distributed.launch tools/train.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.pretrained_model=./pretrain_models/train_step1/best_accuracy  Global.load_static_weights=False Train.loader.batch_size_per_card=7 Global.epoch_num=1 > $log_path/train/e2e_r50_vd_pg.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/e2e_r50_vd_pg.log) -eq 0 ]];then
       cat $log_path/train/e2e_r50_vd_pg.log
       echo -e "\033[33m training of e2e_r50_vd_pg  successfully!\033[0m" | tee -a $log_path/result.log
