@@ -120,6 +120,8 @@ unset http_proxy
 unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
+# python -m pip install --ignore-installed --upgrade \
+#    setuptools==59.5.0 -i https://mirror.baidu.com/pypi/simple #before install bcolz
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
