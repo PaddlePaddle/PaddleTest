@@ -15,6 +15,8 @@ from pyevtk.hl import pointsToVTK
 
 import loading_cfd_data as cfd
 
+paddle.disable_static()
+
 
 def predict(net_params=None, vtk_filename="./vtk/uvp_t_"):
     """

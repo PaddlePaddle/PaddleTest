@@ -14,6 +14,8 @@ from pyevtk.hl import pointsToVTK
 
 import loading_cfd_data as cfd
 
+paddle.disable_static()
+
 
 def train(net_params=None, distributed_env=False):
     """
