@@ -43,14 +43,14 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple
 python -m pip uninstall opencv-python -y
-python -m pip uninstall opencv-python-headless -y #fix '_registerMatType' from 'cv2.cv2'
-python -m pip install  --ignore-installed opencv-python-headless<4.3 -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
 -   i https://mirror.baidu.com/pypi/simple
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple
+python -m pip uninstall opencv-python-headless -y #fix '_registerMatType' from 'cv2.cv2'
+python -m pip install  --ignore-installed "opencv-python-headless<4.3" -i https://mirror.baidu.com/pypi/simple
 
 if [ -d "log" ]; then
     rm -rf log
