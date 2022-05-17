@@ -10,6 +10,7 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
 export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
+export FLAGS_enable_gpu_memory_usage_log=1 #输出显卡占用峰值
 
 echo "path before"
 pwd
@@ -24,6 +25,9 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
 
+#check 新动态图
+echo "set FLAGS_enable_eager_mode"
+echo $FLAGS_enable_eager_mode
 
 # <-> model_flag CI是效率云 step0是clas分类 step1是clas分类 step2是clas分类 step3是识别，CI_all是全部都跑
 #     pr是TC，clas是分类，rec是识别，single是单独模型debug
@@ -116,6 +120,8 @@ unset http_proxy
 unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
+# python -m pip install --ignore-installed --upgrade \
+#    setuptools==59.5.0 -i https://mirror.baidu.com/pypi/simple #before install bcolz
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
@@ -228,6 +234,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         params_dir=$(ls output)
         echo "######  params_dir"
         echo $params_dir
+        cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
 
         if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
             && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
@@ -290,12 +297,22 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             > $log_path/train/${model}_2card.log 2>&1
     else
         if [[ ! ${line} =~ "fp16.yaml" ]]; then
-            python -m paddle.distributed.launch tools/train.py  \
-                -c $line -o Global.epochs=1 \
-                -o Global.output_dir=output \
-                -o DataLoader.Train.sampler.batch_size=1 \
-                -o DataLoader.Eval.sampler.batch_size=1  \
-                > $log_path/train/${model}_2card.log 2>&1
+            if [[ `cat ${line} |grep MultiScaleSampler|wc -l` -gt "0"  ]]; then #for tingquan 220513 change
+                echo "have MultiScaleSampler"
+                python -m paddle.distributed.launch tools/train.py  \
+                    -c $line -o Global.epochs=1 \
+                    -o Global.output_dir=output \
+                    -o DataLoader.Train.sampler.first_bs=1 \
+                    -o DataLoader.Eval.sampler.batch_size=1  \
+                    > $log_path/train/${model}_2card.log 2>&1
+            else
+                python -m paddle.distributed.launch tools/train.py  \
+                    -c $line -o Global.epochs=1 \
+                    -o Global.output_dir=output \
+                    -o DataLoader.Train.sampler.batch_size=1 \
+                    -o DataLoader.Eval.sampler.batch_size=1  \
+                    > $log_path/train/${model}_2card.log 2>&1
+            fi
         else
             python -m paddle.distributed.launch ppcls/static/train.py  \
                 -c $line -o Global.epochs=1 \
@@ -308,6 +325,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     params_dir=$(ls output)
     echo "######  params_dir"
     echo $params_dir
+    cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 
     if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
         && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
@@ -348,6 +366,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         params_dir=$(ls output)
         echo "######  params_dir"
         echo $params_dir
+        cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
         if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]] \
             && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
             echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
@@ -371,7 +390,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         rm -rf ${model}_pretrained.pdparams
     fi
 
-    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] \
+    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'PPHGNet' ]] \
         || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ '/ResNet50_vd.yaml' ]];then
         echo "######  use pretrain model"
         echo ${model}
@@ -638,6 +657,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     params_dir=$(ls output/${category}_${model})
     echo "######  params_dir"
     echo $params_dir
+    cat $log_path/train/${category}_${model}.log | grep "Memory Usage (MB)"
 
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
         && [[ -f "output/${category}_${model}/$params_dir/latest.pdparams" ]];then

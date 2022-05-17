@@ -455,6 +455,46 @@ if [[ ${model_flag} =~ 'CI_all' ]]; then
    fi
 fi
 
+# e2e
+if [[ ${model_flag} =~ 'CI_all' ]]; then
+   python -m paddle.distributed.launch tools/train.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.pretrained_model=./pretrain_models/train_step1/best_accuracy  Global.load_static_weights=False Train.loader.batch_size_per_card=7 Global.epoch_num=1 > $log_path/train/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/e2e_r50_vd_pg.log) -eq 0 ]];then
+      cat $log_path/train/e2e_r50_vd_pg.log
+      echo -e "\033[33m training of e2e_r50_vd_pg  successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat  $log_path/train/e2e_r50_vd_pg.log
+      echo -e "\033[31m training of e2e_r50_vd_pg failed!\033[0m" | tee -a $log_path/result.log
+   fi
+   python tools/eval.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.checkpoints=output/pgnet_r50_vd_totaltext/latest > $log_path/eval/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/eval/e2e_r50_vd_pg.log) -eq 0 ]];then
+      echo -e "\033[33m eval of e2e_r50_vd_pg  successfully!\033[0m" | tee -a $log_path/result.log
+   else
+      cat $log_path/eval/e2e_r50_vd_pg.log
+      echo -e "\033[31m eval of e2e_r50_vd_pg failed!\033[0m" | tee -a $log_path/result.log
+   fi
+   python tools/infer_e2e.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.infer_img="./doc/imgs_en/img_10.jpg" Global.pretrained_model="./output/pgnet_r50_vd_totaltext/latest" Global.load_static_weights=false > $log_path/infer/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/infer/e2e_r50_vd_pg.log) -eq 0 ]];then
+      echo -e "\033[33m infer of e2e_r50_vd_pg  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/infer/e2e_r50_vd_pg.log
+      echo -e "\033[31m infer of e2e_r50_vd_pg failed!\033[0m"| tee -a $log_path/result.log
+   fi
+   python tools/export_model.py -c configs/e2e/e2e_r50_vd_pg.yml -o Global.pretrained_model=./output/pgnet_r50_vd_totaltext/latest Global.load_static_weights=False Global.save_inference_dir=./inference/e2e > $log_path/export/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/e2e_r50_vd_pg.log) -eq 0 ]];then
+      echo -e "\033[33m export_model of e2e_r50_vd_pg  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/export/e2e_r50_vd_pg.log
+      echo -e "\033[31m export_model of e2e_r50_vd_pg failed!\033[0m"| tee -a $log_path/result.log
+   fi
+   python tools/infer/predict_e2e.py --e2e_algorithm="PGNet" --image_dir="./doc/imgs_en/img_10.jpg" --e2e_model_dir="./inference/e2e/"  --e2e_pgnet_valid_set="partvgg" --e2e_pgnet_valid_set="totaltext" > $log_path/predict/e2e_r50_vd_pg.log 2>&1
+   if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/predict/e2e_r50_vd_pg.log) -eq 0 ]];then
+      echo -e "\033[33m predict of e2e_r50_vd_pg  successfully!\033[0m"| tee -a $log_path/result.log
+   else
+      cat $log_path/predict/e2e_r50_vd_pg.log
+      echo -e "\033[31m predict of e2e_r50_vd_pg failed!\033[0m"| tee -a $log_path/result.log
+   fi
+fi
+
 # 根据修改文件判断slim case的运行与否(全量默认都跑)
 prune_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep deploy/slim/prune | wc -l`
 quant_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR | grep diff|grep deploy/slim/quant | wc -l`

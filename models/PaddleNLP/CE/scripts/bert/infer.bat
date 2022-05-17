@@ -4,7 +4,7 @@ cd ../..
 if not exist log\bert md log\bert
 set logpath=%cd%\log\bert
 
-cd models_repo\examples\language_model\bert\
+cd models_repo\model_zoo\bert\
 
 
 python -u ./export_model.py --model_type bert --model_path bert-base-uncased --output_path ./infer_model/model

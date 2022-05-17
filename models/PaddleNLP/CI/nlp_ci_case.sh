@@ -86,7 +86,7 @@ print_info $? glue_${TASK_NAME}_train
 # 4 bert
 bert() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-cd ${nlp_dir}/examples/language_model/bert/
+cd ${nlp_dir}/model_zoo/bert/
 cp -r /ssd1/paddlenlp/download/bert/* ./data/
 ## pretrain
 time (python -m paddle.distributed.launch run_pretrain.py \
@@ -176,7 +176,7 @@ time (python -m paddle.distributed.launch  --log_dir log  run_pretrain.py --mode
 }
 # 7 electra
 electra(){
-cd ${nlp_dir}/examples/language_model/electra/
+cd ${nlp_dir}/model_zoo/electra/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export DATA_DIR=./BookCorpus/
 cp -r /ssd1/paddlenlp/download/electra/BookCorpus/ ./
@@ -201,11 +201,11 @@ print_info $? electra_pretrain
 # 8 gpt
 gpt(){
 #data process
-cd ${nlp_dir}/examples/language_model/data_tools/
+cd ${nlp_dir}/model_zoo/ernie-1.0/data_tools
 sed -i "s/python3/python/g" Makefile
 sed -i "s/python-config/python3.7m-config/g" Makefile
 #pretrain
-cd ${nlp_dir}/examples/language_model/gpt/
+cd ${nlp_dir}/model_zoo/gpt/
 cp -r /ssd1/paddlenlp/download/gpt/* ./
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 time (python -m paddle.distributed.launch run_pretrain.py \
@@ -260,7 +260,7 @@ cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddl
 make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
 print_info $? gpt_C_FT
 #depoly python
-cd ${nlp_dir}/examples/language_model/gpt/faster_gpt/
+cd ${nlp_dir}/model_zoo/gpt/faster_gpt/
 python infer.py \
     --model_name_or_path gpt2-medium-en \
     --batch_size 1 \
@@ -288,7 +288,7 @@ print_info $? gpt_deploy_C_FT
 # 9 ernie-1.0
 ernie-1.0 (){
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-cd ${nlp_dir}/examples/language_model/ernie-1.0/
+cd ${nlp_dir}/model_zoo/ernie-1.0/
 mkdir data && cd data
 wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_ids.npy
 wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_idx.npz
@@ -437,7 +437,7 @@ print_info $? squad_predict
 # 14 tinybert
 tinybert() {
 export CUDA_VISIBLE_DEVICES=${cudaid1}
-cd ${nlp_dir}/examples/model_compression/tinybert/
+cd ${nlp_dir}/model_zoo/tinybert/
 cp -r /ssd1/paddlenlp/download/tinybert/pretrained_models/ ./
 #中间层蒸馏
 time (python task_distill.py \
@@ -816,7 +816,7 @@ print_info $? simbert
 }
 #25 ernie-doc
 ernie-doc(){
-cd ${nlp_dir}/examples/language_model/ernie-doc/
+cd ${nlp_dir}/examples/model_zoo/ernie-doc/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 time (python -m paddle.distributed.launch  --log_dir hyp run_classifier.py --epochs 15 --layerwise_decay 0.7 --learning_rate 5e-5 --batch_size 4 --save_steps 100 --max_steps 100  --dataset hyp --output_dir hyp >${log_path}/ernie-doc_hyp) >>${log_path}/ernie-doc_hyp 2>&1
 print_info $? ernie-doc_hyp
@@ -936,7 +936,7 @@ print_info $? nptag_depoly
 #31 ernie-m
 ernie-m() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-cd ${nlp_dir}/examples/language_model/ernie-m
+cd ${nlp_dir}/examples/model_zoo/ernie-m
 python -m paddle.distributed.launch  --log_dir output run_classifier.py  \
    --task_type cross-lingual-transfer  \
    --batch_size 8    \

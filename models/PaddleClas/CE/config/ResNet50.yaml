@@ -1,5 +1,5 @@
 MODEL: "ResNet50" # 模型名
-PRIORITY: P0
+PRIORITY: P0,convergence_ResNet50
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -17,7 +17,7 @@ VARIABLES:
 
 EXEC:
   exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
-  exec_priority: [P0]
+  exec_priority: [P0,convergence_ResNet50]
   exec_tag: $EXEC_TAG
 
 #测试套
@@ -52,6 +52,15 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+  -
+    tag: linux_convergence_test
+    priority: convergence_ResNet50
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleClas_convergence_develop.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml
 
 TRAIN: # 训练步骤
   -

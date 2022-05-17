@@ -17,7 +17,7 @@ fi
 
 #访问RD程序
 cd $root_path/models_repo
-cd examples/language_model/gpt
+cd model_zoo/gpt
 
 python export_model.py --model_type=gpt \
     --model_path=gpt2-medium-en\

@@ -35,7 +35,7 @@ python -m pip install --ignore-installed  --upgrade pip \
 echo "######  install ppgan "
 python -m pip install  --ignore-installed  ppgan \
    -i https://mirror.baidu.com/pypi/simple
-python -m pip uninstall opencv-python
+python -m pip uninstall opencv-python -y
 python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
 # python -m pip install --ignore-installed  dlib
@@ -46,6 +46,8 @@ python -m pip install  --ignore-installed  dlib \
 python -c 'import dlib'
 python -m pip install  --ignore-installed  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
+python -m pip uninstall opencv-python-headless -y #fix '_registerMatType' from 'cv2.cv2'
+python -m pip install  --ignore-installed "opencv-python-headless<4.3" -i https://mirror.baidu.com/pypi/simple
 
 # dir
 log_path=log

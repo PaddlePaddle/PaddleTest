@@ -1,5 +1,5 @@
 MODEL: "fater_ernie_seq" # 模型名
-PRIORITY: P0_2
+PRIORITY: P0_2_Close # 代码已删除
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
