@@ -23,6 +23,16 @@ echo ---paddle commit---
 python -c 'import paddle; print(paddle.version.commit)';
 python -c 'import paddle; paddle.utils.run_check()';
 
+python -m pip install opencv-python
+python -m pip install pandas
+python -m pip install sklearn
+python -m pip install scipy
+python -m pip install tools
+python -m pip install numba
+python -m pip install pgl
+echo ---pip list---
+python -m pip list 
+
 # set rec workdir
 # workspace == PaddleRec ?
 export rec_dir=/workspace/PaddleRec
