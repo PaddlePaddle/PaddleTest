@@ -109,7 +109,6 @@ done
 }
 
 demo_rank(){
-python -m pip install tools
 declare -A dic
 dic=([autofis]='models/rank/autofis' [bert4rec]='models/rank/bert4rec' [bst]='models/rank/bst' [dcn]='models/rank/dcn' [dcn_v2]='models/rank/dcn_v2' \
     [deepfefm]='models/rank/deepfefm' [deepfm]='models/rank/deepfm' [deeprec]='models/rank/deeprec' [dien]='models/rank/dien'\
@@ -144,8 +143,6 @@ done
 }
 
 demo_recall(){
-python -m pip install numba
-python -m pip install pgl
 
 declare -A dic
 dic=([deepwalk]='models/recall/deepwalk' [ensfm]='models/recall/ensfm'\
