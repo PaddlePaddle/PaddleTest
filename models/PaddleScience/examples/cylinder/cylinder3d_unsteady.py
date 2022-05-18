@@ -12,8 +12,8 @@ import paddlescience as psci
 paddle.seed(1)
 np.random.seed(1)
 
-# paddle.enable_static()
-paddle.disable_static()
+paddle.enable_static()
+# paddle.disable_static()
 
 # load real data
 def GetRealPhyInfo(time, need_info=None):
