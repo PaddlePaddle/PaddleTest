@@ -947,7 +947,7 @@ python -m paddle.distributed.launch  --log_dir output run_classifier.py  \
    --logging_steps 1  >${log_path}/ernie-m >>${log_path}/ernie-m 2>&1
 print_info $? ernie-m
 }
-#32 clue 
+#32 clue
 clue (){
 cd ${nlp_dir}/examples/benchmark/clue/classification
 python -u ./run_clue_classifier_trainer.py \
