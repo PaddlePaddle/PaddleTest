@@ -3,7 +3,7 @@ cd ../..
 if not exist log\cblue md log\cblue
 set logpath=%cd%\log\cblue
 
-cd models_repo\examples\benchmark\cblue\
+cd models_repo\model_zoo\ernie-health\cblue\
 
 python -m paddle.distributed.launch --gpus %2 train_ner.py --batch_size 32 --max_seq_length 128 --learning_rate 6e-5 --epochs 1 --max_steps 20 --save_steps 10 --logging_steps 10 --valid_steps 10 --save_dir ./checkpoint/CMeEE > %logpath%/identify_%1.log 2>&1
 
