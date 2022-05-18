@@ -30,6 +30,7 @@ python -m pip install scipy
 python -m pip install tools
 python -m pip install numba
 python -m pip install pgl
+python -m pip install tqdm
 echo ---pip list---
 python -m pip list 
 
