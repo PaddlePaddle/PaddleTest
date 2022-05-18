@@ -3,7 +3,11 @@
 root_dir=$PWD
 cases=`find ./examples -name "*.py" | sort`
 
-ignore="log.py"
+cd examples/cylinder/2d_unsteady_continuous
+python download_dataset.py
+cd -
+
+ignore="log.py dataset.py download_dataset.py loading_cfd_data.py"
 bug=0
 
 echo "" >  ${root_dir}/result.txt
@@ -29,7 +33,7 @@ echo ============================= serial ${file_name} start ===================
 echo ============================= serial ${file_name}  end! =============================
 done
 
-
+ignore="log.py dataset.py download_dataset.py loading_cfd_data.py viv_inverse_predict.py viv_inverse_train.py loading_cfd_data.py download_dataset.py"
 echo "========= distributed bug file list =========" >> ${root_dir}/result.txt
 for file in ${cases}
 do
