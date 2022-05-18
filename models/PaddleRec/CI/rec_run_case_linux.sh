@@ -124,6 +124,7 @@ for model in $(echo ${!dic[*]});do
     cd ${rec_dir}/${model_path}
     model_kind=`echo ${model_path} | awk -F '/' '{print $2}'`
     if [ ${model} == "autofis" ];then
+        run_case_func ${model_kind}  ${model} dy_train $1 "trainer.py"
         run_case_func ${model_kind}  ${model} dy_train $1 "trainer.py" "stage=1"
         run_case_func ${model_kind}  ${model} dy_infer $1 "../../../tools/infer.py" "stage=1"
     elif [ ${model} == "deeprec" ];then
