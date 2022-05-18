@@ -27,7 +27,7 @@ python -m pip install opencv-python
 python -m pip install pandas
 python -m pip install sklearn
 python -m pip install scipy
-python -m pip install tools
+# python -m pip install tools
 python -m pip install numba
 python -m pip install pgl
 python -m pip install tqdm
