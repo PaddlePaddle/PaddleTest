@@ -539,6 +539,7 @@ if [[ $5 == 'all' ]];then
    export CUDA_VISIBLE_DEVICES=${gpus}
    bash test_cli.sh > ../../../$log_path/test_cli.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/test_cli.log) -eq 0 ]];then
+      cat ../../../$log_path/test_cli.log
       echo -e "\033[33m test_cli successfully! \033[0m" | tee -a ../../../$log_path/result.log
    else
       cat ../../../$log_path/test_cli.log
