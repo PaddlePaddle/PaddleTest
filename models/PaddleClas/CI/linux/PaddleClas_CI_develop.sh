@@ -405,8 +405,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         echo ${model}
         wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${params_dir}_pretrained.pdparams --no-proxy
         rm -rf output/$params_dir/latest.pdparams
-        cp -r ResNet50_pretrained.pdparams output/$params_dir/latest.pdparams
-        rm -rf ResNet50_pretrained.pdparams
+        cp -r ${params_dir}_pretrained.pdparams output/$params_dir/latest.pdparams
+        rm -rf ${params_dir}_pretrained.pdparams
     fi
 
     sleep 3
