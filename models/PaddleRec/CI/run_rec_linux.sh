@@ -24,8 +24,8 @@ python -c 'import paddle; print(paddle.version.commit)';
 python -c 'import paddle; paddle.utils.run_check()';
 
 # set rec workdir
-# workspace == PaddleRec/
-export rec_dir=/workspace
+# workspace == PaddleRec ?
+export rec_dir=/workspace/PaddleRec
 
 # set logs path
 if [ -d "/workspace/logs" ];then
