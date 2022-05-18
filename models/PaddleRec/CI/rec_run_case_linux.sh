@@ -218,7 +218,7 @@ elif [ "$1" = "run_CPU" ];then
     demo_multitask False
     demo_rank False
     demo_recall False
-elif [ "$1" = "run_CPU" ];then 
+elif [ "$1" = "run_ALL" ];then 
     demo_contentunderstanding True freet_run
     demo_match True freet_run
     demo_multitask True freet_run
