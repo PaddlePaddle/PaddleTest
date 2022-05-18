@@ -14,7 +14,7 @@ unset https_proxy
 
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/benchmark/cblue/
+code_path=$cur_path/../../models_repo/model_zoo/ernie-health/cblue/
 log_path=$root_path/log/$model_name/
 if [ ! -d $log_path ]; then
   mkdir -p $log_path

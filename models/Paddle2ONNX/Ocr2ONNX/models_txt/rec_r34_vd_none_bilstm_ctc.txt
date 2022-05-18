@@ -5,5 +5,5 @@ test_data::https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/ocr_data/ocr_dat
 model_type::rec
 opt_ver::11
 opt_ver::11
-atol::1e-5
+atol::1e-4
 rtol::1e-8

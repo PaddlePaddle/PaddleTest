@@ -4,59 +4,43 @@ laplace2d example test
 
 import paddlescience as psci
 import numpy as np
+import paddle
 
+paddle.seed(1)
+np.random.seed(1)
 
-# Analytical solution
-def LaplaceRecSolution(x, y, k=1.0):
-    """
-    LaplaceRecSolution
-    """
-    if k == 0.0:
-        return x * y
-    else:
-        return np.cos(k * x) * np.cosh(k * y)
+paddle.enable_static()
+# paddle.disable_static()
 
+# analytical solution
+ref_sol = lambda x, y: np.cos(x) * np.cosh(y)
 
-# Generate analytical Solution using Geometry points
-def GenSolution(xy, bc_index):
-    """
-    GenSolution
-    """
-    sol = np.zeros((len(xy), 1)).astype(np.float32)
-    bc_value = np.zeros((len(bc_index), 1)).astype(np.float32)
-    len1 = len(xy)
-    for i in range(len1):
-        sol[i] = LaplaceRecSolution(xy[i][0], xy[i][1])
-    len2 = len(bc_index)
-    for i in range(len2):
-        bc_value[i][0] = sol[bc_index[i]]
-    return [sol, bc_value]
+# set geometry and boundary
+geo = psci.geometry.Rectangular(origin=(0.0, 0.0), extent=(1.0, 1.0))
+geo.add_boundary(name="around", criteria=lambda x, y: (y == 1.0) | (y == 0.0) | (x == 0.0) | (x == 1.0))
 
+# discretize geometry
+npoints = 10201
+geo_disc = geo.discretize(npoints=npoints, method="uniform")
 
-# Geometry
-geo = psci.geometry.Rectangular(space_origin=(0.0, 0.0), space_extent=(1.0, 1.0))
+# Laplace
+pde = psci.pde.Laplace(dim=2)
 
-# PDE Laplace
-pdes = psci.pde.Laplace2D()
+# set bounday condition
+bc_around = psci.bc.Dirichlet("u", rhs=ref_sol)
 
-# Discretization
-pdes, geo = psci.discretize(pdes, geo, space_nsteps=(11, 11))
+# add bounday and boundary condition
+pde.add_bc("around", bc_around)
 
-# psci.visu.save_mpl(geo, np.ones(41*41))
-# psci.visu.plot_mpl("output.npy")
-
-# bc value
-golden, bc_value = GenSolution(geo.get_space_domain(), geo.get_bc_index())
-pdes.set_bc_value(bc_value=bc_value)
-
-psci.visu.save_vtk(geo, golden, "golden_laplace_2d")
-np.save("./golden_laplace_2d.npy", golden)
+# discretization pde
+pde_disc = pde.discretize(geo_disc=geo_disc)
 
 # Network
-net = psci.network.FCNet(num_ins=2, num_outs=1, num_layers=5, hidden_size=20, dtype="float32", activation="tanh")
+# TODO: remove num_ins and num_outs
+net = psci.network.FCNet(num_ins=2, num_outs=1, num_layers=5, hidden_size=20, activation="tanh")
 
-# Loss, TO rename
-loss = psci.loss.L2(pdes=pdes, geo=geo)
+# Loss
+loss = psci.loss.L2()
 
 # Algorithm
 algo = psci.algorithm.PINNs(net=net, loss=loss)
@@ -65,23 +49,25 @@ algo = psci.algorithm.PINNs(net=net, loss=loss)
 opt = psci.optimizer.Adam(learning_rate=0.001, parameters=net.parameters())
 
 # Solver
-solver = psci.solver.Solver(algo=algo, opt=opt)
-solution = solver.solve(num_epoch=30000)
+solver = psci.solver.Solver(pde=pde_disc, algo=algo, opt=opt)
+solution = solver.solve(num_epoch=10000)
 
-# Use solution
-rslt = solution(geo)
-psci.visu.save_vtk(geo, rslt, "rslt_laplace_2d")
-np.save("./rslt_laplace_2d.npy", rslt)
+psci.visu.save_vtk(geo_disc=pde_disc.geometry, data=solution)
 
-# Calculate diff and l2 relative error
-diff = rslt - golden
-psci.visu.save_vtk(geo, diff, "diff_laplace_2d")
-np.save("./diff_laplace_2d.npy", diff)
-root_square_error = np.linalg.norm(diff, ord=2)
-mean_square_error = root_square_error * root_square_error / geo.get_domain_size()
-print("mean_sqeare_error: ", mean_square_error)
+# MSE
+# TODO: solution array to dict: interior, bc
+cord = pde_disc.geometry.interior
+ref = ref_sol(cord[:, 0], cord[:, 1])
+mse2 = np.linalg.norm(solution[0][:, 0] - ref, ord=2) ** 2
 
+n = 1
+for cord in pde_disc.geometry.boundary.values():
+    ref = ref_sol(cord[:, 0], cord[:, 1])
+    mse2 += np.linalg.norm(solution[n][:, 0] - ref, ord=2) ** 2
+    n += 1
 
-assert mean_square_error < 0.01, (
-    "The accuracy of mean_square_error is not enough;" "\n mean_square_error: %f" % mean_square_error
-)
+mse = mse2 / npoints
+
+print("MSE is: ", mse)
+
+assert mse < 0.001, "The accuracy of mean_square_error is not enough;" "\n mse: %f" % mse

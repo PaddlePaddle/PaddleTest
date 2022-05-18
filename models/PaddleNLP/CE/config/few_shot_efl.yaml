@@ -15,6 +15,15 @@ EXEC:
   exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
 
 TRAIN: # 训练步骤
   -
@@ -56,7 +65,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.74004
+        kpi_base: 1.12466
         threshold: 0.2
         actived: True
         evaluation: "-"

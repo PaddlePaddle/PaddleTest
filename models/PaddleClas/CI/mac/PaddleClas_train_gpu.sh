@@ -42,17 +42,14 @@ fi
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple
-# python -m pip uninstall opencv-python -y
+python -m pip uninstall opencv-python -y
 python -m pip install  --ignore-installed paddleslim \
-   -i https://mirror.baidu.com/pypi/simple
+-   i https://mirror.baidu.com/pypi/simple
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple
-# python -m pip uninstall opencv-python-headless -y #fix '_registerMatType' from 'cv2.cv2'
-# python -m pip install  --ignore-installed "opencv-python-headless<4.3" -i https://mirror.baidu.com/pypi/simple
 
-python -m pip list |grep opencv
 if [ -d "log" ]; then
     rm -rf log
 fi
@@ -97,29 +94,26 @@ if [[ ${model_flag} =~ "CE" ]]; then
         -o Global.save_interval=1 \
         -o DataLoader.Train.sampler.batch_size=32 \
         -o DataLoader.Eval.sampler.batch_size=32 \
-        -o Global.device=cpu \
-        > $log_path/train/${model}_cpu.log 2>&1
+        > $log_path/train/${model}_gpu.log 2>&1
 else
     python tools/train.py  -c $line \
         -o Global.epochs=1 \
         -o DataLoader.Train.sampler.batch_size=32 \
-        -o DataLoader.Eval.sampler.batch_size=32 \
-        -o Global.device=cpu > $log_path/train/${model}_cpu.log 2>&1
+        -o DataLoader.Eval.sampler.batch_size=32 > $log_path/train/${model}_gpu.log 2>&1
 fi
 if [ $? -eq 0 ];then
-    echo -e "\033[33m training of ${model}_cpu  successfully!\033[0m"|tee -a $log_path/result.log
-    echo "training_exit_code: 0.0" >> $log_path/train/${model}_cpu.log
+    echo -e "\033[33m training of ${model}_gpu  successfully!\033[0m"|tee -a $log_path/result.log
+    echo "training_exit_code: 0.0" >> $log_path/train/${model}_gpu.log
 else
-    cat $log_path/train/${model}_cpu.log
-    echo -e "\033[31m training of ${model}_cpu failed!\033[0m"|tee -a $log_path/result.log
-    echo "training_exit_code: 1.0" >> $log_path/train/${model}_cpu.log
+    cat $log_path/train/${model}_gpu.log
+    echo -e "\033[31m training of ${model}_gpu failed!\033[0m"|tee -a $log_path/result.log
+    echo "training_exit_code: 1.0" >> $log_path/train/${model}_gpu.log
 fi
 sleep 2
 
 # eval
 python tools/eval.py -c $line \
-    -o Global.pretrained_model=$output_path/$model/latest \
-    -o Global.device=cpu > $log_path/eval/$model.log 2>&1
+    -o Global.pretrained_model=$output_path/$model/latest  > $log_path/eval/$model.log 2>&1
 if [ $? -eq 0 ];then
     echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "eval_exit_code: 0.0" >> $log_path/eval/$model.log
@@ -131,8 +125,7 @@ fi
 
 # infer
 python tools/infer.py -c $line \
-    -o Global.pretrained_model=$output_path/$model/latest \
-    -o Global.device=cpu > $log_path/infer/$model.log 2>&1
+    -o Global.pretrained_model=$output_path/$model/latest > $log_path/infer/$model.log 2>&1
 if [ $? -eq 0 ];then
     echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "infer_exit_code: 0.0" >> $log_path/infer/$model.log
@@ -145,8 +138,7 @@ fi
 # export_model
 python tools/export_model.py -c $line \
     -o Global.pretrained_model=$output_path/$model/latest \
-    -o Global.save_inference_dir=./inference/$model \
-    -o Global.device=cpu > $log_path/export_model/$model.log 2>&1
+    -o Global.save_inference_dir=./inference/$model > $log_path/export_model/$model.log 2>&1
 if [ $? -eq 0 ];then
     echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "export_exit_code: 0.0" >> $log_path/export_model/$model.log
@@ -193,7 +185,7 @@ cd ..
 done
 
 # PaddleClas_rec
-# source PaddleClas_rec_CPU.sh
+# source PaddleClas_rec_gpu.sh
 
 num=`cat $log_path/result.log | grep "failed" | wc -l`
 if [ "${num}" -gt "0" ];then

@@ -132,7 +132,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       precision:
         latest: True
-        kpi_base: 0.181353
+        kpi_base: 0.15999
         threshold: 0.05
         actived: True
         evaluation: "+"
@@ -146,7 +146,7 @@ TRAIN: # 训练步骤
         unit_repr: None
       f1:
         latest: True
-        kpi_base: 0.214526
+        kpi_base: 0.19203
         threshold: 0.05
         actived: True
         evaluation: "+"
@@ -308,7 +308,7 @@ EVAL:
     kpis: #kpi指标
       precision:
         latest: True
-        kpi_base: 0.181353
+        kpi_base: 0.15999
         threshold: 0.05
         actived: True
         evaluation: "+"
@@ -322,7 +322,7 @@ EVAL:
         unit_repr: None
       f1:
         latest: True
-        kpi_base: 0.214526
+        kpi_base: 0.19203
         threshold: 0.05
         actived: True
         evaluation: "+"
