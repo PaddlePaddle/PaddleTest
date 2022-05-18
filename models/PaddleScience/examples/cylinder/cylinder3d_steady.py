@@ -70,7 +70,7 @@ solver = psci.solver.Solver(pde=pde, algo=algo, opt=opt)
 
 solver.feed_data_user(real_sol)  # add real solution
 
-solution = solver.solve(num_epoch=2000)
+solution = solver.solve(num_epoch=10)
 
 # TODO 5. label physic_info
 psci.visu.save_vtk(geo_disc=pde.geometry, data=solution)
