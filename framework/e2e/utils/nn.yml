@@ -1,4 +1,40 @@
+Conv1D_base:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: 3
+      stride: 1
+      padding: 0
+
 Conv1D:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -1, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: 3
+      stride: 1
+      padding: 0
+
+Conv1D0:
   desc: "1维卷积"
   paddle:
     api_name: "paddle.nn.Conv1D"
@@ -14,7 +50,330 @@ Conv1D:
       in_channels: 3
       out_channels: 1
 
+Conv1D1:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: 2
+      stride: 1
+      padding: 0
+
+Conv1D2:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [2]
+      stride: 1
+      padding: 0
+
+Conv1D3:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 2
+      padding: 0
+
+Conv1D4:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 2
+      padding: 1
+
+Conv1D5:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 6
+      kernel_size: [3]
+      stride: 2
+      padding: 0
+      groups: 3
+
+Conv1D6:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 2
+      kernel_size: [3]
+      stride: 1
+      padding: 0
+
+Conv1D7:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 3]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 2
+      kernel_size: [3]
+      stride: 1
+      padding: 0
+      data_format: "NLC"
+
+Conv1D8:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 1
+      padding: 1
+      padding_mode: "reflect"
+
+Conv1D9:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 1
+      padding: 1
+      padding_mode: "replicate"
+
+Conv1D10:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 1
+      padding: 1
+      padding_mode: "circular"
+
+Conv1D11:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 1
+      padding: 1
+      dilation: 2
+      padding_mode: "zeros"
+
+Conv1D12:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 1
+      padding: 1
+      dilation: [2]
+      padding_mode: "zeros"
+
+Conv1D13:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: [1]
+      padding: 1
+      dilation: !!python/tuple [2,]
+      padding_mode: "zeros"
+
+Conv1D14:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 1
+      padding: !!python/tuple [1,]
+      dilation: !!python/tuple [2,]
+      padding_mode: "zeros"
+
+Conv1D15:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: [1]
+      padding: [1]
+      dilation: !!python/tuple [2,]
+      padding_mode: "zeros"
+
+Conv1DTranspose_base:
+  desc: "1维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 1
+      padding: 1
+      dilation: 1
+
 Conv1DTranspose:
+  desc: "1维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 2
+      kernel_size: [3]
+      stride: 1
+      padding: 0
+      dilation: 1
+
+Conv1DTranspose0:
   desc: "1维反卷积"
   paddle:
     api_name: "paddle.nn.Conv1DTranspose"
@@ -35,7 +394,145 @@ Conv1DTranspose:
       groups: 1
       dilation: 1
 
-Conv2D:
+Conv1DTranspose1:
+  desc: "1维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 1
+      padding: 1
+      dilation: 1
+
+Conv1DTranspose2:
+  desc: "1维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 2
+      padding: [1]
+      dilation: 1
+
+Conv1DTranspose3:
+  desc: "1维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3]
+      stride: 1
+      padding: [1]
+      dilation: 2
+
+Conv1DTranspose4:
+  desc: "1维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 3
+      kernel_size: [3]
+      stride: 1
+      padding: [1]
+      dilation: 2
+      groups: 3
+
+Conv1DTranspose5:
+  desc: "1维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 3
+      kernel_size: [3]
+      stride: 1
+      padding: [1]
+      dilation: 1
+      groups: 3
+      data_format: "NLC"
+
+Conv1DTranspose6:
+  desc: "1维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 3
+      kernel_size: [3]
+      stride: 2
+      padding: [1]
+      dilation: 1
+      groups: 3
+      data_format: "NLC"
+      output_padding: 1
+
+Conv2D_base:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: 1
+      padding: 0
+
+Conv2D0:
   desc: "2维卷积"
   paddle:
     api_name: "paddle.nn.Conv2D"
@@ -51,7 +548,330 @@ Conv2D:
       in_channels: 3
       out_channels: 1
 
+Conv2D1:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [2, 2]
+      stride: 1
+      padding: 0
+
+Conv2D2:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 3
+      kernel_size: [2, 2]
+      stride: 1
+      padding: 0
+
+Conv2D3:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: 2
+      padding: 0
+
+Conv2D4:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: 2
+      padding: 1
+
+Conv2D5:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 6
+      kernel_size: [3, 3]
+      stride: 2
+      padding: 0
+      groups: 3
+
+Conv2D6:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 2
+      kernel_size: [3, 3]
+      stride: 1
+      padding: 0
+
+Conv2D7:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 4, 3]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 2
+      kernel_size: [3, 3]
+      stride: 1
+      padding: 0
+      data_format: "NHWC"
+
+Conv2D8:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: [2, 1]
+      padding: 1
+      padding_mode: "reflect"
+
+Conv2D9:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: [2, 1]
+      padding: 1
+      padding_mode: "replicate"
+
+Conv2D10:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: [2, 1]
+      padding: 1
+      padding_mode: "circular"
+
+Conv2D11:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: [2, 1]
+      padding: 1
+      dilation: 2
+      padding_mode: "zeros"
+
+Conv2D12:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: [2, 1]
+      padding: 1
+      dilation: [2, 2]
+      padding_mode: "zeros"
+
+Conv2D13:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: [2, 1]
+      padding: 1
+      dilation: !!python/tuple [2, 2]
+      padding_mode: "zeros"
+
+Conv2D14:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: [2, 1]
+      padding: !!python/tuple [1, 2]
+      dilation: !!python/tuple [2, 2]
+      padding_mode: "zeros"
+
+Conv2D15:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: [2, 1]
+      padding: [1, 2]
+      dilation: !!python/tuple [2, 2]
+      padding_mode: "zeros"
+
+Conv2DTranspose_base:
+  desc: "2维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: 1
+      padding: 1
+      dilation: 1
+
 Conv2DTranspose:
+  desc: "2维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: 1
+      padding: 0
+      dilation: 1
+
+Conv2DTranspose0:
   desc: "2维反卷积"
   paddle:
     api_name: "paddle.nn.Conv2DTranspose"
@@ -72,7 +892,145 @@ Conv2DTranspose:
       groups: 1
       dilation: 1
 
-Conv3D:
+Conv2DTranspose1:
+  desc: "2维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: 1
+      padding: 1
+      dilation: 1
+
+Conv2DTranspose2:
+  desc: "2维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: 1
+      padding: [1, 0]
+      dilation: 1
+
+Conv2DTranspose3:
+  desc: "2维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3]
+      stride: 1
+      padding: [1, 0]
+      dilation: 2
+
+Conv2DTranspose4:
+  desc: "2维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 6
+      out_channels: 3
+      kernel_size: [3, 3]
+      stride: 1
+      padding: [1, 0]
+      dilation: 1
+      groups: 3
+
+Conv2DTranspose5:
+  desc: "2维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 6]
+        range: [ 0, 1]
+    params:
+      in_channels: 6
+      out_channels: 3
+      kernel_size: [3, 3]
+      stride: 1
+      padding: [1, 0]
+      dilation: 1
+      groups: 3
+      data_format: "NHWC"
+
+Conv2DTranspose6:
+  desc: "2维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv2DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 6]
+        range: [ 0, 1]
+    params:
+      in_channels: 6
+      out_channels: 3
+      kernel_size: [3, 3]
+      stride: 2
+      padding: [1, 0]
+      dilation: 1
+      groups: 3
+      data_format: "NHWC"
+      output_padding: 1
+
+Conv3D_base:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ -1, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: 0
+
+Conv3D0:
   desc: "3维卷积"
   paddle:
     api_name: "paddle.nn.Conv3D"
@@ -87,6 +1045,78 @@ Conv3D:
       kernel_size: [3, 3, 3]
       in_channels: 3
       out_channels: 1
+
+Conv3D1:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [2, 2, 2]
+      stride: 1
+      padding: 0
+
+Conv3D2:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 3
+      kernel_size: [2, 2, 2]
+      stride: 1
+      padding: 0
+
+Conv3D3:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: 2
+      padding: 0
+
+Conv3D4:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: 2
+      padding: 1
 
 Conv3D5:
   desc: "3维卷积第5个case"
@@ -107,7 +1137,239 @@ Conv3D5:
       padding: 0
       groups: 3
 
+Conv3D6:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 2
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: 0
+
+Conv3D7:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 4, 4, 3]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 2
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: 0
+      data_format: "NDHWC"
+
+Conv3D8:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 1]
+      padding: 1
+      padding_mode: "reflect"
+
+Conv3D9:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 1]
+      padding: 1
+      padding_mode: "replicate"
+
+Conv3D10:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 1]
+      padding: 1
+      padding_mode: "circular"
+
+Conv3D11:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 1]
+      padding: 1
+      dilation: 2
+      padding_mode: "zeros"
+
+Conv3D12:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 1]
+      padding: 1
+      dilation: [2, 2, 2]
+      padding_mode: "zeros"
+
+Conv3D13:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 1]
+      padding: 1
+      dilation: !!python/tuple [2, 2, 2]
+      padding_mode: "zeros"
+
+Conv3D14:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 1]
+      padding: !!python/tuple [1, 2, 2]
+      dilation: !!python/tuple [2, 2, 2]
+      padding_mode: "zeros"
+
+Conv3D15:
+  desc: "3维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 1]
+      padding: [1, 2, 2]
+      dilation: !!python/tuple [2, 2, 2]
+      padding_mode: "zeros"
+
+Conv3DTranspose_base:
+  desc: "3维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: 1
+      dilation: 1
+
 Conv3DTranspose:
+  desc: "3维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 2
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: 0
+      dilation: 1
+
+Conv3DTranspose0:
   desc: "3维反卷积"
   paddle:
     api_name: "paddle.nn.Conv3DTranspose"
@@ -128,7 +1390,127 @@ Conv3DTranspose:
       groups: 1
       dilation: 1
 
-AdaptiveAvgPool1D:
+Conv3DTranspose1:
+  desc: "3维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: 1
+      dilation: 1
+
+Conv3DTranspose2:
+  desc: "3维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: [1, 0, 1]
+      dilation: 1
+
+Conv3DTranspose3:
+  desc: "3维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: [1, 0, 1]
+      dilation: 2
+
+Conv3DTranspose4:
+  desc: "3维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 2, 2]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 3
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: [1, 0, 1]
+      dilation: 1
+      groups: 3
+
+Conv3DTranspose5:
+  desc: "3维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 2, 3]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 3
+      kernel_size: [3, 3, 3]
+      stride: 1
+      padding: [1, 0, 1]
+      dilation: 1
+      groups: 3
+      data_format: "NDHWC"
+
+Conv3DTranspose6:
+  desc: "3维反卷积"
+  paddle:
+    api_name: "paddle.nn.Conv3DTranspose"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 2, 3]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 3
+      kernel_size: [3, 3, 3]
+      stride: 2
+      padding: [1, 0, 1]
+      dilation: 1
+      groups: 3
+      data_format: "NDHWC"
+      output_padding: 1
+
+AdaptiveAvgPool1D_base:
   desc: "1维自适应池化"
   paddle:
     api_name: "paddle.nn.AdaptiveAvgPool1D"
@@ -142,6 +1524,48 @@ AdaptiveAvgPool1D:
     params:
       output_size: 4
 
+AdaptiveAvgPool1D0:
+  desc: "1维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -1, 1]
+    params:
+      output_size: 2
+
+AdaptiveAvgPool1D1:
+  desc: "1维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -1, 1]
+    params:
+      output_size: 8
+
+AdaptiveAvgPool2D_base:
+  desc: "2维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      output_size: [3, 3]
+
 AdaptiveAvgPool2D:
   desc: "2维自适应池化"
   paddle:
@@ -151,13 +1575,128 @@ AdaptiveAvgPool2D:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 3, 8, 8]
+        shape: [2, 3, 4, 4]
         range: [ -1, 1]
+    params:
+      output_size: [1, 1]
+
+AdaptiveAvgPool2D0:
+  desc: "2维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8]
+        range: [ -10, 10]
     params:
       output_size: 4
       data_format: 'NCHW'
 
+AdaptiveAvgPool2D1:
+  desc: "2维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      output_size: [2, 3]
+
+AdaptiveAvgPool2D2:
+  desc: "2维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      output_size: [1, 4]
+
+AdaptiveAvgPool2D3:
+  desc: "2维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 4, 3]
+        range: [ -10, 10]
+    params:
+      output_size: [3, 3]
+      data_format: "NHWC"
+
+AdaptiveAvgPool2D4:
+  desc: "2维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 4, 3]
+        range: [ -10, 10]
+    params:
+      output_size: 3
+      data_format: "NHWC"
+
+AdaptiveAvgPool2D5:
+  desc: "2维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 4, 3]
+        range: [ -10, 10]
+    params:
+      output_size: !!python/tuple [3, 3]
+      data_format: "NHWC"
+
+AdaptiveAvgPool3D_base:
+  desc: "3维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 32, 32]
+        range: [ -10, 10]
+    params:
+      output_size: [3, 3, 3]
+
 AdaptiveAvgPool3D:
+  desc: "3维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 32, 32]
+        range: [ -10, 10]
+    params:
+      output_size: [1, 1, 1]
+
+AdaptiveAvgPool3D0:
   desc: "3维自适应池化"
   paddle:
     api_name: "paddle.nn.AdaptiveAvgPool3D"
@@ -172,7 +1711,135 @@ AdaptiveAvgPool3D:
       output_size: 4
       data_format: 'NCDHW'
 
+AdaptiveAvgPool3D1:
+  desc: "3维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 32, 32]
+        range: [ -10, 10]
+    params:
+      output_size: [2, 3, 3]
+
+AdaptiveAvgPool3D2:
+  desc: "3维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 32, 32]
+        range: [ -10, 10]
+    params:
+      output_size: [2, 2, 2]
+
+AdaptiveAvgPool3D3:
+  desc: "3维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 32, 32]
+        range: [ -10, 10]
+    params:
+      output_size: [1, 3, 2]
+
+AdaptiveAvgPool3D4:
+  desc: "3维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 32, 32]
+        range: [ -10, 10]
+    params:
+      output_size: 3
+
+AdaptiveAvgPool3D5:
+  desc: "3维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 32, 32]
+        range: [ -10, 10]
+    params:
+      output_size: !!python/tuple [3, 3, 3]
+
+AdaptiveAvgPool3D6:
+  desc: "3维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 32, 32]
+        range: [ -10, 10]
+    params:
+      output_size: !!python/tuple [3, 3, 3]
+      data_format: "NCDHW"
+
+AdaptiveAvgPool3D7:
+  desc: "3维自适应池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveAvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 32, 32]
+        range: [ -10, 10]
+    params:
+      output_size: !!python/tuple [3, 3, 3]
+      data_format: "NDHWC"
+
+AdaptiveMaxPool1D_base:
+  desc: "1维自适应最大值池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveMaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      output_size: 4
+
 AdaptiveMaxPool1D:
+  desc: "1维自适应最大值池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveMaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32]
+        range: [ -10, 10]
+    params:
+      output_size: 8
+
+AdaptiveMaxPool1D0:
   desc: "1维自适应最大值池化"
   paddle:
     api_name: "paddle.nn.AdaptiveMaxPool1D"
@@ -187,7 +1854,36 @@ AdaptiveMaxPool1D:
       output_size: 4
       return_mask: False
 
-AdaptiveMaxPool1D1:
+AdaptiveMaxPool1D2:
+  desc: "1维自适应最大值池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveMaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32]
+        range: [ -1, 1]
+    params:
+      output_size: 8
+
+AdaptiveMaxPool1D3:
+  desc: "1维自适应最大值池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveMaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 4]
+        range: [ -1, 1]
+    params:
+      output_size: 4
+      return_mask: True
+
+AdaptiveMaxPool1D4:
   desc: "1维自适应最大值池化，返回mask为True"
   paddle:
     api_name: "paddle.nn.AdaptiveMaxPool1D"
@@ -201,6 +1897,20 @@ AdaptiveMaxPool1D1:
     params:
       output_size: 4
       return_mask: True
+
+AdaptiveMaxPool2D_base:
+  desc: "2维自适应最大值池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveMaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 8, 8]
+        range: [ -10, 10]
+    params:
+      output_size: 3
 
 AdaptiveMaxPool2D:
   desc: "2维自适应最大值池化"
@@ -217,6 +1927,49 @@ AdaptiveMaxPool2D:
       output_size: 4
       return_mask: False
 
+AdaptiveMaxPool2D1:
+  desc: "2维自适应最大值池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveMaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 8, 8]
+        range: [ -10, 10]
+    params:
+      output_size: 4
+
+AdaptiveMaxPool2D2:
+  desc: "2维自适应最大值池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveMaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 5, 5]
+        range: [ -10, 10]
+    params:
+      output_size: 3
+      return_mask: True
+
+AdaptiveMaxPool3D_base:
+  desc: "3维自适应最大值池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveMaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      output_size: 4
+
 AdaptiveMaxPool3D:
   desc: "3维自适应最大值池化"
   paddle:
@@ -232,7 +1985,22 @@ AdaptiveMaxPool3D:
       output_size: 4
       return_mask: False
 
-AvgPool1D:
+AdaptiveMaxPool3D2:
+  desc: "3维自适应最大值池化"
+  paddle:
+    api_name: "paddle.nn.AdaptiveMaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 5, 5, 5]
+        range: [ -10, 10]
+    params:
+      output_size: 3
+      return_mask: True
+
+AvgPool1D_base:
   desc: "1维平均池化"
   paddle:
     api_name: "paddle.nn.AvgPool1D"
@@ -248,7 +2016,105 @@ AvgPool1D:
       stride: 2
       padding: 0
 
+AvgPool1D:
+  desc: "1维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 3
+      stride: 4
+      padding: 0
+
+AvgPool1D1:
+  desc: "1维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 1
+      stride: 1
+      padding: 0
+
+AvgPool1D2:
+  desc: "1维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 2
+      stride: 1
+      padding: 1
+      exclusive: False
+
+AvgPool1D3:
+  desc: "1维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 2
+      stride: 1
+      padding: 0
+      ceil_mode: True
+
+AvgPool2D_base:
+  desc: "2维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -10, 10]
+    params:
+      kernel_size: [2, 2]
+      stride: [2, 2]
+      padding: [0, 0, 0, 0]
+
 AvgPool2D:
+  desc: "2维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3]
+      stride: [3, 3]
+      padding: [0, 0, 0, 0]
+
+AvgPool2D0:
   desc: "2维平均池化"
   paddle:
     api_name: "paddle.nn.AvgPool2D"
@@ -264,6 +2130,124 @@ AvgPool2D:
       stride: 2
       padding: 0
 
+AvgPool2D1:
+  desc: "2维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3]
+      stride: [3, 3]
+      padding: [0, 0, 0, 0]
+      ceil_mode: True
+      exclusive: False
+
+AvgPool2D2:
+  desc: "2维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3]
+      stride: [3, 3]
+      padding: [0, 0, 0, 0]
+      ceil_mode: False
+      exclusive: False
+
+AvgPool2D3:
+  desc: "2维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3]
+      stride: [1, 1]
+      padding: [0, 0]
+
+AvgPool2D4:
+  desc: "2维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3]
+      stride: [1, 1]
+      padding: [1, 1]
+      exclusive: False
+
+AvgPool2D5:
+  desc: "2维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3]
+      stride: [1, 1]
+      padding: [0, 0]
+
+AvgPool2D6:
+  desc: "2维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3]
+      stride: !!python/tuple [1, 1]
+      padding: !!python/tuple [0, 0]
+
+AvgPool3D_base:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [1, 1, 1]
+      padding: [0, 0, 0]
+      exclusive: False
+
 AvgPool3D:
   desc: "3维平均池化"
   paddle:
@@ -274,6 +2258,244 @@ AvgPool3D:
         type: "Tensor"
         dtype: "float32"
         shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 2]
+      padding: [0, 0, 0]
+      exclusive: False
+
+AvgPool3D0:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: 2
+      stride: 2
+      padding: 0
+
+AvgPool3D1:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 2]
+      padding: [0, 0, 0]
+      ceil_mode: True
+
+AvgPool3D2:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 2]
+      padding: [0, 0, 0]
+      data_format: "NDHWC"
+      exclusive: False
+
+AvgPool3D3:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [1, 2, 3]
+      padding: [0, 0, 0]
+      exclusive: False
+
+AvgPool3D4:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: [0, 0, 0]
+      exclusive: False
+
+AvgPool3D5:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: [1, 0, 0]
+      exclusive: True
+
+AvgPool3D6:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: [1, 1, 1]
+      exclusive: True
+
+AvgPool3D7:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: [1, 2, 1]
+      exclusive: True
+
+AvgPool3D8:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: 1
+      exclusive: True
+
+AvgPool3D9:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: 2
+      padding: 1
+      exclusive: True
+
+AvgPool3D10:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: !!python/tuple [3, 2, 1]
+      padding: [0, 0, 1]
+      exclusive: True
+
+AvgPool3D11:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: !!python/tuple [3, 2, 1]
+      padding: !!python/tuple [1, 0, 0]
+      exclusive: True
+
+AvgPool3D12:
+  desc: "3维平均池化"
+  paddle:
+    api_name: "paddle.nn.AvgPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: [0, 1, 0]
+      exclusive: False
+
+MaxPool1D_base:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
         range: [ -1, 1]
     params:
       kernel_size: 2
@@ -290,13 +2512,207 @@ MaxPool1D:
         type: "Tensor"
         dtype: "float32"
         shape: [2, 3, 8]
-        range: [ -1, 1]
+        range: [ -10, 10]
+    params:
+      kernel_size: 3
+      stride: 4
+      padding: 0
+
+MaxPool1D1:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 1
+      stride: 1
+      padding: 0
+
+MaxPool1D2:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 2
+      stride: 1
+      padding: 1
+
+MaxPool1D3:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 2
+      stride: 1
+      padding: 0
+      ceil_mode: True
+
+MaxPool1D4:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2]
+        range: [ -10, 10]
     params:
       kernel_size: 2
       stride: 2
       padding: 0
+      return_mask: True
+
+MaxPool1D5:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 2
+      stride: 1
+      padding: [1]
+
+MaxPool1D6:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 2
+      stride: 1
+      padding: !!python/tuple [1]
+
+MaxPool1D7:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 2
+      stride: [1]
+      padding: 1
+
+MaxPool1D8:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 2
+      stride: !!python/tuple [1]
+      padding: 1
+
+MaxPool1D9:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3]
+      stride: 1
+      padding: 1
+
+MaxPool1D10:
+  desc: "1维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: 2
+      stride: 1
+      padding: [1, 1]
+
+MaxPool2D_base:
+  desc: "2维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -10, 10]
+    params:
+      kernel_size: [2, 2]
+      stride: [2, 2]
+      padding: [0, 0, 0, 0]
 
 MaxPool2D:
+  desc: "2维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3]
+      stride: [3, 3]
+      padding: [0, 0, 0, 0]
+
+MaxPool2D0:
   desc: "2维最大池化"
   paddle:
     api_name: "paddle.nn.MaxPool2D"
@@ -312,7 +2728,136 @@ MaxPool2D:
       stride: 2
       padding: 0
 
+MaxPool2D1:
+  desc: "2维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3]
+      stride: [1, 1]
+      padding: [0, 0, 0, 0]
+      ceil_mode: True
+
+MaxPool2D2:
+  desc: "2维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3]
+      stride: [1, 1]
+      padding: [0, 0, 0, 0]
+
+MaxPool2D3:
+  desc: "2维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3]
+      stride: [1, 1]
+      padding: [1, 1]
+
+MaxPool2D4:
+  desc: "2维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3]
+      stride: [1, 2]
+      padding: [0, 0]
+
+MaxPool2D5:
+  desc: "2维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3]
+      stride: !!python/tuple [1, 2]
+      padding: [0, 0]
+
+MaxPool2D6:
+  desc: "2维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -1, 1]
+    params:
+      kernel_size: [3, 3]
+      stride: !!python/tuple [1, 2]
+      padding: !!python/tuple [0, 0]
+
+MaxPool3D_base:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [1, 1, 1]
+      padding: [0, 0, 0]
+
 MaxPool3D:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 2]
+      padding: [0, 0, 0]
+
+MaxPool3D0:
   desc: "3维最大池化"
   paddle:
     api_name: "paddle.nn.MaxPool3D"
@@ -328,7 +2873,185 @@ MaxPool3D:
       stride: 2
       padding: 0
 
-MaxUnPool2D:
+MaxPool3D1:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4, 4]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [1, 1, 1]
+      padding: [0, 0, 0]
+      ceil_mode: True
+
+MaxPool3D2:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 8, 8, 8, 3]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [2, 2, 2]
+      padding: [0, 0, 0]
+      data_format: "NDHWC"
+
+MaxPool3D3:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [1, 2, 3]
+      padding: [0, 0, 0]
+
+MaxPool3D4:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: [0, 0, 0]
+
+MaxPool3D5:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: [1, 0, 0]
+
+MaxPool3D6:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: [1, 1, 1]
+
+MaxPool3D7:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: [1, 2, 1]
+
+MaxPool3D8:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: [3, 2, 1]
+      padding: 1
+
+MaxPool3D9:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: 2
+      padding: 1
+
+MaxPool3D10:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: !!python/tuple [3, 2, 1]
+      padding: [1, 0, 0]
+
+MaxPool3D11:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: [3, 3, 3]
+      stride: !!python/tuple [3, 2, 1]
+      padding: !!python/tuple [1, 0, 0]
+
+MaxUnPool2D_base:
   desc: "2维最大逆池化"
   paddle:
     api_name: "paddle.nn.MaxUnPool2D"
@@ -350,6 +3073,105 @@ MaxUnPool2D:
       stride: 2
       padding: 0
 
+MaxUnPool2D:
+  desc: "2维最大逆池化"
+  paddle:
+    api_name: "paddle.nn.MaxUnPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 40, 40]
+        range: [ -1, 1]
+      indices:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 4, 40, 40]
+        range: [ 0, 20]
+    params:
+      kernel_size: 2
+
+MaxUnPool2D1:
+  desc: "2维最大逆池化"
+  paddle:
+    api_name: "paddle.nn.MaxUnPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 40, 40]
+        range: [ -1, 1]
+      indices:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 4, 40, 40]
+        range: [ 0, 20]
+    params:
+      kernel_size: !!python/tuple [2, 4]
+
+MaxUnPool2D2:
+  desc: "2维最大逆池化"
+  paddle:
+    api_name: "paddle.nn.MaxUnPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 40, 40]
+        range: [ -1, 1]
+      indices:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 4, 40, 40]
+        range: [ 0, 20]
+    params:
+      kernel_size: 4
+      padding: 2
+
+MaxUnPool2D3:
+  desc: "2维最大逆池化"
+  paddle:
+    api_name: "paddle.nn.MaxUnPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 40, 40]
+        range: [ -1, 1]
+      indices:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 4, 40, 40]
+        range: [ 0, 20]
+    params:
+      kernel_size: 4
+      padding: 2
+      stride: 2
+
+Pad1D_base:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "constant"
+      data_format: 'NCL'
+
 Pad1D:
   desc: "1维pad填充"
   paddle:
@@ -367,7 +3189,451 @@ Pad1D:
       value: 0
       data_format: 'NCL'
 
+Pad1D2:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2]
+      mode: "constant"
+      data_format: 'NCHW'
+
+Pad1D3:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2, 1, 0]
+      mode: "constant"
+      data_format: 'NCDHW'
+
+Pad1D4:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "constant"
+      data_format: 'NCL'
+
+Pad1D5:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2]
+      mode: "constant"
+      data_format: 'NCHW'
+
+Pad1D6:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2, 1, 0]
+      mode: "constant"
+      data_format: 'NCDHW'
+
+Pad1D7:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "reflect"
+      data_format: 'NCL'
+
+Pad1D8:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1]
+      mode: "reflect"
+      data_format: 'NLC'
+
+Pad1D9:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "reflect"
+
+Pad1D10:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 1]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0]
+      mode: "reflect"
+      data_format: "NHWC"
+
+Pad1D11:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1]
+      mode: "reflect"
+      data_format: "NLC"
+
+Pad1D12:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "reflect"
+
+Pad1D13:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 1]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0]
+      mode: "reflect"
+      data_format: "NHWC"
+
+Pad1D14:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0, 1, 0]
+      mode: "reflect"
+      data_format: "NCDHW"
+
+Pad1D15:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 2, 2, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0, 1, 0]
+      mode: "reflect"
+      data_format: "NDHWC"
+
+Pad1D16:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "replicate"
+
+Pad1D17:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1]
+      mode: "replicate"
+
+Pad1D18:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad1D19:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "replicate"
+      data_format: "NLC"
+
+Pad1D20:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad1D21:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1]
+      mode: "replicate"
+
+Pad1D22:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad1D23:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "replicate"
+      data_format: "NLC"
+
+Pad1D24:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NHWC"
+
+Pad1D25:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 0, 0, 1]
+      mode: "replicate"
+      data_format: "NCDHW"
+
+Pad1D26:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 0, 0, 1]
+      mode: "replicate"
+      data_format: "NDHWC"
+
+Pad1D27:
+  desc: "1维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: 2
+      mode: "replicate"
+      data_format: "NCL"
+
+Pad2D_base:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "constant"
+      data_format: 'NCL'
+
 Pad2D:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "constant"
+      value: 0
+      data_format: 'NCL'
+
+Pad2D0:
   desc: "2维pad填充"
   paddle:
     api_name: "paddle.nn.Pad2D"
@@ -384,7 +3650,456 @@ Pad2D:
       value: 3.0
       data_format: 'NCHW'
 
+Pad2D2:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2]
+      mode: "constant"
+      data_format: 'NCHW'
+
+Pad2D3:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2, 1, 0]
+      mode: "constant"
+      data_format: 'NCDHW'
+
+Pad2D4:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "constant"
+      data_format: 'NCL'
+
+Pad2D5:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2]
+      mode: "constant"
+      data_format: 'NCHW'
+
+Pad2D6:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2, 1, 0]
+      mode: "constant"
+      data_format: 'NCDHW'
+
+Pad2D7:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "reflect"
+      data_format: 'NCL'
+
+Pad2D8:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1]
+      mode: "reflect"
+      data_format: 'NLC'
+
+Pad2D9:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "reflect"
+      data_format: "NCL"
+
+Pad2D10:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 1]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0]
+      mode: "reflect"
+      data_format: "NHWC"
+
+Pad2D11:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1]
+      mode: "reflect"
+      data_format: "NLC"
+
+Pad2D12:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "reflect"
+      data_format: "NCL"
+
+Pad2D13:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 1]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0]
+      mode: "reflect"
+      data_format: "NHWC"
+
+Pad2D14:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0, 1, 0]
+      mode: "reflect"
+      data_format: "NCDHW"
+
+Pad2D15:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 2, 2, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0, 1, 0]
+      mode: "reflect"
+      data_format: "NDHWC"
+
+Pad2D16:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "replicate"
+      data_format: "NCL"
+
+Pad2D17:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1]
+      mode: "replicate"
+      data_format: "NCL"
+
+Pad2D18:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad2D19:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "replicate"
+      data_format: "NLC"
+
+Pad2D20:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad2D21:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1]
+      mode: "replicate"
+      data_format: "NCL"
+
+Pad2D22:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad2D23:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "replicate"
+      data_format: "NLC"
+
+Pad2D24:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NHWC"
+
+Pad2D25:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 0, 0, 1]
+      mode: "replicate"
+      data_format: "NCDHW"
+
+Pad2D26:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 0, 0, 1]
+      mode: "replicate"
+      data_format: "NDHWC"
+
+Pad2D27:
+  desc: "2维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 2]
+        range: [ -1, 1]
+    params:
+      padding: 2
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad3D_base:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "constant"
+      data_format: 'NCL'
+
 Pad3D:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "constant"
+      value: 0
+      data_format: 'NCL'
+
+Pad3D0:
   desc: "3维pad填充"
   paddle:
     api_name: "paddle.nn.Pad3D"
@@ -401,6 +4116,434 @@ Pad3D:
       value: 2.1
       data_format: 'NCDHW'
 
+Pad3D2:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2]
+      mode: "constant"
+      data_format: 'NCHW'
+
+Pad3D3:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2, 1, 0]
+      mode: "constant"
+      data_format: 'NCDHW'
+
+Pad3D4:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "constant"
+      data_format: 'NCL'
+
+Pad3D5:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2]
+      mode: "constant"
+      data_format: 'NCHW'
+
+Pad3D6:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 2, 1, 0]
+      mode: "constant"
+      data_format: 'NCDHW'
+
+Pad3D7:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "reflect"
+      data_format: 'NCL'
+
+Pad3D8:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1]
+      mode: "reflect"
+      data_format: 'NLC'
+
+Pad3D9:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "reflect"
+      data_format: "NCL"
+
+Pad3D10:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 1]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0]
+      mode: "reflect"
+      data_format: "NHWC"
+
+Pad3D11:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1]
+      mode: "reflect"
+      data_format: "NLC"
+
+Pad3D12:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "reflect"
+      data_format: "NCL"
+
+Pad3D13:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 1]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0]
+      mode: "reflect"
+      data_format: "NHWC"
+
+Pad3D14:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0, 1, 0]
+      mode: "reflect"
+      data_format: "NCDHW"
+
+Pad3D15:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 2, 2, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 1, 1, 0, 1, 0]
+      mode: "reflect"
+      data_format: "NDHWC"
+
+Pad3D16:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "replicate"
+      data_format: "NCL"
+
+Pad3D17:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1]
+      mode: "replicate"
+      data_format: "NCL"
+
+Pad3D18:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad3D19:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "replicate"
+      data_format: "NLC"
+
+Pad3D20:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad3D21:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1]
+      mode: "replicate"
+      data_format: "NCL"
+
+Pad3D22:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NCHW"
+
+Pad3D23:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      padding: [1, 2]
+      mode: "replicate"
+      data_format: "NLC"
+
+Pad3D24:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3, 4]
+        range: [ -1, 1]
+    params:
+      padding: [2, 1, 2, 1]
+      mode: "replicate"
+      data_format: "NHWC"
+
+Pad3D25:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 0, 0, 1]
+      mode: "replicate"
+      data_format: "NCDHW"
+
+Pad3D26:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 3, 2]
+        range: [ -1, 1]
+    params:
+      padding: [1, 0, 1, 0, 0, 1]
+      mode: "replicate"
+      data_format: "NDHWC"
+
+Pad3D27:
+  desc: "3维pad填充"
+  paddle:
+    api_name: "paddle.nn.Pad3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 2, 2, 2]
+        range: [ -1, 1]
+    params:
+      padding: 2
+      mode: "replicate"
+      data_format: "NCDHW"
+
+CELU_base:
+  desc: "CELU激活层"
+  paddle:
+    api_name: "paddle.nn.CELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -2, 4]
+
 CELU:
   desc: "CELU激活层"
   paddle:
@@ -415,7 +4558,72 @@ CELU:
     params:
       alpha: 0.56
 
+CELU0:
+  desc: "CELU激活层"
+  paddle:
+    api_name: "paddle.nn.CELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 4]
+        range: [ -4, 3]
+
+CELU1:
+  desc: "CELU激活层"
+  paddle:
+    api_name: "paddle.nn.CELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 4]
+        range: [ -4, 3]
+    params:
+      alpha: 0.2
+
+CELU2:
+  desc: "CELU激活层"
+  paddle:
+    api_name: "paddle.nn.CELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2]
+        range: [ -4, 3]
+    params:
+      alpha: -0.4
+
+ELU_base:
+  desc: "ELU激活层"
+  paddle:
+    api_name: "paddle.nn.ELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+
 ELU:
+  desc: "ELU激活层"
+  paddle:
+    api_name: "paddle.nn.ELU"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[-1, 6], [1, 15.6]]
+    params:
+      alpha: 0.2
+
+ELU0:
   desc: "ELU激活层"
   paddle:
     api_name: "paddle.nn.ELU"
@@ -428,6 +4636,46 @@ ELU:
         range: [ -1, 1]
     params:
       alpha: 0.56
+
+ELU1:
+  desc: "ELU激活层"
+  paddle:
+    api_name: "paddle.nn.ELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      alpha: 2
+
+ELU2:
+  desc: "ELU激活层"
+  paddle:
+    api_name: "paddle.nn.ELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      alpha: 0
+
+GELU_base:
+  desc: "GELU激活层"
+  paddle:
+    api_name: "paddle.nn.GELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
 
 GELU:
   desc: "GELU激活层"
@@ -443,6 +4691,31 @@ GELU:
     params:
       approximate: True
 
+GELU1:
+  desc: "GELU激活层"
+  paddle:
+    api_name: "paddle.nn.GELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      approximate: True
+
+Hardshrink_base:
+  desc: "Hardshrink激活层"
+  paddle:
+    api_name: "paddle.nn.Hardshrink"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-1, 0.3, 2.5]
+
 Hardshrink:
   desc: "Hardshrink激活层"
   paddle:
@@ -457,7 +4730,69 @@ Hardshrink:
     params:
       threshold: 0.4
 
+Hardshrink1:
+  desc: "Hardshrink激活层"
+  paddle:
+    api_name: "paddle.nn.Hardshrink"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-1, 0.3, 2.5]
+    params:
+      threshold: 0
+
+Hardshrink2:
+  desc: "Hardshrink激活层"
+  paddle:
+    api_name: "paddle.nn.Hardshrink"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-1, -0.01, 2.5]
+    params:
+      threshold: 0
+
+Hardshrink3:
+  desc: "Hardshrink激活层"
+  paddle:
+    api_name: "paddle.nn.Hardshrink"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-1, -0.01, 2.5]
+    params:
+      threshold: -1
+
+Hardsigmoid_base:
+  desc: "Hardsigmoid激活层"
+  paddle:
+    api_name: "paddle.nn.Hardsigmoid"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2]
+        range: [ -10, 10]
+
 Hardsigmoid:
+  desc: "Hardsigmoid激活层"
+  paddle:
+    api_name: "paddle.nn.Hardsigmoid"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[3., 3., 3.], [-5., 0., 5.], [-3., -3., -3.]]
+
+Hardsigmoid0:
   desc: "Hardsigmoid激活层"
   paddle:
     api_name: "paddle.nn.Hardsigmoid"
@@ -469,7 +4804,30 @@ Hardsigmoid:
         shape: [2, 3, 4, 4, 4]
         range: [ -1, 1]
 
+Hardswish_base:
+  desc: "Hardswish激活层"
+  paddle:
+    api_name: "paddle.nn.Hardswish"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+
 Hardswish:
+  desc: "Hardswish激活层"
+  paddle:
+    api_name: "paddle.nn.Hardswish"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+
+Hardswish0:
   desc: "Hardswish激活层"
   paddle:
     api_name: "paddle.nn.Hardswish"
@@ -481,7 +4839,33 @@ Hardswish:
         shape: [2, 3, 4, 4, 4]
         range: [ -1, 1]
 
+Hardtanh_base:
+  desc: "Hardtanh激活层"
+  paddle:
+    api_name: "paddle.nn.Hardtanh"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-1.5, 0.3, 2.5]
+
 Hardtanh:
+  desc: "Hardtanh激活层"
+  paddle:
+    api_name: "paddle.nn.Hardtanh"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      min: 2.3
+      max: 3.5
+
+Hardtanh0:
   desc: "Hardtanh激活层"
   paddle:
     api_name: "paddle.nn.Hardtanh"
@@ -495,6 +4879,108 @@ Hardtanh:
     params:
       min: -1.5
       max: 2.0
+
+Hardtanh1:
+  desc: "Hardtanh激活层"
+  paddle:
+    api_name: "paddle.nn.Hardtanh"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      min: 0
+      max: 1.3
+
+Hardtanh2:
+  desc: "Hardtanh激活层"
+  paddle:
+    api_name: "paddle.nn.Hardtanh"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      min: -3.4
+      max: 0
+
+Hardtanh3:
+  desc: "Hardtanh激活层"
+  paddle:
+    api_name: "paddle.nn.Hardtanh"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      min: 1
+      max: 1
+
+Hardtanh4:
+  desc: "Hardtanh激活层"
+  paddle:
+    api_name: "paddle.nn.Hardtanh"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      min: 0
+      max: 0
+
+Hardtanh5:
+  desc: "Hardtanh激活层"
+  paddle:
+    api_name: "paddle.nn.Hardtanh"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      min: -3.2
+      max: -3.2
+
+Hardtanh6:
+  desc: "Hardtanh激活层"
+  paddle:
+    api_name: "paddle.nn.Hardtanh"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      min: -3.3
+      max: 3.2
+
+LeakyReLU_base:
+  desc: "LeakyReLU激活层"
+  paddle:
+    api_name: "paddle.nn.LeakyReLU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
 
 LeakyReLU:
   desc: "LeakyReLU激活层"
@@ -510,6 +4996,46 @@ LeakyReLU:
     params:
       negative_slope: 0.015
 
+LeakyReLU1:
+  desc: "LeakyReLU激活层"
+  paddle:
+    api_name: "paddle.nn.LeakyReLU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      negative_slope: 0
+
+LeakyReLU2:
+  desc: "LeakyReLU激活层"
+  paddle:
+    api_name: "paddle.nn.LeakyReLU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      negative_slope: -1
+
+LogSigmoid_base:
+  desc: "LogSigmoid激活层"
+  paddle:
+    api_name: "paddle.nn.LogSigmoid"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+
 LogSigmoid:
   desc: "LogSigmoid激活层"
   paddle:
@@ -522,7 +5048,32 @@ LogSigmoid:
         shape: [2, 3, 4, 4, 4]
         range: [ -1, 1]
 
+LogSoftmax_base:
+  desc: "LogSoftmax激活层"
+  paddle:
+    api_name: "paddle.nn.LogSoftmax"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[[1], [2]], [[3], [4]]]
+    params:
+      axis: 0
+
 LogSoftmax:
+  desc: "LogSoftmax激活层"
+  paddle:
+    api_name: "paddle.nn.LogSoftmax"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -10, 10]
+
+LogSoftmax0:
   desc: "LogSoftmax激活层"
   paddle:
     api_name: "paddle.nn.LogSoftmax"
@@ -536,7 +5087,91 @@ LogSoftmax:
     params:
       axis: 1
 
+LogSoftmax1:
+  desc: "LogSoftmax激活层"
+  paddle:
+    api_name: "paddle.nn.LogSoftmax"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -10, 10]
+    params:
+      axis: -1
+
+LogSoftmax2:
+  desc: "LogSoftmax激活层"
+  paddle:
+    api_name: "paddle.nn.LogSoftmax"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -10, 10]
+    params:
+      axis: 0
+
+LogSoftmax3:
+  desc: "LogSoftmax激活层"
+  paddle:
+    api_name: "paddle.nn.LogSoftmax"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -10, 10]
+    params:
+      axis: 1
+
+LogSoftmax4:
+  desc: "LogSoftmax激活层"
+  paddle:
+    api_name: "paddle.nn.LogSoftmax"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -10, 10]
+    params:
+      axis: 2
+
+Maxout_base:
+  desc: "Maxout激活层"
+  paddle:
+    api_name: "paddle.nn.Maxout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [100, 4, 3, 3]
+        range: [ -10, 10]
+    params:
+      groups: 2
+
 Maxout:
+  desc: "Maxout激活层"
+  paddle:
+    api_name: "paddle.nn.Maxout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [10, 9, 3, 3]
+        range: [ -10, 10]
+    params:
+      groups: 3
+
+Maxout0:
   desc: "Maxout激活层"
   paddle:
     api_name: "paddle.nn.Maxout"
@@ -550,6 +5185,21 @@ Maxout:
     params:
       groups: 2
       axis: 1
+
+Maxout1:
+  desc: "Maxout激活层"
+  paddle:
+    api_name: "paddle.nn.Maxout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [9, 2, 2, 6]
+        range: [ -10, 10]
+    params:
+      groups: 2
+      axis: 3
 
 #PReLU:
 #  desc: "PReLU激活层"
@@ -567,7 +5217,30 @@ Maxout:
 #      weight_attr: None
 #      data_format: "NCHW"
 
+ReLU_base:
+  desc: "ReLU激活层"
+  paddle:
+    api_name: "paddle.nn.ReLU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 10, 3, 3]
+        range: [ -10, 10]
+
 ReLU:
+  desc: "ReLU激活层"
+  paddle:
+    api_name: "paddle.nn.ReLU"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[-1, 4], [1, 15.6]]
+
+ReLU0:
   desc: "ReLU激活层"
   paddle:
     api_name: "paddle.nn.ReLU"
@@ -579,7 +5252,30 @@ ReLU:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+ReLU6_base:
+  desc: "ReLU激活层"
+  paddle:
+    api_name: "paddle.nn.ReLU6"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-1, 0.3, 6.5]
+
 ReLU6:
+  desc: "ReLU激活层"
+  paddle:
+    api_name: "paddle.nn.ReLU6"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+
+ReLU60:
   desc: "ReLU激活层"
   paddle:
     api_name: "paddle.nn.ReLU6"
@@ -591,7 +5287,41 @@ ReLU6:
         shape: [2, 3, 4, 4]
         range: [ -1, 10]
 
+ReLU61:
+  desc: "ReLU激活层"
+  paddle:
+    api_name: "paddle.nn.ReLU6"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [6, 6, 6, 6]
+
+SELU_base:
+  desc: "SELU激活层"
+  paddle:
+    api_name: "paddle.nn.SELU"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[0.1, 1], [2, 3]]
+
 SELU:
+  desc: "SELU激活层"
+  paddle:
+    api_name: "paddle.nn.SELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+
+SELU0:
   desc: "SELU激活层"
   paddle:
     api_name: "paddle.nn.SELU"
@@ -606,6 +5336,31 @@ SELU:
       scale: 1.05173
       alpha: 1.67325
 
+SELU1:
+  desc: "SELU激活层"
+  paddle:
+    api_name: "paddle.nn.SELU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      alpha: 0
+
+Sigmoid_base:
+  desc: "Sigmoid激活层"
+  paddle:
+    api_name: "paddle.nn.Sigmoid"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [1.0, 2.0, 3.0, 4.0]
+
 Sigmoid:
   desc: "Sigmoid激活层"
   paddle:
@@ -618,7 +5373,31 @@ Sigmoid:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+Silu_base:
+  desc: "Silu激活层"
+  paddle:
+    api_name: "paddle.nn.Silu"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 10, 3, 3]
+        range: [ -10, 10]
+
 Silu:
+  desc: "Silu激活层"
+  paddle:
+    api_name: "paddle.nn.Silu"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 1, 3, 3]
+        range: [ -1, 1]
+
+Silu0:
   desc: "Silu激活层"
   paddle:
     api_name: "paddle.nn.Silu"
@@ -629,6 +5408,17 @@ Silu:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+
+Softmax_base:
+  desc: "Softmax激活层"
+  paddle:
+    api_name: "paddle.nn.Softmax"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
 
 Softmax:
   desc: "Softmax激活层"
@@ -644,7 +5434,75 @@ Softmax:
     params:
       axis: 1
 
+Softmax1:
+  desc: "Softmax激活层"
+  paddle:
+    api_name: "paddle.nn.Softmax"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
+    params:
+      axis: 1
+
+Softmax3:
+  desc: "Softmax激活层"
+  paddle:
+    api_name: "paddle.nn.Softmax"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
+    params:
+      axis: 2
+
+Softmax4:
+  desc: "Softmax激活层"
+  paddle:
+    api_name: "paddle.nn.Softmax"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
+    params:
+      axis: 0
+
+Softplus_base:
+  desc: "Softplus激活层"
+  paddle:
+    api_name: "paddle.nn.Softplus"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-0.4, -0.2, 0.1, 0.3]
+    params:
+      beta: 1
+      threshold: 15
+
 Softplus:
+  desc: "Softplus激活层"
+  paddle:
+    api_name: "paddle.nn.Softplus"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      beta: 2
+      threshold: 20
+
+Softplus0:
   desc: "Softplus激活层"
   paddle:
     api_name: "paddle.nn.Softplus"
@@ -659,7 +5517,109 @@ Softplus:
       beta: 1
       threshold: 20
 
+Softplus1:
+  desc: "Softplus激活层"
+  paddle:
+    api_name: "paddle.nn.Softplus"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      beta: 0.000001
+      threshold: 20
+
+Softplus2:
+  desc: "Softplus激活层"
+  paddle:
+    api_name: "paddle.nn.Softplus"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      beta: -0.000001
+      threshold: 20
+
+Softplus3:
+  desc: "Softplus激活层"
+  paddle:
+    api_name: "paddle.nn.Softplus"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      beta: -3
+      threshold: 20
+
+Softplus4:
+  desc: "Softplus激活层"
+  paddle:
+    api_name: "paddle.nn.Softplus"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      beta: 3
+      threshold: 5
+
+Softplus5:
+  desc: "Softplus激活层"
+  paddle:
+    api_name: "paddle.nn.Softplus"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      beta: 3
+      threshold: -5
+
+Softshrink_base:
+  desc: "Softshrink激活层"
+  paddle:
+    api_name: "paddle.nn.Softshrink"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-0.9, -0.2, 0.1, 0.8]
+    params:
+      threshold: 0.5
+
 Softshrink:
+  desc: "Softshrink激活层"
+  paddle:
+    api_name: "paddle.nn.Softshrink"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      threshold: 5
+
+Softshrink0:
   desc: "Softshrink激活层"
   paddle:
     api_name: "paddle.nn.Softshrink"
@@ -673,7 +5633,44 @@ Softshrink:
     params:
       threshold: 0.2
 
+Softshrink1:
+  desc: "Softshrink激活层"
+  paddle:
+    api_name: "paddle.nn.Softshrink"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+    params:
+      threshold: 0
+
+Softsign_base:
+  desc: "Softsign激活层"
+  paddle:
+    api_name: "paddle.nn.Softsign"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-0.4, -0.2, 0.1, 0.3]
+
 Softsign:
+  desc: "Softsign激活层"
+  paddle:
+    api_name: "paddle.nn.Softsign"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+
+Softsign0:
   desc: "Softsign激活层"
   paddle:
     api_name: "paddle.nn.Softsign"
@@ -685,7 +5682,31 @@ Softsign:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+Swish_base:
+  desc: "Swish激活层"
+  paddle:
+    api_name: "paddle.nn.Swish"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 10, 3, 3]
+        range: [ -10, 10]
+
 Swish:
+  desc: "Swish激活层"
+  paddle:
+    api_name: "paddle.nn.Swish"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 1, 3, 3]
+        range: [ -1, 1]
+
+Swish0:
   desc: "Swish激活层"
   paddle:
     api_name: "paddle.nn.Swish"
@@ -696,6 +5717,17 @@ Swish:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -4, 4]
+
+Tanh_base:
+  desc: "Tanh激活层"
+  paddle:
+    api_name: "paddle.nn.Tanh"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-0.4, -0.2, 0.1, 0.3]
 
 Tanh:
   desc: "Tanh激活层"
@@ -709,7 +5741,42 @@ Tanh:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+Tanh0:
+  desc: "Tanh激活层"
+  paddle:
+    api_name: "paddle.nn.Tanh"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -4, 4]
+
+Tanhshrink_base:
+  desc: "Tanhshrink激活层"
+  paddle:
+    api_name: "paddle.nn.Tanhshrink"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [-0.4, -0.2, 0.1, 0.3]
+
 Tanhshrink:
+  desc: "Tanhshrink激活层"
+  paddle:
+    api_name: "paddle.nn.Tanhshrink"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 3]
+        range: [ -10, 10]
+
+Tanhshrink0:
   desc: "Tanhshrink激活层"
   paddle:
     api_name: "paddle.nn.Tanhshrink"
@@ -720,6 +5787,18 @@ Tanhshrink:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+
+ThresholdedReLU_base:
+  desc: "ThresholdedReLU激活层"
+  paddle:
+    api_name: "paddle.nn.ThresholdedReLU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [100, 4, 3, 3]
+        range: [ -10, 10]
 
 ThresholdedReLU:
   desc: "ThresholdedReLU激活层"
@@ -734,6 +5813,48 @@ ThresholdedReLU:
         range: [ -1, 2]
     params:
       threshold: 1.25
+
+ThresholdedReLU1:
+  desc: "ThresholdedReLU激活层"
+  paddle:
+    api_name: "paddle.nn.ThresholdedReLU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [10, 1, 4, 3]
+        range: [ -10, 1]
+    params:
+      threshold: -1
+
+ThresholdedReLU2:
+  desc: "ThresholdedReLU激活层"
+  paddle:
+    api_name: "paddle.nn.ThresholdedReLU"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [10, 1, 4, 3]
+        range: [ -10, 1]
+    params:
+      threshold: 0
+
+BatchNorm_base:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -2, 10]
+    params:
+      num_channels: 3
 
 BatchNorm:
   desc: "BN批归一化"
@@ -758,6 +5879,307 @@ BatchNorm:
       use_global_stats: False
       trainable_statistics: False
 
+BatchNorm0:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4, 5]
+        range: [ -4, 4]
+    params:
+      num_channels: 4
+
+BatchNorm1:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4, 5, 6]
+        range: [ -4, 4]
+    params:
+      num_channels: 4
+
+BatchNorm2:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4, 5, 6, 7]
+        range: [ -4, 4]
+    params:
+      num_channels: 4
+
+BatchNorm3:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4, 5, 6]
+        range: [ -4, 4]
+    params:
+      num_channels: 6
+      data_layout: "NHWC"
+
+BatchNorm4:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4, 5, 6]
+        range: [ -4, 4]
+    params:
+      num_channels: 4
+      epsilon: 0.0001
+
+BatchNorm7:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 8, 2, 4]
+        range: [ -4, 4]
+    params:
+      num_channels: 8
+      act: "relu"
+
+BatchNorm8:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 8, 2, 4]
+        range: [ -4, 4]
+    params:
+      num_channels: 8
+      act: "sigmoid"
+
+# 测试框架不支持输入
+#BatchNorm9:
+#  desc: "BN批归一化"
+#  paddle:
+#    api_name: "paddle.nn.BatchNorm"
+#    inputs:
+#      data:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [3, 2, 4, 6]
+#        range: [ -4, 4]
+#    params:
+#      num_channels: 2
+#      param_attr=paddle.ParamAttr(learning_rate=0.1)
+#      use_global_stats: True
+
+BatchNorm10:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 5]
+        range: [ -4, 4]
+    params:
+      num_channels: 3
+      is_test: True
+
+BatchNorm11:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 5]
+        range: [ -4, 4]
+    params:
+      num_channels: 3
+      trainable_statistics: True
+
+BatchNorm12:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_channels: 3
+      is_test: False
+      momentum: 0.9
+      epsilon: 0.00001
+      dtype: 'float32'
+      data_layout: 'NHWC'
+      in_place: False
+      do_model_average_for_mean_and_var: False
+      use_global_stats: False
+      trainable_statistics: False
+
+BatchNorm13:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8]
+        range: [ -1, 1]
+    params:
+      num_channels: 3
+      is_test: False
+      momentum: 0.85
+      epsilon: 0.00001
+      dtype: 'float32'
+      data_layout: 'NCHW'
+      in_place: False
+      do_model_average_for_mean_and_var: False
+      use_global_stats: False
+      trainable_statistics: False
+
+# CPU精度有问题
+#BatchNorm14:
+#  desc: "BN批归一化"
+#  paddle:
+#    api_name: "paddle.nn.BatchNorm"
+#    inputs:
+#      data:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [2, 3, 8, 8]
+#        range: [ -1, 1]
+#    params:
+#      num_channels: 3
+#      is_test: False
+#      momentum: 0.9
+#      epsilon: 0.00001
+#      dtype: 'float32'
+#      data_layout: 'NCHW'
+#      in_place: True
+#      do_model_average_for_mean_and_var: False
+#      use_global_stats: False
+#      trainable_statistics: False
+
+BatchNorm15:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8]
+        range: [ -1, 1]
+    params:
+      num_channels: 3
+      is_test: False
+      momentum: 0.9
+      epsilon: 0.00001
+      dtype: 'float32'
+      data_layout: 'NCHW'
+      in_place: False
+      do_model_average_for_mean_and_var: True
+      use_global_stats: False
+      trainable_statistics: False
+
+# use_global_stats需要用参数api传入learning_rate, 测试框架不支持传api
+#BatchNorm16:
+#  desc: "BN批归一化"
+#  paddle:
+#    api_name: "paddle.nn.BatchNorm"
+#    inputs:
+#      data:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [2, 3, 8, 8]
+#        range: [ -1, 1]
+#    params:
+#      num_channels: 3
+#      is_test: False
+#      momentum: 0.85
+#      epsilon: 0.00001
+#      dtype: 'float32'
+#      data_layout: 'NCHW'
+#      in_place: False
+#      do_model_average_for_mean_and_var: False
+#      use_global_stats: True
+#      trainable_statistics: False
+
+BatchNorm17:
+  desc: "BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8]
+        range: [ -1, 1]
+    params:
+      num_channels: 3
+      is_test: False
+      momentum: 0.85
+      epsilon: 0.00001
+      dtype: 'float32'
+      data_layout: 'NCHW'
+      in_place: False
+      do_model_average_for_mean_and_var: False
+      trainable_statistics: False
+
+BatchNorm1D_base:
+  desc: "1维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm1D"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[0.6964692], [0.28613934]]
+    params:
+      num_features: 1
+
 BatchNorm1D:
   desc: "1维BN批归一化"
   paddle:
@@ -775,7 +6197,126 @@ BatchNorm1D:
       epsilon: 0.00001
       data_format: 'NCL'
 
-BatchNorm2D:
+BatchNorm1D2:
+  desc: "1维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm1D"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[[0.6964692, 0.28613934, 0.22685145]], [[0.5513148, 0.71946895, 0.42310646]]]
+    params:
+      num_features: 1
+
+BatchNorm1D3:
+  desc: "1维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm1D"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[0.6964692], [0.28613934]]
+    params:
+      num_features: 1
+      momentum: 0.1
+
+BatchNorm1D4:
+  desc: "1维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm1D"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[[0.6964692, 0.28613934, 0.22685145]], [[0.5513148, 0.71946895, 0.42310646]]]
+    params:
+      num_features: 1
+      momentum: 0.1
+
+BatchNorm1D5:
+  desc: "1维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm1D"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[0.6964692], [0.28613934]]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+
+BatchNorm1D6:
+  desc: "1维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm1D"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[[0.6964692, 0.28613934, 0.22685145]], [[0.5513148, 0.71946895, 0.42310646]]]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+
+BatchNorm1D7:
+  desc: "1维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm1D"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[0.6964692], [0.28613934]]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+      data_format: "NCL"
+
+BatchNorm1D8:
+  desc: "1维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm1D"
+    inputs:
+      data:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[[0.6964692, 0.28613934, 0.22685145]], [[0.5513148, 0.71946895, 0.42310646]]]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+      weight_attr: False
+      data_format: "NCL"
+
+BatchNorm1D9:
+  desc: "1维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 3
+      data_format: "NC"
+
+BatchNorm2D_base:
   desc: "2维BN批归一化"
   paddle:
     api_name: "paddle.nn.BatchNorm2D"
@@ -792,7 +6333,104 @@ BatchNorm2D:
       epsilon: 0.00001
       data_format: 'NCHW'
 
-BatchNorm3D:
+BatchNorm2D1:
+  desc: "2维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+
+BatchNorm2D2:
+  desc: "2维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+      momentum: 0.1
+
+BatchNorm2D3:
+  desc: "2维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+
+BatchNorm2D4:
+  desc: "2维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+      data_format: "NCHW"
+
+BatchNorm2D7:
+  desc: "2维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+      data_format: "NCHW"
+      weight_attr: False
+
+BatchNorm2D8:
+  desc: "2维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 4, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 3
+      momentum: 0.9
+      epsilon: 0.00001
+      data_format: 'NHWC'
+
+BatchNorm3D_base:
   desc: "3维BN批归一化"
   paddle:
     api_name: "paddle.nn.BatchNorm3D"
@@ -808,6 +6446,100 @@ BatchNorm3D:
       momentum: 0.9
       epsilon: 0.00001
       data_format: 'NCDHW'
+
+BatchNorm3D1:
+  desc: "3维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+
+BatchNorm3D2:
+  desc: "3维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+      momentum: 0.1
+
+BatchNorm3D3:
+  desc: "3维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+
+BatchNorm3D4:
+  desc: "3维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+      weight_attr: False
+
+BatchNorm3D5:
+  desc: "3维BN批归一化"
+  paddle:
+    api_name: "paddle.nn.BatchNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 1
+      momentum: 0.1
+      epsilon: 0.00001
+      data_format: "NCDHW"
+
+GroupNorm_base:
+  desc: "分组归一化"
+  paddle:
+    api_name: "paddle.nn.GroupNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_groups: 2
+      num_channels: 2
 
 GroupNorm:
   desc: "分组归一化"
@@ -826,7 +6558,108 @@ GroupNorm:
       epsilon: 0.00001
       data_format: 'NCHW'
 
-InstanceNorm1D:
+GroupNorm2:
+  desc: "分组归一化"
+  paddle:
+    api_name: "paddle.nn.GroupNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_groups: 2
+      num_channels: 2
+      epsilon: 0.00001
+
+GroupNorm5:
+  desc: "分组归一化"
+  paddle:
+    api_name: "paddle.nn.GroupNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_groups: 2
+      num_channels: 2
+      epsilon: 0.00001
+      data_format: "NCHW"
+
+GroupNorm6:
+  desc: "分组归一化"
+  paddle:
+    api_name: "paddle.nn.GroupNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 3, 4, 4, 2]
+        range: [ -1, 1]
+    params:
+      num_groups: 6
+      num_channels: 6
+      epsilon: 0.00001
+      data_format: "NCHW"
+
+GroupNorm7:
+  desc: "分组归一化"
+  paddle:
+    api_name: "paddle.nn.GroupNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 2, 2]
+        range: [ -1, 1]
+    params:
+      num_groups: 2
+      num_channels: 4
+      epsilon: 0.00001
+      data_format: "NCHW"
+
+GroupNorm8:
+  desc: "分组归一化"
+  paddle:
+    api_name: "paddle.nn.GroupNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 6, 8, 8]
+        range: [ -1, 1]
+    params:
+      num_groups: 2
+      num_channels: 6
+      epsilon: 0.00001
+      data_format: "NCHW"
+
+GroupNorm9:
+  desc: "分组归一化"
+  paddle:
+    api_name: "paddle.nn.GroupNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8, 8]
+        range: [ -1, 1]
+    params:
+      num_groups: 2
+      num_channels: 4
+      epsilon: 0.00002
+      data_format: "NCHW"
+
+InstanceNorm1D_base:
   desc: "1维实例归一化"
   paddle:
     api_name: "paddle.nn.InstanceNorm1D"
@@ -842,6 +6675,134 @@ InstanceNorm1D:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NCL'
+
+InstanceNorm1D1:
+  desc: "1维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+
+InstanceNorm1D2:
+  desc: "1维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00002
+
+InstanceNorm1D3:
+  desc: "1维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.1
+
+InstanceNorm1D5:
+  desc: "1维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.1
+      data_format: "NCL"
+
+InstanceNorm1D6:
+  desc: "1维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 3
+      epsilon: 0.00001
+      momentum: 0.1
+      data_format: "NLC"
+
+InstanceNorm1D7:
+  desc: "1维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.1
+      weight_attr: False
+      bias_attr: False
+
+InstanceNorm1D8:
+  desc: "1维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 3
+      epsilon: 0.00001
+      momentum: 0.1
+      data_format: "NC"
+
+InstanceNorm2D_base:
+  desc: "2维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
 
 InstanceNorm2D:
   desc: "2维实例归一化"
@@ -860,6 +6821,120 @@ InstanceNorm2D:
       momentum: 0.9
       data_format: 'NCHW'
 
+InstanceNorm2D2:
+  desc: "2维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+
+InstanceNorm2D3:
+  desc: "2维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.1
+
+InstanceNorm2D4:
+  desc: "2维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.9
+
+InstanceNorm2D6:
+  desc: "2维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.9
+      weight_attr: False
+      bias_attr: False
+      data_format: "NCHW"
+
+InstanceNorm2D8:
+  desc: "2维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 5, 3, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 5
+      epsilon: 0.00001
+      momentum: 0.9
+      data_format: 'NCHW'
+
+InstanceNorm2D9:
+  desc: "2维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 5, 3, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 5
+      epsilon: 0.00001
+      momentum: 0.9
+      data_format: 'NHWC'
+
+InstanceNorm3D_base:
+  desc: "3维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+
 InstanceNorm3D:
   desc: "3维实例归一化"
   paddle:
@@ -877,6 +6952,119 @@ InstanceNorm3D:
       momentum: 0.9
       data_format: 'NCDHW'
 
+InstanceNorm3D2:
+  desc: "3维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+
+InstanceNorm3D3:
+  desc: "3维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.1
+
+InstanceNorm3D4:
+  desc: "3维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.9
+
+InstanceNorm3D5:
+  desc: "3维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.9
+      weight_attr: False
+      bias_attr: False
+
+InstanceNorm3D6:
+  desc: "3维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      num_features: 2
+      epsilon: 0.00001
+      momentum: 0.9
+      data_format: "NCDHW"
+
+InstanceNorm3D7:
+  desc: "3维实例归一化"
+  paddle:
+    api_name: "paddle.nn.InstanceNorm3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 5, 5, 5]
+        range: [ -1, 1]
+    params:
+      num_features: 3
+      epsilon: 0.00001
+      momentum: 0.9
+      data_format: "NCDHW"
+
+LayerNorm_base:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LayerNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      normalized_shape: !!python/tuple [2, 2, 3]
+
 LayerNorm:
   desc: "层归一化"
   paddle:
@@ -891,6 +7079,129 @@ LayerNorm:
     params:
       normalized_shape: [2, 2, 3]
       epsilon: 0.00001
+
+LayerNorm3:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LayerNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 2, 3]
+        range: [ -1, 1]
+    params:
+      normalized_shape: [2, 2, 3]
+      epsilon: 0.00001
+      weight_attr: False
+      bias_attr: False
+
+LayerNorm4:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LayerNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ -1, 1]
+    params:
+      normalized_shape: [2, 3]
+
+LayerNorm5:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LayerNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ -1, 1]
+    params:
+      normalized_shape: [2, 3]
+      epsilon: 0.00001
+
+LayerNorm6:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LayerNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 3]
+        range: [ -1, 1]
+    params:
+      normalized_shape: [2, 3]
+      epsilon: 0.00001
+      weight_attr: False
+      bias_attr: False
+
+LayerNorm7:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LayerNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -1, 1]
+    params:
+      normalized_shape: !!python/tuple [3,]
+
+LayerNorm8:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LayerNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -1, 1]
+    params:
+      normalized_shape: [3,]
+      epsilon: 0.00001
+
+LayerNorm9:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LayerNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -1, 1]
+    params:
+      normalized_shape: !!python/tuple [3,]
+      epsilon: 0.00001
+      weight_attr: False
+      bias_attr: False
+
+LocalResponseNorm_base:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LocalResponseNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 8, 8]
+        range: [ -1, 1]
+    params:
+      size: 5
 
 LocalResponseNorm:
   desc: "层归一化"
@@ -910,6 +7221,95 @@ LocalResponseNorm:
       k: 0.9
       data_format: 'NCHW'
 
+LocalResponseNorm0:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LocalResponseNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 8, 8]
+        range: [ -1, 1]
+    params:
+      size: 5
+      alpha: 0.0002
+
+LocalResponseNorm1:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LocalResponseNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 8, 8]
+        range: [ -1, 1]
+    params:
+      size: 5
+      beta: 0.125
+
+LocalResponseNorm2:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LocalResponseNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 8, 8]
+        range: [ -1, 1]
+    params:
+      size: 5
+      k: 0.9
+      data_format: 'NCHW'
+
+LocalResponseNorm3:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LocalResponseNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 3, 8, 8]
+        range: [ -1, 1]
+    params:
+      size: 3
+
+LocalResponseNorm4:
+  desc: "层归一化"
+  paddle:
+    api_name: "paddle.nn.LocalResponseNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 8, 8, 4]
+        range: [ -1, 1]
+    params:
+      size: 5
+      data_format: 'NHWC'
+
+SpectralNorm_base:
+  desc: "谱归一化"
+  paddle:
+    api_name: "paddle.nn.SpectralNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8]
+        range: [ -1, 1]
+    params:
+      weight_shape: [2, 3, 8, 8]
+
 SpectralNorm:
   desc: "谱归一化"
   paddle:
@@ -927,6 +7327,153 @@ SpectralNorm:
       power_iters: 1
       eps: 0.000000000001
       dtype: "float32"
+
+SpectralNorm0:
+  desc: "谱归一化"
+  paddle:
+    api_name: "paddle.nn.SpectralNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4]
+        range: [ -1, 1]
+    params:
+      weight_shape: [2, 4]
+      dim: 0
+      power_iters: 1
+
+SpectralNorm1:
+  desc: "谱归一化"
+  paddle:
+    api_name: "paddle.nn.SpectralNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 5]
+        range: [ -1, 1]
+    params:
+      weight_shape: [2, 4, 5]
+      dim: 0
+      power_iters: 1
+
+SpectralNorm2:
+  desc: "谱归一化"
+  paddle:
+    api_name: "paddle.nn.SpectralNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 5, 6]
+        range: [ -1, 1]
+    params:
+      weight_shape: [2, 4, 5, 6]
+      dim: 0
+      power_iters: 1
+
+SpectralNorm3:
+  desc: "谱归一化"
+  paddle:
+    api_name: "paddle.nn.SpectralNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 3, 5, 6]
+        range: [ -1, 1]
+    params:
+      weight_shape: [4, 3, 5, 6]
+      dim: 0
+      power_iters: 1
+
+SpectralNorm4:
+  desc: "谱归一化"
+  paddle:
+    api_name: "paddle.nn.SpectralNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 3, 2, 5, 6]
+        range: [ -1, 1]
+    params:
+      weight_shape: [4, 3, 2, 5, 6]
+      dim: 0
+      power_iters: 1
+
+SpectralNorm5:
+  desc: "谱归一化"
+  paddle:
+    api_name: "paddle.nn.SpectralNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 3, 2, 5, 6]
+        range: [ -1, 1]
+    params:
+      weight_shape: [4, 3, 2, 5, 6]
+      dim: 1
+      power_iters: 1
+
+SpectralNorm6:
+  desc: "谱归一化"
+  paddle:
+    api_name: "paddle.nn.SpectralNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 3, 5]
+        range: [ -1, 1]
+    params:
+      weight_shape: [4, 3, 5]
+      dim: 1
+      power_iters: 10
+
+SpectralNorm7:
+  desc: "谱归一化"
+  paddle:
+    api_name: "paddle.nn.SpectralNorm"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 3, 5]
+        range: [ -1, 1]
+    params:
+      weight_shape: [4, 3, 5]
+      dim: 1
+      power_iters: 10
+      dtype: "float32"
+
+# 会报错
+#SpectralNorm8:
+#  desc: "谱归一化"
+#  paddle:
+#    api_name: "paddle.nn.SpectralNorm"
+#    inputs:
+#      data:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float64"
+#        shape: [4, 3, 5]
+#        range: [ -1, 1]
+#    params:
+#      weight_shape: [4, 3, 5]
+#      dim: 1
+#      power_iters: 10
+#      dtype: "float64"
 
 #SyncBatchNorm:
 #  desc: "跨卡GPU同步的批归一化"
@@ -956,6 +7503,27 @@ SpectralNorm:
 #        shape: [2, 3, 8, 8]
 #        range: [ -1, 1]
 
+GRU_base:
+  desc: "门控循环单元网络"
+  paddle:
+    api_name: "paddle.nn.GRU"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 5]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 5
+
 GRU:
   desc: "门控循环单元网络"
   paddle:
@@ -981,6 +7549,144 @@ GRU:
       dropout: 0.
       time_major: False
 
+GRU1:
+  desc: "门控循环单元网络"
+  paddle:
+    api_name: "paddle.nn.GRU"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 1, 5]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 5
+      num_layers: 3
+
+GRU2:
+  desc: "门控循环单元网络"
+  paddle:
+    api_name: "paddle.nn.GRU"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [6, 1, 5]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 5
+      num_layers: 3
+      direction: "bidirect"
+
+GRU3:
+  desc: "门控循环单元网络"
+  paddle:
+    api_name: "paddle.nn.GRU"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [6, 1, 5]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 5
+      num_layers: 3
+      direction: "bidirectional"
+
+GRU5:
+  desc: "门控循环单元网络"
+  paddle:
+    api_name: "paddle.nn.GRU"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [6, 1, 5]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 5
+      num_layers: 3
+      direction: "bidirectional"
+      time_major: True
+
+GRU6:
+  desc: "门控循环单元网络"
+  paddle:
+    api_name: "paddle.nn.GRU"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [6, 1, 5]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 5
+      num_layers: 3
+      direction: "bidirectional"
+      time_major: True
+      dropout: 0
+
+GRUCell_base:
+  desc: "门控循环单元Cell"
+  paddle:
+    api_name: "paddle.nn.GRUCell"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 3]
+        range: [ -1, 1]
+    params:
+      input_size: 2
+      hidden_size: 3
+
 GRUCell:
   desc: "门控循环单元Cell"
   paddle:
@@ -1001,6 +7707,42 @@ GRUCell:
     params:
       input_size: 16
       hidden_size: 32
+
+GRUCell0:
+  desc: "门控循环单元Cell"
+  paddle:
+    api_name: "paddle.nn.GRUCell"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 12]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 16]
+        range: [ -1, 1]
+    params:
+      input_size: 12
+      hidden_size: 16
+
+SimpleRNN_base:
+  desc: "简单循环神经网络"
+  paddle:
+    api_name: "paddle.nn.SimpleRNN"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+    params:
+      input_size: 3
+      hidden_size: 2
 
 SimpleRNN:
   desc: "简单循环神经网络"
@@ -1024,6 +7766,165 @@ SimpleRNN:
       hidden_size: 32
       num_layers: 2
 
+SimpleRNN0:
+  desc: "简单循环神经网络"
+  paddle:
+    api_name: "paddle.nn.SimpleRNN"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 4]
+        range: [ -1, 1]
+    params:
+      input_size: 3
+      hidden_size: 4
+
+SimpleRNN1:
+  desc: "简单循环神经网络"
+  paddle:
+    api_name: "paddle.nn.SimpleRNN"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 4]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 4
+      num_layers: 2
+
+SimpleRNN2:
+  desc: "简单循环神经网络"
+  paddle:
+    api_name: "paddle.nn.SimpleRNN"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 1, 4]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 4
+      num_layers: 2
+      activation: "relu"
+
+SimpleRNN3:
+  desc: "简单循环神经网络"
+  paddle:
+    api_name: "paddle.nn.SimpleRNN"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 5]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 5
+      time_major: True
+
+SimpleRNN4:
+  desc: "简单循环神经网络"
+  paddle:
+    api_name: "paddle.nn.SimpleRNN"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 4]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 4
+      dropout: 0.8
+
+SimpleRNN5:
+  desc: "简单循环神经网络"
+  paddle:
+    api_name: "paddle.nn.SimpleRNN"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 4]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [1,]
+        range: [ 2, 4]
+    params:
+      input_size: 4
+      hidden_size: 4
+      dropout: 0.8
+
+SimpleRNNCell_base:
+  desc: "简单循环神经网络cell单元"
+  paddle:
+    api_name: "paddle.nn.SimpleRNNCell"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 4]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 7]
+        range: [ -1, 1]
+    params:
+      input_size: 4
+      hidden_size: 7
+
 SimpleRNNCell:
   desc: "简单循环神经网络cell单元"
   paddle:
@@ -1046,7 +7947,65 @@ SimpleRNNCell:
       hidden_size: 32
       activation: 'tanh'
 
-MultiHeadAttention:
+SimpleRNNCell0:
+  desc: "简单循环神经网络cell单元"
+  paddle:
+    api_name: "paddle.nn.SimpleRNNCell"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 12]
+        range: [ -1, 1]
+    params:
+      input_size: 12
+      hidden_size: 4
+
+SimpleRNNCell1:
+  desc: "简单循环神经网络cell单元"
+  paddle:
+    api_name: "paddle.nn.SimpleRNNCell"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 12]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 6]
+        range: [ -1, 1]
+    params:
+      input_size: 12
+      hidden_size: 6
+
+SimpleRNNCell2:
+  desc: "简单循环神经网络cell单元"
+  paddle:
+    api_name: "paddle.nn.SimpleRNNCell"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 12]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6]
+        range: [ -1, 1]
+    params:
+      input_size: 12
+      hidden_size: 6
+      activation: "relu"
+
+MultiHeadAttention_base:
   desc: "多头注意力机制"
   paddle:
     api_name: "paddle.nn.MultiHeadAttention"
@@ -1080,7 +8039,180 @@ MultiHeadAttention:
       num_heads: 2
       dropout: 0.0
 
-Transformer:
+MultiHeadAttention:
+  desc: "多头注意力机制"
+  paddle:
+    api_name: "paddle.nn.MultiHeadAttention"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+    params:
+      embed_dim: 8
+      num_heads: 2
+      dropout: 0.5
+
+MultiHeadAttention0:
+  desc: "多头注意力机制"
+  paddle:
+    api_name: "paddle.nn.MultiHeadAttention"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+    params:
+      embed_dim: 8
+      num_heads: 2
+      dropout: 0.0
+      kdim: 8
+      vdim: 8
+
+MultiHeadAttention1:
+  desc: "多头注意力机制"
+  paddle:
+    api_name: "paddle.nn.MultiHeadAttention"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+    params:
+      embed_dim: 8
+      num_heads: 2
+      dropout: 0.0
+      need_weights: True
+
+MultiHeadAttention2:
+  desc: "多头注意力机制"
+  paddle:
+    api_name: "paddle.nn.MultiHeadAttention"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+    params:
+      embed_dim: 8
+      num_heads: 2
+      dropout: 1.
+
+MultiHeadAttention3:
+  desc: "多头注意力机制"
+  paddle:
+    api_name: "paddle.nn.MultiHeadAttention"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 9]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 9]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 9]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      embed_dim: 9
+      num_heads: 3
+      dropout: 0.3
+
+Transformer_base:
   desc: "Transformer模型"
   paddle:
     api_name: "paddle.nn.Transformer"
@@ -1124,6 +8256,263 @@ Transformer:
       dropout: 0.1
       activation: 'relu'
 
+Transformer:
+  desc: "Transformer模型"
+  paddle:
+    api_name: "paddle.nn.Transformer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      num_encoder_layers: 4
+      num_decoder_layers: 4
+      dim_feedforward: 512
+
+Transformer0:
+  desc: "Transformer模型"
+  paddle:
+    api_name: "paddle.nn.Transformer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      num_encoder_layers: 4
+      num_decoder_layers: 4
+      dim_feedforward: 512
+      dropout: 0.8
+
+Transformer1:
+  desc: "Transformer模型"
+  paddle:
+    api_name: "paddle.nn.Transformer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      num_encoder_layers: 4
+      num_decoder_layers: 4
+      dim_feedforward: 512
+      activation: 'tanh'
+
+Transformer2:
+  desc: "Transformer模型"
+  paddle:
+    api_name: "paddle.nn.Transformer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      num_encoder_layers: 4
+      num_decoder_layers: 4
+      dim_feedforward: 512
+      attn_dropout: 0.4
+
+Transformer3:
+  desc: "Transformer模型"
+  paddle:
+    api_name: "paddle.nn.Transformer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      num_encoder_layers: 4
+      num_decoder_layers: 4
+      dim_feedforward: 512
+      act_dropout: 0.3
+
+Transformer4:
+  desc: "Transformer模型"
+  paddle:
+    api_name: "paddle.nn.Transformer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      num_encoder_layers: 4
+      num_decoder_layers: 4
+      dim_feedforward: 512
+      normalize_before: True
+
 #TransformerDecoder:
 #  desc: "Transformer解码器, 由多个Transformer解码器层(TransformerDecoderLayer)叠加组成的"
 #  paddle:
@@ -1165,7 +8554,7 @@ Transformer:
 #      dropout: 0.1
 #      activation: 'relu'
 
-TransformerDecoderLayer:
+TransformerDecoderLayer_base:
   desc: "Transformer解码器层"
   paddle:
     api_name: "paddle.nn.TransformerDecoderLayer"
@@ -1207,7 +8596,212 @@ TransformerDecoderLayer:
       dropout: 0.1
       activation: 'relu'
 
-TransformerEncoderLayer:
+TransformerDecoderLayer:
+  desc: "Transformer解码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerDecoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      dropout: 0.5
+
+TransformerDecoderLayer0:
+  desc: "Transformer解码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerDecoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      activation: 'tanh'
+
+TransformerDecoderLayer1:
+  desc: "Transformer解码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerDecoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      attn_dropout: 0.4
+
+TransformerDecoderLayer2:
+  desc: "Transformer解码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerDecoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      act_dropout: 0.6
+
+TransformerDecoderLayer3:
+  desc: "Transformer解码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerDecoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 6, 128]
+        range: [ -1, 1]
+      data2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+      data3:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 6]
+        range: [ -1, 1]
+      data4:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 6, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      normalize_before: True
+
+TransformerEncoderLayer_base:
   desc: "Transformer编码器层"
   paddle:
     api_name: "paddle.nn.TransformerEncoderLayer"
@@ -1231,6 +8825,143 @@ TransformerEncoderLayer:
       dropout: 0.1
       activation: 'relu'
 
+TransformerEncoderLayer:
+  desc: "Transformer编码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerEncoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      dropout: 0.4
+
+TransformerEncoderLayer0:
+  desc: "Transformer编码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerEncoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      activation: 'tanh'
+
+TransformerEncoderLayer1:
+  desc: "Transformer编码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerEncoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      attn_dropout: 0.3
+
+TransformerEncoderLayer2:
+  desc: "Transformer编码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerEncoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      act_dropout: 0.2
+
+TransformerEncoderLayer3:
+  desc: "Transformer编码器层"
+  paddle:
+    api_name: "paddle.nn.TransformerEncoderLayer"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 128]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 4]
+        range: [ -1, 1]
+    params:
+      d_model: 128
+      nhead: 2
+      dim_feedforward: 512
+      normalize_before: True
+
+Bilinear_base:
+  desc: "该层对两个输入执行双线性张量积"
+  paddle:
+    api_name: "paddle.nn.Bilinear"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 1]
+        range: [ -1, 1]
+      data1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 2]
+        range: [ -1, 1]
+    params:
+      in1_features: 1
+      in2_features: 2
+      out_features: 4
+
 Bilinear:
   desc: "该层对两个输入执行双线性张量积"
   paddle:
@@ -1253,6 +8984,21 @@ Bilinear:
       in2_features: 4
       out_features: 8
 
+Linear_base:
+  desc: "线性变换层"
+  paddle:
+    api_name: "paddle.nn.Linear"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [10, 3]
+        range: [ -1, 1]
+    params:
+      in_features: 3
+      out_features: 5
+
 Linear:
   desc: "线性变换层"
   paddle:
@@ -1268,6 +9014,20 @@ Linear:
       in_features: 2
       out_features: 4
 
+AlphaDropout_base:
+  desc: "AlphaDropout是一种具有自归一化性质的dropout。均值为0，方差为1的输入，经过AlphaDropout计算之后，输出的均值和方差与输入保持一致。"
+  paddle:
+    api_name: "paddle.nn.AlphaDropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ 0, 2]
+    params:
+      p: 0.5
+
 AlphaDropout:
   desc: "AlphaDropout是一种具有自归一化性质的dropout。均值为0，方差为1的输入，经过AlphaDropout计算之后，输出的均值和方差与输入保持一致。"
   paddle:
@@ -1282,7 +9042,77 @@ AlphaDropout:
     params:
       p: 0.5
 
-Dropout:
+AlphaDropout1:
+  desc: "AlphaDropout是一种具有自归一化性质的dropout。均值为0，方差为1的输入，经过AlphaDropout计算之后，输出的均值和方差与输入保持一致。"
+  paddle:
+    api_name: "paddle.nn.AlphaDropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2]
+        range: [ -1, 1]
+    params:
+      p: 0.65
+
+AlphaDropout2:
+  desc: "AlphaDropout是一种具有自归一化性质的dropout。均值为0，方差为1的输入，经过AlphaDropout计算之后，输出的均值和方差与输入保持一致。"
+  paddle:
+    api_name: "paddle.nn.AlphaDropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ 0, 2]
+    params:
+      p: 1.0
+
+AlphaDropout3:
+  desc: "AlphaDropout是一种具有自归一化性质的dropout。均值为0，方差为1的输入，经过AlphaDropout计算之后，输出的均值和方差与输入保持一致。"
+  paddle:
+    api_name: "paddle.nn.AlphaDropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ 0, 2]
+    params:
+      p: 0.0
+
+AlphaDropout4:
+  desc: "AlphaDropout是一种具有自归一化性质的dropout。均值为0，方差为1的输入，经过AlphaDropout计算之后，输出的均值和方差与输入保持一致。"
+  paddle:
+    api_name: "paddle.nn.AlphaDropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [5, 10, 15, 20]
+        range: [ -5, 10]
+    params:
+      p: 0.5
+
+AlphaDropout5:
+  desc: "AlphaDropout是一种具有自归一化性质的dropout。均值为0，方差为1的输入，经过AlphaDropout计算之后，输出的均值和方差与输入保持一致。"
+  paddle:
+    api_name: "paddle.nn.AlphaDropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -100, 100]
+    params:
+      p: 0.43
+
+Dropout_base:
   desc: "Dropout是一种正则化手段，该算子根据给定的丢弃概率p ，在训练过程中随机将一些神经元输出设置为0，通过阻止神经元节点间的相关性来减少过拟合"
   paddle:
     api_name: "paddle.nn.Dropout"
@@ -1295,7 +9125,93 @@ Dropout:
         range: [ -1, 1]
     params:
       p: 0.5
+
+Dropout:
+  desc: "Dropout是一种正则化手段，该算子根据给定的丢弃概率p ，在训练过程中随机将一些神经元输出设置为0，通过阻止神经元节点间的相关性来减少过拟合"
+  paddle:
+    api_name: "paddle.nn.Dropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.35
       mode: "upscale_in_train"
+
+Dropout0:
+  desc: "Dropout是一种正则化手段，该算子根据给定的丢弃概率p ，在训练过程中随机将一些神经元输出设置为0，通过阻止神经元节点间的相关性来减少过拟合"
+  paddle:
+    api_name: "paddle.nn.Dropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.5
+      axis: 1
+
+Dropout1:
+  desc: "Dropout是一种正则化手段，该算子根据给定的丢弃概率p ，在训练过程中随机将一些神经元输出设置为0，通过阻止神经元节点间的相关性来减少过拟合"
+  paddle:
+    api_name: "paddle.nn.Dropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.5
+      axis: 2
+
+Dropout2:
+  desc: "Dropout是一种正则化手段，该算子根据给定的丢弃概率p ，在训练过程中随机将一些神经元输出设置为0，通过阻止神经元节点间的相关性来减少过拟合"
+  paddle:
+    api_name: "paddle.nn.Dropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.5
+      axis: 4
+
+Dropout3:
+  desc: "Dropout是一种正则化手段，该算子根据给定的丢弃概率p ，在训练过程中随机将一些神经元输出设置为0，通过阻止神经元节点间的相关性来减少过拟合"
+  paddle:
+    api_name: "paddle.nn.Dropout"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.5
+      mode: "downscale_in_infer"
+
+Dropout2D_base:
+  desc: "2维Dropout"
+  paddle:
+    api_name: "paddle.nn.Dropout2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10]
+        range: [ -1, 1]
 
 Dropout2D:
   desc: "2维Dropout"
@@ -1312,6 +9228,47 @@ Dropout2D:
       p: 0.5
       data_format: 'NCHW'
 
+Dropout2D0:
+  desc: "2维Dropout"
+  paddle:
+    api_name: "paddle.nn.Dropout2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.3
+
+Dropout2D1:
+  desc: "2维Dropout"
+  paddle:
+    api_name: "paddle.nn.Dropout2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.5
+      data_format: 'NHWC'
+
+Dropout3D_base:
+  desc: "3维Dropout"
+  paddle:
+    api_name: "paddle.nn.Dropout3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10, 10]
+        range: [ -1, 1]
+
 Dropout3D:
   desc: "3维Dropout"
   paddle:
@@ -1326,6 +9283,78 @@ Dropout3D:
     params:
       p: 0.5
       data_format: 'NCDHW'
+
+Dropout3D0:
+  desc: "3维Dropout"
+  paddle:
+    api_name: "paddle.nn.Dropout3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.33
+
+Dropout3D1:
+  desc: "3维Dropout"
+  paddle:
+    api_name: "paddle.nn.Dropout3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 1.
+
+Dropout3D2:
+  desc: "3维Dropout"
+  paddle:
+    api_name: "paddle.nn.Dropout3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.
+
+Dropout3D3:
+  desc: "3维Dropout"
+  paddle:
+    api_name: "paddle.nn.Dropout3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 10, 10, 10]
+        range: [ -1, 1]
+    params:
+      p: 0.6
+      data_format: 'NDHWC'
+
+Embedding_base:
+  desc: "嵌入层(Embedding Layer)"
+  paddle:
+    api_name: "paddle.nn.Embedding"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "int64"
+        shape: [3, 1]
+        range: [0, 10]
+    params:
+      num_embeddings: 10
+      embedding_dim: 3
 
 Embedding:
   desc: "嵌入层(Embedding Layer)"
@@ -1343,6 +9372,53 @@ Embedding:
       embedding_dim: 3
       sparse: False
 
+Embedding0:
+  desc: "嵌入层(Embedding Layer)"
+  paddle:
+    api_name: "paddle.nn.Embedding"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "int64"
+        shape: [3, 1]
+        range: [0, 10]
+    params:
+      num_embeddings: 10
+      embedding_dim: 3
+      sparse: True
+
+Embedding1:
+  desc: "嵌入层(Embedding Layer)"
+  paddle:
+    api_name: "paddle.nn.Embedding"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "int64"
+        shape: [3, 1]
+        range: [0, 10]
+    params:
+      num_embeddings: 10
+      embedding_dim: 3
+      padding_idx: 2
+
+PixelShuffle_base:
+  desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
+  paddle:
+    api_name: "paddle.nn.PixelShuffle"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 9, 4, 4]
+        range: [ -10, 10]
+    params:
+      upscale_factor: 3
+      data_format: 'NCHW'
+
 PixelShuffle:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
   paddle:
@@ -1357,6 +9433,192 @@ PixelShuffle:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+
+PixelShuffle1:
+  desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
+  paddle:
+    api_name: "paddle.nn.PixelShuffle"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 81, 4, 4]
+        range: [ -10, 10]
+    params:
+      upscale_factor: 3
+      data_format: 'NCHW'
+
+PixelShuffle2:
+  desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
+  paddle:
+    api_name: "paddle.nn.PixelShuffle"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 4, 9]
+        range: [ -10, 10]
+    params:
+      upscale_factor: 3
+      data_format: 'NHWC'
+
+PixelShuffle4:
+  desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
+  paddle:
+    api_name: "paddle.nn.PixelShuffle"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 9, 4, 4]
+        range: [ -10, 10]
+    params:
+      upscale_factor: 3
+      data_format: 'NCHW'
+
+PixelShuffle5:
+  desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
+  paddle:
+    api_name: "paddle.nn.PixelShuffle"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 9, 4, 4]
+        range: [ -2555, 2555]
+    params:
+      upscale_factor: 3
+      data_format: 'NCHW'
+
+Upsample_base:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 0.6
+      mode: 'linear'
+      align_corners: True
+      align_mode: 0
+      data_format: 'NWC'
+
+Upsample_base0:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 0.6
+      mode: 'linear'
+      align_corners: False
+      align_mode: 0
+      data_format: 'NWC'
+
+Upsample_base1:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 0.6
+      mode: 'linear'
+      align_corners: False
+      align_mode: 1
+      data_format: 'NWC'
+
+Upsample_base2:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 9
+      mode: 'linear'
+      align_corners: False
+      align_mode: 0
+      data_format: 'NWC'
+
+Upsample_base3:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 0.1
+      mode: 'linear'
+      align_corners: False
+      align_mode: 0
+      data_format: 'NWC'
+
+Upsample_base4:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      size: [8]
+      mode: 'linear'
+      align_corners: False
+      align_mode: 1
+      data_format: 'NWC'
+
+Upsample_base5:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      size: [11]
+      mode: 'linear'
+      align_corners: False
+      align_mode: 1
+      data_format: 'NWC'
 
 Upsample:
   desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
@@ -1376,7 +9638,361 @@ Upsample:
       align_mode: 0
       data_format: 'NCHW'
 
+Upsample2:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -1000, 1000]
+    params:
+      size: [17]
+      mode: "linear"
+      align_corners: True
+      align_mode: 0
+      data_format: "NWC"
+
+Upsample3:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 0.4
+      mode: "linear"
+      align_corners: True
+      align_mode: 0
+      data_format: "NWC"
+
+Upsample4:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "bilinear"
+      scale_factor: [0.6, 1.2]
+      align_corners: True
+      align_mode: 0
+      data_format: "NCHW"
+
+Upsample5:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "bilinear"
+      scale_factor: [0.6, 1.2]
+      align_corners: False
+      align_mode: 0
+      data_format: "NCHW"
+
+Upsample6:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "bilinear"
+      scale_factor: [0.6, 0.6]
+      align_corners: True
+      align_mode: 0
+      data_format: "NCHW"
+
+Upsample7:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "bilinear"
+      scale_factor: [0.6, 1.2]
+      align_corners: True
+      align_mode: 1
+      data_format: "NCHW"
+
+Upsample8:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "bilinear"
+      size: [8, 12]
+      align_corners: True
+      align_mode: 1
+      data_format: "NCHW"
+
+Upsample9:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "bilinear"
+      scale_factor: [0.6, 1.2]
+      align_corners: True
+      align_mode: 1
+      data_format: "NHWC"
+
+Upsample10:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 4, 5]
+        range: [ -10, 10]
+    params:
+      size: [10, 11]
+      mode: "bilinear"
+      align_corners: True
+      align_mode: 0
+      data_format: "NCHW"
+
+Upsample11:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 10, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "trilinear"
+      scale_factor: [0.6, 1., 0.9]
+      align_corners: True
+      align_mode: 0
+      data_format: "NCDHW"
+
+Upsample12:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 10, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "trilinear"
+      scale_factor: [0.6, 1., 0.9]
+      align_corners: False
+      align_mode: 0
+      data_format: "NCDHW"
+
+Upsample13:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 10, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "trilinear"
+      scale_factor: [0.6, 0.6, 0.6]
+      align_corners: True
+      align_mode: 0
+      data_format: "NCDHW"
+
+Upsample14:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 10, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "trilinear"
+      scale_factor: [0.6, 1., 0.9]
+      align_corners: True
+      align_mode: 1
+      data_format: "NCDHW"
+
+Upsample15:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 10, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "trilinear"
+      size: [2, 13, 10]
+      align_corners: True
+      align_mode: 1
+      data_format: "NCDHW"
+
+Upsample16:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 10, 10, 10]
+        range: [ -10, 10]
+    params:
+      mode: "trilinear"
+      scale_factor: [0.6, 1.2, 0.5]
+      align_corners: True
+      align_mode: 1
+      data_format: "NDHWC"
+
+Upsample17:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 10, 10, 10]
+        range: [ -10, 10]
+    params:
+      size: [10, 11, 8]
+      mode: "trilinear"
+      align_corners: True
+      align_mode: 0
+      data_format: "NCDHW"
+
+Upsample18:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 10, 10]
+        range: [ -10, 10]
+    params:
+      size: [10, 11]
+      mode: "bicubic"
+      align_corners: True
+      align_mode: 0
+      data_format: "NCHW"
+
+Upsample19:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2, 10, 10]
+        range: [ -1000, 1000]
+    params:
+      size: [10, 11]
+      mode: "bicubic"
+      align_corners: True
+      align_mode: 0
+      data_format: "NCHW"
+
+UpsamplingBilinear2D_base:
+  desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingBilinear2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 5, 6, 7]
+        range: [ -10, 10]
+    params:
+      size: [10, 10]
+      data_format: 'NCHW'
+
 UpsamplingBilinear2D:
+  desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingBilinear2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 5, 6, 7]
+        range: [ -10, 10]
+    params:
+      scale_factor: [1.2, 3.3]
+      data_format: 'NCHW'
+
+UpsamplingBilinear2D1:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
   paddle:
     api_name: "paddle.nn.UpsamplingBilinear2D"
@@ -1391,7 +10007,127 @@ UpsamplingBilinear2D:
       size: [12, 12]
       data_format: 'NCHW'
 
+UpsamplingBilinear2D2:
+  desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingBilinear2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 5, 6, 7]
+        range: [ -10, 10]
+    params:
+      size: [100, 50]
+      data_format: 'NCHW'
+
+UpsamplingBilinear2D3:
+  desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingBilinear2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 5, 6, 7]
+        range: [ -1000, 10]
+    params:
+      size: [10, 10]
+      data_format: 'NCHW'
+
+UpsamplingBilinear2D4:
+  desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingBilinear2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 5, 20, 20]
+        range: [ -10, 10]
+    params:
+      size: [10, 10]
+      data_format: 'NCHW'
+
+UpsamplingBilinear2D5:
+  desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingBilinear2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 5, 6, 7]
+        range: [ -10, 10]
+    params:
+      size: [10., 10.]
+      data_format: 'NHWC'
+
+UpsamplingBilinear2D6:
+  desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingBilinear2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 5, 6, 7]
+        range: [ -10, 10]
+    params:
+      size: [10, 10]
+      data_format: 'NCHW'
+
+UpsamplingBilinear2D7:
+  desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingBilinear2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 5, 6, 7]
+        range: [ -10, 10]
+    params:
+      scale_factor: [3.7, 4.1]
+      data_format: 'NCHW'
+
+UpsamplingNearest2D_base:
+  desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingNearest2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 6, 10]
+        range: [ -10, 10]
+    params:
+      size: [12, 12]
+      data_format: 'NCHW'
+
 UpsamplingNearest2D:
+  desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingNearest2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 6, 10]
+        range: [ -10, 10]
+    params:
+      size: [256, 256]
+      data_format: 'NCHW'
+
+UpsamplingNearest2D0:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
   paddle:
     api_name: "paddle.nn.UpsamplingNearest2D"
@@ -1404,6 +10140,111 @@ UpsamplingNearest2D:
         range: [ -1, 1]
     params:
       size: [12, 12]
+      data_format: 'NCHW'
+
+UpsamplingNearest2D1:
+  desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingNearest2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 6, 10]
+        range: [ -10, 10]
+    params:
+      size: [12, 12]
+      data_format: 'NHWC'
+
+UpsamplingNearest2D2:
+  desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingNearest2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 6, 10]
+        range: [ -10, 10]
+    params:
+      scale_factor: 2
+      data_format: 'NCHW'
+
+UpsamplingNearest2D3:
+  desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingNearest2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 6, 10]
+        range: [ -10, 10]
+    params:
+      scale_factor: 5
+      data_format: 'NCHW'
+
+UpsamplingNearest2D4:
+  desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingNearest2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 6, 10]
+        range: [ -10, 10]
+    params:
+      scale_factor: [2, 3]
+      data_format: 'NCHW'
+
+UpsamplingNearest2D5:
+  desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingNearest2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 6, 10]
+        range: [ -10, 10]
+    params:
+      scale_factor: !!python/tuple [2, 3]
+      data_format: 'NCHW'
+
+UpsamplingNearest2D6:
+  desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingNearest2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 6, 10]
+        range: [ -10, 10]
+    params:
+      size: !!python/tuple [12, 13]
+      data_format: 'NCHW'
+
+UpsamplingNearest2D7:
+  desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
+  paddle:
+    api_name: "paddle.nn.UpsamplingNearest2D"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 6, 10]
+        range: [ -10, 0]
+    params:
+      size: [12, 13]
       data_format: 'NCHW'
 
 CosineSimilarity:
@@ -2368,7 +11209,22 @@ linear:
         shape: [4]
         range: [ -1, 1]
 
-alpha_dropout:
+# 测试框架navie_func无法关闭全局train
+#alpha_dropout_base:
+#  desc: "一种具有自归一化性质的dropout"
+#  paddle:
+#    api_name: "paddle.nn.functional.alpha_dropout"
+#    inputs:
+#      x:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [2, 3]
+#        range: [ 0, 2]
+#    params:
+#      p: 0.5
+
+alpha_dropout0:
   desc: "一种具有自归一化性质的dropout"
   paddle:
     api_name: "paddle.nn.functional.alpha_dropout"
@@ -2383,19 +11239,35 @@ alpha_dropout:
       p: 0.5
       training: False
 
-#alpha_dropout0:
-#  desc: "一种具有自归一化性质的dropout"
-#  paddle:
-#    api_name: "paddle.nn.functional.alpha_dropout"
-#    params:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [2, 4, 8, 8]
-#        range: [ -2, 3]
-#      p: 0.5
-#      training: True
+alpha_dropout2:
+  desc: "一种具有自归一化性质的dropout"
+  paddle:
+    api_name: "paddle.nn.functional.alpha_dropout"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ 0, 2]
+    params:
+      p: 1.0
+      training: False
+
+alpha_dropout3:
+  desc: "一种具有自归一化性质的dropout"
+  paddle:
+    api_name: "paddle.nn.functional.alpha_dropout"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ 0, 2]
+    params:
+      p: 0
+      training: False
 
 #dropout:
 #  desc: "一种正则化手段"
