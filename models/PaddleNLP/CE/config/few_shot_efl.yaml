@@ -15,6 +15,15 @@ EXEC:
   exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
 
 TRAIN: # 训练步骤
   -
