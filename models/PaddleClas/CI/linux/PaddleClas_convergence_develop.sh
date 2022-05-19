@@ -3,18 +3,13 @@ python -c "import paddle; print(paddle.__version__,paddle.version.commit)";
 echo '*****************clas_version****'
 git rev-parse HEAD
 
-echo ${model_flag}
 echo ${Data_path}
 echo ${Project_path}
-echo ${paddle_compile}
 
 echo "path before"
 pwd
-if [[ ${model_flag} =~ 'convergence' ]]; then
-    cd ${Project_path}
-    echo "path after"
-    pwd
-fi
+cd ${Project_path}
+echo "path after"
 
 unset http_proxy
 unset https_proxy
