@@ -184,7 +184,10 @@ class JitTrans(WeakTrans):
         else:
             self.func_type = "func"
 
-        self.jit_save_path = os.path.join(os.getcwd(), "jit_save")
+        self.jit_save_path = os.path.join(os.getcwd(), "jit_save", self.case_name)
+
+        if not os.path.exists(os.path.join(os.getcwd(), "jit_save")):
+            os.mkdir(os.path.join(os.getcwd(), "jit_save"))
 
         if os.path.exists(self.jit_save_path):
             shutil.rmtree(self.jit_save_path)

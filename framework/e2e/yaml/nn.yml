@@ -9512,114 +9512,6 @@ Upsample_base:
       align_mode: 0
       data_format: 'NWC'
 
-Upsample_base0:
-  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
-  paddle:
-    api_name: "paddle.nn.Upsample"
-    inputs:
-      data0:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [2, 10, 4]
-        range: [ -10, 10]
-    params:
-      scale_factor: 0.6
-      mode: 'linear'
-      align_corners: False
-      align_mode: 0
-      data_format: 'NWC'
-
-Upsample_base1:
-  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
-  paddle:
-    api_name: "paddle.nn.Upsample"
-    inputs:
-      data0:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [2, 10, 4]
-        range: [ -10, 10]
-    params:
-      scale_factor: 0.6
-      mode: 'linear'
-      align_corners: False
-      align_mode: 1
-      data_format: 'NWC'
-
-Upsample_base2:
-  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
-  paddle:
-    api_name: "paddle.nn.Upsample"
-    inputs:
-      data0:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [2, 10, 4]
-        range: [ -10, 10]
-    params:
-      scale_factor: 9
-      mode: 'linear'
-      align_corners: False
-      align_mode: 0
-      data_format: 'NWC'
-
-Upsample_base3:
-  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
-  paddle:
-    api_name: "paddle.nn.Upsample"
-    inputs:
-      data0:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [2, 10, 4]
-        range: [ -10, 10]
-    params:
-      scale_factor: 0.1
-      mode: 'linear'
-      align_corners: False
-      align_mode: 0
-      data_format: 'NWC'
-
-Upsample_base4:
-  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
-  paddle:
-    api_name: "paddle.nn.Upsample"
-    inputs:
-      data0:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [2, 10, 4]
-        range: [ -10, 10]
-    params:
-      size: [8]
-      mode: 'linear'
-      align_corners: False
-      align_mode: 1
-      data_format: 'NWC'
-
-Upsample_base5:
-  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
-  paddle:
-    api_name: "paddle.nn.Upsample"
-    inputs:
-      data0:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [2, 10, 4]
-        range: [ -10, 10]
-    params:
-      size: [11]
-      mode: 'linear'
-      align_corners: False
-      align_mode: 1
-      data_format: 'NWC'
-
 Upsample:
   desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
   paddle:
@@ -9961,6 +9853,114 @@ Upsample19:
       align_corners: True
       align_mode: 0
       data_format: "NCHW"
+
+Upsample20:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 0.6
+      mode: 'linear'
+      align_corners: False
+      align_mode: 0
+      data_format: 'NWC'
+
+Upsample21:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 0.6
+      mode: 'linear'
+      align_corners: False
+      align_mode: 1
+      data_format: 'NWC'
+
+Upsample22:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 9
+      mode: 'linear'
+      align_corners: False
+      align_mode: 0
+      data_format: 'NWC'
+
+Upsample23:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      scale_factor: 0.1
+      mode: 'linear'
+      align_corners: False
+      align_mode: 0
+      data_format: 'NWC'
+
+Upsample24:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      size: [8]
+      mode: 'linear'
+      align_corners: False
+      align_mode: 1
+      data_format: 'NWC'
+
+Upsample25:
+  desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
+  paddle:
+    api_name: "paddle.nn.Upsample"
+    inputs:
+      data0:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 10, 4]
+        range: [ -10, 10]
+    params:
+      size: [11]
+      mode: 'linear'
+      align_corners: False
+      align_mode: 1
+      data_format: 'NWC'
 
 UpsamplingBilinear2D_base:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -11210,7 +11210,7 @@ linear:
         range: [ -1, 1]
 
 # 测试框架navie_func无法关闭全局train
-#alpha_dropout_base:
+#alpha_dropout0:
 #  desc: "一种具有自归一化性质的dropout"
 #  paddle:
 #    api_name: "paddle.nn.functional.alpha_dropout"
@@ -11224,7 +11224,7 @@ linear:
 #    params:
 #      p: 0.5
 
-alpha_dropout0:
+alpha_dropout_base:
   desc: "一种具有自归一化性质的dropout"
   paddle:
     api_name: "paddle.nn.functional.alpha_dropout"
@@ -11284,7 +11284,7 @@ alpha_dropout3:
 #      training: False
 #      mode: "upscale_in_train"
 
-dropout2d:
+dropout2d_base:
   desc: "一种正则化手段"
   paddle:
     api_name: "paddle.nn.functional.dropout2d"
@@ -11299,7 +11299,7 @@ dropout2d:
       p: 0.5
       training: False
 
-dropout3d:
+dropout3d_base:
   desc: "一种正则化手段"
   paddle:
     api_name: "paddle.nn.functional.dropout3d"
@@ -11314,7 +11314,7 @@ dropout3d:
       p: 0.5
       training: False
 
-diag_embed:
+diag_embed_base:
   desc: "其在指定的 2D 平面（由 dim1 和 dim2 指定）上的对角线由输入 input 填充"
   paddle:
     api_name: "paddle.nn.functional.diag_embed"
@@ -11330,7 +11330,7 @@ diag_embed:
       dim1: -2
       dim2: -1
 
-embedding:
+embedding_base:
   desc: "嵌入层(Embedding Layer)"
   paddle:
     api_name: "paddle.nn.functional.embedding"
@@ -11351,7 +11351,7 @@ embedding:
       padding_idx: -1
       sparse: True
 
-affine_grid:
+affine_grid_base:
   desc: "生成仿射变换前后的feature maps的坐标映射关系"
   paddle:
     api_name: "paddle.nn.functional.affine_grid"
@@ -11383,7 +11383,7 @@ affine_grid0:
         value: [1, 2, 3, 3]
       align_corners: True
 
-cosine_similarity:
+cosine_similarity_base:
   desc: "计算x1与x2沿axis维度的余弦相似度"
   paddle:
     api_name: "paddle.nn.functional.cosine_similarity"
@@ -11404,7 +11404,7 @@ cosine_similarity:
       axis: 1
       eps: 0.00000001
 
-grid_sample:
+grid_sample_base:
   desc: "基于flow field网格的对输入X进行双线性插值采样"
   paddle:
     api_name: "paddle.nn.functional.grid_sample"
@@ -11426,7 +11426,7 @@ grid_sample:
       padding_mode: 'zeros'
       align_corners: True
 
-label_smooth:
+label_smooth_base:
   desc: "标签平滑正则化(LSR)"
   paddle:
     api_name: "paddle.nn.functional.label_smooth"
@@ -11460,7 +11460,7 @@ label_smooth0:
         range: [ 0, 1]
       epsilon: 0.1
 
-one_hot:
+one_hot_base:
   desc: "该OP将输入'x'中的每个id转换为一个one-hot向量，其长度为 num_classes"
   paddle:
     api_name: "paddle.nn.functional.one_hot"
@@ -11474,7 +11474,7 @@ one_hot:
     params:
       num_classes: 6
 
-pixel_shuffle:
+pixel_shuffle_base:
   desc: "将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
   paddle:
     api_name: "paddle.nn.functional.pixel_shuffle"
@@ -11489,7 +11489,7 @@ pixel_shuffle:
       upscale_factor: 3
       data_format: 'NCHW'
 
-gather_tree:
+gather_tree_base:
   desc: "在整个束搜索(Beam Search)结束后使用"
   paddle:
     api_name: "paddle.nn.functional.gather_tree"
@@ -11523,7 +11523,7 @@ gather_tree:
 #        shape: [2, 3]
 #        range: [ 0, 10]
 
-unfold:
+unfold_base:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
   paddle:
     api_name: "paddle.nn.functional.unfold"
@@ -11539,7 +11539,7 @@ unfold:
       paddings: 0
       dilations: 1
 
-glu:
+glu_base:
   desc: "glu激活函数"
   paddle:
     api_name: "paddle.nn.functional.glu"
@@ -11553,7 +11553,7 @@ glu:
     params:
       axis: -1
 
-interpolate:
+interpolate_base:
   desc: "调整一个batch中图片的大小"
   paddle:
     api_name: "paddle.nn.functional.interpolate"
@@ -11571,7 +11571,7 @@ interpolate:
       align_mode: 0
       data_format: 'NCHW'
 
-sequence_mask:
+sequence_mask_base:
   desc: "该层根据输入 x 和 maxlen 输出一个掩码"
   paddle:
     api_name: "paddle.nn.functional.sequence_mask"
@@ -11585,7 +11585,7 @@ sequence_mask:
     params:
       maxlen: 10
 
-temporal_shift:
+temporal_shift_base:
   desc: "对输入X做时序通道T上的位移操作，为TSM(Temporal Shift Module)中使用的操作"
   paddle:
     api_name: "paddle.nn.functional.temporal_shift"
@@ -11600,7 +11600,7 @@ temporal_shift:
       seg_num: 3
       shift_ratio: 0.25
 
-upsample:
+upsample_base:
   desc: "调整一个batch中图片的大小"
   paddle:
     api_name: "paddle.nn.functional.upsample"
@@ -11618,7 +11618,7 @@ upsample:
       align_mode: 0
       data_format: 'NCHW'
 
-class_center_sample:
+class_center_sample_base:
   desc: "类别中心采样方法, 从全量的类别中心采样一个子集类别中心参与训练"
   paddle:
     api_name: "paddle.nn.functional.class_center_sample"
