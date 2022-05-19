@@ -8,7 +8,9 @@ from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
+
 is_in_eager = paddle.fluid.framework._in_eager_without_dygraph_check()
+
 
 class TestZeros(APIBase):
     """
