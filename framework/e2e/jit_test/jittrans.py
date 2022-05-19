@@ -449,6 +449,8 @@ def compare(result, expect, delta=1e-10, rtol=1e-10):
         # 出错打印错误数据
         if res is False:
             diff = abs(result - expect)
+            logging.error("expect is: {}".format(expect))
+            logging.error("result is: {}".format(result))
             logging.error("Output has diff! max diff: {}".format(np.amax(diff)))
         if result.dtype != expect.dtype:
             logging.error(
