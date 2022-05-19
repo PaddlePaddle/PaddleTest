@@ -3,6 +3,14 @@ python -c "import paddle; print(paddle.__version__,paddle.version.commit)";
 echo '*****************clas_version****'
 git rev-parse HEAD
 
+echo ${Data_path}
+echo ${Project_path}
+
+echo "path before"
+pwd
+cd ${Project_path}
+echo "path after"
+
 unset http_proxy
 unset https_proxy
 python -m pip install --upgrade --force --ignore-installed  paddleslim  -i https://mirror.baidu.com/pypi/simple
