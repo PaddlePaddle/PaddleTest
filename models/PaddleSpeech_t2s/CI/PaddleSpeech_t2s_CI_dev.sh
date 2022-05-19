@@ -530,13 +530,8 @@ done
 if [[ $5 == 'all' ]];then
    # test_cli
    cd tests/unit/cli
-   python -m pip uninstall importlib-metadata -y
-   python -m pip install importlib-metadata==2.0.0
-#   cd ../../../audio
-#   python -m pip install .
-#   cd -
-   echo ${gpus}
-   export CUDA_VISIBLE_DEVICES=${gpus}
+   echo $2
+   export CUDA_VISIBLE_DEVICES=$2
    bash test_cli.sh > ../../../$log_path/test_cli.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/test_cli.log) -eq 0 ]];then
       cat ../../../$log_path/test_cli.log
