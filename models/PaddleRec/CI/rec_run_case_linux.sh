@@ -198,34 +198,51 @@ done
 }
 
 # rerank 暂时无模型
-if [ "$1" = "run_CI" ];then  
+run_CI_func(){
     demo_contentunderstanding True
     demo_match True
     demo_multitask True
     demo_rank True
     demo_recall True
-elif [ "$1" = "run_CE" ];then   
-    demo_contentunderstanding True freet_run
-    demo_match True freet_run
-    demo_multitask True freet_run
-    demo_rank True freet_run
-    demo_recall True freet_run
-elif [ "$1" = "run_CPU" ];then 
-    demo_contentunderstanding False
-    demo_match False
-    demo_multitask False
-    demo_rank False
-    demo_recall False
-elif [ "$1" = "run_ALL" ];then 
-    demo_contentunderstanding True freet_run
-    demo_match True freet_run
-    demo_multitask True freet_run
-    demo_rank True freet_run
-    demo_recall True freet_run
+}
 
+run_freet_func(){
+    demo_contentunderstanding True freet_run
+    demo_match True freet_run
+    demo_multitask True freet_run
+    demo_rank True freet_run
+    demo_recall True freet_run
+}
+
+run_CPU_func(){
     demo_contentunderstanding False
+
     demo_match False
     demo_multitask False
     demo_rank False
     demo_recall False
-fi
+}
+
+run_demo_func(){
+    source ./run_rec_demo.sh
+    demo_movie_recommand True
+}
+
+case $1 in
+"run_CI")
+    run_CI_func
+    ;;
+"run_CE")
+    run_freet_func
+    ;;
+"run_CPU")
+    run_CPU_func
+    ;;
+"run_ALL")
+    run_freet_func
+    run_CPU_func
+    ;;
+"run_demo")
+    run_demo_func
+    ;;
+esac
