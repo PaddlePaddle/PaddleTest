@@ -10,6 +10,7 @@ echo "path before"
 pwd
 cd ${Project_path}
 echo "path after"
+pwd
 
 unset http_proxy
 unset https_proxy
@@ -36,6 +37,17 @@ unzip flowers102.zip >unzip_flowers102.log 2>&1
 ls
 cd ..
 
+log_path=log
+phases='train'
+for phase in $phases
+do
+if [[ -d ${log_path}/${phase} ]]; then
+   echo -e "\033[33m ${log_path}/${phase} is exsit!\033[0m"
+else
+   mkdir -p  ${log_path}/${phase}
+   echo -e "\033[33m ${log_path}/${phase} is created successfully!\033[0m"
+fi
+done
 
 filename=${1##*/}
 #echo $filename
@@ -57,12 +69,12 @@ python -m paddle.distributed.launch tools/train.py -c $1 \
     -o DataLoader.Eval.dataset.cls_label_path="./dataset/flowers102/val_list.txt" \
     -o DataLoader.Eval.dataset.image_root="./dataset/flowers102/" \
     -o Arch.pretrained=True -o DataLoader.Train.sampler.batch_size=32 \
-    -o DataLoader.Eval.sampler.batch_size=32 > $model.log
+    -o DataLoader.Eval.sampler.batch_size=32 > $log_path/train/${model}_convergence.log 2>&1
 
 
 sleep 10
 
 nvidia-smi
 
-cat $model.log
-cat $model.log |grep Avg
+cat $log_path/train/${model}_convergence.log
+cat $log_path/train/${model}_convergence.log |grep Avg
