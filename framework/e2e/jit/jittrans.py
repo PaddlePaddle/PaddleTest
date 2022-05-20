@@ -106,6 +106,10 @@ class JitTrans(WeakTrans):
     def __init__(self, case, default_type=np.float32, seed=None):
         """init"""
         super(JitTrans, self).__init__(case, default_type=np.float32, seed=None)
+        if paddle.is_compiled_with_cuda():
+            paddle.set_device('gpu')
+        else:
+            paddle.set_device('cpu')
         self.atol = 1e-5
         self.rtol = 1e-6
         # 忽略全部测试的api
