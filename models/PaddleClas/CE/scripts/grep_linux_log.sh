@@ -7,7 +7,14 @@ cd ${Project_path}
 echo '#####ls'
 ls
 
-if [[ $2 == 'train_linux_gpu1' ]] ; then
+if [[ $2 == 'train_linux_convergence' ]] ; then
+    echo '#####train_linux_convergence'
+    cat ${log_path}/train/${model}_convergence.log | grep Avg
+    cat ${log_path}/train/${model}_convergence.log | grep Eval | grep best
+    cat ${log_path}/train/${model}_convergence.log | grep Eval | grep best > ../${log_path}/${model}_convergence.log
+    cat ../${log_path}/${model}_convergence.log
+
+elif [[ $2 == 'train_linux_gpu1' ]] ; then
     echo '#####train_linux_gpu1'
     cat ${log_path}/train/${model}_1card.log | grep Avg
     cat ${log_path}/train/${model}_1card.log | grep Train | grep Avg | grep '5/5' > tmp_1card.log
