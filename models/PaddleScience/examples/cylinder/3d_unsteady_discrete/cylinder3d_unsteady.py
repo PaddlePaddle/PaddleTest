@@ -1,6 +1,21 @@
 """
 cylinder3d_unsteady ce test
 """
+# Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# discrete time method
 
 import os
 import zipfile
@@ -12,15 +27,15 @@ import paddlescience as psci
 paddle.seed(1)
 np.random.seed(1)
 
-paddle.enable_static()
-# paddle.disable_static()
+# paddle.enable_static()
+paddle.disable_static()
+
 
 # load real data
 def GetRealPhyInfo(time, need_info=None):
     """
     get real phy info
     """
-    # if real data don't exist, you need to download it.
     if os.path.exists("./openfoam_cylinder_re100") is False:
         data_set = (
             "https://dataset.bj.bcebos.com/PaddleScience/"
@@ -86,7 +101,7 @@ pde_disc = pde.discretize(time_method="implicit", time_step=1, geo_disc=geo_disc
 net = psci.network.FCNet(num_ins=3, num_outs=4, num_layers=10, hidden_size=50, activation="tanh")
 
 # Loss
-loss = psci.loss.L2(p=2)
+loss = psci.loss.L2(p=2, data_weight=100.0)
 
 # Algorithm
 algo = psci.algorithm.PINNs(net=net, loss=loss)
@@ -105,7 +120,7 @@ for next_time in range(int(pde_disc.time_internal[0]) + 1, int(pde_disc.time_int
     solver.feed_data_interior_cur(current_interior)  # add u(n) interior
     solver.feed_data_user_cur(current_user)  # add u(n) user
     solver.feed_data_user_next(GetRealPhyInfo(next_time, need_info="physic"))  # add u(n+1) user
-    next_uvwp = solver.solve(num_epoch=10)
+    next_uvwp = solver.solve(num_epoch=2000)
     # Save vtk
     file_path = "train_cylinder_unsteady_re100/cylinder3d_train_rslt_" + str(next_time)
     psci.visu.save_vtk(filename=file_path, geo_disc=pde_disc.geometry, data=next_uvwp)
