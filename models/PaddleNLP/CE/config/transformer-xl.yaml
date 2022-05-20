@@ -25,7 +25,7 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh data_proc.sh
+        cmd: bash data_proc.sh
 
 TRAIN: # 训练步骤
   -
@@ -37,7 +37,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh 'single'
+        cmd: bash train.sh 'single'
 
     kpis: #kpi指标
       bpc:
@@ -58,7 +58,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh 'multi' $SET_MULTI_CUDA
+        cmd: bash train.sh 'multi' $SET_MULTI_CUDA
 
     kpis: #kpi指标
       bpc:
@@ -79,7 +79,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh 'recv'
+        cmd: bash train.sh 'recv'
     kpis:
       exit_code:
         latest: True
@@ -118,7 +118,7 @@ EVAL:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh eval.sh
+        cmd: bash eval.sh
     kpis:
       exit_code:
         latest: True
