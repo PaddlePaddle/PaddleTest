@@ -16,6 +16,7 @@ for model in $(echo ${!dic[*]});do
     model_path=${dic[$model]}
     echo ${model} : ${model_path}
     cd ${rec_dir}/${model_path}
+    python -m pip instal pip install py27hash
     bash data_prepare.sh > ${log_path}/movie_recommand_data_prepare 2>&1
     print_info $? movie_recommand_data_prepare
 
@@ -33,7 +34,7 @@ for model in $(echo ${!dic[*]});do
     python parse.py recall_offline recall_infer_result > ${log_path}/movie_recommand_recall_offline_parse 2>&1
     print_info $? movie_recommand_recall_offline_parse
     python parse.py rank_offline rank_infer_result > ${log_path}/movie_recommand_rank_offline_parse 2>&1
-    print_info $? movie_recommand_recall_offline_parse
+    print_info $? movie_recommand_rank_offline_parse
 
 done
 }
