@@ -37,10 +37,14 @@ rem data
 rd /s /q data
 mklink /j data %data_path%\PaddleGAN
 
+set http_proxy=
+set https_proxy=
 rem dependency
-python -m pip install -v -e .
-python -m pip install dlib
-python -m pip install -r requirements.txt
+python -m pip install --ignore-installed  --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip uninstall opencv-python -y
+python -m pip install -v -e . -i https://mirror.baidu.com/pypi/simple
+python -m pip install dlib -i https://mirror.baidu.com/pypi/simple
+python -m pip install   --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 python -m pip list
 
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
@@ -101,6 +105,16 @@ if !model!==stylegan_v2_256_ffhq (
 ) else if !model!==msvsr_reds (
     rem windows oom
     echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+
+) else if !model!==basicvsr++_vimeo90k_BD (
+    echo "basicvsr++_vimeo90k_BD eval cv2 have bug"
+    rem windows oom
+    echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
+
+) else if !model!==basicvsr++_reds	 (
+    echo "basicvsr++_reds eval cv2 have bug"
+    rem windows oom
+    echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
 
 ) else if !model!==makeup (
 

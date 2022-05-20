@@ -1,0 +1,35 @@
+Conv1D_base:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ 0, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: 3
+      stride: 1
+      padding: 0
+
+Conv1D:
+  desc: "1维卷积"
+  paddle:
+    api_name: "paddle.nn.Conv1D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -1, 1]
+    params:
+      in_channels: 3
+      out_channels: 1
+      kernel_size: 3
+      stride: 1
+      padding: 0

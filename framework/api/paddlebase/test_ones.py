@@ -9,6 +9,8 @@ import paddle
 import pytest
 import numpy as np
 
+is_in_eager = paddle.fluid.framework._in_eager_without_dygraph_check()
+
 
 class TestOnes(APIBase):
     """
@@ -363,7 +365,8 @@ def test_ones30():
     no shape_type=tuple,shape=(0),AttributeError
     """
     shape = 0
-    obj.exception(mode="python", etype=AttributeError, shape=shape)
+    etype = ValueError if is_in_eager else AttributeError
+    obj.exception(mode="python", etype=etype, shape=shape)
 
 
 @pytest.mark.api_base_ones_exception
@@ -372,7 +375,8 @@ def test_ones31():
     shape_type=tuple,shape=(1.1),AttributeError
     """
     shape = 1.1
-    obj.exception(mode="python", etype=AttributeError, shape=shape)
+    etype = ValueError if is_in_eager else AttributeError
+    obj.exception(mode="python", etype=etype, shape=shape)
 
 
 @pytest.mark.api_base_ones_exception

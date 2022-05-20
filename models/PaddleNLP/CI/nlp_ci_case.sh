@@ -86,7 +86,7 @@ print_info $? glue_${TASK_NAME}_train
 # 4 bert
 bert() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-cd ${nlp_dir}/examples/language_model/bert/
+cd ${nlp_dir}/model_zoo/bert/
 cp -r /ssd1/paddlenlp/download/bert/* ./data/
 ## pretrain
 time (python -m paddle.distributed.launch run_pretrain.py \
@@ -176,7 +176,7 @@ time (python -m paddle.distributed.launch  --log_dir log  run_pretrain.py --mode
 }
 # 7 electra
 electra(){
-cd ${nlp_dir}/examples/language_model/electra/
+cd ${nlp_dir}/model_zoo/electra/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export DATA_DIR=./BookCorpus/
 cp -r /ssd1/paddlenlp/download/electra/BookCorpus/ ./
@@ -201,11 +201,11 @@ print_info $? electra_pretrain
 # 8 gpt
 gpt(){
 #data process
-cd ${nlp_dir}/examples/language_model/data_tools/
+cd ${nlp_dir}/model_zoo/ernie-1.0/data_tools
 sed -i "s/python3/python/g" Makefile
 sed -i "s/python-config/python3.7m-config/g" Makefile
 #pretrain
-cd ${nlp_dir}/examples/language_model/gpt/
+cd ${nlp_dir}/model_zoo/gpt/
 cp -r /ssd1/paddlenlp/download/gpt/* ./
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 time (python -m paddle.distributed.launch run_pretrain.py \
@@ -260,7 +260,7 @@ cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddl
 make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
 print_info $? gpt_C_FT
 #depoly python
-cd ${nlp_dir}/examples/language_model/gpt/faster_gpt/
+cd ${nlp_dir}/model_zoo/gpt/faster_gpt/
 python infer.py \
     --model_name_or_path gpt2-medium-en \
     --batch_size 1 \
@@ -288,7 +288,7 @@ print_info $? gpt_deploy_C_FT
 # 9 ernie-1.0
 ernie-1.0 (){
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-cd ${nlp_dir}/examples/language_model/ernie-1.0/
+cd ${nlp_dir}/model_zoo/ernie-1.0/
 mkdir data && cd data
 wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_ids.npy
 wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_idx.npz
@@ -437,7 +437,7 @@ print_info $? squad_predict
 # 14 tinybert
 tinybert() {
 export CUDA_VISIBLE_DEVICES=${cudaid1}
-cd ${nlp_dir}/examples/model_compression/tinybert/
+cd ${nlp_dir}/model_zoo/tinybert/
 cp -r /ssd1/paddlenlp/download/tinybert/pretrained_models/ ./
 #中间层蒸馏
 time (python task_distill.py \
@@ -816,7 +816,7 @@ print_info $? simbert
 }
 #25 ernie-doc
 ernie-doc(){
-cd ${nlp_dir}/examples/language_model/ernie-doc/
+cd ${nlp_dir}/model_zoo/ernie-doc/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 time (python -m paddle.distributed.launch  --log_dir hyp run_classifier.py --epochs 15 --layerwise_decay 0.7 --learning_rate 5e-5 --batch_size 4 --save_steps 100 --max_steps 100  --dataset hyp --output_dir hyp >${log_path}/ernie-doc_hyp) >>${log_path}/ernie-doc_hyp 2>&1
 print_info $? ernie-doc_hyp
@@ -936,7 +936,7 @@ print_info $? nptag_depoly
 #31 ernie-m
 ernie-m() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-cd ${nlp_dir}/examples/language_model/ernie-m
+cd ${nlp_dir}/model_zoo/ernie-m
 python -m paddle.distributed.launch  --log_dir output run_classifier.py  \
    --task_type cross-lingual-transfer  \
    --batch_size 8    \
@@ -947,11 +947,68 @@ python -m paddle.distributed.launch  --log_dir output run_classifier.py  \
    --logging_steps 1  >${log_path}/ernie-m >>${log_path}/ernie-m 2>&1
 print_info $? ernie-m
 }
-# #32 bart
-# bart{
-# cd ${nlp_dir}/examples/text_summarization/bart
-# }
-#33
+#32 clue
+clue (){
+cd ${nlp_dir}/examples/benchmark/clue/classification
+python -u ./run_clue_classifier_trainer.py \
+    --model_name_or_path roberta-wwm-ext-large \
+    --dataset "clue afqmc" \
+    --max_seq_length 128 \
+    --per_device_train_batch_size 32   \
+    --per_device_eval_batch_size 32   \
+    --learning_rate 1e-5 \
+    --num_train_epochs 3 \
+    --logging_steps 1 \
+    --seed 42  \
+    --save_steps 3 \
+    --warmup_ratio 0.1 \
+    --weight_decay 0.01 \
+    --adam_epsilon 1e-8 \
+    --output_dir ./tmp \
+    --device gpu  \
+    --do_train \
+    --do_eval \
+    --metric_for_best_model "eval_accuracy" \
+    --load_best_model_at_end \
+    --save_total_limit 1 \
+    --max_steps 1 >${log_path}/clue-trainer_api >>${log_path}/clue-trainer_api 2>&1
+print_info $? clue-tranier_api
+python -u run_clue_classifier.py  \
+    --model_name_or_path ernie-3.0-base-zh \
+    --task_name afqmc \
+    --max_seq_length 128 \
+    --batch_size 16   \
+    --learning_rate 3e-5 \
+    --num_train_epochs 3 \
+    --logging_steps 100 \
+    --seed 42  \
+    --save_steps 1 \
+    --warmup_proportion 0.1 \
+    --weight_decay 0.01 \
+    --adam_epsilon 1e-8 \
+    --output_dir ./output/afqmc \
+    --device gpu \
+    --max_steps 1 \
+    --do_train  >${log_path}/clue-class >>${log_path}/clue-class 2>&1
+print_info $? clue-class
+cd ${nlp_dir}/examples/benchmark/clue/mrc
+export CUDA_VISIBLE_DEVICES=${cudaid1}
+python -m paddle.distributed.launch run_cmrc.py \
+    --model_name_or_path ernie-3.0-base-zh \
+    --batch_size 16 \
+    --learning_rate 3e-5 \
+    --max_seq_length 512 \
+    --num_train_epochs 2 \
+    --do_train \
+    --do_predict \
+    --warmup_proportion 0.1 \
+    --weight_decay 0.01 \
+    --gradient_accumulation_steps 2 \
+    --max_steps 1 \
+    --save_steps 1 \
+    --output_dir ./tmp >${log_path}/clue-mrc >>${log_path}/clue-mrc 2>&1
+print_info $? clue-mrc
+}
 ####################################
 export P0case_list=()
 export P0case_time=0
@@ -960,14 +1017,14 @@ declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2   ["squad"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
-  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5)
+  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["clue"]=5)
 get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
 done
 P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie-1.0 xlnet ofa  squad tinybert lexical_analysis seq2seq \
 pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
-nptag ernie-m )
+nptag ernie-m clue)
 P0case_time=${all_P0case_time}
 }
 set -e

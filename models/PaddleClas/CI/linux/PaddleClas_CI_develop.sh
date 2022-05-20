@@ -120,6 +120,8 @@ unset http_proxy
 unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
+# python -m pip install --ignore-installed --upgrade \
+#    setuptools==59.5.0 -i https://mirror.baidu.com/pypi/simple #before install bcolz
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
@@ -295,12 +297,22 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             > $log_path/train/${model}_2card.log 2>&1
     else
         if [[ ! ${line} =~ "fp16.yaml" ]]; then
-            python -m paddle.distributed.launch tools/train.py  \
-                -c $line -o Global.epochs=1 \
-                -o Global.output_dir=output \
-                -o DataLoader.Train.sampler.batch_size=1 \
-                -o DataLoader.Eval.sampler.batch_size=1  \
-                > $log_path/train/${model}_2card.log 2>&1
+            if [[ `cat ${line} |grep MultiScaleSampler|wc -l` -gt "0"  ]]; then #for tingquan 220513 change
+                echo "have MultiScaleSampler"
+                python -m paddle.distributed.launch tools/train.py  \
+                    -c $line -o Global.epochs=1 \
+                    -o Global.output_dir=output \
+                    -o DataLoader.Train.sampler.first_bs=1 \
+                    -o DataLoader.Eval.sampler.batch_size=1  \
+                    > $log_path/train/${model}_2card.log 2>&1
+            else
+                python -m paddle.distributed.launch tools/train.py  \
+                    -c $line -o Global.epochs=1 \
+                    -o Global.output_dir=output \
+                    -o DataLoader.Train.sampler.batch_size=1 \
+                    -o DataLoader.Eval.sampler.batch_size=1  \
+                    > $log_path/train/${model}_2card.log 2>&1
+            fi
         else
             python -m paddle.distributed.launch ppcls/static/train.py  \
                 -c $line -o Global.epochs=1 \
@@ -378,7 +390,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         rm -rf ${model}_pretrained.pdparams
     fi
 
-    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] \
+    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] || [[ ${model} =~ 'PPHGNet' ]] \
         || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ '/ResNet50_vd.yaml' ]];then
         echo "######  use pretrain model"
         echo ${model}
@@ -393,8 +405,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         echo ${model}
         wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${params_dir}_pretrained.pdparams --no-proxy
         rm -rf output/$params_dir/latest.pdparams
-        cp -r ResNet50_pretrained.pdparams output/$params_dir/latest.pdparams
-        rm -rf ResNet50_pretrained.pdparams
+        cp -r ${params_dir}_pretrained.pdparams output/$params_dir/latest.pdparams
+        rm -rf ${params_dir}_pretrained.pdparams
     fi
 
     sleep 3

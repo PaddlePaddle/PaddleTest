@@ -5,7 +5,7 @@ if not exist log\electra md log\electra
 
 set logpath=%cd%\log\electra
 
-cd models_repo\examples\language_model\electra
+cd models_repo\model_zoo\electra
 
 python -u ./export_model.py --input_model_dir ./SST-2/sst-2_ft_model_40.pdparams/ --output_model_dir ./ --model_name electra-deploy
 

@@ -25,6 +25,8 @@ if [ $? -eq 0 ];then
    echo -e "\033[33m data preprocess of tacotron2 successfully! \033[0m"
 else
    cat preprocess.log
+   rm -rf ./dump
+   ln -s ${Data_path}/preprocess_data/new_tacotron2/dump/ ./
    echo -e "\033[31m data preprocess of tacotron2 failed! \033[0m"
 fi
 

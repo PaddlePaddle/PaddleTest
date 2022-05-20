@@ -35,18 +35,19 @@ python -m pip install --ignore-installed  --upgrade pip \
 echo "######  install ppgan "
 python -m pip install  --ignore-installed  ppgan \
    -i https://mirror.baidu.com/pypi/simple
-python -m pip uninstall opencv-python
+# python -m pip uninstall opencv-python -y
 python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
 # python -m pip install --ignore-installed  dlib
 python -m pip install  --ignore-installed  dlib \
    -i https://mirror.baidu.com/pypi/simple
-# python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
-# python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
 python -c 'import dlib'
 python -m pip install  --ignore-installed  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
+# python -m pip uninstall opencv-python-headless -y #fix '_registerMatType' from 'cv2.cv2'
+# python -m pip install  --ignore-installed "opencv-python-headless<4.3" -i https://mirror.baidu.com/pypi/simple
 
+python -m pip list |grep opencv
 # dir
 log_path=log
 phases='train eval infer'
@@ -71,7 +72,7 @@ echo $model
 if [ -d "output" ]; then
     rm -rf output
 fi
-sed -i '' 's/epochs/total_iters/g' $line #将epcoh换为iter
+sed -i '' '1s/epochs/total_iters/g' $line #将epcoh换为iter
 sed -i '' 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 #train
 python tools/main.py -c $line -o total_iters=20 log_config.interval=20 log_config.visiual_interval=1 snapshot_config.interval=10 output_dir=output > $log_path/train/$model.log 2>&1

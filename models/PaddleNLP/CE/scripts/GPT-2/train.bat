@@ -5,7 +5,7 @@ if not exist log\GPT-2\ md log\GPT-2\
 
 set logpath=%cd%\log\GPT-2
 
-cd models_repo\examples\language_model\gpt\
+cd models_repo\model_zoo\gpt\
 
 xcopy /e /y /c /h /r D:\ce_data\paddleNLP\gpt2\  .\
 

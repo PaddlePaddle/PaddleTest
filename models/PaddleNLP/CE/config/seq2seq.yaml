@@ -27,7 +27,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh $XPU "single"
+        cmd: bash train.sh $XPU "single"
 
     kpis: #kpi指标
       Perplexity:
@@ -48,7 +48,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh $XPU "multi"
+        cmd: bash train.sh $XPU "multi"
 
     kpis: #kpi指标
       Perplexity:
@@ -98,7 +98,7 @@ INFER:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh infer.sh $XPU
+        cmd: bash infer.sh $XPU
     kpis:
       exit_code:
         latest: True
@@ -137,7 +137,7 @@ InferFram:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh InferFram.sh $XPU
+        cmd: bash InferFram.sh $XPU
     kpis:
       exit_code:
         latest: True
