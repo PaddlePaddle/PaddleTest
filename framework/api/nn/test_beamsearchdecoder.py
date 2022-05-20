@@ -15,6 +15,7 @@ from paddle.nn import GRUCell, Linear, Embedding, LSTMCell, SimpleRNNCell, Softm
 
 is_in_eager = paddle.fluid.framework._in_eager_without_dygraph_check()
 
+
 np.random.seed(2)
 random.seed(2)
 paddle.seed(2)
