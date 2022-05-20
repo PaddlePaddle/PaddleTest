@@ -548,7 +548,6 @@ def test_beamsearchdecoder6():
                 raise Exception
 
 
-
 @pytest.mark.api_nn_BeamSearchDecoder_exception
 def test_beamsearchdecoder7():
     """
