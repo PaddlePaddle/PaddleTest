@@ -296,6 +296,7 @@ class JitTrans(WeakTrans):
             jit_obj = paddle.jit.to_static(obj)
             exp = jit_obj(inputs_value)  # 此行用于构建inputSpec,不可删除
             paddle.jit.save(jit_obj, path=os.path.join(self.jit_save_path, self.get_func("paddle")))
+            print("jit_save use exp: ", exp)
         elif method == "BuildClassWithInputSpec":
             input_spec = self.mk_list_spec()
             paddle.jit.save(
@@ -305,6 +306,7 @@ class JitTrans(WeakTrans):
             jit_obj = paddle.jit.to_static(obj)
             exp = jit_obj(self.in_tensor)  # 此行用于构建inputSpec,不可删除
             paddle.jit.save(jit_obj, path=os.path.join(self.jit_save_path, self.get_func("paddle")))
+            print("jit_save use exp: ", exp)
         elif method == "BuildFuncWithInputSpec":
             input_spec = self.mk_dict_spec()
             # jit_obj = paddle.jit.to_static(obj, input_spec=[input_spec])
@@ -315,6 +317,7 @@ class JitTrans(WeakTrans):
             jit_obj = paddle.jit.to_static(obj)
             exp = jit_obj(self.in_tensor, self.in_params, self.func)  # 此行用于构建inputSpec,不可删除
             paddle.jit.save(jit_obj, path=os.path.join(self.jit_save_path, self.get_func("paddle")))
+            print("jit_save use exp: ", exp)
 
     def jit_load(self, method=None):
         """paddle.jit.load加载"""
