@@ -13,6 +13,7 @@ import numpy as np
 from paddle.nn import BeamSearchDecoder, dynamic_decode
 from paddle.nn import GRUCell, Linear, Embedding, LSTMCell, SimpleRNNCell, Softmax
 
+is_in_eager = paddle.fluid.framework._in_eager_without_dygraph_check()
 
 np.random.seed(2)
 random.seed(2)
@@ -533,11 +534,18 @@ def test_beamsearchdecoder6():
     try:
         dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=5)
     except Exception as e:
-        # print(e)
-        if ("[operator < matmul > error]" in e.args[0]) or ("[operator < matmul_v2 > error]" in e.args[0]):
-            pass
+        print(e)
+        if is_in_eager:
+            if ("matmul_final_state_dygraph_function" in e.args[0]) and ("InvalidArgumentError" in e.args[0]):
+                pass
+            else:
+                raise Exception
         else:
-            raise Exception
+            if ("[operator < matmul > error]" in e.args[0]) or ("[operator < matmul_v2 > error]" in e.args[0]):
+                pass
+            else:
+                raise Exception
+
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_exception
