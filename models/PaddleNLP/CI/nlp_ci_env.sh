@@ -56,8 +56,6 @@ nlp2_build (){
     python -m pip install dist/paddlenlp****.whl
 }
 $3
-python -m pip install -r requirements_ci.txt
-unset http_proxy && unset https_proxy
 python -m pip install paddleslim -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -c 'from visualdl import LogWriter'
 pip list

@@ -65,7 +65,7 @@ def train(net_params=None, distributed_env=False):
 
     # Training
     adm_opt = paddle.optimizer.Adam(learning_rate=1e-5, parameters=PINN.net.parameters())
-    PINN.train(num_epoch=10, optimizer=adm_opt)
+    PINN.train(num_epoch=10000, optimizer=adm_opt)
 
     # bfgs_opt = psci.optimizer.BFGS()
 

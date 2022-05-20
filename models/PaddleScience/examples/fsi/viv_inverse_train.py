@@ -52,9 +52,9 @@ def train(net_params=None):
     batchsize = 150
     scheduler = paddle.optimizer.lr.StepDecay(learning_rate=1e-3, step_size=20000, gamma=0.9)
     adm_opt = paddle.optimizer.Adam(scheduler, weight_decay=None, parameters=PINN.net.parameters())
-    PINN.train(num_epoch=100000, batchsize=batchsize, optimizer=adm_opt, scheduler=scheduler)
+    PINN.train(num_epoch=20000, batchsize=batchsize, optimizer=adm_opt, scheduler=scheduler)
     adm_opt = psci.optimizer.Adam(learning_rate=1e-5, weight_decay=None, parameters=PINN.net.parameters())
-    PINN.train(num_epoch=100000, batchsize=batchsize, optimizer=adm_opt)
+    PINN.train(num_epoch=20000, batchsize=batchsize, optimizer=adm_opt)
 
 
 if __name__ == "__main__":

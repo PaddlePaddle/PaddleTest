@@ -184,7 +184,10 @@ class JitTrans(WeakTrans):
         else:
             self.func_type = "func"
 
-        self.jit_save_path = os.path.join(os.getcwd(), "jit_save")
+        self.jit_save_path = os.path.join(os.getcwd(), "jit_save", self.case_name)
+
+        if not os.path.exists(os.path.join(os.getcwd(), "jit_save")):
+            os.mkdir(os.path.join(os.getcwd(), "jit_save"))
 
         if os.path.exists(self.jit_save_path):
             shutil.rmtree(self.jit_save_path)
@@ -446,6 +449,8 @@ def compare(result, expect, delta=1e-10, rtol=1e-10):
         # 出错打印错误数据
         if res is False:
             diff = abs(result - expect)
+            logging.error("expect is: {}".format(expect))
+            logging.error("result is: {}".format(result))
             logging.error("Output has diff! max diff: {}".format(np.amax(diff)))
         if result.dtype != expect.dtype:
             logging.error(

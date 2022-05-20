@@ -72,7 +72,7 @@ echo $model
 if [ -d "output" ]; then
     rm -rf output
 fi
-sed -i '' 's/epochs/total_iters/g' $line #将epcoh换为iter
+sed -i '' '1s/epochs/total_iters/g' $line #将epcoh换为iter
 sed -i '' 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 #train
 python tools/main.py -c $line -o total_iters=20 log_config.interval=20 log_config.visiual_interval=1 snapshot_config.interval=10 output_dir=output > $log_path/train/$model.log 2>&1
