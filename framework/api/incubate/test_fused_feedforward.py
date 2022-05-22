@@ -10,6 +10,8 @@ from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
+from paddle.fluid.framework import _enable_legacy_dygraph
+_enable_legacy_dygraph()
 
 sys.path.append("../../utils/")
 from interceptor import skip_not_compile_gpu
