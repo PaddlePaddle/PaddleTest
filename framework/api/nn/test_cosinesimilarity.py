@@ -11,6 +11,8 @@ import paddle
 import pytest
 import numpy as np
 
+is_in_eager = paddle.fluid.framework._in_eager_without_dygraph_check()
+
 
 class TestCosineSimilarity(APIBase):
     """
@@ -259,8 +261,14 @@ def test_cosinesimilarity8():
     try:
         cos_sim_func(x1_tensor, x2_tensor)
     except Exception as e:
-        # print(e)
-        if "[operator < elementwise_mul > error]" in e.args[0]:
-            pass
+        print(e)
+        if is_in_eager:
+            if "multiply_final_state_dygraph_function" in e.args[0] and "InvalidArgumentError" in e.args[0]:
+                pass
+            else:
+                raise Exception
         else:
-            raise Exception
+            if "[operator < elementwise_mul > error]" in e.args[0]:
+                pass
+            else:
+                raise Exception

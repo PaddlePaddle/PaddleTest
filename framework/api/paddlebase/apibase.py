@@ -536,12 +536,18 @@ class APIBase(object):
         """
         if self.__layertype == "func":
             res = self.func(**self.kwargs)
-            loss = paddle.mean(res).numpy()
+            if isinstance(res, (list, tuple)):
+                loss = paddle.mean(res[0]).numpy()
+            else:
+                loss = paddle.mean(res).numpy()
             return loss
         elif self.__layertype == "class":
             obj = self.func(**self.kwargs)
             res = obj(self.data)
-            loss = paddle.mean(res).numpy()
+            if isinstance(res, (list, tuple)):
+                loss = paddle.mean(res[0]).numpy()
+            else:
+                loss = paddle.mean(res).numpy()
             return loss
 
     def _dygraph_forward(self):
@@ -564,7 +570,10 @@ class APIBase(object):
         Args:
             res ([variable]): forward_res
         """
-        loss = paddle.mean(res)
+        if isinstance(res, (list, tuple)):
+            loss = paddle.mean(res[0])
+        else:
+            loss = paddle.mean(res)
         loss.backward()
         grad = {}
         for k, v in self.kwargs.items():

@@ -15,7 +15,7 @@ cd $home
 # jit
 cd e2e
 cd jit
-bash ./run.sh
+#bash ./run.sh
 jit=$?
 echo ${jit}
 cd $home
