@@ -19,4 +19,4 @@ git branch
 python -m pip install -r requirements.txt
 python setup.py install
 echo --------pip list---------
-python -m pip list 
+python -m pip list

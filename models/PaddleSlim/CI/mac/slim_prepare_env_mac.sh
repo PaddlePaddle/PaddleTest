@@ -70,4 +70,3 @@ slim3_build_whl (){
 $3
 echo ---installed paddleslim---
 python -m pip list | grep paddleslim
-
