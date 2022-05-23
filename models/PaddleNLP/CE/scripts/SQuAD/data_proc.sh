@@ -13,6 +13,6 @@ cd $code_path
 # 删除之前先打印出来
 echo "删除之前先打印出来"
 cat /opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/datasets/builder.py
-sed -i '557,561d' /opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/datasets/builder.py
+sed -i '584,588d' /opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/datasets/builder.py
 echo "删除之后再打印出来"
 cat /opt/_internal/cpython-3.7.0/lib/python3.7/site-packages/datasets/builder.py

@@ -16,6 +16,6 @@ cd $code_path
 # 跑之前先修改下包的代码：
 echo "删除之前先打印出来"
 cat /usr/local/lib/python3.8/dist-packages/datasets/builder.py
-sed -i '557,561d' /usr/local/lib/python3.8/dist-packages/datasets/builder.py
+sed -i '584,588d' /usr/local/lib/python3.8/dist-packages/datasets/builder.py
 echo "删除之后再打印出来"
 cat /usr/local/lib/python3.8/dist-packages/datasets/builder.py
