@@ -9,6 +9,8 @@ import paddle
 import pytest
 import numpy as np
 
+is_in_eager = paddle.fluid.framework._in_eager_without_dygraph_check()
+
 
 class TestRNNCellBase(APIBase):
     """
@@ -131,10 +133,16 @@ def test_rnncellbase6():
     try:
         obj.get_initial_states(batch_ref=x, shape=shape, dtype=dtype, batch_dim_idx=batch_dim_idx)
     except Exception as e:
-        if "[operator < fill_constant_batch_size_like > error]" in e.args[0]:
-            pass
+        if is_in_eager:
+            if "full_batch_size_like" in e.args[0] and "InvalidArgumentError" in e.args[0]:
+                pass
+            else:
+                raise Exception
         else:
-            raise Exception
+            if "[operator < fill_constant_batch_size_like > error]" in e.args[0]:
+                pass
+            else:
+                raise Exception
 
 
 @pytest.mark.api_nn_RNNCellBase_parameters
@@ -199,10 +207,17 @@ def test_rnncellbase10():
     try:
         obj.get_initial_states(batch_ref=x, shape=shape, dtype=dtype)
     except Exception as e:
-        if "[operator < fill_constant_batch_size_like > error]" in e.args[0]:
-            pass
+        print(e.args[0])
+        if is_in_eager:
+            if "full_batch_size_like" in e.args[0] and "PreconditionNotMetError" in e.args[0]:
+                pass
+            else:
+                raise Exception
         else:
-            raise Exception
+            if "[operator < fill_constant_batch_size_like > error]" in e.args[0]:
+                pass
+            else:
+                raise Exception
 
 
 @pytest.mark.api_nn_RNNCellBase_parameters
