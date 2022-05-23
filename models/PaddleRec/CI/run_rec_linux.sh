@@ -1,5 +1,5 @@
 #! /bin/bash
-# $1:python_version $2:paddle_compile_path $3:run_CI/run_CE/run_ALL/run_CPU  $4:cudaid1 $5:cudaid2
+# $1:python_version $2:paddle_compile_path $3:run_CI/run_CE/run_ALL/run_CPU $4:cudaid1 $5:cudaid2
 
 case $1 in
 27)
@@ -32,7 +32,7 @@ python -m pip install numba
 python -m pip install pgl
 python -m pip install tqdm
 echo ---pip list---
-python -m pip list 
+python -m pip list
 
 # set rec workdir
 # workspace == PaddleRec ?

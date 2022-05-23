@@ -38,10 +38,10 @@ feetrun_case_func(){
 }
 
 feetrun_dy_st_train_infer(){
-    feetrun_case_func $1  $2 dy_train "../../../tools/trainer.py"
-    feetrun_case_func $1  $2 dy_infer "../../../tools/infer.py"
-    feetrun_case_func $1  $2 st_train "../../../tools/static_trainer.py"
-    feetrun_case_func $1  $2 st_infer "../../../tools/static_infer.py"
+    feetrun_case_func $1 $2 dy_train "../../../tools/trainer.py"
+    feetrun_case_func $1 $2 dy_infer "../../../tools/infer.py"
+    feetrun_case_func $1 $2 st_train "../../../tools/static_trainer.py"
+    feetrun_case_func $1 $2 st_infer "../../../tools/static_infer.py"
 }
 
 demo_contentunderstanding(){
@@ -84,7 +84,7 @@ done
 
 demo_multitask(){
 declare -A dic
-dic=([aitm]='models/multitask/aitm' [dselect_k]='models/multitask/dselect_k'\
+dic=([aitm]='models/multitask/aitm' [dselect_k]='models/multitask/dselect_k' \
     [esmm]='models/multitask/esmm' [maml]='models/multitask/maml' [mmoe]='models/multitask/mmoe' \
     [ple]='models/multitask/ple' [esmm]='models/multitask/share_bottom' \
 )
@@ -95,15 +95,15 @@ for model in $(echo ${!dic[*]});do
     cd ${rec_dir}/${model_path}
     model_kind=`echo ${model_path} | awk -F '/' '{print $2}'`
     if [ ${model} == "aitm" ] || [ ${model} == "maml" ] || [ ${model} == "fat_deepffm" ] || [ ${model} == "fat_deepffm" ];then
-        run_case_func ${model_kind}  ${model} dy_train $1 "../../../tools/trainer.py"
-        run_case_func ${model_kind}  ${model} dy_infer $1 "../../../tools/infer.py"
+        run_case_func ${model_kind} ${model} dy_train $1 "../../../tools/trainer.py"
+        run_case_func ${model_kind} ${model} dy_infer $1 "../../../tools/infer.py"
     else
         run_dy_st_train_infer ${model_kind} ${model} $1
 
         if [ "$2" == "freet_run" ];then
             feetrun_dy_st_train_infer ${model_kind} ${model}
         fi
-    fi 
+    fi
 
 done
 }
@@ -111,8 +111,8 @@ done
 demo_rank(){
 declare -A dic
 dic=([autofis]='models/rank/autofis' [bert4rec]='models/rank/bert4rec' [bst]='models/rank/bst' [dcn]='models/rank/dcn' [dcn_v2]='models/rank/dcn_v2' \
-    [deepfefm]='models/rank/deepfefm' [deepfm]='models/rank/deepfm' [deeprec]='models/rank/deeprec' [dien]='models/rank/dien'\
-    [difm]='models/rank/difm' [din]='models/rank/din' [dlrm]='models/rank/dlrm' [dmr]='models/rank/dmr' [dnn]='models/rank/dnn'\
+    [deepfefm]='models/rank/deepfefm' [deepfm]='models/rank/deepfm' [deeprec]='models/rank/deeprec' [dien]='models/rank/dien' \
+    [difm]='models/rank/difm' [din]='models/rank/din' [dlrm]='models/rank/dlrm' [dmr]='models/rank/dmr' [dnn]='models/rank/dnn' \
     [dsin]='models/rank/dsin' [fat_deepffm]='models/rank/fat_deepffm' [ffm]='models/rank/ffm' [flen]='models/rank/flen' \
     [fm]='models/rank/fm' [gatenet]='models/rank/gatenet' [logistic_regression]='models/rank/logistic_regression' \
     [naml]='models/rank/naml' [wide_deep]='models/rank/wide_deep' [xdeepfm]='models/rank/xdeepfm' \
@@ -146,7 +146,7 @@ done
 demo_recall(){
 
 declare -A dic
-dic=([deepwalk]='models/recall/deepwalk' [ensfm]='models/recall/ensfm'\
+dic=([deepwalk]='models/recall/deepwalk' [ensfm]='models/recall/ensfm' \
     [mhcn]='models/recall/mhcn' [ncf]='models/recall/ncf' [tisas]='models/recall/tisas' \
     [mind]='models/recall/mind' [word2vec]='models/recall/word2vec' \
 )
@@ -165,20 +165,20 @@ for model in $(echo ${!dic[*]});do
          # run_case_func ${model_kind}  ${model} dy_infer $1 "infer.py"
     elif [ ${model} == "deepwalk" ] ;then
         cd multi_class
-        run_case_func ${model_kind}  ${model} st_train $1 "../../../../tools/static_trainer.py"
-        run_case_func ${model_kind}  ${model} st_infer $1 "../../../../tools/static_infer.py"
+        run_case_func ${model_kind} ${model} st_train $1 "../../../../tools/static_trainer.py"
+        run_case_func ${model_kind} ${model} st_infer $1 "../../../../tools/static_infer.py"
     elif [ ${model} == "word2vec" ] || [ ${model} == "mind" ];then
-        run_case_func ${model_kind}  ${model} dy_train $1 "../../../tools/trainer.py"
-        # run_case_func ${model_kind}  ${model} dy_infer $1 "infer.py"
-        run_case_func ${model_kind}  ${model} st_train $1 "../../../tools/static_trainer.py"
-        # run_case_func ${model_kind}  ${model} st_infer $1 "static_infer.py"
+        run_case_func ${model_kind} ${model} dy_train $1 "../../../tools/trainer.py"
+        # run_case_func ${model_kind} ${model} dy_infer $1 "infer.py"
+        run_case_func ${model_kind} ${model} st_train $1 "../../../tools/static_trainer.py"
+        # run_case_func ${model_kind} ${model} st_infer $1 "static_infer.py"
     else
         run_dy_st_train_infer ${model_kind} ${model} $1
 
         if [ "$2" == "freet_run" ];then
             feetrun_dy_st_train_infer ${model_kind} ${model}
         fi
-    fi  
+    fi
 done
 }
 
@@ -192,8 +192,8 @@ for model in $(echo ${!dic[*]});do
     echo ${model} : ${model_path}
     cd ${rec_dir}/${model_path}
     model_kind=`echo ${model_path} | awk -F '/' '{print $2}'`
-    run_case_dy_func ${model_kind}  ${model} $1
-    run_case_st_func ${model_kind}  ${model} $1
+    run_case_dy_func ${model_kind} ${model} $1
+    run_case_st_func ${model_kind} ${model} $1
 done
 }
 

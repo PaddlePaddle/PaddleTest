@@ -85,7 +85,7 @@ for model in $(echo ${!dic[*]});do
     print_info $? ${i}_${model}_dy_train_gpu1
     echo -e "\033[31m start _dy_infer_gpu1 ${model}  \033[0m "
     python -u ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${i}_${model}_dy_infer_gpu1 2>&1
-    print_info $? ${i}_${model}_dy_infer_gpu1 
+    print_info $? ${i}_${model}_dy_infer_gpu1
     rm -rf output_model_*
 
     # st_gpu1
@@ -199,7 +199,7 @@ python -u ../../../tools/trainer.py -m rank/config.yaml > ${log_path}/st_distill
 # 动态图预测
 python -u infer.py -m rank/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # rank模型的测试结果解析
-python parse.py rank_offline rank_infer_result > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1 
+python parse.py rank_offline rank_infer_result > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # 静态图训练
 python -u ../../../tools/static_trainer.py -m rank/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # 静态图预测
@@ -214,7 +214,7 @@ python -u ../../../tools/trainer.py -m recall/config.yaml > ${log_path}/st_disti
 python -u infer.py -m recall/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # rank模型的测试结果解析
 python parse.py rank_offline rank_infer_result > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
-# 静态图训练 
+# 静态图训练
 python -u ../../../tools/static_trainer.py -m recall/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # 静态图预测
 python -u static_infer.py -m recall/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
