@@ -74,18 +74,18 @@ print_info $? st_dml_mv1_res50
 }
 
 # distill + dml 共计5个case
-all_distill_CI(){ 
+all_distill_CI(){
     demo_distill_01
 }
 
-all_distill_CE(){ 
+all_distill_CE(){
     demo_distill_02
     demo_distill_03
     #demo_deep_mutual_learning_01
     #demo_deep_mutual_learning_02
 }
 
-all_distill_ALL(){ 
+all_distill_ALL(){
     demo_distill_01
     demo_distill_02
     demo_distill_03
@@ -256,20 +256,20 @@ print_info $? st_pact_quant_aware_v3_load
 
 #cd demo/quant/quant_aware_with_infermodel/ 所需训练时间较长，UT中自定义model覆盖
 
-all_st_quant_CI(){ 
+all_st_quant_CI(){
     demo_st_quant_aware_v1
     demo_st_quant_aware_ResNet34
     demo_st_quant_post_hist
     demo_st_pact_quant_aware_v3
 }
 
-all_st_quant_CE(){ 
-    demo_st_quant_post_hpo 
+all_st_quant_CE(){
+    demo_st_quant_post_hpo
     demo_st_quant_embedding
     demo_st_quant_post
 }
 
-all_st_quant_ALL(){ 
+all_st_quant_ALL(){
     demo_st_quant_post_hpo
     demo_st_quant_post_hist
     demo_st_quant_aware_v1
@@ -297,7 +297,7 @@ python train.py  --lr=0.001 \
 --num_epochs 1 > ${log_path}/dy_pact_quant_v3_gpu1 2>&1
 print_info $? dy_pact_quant_v3_gpu1
 # 多卡训练
-CUDA_VISIBLE_DEVICES=${cudaid2}  
+CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch \
 train.py  --lr=0.001 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
@@ -314,7 +314,7 @@ cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dy_qat4
 
 ln -s ${slim_dir}/demo/data/ILSVRC2012
 # if set as -1, use all test samples
-test_samples=1000  
+test_samples=1000
 data_path='./ILSVRC2012/'
 epoch=1
 lr=0.0001
@@ -412,17 +412,17 @@ done
 }
 
 
-all_dy_quant_CI(){ 
+all_dy_quant_CI(){
     demo_dy_quant_v1
 }
 
-all_dy_quant_CE(){ 
+all_dy_quant_CE(){
     demo_dy_quant_v3
     ce_tests_dy_qat4
     ce_tests_dy_ptq4
 }
 
-all_dy_quant_ALL(){ 
+all_dy_quant_ALL(){
     demo_dy_quant_v1
     demo_dy_quant_v3
     ce_tests_dy_qat4
@@ -524,19 +524,19 @@ python train.py --model ResNet50 --pruned_ratio 0.31 --data "imagenet" \
 print_info $? st_prune_ResNet50
 }
 
-all_st_prune_CI(){ 
+all_st_prune_CI(){
     demo_st_prune_v1
     demo_st_prune_fpgm_v2
 }
 
-all_st_prune_CE(){ 
+all_st_prune_CE(){
     demo_st_prune_fpgm_v1
     demo_st_prune_fpgm_resnet34_50
     demo_st_prune_ResNet50
 
 }
 
-all_st_prune_ALL(){ 
+all_st_prune_ALL(){
     demo_st_prune_v1
     demo_st_prune_fpgm_v2
     demo_st_prune_fpgm_v1
@@ -579,7 +579,7 @@ python eval.py \
 --batch_size=128 >${log_path}/dy_prune_ResNet34_f42_gpu1_eval 2>&1
 print_info $? dy_prune_ResNet34_f42_gpu1_eval
 
-#导出模型  
+#导出模型
 CUDA_VISIBLE_DEVICES=${cudaid1} python export_model.py \
 --checkpoint=./fpgm_resnet34_025_120_models/final \
 --model="resnet34" \
@@ -653,18 +653,18 @@ train.py \
 print_info $? dy_prune_ResNet34_f42_gpu2
 }
 
-all_dy_prune_CI(){ 
+all_dy_prune_CI(){
     demo_dy_pruning_resnet34
 }
 
-all_dy_prune_CE(){ 
+all_dy_prune_CE(){
 	demo_dy_pruning_v1
 	demo_dy_pruning_v2
         demo_dy_pruning_ResNet34_f42
 }
 
 
-all_dy_prune_ALL(){ 
+all_dy_prune_ALL(){
     demo_dy_pruning_resnet34
     demo_dy_pruning_v1
     demo_dy_pruning_v2
@@ -741,17 +741,17 @@ python -m paddle.distributed.launch \
 print_info $? st_unstructured_prune_ratio_gmp
 }
 
-all_st_unstr_prune_CI(){ 
+all_st_unstr_prune_CI(){
     demo_st_unstructured_prune_threshold
     demo_st_unstructured_prune_ratio_gmp
 }
 
-all_st_unstr_prune_CE(){ 
+all_st_unstr_prune_CE(){
     demo_st_unstructured_prune_ratio
-    
+
 }
 
-all_st_unstr_prune_ALL(){ 
+all_st_unstr_prune_ALL(){
     demo_st_unstructured_prune_threshold
     demo_st_unstructured_prune_ratio
     demo_st_unstructured_prune_ratio_gmp
@@ -844,16 +844,16 @@ python -m paddle.distributed.launch \
 print_info $? dy_unstructured_prune_ratio_gmp
 }
 
-all_dy_unstr_prune_CI(){ 
+all_dy_unstr_prune_CI(){
     demo_dy_unstructured_pruning_threshold
     demo_dy_unstructured_pruning_ratio_gmp
 }
 
-all_dy_unstr_prune_CE(){ 
+all_dy_unstr_prune_CE(){
     demo_dy_unstructured_pruning_ratio
 }
 
-all_dy_unstr_prune_ALL(){ 
+all_dy_unstr_prune_ALL(){
     demo_dy_unstructured_pruning_ratio
     demo_dy_unstructured_pruning_threshold
     demo_dy_unstructured_pruning_ratio_gmp
@@ -935,27 +935,27 @@ python demo_glue.py \
 print_info $? auto_bert_asp_dis
 }
 
-all_auto_CE(){ 
+all_auto_CE(){
     demo_auto_mbv2_qat_dis
     demo_auto_mbv2_ptq_hpo
     demo_auto_bert_asp_dis
 }
 
-all_auto_ALL(){ 
+all_auto_ALL(){
     demo_auto_mbv2_qat_dis
     demo_auto_mbv2_ptq_hpo
     demo_auto_bert_asp_dis
 }
 
-if [ "$1" = "run_CI" ];then   
+if [ "$1" = "run_CI" ];then
 	# CI任务的case
     export all_case_list=(all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
-elif [ "$1" = "run_CE" ];then   
+elif [ "$1" = "run_CE" ];then
 	# CE任务的case、暂时去掉all_auto_CE
     export all_case_list=(all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
-elif [ "$1" = "ALL" ];then   
-	# 全量case、暂时去掉all_auto_ALL 
-    export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas) 
+elif [ "$1" = "ALL" ];then
+	# 全量case、暂时去掉all_auto_ALL
+    export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas)
 fi
 
 echo --- start run case ---

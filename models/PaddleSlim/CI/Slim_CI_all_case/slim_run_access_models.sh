@@ -149,7 +149,7 @@ python bert_distill.py \
     --teacher_dir best_model_610 \
     --save_steps 1000 \
     --embedding_name w2v.google_news.target.word-word.dim300.en > ${log_path}/slim_nlp_distill_lstm_sst2_distill 2>&1
-print_info $? slim_nlp_distill_lstm_sst2_distill 
+print_info $? slim_nlp_distill_lstm_sst2_distill
 }
 
 slim_nlp_distill_minilmv2(){
@@ -176,7 +176,7 @@ slim_nlp_distill_minilmv2(){
   --weight_decay 1e-2 \
   --output_dir ./pretrain \
   --input_dir ./minilmv2_6l_768d_ch > ${log_path}/slim_nlp_distill_minilmv2 2>&1
-print_info $? slim_nlp_distill_minilmv2 
+print_info $? slim_nlp_distill_minilmv2
 }
 
 slim_nlp_ofa_bert(){
@@ -196,7 +196,7 @@ python -u run_glue.py \
     --max_steps 10 \
     --output_dir ./tmp/$TASK_NAME/  \
     --device gpu > ${log_path}/slim_nlp_bert_Finetuning 2>&1
-print_info $? slim_nlp_bert_Finetuning 
+print_info $? slim_nlp_bert_Finetuning
 
     cd ${repo_path}/PaddleNLP/examples/model_compression/ofa/
 python -u ./run_glue_ofa.py --model_type bert \
@@ -212,7 +212,7 @@ python -u ./run_glue_ofa.py --model_type bert \
     --device gpu  \
     --max_steps 200 \
     --width_mult_list 1.0 0.8333333333333334 0.6666666666666666 0.5 > ${log_path}/slim_nlp_bert_ofa 2>&1
-print_info $? slim_nlp_bert_ofa 
+print_info $? slim_nlp_bert_ofa
 
 }
 
@@ -366,7 +366,7 @@ slim_clas_post_quant_ResNet50_vd(){
     python tools/export_model.py -c ./ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml   \
 	-o Global.pretrained_model=./cls_pretrain/ResNet50_vd_pretrained   \
 	-o Global.save_inference_dir=./deploy/models/class_ResNet50_vd_ImageNet_infer > ${log_path}/clas_export_model_ResNet50_vd 2>&1
-print_info $? clas_export_model_ResNet50_vd	
+print_info $? clas_export_model_ResNet50_vd
 
 	python deploy/slim/quant_post_static.py -c ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml \
 	 -o Global.save_inference_dir=./deploy/models/class_ResNet50_vd_ImageNet_infer \

@@ -210,7 +210,7 @@ cd ${slim_dir}/demo/nas || catchException demo_nas
 python sa_nas_mobilenetv2.py --search_steps 1 --port 8881 --retain_epoch 1 --use_gpu False >${log_path}/sa_nas_v2_T_1card 2>&1
 print_info $? sa_nas_v2_T_1card
 }
-all_nas(){ 
+all_nas(){
     demo_nas
 }
 

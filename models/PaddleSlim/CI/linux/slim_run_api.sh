@@ -9,7 +9,7 @@ if [ -d "/workspace/logs" ];then
 fi
 mkdir /workspace/logs
 export log_path=/workspace/logs
-  
+
 #python version、paddle_compile_path、slim_install_method
 bash slim_prepare_env.sh $1 $2 $3
 

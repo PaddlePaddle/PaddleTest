@@ -86,9 +86,9 @@ rem :ut_test
 rem if exist ./ut_logs rd /s /q ut_logs
 rem mkdir ut_logs
 rem setlocal enabledelayedexpansion
-rem for  %%i in (test_*.py) do ( 
-rem echo %%i 
-rem python %%i > ut_logs\%%~ni.txt 2>&1 
+rem for  %%i in (test_*.py) do (
+rem echo %%i
+rem python %%i > ut_logs\%%~ni.txt 2>&1
 rem if %errorlevel% == 1 (
 rem     move ut_logs\%%~ni.txt ut_logs\F_%%~ni.txt
 rem ) else (
@@ -212,7 +212,7 @@ goto :eof
 :quant_embedding
 cd %repo_path%/PaddleSlim/demo/quant/quant_embedding
 mklink /J data %data_path%\word_2evc_demo_data
-set OPENBLAS_NUM_THREADS=1 
+set OPENBLAS_NUM_THREADS=1
 set CPU_NUM=5
 set model=quant_em_word2vec
 python train.py --train_data_dir data/convert_text8 ^
@@ -220,16 +220,16 @@ python train.py --train_data_dir data/convert_text8 ^
     --model_output_dir v1_cpu5_b100_lr1dir ^
     --base_lr 1.0 --print_batch 1000 --with_speed --is_sparse >%log_path%\%model%.log 2>&1
 call :printInfo  %errorlevel%
-goto :eof  
+goto :eof
 
 :st_quant_post
 call :quant_post_v1_export
 call :quant_post_hist
-goto :eof 
+goto :eof
 
 :quant_post_v1_export
 cd %repo_path%/PaddleSlim/demo/quant/quant_post
-:: 导出模型 
+:: 导出模型
 echo run quant_post_v1_export
 set model=quant_post_v1_export
 python export_model.py --model "MobileNet" --use_gpu=False ^
@@ -242,7 +242,7 @@ goto :eof
 cd %repo_path%/PaddleSlim/demo/quant/quant_post
 setlocal enabledelayedexpansion
 for %%A in (hist) do (
-echo run %%A 
+echo run %%A
 ::不带bc的离线量化
 set model=st_quant_post_v1_T_%%A
 echo run !model!

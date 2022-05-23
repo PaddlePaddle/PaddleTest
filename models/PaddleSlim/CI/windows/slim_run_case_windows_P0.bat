@@ -61,7 +61,7 @@ goto :eof
 :quant_embedding
 cd %repo_path%/PaddleSlim/demo/quant/quant_embedding
 mklink /J data %data_path%\word_2evc_demo_data
-set OPENBLAS_NUM_THREADS=1 
+set OPENBLAS_NUM_THREADS=1
 set CPU_NUM=5
 set model=quant_em_word2vec
 python train.py --train_data_dir data/convert_text8 ^

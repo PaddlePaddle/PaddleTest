@@ -231,7 +231,7 @@ print_info $? dy_pact_quant_v3_gpu1
 # 多卡训练，以0到3号卡为例
 #CUDA_VISIBLE_DEVICES=${cudaid2}  python -m paddle.distributed.launch \
 #--log_dir dy_pact_quant_v3_gpu4_log \
-CUDA_VISIBLE_DEVICES=${cudaid1}   
+CUDA_VISIBLE_DEVICES=${cudaid1}
 python train.py  --lr=0.001 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
 --use_pact=True --num_epochs=1 \

@@ -99,12 +99,12 @@ if [ $P0case_EXCODE -ne 0 ] ; then
     FF=`ls *_FAIL*|wc -l`
     echo -e "\033[31m ---- P0case failed number: ${FF} \033[0m"
     ls *_FAIL*
-    for i in `ls *_FAIL*` 
-    do 
+    for i in `ls *_FAIL*`
+    do
       echo -----fail log as follow:$i----------
-      cat $i 
+      cat $i
     done
-    
+
     exit $P0case_EXCODE
 else
     echo -e "\033[32m ---- P0case Success \033[0m"

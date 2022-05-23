@@ -185,7 +185,7 @@ goto :eof
 :quant_embedding
 cd %repo_path%/PaddleSlim/demo/quant/quant_embedding
 mklink /J data %data_path%\word_2evc_demo_data
-set OPENBLAS_NUM_THREADS=1 
+set OPENBLAS_NUM_THREADS=1
 set CPU_NUM=5
 set model=quant_em_word2vec
 python train.py --train_data_dir data/convert_text8 ^
@@ -193,16 +193,16 @@ python train.py --train_data_dir data/convert_text8 ^
     --model_output_dir v1_cpu5_b100_lr1dir ^
     --base_lr 1.0 --print_batch 1000 --with_speed --is_sparse >%log_path%\%model%.log 2>&1
 call :printInfo  %errorlevel%
-goto :eof  
+goto :eof
 
 :st_quant_post
 call :quant_post_v1_export
 call :quant_post_hist_avg_mse
-goto :eof 
+goto :eof
 
 :quant_post_v1_export
 cd %repo_path%/PaddleSlim/demo/quant/quant_post
-:: 导出模型 
+:: 导出模型
 echo run quant_post_v1_export
 set model=quant_post_v1_export
 python export_model.py --model "MobileNet" ^
@@ -215,7 +215,7 @@ goto :eof
 cd %repo_path%/PaddleSlim/demo/quant/quant_post
 setlocal enabledelayedexpansion
 for %%A in (hist, avg, mse) do (
-echo run %%A 
+echo run %%A
 ::不带bc的离线量化
 set model=st_quant_post_v1_T_%%A
 echo run !model!
@@ -495,7 +495,7 @@ for %%M in (vgg16) do (
         --quant_batch_size=%quant_batch_size% ^
         --output_dir=%output_dir% >%log_path%\!model!.log 2>&1
     call :printInfo  %errorlevel%
-    
+
     echo "-------- eval fp32_infer model:", %%M
     set model=eval_fp32_infer_%%M
     python ./src/test.py ^
