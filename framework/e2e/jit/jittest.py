@@ -12,9 +12,9 @@ sys.path.append(os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "uti
 from utils.yaml_loader import YamlLoader
 from jittrans import JitTrans
 
-yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "utils", "base.yml")
+yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", "nn.yml")
 
-case_name = "kthvalue"
+case_name = "PairwiseDistance_4"
 
 
 # loading yaml
@@ -38,3 +38,5 @@ jit_case.jit_run()
 # bernoulli, multinomial, normal, rand, randint, randint_like, randn, randperm, uniform, standard_normal, poisson
 # shape出现diff：unsqueeze_
 # 第0维度shape为none或-1时报错：expand_as
+
+# Paddle.nn.MaxUnPool2D  GPU下，动转静前后预测输出值无法对齐
