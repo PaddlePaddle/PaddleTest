@@ -111,6 +111,3 @@ PREDICT: # 训练步骤
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/rec_mv3_none_bilstm_ctc_predict.log
-  
-
-

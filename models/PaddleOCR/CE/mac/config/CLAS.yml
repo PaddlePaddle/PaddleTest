@@ -119,5 +119,3 @@ PREDICT: # 训练步骤
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/cls_mv3_predict.log
-  
-
