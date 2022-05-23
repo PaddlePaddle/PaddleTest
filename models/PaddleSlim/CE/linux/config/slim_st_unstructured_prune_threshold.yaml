@@ -30,7 +30,7 @@ DATA_PROC:
 TRAIN: # 训练步骤
   -
     tag: linux_st_gpu1
-    priority: p2
+    priority: p0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
@@ -42,15 +42,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc_top1:
         latest: True
-        kpi_base: 0.6306
-        threshold: 0.02
+        kpi_base: 0.69667971
+        threshold: 0.0000001
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.8530
-        threshold: 0.02
+        kpi_base: 0.90253907
+        threshold: 0.0000001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -76,14 +76,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.178907483
+        kpi_base: 0.1365005820
         threshold: 0.0000001
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.96875
+        kpi_base: 0.984375
         threshold: 0
         actived: True
         evaluation: "+"

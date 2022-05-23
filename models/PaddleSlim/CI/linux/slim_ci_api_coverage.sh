@@ -10,10 +10,11 @@ else
     echo -e "\033[32m ${log_path}/$2_SUCCESS \033[0m"
 fi
 }
+
 cudaid1=$1;
 cudaid2=$2;
 echo "cudaid1,cudaid2", ${cudaid1}, ${cudaid2}
-export CUDA_VISIBLE_DEVICES=${cudaid1}
+export CUDA_VISIBLE_DEVICES=${cudaid2}
 
 # install lcov
 curl -o /lcov-1.14.tar.gz -s https://paddle-ci.gz.bcebos.com/coverage%2Flcov-1.14.tar.gz
@@ -22,7 +23,7 @@ cd /lcov-1.14
 make install
 
 cd ${slim_dir}/tests
-pip install coverage
+python -m pip install coverage
 
 export COVERAGE_FILE=`pwd`/python-coverage.data
 source=${slim_dir}
@@ -32,9 +33,9 @@ test_num=1
 static_test_num=`ls test_*.py|wc -l`
 dygraph_test_num=`ls dygraph/test_*.py|wc -l`
 all_test_num=`expr ${static_test_num} + ${dygraph_test_num}`
+
 run_api_case(){
 cases=`find ./ -name "test*.py" | sort`
-#ignore="test_analysis_helper.py"
 ignore=""
 for line in `ls test_*.py`
 do
@@ -50,6 +51,7 @@ do
 done
 }
 run_api_case
+
 run_api_case_dygraph(){
 if [ -d ${slim_dir}/tests/dygraph ];then
 cd ${slim_dir}/tests/dygraph
@@ -138,6 +140,7 @@ if [ "$PYTHON_COVERAGE_LINES_ASSERT" = "1" ]; then
     echo -e "\033[31m ---- coverage-diff < 0.9 \033[0m"
     exit 9
 fi
+
 cd ${slim_dir}/logs
 ls *_FAIL*
 if [ $? -eq 0 ];then

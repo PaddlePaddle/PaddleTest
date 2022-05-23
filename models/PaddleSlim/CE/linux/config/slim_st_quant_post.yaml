@@ -30,7 +30,7 @@ DATA_PROC:
 EXPORT: # 训练步骤
   -
     tag: linux_st_gpu1
-    priority: p0
+    priority: p2
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
@@ -105,7 +105,7 @@ EVAL1: # 训练步骤
     kpis: #kpi指标
       top1:
         latest: True
-        kpi_base: 0.73222656
+        kpi_base: 0.72636719
         threshold: 0
         actived: True
         evaluation: "+"
