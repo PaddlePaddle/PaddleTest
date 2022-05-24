@@ -33,7 +33,7 @@ print(api_list)
 for a in api_list:
     str_all = ""
     for case in cases:
-        if a + '_' in case:
+        if a + "_" in case:
             tmp = (
                 "def test_{}():\n"
                 '    """test {}"""\n'
