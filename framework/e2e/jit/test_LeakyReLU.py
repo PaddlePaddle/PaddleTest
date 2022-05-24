@@ -24,19 +24,19 @@ def test_LeakyReLU_base():
     jit_case.jit_run()
 
 
-def test_LeakyReLU():
-    """test LeakyReLU"""
-    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU"))
+def test_LeakyReLU_0():
+    """test LeakyReLU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU_0"))
     jit_case.jit_run()
 
 
-def test_LeakyReLU1():
-    """test LeakyReLU1"""
-    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU1"))
+def test_LeakyReLU_1():
+    """test LeakyReLU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU_1"))
     jit_case.jit_run()
 
 
-def test_LeakyReLU2():
-    """test LeakyReLU2"""
-    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU2"))
+def test_LeakyReLU_2():
+    """test LeakyReLU_2"""
+    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU_2"))
     jit_case.jit_run()

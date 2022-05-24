@@ -24,49 +24,49 @@ def test_LayerNorm_base():
     jit_case.jit_run()
 
 
-def test_LayerNorm():
-    """test LayerNorm"""
-    jit_case = JitTrans(case=yml.get_case_info("LayerNorm"))
+def test_LayerNorm_0():
+    """test LayerNorm_0"""
+    jit_case = JitTrans(case=yml.get_case_info("LayerNorm_0"))
     jit_case.jit_run()
 
 
-def test_LayerNorm3():
-    """test LayerNorm3"""
-    jit_case = JitTrans(case=yml.get_case_info("LayerNorm3"))
+def test_LayerNorm_3():
+    """test LayerNorm_3"""
+    jit_case = JitTrans(case=yml.get_case_info("LayerNorm_3"))
     jit_case.jit_run()
 
 
-def test_LayerNorm4():
-    """test LayerNorm4"""
-    jit_case = JitTrans(case=yml.get_case_info("LayerNorm4"))
+def test_LayerNorm_4():
+    """test LayerNorm_4"""
+    jit_case = JitTrans(case=yml.get_case_info("LayerNorm_4"))
     jit_case.jit_run()
 
 
-def test_LayerNorm5():
-    """test LayerNorm5"""
-    jit_case = JitTrans(case=yml.get_case_info("LayerNorm5"))
+def test_LayerNorm_5():
+    """test LayerNorm_5"""
+    jit_case = JitTrans(case=yml.get_case_info("LayerNorm_5"))
     jit_case.jit_run()
 
 
-def test_LayerNorm6():
-    """test LayerNorm6"""
-    jit_case = JitTrans(case=yml.get_case_info("LayerNorm6"))
+def test_LayerNorm_6():
+    """test LayerNorm_6"""
+    jit_case = JitTrans(case=yml.get_case_info("LayerNorm_6"))
     jit_case.jit_run()
 
 
-def test_LayerNorm7():
-    """test LayerNorm7"""
-    jit_case = JitTrans(case=yml.get_case_info("LayerNorm7"))
+def test_LayerNorm_7():
+    """test LayerNorm_7"""
+    jit_case = JitTrans(case=yml.get_case_info("LayerNorm_7"))
     jit_case.jit_run()
 
 
-def test_LayerNorm8():
-    """test LayerNorm8"""
-    jit_case = JitTrans(case=yml.get_case_info("LayerNorm8"))
+def test_LayerNorm_8():
+    """test LayerNorm_8"""
+    jit_case = JitTrans(case=yml.get_case_info("LayerNorm_8"))
     jit_case.jit_run()
 
 
-def test_LayerNorm9():
-    """test LayerNorm9"""
-    jit_case = JitTrans(case=yml.get_case_info("LayerNorm9"))
+def test_LayerNorm_9():
+    """test LayerNorm_9"""
+    jit_case = JitTrans(case=yml.get_case_info("LayerNorm_9"))
     jit_case.jit_run()

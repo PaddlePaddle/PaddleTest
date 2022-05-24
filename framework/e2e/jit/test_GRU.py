@@ -24,37 +24,37 @@ def test_GRU_base():
     jit_case.jit_run()
 
 
-def test_GRU():
-    """test GRU"""
-    jit_case = JitTrans(case=yml.get_case_info("GRU"))
+def test_GRU_0():
+    """test GRU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("GRU_0"))
     jit_case.jit_run()
 
 
-def test_GRU1():
-    """test GRU1"""
-    jit_case = JitTrans(case=yml.get_case_info("GRU1"))
+def test_GRU_1():
+    """test GRU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("GRU_1"))
     jit_case.jit_run()
 
 
-def test_GRU2():
-    """test GRU2"""
-    jit_case = JitTrans(case=yml.get_case_info("GRU2"))
+def test_GRU_2():
+    """test GRU_2"""
+    jit_case = JitTrans(case=yml.get_case_info("GRU_2"))
     jit_case.jit_run()
 
 
-def test_GRU3():
-    """test GRU3"""
-    jit_case = JitTrans(case=yml.get_case_info("GRU3"))
+def test_GRU_3():
+    """test GRU_3"""
+    jit_case = JitTrans(case=yml.get_case_info("GRU_3"))
     jit_case.jit_run()
 
 
-def test_GRU5():
-    """test GRU5"""
-    jit_case = JitTrans(case=yml.get_case_info("GRU5"))
+def test_GRU_5():
+    """test GRU_5"""
+    jit_case = JitTrans(case=yml.get_case_info("GRU_5"))
     jit_case.jit_run()
 
 
-def test_GRU6():
-    """test GRU6"""
-    jit_case = JitTrans(case=yml.get_case_info("GRU6"))
+def test_GRU_6():
+    """test GRU_6"""
+    jit_case = JitTrans(case=yml.get_case_info("GRU_6"))
     jit_case.jit_run()

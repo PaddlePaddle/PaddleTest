@@ -24,27 +24,27 @@ def test_CELU_base():
     jit_case.jit_run()
 
 
-def test_CELU():
-    """test CELU"""
-    jit_case = JitTrans(case=yml.get_case_info("CELU"))
+def test_CELU_0():
+    """test CELU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("CELU_0"))
     jit_case.jit_run()
 
 
-def test_CELU0():
-    """test CELU0"""
-    jit_case = JitTrans(case=yml.get_case_info("CELU0"))
+def test_CELU_1():
+    """test CELU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("CELU_1"))
     jit_case.jit_run()
 
 
-def test_CELU1():
-    """test CELU1"""
-    jit_case = JitTrans(case=yml.get_case_info("CELU1"))
+def test_CELU_2():
+    """test CELU_2"""
+    jit_case = JitTrans(case=yml.get_case_info("CELU_2"))
     jit_case.jit_run()
 
 
-def test_CELU2():
-    """test CELU2"""
-    jit_case = JitTrans(case=yml.get_case_info("CELU2"))
+def test_CELU_3():
+    """test CELU_3"""
+    jit_case = JitTrans(case=yml.get_case_info("CELU_3"))
     jit_case.jit_run()
 
 
@@ -54,27 +54,27 @@ def test_ELU_base():
     jit_case.jit_run()
 
 
-def test_ELU():
-    """test ELU"""
-    jit_case = JitTrans(case=yml.get_case_info("ELU"))
+def test_ELU_0():
+    """test ELU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("ELU_0"))
     jit_case.jit_run()
 
 
-def test_ELU0():
-    """test ELU0"""
-    jit_case = JitTrans(case=yml.get_case_info("ELU0"))
+def test_ELU_1():
+    """test ELU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("ELU_1"))
     jit_case.jit_run()
 
 
-def test_ELU1():
-    """test ELU1"""
-    jit_case = JitTrans(case=yml.get_case_info("ELU1"))
+def test_ELU_2():
+    """test ELU_2"""
+    jit_case = JitTrans(case=yml.get_case_info("ELU_2"))
     jit_case.jit_run()
 
 
-def test_ELU2():
-    """test ELU2"""
-    jit_case = JitTrans(case=yml.get_case_info("ELU2"))
+def test_ELU_3():
+    """test ELU_3"""
+    jit_case = JitTrans(case=yml.get_case_info("ELU_3"))
     jit_case.jit_run()
 
 
@@ -84,15 +84,15 @@ def test_GELU_base():
     jit_case.jit_run()
 
 
-def test_GELU():
-    """test GELU"""
-    jit_case = JitTrans(case=yml.get_case_info("GELU"))
+def test_GELU_0():
+    """test GELU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("GELU_0"))
     jit_case.jit_run()
 
 
-def test_GELU1():
-    """test GELU1"""
-    jit_case = JitTrans(case=yml.get_case_info("GELU1"))
+def test_GELU_1():
+    """test GELU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("GELU_1"))
     jit_case.jit_run()
 
 
@@ -102,19 +102,19 @@ def test_SELU_base():
     jit_case.jit_run()
 
 
-def test_SELU():
-    """test SELU"""
-    jit_case = JitTrans(case=yml.get_case_info("SELU"))
+def test_SELU_0():
+    """test SELU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("SELU_0"))
     jit_case.jit_run()
 
 
-def test_SELU0():
-    """test SELU0"""
-    jit_case = JitTrans(case=yml.get_case_info("SELU0"))
+def test_SELU_1():
+    """test SELU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("SELU_1"))
     jit_case.jit_run()
 
 
-def test_SELU1():
-    """test SELU1"""
-    jit_case = JitTrans(case=yml.get_case_info("SELU1"))
+def test_SELU_2():
+    """test SELU_2"""
+    jit_case = JitTrans(case=yml.get_case_info("SELU_2"))
     jit_case.jit_run()

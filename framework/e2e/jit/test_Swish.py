@@ -24,13 +24,13 @@ def test_Swish_base():
     jit_case.jit_run()
 
 
-def test_Swish():
-    """test Swish"""
-    jit_case = JitTrans(case=yml.get_case_info("Swish"))
+def test_Swish_0():
+    """test Swish_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Swish_0"))
     jit_case.jit_run()
 
 
-def test_Swish0():
-    """test Swish0"""
-    jit_case = JitTrans(case=yml.get_case_info("Swish0"))
+def test_Swish_1():
+    """test Swish_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Swish_1"))
     jit_case.jit_run()

@@ -24,43 +24,43 @@ def test_Softplus_base():
     jit_case.jit_run()
 
 
-def test_Softplus():
-    """test Softplus"""
-    jit_case = JitTrans(case=yml.get_case_info("Softplus"))
+def test_Softplus_0():
+    """test Softplus_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Softplus_0"))
     jit_case.jit_run()
 
 
-def test_Softplus0():
-    """test Softplus0"""
-    jit_case = JitTrans(case=yml.get_case_info("Softplus0"))
+def test_Softplus_1():
+    """test Softplus_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Softplus_1"))
     jit_case.jit_run()
 
 
-def test_Softplus1():
-    """test Softplus1"""
-    jit_case = JitTrans(case=yml.get_case_info("Softplus1"))
+def test_Softplus_2():
+    """test Softplus_2"""
+    jit_case = JitTrans(case=yml.get_case_info("Softplus_2"))
     jit_case.jit_run()
 
 
-def test_Softplus2():
-    """test Softplus2"""
-    jit_case = JitTrans(case=yml.get_case_info("Softplus2"))
+def test_Softplus_3():
+    """test Softplus_3"""
+    jit_case = JitTrans(case=yml.get_case_info("Softplus_3"))
     jit_case.jit_run()
 
 
-def test_Softplus3():
-    """test Softplus3"""
-    jit_case = JitTrans(case=yml.get_case_info("Softplus3"))
+def test_Softplus_4():
+    """test Softplus_4"""
+    jit_case = JitTrans(case=yml.get_case_info("Softplus_4"))
     jit_case.jit_run()
 
 
-def test_Softplus4():
-    """test Softplus4"""
-    jit_case = JitTrans(case=yml.get_case_info("Softplus4"))
+def test_Softplus_5():
+    """test Softplus_5"""
+    jit_case = JitTrans(case=yml.get_case_info("Softplus_5"))
     jit_case.jit_run()
 
 
-def test_Softplus5():
-    """test Softplus5"""
-    jit_case = JitTrans(case=yml.get_case_info("Softplus5"))
+def test_Softplus_6():
+    """test Softplus_6"""
+    jit_case = JitTrans(case=yml.get_case_info("Softplus_6"))
     jit_case.jit_run()

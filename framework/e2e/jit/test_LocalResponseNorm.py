@@ -24,37 +24,37 @@ def test_LocalResponseNorm_base():
     jit_case.jit_run()
 
 
-def test_LocalResponseNorm():
-    """test LocalResponseNorm"""
-    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm"))
+def test_LocalResponseNorm_0():
+    """test LocalResponseNorm_0"""
+    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm_0"))
     jit_case.jit_run()
 
 
-def test_LocalResponseNorm0():
-    """test LocalResponseNorm0"""
-    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm0"))
+def test_LocalResponseNorm_1():
+    """test LocalResponseNorm_1"""
+    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm_1"))
     jit_case.jit_run()
 
 
-def test_LocalResponseNorm1():
-    """test LocalResponseNorm1"""
-    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm1"))
+def test_LocalResponseNorm_2():
+    """test LocalResponseNorm_2"""
+    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm_2"))
     jit_case.jit_run()
 
 
-def test_LocalResponseNorm2():
-    """test LocalResponseNorm2"""
-    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm2"))
+def test_LocalResponseNorm_3():
+    """test LocalResponseNorm_3"""
+    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm_3"))
     jit_case.jit_run()
 
 
-def test_LocalResponseNorm3():
-    """test LocalResponseNorm3"""
-    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm3"))
+def test_LocalResponseNorm_4():
+    """test LocalResponseNorm_4"""
+    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm_4"))
     jit_case.jit_run()
 
 
-def test_LocalResponseNorm4():
-    """test LocalResponseNorm4"""
-    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm4"))
+def test_LocalResponseNorm_5():
+    """test LocalResponseNorm_5"""
+    jit_case = JitTrans(case=yml.get_case_info("LocalResponseNorm_5"))
     jit_case.jit_run()

@@ -24,13 +24,13 @@ def test_Tanhshrink_base():
     jit_case.jit_run()
 
 
-def test_Tanhshrink():
-    """test Tanhshrink"""
-    jit_case = JitTrans(case=yml.get_case_info("Tanhshrink"))
+def test_Tanhshrink_0():
+    """test Tanhshrink_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Tanhshrink_0"))
     jit_case.jit_run()
 
 
-def test_Tanhshrink0():
-    """test Tanhshrink0"""
-    jit_case = JitTrans(case=yml.get_case_info("Tanhshrink0"))
+def test_Tanhshrink_1():
+    """test Tanhshrink_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Tanhshrink_1"))
     jit_case.jit_run()

@@ -24,37 +24,37 @@ def test_BatchNorm2D_base():
     jit_case.jit_run()
 
 
-def test_BatchNorm2D1():
-    """test BatchNorm2D1"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D1"))
+def test_BatchNorm2D_1():
+    """test BatchNorm2D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D_1"))
     jit_case.jit_run()
 
 
-def test_BatchNorm2D2():
-    """test BatchNorm2D2"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D2"))
+def test_BatchNorm2D_2():
+    """test BatchNorm2D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D_2"))
     jit_case.jit_run()
 
 
-def test_BatchNorm2D3():
-    """test BatchNorm2D3"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D3"))
+def test_BatchNorm2D_3():
+    """test BatchNorm2D_3"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D_3"))
     jit_case.jit_run()
 
 
-def test_BatchNorm2D4():
-    """test BatchNorm2D4"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D4"))
+def test_BatchNorm2D_4():
+    """test BatchNorm2D_4"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D_4"))
     jit_case.jit_run()
 
 
-def test_BatchNorm2D7():
-    """test BatchNorm2D7"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D7"))
+def test_BatchNorm2D_7():
+    """test BatchNorm2D_7"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D_7"))
     jit_case.jit_run()
 
 
-def test_BatchNorm2D8():
-    """test BatchNorm2D8"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D8"))
+def test_BatchNorm2D_8():
+    """test BatchNorm2D_8"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2D_8"))
     jit_case.jit_run()

@@ -24,19 +24,19 @@ def test_ThresholdedReLU_base():
     jit_case.jit_run()
 
 
-def test_ThresholdedReLU():
-    """test ThresholdedReLU"""
-    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU"))
+def test_ThresholdedReLU_0():
+    """test ThresholdedReLU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU_0"))
     jit_case.jit_run()
 
 
-def test_ThresholdedReLU1():
-    """test ThresholdedReLU1"""
-    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU1"))
+def test_ThresholdedReLU_1():
+    """test ThresholdedReLU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU_1"))
     jit_case.jit_run()
 
 
-def test_ThresholdedReLU2():
-    """test ThresholdedReLU2"""
-    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU2"))
+def test_ThresholdedReLU_2():
+    """test ThresholdedReLU_2"""
+    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU_2"))
     jit_case.jit_run()

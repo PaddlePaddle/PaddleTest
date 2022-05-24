@@ -24,43 +24,43 @@ def test_SimpleRNN_base():
     jit_case.jit_run()
 
 
-def test_SimpleRNN():
-    """test SimpleRNN"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN"))
+def test_SimpleRNN_0():
+    """test SimpleRNN_0"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN_0"))
     jit_case.jit_run()
 
 
-def test_SimpleRNN0():
-    """test SimpleRNN0"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN0"))
+def test_SimpleRNN_1():
+    """test SimpleRNN_1"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN_1"))
     jit_case.jit_run()
 
 
-def test_SimpleRNN1():
-    """test SimpleRNN1"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN1"))
+def test_SimpleRNN_2():
+    """test SimpleRNN_2"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN_2"))
     jit_case.jit_run()
 
 
-def test_SimpleRNN2():
-    """test SimpleRNN2"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN2"))
+def test_SimpleRNN_3():
+    """test SimpleRNN_3"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN_3"))
     jit_case.jit_run()
 
 
-def test_SimpleRNN3():
-    """test SimpleRNN3"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN3"))
+def test_SimpleRNN_4():
+    """test SimpleRNN_4"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN_4"))
     jit_case.jit_run()
 
 
-def test_SimpleRNN4():
-    """test SimpleRNN4"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN4"))
+def test_SimpleRNN_5():
+    """test SimpleRNN_5"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN_5"))
     jit_case.jit_run()
 
 
-def test_SimpleRNN5():
-    """test SimpleRNN5"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN5"))
+def test_SimpleRNN_6():
+    """test SimpleRNN_6"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNN_6"))
     jit_case.jit_run()

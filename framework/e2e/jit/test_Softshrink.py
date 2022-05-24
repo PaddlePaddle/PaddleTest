@@ -24,19 +24,19 @@ def test_Softshrink_base():
     jit_case.jit_run()
 
 
-def test_Softshrink():
-    """test Softshrink"""
-    jit_case = JitTrans(case=yml.get_case_info("Softshrink"))
+def test_Softshrink_0():
+    """test Softshrink_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Softshrink_0"))
     jit_case.jit_run()
 
 
-def test_Softshrink0():
-    """test Softshrink0"""
-    jit_case = JitTrans(case=yml.get_case_info("Softshrink0"))
+def test_Softshrink_1():
+    """test Softshrink_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Softshrink_1"))
     jit_case.jit_run()
 
 
-def test_Softshrink1():
-    """test Softshrink1"""
-    jit_case = JitTrans(case=yml.get_case_info("Softshrink1"))
+def test_Softshrink_2():
+    """test Softshrink_2"""
+    jit_case = JitTrans(case=yml.get_case_info("Softshrink_2"))
     jit_case.jit_run()

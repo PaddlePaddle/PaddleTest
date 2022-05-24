@@ -18,109 +18,163 @@ yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", 
 yml = YamlLoader(yaml_path)
 
 
-def test_Conv1D_base():
-    """test Conv1D_base"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D_base"))
+def test_conv1d_base():
+    """test conv1d_base"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_base"))
     jit_case.jit_run()
 
 
-def test_Conv1D():
-    """test Conv1D"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D"))
+def test_conv1d_0():
+    """test conv1d_0"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_0"))
     jit_case.jit_run()
 
 
-def test_Conv1D0():
-    """test Conv1D0"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D0"))
+def test_conv1d_1():
+    """test conv1d_1"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_1"))
     jit_case.jit_run()
 
 
-def test_Conv1D1():
-    """test Conv1D1"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D1"))
+def test_conv1d_2():
+    """test conv1d_2"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_2"))
     jit_case.jit_run()
 
 
-def test_Conv1D2():
-    """test Conv1D2"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D2"))
+def test_conv1d_3():
+    """test conv1d_3"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_3"))
     jit_case.jit_run()
 
 
-def test_Conv1D3():
-    """test Conv1D3"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D3"))
+def test_conv1d_4():
+    """test conv1d_4"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_4"))
     jit_case.jit_run()
 
 
-def test_Conv1D4():
-    """test Conv1D4"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D4"))
+def test_conv1d_5():
+    """test conv1d_5"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_5"))
     jit_case.jit_run()
 
 
-def test_Conv1D5():
-    """test Conv1D5"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D5"))
+def test_conv1d_6():
+    """test conv1d_6"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_6"))
     jit_case.jit_run()
 
 
-def test_Conv1D6():
-    """test Conv1D6"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D6"))
+def test_conv1d_7():
+    """test conv1d_7"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_7"))
     jit_case.jit_run()
 
 
-def test_Conv1D7():
-    """test Conv1D7"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D7"))
+def test_conv1d_11():
+    """test conv1d_11"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_11"))
     jit_case.jit_run()
 
 
-def test_Conv1D8():
-    """test Conv1D8"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D8"))
+def test_conv1d_12():
+    """test conv1d_12"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_12"))
     jit_case.jit_run()
 
 
-def test_Conv1D9():
-    """test Conv1D9"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D9"))
+def test_conv1d_13():
+    """test conv1d_13"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_13"))
     jit_case.jit_run()
 
 
-def test_Conv1D10():
-    """test Conv1D10"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D10"))
+def test_conv1d_14():
+    """test conv1d_14"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_14"))
     jit_case.jit_run()
 
 
-def test_Conv1D11():
-    """test Conv1D11"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D11"))
+def test_conv1d_transpose_base():
+    """test conv1d_transpose_base"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_base"))
     jit_case.jit_run()
 
 
-def test_Conv1D12():
-    """test Conv1D12"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D12"))
+def test_conv1d_transpose_():
+    """test conv1d_transpose_"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_"))
     jit_case.jit_run()
 
 
-def test_Conv1D13():
-    """test Conv1D13"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D13"))
+def test_conv1d_transpose_0():
+    """test conv1d_transpose_0"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_0"))
     jit_case.jit_run()
 
 
-def test_Conv1D14():
-    """test Conv1D14"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D14"))
+def test_conv1d_transpose_1():
+    """test conv1d_transpose_1"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_1"))
     jit_case.jit_run()
 
 
-def test_Conv1D15():
-    """test Conv1D15"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv1D15"))
+def test_conv1d_transpose_2():
+    """test conv1d_transpose_2"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_2"))
+    jit_case.jit_run()
+
+
+def test_conv1d_transpose_3():
+    """test conv1d_transpose_3"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_3"))
+    jit_case.jit_run()
+
+
+def test_conv1d_transpose_4():
+    """test conv1d_transpose_4"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_4"))
+    jit_case.jit_run()
+
+
+def test_conv1d_transpose_5():
+    """test conv1d_transpose_5"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_5"))
+    jit_case.jit_run()
+
+
+def test_conv1d_transpose_6():
+    """test conv1d_transpose_6"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_6"))
+    jit_case.jit_run()
+
+
+def test_conv1d_transpose_7():
+    """test conv1d_transpose_7"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_7"))
+    jit_case.jit_run()
+
+
+def test_conv1d_transpose_8():
+    """test conv1d_transpose_8"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_8"))
+    jit_case.jit_run()
+
+
+def test_conv1d_transpose_9():
+    """test conv1d_transpose_9"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_9"))
+    jit_case.jit_run()
+
+
+def test_conv1d_transpose_10():
+    """test conv1d_transpose_10"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_10"))
+    jit_case.jit_run()
+
+
+def test_conv1d_transpose_11():
+    """test conv1d_transpose_11"""
+    jit_case = JitTrans(case=yml.get_case_info("conv1d_transpose_11"))
     jit_case.jit_run()

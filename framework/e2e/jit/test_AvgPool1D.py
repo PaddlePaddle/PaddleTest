@@ -24,15 +24,15 @@ def test_AdaptiveAvgPool1D_base():
     jit_case.jit_run()
 
 
-def test_AdaptiveAvgPool1D0():
-    """test AdaptiveAvgPool1D0"""
-    jit_case = JitTrans(case=yml.get_case_info("AdaptiveAvgPool1D0"))
+def test_AdaptiveAvgPool1D_0():
+    """test AdaptiveAvgPool1D_0"""
+    jit_case = JitTrans(case=yml.get_case_info("AdaptiveAvgPool1D_0"))
     jit_case.jit_run()
 
 
-def test_AdaptiveAvgPool1D1():
-    """test AdaptiveAvgPool1D1"""
-    jit_case = JitTrans(case=yml.get_case_info("AdaptiveAvgPool1D1"))
+def test_AdaptiveAvgPool1D_1():
+    """test AdaptiveAvgPool1D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("AdaptiveAvgPool1D_1"))
     jit_case.jit_run()
 
 
@@ -42,25 +42,25 @@ def test_AvgPool1D_base():
     jit_case.jit_run()
 
 
-def test_AvgPool1D():
-    """test AvgPool1D"""
-    jit_case = JitTrans(case=yml.get_case_info("AvgPool1D"))
+def test_AvgPool1D_0():
+    """test AvgPool1D_0"""
+    jit_case = JitTrans(case=yml.get_case_info("AvgPool1D_0"))
     jit_case.jit_run()
 
 
-def test_AvgPool1D1():
-    """test AvgPool1D1"""
-    jit_case = JitTrans(case=yml.get_case_info("AvgPool1D1"))
+def test_AvgPool1D_1():
+    """test AvgPool1D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("AvgPool1D_1"))
     jit_case.jit_run()
 
 
-def test_AvgPool1D2():
-    """test AvgPool1D2"""
-    jit_case = JitTrans(case=yml.get_case_info("AvgPool1D2"))
+def test_AvgPool1D_2():
+    """test AvgPool1D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("AvgPool1D_2"))
     jit_case.jit_run()
 
 
-def test_AvgPool1D3():
-    """test AvgPool1D3"""
-    jit_case = JitTrans(case=yml.get_case_info("AvgPool1D3"))
+def test_AvgPool1D_3():
+    """test AvgPool1D_3"""
+    jit_case = JitTrans(case=yml.get_case_info("AvgPool1D_3"))
     jit_case.jit_run()

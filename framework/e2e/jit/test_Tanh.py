@@ -24,13 +24,13 @@ def test_Tanh_base():
     jit_case.jit_run()
 
 
-def test_Tanh():
-    """test Tanh"""
-    jit_case = JitTrans(case=yml.get_case_info("Tanh"))
+def test_Tanh_0():
+    """test Tanh_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Tanh_0"))
     jit_case.jit_run()
 
 
-def test_Tanh0():
-    """test Tanh0"""
-    jit_case = JitTrans(case=yml.get_case_info("Tanh0"))
+def test_Tanh_1():
+    """test Tanh_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Tanh_1"))
     jit_case.jit_run()

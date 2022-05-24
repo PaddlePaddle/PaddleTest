@@ -18,19 +18,67 @@ yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", 
 yml = YamlLoader(yaml_path)
 
 
+def test_LeakyReLU_base():
+    """test LeakyReLU_base"""
+    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU_base"))
+    jit_case.jit_run()
+
+
+def test_LeakyReLU_0():
+    """test LeakyReLU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU_0"))
+    jit_case.jit_run()
+
+
+def test_LeakyReLU_1():
+    """test LeakyReLU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU_1"))
+    jit_case.jit_run()
+
+
+def test_LeakyReLU_2():
+    """test LeakyReLU_2"""
+    jit_case = JitTrans(case=yml.get_case_info("LeakyReLU_2"))
+    jit_case.jit_run()
+
+
 def test_ReLU_base():
     """test ReLU_base"""
     jit_case = JitTrans(case=yml.get_case_info("ReLU_base"))
     jit_case.jit_run()
 
 
-def test_ReLU():
-    """test ReLU"""
-    jit_case = JitTrans(case=yml.get_case_info("ReLU"))
+def test_ReLU_0():
+    """test ReLU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("ReLU_0"))
     jit_case.jit_run()
 
 
-def test_ReLU0():
-    """test ReLU0"""
-    jit_case = JitTrans(case=yml.get_case_info("ReLU0"))
+def test_ReLU_1():
+    """test ReLU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("ReLU_1"))
+    jit_case.jit_run()
+
+
+def test_ThresholdedReLU_base():
+    """test ThresholdedReLU_base"""
+    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU_base"))
+    jit_case.jit_run()
+
+
+def test_ThresholdedReLU_0():
+    """test ThresholdedReLU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU_0"))
+    jit_case.jit_run()
+
+
+def test_ThresholdedReLU_1():
+    """test ThresholdedReLU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU_1"))
+    jit_case.jit_run()
+
+
+def test_ThresholdedReLU_2():
+    """test ThresholdedReLU_2"""
+    jit_case = JitTrans(case=yml.get_case_info("ThresholdedReLU_2"))
     jit_case.jit_run()

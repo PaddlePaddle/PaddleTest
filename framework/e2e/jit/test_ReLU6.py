@@ -24,19 +24,19 @@ def test_ReLU6_base():
     jit_case.jit_run()
 
 
-def test_ReLU6():
-    """test ReLU6"""
-    jit_case = JitTrans(case=yml.get_case_info("ReLU6"))
+def test_ReLU6_0():
+    """test ReLU6_0"""
+    jit_case = JitTrans(case=yml.get_case_info("ReLU6_0"))
     jit_case.jit_run()
 
 
-def test_ReLU60():
-    """test ReLU60"""
-    jit_case = JitTrans(case=yml.get_case_info("ReLU60"))
+def test_ReLU6_1():
+    """test ReLU6_1"""
+    jit_case = JitTrans(case=yml.get_case_info("ReLU6_1"))
     jit_case.jit_run()
 
 
-def test_ReLU61():
-    """test ReLU61"""
-    jit_case = JitTrans(case=yml.get_case_info("ReLU61"))
+def test_ReLU6_2():
+    """test ReLU6_2"""
+    jit_case = JitTrans(case=yml.get_case_info("ReLU6_2"))
     jit_case.jit_run()

@@ -24,13 +24,13 @@ def test_AdaptiveMaxPool3D_base():
     jit_case.jit_run()
 
 
-def test_AdaptiveMaxPool3D():
-    """test AdaptiveMaxPool3D"""
-    jit_case = JitTrans(case=yml.get_case_info("AdaptiveMaxPool3D"))
+def test_AdaptiveMaxPool3D_1():
+    """test AdaptiveMaxPool3D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("AdaptiveMaxPool3D_1"))
     jit_case.jit_run()
 
 
-def test_AdaptiveMaxPool3D2():
-    """test AdaptiveMaxPool3D2"""
-    jit_case = JitTrans(case=yml.get_case_info("AdaptiveMaxPool3D2"))
+def test_AdaptiveMaxPool3D_2():
+    """test AdaptiveMaxPool3D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("AdaptiveMaxPool3D_2"))
     jit_case.jit_run()

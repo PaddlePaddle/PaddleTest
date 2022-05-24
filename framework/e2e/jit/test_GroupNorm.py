@@ -24,43 +24,43 @@ def test_GroupNorm_base():
     jit_case.jit_run()
 
 
-def test_GroupNorm():
-    """test GroupNorm"""
-    jit_case = JitTrans(case=yml.get_case_info("GroupNorm"))
+def test_GroupNorm_0():
+    """test GroupNorm_0"""
+    jit_case = JitTrans(case=yml.get_case_info("GroupNorm_0"))
     jit_case.jit_run()
 
 
-def test_GroupNorm2():
-    """test GroupNorm2"""
-    jit_case = JitTrans(case=yml.get_case_info("GroupNorm2"))
+def test_GroupNorm_2():
+    """test GroupNorm_2"""
+    jit_case = JitTrans(case=yml.get_case_info("GroupNorm_2"))
     jit_case.jit_run()
 
 
-def test_GroupNorm5():
-    """test GroupNorm5"""
-    jit_case = JitTrans(case=yml.get_case_info("GroupNorm5"))
+def test_GroupNorm_5():
+    """test GroupNorm_5"""
+    jit_case = JitTrans(case=yml.get_case_info("GroupNorm_5"))
     jit_case.jit_run()
 
 
-def test_GroupNorm6():
-    """test GroupNorm6"""
-    jit_case = JitTrans(case=yml.get_case_info("GroupNorm6"))
+def test_GroupNorm_6():
+    """test GroupNorm_6"""
+    jit_case = JitTrans(case=yml.get_case_info("GroupNorm_6"))
     jit_case.jit_run()
 
 
-def test_GroupNorm7():
-    """test GroupNorm7"""
-    jit_case = JitTrans(case=yml.get_case_info("GroupNorm7"))
+def test_GroupNorm_7():
+    """test GroupNorm_7"""
+    jit_case = JitTrans(case=yml.get_case_info("GroupNorm_7"))
     jit_case.jit_run()
 
 
-def test_GroupNorm8():
-    """test GroupNorm8"""
-    jit_case = JitTrans(case=yml.get_case_info("GroupNorm8"))
+def test_GroupNorm_8():
+    """test GroupNorm_8"""
+    jit_case = JitTrans(case=yml.get_case_info("GroupNorm_8"))
     jit_case.jit_run()
 
 
-def test_GroupNorm9():
-    """test GroupNorm9"""
-    jit_case = JitTrans(case=yml.get_case_info("GroupNorm9"))
+def test_GroupNorm_9():
+    """test GroupNorm_9"""
+    jit_case = JitTrans(case=yml.get_case_info("GroupNorm_9"))
     jit_case.jit_run()

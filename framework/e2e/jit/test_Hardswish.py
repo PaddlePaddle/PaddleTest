@@ -24,13 +24,13 @@ def test_Hardswish_base():
     jit_case.jit_run()
 
 
-def test_Hardswish():
-    """test Hardswish"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardswish"))
+def test_Hardswish_0():
+    """test Hardswish_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardswish_0"))
     jit_case.jit_run()
 
 
-def test_Hardswish0():
-    """test Hardswish0"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardswish0"))
+def test_Hardswish_1():
+    """test Hardswish_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardswish_1"))
     jit_case.jit_run()

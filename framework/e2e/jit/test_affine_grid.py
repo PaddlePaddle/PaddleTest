@@ -22,9 +22,3 @@ def test_affine_grid_base():
     """test affine_grid_base"""
     jit_case = JitTrans(case=yml.get_case_info("affine_grid_base"))
     jit_case.jit_run()
-
-
-def test_affine_grid0():
-    """test affine_grid0"""
-    jit_case = JitTrans(case=yml.get_case_info("affine_grid0"))
-    jit_case.jit_run()

@@ -24,13 +24,13 @@ def test_Silu_base():
     jit_case.jit_run()
 
 
-def test_Silu():
-    """test Silu"""
-    jit_case = JitTrans(case=yml.get_case_info("Silu"))
+def test_Silu_0():
+    """test Silu_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Silu_0"))
     jit_case.jit_run()
 
 
-def test_Silu0():
-    """test Silu0"""
-    jit_case = JitTrans(case=yml.get_case_info("Silu0"))
+def test_Silu_1():
+    """test Silu_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Silu_1"))
     jit_case.jit_run()

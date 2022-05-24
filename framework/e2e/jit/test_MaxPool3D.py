@@ -24,15 +24,15 @@ def test_AdaptiveMaxPool3D_base():
     jit_case.jit_run()
 
 
-def test_AdaptiveMaxPool3D():
-    """test AdaptiveMaxPool3D"""
-    jit_case = JitTrans(case=yml.get_case_info("AdaptiveMaxPool3D"))
+def test_AdaptiveMaxPool3D_1():
+    """test AdaptiveMaxPool3D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("AdaptiveMaxPool3D_1"))
     jit_case.jit_run()
 
 
-def test_AdaptiveMaxPool3D2():
-    """test AdaptiveMaxPool3D2"""
-    jit_case = JitTrans(case=yml.get_case_info("AdaptiveMaxPool3D2"))
+def test_AdaptiveMaxPool3D_2():
+    """test AdaptiveMaxPool3D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("AdaptiveMaxPool3D_2"))
     jit_case.jit_run()
 
 
@@ -42,79 +42,79 @@ def test_MaxPool3D_base():
     jit_case.jit_run()
 
 
-def test_MaxPool3D():
-    """test MaxPool3D"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D"))
+def test_MaxPool3D_0():
+    """test MaxPool3D_0"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_0"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D0():
-    """test MaxPool3D0"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D0"))
+def test_MaxPool3D_1():
+    """test MaxPool3D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_1"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D1():
-    """test MaxPool3D1"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D1"))
+def test_MaxPool3D_2():
+    """test MaxPool3D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_2"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D2():
-    """test MaxPool3D2"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D2"))
+def test_MaxPool3D_3():
+    """test MaxPool3D_3"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_3"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D3():
-    """test MaxPool3D3"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D3"))
+def test_MaxPool3D_4():
+    """test MaxPool3D_4"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_4"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D4():
-    """test MaxPool3D4"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D4"))
+def test_MaxPool3D_5():
+    """test MaxPool3D_5"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_5"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D5():
-    """test MaxPool3D5"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D5"))
+def test_MaxPool3D_6():
+    """test MaxPool3D_6"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_6"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D6():
-    """test MaxPool3D6"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D6"))
+def test_MaxPool3D_7():
+    """test MaxPool3D_7"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_7"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D7():
-    """test MaxPool3D7"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D7"))
+def test_MaxPool3D_8():
+    """test MaxPool3D_8"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_8"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D8():
-    """test MaxPool3D8"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D8"))
+def test_MaxPool3D_9():
+    """test MaxPool3D_9"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_9"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D9():
-    """test MaxPool3D9"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D9"))
+def test_MaxPool3D_10():
+    """test MaxPool3D_10"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_10"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D10():
-    """test MaxPool3D10"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D10"))
+def test_MaxPool3D_11():
+    """test MaxPool3D_11"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_11"))
     jit_case.jit_run()
 
 
-def test_MaxPool3D11():
-    """test MaxPool3D11"""
-    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D11"))
+def test_MaxPool3D_12():
+    """test MaxPool3D_12"""
+    jit_case = JitTrans(case=yml.get_case_info("MaxPool3D_12"))
     jit_case.jit_run()

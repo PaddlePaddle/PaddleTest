@@ -24,13 +24,13 @@ def test_AdaptiveAvgPool1D_base():
     jit_case.jit_run()
 
 
-def test_AdaptiveAvgPool1D0():
-    """test AdaptiveAvgPool1D0"""
-    jit_case = JitTrans(case=yml.get_case_info("AdaptiveAvgPool1D0"))
+def test_AdaptiveAvgPool1D_0():
+    """test AdaptiveAvgPool1D_0"""
+    jit_case = JitTrans(case=yml.get_case_info("AdaptiveAvgPool1D_0"))
     jit_case.jit_run()
 
 
-def test_AdaptiveAvgPool1D1():
-    """test AdaptiveAvgPool1D1"""
-    jit_case = JitTrans(case=yml.get_case_info("AdaptiveAvgPool1D1"))
+def test_AdaptiveAvgPool1D_1():
+    """test AdaptiveAvgPool1D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("AdaptiveAvgPool1D_1"))
     jit_case.jit_run()

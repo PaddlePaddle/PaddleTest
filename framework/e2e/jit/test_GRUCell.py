@@ -24,13 +24,13 @@ def test_GRUCell_base():
     jit_case.jit_run()
 
 
-def test_GRUCell():
-    """test GRUCell"""
-    jit_case = JitTrans(case=yml.get_case_info("GRUCell"))
+def test_GRUCell_0():
+    """test GRUCell_0"""
+    jit_case = JitTrans(case=yml.get_case_info("GRUCell_0"))
     jit_case.jit_run()
 
 
-def test_GRUCell0():
-    """test GRUCell0"""
-    jit_case = JitTrans(case=yml.get_case_info("GRUCell0"))
+def test_GRUCell_1():
+    """test GRUCell_1"""
+    jit_case = JitTrans(case=yml.get_case_info("GRUCell_1"))
     jit_case.jit_run()

@@ -24,13 +24,13 @@ def test_Hardsigmoid_base():
     jit_case.jit_run()
 
 
-def test_Hardsigmoid():
-    """test Hardsigmoid"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardsigmoid"))
+def test_Hardsigmoid_0():
+    """test Hardsigmoid_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardsigmoid_0"))
     jit_case.jit_run()
 
 
-def test_Hardsigmoid0():
-    """test Hardsigmoid0"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardsigmoid0"))
+def test_Hardsigmoid_1():
+    """test Hardsigmoid_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardsigmoid_1"))
     jit_case.jit_run()

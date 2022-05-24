@@ -24,85 +24,85 @@ def test_BatchNorm_base():
     jit_case.jit_run()
 
 
-def test_BatchNorm():
-    """test BatchNorm"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm"))
+def test_BatchNorm_0():
+    """test BatchNorm_0"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_0"))
     jit_case.jit_run()
 
 
-def test_BatchNorm0():
-    """test BatchNorm0"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm0"))
+def test_BatchNorm_1():
+    """test BatchNorm_1"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_1"))
     jit_case.jit_run()
 
 
-def test_BatchNorm1():
-    """test BatchNorm1"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm1"))
+def test_BatchNorm_2():
+    """test BatchNorm_2"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_2"))
     jit_case.jit_run()
 
 
-def test_BatchNorm2():
-    """test BatchNorm2"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm2"))
+def test_BatchNorm_3():
+    """test BatchNorm_3"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_3"))
     jit_case.jit_run()
 
 
-def test_BatchNorm3():
-    """test BatchNorm3"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm3"))
+def test_BatchNorm_4():
+    """test BatchNorm_4"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_4"))
     jit_case.jit_run()
 
 
-def test_BatchNorm4():
-    """test BatchNorm4"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm4"))
+def test_BatchNorm_7():
+    """test BatchNorm_7"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_7"))
     jit_case.jit_run()
 
 
-def test_BatchNorm7():
-    """test BatchNorm7"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm7"))
+def test_BatchNorm_8():
+    """test BatchNorm_8"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_8"))
     jit_case.jit_run()
 
 
-def test_BatchNorm8():
-    """test BatchNorm8"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm8"))
+def test_BatchNorm_10():
+    """test BatchNorm_10"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_10"))
     jit_case.jit_run()
 
 
-def test_BatchNorm10():
-    """test BatchNorm10"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm10"))
+def test_BatchNorm_11():
+    """test BatchNorm_11"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_11"))
     jit_case.jit_run()
 
 
-def test_BatchNorm11():
-    """test BatchNorm11"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm11"))
+def test_BatchNorm_12():
+    """test BatchNorm_12"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_12"))
     jit_case.jit_run()
 
 
-def test_BatchNorm12():
-    """test BatchNorm12"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm12"))
+def test_BatchNorm_13():
+    """test BatchNorm_13"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_13"))
     jit_case.jit_run()
 
 
-def test_BatchNorm13():
-    """test BatchNorm13"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm13"))
+def test_BatchNorm_15():
+    """test BatchNorm_15"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_15"))
     jit_case.jit_run()
 
 
-def test_BatchNorm15():
-    """test BatchNorm15"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm15"))
+def test_BatchNorm_17():
+    """test BatchNorm_17"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_17"))
     jit_case.jit_run()
 
 
-def test_BatchNorm17():
-    """test BatchNorm17"""
-    jit_case = JitTrans(case=yml.get_case_info("BatchNorm17"))
+def test_BatchNorm_18():
+    """test BatchNorm_18"""
+    jit_case = JitTrans(case=yml.get_case_info("BatchNorm_18"))
     jit_case.jit_run()

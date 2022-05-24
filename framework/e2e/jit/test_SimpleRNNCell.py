@@ -24,25 +24,25 @@ def test_SimpleRNNCell_base():
     jit_case.jit_run()
 
 
-def test_SimpleRNNCell():
-    """test SimpleRNNCell"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNNCell"))
+def test_SimpleRNNCell_0():
+    """test SimpleRNNCell_0"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNNCell_0"))
     jit_case.jit_run()
 
 
-def test_SimpleRNNCell0():
-    """test SimpleRNNCell0"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNNCell0"))
+def test_SimpleRNNCell_1():
+    """test SimpleRNNCell_1"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNNCell_1"))
     jit_case.jit_run()
 
 
-def test_SimpleRNNCell1():
-    """test SimpleRNNCell1"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNNCell1"))
+def test_SimpleRNNCell_2():
+    """test SimpleRNNCell_2"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNNCell_2"))
     jit_case.jit_run()
 
 
-def test_SimpleRNNCell2():
-    """test SimpleRNNCell2"""
-    jit_case = JitTrans(case=yml.get_case_info("SimpleRNNCell2"))
+def test_SimpleRNNCell_3():
+    """test SimpleRNNCell_3"""
+    jit_case = JitTrans(case=yml.get_case_info("SimpleRNNCell_3"))
     jit_case.jit_run()
