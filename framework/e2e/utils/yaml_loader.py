@@ -18,7 +18,7 @@ class YamlLoader(object):
     def __init__(self, yml):
         """initialize"""
         try:
-            with open(yml) as f:
+            with open(yml, encoding="utf-8") as f:
                 self.yml = yaml.load(f, Loader=yaml.FullLoader)
         except Exception as e:
             print(e)
@@ -40,5 +40,4 @@ class YamlLoader(object):
         get all case name
         """
         # 获取全部case name
-        # print(self.yml)
         return self.yml.keys()
