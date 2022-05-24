@@ -14518,7 +14518,7 @@ max_pool3d_10:
       stride: !!python/tuple [3, 2, 1]
       padding: [1, 0, 0]
 
-max_pool3d_10:
+max_pool3d_11:
   desc: "3维最大池化"
   paddle:
     api_name: "paddle.nn.functional.max_pool3d"
@@ -14534,7 +14534,7 @@ max_pool3d_10:
       stride: !!python/tuple [3, 2, 1]
       padding: !!python/tuple [1, 0, 0]
 
-max_pool3d_11:
+max_pool3d_12:
   desc: "3维最大池化"
   paddle:
     api_name: "paddle.nn.functional.max_pool3d"
@@ -14553,7 +14553,7 @@ max_pool3d_11:
       ceil_mode: True
       data_format: 'NCDHW'
 
-max_pool3d_12:
+max_pool3d_13:
   desc: "3维最大池化"
   paddle:
     api_name: "paddle.nn.functional.max_pool3d"

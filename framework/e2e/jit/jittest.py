@@ -14,7 +14,7 @@ from jittrans import JitTrans
 
 yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", "nn.yml")
 
-case_name = "PairwiseDistance_4"
+case_name = "max_pool3d_13"
 
 
 # loading yaml
