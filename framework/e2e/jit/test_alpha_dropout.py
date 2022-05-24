@@ -22,15 +22,3 @@ def test_alpha_dropout_base():
     """test alpha_dropout_base"""
     jit_case = JitTrans(case=yml.get_case_info("alpha_dropout_base"))
     jit_case.jit_run()
-
-
-def test_alpha_dropout2():
-    """test alpha_dropout2"""
-    jit_case = JitTrans(case=yml.get_case_info("alpha_dropout2"))
-    jit_case.jit_run()
-
-
-def test_alpha_dropout3():
-    """test alpha_dropout3"""
-    jit_case = JitTrans(case=yml.get_case_info("alpha_dropout3"))
-    jit_case.jit_run()

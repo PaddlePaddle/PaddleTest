@@ -24,19 +24,19 @@ def test_Maxout_base():
     jit_case.jit_run()
 
 
-def test_Maxout():
-    """test Maxout"""
-    jit_case = JitTrans(case=yml.get_case_info("Maxout"))
+def test_Maxout_0():
+    """test Maxout_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Maxout_0"))
     jit_case.jit_run()
 
 
-def test_Maxout0():
-    """test Maxout0"""
-    jit_case = JitTrans(case=yml.get_case_info("Maxout0"))
+def test_Maxout_1():
+    """test Maxout_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Maxout_1"))
     jit_case.jit_run()
 
 
-def test_Maxout1():
-    """test Maxout1"""
-    jit_case = JitTrans(case=yml.get_case_info("Maxout1"))
+def test_Maxout_2():
+    """test Maxout_2"""
+    jit_case = JitTrans(case=yml.get_case_info("Maxout_2"))
     jit_case.jit_run()

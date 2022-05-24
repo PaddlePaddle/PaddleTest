@@ -24,7 +24,7 @@ def test_LogSigmoid_base():
     jit_case.jit_run()
 
 
-def test_LogSigmoid():
-    """test LogSigmoid"""
-    jit_case = JitTrans(case=yml.get_case_info("LogSigmoid"))
+def test_LogSigmoid_0():
+    """test LogSigmoid_0"""
+    jit_case = JitTrans(case=yml.get_case_info("LogSigmoid_0"))
     jit_case.jit_run()

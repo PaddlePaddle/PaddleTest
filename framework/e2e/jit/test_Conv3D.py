@@ -18,103 +18,181 @@ yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", 
 yml = YamlLoader(yaml_path)
 
 
-def test_Conv3D_base():
-    """test Conv3D_base"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D_base"))
+def test_conv3d_base():
+    """test conv3d_base"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_base"))
     jit_case.jit_run()
 
 
-def test_Conv3D0():
-    """test Conv3D0"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D0"))
+def test_conv3d_0():
+    """test conv3d_0"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_0"))
     jit_case.jit_run()
 
 
-def test_Conv3D1():
-    """test Conv3D1"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D1"))
+def test_conv3d_1():
+    """test conv3d_1"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_1"))
     jit_case.jit_run()
 
 
-def test_Conv3D2():
-    """test Conv3D2"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D2"))
+def test_conv3d_2():
+    """test conv3d_2"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_2"))
     jit_case.jit_run()
 
 
-def test_Conv3D3():
-    """test Conv3D3"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D3"))
+def test_conv3d_3():
+    """test conv3d_3"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_3"))
     jit_case.jit_run()
 
 
-def test_Conv3D4():
-    """test Conv3D4"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D4"))
+def test_conv3d_4():
+    """test conv3d_4"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_4"))
     jit_case.jit_run()
 
 
-def test_Conv3D5():
-    """test Conv3D5"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D5"))
+def test_conv3d_5():
+    """test conv3d_5"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_5"))
     jit_case.jit_run()
 
 
-def test_Conv3D6():
-    """test Conv3D6"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D6"))
+def test_conv3d_6():
+    """test conv3d_6"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_6"))
     jit_case.jit_run()
 
 
-def test_Conv3D7():
-    """test Conv3D7"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D7"))
+def test_conv3d_7():
+    """test conv3d_7"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_7"))
     jit_case.jit_run()
 
 
-def test_Conv3D8():
-    """test Conv3D8"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D8"))
+def test_conv3d_11():
+    """test conv3d_11"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_11"))
     jit_case.jit_run()
 
 
-def test_Conv3D9():
-    """test Conv3D9"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D9"))
+def test_conv3d_12():
+    """test conv3d_12"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_12"))
     jit_case.jit_run()
 
 
-def test_Conv3D10():
-    """test Conv3D10"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D10"))
+def test_conv3d_13():
+    """test conv3d_13"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_13"))
     jit_case.jit_run()
 
 
-def test_Conv3D11():
-    """test Conv3D11"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D11"))
+def test_conv3d_14():
+    """test conv3d_14"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_14"))
     jit_case.jit_run()
 
 
-def test_Conv3D12():
-    """test Conv3D12"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D12"))
+def test_conv3d_15():
+    """test conv3d_15"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_15"))
     jit_case.jit_run()
 
 
-def test_Conv3D13():
-    """test Conv3D13"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D13"))
+def test_conv3d_transpose_base():
+    """test conv3d_transpose_base"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_base"))
     jit_case.jit_run()
 
 
-def test_Conv3D14():
-    """test Conv3D14"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D14"))
+def test_conv3d_transpose_0():
+    """test conv3d_transpose_0"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_0"))
     jit_case.jit_run()
 
 
-def test_Conv3D15():
-    """test Conv3D15"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv3D15"))
+def test_conv3d_transpose_1():
+    """test conv3d_transpose_1"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_1"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_2():
+    """test conv3d_transpose_2"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_2"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_3():
+    """test conv3d_transpose_3"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_3"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_4():
+    """test conv3d_transpose_4"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_4"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_5():
+    """test conv3d_transpose_5"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_5"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_6():
+    """test conv3d_transpose_6"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_6"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_7():
+    """test conv3d_transpose_7"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_7"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_8():
+    """test conv3d_transpose_8"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_8"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_9():
+    """test conv3d_transpose_9"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_9"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_10():
+    """test conv3d_transpose_10"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_10"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_11():
+    """test conv3d_transpose_11"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_11"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_12():
+    """test conv3d_transpose_12"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_12"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_13():
+    """test conv3d_transpose_13"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_13"))
+    jit_case.jit_run()
+
+
+def test_conv3d_transpose_14():
+    """test conv3d_transpose_14"""
+    jit_case = JitTrans(case=yml.get_case_info("conv3d_transpose_14"))
     jit_case.jit_run()

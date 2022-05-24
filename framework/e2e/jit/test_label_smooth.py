@@ -22,9 +22,3 @@ def test_label_smooth_base():
     """test label_smooth_base"""
     jit_case = JitTrans(case=yml.get_case_info("label_smooth_base"))
     jit_case.jit_run()
-
-
-def test_label_smooth0():
-    """test label_smooth0"""
-    jit_case = JitTrans(case=yml.get_case_info("label_smooth0"))
-    jit_case.jit_run()

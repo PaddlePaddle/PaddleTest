@@ -24,37 +24,37 @@ def test_AlphaDropout_base():
     jit_case.jit_run()
 
 
-def test_AlphaDropout():
-    """test AlphaDropout"""
-    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout"))
+def test_AlphaDropout_0():
+    """test AlphaDropout_0"""
+    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout_0"))
     jit_case.jit_run()
 
 
-def test_AlphaDropout1():
-    """test AlphaDropout1"""
-    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout1"))
+def test_AlphaDropout_1():
+    """test AlphaDropout_1"""
+    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout_1"))
     jit_case.jit_run()
 
 
-def test_AlphaDropout2():
-    """test AlphaDropout2"""
-    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout2"))
+def test_AlphaDropout_2():
+    """test AlphaDropout_2"""
+    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout_2"))
     jit_case.jit_run()
 
 
-def test_AlphaDropout3():
-    """test AlphaDropout3"""
-    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout3"))
+def test_AlphaDropout_3():
+    """test AlphaDropout_3"""
+    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout_3"))
     jit_case.jit_run()
 
 
-def test_AlphaDropout4():
-    """test AlphaDropout4"""
-    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout4"))
+def test_AlphaDropout_4():
+    """test AlphaDropout_4"""
+    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout_4"))
     jit_case.jit_run()
 
 
-def test_AlphaDropout5():
-    """test AlphaDropout5"""
-    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout5"))
+def test_AlphaDropout_5():
+    """test AlphaDropout_5"""
+    jit_case = JitTrans(case=yml.get_case_info("AlphaDropout_5"))
     jit_case.jit_run()

@@ -24,49 +24,49 @@ def test_Conv2DTranspose_base():
     jit_case.jit_run()
 
 
-def test_Conv2DTranspose():
-    """test Conv2DTranspose"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose"))
+def test_Conv2DTranspose_0():
+    """test Conv2DTranspose_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose_0"))
     jit_case.jit_run()
 
 
-def test_Conv2DTranspose0():
-    """test Conv2DTranspose0"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose0"))
+def test_Conv2DTranspose_1():
+    """test Conv2DTranspose_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose_1"))
     jit_case.jit_run()
 
 
-def test_Conv2DTranspose1():
-    """test Conv2DTranspose1"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose1"))
+def test_Conv2DTranspose_2():
+    """test Conv2DTranspose_2"""
+    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose_2"))
     jit_case.jit_run()
 
 
-def test_Conv2DTranspose2():
-    """test Conv2DTranspose2"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose2"))
+def test_Conv2DTranspose_3():
+    """test Conv2DTranspose_3"""
+    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose_3"))
     jit_case.jit_run()
 
 
-def test_Conv2DTranspose3():
-    """test Conv2DTranspose3"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose3"))
+def test_Conv2DTranspose_4():
+    """test Conv2DTranspose_4"""
+    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose_4"))
     jit_case.jit_run()
 
 
-def test_Conv2DTranspose4():
-    """test Conv2DTranspose4"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose4"))
+def test_Conv2DTranspose_5():
+    """test Conv2DTranspose_5"""
+    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose_5"))
     jit_case.jit_run()
 
 
-def test_Conv2DTranspose5():
-    """test Conv2DTranspose5"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose5"))
+def test_Conv2DTranspose_6():
+    """test Conv2DTranspose_6"""
+    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose_6"))
     jit_case.jit_run()
 
 
-def test_Conv2DTranspose6():
-    """test Conv2DTranspose6"""
-    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose6"))
+def test_Conv2DTranspose_7():
+    """test Conv2DTranspose_7"""
+    jit_case = JitTrans(case=yml.get_case_info("Conv2DTranspose_7"))
     jit_case.jit_run()

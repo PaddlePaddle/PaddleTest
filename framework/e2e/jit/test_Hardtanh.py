@@ -24,49 +24,49 @@ def test_Hardtanh_base():
     jit_case.jit_run()
 
 
-def test_Hardtanh():
-    """test Hardtanh"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardtanh"))
+def test_Hardtanh_0():
+    """test Hardtanh_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardtanh_0"))
     jit_case.jit_run()
 
 
-def test_Hardtanh0():
-    """test Hardtanh0"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardtanh0"))
+def test_Hardtanh_1():
+    """test Hardtanh_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardtanh_1"))
     jit_case.jit_run()
 
 
-def test_Hardtanh1():
-    """test Hardtanh1"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardtanh1"))
+def test_Hardtanh_2():
+    """test Hardtanh_2"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardtanh_2"))
     jit_case.jit_run()
 
 
-def test_Hardtanh2():
-    """test Hardtanh2"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardtanh2"))
+def test_Hardtanh_3():
+    """test Hardtanh_3"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardtanh_3"))
     jit_case.jit_run()
 
 
-def test_Hardtanh3():
-    """test Hardtanh3"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardtanh3"))
+def test_Hardtanh_4():
+    """test Hardtanh_4"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardtanh_4"))
     jit_case.jit_run()
 
 
-def test_Hardtanh4():
-    """test Hardtanh4"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardtanh4"))
+def test_Hardtanh_5():
+    """test Hardtanh_5"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardtanh_5"))
     jit_case.jit_run()
 
 
-def test_Hardtanh5():
-    """test Hardtanh5"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardtanh5"))
+def test_Hardtanh_6():
+    """test Hardtanh_6"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardtanh_6"))
     jit_case.jit_run()
 
 
-def test_Hardtanh6():
-    """test Hardtanh6"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardtanh6"))
+def test_Hardtanh_7():
+    """test Hardtanh_7"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardtanh_7"))
     jit_case.jit_run()

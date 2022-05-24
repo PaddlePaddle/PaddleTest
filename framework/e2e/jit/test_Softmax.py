@@ -24,39 +24,39 @@ def test_LogSoftmax_base():
     jit_case.jit_run()
 
 
-def test_LogSoftmax():
-    """test LogSoftmax"""
-    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax"))
+def test_LogSoftmax_0():
+    """test LogSoftmax_0"""
+    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax_0"))
     jit_case.jit_run()
 
 
-def test_LogSoftmax0():
-    """test LogSoftmax0"""
-    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax0"))
+def test_LogSoftmax_1():
+    """test LogSoftmax_1"""
+    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax_1"))
     jit_case.jit_run()
 
 
-def test_LogSoftmax1():
-    """test LogSoftmax1"""
-    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax1"))
+def test_LogSoftmax_2():
+    """test LogSoftmax_2"""
+    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax_2"))
     jit_case.jit_run()
 
 
-def test_LogSoftmax2():
-    """test LogSoftmax2"""
-    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax2"))
+def test_LogSoftmax_3():
+    """test LogSoftmax_3"""
+    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax_3"))
     jit_case.jit_run()
 
 
-def test_LogSoftmax3():
-    """test LogSoftmax3"""
-    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax3"))
+def test_LogSoftmax_4():
+    """test LogSoftmax_4"""
+    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax_4"))
     jit_case.jit_run()
 
 
-def test_LogSoftmax4():
-    """test LogSoftmax4"""
-    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax4"))
+def test_LogSoftmax_5():
+    """test LogSoftmax_5"""
+    jit_case = JitTrans(case=yml.get_case_info("LogSoftmax_5"))
     jit_case.jit_run()
 
 
@@ -66,25 +66,25 @@ def test_Softmax_base():
     jit_case.jit_run()
 
 
-def test_Softmax():
-    """test Softmax"""
-    jit_case = JitTrans(case=yml.get_case_info("Softmax"))
+def test_Softmax_0():
+    """test Softmax_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Softmax_0"))
     jit_case.jit_run()
 
 
-def test_Softmax1():
-    """test Softmax1"""
-    jit_case = JitTrans(case=yml.get_case_info("Softmax1"))
+def test_Softmax_1():
+    """test Softmax_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Softmax_1"))
     jit_case.jit_run()
 
 
-def test_Softmax3():
-    """test Softmax3"""
-    jit_case = JitTrans(case=yml.get_case_info("Softmax3"))
+def test_Softmax_3():
+    """test Softmax_3"""
+    jit_case = JitTrans(case=yml.get_case_info("Softmax_3"))
     jit_case.jit_run()
 
 
-def test_Softmax4():
-    """test Softmax4"""
-    jit_case = JitTrans(case=yml.get_case_info("Softmax4"))
+def test_Softmax_4():
+    """test Softmax_4"""
+    jit_case = JitTrans(case=yml.get_case_info("Softmax_4"))
     jit_case.jit_run()

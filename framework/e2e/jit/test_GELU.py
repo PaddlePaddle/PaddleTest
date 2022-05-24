@@ -24,13 +24,13 @@ def test_GELU_base():
     jit_case.jit_run()
 
 
-def test_GELU():
-    """test GELU"""
-    jit_case = JitTrans(case=yml.get_case_info("GELU"))
+def test_GELU_0():
+    """test GELU_0"""
+    jit_case = JitTrans(case=yml.get_case_info("GELU_0"))
     jit_case.jit_run()
 
 
-def test_GELU1():
-    """test GELU1"""
-    jit_case = JitTrans(case=yml.get_case_info("GELU1"))
+def test_GELU_1():
+    """test GELU_1"""
+    jit_case = JitTrans(case=yml.get_case_info("GELU_1"))
     jit_case.jit_run()

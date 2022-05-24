@@ -24,13 +24,13 @@ def test_Softsign_base():
     jit_case.jit_run()
 
 
-def test_Softsign():
-    """test Softsign"""
-    jit_case = JitTrans(case=yml.get_case_info("Softsign"))
+def test_Softsign_0():
+    """test Softsign_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Softsign_0"))
     jit_case.jit_run()
 
 
-def test_Softsign0():
-    """test Softsign0"""
-    jit_case = JitTrans(case=yml.get_case_info("Softsign0"))
+def test_Softsign_1():
+    """test Softsign_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Softsign_1"))
     jit_case.jit_run()

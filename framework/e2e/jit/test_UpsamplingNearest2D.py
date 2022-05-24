@@ -24,55 +24,55 @@ def test_UpsamplingNearest2D_base():
     jit_case.jit_run()
 
 
-def test_UpsamplingNearest2D():
-    """test UpsamplingNearest2D"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D"))
+def test_UpsamplingNearest2D_0():
+    """test UpsamplingNearest2D_0"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D_0"))
     jit_case.jit_run()
 
 
-def test_UpsamplingNearest2D0():
-    """test UpsamplingNearest2D0"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D0"))
+def test_UpsamplingNearest2D_1():
+    """test UpsamplingNearest2D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D_1"))
     jit_case.jit_run()
 
 
-def test_UpsamplingNearest2D1():
-    """test UpsamplingNearest2D1"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D1"))
+def test_UpsamplingNearest2D_2():
+    """test UpsamplingNearest2D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D_2"))
     jit_case.jit_run()
 
 
-def test_UpsamplingNearest2D2():
-    """test UpsamplingNearest2D2"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D2"))
+def test_UpsamplingNearest2D_3():
+    """test UpsamplingNearest2D_3"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D_3"))
     jit_case.jit_run()
 
 
-def test_UpsamplingNearest2D3():
-    """test UpsamplingNearest2D3"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D3"))
+def test_UpsamplingNearest2D_4():
+    """test UpsamplingNearest2D_4"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D_4"))
     jit_case.jit_run()
 
 
-def test_UpsamplingNearest2D4():
-    """test UpsamplingNearest2D4"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D4"))
+def test_UpsamplingNearest2D_5():
+    """test UpsamplingNearest2D_5"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D_5"))
     jit_case.jit_run()
 
 
-def test_UpsamplingNearest2D5():
-    """test UpsamplingNearest2D5"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D5"))
+def test_UpsamplingNearest2D_6():
+    """test UpsamplingNearest2D_6"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D_6"))
     jit_case.jit_run()
 
 
-def test_UpsamplingNearest2D6():
-    """test UpsamplingNearest2D6"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D6"))
+def test_UpsamplingNearest2D_7():
+    """test UpsamplingNearest2D_7"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D_7"))
     jit_case.jit_run()
 
 
-def test_UpsamplingNearest2D7():
-    """test UpsamplingNearest2D7"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D7"))
+def test_UpsamplingNearest2D_8():
+    """test UpsamplingNearest2D_8"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingNearest2D_8"))
     jit_case.jit_run()

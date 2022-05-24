@@ -24,31 +24,31 @@ def test_PixelShuffle_base():
     jit_case.jit_run()
 
 
-def test_PixelShuffle():
-    """test PixelShuffle"""
-    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle"))
+def test_PixelShuffle_0():
+    """test PixelShuffle_0"""
+    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle_0"))
     jit_case.jit_run()
 
 
-def test_PixelShuffle1():
-    """test PixelShuffle1"""
-    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle1"))
+def test_PixelShuffle_1():
+    """test PixelShuffle_1"""
+    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle_1"))
     jit_case.jit_run()
 
 
-def test_PixelShuffle2():
-    """test PixelShuffle2"""
-    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle2"))
+def test_PixelShuffle_2():
+    """test PixelShuffle_2"""
+    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle_2"))
     jit_case.jit_run()
 
 
-def test_PixelShuffle4():
-    """test PixelShuffle4"""
-    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle4"))
+def test_PixelShuffle_4():
+    """test PixelShuffle_4"""
+    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle_4"))
     jit_case.jit_run()
 
 
-def test_PixelShuffle5():
-    """test PixelShuffle5"""
-    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle5"))
+def test_PixelShuffle_5():
+    """test PixelShuffle_5"""
+    jit_case = JitTrans(case=yml.get_case_info("PixelShuffle_5"))
     jit_case.jit_run()

@@ -24,7 +24,7 @@ def test_Linear_base():
     jit_case.jit_run()
 
 
-def test_Linear():
-    """test Linear"""
-    jit_case = JitTrans(case=yml.get_case_info("Linear"))
+def test_Linear_0():
+    """test Linear_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Linear_0"))
     jit_case.jit_run()

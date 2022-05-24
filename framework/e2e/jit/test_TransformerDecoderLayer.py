@@ -24,31 +24,31 @@ def test_TransformerDecoderLayer_base():
     jit_case.jit_run()
 
 
-def test_TransformerDecoderLayer():
-    """test TransformerDecoderLayer"""
-    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer"))
+def test_TransformerDecoderLayer_0():
+    """test TransformerDecoderLayer_0"""
+    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer_0"))
     jit_case.jit_run()
 
 
-def test_TransformerDecoderLayer0():
-    """test TransformerDecoderLayer0"""
-    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer0"))
+def test_TransformerDecoderLayer_1():
+    """test TransformerDecoderLayer_1"""
+    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer_1"))
     jit_case.jit_run()
 
 
-def test_TransformerDecoderLayer1():
-    """test TransformerDecoderLayer1"""
-    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer1"))
+def test_TransformerDecoderLayer_2():
+    """test TransformerDecoderLayer_2"""
+    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer_2"))
     jit_case.jit_run()
 
 
-def test_TransformerDecoderLayer2():
-    """test TransformerDecoderLayer2"""
-    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer2"))
+def test_TransformerDecoderLayer_3():
+    """test TransformerDecoderLayer_3"""
+    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer_3"))
     jit_case.jit_run()
 
 
-def test_TransformerDecoderLayer3():
-    """test TransformerDecoderLayer3"""
-    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer3"))
+def test_TransformerDecoderLayer_4():
+    """test TransformerDecoderLayer_4"""
+    jit_case = JitTrans(case=yml.get_case_info("TransformerDecoderLayer_4"))
     jit_case.jit_run()

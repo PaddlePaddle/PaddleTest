@@ -24,49 +24,49 @@ def test_UpsamplingBilinear2D_base():
     jit_case.jit_run()
 
 
-def test_UpsamplingBilinear2D():
-    """test UpsamplingBilinear2D"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D"))
+def test_UpsamplingBilinear2D_0():
+    """test UpsamplingBilinear2D_0"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D_0"))
     jit_case.jit_run()
 
 
-def test_UpsamplingBilinear2D1():
-    """test UpsamplingBilinear2D1"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D1"))
+def test_UpsamplingBilinear2D_1():
+    """test UpsamplingBilinear2D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D_1"))
     jit_case.jit_run()
 
 
-def test_UpsamplingBilinear2D2():
-    """test UpsamplingBilinear2D2"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D2"))
+def test_UpsamplingBilinear2D_2():
+    """test UpsamplingBilinear2D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D_2"))
     jit_case.jit_run()
 
 
-def test_UpsamplingBilinear2D3():
-    """test UpsamplingBilinear2D3"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D3"))
+def test_UpsamplingBilinear2D_3():
+    """test UpsamplingBilinear2D_3"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D_3"))
     jit_case.jit_run()
 
 
-def test_UpsamplingBilinear2D4():
-    """test UpsamplingBilinear2D4"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D4"))
+def test_UpsamplingBilinear2D_4():
+    """test UpsamplingBilinear2D_4"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D_4"))
     jit_case.jit_run()
 
 
-def test_UpsamplingBilinear2D5():
-    """test UpsamplingBilinear2D5"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D5"))
+def test_UpsamplingBilinear2D_5():
+    """test UpsamplingBilinear2D_5"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D_5"))
     jit_case.jit_run()
 
 
-def test_UpsamplingBilinear2D6():
-    """test UpsamplingBilinear2D6"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D6"))
+def test_UpsamplingBilinear2D_6():
+    """test UpsamplingBilinear2D_6"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D_6"))
     jit_case.jit_run()
 
 
-def test_UpsamplingBilinear2D7():
-    """test UpsamplingBilinear2D7"""
-    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D7"))
+def test_UpsamplingBilinear2D_7():
+    """test UpsamplingBilinear2D_7"""
+    jit_case = JitTrans(case=yml.get_case_info("UpsamplingBilinear2D_7"))
     jit_case.jit_run()

@@ -24,43 +24,43 @@ def test_InstanceNorm2D_base():
     jit_case.jit_run()
 
 
-def test_InstanceNorm2D():
-    """test InstanceNorm2D"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D"))
+def test_InstanceNorm2D_0():
+    """test InstanceNorm2D_0"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D_0"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm2D2():
-    """test InstanceNorm2D2"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D2"))
+def test_InstanceNorm2D_2():
+    """test InstanceNorm2D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D_2"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm2D3():
-    """test InstanceNorm2D3"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D3"))
+def test_InstanceNorm2D_3():
+    """test InstanceNorm2D_3"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D_3"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm2D4():
-    """test InstanceNorm2D4"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D4"))
+def test_InstanceNorm2D_4():
+    """test InstanceNorm2D_4"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D_4"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm2D6():
-    """test InstanceNorm2D6"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D6"))
+def test_InstanceNorm2D_6():
+    """test InstanceNorm2D_6"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D_6"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm2D8():
-    """test InstanceNorm2D8"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D8"))
+def test_InstanceNorm2D_8():
+    """test InstanceNorm2D_8"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D_8"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm2D9():
-    """test InstanceNorm2D9"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D9"))
+def test_InstanceNorm2D_9():
+    """test InstanceNorm2D_9"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm2D_9"))
     jit_case.jit_run()

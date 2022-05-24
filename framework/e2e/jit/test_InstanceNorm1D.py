@@ -24,43 +24,43 @@ def test_InstanceNorm1D_base():
     jit_case.jit_run()
 
 
-def test_InstanceNorm1D1():
-    """test InstanceNorm1D1"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D1"))
+def test_InstanceNorm1D_1():
+    """test InstanceNorm1D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D_1"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm1D2():
-    """test InstanceNorm1D2"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D2"))
+def test_InstanceNorm1D_2():
+    """test InstanceNorm1D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D_2"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm1D3():
-    """test InstanceNorm1D3"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D3"))
+def test_InstanceNorm1D_3():
+    """test InstanceNorm1D_3"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D_3"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm1D5():
-    """test InstanceNorm1D5"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D5"))
+def test_InstanceNorm1D_5():
+    """test InstanceNorm1D_5"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D_5"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm1D6():
-    """test InstanceNorm1D6"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D6"))
+def test_InstanceNorm1D_6():
+    """test InstanceNorm1D_6"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D_6"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm1D7():
-    """test InstanceNorm1D7"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D7"))
+def test_InstanceNorm1D_7():
+    """test InstanceNorm1D_7"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D_7"))
     jit_case.jit_run()
 
 
-def test_InstanceNorm1D8():
-    """test InstanceNorm1D8"""
-    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D8"))
+def test_InstanceNorm1D_8():
+    """test InstanceNorm1D_8"""
+    jit_case = JitTrans(case=yml.get_case_info("InstanceNorm1D_8"))
     jit_case.jit_run()

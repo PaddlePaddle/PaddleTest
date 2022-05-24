@@ -24,37 +24,37 @@ def test_Transformer_base():
     jit_case.jit_run()
 
 
-def test_Transformer():
-    """test Transformer"""
-    jit_case = JitTrans(case=yml.get_case_info("Transformer"))
+def test_Transformer_0():
+    """test Transformer_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Transformer_0"))
     jit_case.jit_run()
 
 
-def test_Transformer0():
-    """test Transformer0"""
-    jit_case = JitTrans(case=yml.get_case_info("Transformer0"))
+def test_Transformer_1():
+    """test Transformer_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Transformer_1"))
     jit_case.jit_run()
 
 
-def test_Transformer1():
-    """test Transformer1"""
-    jit_case = JitTrans(case=yml.get_case_info("Transformer1"))
+def test_Transformer_2():
+    """test Transformer_2"""
+    jit_case = JitTrans(case=yml.get_case_info("Transformer_2"))
     jit_case.jit_run()
 
 
-def test_Transformer2():
-    """test Transformer2"""
-    jit_case = JitTrans(case=yml.get_case_info("Transformer2"))
+def test_Transformer_3():
+    """test Transformer_3"""
+    jit_case = JitTrans(case=yml.get_case_info("Transformer_3"))
     jit_case.jit_run()
 
 
-def test_Transformer3():
-    """test Transformer3"""
-    jit_case = JitTrans(case=yml.get_case_info("Transformer3"))
+def test_Transformer_4():
+    """test Transformer_4"""
+    jit_case = JitTrans(case=yml.get_case_info("Transformer_4"))
     jit_case.jit_run()
 
 
-def test_Transformer4():
-    """test Transformer4"""
-    jit_case = JitTrans(case=yml.get_case_info("Transformer4"))
+def test_Transformer_5():
+    """test Transformer_5"""
+    jit_case = JitTrans(case=yml.get_case_info("Transformer_5"))
     jit_case.jit_run()

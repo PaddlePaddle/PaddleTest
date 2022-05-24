@@ -24,25 +24,25 @@ def test_Hardshrink_base():
     jit_case.jit_run()
 
 
-def test_Hardshrink():
-    """test Hardshrink"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardshrink"))
+def test_Hardshrink_0():
+    """test Hardshrink_0"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardshrink_0"))
     jit_case.jit_run()
 
 
-def test_Hardshrink1():
-    """test Hardshrink1"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardshrink1"))
+def test_Hardshrink_1():
+    """test Hardshrink_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardshrink_1"))
     jit_case.jit_run()
 
 
-def test_Hardshrink2():
-    """test Hardshrink2"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardshrink2"))
+def test_Hardshrink_2():
+    """test Hardshrink_2"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardshrink_2"))
     jit_case.jit_run()
 
 
-def test_Hardshrink3():
-    """test Hardshrink3"""
-    jit_case = JitTrans(case=yml.get_case_info("Hardshrink3"))
+def test_Hardshrink_3():
+    """test Hardshrink_3"""
+    jit_case = JitTrans(case=yml.get_case_info("Hardshrink_3"))
     jit_case.jit_run()

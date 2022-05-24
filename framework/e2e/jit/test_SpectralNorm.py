@@ -24,55 +24,55 @@ def test_SpectralNorm_base():
     jit_case.jit_run()
 
 
-def test_SpectralNorm():
-    """test SpectralNorm"""
-    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm"))
+def test_SpectralNorm_0():
+    """test SpectralNorm_0"""
+    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm_0"))
     jit_case.jit_run()
 
 
-def test_SpectralNorm0():
-    """test SpectralNorm0"""
-    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm0"))
+def test_SpectralNorm_1():
+    """test SpectralNorm_1"""
+    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm_1"))
     jit_case.jit_run()
 
 
-def test_SpectralNorm1():
-    """test SpectralNorm1"""
-    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm1"))
+def test_SpectralNorm_2():
+    """test SpectralNorm_2"""
+    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm_2"))
     jit_case.jit_run()
 
 
-def test_SpectralNorm2():
-    """test SpectralNorm2"""
-    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm2"))
+def test_SpectralNorm_3():
+    """test SpectralNorm_3"""
+    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm_3"))
     jit_case.jit_run()
 
 
-def test_SpectralNorm3():
-    """test SpectralNorm3"""
-    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm3"))
+def test_SpectralNorm_4():
+    """test SpectralNorm_4"""
+    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm_4"))
     jit_case.jit_run()
 
 
-def test_SpectralNorm4():
-    """test SpectralNorm4"""
-    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm4"))
+def test_SpectralNorm_5():
+    """test SpectralNorm_5"""
+    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm_5"))
     jit_case.jit_run()
 
 
-def test_SpectralNorm5():
-    """test SpectralNorm5"""
-    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm5"))
+def test_SpectralNorm_6():
+    """test SpectralNorm_6"""
+    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm_6"))
     jit_case.jit_run()
 
 
-def test_SpectralNorm6():
-    """test SpectralNorm6"""
-    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm6"))
+def test_SpectralNorm_7():
+    """test SpectralNorm_7"""
+    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm_7"))
     jit_case.jit_run()
 
 
-def test_SpectralNorm7():
-    """test SpectralNorm7"""
-    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm7"))
+def test_SpectralNorm_9():
+    """test SpectralNorm_9"""
+    jit_case = JitTrans(case=yml.get_case_info("SpectralNorm_9"))
     jit_case.jit_run()

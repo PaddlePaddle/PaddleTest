@@ -24,163 +24,163 @@ def test_Pad1D_base():
     jit_case.jit_run()
 
 
-def test_Pad1D():
-    """test Pad1D"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D"))
+def test_Pad1D_1():
+    """test Pad1D_1"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_1"))
     jit_case.jit_run()
 
 
-def test_Pad1D2():
-    """test Pad1D2"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D2"))
+def test_Pad1D_2():
+    """test Pad1D_2"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_2"))
     jit_case.jit_run()
 
 
-def test_Pad1D3():
-    """test Pad1D3"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D3"))
+def test_Pad1D_3():
+    """test Pad1D_3"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_3"))
     jit_case.jit_run()
 
 
-def test_Pad1D4():
-    """test Pad1D4"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D4"))
+def test_Pad1D_4():
+    """test Pad1D_4"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_4"))
     jit_case.jit_run()
 
 
-def test_Pad1D5():
-    """test Pad1D5"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D5"))
+def test_Pad1D_5():
+    """test Pad1D_5"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_5"))
     jit_case.jit_run()
 
 
-def test_Pad1D6():
-    """test Pad1D6"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D6"))
+def test_Pad1D_6():
+    """test Pad1D_6"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_6"))
     jit_case.jit_run()
 
 
-def test_Pad1D7():
-    """test Pad1D7"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D7"))
+def test_Pad1D_7():
+    """test Pad1D_7"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_7"))
     jit_case.jit_run()
 
 
-def test_Pad1D8():
-    """test Pad1D8"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D8"))
+def test_Pad1D_8():
+    """test Pad1D_8"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_8"))
     jit_case.jit_run()
 
 
-def test_Pad1D9():
-    """test Pad1D9"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D9"))
+def test_Pad1D_9():
+    """test Pad1D_9"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_9"))
     jit_case.jit_run()
 
 
-def test_Pad1D10():
-    """test Pad1D10"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D10"))
+def test_Pad1D_10():
+    """test Pad1D_10"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_10"))
     jit_case.jit_run()
 
 
-def test_Pad1D11():
-    """test Pad1D11"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D11"))
+def test_Pad1D_11():
+    """test Pad1D_11"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_11"))
     jit_case.jit_run()
 
 
-def test_Pad1D12():
-    """test Pad1D12"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D12"))
+def test_Pad1D_12():
+    """test Pad1D_12"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_12"))
     jit_case.jit_run()
 
 
-def test_Pad1D13():
-    """test Pad1D13"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D13"))
+def test_Pad1D_13():
+    """test Pad1D_13"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_13"))
     jit_case.jit_run()
 
 
-def test_Pad1D14():
-    """test Pad1D14"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D14"))
+def test_Pad1D_14():
+    """test Pad1D_14"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_14"))
     jit_case.jit_run()
 
 
-def test_Pad1D15():
-    """test Pad1D15"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D15"))
+def test_Pad1D_15():
+    """test Pad1D_15"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_15"))
     jit_case.jit_run()
 
 
-def test_Pad1D16():
-    """test Pad1D16"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D16"))
+def test_Pad1D_16():
+    """test Pad1D_16"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_16"))
     jit_case.jit_run()
 
 
-def test_Pad1D17():
-    """test Pad1D17"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D17"))
+def test_Pad1D_17():
+    """test Pad1D_17"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_17"))
     jit_case.jit_run()
 
 
-def test_Pad1D18():
-    """test Pad1D18"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D18"))
+def test_Pad1D_18():
+    """test Pad1D_18"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_18"))
     jit_case.jit_run()
 
 
-def test_Pad1D19():
-    """test Pad1D19"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D19"))
+def test_Pad1D_19():
+    """test Pad1D_19"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_19"))
     jit_case.jit_run()
 
 
-def test_Pad1D20():
-    """test Pad1D20"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D20"))
+def test_Pad1D_20():
+    """test Pad1D_20"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_20"))
     jit_case.jit_run()
 
 
-def test_Pad1D21():
-    """test Pad1D21"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D21"))
+def test_Pad1D_21():
+    """test Pad1D_21"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_21"))
     jit_case.jit_run()
 
 
-def test_Pad1D22():
-    """test Pad1D22"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D22"))
+def test_Pad1D_22():
+    """test Pad1D_22"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_22"))
     jit_case.jit_run()
 
 
-def test_Pad1D23():
-    """test Pad1D23"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D23"))
+def test_Pad1D_23():
+    """test Pad1D_23"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_23"))
     jit_case.jit_run()
 
 
-def test_Pad1D24():
-    """test Pad1D24"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D24"))
+def test_Pad1D_24():
+    """test Pad1D_24"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_24"))
     jit_case.jit_run()
 
 
-def test_Pad1D25():
-    """test Pad1D25"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D25"))
+def test_Pad1D_25():
+    """test Pad1D_25"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_25"))
     jit_case.jit_run()
 
 
-def test_Pad1D26():
-    """test Pad1D26"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D26"))
+def test_Pad1D_26():
+    """test Pad1D_26"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_26"))
     jit_case.jit_run()
 
 
-def test_Pad1D27():
-    """test Pad1D27"""
-    jit_case = JitTrans(case=yml.get_case_info("Pad1D27"))
+def test_Pad1D_27():
+    """test Pad1D_27"""
+    jit_case = JitTrans(case=yml.get_case_info("Pad1D_27"))
     jit_case.jit_run()
