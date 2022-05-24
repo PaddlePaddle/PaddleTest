@@ -24,8 +24,8 @@ FUNCTION: # 训练步骤，开头只跑一次
     tag: mac_function_test
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path/PaddleOCR
-        cmd: sh PaddleOCR_data_process.sh ${Data_path}
+        path: $ROOT_PATH/PaddleOCR
+        cmd: sh PaddleOCR_data_process.sh ${Data_path};
              sh PaddleOCR_MAC_CPU_1.sh
 
 TRAIN: # 训练步骤
