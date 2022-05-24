@@ -40,5 +40,4 @@ class YamlLoader(object):
         get all case name
         """
         # 获取全部case name
-        # print(self.yml)
         return self.yml.keys()
