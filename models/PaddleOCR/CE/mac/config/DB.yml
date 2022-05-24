@@ -1,0 +1,113 @@
+MODEL: "DB" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleOCR
+  path: $ROOT_PATH/PaddleOCR
+  branch: $ocr_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: ./ #脚本的路径
+  model_log_path: log
+
+EXEC:
+  exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
+  exec_priority: [P0]
+  exec_tag: ["train_mac_cpu", "eval_mac", "infer_mac", "export_mac", "predict_mac"]
+
+#测试套
+TRAIN: # 训练步骤
+    priority: P0
+    tag: train_mac_cpu
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh configs/det/det_mv3_db.yml train_mac_cpu
+
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/det_mv3_db_cpu.log
+
+EVAL: # 训练步骤
+  -
+    priority: P0
+    tag: eval_mac
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh configs/det/det_mv3_db.yml eval_mac
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/det_mv3_db_eval.log
+
+
+INFER: # 训练步骤
+  -
+    priority: P0
+    tag: infer_mac
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh configs/det/det_mv3_db.yml infer_mac
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/det_mv3_db_infer.log
+
+EXPORT: # 训练步骤
+  -
+    priority: P0
+    tag: export_mac
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh configs/det/det_mv3_db.yml export_mac
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/det_mv3_db_export.log
+
+PREDICT: # 训练步骤
+  -
+    priority: P0
+    tag: predict_mac
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh configs/det/det_mv3_db.yml predict_mac
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/det_mv3_db_predict.log
