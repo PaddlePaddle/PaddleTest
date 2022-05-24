@@ -28,7 +28,7 @@ FUNCTION: # 训练步骤，开头只跑一次
         cmd: sh PaddleOCR_MAC_CPU_1.sh
 
 TRAIN: # 训练步骤
-    priority: P0  
+    priority: P0
     tag: train_mac_cpu
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
