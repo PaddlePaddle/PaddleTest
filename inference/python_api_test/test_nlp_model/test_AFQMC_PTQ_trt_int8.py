@@ -571,4 +571,3 @@ def test_trt_int8_bz1_multi_thread():
     )
 
     del test_suite2  # destroy class to save memory
-
