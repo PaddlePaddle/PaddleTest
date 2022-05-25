@@ -86,7 +86,7 @@ EXPORT: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh configs/det/det_mv3_db.yml export_mac
     kpis: #kpi指标
-      eval_exit_code:
+      export_exit_code:
         latest: True
         kpi_base: 0.0
         threshold: 0.0
