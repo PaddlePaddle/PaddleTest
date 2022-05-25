@@ -29,6 +29,7 @@ FUNCTION: # 训练步骤，开头只跑一次
              sh PaddleOCR_MAC_CPU_1.sh
 
 TRAIN: # 训练步骤
+  -
     priority: P0
     tag: train_mac_cpu
     env: #去掉，自动调度
