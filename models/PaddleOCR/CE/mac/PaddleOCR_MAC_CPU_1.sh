@@ -25,6 +25,7 @@ fi
 done
 
 output_path="output"
+cp ../ocr_p0model_list ./
 cat ocr_p0model_list | while read line
 do
 #echo $line
