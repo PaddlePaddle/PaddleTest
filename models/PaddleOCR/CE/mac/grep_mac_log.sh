@@ -30,8 +30,8 @@ elif [[ $2 == 'infer_mac' ]] ; then
 
 elif [[ $2 == 'export_mac' ]] ; then
     echo '#####export_mac'
-    cat ${log_path}/export_model/${model}.log | grep export_exit_code
-    cat ${log_path}/export_model/${model}.log | grep export_exit_code >../${log_path}/${model}_export.log
+    cat ${log_path}/export/${model}.log | grep export_exit_code
+    cat ${log_path}/export/${model}.log | grep export_exit_code >../${log_path}/${model}_export.log
     cat ../${log_path}/${model}_export.log
 
 elif [[ $2 == 'predict_mac' ]] ; then

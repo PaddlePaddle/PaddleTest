@@ -132,11 +132,11 @@ echo "export"
 python tools/export_model.py -c $line -o Global.use_gpu=${gpu_flag} Global.checkpoints="output/"${model}"/latest"  Global.save_inference_dir="./models_inference/"${model} >  $log_path/export/${model}.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/${model}.log) -eq 0 ]];then
    echo -e "\033[33m export of $model  successfully!\033[0m"| tee -a $log_path/result.log
-   echo "export_exit_code: 0.0" >> $log_path/export_model/$model.log
+   echo "export_exit_code: 0.0" >> $log_path/export/$model.log
 else
    cat $log_path/export/${model}.log
    echo -e "\033[31m export of $model failed!\033[0m"| tee -a $log_path/result.log
-   echo "export_exit_code: 1.0" >> $log_path/export_model/$model.log
+   echo "export_exit_code: 1.0" >> $log_path/export/$model.log
 fi
 
 #predict
@@ -148,11 +148,11 @@ echo "cls"
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words/ch/word_4.jpg" --cls_model_dir="./models_inference/"${model} --use_gpu=${gpu_flag} >$log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
-   echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
+   echo "predict_exit_code: 0.0" >> $log_path/predict/$model.log
 else
    cat $log_path/predict/${model}.log
    echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
-   echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
+   echo "predict_exit_code: 1.0" >> $log_path/predict/$model.log
 fi
 
 elif [[ $model =~ "det" ]];then
@@ -161,11 +161,11 @@ echo "det"
 python tools/infer/predict_${category}.py  --image_dir="./doc/imgs_en/img_10.jpg" --det_model_dir="./models_inference/"${model} --use_gpu=${gpu_flag} >$log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
-   echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
+   echo "predict_exit_code: 0.0" >> $log_path/predict/$model.log
 else
    cat $log_path/predict/${model}.log
    echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
-   echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
+   echo "predict_exit_code: 1.0" >> $log_path/predict/$model.log
 fi
 
 elif [[ $model =~ "rec" ]];then
@@ -175,11 +175,11 @@ echo "rec"
 python tools/infer/predict_${category}.py  --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 32, 100" --rec_char_dict_path=./ppocr/utils/ic15_dict.txt --use_gpu=${gpu_flag} >$log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
-   echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
+   echo "predict_exit_code: 0.0" >> $log_path/predict/$model.log
 else
    cat $log_path/predict/${model}.log
    echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
-   echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
+   echo "predict_exit_code: 1.0" >> $log_path/predict/$model.log
 fi
 
 elif [[ $model =~ "e2e" ]];then
@@ -189,11 +189,11 @@ echo "e2e"
 python tools/infer/predict_${category}.py   --image_dir="./doc/imgs_en/img_10.jpg"  --e2e_model_dir="./models_inference/"${model} --e2e_algorithm="PGNet" --use_gpu=${gpu_flag} >$log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
-   echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
+   echo "predict_exit_code: 0.0" >> $log_path/predict/$model.log
 else
    cat $log_path/predict/${model}.log
    echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
-   echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
+   echo "predict_exit_code: 1.0" >> $log_path/predict/$model.log
 fi
 
 fi
