@@ -47,6 +47,7 @@ def test_fused_feedforward0():
     np.random.seed(22)
     x = np.random.rand(1, 2, 2)
     res = np.array([[[-0.9997536, 0.9997536], [-0.9999639, 0.9999639]]])
+    attr = paddle.nn.initializer.Constant(2)
     obj.run(
         res=res,
         data=x,
@@ -54,8 +55,10 @@ def test_fused_feedforward0():
         dim_feedforward=2,
         dropout_rate=0,
         act_dropout_rate=0,
-        weight_attr=paddle.nn.initializer.Constant(2),
-        bias_attr=paddle.nn.initializer.Constant(2),
+        linear1_weight_attr=attr,
+        linear1_bias_attr=attr,
+        linear2_weight_attr=attr,
+        linear2_bias_attr=attr,
     )
 
 
@@ -69,6 +72,7 @@ def test_fused_feedforward1():
     np.random.seed(22)
     x = np.random.rand(1, 2, 3)
     res = np.array([[[-1.3824339, 0.9524618, 0.4299395], [1.3745127, -0.97339916, -0.40110698]]])
+    attr = paddle.nn.initializer.Constant(2)
     obj.run(
         res=res,
         data=x,
@@ -77,8 +81,10 @@ def test_fused_feedforward1():
         dropout_rate=0,
         act_dropout_rate=0,
         activation="gelu",
-        weight_attr=paddle.nn.initializer.Constant(2),
-        bias_attr=paddle.nn.initializer.Constant(2),
+        linear1_weight_attr=attr,
+        linear1_bias_attr=attr,
+        linear2_weight_attr=attr,
+        linear2_bias_attr=attr,
     )
 
 
@@ -91,6 +97,7 @@ def test_fused_feedforward2():
     np.random.seed(22)
     x = np.random.rand(1, 2, 2)
     res = np.array([[[10.20846272, 10.48168278], [10.42053699, 10.85918140]]])
+    attr = paddle.nn.initializer.Constant(2)
     obj.run(
         res=res,
         data=x,
@@ -99,6 +106,8 @@ def test_fused_feedforward2():
         dropout_rate=0,
         act_dropout_rate=0,
         normalize_before=True,
-        weight_attr=paddle.nn.initializer.Constant(2),
-        bias_attr=paddle.nn.initializer.Constant(2),
+        linear1_weight_attr=attr,
+        linear1_bias_attr=attr,
+        linear2_weight_attr=attr,
+        linear2_bias_attr=attr,
     )
