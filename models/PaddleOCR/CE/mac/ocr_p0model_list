@@ -1,4 +1,1 @@
 configs/cls/cls_mv3.yml
-configs/e2e/e2e_r50_vd_pg.yml
-configs/rec/rec_mv3_none_bilstm_ctc.yml
-configs/det/det_mv3_db.yml
