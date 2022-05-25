@@ -1,4 +1,8 @@
-
+echo "Project_path"
+echo ${Project_path}
+cd ${Project_path}
+echo "path after"
+pwd
 # env
 unset http_proxy
 unset https_proxy
