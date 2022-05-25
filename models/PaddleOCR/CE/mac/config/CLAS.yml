@@ -32,9 +32,6 @@ TRAIN: # 训练步骤
   -
     priority: P0
     tag: train_mac_cpu
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
-
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -77,7 +74,7 @@ EXPORT: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_mac_log.sh configs/cls/cls_mv3.yml export_mac
     kpis: #kpi指标
-      eval_exit_code:
+      export_exit_code:
         latest: True
         kpi_base: 0.0
         threshold: 0.0
