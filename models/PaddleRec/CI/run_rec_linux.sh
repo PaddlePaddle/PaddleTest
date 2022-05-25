@@ -22,6 +22,8 @@ esac
 python -c 'import sys; print(sys.version_info[:])';
 
 echo ---install paddle---
+python -m pip uninstall paddlepaddle-gpu -y
+python -m pip uninstall paddlepaddle -y
 python -m pip install $2 --no-cache-dir
 echo ---paddle commit---
 python -c 'import paddle; print(paddle.version.commit)';
