@@ -85,7 +85,7 @@ print_info $? st_quant_aware_v1_T
 }
 
 all_quant(){
-    demo_st_quant_aware
+    #demo_st_quant_aware
     demo_st_quant_post
     demo_st_pact_quant_aware
     demo_dygraph_quant
