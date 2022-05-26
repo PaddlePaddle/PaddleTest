@@ -150,8 +150,8 @@ call :printInfo %errorlevel% %%I_demo_st_infer
 )
 python -u tools/trainer.py -m models/recall/word2vec/config.yaml > %log_path%\word2vec_demo_dy_train_new.log 2>&1
 call :printInfo %errorlevel% word2vec_demo_dy_train_new
-python -u models/recall/%%I/infer.py -m models/recall/word2vec/config.yaml > %log_path%\word2vec_demo_dy_infer_new.log 2>&1
-call :printInfo %errorlevel% word2vec_demo_dy_infer_new
+::python -u models/recall/%%I/infer.py -m models/recall/word2vec/config.yaml > %log_path%\word2vec_demo_dy_infer_new.log 2>&1
+::call :printInfo %errorlevel% word2vec_demo_dy_infer_new
 goto :eof
 
 ::########################################################################
