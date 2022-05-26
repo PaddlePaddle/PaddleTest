@@ -23,7 +23,7 @@ def send(url):
         "commit_id": os.getenv('build_commit_id'),
         "commit_time": os.getenv('build_commit_time'),
         "repo": os.getenv('build_repo_name'),
-        "branch": os.getenv('build_repo_name'),
+        "branch": os.getenv('build_repo_branch'),
         "duration": 1,
         "exit_code": os.getenv('build_exit_code'),
         "status": os.getenv('build_status'),
