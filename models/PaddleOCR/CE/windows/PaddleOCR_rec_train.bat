@@ -15,6 +15,10 @@ python -m pip install -r requirements.txt
 
 
 setlocal enabledelayedexpansion
+xcopy ..\ocr_rec_models_list.txt  .\  /s /e
+xcopy ..\ocr_rec_models_list_2.txt  .\  /s /e
+xcopy ..\ocr_det_models_list.txt  .\  /s /e
+xcopy ..\ocr_det_models_list_2.txt  .\  /s /e
 for /f %%i in (ocr_rec_models_list.txt) do (
 rem echo %%i
 rem sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' %%i
