@@ -30,7 +30,7 @@ python -m pip install pyparsing==2.4.7 --ignore-installed
 #pip install -e .
 pip install .
 # fix protobuf upgrade
-python -m pip uninstall protobuf
+python -m pip uninstall protobuf -y
 python -m pip install protobuf==3.20.1
 python -m pip list | grep protobuf
 python -c "import sys; print('python version:',sys.version_info[:])";
