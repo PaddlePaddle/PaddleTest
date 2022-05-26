@@ -52,7 +52,7 @@ goto :eof
 :contentunderstanding_demo
 echo ----start run contentunderstanding---
 for %%I in (tagspace textcnn) do (
-echo ----ontentunderstanding:%%I running----
+echo ----contentunderstanding:%%I running----
 python -u tools/trainer.py -m models/contentunderstanding/%%I/config.yaml > %log_path%\%%I_demo_dy_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_train
 python -u tools/infer.py -m models/contentunderstanding/%%I/config.yaml > %log_path%\%%I_demo_dy_infer.log 2>&1
