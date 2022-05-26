@@ -46,6 +46,7 @@ def send(url):
        print("ok")
     else:
        print('error')
+    print(result)
 if __name__ == "__main__":
     #url需配置在环境变量中，不允许上传到github；
     url = os.getenv('build_url')
