@@ -26,7 +26,7 @@ if not !errorlevel! == 0 (
         echo   !model!,train,FAIL  >> %log_path%\result.log
         echo  training of !model! failed!
         echo "training_exit_code: 1.0" >> %log_path%\!model!_train.log
-) else (å
+) else (
         echo   !model!,train,SUCCESS  >> %log_path%\result.log
         echo   training of !model! successfully!
         echo "training_exit_code: 0.0" >> %log_path%\!model!_train.log
