@@ -183,4 +183,5 @@ echo -----------------------------------------------------------
 
 )
 
+xcopy ..\PaddleOCR_det_train.bat .\
 call PaddleOCR_det_train.bat

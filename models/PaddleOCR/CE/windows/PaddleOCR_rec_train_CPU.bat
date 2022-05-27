@@ -186,4 +186,5 @@ echo -----------------------------------------------------------
 )
 
 rem call PaddleOCR_det_train.bat
+xcopy ..\PaddleOCR_det_train_CPU.bat  .\
 call PaddleOCR_det_train_CPU.bat
