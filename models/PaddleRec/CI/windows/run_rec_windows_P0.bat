@@ -28,14 +28,14 @@ dir
 
 call :rec_demo
 
-cd %log_path%
-for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
-echo %result:~-1%
+rem cd %log_path%
+rem for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
+rem echo %result:~-1%
 
-for /f "delims=" %%i in (' echo %result:~-1% ') do set exitcode=%%i
-echo -----fail case:%exitcode%---------
-echo -----exit code:%exitcode%---------
-exit %exitcode%
+rem for /f "delims=" %%i in (' echo %result:~-1% ') do set exitcode=%%i
+rem echo -----fail case:%exitcode%---------
+rem echo -----exit code:%exitcode%---------
+rem exit %exitcode%
 
 
 :rec_demo
