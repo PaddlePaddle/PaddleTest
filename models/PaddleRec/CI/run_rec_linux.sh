@@ -56,13 +56,13 @@ export log_path=/workspace/logs
 bash rec_run_case_linux.sh $3 $4 $5
 
 
-cd ${log_path}
-FF=`ls *FAIL*|wc -l`
-if [ "${FF}" -gt "0" ];then
-    echo ---fail case: ${FF}
-    ls *FAIL*
-    exit 1
-else
-    echo ---all case pass---
-    exit 0
-fi
+# cd ${log_path}
+# FF=`ls *FAIL*|wc -l`
+# if [ "${FF}" -gt "0" ];then
+#     echo ---fail case: ${FF}
+#     ls *FAIL*
+#     exit 1
+# else
+#     echo ---all case pass---
+#     exit 0
+# fi
