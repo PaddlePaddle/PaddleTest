@@ -228,9 +228,23 @@ run_demo_func(){
     demo_movie_recommand True
 }
 
+print_logs(){
+cd ${log_path}
+FF=`ls *FAIL*|wc -l`
+if [ "${FF}" -gt "0" ];then
+    echo ---fail case: ${FF}
+    ls *FAIL*
+    exit 1
+else
+    echo ---all case pass---
+    exit 0
+fi
+}
+
 case $1 in
 "run_CI")
     run_CI_func
+    print_logs
     ;;
 "run_CE")
     run_freet_func
