@@ -28,6 +28,6 @@ set build_type_id=%AGILE_PIPELINE_CONF_ID%
 set build_id=%AGILE_PIPELINE_BUILD_ID%
 set build_job_id=%AGILE_JOB_BUILD_ID%
 
-unset http_proxy
-unset https_proxy
+set http_proxy=
+set https_proxy=
 python upload_report.py
