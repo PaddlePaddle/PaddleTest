@@ -72,7 +72,7 @@ if not !errorlevel! == 0 (
 ) else (
         echo   !model!,infer,SUCCESS  >> %log_path%\result.log
         echo   infering of !model! successfully!
-        echo "infer_exit_code: 1.0" >> %log_path%\!model!_infer.log
+        echo "infer_exit_code: 0.0" >> %log_path%\!model!_infer.log
 )
 
 rem export_model
@@ -84,7 +84,7 @@ if not !errorlevel! == 0 (
 ) else (
         echo   !model!,export_model,SUCCESS  >> %log_path%\result.log
         echo   export_model of !model! successfully!
-        echo "export_exit_code: 1.0" >> %log_path%\!model!_export.log
+        echo "export_exit_code: 0.0" >> %log_path%\!model!_export.log
 )
 rem predict
 rem python tools/infer/predict_rec.py --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"!model! --rec_image_shape="3, 32, 100" --rec_char_type="en" > %log_path%/!model!_predict.log 2>&1
@@ -96,7 +96,7 @@ if not !errorlevel! == 0 (
 ) else (
         echo   !model!,predict,SUCCESS  >> %log_path%\result.log
         echo   predicting of !model! successfully!
-        echo "predict_exit_code: 1.0" >> %log_path%\!model!_predict.log
+        echo "predict_exit_code: 0.0" >> %log_path%\!model!_predict.log
 )
 
 )
