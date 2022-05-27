@@ -22,7 +22,7 @@ for /f "tokens=1,2,3,4,5 delims=:" %%a in ( "%str1%" ) do set build_commit_id=%%
 echo %build_commit_id%
 
 for /f "delims=" %%t in ('findstr commit_time description.txt ') do set str1=%%t
-for /f "tokens=1,2,3,4,5 delims=:" %%a in ( "%str1%" ) do set commit_time=%%b
+for /f "tokens=1,2,3,4,5 delims=:" %%a in ( "%str1%" ) do set build_commit_time=%%b
 
 echo %build_commit_time%
 
