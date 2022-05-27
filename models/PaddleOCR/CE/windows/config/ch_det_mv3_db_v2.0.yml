@@ -25,7 +25,7 @@ FUNCTION: # 训练步骤，开头只跑一次
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: dir
+        cmd: PaddleOCR_rec_train.bat
 
   -
     priority: P1
@@ -33,7 +33,7 @@ FUNCTION: # 训练步骤，开头只跑一次
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: dir
+        cmd: PaddleOCR_rec_train_CPU.bat
 
 TRAIN: # 训练步骤
   -

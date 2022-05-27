@@ -1,8 +1,6 @@
 @ echo off
 
 set log_path=log
-echo %Project_path%
-cd %Project_path%
 md log
 
 if not exist train_data (mklink /j train_data %data_path%\PaddleOCR\train_data)

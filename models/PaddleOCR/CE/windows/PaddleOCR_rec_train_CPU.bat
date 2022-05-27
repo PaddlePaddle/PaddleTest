@@ -4,7 +4,13 @@ set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
 set log_path=log
 echo %Project_path%
+echo "path before"
+chdir
 cd %Project_path%
+echo "path after"
+chdir
+dir
+
 md log
 if not exist train_data (mklink /j train_data %data_path%\PaddleOCR\train_data)
 if not exist pretrain_models (mklink /j pretrain_models %data_path%\PaddleOCR\pretrain_models)
@@ -15,10 +21,10 @@ python -m pip install -r requirements.txt
 
 
 setlocal enabledelayedexpansion
-xcopy ..\ocr_rec_models_list.txt  .\  /s /e
-xcopy ..\ocr_rec_models_list_2.txt  .\  /s /e
-xcopy ..\ocr_det_models_list.txt  .\  /s /e
-xcopy ..\ocr_det_models_list_2.txt  .\  /s /e
+xcopy ..\ocr_rec_models_list.txt  .\
+xcopy ..\ocr_rec_models_list_2.txt  .\
+xcopy ..\ocr_det_models_list.txt  .\
+xcopy ..\ocr_det_models_list_2.txt  .\
 for /f %%i in (ocr_rec_models_list.txt) do (
 rem echo %%i
 rem sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' %%i
