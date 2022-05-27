@@ -19,7 +19,7 @@ bash slim_run_case_mac.sh
 
 
 cd ${log_path}
-FF=`ls *FAIL*|wc -l`
+export FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
     echo ---failed case: ${FF}---
     ls *FAIL*|wc -l
