@@ -31,7 +31,7 @@ def send(url):
         "case_detail": json.dumps([
             {
                 "model_name": os.getenv('build_repo_name'),
-                "kpi_name": os.getenv('models'),
+                "kpi_name": "models",
                 "kpi_status": os.getenv('build_status'),
                 "kpi_base": 0,
                 "kpi_value": 0,
