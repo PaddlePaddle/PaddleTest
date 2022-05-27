@@ -24,7 +24,7 @@ def check_model_exist():
     """
     check model exist
     """
-    model_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2.2/nlp/AFQMC_base.tgz"
+    model_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2.2/nlp/AFQMC_PTQ_1.tgz"
     if not os.path.exists("./AFQMC_PTQ_1/strategy_1/__model__"):
         wget.download(model_url, out="./")
         tar = tarfile.open("AFQMC_PTQ_1.tgz")
