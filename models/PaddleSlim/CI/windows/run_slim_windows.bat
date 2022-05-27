@@ -60,6 +60,7 @@ if "%3"=="run_P0" (
 ) else if "%3"=="run_P1" (
 	echo ----run P1 case ---
 	call  slim_run_case_windows_P1.bat
+	call :prinf_logs
 ) else if "%3"=="run_CPU"  (
 	echo ----run CPU case ---
 	call  slim_run_case_windows_CPU.bat
@@ -67,12 +68,11 @@ if "%3"=="run_P0" (
     	echo ---skip run case with windows---
 )
 
-:: prinf_logs
+:prinf_logs
 cd %root_path%
 cd %log_path%
 for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
 echo %result:~-1%
-
 
 for /f "delims=" %%i in (' echo %result:~-1% ') do set exitcode=%%i
 echo -----fail case:%exitcode%---------
