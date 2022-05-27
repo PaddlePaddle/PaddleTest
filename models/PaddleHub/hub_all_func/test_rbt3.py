@@ -1,19 +1,19 @@
-#!/bin/env python
-# -*- coding: utf-8 -*-
-# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
-"""
-ernie_tiny
-"""
+"""rbt3"""
 import os
 import paddle
-
-paddle.set_device("gpu")
 import paddlehub as hub
 
+if paddle.is_compiled_with_cuda():
+    paddle.set_device("gpu")
+    use_gpu = True
+else:
+    paddle.set_device("cpu")
+    use_gpu = False
 
-def test_ernie_tiny_predict():
-    """ernie_tiny"""
-    os.system("hub install ernie_tiny")
+
+def test_rbt3_predict():
+    """rbt3 predict"""
+    os.system("hub install rbt3")
     data = [
         ["这个宾馆比较陈旧了，特价的房间也很一般。总体来说一般"],
         ["怀着十分激动的心情放映，可是看着看着发现，在放映完毕后，出现一集米老鼠的动画片"],
@@ -21,11 +21,8 @@ def test_ernie_tiny_predict():
     ]
     label_map = {0: "negative", 1: "positive"}
 
-    model = hub.Module(
-        name="ernie_tiny", version="2.0.2", task="seq-cls", load_checkpoint="/path/to/parameters", label_map=label_map
-    )
-    results = model.predict(data, max_seq_len=50, batch_size=1, use_gpu=False)
+    model = hub.Module(name="rbt3", task="seq-cls", label_map=label_map)
+    results = model.predict(data, max_seq_len=50, batch_size=1, use_gpu=use_gpu)
     for idx, text in enumerate(data):
         print("Data: {} \t Lable: {}".format(text, results[idx]))
-
-    os.system("hub uninstall ernie_tiny")
+    os.system("hub uninstall rbt3")

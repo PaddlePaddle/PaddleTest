@@ -1,15 +1,16 @@
-#!/bin/env python
-# -*- coding: utf-8 -*-
-# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
-"""
-efficientnetb1_imagenet
-"""
+"""efficientnetb1_imagenet"""
 import os
 import paddlehub as hub
 import paddle
 
-paddle.set_device("gpu")
 import cv2
+
+if paddle.is_compiled_with_cuda():
+    paddle.set_device("gpu")
+    use_gpu = True
+else:
+    paddle.set_device("cpu")
+    use_gpu = False
 
 
 def test_efficientnetb1_imagenet_predict():
