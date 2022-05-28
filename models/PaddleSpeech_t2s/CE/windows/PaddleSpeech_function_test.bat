@@ -14,11 +14,11 @@ set https_proxy=%proxy%
 echo "*****************speech_version****"
 git rev-parse HEAD
 conda install -y -c conda-forge sox libsndfile bzip2
-python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple 
+python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install $1 --ignore-installed
+python -m pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple
 echo  "*****************paddle_version*****"
-python -c "import paddle; print(paddle.__version__,paddle.version.commit)";
-python -m pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple 
+python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
 cd tests/unit/cli
 chdir
 
@@ -76,4 +76,3 @@ set num=0
 for /F %%i in ('findstr /s "FAIL" %log_path%/result.log') do ( set num=%%i )
 findstr /s "FAIL" %log_path%/result.log
 if %num%==0 (exit /b 0)else (exit /b 1)
-
