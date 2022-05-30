@@ -215,7 +215,7 @@ all_nas(){
 }
 
 #export all_case_list=(all_distillation all_quant all_prune  all_nas)
-export all_case_list=(all_quant all_nas)
+export all_case_list=(all_quant )
 
 ####################################
 echo --- start run case ---
