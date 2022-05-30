@@ -14,16 +14,16 @@ def send(url):
     os.chdir(os.getenv('log_path'))
     models_result=[]
     for model in models_list:
-        if platform.system().lower() == 'linux':
-            cmd_grep=" ls | grep -i fail | grep -i {}" .format(model)
-        elif platform.system().lower() == 'windows':
-            cmd_grep=" dir | findstr -i fail | findstr -i {}" .format(model)
-
+        if platform.system().lower() == 'windows':
+            cmd_grep=" dir | findstr -i success | findstr -i {}" .format(model)
+        else:
+            cmd_grep=" ls | grep -i success | grep -i {}" .format(model)
+      
         cmd_res = os.system(cmd_grep)
         if cmd_res == 0 :
-            kpi_status = "Failed"
-        else:
             kpi_status = "Passed"
+        else:
+            kpi_status = "Failed"
 
         models_result.append(
             {
