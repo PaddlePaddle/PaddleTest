@@ -36,7 +36,7 @@ chdir
 echo "########test_cli_cls########"
 wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav --no-check-certificate
 paddlespeech cls --input ./cat.wav --topk 10 > ..\..\..\%log_path%\cli_cls.log 2>&1
-if not !errorlevel! == 0 (
+if not %errorlevel% == 0 (
         echo  cli,cls,FAIL  >> ..\..\..\%log_path%\result.log
         echo  cli_cls failed!
 ) else (
@@ -45,7 +45,7 @@ if not !errorlevel! == 0 (
 )
 echo "########test_cli_text########"
 paddlespeech text --input 今天的天气真不错啊你下午有空吗我想约你一起去吃饭 > ..\..\..\%log_path%\cli_text.log 2>&1
-if not !errorlevel! == 0 (
+if not %errorlevel% == 0 (
         echo  cli,text,FAIL  >> ..\..\..\%log_path%\result.log
         echo  cli_text failed!
 ) else (
@@ -55,7 +55,7 @@ if not !errorlevel! == 0 (
 echo "########test_cli_asr########"
 wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav --no-check-certificate
 paddlespeech asr --input ./zh.wav > ..\..\..\%log_path%\cli_asr.log 2>&1
-if not !errorlevel! == 0 (
+if not %errorlevel% == 0 (
         echo  cli,asr,FAIL  >> ..\..\..\%log_path%\result.log
         echo  cli_asr failed!
 ) else (
@@ -64,7 +64,7 @@ if not !errorlevel! == 0 (
 )
 echo "########test_cli_tts########"
 paddlespeech tts --input "你好，欢迎使用百度飞桨深度学习框架！" > ..\..\..\%log_path%\cli_tts.log 2>&1
-if not !errorlevel! == 0 (
+if not %errorlevel% == 0 (
         echo  cli,tts,FAIL  >> ..\..\..\%log_path%\result.log
         echo  cli_tts failed!
 ) else (
