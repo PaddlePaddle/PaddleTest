@@ -60,6 +60,7 @@ for model in $(echo ${!dic[*]});do
     if [ "$2" == "freet_run" ];then
         feetrun_dy_st_train_infer ${model_kind} ${model}
     fi
+    rm -rf output*
 done
 }
 
@@ -79,6 +80,7 @@ for model in $(echo ${!dic[*]});do
     if [ "$2" == "freet_run" ];then
         feetrun_dy_st_train_infer ${model_kind} ${model}
     fi
+    rm -rf output*
 done
 }
 
@@ -104,7 +106,7 @@ for model in $(echo ${!dic[*]});do
             feetrun_dy_st_train_infer ${model_kind} ${model}
         fi
     fi
-
+    rm -rf output*
 done
 }
 
@@ -140,6 +142,7 @@ for model in $(echo ${!dic[*]});do
             feetrun_dy_st_train_infer ${model_kind} ${model}
         fi
     fi
+    rm -rf output*
 done
 }
 
@@ -179,6 +182,7 @@ for model in $(echo ${!dic[*]});do
             feetrun_dy_st_train_infer ${model_kind} ${model}
         fi
     fi
+    rm -rf output*
 done
 }
 
