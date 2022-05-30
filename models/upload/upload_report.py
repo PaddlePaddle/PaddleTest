@@ -2,6 +2,7 @@
 import json
 import requests
 import os
+import platform
 def send(url):
     """
     以case成功/失败的粒度上传报告
