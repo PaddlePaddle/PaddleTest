@@ -1,9 +1,15 @@
 @ echo off
 set log_path=log
 
+echo "envir before"
+CALL conda info --envs
+CALL conda deactivate
+CALL conda remove -n paddlespeech_env --all -y
+echo "clear envir after"
+CALL conda info --envs
 echo "*****************create_virtual_env*********"
-conda create -n paddlespeech_env python=3.8 -y
-conda activate paddlespeech_env
+CALL conda create -n paddlespeech_env python=3.8 -y
+CALL conda activate paddlespeech_env
 echo "*****************python_version****"
 python -c "import sys; print('python version:',sys.version_info[:])";
 
@@ -13,7 +19,7 @@ set https_proxy=%proxy%
 @echo on
 echo "*****************speech_version****"
 git rev-parse HEAD
-conda install -y -c conda-forge sox libsndfile bzip2
+CALL conda install -y -c conda-forge sox libsndfile bzip2
 python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install $1 --ignore-installed
 python -m pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple
@@ -62,12 +68,12 @@ if not !errorlevel! == 0 (
 )
 
 echo "########exit_environment########"
-conda deactivate
+CALL conda deactivate
 echo "envir before"
-conda info --envs
-conda remove -n paddlespeech_env --all -y
+CALL conda info --envs
+CALL conda remove -n paddlespeech_env --all -y
 echo "envir after"
-conda info --envs
+CALL conda info --envs
 
 cd ../../../
 chdir
