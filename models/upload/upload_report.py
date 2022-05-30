@@ -11,7 +11,7 @@ def send(url):
     for model in (models.split(',')):
         models_list.append(model)
 
-    os.chdir(os.getenv('logs_path'))
+    os.chdir(os.getenv('log_path'))
     os.system('pwd')
     models_result=[]
     for model in models_list:
