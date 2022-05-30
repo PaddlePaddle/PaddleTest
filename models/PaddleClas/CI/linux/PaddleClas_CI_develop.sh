@@ -105,6 +105,9 @@ fi
 echo "######  paddle version"
 python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 
+echo "######  clas version"
+git rev-parse HEAD
+
 # python
 python -c 'import sys; print(sys.version_info[:])'
 echo "######  python version"
