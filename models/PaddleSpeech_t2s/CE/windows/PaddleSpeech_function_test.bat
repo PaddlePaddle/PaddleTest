@@ -16,12 +16,13 @@ python -c "import sys; print('python version:',sys.version_info[:])";
 set no_proxy=bcebos.com
 set http_proxy=%proxy%
 set https_proxy=%proxy%
+set compile_path=%compile_path%
 @echo on
 echo "*****************speech_version****"
 git rev-parse HEAD
 CALL conda install -y -c conda-forge sox libsndfile bzip2
 python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m pip install $1 --ignore-installed
+python -m pip install %compile_path% --ignore-installed
 python -m pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple
 echo  "*****************paddle_version*****"
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
