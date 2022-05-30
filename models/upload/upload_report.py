@@ -4,7 +4,7 @@ import requests
 import os
 def send(url):
     """
-    以任务成功/失败的粒度上传报告
+    以case成功/失败的粒度上传报告
     """
     models=os.getenv('models_list')
     models_list=[]
@@ -44,7 +44,6 @@ def send(url):
         "duration": 1,
         "exit_code": os.getenv('build_exit_code'),
         "status": os.getenv('build_status'),
-
         "case_detail": json.dumps(models_result)
     }
     res = requests.post(url, data=params)
