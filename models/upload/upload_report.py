@@ -12,10 +12,13 @@ def send(url):
         models_list.append(model)
 
     os.chdir(os.getenv('log_path'))
-    os.system('pwd')
     models_result=[]
     for model in models_list:
-        cmd_grep=" ls | grep -i fail | grep {}" .format(model)
+        if platform.system().lower() == 'linux':
+            cmd_grep=" ls | grep -i fail | grep -i {}" .format(model)
+        elif platform.system().lower() == 'windows':
+            cmd_grep=" dir | findstr -i fail | findstr -i {}" .format(model)
+
         cmd_res = os.system(cmd_grep)
         if cmd_res == 0 :
             kpi_status = "Failed"
