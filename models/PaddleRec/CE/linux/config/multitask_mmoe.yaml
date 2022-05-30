@@ -526,7 +526,7 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.5
+        kpi_base: 0.944444
         threshold: 0.001
         actived: True
         evaluation: "+"
