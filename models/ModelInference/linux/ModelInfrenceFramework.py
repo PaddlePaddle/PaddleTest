@@ -44,8 +44,11 @@ class RepoInit:
         self.branch = branch
         print("This is Repo Init!")
         pid = os.getpid()
+        http_proxy = os.environ.get("http_proxy")
         cmd = """ps aux| grep python | grep -v %s | awk '{print $2}'| xargs kill -9;
                  rm -rf %s;
+                 export http_proxy=%s;
+                 export https_proxy=%s;
                  git clone https://github.com/paddlepaddle/%s.git;
                  cd %s; git checkout %s;
                  python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple;
@@ -53,6 +56,8 @@ class RepoInit:
                  unset http_proxy;""" % (
             pid,
             self.repo,
+            http_proxy,
+            http_proxy,
             self.repo,
             self.repo,
             self.branch,
