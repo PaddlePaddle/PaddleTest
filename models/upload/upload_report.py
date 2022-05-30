@@ -1,15 +1,4 @@
 # encoding: utf-8
-"""
-/***************************************************************************
-  *
-  * Copyright (c) 2020 Baidu.com, Inc. All Rights Reserved
-  * @file upload_report.py
-  * @author wanghongtao
-  * @date 2020/7/1 3:46 PM
-  * @brief api test framework base class
-  *
-  **************************************************************************/
-"""
 import json
 import requests
 import os
@@ -17,10 +6,14 @@ def send(url):
     """
     以任务成功/失败的粒度上传报告
     """
-    models_list=os.getenv('models_list')
-    models_result=[]
+    models=os.getenv('models_list')
+    models_list=[]
+    for model in (models.split(',')):
+        models_list.append(model)
+
     os.chdir(os.getenv('logs_path'))
     os.system('pwd')
+    models_result=[]
     for model in models_list:
         cmd_grep=" ls | grep -i fail | grep {}" .format(model)
         cmd_res = os.system(cmd_grep)
@@ -52,17 +45,7 @@ def send(url):
         "exit_code": os.getenv('build_exit_code'),
         "status": os.getenv('build_status'),
 
-        "case_detail": json.dumps([
-            {
-                "model_name": os.getenv('build_repo_name'),
-                "kpi_name": os.getenv('models'),
-                "kpi_status": os.getenv('build_status'),
-                "kpi_base": 0,
-                "kpi_value": 0,
-                "threshold": 0,
-                "ratio": 0
-            }
-        ])
+        "case_detail": json.dumps(models_result)
     }
     res = requests.post(url, data=params)
     result =res.json()
