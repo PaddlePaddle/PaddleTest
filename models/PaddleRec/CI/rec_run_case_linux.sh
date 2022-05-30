@@ -88,7 +88,7 @@ demo_multitask(){
 declare -A dic
 dic=([aitm]='models/multitask/aitm' [dselect_k]='models/multitask/dselect_k' \
     [esmm]='models/multitask/esmm' [maml]='models/multitask/maml' [mmoe]='models/multitask/mmoe' \
-    [ple]='models/multitask/ple' [esmm]='models/multitask/share_bottom' \
+    [ple]='models/multitask/ple' [share_bottom]='models/multitask/share_bottom' \
 )
 
 for model in $(echo ${!dic[*]});do
