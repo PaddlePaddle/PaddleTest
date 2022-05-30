@@ -221,10 +221,10 @@ run_freet_func(){
 run_CPU_func(){
     demo_contentunderstanding False
 
-    # demo_match False
-    # demo_multitask False
-    # demo_rank False
-    # demo_recall False
+    demo_match False
+    demo_multitask False
+    demo_rank False
+    demo_recall False
 }
 
 run_demo_func(){
