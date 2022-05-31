@@ -3,7 +3,7 @@
 #
 #
 # card=`bash ./get_empty_card.sh`
-# export CUDA_VISIBLE_DEVICES=card
+# export CUDA_VISIBLE_DEVICES=$card
 # **ONLY SUPPORT SINGLE CARD**
 #
 ####################################
