@@ -142,6 +142,23 @@ class InferenceTest(object):
         predict = text_pre(file_path)
         return predict
 
+    def get_output_data(self, data_path):
+        """
+        get output data as truth value
+        Args:
+           data_path(str): data path
+        Returns:
+           output_data_dict(dict): ndarray in dict
+        """
+        output_data_dict = {}
+        for root, _, files in os.walk(data_path):
+            for file_name in files:
+                if file_name.endswith("npy"):
+                    full_path = os.path.join(root, file_name)
+                    output_data = np.load(full_path)
+                    output_data_dict[os.path.splitext(file_name)[0]] = output_data
+        return output_data_dict
+
     def config_test(self):
         """
         test config instance
@@ -710,3 +727,4 @@ def record_by_pid(pid: int, cuda_visible_device: int):
 
     gpu_max_mem = max([float(i["used(MB)"]) for i in _gpu_mem_lists])
     return gpu_max_mem
+
