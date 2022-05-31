@@ -175,6 +175,7 @@ call :printInfo  %errorlevel%
 :dy_unstructured_prune_ratio
 echo run dy_unstructured_prune_ratio
 cd %repo_path%/PaddleSlim/demo/dygraph/unstructured_pruning
+set model=dy_unstructured_prune_ratio
 python -m paddle.distributed.launch ^
 --log_dir dy_ratio_prune_ratio_log train.py ^
 --data imagenet --lr 0.05 --pruning_mode ratio --ratio 0.55 ^
