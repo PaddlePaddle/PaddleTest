@@ -727,4 +727,3 @@ def record_by_pid(pid: int, cuda_visible_device: int):
 
     gpu_max_mem = max([float(i["used(MB)"]) for i in _gpu_mem_lists])
     return gpu_max_mem
-

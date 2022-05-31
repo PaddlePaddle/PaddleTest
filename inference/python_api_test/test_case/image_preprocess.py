@@ -159,4 +159,3 @@ def sig_fig_compare(num0, num1, delta=5):
             return abs(num0_padding - num1_padding) / (10 * scale)
     elif num0_int_length != num1_int_length:
         return abs(difference)
-
