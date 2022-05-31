@@ -16,7 +16,7 @@ def send(url):
     models_result=[]
     for model in models_list:
         if platform.system().lower() == 'windows':
-            cmd_grep=" dir | find /i  success | find /i {}" .format(model)
+            cmd_grep=" dir | findstr /i  success | findstr /i {}" .format(model)
         else:
             cmd_grep=" ls | grep -i success | grep -i {}" .format(model)
       
