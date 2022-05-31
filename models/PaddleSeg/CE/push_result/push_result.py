@@ -17,6 +17,7 @@ def send(url):
                                 "kpi_value": 0,
                                 "threshold": 0,
                                 "ratio": 0})     
+    print('case_result:{}'.format(case_result))
     params = {
          "build_type_id": os.getenv('build_type_id'),
          "build_id": os.getenv('build_id'),
@@ -29,6 +30,7 @@ def send(url):
          "duration": 200,
          "case_detail": json.dumps(case_result)
     }
+    print('params:{}'.format(params))
     res = requests.post(url, data=params)
     result = res.json()
     print('result:{}'.format(result))
