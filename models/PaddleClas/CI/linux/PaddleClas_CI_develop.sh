@@ -414,7 +414,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         rm -rf ${params_dir}_pretrained.pdparams
     fi
 
-    if [[ ${model} =~ 'distill_pphgnet_base' ]];then
+    if [[ ${model} =~ 'distill_pphgnet_base' ]]  || [[ ${model} =~ 'PPHGNet_base' ]] ;then
         echo "######  use distill_pphgnet_base pretrain model"
         echo ${model}
         echo ${params_dir}
