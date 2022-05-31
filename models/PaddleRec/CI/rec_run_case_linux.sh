@@ -147,9 +147,8 @@ done
 }
 
 demo_recall(){
-#[ensfm]='models/recall/ensfm'
 declare -A dic
-dic=([deepwalk]='models/recall/deepwalk'  \
+dic=([deepwalk]='models/recall/deepwalk' [ensfm]='models/recall/ensfm' \
     [mhcn]='models/recall/mhcn' [ncf]='models/recall/ncf' [tisas]='models/recall/tisas' \
     [mind]='models/recall/mind' [word2vec]='models/recall/word2vec' \
 )
