@@ -292,6 +292,7 @@ goto :eof
 if %1 == 0 (
     move %log_path%\%2.log %log_path%\SUCCESS_%2.log
     echo SUCCESS_%2.log
+    type %log_path%\SUCCESS_%2.log
     echo SUCCESS_%2.log >> %log_path%\result.log
 ) else (
     move %log_path%\%2.log %log_path%\FAIL_%2.log
