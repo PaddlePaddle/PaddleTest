@@ -24,3 +24,5 @@ if  [ ! -n "$stat" ];then
     fi
 fi
 done
+# if no empty card, exit 7
+exit 7
