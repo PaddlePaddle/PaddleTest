@@ -46,7 +46,7 @@ feetrun_dy_st_train_infer(){
 
 demo_contentunderstanding(){
 declare -A dic
-dic=([dssm]='models/contentunderstanding/tagspace' [textcnn]='models/contentunderstanding/textcnn'\
+dic=([tagspace]='models/contentunderstanding/tagspace' [textcnn]='models/contentunderstanding/textcnn'\
 )
 
 for model in $(echo ${!dic[*]});do
