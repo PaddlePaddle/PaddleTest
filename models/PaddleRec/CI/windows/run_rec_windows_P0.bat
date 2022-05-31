@@ -40,12 +40,12 @@ rem exit %exitcode%
 
 :rec_demo
 cd %repo_path%
-call :contentunderstanding_demo
-call :match_demo
-call :multitask_demo
-call :rank_demo
-call :recall_demo
-call :recall_demo_2
+call :contentunderstanding_demo %2
+rem call :match_demo
+rem call :multitask_demo
+rem call :rank_demo
+rem call :recall_demo
+rem call :recall_demo_2
 goto :eof
 
 
@@ -53,14 +53,14 @@ goto :eof
 echo ----start run contentunderstanding---
 for %%I in (tagspace textcnn) do (
 echo ----contentunderstanding:%%I running----
-python -u tools/trainer.py -m models/contentunderstanding/%%I/config.yaml > %log_path%\%%I_demo_dy_train.log 2>&1
+python -u tools/trainer.py -m models/contentunderstanding/%%I/config.yaml -o runner.use_gpu=%1 > %log_path%\%%I_demo_dy_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/contentunderstanding/%%I/config.yaml > %log_path%\%%I_demo_dy_infer.log 2>&1
+python -u tools/infer.py -m models/contentunderstanding/%%I/config.yaml -o runner.use_gpu=%1 > %log_path%\%%I_demo_dy_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/contentunderstanding/%%I/config.yaml >%log_path%\%%I_demo_st_train.log 2>&1
+python -u tools/static_trainer.py -m models/contentunderstanding/%%I/config.yaml -o runner.use_gpu=%1 >%log_path%\%%I_demo_st_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_infer.py -m models/contentunderstanding/%%I/config.yaml >%log_path%\%%I_demo_st_infer.log 2>&1
+python -u tools/static_infer.py -m models/contentunderstanding/%%I/config.yaml -o runner.use_gpu=%1 >%log_path%\%%I_demo_st_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_infer
 )
 goto :eof
