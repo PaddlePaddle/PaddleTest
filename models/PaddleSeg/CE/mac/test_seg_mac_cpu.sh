@@ -20,7 +20,7 @@ fi
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
-        echo -e "${model},${mode},Failed" >result
+        echo -e "${model},${mode},Failed" >>result 2>&1
         cd ${log_dir}/log_err
         if [ ! -d ${model} ];then
             mkdir ${model}
@@ -32,7 +32,7 @@ print_result(){
         #exit 1
     else
         echo -e "${model},${mode},SUCCESS"
-        echo -e "${model},${mode},Passed" >result
+        echo -e "${model},${mode},Passed" >>result 2>&1
     fi
 }
 

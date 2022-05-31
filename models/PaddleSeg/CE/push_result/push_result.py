@@ -3,10 +3,11 @@ import requests
 import paddle
 
 def send(url):
-    case_result = {}
+    case_result = []
     with open('result', 'r') as f:
         for line in f:
-            sub_str = line.split(',').strip('\n')
+            line = line.strip('\n')
+            sub_str = line.split(',')
             case_result.append({"model_name": sub_str[0],
                                 "step_name": sub_str[1], 
                                 "kpi_name": "loss",
@@ -25,7 +26,7 @@ def send(url):
          "status": os.getenv('status'),
          "exit_code": os.getenv('exit_code'),
          "duration": 200,
-         "case_detail": json.dumps([case_result])
+         "case_detail": json.dumps(case_result)
     }
     res = requests.post(url, data=params)
     result = res.json()
