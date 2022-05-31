@@ -68,11 +68,11 @@ def runCETest(params):
     path = params[0]
     case = params[1]
     print("case: %s" % case)
-    val = os.system("export FLAGS_call_stack_level= && cd %s && python3.7 -m pytest %s" % (path, case))
+    val = os.system("export FLAGS_call_stack_level= && cd %s && python3.7 -m pytest -sv %s" % (path, case))
     retry_count = 0
     final_result = ""
     while val != 0:
-        val = os.system("export FLAGS_call_stack_level=2 && cd %s && python3.7 -m pytest %s" % (path, case))
+        val = os.system("export FLAGS_call_stack_level=2 && cd %s && python3.7 -m pytest -sv %s" % (path, case))
         retry_count = retry_count + 1
         if retry_count > 2:
             val = 0
