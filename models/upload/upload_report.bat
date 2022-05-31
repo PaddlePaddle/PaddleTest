@@ -13,7 +13,7 @@ set c=%%c
 set d=%%d
 set e=%%e
 )
-set path_temp=%a%//%b%/%c%/%d%/%e%
+set path_temp=%a%/%b%/%c%/%d%/%e%
 wget %path_temp%/description.txt --no-check-certificate
 
 for /f "delims=" %%t in ('findstr commit_id description.txt ') do set str1=%%t
