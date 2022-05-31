@@ -15,11 +15,12 @@ do
 stat=`nvidia-smi -a -i $i | grep "Process ID"`
 if  [ ! -n "$stat" ];then
     sleep 15
-fi
-# double check whether gpu card is empty
-stat=`nvidia-smi -a -i $i | grep "Process ID"`
-if  [ ! -n "$stat" ];then
-    echo $i
-    exit 0
+
+    # double check whether gpu card is empty
+    stat=`nvidia-smi -a -i $i | grep "Process ID"`
+    if  [ ! -n "$stat" ];then
+        echo $i
+        exit 0
+    fi
 fi
 done
