@@ -6,8 +6,8 @@
 compatrans
 """
 
-from wt.weaktrans import WeakTrans, Framework
-from wt.yaml_loader import YamlLoader
+from utils.weaktrans import WeakTrans, Framework
+from utils.yaml_loader import YamlLoader
 import numpy as np
 import paddle
 import torch

@@ -10,7 +10,7 @@ import random
 from inspect import isclass
 import paddle
 import numpy as np
-from logger import logger
+from utils.logger import logger
 
 
 class Framework(object):
