@@ -258,6 +258,7 @@ case $1 in
 "run_ALL")
     run_freet_func
     run_CPU_func
+    print_logs
     ;;
 "run_demo")
     run_demo_func
