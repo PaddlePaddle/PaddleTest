@@ -22,7 +22,7 @@ def send(url):
          "build_type_id": os.getenv('build_type_id'),
          "build_id": os.getenv('build_id'),
          "commit_id": paddle.version.commit,
-         #"commit_time": "",
+         "commit_time": os.getenv('commit_time'),
          "repo": os.getenv('repo'),
          "branch": os.getenv('branch'),
          "status": os.getenv('status'),
@@ -32,6 +32,7 @@ def send(url):
     }
     print('params:{}'.format(params))
     res = requests.post(url, data=params)
+    print("res.text:{}".format(res.text))
     result = res.json()
     print('result:{}'.format(result))
     if result['code'] == 200 and result['message'] == 'success':
@@ -40,5 +41,5 @@ def send(url):
        print('error')
 
 if __name__ == "__main__":
-    url = "http://wangying28-2020-004-3.bcc-bdbl.baidu.com:8999/api/case"
+    url = 'http://wangying28-2020-004-3.bcc-bdbl.baidu.com:8999/api/case'
     send(url)
