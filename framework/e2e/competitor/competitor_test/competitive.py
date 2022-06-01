@@ -24,7 +24,7 @@ class CompetitorCompareTest(object):
     def __init__(self, paddle_api, torch_api):
         self.seed = 33
         self.enable_backward = True
-        self.debug = True
+        self.debug = False
         self.paddle_api = paddle_api
         self.torch_api = torch_api
         self.compare_dict = None
@@ -216,7 +216,7 @@ class CompetitorCompareTest(object):
 
         for k, v in data["params"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                self.torch_param[k] = paddle.to_tensor(v, dtype=TORCHDTYPE.get(dtype))
+                self.torch_param[k] = torch.tensor(v, dtype=TORCHDTYPE.get(dtype))
             else:
                 self.torch_param[k] = v
 
