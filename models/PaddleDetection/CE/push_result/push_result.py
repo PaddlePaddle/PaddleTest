@@ -1,9 +1,10 @@
+import os
 import json
 import requests
 import paddle
-import os
 
 def send(url):
+    """send model result"""
     case_result = []
     with open('result', 'r') as f:
         for line in f:
