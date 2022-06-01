@@ -100,9 +100,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_train.log log_err\!model!\
 echo !model!, train, FAIL
+echo !model!, train, failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,train, SUCCESS
+echo !model!, train, Passed >>result 2>&1
 )
 goto:eof
 
@@ -116,9 +118,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_eval.log log_err\!model!\
 echo !model!, eval, FAIL
+echo !model!, eval, Failed >>result 2>&1
 set err_sign=1
 ) else (
-echo !model!,eval, SUCCESS
+echo !model!, eval, SUCCESS
+echo !model!, eval, Passed >>result 2>&1
 )
 )
 goto:eof
@@ -130,20 +134,24 @@ python tools/!infer_method!.py -c !config_path! --video_file=./test_demo.mp4 --o
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
-echo !model!, infer, FAIL
+echo !model!, predict, FAIL
+echo !model!, predict, Failed >>result 2>&1
 set err_sign=1
 ) else (
-echo !model!,infer, SUCCESS
+echo !model!, predict, SUCCESS
+echo !model!, predict, Passed >>result 2>&1
 )
 ) else (
 python tools/!infer_method!.py -c !config_path! --infer_img=!infer_img! --output_dir=./infer_output/!model!/ -o weights=!url! use_gpu=false >log/!model!/!model!_infer.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
-echo !model!, infer, FAIL
+echo !model!, predict, FAIL
+echo !model!, predict, Failed >>result 2>&1
 set err_sign=1
 ) else (
-echo !model!,infer, SUCCESS
+echo !model!,predict, SUCCESS
+echo !model!, predict, Passed >>result 2>&1
 )
 )
 goto:eof
@@ -158,9 +166,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_export.log log_err\!model!\
 echo !model!, export_model, FAIL
+echo !model!, export, Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,export_model, SUCCESS
+echo !model!, export, Passed >>result 2>&1
 )
 )
 goto:eof
@@ -173,9 +183,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+echo !model!, python_infer, Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
+echo !model!, python_infer, Passed >>result 2>&1
 )
 ) else (
 python deploy/python/!python_infer_method!.py --model_dir=./inference_model/!model! --image_file=!infer_img! --device=CPU --output_dir=python_infer_output/!model!/ >log/!model!/!model!_python_infer.log 2>&1
@@ -183,9 +195,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+echo !model!, python_infer, Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
+echo !model!, python_infer, Passed >>result 2>&1
 )
 )
 goto:eof
