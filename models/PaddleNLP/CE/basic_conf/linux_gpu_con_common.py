@@ -35,6 +35,8 @@ EXEC_TAG = [
     "linux_st_gpu2_con",
     "linux_dy_gpu1_con",
     "linux_dy_gpu2_con",
+    "linux_dy_gpu4_con",
+    "linux_dy_gpu8_con",
     # 补充一些自定义标签
-    "linux_download_data",
+    "linux_download_data_con",
 ]

@@ -1,5 +1,5 @@
 MODEL: "bert" # 模型名
-PRIORITY: P0, Dy_con, Pre_test #P0天级别 和 动态图收敛任务
+PRIORITY: P0, Pre_test #P0天级别 和 动态图收敛任务
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
