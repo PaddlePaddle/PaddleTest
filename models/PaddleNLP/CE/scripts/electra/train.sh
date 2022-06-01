@@ -7,38 +7,16 @@ model_name=${PWD##*/}
 
 echo "$model_name 模型训练阶段"
 
-#取消代理
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
-
-#路径配置
-root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/model_zoo/$model_name/
-log_path=$root_path/log/$model_name/
-if [ ! -d $log_path ]; then
-  mkdir -p $log_path
-fi
-
-#删除分布式日志重新记录
-rm -rf $code_path/log/workerlog.0
+code_path=${nlp_dir}/model_zoo/$model_name/
 
 #访问RD程序
 cd $code_path
 DATA_DIR=$code_path/BookCorpus/
 
 MULTI=$1
-MAXSTEPS=$2
-
-print_info(){
-cat ${log_path}/$2.log
-if [ $1 -ne 0 ];then
-    echo "exit_code: 1.0" >> ${log_path}/$2.log
-else
-    echo "exit_code: 0.0" >> ${log_path}/$2.log
-fi
-}
+MAX_STEPS=$2
+SAVE_STEPS=$3
+LOGGING_STEPS=$4
 
 if [[ ${MULTI} == 'multi' ]];then #多卡
     python -u ./run_pretrain.py \
@@ -53,12 +31,11 @@ if [[ ${MULTI} == 'multi' ]];then #多卡
     --adam_epsilon 1e-6 \
     --warmup_steps 10000 \
     --num_train_epochs 1 \
-    --logging_steps 1 \
-    --save_steps 10 \
-    --max_steps ${MAXSTEPS} \
-    --device gpu  > $log_path/multi_cards_train.log 2>&1
-    print_info $? "multi_cards_train"
-else #单卡或CPU
+    --logging_steps ${LOGGING_STEPS} \
+    --save_steps ${SAVE_STEPS} \
+    --max_steps ${MAX_STEPS} \
+    --device gpu
+else #单卡
     python -u ./run_pretrain.py \
         --model_type electra \
         --model_name_or_path electra-small \
@@ -71,11 +48,8 @@ else #单卡或CPU
         --adam_epsilon 1e-6 \
         --warmup_steps 10000 \
         --num_train_epochs 1 \
-        --logging_steps 1 \
-        --save_steps 10 \
+        --logging_steps ${LOGGING_STEPS} \
+        --save_steps ${SAVE_STEPS} \
         --device gpu \
-        --max_steps ${MAXSTEPS} > $log_path/single_card_train.log 2>&1
-    print_info $? "single_card_train"
+        --max_steps ${MAX_STEPS}
 fi
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY

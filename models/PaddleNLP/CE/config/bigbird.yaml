@@ -9,6 +9,7 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/bigbird/ #脚本的路径
   model_log_path: log/bigbird/
 
@@ -24,8 +25,8 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh bigbird $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
   -
     priority: p0
     tag: win_download_data
@@ -39,18 +40,14 @@ DATA_PROC:
     tag: mac_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh bigbird $XPU mac $SET_CUDA $SET_MULTI_CUDA CE
 
 TRAIN: # 训练步骤
   #pretrain
   -
     priority: p0
     tag: linux_dy_gpu1
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU 'bigbird-base-uncased' 'single' $SET_CUDA
 
     kpis: #kpi指标
       loss:
@@ -65,10 +62,6 @@ TRAIN: # 训练步骤
   -
     priority: p1
     tag: linux_dy_gpu2
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU 'bigbird-base-uncased' 'multi' $SET_MULTI_CUDA
 
     kpis: #kpi指标
       loss:
@@ -83,10 +76,6 @@ TRAIN: # 训练步骤
   -
     priority: p1
     tag: mac_dy_cpu
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU 'bigbird-base-uncased' mac
 
     kpis:
       exit_code:
@@ -120,12 +109,6 @@ FINETUNE:
   -
     priority: p1
     tag: linux_dy_gpu1
-    env:
-        CUDA_VISIBLE_DEVICES: $SET_CUDA
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh
     kpis:
       loss:
         latest: True
@@ -160,10 +143,6 @@ GLUE:
   -
     priority: p1
     tag: linux_gpu1_SST-2
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh run_glue.sh $XPU $SET_CUDA
 
     kpis: #kpi指标
       loss:
