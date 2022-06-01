@@ -947,22 +947,42 @@ all_auto_ALL(){
     demo_auto_bert_asp_dis
 }
 
+run_case_func(){
+    echo --- start run case ---
+    case_num=1
+    for model in ${all_case_list[*]};do
+        echo ---$case_num/${#all_case_list[*]}: ${model}---
+        ${model}
+        let case_num++
+    done
+    echo --- end run case---
+}
+
+print_logs_func(){
+    cd ${log_path}
+    FF=`ls *FAIL*|wc -l`
+    if [ "${FF}" -gt "0" ];then
+        echo ---fail case: ${FF}
+        ls *FAIL*
+        exit 1
+    else
+        echo ---all case pass---
+        exit 0
+    fi
+}
+
 if [ "$1" = "run_CI" ];then
 	# CI任务的case
     export all_case_list=(all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
+    run_case_func
+    print_logs_func
 elif [ "$1" = "run_CE" ];then
 	# CE任务的case、暂时去掉all_auto_CE
     export all_case_list=(all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
+    run_case_func
+    print_logs_func
 elif [ "$1" = "ALL" ];then
 	# 全量case、暂时去掉all_auto_ALL
     export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas)
+    run_case_func
 fi
-
-echo --- start run case ---
-case_num=1
-for model in ${all_case_list[*]};do
-    echo ---$case_num/${#all_case_list[*]}: ${model}---
-    ${model}
-    let case_num++
-done
-echo --- end run case---
