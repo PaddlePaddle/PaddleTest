@@ -41,5 +41,5 @@ def send(url):
        print('error')
 
 if __name__ == "__main__":
-    url = 'http://wangying28-2020-004-3.bcc-bdbl.baidu.com:8999/api/case'
+    url = os.getenv('url')
     send(url)

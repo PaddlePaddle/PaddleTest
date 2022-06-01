@@ -204,10 +204,10 @@ done
 
 if [ "${err_sign}" = true ];then
     export status='Failed'
-    export exit_code='1'
+    export exit_code='8'
     exit 1
 else
-    export status='Success'
+    export status='Passed'
     export exit_code='0'
     exit 0
 fi
