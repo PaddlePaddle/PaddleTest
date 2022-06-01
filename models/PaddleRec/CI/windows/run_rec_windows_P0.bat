@@ -40,12 +40,12 @@ rem exit %exitcode%
 
 :rec_demo
 cd %repo_path%
-call :contentunderstanding_demo %1
-call :match_demo %1
-call :multitask_demo %1
-call :rank_demo %1
-call :recall_demo %1
-call :recall_demo_2 %1
+call :contentunderstanding_demo %2
+call :match_demo %2
+call :multitask_demo %2
+call :rank_demo %2
+call :recall_demo %2
+call :recall_demo_2 %2
 goto :eof
 
 
