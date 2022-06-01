@@ -12,7 +12,7 @@ import torch
 from competitor_test.tools import FrontAPIBase, compare, solve_tuple, TORCHDTYPE
 
 # import logging
-from wt.logger import Logger
+from utils.logger import Logger
 
 
 class CompetitorCompareTest(object):

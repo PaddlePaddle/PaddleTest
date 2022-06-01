@@ -8,7 +8,7 @@ import numpy as np
 import paddle
 import torch
 import pytest
-from wt.logger import Logger
+from utils.logger import Logger
 
 
 class FrontAPIBase(object):

@@ -7,7 +7,7 @@ yaml executor
 
 from competitor_test.competitive import CompetitorCompareTest
 from competitor_test.comptrans import CompeTrans
-from wt.yaml_loader import YamlLoader
+from utils.yaml_loader import YamlLoader
 
 
 def yaml_exe(yaml_file):
@@ -33,6 +33,6 @@ def yaml_exe(yaml_file):
 
 
 if __name__ == "__main__":
-    yaml_exe("./test0.yml")
+    yaml_exe("../yaml/test0.yml")
     # obj = YamlLoader("test0.yml")
     # cases_name = obj.get_all_case_name()
