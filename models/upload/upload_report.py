@@ -34,7 +34,7 @@ def send(url):
             # grep/findstr fail log中是否包含model
             cmd_grep_fail = grep_logs('fail', model)
             cmd_res_fail = os.system(cmd_grep_fail)
-            if cmd_cmd_res_fail == 0 :
+            if cmd_res_fail == 0 :
                 kpi_status = "Failed"
         else:
             kpi_status = "Failed"
