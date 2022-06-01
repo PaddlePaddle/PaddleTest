@@ -32,3 +32,34 @@ fft:
     api_name: "torch.fft.fft"
     mapping:
       ins: { x: input, n: "n", norm: "norm"}
+
+conv2d_base:
+  desc: "2维卷积"
+  paddle:
+    api_name: "paddle.nn.functional.conv2d"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      weight:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 3, 3, 3]
+        range: [ -1, 1]
+      bias:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1]
+        range: [ -1, 1]
+      stride: 1
+      padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }

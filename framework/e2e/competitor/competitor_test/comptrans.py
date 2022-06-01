@@ -23,6 +23,11 @@ class CompeTrans(WeakTrans):
         super().__init__(case)
         self.eval_str = None
         self.framework = Framework()
+        self.stop = False  # judge 是否进行竞品测试
+        if not self.case.get(self.framework.TORCH, None):
+            self.logger.get_log().info("no competitor test !!!")
+            self.stop = True
+            return
         self.mapping = self.case[self.framework.TORCH].get("mapping", None)
         self.ins = None
         self._run()
@@ -109,17 +114,17 @@ class CompeTrans(WeakTrans):
 
 
 if __name__ == "__main__":
-    obj = YamlLoader("eg0.yml")
+    obj = YamlLoader("../../yaml/test0.yml")
     cases_name = obj.get_all_case_name()
     for case_name in cases_name:
         case = obj.get_case_info(case_name)
         # print(case)
 
         w = CompeTrans(case, 0, 0)
-        api = w.get_function()
-
-        ins0 = w.get_paddle_ins()
-        # print(ins0)
-
-        ins = w.get_torch_ins()
-        print(ins)
+        # api = w.get_function()
+        #
+        # ins0 = w.get_paddle_ins()
+        # # print(ins0)
+        #
+        # ins = w.get_torch_ins()
+        # print(ins)
