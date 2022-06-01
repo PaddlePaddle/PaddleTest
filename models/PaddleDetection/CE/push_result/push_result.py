@@ -1,3 +1,4 @@
+"""collect running result"""
 import os
 import json
 import requests
@@ -11,13 +12,13 @@ def send(url):
             line = line.strip('\n')
             sub_str = line.split(',')
             case_result.append({"model_name": sub_str[0],
-                                "step_name": sub_str[1], 
+                                "step_name": sub_str[1],
                                 "kpi_name": "loss",
                                 "kpi_status": sub_str[2],
                                 "kpi_base": 0,
                                 "kpi_value": 0,
                                 "threshold": 0,
-                                "ratio": 0})     
+                                "ratio": 0})
     print('case_result:{}'.format(case_result))
     params = {
          "build_type_id": os.getenv('build_type_id'),

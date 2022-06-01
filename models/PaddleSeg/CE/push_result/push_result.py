@@ -1,3 +1,4 @@
+"""collect running result"""
 import os
 import json
 import requests
