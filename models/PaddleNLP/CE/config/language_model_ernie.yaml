@@ -1,5 +1,5 @@
 MODEL: "language_model_ernie" # 模型名
-PRIORITY: P0, Dy_con
+PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
