@@ -3,6 +3,17 @@ import json
 import requests
 import os
 import platform
+
+
+def grep_logs(key_word, model):
+    if platform.system().lower() == 'windows':
+        cmd_grep=" dir | findstr /i  {} | findstr /i {}" .format(key_word, model)
+    else:
+        # linux and mac
+        cmd_grep=" ls | grep -i {} | grep -i {}" .format(key_word, model)
+    return cmd_grep
+
+
 def send(url):
     """
     以case成功/失败的粒度上传报告
@@ -15,14 +26,16 @@ def send(url):
     os.chdir(os.getenv('log_path'))
     models_result=[]
     for model in models_list:
-        if platform.system().lower() == 'windows':
-            cmd_grep=" dir | findstr /i  success | findstr /i {}" .format(model)
-        else:
-            cmd_grep=" ls | grep -i success | grep -i {}" .format(model)
-      
+        # 需grep/findstr success、避免model_name没有查询到默认为success；
+        cmd_grep = grep_logs('success', model)
         cmd_res = os.system(cmd_grep)
         if cmd_res == 0 :
             kpi_status = "Passed"
+            # grep/findstr fail log中是否包含model
+            cmd_grep_fail = grep_logs('fail', model)
+            cmd_res_fail = os.system(cmd_grep_fail)
+            if cmd_cmd_res_fail == 0 :
+                kpi_status = "Failed"
         else:
             kpi_status = "Failed"
 
