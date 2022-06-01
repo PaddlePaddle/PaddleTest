@@ -21,21 +21,21 @@ def send(url):
                     "kpi_base": 0,
                     "kpi_value": 0,
                     "threshold": 0,
-                    "ratio": 0
+                    "ratio": 0,
                 }
             )
     print("case_result:{}".format(case_result))
     params = {
-        "build_type_id": os.getenv('build_type_id'),
-        "build_id": os.getenv('build_id'),
+        "build_type_id": os.getenv("build_type_id"),
+        "build_id": os.getenv("build_id"),
         "commit_id": paddle.version.commit,
-        "commit_time": os.getenv('commit_time'),
-        "repo": os.getenv('repo'),
-        "branch": os.getenv('branch'),
-        "status": os.getenv('status'),
-        "exit_code": os.getenv('exit_code'),
+        "commit_time": os.getenv("commit_time"),
+        "repo": os.getenv("repo"),
+        "branch": os.getenv("branch"),
+        "status": os.getenv("status"),
+        "exit_code": os.getenv("exit_code"),
         "duration": 200,
-        "case_detail": json.dumps(case_result)
+        "case_detail": json.dumps(case_result),
     }
     print("params:{}".format(params))
     res = requests.post(url, data=params)

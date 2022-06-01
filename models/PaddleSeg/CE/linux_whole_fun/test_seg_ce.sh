@@ -44,7 +44,7 @@ ln -s ${data_path}/seg_dynamic_pretrain seg_dynamic_pretrain
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
-        echo -e "${model},${mode},Failed" >>result 2>&1 
+        echo -e "${model},${mode},Failed" >>result 2>&1
         cd ${log_dir}/log_err
         if [ ! -d ${model} ];then
             mkdir ${model}
