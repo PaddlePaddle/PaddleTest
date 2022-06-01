@@ -262,5 +262,6 @@ case $1 in
     ;;
 "run_demo")
     run_demo_func
+    print_logs
     ;;
 esac
