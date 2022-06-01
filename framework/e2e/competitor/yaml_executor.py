@@ -19,6 +19,8 @@ def yaml_exe(yaml_file):
     for case_name in cases_name:
         case = obj.get_case_info(case_name)
         tans_obj = CompeTrans(case, 1, 2)
+        if tans_obj.stop:
+            continue
         api = tans_obj.get_function()
         paddle_ins = tans_obj.get_paddle_ins()
         # print(paddle_ins)
