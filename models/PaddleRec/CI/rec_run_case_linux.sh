@@ -256,8 +256,8 @@ case $1 in
     run_CPU_func
     ;;
 "run_ALL")
-    #run_freet_func
-    #run_CPU_func
+   run_freet_func
+   run_CPU_func
    # print_logs
    echo ---skip---
     ;;
