@@ -88,6 +88,8 @@ ln -s ${data_path}/data/ppdet_pretrained /root/.cache/paddle/weights
 cd ppdet/ext_op
 python setup.py install
 cd ../..
+#avoid hang in yolox
+sed -i "s|norm_type: sync_bn|norm_type: bn|g" configs/yolox/_base_/yolox_cspdarknet.yml
 # prepare dynamic data
 sed -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 #modify coco images
