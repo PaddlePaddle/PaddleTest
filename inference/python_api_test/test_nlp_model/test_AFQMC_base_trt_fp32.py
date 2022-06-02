@@ -310,8 +310,10 @@ def test_trt_fp32_bz1():
     )
     token_type_ids = np.tile(sent_ids, (40, 1))
 
+    output_data_path = "./AFQMC_base/trt_fp32"
+    output_data_dict = test_suite.get_output_data(output_data_path)
+
     input_data_dict = {"token_type_ids": token_type_ids, "input_ids": input_ids}
-    output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
 
     del test_suite  # destroy class to save memory
 
@@ -557,8 +559,10 @@ def test_trt_fp32_bz1_multi_thread():
     )
     token_type_ids = np.tile(sent_ids, (40, 1))
 
+    output_data_path = "./AFQMC_base/trt_fp32"
+    output_data_dict = test_suite.get_output_data(output_data_path)
+
     input_data_dict = {"token_type_ids": token_type_ids, "input_ids": input_ids}
-    output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
 
     del test_suite  # destroy class to save memory
 

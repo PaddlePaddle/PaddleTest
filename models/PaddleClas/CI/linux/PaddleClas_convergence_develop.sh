@@ -3,8 +3,11 @@ python -c "import paddle; print(paddle.__version__,paddle.version.commit)";
 echo '*****************clas_version****'
 git rev-parse HEAD
 
+echo "Data_path Project_path"
 echo ${Data_path}
+ls ${Data_path}
 echo ${Project_path}
+ls ${Project_path} |head -n 2
 
 echo "path before"
 pwd
@@ -31,10 +34,15 @@ python -m pip list
 
 #先用一个flower数据试一下
 cd dataset
-ls
-wget https://paddle-imagenet-models-name.bj.bcebos.com/data/flowers102.zip >download_flowers102.log 2>&1
-unzip flowers102.zip >unzip_flowers102.log 2>&1
-ls
+cp ${Data_path}/flowers102.zip .
+if [[ -f "flowers102.zip" ]];then
+   unzip flowers102.zip >unzip_flowers102.log 2>&1
+   ls
+else
+   wget https://paddle-imagenet-models-name.bj.bcebos.com/data/flowers102.zip >download_flowers102.log 2>&1
+   unzip flowers102.zip >unzip_flowers102.log 2>&1
+   ls
+fi
 cd ..
 
 log_path=log

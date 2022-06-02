@@ -147,8 +147,8 @@ def sig_fig_compare(num0, num1, delta=5):
     num1_int_length = len(str(int(num1)))
     num0_int = int(num0)
     num1_int = int(num1)
-    if num0 < 1 and num1 < 1 and difference < 1:
-        return difference
+    if num0 < 1 and num1 < 1 and abs(difference) < 1:
+        return abs(difference)
     elif num0_int_length == num1_int_length:
         if num0_int_length >= delta:
             return abs(num0_int - num1_int)
@@ -158,4 +158,4 @@ def sig_fig_compare(num0, num1, delta=5):
             num1_padding = num1 * scale
             return abs(num0_padding - num1_padding) / (10 * scale)
     elif num0_int_length != num1_int_length:
-        return difference
+        return abs(difference)

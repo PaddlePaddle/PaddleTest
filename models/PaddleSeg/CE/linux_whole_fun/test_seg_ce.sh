@@ -44,6 +44,7 @@ ln -s ${data_path}/seg_dynamic_pretrain seg_dynamic_pretrain
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
+        echo -e "${model},${mode},Failed" >>result 2>&1
         cd ${log_dir}/log_err
         if [ ! -d ${model} ];then
             mkdir ${model}
@@ -55,6 +56,7 @@ print_result(){
         #exit 1
     else
         echo -e "${model},${mode},SUCCESS"
+        echo -e "${model},${mode},Passed" >>result 2>&1
     fi
 }
 
@@ -63,13 +65,13 @@ pip install -r requirements.txt
 log_dir=.
 model_type_path=
 if [ "$1" == 'develop_d1' ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v deeplabv3  | grep -v benchmark | tee dynamic_config_all_temp
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v deeplabv3  | grep -v benchmark | grep -v smrt | tee dynamic_config_all_temp
 elif [ "$1" == 'develop_d2' ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep segformer | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | tee dynamic_config_segformer
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep deeplabv3 | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | tee dynamic_config_deeplabv3
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep segformer | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | tee dynamic_config_segformer
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep deeplabv3 | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | tee dynamic_config_deeplabv3
 cat dynamic_config_segformer dynamic_config_deeplabv3 >>dynamic_config_all_temp
 else
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v benchmark | tee dynamic_config_all_temp
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v benchmark | grep -v smrt | tee dynamic_config_all_temp
 fi
 sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
 skip_export_model='enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k dmnet_resnet101_os8_cityscapes_1024x512_80k gscnn_resnet50_os8_cityscapes_1024x512_80k'
@@ -201,7 +203,11 @@ fi
 done
 
 if [ "${err_sign}" = true ];then
+    export status='Failed'
+    export exit_code='8'
     exit 1
 else
+    export status='Passed'
+    export exit_code='0'
     exit 0
 fi

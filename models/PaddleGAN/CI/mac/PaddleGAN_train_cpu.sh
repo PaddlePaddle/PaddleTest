@@ -22,6 +22,7 @@ fi
 # data
 rm -rf data
 ln -s ${data_path} data
+ls data
 
 # env
 # python -m pip install --upgrade pip -i

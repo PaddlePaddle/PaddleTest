@@ -74,9 +74,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_train.log log_err\!model!\
 echo !model!, train, FAIL
+echo !model!, train, Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!, train, SUCCESS
+echo !model!, train, Passed >>result 2>&1
 )
 )
 goto:eof
@@ -91,9 +93,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_eval.log log_err\!model!\
 echo !model!, eval, FAIL
+echo !model!, eval, Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!, eval, SUCCESS
+echo !model!, eval, Passed >>result 2>&1
 )
 )
 goto:eof
@@ -108,9 +112,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_predict.log log_err\!model!\
 echo !model!, predict, FAIL
+echo !model!, predict, Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!, predict, SUCCESS
+echo !model!, predict, Passed >>result 2>&1
 )
 )
 goto:eof
@@ -125,9 +131,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_export.log log_err\!model!\
 echo !model!, export, FAIL
+echo !model!, export, Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!, export, SUCCESS
+echo !model!, export, Passed >>result 2>&1
 )
 )
 goto:eof
@@ -142,9 +150,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+echo !model!, python_infer, Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!, python_infer, SUCCESS
+echo !model!, python_infer, Passed >>result 2>&1
 )
 )
 goto:eof

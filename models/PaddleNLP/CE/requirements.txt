@@ -12,7 +12,6 @@ attrdict
 pyyaml
 h5py
 pandas
-sentencepiece
 termcolor
 gensim
 nltk==3.5
