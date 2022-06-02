@@ -7,16 +7,16 @@ mklink /J pretrain %pretrain_path%
 echo -----------------run P0 CPU case:start ------------------------
 
 echo 1 distillion
-rem call :all_distillation
+call :all_distillation
 
 echo 2 quant
-rem call :all_quant
+call :all_quant
 
 echo 3 prune
-rem call :all_prune
+call :all_prune
 
 echo 4 nas
-rem call :all_nas
+call :all_nas
 
 echo -----------------run P0 CPU case:end -------------------------
 
