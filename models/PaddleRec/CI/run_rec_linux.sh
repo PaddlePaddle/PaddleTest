@@ -37,6 +37,7 @@ python -m pip install numba
 python -m pip install pgl
 python -m pip install tqdm
 python -m pip install pyyaml
+python -m pip install requests
 echo ---pip list---
 python -m pip list
 
