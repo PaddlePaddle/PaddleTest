@@ -144,6 +144,7 @@ print_result(){
         echo -e "${model},${model_type},${mode},SUCCESS"
         echo -e "${model},${mode},Passed" >>result 2>&1
     fi
+    rm -rf /dev/shm/*
 }
 TRAIN(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
