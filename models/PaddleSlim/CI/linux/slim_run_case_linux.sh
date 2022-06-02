@@ -978,9 +978,10 @@ if [ "$1" = "run_CI" ];then
     print_logs_func
 elif [ "$1" = "run_CE" ];then
 	# CE任务的case、暂时去掉all_auto_CE
-    export all_case_list=(all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
-    run_case_func
+    # export all_case_list=(all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
+    # run_case_func
     # print_logs_func
+    echo --skip---
 elif [ "$1" = "ALL" ];then
 	# 全量case、暂时去掉all_auto_ALL
     export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas)
