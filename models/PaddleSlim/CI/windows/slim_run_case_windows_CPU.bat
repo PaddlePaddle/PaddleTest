@@ -174,7 +174,7 @@ python train.py --batch_size 64 --pretrained_model ../pretrain/MobileNetV1_pretr
 call :printInfo  %errorlevel%
 
 :dy_unstructured_prune_ratio
-echo run dy_unstructured_prune_ratio
+set model=dy_unstructured_prune_ratio
 cd %repo_path%/PaddleSlim/demo/dygraph/unstructured_pruning
 python -m paddle.distributed.launch ^
 --log_dir dy_ratio_prune_ratio_log train.py ^
