@@ -964,7 +964,7 @@ print_logs_func(){
     if [ "${FF}" -gt "0" ];then
         echo ---fail case: ${FF}
         ls *FAIL*
-        exit 1
+        exit ${FF}
     else
         echo ---all case pass---
         exit 0
