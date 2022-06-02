@@ -141,8 +141,8 @@ print_info $? st_quant_em_word2vec
 python infer.py --infer_epoch --test_dir data/test_mid_dir \
 --dict_path data/test_build_dict_word_to_id_ \
 --batch_size 20000 --model_dir v1_cpu5_b100_lr1dir/  --start_index 0 \
---last_index 0 --emb_quant True >${log_path}/st_quant_em_afteri_nfer 2>&1
-print_info $? st_quant_em_afteri_nfer
+--last_index 0 --emb_quant True >${log_path}/st_quant_em_after_infer 2>&1
+print_info $? st_quant_em_after_infer
 }
 
 demo_st_quant_post_hist(){
