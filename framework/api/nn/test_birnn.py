@@ -152,6 +152,7 @@ def test_birnn3():
     obj5.run(res, x_data, (h_data, h1_data), cell_fw=cell_fw, cell_bw=cell_bw)
     paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
+
 @pytest.mark.api_nn_BiRNN_parameters
 def test_birnn4():
     """
