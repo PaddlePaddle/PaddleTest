@@ -1892,6 +1892,10 @@ AdaptiveMaxPool1D_base:
         range: [ -10, 10]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool1D_0:
   desc: "1维自适应最大值池化"
@@ -1907,6 +1911,10 @@ AdaptiveMaxPool1D_0:
     params:
       output_size: 4
       return_mask: False
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool1D_1:
   desc: "1维自适应最大值池化"
@@ -1921,6 +1929,10 @@ AdaptiveMaxPool1D_1:
         range: [ -10, 10]
     params:
       output_size: 8
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool1D_2:
   desc: "1维自适应最大值池化"
@@ -1935,6 +1947,10 @@ AdaptiveMaxPool1D_2:
         range: [ -1, 1]
     params:
       output_size: 8
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool1D_3:
   desc: "1维自适应最大值池化"
@@ -1950,6 +1966,10 @@ AdaptiveMaxPool1D_3:
     params:
       output_size: 4
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool1D_4:
   desc: "1维自适应最大值池化，返回mask为True"
@@ -1965,6 +1985,10 @@ AdaptiveMaxPool1D_4:
     params:
       output_size: 4
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool2D_base:
   desc: "2维自适应最大值池化"
@@ -1979,6 +2003,10 @@ AdaptiveMaxPool2D_base:
         range: [ -10, 10]
     params:
       output_size: 3
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool2d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool2D_0:
   desc: "2维自适应最大值池化"
@@ -1994,6 +2022,11 @@ AdaptiveMaxPool2D_0:
     params:
       output_size: 4
       return_mask: False
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool2d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
+
 
 AdaptiveMaxPool2D_1:
   desc: "2维自适应最大值池化"
@@ -2008,6 +2041,10 @@ AdaptiveMaxPool2D_1:
         range: [ -10, 10]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool2d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool2D_2:
   desc: "2维自适应最大值池化"
@@ -2023,6 +2060,10 @@ AdaptiveMaxPool2D_2:
     params:
       output_size: 3
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool2d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool3D_base:
   desc: "3维自适应最大值池化"
@@ -2037,6 +2078,10 @@ AdaptiveMaxPool3D_base:
         range: [ -1, 1]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool3d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool3D_1:
   desc: "3维自适应最大值池化"
@@ -2052,6 +2097,10 @@ AdaptiveMaxPool3D_1:
     params:
       output_size: 4
       return_mask: False
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool3d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool3D_2:
   desc: "3维自适应最大值池化"
@@ -2067,6 +2116,10 @@ AdaptiveMaxPool3D_2:
     params:
       output_size: 3
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool3d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AvgPool1D_base:
   desc: "1维平均池化"
@@ -2083,6 +2136,10 @@ AvgPool1D_base:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool1D_0:
   desc: "1维平均池化"
@@ -2099,6 +2156,10 @@ AvgPool1D_0:
       kernel_size: 3
       stride: 4
       padding: 0
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool1D_1:
   desc: "1维平均池化"
@@ -2115,6 +2176,10 @@ AvgPool1D_1:
       kernel_size: 1
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool1D_2:
   desc: "1维平均池化"
@@ -2132,6 +2197,10 @@ AvgPool1D_2:
       stride: 1
       padding: 1
       exclusive: False
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool1D_3:
   desc: "1维平均池化"
@@ -2149,6 +2218,10 @@ AvgPool1D_3:
       stride: 1
       padding: 0
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode }
 
 AvgPool2D_base:
   desc: "2维平均池化"
@@ -2181,6 +2254,10 @@ AvgPool2D_0:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.AvgPool2d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool2D_1:
   desc: "2维平均池化"
@@ -2569,6 +2646,10 @@ MaxPool1D_base:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool1D_0:
   desc: "1维最大池化"
@@ -2585,6 +2666,10 @@ MaxPool1D_0:
       kernel_size: 3
       stride: 4
       padding: 0
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool1D_1:
   desc: "1维最大池化"
@@ -2601,6 +2686,10 @@ MaxPool1D_1:
       kernel_size: 1
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool1D_2:
   desc: "1维最大池化"
@@ -2617,6 +2706,10 @@ MaxPool1D_2:
       kernel_size: 2
       stride: 1
       padding: 1
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool1D_3:
   desc: "1维最大池化"
@@ -2634,6 +2727,10 @@ MaxPool1D_3:
       stride: 1
       padding: 0
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode }
 
 MaxPool1D_4:
   desc: "1维最大池化"
@@ -2651,6 +2748,10 @@ MaxPool1D_4:
       stride: 2
       padding: 0
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding, return_mask: return_indices }
 
 MaxPool1D_5:
   desc: "1维最大池化"
@@ -2667,6 +2768,10 @@ MaxPool1D_5:
       kernel_size: 2
       stride: 1
       padding: [1]
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool1D_6:
   desc: "1维最大池化"
@@ -2683,6 +2788,10 @@ MaxPool1D_6:
       kernel_size: 2
       stride: 1
       padding: !!python/tuple [1]
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool1D_7:
   desc: "1维最大池化"
@@ -2699,6 +2808,10 @@ MaxPool1D_7:
       kernel_size: 2
       stride: [1]
       padding: 1
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool1D_8:
   desc: "1维最大池化"
@@ -2715,6 +2828,10 @@ MaxPool1D_8:
       kernel_size: 2
       stride: !!python/tuple [1]
       padding: 1
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool1D_9:
   desc: "1维最大池化"
@@ -2731,6 +2848,10 @@ MaxPool1D_9:
       kernel_size: [3]
       stride: 1
       padding: 1
+  pytorch:
+    api_name: "torch.nn.MaxPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool1D_10:
   desc: "1维最大池化"
@@ -2779,6 +2900,10 @@ MaxPool2D_0:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.MaxPool2d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool2D_1:
   desc: "2维最大池化"
@@ -2893,6 +3018,26 @@ MaxPool2D_7:
       stride: [3, 3]
       padding: [0, 0, 0, 0]
 
+MaxPool2D_8:
+  desc: "2维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool2D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 32, 32]
+        range: [ -1, 1]
+    params:
+      kernel_size: !!python/tuple [3, 3]
+      stride: !!python/tuple [3, 3]
+      padding: !!python/tuple [0, 0]
+  pytorch:
+    api_name: "torch.nn.MaxPool2d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
+
 MaxPool3D_base:
   desc: "3维最大池化"
   paddle:
@@ -2924,6 +3069,10 @@ MaxPool3D_0:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.MaxPool3d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 MaxPool3D_1:
   desc: "3维最大池化"
@@ -3119,6 +3268,26 @@ MaxPool3D_12:
       stride: [2, 2, 2]
       padding: [0, 0, 0]
 
+MaxPool3D_13:
+  desc: "3维最大池化"
+  paddle:
+    api_name: "paddle.nn.MaxPool3D"
+    inputs:
+      data:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 8, 8, 8]
+        range: [ -10, 10]
+    params:
+      kernel_size: !!python/tuple [3, 3, 3]
+      stride: !!python/tuple [2, 2, 2]
+      padding: !!python/tuple [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.MaxPool3d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
+
 MaxUnPool2D_base:
   desc: "2维最大逆池化"
   paddle:
@@ -3256,6 +3425,10 @@ Pad1D_1:
       mode: "constant"
       value: 0
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ConstantPad1d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad1D_2:
   desc: "1维pad填充"
@@ -3352,6 +3525,10 @@ Pad1D_7:
       padding: [1, 2]
       mode: "reflect"
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ReflectionPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_8:
   desc: "1维pad填充"
@@ -3383,6 +3560,10 @@ Pad1D_9:
     params:
       padding: [1, 2]
       mode: "reflect"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_10:
   desc: "1维pad填充"
@@ -3430,6 +3611,10 @@ Pad1D_12:
     params:
       padding: [1, 2]
       mode: "reflect"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_13:
   desc: "1维pad填充"
@@ -3493,6 +3678,10 @@ Pad1D_16:
     params:
       padding: [1, 2]
       mode: "replicate"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_17:
   desc: "1维pad填充"
@@ -3508,6 +3697,10 @@ Pad1D_17:
     params:
       padding: [2, 1]
       mode: "replicate"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_18:
   desc: "1维pad填充"
@@ -3524,6 +3717,10 @@ Pad1D_18:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_19:
   desc: "1维pad填充"
@@ -3556,6 +3753,10 @@ Pad1D_20:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_21:
   desc: "1维pad填充"
@@ -3571,6 +3772,10 @@ Pad1D_21:
     params:
       padding: [2, 1]
       mode: "replicate"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_22:
   desc: "1维pad填充"
@@ -3587,6 +3792,10 @@ Pad1D_22:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_23:
   desc: "1维pad填充"
@@ -3635,6 +3844,10 @@ Pad1D_25:
       padding: [1, 0, 1, 0, 0, 1]
       mode: "replicate"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_26:
   desc: "1维pad填充"
@@ -3667,6 +3880,10 @@ Pad1D_27:
       padding: 2
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_base:
   desc: "2维pad填充"
@@ -3700,6 +3917,10 @@ Pad2D_0:
       mode: "constant"
       value: 3.0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.ConstantPad2d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad2D_1:
   desc: "2维pad填充"
@@ -3717,6 +3938,10 @@ Pad2D_1:
       mode: "constant"
       value: 0
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ConstantPad2d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad2D_2:
   desc: "2维pad填充"
@@ -3813,6 +4038,10 @@ Pad2D_7:
       padding: [1, 2]
       mode: "reflect"
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ReflectionPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_8:
   desc: "2维pad填充"
@@ -3845,6 +4074,10 @@ Pad2D_9:
       padding: [1, 2]
       mode: "reflect"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_10:
   desc: "2维pad填充"
@@ -3893,6 +4126,10 @@ Pad2D_12:
       padding: [1, 2]
       mode: "reflect"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_13:
   desc: "2维pad填充"
@@ -3957,6 +4194,10 @@ Pad2D_16:
       padding: [1, 2]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_17:
   desc: "2维pad填充"
@@ -3973,6 +4214,10 @@ Pad2D_17:
       padding: [2, 1]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_18:
   desc: "2维pad填充"
@@ -3989,6 +4234,10 @@ Pad2D_18:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_19:
   desc: "2维pad填充"
@@ -4021,6 +4270,10 @@ Pad2D_20:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_21:
   desc: "2维pad填充"
@@ -4037,6 +4290,10 @@ Pad2D_21:
       padding: [2, 1]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_22:
   desc: "2维pad填充"
@@ -4053,6 +4310,10 @@ Pad2D_22:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_23:
   desc: "2维pad填充"
@@ -4101,6 +4362,10 @@ Pad2D_25:
       padding: [1, 0, 1, 0, 0, 1]
       mode: "replicate"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_26:
   desc: "2维pad填充"
@@ -4133,6 +4398,10 @@ Pad2D_27:
       padding: 2
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_base:
   desc: "3维pad填充"
@@ -4166,6 +4435,10 @@ Pad3D_0:
       mode: "constant"
       value: 2.1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.ConstantPad3d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad3D_1:
   desc: "3维pad填充"
@@ -4183,6 +4456,10 @@ Pad3D_1:
       mode: "constant"
       value: 0
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ConstantPad3d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad3D_2:
   desc: "3维pad填充"
@@ -4279,6 +4556,10 @@ Pad3D_7:
       padding: [1, 2]
       mode: "reflect"
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ReflectionPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_8:
   desc: "3维pad填充"
@@ -4311,6 +4592,10 @@ Pad3D_9:
       padding: [1, 2]
       mode: "reflect"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_10:
   desc: "3维pad填充"
@@ -4359,6 +4644,10 @@ Pad3D_12:
       padding: [1, 2]
       mode: "reflect"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_13:
   desc: "3维pad填充"
@@ -4391,6 +4680,10 @@ Pad3D_14:
       padding: [1, 1, 1, 0, 1, 0]
       mode: "reflect"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_15:
   desc: "3维pad填充"
@@ -4423,6 +4716,10 @@ Pad3D_16:
       padding: [1, 2]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_17:
   desc: "3维pad填充"
@@ -4439,6 +4736,10 @@ Pad3D_17:
       padding: [2, 1]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_18:
   desc: "3维pad填充"
@@ -4455,6 +4756,10 @@ Pad3D_18:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_19:
   desc: "3维pad填充"
@@ -4487,6 +4792,10 @@ Pad3D_20:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_21:
   desc: "3维pad填充"
@@ -4503,6 +4812,10 @@ Pad3D_21:
       padding: [2, 1]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_22:
   desc: "3维pad填充"
@@ -4519,6 +4832,10 @@ Pad3D_22:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_23:
   desc: "3维pad填充"
@@ -4567,6 +4884,10 @@ Pad3D_25:
       padding: [1, 0, 1, 0, 0, 1]
       mode: "replicate"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_26:
   desc: "3维pad填充"
@@ -4599,6 +4920,10 @@ Pad3D_27:
       padding: 2
       mode: "replicate"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 CELU_base:
   desc: "CELU激活层"

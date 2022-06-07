@@ -176,7 +176,10 @@ class CompetitorCompareTest(object):
             data["params"] = {}
         for k, v in data["inputs"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                self.paddle_inputs[k] = paddle.to_tensor(v, stop_gradient=False, dtype=dtype)
+                if v.dtype in ["int32", "int64"]:
+                    self.paddle_inputs[k] = paddle.to_tensor(v)
+                else:
+                    self.paddle_inputs[k] = paddle.to_tensor(v, stop_gradient=False, dtype=dtype)
             elif isinstance(v, (list, tuple)):
                 self.paddle_inputs = []
                 for i, j in enumerate(v):
@@ -190,7 +193,10 @@ class CompetitorCompareTest(object):
 
         for k, v in data["params"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                self.paddle_param[k] = paddle.to_tensor(v, dtype=dtype)
+                if v.dtype in ["int32", "int64"]:
+                    self.paddle_inputs[k] = paddle.to_tensor(v)
+                else:
+                    self.paddle_inputs[k] = paddle.to_tensor(v, dtype=dtype)
             else:
                 self.paddle_param[k] = v
 
@@ -202,7 +208,10 @@ class CompetitorCompareTest(object):
             data["params"] = {}
         for k, v in data["inputs"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                self.torch_inputs[k] = torch.tensor(v, requires_grad=True, dtype=TORCHDTYPE.get(dtype))
+                if v.dtype in ["int32", "int64"]:
+                    self.torch_inputs[k] = torch.tensor(v)
+                else:
+                    self.torch_inputs[k] = torch.tensor(v, requires_grad=True, dtype=TORCHDTYPE.get(dtype))
             elif isinstance(v, (list, tuple)):
                 self.torch_inputs = []
                 for i, j in enumerate(v):
@@ -216,7 +225,10 @@ class CompetitorCompareTest(object):
 
         for k, v in data["params"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                self.torch_param[k] = torch.tensor(v, dtype=TORCHDTYPE.get(dtype))
+                if v.dtype in ["int32", "int64"]:
+                    self.torch_inputs[k] = torch.tensor(v)
+                else:
+                    self.torch_inputs[k] = torch.tensor(v, dtype=TORCHDTYPE.get(dtype))
             else:
                 self.torch_param[k] = v
 
