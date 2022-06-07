@@ -1892,6 +1892,10 @@ AdaptiveMaxPool1D_base:
         range: [ -10, 10]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool1D_0:
   desc: "1维自适应最大值池化"
@@ -1907,6 +1911,10 @@ AdaptiveMaxPool1D_0:
     params:
       output_size: 4
       return_mask: False
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool1D_1:
   desc: "1维自适应最大值池化"
@@ -1921,6 +1929,10 @@ AdaptiveMaxPool1D_1:
         range: [ -10, 10]
     params:
       output_size: 8
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool1D_2:
   desc: "1维自适应最大值池化"
@@ -1935,6 +1947,10 @@ AdaptiveMaxPool1D_2:
         range: [ -1, 1]
     params:
       output_size: 8
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool1D_3:
   desc: "1维自适应最大值池化"
@@ -1950,6 +1966,10 @@ AdaptiveMaxPool1D_3:
     params:
       output_size: 4
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool1D_4:
   desc: "1维自适应最大值池化，返回mask为True"
@@ -1965,6 +1985,10 @@ AdaptiveMaxPool1D_4:
     params:
       output_size: 4
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool1d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool2D_base:
   desc: "2维自适应最大值池化"
@@ -1979,6 +2003,10 @@ AdaptiveMaxPool2D_base:
         range: [ -10, 10]
     params:
       output_size: 3
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool2d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool2D_0:
   desc: "2维自适应最大值池化"
@@ -1994,6 +2022,11 @@ AdaptiveMaxPool2D_0:
     params:
       output_size: 4
       return_mask: False
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool2d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
+
 
 AdaptiveMaxPool2D_1:
   desc: "2维自适应最大值池化"
@@ -2008,6 +2041,10 @@ AdaptiveMaxPool2D_1:
         range: [ -10, 10]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool2d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool2D_2:
   desc: "2维自适应最大值池化"
@@ -2023,6 +2060,10 @@ AdaptiveMaxPool2D_2:
     params:
       output_size: 3
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool2d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool3D_base:
   desc: "3维自适应最大值池化"
@@ -2037,6 +2078,10 @@ AdaptiveMaxPool3D_base:
         range: [ -1, 1]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool3d"
+    mapping:
+      ins: { data: input, output_size: output_size }
 
 AdaptiveMaxPool3D_1:
   desc: "3维自适应最大值池化"
@@ -2052,6 +2097,10 @@ AdaptiveMaxPool3D_1:
     params:
       output_size: 4
       return_mask: False
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool3d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AdaptiveMaxPool3D_2:
   desc: "3维自适应最大值池化"
@@ -2067,6 +2116,10 @@ AdaptiveMaxPool3D_2:
     params:
       output_size: 3
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.AdaptiveMaxPool3d"
+    mapping:
+      ins: { data: input, output_size: output_size, return_mask: return_indices }
 
 AvgPool1D_base:
   desc: "1维平均池化"
@@ -2083,6 +2136,10 @@ AvgPool1D_base:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool1D_0:
   desc: "1维平均池化"
@@ -2099,6 +2156,10 @@ AvgPool1D_0:
       kernel_size: 3
       stride: 4
       padding: 0
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool1D_1:
   desc: "1维平均池化"
@@ -2115,6 +2176,10 @@ AvgPool1D_1:
       kernel_size: 1
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool1D_2:
   desc: "1维平均池化"
@@ -2132,6 +2197,10 @@ AvgPool1D_2:
       stride: 1
       padding: 1
       exclusive: False
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool1D_3:
   desc: "1维平均池化"
@@ -2149,6 +2218,10 @@ AvgPool1D_3:
       stride: 1
       padding: 0
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.AvgPool1d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode }
 
 AvgPool2D_base:
   desc: "2维平均池化"
@@ -2181,6 +2254,10 @@ AvgPool2D_0:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.AvgPool2d"
+    mapping:
+      ins: { data: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 AvgPool2D_1:
   desc: "2维平均池化"
