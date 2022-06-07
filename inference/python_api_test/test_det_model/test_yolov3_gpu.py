@@ -68,6 +68,8 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
+@pytest.mark.server
+@pytest.mark.gpu
 def test_gpu_more_bz():
     """
     compared gpu yolov3 batch size = [1,4,8] outputs with true val

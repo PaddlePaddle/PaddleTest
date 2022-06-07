@@ -45,9 +45,9 @@ def test_config():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-def test_mkldnn():
+def test_gpu():
     """
-    compared mkldnn lac outputs with true val
+    compared gpu lac outputs with true val
     """
     check_model_exist()
 

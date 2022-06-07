@@ -65,6 +65,7 @@ def test_disable_gpu():
 
 @pytest.mark.win
 @pytest.mark.server
+@pytest.mark.gpu
 @pytest.mark.gpu_more
 def test_gpu_more_bz():
     """
