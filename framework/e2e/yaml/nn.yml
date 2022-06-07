@@ -3425,6 +3425,10 @@ Pad1D_1:
       mode: "constant"
       value: 0
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ConstantPad1d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad1D_2:
   desc: "1维pad填充"
@@ -3521,6 +3525,10 @@ Pad1D_7:
       padding: [1, 2]
       mode: "reflect"
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ReflectionPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_8:
   desc: "1维pad填充"
@@ -3552,6 +3560,10 @@ Pad1D_9:
     params:
       padding: [1, 2]
       mode: "reflect"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_10:
   desc: "1维pad填充"
@@ -3599,6 +3611,10 @@ Pad1D_12:
     params:
       padding: [1, 2]
       mode: "reflect"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_13:
   desc: "1维pad填充"
@@ -3662,6 +3678,10 @@ Pad1D_16:
     params:
       padding: [1, 2]
       mode: "replicate"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_17:
   desc: "1维pad填充"
@@ -3677,6 +3697,10 @@ Pad1D_17:
     params:
       padding: [2, 1]
       mode: "replicate"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_18:
   desc: "1维pad填充"
@@ -3693,6 +3717,10 @@ Pad1D_18:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_19:
   desc: "1维pad填充"
@@ -3725,6 +3753,10 @@ Pad1D_20:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_21:
   desc: "1维pad填充"
@@ -3740,6 +3772,10 @@ Pad1D_21:
     params:
       padding: [2, 1]
       mode: "replicate"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_22:
   desc: "1维pad填充"
@@ -3756,6 +3792,10 @@ Pad1D_22:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_23:
   desc: "1维pad填充"
@@ -3804,6 +3844,10 @@ Pad1D_25:
       padding: [1, 0, 1, 0, 0, 1]
       mode: "replicate"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad1D_26:
   desc: "1维pad填充"
@@ -3836,6 +3880,10 @@ Pad1D_27:
       padding: 2
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad1d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_base:
   desc: "2维pad填充"
@@ -3869,6 +3917,10 @@ Pad2D_0:
       mode: "constant"
       value: 3.0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.ConstantPad2d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad2D_1:
   desc: "2维pad填充"
@@ -3886,6 +3938,10 @@ Pad2D_1:
       mode: "constant"
       value: 0
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ConstantPad2d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad2D_2:
   desc: "2维pad填充"
@@ -3982,6 +4038,10 @@ Pad2D_7:
       padding: [1, 2]
       mode: "reflect"
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ReflectionPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_8:
   desc: "2维pad填充"
@@ -4014,6 +4074,10 @@ Pad2D_9:
       padding: [1, 2]
       mode: "reflect"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_10:
   desc: "2维pad填充"
@@ -4062,6 +4126,10 @@ Pad2D_12:
       padding: [1, 2]
       mode: "reflect"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_13:
   desc: "2维pad填充"
@@ -4126,6 +4194,10 @@ Pad2D_16:
       padding: [1, 2]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_17:
   desc: "2维pad填充"
@@ -4142,6 +4214,10 @@ Pad2D_17:
       padding: [2, 1]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_18:
   desc: "2维pad填充"
@@ -4158,6 +4234,10 @@ Pad2D_18:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_19:
   desc: "2维pad填充"
@@ -4190,6 +4270,10 @@ Pad2D_20:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_21:
   desc: "2维pad填充"
@@ -4206,6 +4290,10 @@ Pad2D_21:
       padding: [2, 1]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_22:
   desc: "2维pad填充"
@@ -4222,6 +4310,10 @@ Pad2D_22:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_23:
   desc: "2维pad填充"
@@ -4270,6 +4362,10 @@ Pad2D_25:
       padding: [1, 0, 1, 0, 0, 1]
       mode: "replicate"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad2D_26:
   desc: "2维pad填充"
@@ -4302,6 +4398,10 @@ Pad2D_27:
       padding: 2
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad2d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_base:
   desc: "3维pad填充"
@@ -4335,6 +4435,10 @@ Pad3D_0:
       mode: "constant"
       value: 2.1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.ConstantPad3d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad3D_1:
   desc: "3维pad填充"
@@ -4352,6 +4456,10 @@ Pad3D_1:
       mode: "constant"
       value: 0
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ConstantPad3d"
+    mapping:
+      ins: { data: input, padding: padding, value: value }
 
 Pad3D_2:
   desc: "3维pad填充"
@@ -4448,6 +4556,10 @@ Pad3D_7:
       padding: [1, 2]
       mode: "reflect"
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.ReflectionPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_8:
   desc: "3维pad填充"
@@ -4480,6 +4592,10 @@ Pad3D_9:
       padding: [1, 2]
       mode: "reflect"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_10:
   desc: "3维pad填充"
@@ -4528,6 +4644,10 @@ Pad3D_12:
       padding: [1, 2]
       mode: "reflect"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_13:
   desc: "3维pad填充"
@@ -4560,6 +4680,10 @@ Pad3D_14:
       padding: [1, 1, 1, 0, 1, 0]
       mode: "reflect"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReflectionPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_15:
   desc: "3维pad填充"
@@ -4592,6 +4716,10 @@ Pad3D_16:
       padding: [1, 2]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_17:
   desc: "3维pad填充"
@@ -4608,6 +4736,10 @@ Pad3D_17:
       padding: [2, 1]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_18:
   desc: "3维pad填充"
@@ -4624,6 +4756,10 @@ Pad3D_18:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_19:
   desc: "3维pad填充"
@@ -4656,6 +4792,10 @@ Pad3D_20:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_21:
   desc: "3维pad填充"
@@ -4672,6 +4812,10 @@ Pad3D_21:
       padding: [2, 1]
       mode: "replicate"
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_22:
   desc: "3维pad填充"
@@ -4688,6 +4832,10 @@ Pad3D_22:
       padding: [2, 1, 2, 1]
       mode: "replicate"
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_23:
   desc: "3维pad填充"
@@ -4736,6 +4884,10 @@ Pad3D_25:
       padding: [1, 0, 1, 0, 0, 1]
       mode: "replicate"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 Pad3D_26:
   desc: "3维pad填充"
@@ -4768,6 +4920,10 @@ Pad3D_27:
       padding: 2
       mode: "replicate"
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.ReplicationPad3d"
+    mapping:
+      ins: { data: input, padding: padding }
 
 CELU_base:
   desc: "CELU激活层"
