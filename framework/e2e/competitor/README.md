@@ -23,7 +23,7 @@
 ## case描述
 API case是通过yaml文件描述，内容包括paddle和torch的对比信息。[存放位置](https://github.com/PaddlePaddle/PaddleTest/tree/develop/framework/e2e/yaml)
 
-![img.png](competitor_test/image/img.png)
+![img.png](competitor_test/image/img1.png)
 
 如图所示，一个yaml测试case主要由四部分组成：
 - case名称：用于区分不同case，因此case名不能重复
