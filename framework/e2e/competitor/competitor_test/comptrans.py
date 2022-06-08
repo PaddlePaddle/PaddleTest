@@ -66,6 +66,8 @@ class CompeTrans(WeakTrans):
         """
         rslt = dict()
         for k, v in map1.items():
+            if not map2.get(k):  # 跳过paddle有的，但是torch没有的参数
+                continue
             rslt[map2.get(k)] = v
         return rslt
 

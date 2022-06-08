@@ -97,7 +97,7 @@ def data_parallel_partition(data, time_step=0):
     len2 = len(data)
     for i in range(len2):
         # first 3 labels are output from last time step and are already partitioned
-        if time_step > 0 and i in [0, 1, 2]:
+        if time_step > 0 and i in [0, 1, 2, 7, 8, 9]:
             continue
 
         gbsz = data[i].shape[0]
