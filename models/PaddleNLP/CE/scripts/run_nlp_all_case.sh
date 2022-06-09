@@ -5,7 +5,7 @@ cat ${log_path}/$2.log
 if [ $1 -ne 0 ];then
     echo "exit_code: 1.0" >> ${log_path}/$2.log
     #copy 一份失败的日志
-    # cp ${log_path}/$2.log ${log_path}/$2_FAIL.log
+    cp ${log_path}/$2.log ${log_path}/$2_FAIL.log
 else
     echo "exit_code: 0.0" >> ${log_path}/$2.log
 fi
@@ -156,7 +156,7 @@ if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
 cd ./bigbird
-if [[ ${mode_tag} == "mac" ]];then
+if [[ ${system} == "mac" ]];then
     bash train.sh ${device} 'bigbird-base-uncased' > $log_path/train_mac_${device}.log 2>&1
     print_info $? train_mac_${device}
 else
