@@ -426,7 +426,41 @@ print_info $? train_albert-base-v2_MNLI_multi_${device}
 fi
 cd ..
 }
-
+# 13 squad
+squad(){
+# 固定接收5个参数，有扩展可以自定义
+device=$1
+system=$2
+cudaid1=$3
+cudaid2=$4
+mode_tag=$5
+# 这里怎么兼容cpu/gpu；linux、mac
+if [[ ${mode_tag} == "CE" ]];then
+    log_path=${log_path}/SQuAD/
+    MAX_STEPS=30
+    SAVE_STEPS=10
+    LOGGING_STEPS=10
+    cd ./SQuAD
+    bash data_proc.sh
+    cd ..
+else
+    log_path=$log_path
+    MAX_STEPS=1
+    SAVE_STEPS=1
+    LOGGING_STEPS=1
+fi
+if [ ! -d $log_path ]; then
+  mkdir -p $log_path
+fi
+cd ./SQuAD
+bash train.sh ${device} 1.1 ${cudaid1} ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} >$log_path/train_${device}_1.1.log 2>&1
+print_info $? train_${device}_1.1
+if [[ ${mode_tag} == "CE" ]];then
+    bash train.sh ${device} 2.0 ${cudaid1} ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} >$log_path/train_${device}_2.0.log 2>&1
+    print_info $? train_${device}_2.0
+fi
+cd ..
+}
 
 
 ####################################
