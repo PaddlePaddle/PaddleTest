@@ -206,7 +206,7 @@ export DATA_DIR=./BookCorpus/
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 bash train.sh 'single' ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} > $log_path/single_card_train.log 2>&1
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-bash train.sh 'multi' ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} > $log_path/multi_card_train.log 2>&1
+bash train.sh 'multi' ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} > $log_path/multi_cards_train.log 2>&1
 if [[ ${mode_tag} == "CE" ]];then
     export CUDA_VISIBLE_DEVICES=${cudaid1}
     bash finetune.sh > $log_path/single_fine-tune.log 2>&1
@@ -322,7 +322,7 @@ bash finetune.sh ${device} 'multi' SST-2  ${cudaid2} ${MAX_STEPS} ${SAVE_STEPS} 
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 bash train.sh ${device} 'single' SST-2 ${cudaid1} ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} ${MODEL_STEP} > $log_path/train_SST-2_single_${device}.log 2>&1
 unset CUDA_VISIBLE_DEVICES
-bash train.sh ${device} 'multi' SST-2 ${cudaid2} ${cudaid2} ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} ${MODEL_STEP} > $log_path/train_SST-2_multi_${device}.log 2>&1
+bash train.sh ${device} 'multi' SST-2 ${cudaid2} ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} ${MODEL_STEP} > $log_path/train_SST-2_multi_${device}.log 2>&1
 if [[ ${mode_tag} == "CE" ]];then
     export CUDA_VISIBLE_DEVICES=${cudaid1}
     bash finetune.sh ${device} 'single' QNLI ${cudaid1} ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} > $log_path/finetune_QNLI_single_${device}.log 2>&1
