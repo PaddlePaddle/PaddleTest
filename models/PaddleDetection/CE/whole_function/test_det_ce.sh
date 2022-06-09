@@ -68,6 +68,9 @@ ln -s ${data_path}/data/DOTA_1024_s2anet dataset/DOTA_1024_s2anet
 if [ -d "dataset/VisDrone2019_coco" ];then rm -rf dataset/VisDrone2019_coco
 fi
 ln -s ${data_path}/data/VisDrone2019_coco dataset/VisDrone2019_coco
+if [ -d "dataset/visdrone" ];then rm -rf dataset/visdrone
+fi
+ln -s ${data_path}/data/visdrone dataset/visdrone
 if [ -d "dataset/mainbody" ];then rm -rf dataset/mainbody
 fi
 ln -s ${data_path}/data/mainbody dataset/mainbody

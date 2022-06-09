@@ -85,6 +85,9 @@ ln -s ${file_path}/data/DOTA_1024_s2anet dataset/DOTA_1024_s2anet
 if [ -d "dataset/mainbody" ];then rm -rf dataset/mainbody
 fi
 ln -s ${file_path}/data/mainbody dataset/mainbody
+if [ -d "dataset/visdrone" ];then rm -rf dataset/visdrone
+fi
+ln -s ${file_path}/data/visdrone dataset/visdrone
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${model_type},${mode},FAIL"
