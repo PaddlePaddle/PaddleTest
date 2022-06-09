@@ -352,7 +352,8 @@ makeup)
     sleep 0.01
     ;;
 msvsr_l_reds)
-    echo "skip eval msvsr_l_reds because OOM"
+    echo "skip eval msvsr_l_reds because train & eval OOM need 32G"
+    echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
     sleep 0.01
     ;;
 *)

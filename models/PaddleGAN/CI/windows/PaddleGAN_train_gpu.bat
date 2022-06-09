@@ -102,23 +102,56 @@ if !model!==stylegan_v2_256_ffhq (
         echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
     )
     )
+
 ) else if !model!==msvsr_reds (
-    rem windows oom
-    echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+    for /d %%j in %params_dir% do (
+    echo %%j
+    python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams -o dataset.test.num_frames=30 > %log_path%/!model!_eval.log 2>&1
+    if not !errorlevel! == 0 (
+
+        echo  %log_path%\!model!_eval.log
+        type  %log_path%\!model!_eval.log
+        echo   !model!,eval,FAIL  >> %log_path%\result.log
+        echo  eval of !model! failed!
+        echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
+    ) else (
+
+        echo   !model!,eval,SUCCESS  >> %log_path%\result.log
+        echo   eval of !model! successfully!
+        echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+    )
 
 ) else if !model!==basicvsr++_vimeo90k_BD (
-    echo "basicvsr++_vimeo90k_BD eval cv2 have bug"
-    rem windows oom
-    echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
-
-) else if !model!==basicvsr++_reds	 (
-    echo "basicvsr++_reds eval cv2 have bug"
-    rem windows oom
-    echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
+    echo "basicvsr++_vimeo90k_BD eval OOM need change data small"
+    echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
 
 ) else if !model!==makeup (
 
+    echo "makeup no eval "
     echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+
+) else if !model!==msvsr_l_reds (
+
+    echo "msvsr_l_reds train eval OOM can not fix"
+    echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+
+) else if !model!==basicvsr++_reds	 (
+    for /d %%j in %params_dir% do (
+    echo %%j
+    python -u tools/main.py --config-file %%i --evaluate-only --load output/%%j/iter_20_checkpoint.pdparams -o dataset.test.num_frames=30 > %log_path%/!model!_eval.log 2>&1
+    if not !errorlevel! == 0 (
+
+        echo  %log_path%\!model!_eval.log
+        type  %log_path%\!model!_eval.log
+        echo   !model!,eval,FAIL  >> %log_path%\result.log
+        echo  eval of !model! failed!
+        echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
+    ) else (
+
+        echo   !model!,eval,SUCCESS  >> %log_path%\result.log
+        echo   eval of !model! successfully!
+        echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+    )
 
 ) else (
     for /d %%j in %params_dir% do (
