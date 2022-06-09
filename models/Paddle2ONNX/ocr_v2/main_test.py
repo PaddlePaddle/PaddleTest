@@ -9,24 +9,24 @@ import shutil
 import platform
 
 
-class ClasV2Test(object):
+class OcrV2Test(object):
     """
-    test Clas to onnx tipc
+    test Ocr to onnx tipc
     """
 
     def __init__(self):
-        if os.path.exists("tipc_models_url_PaddleClas_latest.txt"):
-            os.remove("tipc_models_url_PaddleClas_latest.txt")
+        if os.path.exists("tipc_models_url_PaddleOCR_latest.txt"):
+            os.remove("tipc_models_url_PaddleOCR_latest.txt")
 
         self.txt_url = (
             "https://paddle-qa.bj.bcebos.com/fullchain_ce_test/"
-            "model_download_link/tipc_models_url_PaddleClas_latest.txt"
+            "model_download_link/tipc_models_url_PaddleOCR_latest.txt"
         )
 
         os.system("wget -q --no-proxy {}".format(self.txt_url))
 
         self.model_url_list = []
-        for line in open("tipc_models_url_PaddleClas_latest.txt"):
+        for line in open("tipc_models_url_PaddleOCR_latest.txt"):
             self.model_url_list.append(line)
 
         self.opset_v_list = [10, 11, 12]
@@ -123,5 +123,5 @@ class ClasV2Test(object):
 
 
 if __name__ == "__main__":
-    test = ClasV2Test()
+    test = OcrV2Test()
     test.run()
