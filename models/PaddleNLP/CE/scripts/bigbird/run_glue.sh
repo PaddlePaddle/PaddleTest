@@ -6,19 +6,13 @@ cur_path=`pwd`
 model_name=${PWD##*/}
 
 echo "$model_name 模型训练阶段"
-#取消代理
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
 
 #路径配置
-root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/language_model/$model_name/
-log_path=$root_path/log/$model_name/
-if [ ! -d $log_path ]; then
-  mkdir -p $log_path
-fi
+code_path=${nlp_dir}/examples/language_model/$model_name/
+
+MAX_STEPS=$1
+SAVE_STEPS=$2
+LOGGING_STEPS=$3
 
 #访问RD程序
 cd $code_path
@@ -31,11 +25,8 @@ python -m paddle.distributed.launch --gpus $2 run_glue.py \
     --batch_size 32   \
     --learning_rate 1e-5 \
     --epochs 1 \
-    --logging_steps 1 \
-    --save_steps 10 \
-    --max_steps 30 \
+    --logging_steps ${LOGGING_STEPS} \
+    --save_steps ${SAVE_STEPS} \
+    --max_steps ${MAX_STEPS} \
     --output_dir ./tmp/ \
-    --device $1 >$log_path/run_glue_$1.log 2>&1
-
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY
+    --device $1
