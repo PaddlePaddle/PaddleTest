@@ -112,7 +112,8 @@ if !model!==stylegan_v2_256_ffhq (
         echo  %log_path%\!model!_eval.log
         type  %log_path%\!model!_eval.log
         echo   !model!,eval,FAIL  >> %log_path%\result.log
-        echo  eval of !model! failed!        echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
+        echo  eval of !model! failed!
+        echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
     ) else (
 
         echo   !model!,eval,SUCCESS  >> %log_path%\result.log
@@ -143,7 +144,8 @@ if !model!==stylegan_v2_256_ffhq (
         echo  %log_path%\!model!_eval.log
         type  %log_path%\!model!_eval.log
         echo   !model!,eval,FAIL  >> %log_path%\result.log
-        echo  eval of !model! failed!        echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
+        echo  eval of !model! failed!
+        echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
     ) else (
 
         echo   !model!,eval,SUCCESS  >> %log_path%\result.log
