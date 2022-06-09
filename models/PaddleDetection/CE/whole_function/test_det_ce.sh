@@ -48,6 +48,7 @@ sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" sc
 sh scripts/build.sh
 cd ../..
 fi
+#prepare data
 if [ -d 'dataset/coco' ];then
 rm -rf dataset/coco
 fi
