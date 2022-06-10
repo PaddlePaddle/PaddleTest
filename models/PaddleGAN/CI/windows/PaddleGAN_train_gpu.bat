@@ -120,6 +120,7 @@ if !model!==stylegan_v2_256_ffhq (
         echo   eval of !model! successfully!
         echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
     )
+    )
 
 ) else if !model!==basicvsr++_vimeo90k_BD (
     echo "basicvsr++_vimeo90k_BD eval OOM need change data small"
@@ -151,6 +152,7 @@ if !model!==stylegan_v2_256_ffhq (
         echo   !model!,eval,SUCCESS  >> %log_path%\result.log
         echo   eval of !model! successfully!
         echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+    )
     )
 
 ) else (
