@@ -6884,6 +6884,10 @@ BatchNorm1D_base:
         value: [[0.6964692], [0.28613934]]
     params:
       num_features: 1
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features }
 
 BatchNorm1D_0:
   desc: "1维BN批归一化"
@@ -6901,6 +6905,10 @@ BatchNorm1D_0:
       momentum: 0.9
       epsilon: 0.00001
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 BatchNorm1D_2:
   desc: "1维BN批归一化"
@@ -6914,6 +6922,10 @@ BatchNorm1D_2:
         value: [[[0.6964692, 0.28613934, 0.22685145]], [[0.5513148, 0.71946895, 0.42310646]]]
     params:
       num_features: 1
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features }
 
 BatchNorm1D_3:
   desc: "1维BN批归一化"
@@ -6928,6 +6940,10 @@ BatchNorm1D_3:
     params:
       num_features: 1
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum }
 
 BatchNorm1D_4:
   desc: "1维BN批归一化"
@@ -6942,6 +6958,10 @@ BatchNorm1D_4:
     params:
       num_features: 1
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum }
 
 BatchNorm1D_5:
   desc: "1维BN批归一化"
@@ -6957,6 +6977,10 @@ BatchNorm1D_5:
       num_features: 1
       momentum: 0.1
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 BatchNorm1D_6:
   desc: "1维BN批归一化"
@@ -6972,6 +6996,10 @@ BatchNorm1D_6:
       num_features: 1
       momentum: 0.1
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 BatchNorm1D_7:
   desc: "1维BN批归一化"
@@ -6988,6 +7016,10 @@ BatchNorm1D_7:
       momentum: 0.1
       epsilon: 0.00001
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 BatchNorm1D_8:
   desc: "1维BN批归一化"
@@ -7020,6 +7052,10 @@ BatchNorm1D_9:
     params:
       num_features: 3
       data_format: "NC"
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features }
 
 BatchNorm2D_base:
   desc: "2维BN批归一化"
@@ -7037,6 +7073,10 @@ BatchNorm2D_base:
       momentum: 0.9
       epsilon: 0.00001
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 BatchNorm2D_1:
   desc: "2维BN批归一化"
@@ -7051,6 +7091,10 @@ BatchNorm2D_1:
         range: [ -1, 1]
     params:
       num_features: 1
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features }
 
 BatchNorm2D_2:
   desc: "2维BN批归一化"
@@ -7066,6 +7110,10 @@ BatchNorm2D_2:
     params:
       num_features: 1
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum }
 
 BatchNorm2D_3:
   desc: "2维BN批归一化"
@@ -7082,6 +7130,10 @@ BatchNorm2D_3:
       num_features: 1
       momentum: 0.1
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 BatchNorm2D_4:
   desc: "2维BN批归一化"
@@ -7099,6 +7151,10 @@ BatchNorm2D_4:
       momentum: 0.1
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 BatchNorm2D_7:
   desc: "2维BN批归一化"
@@ -7151,6 +7207,10 @@ BatchNorm3D_base:
       momentum: 0.9
       epsilon: 0.00001
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 BatchNorm3D_1:
   desc: "3维BN批归一化"
@@ -7165,6 +7225,10 @@ BatchNorm3D_1:
         range: [ -1, 1]
     params:
       num_features: 1
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features }
 
 BatchNorm3D_2:
   desc: "3维BN批归一化"
@@ -7180,6 +7244,10 @@ BatchNorm3D_2:
     params:
       num_features: 1
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum }
 
 BatchNorm3D_3:
   desc: "3维BN批归一化"
@@ -7196,6 +7264,10 @@ BatchNorm3D_3:
       num_features: 1
       momentum: 0.1
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 BatchNorm3D_4:
   desc: "3维BN批归一化"
@@ -7230,6 +7302,10 @@ BatchNorm3D_5:
       momentum: 0.1
       epsilon: 0.00001
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
 
 GroupNorm_base:
   desc: "分组归一化"
