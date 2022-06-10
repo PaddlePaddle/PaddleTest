@@ -63,7 +63,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/slim_st_pact_quant_aware_no_pact.log
 
   -
-    tag: linux_st_gpu2
+    tag: linux_st_gpu1
     priority: p0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
