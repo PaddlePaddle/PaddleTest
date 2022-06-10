@@ -129,7 +129,7 @@ find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v s
 find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v bytetrack | grep -v centernet | grep -v picodet | grep dcn | awk '{print $NF}' | tee config_list5
 cat cascade_list centernet_list picodet_list config_list5 >>config_list
 else
-find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v gfl | grep -v bytetrack | awk '{print $NF}' | tee config_list
+find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v bytetrack | awk '{print $NF}' | tee config_list
 fi
 
 print_result(){
