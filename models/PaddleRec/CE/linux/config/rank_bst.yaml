@@ -96,7 +96,7 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.35803  # 0.356921
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -410,7 +410,7 @@ INFER:
       auc:
         latest: True
         kpi_base: 0.5  # 0.510870
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None

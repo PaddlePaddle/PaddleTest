@@ -96,9 +96,9 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.53728294
-        threshold: 0.001
+        threshold: 0
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: None
       exit_code:
         latest: True
@@ -466,7 +466,7 @@ INFER:
       prediction:
         latest: True
         kpi_base: 0.34032416
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None

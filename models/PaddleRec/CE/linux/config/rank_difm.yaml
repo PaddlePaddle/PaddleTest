@@ -96,7 +96,7 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.96415  # 由于release分支指标与dev分支有差距，因此拉大阈值,0.909992
-        threshold: 0.03
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -413,8 +413,8 @@ INFER:
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.904295  # 0.911756
-        threshold: 0.04
+        kpi_base: 0.900458  # 0.911756
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None

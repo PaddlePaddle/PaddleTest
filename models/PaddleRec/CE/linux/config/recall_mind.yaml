@@ -95,10 +95,10 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.151877
-        threshold: 0.01
+        kpi_base: 3.8908477
+        threshold: 0
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: None
       exit_code:
         latest: True
@@ -409,8 +409,8 @@ INFER:
     kpis: #kpi指标
       recall@50:
         latest: True
-        kpi_base: 0.0026
-        threshold: 0.01
+        kpi_base: 0.00961
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
