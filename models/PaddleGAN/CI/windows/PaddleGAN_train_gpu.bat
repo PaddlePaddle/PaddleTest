@@ -135,6 +135,10 @@ if !model!==stylegan_v2_256_ffhq (
     echo "basicvsr++_vimeo90k_BD eval OOM need change data small"
     echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
 
+) else if !model!==cyclegan_cityscapes (
+    echo "cyclegan_cityscapes eval OOM need change data small"
+    echo "eval_exit_code: 0.0" >> %log_path%\!model!_eval.log
+
 ) else if !model!==makeup (
 
     echo "makeup no eval "
