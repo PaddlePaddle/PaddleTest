@@ -25,13 +25,14 @@ if !errorlevel! equ 0 (
 )
 
 set log_path=log
-set gpu_flag=True
-if exist "log" (
-   rmdir log /S /Q
-	md log
-) else (
-	md log
-)
+md log
+@REM if exist "log" (
+@REM    rmdir log /S /Q
+@REM 	md log
+@REM ) else (
+@REM 	md log
+@REM )
+
 cd dataset
 if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
 cd ..
