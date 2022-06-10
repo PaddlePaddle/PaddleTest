@@ -5781,6 +5781,10 @@ ReLU_base:
         dtype: "float32"
         shape: [3, 10, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.ReLU"
+    mapping:
+      ins: { data: input }
 
 ReLU_0:
   desc: "ReLU激活层"
@@ -5793,6 +5797,10 @@ ReLU_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.ReLU"
+    mapping:
+      ins: { data: input }
 
 ReLU_1:
   desc: "ReLU激活层"
@@ -5804,6 +5812,10 @@ ReLU_1:
         type: "Tensor"
         dtype: "float32"
         value: [[-1, 4], [1, 15.6]]
+  pytorch:
+    api_name: "torch.nn.ReLU"
+    mapping:
+      ins: { data: input }
 
 ReLU6_base:
   desc: "ReLU激活层"
@@ -5815,6 +5827,10 @@ ReLU6_base:
         type: "Tensor"
         dtype: "float32"
         value: [-1, 0.3, 6.5]
+  pytorch:
+    api_name: "torch.nn.ReLU6"
+    mapping:
+      ins: { data: input }
 
 ReLU6_0:
   desc: "ReLU激活层"
@@ -5827,6 +5843,10 @@ ReLU6_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 10]
+  pytorch:
+    api_name: "torch.nn.ReLU6"
+    mapping:
+      ins: { data: input }
 
 ReLU6_1:
   desc: "ReLU激活层"
@@ -5838,6 +5858,10 @@ ReLU6_1:
         type: "Tensor"
         dtype: "float32"
         value: [6, 6, 6, 6]
+  pytorch:
+    api_name: "torch.nn.ReLU6"
+    mapping:
+      ins: { data: input }
 
 ReLU6_2:
   desc: "ReLU激活层"
@@ -5850,6 +5874,10 @@ ReLU6_2:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.ReLU6"
+    mapping:
+      ins: { data: input }
 
 SELU_base:
   desc: "SELU激活层"
@@ -5861,6 +5889,10 @@ SELU_base:
         type: "Tensor"
         dtype: "float32"
         value: [[0.1, 1], [2, 3]]
+  pytorch:
+    api_name: "torch.nn.SELU"
+    mapping:
+      ins: { data: input }
 
 SELU_0:
   desc: "SELU激活层"
@@ -5913,6 +5945,10 @@ Sigmoid_base:
         type: "Tensor"
         dtype: "float32"
         value: [1.0, 2.0, 3.0, 4.0]
+  pytorch:
+    api_name: "torch.nn.Sigmoid"
+    mapping:
+      ins: { data: input }
 
 Sigmoid_0:
   desc: "Sigmoid激活层"
@@ -5925,6 +5961,10 @@ Sigmoid_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Sigmoid"
+    mapping:
+      ins: { data: input }
 
 Silu_base:
   desc: "Silu激活层"
@@ -5937,6 +5977,10 @@ Silu_base:
         dtype: "float32"
         shape: [3, 10, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.SiLU"
+    mapping:
+      ins: { data: input }
 
 Silu_0:
   desc: "Silu激活层"
@@ -5949,6 +5993,10 @@ Silu_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.SiLU"
+    mapping:
+      ins: { data: input }
 
 Silu_1:
   desc: "Silu激活层"
@@ -5961,6 +6009,10 @@ Silu_1:
         dtype: "float32"
         shape: [4, 1, 3, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.SiLU"
+    mapping:
+      ins: { data: input }
 
 Softmax_base:
   desc: "Softmax激活层"
@@ -5986,6 +6038,10 @@ Softmax_0:
         range: [ -1, 1]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.nn.Softmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 Softmax_1:
   desc: "Softmax激活层"
@@ -5999,6 +6055,10 @@ Softmax_1:
         value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.nn.Softmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 Softmax_3:
   desc: "Softmax激活层"
@@ -6012,6 +6072,10 @@ Softmax_3:
         value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
     params:
       axis: 2
+  pytorch:
+    api_name: "torch.nn.Softmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 Softmax_4:
   desc: "Softmax激活层"
@@ -6025,6 +6089,10 @@ Softmax_4:
         value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.nn.Softmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 Softplus_base:
   desc: "Softplus激活层"
@@ -6039,6 +6107,10 @@ Softplus_base:
     params:
       beta: 1
       threshold: 15
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_0:
   desc: "Softplus激活层"
@@ -6054,6 +6126,10 @@ Softplus_0:
     params:
       beta: 1
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_1:
   desc: "Softplus激活层"
@@ -6069,6 +6145,10 @@ Softplus_1:
     params:
       beta: 0.000001
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_2:
   desc: "Softplus激活层"
@@ -6084,6 +6164,10 @@ Softplus_2:
     params:
       beta: -0.000001
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_3:
   desc: "Softplus激活层"
@@ -6099,6 +6183,10 @@ Softplus_3:
     params:
       beta: -3
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_4:
   desc: "Softplus激活层"
@@ -6114,6 +6202,10 @@ Softplus_4:
     params:
       beta: 3
       threshold: 5
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_5:
   desc: "Softplus激活层"
@@ -6129,6 +6221,10 @@ Softplus_5:
     params:
       beta: 3
       threshold: -5
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_6:
   desc: "Softplus激活层"
@@ -6144,6 +6240,10 @@ Softplus_6:
     params:
       beta: 2
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softshrink_base:
   desc: "Softshrink激活层"
@@ -6157,6 +6257,10 @@ Softshrink_base:
         value: [-0.9, -0.2, 0.1, 0.8]
     params:
       threshold: 0.5
+  pytorch:
+    api_name: "torch.nn.Softshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Softshrink_0:
   desc: "Softshrink激活层"
@@ -6171,6 +6275,10 @@ Softshrink_0:
         range: [ -1, 1]
     params:
       threshold: 0.2
+  pytorch:
+    api_name: "torch.nn.Softshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Softshrink_1:
   desc: "Softshrink激活层"
@@ -6185,6 +6293,10 @@ Softshrink_1:
         range: [ -10, 10]
     params:
       threshold: 0
+  pytorch:
+    api_name: "torch.nn.Softshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Softshrink_2:
   desc: "Softshrink激活层"
@@ -6199,6 +6311,10 @@ Softshrink_2:
         range: [ -10, 10]
     params:
       threshold: 5
+  pytorch:
+    api_name: "torch.nn.Softshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Softsign_base:
   desc: "Softsign激活层"
@@ -6210,6 +6326,10 @@ Softsign_base:
         type: "Tensor"
         dtype: "float32"
         value: [-0.4, -0.2, 0.1, 0.3]
+  pytorch:
+    api_name: "torch.nn.Softsign"
+    mapping:
+      ins: { data: input }
 
 Softsign_0:
   desc: "Softsign激活层"
@@ -6222,6 +6342,10 @@ Softsign_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Softsign"
+    mapping:
+      ins: { data: input }
 
 Softsign_1:
   desc: "Softsign激活层"
@@ -6234,6 +6358,10 @@ Softsign_1:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.Softsign"
+    mapping:
+      ins: { data: input }
 
 Swish_base:
   desc: "Swish激活层"
@@ -6281,6 +6409,10 @@ Tanh_base:
         type: "Tensor"
         dtype: "float32"
         value: [-0.4, -0.2, 0.1, 0.3]
+  pytorch:
+    api_name: "torch.nn.Tanh"
+    mapping:
+      ins: { data: input }
 
 Tanh_0:
   desc: "Tanh激活层"
@@ -6293,6 +6425,10 @@ Tanh_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -4, 4]
+  pytorch:
+    api_name: "torch.nn.Tanh"
+    mapping:
+      ins: { data: input }
 
 Tanh_1:
   desc: "Tanh激活层"
@@ -6305,6 +6441,10 @@ Tanh_1:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Tanh"
+    mapping:
+      ins: { data: input }
 
 Tanhshrink_base:
   desc: "Tanhshrink激活层"
@@ -6316,6 +6456,10 @@ Tanhshrink_base:
         type: "Tensor"
         dtype: "float32"
         value: [-0.4, -0.2, 0.1, 0.3]
+  pytorch:
+    api_name: "torch.nn.Tanhshrink"
+    mapping:
+      ins: { data: input }
 
 Tanhshrink_0:
   desc: "Tanhshrink激活层"
@@ -6328,6 +6472,10 @@ Tanhshrink_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Tanhshrink"
+    mapping:
+      ins: { data: input }
 
 Tanhshrink_1:
   desc: "Tanhshrink激活层"
@@ -6340,6 +6488,10 @@ Tanhshrink_1:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.Tanhshrink"
+    mapping:
+      ins: { data: input }
 
 ThresholdedReLU_base:
   desc: "ThresholdedReLU激活层"
