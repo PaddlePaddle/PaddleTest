@@ -4936,6 +4936,10 @@ CELU_base:
         dtype: "float32"
         shape: [2, 3, 4]
         range: [ -2, 4]
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input }
 
 CELU_0:
   desc: "CELU激活层"
@@ -4948,6 +4952,10 @@ CELU_0:
         dtype: "float32"
         shape: [2, 4, 4]
         range: [ -4, 3]
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input }
 
 CELU_1:
   desc: "CELU激活层"
@@ -4962,6 +4970,10 @@ CELU_1:
         range: [ -4, 3]
     params:
       alpha: 0.2
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 CELU_2:
   desc: "CELU激活层"
@@ -4976,6 +4988,10 @@ CELU_2:
         range: [ -4, 3]
     params:
       alpha: -0.4
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 CELU_3:
   desc: "CELU激活层"
@@ -4990,6 +5006,10 @@ CELU_3:
         range: [ -1, 1]
     params:
       alpha: 0.56
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 ELU_base:
   desc: "ELU激活层"
@@ -5002,6 +5022,10 @@ ELU_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input }
 
 ELU_0:
   desc: "ELU激活层"
@@ -5016,6 +5040,10 @@ ELU_0:
         range: [ -1, 1]
     params:
       alpha: 0.56
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 ELU_1:
   desc: "ELU激活层"
@@ -5030,6 +5058,10 @@ ELU_1:
         range: [ -10, 10]
     params:
       alpha: 2
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 ELU_2:
   desc: "ELU激活层"
@@ -5044,6 +5076,10 @@ ELU_2:
         range: [ -10, 10]
     params:
       alpha: 0
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 ELU_3:
   desc: "ELU激活层"
@@ -5057,6 +5093,10 @@ ELU_3:
         value: [[-1, 6], [1, 15.6]]
     params:
       alpha: 0.2
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 GELU_base:
   desc: "GELU激活层"
@@ -5069,6 +5109,10 @@ GELU_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.GELU"
+    mapping:
+      ins: { data: input }
 
 GELU_0:
   desc: "GELU激活层"
@@ -5108,6 +5152,10 @@ Hardshrink_base:
         type: "Tensor"
         dtype: "float32"
         value: [-1, 0.3, 2.5]
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input }
 
 Hardshrink_0:
   desc: "Hardshrink激活层"
@@ -5122,6 +5170,10 @@ Hardshrink_0:
         range: [ -1, 1]
     params:
       threshold: 0.4
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Hardshrink_1:
   desc: "Hardshrink激活层"
@@ -5135,6 +5187,10 @@ Hardshrink_1:
         value: [-1, 0.3, 2.5]
     params:
       threshold: 0
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Hardshrink_2:
   desc: "Hardshrink激活层"
@@ -5148,6 +5204,10 @@ Hardshrink_2:
         value: [-1, -0.01, 2.5]
     params:
       threshold: 0
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Hardshrink_3:
   desc: "Hardshrink激活层"
@@ -5161,6 +5221,10 @@ Hardshrink_3:
         value: [-1, -0.01, 2.5]
     params:
       threshold: -1
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Hardsigmoid_base:
   desc: "Hardsigmoid激活层"
@@ -5173,6 +5237,10 @@ Hardsigmoid_base:
         dtype: "float32"
         shape: [2, 2]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.Hardsigmoid"
+    mapping:
+      ins: { data: input }
 
 Hardsigmoid_0:
   desc: "Hardsigmoid激活层"
@@ -5185,6 +5253,10 @@ Hardsigmoid_0:
         dtype: "float32"
         shape: [2, 3, 4, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Hardsigmoid"
+    mapping:
+      ins: { data: input }
 
 Hardsigmoid_1:
   desc: "Hardsigmoid激活层"
@@ -5196,6 +5268,10 @@ Hardsigmoid_1:
         type: "Tensor"
         dtype: "float32"
         value: [[3., 3., 3.], [-5., 0., 5.], [-3., -3., -3.]]
+  pytorch:
+    api_name: "torch.nn.Hardsigmoid"
+    mapping:
+      ins: { data: input }
 
 Hardswish_base:
   desc: "Hardswish激活层"
@@ -5208,6 +5284,10 @@ Hardswish_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.Hardswish"
+    mapping:
+      ins: { data: input }
 
 Hardswish_0:
   desc: "Hardswish激活层"
@@ -5220,6 +5300,10 @@ Hardswish_0:
         dtype: "float32"
         shape: [2, 3, 4, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Hardswish"
+    mapping:
+      ins: { data: input }
 
 Hardswish_1:
   desc: "Hardswish激活层"
@@ -5231,6 +5315,10 @@ Hardswish_1:
         type: "Tensor"
         dtype: "float32"
         value: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+  pytorch:
+    api_name: "torch.nn.Hardswish"
+    mapping:
+      ins: { data: input }
 
 Hardtanh_base:
   desc: "Hardtanh激活层"
@@ -5242,6 +5330,10 @@ Hardtanh_base:
         type: "Tensor"
         dtype: "float32"
         value: [-1.5, 0.3, 2.5]
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input }
 
 Hardtanh_0:
   desc: "Hardtanh激活层"
@@ -5257,6 +5349,10 @@ Hardtanh_0:
     params:
       min: -1.5
       max: 2.0
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 Hardtanh_1:
   desc: "Hardtanh激活层"
@@ -5272,6 +5368,10 @@ Hardtanh_1:
     params:
       min: 0
       max: 1.3
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 Hardtanh_2:
   desc: "Hardtanh激活层"
@@ -5287,6 +5387,10 @@ Hardtanh_2:
     params:
       min: -3.4
       max: 0
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 Hardtanh_3:
   desc: "Hardtanh激活层"
@@ -5347,6 +5451,10 @@ Hardtanh_6:
     params:
       min: -3.3
       max: 3.2
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 Hardtanh_7:
   desc: "Hardtanh激活层"
@@ -5362,6 +5470,10 @@ Hardtanh_7:
     params:
       min: 2.3
       max: 3.5
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 LeakyReLU_base:
   desc: "LeakyReLU激活层"
@@ -5374,6 +5486,10 @@ LeakyReLU_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.LeakyReLU"
+    mapping:
+      ins: { data: input }
 
 LeakyReLU_0:
   desc: "LeakyReLU激活层"
@@ -5388,6 +5504,10 @@ LeakyReLU_0:
         range: [ -1, 1]
     params:
       negative_slope: 0.015
+  pytorch:
+    api_name: "torch.nn.LeakyReLU"
+    mapping:
+      ins: { data: input, negative_slope: negative_slope }
 
 LeakyReLU_1:
   desc: "LeakyReLU激活层"
@@ -5402,6 +5522,10 @@ LeakyReLU_1:
         range: [ -10, 10]
     params:
       negative_slope: 0
+  pytorch:
+    api_name: "torch.nn.LeakyReLU"
+    mapping:
+      ins: { data: input, negative_slope: negative_slope }
 
 LeakyReLU_2:
   desc: "LeakyReLU激活层"
@@ -5416,6 +5540,10 @@ LeakyReLU_2:
         range: [ -10, 10]
     params:
       negative_slope: -1
+  pytorch:
+    api_name: "torch.nn.LeakyReLU"
+    mapping:
+      ins: { data: input, negative_slope: negative_slope }
 
 LogSigmoid_base:
   desc: "LogSigmoid激活层"
@@ -5428,6 +5556,10 @@ LogSigmoid_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.LogSigmoid"
+    mapping:
+      ins: { data: input }
 
 LogSigmoid_0:
   desc: "LogSigmoid激活层"
@@ -5440,6 +5572,10 @@ LogSigmoid_0:
         dtype: "float32"
         shape: [2, 3, 4, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.LogSigmoid"
+    mapping:
+      ins: { data: input }
 
 LogSoftmax_base:
   desc: "LogSoftmax激活层"
@@ -5453,6 +5589,10 @@ LogSoftmax_base:
         value: [[[1], [2]], [[3], [4]]]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_0:
   desc: "LogSoftmax激活层"
@@ -5467,6 +5607,10 @@ LogSoftmax_0:
         range: [ -1, 1]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_1:
   desc: "LogSoftmax激活层"
@@ -5481,6 +5625,10 @@ LogSoftmax_1:
         range: [ -10, 10]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_2:
   desc: "LogSoftmax激活层"
@@ -5495,6 +5643,10 @@ LogSoftmax_2:
         range: [ -10, 10]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_3:
   desc: "LogSoftmax激活层"
@@ -5509,6 +5661,10 @@ LogSoftmax_3:
         range: [ -10, 10]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_4:
   desc: "LogSoftmax激活层"
@@ -5523,6 +5679,10 @@ LogSoftmax_4:
         range: [ -10, 10]
     params:
       axis: 2
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_5:
   desc: "LogSoftmax激活层"
