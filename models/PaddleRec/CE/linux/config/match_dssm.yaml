@@ -42,8 +42,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.380
-        threshold: 0.04
+        kpi_base: 0.38071522
+        threshold: 0.00000001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -423,8 +423,8 @@ INFER:
     kpis: #kpi指标
       pnr:
         latest: True
-        kpi_base: 0.9300
-        threshold: 0.02
+        kpi_base: 14.14537902
+        threshold: 0.00000001
         actived: True
         evaluation: "+"
         unit_repr: None
