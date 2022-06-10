@@ -71,7 +71,7 @@ echo "makeup singan_animation singan_finetune singan_sr singan_universal"| finds
 if !errorlevel! equ 0 (
     python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output > %log_path%/!model!_train.log 2>&1
 ) else (
-    python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 > %log_path%/!model!_train.log 2>&1
+    python -u tools/main.py --config-file %%i -o  total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1  dataset.train.num_workers=0  > %log_path%/!model!_train.log 2>&1
 )
 
 if not !errorlevel! == 0 (
