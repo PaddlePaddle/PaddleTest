@@ -157,7 +157,7 @@ if [ ! -d $log_path ]; then
 fi
 cd ./bigbird
 if [[ ${system} == "mac" ]];then
-    bash train.sh ${device} 'bigbird-base-uncased' > $log_path/train_mac_${device}.log 2>&1
+    bash train.sh ${device} 'bigbird-base-uncased' 'mac' 'None' ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} > $log_path/train_mac_${device}.log 2>&1
     print_info $? train_mac_${device}
 else
     unset CUDA_VISIBLE_DEVICES
