@@ -85,7 +85,9 @@ class ClasV2Test(object):
             )
             str_all += tmp
 
-        with open("test_{}.py".format(model_name), "w") as f:
+        case_name = model_name.replace(".", "_")
+        case_name = case_name.replace("-", "_")
+        with open("test_{}.py".format(case_name), "w") as f:
             f.write(
                 "#!/bin/env python\n"
                 "# -*- coding: utf-8 -*-\n"
@@ -103,19 +105,19 @@ class ClasV2Test(object):
         os.system("wget -q --no-proxy {}".format(tgz_url))
         os.system("tar -xzf {}".format(tgz))
 
-        return tgz, model_name, model_path
+        return tgz, case_name, model_path
 
     def run(self):
         """
         run test
         """
         for tgz_url in self.model_url_list:
-            tgz, model_name, model_path = self.prepare_resource(tgz_url)
+            tgz, case_name, model_path = self.prepare_resource(tgz_url)
 
             if platform.system() == "Windows":
-                os.system("python.exe -m pytest {} --alluredir=report".format("test_" + model_name + ".py"))
+                os.system("python.exe -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
             else:
-                os.system("python -m pytest {} --alluredir=report".format("test_" + model_name + ".py"))
+                os.system("python -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
             os.remove(tgz)
             shutil.rmtree(model_path)
 

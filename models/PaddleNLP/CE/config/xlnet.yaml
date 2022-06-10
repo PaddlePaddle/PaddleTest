@@ -6,23 +6,30 @@ GIT:
   branch: $BASE_BRANCH
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/xlnet/ #脚本的路径
   model_log_path: log/xlnet/
 
 EXEC:
-  exec_cases: [FINETUNE]
+  exec_cases: [DATA_PROC, FINETUNE]
   exec_priority: [p0]
   exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh xlnet $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
 
 #测试套
 FINETUNE:
   - #可以有多步
     priority: p0
     tag: linux_gpu1_SST-2
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash fine_tune.sh 'SST-2' $SET_CUDA
 
     kpis: #kpi指标
       acc:
@@ -55,10 +62,6 @@ FINETUNE:
   - #可以有多步
     priority: p9
     tag: linux_gpu1_CoLA
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash fine_tune.sh 'CoLA' $SET_CUDA
 
     kpis: #kpi指标
       mcc:
@@ -73,10 +76,6 @@ FINETUNE:
   - #可以有多步
     priority: p0
     tag: linux_gpu1_MRPC
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash fine_tune.sh 'MRPC' $SET_CUDA
 
     kpis: #kpi指标
       f1:
@@ -117,10 +116,6 @@ FINETUNE:
   - #可以有多步
     priority: p0
     tag: linux_gpu1_STS-B
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash fine_tune.sh 'STS-B' $SET_CUDA
 
     kpis: #kpi指标
       pearson:
@@ -160,10 +155,6 @@ FINETUNE:
   - #可以有多步
     priority: p0
     tag: linux_gpu1_QNLI
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash fine_tune.sh 'QNLI' $SET_CUDA
 
     kpis: #kpi指标
       acc:
@@ -196,10 +187,6 @@ FINETUNE:
   - #可以有多步
     priority: p0
     tag: linux_gpu1_QQP
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash fine_tune.sh 'QQP' $SET_CUDA
 
     kpis: #kpi指标
       acc:
@@ -239,10 +226,6 @@ FINETUNE:
   - #可以有多步
     priority: p0
     tag: linux_gpu1_MNLI
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash fine_tune.sh 'MNLI' $SET_CUDA
 
     kpis: #kpi指标
       acc:
@@ -276,10 +259,6 @@ FINETUNE:
   - #可以有多步
     priority: p0
     tag: linux_gpu1_RTE
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash fine_tune.sh 'RTE' $SET_CUDA
 
     kpis: #kpi指标
       acc:
@@ -312,10 +291,6 @@ FINETUNE:
   - #可以有多步
     priority: p0
     tag: linux_gpu1_WNLI
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash fine_tune.sh 'WNLI' $SET_CUDA
 
     kpis: #kpi指标
       acc:

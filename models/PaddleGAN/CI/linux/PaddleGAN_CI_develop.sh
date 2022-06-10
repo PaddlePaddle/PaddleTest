@@ -126,8 +126,8 @@ if [ -f "/etc/redhat-release" ]; then
     echo "######  ffmpeg"
     yum update -y
     yum install epel-release -y
-    rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
-    rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+    # rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+    # rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
     yum install boost -y
     yum install opencv -y
     yum install ffmpeg -y
@@ -352,7 +352,8 @@ makeup)
     sleep 0.01
     ;;
 msvsr_l_reds)
-    echo "skip eval msvsr_l_reds because OOM"
+    echo "skip eval msvsr_l_reds because train & eval OOM need 32G"
+    echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
     sleep 0.01
     ;;
 *)

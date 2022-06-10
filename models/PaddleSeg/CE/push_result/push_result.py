@@ -11,6 +11,7 @@ def send(url):
     with open("result", "r") as f:
         for line in f:
             line = line.strip("\n")
+            line = line.strip(" ")
             sub_str = line.split(",")
             case_result.append(
                 {

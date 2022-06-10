@@ -9,6 +9,7 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/SQuAD/ #脚本的路径
   model_log_path: log/SQuAD/
 
@@ -24,8 +25,8 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh squad $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
   -
     priority: p0
     tag: win_download_data
@@ -40,9 +41,6 @@ TRAIN:
     tag: linux_dy_gpu1
 
     run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh gpu 1.1 $SET_CUDA
       -
         path: $PROJECT_ROOT/utils
         cmd: python process_log.py --log_path=$ROOT_PATH/$model_log_path/train_gpu_1.1.log --reg='"' --obj=""
@@ -67,10 +65,6 @@ TRAIN:
   -
     priority: p1
     tag: linux_dy_gpu1
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh gpu 2.0 $SET_CUDA
     kpis:
       exit_code:
         latest: True

@@ -395,7 +395,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         rm -rf ${model}_pretrained.pdparams
     fi
 
-    if [[ ${model} =~ 'MobileNetV3' ]] || [[ ${model} =~ 'PPLCNet' ]] \
+    if [[ ${model} =~ 'MobileNetV3' ]] || ( [[ ${model} =~ 'PPLCNet' ]] && [[ ! ${model} =~ 'dml' ]] ) \
         || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ '/ResNet50_vd.yaml' ]];then
         echo "######  use pretrain model"
         echo ${model}
@@ -422,6 +422,16 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         rm -rf output/$params_dir/latest.pdparams
         cp -r PPHGNet_base_ssld_pretrained.pdparams output/$params_dir/latest.pdparams
         rm -rf PPHGNet_base_ssld_pretrained_pretrained.pdparams
+    fi
+
+    if [[ ${model} =~ 'PPLCNet' ]]  && [[ ${model} =~ 'dml' ]] ;then
+        echo "######  use PPLCNet dml pretrain model"
+        echo ${model}
+        echo ${params_dir}
+        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/Distillation/${model}_pretrained.pdparams --no-proxy
+        rm -rf output/$params_dir/latest.pdparams
+        cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
+        rm -rf ${model}_pretrained.pdparams
     fi
 
     sleep 3
