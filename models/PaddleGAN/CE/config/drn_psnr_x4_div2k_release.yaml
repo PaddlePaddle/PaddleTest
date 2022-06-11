@@ -62,7 +62,7 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/drn_psnr_x4_div2k.yaml train_linux_gpu1
     kpis: #kpi指标
-      :
+      loss_dual:
         latest: True
         kpi_base: 8462.812
         threshold: 1.0
@@ -78,7 +78,7 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/drn_psnr_x4_div2k.yaml train_linux_gpu2
     kpis: #kpi指标
-      :
+      loss_dual:
         latest: True
         kpi_base: 9151.643
         threshold: 1.0
