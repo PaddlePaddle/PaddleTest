@@ -62,9 +62,9 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/photopen.yaml train_linux_gpu1
     kpis: #kpi指标
-      g_ganloss:
+      g_featloss:
         latest: True
-        kpi_base: 8462.812
+        kpi_base: 12.787
         threshold: 1.0
         actived: True
         evaluation: "-"
@@ -78,9 +78,9 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/photopen.yaml train_linux_gpu2
     kpis: #kpi指标
-      g_ganloss:
+      g_featloss:
         latest: True
-        kpi_base: 9151.643
+        kpi_base: 12.787
         threshold: 1.0
         actived: True
         evaluation: "-"

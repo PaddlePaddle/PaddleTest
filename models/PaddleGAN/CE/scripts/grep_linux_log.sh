@@ -25,8 +25,10 @@ if [[ $2 == 'train_linux_gpu1' ]] ; then
     tail -n 10 ${log_path}/train/${model}_1card.log
 
     cat ${log_path}/train/${model}_1card.log | grep Iter | grep '20/20'
-    # cat ${log_path}/train/${model}_1card.log | grep training_exit_code
-    cat ${log_path}/train/${model}_1card.log | grep Iter | grep '20/20' >../${log_path}/${model}_1card.log
+    cat ${log_path}/train/${model}_1card.log | grep Iter | grep '20/20' >tmp_1card.log
+    cat ${log_path}/train/${model}_1card.log | grep training_exit_code
+    cat ${log_path}/train/${model}_1card.log | grep training_exit_code >>tmp_1card.log
+    cat tmp_1card.log | tr '\n' ',' > ../${log_path}/${model}_1card.log
     cat ../${log_path}/${model}_1card.log
 
 elif [[ $2 == 'train_linux_gpu2' ]] ; then
@@ -34,8 +36,10 @@ elif [[ $2 == 'train_linux_gpu2' ]] ; then
     tail -n 10 ${log_path}/train/${model}_2card.log
 
     cat ${log_path}/train/${model}_2card.log | grep Iter | grep '20/20'
-    # cat ${log_path}/train/${model}_2card.log | grep training_exit_code
-    cat ${log_path}/train/${model}_2card.log | grep Iter | grep '20/20' >../${log_path}/${model}_2card.log
+    cat ${log_path}/train/${model}_2card.log | grep Iter | grep '20/20' >tmp_2card.log
+    cat ${log_path}/train/${model}_2card.log | grep training_exit_code
+    cat ${log_path}/train/${model}_2card.log | grep training_exit_code >>tmp_2card.log
+    cat tmp_2card.log | tr '\n' ',' > ../${log_path}/${model}_2card.log
     cat ../${log_path}/${model}_2card.log
 
 elif [[ $2 == 'eval_linux' ]] ; then
