@@ -119,7 +119,53 @@ TRAIN: # 训练步骤
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 23.03562
+        kpi_base: 7.01511
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/DarkNet53_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml train_linux_gpu1
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.6109
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 31.5522
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/DarkNet53_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.73945
+        threshold: 0.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 7.05802
         threshold: 0.00001
         actived: True
         evaluation: "-"

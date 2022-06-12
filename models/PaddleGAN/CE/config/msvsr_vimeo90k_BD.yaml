@@ -1,5 +1,5 @@
 MODEL: "msvsr_vimeo90k_BD" # 模型名
-PRIORITY: P1
+PRIORITY: P1,convergence_msvsr_vimeo90k_BD,msvsr_vimeo90k_BD
 GIT:
   addr: $REPO_PaddleGAN
   path: $ROOT_PATH/PaddleGAN
@@ -52,8 +52,33 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleGAN_train_cpu.sh configs/msvsr_vimeo90k_BD.yaml
+  -
+    tag: linux_convergence_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleGAN_convergence_develop.sh configs/msvsr_vimeo90k_BD.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/msvsr_vimeo90k_BD.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/msvsr_vimeo90k_BD_convergence.log
   -
     tag: train_linux_gpu1
     priority: P1
@@ -72,6 +97,38 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/msvsr_vimeo90k_BD_1card.log
   -
     tag: train_linux_gpu2
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/msvsr_vimeo90k_BD.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss_pix:
+        latest: True
+        kpi_base: 0.031
+        threshold: 1.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/msvsr_vimeo90k_BD_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/msvsr_vimeo90k_BD.yaml train_linux_gpu1
+    kpis: #kpi指标
+      loss_pix:
+        latest: True
+        kpi_base: 0.026
+        threshold: 1.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/msvsr_vimeo90k_BD_1card.log
+  -
+    tag: train_linux_gpu2_release
     priority: P1
     run:
       -

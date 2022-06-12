@@ -1,5 +1,5 @@
 MODEL: "esrgan_psnr_x4_div2k" # 模型名
-PRIORITY: P1
+PRIORITY: P1,convergence_esrgan_psnr_x4_div2k,esrgan_psnr_x4_div2k
 GIT:
   addr: $REPO_PaddleGAN
   path: $ROOT_PATH/PaddleGAN
@@ -52,8 +52,33 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleGAN_train_cpu.sh configs/esrgan_psnr_x4_div2k.yaml
+  -
+    tag: linux_convergence_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleGAN_convergence_develop.sh configs/esrgan_psnr_x4_div2k.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/esrgan_psnr_x4_div2k.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/esrgan_psnr_x4_div2k_convergence.log
   -
     tag: train_linux_gpu1
     priority: P1
@@ -64,7 +89,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss_pixel:
         latest: True
-        kpi_base: 13.186
+        kpi_base: 28.251
         threshold: 1.0
         actived: True
         evaluation: "-"
@@ -80,7 +105,39 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss_pixel:
         latest: True
-        kpi_base: 4.81
+        kpi_base: 15.114
+        threshold: 1.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/esrgan_psnr_x4_div2k_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/esrgan_psnr_x4_div2k.yaml train_linux_gpu1
+    kpis: #kpi指标
+      loss_pixel:
+        latest: True
+        kpi_base: 28.251
+        threshold: 1.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/esrgan_psnr_x4_div2k_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/esrgan_psnr_x4_div2k.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss_pixel:
+        latest: True
+        kpi_base: 15.114
         threshold: 1.0
         actived: True
         evaluation: "-"
