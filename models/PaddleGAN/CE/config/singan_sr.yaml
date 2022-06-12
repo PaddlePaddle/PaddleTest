@@ -62,9 +62,9 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/singan_sr.yaml train_linux_gpu1
     kpis: #kpi指标
-      scale6/D_gradient_penalty:
+      scale9/D_gradient_penalty:
         latest: True
-        kpi_base: 0.019
+        kpi_base: 0.119
         threshold: 1.0
         actived: True
         evaluation: "-"
@@ -78,9 +78,9 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/singan_sr.yaml train_linux_gpu2
     kpis: #kpi指标
-      scale6/D_gradient_penalty:
+      scale9/D_gradient_penalty:
         latest: True
-        kpi_base: 0.019
+        kpi_base: 0.119
         threshold: 1.0
         actived: True
         evaluation: "-"

@@ -52,7 +52,7 @@ elif [[ ${model} == 'pan_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pixel|g" ${model}.yaml #指标
     sed -i "" "s|8462.812|0.036|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.015|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|9151.643|0.022|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'drn_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -82,7 +82,7 @@ elif [[ ${model} == 'basicvsr_reds' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pixel|g" ${model}.yaml #指标
     sed -i "" "s|8462.812|0.052|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.027|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|9151.643|0.044|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'edvr_m_w_tsa' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -93,14 +93,14 @@ elif [[ ${model} == 'edvr_m_w_tsa' ]]; then
 elif [[ ${model} == 'esrgan_x4_div2k' ]]; then
     sed -i "" "s|P0|P0|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pix|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|0.116|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|8462.812|0.164|g" ${model}.yaml #linux_train_单卡
     sed -i "" "s|9151.643|0.172|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'singan_finetune' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
-    sed -i "" "s|loss_pixel|scale6/D_gradient_penalty|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|0.056|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.056|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|loss_pixel|scale1/D_gradient_penalty|g" ${model}.yaml #指标
+    sed -i "" "s|8462.812|0.156|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|0.156|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'pix2pix_cityscapes' ]]; then
     sed -i "" "s|P0|P0|g" ${model}.yaml
@@ -140,9 +140,9 @@ elif [[ ${model} == 'lapstyle_draft' ]]; then
 
 elif [[ ${model} == 'singan_sr' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
-    sed -i "" "s|loss_pixel|scale6/D_gradient_penalty|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|0.019|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.019|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|loss_pixel|scale9/D_gradient_penalty|g" ${model}.yaml #指标
+    sed -i "" "s|8462.812|0.119|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|0.119|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'cyclegan_horse2zebra' ]]; then
     sed -i "" "s|P0|P0|g" ${model}.yaml
@@ -153,8 +153,8 @@ elif [[ ${model} == 'cyclegan_horse2zebra' ]]; then
 elif [[ ${model} == 'esrgan_psnr_x2_div2k' ]]; then
     sed -i "" "s|P0|P0|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pixel|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|5.464|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|6.553|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|11.331|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|9.658|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'wgan_mnist' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -183,8 +183,8 @@ elif [[ ${model} == 'basicvsr++_vimeo90k_BD' ]]; then
 elif [[ ${model} == 'lesrcnn_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pixel|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|0.216|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.121|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|0.255|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|0.17|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'ugatit_selfie2anime_light' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -195,8 +195,8 @@ elif [[ ${model} == 'ugatit_selfie2anime_light' ]]; then
 elif [[ ${model} == 'edvr_l_wo_tsa' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pixel|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|5046.816|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|7817.851|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|8268.696|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|8860.704|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'realsr_bicubic_noise_x4_df2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -214,13 +214,13 @@ elif [[ ${model} == 'starganv2_afhq' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|G/latent_adv|g" ${model}.yaml #指标
     sed -i "" "s|8462.812|13.905|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.939|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|9151.643|5.725|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'msvsr_reds' ]]; then
     sed -i "" "s|P0|P0|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pix|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|0.025|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.025|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|0.024|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|0.054|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'msvsr_vimeo90k_BD' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -237,7 +237,7 @@ elif [[ ${model} == 'iconvsr_reds' ]]; then
 elif [[ ${model} == 'edvr_l_w_tsa' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pixel|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|6446.748|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|8462.812|10505.313|g" ${model}.yaml #linux_train_单卡
     sed -i "" "s|9151.643|6680.915|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'lapstyle_rev_first' ]]; then
@@ -255,14 +255,14 @@ elif [[ ${model} == 'cyclegan_cityscapes' ]]; then
 elif [[ ${model} == 'singan_universal' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|scale6/D_gradient_penalty|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|0.106|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.106|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|0.206|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|0.206|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'singan_animation' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|scale6/D_gradient_penalty|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|0.169|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.169|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|0.269|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|0.269|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'starganv2_celeba_hq' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -274,7 +274,7 @@ elif [[ ${model} == 'mprnet_denoising' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss|g" ${model}.yaml #指标
     sed -i "" "s|8462.812|16058.466|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|13216.954|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|9151.643|19116.625|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'firstorder_vox_256' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -285,8 +285,8 @@ elif [[ ${model} == 'firstorder_vox_256' ]]; then
 elif [[ ${model} == 'stylegan_v2_256_ffhq' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|l_d|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|0.304|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.208|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|0.447|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|0.454|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'makeup' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
