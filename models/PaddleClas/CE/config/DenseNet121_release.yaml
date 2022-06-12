@@ -1,5 +1,5 @@
 MODEL: "DenseNet121" # 模型名
-PRIORITY: P1_release
+PRIORITY: P1_release,convergence_DenseNet121,DenseNet121
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -52,8 +52,33 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/DenseNet/DenseNet121.yaml
+  -
+    tag: linux_convergence_test
+    priority: P1_release
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleClas_convergence_develop.sh ppcls/configs/ImageNet/DenseNet/DenseNet121.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P1_release
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/DenseNet/DenseNet121.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/DenseNet121_convergence.log
   -
     tag: train_linux_gpu1
     priority: P1_release
@@ -89,6 +114,13 @@ TRAIN: # 训练步骤
         latest: True
         kpi_base: 6.40143
         threshold: 0.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 8.53125
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
