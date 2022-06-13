@@ -62,12 +62,12 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/cond_dcgan_mnist.yaml train_linux_gpu1
     kpis: #kpi指标
-      training_single_exit_code:
+      D_fake_loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.0
+        kpi_base: 8462.812
+        threshold: 1.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/cond_dcgan_mnist_1card.log
   -
@@ -78,12 +78,12 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh configs/cond_dcgan_mnist.yaml train_linux_gpu2
     kpis: #kpi指标
-      training_multi_exit_code:
+      D_fake_loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.0
+        kpi_base: 9151.643
+        threshold: 1.0
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/cond_dcgan_mnist_2card.log
   -

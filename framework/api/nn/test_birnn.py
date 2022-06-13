@@ -17,6 +17,7 @@ def test_birnn0():
     """
     time_major = True
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj2 = RnnBase(paddle.nn.BiRNN)
     obj2.enable_static = False
     np.random.seed(22)
@@ -45,6 +46,7 @@ def test_birnn0():
     )
     obj2.atol = 1e-5
     obj2.run(res, x, cell_fw=cell_fw, cell_bw=cell_bw, time_major=True)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_BiRNN_parameters
@@ -52,6 +54,7 @@ def test_birnn1():
     """
     set initial_states
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj3 = RnnBase(paddle.nn.BiRNN)
     obj3.enable_static = False
     np.random.seed(22)
@@ -78,6 +81,7 @@ def test_birnn1():
         bias_hh_attr=initializer.Constant(4),
     )
     obj3.run(res, x_data, ((h_data, c_data), (h1_data, c1_data)), cell_fw=cell_fw, cell_bw=cell_bw)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_BiRNN_parameters
@@ -86,6 +90,7 @@ def test_birnn2():
     cell: GRUCell
     set initial_states
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj4 = RnnBase(paddle.nn.BiRNN)
     obj4.enable_static = False
     np.random.seed(22)
@@ -111,6 +116,7 @@ def test_birnn2():
     )
     obj4.atol = 1e-4
     obj4.run(res, x_data, cell_fw=cell_fw, cell_bw=cell_bw)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_BiRNN_parameters
@@ -119,6 +125,7 @@ def test_birnn3():
     cell: SimpleRNNCell
     set initial_states
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj5 = RnnBase(paddle.nn.BiRNN)
     obj5.enable_static = False
     np.random.seed(22)
@@ -143,6 +150,7 @@ def test_birnn3():
         bias_hh_attr=initializer.Constant(4),
     )
     obj5.run(res, x_data, (h_data, h1_data), cell_fw=cell_fw, cell_bw=cell_bw)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_BiRNN_parameters
@@ -151,6 +159,7 @@ def test_birnn4():
     cell: fw -> GRUCell; bw -> SimpleRNNCell
     set initial_states
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj6 = RnnBase(paddle.nn.BiRNN)
     obj6.enable_static = False
     np.random.seed(22)
@@ -175,3 +184,4 @@ def test_birnn4():
         bias_hh_attr=initializer.Constant(4),
     )
     obj6.run(res, x_data, (h_data, h1_data), cell_fw=cell_fw, cell_bw=cell_bw)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})

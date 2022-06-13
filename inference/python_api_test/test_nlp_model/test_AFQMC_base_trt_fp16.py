@@ -46,40 +46,23 @@ def set_dynamic_shape(config):
     """
     set dynamic shape
     """
-    names = ["input_ids", "token_type_ids", "cumsum_0.tmp_0", "full_like_0.tmp_0", "unsqueeze2_0.tmp_0", "tmp_4"]
+    names = ["embedding_3.tmp_0", "embedding_4.tmp_0", "embedding_5.tmp_0", "unsqueeze2_0.tmp_0"]
     max_batch = 40
-    min_batch_seq_len = 1
-    max_batch_seq_len = 512
-    opt_batch_seq_len = 256
+    max_single_seq_len = 128
+    opt_single_seq_len = 64
 
-    min_shape = [1, min_batch_seq_len]
-    max_shape = [max_batch, max_batch_seq_len]
-    opt_shape = [max_batch, opt_batch_seq_len]
+    min_shape = [1, 1, 768]
+    max_shape = [max_batch, max_single_seq_len, 768]
+    opt_shape = [1, opt_single_seq_len, 768]
     config.set_trt_dynamic_shape_info(
-        {
-            names[0]: min_shape,
-            names[1]: min_shape,
-            names[2]: min_shape,
-            names[3]: min_shape,
-            names[4]: [1, 1, 1, 1],
-            names[5]: min_shape,
-        },
+        {names[0]: min_shape, names[1]: min_shape, names[2]: min_shape, names[3]: [1, 1, 1, 1]},
         {
             names[0]: max_shape,
             names[1]: max_shape,
             names[2]: max_shape,
-            names[3]: max_shape,
-            names[4]: [40, 1, 1, 128],
-            names[5]: max_shape,
+            names[3]: [max_batch, 1, 1, max_single_seq_len],
         },
-        {
-            names[0]: opt_shape,
-            names[1]: opt_shape,
-            names[2]: opt_shape,
-            names[3]: opt_shape,
-            names[4]: [40, 1, 1, 128],
-            names[5]: opt_shape,
-        },
+        {names[0]: opt_shape, names[1]: opt_shape, names[2]: opt_shape, names[3]: [1, 1, 1, opt_single_seq_len]},
     )
 
 
@@ -310,8 +293,10 @@ def test_trt_fp16_bz1():
     )
     token_type_ids = np.tile(sent_ids, (40, 1))
 
+    output_data_path = "./AFQMC_base/trt_fp16"
+    output_data_dict = test_suite.get_output_data(output_data_path)
+
     input_data_dict = {"token_type_ids": token_type_ids, "input_ids": input_ids}
-    output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
 
     del test_suite  # destroy class to save memory
 
@@ -323,7 +308,7 @@ def test_trt_fp16_bz1():
         input_data_dict,
         output_data_dict,
         min_subgraph_size=5,
-        delta=1e-5,
+        delta=2e-3,
         max_batch_size=40,
         use_static=False,
         precision="trt_fp16",
@@ -557,8 +542,10 @@ def test_trt_fp16_bz1_multi_thread():
     )
     token_type_ids = np.tile(sent_ids, (40, 1))
 
+    output_data_path = "./AFQMC_base/trt_fp16"
+    output_data_dict = test_suite.get_output_data(output_data_path)
+
     input_data_dict = {"token_type_ids": token_type_ids, "input_ids": input_ids}
-    output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
 
     del test_suite  # destroy class to save memory
 
@@ -567,7 +554,7 @@ def test_trt_fp16_bz1_multi_thread():
     set_dynamic_shape(test_suite2.pd_config)
     test_suite2.pd_config.exp_disable_tensorrt_ops(["elementwise_sub"])
     test_suite2.trt_bz1_multi_thread_test(
-        input_data_dict, output_data_dict, min_subgraph_size=5, delta=1e-5, use_static=False, precision="trt_fp16"
+        input_data_dict, output_data_dict, min_subgraph_size=5, delta=2e-3, use_static=False, precision="trt_fp16"
     )
 
     del test_suite2  # destroy class to save memory
