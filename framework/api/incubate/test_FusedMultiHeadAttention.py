@@ -48,6 +48,7 @@ def test_FusedMultiHeadAttention0():
     res = np.array(
         [[[-0.41791570, 1.90818739, 1.38764536, 5.12208271], [-0.00312311, 1.70438468, 1.00867295, 5.29018211]]]
     )
+    attr = initializer.Constant(2)
     obj.run(
         res=res,
         data=query_data,
@@ -55,8 +56,14 @@ def test_FusedMultiHeadAttention0():
         num_heads=2,
         dropout_rate=0,
         attn_dropout_rate=0,
-        weight_attr=initializer.Constant(2),
-        bias_attr=initializer.Constant(2),
+        qkv_weight_attr=attr,
+        qkv_bias_attr=attr,
+        linear_weight_attr=attr,
+        linear_bias_attr=attr,
+        pre_ln_scale_attr=attr,
+        pre_ln_bias_attr=attr,
+        ln_scale_attr=attr,
+        ln_bias_attr=attr,
     )
 
 
@@ -77,6 +84,7 @@ def test_FusedMultiHeadAttention1():
             ]
         ]
     )
+    attr = initializer.Constant(2)
     obj.run(
         res=res,
         data=query_data,
@@ -85,6 +93,12 @@ def test_FusedMultiHeadAttention1():
         dropout_rate=0,
         attn_dropout_rate=0,
         normalize_before=True,
-        weight_attr=initializer.Constant(2),
-        bias_attr=initializer.Constant(2),
+        qkv_weight_attr=attr,
+        qkv_bias_attr=attr,
+        linear_weight_attr=attr,
+        linear_bias_attr=attr,
+        pre_ln_scale_attr=attr,
+        pre_ln_bias_attr=attr,
+        ln_scale_attr=attr,
+        ln_bias_attr=attr,
     )
