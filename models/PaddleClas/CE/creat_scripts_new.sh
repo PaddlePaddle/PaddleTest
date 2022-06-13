@@ -27,6 +27,7 @@
 # 如果resnet50 release 和 develop一致，其它的不一致怎么办
 #     基准值不能只局限于resnet50，也应该可配置化，增加判断条件如果是作为基准值的模型不复制（要用全等号）  done
 
+
 export base_model=ResNet50
 export base_priority=P0
 priority_all='P0 P1' #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
