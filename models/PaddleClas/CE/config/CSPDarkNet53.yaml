@@ -89,14 +89,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.47177
+        kpi_base: 6.88833
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 27.74947
+        kpi_base: 8.58148
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -112,14 +112,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.35905
+        kpi_base: 6.79435
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.01511
+        kpi_base: 9.53533
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -135,14 +135,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.38832
+        kpi_base: 6.88871
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 10.27651
+        kpi_base: 9.56056
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -158,14 +158,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.31204
+        kpi_base: 6.78944
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.05802
+        kpi_base: 8.33061
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -231,7 +231,23 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 27.74947
+        kpi_base: 9.56056
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/CSPDarkNet53_eval.log
+  -
+    tag: eval_linux_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 8.58148
         threshold: 0.00001
         actived: True
         evaluation: "-"

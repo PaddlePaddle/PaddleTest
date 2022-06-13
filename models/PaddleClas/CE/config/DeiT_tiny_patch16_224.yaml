@@ -89,14 +89,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.31575
+        kpi_base: 6.5819
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.8391
+        kpi_base: 7.62147
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -112,14 +112,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.23028
+        kpi_base: 6.69045
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.01511
+        kpi_base: 7.58847
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -135,14 +135,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.34939
+        kpi_base: 6.61004
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.94151
+        kpi_base: 7.52763
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -158,14 +158,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.48434
+        kpi_base: 6.63883
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.05802
+        kpi_base: 7.54239
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -231,7 +231,23 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 7.8391
+        kpi_base: 7.52763
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/DeiT_tiny_patch16_224_eval.log
+  -
+    tag: eval_linux_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/DeiT/DeiT_tiny_patch16_224.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 7.62147
         threshold: 0.00001
         actived: True
         evaluation: "-"

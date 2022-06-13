@@ -89,15 +89,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.4628
+        kpi_base: 6.88506
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 16
-        threshold: 0.10001
+        kpi_base: 7.6093
+        threshold: 0.10.01
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -112,14 +112,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.54288
+        kpi_base: 6.78328
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.01511
+        kpi_base: 7.08462
         threshold: 0.10001
         actived: True
         evaluation: "-"
@@ -135,14 +135,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.4628
+        kpi_base: 6.88484
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 16
+        kpi_base: 7.36231
         threshold: 0.10001
         actived: True
         evaluation: "-"
@@ -158,14 +158,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.54288
+        kpi_base: 6.7784
         threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.05802
+        kpi_base: 7.10369
         threshold: 0.10001
         actived: True
         evaluation: "-"
@@ -231,7 +231,23 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 16
+        kpi_base: 7.36231
+        threshold: 0.10001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_eval.log
+  -
+    tag: eval_linux_release
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 7.6093
         threshold: 0.10001
         actived: True
         evaluation: "-"

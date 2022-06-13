@@ -89,15 +89,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.39329
-        threshold: 0.0
+        kpi_base: 125091.62074
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 8.44204
-        threshold: 0.00001
+        kpi_base: 818366.51250
+        threshold: 0.10.01
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -112,15 +112,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.50465
-        threshold: 0.0
+        kpi_base: 11.90543
+        threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 10.96941
-        threshold: 0.00001
+        kpi_base: 34.80694
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -135,15 +135,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.43611
-        threshold: 0.0
+        kpi_base: 139920.59104
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 16.04218
-        threshold: 0.00001
+        kpi_base: 1187731.77900
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -158,15 +158,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.62874
-        threshold: 0.0
+        kpi_base: 9.63286
+        threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.29234
-        threshold: 0.00001
+        kpi_base: 35.57647
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -182,9 +182,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_train.log
   -
@@ -198,9 +198,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_train.log
   -
@@ -214,9 +214,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_cpu.log
 
@@ -231,8 +231,24 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.93207
-        threshold: 0.00001
+        kpi_base: 1.2112
+        threshold: 0.10001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/LeViT_128S_eval.log
+  -
+    tag: eval_linux_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 1.2112
+        threshold: 0.10001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -248,9 +264,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_eval.log
   -
@@ -264,9 +280,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_eval.log
 
@@ -283,9 +299,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_infer.log
   -
@@ -299,9 +315,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_infer.log
   -
@@ -315,9 +331,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_infer.log
 
@@ -333,9 +349,9 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_predict.log
   -
@@ -349,9 +365,9 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_predict.log
   -
@@ -365,8 +381,8 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.1
         actived: True
-        evaluation: "="
+        evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/LeViT_128S_predict.log

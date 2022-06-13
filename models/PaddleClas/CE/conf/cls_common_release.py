@@ -35,4 +35,11 @@ SET_MULTI_CUDA = "0,1"
 REPO_PaddleClas = "https://github.com/PaddlePaddle/PaddleClas.git"
 BASE_BRANCH = "develop"
 cls_BRANCH = "develop"
-EXEC_TAG = ["linux_function_test", "train_linux_gpu1_release", "train_linux_gpu2_release", "eval_linux", "infer_linux", "predict_linux"]
+EXEC_TAG = [
+    "linux_function_test",
+    "train_linux_gpu1_release",
+    "train_linux_gpu2_release",
+    "eval_linux_release",
+    "infer_linux",
+    "predict_linux",
+]

@@ -27,8 +27,8 @@ if [[ ${model} == 'ugatit_photo2cartoon' ]]; then
 elif [[ ${model} == 'realsr_kernel_noise_x4_dped' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pix|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|0.143|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.086|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|1.143|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|1.986|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'pix2pix_cityscapes_2gpus' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -285,8 +285,8 @@ elif [[ ${model} == 'firstorder_vox_256' ]]; then
 elif [[ ${model} == 'stylegan_v2_256_ffhq' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|l_d|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|1.398|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|0.726|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|2.398|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|2.726|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'makeup' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml

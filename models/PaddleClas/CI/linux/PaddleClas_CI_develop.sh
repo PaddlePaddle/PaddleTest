@@ -286,6 +286,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             sed -i 's/learning_rate:/learning_rate: 0.0001 #/g' $line #将 学习率调低为0.0001
             echo "change lr"
         fi
+        if  [[ ${line} =~ 'ViT' ]] || [[ ${line} =~ 'TNT_small' ]]; then
+            sed -i 's/0.1, 0.01, 0.001, 0.0001/0.05, 0.005, 0.0005, 0.00005/g' $line #调整学习率
+            echo "change lr"
+        fi
+
         # sed -i 's/RandCropImage/ResizeImage/g' $line
         # sed -ie '/RandFlipImage/d' $line
         # sed -ie '/flip_code/d' $line

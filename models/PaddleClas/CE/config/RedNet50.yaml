@@ -89,7 +89,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.00765
+        kpi_base: 6.904
         threshold: 0.0
         actived: True
         evaluation: "="
@@ -112,14 +112,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.2255
+        kpi_base: 6.82994
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       exit_code:
         latest: True
-        kpi_base: 7.01511
+        kpi_base: 0.0
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -135,7 +135,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.09878
+        kpi_base: 6.89483
         threshold: 0.0
         actived: True
         evaluation: "="
@@ -158,14 +158,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.20561
+        kpi_base: 6.82633
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       exit_code:
         latest: True
-        kpi_base: 7.05802
+        kpi_base: 0.0
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -223,6 +223,22 @@ TRAIN: # 训练步骤
 EVAL: # 训练步骤
   -
     tag: eval_linux
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/RedNet/RedNet50.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.94408
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/RedNet50_eval.log
+  -
+    tag: eval_linux_release
     priority: P1
     run:
       -
