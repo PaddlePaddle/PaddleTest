@@ -87,16 +87,16 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu1
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 6.39329
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 8.44204
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -110,16 +110,16 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu2
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 6.50465
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 10.96941
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -133,16 +133,16 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu1
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 6.43611
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 16.04218
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -156,16 +156,16 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu2
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 6.62874
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 7.29234
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -229,9 +229,9 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml eval_linux
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 0.93207
         threshold: 0.00001
         actived: True
         evaluation: "-"

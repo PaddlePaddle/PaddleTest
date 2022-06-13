@@ -246,20 +246,20 @@ elif [[ ${model} == 'LeViT_128S' ]]; then
     # sed -i "" "s|0.93207|1.2112|g" ${model}.yaml #linux_eval
     # sed -i "" "s|8.44204|10.03219|g" ${model}.yaml #linux_train_eval_单卡
 
-    sed -i "" "s|6.39329|0.0|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|6.50465|0.0|g" ${model}.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval
-    sed -i "" "s|8.44204|0.0|g" ${model}.yaml #linux_train_eval_单卡
-    sed -i "" "s|10.96941|0.0|g" ${model}.yaml #linux_train_eval_多卡
+    # sed -i "" "s|6.39329|0.0|g" ${model}.yaml #linux_train_单卡
+    # sed -i "" "s|6.50465|0.0|g" ${model}.yaml #linux_train_多卡
+    # sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval
+    # sed -i "" "s|8.44204|0.0|g" ${model}.yaml #linux_train_eval_单卡
+    # sed -i "" "s|10.96941|0.0|g" ${model}.yaml #linux_train_eval_多卡
 
-    sed -i "" "s|6.43611|0.0|g" ${model}.yaml #linux_train_单卡_release
-    sed -i "" "s|6.62874|0.0|g" ${model}.yaml #linux_train_多卡_release
-    sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval_release
-    sed -i "" "s|16.04218|0.0|g" ${model}.yaml #linux_train_eval_单卡_release
-    sed -i "" "s|7.29234|0.0|g" ${model}.yaml #linux_train_eval_多卡_release
+    # sed -i "" "s|6.43611|0.0|g" ${model}.yaml #linux_train_单卡_release
+    # sed -i "" "s|6.62874|0.0|g" ${model}.yaml #linux_train_多卡_release
+    # sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval_release
+    # sed -i "" "s|16.04218|0.0|g" ${model}.yaml #linux_train_eval_单卡_release
+    # sed -i "" "s|7.29234|0.0|g" ${model}.yaml #linux_train_eval_多卡_release
 
-    sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}.yaml #bodong
-    sed -i "" 's|"="|"-"|g' ${model}.yaml
+    # sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}.yaml #bodong
+    # sed -i "" 's|"="|"-"|g' ${model}.yaml
     # sed -i "" "s|loss|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
     # sed -i "" "s|train_eval|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
 
@@ -542,20 +542,20 @@ elif [[ ${model} == 'TNT_small' ]]; then
     # sed -i "" "s|0.93207|13.37703|g" ${model}.yaml #linux_eval
     # sed -i "" "s|8.44204|13.37703|g" ${model}.yaml #linux_train_eval_单卡
 
-    sed -i "" "s|6.39329|0.0|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|6.50465|0.0|g" ${model}.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval
-    sed -i "" "s|8.44204|0.0|g" ${model}.yaml #linux_train_eval_单卡
-    sed -i "" "s|10.96941|0.0|g" ${model}.yaml #linux_train_eval_多卡
+    # sed -i "" "s|6.39329|0.0|g" ${model}.yaml #linux_train_单卡
+    # sed -i "" "s|6.50465|0.0|g" ${model}.yaml #linux_train_多卡
+    # sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval
+    # sed -i "" "s|8.44204|0.0|g" ${model}.yaml #linux_train_eval_单卡
+    # sed -i "" "s|10.96941|0.0|g" ${model}.yaml #linux_train_eval_多卡
 
-    sed -i "" "s|6.43611|0.0|g" ${model}.yaml #linux_train_单卡_release
-    sed -i "" "s|6.62874|0.0|g" ${model}.yaml #linux_train_多卡_release
-    sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval_release
-    sed -i "" "s|16.04218|0.0|g" ${model}.yaml #linux_train_eval_单卡_release
-    sed -i "" "s|7.29234|0.0|g" ${model}.yaml #linux_train_eval_多卡_release
+    # sed -i "" "s|6.43611|0.0|g" ${model}.yaml #linux_train_单卡_release
+    # sed -i "" "s|6.62874|0.0|g" ${model}.yaml #linux_train_多卡_release
+    # sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval_release
+    # sed -i "" "s|16.04218|0.0|g" ${model}.yaml #linux_train_eval_单卡_release
+    # sed -i "" "s|7.29234|0.0|g" ${model}.yaml #linux_train_eval_多卡_release
 
-    sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}.yaml #bodong
-    sed -i "" 's|"="|"-"|g' ${model}.yaml
+    # sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}.yaml #bodong
+    # sed -i "" 's|"="|"-"|g' ${model}.yaml
     # sed -i "" "s|loss|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
     # sed -i "" "s|train_eval|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
 
@@ -581,17 +581,17 @@ elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
     # sed -i "" "s|0.93207|273455638.816|g" ${model}.yaml #linux_eval
     # sed -i "" "s|8.44204|273455638.816|g" ${model}.yaml #linux_train_eval_单卡
 
-    sed -i "" "s|6.39329|0.0|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|6.50465|0.0|g" ${model}.yaml #linux_train_多卡
-    sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval
-    sed -i "" "s|8.44204|0.0|g" ${model}.yaml #linux_train_eval_单卡
-    sed -i "" "s|10.96941|0.0|g" ${model}.yaml #linux_train_eval_多卡
+    # sed -i "" "s|6.39329|0.0|g" ${model}.yaml #linux_train_单卡
+    # sed -i "" "s|6.50465|0.0|g" ${model}.yaml #linux_train_多卡
+    # sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval
+    # sed -i "" "s|8.44204|0.0|g" ${model}.yaml #linux_train_eval_单卡
+    # sed -i "" "s|10.96941|0.0|g" ${model}.yaml #linux_train_eval_多卡
 
-    sed -i "" "s|6.43611|0.0|g" ${model}.yaml #linux_train_单卡_release
-    sed -i "" "s|6.62874|0.0|g" ${model}.yaml #linux_train_多卡_release
-    sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval_release
-    sed -i "" "s|16.04218|0.0|g" ${model}.yaml #linux_train_eval_单卡_release
-    sed -i "" "s|7.29234|0.0|g" ${model}.yaml #linux_train_eval_多卡_release
+    # sed -i "" "s|6.43611|0.0|g" ${model}.yaml #linux_train_单卡_release
+    # sed -i "" "s|6.62874|0.0|g" ${model}.yaml #linux_train_多卡_release
+    # sed -i "" "s|0.93207|0.0|g" ${model}.yaml #linux_eval_release
+    # sed -i "" "s|16.04218|0.0|g" ${model}.yaml #linux_train_eval_单卡_release
+    # sed -i "" "s|7.29234|0.0|g" ${model}.yaml #linux_train_eval_多卡_release
 
     # sed -i "" "s|loss|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
     # sed -i "" "s|train_eval|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真

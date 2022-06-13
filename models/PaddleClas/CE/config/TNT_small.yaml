@@ -87,17 +87,17 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu1
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.1
+        kpi_base: 6.39329
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.10001
+        kpi_base: 8.44204
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -110,17 +110,17 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu2
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.1
+        kpi_base: 6.50465
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.10001
+        kpi_base: 10.96941
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -133,17 +133,17 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu1
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.1
+        kpi_base: 6.43611
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.10001
+        kpi_base: 16.04218
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -156,17 +156,17 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu2
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.1
+        kpi_base: 6.62874
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.10001
+        kpi_base: 7.29234
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -182,9 +182,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_train.log
   -
@@ -198,9 +198,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_train.log
   -
@@ -214,9 +214,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_cpu.log
 
@@ -229,10 +229,10 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml eval_linux
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.10001
+        kpi_base: 0.93207
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -248,9 +248,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_eval.log
   -
@@ -264,9 +264,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_eval.log
 
@@ -283,9 +283,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_infer.log
   -
@@ -299,9 +299,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_infer.log
   -
@@ -315,9 +315,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_infer.log
 
@@ -333,9 +333,9 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_predict.log
   -
@@ -349,9 +349,9 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_predict.log
   -
@@ -365,8 +365,8 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_predict.log
