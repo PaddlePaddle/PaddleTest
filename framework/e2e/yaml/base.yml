@@ -2033,6 +2033,22 @@ less_equal_base:
     api_name: "paddle.less_equal"
     inputs:
       x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[2.0, 1.0, -3.5], [-2.7, 1.5, 3], [0, 4.1, 8.6]]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[-2.0, 1.1, -3.5], [-2.5, 1.5, 3.5], [0.5, 4.2, 8.3]]
+
+less_equal_0:
+  desc: "逐元素地返回 x<=y 的逻辑值，相同位置前者输入小于等于后者输入则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.less_equal"
+    inputs:
+      x:
         random: true
         type: "Tensor"
         dtype: "float32"
@@ -2045,8 +2061,60 @@ less_equal_base:
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
 
+less_equal_1:
+  desc: "逐元素地返回 x<=y 的逻辑值，相同位置前者输入小于等于后者输入则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.less_equal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 1, 3]
+        range: [ -10, 10]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -10, 10]
+
+less_equal_2:
+  desc: "逐元素地返回 x<=y 的逻辑值，相同位置前者输入小于等于后者输入则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.less_equal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2]
+        range: [ -10, 10]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2]
+        range: [ -10, 10]
+
 less_than_base:
-  desc: "逐元素地返回 x<y 的逻辑值，相同位置前者输入小于等于后者输入则返回True，否则返回False"
+  desc: "逐元素地返回 x<y 的逻辑值，相同位置前者输入小于后者输入则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.less_than"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[2.0, 1.0, -3.5], [-2.7, 1.5, 3], [0, 4.1, 8.6]]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[-2.0, 1.1, -3.5], [-2.5, 1.5, 3.5], [0.5, 4.2, 8.3]]
+
+less_than_0:
+  desc: "逐元素地返回 x<y 的逻辑值，相同位置前者输入小于后者输入则返回True，否则返回False"
   paddle:
     api_name: "paddle.less_than"
     inputs:
@@ -2061,6 +2129,42 @@ less_than_base:
         type: "Tensor"
         dtype: "float32"
         shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+
+less_than_1:
+  desc: "逐元素地返回 x<y 的逻辑值，相同位置前者输入小于后者输入则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.less_than"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 1, 3]
+        range: [ -10, 10]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -10, 10]
+
+less_than_2:
+  desc: "逐元素地返回 x<y 的逻辑值，相同位置前者输入小于后者输入则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.less_than"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2]
+        range: [ -10, 10]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2]
         range: [ -10, 10]
 
 lgamma_base:
@@ -2085,10 +2189,78 @@ log_base:
         type: "Tensor"
         dtype: "float32"
         shape: [2, 3, 4, 4]
+        range: [ 0.001, 10]
+
+log_0:
+  desc: "Log激活函数(计算自然对数)"
+  paddle:
+    api_name: "paddle.log"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        value: [0]
+
+log_1:
+  desc: "Log激活函数(计算自然对数)"
+  paddle:
+    api_name: "paddle.log"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        value: [-3]
+
+log_2:
+  desc: "Log激活函数(计算自然对数)"
+  paddle:
+    api_name: "paddle.log"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
         range: [ -1, 10]
 
 log10_base:
-  desc: "Log10激活函数（计算底为10的对数）"
+  desc: "Log10激活函数(计算底为10对数)"
+  paddle:
+    api_name: "paddle.log10"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0.001, 10]
+
+log10_0:
+  desc: "Log10激活函数(计算底为10对数)"
+  paddle:
+    api_name: "paddle.log10"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        value: [0]
+
+log10_1:
+  desc: "Log10激活函数(计算底为10对数)"
+  paddle:
+    api_name: "paddle.log10"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        value: [-3]
+
+log10_2:
+  desc: "Log10激活函数(计算底为10对数)"
   paddle:
     api_name: "paddle.log10"
     inputs:
@@ -2100,7 +2272,41 @@ log10_base:
         range: [ -1, 10]
 
 log2_base:
-  desc: "Log2激活函数（计算底为2的对数）"
+  desc: "Log2激活函数(计算底为2对数)"
+  paddle:
+    api_name: "paddle.log2"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ 0.001, 10]
+
+log2_0:
+  desc: "Log2激活函数(计算底为2对数)"
+  paddle:
+    api_name: "paddle.log2"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        value: [0]
+
+log2_1:
+  desc: "Log2激活函数(计算底为2对数)"
+  paddle:
+    api_name: "paddle.log2"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        value: [-3]
+
+log2_2:
+  desc: "Log2激活函数(计算底为2对数)"
   paddle:
     api_name: "paddle.log2"
     inputs:
@@ -2129,6 +2335,58 @@ logical_and_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+logical_and_0:
+  desc: "逐元素的对 x 和 y 进行逻辑与运算"
+  paddle:
+    api_name: "paddle.logical_and"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "bool"
+        value: [True]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "bool"
+        value: [True, False, True, False]
+
+logical_and_1:
+  desc: "逐元素的对 x 和 y 进行逻辑与运算"
+  paddle:
+    api_name: "paddle.logical_and"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [1, 2, 1, 3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+
+logical_and_2:
+  desc: "逐元素的对 x 和 y 进行逻辑与运算"
+  paddle:
+    api_name: "paddle.logical_and"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [1, 2]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [2, 2]
+        range: [ -1, 1]
+
 logical_not_base:
   desc: "逐元素的对 X Tensor进行逻辑非运算"
   paddle:
@@ -2138,6 +2396,18 @@ logical_not_base:
         random: true
         type: "Tensor"
         dtype: "int32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
+logical_not_0:
+  desc: "逐元素的对 X Tensor进行逻辑非运算"
+  paddle:
+    api_name: "paddle.logical_not"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
@@ -2159,6 +2429,58 @@ logical_or_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+logical_or_0:
+  desc: "逐元素的对 x 和 y 进行逻辑或运算"
+  paddle:
+    api_name: "paddle.logical_or"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "bool"
+        value: [True]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "bool"
+        value: [True, False, True, False]
+
+logical_or_1:
+  desc: "逐元素的对 x 和 y 进行逻辑或运算"
+  paddle:
+    api_name: "paddle.logical_or"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [1, 2, 1, 3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+
+logical_or_2:
+  desc: "逐元素的对 x 和 y 进行逻辑或运算"
+  paddle:
+    api_name: "paddle.logical_or"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [1, 2]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [2, 2]
+        range: [ -1, 1]
+
 logical_xor_base:
   desc: "逐元素的对 X 和 Y 进行逻辑异或运算"
   paddle:
@@ -2175,6 +2497,58 @@ logical_xor_base:
         type: "Tensor"
         dtype: "int32"
         shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
+logical_xor_0:
+  desc: "逐元素的对 x 和 y 进行逻辑异或运算"
+  paddle:
+    api_name: "paddle.logical_xor"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "bool"
+        value: [True]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "bool"
+        value: [True, False, True, False]
+
+logical_xor_1:
+  desc: "逐元素的对 x 和 y 进行逻辑异或运算"
+  paddle:
+    api_name: "paddle.logical_xor"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [1, 2, 1, 3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+
+logical_xor_2:
+  desc: "逐元素的对 x 和 y 进行逻辑异或运算"
+  paddle:
+    api_name: "paddle.logical_xor"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [1, 2]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [2, 2]
         range: [ -1, 1]
 
 bitwise_and_base:
@@ -2255,6 +2629,64 @@ logsumexp_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+logsumexp_0:
+  desc: "沿着参数``axis`` 计算 x 的以e为底的指数的和的自然对数"
+  paddle:
+    api_name: "paddle.logsumexp"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 2
+
+logsumexp_1:
+  desc: "沿着参数``axis`` 计算 x 的以e为底的指数的和的自然对数"
+  paddle:
+    api_name: "paddle.logsumexp"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: [0, 1]
+
+logsumexp_2:
+  desc: "沿着参数``axis`` 计算 x 的以e为底的指数的和的自然对数"
+  paddle:
+    api_name: "paddle.logsumexp"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 0
+      keepdim: True
+
+logsumexp_3:
+  desc: "沿着参数``axis`` 计算 x 的以e为底的指数的和的自然对数"
+  paddle:
+    api_name: "paddle.logsumexp"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: [0, 1]
+      keepdim: True
+
 max_base:
   desc: "对指定维度上的Tensor元素求最大值运算，并输出相应的计算结果"
   paddle:
@@ -2266,6 +2698,65 @@ max_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+
+max_0:
+  desc: "对指定维度上的Tensor元素求最大值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.max"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -2
+
+max_1:
+  desc: "对指定维度上的Tensor元素求最大值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.max"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -2
+      keepdim: True
+
+max_2:
+  desc: "对指定维度上的Tensor元素求最大值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.max"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 1
+      keepdim: False
+
+max_3:
+  desc: "对指定维度上的Tensor元素求最大值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.max"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: [-2, 1]
+      keepdim: False
 
 maximum_base:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更大的元素保存到返回结果中"
@@ -2285,6 +2776,42 @@ maximum_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+maximum_0:
+  desc: "逐元素对比输入的两个Tensor，并且把各个位置更大的元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.maximum"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 1, 3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+
+maximum_1:
+  desc: "逐元素对比输入的两个Tensor，并且把各个位置更大的元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.maximum"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2]
+        range: [ -1, 1]
+
 mean_base:
   desc: "沿参数 axis 计算 x 的平均值"
   paddle:
@@ -2297,6 +2824,78 @@ mean_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+mean_0:
+  desc: "沿参数 axis 计算 x 的平均值"
+  paddle:
+    api_name: "paddle.mean"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -2
+
+mean_1:
+  desc: "沿参数 axis 计算 x 的平均值"
+  paddle:
+    api_name: "paddle.mean"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: [0, 1]
+
+mean_2:
+  desc: "沿参数 axis 计算 x 的平均值"
+  paddle:
+    api_name: "paddle.mean"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: [0, 1, 2]
+
+mean_3:
+  desc: "沿参数 axis 计算 x 的平均值"
+  paddle:
+    api_name: "paddle.mean"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -2
+      keepdims: False
+
+mean_4:
+  desc: "沿参数 axis 计算 x 的平均值"
+  paddle:
+    api_name: "paddle.mean"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 1
+      keepdims: True
+
 median_base:
   desc: "沿给定的轴 axis 计算 x 中元素的中位数"
   paddle:
@@ -2308,6 +2907,9 @@ median_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+    params:
+      axis: 0
+      keepdims: False
 
 median_0:
   desc: "沿给定的轴 axis 计算 x 中元素的中位数"
@@ -2323,6 +2925,61 @@ median_0:
     params:
       axis: 1
 
+median_1:
+  desc: "沿给定的轴 axis 计算 x 中元素的中位数"
+  paddle:
+    api_name: "paddle.median"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 1
+      keepdims: True
+
+median_2:
+  desc: "沿给定的轴 axis 计算 x 中元素的中位数"
+  paddle:
+    api_name: "paddle.median"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -2
+      keepdims: True
+
+median_3:
+  desc: "沿给定的轴 axis 计算 x 中元素的中位数"
+  paddle:
+    api_name: "paddle.median"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[2, 3, 1, 1], [10, 1, 15, float("nan")], [4, 8, float("nan"), 7]]
+    params:
+      axis: 0
+
+median_4:
+  desc: "沿给定的轴 axis 计算 x 中元素的中位数"
+  paddle:
+    api_name: "paddle.median"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+
 min_base:
   desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
   paddle:
@@ -2335,7 +2992,118 @@ min_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+min_0:
+  desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.min"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 1
+      keepdims: False
+
+min_1:
+  desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.min"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -2
+
+min_2:
+  desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.min"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -2
+      keepdims: True
+
+min_3:
+  desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.min"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: [-2, 1]
+      keepdims: False
+
 minimum_base:
+  desc: "逐元素对比输入的两个Tensor，并且把各个位置更小的元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.minimum"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [1]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [2, -2, 0, 3]
+
+minimum_0:
+  desc: "逐元素对比输入的两个Tensor，并且把各个位置更小的元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.minimum"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 1, 3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+
+minimum_1:
+  desc: "逐元素对比输入的两个Tensor，并且把各个位置更小的元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.minimum"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2]
+        range: [ -1, 1]
+
+minimum_2:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更小的元素保存到返回结果中"
   paddle:
     api_name: "paddle.minimum"
@@ -2371,6 +3139,96 @@ mm_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+mm_0:
+  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
+  paddle:
+    api_name: "paddle.mm"
+    inputs:
+      input:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 1, 2]
+        range: [ -1, 1]
+      mat2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2, 3]
+        range: [ -1, 1]
+
+mm_1:
+  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
+  paddle:
+    api_name: "paddle.mm"
+    inputs:
+      input:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -1, 1]
+      mat2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 2]
+        range: [ -1, 1]
+
+mm_2:
+  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
+  paddle:
+    api_name: "paddle.mm"
+    inputs:
+      input:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -1, 1]
+      mat2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 5]
+        range: [ -1, 1]
+
+mm_3:
+  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
+  paddle:
+    api_name: "paddle.mm"
+    inputs:
+      input:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4]
+        range: [ -1, 1]
+      mat2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4]
+        range: [ -1, 1]
+
+mm_4:
+  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
+  paddle:
+    api_name: "paddle.mm"
+    inputs:
+      input:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [7]
+        range: [ -1, 1]
+      mat2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [7]
+        range: [ -1, 1]
+
 ## 测试框架暂不支持
 #multiplex:
 #  desc: "根据给定的index参数，从每个输入Tensor中选择特定行构造输出Tensor"
@@ -2385,6 +3243,58 @@ mm_base:
 #        range: [ -1, 1]
 
 multiply_base:
+  desc: "逐元素相乘算子，输入 x 与输入 y 逐元素相乘，并将各个位置的输出元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.multiply"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        value: [2.0]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        value: [1, -1, 4, 5]
+
+multiply_0:
+  desc: "逐元素相乘算子，输入 x 与输入 y 逐元素相乘，并将各个位置的输出元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.multiply"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 1, 3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+
+multiply_1:
+  desc: "逐元素相乘算子，输入 x 与输入 y 逐元素相乘，并将各个位置的输出元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.multiply"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 2]
+        range: [ -1, 1]
+
+multiply_2:
   desc: "逐元素相乘算子，输入 x 与输入 y 逐元素相乘，并将各个位置的输出元素保存到返回结果中"
   paddle:
     api_name: "paddle.multiply"
@@ -2414,7 +3324,114 @@ neg_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+neg_0:
+  desc: "计算输入 x 的相反数并返回"
+  paddle:
+    api_name: "paddle.neg"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 3, 4, 4]
+        range: [ -5, 5]
+
+neg_1:
+  desc: "计算输入 x 的相反数并返回"
+  paddle:
+    api_name: "paddle.neg"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[0, 0, 0], [0, 0, 0]]
+
 not_equal_base:
+  desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.not_equal"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "int32"
+        value: [[2.0, 1.0, -3.5], [-2.7, 1.5, 3], [0, 4.1, 8.6]]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "int32"
+        value: [[-2.0, 1.1, -3.5], [-2.5, 1.5, 3.5], [0.5, 4.2, 8.3]]
+
+not_equal_0:
+  desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.not_equal"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "int32"
+        value: [1]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "int32"
+        value: [1, -1, 2, -4]
+
+not_equal_1:
+  desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.not_equal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [1, 2, 1, 3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [1, 2, 3]
+        range: [ -1, 1]
+
+not_equal_2:
+  desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.not_equal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [1, 2]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 2]
+        range: [ -1, 1]
+
+not_equal_3:
+  desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
+  paddle:
+    api_name: "paddle.not_equal"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "int32"
+        value: [[True, False, True], [True, False, True], [True, False, True]]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "int32"
+        value: [True, False, True]
+
+not_equal_4:
   desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
   paddle:
     api_name: "paddle.not_equal"
@@ -2450,6 +3467,59 @@ pow_base:
         shape: [2, 3, 4, 4]
         range: [ -2, 6]
 
+pow_0:
+  desc: "指数算子，逐元素计算 x 的 y 次幂指数算子，逐元素计算 x 的 y 次幂"
+  paddle:
+    api_name: "paddle.pow"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 3, 4, 4]
+        range: [ -2, 6]
+
+pow_1:
+  desc: "指数算子，逐元素计算 x 的 y 次幂指数算子，逐元素计算 x 的 y 次幂"
+  paddle:
+    api_name: "paddle.pow"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [0]
+
+pow_2:
+  desc: "指数算子，逐元素计算 x 的 y 次幂指数算子，逐元素计算 x 的 y 次幂"
+  paddle:
+    api_name: "paddle.pow"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 1, 3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 2, 3]
+        range: [ -2, 6]
+
 prod_base:
   desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
   paddle:
@@ -2476,6 +3546,50 @@ prod_0:
     params:
       axis: 1
       keepdim: False
+
+prod_1:
+  desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.prod"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -1
+
+prod_2:
+  desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.prod"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 1
+      keepdim: True
+
+prod_3:
+  desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.prod"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -2
+      keepdim: True
 
 reciprocal_base:
   desc: "对输入Tensor取倒数"
@@ -2525,7 +3639,137 @@ rsqrt_0:
         shape: [2, 3, 4, 4]
         range: [ -1, -2]
 
+rsqrt_1:
+  desc: "rsqrt激活函数"
+  paddle:
+    api_name: "paddle.rsqrt"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        value: [0, 0, 0, 0]
+
 scale_base:
+  desc: "对输入Tensor进行缩放和偏置"
+  paddle:
+    api_name: "paddle.scale"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      scale: 1.0
+      bias: 0.0
+      bias_after_scale: True
+      act: None
+
+scale_0:
+  desc: "对输入Tensor进行缩放和偏置"
+  paddle:
+    api_name: "paddle.scale"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      scale: 2.0
+      bias: 4.0
+      bias_after_scale: True
+      act: None
+
+scale_1:
+  desc: "对输入Tensor进行缩放和偏置"
+  paddle:
+    api_name: "paddle.scale"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      scale: 2.0
+      bias: 4.0
+      bias_after_scale: False
+      act: None
+
+scale_2:
+  desc: "对输入Tensor进行缩放和偏置"
+  paddle:
+    api_name: "paddle.scale"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      scale: 2.0
+      bias: 4.0
+      bias_after_scale: True
+      act: 'tanh'
+
+scale_3:
+  desc: "对输入Tensor进行缩放和偏置"
+  paddle:
+    api_name: "paddle.scale"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      scale: 2.0
+      bias: 4.0
+      bias_after_scale: True
+      act: 'softmax'
+
+scale_4:
+  desc: "对输入Tensor进行缩放和偏置"
+  paddle:
+    api_name: "paddle.scale"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      scale: 2.0
+      bias: 4.0
+      bias_after_scale: True
+      act: 'sigmoid'
+
+scale_5:
+  desc: "对输入Tensor进行缩放和偏置"
+  paddle:
+    api_name: "paddle.scale"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      scale: 2.0
+      bias: 4.0
+      bias_after_scale: True
+      act: 'relu'
+
+scale_6:
   desc: "对输入Tensor进行缩放和偏置"
   paddle:
     api_name: "paddle.scale"
@@ -2561,6 +3805,18 @@ sin_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+sin_0:
+  desc: "计算输入的正弦值"
+  paddle:
+    api_name: "paddle.sin"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+
 sinh_base:
   desc: "双曲正弦函数"
   paddle:
@@ -2572,6 +3828,18 @@ sinh_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+
+sinh_0:
+  desc: "双曲正弦函数"
+  paddle:
+    api_name: "paddle.sinh"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
 
 sqrt_base:
   desc: "计算输入的算数平方根"
@@ -2585,6 +3853,17 @@ sqrt_base:
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
 
+sqrt_0:
+  desc: "计算输入的算数平方根"
+  paddle:
+    api_name: "paddle.sqrt"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [0, 0, 0, 0]
+
 square_base:
   desc: "对输入参数``x``进行逐元素取平方运算"
   paddle:
@@ -2597,7 +3876,78 @@ square_base:
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
 
+square_0:
+  desc: "对输入参数``x``进行逐元素取平方运算"
+  paddle:
+    api_name: "paddle.square"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [0, 0, 0, 0]
+
 stanh_base:
+  desc: "stanh 激活函数"
+  paddle:
+    api_name: "paddle.stanh"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      scale_a: 0.67
+      scale_b: 1.72
+
+stanh_0:
+  desc: "stanh 激活函数"
+  paddle:
+    api_name: "paddle.stanh"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+    params:
+      scale_a: 0.67
+      scale_b: 1.72
+
+stanh_1:
+  desc: "stanh 激活函数"
+  paddle:
+    api_name: "paddle.stanh"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      scale_a: 1.43
+      scale_b: 4.56
+
+stanh_2:
+  desc: "stanh 激活函数"
+  paddle:
+    api_name: "paddle.stanh"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      scale_a: 6.42
+      scale_b: 3.58
+
+stanh_3:
   desc: "stanh 激活函数"
   paddle:
     api_name: "paddle.stanh"
@@ -2610,6 +3960,70 @@ stanh_base:
         range: [ -1, 1]
 
 std_base:
+  desc: "沿给定的轴 axis 计算 x 中元素的标准差"
+  paddle:
+    api_name: "paddle.std"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 0
+      unbiased: True
+      keepdim: False
+
+std_0:
+  desc: "沿给定的轴 axis 计算 x 中元素的标准差"
+  paddle:
+    api_name: "paddle.std"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -1
+      unbiased: True
+      keepdim: False
+
+std_1:
+  desc: "沿给定的轴 axis 计算 x 中元素的标准差"
+  paddle:
+    api_name: "paddle.std"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 2
+      unbiased: False
+      keepdim: False
+
+std_2:
+  desc: "沿给定的轴 axis 计算 x 中元素的标准差"
+  paddle:
+    api_name: "paddle.std"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 0
+      unbiased: False
+      keepdim: True
+
+std_3:
   desc: "沿给定的轴 axis 计算 x 中元素的标准差"
   paddle:
     api_name: "paddle.std"
@@ -2639,6 +4053,38 @@ subtract_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+subtract_0:
+  desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.subtract"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [2, nan, 5]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [1, 4, nan]
+
+subtract_1:
+  desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
+  paddle:
+    api_name: "paddle.subtract"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [2, -inf, 5]
+      y:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [1, 4, inf]
+
 sum_base:
   desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
   paddle:
@@ -2650,6 +4096,51 @@ sum_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+
+sum_0:
+  desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.sum"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 1
+      keepdim: False
+
+sum_1:
+  desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.sum"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: [1, 2]
+      keepdim: False
+
+sum_2:
+  desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.sum"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 1
+      keepdim: True
 
 tan_base:
   desc: "三角函数tangent"
@@ -2675,6 +4166,41 @@ tanh_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+tanh_0:
+  desc: "tanh 激活函数"
+  paddle:
+    api_name: "paddle.tanh"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -100, -1]
+
+tanh_1:
+  desc: "tanh 激活函数"
+  paddle:
+    api_name: "paddle.tanh"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+
+tanh_2:
+  desc: "tanh 激活函数"
+  paddle:
+    api_name: "paddle.tanh"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [0, 0, 0, 0]
+
 tanh__base:
   desc: "tanh 激活函数, 对输入 x 采用 Inplace 策略"
   paddle:
@@ -2686,6 +4212,41 @@ tanh__base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+
+tanh__0:
+  desc: "tanh 激活函数, 对输入 x 采用 Inplace 策略"
+  paddle:
+    api_name: "paddle.tanh_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -100, -1]
+
+tanh__1:
+  desc: "tanh 激活函数, 对输入 x 采用 Inplace 策略"
+  paddle:
+    api_name: "paddle.tanh_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+
+tanh__2:
+  desc: "tanh 激活函数, 对输入 x 采用 Inplace 策略"
+  paddle:
+    api_name: "paddle.tanh_"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [0, 0, 0, 0]
 
 trace_base:
   desc: "计算输入 Tensor 在指定平面上的对角线元素之和，并输出相应的计算结果"
@@ -2699,6 +4260,102 @@ trace_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+trace_0:
+  desc: "计算输入 Tensor 在指定平面上的对角线元素之和，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.trace"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4]
+        range: [ -1, 1]
+    params:
+      offset: 0
+      axis1: 0
+      axis2: 1
+
+trace_1:
+  desc: "计算输入 Tensor 在指定平面上的对角线元素之和，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.trace"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4]
+        range: [ -1, 1]
+    params:
+      offset: -1
+      axis1: 0
+      axis2: 1
+
+trace_2:
+  desc: "计算输入 Tensor 在指定平面上的对角线元素之和，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.trace"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4]
+        range: [ -1, 1]
+    params:
+      offset: 1
+      axis1: 0
+      axis2: 1
+
+trace_3:
+  desc: "计算输入 Tensor 在指定平面上的对角线元素之和，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.trace"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2]
+        range: [ -1, 1]
+    params:
+      offset: 0
+      axis1: -3
+      axis2: -2
+
+trace_4:
+  desc: "计算输入 Tensor 在指定平面上的对角线元素之和，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.trace"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2]
+        range: [ -1, 1]
+    params:
+      offset: -1
+      axis1: 2
+      axis2: -2
+
+trace_5:
+  desc: "计算输入 Tensor 在指定平面上的对角线元素之和，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.trace"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 2]
+        range: [ -1, 1]
+    params:
+      offset: 1
+      axis1: 0
+      axis2: 2
+
 var_base:
   desc: "沿给定的轴 axis 计算 x 中元素的方差"
   paddle:
@@ -2711,6 +4368,70 @@ var_base:
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
 
+var_0:
+  desc: "沿给定的轴 axis 计算 x 中元素的方差"
+  paddle:
+    api_name: "paddle.var"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 0
+      unbiased: True
+      keepdim: False
+
+var_1:
+  desc: "沿给定的轴 axis 计算 x 中元素的方差"
+  paddle:
+    api_name: "paddle.var"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 2
+      unbiased: False
+      keepdim: False
+
+var_2:
+  desc: "沿给定的轴 axis 计算 x 中元素的方差"
+  paddle:
+    api_name: "paddle.var"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: 0
+      unbiased: True
+      keepdim: True
+
+var_3:
+  desc: "沿给定的轴 axis 计算 x 中元素的方差"
+  paddle:
+    api_name: "paddle.var"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis: -2
+      unbiased: True
+      keepdim: False
+
 diagonal_base:
   desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
   paddle:
@@ -2722,6 +4443,91 @@ diagonal_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+
+diagonal_0:
+  desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
+  paddle:
+    api_name: "paddle.diagonal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "int32"
+        shape: [2, 3, 4, 4]
+        range: [ -5, 5]
+
+diagonal_1:
+  desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
+  paddle:
+    api_name: "paddle.diagonal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -5, 5]
+    params:
+      offset: 1
+
+diagonal_2:
+  desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
+  paddle:
+    api_name: "paddle.diagonal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -5, 5]
+    params:
+      offset: -1
+
+diagonal_3:
+  desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
+  paddle:
+    api_name: "paddle.diagonal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [6, 6, 6, 4, 4]
+        range: [ -5, 5]
+    params:
+      axis1: 0
+      axis2: 3
+
+diagonal_4:
+  desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
+  paddle:
+    api_name: "paddle.diagonal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [6, 6, 6, 4, 4]
+        range: [ -5, 5]
+    params:
+      axis1: 3
+      axis2: 4
+
+diagonal_5:
+  desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
+  paddle:
+    api_name: "paddle.diagonal"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [6, 6, 6, 4, 4]
+        range: [ -5, 5]
+    params:
+      axis1: -1
+      axis2: 2
 
 trunc_base:
   desc: "将输入 Tensor 的小数部分置0，返回置0后的 Tensor ，如果输入 Tensor 的数据类型为整数，则不做处理"
