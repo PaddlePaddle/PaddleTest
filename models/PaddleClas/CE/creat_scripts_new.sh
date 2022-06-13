@@ -18,8 +18,8 @@
 # ResNet50	16.04218	0	linux单卡训练时 评估_release
 # ResNet50	7.29234	0	linux多卡训练时 评估_release
 
-# python analysis_html.py #搜集value值  develop 和 release分开统计   
-#     如何解析？？？现在能把报告转成array   
+# python analysis_html.py #搜集value值  develop 和 release分开统计
+#     如何解析？？？现在能把报告转成array
 #     从网页解析判断合规，先自己生成后解析   done
 
 # models_list_cls_testP0 弄成循环可配置化  done
@@ -108,7 +108,7 @@ do
                         do
                         # echo ${arr_base[${num_lisrt_tmp}]}
                         # echo ${arr_target[${num_lisrt_tmp}]}
-                        sed -i "" "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model}.yaml 
+                        sed -i "" "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model}.yaml
                         #mac命令只替换第一个，linux有所区别需要注意
                         # sed -i "" "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model}.yaml #linux_train_单卡
 
