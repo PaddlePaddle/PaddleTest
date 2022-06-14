@@ -43,7 +43,7 @@ TRAIN: # 训练步骤
       acc:
         latest: True
         kpi_base: 0.822318
-        threshold: 0.0000001
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -480,7 +480,7 @@ INFER:
       acc:
         latest: True
         kpi_base: 0.891493
-        threshold: 0.0000001
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None

@@ -419,7 +419,7 @@ INFER:
       auc:
         latest: True
         kpi_base: 0.798807
-        threshold: 0.005
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -447,7 +447,7 @@ INFER:
       auc:
         latest: True
         kpi_base: 0.795229
-        threshold: 0.02
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -499,7 +499,7 @@ INFER:
       auc:
         latest: True
         kpi_base: 0.795229
-        threshold: 0.02
+        threshold: 0.002
         actived: True
         evaluation: "+"
         unit_repr: None

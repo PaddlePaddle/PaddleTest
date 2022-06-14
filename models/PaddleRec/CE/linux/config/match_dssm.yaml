@@ -43,7 +43,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.38071522
-        threshold: 0.00000001
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -424,7 +424,7 @@ INFER:
       pnr:
         latest: True
         kpi_base: 14.14537902
-        threshold: 0.00000001
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
