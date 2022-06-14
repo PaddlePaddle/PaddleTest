@@ -4,6 +4,12 @@
 """
 tools
 """
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.dirname(os.getcwd())))
+sys.path.append(os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "utils"))
+
 import numpy as np
 import paddle
 import torch
