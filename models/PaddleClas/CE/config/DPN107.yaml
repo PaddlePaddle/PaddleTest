@@ -231,7 +231,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 8.00598
+        kpi_base: 7.14157
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -247,7 +247,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 7.14157
+        kpi_base: 8.00598
         threshold: 0.00001
         actived: True
         evaluation: "-"
