@@ -1,5 +1,5 @@
 MODEL: "cyclegan_horse2zebra" # 模型名
-PRIORITY: P0
+PRIORITY: P0,convergence_cyclegan_horse2zebra,cyclegan_horse2zebra
 GIT:
   addr: $REPO_PaddleGAN
   path: $ROOT_PATH/PaddleGAN
@@ -52,8 +52,33 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleGAN_train_cpu.sh configs/cyclegan_horse2zebra.yaml
+  -
+    tag: linux_convergence_test
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleGAN_convergence_develop.sh configs/cyclegan_horse2zebra.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/cyclegan_horse2zebra.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/cyclegan_horse2zebra_convergence.log
   -
     tag: train_linux_gpu1
     priority: P0
@@ -64,7 +89,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       G_idt_A_loss:
         latest: True
-        kpi_base: 8462.812
+        kpi_base: 2.856
         threshold: 1.0
         actived: True
         evaluation: "-"
@@ -80,7 +105,39 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       G_idt_A_loss:
         latest: True
-        kpi_base: 9151.643
+        kpi_base: 2.874
+        threshold: 1.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/cyclegan_horse2zebra_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/cyclegan_horse2zebra.yaml train_linux_gpu1
+    kpis: #kpi指标
+      G_idt_A_loss:
+        latest: True
+        kpi_base: 2.856
+        threshold: 1.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/cyclegan_horse2zebra_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/cyclegan_horse2zebra.yaml train_linux_gpu2
+    kpis: #kpi指标
+      G_idt_A_loss:
+        latest: True
+        kpi_base: 2.874
         threshold: 1.0
         actived: True
         evaluation: "-"

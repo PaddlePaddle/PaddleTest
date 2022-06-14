@@ -286,19 +286,24 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             sed -i 's/learning_rate:/learning_rate: 0.0001 #/g' $line #将 学习率调低为0.0001
             echo "change lr"
         fi
-        sed -i 's/RandCropImage/ResizeImage/g' $line
-        sed -ie '/RandFlipImage/d' $line
-        sed -ie '/flip_code/d' $line
+        if  [[ ${line} =~ 'ViT' ]] || [[ ${line} =~ 'TNT_small' ]]; then
+            sed -i 's/0.1, 0.01, 0.001, 0.0001/0.05, 0.005, 0.0005, 0.00005/g' $line #调整学习率
+            echo "change lr"
+        fi
+
+        # sed -i 's/RandCropImage/ResizeImage/g' $line
+        # sed -ie '/RandFlipImage/d' $line
+        # sed -ie '/flip_code/d' $line
         # -o Global.eval_during_train=False  \
         python -m paddle.distributed.launch tools/train.py -c $line  \
-            -o Global.epochs=5  \
+            -o Global.epochs=2  \
             -o Global.seed=1234 \
             -o Global.output_dir=output \
             -o DataLoader.Train.loader.num_workers=0 \
             -o DataLoader.Train.sampler.shuffle=False  \
-            -o Global.eval_interval=5  \
-            -o Global.save_interval=5 \
-            -o DataLoader.Train.sampler.batch_size=4 \
+            -o Global.eval_interval=2  \
+            -o Global.save_interval=2 \
+            -o DataLoader.Train.sampler.batch_size=1 \
             > $log_path/train/${model}_2card.log 2>&1
     else
         if [[ ! ${line} =~ "fp16.yaml" ]]; then
@@ -352,14 +357,14 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     if [[ ${model_flag} =~ "CE" ]]; then
         rm -rf output #清空多卡cache
         python  tools/train.py -c $line  \
-            -o Global.epochs=5  \
+            -o Global.epochs=2  \
             -o Global.seed=1234 \
             -o Global.output_dir=output \
             -o DataLoader.Train.loader.num_workers=0 \
             -o DataLoader.Train.sampler.shuffle=False  \
-            -o Global.eval_interval=5  \
-            -o Global.save_interval=5 \
-            -o DataLoader.Train.sampler.batch_size=4  \
+            -o Global.eval_interval=2  \
+            -o Global.save_interval=2 \
+            -o DataLoader.Train.sampler.batch_size=1  \
             > $log_path/train/${model}_1card.log 2>&1
     # else  #取消CI单卡训练
     #    python tools/train.py  \

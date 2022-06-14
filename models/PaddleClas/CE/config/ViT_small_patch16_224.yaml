@@ -1,5 +1,5 @@
 MODEL: "ViT_small_patch16_224" # 模型名
-PRIORITY: P1
+PRIORITY: P1,convergence_ViT_small_patch16_224,ViT_small_patch16_224
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -52,8 +52,33 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml
+  -
+    tag: linux_convergence_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleClas_convergence_develop.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_convergence.log
   -
     tag: train_linux_gpu1
     priority: P1
@@ -62,17 +87,17 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu1
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.0
+        kpi_base: 11.33264
+        threshold:
         actived: True
         evaluation: "="
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.00001
+        kpi_base: 19.40664
+        threshold: 0.01
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -85,10 +110,63 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu2
     kpis: #kpi指标
-      exit_code:
+      loss:
+        latest: True
+        kpi_base: 7.46077
+        threshold: 0.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 8.57400
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu1
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.73698
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 14.7.24869.8.74698.792
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 14.87640
+        threshold: 0.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
         latest: True
         kpi_base: 0.0
-        threshold: 0.0
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -151,9 +229,25 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml eval_linux
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
         kpi_base: 0.0
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/ViT_small_patch16_224_eval.log
+  -
+    tag: eval_linux_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 19.40664
         threshold: 0.00001
         actived: True
         evaluation: "-"

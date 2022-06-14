@@ -1,5 +1,5 @@
 MODEL: "alt_gvt_small" # 模型名
-PRIORITY: P1
+PRIORITY: P1,convergence_alt_gvt_small,alt_gvt_small
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -52,8 +52,33 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml
+  -
+    tag: linux_convergence_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleClas_convergence_develop.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/alt_gvt_small_convergence.log
   -
     tag: train_linux_gpu1
     priority: P1
@@ -64,14 +89,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.27162
+        kpi_base: 6.53417
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.992
+        kpi_base: 7.26522
         threshold: 0.00001
         actived: True
         evaluation: "-"
@@ -87,8 +112,61 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.44887
+        kpi_base: 6.53717
         threshold: 0.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 7.18849
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/alt_gvt_small_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml train_linux_gpu1
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.59651
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 7.37787
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/alt_gvt_small_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.53953
+        threshold: 0.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 7.5097
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -153,7 +231,23 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 7.992
+        kpi_base: 7.37787
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/alt_gvt_small_eval.log
+  -
+    tag: eval_linux_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/Twins/alt_gvt_small.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 7.26522
         threshold: 0.00001
         actived: True
         evaluation: "-"

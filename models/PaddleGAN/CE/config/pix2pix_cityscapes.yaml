@@ -1,5 +1,5 @@
 MODEL: "pix2pix_cityscapes" # 模型名
-PRIORITY: P0
+PRIORITY: P0,convergence_pix2pix_cityscapes,pix2pix_cityscapes
 GIT:
   addr: $REPO_PaddleGAN
   path: $ROOT_PATH/PaddleGAN
@@ -52,8 +52,33 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleGAN_train_cpu.sh configs/pix2pix_cityscapes.yaml
+  -
+    tag: linux_convergence_test
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleGAN_convergence_develop.sh configs/pix2pix_cityscapes.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/pix2pix_cityscapes.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/pix2pix_cityscapes_convergence.log
   -
     tag: train_linux_gpu1
     priority: P0
@@ -64,7 +89,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       D_fake_loss:
         latest: True
-        kpi_base: 8462.812
+        kpi_base: 0.824
         threshold: 1.0
         actived: True
         evaluation: "-"
@@ -80,7 +105,39 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       D_fake_loss:
         latest: True
-        kpi_base: 9151.643
+        kpi_base: 0.519
+        threshold: 1.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/pix2pix_cityscapes_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/pix2pix_cityscapes.yaml train_linux_gpu1
+    kpis: #kpi指标
+      D_fake_loss:
+        latest: True
+        kpi_base: 0.824
+        threshold: 1.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/pix2pix_cityscapes_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh configs/pix2pix_cityscapes.yaml train_linux_gpu2
+    kpis: #kpi指标
+      D_fake_loss:
+        latest: True
+        kpi_base: 0.519
         threshold: 1.0
         actived: True
         evaluation: "-"
