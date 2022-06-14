@@ -30,8 +30,8 @@
 
 export base_model=ResNet50
 export base_priority=P0
-priority_all='P0 P1' #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
-branch='release develop'
+priority_all='P0 P1' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
+branch='develop release'  # develop release  #顺序不能反
 # read -p "Press enter to continue"  #卡一下
 
 echo base_model
@@ -59,10 +59,10 @@ do
 
             #记录一些特殊规则
             if [[ ${model} == 'HRNet_W18_C' ]]; then
-                sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}.yaml #bodong
+                sed -i "" "s|threshold: 0.0|threshold: 0.2 #|g" ${model}.yaml #bodong
                 sed -i "" 's|"="|"-"|g' ${model}.yaml
             elif [[ ${model} == 'LeViT_128S' ]]; then
-                sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model}.yaml #bodong
+                sed -i "" "s|threshold: 0.0|threshold: 0.2 #|g" ${model}.yaml #bodong
                 sed -i "" 's|"="|"-"|g' ${model}.yaml
                 # sed -i "" "s|loss|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
                 # sed -i "" "s|train_eval|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
@@ -76,6 +76,7 @@ do
             #     sed -i "" 's|"="|"-"|g' ${model}.yaml
                 # sed -i "" "s|loss|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
                 # sed -i "" "s|train_eval|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
+                #暂时监控linux通过改学习率不出nan
             # elif [[ ${model} == 'ViT_small_patch16_224' ]]; then
             #     sed -i "" "s|loss|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
                 # sed -i "" "s|train_eval|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真

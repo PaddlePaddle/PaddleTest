@@ -90,14 +90,14 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 125091.62074
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
         kpi_base: 818366.51250
-        threshold: 0.10.01
+        threshold: 0.2 #0.01
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -113,14 +113,14 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 11.90543
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
         kpi_base: 34.80694
-        threshold: 0.10001
+        threshold: 0.2 #0001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -135,15 +135,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 139920.59104
-        threshold: 0.1
+        kpi_base: 139920.58669
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 1187731.77900
-        threshold: 0.10001
+        kpi_base: 1187816.548
+        threshold: 0.2 #0001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -159,14 +159,14 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 9.63286
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
         kpi_base: 35.57647
-        threshold: 0.10001
+        threshold: 0.2 #0001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -182,7 +182,7 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -198,7 +198,7 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -214,7 +214,7 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -232,7 +232,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 1.2112
-        threshold: 0.10001
+        threshold: 0.2 #0001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -248,7 +248,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 1.2112
-        threshold: 0.10001
+        threshold: 0.2 #0001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -264,7 +264,7 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -280,7 +280,7 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -299,7 +299,7 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -315,7 +315,7 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -331,7 +331,7 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -349,7 +349,7 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -365,7 +365,7 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -381,7 +381,7 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.2 #
         actived: True
         evaluation: "-"
         unit_repr: None
