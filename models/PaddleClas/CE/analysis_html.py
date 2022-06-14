@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-# -*- coding: UTF-8 -*-
+"""解析html结果"""
 
 import requests
 from bs4 import BeautifulSoup
@@ -20,7 +19,8 @@ url_all = [
     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15724691/result/reportUrl.html",
 ]
 with open("clas_develop", "w", encoding="utf-8") as f:
-    for i in range(len(url_all)):
+    for i, _ in enumerate(url_all):
+        # for i in range(len(url_all)): #code style error
         url = url_all[i]
         resp = requests.get(url)
         # print(resp.content)
