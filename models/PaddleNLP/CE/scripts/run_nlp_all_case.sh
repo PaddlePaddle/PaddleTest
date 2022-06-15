@@ -203,7 +203,7 @@ if [[ ${mode_tag} == "CE" ]];then
     MAX_STEPS=10
     SAVE_STEPS=10
     LOGGING_STEPS=1
-    default_list="train,finetune,glue"
+    default_list="train,finetune"
 else
     log_path=$log_path
     MAX_STEPS=1
@@ -238,7 +238,7 @@ finetune(){
 }
 glue(){
     cd ./bigbird
-    bash run_glue.sh ${device} ${cudaid1} > $log_path/run_glue_${device}.log 2>&1
+    bash run_glue.sh ${device} ${cudaid1} ${MAX_STEPS} ${SAVE_STEPS} ${LOGGING_STEPS} > $log_path/run_glue_${device}.log 2>&1
     print_info $? run_glue_${device}
     cd ..
 }

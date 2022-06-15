@@ -10,9 +10,9 @@ echo "$model_name 模型训练阶段"
 #路径配置
 code_path=${nlp_dir}/examples/language_model/$model_name/
 
-MAX_STEPS=$1
-SAVE_STEPS=$2
-LOGGING_STEPS=$3
+MAX_STEPS=$3
+SAVE_STEPS=$4
+LOGGING_STEPS=$5
 
 #访问RD程序
 cd $code_path
