@@ -203,7 +203,7 @@ if [[ ${mode_tag} == "CE" ]];then
     MAX_STEPS=10
     SAVE_STEPS=10
     LOGGING_STEPS=1
-    default_list="train,finetune,glue" 
+    default_list="train,finetune,glue"
 else
     log_path=$log_path
     MAX_STEPS=1
@@ -305,7 +305,7 @@ infer(){
     cd ./electra
     bash infer.sh > $log_path/infer.log 2>&1
     print_info $? infer
-    cd .. 
+    cd ..
 }
 IFS=","
 if [[ ${step} && ${step} == "all" ]];then
