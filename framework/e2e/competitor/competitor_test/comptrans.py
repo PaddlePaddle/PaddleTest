@@ -111,6 +111,8 @@ class CompeTrans(WeakTrans):
             return ["int32", "int64"]
         elif dtype in ["float", "float32", "float64"]:
             return ["float32", "float64"]
+        elif dtype == "float16":
+            return ["float16"]
         elif dtype in ["complex", "complex64", "complex128"]:
             return ["complex64", "complex128"]
 
