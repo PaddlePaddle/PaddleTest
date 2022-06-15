@@ -56,7 +56,7 @@ def compare(paddle, torch, delta=1e-6, rtol=1e-5):
         assert res
         # tools.assert_equal(result.shape, expect.shape)
         assert paddle.shape == expect.shape
-    elif isinstance(paddle, list):
+    elif isinstance(paddle, (list, tuple)):
         for i, j in enumerate(paddle):
             if isinstance(j, (np.generic, np.ndarray)):
                 compare(j, torch[i], delta, rtol)
@@ -89,6 +89,7 @@ def solve_tuple(item, type, convert):
 
 
 TORCHDTYPE = {
+    "float16": torch.float16,
     "float32": torch.float32,
     "float64": torch.float64,
     "int32": torch.int32,
@@ -96,6 +97,9 @@ TORCHDTYPE = {
     "complex64": torch.complex64,
     "complex128": torch.complex128,
 }
+
+
+TORCHDEVICE = {"cpu": torch.device("cpu"), "gpu": torch.device("cuda"), "gpu:0": torch.device("cuda:0")}
 
 
 if __name__ == "__main__":
