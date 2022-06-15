@@ -56,7 +56,7 @@ def compare(paddle, torch, delta=1e-6, rtol=1e-5):
         assert res
         # tools.assert_equal(result.shape, expect.shape)
         assert paddle.shape == expect.shape
-    elif isinstance(paddle, list):
+    elif isinstance(paddle, (list, tuple)):
         for i, j in enumerate(paddle):
             if isinstance(j, (np.generic, np.ndarray)):
                 compare(j, torch[i], delta, rtol)
