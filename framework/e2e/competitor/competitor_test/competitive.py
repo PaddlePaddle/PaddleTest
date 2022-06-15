@@ -110,7 +110,7 @@ class CompetitorCompareTest(object):
                 )
         return res, backward_res if self.enable_backward else res
 
-    def _run_torch(self, data_c, dtype):
+    def _run_torch(self, data_c, dtype, place):
         """
         run torch
         """
@@ -142,7 +142,7 @@ class CompetitorCompareTest(object):
         if isinstance(t, torch.Tensor):
             return torch.detach(t).cpu().numpy()
         elif isinstance(t, (list, tuple)):
-            convert_numpy = lambda x: torch.cpu().detach(x).numpy()
+            convert_numpy = lambda x: torch.detach(x).cpu().numpy()
             return solve_tuple(t, torch.Tensor, convert_numpy)
 
     def _set_seed(self):
@@ -204,7 +204,7 @@ class CompetitorCompareTest(object):
             else:
                 self.paddle_param[k] = v
 
-    def _set_torch_param(self, data: dict, dtype):
+    def _set_torch_param(self, data: dict, dtype, place):
         """
         set torch params
         """
