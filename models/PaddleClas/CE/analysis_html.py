@@ -12,13 +12,13 @@ b = []
 
 url_all = [
     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15746602/result/reportUrl.html",
-    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15746575/result/reportUrl.html",
+    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15777850/result/reportUrl.html",
 ]  # release
 with open("clas_release", "w", encoding="utf-8") as f:
 
     # url_all = [
     #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15715846/result/reportUrl.html",
-    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15724691/result/reportUrl.html",
+    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15779389/result/reportUrl.html",
     # ] #develop
     # with open("clas_develop", "w", encoding="utf-8") as f:
 
