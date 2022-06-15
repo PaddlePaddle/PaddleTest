@@ -429,7 +429,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         rm -rf PPHGNet_base_ssld_pretrained_pretrained.pdparams
     fi
 
-    if [[ ${model} =~ 'PPLCNet' ]]  && [[ ${model} =~ 'dml' ]] ;then
+    if [[ ${model} =~ 'PPLCNet' ]]  && [[ ${model} =~ '_dml' ]] ;then #注意区分dml 与 udml
         echo "######  use PPLCNet dml pretrain model"
         echo ${model}
         echo ${params_dir}
