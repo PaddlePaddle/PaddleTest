@@ -54,13 +54,12 @@ python_infer(){
     print_info $? python_infer_bigru_crf_${device}
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
@@ -119,13 +118,12 @@ eval(){
     print_info $? eval_${device}
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
@@ -169,13 +167,12 @@ train(){
     print_info $? train_bert-base-uncased_SST-2_single_${device}
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
@@ -242,13 +239,12 @@ glue(){
     print_info $? run_glue_${device}
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
@@ -307,13 +303,12 @@ infer(){
     print_info $? infer
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
@@ -348,7 +343,7 @@ train(){
     # 收敛性case
     if [[ ${mode_tag} == "CE_CON" ]];then
         # 收敛性的数据集准备TODO
-        bash train.sh ${device} "multi" ${cudaid2} con  > $log_path/train_multi_${device}.log 2>&1
+        bash train.sh ${device} "multi" ${cudaid2} con > $log_path/train_multi_${device}.log 2>&1
         print_info $? train_multi_${device}
     else
         # 获取数据
@@ -362,13 +357,12 @@ train(){
     fi
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
@@ -424,13 +418,12 @@ finetune(){
     fi
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
@@ -572,13 +565,12 @@ train(){
     fi
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
@@ -631,13 +623,12 @@ train(){
     fi
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
@@ -682,13 +673,12 @@ train(){
     fi
     cd ..
 }
-IFS=","
 if [[ ${step} && ${step} == "all" ]];then
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 elif [[ ${step} ]];then
-    exec_list=(${step})
+    exec_list=(${step//,/ })
 else
-    exec_list=(${default_list})
+    exec_list=(${default_list//,/ })
 fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
