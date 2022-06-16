@@ -6,20 +6,8 @@ cur_path=`pwd`
 model_name=${PWD##*/}
 
 echo "$model_name 模型训练阶段"
-
-#取消代理
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
-
 #路径配置
-root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/machine_translation/$model_name
-log_path=$root_path/log/$model_name/
-if [ ! -d $log_path ]; then
-  mkdir -p $log_path
-fi
+code_path=${nlp_dir}/examples/machine_translation/$model_name
 
 #删除分布式日志重新记录
 rm -rf $code_path/log/workerlog.0
@@ -47,13 +35,7 @@ if [ $1 == "multi" ];then #多卡
     python -m paddle.distributed.launch\
         --gpus $3 train.py\
         --config ./configs/transformer.base.yaml > $log_path/multi_cards_train.log 2>&1
-    cat $log_path/multi_cards_train.log
-    cat $code_path/log/workerlog.0
 
 else #单卡或CPU
     python train.py --config ./configs/transformer.base.yaml > $log_path/single_card_train.log 2>&1
-    cat $log_path/single_card_train.log
 fi
-
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY

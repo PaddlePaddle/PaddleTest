@@ -7,11 +7,12 @@ GIT:
 
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/lexical_analysis/ #脚本的路径
   model_log_path: log/lexical_analysis/
 
 EXEC:
-  exec_cases: [DATA_PROC,TRAIN,INFER,EVAL]
+  exec_cases: [DATA_PROC,TRAIN,INFER,EVAL,PYTHON_INFER]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
@@ -22,8 +23,8 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh lexical_analysis $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
   -
     priority: p0
     tag: win_download_data
@@ -36,8 +37,8 @@ DATA_PROC:
     tag: mac_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh lexical_analysis $XPU mac $SET_CUDA $SET_MULTI_CUDA CE
   -
     priority: p0
     tag: win_download_data_cpu
@@ -54,13 +55,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "single"
 
     kpis: #kpi指标
       precision:
@@ -88,11 +82,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "multi" $SET_MULTI_CUDA
 
     kpis: #kpi指标
       precision:
@@ -174,10 +163,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: mac_dy_cpu
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "single"
 
     kpis: #kpi指标
       exit_code:
@@ -193,12 +178,7 @@ INFER:
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-        CUDA_VISIBLE_DEVICES: $SET_CUDA
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU
+
     kpis:
       exit_code:
         latest: True
@@ -231,10 +211,7 @@ INFER:
   -
     priority: p0
     tag: mac_dy_cpu
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU
+
     kpis:
       exit_code:
         latest: True
@@ -266,12 +243,7 @@ EVAL:
   - #可以有多步
     priority: p1
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash eval.sh $XPU
+
     kpis: #kpi指标
       precision:
         latest: True
@@ -332,10 +304,7 @@ EVAL:
   - #可以有多步
     priority: p1
     tag: mac_dy_cpu
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash eval.sh $XPU
+
     kpis: #kpi指标
       exit_code:
         latest: True
@@ -383,3 +352,18 @@ EVAL:
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/eval_$XPU.log
+
+PYTHON_INFER:
+  - #可以有多步
+    priority: p1
+    tag: linux_dy_gpu1
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_single_$XPU.log

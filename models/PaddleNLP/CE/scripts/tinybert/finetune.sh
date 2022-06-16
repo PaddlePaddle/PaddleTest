@@ -3,23 +3,14 @@ model_name=${PWD##*/}
 
 echo "$model_name 模型finetune阶段"
 
-#取消代理
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
-
 #路径配置
-root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/model_zoo/tinybert/
-log_path=$root_path/log/$model_name/
-if [ ! -d $log_path ]; then
-  mkdir -p $log_path
-fi
+code_path=${nlp_dir}/model_zoo/tinybert/
 
+MAX_STEPS=$4
+SAVE_STEPS=$5
+LOGGING_STEPS=$6
 #访问RD程序
 cd $code_path
-
 
 cd ../../examples/benchmark/glue/
 
@@ -31,11 +22,8 @@ python -u ./run_glue.py \
     --batch_size 32   \
     --learning_rate 2e-5 \
     --num_train_epochs 1 \
-    --logging_steps 1 \
-    --save_steps 10 \
-    --max_steps 30 \
+    --logging_steps ${LOGGING_STEPS} \
+    --save_steps ${SAVE_STEPS} \
+    --max_steps ${MAX_STEPS} \
     --output_dir ./tmp/$3/$2\
-    --device $1 > $log_path/finetune_$3_$2_$1.log 2>&1
-
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY
+    --device $1

@@ -1,9 +1,3 @@
-#unset http_proxy
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
-
 #外部传入参数说明
 # $1:  $XPU = gpu or cpu
 #获取当前路径
@@ -13,12 +7,7 @@ model_name=${PWD##*/}
 echo "$model_name 模型训练阶段"
 
 #路径配置
-root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/machine_translation/seq2seq/
-log_path=$root_path/log/$model_name/
-mkdir -p $log_path
-#临时环境更改
-cd $root_path/models_repo
+code_path=${nlp_dir}/examples/machine_translation/seq2seq/
 
 #访问RD程序
 cd $code_path
@@ -26,31 +15,17 @@ cd $code_path
 DEVICE=$1
 MULTI=$2
 
-print_info(){
-cat ${log_path}/$2.log
-if [ $1 -ne 0 ];then
-    echo "exit_code: 1.0" >> ${log_path}/$2.log
-else
-    echo "exit_code: 0.0" >> ${log_path}/$2.log
-fi
-}
-
 if [[ ${DEVICE} == "gpu" ]]; then
     python train.py \
         --num_layers 2 \
         --hidden_size 512 \
         --batch_size 128 \
         --max_epoch 1 \
+        --log_freq 1 \
         --dropout 0.2 \
         --init_scale  0.1 \
         --max_grad_norm 5.0 \
         --device ${DEVICE} \
-        --model_path ./attention_models >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
-
-    print_info $? train_${MULTI}_${DEVICE}
+        --model_path ./attention_models
 
 fi
-
-#set http_proxy
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY

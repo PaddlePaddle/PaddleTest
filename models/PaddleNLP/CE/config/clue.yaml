@@ -1,0 +1,79 @@
+MODEL: "clue" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+
+VARIABLES:
+  scripts_path: scripts
+  model_log_path: log/clue/
+
+EXEC:
+  exec_cases: [DATA_PROC, CLASSIFICATION, FINETUNE, READING_CMP]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh clue $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
+
+FINETUNE:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+
+    kpis: #kpi指标
+      eval_loss:
+        latest: True
+        kpi_base: 0.63541
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/finetune_afqmc_single_$XPU.log
+
+CLASSIFICATION: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.406719
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 0.6892956
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/classification_afqmc_single_$XPU.log
+
+READING_CMP:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+
+    kpis: #kpi指标
+      acc:
+        latest: True
+        kpi_base: 0.21960
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/reading_cmp_cmrc_single_$XPU.log
+

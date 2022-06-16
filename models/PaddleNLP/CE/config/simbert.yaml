@@ -9,6 +9,7 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/simbert/ #脚本的路径
   model_log_path: log/simbert/
 
@@ -24,8 +25,8 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh simbert $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
 
   -
     priority: p0
