@@ -7359,6 +7359,12 @@ GroupNorm_base:
     params:
       num_groups: 2
       num_channels: 2
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels }
+      excess:
+        place: True
 
 GroupNorm_0:
   desc: "分组归一化"
@@ -7376,6 +7382,12 @@ GroupNorm_0:
       num_channels: 6
       epsilon: 0.00001
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        place: True
 
 GroupNorm_2:
   desc: "分组归一化"
@@ -7392,6 +7404,12 @@ GroupNorm_2:
       num_groups: 2
       num_channels: 2
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        place: True
 
 GroupNorm_5:
   desc: "分组归一化"
@@ -7409,6 +7427,12 @@ GroupNorm_5:
       num_channels: 2
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        place: True
 
 GroupNorm_6:
   desc: "分组归一化"
@@ -7426,6 +7450,12 @@ GroupNorm_6:
       num_channels: 6
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        place: True
 
 GroupNorm_7:
   desc: "分组归一化"
@@ -7443,6 +7473,12 @@ GroupNorm_7:
       num_channels: 4
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        place: True
 
 GroupNorm_8:
   desc: "分组归一化"
@@ -7460,6 +7496,12 @@ GroupNorm_8:
       num_channels: 6
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        place: True
 
 GroupNorm_9:
   desc: "分组归一化"
@@ -7477,6 +7519,12 @@ GroupNorm_9:
       num_channels: 4
       epsilon: 0.00002
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        place: True
 
 InstanceNorm1D_base:
   desc: "1维实例归一化"
