@@ -59,10 +59,10 @@ do
 
             #记录一些特殊规则
             if [[ ${model} == 'HRNet_W18_C' ]]; then
-                sed -i "" "s|threshold: 0.0|threshold: 0.2 #|g" ${model}.yaml #bodong
+                sed -i "" "s|threshold: 0.0|threshold: 1.0 #|g" ${model}.yaml #bodong
                 sed -i "" 's|"="|"-"|g' ${model}.yaml
             elif [[ ${model} == 'LeViT_128S' ]]; then
-                sed -i "" "s|threshold: 0.0|threshold: 0.2 #|g" ${model}.yaml #bodong
+                sed -i "" "s|threshold: 0.0|threshold: 1.0 #|g" ${model}.yaml #bodong
                 sed -i "" 's|"="|"-"|g' ${model}.yaml
                 # sed -i "" "s|loss|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
                 # sed -i "" "s|train_eval|exit_code|g" ${model}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真

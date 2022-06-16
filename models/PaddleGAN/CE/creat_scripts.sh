@@ -69,14 +69,14 @@ elif [[ ${model} == 'esrgan_psnr_x4_div2k' ]]; then
 elif [[ ${model} == 'animeganv2_pretrain' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|init_c_loss|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|372.322|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|511.257|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|672.322|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|611.257|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'animeganv2' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|d_loss|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|221.378|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|225.417|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|621.378|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|625.417|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'basicvsr_reds' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
