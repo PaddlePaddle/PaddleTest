@@ -6911,6 +6911,8 @@ BatchNorm1D_0:
     api_name: "torch.nn.BatchNorm1d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 BatchNorm1D_2:
   desc: "1维BN批归一化"
@@ -6928,6 +6930,8 @@ BatchNorm1D_2:
     api_name: "torch.nn.BatchNorm1d"
     mapping:
       ins: { data: input, num_features: num_features }
+      excess:
+        place: True
 
 BatchNorm1D_3:
   desc: "1维BN批归一化"
@@ -6946,6 +6950,8 @@ BatchNorm1D_3:
     api_name: "torch.nn.BatchNorm1d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum }
+      excess:
+        place: True
 
 BatchNorm1D_4:
   desc: "1维BN批归一化"
@@ -6964,6 +6970,8 @@ BatchNorm1D_4:
     api_name: "torch.nn.BatchNorm1d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum }
+      excess:
+        place: True
 
 BatchNorm1D_5:
   desc: "1维BN批归一化"
@@ -6983,6 +6991,8 @@ BatchNorm1D_5:
     api_name: "torch.nn.BatchNorm1d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 BatchNorm1D_6:
   desc: "1维BN批归一化"
@@ -7002,6 +7012,8 @@ BatchNorm1D_6:
     api_name: "torch.nn.BatchNorm1d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 BatchNorm1D_7:
   desc: "1维BN批归一化"
@@ -7022,6 +7034,8 @@ BatchNorm1D_7:
     api_name: "torch.nn.BatchNorm1d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 BatchNorm1D_8:
   desc: "1维BN批归一化"
@@ -7058,6 +7072,8 @@ BatchNorm1D_9:
     api_name: "torch.nn.BatchNorm1d"
     mapping:
       ins: { data: input, num_features: num_features }
+      excess:
+        place: True
 
 BatchNorm2D_base:
   desc: "2维BN批归一化"
@@ -7079,6 +7095,8 @@ BatchNorm2D_base:
     api_name: "torch.nn.BatchNorm2d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 BatchNorm2D_1:
   desc: "2维BN批归一化"
@@ -7097,6 +7115,8 @@ BatchNorm2D_1:
     api_name: "torch.nn.BatchNorm2d"
     mapping:
       ins: { data: input, num_features: num_features }
+      excess:
+        place: True
 
 BatchNorm2D_2:
   desc: "2维BN批归一化"
@@ -7116,6 +7136,8 @@ BatchNorm2D_2:
     api_name: "torch.nn.BatchNorm2d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum }
+      excess:
+        place: True
 
 BatchNorm2D_3:
   desc: "2维BN批归一化"
@@ -7136,6 +7158,8 @@ BatchNorm2D_3:
     api_name: "torch.nn.BatchNorm2d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 BatchNorm2D_4:
   desc: "2维BN批归一化"
@@ -7157,6 +7181,8 @@ BatchNorm2D_4:
     api_name: "torch.nn.BatchNorm2d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 BatchNorm2D_7:
   desc: "2维BN批归一化"
@@ -7213,6 +7239,8 @@ BatchNorm3D_base:
     api_name: "torch.nn.BatchNorm3d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 BatchNorm3D_1:
   desc: "3维BN批归一化"
@@ -7231,6 +7259,8 @@ BatchNorm3D_1:
     api_name: "torch.nn.BatchNorm3d"
     mapping:
       ins: { data: input, num_features: num_features }
+      excess:
+        place: True
 
 BatchNorm3D_2:
   desc: "3维BN批归一化"
@@ -7250,6 +7280,8 @@ BatchNorm3D_2:
     api_name: "torch.nn.BatchNorm3d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum }
+      excess:
+        place: True
 
 BatchNorm3D_3:
   desc: "3维BN批归一化"
@@ -7270,6 +7302,8 @@ BatchNorm3D_3:
     api_name: "torch.nn.BatchNorm3d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 BatchNorm3D_4:
   desc: "3维BN批归一化"
@@ -7308,6 +7342,8 @@ BatchNorm3D_5:
     api_name: "torch.nn.BatchNorm3d"
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        place: True
 
 GroupNorm_base:
   desc: "分组归一化"
