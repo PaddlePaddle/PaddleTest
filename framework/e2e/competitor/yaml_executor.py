@@ -4,6 +4,7 @@
 """
 yaml executor
 """
+import sys
 
 from competitor_test.competitive import CompetitorCompareTest
 from competitor_test.comptrans import CompeTrans
@@ -64,5 +65,5 @@ def debug_yaml_exe(yaml_file, case_name):
 
 
 if __name__ == "__main__":
-    # yaml_exe("../yaml/test0.yml")
-    debug_yaml_exe("../yaml/nn.yml", "AdaptiveAvgPool3D_8")
+    yaml_exe("../yaml/nn.yml")
+    # debug_yaml_exe("../yaml/nn.yml", sys.argv[1])

@@ -7542,6 +7542,12 @@ InstanceNorm1D_base:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm1D_1:
   desc: "1维实例归一化"
@@ -7556,6 +7562,12 @@ InstanceNorm1D_1:
         range: [ -1, 1]
     params:
       num_features: 2
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        place: True
 
 InstanceNorm1D_2:
   desc: "1维实例归一化"
@@ -7571,6 +7583,12 @@ InstanceNorm1D_2:
     params:
       num_features: 2
       epsilon: 0.00002
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps }
+      excess:
+        place: True
 
 InstanceNorm1D_3:
   desc: "1维实例归一化"
@@ -7587,6 +7605,12 @@ InstanceNorm1D_3:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm1D_5:
   desc: "1维实例归一化"
@@ -7604,6 +7628,12 @@ InstanceNorm1D_5:
       epsilon: 0.00001
       momentum: 0.1
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm1D_6:
   desc: "1维实例归一化"
@@ -7621,6 +7651,12 @@ InstanceNorm1D_6:
       epsilon: 0.00001
       momentum: 0.1
       data_format: "NLC"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm1D_7:
   desc: "1维实例归一化"
@@ -7639,6 +7675,12 @@ InstanceNorm1D_7:
       momentum: 0.1
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm1D_8:
   desc: "1维实例归一化"
@@ -7670,6 +7712,12 @@ InstanceNorm2D_base:
         range: [ -1, 1]
     params:
       num_features: 2
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        place: True
 
 InstanceNorm2D_0:
   desc: "2维实例归一化"
@@ -7687,6 +7735,12 @@ InstanceNorm2D_0:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm2D_2:
   desc: "2维实例归一化"
@@ -7702,6 +7756,12 @@ InstanceNorm2D_2:
     params:
       num_features: 2
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps }
+      excess:
+        place: True
 
 InstanceNorm2D_3:
   desc: "2维实例归一化"
@@ -7718,6 +7778,12 @@ InstanceNorm2D_3:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm2D_4:
   desc: "2维实例归一化"
@@ -7734,6 +7800,12 @@ InstanceNorm2D_4:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.9
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm2D_6:
   desc: "2维实例归一化"
@@ -7753,6 +7825,12 @@ InstanceNorm2D_6:
       weight_attr: False
       bias_attr: False
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm2D_8:
   desc: "2维实例归一化"
@@ -7770,6 +7848,12 @@ InstanceNorm2D_8:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm2D_9:
   desc: "2维实例归一化"
@@ -7787,6 +7871,12 @@ InstanceNorm2D_9:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NHWC'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm3D_base:
   desc: "3维实例归一化"
@@ -7801,6 +7891,12 @@ InstanceNorm3D_base:
         range: [ -1, 1]
     params:
       num_features: 2
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        place: True
 
 InstanceNorm3D_0:
   desc: "3维实例归一化"
@@ -7818,6 +7914,12 @@ InstanceNorm3D_0:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm3D_2:
   desc: "3维实例归一化"
@@ -7833,6 +7935,12 @@ InstanceNorm3D_2:
     params:
       num_features: 2
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps }
+      excess:
+        place: True
 
 InstanceNorm3D_3:
   desc: "3维实例归一化"
@@ -7849,6 +7957,12 @@ InstanceNorm3D_3:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm3D_4:
   desc: "3维实例归一化"
@@ -7865,6 +7979,12 @@ InstanceNorm3D_4:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.9
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm3D_5:
   desc: "3维实例归一化"
@@ -7883,6 +8003,12 @@ InstanceNorm3D_5:
       momentum: 0.9
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm3D_6:
   desc: "3维实例归一化"
@@ -7900,6 +8026,12 @@ InstanceNorm3D_6:
       epsilon: 0.00001
       momentum: 0.9
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 InstanceNorm3D_7:
   desc: "3维实例归一化"
@@ -7917,6 +8049,12 @@ InstanceNorm3D_7:
       epsilon: 0.00001
       momentum: 0.9
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        place: True
 
 LayerNorm_base:
   desc: "层归一化"
@@ -7931,6 +8069,12 @@ LayerNorm_base:
         range: [ -1, 1]
     params:
       normalized_shape: !!python/tuple [2, 2, 3]
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape }
+      excess:
+        place: True
 
 LayerNorm_0:
   desc: "层归一化"
@@ -7946,6 +8090,12 @@ LayerNorm_0:
     params:
       normalized_shape: [2, 2, 3]
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        place: True
 
 LayerNorm_3:
   desc: "层归一化"
@@ -7963,6 +8113,12 @@ LayerNorm_3:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        place: True
 
 LayerNorm_4:
   desc: "层归一化"
@@ -7977,6 +8133,12 @@ LayerNorm_4:
         range: [ -1, 1]
     params:
       normalized_shape: [2, 3]
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape }
+      excess:
+        place: True
 
 LayerNorm_5:
   desc: "层归一化"
@@ -7992,6 +8154,12 @@ LayerNorm_5:
     params:
       normalized_shape: [2, 3]
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        place: True
 
 LayerNorm_6:
   desc: "层归一化"
@@ -8009,6 +8177,12 @@ LayerNorm_6:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        place: True
 
 LayerNorm_7:
   desc: "层归一化"
@@ -8023,6 +8197,12 @@ LayerNorm_7:
         range: [ -1, 1]
     params:
       normalized_shape: !!python/tuple [3,]
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape }
+      excess:
+        place: True
 
 LayerNorm_8:
   desc: "层归一化"
@@ -8038,6 +8218,12 @@ LayerNorm_8:
     params:
       normalized_shape: [3,]
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        place: True
 
 LayerNorm_9:
   desc: "层归一化"
@@ -8055,6 +8241,12 @@ LayerNorm_9:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        place: True
 
 LocalResponseNorm_base:
   desc: "层归一化"
@@ -8069,6 +8261,10 @@ LocalResponseNorm_base:
         range: [ -1, 1]
     params:
       size: 5
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size }
 
 LocalResponseNorm_0:
   desc: "层归一化"
@@ -8084,6 +8280,10 @@ LocalResponseNorm_0:
     params:
       size: 5
       alpha: 0.0002
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size, alpha: alpha }
 
 LocalResponseNorm_1:
   desc: "层归一化"
@@ -8099,6 +8299,10 @@ LocalResponseNorm_1:
     params:
       size: 5
       beta: 0.125
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size, beta: beta }
 
 LocalResponseNorm_2:
   desc: "层归一化"
@@ -8115,6 +8319,10 @@ LocalResponseNorm_2:
       size: 5
       k: 0.9
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size, k: k }
 
 LocalResponseNorm_3:
   desc: "层归一化"
@@ -8129,6 +8337,10 @@ LocalResponseNorm_3:
         range: [ -1, 1]
     params:
       size: 3
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size }
 
 LocalResponseNorm_4:
   desc: "层归一化"
@@ -8162,6 +8374,10 @@ LocalResponseNorm_5:
       beta: 0.665
       k: 0.9
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size, alpha: alpha, beta: beta, k: k }
 
 SpectralNorm_base:
   desc: "谱归一化"
