@@ -14,6 +14,8 @@ from competitor_test.tools import FrontAPIBase, compare, solve_tuple, TORCHDTYPE
 # import logging
 from utils.logger import Logger
 
+logger = Logger("Competitive")
+
 
 class CompetitorCompareTest(object):
     """
@@ -37,7 +39,8 @@ class CompetitorCompareTest(object):
         self._set_place()
         self.ignore_var = []
         self.types = None
-        self.logger = Logger("CompetitorCompareTest")
+        self.logger = logger
+        self.torch_place = False
         self.hook()
         # 日志等级
         # if self.debug:
@@ -55,11 +58,10 @@ class CompetitorCompareTest(object):
         """
         run paddle and competitor api
         """
+        paddle_api_name, torch_api_name = self.paddle_api.__name__, self.torch_api.__name__
         for place in self.places:
             self.logger.get_log().info(
-                "[{}]start compare [paddle]{} and [torch]{}".format(
-                    place, str(self.paddle_api.__name__), str(self.torch_api.__name__)
-                )
+                "[{}]start compare [paddle]{} and [torch]{}".format(place, str(paddle_api_name), str(torch_api_name))
             )
 
             paddle.set_device(place)
@@ -110,7 +112,7 @@ class CompetitorCompareTest(object):
                 )
         return res, backward_res if self.enable_backward else res
 
-    def _run_torch(self, data_c, dtype):
+    def _run_torch(self, data_c, dtype, place):
         """
         run torch
         """
@@ -142,7 +144,7 @@ class CompetitorCompareTest(object):
         if isinstance(t, torch.Tensor):
             return torch.detach(t).cpu().numpy()
         elif isinstance(t, (list, tuple)):
-            convert_numpy = lambda x: torch.cpu().detach(x).numpy()
+            convert_numpy = lambda x: torch.detach(x).cpu().numpy()
             return solve_tuple(t, torch.Tensor, convert_numpy)
 
     def _set_seed(self):
@@ -204,7 +206,7 @@ class CompetitorCompareTest(object):
             else:
                 self.paddle_param[k] = v
 
-    def _set_torch_param(self, data: dict, dtype):
+    def _set_torch_param(self, data: dict, dtype, place):
         """
         set torch params
         """
@@ -239,6 +241,8 @@ class CompetitorCompareTest(object):
                     self.torch_inputs[k] = torch.tensor(v, device=TORCHDEVICE.get(place), dtype=TORCHDTYPE.get(dtype))
             else:
                 self.torch_param[k] = v
+        if self.torch_place:
+            self.torch_param["device"] = TORCHDEVICE.get(place)
 
     def _settle_api(self, api):
         """
