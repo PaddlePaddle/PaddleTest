@@ -89,7 +89,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       d_loss:
         latest: True
-        kpi_base: 221.378
+        kpi_base: 621.378
         threshold: 1.0
         actived: True
         evaluation: "-"
@@ -105,7 +105,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       d_loss:
         latest: True
-        kpi_base: 225.417
+        kpi_base: 625.417
         threshold: 1.0
         actived: True
         evaluation: "-"
@@ -121,7 +121,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       d_loss:
         latest: True
-        kpi_base: 221.378
+        kpi_base: 621.378
         threshold: 1.0
         actived: True
         evaluation: "-"
@@ -137,7 +137,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       d_loss:
         latest: True
-        kpi_base: 225.417
+        kpi_base: 625.417
         threshold: 1.0
         actived: True
         evaluation: "-"
