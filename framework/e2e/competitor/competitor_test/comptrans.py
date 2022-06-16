@@ -54,6 +54,14 @@ class CompeTrans(WeakTrans):
         """get paddle ins"""
         return self.ins
 
+    def get_torch_place(self):
+        """get torch place"""
+        exce = self.mapping.get("excess", None)
+        if exce:
+            return exce.get("place", None)
+        else:
+            return None
+
     def _generate_ins(self):
         """generate ins"""
         inputs = super(CompeTrans, self).get_inputs(self.framework.PADDLE)

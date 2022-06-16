@@ -6888,6 +6888,8 @@ BatchNorm1D_base:
     api_name: "torch.nn.BatchNorm1d"
     mapping:
       ins: { data: input, num_features: num_features }
+      excess:
+        place: True
 
 BatchNorm1D_0:
   desc: "1维BN批归一化"
