@@ -48,13 +48,13 @@ add_0:
       x:
         random: true
         type: "Tensor"
-        dtype: "int32"
+        dtype: "float64"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
       y:
         random: true
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
 
@@ -443,7 +443,7 @@ allclose_base:
         dtype: "float32"
         value: [10.00001]
       y:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [10.0]
@@ -484,7 +484,7 @@ allclose_1:
         dtype: "float32"
         value: [10.1]
       y:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [10.0]
@@ -504,7 +504,7 @@ allclose_2:
         dtype: "float32"
         value: [10.1]
       y:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [10.0]
@@ -524,7 +524,7 @@ allclose_3:
         dtype: "float32"
         value: [10.1, 0.001, 4000000]
       y:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [10, 0.001, 4000000]
@@ -544,7 +544,7 @@ allclose_4:
         dtype: "float32"
         value: [nan]
       y:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [nan]
@@ -564,7 +564,7 @@ allclose_5:
         dtype: "float32"
         value: [10.1, 0.001, 4000000]
       y:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [10, 0.001, 4000000]
@@ -584,7 +584,7 @@ allclose_6:
         dtype: "float32"
         value: [10.001]
       y:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [10.00001]
@@ -642,7 +642,7 @@ allclose_9:
         random: False
         type: "Tensor"
         dtype: "float32"
-        vlaue: []
+        value: []
 
 any_base:
   desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"
@@ -663,7 +663,7 @@ any_0:
       x:
         random: True
         type: "Tensor"
-        dtype: "int32"
+        dtype: "bool"
         shape: [10]
         range: [-4, 4]
 
@@ -675,7 +675,7 @@ any_1:
       x:
         random: True
         type: "Tensor"
-        dtype: "int32"
+        dtype: "bool"
         shape: [10, 10]
         range: [-4, 4]
 
@@ -687,7 +687,7 @@ any_2:
       x:
         random: True
         type: "Tensor"
-        dtype: "int32"
+        dtype: "bool"
         shape: [3, 4, 2]
         range: [-4, 4]
 
@@ -699,7 +699,7 @@ any_3:
       x:
         random: True
         type: "Tensor"
-        dtype: "int32"
+        dtype: "bool"
         shape: [2, 4, 4, 2]
         range: [-4, 4]
 
@@ -711,7 +711,7 @@ any_4:
       x:
         random: True
         type: "Tensor"
-        dtype: "int32"
+        dtype: "bool"
         shape: [2, 4, 4, 2]
         range: [-4, 4]
     params:
@@ -725,7 +725,7 @@ any_5:
       x:
         random: True
         type: "Tensor"
-        dtype: "int32"
+        dtype: "bool"
         shape: [2, 4, 4, 2]
         range: [-4, 4]
     params:
@@ -739,7 +739,7 @@ any_6:
       x:
         random: True
         type: "Tensor"
-        dtype: "int32"
+        dtype: "bool"
         shape: [2, 4, 4, 2]
         range: [-4, 4]
     params:
@@ -753,7 +753,7 @@ any_7:
       x:
         random: True
         type: "Tensor"
-        dtype: "int32"
+        dtype: "bool"
         shape: [2, 4, 4, 2]
         range: [-4, 4]
     params:
@@ -1248,6 +1248,8 @@ cumprod_4:
         dtype: "float32"
         shape: [12]
         range: [ -2, 2]
+    params:
+      dim: 0
 
 digamma_base:
   desc: "逐元素计算输入Tensor的digamma函数值"
@@ -1599,7 +1601,7 @@ equal_all_1:
       y:
         random: True
         type: "Tensor"
-        dtype: "int32"
+        dtype: "float32"
         shape: [3, 3, 3]
         range: [-10, 10]
 
@@ -2197,7 +2199,7 @@ log_0:
     api_name: "paddle.log"
     inputs:
       x:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [0]
@@ -2208,7 +2210,7 @@ log_1:
     api_name: "paddle.log"
     inputs:
       x:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [-3]
@@ -2243,7 +2245,7 @@ log10_0:
     api_name: "paddle.log10"
     inputs:
       x:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [0]
@@ -2254,7 +2256,7 @@ log10_1:
     api_name: "paddle.log10"
     inputs:
       x:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [-3]
@@ -2289,7 +2291,7 @@ log2_0:
     api_name: "paddle.log2"
     inputs:
       x:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [0]
@@ -2300,7 +2302,7 @@ log2_1:
     api_name: "paddle.log2"
     inputs:
       x:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [-3]
@@ -2894,7 +2896,7 @@ mean_4:
         range: [ -1, 1]
     params:
       axis: 1
-      keepdims: True
+      keepdim: True
 
 median_base:
   desc: "沿给定的轴 axis 计算 x 中元素的中位数"
@@ -2953,7 +2955,7 @@ median_2:
         range: [ -1, 1]
     params:
       axis: -2
-      keepdims: True
+      keepdim: True
 
 median_3:
   desc: "沿给定的轴 axis 计算 x 中元素的中位数"
@@ -2964,7 +2966,7 @@ median_3:
         random: False
         type: "Tensor"
         dtype: "float32"
-        value: [[2, 3, 1, 1], [10, 1, 15, float("nan")], [4, 8, float("nan"), 7]]
+        value: [[2, 3, 1, 1], [10, 1, 15, nan], [4, 8, nan, 7]]
     params:
       axis: 0
 
@@ -3005,7 +3007,7 @@ min_0:
         range: [ -1, 1]
     params:
       axis: 1
-      keepdims: False
+      keepdim: False
 
 min_1:
   desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
@@ -3034,7 +3036,7 @@ min_2:
         range: [ -1, 1]
     params:
       axis: -2
-      keepdims: True
+      keepdim: True
 
 min_3:
   desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
@@ -3049,7 +3051,7 @@ min_3:
         range: [ -1, 1]
     params:
       axis: [-2, 1]
-      keepdims: False
+      keepdim: False
 
 minimum_base:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更小的元素保存到返回结果中"
@@ -3248,12 +3250,12 @@ multiply_base:
     api_name: "paddle.multiply"
     inputs:
       x:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [2.0]
       y:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [1, -1, 4, 5]
@@ -3645,7 +3647,7 @@ rsqrt_1:
     api_name: "paddle.rsqrt"
     inputs:
       x:
-        random: true
+        random: False
         type: "Tensor"
         dtype: "float32"
         value: [0, 0, 0, 0]
@@ -3665,7 +3667,6 @@ scale_base:
       scale: 1.0
       bias: 0.0
       bias_after_scale: True
-      act: None
 
 scale_0:
   desc: "对输入Tensor进行缩放和偏置"
@@ -3682,7 +3683,6 @@ scale_0:
       scale: 2.0
       bias: 4.0
       bias_after_scale: True
-      act: None
 
 scale_1:
   desc: "对输入Tensor进行缩放和偏置"
@@ -3699,7 +3699,6 @@ scale_1:
       scale: 2.0
       bias: 4.0
       bias_after_scale: False
-      act: None
 
 scale_2:
   desc: "对输入Tensor进行缩放和偏置"
@@ -5214,7 +5213,7 @@ linspace_5:
       num:
         random: False
         type: "Tensor"
-        dtype: "float32"
+        dtype: "int32"
         value: [5]
 
 numel_base:
@@ -6397,13 +6396,13 @@ cross_0:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 3, 4, 4]
+        shape: [3, 4, 4, 3]
         range: [ -1, 1]
       y:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 3, 4, 4]
+        shape: [3, 4, 4, 3]
         range: [ -1, 1]
     params:
       axis: 0
@@ -6437,13 +6436,13 @@ cross_2:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 3, 4, 4]
+        shape: [2, 4, 3, 4]
         range: [ -1, 1]
       y:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 3, 4, 4]
+        shape: [2, 4, 3, 4]
         range: [ -1, 1]
     params:
       axis: 2
@@ -6457,13 +6456,13 @@ cross_3:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 3, 4, 4]
+        shape: [2, 3, 3, 4]
         range: [ -1, 1]
       y:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 3, 4, 4]
+        shape: [2, 3, 3, 4]
         range: [ -1, 1]
     params:
       axis: -2
@@ -6633,7 +6632,7 @@ histogram_3:
         range: [ -4, 2]
     params:
       bins: 4
-      max: -1
+      max: 0
 
 histogram_4:
   desc: "计算输入张量的直方图。以min和max为range边界，将其均分成bins个直条"
@@ -7103,7 +7102,7 @@ chunk_1:
         shape: [9, 2, 4, 4]
         range: [ -1, 1]
     params:
-      chunks: 3
+      chunks: 2
       axis: -1
 
 chunk_2:
@@ -7118,11 +7117,11 @@ chunk_2:
         shape: [9, 2, 4, 4]
         range: [ -1, 1]
     params:
-      chunks: 3
+      chunks: 2
       axis:
         random: False
         type: "Tensor"
-        dtype: "float32"
+        dtype: "int32"
         value: [1]
 
 crop_base:
@@ -7799,9 +7798,8 @@ slice_0:
         range: [ -1, 1]
     params:
       axes: [0]
-      starts: [3]
-      ends: [1]
-      strides: [-2]
+      starts: [1]
+      ends: [3]
 
 slice_1:
   desc: "沿多个轴生成 input 的切片"
@@ -7816,9 +7814,8 @@ slice_1:
         range: [ -1, 1]
     params:
       axes: [0, 1]
-      starts: [3, 4]
-      ends: [5, 2]
-      strides: [1, -2]
+      starts: [3, 2]
+      ends: [5, 4]
 
 slice_2:
   desc: "沿多个轴生成 input 的切片"
@@ -7833,9 +7830,8 @@ slice_2:
         range: [ -1, 1]
     params:
       axes: [0, 1]
-      starts: [3, 4]
-      ends: [5, 2]
-      strides: [4, -2]
+      starts: [3, 2]
+      ends: [5, 4]
 
 squeeze_base:
   desc: "删除输入Tensor的Shape中尺寸为1的维度"
@@ -9170,7 +9166,7 @@ quantile_1:
     params:
       q: 0.75
       axis: -1
-      keepdims: True
+      keepdim: True
 
 quantile_2:
   desc: "Tensor的quantile求值"
@@ -9186,7 +9182,7 @@ quantile_2:
     params:
       q: [0.25, 0.5, 0.75]
       axis: 3
-      keepdims: False
+      keepdim: False
 
 renorm_base:
   desc: "求Tensor的renorm值"
@@ -9322,4 +9318,4 @@ kthvalue_1:
     params:
       k: 4
       axis: 2
-      keepdims: True
+      keepdim: True
