@@ -15,6 +15,7 @@ _enable_legacy_dygraph()
 
 sys.path.append("../../utils/")
 from interceptor import skip_not_compile_gpu
+from interceptor import skip_branch_not_develop
 
 
 class TestFusedFeedForward(APIBase):
@@ -39,6 +40,7 @@ obj.places = [paddle.CUDAPlace(0)]
 
 
 @skip_not_compile_gpu
+@skip_branch_not_develop
 @pytest.mark.api_nn_FusedFeedForward_parameters
 def test_fused_feedforward0():
     """
@@ -63,6 +65,7 @@ def test_fused_feedforward0():
 
 
 @skip_not_compile_gpu
+@skip_branch_not_develop
 @pytest.mark.api_nn_FusedFeedForward_parameters
 def test_fused_feedforward1():
     """
@@ -89,6 +92,7 @@ def test_fused_feedforward1():
 
 
 @skip_not_compile_gpu
+@skip_branch_not_develop
 @pytest.mark.api_nn_FusedFeedForward_parameters
 def test_fused_feedforward2():
     """
