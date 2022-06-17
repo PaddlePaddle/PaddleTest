@@ -13,6 +13,7 @@ import numpy as np
 
 sys.path.append("../../utils/")
 from interceptor import skip_not_compile_gpu
+from interceptor import skip_branch_not_develop
 
 
 class TestFusedMultiHeadAttention(APIBase):
@@ -37,6 +38,7 @@ obj.places = [paddle.CUDAPlace(0)]
 
 
 @skip_not_compile_gpu
+@skip_branch_not_develop
 @pytest.mark.api_incubate_fused_multi_head_attention_parameters
 def test_FusedMultiHeadAttention0():
     """
@@ -68,6 +70,7 @@ def test_FusedMultiHeadAttention0():
 
 
 @skip_not_compile_gpu
+@skip_branch_not_develop
 @pytest.mark.api_incubate_fused_multi_head_attention_parameters
 def test_FusedMultiHeadAttention1():
     """
