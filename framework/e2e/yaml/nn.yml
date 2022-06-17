@@ -10501,6 +10501,10 @@ PixelShuffle_base:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 PixelShuffle_0:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
@@ -10516,6 +10520,10 @@ PixelShuffle_0:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 PixelShuffle_1:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
@@ -10531,6 +10539,10 @@ PixelShuffle_1:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 PixelShuffle_2:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
@@ -10561,6 +10573,10 @@ PixelShuffle_4:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 PixelShuffle_5:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
@@ -10576,6 +10592,10 @@ PixelShuffle_5:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 Upsample_base:
   desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
