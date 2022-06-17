@@ -11079,6 +11079,10 @@ UpsamplingBilinear2D_base:
     params:
       size: [10, 10]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_0:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -11092,8 +11096,12 @@ UpsamplingBilinear2D_0:
         shape: [4, 5, 6, 7]
         range: [ -10, 10]
     params:
-      scale_factor: [1.2, 3.3]
+      scale_factor: !!python/tuple [1.2, 3.3]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingBilinear2D_1:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -11109,6 +11117,10 @@ UpsamplingBilinear2D_1:
     params:
       size: [12, 12]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_2:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -11124,6 +11136,10 @@ UpsamplingBilinear2D_2:
     params:
       size: [100, 50]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_3:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -11139,6 +11155,10 @@ UpsamplingBilinear2D_3:
     params:
       size: [10, 10]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_4:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -11154,6 +11174,10 @@ UpsamplingBilinear2D_4:
     params:
       size: [10, 10]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_5:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -11184,6 +11208,10 @@ UpsamplingBilinear2D_6:
     params:
       size: [10, 10]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_7:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -11197,8 +11225,12 @@ UpsamplingBilinear2D_7:
         shape: [4, 5, 6, 7]
         range: [ -10, 10]
     params:
-      scale_factor: [3.7, 4.1]
+      scale_factor: !!python/tuple [3.7, 4.1]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingNearest2D_base:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -11214,6 +11246,10 @@ UpsamplingNearest2D_base:
     params:
       size: [12, 12]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingNearest2D_0:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -11229,6 +11265,10 @@ UpsamplingNearest2D_0:
     params:
       size: [12, 12]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingNearest2D_1:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -11259,6 +11299,10 @@ UpsamplingNearest2D_2:
     params:
       scale_factor: 2
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingNearest2D_3:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -11274,6 +11318,10 @@ UpsamplingNearest2D_3:
     params:
       scale_factor: 5
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingNearest2D_4:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -11304,6 +11352,10 @@ UpsamplingNearest2D_5:
     params:
       scale_factor: !!python/tuple [2, 3]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingNearest2D_6:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -11319,6 +11371,10 @@ UpsamplingNearest2D_6:
     params:
       size: !!python/tuple [12, 13]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingNearest2D_7:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -11334,6 +11390,10 @@ UpsamplingNearest2D_7:
     params:
       size: [12, 13]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingNearest2D_8:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -11349,6 +11409,10 @@ UpsamplingNearest2D_8:
     params:
       size: [256, 256]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 CosineSimilarity_base:
   desc: "比较两个tensor的余弦相似度"

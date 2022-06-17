@@ -9,7 +9,7 @@ import random
 import numpy as np
 import paddle
 import torch
-from competitor_test.tools import FrontAPIBase, compare, solve_tuple, TORCHDTYPE, TORCHDEVICE
+from competitor_test.tools import FrontAPIBase, compare, solve_tuple, TORCHDTYPE, TORCHDEVICE, COMPAREGAP
 
 # import logging
 from utils.logger import Logger
@@ -41,6 +41,7 @@ class CompetitorCompareTest(object):
         self.types = None
         self.logger = logger
         self.torch_place = False
+        self.delta = 1e-6
         self.hook()
         # 日志等级
         # if self.debug:
@@ -59,6 +60,8 @@ class CompetitorCompareTest(object):
         run paddle and competitor api
         """
         paddle_api_name, torch_api_name = self.paddle_api.__name__, self.torch_api.__name__
+        if COMPAREGAP.get(paddle_api_name, None):
+            self.delta = COMPAREGAP.get(paddle_api_name)
         for place in self.places:
             self.logger.get_log().info(
                 "[{}]start compare [paddle]{} and [torch]{}".format(place, str(paddle_api_name), str(torch_api_name))
@@ -82,16 +85,16 @@ class CompetitorCompareTest(object):
                     paddle_backward_res = self._paddle_to_numpy(paddle_backward_res)
                     torch_forward_res = self._torch_to_numpy(torch_forward_res)
                     torch_backward_res = self._torch_to_numpy(torch_backward_res)
-                    compare(paddle_forward_res, torch_forward_res)
+                    compare(paddle_forward_res, torch_forward_res, self.delta)
                     self.logger.get_log().info("[{}] data type forward result compare success!".format(dtype))
-                    compare(paddle_backward_res, torch_backward_res)
+                    compare(paddle_backward_res, torch_backward_res, self.delta)
                     self.logger.get_log().info("[{}] data backward result compare success!".format(dtype))
                 else:
                     paddle_forward_res = self._run_paddle(data, dtype)
                     torch_forward_res = self._run_torch(data_c, dtype, place)
                     paddle_forward_res = self._paddle_to_numpy(paddle_forward_res)
                     torch_forward_res = self._torch_to_numpy(torch_forward_res)
-                    compare(paddle_forward_res, torch_forward_res)
+                    compare(paddle_forward_res, torch_forward_res, self.delta)
                     self.logger.get_log().info("[{}] data type forward result compare success!".format(dtype))
 
     def _run_paddle(self, data, dtype):
