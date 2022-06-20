@@ -11859,6 +11859,10 @@ PairwiseDistance_base:
         range: [ -1, 1]
     params:
       p: 2.
+  pytorch:
+    api_name: "torch.nn.PairwiseDistance"
+    mapping:
+      ins: { data0: input1, data1: input2, p: p }
 
 PairwiseDistance_0:
   desc: "计算两个tensor之间pairwise的距离"
@@ -11983,6 +11987,10 @@ Unfold_base:
         shape: [2, 3, 10, 10]
     params:
       kernel_sizes: 3
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size }
 
 Unfold_0:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -11996,6 +12004,10 @@ Unfold_0:
         shape: [2, 3, 10, 10]
     params:
       kernel_sizes: [3, 3]
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size }
 
 Unfold_1:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -12010,6 +12022,10 @@ Unfold_1:
     params:
       kernel_sizes: [3, 3]
       paddings: 1
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size, paddings: padding }
 
 Unfold_2:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -12024,6 +12040,10 @@ Unfold_2:
     params:
       kernel_sizes: [2, 4]
       paddings: 1
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size, paddings: padding }
 
 Unfold_3:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -12039,6 +12059,10 @@ Unfold_3:
       kernel_sizes: [2, 4]
       paddings: 1
       strides: 2
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size, paddings: padding, strides: stride }
 
 Unfold_4:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -12055,6 +12079,10 @@ Unfold_4:
       strides: 1
       paddings: 0
       dilations: 1
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size, paddings: padding, strides: stride, dilations: dilation }
 
 conv1d_base:
   desc: "1维卷积"
