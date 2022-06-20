@@ -11434,6 +11434,10 @@ CosineSimilarity_base:
     params:
       axis: 1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_0:
   desc: "比较两个tensor的余弦相似度"
@@ -11455,6 +11459,10 @@ CosineSimilarity_0:
     params:
       axis: 1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_1:
   desc: "比较两个tensor的余弦相似度"
@@ -11476,6 +11484,10 @@ CosineSimilarity_1:
     params:
       axis: -1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_2:
   desc: "比较两个tensor的余弦相似度"
@@ -11497,6 +11509,10 @@ CosineSimilarity_2:
     params:
       axis: -2
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_3:
   desc: "比较两个tensor的余弦相似度"
@@ -11518,6 +11534,10 @@ CosineSimilarity_3:
     params:
       axis: 1
       eps: 0.000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_4:
   desc: "比较两个tensor的余弦相似度"
@@ -11539,6 +11559,10 @@ CosineSimilarity_4:
     params:
       axis: -1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_5:
   desc: "比较两个tensor的余弦相似度"
@@ -11572,6 +11596,10 @@ Flatten_base:
         dtype: "float32"
         shape: [2, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input }
 
 Flatten_0:
   desc: "展开一个tensor"
@@ -11584,6 +11612,10 @@ Flatten_0:
         dtype: "float32"
         shape: [2, 3, 5, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input }
 
 Flatten_1:
   desc: "展开一个tensor"
@@ -11599,6 +11631,10 @@ Flatten_1:
     params:
       start_axis: 0
       stop_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_2:
   desc: "展开一个tensor"
@@ -11613,6 +11649,10 @@ Flatten_2:
         range: [ -1, 1]
     params:
       stop_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, stop_axis: end_dim }
 
 Flatten_3:
   desc: "展开一个tensor"
@@ -11627,6 +11667,10 @@ Flatten_3:
         range: [ -1, 1]
     params:
       start_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim }
 
 Flatten_4:
   desc: "展开一个tensor"
@@ -11642,6 +11686,10 @@ Flatten_4:
     params:
       start_axis: 1
       stop_axis: 2
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_5:
   desc: "展开一个tensor"
@@ -11657,6 +11705,10 @@ Flatten_5:
     params:
       start_axis: -3
       stop_axis: -3
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_6:
   desc: "展开一个tensor"
@@ -11672,6 +11724,10 @@ Flatten_6:
     params:
       start_axis: -3
       stop_axis: 1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_7:
   desc: "展开一个tensor"
@@ -11687,6 +11743,10 @@ Flatten_7:
     params:
       start_axis: -2
       stop_axis: 1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_8:
   desc: "展开一个tensor"
@@ -11702,6 +11762,10 @@ Flatten_8:
     params:
       start_axis: 0
       stop_axis: 1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_9:
   desc: "展开一个tensor"
@@ -11717,6 +11781,10 @@ Flatten_9:
     params:
       start_axis: 0
       stop_axis: 2
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_10:
   desc: "展开一个tensor"
@@ -11729,6 +11797,10 @@ Flatten_10:
         dtype: "float32"
         shape: [3, 3, 100]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input }
 
 Flatten_11:
   desc: "展开一个tensor"
@@ -11744,6 +11816,10 @@ Flatten_11:
     params:
       start_axis: -3
       stop_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_12:
   desc: "展开一个tensor"
@@ -11759,6 +11835,10 @@ Flatten_12:
     params:
       start_axis: -2
       stop_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 PairwiseDistance_base:
   desc: "计算两个tensor之间pairwise的距离"
