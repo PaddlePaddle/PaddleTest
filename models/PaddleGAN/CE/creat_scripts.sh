@@ -64,7 +64,7 @@ elif [[ ${model} == 'esrgan_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pixel|g" ${model}.yaml #指标
     sed -i "" "s|8462.812|28.251|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|15.114|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|9151.643|25.114|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'animeganv2_pretrain' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
@@ -154,7 +154,7 @@ elif [[ ${model} == 'esrgan_psnr_x2_div2k' ]]; then
     sed -i "" "s|P0|P0|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_pixel|g" ${model}.yaml #指标
     sed -i "" "s|8462.812|26.395|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|14.98|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|9151.643|24.98|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'wgan_mnist' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml

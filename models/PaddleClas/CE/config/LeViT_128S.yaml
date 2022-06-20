@@ -135,14 +135,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 59128.39954
+        kpi_base: 139920.58921
         threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 393302.9775
+        kpi_base: 1187701.472
         threshold: 1.0 #0001
         actived: True
         evaluation: "-"
