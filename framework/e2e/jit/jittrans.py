@@ -136,6 +136,12 @@ class JitTrans(WeakTrans):
             "paddle.rand",
             "paddle.bernoulli",
             "paddle.randint_like",
+            "paddle.normal",
+            "paddle.standard_normal",
+            "paddle.randn",
+            "paddle.uniform",
+            "paddle.poisson",
+            "paddle.randperm",
         ]
         # 忽略jit_save测试的api
         self.ignore_api_jit_save = ["paddle.broadcast_shape", "paddle.rank"]
