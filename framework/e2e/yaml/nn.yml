@@ -12110,6 +12110,10 @@ conv1d_base:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_0:
   desc: "1维卷积"
@@ -12134,6 +12138,10 @@ conv1d_0:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 conv1d_1:
   desc: "1维卷积"
@@ -12161,6 +12169,10 @@ conv1d_1:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_2:
   desc: "1维卷积"
@@ -12188,6 +12200,10 @@ conv1d_2:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_3:
   desc: "1维卷积"
@@ -12215,6 +12231,10 @@ conv1d_3:
         range: [ -1, 1]
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_4:
   desc: "1维卷积"
@@ -12242,6 +12262,10 @@ conv1d_4:
         range: [ -1, 1]
       stride: 2
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_5:
   desc: "1维卷积"
@@ -12270,6 +12294,10 @@ conv1d_5:
       stride: 2
       padding: 0
       groups: 3
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, groups: groups }
 
 conv1d_6:
   desc: "1维卷积"
@@ -12297,6 +12325,10 @@ conv1d_6:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_7:
   desc: "1维卷积"
@@ -12353,6 +12385,10 @@ conv1d_11:
       stride: [1]
       padding: 1
       dilation: 2
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, dilation: dilation }
 
 conv1d_12:
   desc: "1维卷积"
@@ -12381,6 +12417,10 @@ conv1d_12:
       stride: [1]
       padding: [1]
       dilation: [2,]
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, dilation: dilation }
 
 conv1d_13:
   desc: "1维卷积"
@@ -12409,6 +12449,10 @@ conv1d_13:
       stride: [1]
       padding: [1]
       dilation: !!python/tuple [2,]
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, dilation: dilation }
 
 conv1d_14:
   desc: "1维卷积"
@@ -12437,6 +12481,10 @@ conv1d_14:
       stride: [1]
       padding: [2]
       dilation: !!python/tuple [2,]
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, dilation: dilation }
 
 conv1d_transpose_base:
   desc: "1维反卷积"
@@ -12462,6 +12510,11 @@ conv1d_transpose_base:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_:
   desc: "1维反卷积"
@@ -12486,6 +12539,10 @@ conv1d_transpose_:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 conv1d_transpose_0:
   desc: "1维反卷积"
@@ -12511,6 +12568,11 @@ conv1d_transpose_0:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_1:
   desc: "1维反卷积"
@@ -12536,6 +12598,11 @@ conv1d_transpose_1:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_2:
   desc: "1维反卷积"
@@ -12561,6 +12628,11 @@ conv1d_transpose_2:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_3:
   desc: "1维反卷积"
@@ -12586,6 +12658,11 @@ conv1d_transpose_3:
       dilation: 2
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_4:
   desc: "1维反卷积"
@@ -12611,6 +12688,11 @@ conv1d_transpose_4:
       dilation: 1
       groups: 3
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_5:
   desc: "1维反卷积"
@@ -12681,7 +12763,6 @@ conv1d_transpose_7:
         shape: [3, 2, 3]
         range: [ -1, 1 ]
       stride: 1
-      padding: [4, 4]
       output_padding: 0
       dilation: 1
       groups: 1
@@ -12819,6 +12900,10 @@ conv2d_base:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv2d_0:
   desc: "2维卷积"
@@ -12840,6 +12925,10 @@ conv2d_0:
         range: [ -1, 1 ]
       padding: 0
       groups: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, padding: padding, groups: groups }
 
 conv2d_1:
   desc: "2维卷积"
@@ -12861,6 +12950,10 @@ conv2d_1:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding }
 
 conv2d_2:
   desc: "2维卷积"
@@ -12888,6 +12981,10 @@ conv2d_2:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv2d_3:
   desc: "2维卷积"
@@ -12909,6 +13006,10 @@ conv2d_3:
         range: [ -1, 1]
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding }
 
 conv2d_4:
   desc: "2维卷积"
@@ -12930,6 +13031,10 @@ conv2d_4:
         range: [ -1, 1]
       stride: 2
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding }
 
 conv2d_5:
   desc: "2维卷积"
@@ -12952,6 +13057,10 @@ conv2d_5:
       stride: 2
       padding: 0
       groups: 3
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, groups: groups }
 
 conv2d_6:
   desc: "2维卷积"
@@ -12979,6 +13088,10 @@ conv2d_6:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv2d_7:
   desc: "2维卷积"
@@ -13052,6 +13165,10 @@ conv2d_12:
       stride: [2, 1]
       padding: 1
       dilation: [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_13:
   desc: "2维卷积"
@@ -13074,6 +13191,10 @@ conv2d_13:
       stride: [2, 1]
       padding: 1
       dilation: !!python/tuple [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_14:
   desc: "2维卷积"
@@ -13096,6 +13217,10 @@ conv2d_14:
       stride: [2, 1]
       padding: !!python/tuple [1, 2]
       dilation: !!python/tuple [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_15:
   desc: "2维卷积"
@@ -13149,6 +13274,10 @@ conv2d_transpose_base:
       output_padding: 0
       dilation: 1
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation }
 
 conv2d_transpose_0:
   desc: "2维反卷积"
@@ -13173,6 +13302,10 @@ conv2d_transpose_0:
       output_padding: 0
       dilation: 1
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation }
 
 conv2d_transpose_1:
   desc: "2维反卷积"
@@ -13195,6 +13328,10 @@ conv2d_transpose_1:
       stride: 1
       padding: 1
       dilation: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_transpose_2:
   desc: "2维反卷积"
@@ -13218,6 +13355,10 @@ conv2d_transpose_2:
       padding: [1, 0]
       dilation: 1
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_transpose_3:
   desc: "2维反卷积"
@@ -13241,6 +13382,10 @@ conv2d_transpose_3:
       padding: [1, 0]
       dilation: 2
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_transpose_4:
   desc: "2维反卷积"
@@ -13266,6 +13411,10 @@ conv2d_transpose_4:
       dilation: 1
       groups: 3
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation, groups: groups }
 
 conv2d_transpose_5:
   desc: "2维反卷积"
@@ -13489,6 +13638,10 @@ conv2d_transpose_13:
       dilation: 1
       groups: 1
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 conv3d_base:
   desc: "3维卷积"
@@ -13516,6 +13669,10 @@ conv3d_base:
         range: [ -1, 1 ]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_0:
   desc: "3维卷积"
@@ -13537,6 +13694,10 @@ conv3d_0:
         range: [ -1, 1 ]
       padding: 0
       groups: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, groups: groups, padding: padding }
 
 conv3d_1:
   desc: "3维卷积"
@@ -13564,6 +13725,10 @@ conv3d_1:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_2:
   desc: "3维卷积"
@@ -13591,6 +13756,10 @@ conv3d_2:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_3:
   desc: "3维卷积"
@@ -13618,6 +13787,10 @@ conv3d_3:
         range: [ -1, 1]
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_4:
   desc: "3维卷积"
@@ -13645,6 +13818,10 @@ conv3d_4:
         range: [ -1, 1]
       stride: 2
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_5:
   desc: "3维卷积"
@@ -13673,6 +13850,10 @@ conv3d_5:
       stride: 2
       padding: 0
       groups: 3
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, groups: groups }
 
 conv3d_6:
   desc: "3维卷积"
@@ -13700,6 +13881,10 @@ conv3d_6:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_7:
   desc: "3维卷积"
@@ -13750,6 +13935,10 @@ conv3d_11:
       stride: [2, 2, 1]
       padding: 1
       dilation: 2
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_12:
   desc: "3维卷积"
@@ -13772,6 +13961,10 @@ conv3d_12:
       stride: [2, 2, 1]
       padding: 1
       dilation: [2, 2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_13:
   desc: "3维卷积"
@@ -13794,6 +13987,10 @@ conv3d_13:
       stride: [2, 2, 1]
       padding: 1
       dilation: !!python/tuple [2, 2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_14:
   desc: "3维卷积"
@@ -13816,6 +14013,10 @@ conv3d_14:
       stride: [2, 2, 1]
       padding: !!python/tuple [1, 2, 2]
       dilation: !!python/tuple [2, 2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_15:
   desc: "3维卷积"
@@ -13838,6 +14039,10 @@ conv3d_15:
       stride: [2, 2, 1]
       padding: [1, 2, 2]
       dilation: !!python/tuple [2, 2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 
 conv3d_transpose_base:
@@ -13869,6 +14074,10 @@ conv3d_transpose_base:
       output_padding: 0
       dilation: 1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation }
 
 conv3d_transpose_0:
   desc: "2维反卷积"
@@ -13893,6 +14102,10 @@ conv3d_transpose_0:
       output_padding: 0
       dilation: 1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation }
 
 conv3d_transpose_1:
   desc: "2维反卷积"
@@ -13915,6 +14128,10 @@ conv3d_transpose_1:
       stride: 1
       padding: 1
       dilation: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_transpose_2:
   desc: "2维反卷积"
@@ -13938,6 +14155,10 @@ conv3d_transpose_2:
       padding: [1, 0, 1]
       dilation: 1
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_transpose_3:
   desc: "2维反卷积"
@@ -13961,6 +14182,10 @@ conv3d_transpose_3:
       padding: [1, 0, 1]
       dilation: 2
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_transpose_4:
   desc: "2维反卷积"
@@ -13986,6 +14211,10 @@ conv3d_transpose_4:
       dilation: 1
       groups: 3
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation, groups: groups }
 
 conv3d_transpose_5:
   desc: "2维反卷积"
@@ -14209,6 +14438,10 @@ conv3d_transpose_13:
       dilation: 1
       groups: 1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 conv3d_transpose_14:
   desc: "2维反卷积"
@@ -14233,6 +14466,10 @@ conv3d_transpose_14:
       dilation: 1
       groups: 1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 adaptive_avg_pool1d_base:
   desc: "1维自适应平均池化"
