@@ -15113,6 +15113,10 @@ avg_pool1d_base:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool1d_0:
   desc: "1维平均池化"
@@ -15129,6 +15133,10 @@ avg_pool1d_0:
       kernel_size: 3
       stride: 4
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool1d_1:
   desc: "1维平均池化"
@@ -15145,6 +15153,10 @@ avg_pool1d_1:
       kernel_size: 1
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool1d_2:
   desc: "1维平均池化"
@@ -15211,6 +15223,10 @@ avg_pool2d_base:
         range: [ -1, 1]
     params:
       kernel_size: [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size }
 
 avg_pool2d_0:
   desc: "2维平均池化"
@@ -15225,6 +15241,10 @@ avg_pool2d_0:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size }
 
 avg_pool2d_1:
   desc: "2维平均池化"
@@ -15242,6 +15262,10 @@ avg_pool2d_1:
       stride: [3, 3]
       padding: [0, 0]
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode }
 
 avg_pool2d_2:
   desc: "2维平均池化"
@@ -15276,6 +15300,10 @@ avg_pool2d_3:
       kernel_size: [3, 3]
       stride: [1, 1]
       padding: [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool2d_4:
   desc: "2维平均池化"
@@ -15292,6 +15320,10 @@ avg_pool2d_4:
       kernel_size: [3, 3]
       stride: !!python/tuple [1, 1]
       padding: [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool2d_5:
   desc: "2维平均池化"
