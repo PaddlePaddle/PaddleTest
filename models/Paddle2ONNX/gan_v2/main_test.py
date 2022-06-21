@@ -52,6 +52,11 @@ class GanV2Test(object):
         tmp = tgz.replace(time_stamp + "^" + repo + "^" + model_name + "^" + paddle_commit + "^", "")
         repo_commit = tmp[0 : tmp.find(".")]
 
+        if model_name == "FOMM":
+            pd_file = "kp_detector"
+        else:
+            pd_file = "inference"
+
         str_all = ""
         for opset_v in self.opset_v_list:
             tmp = (
@@ -63,8 +68,8 @@ class GanV2Test(object):
                 "    logging.info('repo commit: {} !!!')\n"
                 "    unit_exit_code = os.system(\n"
                 '        "paddle2onnx --model_dir={} "\n'
-                '        "--model_filename=inference.pdmodel "\n'
-                '        "--params_filename=inference.pdiparams "\n'
+                '        "--model_filename={}.pdmodel "\n'
+                '        "--params_filename={}.pdiparams "\n'
                 '        "--save_file={} "\n'
                 '        "--opset_version={} --enable_onnx_checker=True"\n'
                 "    )\n"
@@ -79,6 +84,8 @@ class GanV2Test(object):
                     paddle_commit,
                     repo_commit,
                     model_path,
+                    pd_file,
+                    pd_file,
                     os.path.join(model_path, "inference.onnx"),
                     opset_v,
                 )

@@ -29,7 +29,7 @@ class OcrV2Test(object):
         for line in open("tipc_models_url_PaddleOCR_latest.txt"):
             self.model_url_list.append(line)
 
-        self.opset_v_list = [10, 11, 12]
+        self.opset_v_list = [11, 12]
 
     def prepare_resource(self, tgz_url):
         """
