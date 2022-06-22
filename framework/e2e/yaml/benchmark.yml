@@ -347,3 +347,85 @@ conv2d_9:
     api_name: torch.nn.functional.conv2d
     mapping:
       ins: {x: input, weight: weight, dilation: dilation, padding: padding, stride: stride, groups: groups}
+
+
+avg_pool3d_0:
+  desc: Case描述, auto generate from OP benchmark
+  paddle:
+    api_name: paddle.nn.functional.avg_pool3d
+    inputs:
+      x:
+        dtype: float32
+        random: true
+        shape: [16, 2048, 7, 7, 7]
+    params:
+      ceil_mode: false
+      data_format: NCDHW
+      kernel_size: [7, 7, 7]
+      padding: [0, 0, 0]
+      stride: [1, 1, 1]
+  pytorch:
+    api_name: torch.nn.functional.avg_pool3d
+    mapping:
+      ins: {x: input, kernel_size: kernel_size, padding: padding, stride: stride, ceil_mode: ceil_mode}
+
+avg_pool3d_1:
+  desc: Case描述, auto generate from OP benchmark
+  paddle:
+    api_name: paddle.nn.functional.avg_pool3d
+    inputs:
+      x:
+        dtype: float32
+        random: true
+        shape: [16, 256, 16, 16, 16]
+    params:
+      ceil_mode: false
+      data_format: NCDHW
+      kernel_size: [2, 2, 2]
+      padding: [0, 0, 0]
+      stride: [2, 2, 2]
+  pytorch:
+    api_name: torch.nn.functional.avg_pool3d
+    mapping:
+      ins: {x: input, kernel_size: kernel_size, padding: padding, stride: stride, ceil_mode: ceil_mode}
+
+avg_pool3d_2:
+  desc: Case描述, auto generate from OP benchmark
+  paddle:
+    api_name: paddle.nn.functional.avg_pool3d
+    inputs:
+      x:
+        dtype: float32
+        random: true
+        shape: [16, 1024, 16, 16, 16]
+    params:
+      ceil_mode: true
+      data_format: NCDHW
+      kernel_size: [2, 2, 2]
+      padding: [0, 0, 0]
+      stride: [2, 2, 2]
+  pytorch:
+    api_name: torch.nn.functional.avg_pool3d
+    mapping:
+      ins: {x: input, kernel_size: kernel_size, padding: padding, stride: stride, ceil_mode: ceil_mode}
+
+
+binary_cross_entropy_0:
+  desc: Case描述, auto generate from OP benchmark
+  paddle:
+    api_name: paddle.nn.functional.binary_cross_entropy
+    inputs:
+      input:
+        dtype: float32
+        random: true
+        shape: [16, 3, 64, 64, 1 ]
+        range: [ 0, 1]
+      label:
+        dtype: float32
+        random: true
+        shape: [16, 3, 64, 64, 1 ]
+    params: {}
+  pytorch:
+    api_name: torch.nn.functional.binary_cross_entropy
+    mapping:
+      ins: {input: input, label: target}
