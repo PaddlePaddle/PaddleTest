@@ -112,7 +112,7 @@ FINETUNE:
     kpis:
       loss:
         latest: True
-        kpi_base: 0.645923
+        kpi_base: 0.782154
         threshold: 0.08
         actived: True
         evaluation: "-"
