@@ -45,7 +45,7 @@ TRAIN:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.03377
+        kpi_base: 0.04844
         threshold: 0.05
         actived: True
         evaluation: "-"
