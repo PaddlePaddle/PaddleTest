@@ -19,7 +19,7 @@ if exist dynamic_list (
 del /f dynamic_list
  )
 for /r configs %%i in (*.yml) do (
-echo %%i | findstr /i .yml | findstr /v /i "quick_start" | findstr /v /i "_base_" | findstr /v /i "contrib" | findstr /v /i "segformer" | findstr /v /i "smrt" >>dynamic_list
+echo %%i | findstr /i .yml | findstr /v /i "quick_start" | findstr /v /i "_base_" | findstr /v /i "contrib" | findstr /v /i "segformer" | findstr /v /i "smrt" | findstr /v /i "xpu" >>dynamic_list
 )
 echo test_start
 set err_sign=0
