@@ -66,3 +66,18 @@ def test_slice_base_2():
     strides = [4, -2]
     res = x_data[starts[0] : ends[0] : strides[0], starts[1] : ends[1] : strides[1]]
     obj.run(res=res, x=x_data, axes=axes, starts=starts, ends=ends, strides=strides)
+
+
+@pytest.mark.api_base_slice_parameters
+def test_slice_3():
+    """
+    strides < 0
+    end < 0
+    set_value
+    """
+    x = paddle.to_tensor([1, 2, 3, 4])
+    r = np.array([4, 3, 2])
+    assert np.allclose(x[7:-4:-1].numpy(), r)
+    x[7:-4:-1] = -5
+    res = np.array([1, -5, -5, -5])
+    assert np.allclose(x.numpy(), res)
