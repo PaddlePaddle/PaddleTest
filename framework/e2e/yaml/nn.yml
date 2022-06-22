@@ -15916,6 +15916,10 @@ max_pool2d_base:
         range: [ -1, 1]
     params:
       kernel_size: [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size }
 
 max_pool2d_0:
   desc: "2维最大池化"
@@ -15930,6 +15934,10 @@ max_pool2d_0:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size }
 
 max_pool2d_1:
   desc: "2维最大池化"
@@ -15946,6 +15954,10 @@ max_pool2d_1:
       kernel_size: [3, 3]
       stride: [1, 1]
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, ceil_mode: ceil_mode }
 
 max_pool2d_2:
   desc: "2维最大池化"
@@ -15961,6 +15973,10 @@ max_pool2d_2:
     params:
       kernel_size: [3, 3]
       stride: [1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride }
 
 max_pool2d_3:
   desc: "2维最大池化"
@@ -15977,6 +15993,10 @@ max_pool2d_3:
       kernel_size: [3, 3]
       stride: [1, 1]
       padding: [1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool2d_4:
   desc: "2维最大池化"
@@ -15993,6 +16013,10 @@ max_pool2d_4:
       kernel_size: [3, 3]
       stride: [1, 2]
       padding: [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool2d_5:
   desc: "2维最大池化"
@@ -16009,6 +16033,10 @@ max_pool2d_5:
       kernel_size: [3, 3]
       stride: !!python/tuple [1, 2]
       padding: [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool2d_6:
   desc: "2维最大池化"
@@ -16025,6 +16053,10 @@ max_pool2d_6:
       kernel_size: [3, 3]
       stride: !!python/tuple [1, 2]
       padding: !!python/tuple [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool2d_7:
   desc: "2维最大池化"
@@ -16044,6 +16076,10 @@ max_pool2d_7:
       return_mask: True
       ceil_mode: True
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, return_mask: return_indices, ceil_mode: ceil_mode }
 
 max_pool2d_8:
   desc: "2维最大池化"
@@ -16077,6 +16113,10 @@ max_pool3d_base:
       kernel_size: [3, 3, 3]
       stride: [1, 1, 1]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_0:
   desc: "3维最大池化"
@@ -16093,6 +16133,10 @@ max_pool3d_0:
       kernel_size: [3, 3, 3]
       stride: [2, 2, 2]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_1:
   desc: "3维最大池化"
@@ -16110,6 +16154,10 @@ max_pool3d_1:
       stride: [1, 1, 1]
       padding: [0, 0, 0]
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode }
 
 max_pool3d_2:
   desc: "3维最大池化"
@@ -16143,6 +16191,10 @@ max_pool3d_3:
       kernel_size: [3, 3, 3]
       stride: [1, 2, 3]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_4:
   desc: "3维最大池化"
@@ -16159,6 +16211,10 @@ max_pool3d_4:
       kernel_size: [3, 3, 3]
       stride: [3, 2, 1]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_5:
   desc: "3维最大池化"
@@ -16175,6 +16231,10 @@ max_pool3d_5:
       kernel_size: [3, 3, 3]
       stride: [3, 2, 1]
       padding: [1, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_6:
   desc: "3维最大池化"
@@ -16191,6 +16251,10 @@ max_pool3d_6:
       kernel_size: [3, 3, 3]
       stride: [3, 2, 1]
       padding: [1, 1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_7:
   desc: "3维最大池化"
@@ -16223,6 +16287,10 @@ max_pool3d_8:
       kernel_size: [3, 3, 3]
       stride: [3, 2, 1]
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_9:
   desc: "3维最大池化"
@@ -16239,6 +16307,10 @@ max_pool3d_9:
       kernel_size: [3, 3, 3]
       stride: 2
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_10:
   desc: "3维最大池化"
@@ -16255,6 +16327,10 @@ max_pool3d_10:
       kernel_size: [3, 3, 3]
       stride: !!python/tuple [3, 2, 1]
       padding: [1, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_11:
   desc: "3维最大池化"
@@ -16271,6 +16347,10 @@ max_pool3d_11:
       kernel_size: [3, 3, 3]
       stride: !!python/tuple [3, 2, 1]
       padding: !!python/tuple [1, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_12:
   desc: "3维最大池化"
@@ -16290,6 +16370,10 @@ max_pool3d_12:
       return_mask: True
       ceil_mode: True
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode, return_mask: return_indices }
 
 max_pool3d_13:
   desc: "3维最大池化"
