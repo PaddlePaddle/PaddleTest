@@ -30,6 +30,7 @@ class DetV2Test(object):
             self.model_url_list.append(line)
 
         self.opset_v_list = [10, 11, 12]
+        self.ignore_model = ["ttfnet_darknet53_1x_coco", "yolov3_darknet53_270e_coco_PACT"]
 
     def prepare_resource(self, tgz_url):
         """
@@ -105,19 +106,19 @@ class DetV2Test(object):
         os.system("wget -q --no-proxy {}".format(tgz_url))
         os.system("tar -xzf {}".format(tgz))
 
-        return tgz, case_name, model_path
+        return tgz, case_name, model_path, model_name
 
     def run(self):
         """
         run test
         """
         for tgz_url in self.model_url_list:
-            tgz, case_name, model_path = self.prepare_resource(tgz_url)
-
-            if platform.system() == "Windows":
-                os.system("python.exe -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
-            else:
-                os.system("python -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
+            tgz, case_name, model_path, model_name = self.prepare_resource(tgz_url)
+            if model_name not in self.ignore_model:
+                if platform.system() == "Windows":
+                    os.system("python.exe -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
+                else:
+                    os.system("python -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
             os.remove(tgz)
             shutil.rmtree(model_path)
 
