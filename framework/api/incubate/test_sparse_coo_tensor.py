@@ -15,7 +15,7 @@ sys.path.append("../../utils/")
 from interceptor import skip_branch_not_develop
 
 
-# @skip_branch_not_develop
+@skip_branch_not_develop
 @pytest.mark.api_sparse_sparse_coo_tensor_vartype
 def test_sparse_sparse_coo_tensor_base():
     """
@@ -36,7 +36,7 @@ def test_sparse_sparse_coo_tensor_base():
             assert np.allclose(dense.numpy(), dense_res)
 
 
-# @skip_branch_not_develop
+@skip_branch_not_develop
 @pytest.mark.api_sparse_sparse_coo_tensor_vartype
 def test_sparse_sparse_coo_tensor1():
     """
