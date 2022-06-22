@@ -75,6 +75,7 @@ def test_slice_3():
     end < 0
     set_value
     """
+    paddle.disable_static()
     x = paddle.to_tensor([1, 2, 3, 4])
     r = np.array([4, 3, 2])
     assert np.allclose(x[7:-4:-1].numpy(), r)
