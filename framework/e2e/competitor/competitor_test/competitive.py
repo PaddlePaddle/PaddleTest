@@ -9,10 +9,12 @@ import random
 import numpy as np
 import paddle
 import torch
-from competitor_test.tools import FrontAPIBase, compare, solve_tuple, TORCHDTYPE
+from competitor_test.tools import FrontAPIBase, compare, solve_tuple, TORCHDTYPE, TORCHDEVICE, COMPAREGAP
 
 # import logging
 from utils.logger import Logger
+
+logger = Logger("Competitive")
 
 
 class CompetitorCompareTest(object):
@@ -37,7 +39,9 @@ class CompetitorCompareTest(object):
         self._set_place()
         self.ignore_var = []
         self.types = None
-        self.logger = Logger("CompetitorCompareTest")
+        self.logger = logger
+        self.torch_place = False
+        self.delta = 1e-6
         self.hook()
         # 日志等级
         # if self.debug:
@@ -55,11 +59,12 @@ class CompetitorCompareTest(object):
         """
         run paddle and competitor api
         """
+        paddle_api_name, torch_api_name = self.paddle_api.__name__, self.torch_api.__name__
+        if COMPAREGAP.get(paddle_api_name, None):
+            self.delta = COMPAREGAP.get(paddle_api_name)
         for place in self.places:
             self.logger.get_log().info(
-                "[{}]start compare [paddle]{} and [torch]{}".format(
-                    place, str(self.paddle_api.__name__), str(self.torch_api.__name__)
-                )
+                "[{}]start compare [paddle]{} and [torch]{}".format(place, str(paddle_api_name), str(torch_api_name))
             )
 
             paddle.set_device(place)
@@ -71,21 +76,25 @@ class CompetitorCompareTest(object):
                 if dtype in ["float16", "float32", "float64"]:
                     paddle.set_default_dtype(dtype)
                     torch.set_default_dtype(TORCHDTYPE.get(dtype))
+                if place == "cpu" and dtype == "float16":
+                    continue
                 if self.enable_backward:
                     paddle_forward_res, paddle_backward_res = self._run_paddle(data, dtype)
-                    torch_forward_res, torch_backward_res = self._run_torch(data_c, dtype)
+                    torch_forward_res, torch_backward_res = self._run_torch(data_c, dtype, place)
                     paddle_forward_res = self._paddle_to_numpy(paddle_forward_res)
                     paddle_backward_res = self._paddle_to_numpy(paddle_backward_res)
                     torch_forward_res = self._torch_to_numpy(torch_forward_res)
                     torch_backward_res = self._torch_to_numpy(torch_backward_res)
-                    compare(paddle_forward_res, torch_forward_res)
+                    compare(paddle_forward_res, torch_forward_res, self.delta)
                     self.logger.get_log().info("[{}] data type forward result compare success!".format(dtype))
-                    compare(paddle_backward_res, torch_backward_res)
+                    compare(paddle_backward_res, torch_backward_res, self.delta)
                     self.logger.get_log().info("[{}] data backward result compare success!".format(dtype))
                 else:
                     paddle_forward_res = self._run_paddle(data, dtype)
-                    torch_forward_res = self._run_torch(data_c, dtype)
-                    compare(paddle_forward_res, torch_forward_res)
+                    torch_forward_res = self._run_torch(data_c, dtype, place)
+                    paddle_forward_res = self._paddle_to_numpy(paddle_forward_res)
+                    torch_forward_res = self._torch_to_numpy(torch_forward_res)
+                    compare(paddle_forward_res, torch_forward_res, self.delta)
                     self.logger.get_log().info("[{}] data type forward result compare success!".format(dtype))
 
     def _run_paddle(self, data, dtype):
@@ -106,11 +115,11 @@ class CompetitorCompareTest(object):
                 )
         return res, backward_res if self.enable_backward else res
 
-    def _run_torch(self, data_c, dtype):
+    def _run_torch(self, data_c, dtype, place):
         """
         run torch
         """
-        self._set_torch_param(data_c, dtype)
+        self._set_torch_param(data_c, dtype, place)
         self.torch_api = self._settle_api(self.torch_api)
         res = self._torch_forward()
         if self.debug:
@@ -136,9 +145,9 @@ class CompetitorCompareTest(object):
         convert torch.Tensor to ndarry
         """
         if isinstance(t, torch.Tensor):
-            return torch.detach(t).numpy()
+            return torch.detach(t).cpu().numpy()
         elif isinstance(t, (list, tuple)):
-            convert_numpy = lambda x: torch.detach(x).numpy()
+            convert_numpy = lambda x: torch.detach(x).cpu().numpy()
             return solve_tuple(t, torch.Tensor, convert_numpy)
 
     def _set_seed(self):
@@ -176,7 +185,10 @@ class CompetitorCompareTest(object):
             data["params"] = {}
         for k, v in data["inputs"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                self.paddle_inputs[k] = paddle.to_tensor(v, stop_gradient=False, dtype=dtype)
+                if v.dtype in ["int32", "int64"]:
+                    self.paddle_inputs[k] = paddle.to_tensor(v)
+                else:
+                    self.paddle_inputs[k] = paddle.to_tensor(v, stop_gradient=False, dtype=dtype)
             elif isinstance(v, (list, tuple)):
                 self.paddle_inputs = []
                 for i, j in enumerate(v):
@@ -190,11 +202,14 @@ class CompetitorCompareTest(object):
 
         for k, v in data["params"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                self.paddle_param[k] = paddle.to_tensor(v, dtype=dtype)
+                if v.dtype in ["int32", "int64"]:
+                    self.paddle_inputs[k] = paddle.to_tensor(v)
+                else:
+                    self.paddle_inputs[k] = paddle.to_tensor(v, dtype=dtype)
             else:
                 self.paddle_param[k] = v
 
-    def _set_torch_param(self, data: dict, dtype):
+    def _set_torch_param(self, data: dict, dtype, place):
         """
         set torch params
         """
@@ -202,12 +217,19 @@ class CompetitorCompareTest(object):
             data["params"] = {}
         for k, v in data["inputs"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                self.torch_inputs[k] = torch.tensor(v, requires_grad=True, dtype=TORCHDTYPE.get(dtype))
+                if v.dtype in ["int32", "int64"]:
+                    self.torch_inputs[k] = torch.tensor(v, device=TORCHDEVICE.get(place))
+                else:
+                    self.torch_inputs[k] = torch.tensor(
+                        v, device=TORCHDEVICE.get(place), requires_grad=True, dtype=TORCHDTYPE.get(dtype)
+                    )
             elif isinstance(v, (list, tuple)):
                 self.torch_inputs = []
                 for i, j in enumerate(v):
                     if isinstance(j, (np.generic, np.ndarray)):
-                        self.torch_inputs[k][i] = torch.tensor(j, requires_grad=True, dtype=TORCHDTYPE.get(dtype))
+                        self.torch_inputs[k][i] = torch.tensor(
+                            j, device=TORCHDEVICE.get(place), requires_grad=True, dtype=TORCHDTYPE.get(dtype)
+                        )
                     else:
                         self.logger.get_log().error("torch inputs type cannot convert")
                         raise TypeError
@@ -216,9 +238,14 @@ class CompetitorCompareTest(object):
 
         for k, v in data["params"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                self.torch_param[k] = torch.tensor(v, dtype=TORCHDTYPE.get(dtype))
+                if v.dtype in ["int32", "int64"]:
+                    self.torch_inputs[k] = torch.tensor(v, device=TORCHDEVICE.get(place))
+                else:
+                    self.torch_inputs[k] = torch.tensor(v, device=TORCHDEVICE.get(place), dtype=TORCHDTYPE.get(dtype))
             else:
                 self.torch_param[k] = v
+        if self.torch_place:
+            self.torch_param["device"] = TORCHDEVICE.get(place)
 
     def _settle_api(self, api):
         """
@@ -278,7 +305,7 @@ class CompetitorCompareTest(object):
             elif isinstance(v, (list, tuple)):
                 grad[k] = []
                 for i, j in enumerate(v):
-                    if isinstance(j, paddle.Tensor):
+                    if isinstance(j, torch.Tensor):
                         grad[k].append(v[i].grad)
         return grad
 

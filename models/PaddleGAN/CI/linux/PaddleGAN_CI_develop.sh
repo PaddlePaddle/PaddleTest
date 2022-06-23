@@ -126,8 +126,8 @@ if [ -f "/etc/redhat-release" ]; then
     echo "######  ffmpeg"
     yum update -y
     yum install epel-release -y
-    rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
-    rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+    # rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+    # rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
     yum install boost -y
     yum install opencv -y
     yum install ffmpeg -y
@@ -247,19 +247,20 @@ lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_ani
 python tools/main.py --config-file $line \
     -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
     > $log_path/train/${model}_1card.log 2>&1
+cp $log_path/train/${model}_1card.log $log_path/train/${model}_2card.log
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
 cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
     echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
-    echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
-    echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
+    echo "training_exit_code: 0.0" >> $log_path/train/${model}_1card.log
+    echo "training_exit_code: 0.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
 else
     cat $log_path/train/${model}_1card.log
     echo -e "\033[31m train of $model failed!\033[0m"| tee -a $log_path/result.log
-    echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
-    echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
+    echo "training_exit_code: 1.0" >> $log_path/train/${model}_1card.log
+    echo "training_exit_code: 1.0" >> $log_path/train/${model}_2card.log #为保持一致虚增多卡
 fi
     ;;
 *)
@@ -278,11 +279,11 @@ echo $params_dir
 cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
     echo -e "\033[33m train multi of $model  successfully!\033[0m"| tee -a $log_path/result.log
-    echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
+    echo "training_exit_code: 0.0" >> $log_path/train/${model}_2card.log
 else
     cat $log_path/train/${model}_2card.log
     echo -e "\033[31m train multi of $model failed!\033[0m"| tee -a $log_path/result.log
-    echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
+    echo "training_exit_code: 1.0" >> $log_path/train/${model}_2card.log
 fi
 
 #单卡训练
@@ -305,11 +306,11 @@ if [[ ${model_flag} =~ "CE" ]]; then
     cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
     if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
         echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
-        echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
+        echo "training_exit_code: 0.0" >> $log_path/train/${model}_1card.log
     else
         cat $log_path/train/${model}_1card.log
         echo -e "\033[31m train single of $model failed!\033[0m"| tee -a $log_path/result.log
-        echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
+        echo "training_exit_code: 1.0" >> $log_path/train/${model}_1card.log
     fi
 fi
 
@@ -352,7 +353,8 @@ makeup)
     sleep 0.01
     ;;
 msvsr_l_reds)
-    echo "skip eval msvsr_l_reds because OOM"
+    echo "skip eval msvsr_l_reds because train & eval OOM need 32G"
+    echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
     sleep 0.01
     ;;
 *)

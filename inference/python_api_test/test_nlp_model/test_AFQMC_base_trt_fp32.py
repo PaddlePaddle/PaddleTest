@@ -46,40 +46,23 @@ def set_dynamic_shape(config):
     """
     set dynamic shape
     """
-    names = ["input_ids", "token_type_ids", "cumsum_0.tmp_0", "full_like_0.tmp_0", "unsqueeze2_0.tmp_0", "tmp_4"]
+    names = ["embedding_3.tmp_0", "embedding_4.tmp_0", "embedding_5.tmp_0", "unsqueeze2_0.tmp_0"]
     max_batch = 40
-    min_batch_seq_len = 1
-    max_batch_seq_len = 512
-    opt_batch_seq_len = 256
+    max_single_seq_len = 128
+    opt_single_seq_len = 64
 
-    min_shape = [1, min_batch_seq_len]
-    max_shape = [max_batch, max_batch_seq_len]
-    opt_shape = [max_batch, opt_batch_seq_len]
+    min_shape = [1, 1, 768]
+    max_shape = [max_batch, max_single_seq_len, 768]
+    opt_shape = [1, opt_single_seq_len, 768]
     config.set_trt_dynamic_shape_info(
-        {
-            names[0]: min_shape,
-            names[1]: min_shape,
-            names[2]: min_shape,
-            names[3]: min_shape,
-            names[4]: [1, 1, 1, 1],
-            names[5]: min_shape,
-        },
+        {names[0]: min_shape, names[1]: min_shape, names[2]: min_shape, names[3]: [1, 1, 1, 1]},
         {
             names[0]: max_shape,
             names[1]: max_shape,
             names[2]: max_shape,
-            names[3]: max_shape,
-            names[4]: [40, 1, 1, 128],
-            names[5]: max_shape,
+            names[3]: [max_batch, 1, 1, max_single_seq_len],
         },
-        {
-            names[0]: opt_shape,
-            names[1]: opt_shape,
-            names[2]: opt_shape,
-            names[3]: opt_shape,
-            names[4]: [40, 1, 1, 128],
-            names[5]: opt_shape,
-        },
+        {names[0]: opt_shape, names[1]: opt_shape, names[2]: opt_shape, names[3]: [1, 1, 1, opt_single_seq_len]},
     )
 
 

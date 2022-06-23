@@ -54,6 +54,14 @@ class CompeTrans(WeakTrans):
         """get paddle ins"""
         return self.ins
 
+    def get_torch_place(self):
+        """get torch place"""
+        exce = self.mapping.get("excess", None)
+        if exce:
+            return exce.get("place", None)
+        else:
+            return None
+
     def _generate_ins(self):
         """generate ins"""
         inputs = super(CompeTrans, self).get_inputs(self.framework.PADDLE)
@@ -66,6 +74,8 @@ class CompeTrans(WeakTrans):
         """
         rslt = dict()
         for k, v in map1.items():
+            if not map2.get(k):  # 跳过paddle有的，但是torch没有的参数
+                continue
             rslt[map2.get(k)] = v
         return rslt
 
@@ -109,6 +119,8 @@ class CompeTrans(WeakTrans):
             return ["int32", "int64"]
         elif dtype in ["float", "float32", "float64"]:
             return ["float32", "float64"]
+        elif dtype == "float16":
+            return ["float16"]
         elif dtype in ["complex", "complex64", "complex128"]:
             return ["complex64", "complex128"]
 

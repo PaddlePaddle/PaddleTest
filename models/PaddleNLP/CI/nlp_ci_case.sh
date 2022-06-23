@@ -993,6 +993,8 @@ python -u run_clue_classifier.py  \
 print_info $? clue-class
 cd ${nlp_dir}/examples/benchmark/clue/mrc
 export CUDA_VISIBLE_DEVICES=${cudaid1}
+unset http_proxy=${http_proxy}
+unset https_proxy=${http_proxy}
 python -m paddle.distributed.launch run_cmrc.py \
     --model_name_or_path ernie-3.0-base-zh \
     --batch_size 16 \
@@ -1008,6 +1010,13 @@ python -m paddle.distributed.launch run_cmrc.py \
     --save_steps 1 \
     --output_dir ./tmp >${log_path}/clue-mrc >>${log_path}/clue-mrc 2>&1
 print_info $? clue-mrc
+export http_proxy=${http_proxy};
+export https_proxy=${http_proxy}
+}
+#32 taskflow
+clue (){
+cd ${nlp_dir}
+python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
 }
 ####################################
 export P0case_list=()
@@ -1017,14 +1026,14 @@ declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2   ["squad"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
-  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["clue"]=5)
+  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["clue"]=5 ["taskflow"]=5)
 get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
 done
 P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie-1.0 xlnet ofa  squad tinybert lexical_analysis seq2seq \
 pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
-nptag ernie-m clue)
+nptag ernie-m clue taskflow)
 P0case_time=${all_P0case_time}
 }
 set -e

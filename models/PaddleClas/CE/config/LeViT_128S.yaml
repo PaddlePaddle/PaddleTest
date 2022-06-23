@@ -1,5 +1,5 @@
 MODEL: "LeViT_128S" # 模型名
-PRIORITY: P1
+PRIORITY: P1,convergence_LeViT_128S,LeViT_128S
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -52,8 +52,33 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml
+  -
+    tag: linux_convergence_test
+    priority: P1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleClas_convergence_develop.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/LeViT_128S_convergence.log
   -
     tag: train_linux_gpu1
     priority: P1
@@ -62,17 +87,17 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml train_linux_gpu1
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.1
+        kpi_base: 125091.6219
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.10001
+        kpi_base: 818413.944
+        threshold: 1.0 #0.01
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -85,10 +110,63 @@ TRAIN: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml train_linux_gpu2
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.1
+        kpi_base: 12.10445
+        threshold: 1.0 #
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 34.80694
+        threshold: 1.0 #0001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/LeViT_128S_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml train_linux_gpu1
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 139920.58921
+        threshold: 1.0 #
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 1187701.472
+        threshold: 1.0 #0001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/LeViT_128S_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 9.63286
+        threshold: 1.0 #
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 35.57647
+        threshold: 1.0 #0001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -104,7 +182,7 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -120,7 +198,7 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -136,7 +214,7 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -151,10 +229,26 @@ EVAL: # 训练步骤
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml eval_linux
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.10001
+        kpi_base: 1.2112
+        threshold: 1.0 #0001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/LeViT_128S_eval.log
+  -
+    tag: eval_linux_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 1.2112
+        threshold: 1.0 #0001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -170,7 +264,7 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -186,7 +280,7 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -205,7 +299,7 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -221,7 +315,7 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -237,7 +331,7 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -255,7 +349,7 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -271,7 +365,7 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -287,7 +381,7 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None

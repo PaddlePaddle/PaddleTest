@@ -1,6 +1,6 @@
 MODEL: "GPT-2" # 模型名
 
-PRIORITY: P0, Pre_test, Dy_con, agile_ci
+PRIORITY: P0, Pre_test, agile_ci
 
 GIT:
   addr: $REPO_PaddleNLP
@@ -191,7 +191,7 @@ INFER:
 
 EVAL:
   -
-    priority: p1
+    priority: p2
     tag: linux_dy_gpu1
     env: #去掉，自动调度
         CUDA_VISIBLE_DEVICES: $SET_CUDA

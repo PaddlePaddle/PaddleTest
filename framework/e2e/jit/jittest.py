@@ -12,9 +12,9 @@ sys.path.append(os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "uti
 from utils.yaml_loader import YamlLoader
 from jittrans import JitTrans
 
-yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", "nn.yml")
+yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", "base.yml")
 
-case_name = "max_pool3d_13"
+case_name = "shard_index_4"
 
 
 # loading yaml

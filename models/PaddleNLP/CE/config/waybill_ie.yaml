@@ -7,6 +7,7 @@ GIT:
 
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/waybill_ie/ #脚本的路径
   model_log_path: log/waybill_ie/
 
@@ -22,8 +23,8 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh waybill_ie $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
   -
     priority: p0
     tag: win_download_data
@@ -36,13 +37,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_ernie
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh gpu ernie
 
     kpis: #kpi指标
       Precision:
@@ -71,13 +65,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_bigru_crf
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh gpu bigru_crf
 
     kpis: #kpi指标
       Precision:
@@ -106,13 +93,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_ernie_crf
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh gpu ernie_crf
 
     kpis: #kpi指标
       Precision:
@@ -227,12 +207,6 @@ PYTHON_INFER:
   -
     priority: p0
     tag: linux_gpu1_ernie
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash python_infer.sh $XPU ernie
 
     kpis: #kpi指标
       exit_code:
@@ -247,12 +221,6 @@ PYTHON_INFER:
   -
     priority: p0
     tag: linux_gpu1_ernie_crf
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash python_infer.sh $XPU ernie_crf
 
     kpis: #kpi指标
       exit_code:
@@ -267,12 +235,6 @@ PYTHON_INFER:
   -
     priority: p0
     tag: linux_gpu1_bigru_crf
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash python_infer.sh $XPU bigru_crf
 
     kpis: #kpi指标
       exit_code:
