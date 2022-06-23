@@ -246,7 +246,10 @@ class Jelly(object):
             input_param = dict(self.torch_data, **self.torch_param)
             res = self.torch_api(**input_param)
             # init grad tensor
-            grad_tensor = torch.ones(res.shape, dtype=res.dtype)
+            if self.places == "gpu":
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype).to("cuda")
+            else:
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype)
 
             def func(input_param):
                 res = self.torch_api(**input_param)
