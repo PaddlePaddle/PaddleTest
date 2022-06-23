@@ -5,10 +5,14 @@
 test max
 """
 
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../../utils/")
+from interceptor import skip_branch_not_develop
 
 
 class TestSlice(APIBase):
@@ -68,6 +72,7 @@ def test_slice_base_2():
     obj.run(res=res, x=x_data, axes=axes, starts=starts, ends=ends, strides=strides)
 
 
+@skip_branch_not_develop
 @pytest.mark.api_base_slice_parameters
 def test_slice_3():
     """
