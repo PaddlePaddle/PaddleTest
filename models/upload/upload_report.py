@@ -49,7 +49,7 @@ def send(url):
                 "threshold": 0,
                 "ratio": 0
             })
-    print(models_result)
+    # print(models_result)
         
     params = {
         "build_type_id": os.getenv('build_type_id'),
@@ -69,7 +69,7 @@ def send(url):
        print("ok")
     else:
        print('error')
-    # print(params)
+    print(params)
     print(result)
 if __name__ == "__main__":
     # build_url需配置在环境变量中，不允许上传到github；
