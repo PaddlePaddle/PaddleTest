@@ -1,5 +1,5 @@
 MODEL: "HRNet_W18_C" # 模型名
-PRIORITY: P0
+PRIORITY: P0,convergence_HRNet_W18_C,HRNet_W18_C
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -52,8 +52,33 @@ FUNCTION: # 训练步骤
       -
         path: $ROOT_PATH/$model_function_path_mac
         cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml
+  -
+    tag: linux_convergence_test
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleClas_convergence_develop.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml
 
 TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_convergence.log
   -
     tag: train_linux_gpu1
     priority: P0
@@ -64,15 +89,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.4628
-        threshold: 0.1
+        kpi_base: 6.88506
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 16
-        threshold: 0.10001
+        kpi_base: 7.6093
+        threshold: 1.0 #0.01
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -87,8 +112,61 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.54288
-        threshold: 0.1
+        kpi_base: 6.78328
+        threshold: 1.0 #
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 7.08462
+        threshold: 1.0 #0001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml train_linux_gpu1
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.88455
+        threshold: 1.0 #
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 7.4173
+        threshold: 1.0 #0001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.77437
+        threshold: 1.0 #
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 7.13696
+        threshold: 1.0 #0001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -104,7 +182,7 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -120,7 +198,7 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -136,7 +214,7 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -153,8 +231,24 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 16
-        threshold: 0.10001
+        kpi_base: 7.6093
+        threshold: 1.0 #0001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/HRNet_W18_C_eval.log
+  -
+    tag: eval_linux_release
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 7.4173
+        threshold: 1.0 #0001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -170,7 +264,7 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -186,7 +280,7 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -205,7 +299,7 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -221,7 +315,7 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -237,7 +331,7 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -255,7 +349,7 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -271,7 +365,7 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -287,7 +381,7 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None

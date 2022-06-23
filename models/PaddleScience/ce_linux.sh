@@ -23,12 +23,11 @@ echo ============================= serial ${file_name} start ===================
         echo "skip"
     else
         cd ${file_dir}
-        python ${file_name} >> ${file_name%.*}.log
+        python ${file_name}
         if [ $? -ne 0 ]; then
             echo ${file_name} >> ${root_dir}/result.txt
             bug=`expr ${bug} + 1`
         fi
-        cat ${file_name%.*}.log
         cd -
     fi
 echo ============================= serial ${file_name}  end! =============================
@@ -47,12 +46,11 @@ echo ============================= distributed ${file_name} start ==============
         echo "skip"
     else
         cd ${file_dir}
-        python -m paddle.distributed.launch --devices=0,1 ${file_name} >> dst_${file_name%.*}.log
+        python -m paddle.distributed.launch --devices=0,1 ${file_name}
         if [ $? -ne 0 ]; then
             echo ${file_name} >> ${root_dir}/result.txt
             bug=`expr ${bug} + 1`
         fi
-        cat dst_${file_name%.*}.log
         cd -
     fi
 echo ============================= distributed ${file_name}  end! =============================

@@ -26,7 +26,7 @@ echo -e '*****************detection_version****'
 git rev-parse HEAD
 #find modified config file of this pr
 rm -rf config_list
-git diff --numstat --diff-filter=AMR upstream/${branch} | grep .yml | grep configs | grep -v kunlun | grep -v xpu | grep -v reader | grep -v test | grep -v oidv5 |grep -v _base_ |grep -v datasets |grep -v runtime |grep -v slim | grep -v roadsign | grep -v pruner | awk '{print $NF}' | tee config_list
+git diff --numstat --diff-filter=AMR upstream/${branch} | grep .yml | grep configs | grep -v kunlun | grep -v xpu | grep -v reader | grep -v test | grep -v oidv5 |grep -v _base_ |grep -v datasets |grep -v runtime |grep -v slim | grep -v roadsign | grep -v pruner | grep -v bytetrack | grep -v deepsort | awk '{print $NF}' | tee config_list
 echo -e '******************config_list****'
 cat config_list
 #create log dir
@@ -85,6 +85,9 @@ ln -s ${file_path}/data/DOTA_1024_s2anet dataset/DOTA_1024_s2anet
 if [ -d "dataset/mainbody" ];then rm -rf dataset/mainbody
 fi
 ln -s ${file_path}/data/mainbody dataset/mainbody
+if [ -d "dataset/visdrone" ];then rm -rf dataset/visdrone
+fi
+ln -s ${file_path}/data/visdrone dataset/visdrone
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${model_type},${mode},FAIL"

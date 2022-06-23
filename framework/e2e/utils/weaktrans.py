@@ -119,6 +119,8 @@ class WeakTrans(object):
             return np.random.randint(low, high, shape).astype("int64")
         elif dtype == "float":
             return low + (high - low) * np.random.random(shape)
+        elif dtype == "float16":
+            return low + (high - low) * np.random.random(shape).astype("float16")
         elif dtype == "float32":
             return low + (high - low) * np.random.random(shape).astype("float32")
         elif dtype == "float64":

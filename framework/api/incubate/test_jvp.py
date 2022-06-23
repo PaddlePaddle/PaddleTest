@@ -79,10 +79,12 @@ def test_jvp_base():
     x: 1-d tensor
     single_input and single_output
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.random.rand(2)
     paddle.disable_static()
     res = ans.jvp_with_jac(func0, paddle.to_tensor(x))
     obj.base(res=res.numpy(), func=func0, xs=x)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_incubate_jvp_parameters
@@ -91,10 +93,12 @@ def test_jvp1():
     x: 2-d tensor
     single_input and single_output
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.array([[1.0, 2.0], [3.0, 4.0]])
     paddle.disable_static()
     res = ans.jvp_with_jac(func0, paddle.to_tensor(x))
     obj.run(res=res.numpy(), func=func0, xs=x)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_incubate_jvp_parameters
@@ -104,11 +108,13 @@ def test_jvp2():
     single_input and single_output
     set v
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.array([[1.0, 2.0], [3.0, 4.0]])
     v = np.random.rand(2, 2)
     paddle.disable_static()
     res = ans.jvp_with_jac(func0, paddle.to_tensor(x), v=paddle.to_tensor(v))
     obj.run(res=res.numpy(), func=func0, xs=x, v=v)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_incubate_jvp_parameters
@@ -160,10 +166,12 @@ def test_jvp6():
     x: 2-d tensor
     single_input and multi_output
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.random.rand(3, 3)
     paddle.disable_static()
     res = ans.jvp_with_jac(func2, paddle.to_tensor(x))
     obj.run(res=res.numpy(), func=func2, xs=x)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_incubate_jvp_parameters
@@ -173,11 +181,13 @@ def test_jvp7():
     single_input and multi_output
     set v
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.random.rand(3, 3)
     v = np.random.rand(3, 3)
     paddle.disable_static()
     res = ans.jvp_with_jac(func2, paddle.to_tensor(x), v=paddle.to_tensor(v))
     obj.run(res=res.numpy(), func=func2, xs=x, v=v)
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_incubate_jvp_parameters
@@ -186,11 +196,13 @@ def test_jvp8():
     x: 2-d tensor
     multi_input and multi_output
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.random.rand(3, 3)
     y = np.random.rand(3, 3)
     paddle.disable_static()
     res = ans.jvp_with_jac(func3, [paddle.to_tensor(x), paddle.to_tensor(y)])
     obj.run(res=res.numpy(), func=func3, xs=[x, y])
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_incubate_jvp_parameters
@@ -200,6 +212,7 @@ def test_jvp9():
     multi_input and multi_output
     set v
     """
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.random.rand(4, 4)
     v1 = np.random.rand(4, 4)
     paddle.disable_static()
@@ -207,3 +220,4 @@ def test_jvp9():
         func3, [paddle.to_tensor(x), paddle.to_tensor(x)], v=[paddle.to_tensor(v1), paddle.to_tensor(v1)]
     )
     obj.run(res=res.numpy(), func=func3, xs=[x, x], v=[v1, v1])
+    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
