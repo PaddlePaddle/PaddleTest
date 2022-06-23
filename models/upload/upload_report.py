@@ -21,7 +21,7 @@ def send(url):
     models=os.getenv('models_list')
     models_list=[]
     for model in (models.split(',')):
-        if model:
+        if model.strip():
             models_list.append(model.strip())
 
     os.chdir(os.getenv('log_path'))
