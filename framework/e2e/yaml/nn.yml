@@ -8113,12 +8113,7 @@ LayerNorm_3:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
-#  pytorch:
-#    api_name: "torch.nn.LayerNorm"
-#    mapping:
-#      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
-#      excess:
-#        place: True
+        place: True
 
 LayerNorm_4:
   desc: "层归一化"
@@ -8177,12 +8172,6 @@ LayerNorm_6:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
-#  pytorch:
-#    api_name: "torch.nn.LayerNorm"
-#    mapping:
-#      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
-#      excess:
-#        place: True
 
 LayerNorm_7:
   desc: "层归一化"
@@ -8241,12 +8230,6 @@ LayerNorm_9:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
-#  pytorch:
-#    api_name: "torch.nn.LayerNorm"
-#    mapping:
-#      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
-#      excess:
-#        place: True
 
 LocalResponseNorm_base:
   desc: "层归一化"
