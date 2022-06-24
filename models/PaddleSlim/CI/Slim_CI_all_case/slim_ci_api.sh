@@ -73,7 +73,6 @@ git fetch upstream
 IF_UT=false
 for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     dir1=${file_name%%/*}
-    echo ---diff file_name---
     echo ${file_name}
 #    if [[ ${file_name##*.} =~ "md" ]] || [[ ${file_name##*.} =~ "rst" ]] || [[ ${dir1} =~ "demo" ]] || [[ ${dir1} =~ "docs" ]];then
     if [[ ${dir1} =~ "tests" ]] || [[ ${dir1} =~ "paddleslim" ]] ;then
