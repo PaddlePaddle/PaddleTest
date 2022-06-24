@@ -16914,6 +16914,10 @@ local_response_norm:
       beta: 0.75
       k: 1.0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.local_response_norm"
+    mapping:
+      ins: { x: input, size: size, alpha: alpha, beta: beta, k: k }
 
 normalize:
   desc: "使用 Lp 范数沿维度 axis 对 x 进行归一化"
@@ -16930,6 +16934,10 @@ normalize:
       p: 2
       axis: 1
       epsilon: 0.000000000001
+  pytorch:
+    api_name: "torch.nn.functional.normalize"
+    mapping:
+      ins: { x: input, axis: dim, p: p, epsilon: eps }
 
 bilinear:
   desc: "对两个输入执行双线性张量积"
@@ -16961,6 +16969,35 @@ bilinear:
         dtype: "float32"
         shape: [1, 10]
         range: [ -1, 1]
+
+bilinear_0:
+  desc: "对两个输入执行双线性张量积"
+  paddle:
+    api_name: "paddle.nn.functional.bilinear"
+    inputs:
+      x1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [5, 5]
+        range: [ -1, 1]
+      x2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [5, 4]
+        range: [ -1, 1]
+    params:
+      weight:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [10, 5, 4]
+        range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.bilinear"
+    mapping:
+      ins: { x1: input1, x2: input2, weight: weight,  }
 
 linear:
   desc: "线性变换"
@@ -17016,6 +17053,10 @@ alpha_dropout_base:
     params:
       p: 0.5
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.alpha_dropout"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 alpha_dropout2:
   desc: "一种具有自归一化性质的dropout"
@@ -17031,6 +17072,10 @@ alpha_dropout2:
     params:
       p: 1.0
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.alpha_dropout"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 alpha_dropout3:
   desc: "一种具有自归一化性质的dropout"
@@ -17046,6 +17091,10 @@ alpha_dropout3:
     params:
       p: 0
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.alpha_dropout"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 #dropout:
 #  desc: "一种正则化手段"
@@ -17076,6 +17125,10 @@ dropout2d_base:
     params:
       p: 0.5
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.dropout2d"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 dropout3d_base:
   desc: "一种正则化手段"
@@ -17091,6 +17144,10 @@ dropout3d_base:
     params:
       p: 0.5
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.dropout3d"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 diag_embed_base:
   desc: "其在指定的 2D 平面（由 dim1 和 dim2 指定）上的对角线由输入 input 填充"
