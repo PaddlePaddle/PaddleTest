@@ -203,9 +203,9 @@ class CompetitorCompareTest(object):
         for k, v in data["params"].items():
             if isinstance(v, (np.generic, np.ndarray)):
                 if v.dtype in ["int32", "int64"]:
-                    self.paddle_inputs[k] = paddle.to_tensor(v)
+                    self.paddle_param[k] = paddle.to_tensor(v)
                 else:
-                    self.paddle_inputs[k] = paddle.to_tensor(v, dtype=dtype)
+                    self.paddle_param[k] = paddle.to_tensor(v, dtype=dtype)
             else:
                 self.paddle_param[k] = v
 

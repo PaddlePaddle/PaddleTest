@@ -17164,6 +17164,10 @@ diag_embed_base:
       offset: 0
       dim1: -2
       dim2: -1
+  pytorch:
+    api_name: "torch.diag_embed"
+    mapping:
+      ins: { input: input, offset: offset, dim1: dim1, dim2: dim2 }
 
 embedding_base:
   desc: "嵌入层(Embedding Layer)"
