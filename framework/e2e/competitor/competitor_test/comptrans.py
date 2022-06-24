@@ -58,9 +58,12 @@ class CompeTrans(WeakTrans):
         """get torch place"""
         exce = self.mapping.get("excess", None)
         if exce:
-            return exce.get("place", None)
-        else:
-            return None
+            device = exce.get("device", False)
+            # print(device)
+            if device is None:
+                return True
+            else:
+                return None
 
     def _generate_ins(self):
         """generate ins"""
