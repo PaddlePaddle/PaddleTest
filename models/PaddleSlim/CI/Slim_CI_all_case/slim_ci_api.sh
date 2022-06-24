@@ -80,7 +80,8 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     fi
 done
 echo -e "\033[35m ---- IF_UT: $IF_UT  \033[0m"
-#IF_UT=true
+
+IF_UT=true
 UT_EXCODE=0
 if [ $IF_UT == 'true' ];then
     bash slim_ci_api_coverage.sh $4 $5;
