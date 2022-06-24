@@ -67,7 +67,7 @@ fi
 mkdir /workspace/logs
 export log_path=/workspace/logs
 ####################################
-#IF_UT=false
+IF_UT=false
 for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     dir1=${file_name%%/*}
     echo ${file_name}
