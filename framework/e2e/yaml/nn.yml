@@ -8113,12 +8113,12 @@ LayerNorm_3:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
-  pytorch:
-    api_name: "torch.nn.LayerNorm"
-    mapping:
-      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
-      excess:
-        device:
+#  pytorch:
+#    api_name: "torch.nn.LayerNorm"
+#    mapping:
+#      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+#      excess:
+#        device:
 
 LayerNorm_4:
   desc: "层归一化"
@@ -8197,12 +8197,12 @@ LayerNorm_7:
         range: [ -1, 1]
     params:
       normalized_shape: !!python/tuple [3,]
-  pytorch:
-    api_name: "torch.nn.LayerNorm"
-    mapping:
-      ins: { data: input, normalized_shape: normalized_shape }
-      excess:
-        device:
+#  pytorch:
+#    api_name: "torch.nn.LayerNorm"
+#    mapping:
+#      ins: { data: input, normalized_shape: normalized_shape }
+#      excess:
+#        device:
 
 LayerNorm_8:
   desc: "层归一化"
@@ -8241,12 +8241,12 @@ LayerNorm_9:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
-  pytorch:
-    api_name: "torch.nn.LayerNorm"
-    mapping:
-      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
-      excess:
-        device:
+#  pytorch:
+#    api_name: "torch.nn.LayerNorm"
+#   mapping:
+#      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+#      excess:
+#        device:
 
 LocalResponseNorm_base:
   desc: "层归一化"
