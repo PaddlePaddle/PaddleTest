@@ -14,23 +14,23 @@ root_path=$cur_path/../../
 if [ -d "$cur_path/../../PaddleDetection/dataset/coco" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/coco
 fi
-ln -s ${datapath}/coco $cur_path/../../PaddleDetection/dataset/coco
+ln -s ${data_path}/coco $cur_path/../../PaddleDetection/dataset/coco
 if [ -d "$cur_path/../../PaddleDetection/dataset/voc" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/voc
 fi
-ln -s ${datapath}/pascalvoc $cur_path/../../PaddleDetection/dataset/voc
+ln -s ${data_path}/pascalvoc $cur_path/../../PaddleDetection/dataset/voc
 if [ -d "$cur_path/../../PaddleDetection/dataset/mot" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/mot
 fi
-ln -s ${datapath}/mot $cur_path/../../PaddleDetection/dataset/mot
+ln -s ${data_path}/mot $cur_path/../../PaddleDetection/dataset/mot
 if [ -d "$cur_path/../../PaddleDetection/dataset/AIchallenge" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/AIchallenge
 fi
-ln -s ${datapath}/AIchallenge $cur_path/../../PaddleDetection/dataset/AIchallenge
+ln -s ${data_path}/AIchallenge $cur_path/../../PaddleDetection/dataset/AIchallenge
 if [ -d "$cur_path/../../PaddleDetection/dataset/aic_coco_train_cocoformat.json" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/aic_coco_train_cocoformat.json
 fi
-ln -s ${datapath}/aic_coco_train_cocoformat.json $cur_path/../../PaddleDetection/dataset/aic_coco_train_cocoformat.json
+ln -s ${data_path}/aic_coco_train_cocoformat.json $cur_path/../../PaddleDetection/dataset/aic_coco_train_cocoformat.json
 
 #train config process
 max_iters=121 #2500 #1000
