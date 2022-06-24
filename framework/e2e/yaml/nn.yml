@@ -6889,7 +6889,7 @@ BatchNorm1D_base:
     mapping:
       ins: { data: input, num_features: num_features }
       excess:
-        place: True
+        device:
 
 BatchNorm1D_0:
   desc: "1维BN批归一化"
@@ -6912,7 +6912,7 @@ BatchNorm1D_0:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 BatchNorm1D_2:
   desc: "1维BN批归一化"
@@ -6931,7 +6931,7 @@ BatchNorm1D_2:
     mapping:
       ins: { data: input, num_features: num_features }
       excess:
-        place: True
+        device:
 
 BatchNorm1D_3:
   desc: "1维BN批归一化"
@@ -6951,7 +6951,7 @@ BatchNorm1D_3:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum }
       excess:
-        place: True
+        device:
 
 BatchNorm1D_4:
   desc: "1维BN批归一化"
@@ -6971,7 +6971,7 @@ BatchNorm1D_4:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum }
       excess:
-        place: True
+        device:
 
 BatchNorm1D_5:
   desc: "1维BN批归一化"
@@ -6992,7 +6992,7 @@ BatchNorm1D_5:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 BatchNorm1D_6:
   desc: "1维BN批归一化"
@@ -7013,7 +7013,7 @@ BatchNorm1D_6:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 BatchNorm1D_7:
   desc: "1维BN批归一化"
@@ -7035,7 +7035,7 @@ BatchNorm1D_7:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 BatchNorm1D_8:
   desc: "1维BN批归一化"
@@ -7073,7 +7073,7 @@ BatchNorm1D_9:
     mapping:
       ins: { data: input, num_features: num_features }
       excess:
-        place: True
+        device:
 
 BatchNorm2D_base:
   desc: "2维BN批归一化"
@@ -7096,7 +7096,7 @@ BatchNorm2D_base:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 BatchNorm2D_1:
   desc: "2维BN批归一化"
@@ -7116,7 +7116,7 @@ BatchNorm2D_1:
     mapping:
       ins: { data: input, num_features: num_features }
       excess:
-        place: True
+        device:
 
 BatchNorm2D_2:
   desc: "2维BN批归一化"
@@ -7137,7 +7137,7 @@ BatchNorm2D_2:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum }
       excess:
-        place: True
+        device:
 
 BatchNorm2D_3:
   desc: "2维BN批归一化"
@@ -7159,7 +7159,7 @@ BatchNorm2D_3:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 BatchNorm2D_4:
   desc: "2维BN批归一化"
@@ -7182,7 +7182,7 @@ BatchNorm2D_4:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 BatchNorm2D_7:
   desc: "2维BN批归一化"
@@ -7240,7 +7240,7 @@ BatchNorm3D_base:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 BatchNorm3D_1:
   desc: "3维BN批归一化"
@@ -7260,7 +7260,7 @@ BatchNorm3D_1:
     mapping:
       ins: { data: input, num_features: num_features }
       excess:
-        place: True
+        device:
 
 BatchNorm3D_2:
   desc: "3维BN批归一化"
@@ -7281,7 +7281,7 @@ BatchNorm3D_2:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum }
       excess:
-        place: True
+        device:
 
 BatchNorm3D_3:
   desc: "3维BN批归一化"
@@ -7303,7 +7303,7 @@ BatchNorm3D_3:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 BatchNorm3D_4:
   desc: "3维BN批归一化"
@@ -7343,7 +7343,7 @@ BatchNorm3D_5:
     mapping:
       ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
       excess:
-        place: True
+        device:
 
 GroupNorm_base:
   desc: "分组归一化"
@@ -7364,7 +7364,7 @@ GroupNorm_base:
     mapping:
       ins: { data: input, num_groups: num_groups, num_channels: num_channels }
       excess:
-        place: True
+        device:
 
 GroupNorm_0:
   desc: "分组归一化"
@@ -7387,7 +7387,7 @@ GroupNorm_0:
     mapping:
       ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
       excess:
-        place: True
+        device:
 
 GroupNorm_2:
   desc: "分组归一化"
@@ -7409,7 +7409,7 @@ GroupNorm_2:
     mapping:
       ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
       excess:
-        place: True
+        device:
 
 GroupNorm_5:
   desc: "分组归一化"
@@ -7432,7 +7432,7 @@ GroupNorm_5:
     mapping:
       ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
       excess:
-        place: True
+        device:
 
 GroupNorm_6:
   desc: "分组归一化"
@@ -7455,7 +7455,7 @@ GroupNorm_6:
     mapping:
       ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
       excess:
-        place: True
+        device:
 
 GroupNorm_7:
   desc: "分组归一化"
@@ -7478,7 +7478,7 @@ GroupNorm_7:
     mapping:
       ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
       excess:
-        place: True
+        device:
 
 GroupNorm_8:
   desc: "分组归一化"
@@ -7501,7 +7501,7 @@ GroupNorm_8:
     mapping:
       ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
       excess:
-        place: True
+        device:
 
 GroupNorm_9:
   desc: "分组归一化"
@@ -7524,7 +7524,7 @@ GroupNorm_9:
     mapping:
       ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
       excess:
-        place: True
+        device:
 
 InstanceNorm1D_base:
   desc: "1维实例归一化"
@@ -7547,7 +7547,7 @@ InstanceNorm1D_base:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm1D_1:
   desc: "1维实例归一化"
@@ -7567,7 +7567,7 @@ InstanceNorm1D_1:
     mapping:
       ins: { data: input, num_features: num_features }
       excess:
-        place: True
+        device:
 
 InstanceNorm1D_2:
   desc: "1维实例归一化"
@@ -7588,7 +7588,7 @@ InstanceNorm1D_2:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps }
       excess:
-        place: True
+        device:
 
 InstanceNorm1D_3:
   desc: "1维实例归一化"
@@ -7610,7 +7610,7 @@ InstanceNorm1D_3:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm1D_5:
   desc: "1维实例归一化"
@@ -7633,7 +7633,7 @@ InstanceNorm1D_5:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm1D_6:
   desc: "1维实例归一化"
@@ -7656,7 +7656,7 @@ InstanceNorm1D_6:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm1D_7:
   desc: "1维实例归一化"
@@ -7680,7 +7680,7 @@ InstanceNorm1D_7:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm1D_8:
   desc: "1维实例归一化"
@@ -7717,7 +7717,7 @@ InstanceNorm2D_base:
     mapping:
       ins: { data: input, num_features: num_features }
       excess:
-        place: True
+        device:
 
 InstanceNorm2D_0:
   desc: "2维实例归一化"
@@ -7740,7 +7740,7 @@ InstanceNorm2D_0:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm2D_2:
   desc: "2维实例归一化"
@@ -7761,7 +7761,7 @@ InstanceNorm2D_2:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps }
       excess:
-        place: True
+        device:
 
 InstanceNorm2D_3:
   desc: "2维实例归一化"
@@ -7783,7 +7783,7 @@ InstanceNorm2D_3:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm2D_4:
   desc: "2维实例归一化"
@@ -7805,7 +7805,7 @@ InstanceNorm2D_4:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm2D_6:
   desc: "2维实例归一化"
@@ -7830,7 +7830,7 @@ InstanceNorm2D_6:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm2D_8:
   desc: "2维实例归一化"
@@ -7853,7 +7853,7 @@ InstanceNorm2D_8:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm2D_9:
   desc: "2维实例归一化"
@@ -7876,7 +7876,7 @@ InstanceNorm2D_9:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm3D_base:
   desc: "3维实例归一化"
@@ -7896,7 +7896,7 @@ InstanceNorm3D_base:
     mapping:
       ins: { data: input, num_features: num_features }
       excess:
-        place: True
+        device:
 
 InstanceNorm3D_0:
   desc: "3维实例归一化"
@@ -7919,7 +7919,7 @@ InstanceNorm3D_0:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm3D_2:
   desc: "3维实例归一化"
@@ -7940,7 +7940,7 @@ InstanceNorm3D_2:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps }
       excess:
-        place: True
+        device:
 
 InstanceNorm3D_3:
   desc: "3维实例归一化"
@@ -7962,7 +7962,7 @@ InstanceNorm3D_3:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm3D_4:
   desc: "3维实例归一化"
@@ -7984,7 +7984,7 @@ InstanceNorm3D_4:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm3D_5:
   desc: "3维实例归一化"
@@ -8008,7 +8008,7 @@ InstanceNorm3D_5:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm3D_6:
   desc: "3维实例归一化"
@@ -8031,7 +8031,7 @@ InstanceNorm3D_6:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 InstanceNorm3D_7:
   desc: "3维实例归一化"
@@ -8054,7 +8054,7 @@ InstanceNorm3D_7:
     mapping:
       ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
       excess:
-        place: True
+        device:
 
 LayerNorm_base:
   desc: "层归一化"
@@ -8074,7 +8074,7 @@ LayerNorm_base:
     mapping:
       ins: { data: input, normalized_shape: normalized_shape }
       excess:
-        place: True
+        device:
 
 LayerNorm_0:
   desc: "层归一化"
@@ -8095,7 +8095,7 @@ LayerNorm_0:
     mapping:
       ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
       excess:
-        place: True
+        device:
 
 LayerNorm_3:
   desc: "层归一化"
@@ -8118,7 +8118,7 @@ LayerNorm_3:
     mapping:
       ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
       excess:
-        place: True
+        device:
 
 LayerNorm_4:
   desc: "层归一化"
@@ -8138,7 +8138,7 @@ LayerNorm_4:
     mapping:
       ins: { data: input, normalized_shape: normalized_shape }
       excess:
-        place: True
+        device:
 
 LayerNorm_5:
   desc: "层归一化"
@@ -8159,7 +8159,7 @@ LayerNorm_5:
     mapping:
       ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
       excess:
-        place: True
+        device:
 
 LayerNorm_6:
   desc: "层归一化"
@@ -8182,7 +8182,7 @@ LayerNorm_6:
     mapping:
       ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
       excess:
-        place: True
+        device:
 
 LayerNorm_7:
   desc: "层归一化"
@@ -8202,7 +8202,7 @@ LayerNorm_7:
     mapping:
       ins: { data: input, normalized_shape: normalized_shape }
       excess:
-        place: True
+        device:
 
 LayerNorm_8:
   desc: "层归一化"
@@ -8223,7 +8223,7 @@ LayerNorm_8:
     mapping:
       ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
       excess:
-        place: True
+        device:
 
 LayerNorm_9:
   desc: "层归一化"
@@ -8246,7 +8246,7 @@ LayerNorm_9:
     mapping:
       ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
       excess:
-        place: True
+        device:
 
 LocalResponseNorm_base:
   desc: "层归一化"
