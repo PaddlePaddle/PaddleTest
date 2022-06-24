@@ -5,6 +5,7 @@
 """
 benchmark trans extend weaktrans
 """
+import torch
 
 from utils.weaktrans import WeakTrans, Framework
 import numpy as np
@@ -73,6 +74,11 @@ class BenchTrans(WeakTrans):
             for key, value in mapping.items():
                 if self.paddle_param.get(key) is not None:
                     torch_param[value] = self.paddle_param.get(key)
+            # for excess
+            excess = self.case[Framework.TORCH]["mapping"].get("excess")
+            if excess is not None:
+                for key, value in excess.items():
+                    torch_param[key] = value
             return torch_param
         else:
             RuntimeError("No torch yaml settings")
