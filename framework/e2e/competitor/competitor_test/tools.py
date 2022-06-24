@@ -103,7 +103,7 @@ TORCHDTYPE = {
 TORCHDEVICE = {"cpu": torch.device("cpu"), "gpu": torch.device("cuda"), "gpu:0": torch.device("cuda:0")}
 
 
-COMPAREGAP = {"UpsamplingBilinear2D": 1e-4}
+COMPAREGAP = {"UpsamplingBilinear2D": 1e-4, "selu": 1e-4}
 
 if __name__ == "__main__":
     a = [paddle.to_tensor(1), paddle.to_tensor([2, 3]), 3]

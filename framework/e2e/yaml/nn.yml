@@ -16408,6 +16408,10 @@ pad:
       mode: 'constant'
       value: 0.0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.pad"
+    mapping:
+      ins: { x: input, pad: pad, mode: mode, value: value }
 
 pad0:
   desc: "该OP依照 pad 和 mode 属性对 x 进行 pad"
@@ -16444,6 +16448,10 @@ celu:
         range: [ -1, 5]
     params:
       alpha: 1.0
+  pytorch:
+    api_name: "torch.nn.functional.celu"
+    mapping:
+      ins: { x: input, alpha: alpha }
 
 elu:
   desc: "elu激活层"
@@ -16458,6 +16466,10 @@ elu:
         range: [ -1, 5]
     params:
       alpha: 1.0
+  pytorch:
+    api_name: "torch.nn.functional.elu"
+    mapping:
+      ins: { x: input, alpha: alpha }
 
 #elu_:
 #  desc: "elu激活层, 对输入x采用Inplace策略"
@@ -16485,6 +16497,10 @@ gelu:
         range: [ -2, 5]
     params:
       approximate: False
+  pytorch:
+    api_name: "torch.nn.functional.gelu"
+    mapping:
+      ins: { x: input }
 
 #gumbel_softmax:
 #  desc: "该OP实现了按Gumbel-Softmax分布进行采样的功能，通过hard可选择是否离散化"
@@ -16514,6 +16530,10 @@ hardshrink:
         range: [ -2, 5]
     params:
       threshold: 0.75
+  pytorch:
+    api_name: "torch.nn.functional.hardshrink"
+    mapping:
+      ins: { x: input, threshold: lambd }
 
 hardsigmoid:
   desc: "hardsigmoid激活函数"
@@ -16529,6 +16549,10 @@ hardsigmoid:
     params:
       slope: 0.1666667
       offset: 0.5
+  pytorch:
+    api_name: "torch.nn.functional.hardsigmoid"
+    mapping:
+      ins: { x: input }
 
 hardswish:
   desc: "hardswish激活函数"
@@ -16541,6 +16565,10 @@ hardswish:
         dtype: "float32"
         shape: [2, 3, 8, 8]
         range: [ -2, 5]
+  pytorch:
+    api_name: "torch.nn.functional.hardswish"
+    mapping:
+      ins: { x: input }
 
 hardtanh:
   desc: "hardtanh激活函数"
@@ -16556,6 +16584,10 @@ hardtanh:
     params:
       min: -1.0
       max: 1.0
+  pytorch:
+    api_name: "torch.nn.functional.hardtanh"
+    mapping:
+      ins: { x: input, min: min_val, max: max_val }
 
 leaky_relu:
   desc: "leaky_relu激活函数"
@@ -16570,6 +16602,10 @@ leaky_relu:
         range: [ -2, 5]
     params:
       negative_slope: 0.01
+  pytorch:
+    api_name: "torch.nn.functional.leaky_relu"
+    mapping:
+      ins: { x: input, negative_slope: negative_slope }
 
 log_sigmoid:
   desc: "log_sigmoid激活函数"
@@ -16596,6 +16632,10 @@ log_softmax:
         range: [ -2, 5]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.nn.functional.log_softmax"
+    mapping:
+      ins: { x: input, axis: dim }
 
 maxout:
   desc: "maxout激活函数"
@@ -16631,6 +16671,10 @@ prelu:
         shape: [1]
         range: [ 0, 1]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.prelu"
+    mapping:
+      ins: { x: input, weight: weight }
 
 relu:
   desc: "relu激活函数"
@@ -16643,6 +16687,10 @@ relu:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 5]
+  pytorch:
+    api_name: "torch.nn.functional.relu"
+    mapping:
+      ins: { x: input }
 
 relu_:
   desc: "relu_激活函数, 对输入 x 采用 Inplace 策略"
@@ -16667,6 +16715,10 @@ relu6:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 10]
+  pytorch:
+    api_name: "torch.nn.functional.relu6"
+    mapping:
+      ins: { x: input }
 
 selu:
   desc: "selu激活函数"
@@ -16682,6 +16734,10 @@ selu:
     params:
       scale: 1.0507
       alpha: 1.6732
+  pytorch:
+    api_name: "torch.nn.functional.selu"
+    mapping:
+      ins: { x: input }
 
 sigmoid:
   desc: "sigmoid激活函数"
@@ -16694,6 +16750,10 @@ sigmoid:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 5]
+  pytorch:
+    api_name: "torch.nn.functional.sigmoid"
+    mapping:
+      ins: { x: input }
 
 silu:
   desc: "silu激活函数"
@@ -16706,6 +16766,10 @@ silu:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 5]
+  pytorch:
+    api_name: "torch.nn.functional.silu"
+    mapping:
+      ins: { x: input }
 
 softmax:
   desc: "softmax激活函数"
@@ -16720,6 +16784,10 @@ softmax:
         range: [ -2, 5]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.nn.functional.softmax"
+    mapping:
+      ins: { x: input, axis: dim }
 
 #softmax_:
 #  desc: "softmax_激活函数, 对输入 x 采用 Inplace 策略"
@@ -16748,6 +16816,10 @@ softplus:
     params:
       beta: 1
       threshold: 5
+  pytorch:
+    api_name: "torch.nn.functional.softplus"
+    mapping:
+      ins: { x: input, beta: beta, threshold: threshold }
 
 softshrink:
   desc: "softshrink激活函数"
@@ -16762,6 +16834,10 @@ softshrink:
         range: [ -2, 3]
     params:
       threshold: 0.5
+  pytorch:
+    api_name: "torch.nn.functional.softshrink"
+    mapping:
+      ins: { x: input, threshold: lambd }
 
 softsign:
   desc: "softsign激活函数"
@@ -16774,6 +16850,10 @@ softsign:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 3]
+  pytorch:
+    api_name: "torch.nn.functional.softsign"
+    mapping:
+      ins: { x: input }
 
 swish:
   desc: "swish激活函数"
@@ -16798,6 +16878,10 @@ tanhshrink:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 3]
+  pytorch:
+    api_name: "torch.nn.functional.tanhshrink"
+    mapping:
+      ins: { x: input }
 
 thresholded_relu:
   desc: "thresholded_relu激活函数"
