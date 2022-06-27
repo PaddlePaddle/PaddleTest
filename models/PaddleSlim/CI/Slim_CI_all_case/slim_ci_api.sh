@@ -121,6 +121,7 @@ EXCODE=0
 if [ $check_sty_EXCODE -eq 2 ];then
     echo -e "\033[31m ---- check code style Failed!  \033[0m"
     EXCODE=2
+    exit $EXCODE
 fi
 if [ $UT_EXCODE -eq 0 ];then
     echo -e "\033[32m ---- unit test Success  \033[0m"
