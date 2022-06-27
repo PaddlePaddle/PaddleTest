@@ -57,8 +57,8 @@ elif [[ ${model} == 'pan_psnr_x4_div2k' ]]; then
 elif [[ ${model} == 'drn_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|loss_dual|g" ${model}.yaml #指标
-    sed -i "" "s|8462.812|106.452|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|109.42|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|8462.812|206.452|g" ${model}.yaml #linux_train_单卡
+    sed -i "" "s|9151.643|209.42|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'esrgan_psnr_x4_div2k' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml

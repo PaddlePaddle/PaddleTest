@@ -20,7 +20,6 @@ if [[ ${model_flag} =~ 'CE' ]]; then
     pwd
     export FLAGS_cudnn_deterministic=True
     # export FLAGS_enable_eager_mode=1 #验证天宇 220329 pr  在任务重插入
-    unset FLAGS_enable_eager_mode
     unset FLAGS_use_virtual_memory_auto_growth
     unset FLAGS_use_stream_safe_cuda_allocator
 fi
@@ -429,7 +428,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         rm -rf PPHGNet_base_ssld_pretrained_pretrained.pdparams
     fi
 
-    if [[ ${model} =~ 'PPLCNet' ]]  && [[ ${model} =~ '_dml' ]] ;then #注意区分dml 与 udml
+    if [[ ${model} =~ 'PPLCNet' ]]  && [[ ${model} =~ 'dml' ]] ;then #注意区分dml 与 udml
         echo "######  use PPLCNet dml pretrain model"
         echo ${model}
         echo ${params_dir}
