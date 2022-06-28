@@ -7,6 +7,7 @@ GIT:
 
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/taskflow/ #脚本的路径
   model_log_path: log/taskflow/
 
@@ -21,8 +22,8 @@ INTERACT:
     tag: linux_dy_gpu1
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash interact.sh $XPU
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh taskflow $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
 
     kpis:
       exit_code:

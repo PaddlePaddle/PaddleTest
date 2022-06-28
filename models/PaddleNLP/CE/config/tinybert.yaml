@@ -7,6 +7,7 @@ GIT:
 
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/tinybert/ #脚本的路径
   model_log_path: log/tinybert/
 
@@ -22,19 +23,13 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh tinybert $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
 
 FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_SST-2
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'single' SST-2
 
     kpis: #kpi指标
       loss:
@@ -49,12 +44,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu2_SST-2
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'multi' SST-2
 
     kpis: #kpi指标
       loss:
@@ -89,12 +78,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_QNLI
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'single' QNLI
 
     kpis: #kpi指标
       loss:
@@ -109,12 +92,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu2_QNLI
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'multi' QNLI
 
     kpis: #kpi指标
       loss:
@@ -150,12 +127,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_CoLA
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'single' CoLA
 
     kpis: #kpi指标
       loss:
@@ -170,12 +141,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu2_CoLA
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'multi' CoLA
 
     kpis: #kpi指标
       loss:
@@ -211,12 +176,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_MRPC
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'single' MRPC
 
     kpis: #kpi指标
       loss:
@@ -231,12 +190,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu2_MRPC
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'multi' MRPC
 
     kpis: #kpi指标
       loss:
@@ -272,12 +225,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_QQP
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'single' QQP
 
     kpis: #kpi指标
       loss:
@@ -292,12 +239,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu2_QQP
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'multi' QQP
 
     kpis: #kpi指标
       loss:
@@ -332,12 +273,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0 #时间太久
     tag: linux_gpu1_MNLI
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'single' MNLI
 
     kpis: #kpi指标
       loss:
@@ -352,12 +287,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0 #时间太久
     tag: linux_gpu2_MNLI
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'multi' MNLI
 
     kpis: #kpi指标
       loss:
@@ -393,12 +322,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_RTE
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'single' RTE
 
     kpis: #kpi指标
       loss:
@@ -413,12 +336,6 @@ FINETUNE: # 训练步骤
   -
     priority: p0
     tag: linux_gpu2_RTE
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh $XPU 'multi' RTE
 
     kpis: #kpi指标
       loss:
@@ -456,12 +373,6 @@ DISTILL: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_SST-2
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'single' SST-2
 
     kpis: #kpi指标
       exit_code:
@@ -476,12 +387,6 @@ DISTILL: # 训练步骤
   -
     priority: p2
     tag: linux_gpu2_SST-2
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'multi' SST-2
 
     kpis: #kpi指标
       exit_code:
@@ -516,12 +421,6 @@ DISTILL: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_QNLI
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'single' QNLI
 
     kpis: #kpi指标
       exit_code:
@@ -536,12 +435,6 @@ DISTILL: # 训练步骤
   -
     priority: p2
     tag: linux_gpu2_QNLI
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'multi' QNLI
 
     kpis: #kpi指标
       exit_code:
@@ -576,12 +469,6 @@ DISTILL: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_CoLA
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'single' CoLA
 
     kpis: #kpi指标
       exit_code:
@@ -596,12 +483,6 @@ DISTILL: # 训练步骤
   -
     priority: p2
     tag: linux_gpu2_CoLA
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'multi' CoLA
 
     kpis: #kpi指标
       exit_code:
@@ -637,12 +518,6 @@ DISTILL: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_MRPC
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'single' MRPC
 
     kpis: #kpi指标
       exit_code:
@@ -657,12 +532,6 @@ DISTILL: # 训练步骤
   -
     priority: p2
     tag: linux_gpu2_MRPC
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'multi' MRPC
 
     kpis: #kpi指标
       exit_code:
@@ -697,12 +566,6 @@ DISTILL: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_QQP
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'single' QQP
 
     kpis: #kpi指标
       exit_code:
@@ -717,12 +580,6 @@ DISTILL: # 训练步骤
   -
     priority: p2
     tag: linux_gpu2_QQP
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'multi' QQP
 
     kpis: #kpi指标
       exit_code:
@@ -757,12 +614,6 @@ DISTILL: # 训练步骤
   -
     priority: p0 #时间太久
     tag: linux_gpu1_MNLI
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'single' MNLI
 
     kpis: #kpi指标
       exit_code:
@@ -777,12 +628,6 @@ DISTILL: # 训练步骤
   -
     priority: p2 #时间太久
     tag: linux_gpu2_MNLI
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'multi' MNLI
 
     kpis: #kpi指标
       exit_code:
@@ -817,12 +662,6 @@ DISTILL: # 训练步骤
   -
     priority: p0
     tag: linux_gpu1_RTE
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'single' RTE
 
     kpis: #kpi指标
       exit_code:
@@ -837,12 +676,6 @@ DISTILL: # 训练步骤
   -
     priority: p2
     tag: linux_gpu2_RTE
-    env:
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA #取值为None，则不设置
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU 'multi' RTE
 
     kpis: #kpi指标
       exit_code:
