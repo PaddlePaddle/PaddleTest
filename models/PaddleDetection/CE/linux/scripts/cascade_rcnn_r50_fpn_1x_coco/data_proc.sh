@@ -66,3 +66,24 @@ sed -i "s/^    - RandomExpand:/#&/" $cur_path/../../PaddleDetection/configs/yolo
 sed -i "s/^    - RandomCrop:/#&/" $cur_path/../../PaddleDetection/configs/yolov3/_base_/yolov3_reader.yml
 sed -i "s/^    - RandomFlip:/#&/" $cur_path/../../PaddleDetection/configs/yolov3/_base_/yolov3_reader.yml
 sed -i "s/^  mixup_epoch/#&/" $cur_path/../../PaddleDetection/configs/yolov3/_base_/yolov3_reader.yml
+#ppyolov2
+sed -i "13c 13c    - BatchRandomResize: {target_size: [320], random_size: True, random_interp: False, keep_ratio: False}" $cur_path/../../PaddleDetection/configs/ppyolo/_base_/ppyolov2_reader.yml
+sed -i "s/13c//" $cur_path/../../PaddleDetection/configs/ppyolo/_base_/ppyolov2_reader.yml
+sed -i "s/^    - Mixup:/#&/" $cur_path/../../PaddleDetection/configs/ppyolo/_base_/ppyolov2_reader.yml
+sed -i "s/^    - RandomDistort:/#&/" $cur_path/../../PaddleDetection/configs/ppyolo/_base_/ppyolov2_reader.yml
+sed -i "s/^    - RandomExpand:/#&/" $cur_path/../../PaddleDetection/configs/ppyolo/_base_/ppyolov2_reader.yml
+sed -i "s/^    - RandomCrop:/#&/" $cur_path/../../PaddleDetection/configs/ppyolo/_base_/ppyolov2_reader.yml
+sed -i "s/^    - RandomFlip:/#&/" $cur_path/../../PaddleDetection/configs/ppyolo/_base_/ppyolov2_reader.yml
+sed -i "s/^  mixup_epoch/#&/" $cur_path/../../PaddleDetection/configs/ppyolo/_base_/ppyolov2_reader.yml
+#ssd
+sed -i "s/^    - RandomDistort:/#&/" $cur_path/../../PaddleDetection/configs/ssd/_base_/ssd_mobilenet_reader.yml
+sed -i "s/^    - RandomExpand:/#&/" $cur_path/../../PaddleDetection/configs/ssd/_base_/ssd_mobilenet_reader.yml
+sed -i "s/^    - RandomCrop:/#&/" $cur_path/../../PaddleDetection/configs/ssd/_base_/ssd_mobilenet_reader.yml
+sed -i "s/^    - RandomFlip:/#&/" $cur_path/../../PaddleDetection/configs/ssd/_base_/ssd_mobilenet_reader.yml
+#hrnet
+sed -i "97c 97c        prob_half_body: 0." $cur_path/../../PaddleDetection/configs/keypoint/hrnet/hrnet_w32_256x192.yml
+sed -i "s/97c//" $cur_path/../../PaddleDetection/configs/keypoint/hrnet/hrnet_w32_256x192.yml
+sed -i "/if np.random.randn() < 0.5 and len(upper_joints) > 2:/a\        if True and len(upper_joints) > 2:" $cur_path/../../PaddleDetection/ppdet/data/transform/keypoint_operators.py
+sed -i "s/^        if np.random.randn() < 0.5/#&/" $cur_path/../../PaddleDetection/ppdet/data/transform/keypoint_operators.py
+#ttfnet
+sed -i "s/^  - RandomFlip:/#&/" $cur_path/../../PaddleDetection/configs/ttfnet/_base_/ttfnet_reader.yml
