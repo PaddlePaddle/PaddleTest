@@ -17194,15 +17194,20 @@ affine_grid_base:
   desc: "生成仿射变换前后的feature maps的坐标映射关系"
   paddle:
     api_name: "paddle.nn.functional.affine_grid"
-    params:
+    inputs:
       theta:
         random: true
         type: "Tensor"
         dtype: "float32"
         shape: [1, 2, 3]
         range: [ -1, 2]
+    params:
       out_shape: [1, 2, 3, 3]
       align_corners: True
+  pytorch:
+    api_name: "torch.nn.functional.affine_grid"
+    mapping:
+      ins: { theta: theta, out_shape: size, align_corners: align_corners }
 
 affine_grid0:
   desc: "生成仿射变换前后的feature maps的坐标映射关系"
@@ -17242,6 +17247,10 @@ cosine_similarity_base:
     params:
       axis: 1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.functional.cosine_similarity"
+    mapping:
+      ins: { x1: x1, x2: x2, axis: dim, eps: eps }
 
 grid_sample_base:
   desc: "基于flow field网格的对输入X进行双线性插值采样"
@@ -17264,6 +17273,10 @@ grid_sample_base:
       mode: 'bilinear'
       padding_mode: 'zeros'
       align_corners: True
+  pytorch:
+    api_name: "torch.nn.functional.grid_sample"
+    mapping:
+      ins: { x: input, grid: grid, mode: mode, padding_mode: padding_mode, align_corners: align_corners }
 
 label_smooth_base:
   desc: "标签平滑正则化(LSR)"
@@ -17312,6 +17325,10 @@ one_hot_base:
         range: [ 0, 5]
     params:
       num_classes: 6
+#  pytorch:
+#    api_name: "torch.nn.functional.one_hot"
+#    mapping:
+#      ins: { x: tensor, num_classes: num_classes }
 
 pixel_shuffle_base:
   desc: "将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
