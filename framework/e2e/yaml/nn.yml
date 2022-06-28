@@ -17390,6 +17390,10 @@ unfold_base:
       strides: 1
       paddings: 0
       dilations: 1
+  pytorch:
+    api_name: "torch.nn.functional.unfold"
+    mapping:
+      ins: { x: input, kernel_sizes: kernel_size, strides: stride, paddings: padding, dilations: dilation }
 
 glu_base:
   desc: "glu激活函数"
@@ -17404,6 +17408,10 @@ glu_base:
         range: [ -2, 3]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.nn.functional.glu"
+    mapping:
+      ins: { x: input, axis: dim }
 
 interpolate_base:
   desc: "调整一个batch中图片的大小"
@@ -17422,6 +17430,10 @@ interpolate_base:
       align_corners: False
       align_mode: 0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.interpolate"
+    mapping:
+      ins: { x: input, size: size, mode: mode, }
 
 sequence_mask_base:
   desc: "该层根据输入 x 和 maxlen 输出一个掩码"
@@ -17469,6 +17481,10 @@ upsample_base:
       align_corners: False
       align_mode: 0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.upsample"
+    mapping:
+      ins: { x: input, size: size }
 
 class_center_sample_base:
   desc: "类别中心采样方法, 从全量的类别中心采样一个子集类别中心参与训练"
