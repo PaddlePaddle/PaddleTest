@@ -17190,15 +17190,20 @@ affine_grid_base:
   desc: "生成仿射变换前后的feature maps的坐标映射关系"
   paddle:
     api_name: "paddle.nn.functional.affine_grid"
-    params:
+    inputs:
       theta:
         random: true
         type: "Tensor"
         dtype: "float32"
         shape: [1, 2, 3]
         range: [ -1, 2]
+    params:
       out_shape: [1, 2, 3, 3]
       align_corners: True
+  pytorch:
+    api_name: "torch.nn.functional.affine_grid"
+    mapping:
+      ins: { theta: theta, out_shape: size, align_corners: align_corners }
 
 affine_grid0:
   desc: "生成仿射变换前后的feature maps的坐标映射关系"
@@ -17238,6 +17243,10 @@ cosine_similarity_base:
     params:
       axis: 1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.functional.cosine_similarity"
+    mapping:
+      ins: { x1: x1, x2: x2, axis: dim, eps: eps }
 
 grid_sample_base:
   desc: "基于flow field网格的对输入X进行双线性插值采样"
@@ -17260,6 +17269,10 @@ grid_sample_base:
       mode: 'bilinear'
       padding_mode: 'zeros'
       align_corners: True
+  pytorch:
+    api_name: "torch.nn.functional.grid_sample"
+    mapping:
+      ins: { x: input, grid: grid, mode: mode, padding_mode: padding_mode, align_corners: align_corners }
 
 label_smooth_base:
   desc: "标签平滑正则化(LSR)"
@@ -17323,6 +17336,10 @@ pixel_shuffle_base:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.pixel_shuffle"
+    mapping:
+      ins: { x: input, upscale_factor: upscale_factor }
 
 gather_tree_base:
   desc: "在整个束搜索(Beam Search)结束后使用"
