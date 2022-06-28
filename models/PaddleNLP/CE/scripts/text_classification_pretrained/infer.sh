@@ -28,4 +28,3 @@ else #CPU 跟GPU只是log后缀不一样，也可以传两个参数保持跟GPU�
         --params_path checkpoints/model_900/model_state.pdparams
 
 fi
-

@@ -46,4 +46,3 @@ else
         --logging_steps 1\
         --device ${DEVICE}
 fi
-

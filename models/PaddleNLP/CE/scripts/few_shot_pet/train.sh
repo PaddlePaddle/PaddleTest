@@ -27,4 +27,3 @@ python -u -m paddle.distributed.launch --gpus $3 \
 	--save_steps 100 \
 	--rdrop_coef $5 \
 	--language_model "ernie-1.0"
-

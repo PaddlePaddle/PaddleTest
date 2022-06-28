@@ -976,7 +976,7 @@ train(){
     export CUDA_VISIBLE_DEVICES=${cudaid1}
     bash train.sh ${device} "single" > $log_path/train_single_${device}.log 2>&1
     print_info $? train_single_${device}
-    export CUDA_VISIBLE_DEVICES=${cudaid2} 
+    export CUDA_VISIBLE_DEVICES=${cudaid2}
     bash train.sh ${device} "multi" > $log_path/train_multi_${device}.log 2>&1
     print_info $? train_multi_${device}
     cd ..
@@ -1102,7 +1102,7 @@ train(){
         bash train.sh ${device} single True > $log_path/train_single_${device}.log 2>&1
         print_info $? train_single_${device}
         # 使用paddle.nn.Embedding
-        export CUDA_VISIBLE_DEVICES=${cudaid2} 
+        export CUDA_VISIBLE_DEVICES=${cudaid2}
         bash train.sh ${device} multi > $log_path/train_multi_${device}.log 2>&1
         print_info $? train_multi_${device}
     fi
@@ -1558,7 +1558,7 @@ fi
 echo ${exec_list[@]}
 for case in ${exec_list[@]};do
     ${case}
-done   
+done
 }
 
 #26 transformer-xl
@@ -1803,7 +1803,7 @@ else
 fi
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
-fi  
+fi
 train(){
     cd ./nptag
     bash data_proc.sh
@@ -1987,7 +1987,7 @@ classification(){
     print_info $? classification_afqmc_single_${device}
     cd ${cur_path}
 }
-reading_cmp(){   
+reading_cmp(){
     cur_path=`pwd`
     cd ${nlp_dir}/examples/benchmark/clue/mrc
     unset CUDA_VISIBLE_DEVICES

@@ -29,4 +29,3 @@ python infer.py \
     --device ${DEVICE} \
     --batch_size 128 \
     --infer_output_file infer_output.txt
-

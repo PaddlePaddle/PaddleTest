@@ -13,4 +13,3 @@ python -m paddle.distributed.launch --gpus $2 predict.py \
     --params_path ./tmp/model_100/model_state.pdparams \
     --batch_size 32 \
     --device $1
-

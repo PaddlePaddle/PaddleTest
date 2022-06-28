@@ -6,4 +6,3 @@ cur_path=`pwd`
 model_name=${PWD##*/}
 
 python interact.py
-

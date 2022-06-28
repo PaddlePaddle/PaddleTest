@@ -14,4 +14,3 @@ python predict_sighan.py \
     --batch_size 32 \
     --ckpt_path checkpoints/single/best_model.pdparams \
     --predict_file predict_sighan13.txt
-

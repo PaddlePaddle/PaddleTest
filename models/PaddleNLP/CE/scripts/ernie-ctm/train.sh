@@ -25,4 +25,3 @@ python -m paddle.distributed.launch --gpus "$3"  train.py \
     --save_steps 100 \
     --output_dir ./tmp/ \
     --device $1
-

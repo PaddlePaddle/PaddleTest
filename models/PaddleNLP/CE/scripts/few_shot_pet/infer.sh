@@ -21,4 +21,3 @@ python -u -m paddle.distributed.launch --gpus $3 predict.py \
     --output_dir "./output/$4" \
     --batch_size 32 \
     --max_seq_length 512
-

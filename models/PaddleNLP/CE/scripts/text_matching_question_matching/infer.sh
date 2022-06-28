@@ -20,4 +20,3 @@ python -u predict.py \
     --batch_size 128 \
     --input_file ./data/test/public_test_A \
     --result_file "predict_result"
-

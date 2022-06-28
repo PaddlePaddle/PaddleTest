@@ -12,4 +12,3 @@ code_path=${nlp_dir}/examples/text_to_knowledge/nptag
 cd $code_path
 python export_model.py --params_path=./output/single/model_100/model_state.pdparams --output_path=./export
 python deploy/python/predict.py --model_dir=./export
-

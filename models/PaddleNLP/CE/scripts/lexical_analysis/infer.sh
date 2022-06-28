@@ -18,4 +18,3 @@ python predict.py --data_dir ./lexical_analysis_dataset_tiny \
     --init_checkpoint ./save_dir/model_${MODEL_STEP}.pdparams \
     --batch_size 32 \
     --device ${DEVICE}
-
