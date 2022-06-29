@@ -31,13 +31,13 @@ FINETUNE:
     tag: linux_dy_gpu1
 
     kpis: #kpi指标
-      eval_loss:
+      exit_code:
         latest: True
-        kpi_base: 0.63541
-        threshold: 0.08
+        kpi_base: 0
+        threshold: 0
         actived: True
         evaluation: "-"
-        unit_repr: "s"
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/finetune_afqmc_single_$XPU.log
 
 CLASSIFICATION: # 训练步骤
