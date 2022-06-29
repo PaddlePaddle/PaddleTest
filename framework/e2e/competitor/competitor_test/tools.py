@@ -105,4 +105,14 @@ TORCHDEVICE = {"cpu": torch.device("cpu"), "gpu": torch.device("cuda"), "gpu:0":
 
 COMPAREGAP = {"UpsamplingBilinear2D": 1e-4, "selu": 1e-4}
 
-STOP_BACKWARD = ["add_1"]
+
+def case2name(api_name, n):
+    """
+    api_name convert api cases
+    """
+    s = ["_base"] + ["_" + str(k) for k in range(n + 1)]
+    x = [api_name + i for i in s]
+    return x
+
+
+STOP_BACKWARD = ["add_1", *case2name("allclose", 9)]

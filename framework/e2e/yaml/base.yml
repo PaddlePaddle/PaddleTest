@@ -207,6 +207,10 @@ addmm_base:
     params:
       alpha: 1.0
       beta: 1.0
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 addmm_0:
   desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
@@ -234,6 +238,10 @@ addmm_0:
     params:
       alpha: 5.0
       beta: 0.5
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 addmm_1:
   desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
@@ -261,6 +269,10 @@ addmm_1:
     params:
       alpha: 0.0
       beta: 0.5
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 addmm_2:
   desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
@@ -288,6 +300,10 @@ addmm_2:
     params:
       alpha: -3.3
       beta: 0.5
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 addmm_3:
   desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
@@ -315,6 +331,10 @@ addmm_3:
     params:
       alpha: -3.3
       beta: 0.0
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 addmm_4:
   desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
@@ -342,6 +362,10 @@ addmm_4:
     params:
       alpha: -3.3
       beta: -0.7
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 addmm_5:
   desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
@@ -369,6 +393,10 @@ addmm_5:
     params:
       alpha: 1
       beta: 1
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 addmm_6:
   desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
@@ -396,6 +424,10 @@ addmm_6:
     params:
       alpha: 0
       beta: 0
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 addmm_7:
   desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
@@ -423,6 +455,10 @@ addmm_7:
     params:
       alpha: 3.3
       beta: -3.3
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 addmm_8:
   desc: "计算x和y的乘积，将结果乘以标量alpha，再加上input与beta的乘积，得到输出"
@@ -450,6 +486,10 @@ addmm_8:
     params:
       alpha: 3.3
       beta: -3.3
+  pytorch:
+    api_name: "torch.addmm"
+    mapping:
+      ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
 ## weaktrans不支持bool输入
 #all:
@@ -483,6 +523,10 @@ allclose_base:
       rtol: 0.01
       atol: 0.01
       equal_nan: False
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other, rtol: rtol, atol: atol, equal_nan: equal_nan }
 
 allclose_0:
   desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
@@ -504,6 +548,10 @@ allclose_0:
     params:
       rtol: 0.00001
       atol: 0.00000001
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other, rtol: rtol, atol: atol }
 
 allclose_1:
   desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
@@ -524,6 +572,10 @@ allclose_1:
       rtol: 0.01
       atol: 0.0
       equal_nan: False
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other, rtol: rtol, atol: atol, equal_nan: equal_nan }
 
 allclose_2:
   desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
@@ -544,6 +596,10 @@ allclose_2:
       rtol: 0.000001
       atol: 0.001
       equal_nan: False
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other, rtol: rtol, atol: atol, equal_nan: equal_nan }
 
 allclose_3:
   desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
@@ -564,6 +620,10 @@ allclose_3:
       rtol: 0.000001
       atol: 0.001
       equal_nan: True
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other, rtol: rtol, atol: atol, equal_nan: equal_nan }
 
 allclose_4:
   desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
@@ -584,6 +644,10 @@ allclose_4:
       rtol: 0.000001
       atol: 0.001
       equal_nan: True
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other, rtol: rtol, atol: atol, equal_nan: equal_nan }
 
 allclose_5:
   desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
@@ -604,6 +668,10 @@ allclose_5:
       rtol: 0.000001
       atol: 0.001
       equal_nan: False
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other, rtol: rtol, atol: atol, equal_nan: equal_nan }
 
 allclose_6:
   desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
@@ -620,6 +688,10 @@ allclose_6:
         type: "Tensor"
         dtype: "float32"
         value: [10.00001]
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other }
 
 allclose_7:
   desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
@@ -638,6 +710,10 @@ allclose_7:
         dtype: "float32"
         shape: [2, 2, 2, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other }
 
 allclose_8:
   desc: "逐个检查x和y的所有元素是否均满足∣x−y∣∣≤atol+rtol×∣∣y∣∣"
@@ -675,6 +751,10 @@ allclose_9:
         type: "Tensor"
         dtype: "float32"
         value: []
+  pytorch:
+    api_name: "torch.allclose"
+    mapping:
+      ins: { x: input, y: other }
 
 any_base:
   desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"
