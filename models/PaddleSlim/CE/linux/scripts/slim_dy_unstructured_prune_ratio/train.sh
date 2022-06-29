@@ -55,7 +55,7 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
           --log_dir='train_dy_ratio_log' \
           train.py \
           --batch_size 64 \
-          --data 'cifar10' \
+          --data imagenet \
           --pruning_mode ratio \
           --ratio 0.75 \
           --lr 0.005 \
