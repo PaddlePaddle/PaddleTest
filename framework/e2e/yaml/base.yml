@@ -9,6 +9,10 @@ abs_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.abs"
+    mapping:
+      ins: { x: input }
 
 acos_base:
   desc: "arccosine函数"
@@ -21,6 +25,10 @@ acos_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.acos"
+    mapping:
+      ins: { x: input }
 
 add_base:
   desc: "逐元素相加算子"
@@ -39,6 +47,10 @@ add_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.add"
+    mapping:
+      ins: { x: input, y: other }
 
 add_0:
   desc: "逐元素相加算子"
@@ -57,6 +69,10 @@ add_0:
         dtype: "float64"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.add"
+    mapping:
+      ins: { x: input, y: other }
 
 add_1:
   desc: "逐元素相加算子"
@@ -75,6 +91,10 @@ add_1:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.add"
+    mapping:
+      ins: { x: input, y: other }
 
 add_2:
   desc: "逐元素相加算子"
@@ -93,6 +113,10 @@ add_2:
         dtype: "float32"
         shape: [2, 3, 4, 1]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.add"
+    mapping:
+      ins: { x: input, y: other }
 
 add_3:
   desc: "逐元素相加算子"
@@ -111,6 +135,10 @@ add_3:
         dtype: "float32"
         shape: [2, 3, 1, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.add"
+    mapping:
+      ins: { x: input, y: other }
 
 add_4:
   desc: "逐元素相加算子"
@@ -129,6 +157,10 @@ add_4:
         dtype: "float32"
         shape: [2, 3, 1, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.add"
+    mapping:
+      ins: { x: input, y: other }
 
 # 暂不支持list[Tensor, Tensor]输入
 #add_n:

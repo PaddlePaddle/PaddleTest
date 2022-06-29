@@ -8,6 +8,7 @@ import sys
 
 from competitor_test.competitive import CompetitorCompareTest
 from competitor_test.comptrans import CompeTrans
+from competitor_test.tools import STOP_BACKWARD
 from utils.yaml_loader import YamlLoader
 
 
@@ -25,17 +26,15 @@ def yaml_exe(yaml_file):
             continue
         api = tans_obj.get_function()
         paddle_ins = tans_obj.get_paddle_ins()
-        # print(paddle_ins)
         torch_ins = tans_obj.get_torch_ins()
-        # print(torch_ins)
-        # print(tans_obj.ins)
         types = tans_obj.get_dtype()
-        # print(types)
         torch_place = tans_obj.get_torch_place()
         test_obj = CompetitorCompareTest(*api)
         test_obj.types = types
         if torch_place:
             test_obj.torch_place = True
+        if case_name in STOP_BACKWARD:
+            test_obj.enable_backward = False
         test_obj.run(paddle_ins, torch_ins)
 
 
@@ -61,9 +60,11 @@ def debug_yaml_exe(yaml_file, case_name):
         test_obj.types = types
         if torch_place:
             test_obj.torch_place = True
+        if case_name in STOP_BACKWARD:
+            test_obj.enable_backward = False
         test_obj.run(paddle_ins, torch_ins)
 
 
 if __name__ == "__main__":
     # yaml_exe("../yaml/nn.yml")
-    debug_yaml_exe("../yaml/nn.yml", sys.argv[1])
+    debug_yaml_exe("../yaml/base.yml", sys.argv[1])
