@@ -7,8 +7,11 @@ model_name=${PWD##*/}
 
 echo "$model_name 模型训练阶段"
 #路径配置
-code_path=${nlp_dir}/examples/machine_translation/$model_name
-
+code_path=$cur_path/../../models_repo/examples/machine_translation/$model_name
+log_path=$root_path/log/$model_name/
+if [ ! -d $log_path ]; then
+  mkdir -p $log_path
+fi
 #删除分布式日志重新记录
 rm -rf $code_path/log/workerlog.0
 
