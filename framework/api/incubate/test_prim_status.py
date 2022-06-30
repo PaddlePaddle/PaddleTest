@@ -10,6 +10,7 @@ sys.path.append("../../utils/")
 from interceptor import skip_branch_not_develop
 
 
+@skip_branch_not_develop
 @pytest.mark.api_incubate_autograd_enable_prim
 def test_enable_prim():
     """
@@ -21,6 +22,7 @@ def test_enable_prim():
     assert prim_enabled() is True
 
 
+@skip_branch_not_develop
 @pytest.mark.api_incubate_autograd_disable_prim
 def test_disable_prim():
     """

@@ -11,6 +11,7 @@ sys.path.append("../../utils/")
 from interceptor import skip_branch_not_develop
 
 
+@skip_branch_not_develop
 @pytest.mark.api_incubate_autograd_prim2orig
 def test_prim2orig():
     """
