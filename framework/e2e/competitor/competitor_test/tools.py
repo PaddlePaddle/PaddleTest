@@ -116,4 +116,4 @@ def case2name(api_name, n):
     return x
 
 
-STOP_BACKWARD = ["add_1", *case2name("allclose", 9)]
+STOP_BACKWARD = ["add_1", *case2name("allclose", 9), *case2name("equal_all", 6), *case2name("greater_equal", 2)]

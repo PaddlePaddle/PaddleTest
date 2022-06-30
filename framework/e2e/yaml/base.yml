@@ -910,6 +910,10 @@ asin_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.asin"
+    mapping:
+      ins: { x: input }
 
 atan_base:
   desc: "arctangent函数"
@@ -922,6 +926,10 @@ atan_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.atan"
+    mapping:
+      ins: { x: input }
 
 atan2_base:
   desc: "对x/y进行逐元素的arctangent运算，通过符号确定象限"
@@ -940,6 +948,10 @@ atan2_base:
         dtype: "float32"
         shape: [6, 6]
         range: [ -5, 5]
+  pytorch:
+    api_name: "torch.atan2"
+    mapping:
+      ins: { x: input, y: other }
 
 atan2_0:
   desc: "对x/y进行逐元素的arctangent运算，通过符号确定象限"
@@ -958,6 +970,10 @@ atan2_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.atan2"
+    mapping:
+      ins: { x: input, y: other }
 
 atan2_1:
   desc: "对x/y进行逐元素的arctangent运算，通过符号确定象限"
@@ -976,6 +992,10 @@ atan2_1:
         dtype: "int32"
         shape: [6, 6]
         range: [ -5, 5]
+  pytorch:
+    api_name: "torch.atan2"
+    mapping:
+      ins: { x: input, y: other }
 
 atan2_2:
   desc: "对x/y进行逐元素的arctangent运算，通过符号确定象限"
@@ -994,6 +1014,10 @@ atan2_2:
         dtype: "float32"
         shape: [3, 2, 4, 4, 4]
         range: [ -5, 5]
+  pytorch:
+    api_name: "torch.atan2"
+    mapping:
+      ins: { x: input, y: other }
 
 ceil_base:
   desc: "向上取整运算函数"
@@ -1006,6 +1030,10 @@ ceil_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.ceil"
+    mapping:
+      ins: { x: input }
 
 clip_base:
   desc: "向上取整运算函数"
@@ -1021,6 +1049,10 @@ clip_base:
     params:
       min: -5.0
       max: 5.0
+  pytorch:
+    api_name: "torch.clip"
+    mapping:
+      ins: { x: input , min: min, max: max}
 
 clip_0:
   desc: "向上取整运算函数"
@@ -1036,6 +1068,10 @@ clip_0:
     params:
       min: -4
       max: 6
+  pytorch:
+    api_name: "torch.clip"
+    mapping:
+      ins: { x: input , min: min, max: max }
 
 clip_1:
   desc: "向上取整运算函数"
@@ -1051,6 +1087,10 @@ clip_1:
     params:
       min: 0.0
       max: 5
+  pytorch:
+    api_name: "torch.clip"
+    mapping:
+      ins: { x: input , min: min, max: max }
 
 clip_2:
   desc: "向上取整运算函数"
@@ -1064,6 +1104,10 @@ clip_2:
         value: [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
     params:
       min: 1.0
+  pytorch:
+    api_name: "torch.clip"
+    mapping:
+      ins: { x: input , min: min }
 
 clip_3:
   desc: "向上取整运算函数"
@@ -1078,6 +1122,10 @@ clip_3:
         range: [ -1, 10]
     params:
       min: 5
+  pytorch:
+    api_name: "torch.clip"
+    mapping:
+      ins: { x: input , min: min }
 
 clip_4:
   desc: "向上取整运算函数"
@@ -1092,6 +1140,10 @@ clip_4:
     params:
       min: 2.0
       max: 2.0
+  pytorch:
+    api_name: "torch.clip"
+    mapping:
+      ins: { x: input , min: min, max: max }
 
 clip_5:
   desc: "向上取整运算函数"
@@ -1124,6 +1176,10 @@ clip_6:
         range: [ 1, 10]
     params:
       max: 5
+  pytorch:
+    api_name: "torch.clip"
+    mapping:
+      ins: { x: input, max: max }
 
 clip_7:
   desc: "向上取整运算函数"
@@ -1137,6 +1193,10 @@ clip_7:
         value: [[[1, 1, 1], [1, 1, 1]]]
     params:
       max: 1
+  pytorch:
+    api_name: "torch.clip"
+    mapping:
+      ins: { x: input, max: max }
 
 clip_8:
   desc: "向上取整运算函数"
@@ -1150,6 +1210,10 @@ clip_8:
         value: [-10, 2, 0]
     params:
       max: -1
+  pytorch:
+    api_name: "torch.clip"
+    mapping:
+      ins: { x: input, max: max }
 
 clip_9:
   desc: "向上取整运算函数"
@@ -1216,6 +1280,10 @@ conj_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.conj"
+    mapping:
+      ins: { x: input }
 
 conj_0:
   desc: "是逐元素计算Tensor的共轭运算"
@@ -1240,6 +1308,10 @@ cos_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.cos"
+    mapping:
+      ins: { x: input }
 
 cosh_base:
   desc: "双曲余弦函数"
@@ -1252,6 +1324,10 @@ cosh_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.cosh"
+    mapping:
+      ins: { x: input }
 
 cumsum_base:
   desc: "沿给定 axis 计算张量 x 的累加和"
@@ -1264,6 +1340,12 @@ cumsum_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+    params:
+      axis: -1
+  pytorch:
+    api_name: "torch.cumsum"
+    mapping:
+      ins: { x: input, axis: dim }
 
 cumsum_0:
   desc: "沿给定 axis 计算张量 x 的累加和"
@@ -1278,6 +1360,10 @@ cumsum_0:
         range: [ -1, 1]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.cumsum"
+    mapping:
+      ins: { x: input, axis: dim }
 
 cumsum_1:
   desc: "沿给定 axis 计算张量 x 的累加和"
@@ -1292,6 +1378,10 @@ cumsum_1:
         range: [ -1, 1]
     params:
       axis: -4
+  pytorch:
+    api_name: "torch.cumsum"
+    mapping:
+      ins: { x: input, axis: dim }
 
 cumsum_2:
   desc: "沿给定 axis 计算张量 x 的累加和"
@@ -1306,6 +1396,10 @@ cumsum_2:
         range: [ -1, 1]
     params:
       axis: 3
+  pytorch:
+    api_name: "torch.cumsum"
+    mapping:
+      ins: { x: input, axis: dim }
 
 cumprod_base:
   desc: "沿给定 axis 计算张量 x 的累乘"
@@ -1320,6 +1414,10 @@ cumprod_base:
         range: [ -2, 2]
     params:
       dim: 0
+  pytorch:
+    api_name: "torch.cumprod"
+    mapping:
+      ins: { x: input, dim: dim }
 
 cumprod_0:
   desc: "沿给定 axis 计算张量 x 的累乘"
@@ -1334,6 +1432,10 @@ cumprod_0:
         range: [ -2, 2]
     params:
       dim: 1
+  pytorch:
+    api_name: "torch.cumprod"
+    mapping:
+      ins: { x: input, dim: dim }
 
 cumprod_1:
   desc: "沿给定 axis 计算张量 x 的累乘"
@@ -1348,6 +1450,10 @@ cumprod_1:
         range: [ -2, 2]
     params:
       dim: -1
+  pytorch:
+    api_name: "torch.cumprod"
+    mapping:
+      ins: { x: input, dim: dim }
 
 cumprod_2:
   desc: "沿给定 axis 计算张量 x 的累乘"
@@ -1362,6 +1468,10 @@ cumprod_2:
         range: [ -2, 2]
     params:
       dim: 3
+  pytorch:
+    api_name: "torch.cumprod"
+    mapping:
+      ins: { x: input, dim: dim }
 
 cumprod_3:
   desc: "沿给定 axis 计算张量 x 的累乘"
@@ -1376,6 +1486,10 @@ cumprod_3:
         range: [ -2, 2]
     params:
       dim: 4
+  pytorch:
+    api_name: "torch.cumprod"
+    mapping:
+      ins: { x: input, dim: dim }
 
 cumprod_4:
   desc: "沿给定 axis 计算张量 x 的累乘"
@@ -1390,6 +1504,10 @@ cumprod_4:
         range: [ -2, 2]
     params:
       dim: 0
+  pytorch:
+    api_name: "torch.cumprod"
+    mapping:
+      ins: { x: input, dim: dim }
 
 digamma_base:
   desc: "逐元素计算输入Tensor的digamma函数值"
@@ -1402,6 +1520,10 @@ digamma_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.digamma"
+    mapping:
+      ins: { x: input }
 
 digamma_0:
   desc: "逐元素计算输入Tensor的digamma函数值"
@@ -1414,6 +1536,10 @@ digamma_0:
         dtype: "float32"
         shape: [3, 6, 6, 6, 6]
         range: [ -5, 5]
+  pytorch:
+    api_name: "torch.digamma"
+    mapping:
+      ins: { x: input }
 
 divide_base:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
@@ -1430,6 +1556,10 @@ divide_base:
         type: "Tensor"
         dtype: "float32"
         value: [1, 5, 2]
+  pytorch:
+    api_name: "torch.divide"
+    mapping:
+      ins: { x: input, y: other }
 
 divide_0:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
@@ -1448,6 +1578,10 @@ divide_0:
         dtype: "float32"
         shape: [3]
         range: [ 1, 10]
+  pytorch:
+    api_name: "torch.divide"
+    mapping:
+      ins: { x: input, y: other }
 
 divide_1:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
@@ -1466,6 +1600,10 @@ divide_1:
         dtype: "float32"
         shape: [3, 1]
         range: [ -1, 10]
+  pytorch:
+    api_name: "torch.divide"
+    mapping:
+      ins: { x: input, y: other }
 
 divide_2:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
@@ -1482,6 +1620,10 @@ divide_2:
         type: "Tensor"
         dtype: "float32"
         value: [-0.1, 2]
+  pytorch:
+    api_name: "torch.divide"
+    mapping:
+      ins: { x: input, y: other }
 
 divide_3:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
@@ -1498,6 +1640,10 @@ divide_3:
         type: "Tensor"
         dtype: "float32"
         value: [1, 2, 3]
+  pytorch:
+    api_name: "torch.divide"
+    mapping:
+      ins: { x: input, y: other }
 
 divide_4:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
@@ -1514,6 +1660,10 @@ divide_4:
         type: "Tensor"
         dtype: "float32"
         value: [[-1], [2], [1]]
+  pytorch:
+    api_name: "torch.divide"
+    mapping:
+      ins: { x: input, y: other }
 
 divide_5:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
@@ -1530,6 +1680,10 @@ divide_5:
         type: "Tensor"
         dtype: "float32"
         value: [0, 0, 0]
+  pytorch:
+    api_name: "torch.divide"
+    mapping:
+      ins: { x: input, y: other }
 
 divide_6:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
@@ -1546,6 +1700,10 @@ divide_6:
         type: "Tensor"
         dtype: "float32"
         value: [0, 0, 0]
+  pytorch:
+    api_name: "torch.divide"
+    mapping:
+      ins: { x: input, y: other }
 
 divide_7:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
@@ -1564,6 +1722,10 @@ divide_7:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.divide"
+    mapping:
+      ins: { x: input, y: other }
 
 equal_base:
   desc: "逐元素比较x和y是否相等，相同位置的元素相同则返回True，否则返回False"
@@ -1708,6 +1870,10 @@ equal_all_base:
         type: "Tensor"
         dtype: "float32"
         value: [[[2.3, 4.5, -2.], [2., 0., 2.]], [[1., -4., -2.1], [2., 1.1, 2.]]]
+  pytorch:
+    api_name: "torch.equal"
+    mapping:
+      ins: { x: input, y: other }
 
 equal_all_0:
   desc: "如果所有相同位置的元素相同返回True，否则返回False"
@@ -1726,6 +1892,10 @@ equal_all_0:
         dtype: "int32"
         shape: [3, 3, 3]
         range: [-10, 10]
+  pytorch:
+    api_name: "torch.equal"
+    mapping:
+      ins: { x: input, y: other }
 
 equal_all_1:
   desc: "如果所有相同位置的元素相同返回True，否则返回False"
@@ -1744,6 +1914,10 @@ equal_all_1:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [-10, 10]
+  pytorch:
+    api_name: "torch.equal"
+    mapping:
+      ins: { x: input, y: other }
 
 equal_all_2:
   desc: "如果所有相同位置的元素相同返回True，否则返回False"
@@ -1762,6 +1936,10 @@ equal_all_2:
         dtype: "int32"
         shape: [3, 3]
         range: [-10, 10]
+#  pytorch:
+#    api_name: "torch.equal"
+#    mapping:
+#      ins: { x: input, y: other }
 
 equal_all_3:
   desc: "如果所有相同位置的元素相同返回True，否则返回False"
@@ -1778,6 +1956,10 @@ equal_all_3:
         type: "Tensor"
         dtype: "float32"
         value: [[3, 3, 3]]
+  pytorch:
+    api_name: "torch.equal"
+    mapping:
+      ins: { x: input, y: other }
 
 equal_all_4:
   desc: "如果所有相同位置的元素相同返回True，否则返回False"
@@ -1794,6 +1976,10 @@ equal_all_4:
         type: "Tensor"
         dtype: "bool"
         value: [[True, False, True]]
+  pytorch:
+    api_name: "torch.equal"
+    mapping:
+      ins: { x: input, y: other }
 
 equal_all_5:
   desc: "如果所有相同位置的元素相同返回True，否则返回False"
@@ -1810,6 +1996,10 @@ equal_all_5:
         type: "Tensor"
         dtype: "bool"
         value: [[True, False, True], [True, False, True]]
+  pytorch:
+    api_name: "torch.equal"
+    mapping:
+      ins: { x: input, y: other }
 
 erf_base:
   desc: "逐元素计算 Erf 激活函数"
@@ -1822,6 +2012,10 @@ erf_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.erf"
+    mapping:
+      ins: { x: input }
 
 exp_base:
   desc: "对输入, 逐元素进行以自然数e为底指数运算"
@@ -1834,6 +2028,10 @@ exp_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.exp"
+    mapping:
+      ins: { x: input }
 
 expm1_base:
   desc: "对输入，逐元素进行以自然数e为底指数运算并减1"
@@ -1846,6 +2044,10 @@ expm1_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.expm1"
+    mapping:
+      ins: { x: input }
 
 floor_base:
   desc: "向下取整函数"
@@ -1858,6 +2060,10 @@ floor_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.floor"
+    mapping:
+      ins: { x: input }
 
 floor_divide_base:
   desc: "输入 x 与输入 y 逐元素整除，并将各个位置的输出元素保存到返回结果中"
@@ -1874,6 +2080,10 @@ floor_divide_base:
         type: "Tensor"
         dtype: "int32"
         value: [1, 5, 2]
+  pytorch:
+    api_name: "torch.floor_divide"
+    mapping:
+      ins: { x: input, y: other }
 
 floor_divide_0:
   desc: "输入 x 与输入 y 逐元素整除，并将各个位置的输出元素保存到返回结果中"
@@ -1892,6 +2102,10 @@ floor_divide_0:
         dtype: "int32"
         shape: [3]
         range: [ 1, 10]
+  pytorch:
+    api_name: "torch.floor_divide"
+    mapping:
+      ins: { x: input, y: other }
 
 floor_divide_1:
   desc: "输入 x 与输入 y 逐元素整除，并将各个位置的输出元素保存到返回结果中"
@@ -1908,6 +2122,10 @@ floor_divide_1:
         type: "Tensor"
         dtype: "int32"
         value: [-10, 9]
+  pytorch:
+    api_name: "torch.floor_divide"
+    mapping:
+      ins: { x: input, y: other }
 
 floor_divide_2:
   desc: "输入 x 与输入 y 逐元素整除，并将各个位置的输出元素保存到返回结果中"
@@ -1924,6 +2142,10 @@ floor_divide_2:
         type: "Tensor"
         dtype: "int32"
         value: [1, -1, 3]
+  pytorch:
+    api_name: "torch.floor_divide"
+    mapping:
+      ins: { x: input, y: other }
 
 floor_divide_3:
   desc: "输入 x 与输入 y 逐元素整除，并将各个位置的输出元素保存到返回结果中"
@@ -1942,6 +2164,10 @@ floor_divide_3:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ 1, 5]
+  pytorch:
+    api_name: "torch.floor_divide"
+    mapping:
+      ins: { x: input, y: other }
 
 greater_equal_base:
   desc: "逐元素地返回 x>=y 的逻辑值，相同位置前者输入大于等于后者输入则返回True，否则返回False"
@@ -1958,6 +2184,10 @@ greater_equal_base:
         type: "Tensor"
         dtype: "float32"
         value: [[-2.0, 1.1, -3.5], [-2.5, 1.5, 3.5], [0.5, 4.2, 8.3]]
+  pytorch:
+    api_name: "torch.greater_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 greater_equal_0:
   desc: "逐元素地返回 x>=y 的逻辑值，相同位置前者输入大于等于后者输入则返回True，否则返回False"
@@ -1976,6 +2206,10 @@ greater_equal_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.greater_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 greater_equal_1:
   desc: "逐元素地返回 x>=y 的逻辑值，相同位置前者输入大于等于后者输入则返回True，否则返回False"
@@ -1992,6 +2226,10 @@ greater_equal_1:
         type: "Tensor"
         dtype: "float32"
         value: [1, -1, 2, -4]
+  pytorch:
+    api_name: "torch.greater_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 greater_equal_2:
   desc: "逐元素地返回 x>=y 的逻辑值，相同位置前者输入大于等于后者输入则返回True，否则返回False"
@@ -2010,6 +2248,10 @@ greater_equal_2:
         dtype: "float32"
         shape: [1, 2, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.greater_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 greater_than_base:
   desc: "逐元素地返回 x>y 的逻辑值，相同位置前者输入大于后者输入则返回True，否则返回False"
