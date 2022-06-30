@@ -76,6 +76,8 @@ class CompetitorCompareTest(object):
                 if dtype in ["float16", "float32", "float64"]:
                     paddle.set_default_dtype(dtype)
                     torch.set_default_dtype(TORCHDTYPE.get(dtype))
+                if dtype in ["int32", "int64", "bool"]:
+                    self.enable_backward = False
                 if place == "cpu" and dtype == "float16":
                     continue
                 if self.enable_backward:
@@ -217,7 +219,7 @@ class CompetitorCompareTest(object):
             data["params"] = {}
         for k, v in data["inputs"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                if v.dtype in ["int32", "int64"]:
+                if v.dtype in ["int32", "int64", "bool"]:
                     self.torch_inputs[k] = torch.tensor(v, device=TORCHDEVICE.get(place))
                 else:
                     self.torch_inputs[k] = torch.tensor(
