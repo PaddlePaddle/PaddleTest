@@ -2338,6 +2338,10 @@ kron_base:
         dtype: "float32"
         shape: [3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.kron"
+    mapping:
+      ins: { x: input, y: other }
 
 kron_0:
   desc: "计算两个张量的克罗内克积, 结果是一个合成的张量, 由第二个张量经过第一个张量中的元素缩放 后的组块构成。"
@@ -2356,6 +2360,10 @@ kron_0:
         dtype: "int32"
         shape: [3, 3, 2]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.kron"
+    mapping:
+      ins: { x: input, y: other }
 
 kron_1:
   desc: "计算两个张量的克罗内克积, 结果是一个合成的张量, 由第二个张量经过第一个张量中的元素缩放 后的组块构成。"
@@ -2374,6 +2382,10 @@ kron_1:
         dtype: "float32"
         shape: [3, 3, 2]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.kron"
+    mapping:
+      ins: { x: input, y: other }
 
 kron_2:
   desc: "计算两个张量的克罗内克积, 结果是一个合成的张量, 由第二个张量经过第一个张量中的元素缩放 后的组块构成。"
@@ -2392,6 +2404,10 @@ kron_2:
         dtype: "float32"
         shape: [3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.kron"
+    mapping:
+      ins: { x: input, y: other }
 
 kron_3:
   desc: "计算两个张量的克罗内克积, 结果是一个合成的张量, 由第二个张量经过第一个张量中的元素缩放 后的组块构成。"
@@ -2410,6 +2426,10 @@ kron_3:
         dtype: "float32"
         shape: [2, 3, 5, 5]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.kron"
+    mapping:
+      ins: { x: input, y: other }
 
 less_equal_base:
   desc: "逐元素地返回 x<=y 的逻辑值，相同位置前者输入小于等于后者输入则返回True，否则返回False"
@@ -2426,6 +2446,10 @@ less_equal_base:
         type: "Tensor"
         dtype: "float32"
         value: [[-2.0, 1.1, -3.5], [-2.5, 1.5, 3.5], [0.5, 4.2, 8.3]]
+  pytorch:
+    api_name: "torch.less_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 less_equal_0:
   desc: "逐元素地返回 x<=y 的逻辑值，相同位置前者输入小于等于后者输入则返回True，否则返回False"
@@ -2444,6 +2468,10 @@ less_equal_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.less_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 less_equal_1:
   desc: "逐元素地返回 x<=y 的逻辑值，相同位置前者输入小于等于后者输入则返回True，否则返回False"
@@ -2462,6 +2490,10 @@ less_equal_1:
         dtype: "float32"
         shape: [1, 2, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.less_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 less_equal_2:
   desc: "逐元素地返回 x<=y 的逻辑值，相同位置前者输入小于等于后者输入则返回True，否则返回False"
@@ -2480,6 +2512,10 @@ less_equal_2:
         dtype: "float32"
         shape: [2, 2]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.less_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 less_than_base:
   desc: "逐元素地返回 x<y 的逻辑值，相同位置前者输入小于后者输入则返回True，否则返回False"
@@ -2562,6 +2598,10 @@ lgamma_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.lgamma"
+    mapping:
+      ins: { x: input }
 
 log_base:
   desc: "Log激活函数(计算自然对数)"
@@ -2574,6 +2614,10 @@ log_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ 0.001, 10]
+  pytorch:
+    api_name: "torch.log"
+    mapping:
+      ins: { x: input }
 
 log_0:
   desc: "Log激活函数(计算自然对数)"
@@ -2585,6 +2629,10 @@ log_0:
         type: "Tensor"
         dtype: "float32"
         value: [0]
+  pytorch:
+    api_name: "torch.log"
+    mapping:
+      ins: { x: input }
 
 log_1:
   desc: "Log激活函数(计算自然对数)"
@@ -2596,6 +2644,10 @@ log_1:
         type: "Tensor"
         dtype: "float32"
         value: [-3]
+  pytorch:
+    api_name: "torch.log"
+    mapping:
+      ins: { x: input }
 
 log_2:
   desc: "Log激活函数(计算自然对数)"
@@ -2608,6 +2660,10 @@ log_2:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 10]
+  pytorch:
+    api_name: "torch.log"
+    mapping:
+      ins: { x: input }
 
 log10_base:
   desc: "Log10激活函数(计算底为10对数)"
@@ -2620,6 +2676,10 @@ log10_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ 0.001, 10]
+  pytorch:
+    api_name: "torch.log10"
+    mapping:
+      ins: { x: input }
 
 log10_0:
   desc: "Log10激活函数(计算底为10对数)"
@@ -2631,6 +2691,10 @@ log10_0:
         type: "Tensor"
         dtype: "float32"
         value: [0]
+  pytorch:
+    api_name: "torch.log10"
+    mapping:
+      ins: { x: input }
 
 log10_1:
   desc: "Log10激活函数(计算底为10对数)"
@@ -2642,6 +2706,10 @@ log10_1:
         type: "Tensor"
         dtype: "float32"
         value: [-3]
+  pytorch:
+    api_name: "torch.log10"
+    mapping:
+      ins: { x: input }
 
 log10_2:
   desc: "Log10激活函数(计算底为10对数)"
@@ -2654,6 +2722,10 @@ log10_2:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 10]
+  pytorch:
+    api_name: "torch.log10"
+    mapping:
+      ins: { x: input }
 
 log2_base:
   desc: "Log2激活函数(计算底为2对数)"
@@ -2666,6 +2738,10 @@ log2_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ 0.001, 10]
+  pytorch:
+    api_name: "torch.log2"
+    mapping:
+      ins: { x: input }
 
 log2_0:
   desc: "Log2激活函数(计算底为2对数)"
@@ -2677,6 +2753,10 @@ log2_0:
         type: "Tensor"
         dtype: "float32"
         value: [0]
+  pytorch:
+    api_name: "torch.log2"
+    mapping:
+      ins: { x: input }
 
 log2_1:
   desc: "Log2激活函数(计算底为2对数)"
@@ -2688,6 +2768,10 @@ log2_1:
         type: "Tensor"
         dtype: "float32"
         value: [-3]
+  pytorch:
+    api_name: "torch.log2"
+    mapping:
+      ins: { x: input }
 
 log2_2:
   desc: "Log2激活函数(计算底为2对数)"
@@ -2700,6 +2784,10 @@ log2_2:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 10]
+  pytorch:
+    api_name: "torch.log2"
+    mapping:
+      ins: { x: input }
 
 logical_and_base:
   desc: "逐元素的对 x 和 y 进行逻辑与运算"
@@ -2718,6 +2806,10 @@ logical_and_base:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_and"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_and_0:
   desc: "逐元素的对 x 和 y 进行逻辑与运算"
@@ -2734,6 +2826,10 @@ logical_and_0:
         type: "Tensor"
         dtype: "bool"
         value: [True, False, True, False]
+  pytorch:
+    api_name: "torch.logical_and"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_and_1:
   desc: "逐元素的对 x 和 y 进行逻辑与运算"
@@ -2752,6 +2848,10 @@ logical_and_1:
         dtype: "bool"
         shape: [1, 2, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_and"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_and_2:
   desc: "逐元素的对 x 和 y 进行逻辑与运算"
@@ -2770,6 +2870,10 @@ logical_and_2:
         dtype: "bool"
         shape: [2, 2]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_and"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_not_base:
   desc: "逐元素的对 X Tensor进行逻辑非运算"
@@ -2782,6 +2886,10 @@ logical_not_base:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_not"
+    mapping:
+      ins: { x: input }
 
 logical_not_0:
   desc: "逐元素的对 X Tensor进行逻辑非运算"
@@ -2794,6 +2902,10 @@ logical_not_0:
         dtype: "bool"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_not"
+    mapping:
+      ins: { x: input }
 
 logical_or_base:
   desc: "逐元素的对 X 和 Y 进行逻辑或运算"
@@ -2812,6 +2924,10 @@ logical_or_base:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_or"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_or_0:
   desc: "逐元素的对 x 和 y 进行逻辑或运算"
@@ -2828,6 +2944,10 @@ logical_or_0:
         type: "Tensor"
         dtype: "bool"
         value: [True, False, True, False]
+  pytorch:
+    api_name: "torch.logical_or"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_or_1:
   desc: "逐元素的对 x 和 y 进行逻辑或运算"
@@ -2846,6 +2966,10 @@ logical_or_1:
         dtype: "bool"
         shape: [1, 2, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_or"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_or_2:
   desc: "逐元素的对 x 和 y 进行逻辑或运算"
@@ -2864,6 +2988,10 @@ logical_or_2:
         dtype: "bool"
         shape: [2, 2]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_or"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_xor_base:
   desc: "逐元素的对 X 和 Y 进行逻辑异或运算"
@@ -2882,6 +3010,10 @@ logical_xor_base:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_xor"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_xor_0:
   desc: "逐元素的对 x 和 y 进行逻辑异或运算"
@@ -2898,6 +3030,10 @@ logical_xor_0:
         type: "Tensor"
         dtype: "bool"
         value: [True, False, True, False]
+  pytorch:
+    api_name: "torch.logical_xor"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_xor_1:
   desc: "逐元素的对 x 和 y 进行逻辑异或运算"
@@ -2916,6 +3052,10 @@ logical_xor_1:
         dtype: "bool"
         shape: [1, 2, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_xor"
+    mapping:
+      ins: { x: input, y: other }
 
 logical_xor_2:
   desc: "逐元素的对 x 和 y 进行逻辑异或运算"
@@ -2934,6 +3074,10 @@ logical_xor_2:
         dtype: "bool"
         shape: [2, 2]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.logical_xor"
+    mapping:
+      ins: { x: input, y: other }
 
 bitwise_and_base:
   desc: "逐元素的对 X 和 Y 进行按位与运算"
@@ -2952,6 +3096,10 @@ bitwise_and_base:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.bitwise_and"
+    mapping:
+      ins: { x: input, y: other }
 
 bitwise_not_base:
   desc: "逐元素的对 X 和 Y 进行按位取反运算"
@@ -2964,6 +3112,10 @@ bitwise_not_base:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.bitwise_not"
+    mapping:
+      ins: { x: input }
 
 bitwise_or_base:
   desc: "逐元素的对 X 和 Y 进行按位或运算"
@@ -2982,6 +3134,10 @@ bitwise_or_base:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.bitwise_or"
+    mapping:
+      ins: { x: input, y: other }
 
 bitwise_xor_base:
   desc: "逐元素的对 X 和 Y 进行按位异或运算"
@@ -3000,6 +3156,10 @@ bitwise_xor_base:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.bitwise_xor"
+    mapping:
+      ins: { x: input, y: other }
 
 logsumexp_base:
   desc: "沿着参数``axis`` 计算 x 的以e为底的指数的和的自然对数"
@@ -3026,6 +3186,10 @@ logsumexp_0:
         range: [ -1, 1]
     params:
       axis: 2
+  pytorch:
+    api_name: "torch.logsumexp"
+    mapping:
+      ins: { x: input, axis: dim }
 
 logsumexp_1:
   desc: "沿着参数``axis`` 计算 x 的以e为底的指数的和的自然对数"
@@ -3040,6 +3204,10 @@ logsumexp_1:
         range: [ -1, 1]
     params:
       axis: [0, 1]
+  pytorch:
+    api_name: "torch.logsumexp"
+    mapping:
+      ins: { x: input, axis: dim }
 
 logsumexp_2:
   desc: "沿着参数``axis`` 计算 x 的以e为底的指数的和的自然对数"
@@ -3055,6 +3223,10 @@ logsumexp_2:
     params:
       axis: 0
       keepdim: True
+  pytorch:
+    api_name: "torch.logsumexp"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 logsumexp_3:
   desc: "沿着参数``axis`` 计算 x 的以e为底的指数的和的自然对数"
@@ -3070,6 +3242,10 @@ logsumexp_3:
     params:
       axis: [0, 1]
       keepdim: True
+  pytorch:
+    api_name: "torch.logsumexp"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 max_base:
   desc: "对指定维度上的Tensor元素求最大值运算，并输出相应的计算结果"
@@ -3082,6 +3258,10 @@ max_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.max"
+    mapping:
+      ins: { x: input }
 
 max_0:
   desc: "对指定维度上的Tensor元素求最大值运算，并输出相应的计算结果"
