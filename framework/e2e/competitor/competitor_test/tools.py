@@ -97,6 +97,7 @@ TORCHDTYPE = {
     "int64": torch.int64,
     "complex64": torch.complex64,
     "complex128": torch.complex128,
+    "bool": torch.bool,
 }
 
 

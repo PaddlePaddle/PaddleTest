@@ -766,6 +766,10 @@ any_base:
         type: "Tensor"
         dtype: "bool"
         value: [[True, False], [False, True]]
+  pytorch:
+    api_name: "torch.any"
+    mapping:
+      ins: { x: input }
 
 any_0:
   desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"
@@ -778,6 +782,10 @@ any_0:
         dtype: "bool"
         shape: [10]
         range: [-4, 4]
+  pytorch:
+    api_name: "torch.any"
+    mapping:
+      ins: { x: input }
 
 any_1:
   desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"
@@ -790,6 +798,10 @@ any_1:
         dtype: "bool"
         shape: [10, 10]
         range: [-4, 4]
+  pytorch:
+    api_name: "torch.any"
+    mapping:
+      ins: { x: input }
 
 any_2:
   desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"
@@ -802,6 +814,10 @@ any_2:
         dtype: "bool"
         shape: [3, 4, 2]
         range: [-4, 4]
+  pytorch:
+    api_name: "torch.any"
+    mapping:
+      ins: { x: input }
 
 any_3:
   desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"
@@ -814,6 +830,10 @@ any_3:
         dtype: "bool"
         shape: [2, 4, 4, 2]
         range: [-4, 4]
+  pytorch:
+    api_name: "torch.any"
+    mapping:
+      ins: { x: input }
 
 any_4:
   desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"
@@ -828,6 +848,10 @@ any_4:
         range: [-4, 4]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.any"
+    mapping:
+      ins: { x: input, axis: dim }
 
 any_5:
   desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"
@@ -842,6 +866,10 @@ any_5:
         range: [-4, 4]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.any"
+    mapping:
+      ins: { x: input, axis: dim }
 
 any_6:
   desc: "对指定维度上的Tensor元素进行逻辑或运算，并输出相应的计算结果"

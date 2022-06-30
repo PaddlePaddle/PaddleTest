@@ -126,6 +126,8 @@ class CompeTrans(WeakTrans):
             return ["float16"]
         elif dtype in ["complex", "complex64", "complex128"]:
             return ["complex64", "complex128"]
+        elif dtype == "bool":
+            return ["bool"]
 
 
 if __name__ == "__main__":
