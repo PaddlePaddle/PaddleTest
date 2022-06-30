@@ -5,7 +5,7 @@ import sys
 import pytest
 import numpy as np
 import paddle
-from paddle.incubate.autograd import enable_prim, prim2orig, disable_prim, prim_enabled
+import paddle.incubate.autograd as augograd
 
 sys.path.append("../../utils/")
 from interceptor import skip_branch_not_develop
@@ -13,9 +13,9 @@ from interceptor import skip_branch_not_develop
 
 @skip_branch_not_develop
 @pytest.mark.api_incubate_autograd_prim2orig
-def test_prim2orig():
+def test_enable_prim():
     """
-    test prim2orig
+    test01
     """
     np.random.seed(1)
     x = np.random.rand(2, 2)
@@ -27,7 +27,7 @@ def test_prim2orig():
     d_dy_dx = paddle.grad(y, xp)
 
     paddle.enable_static()
-    enable_prim()
+    augograd.enable_prim()
     # Set place and excutor
     place = paddle.CPUPlace()
     if paddle.device.is_compiled_with_cuda():
@@ -45,8 +45,8 @@ def test_prim2orig():
         y = paddle.tanh(paddle.matmul(input_x, params_w))
         dy_dx, = paddle.static.gradients([y], [input_x])
         # Do prim2orig transform.
-        if prim_enabled():
-            prim2orig(main.block(0))
+        if augograd.prim_enabled():
+            augograd.prim2orig(main.block(0))
     # Run program
     exe.run(startup)
     res = exe.run(main, feed={"x": x, "w_p": w}, fetch_list=dy_dx)
