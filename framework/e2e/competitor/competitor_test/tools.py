@@ -126,4 +126,5 @@ STOP_BACKWARD = [
     "isfinite_base",
     "isinf_base",
     "isnan_base",
+    *case2name("full_like", 1),
 ]
