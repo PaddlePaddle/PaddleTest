@@ -88,4 +88,5 @@ def test_cumsum_3():
     x_data = np.random.rand(1, 16, 96, 32).astype(np.float32)
     res = np.cumsum(x_data, axis=2)
     obj.enable_backward = False
+    obj.delta = 1e-4
     obj.run(res=res, x=x_data, axis=2)
