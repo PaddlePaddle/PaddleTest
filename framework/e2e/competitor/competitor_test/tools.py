@@ -123,4 +123,7 @@ STOP_BACKWARD = [
     *case2name("greater_equal", 2),
     *case2name("less_equal", 2),
     *case2name("tanh_", 2),
+    "isfinite_base",
+    "isinf_base",
+    "isnan_base",
 ]
