@@ -5948,6 +5948,10 @@ diagflat_base:
         dtype: "float32"
         shape: [2, 3, 5, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.diagflat"
+    mapping:
+      ins: { x: input }
 
 diagflat_0:
   desc: "如果 x 是一维张量，则返回带有 x 元素作为对角线的二维方阵. 如果 x 是大于等于二维的张量，则返回一个二维方阵"
@@ -5962,6 +5966,10 @@ diagflat_0:
         range: [ -1, 1]
     params:
       offset: -1
+  pytorch:
+    api_name: "torch.diagflat"
+    mapping:
+      ins: { x: input, offset: offset }
 
 diagflat_1:
   desc: "如果 x 是一维张量，则返回带有 x 元素作为对角线的二维方阵. 如果 x 是大于等于二维的张量，则返回一个二维方阵"
@@ -5976,6 +5984,10 @@ diagflat_1:
         range: [ -1, 1]
     params:
       offset: 2
+  pytorch:
+    api_name: "torch.diagflat"
+    mapping:
+      ins: { x: input, offset: offset }
 
 empty_base:
   desc: "创建形状大小为shape并且数据类型为dtype的Tensor，其中元素值是未初始化的"
@@ -6023,6 +6035,10 @@ eye_base:
     api_name: "paddle.eye"
     params:
       num_rows: 5
+  pytorch:
+    api_name: "torch.eye"
+    mapping:
+      ins: { num_rows: n }
 
 eye_0:
   desc: "创建形状大小为shape并且数据类型为dtype的Tensor，其中元素值是未初始化的"
@@ -6031,6 +6047,10 @@ eye_0:
     params:
       num_rows: 3
       num_columns: 5
+  pytorch:
+    api_name: "torch.eye"
+    mapping:
+      ins: { num_rows: n, num_columns: m }
 
 eye_1:
   desc: "创建形状大小为shape并且数据类型为dtype的Tensor，其中元素值是未初始化的"
@@ -6040,6 +6060,10 @@ eye_1:
       num_rows: 5
       num_columns: 3
       dtype: "int64"
+  pytorch:
+    api_name: "torch.eye"
+    mapping:
+      ins: { num_rows: n, num_columns: m }
 
 full_base:
   desc: "创建形状大小为 shape 并且数据类型为 dtype 的Tensor，其中元素值均为 fill_value"
@@ -6049,6 +6073,10 @@ full_base:
       shape: [2, 3, 4, 4]
       fill_value: 3.0
       dtype: "float32"
+  pytorch:
+    api_name: "torch.full"
+    mapping:
+      ins: { shape: size, fill_value: fill_value }
 
 full_0:
   desc: "创建形状大小为 shape 并且数据类型为 dtype 的Tensor，其中元素值均为 fill_value"
@@ -6058,6 +6086,10 @@ full_0:
       shape: [2, 3, 4, 4]
       fill_value: True
       dtype: "bool"
+  pytorch:
+    api_name: "torch.full"
+    mapping:
+      ins: { shape: size, fill_value: fill_value }
 
 full_1:
   desc: "创建形状大小为 shape 并且数据类型为 dtype 的Tensor，其中元素值均为 fill_value"
@@ -6067,6 +6099,10 @@ full_1:
       shape: [2, 3, 4, 4]
       fill_value: False
       dtype: "bool"
+  pytorch:
+    api_name: "torch.full"
+    mapping:
+      ins: { shape: size, fill_value: fill_value }
 
 full_2:
   desc: "创建形状大小为 shape 并且数据类型为 dtype 的Tensor，其中元素值均为 fill_value"
@@ -6076,6 +6112,10 @@ full_2:
       shape: [2, 3, 4, 4]
       fill_value: 1
       dtype: "int32"
+  pytorch:
+    api_name: "torch.full"
+    mapping:
+      ins: { shape: size, fill_value: fill_value }
 
 full_3:
   desc: "创建形状大小为 shape 并且数据类型为 dtype 的Tensor，其中元素值均为 fill_value"
@@ -6085,6 +6125,10 @@ full_3:
       shape: !!python/tuple [2, 3, 4, 4]
       fill_value: 1
       dtype: "int32"
+  pytorch:
+    api_name: "torch.full"
+    mapping:
+      ins: { shape: size, fill_value: fill_value }
 
 full_4:
   desc: "创建形状大小为 shape 并且数据类型为 dtype 的Tensor，其中元素值均为 fill_value"
@@ -6125,6 +6169,10 @@ full_like_base:
         range: [ -1, 1]
     params:
       fill_value: 3.
+  pytorch:
+    api_name: "torch.full_like"
+    mapping:
+      ins: { x: input, fill_value: fill_value }
 
 full_like_0:
   desc: "创建一个和 x 具有相同的形状并且数据类型为 dtype 的Tensor，其中元素值均为 fill_value"
@@ -6139,6 +6187,10 @@ full_like_0:
         range: [ -1, 1]
     params:
       fill_value: True
+  pytorch:
+    api_name: "torch.full_like"
+    mapping:
+      ins: { x: input, fill_value: fill_value }
 
 #full_like_1:
 #  desc: "创建一个和 x 具有相同的形状并且数据类型为 dtype 的Tensor，其中元素值均为 fill_value"
