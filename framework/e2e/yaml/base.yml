@@ -5477,6 +5477,10 @@ trunc_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.trunc"
+    mapping:
+      ins: { input: input }
 
 trunc_0:
   desc: "将输入 Tensor 的小数部分置0，返回置0后的 Tensor ，如果输入 Tensor 的数据类型为整数，则不做处理"
@@ -5501,6 +5505,10 @@ trunc_1:
         dtype: "float32"
         shape: [2, 3, 4, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.trunc"
+    mapping:
+      ins: { input: input }
 
 log1p_base:
   desc: "计算Log1p（加一的自然对数）结果"
@@ -5513,6 +5521,10 @@ log1p_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.log1p"
+    mapping:
+      ins: { x: input }
 
 log1p_0:
   desc: "计算Log1p（加一的自然对数）结果"
@@ -5525,6 +5537,10 @@ log1p_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ 0.5, 20]
+  pytorch:
+    api_name: "torch.log1p"
+    mapping:
+      ins: { x: input }
 
 is_empty_base:
   desc: "测试变量是否为空"
@@ -5583,6 +5599,10 @@ isfinite_base:
         type: "Tensor"
         dtype: "float32"
         value: [[-1., 2., nan], [-inf, inf, -nan], [2.4, 0., -inf]]
+  pytorch:
+    api_name: "torch.isfinite"
+    mapping:
+      ins: { x: input }
 
 isinf_base:
   desc: "返回输入tensor的每一个值是否为 +/-INF"
@@ -5594,6 +5614,10 @@ isinf_base:
         type: "Tensor"
         dtype: "float32"
         value: [[-1., 2., nan], [-inf, inf, -nan], [2.4, 0., -inf]]
+  pytorch:
+    api_name: "torch.isinf"
+    mapping:
+      ins: { x: input }
 
 isnan_base:
   desc: "返回输入tensor的每一个值是否为 +/-NaN"
@@ -5605,6 +5629,10 @@ isnan_base:
         type: "Tensor"
         dtype: "float32"
         value: [[-1., 2., nan], [-inf, inf, -nan], [2.4, 0., -inf]]
+  pytorch:
+    api_name: "torch.isnan"
+    mapping:
+      ins: { x: input }
 
 imag_base:
   desc: "返回一个包含输入复数Tensor的虚部数值的新Tensor"
@@ -5617,6 +5645,10 @@ imag_base:
         dtype: "complex64"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.imag"
+    mapping:
+      ins: { x: input }
 
 real_base:
   desc: "返回一个包含输入复数Tensor的实部数值的新Tensor"
@@ -5629,6 +5661,10 @@ real_base:
         dtype: "complex64"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.real"
+    mapping:
+      ins: { x: input }
 
 shape_base:
   desc: "获得输入Tensor或SelectedRows的shape"
@@ -5689,6 +5725,10 @@ arange_base:
       end: 15.0
       step: 2.0
       dtype: "float32"
+  pytorch:
+    api_name: "torch.arange"
+    mapping:
+      ins: { start: start, end: end, step: step }
 
 arange_0:
   desc: "该OP返回以步长 step 均匀分隔给定数值区间[start, end)的1-D Tensor"
@@ -5704,6 +5744,10 @@ arange_1:
     params:
       start: 5
       end: 10
+  pytorch:
+    api_name: "torch.arange"
+    mapping:
+      ins: { start: start, end: end }
 
 arange_2:
   desc: "该OP返回以步长 step 均匀分隔给定数值区间[start, end)的1-D Tensor"
@@ -5713,6 +5757,10 @@ arange_2:
       start: 1
       end: 20
       step: 3
+  pytorch:
+    api_name: "torch.arange"
+    mapping:
+      ins: { start: start, end: end, step: step }
 
 arange_3:
   desc: "该OP返回以步长 step 均匀分隔给定数值区间[start, end)的1-D Tensor"
@@ -5746,6 +5794,10 @@ diag_base:
         dtype: "float32"
         shape: [4, 5]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.diag"
+    mapping:
+      ins: { x: input }
 
 diag_0:
   desc: "如果 x 是向量（1-D张量），则返回带有 x 元素作为对角线的2-D方阵. 如果 x 是矩阵（2-D张量），则提取 x 的对角线元素，以1-D张量返回"
@@ -5758,6 +5810,10 @@ diag_0:
         dtype: "float32"
         shape: [1]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.diag"
+    mapping:
+      ins: { x: input }
 
 diag_1:
   desc: "如果 x 是向量（1-D张量），则返回带有 x 元素作为对角线的2-D方阵. 如果 x 是矩阵（2-D张量），则提取 x 的对角线元素，以1-D张量返回"
@@ -5770,6 +5826,10 @@ diag_1:
         dtype: "float32"
         shape: [3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.diag"
+    mapping:
+      ins: { x: input }
 
 diag_2:
   desc: "如果 x 是向量（1-D张量），则返回带有 x 元素作为对角线的2-D方阵. 如果 x 是矩阵（2-D张量），则提取 x 的对角线元素，以1-D张量返回"
@@ -5782,6 +5842,10 @@ diag_2:
         dtype: "float32"
         shape: [3, 1]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.diag"
+    mapping:
+      ins: { x: input }
 
 diag_3:
   desc: "如果 x 是向量（1-D张量），则返回带有 x 元素作为对角线的2-D方阵. 如果 x 是矩阵（2-D张量），则提取 x 的对角线元素，以1-D张量返回"
@@ -5796,6 +5860,10 @@ diag_3:
         range: [ -10, 10]
     params:
       offset: 0
+  pytorch:
+    api_name: "torch.diag"
+    mapping:
+      ins: { x: input, offset: diagonal }
 
 diag_4:
   desc: "如果 x 是向量（1-D张量），则返回带有 x 元素作为对角线的2-D方阵. 如果 x 是矩阵（2-D张量），则提取 x 的对角线元素，以1-D张量返回"
@@ -5810,6 +5878,10 @@ diag_4:
         range: [ -10, 10]
     params:
       offset: -1
+  pytorch:
+    api_name: "torch.diag"
+    mapping:
+      ins: { x: input, offset: diagonal }
 
 diag_5:
   desc: "如果 x 是向量（1-D张量），则返回带有 x 元素作为对角线的2-D方阵. 如果 x 是矩阵（2-D张量），则提取 x 的对角线元素，以1-D张量返回"
@@ -5824,6 +5896,10 @@ diag_5:
         range: [ -10, 10]
     params:
       offset: 1
+  pytorch:
+    api_name: "torch.diag"
+    mapping:
+      ins: { x: input, offset: diagonal }
 
 diag_6:
   desc: "如果 x 是向量（1-D张量），则返回带有 x 元素作为对角线的2-D方阵. 如果 x 是矩阵（2-D张量），则提取 x 的对角线元素，以1-D张量返回"
@@ -5838,6 +5914,10 @@ diag_6:
         range: [ -10, 10]
     params:
       offset: 0
+  pytorch:
+    api_name: "torch.diag"
+    mapping:
+      ins: { x: input, offset: diagonal }
 
 diag_7:
   desc: "如果 x 是向量（1-D张量），则返回带有 x 元素作为对角线的2-D方阵. 如果 x 是矩阵（2-D张量），则提取 x 的对角线元素，以1-D张量返回"
@@ -5852,6 +5932,10 @@ diag_7:
         range: [ -10, 10]
     params:
       offset: 10
+  pytorch:
+    api_name: "torch.diag"
+    mapping:
+      ins: { x: input, offset: diagonal }
 
 diagflat_base:
   desc: "如果 x 是一维张量，则返回带有 x 元素作为对角线的二维方阵. 如果 x 是大于等于二维的张量，则返回一个二维方阵"

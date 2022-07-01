@@ -115,19 +115,30 @@ class CompeTrans(WeakTrans):
         """
         get types
         """
-        inputs_info = self.case[self.framework.PADDLE]["inputs"].values()
-        inputs_info = list(inputs_info)[0]
-        dtype = inputs_info.get("dtype", "float")
-        if dtype in ["int", "int32", "int64"]:
+        if self.case[self.framework.PADDLE].get("inputs"):
+            types_info = self.case[self.framework.PADDLE]["inputs"]
+        elif self.case[self.framework.PADDLE].get("params"):
+            types_info = self.case[self.framework.PADDLE].get("params")
+        else:
+            self.logger.get_log().error("Either inputs or params must be set !!!")
+            assert False
+
+        types_info = list(types_info.values())[0]
+
+        if isinstance(types_info, dict):
+            dtype = types_info.get("dtype", "float")
+            if dtype in ["int", "int32", "int64"]:
+                return ["int32", "int64"]
+            elif dtype in ["float", "float32", "float64"]:
+                return ["float32", "float64"]
+            elif dtype == "float16":
+                return ["float16"]
+            elif dtype in ["complex", "complex64", "complex128"]:
+                return ["complex64", "complex128"]
+            elif dtype == "bool":
+                return ["bool"]
+        else:
             return ["int32", "int64"]
-        elif dtype in ["float", "float32", "float64"]:
-            return ["float32", "float64"]
-        elif dtype == "float16":
-            return ["float16"]
-        elif dtype in ["complex", "complex64", "complex128"]:
-            return ["complex64", "complex128"]
-        elif dtype == "bool":
-            return ["bool"]
 
 
 if __name__ == "__main__":
@@ -135,13 +146,3 @@ if __name__ == "__main__":
     cases_name = obj.get_all_case_name()
     for case_name in cases_name:
         case = obj.get_case_info(case_name)
-        # print(case)
-
-        w = CompeTrans(case, 0, 0)
-        # api = w.get_function()
-        #
-        # ins0 = w.get_paddle_ins()
-        # # print(ins0)
-        #
-        # ins = w.get_torch_ins()
-        # print(ins)
