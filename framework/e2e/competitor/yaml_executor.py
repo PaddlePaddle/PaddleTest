@@ -66,5 +66,5 @@ def debug_yaml_exe(yaml_file, case_name):
 
 
 if __name__ == "__main__":
-    # yaml_exe("../yaml/nn.yml")
+    # yaml_exe("../yaml/base.yml")
     debug_yaml_exe("../yaml/base.yml", sys.argv[1])

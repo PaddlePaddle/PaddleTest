@@ -4259,6 +4259,10 @@ prod_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.prod"
+    mapping:
+      ins: { x: input }
 
 prod_0:
   desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
@@ -4274,6 +4278,10 @@ prod_0:
     params:
       axis: 1
       keepdim: False
+  pytorch:
+    api_name: "torch.prod"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 prod_1:
   desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
@@ -4288,6 +4296,10 @@ prod_1:
         range: [ -1, 1]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.prod"
+    mapping:
+      ins: { x: input, axis: dim }
 
 prod_2:
   desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
@@ -4303,6 +4315,10 @@ prod_2:
     params:
       axis: 1
       keepdim: True
+  pytorch:
+    api_name: "torch.prod"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 prod_3:
   desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
@@ -4318,6 +4334,10 @@ prod_3:
     params:
       axis: -2
       keepdim: True
+  pytorch:
+    api_name: "torch.prod"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 reciprocal_base:
   desc: "对输入Tensor取倒数"
@@ -4330,6 +4350,10 @@ reciprocal_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, -2]
+  pytorch:
+    api_name: "torch.reciprocal"
+    mapping:
+      ins: { x: input }
 
 round_base:
   desc: "将输入中的数值四舍五入到最接近的整数数值"
@@ -4342,6 +4366,10 @@ round_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.round"
+    mapping:
+      ins: { x: input }
 
 rsqrt_base:
   desc: "rsqrt激活函数"
@@ -4354,6 +4382,10 @@ rsqrt_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ 1, 2]
+  pytorch:
+    api_name: "torch.rsqrt"
+    mapping:
+      ins: { x: input }
 
 rsqrt_0:
   desc: "rsqrt激活函数"
@@ -4366,6 +4398,10 @@ rsqrt_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, -2]
+  pytorch:
+    api_name: "torch.rsqrt"
+    mapping:
+      ins: { x: input }
 
 rsqrt_1:
   desc: "rsqrt激活函数"
@@ -4377,6 +4413,10 @@ rsqrt_1:
         type: "Tensor"
         dtype: "float32"
         value: [0, 0, 0, 0]
+  pytorch:
+    api_name: "torch.rsqrt"
+    mapping:
+      ins: { x: input }
 
 scale_base:
   desc: "对输入Tensor进行缩放和偏置"
@@ -4517,6 +4557,10 @@ sign_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.sign"
+    mapping:
+      ins: { x: input }
 
 sin_base:
   desc: "计算输入的正弦值"
@@ -4529,6 +4573,10 @@ sin_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.sin"
+    mapping:
+      ins: { x: input }
 
 sin_0:
   desc: "计算输入的正弦值"
@@ -4541,6 +4589,10 @@ sin_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.sin"
+    mapping:
+      ins: { x: input }
 
 sinh_base:
   desc: "双曲正弦函数"
@@ -4553,6 +4605,10 @@ sinh_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.sinh"
+    mapping:
+      ins: { x: input }
 
 sinh_0:
   desc: "双曲正弦函数"
@@ -4565,6 +4621,10 @@ sinh_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.sinh"
+    mapping:
+      ins: { x: input }
 
 sqrt_base:
   desc: "计算输入的算数平方根"
@@ -4577,6 +4637,10 @@ sqrt_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.sqrt"
+    mapping:
+      ins: { x: input }
 
 sqrt_0:
   desc: "计算输入的算数平方根"
@@ -4588,6 +4652,10 @@ sqrt_0:
         type: "Tensor"
         dtype: "float32"
         value: [0, 0, 0, 0]
+  pytorch:
+    api_name: "torch.sqrt"
+    mapping:
+      ins: { x: input }
 
 square_base:
   desc: "对输入参数``x``进行逐元素取平方运算"
@@ -4600,6 +4668,10 @@ square_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 2]
+  pytorch:
+    api_name: "torch.square"
+    mapping:
+      ins: { x: input }
 
 square_0:
   desc: "对输入参数``x``进行逐元素取平方运算"
@@ -4611,6 +4683,10 @@ square_0:
         type: "Tensor"
         dtype: "float32"
         value: [0, 0, 0, 0]
+  pytorch:
+    api_name: "torch.square"
+    mapping:
+      ins: { x: input }
 
 stanh_base:
   desc: "stanh 激活函数"
@@ -4699,6 +4775,10 @@ std_base:
       axis: 0
       unbiased: True
       keepdim: False
+  pytorch:
+    api_name: "torch.std"
+    mapping:
+      ins: { x: input, axis: dim, unbiased: unbiased, keepdim: keepdim }
 
 std_0:
   desc: "沿给定的轴 axis 计算 x 中元素的标准差"
@@ -4715,6 +4795,10 @@ std_0:
       axis: -1
       unbiased: True
       keepdim: False
+  pytorch:
+    api_name: "torch.std"
+    mapping:
+      ins: { x: input, axis: dim, unbiased: unbiased, keepdim: keepdim }
 
 std_1:
   desc: "沿给定的轴 axis 计算 x 中元素的标准差"
@@ -4731,6 +4815,10 @@ std_1:
       axis: 2
       unbiased: False
       keepdim: False
+  pytorch:
+    api_name: "torch.std"
+    mapping:
+      ins: { x: input, axis: dim, unbiased: unbiased, keepdim: keepdim }
 
 std_2:
   desc: "沿给定的轴 axis 计算 x 中元素的标准差"
@@ -4747,6 +4835,10 @@ std_2:
       axis: 0
       unbiased: False
       keepdim: True
+  pytorch:
+    api_name: "torch.std"
+    mapping:
+      ins: { x: input, axis: dim, unbiased: unbiased, keepdim: keepdim }
 
 std_3:
   desc: "沿给定的轴 axis 计算 x 中元素的标准差"
@@ -4759,6 +4851,10 @@ std_3:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.std"
+    mapping:
+      ins: { x: input }
 
 subtract_base:
   desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
@@ -4777,6 +4873,10 @@ subtract_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.subtract"
+    mapping:
+      ins: { x: input, y: other }
 
 subtract_0:
   desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
@@ -4793,6 +4893,10 @@ subtract_0:
         type: "Tensor"
         dtype: "float32"
         value: [1, 4, nan]
+  pytorch:
+    api_name: "torch.subtract"
+    mapping:
+      ins: { x: input, y: other }
 
 subtract_1:
   desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
@@ -4809,6 +4913,10 @@ subtract_1:
         type: "Tensor"
         dtype: "float32"
         value: [1, 4, inf]
+  pytorch:
+    api_name: "torch.subtract"
+    mapping:
+      ins: { x: input, y: other }
 
 sum_base:
   desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
@@ -4821,6 +4929,10 @@ sum_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.sum"
+    mapping:
+      ins: { x: input }
 
 sum_0:
   desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
@@ -4836,6 +4948,10 @@ sum_0:
     params:
       axis: 1
       keepdim: False
+  pytorch:
+    api_name: "torch.sum"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 sum_1:
   desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
@@ -4851,6 +4967,10 @@ sum_1:
     params:
       axis: [1, 2]
       keepdim: False
+  pytorch:
+    api_name: "torch.sum"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 sum_2:
   desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
@@ -4866,6 +4986,10 @@ sum_2:
     params:
       axis: 1
       keepdim: True
+  pytorch:
+    api_name: "torch.sum"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 tan_base:
   desc: "三角函数tangent"
@@ -4878,6 +5002,10 @@ tan_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.tan"
+    mapping:
+      ins: { x: input }
 
 tanh_base:
   desc: "tanh 激活函数"
@@ -4890,6 +5018,10 @@ tanh_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.tanh"
+    mapping:
+      ins: { x: input }
 
 tanh_0:
   desc: "tanh 激活函数"
@@ -4902,6 +5034,10 @@ tanh_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -100, -1]
+  pytorch:
+    api_name: "torch.tanh"
+    mapping:
+      ins: { x: input }
 
 tanh_1:
   desc: "tanh 激活函数"
@@ -4914,6 +5050,10 @@ tanh_1:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.tanh"
+    mapping:
+      ins: { x: input }
 
 tanh_2:
   desc: "tanh 激活函数"
@@ -4925,6 +5065,10 @@ tanh_2:
         type: "Tensor"
         dtype: "float32"
         value: [0, 0, 0, 0]
+  pytorch:
+    api_name: "torch.tanh"
+    mapping:
+      ins: { x: input }
 
 tanh__base:
   desc: "tanh 激活函数, 对输入 x 采用 Inplace 策略"
