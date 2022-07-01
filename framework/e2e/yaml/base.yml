@@ -5081,6 +5081,10 @@ tanh__base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.tanh"
+    mapping:
+      ins: { x: input }
 
 tanh__0:
   desc: "tanh 激活函数, 对输入 x 采用 Inplace 策略"
@@ -5093,6 +5097,10 @@ tanh__0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -100, -1]
+  pytorch:
+    api_name: "torch.tanh"
+    mapping:
+      ins: { x: input }
 
 tanh__1:
   desc: "tanh 激活函数, 对输入 x 采用 Inplace 策略"
@@ -5105,6 +5113,10 @@ tanh__1:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.tanh"
+    mapping:
+      ins: { x: input }
 
 tanh__2:
   desc: "tanh 激活函数, 对输入 x 采用 Inplace 策略"
@@ -5116,6 +5128,10 @@ tanh__2:
         type: "Tensor"
         dtype: "float32"
         value: [0, 0, 0, 0]
+  pytorch:
+    api_name: "torch.tanh"
+    mapping:
+      ins: { x: input }
 
 trace_base:
   desc: "计算输入 Tensor 在指定平面上的对角线元素之和，并输出相应的计算结果"
@@ -5144,6 +5160,10 @@ trace_0:
       offset: 0
       axis1: 0
       axis2: 1
+  pytorch:
+    api_name: "torch.trace"
+    mapping:
+      ins: { x: input }
 
 trace_1:
   desc: "计算输入 Tensor 在指定平面上的对角线元素之和，并输出相应的计算结果"
@@ -5236,6 +5256,10 @@ var_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.var"
+    mapping:
+      ins: { x: input }
 
 var_0:
   desc: "沿给定的轴 axis 计算 x 中元素的方差"
@@ -5252,6 +5276,10 @@ var_0:
       axis: 0
       unbiased: True
       keepdim: False
+  pytorch:
+    api_name: "torch.var"
+    mapping:
+      ins: { x: input, axis: dim, unbiased: unbiased, keepdim: keepdim }
 
 var_1:
   desc: "沿给定的轴 axis 计算 x 中元素的方差"
@@ -5268,6 +5296,10 @@ var_1:
       axis: 2
       unbiased: False
       keepdim: False
+  pytorch:
+    api_name: "torch.var"
+    mapping:
+      ins: { x: input, axis: dim, unbiased: unbiased, keepdim: keepdim }
 
 var_2:
   desc: "沿给定的轴 axis 计算 x 中元素的方差"
@@ -5284,6 +5316,10 @@ var_2:
       axis: 0
       unbiased: True
       keepdim: True
+  pytorch:
+    api_name: "torch.var"
+    mapping:
+      ins: { x: input, axis: dim, unbiased: unbiased, keepdim: keepdim }
 
 var_3:
   desc: "沿给定的轴 axis 计算 x 中元素的方差"
@@ -5300,6 +5336,10 @@ var_3:
       axis: -2
       unbiased: True
       keepdim: False
+  pytorch:
+    api_name: "torch.var"
+    mapping:
+      ins: { x: input, axis: dim, unbiased: unbiased, keepdim: keepdim }
 
 diagonal_base:
   desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
@@ -5312,6 +5352,10 @@ diagonal_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.diagonal"
+    mapping:
+      ins: { x: input }
 
 diagonal_0:
   desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
@@ -5324,6 +5368,10 @@ diagonal_0:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -5, 5]
+  pytorch:
+    api_name: "torch.diagonal"
+    mapping:
+      ins: { x: input }
 
 diagonal_1:
   desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
@@ -5338,6 +5386,10 @@ diagonal_1:
         range: [ -5, 5]
     params:
       offset: 1
+  pytorch:
+    api_name: "torch.diagonal"
+    mapping:
+      ins: { x: input, offset: offset }
 
 diagonal_2:
   desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
@@ -5352,6 +5404,10 @@ diagonal_2:
         range: [ -5, 5]
     params:
       offset: -1
+  pytorch:
+    api_name: "torch.diagonal"
+    mapping:
+      ins: { x: input, offset: offset }
 
 diagonal_3:
   desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
@@ -5367,6 +5423,10 @@ diagonal_3:
     params:
       axis1: 0
       axis2: 3
+  pytorch:
+    api_name: "torch.diagonal"
+    mapping:
+      ins: { x: input, axis1: dim1, axis2: dim2 }
 
 diagonal_4:
   desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
@@ -5382,6 +5442,10 @@ diagonal_4:
     params:
       axis1: 3
       axis2: 4
+  pytorch:
+    api_name: "torch.diagonal"
+    mapping:
+      ins: { x: input, axis1: dim1, axis2: dim2 }
 
 diagonal_5:
   desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
@@ -5397,6 +5461,10 @@ diagonal_5:
     params:
       axis1: -1
       axis2: 2
+  pytorch:
+    api_name: "torch.diagonal"
+    mapping:
+      ins: { x: input, axis1: dim1, axis2: dim2 }
 
 trunc_base:
   desc: "将输入 Tensor 的小数部分置0，返回置0后的 Tensor ，如果输入 Tensor 的数据类型为整数，则不做处理"

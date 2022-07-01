@@ -187,7 +187,7 @@ class CompetitorCompareTest(object):
             data["params"] = {}
         for k, v in data["inputs"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                if v.dtype in ["int32", "int64"]:
+                if v.dtype in ["int32", "int64"] or self.enable_backward is False:
                     self.paddle_inputs[k] = paddle.to_tensor(v)
                 else:
                     self.paddle_inputs[k] = paddle.to_tensor(v, stop_gradient=False, dtype=dtype)
@@ -204,7 +204,7 @@ class CompetitorCompareTest(object):
 
         for k, v in data["params"].items():
             if isinstance(v, (np.generic, np.ndarray)):
-                if v.dtype in ["int32", "int64"]:
+                if v.dtype in ["int32", "int64"] or self.enable_backward is False:
                     self.paddle_inputs[k] = paddle.to_tensor(v)
                 else:
                     self.paddle_inputs[k] = paddle.to_tensor(v, dtype=dtype)
