@@ -3339,6 +3339,10 @@ maximum_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.maximum"
+    mapping:
+      ins: { x: input, y: other }
 
 maximum_0:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更大的元素保存到返回结果中"
@@ -3357,6 +3361,10 @@ maximum_0:
         dtype: "float32"
         shape: [1, 2, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.maximum"
+    mapping:
+      ins: { x: input, y: other }
 
 maximum_1:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更大的元素保存到返回结果中"
@@ -3375,6 +3383,10 @@ maximum_1:
         dtype: "float32"
         shape: [2, 2]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.maximum"
+    mapping:
+      ins: { x: input, y: other }
 
 mean_base:
   desc: "沿参数 axis 计算 x 的平均值"
@@ -3387,6 +3399,10 @@ mean_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.mean"
+    mapping:
+      ins: { x: input }
 
 mean_0:
   desc: "沿参数 axis 计算 x 的平均值"
@@ -3401,6 +3417,10 @@ mean_0:
         range: [ -1, 1]
     params:
       axis: -2
+  pytorch:
+    api_name: "torch.mean"
+    mapping:
+      ins: { x: input, axis: dim }
 
 mean_1:
   desc: "沿参数 axis 计算 x 的平均值"
@@ -3415,6 +3435,10 @@ mean_1:
         range: [ -1, 1]
     params:
       axis: [0, 1]
+  pytorch:
+    api_name: "torch.mean"
+    mapping:
+      ins: { x: input, axis: dim }
 
 mean_2:
   desc: "沿参数 axis 计算 x 的平均值"
@@ -3429,6 +3453,10 @@ mean_2:
         range: [ -1, 1]
     params:
       axis: [0, 1, 2]
+  pytorch:
+    api_name: "torch.mean"
+    mapping:
+      ins: { x: input, axis: dim }
 
 mean_3:
   desc: "沿参数 axis 计算 x 的平均值"
@@ -3444,6 +3472,10 @@ mean_3:
     params:
       axis: -2
       keepdim: False
+  pytorch:
+    api_name: "torch.mean"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 mean_4:
   desc: "沿参数 axis 计算 x 的平均值"
@@ -3459,6 +3491,10 @@ mean_4:
     params:
       axis: 1
       keepdim: True
+  pytorch:
+    api_name: "torch.mean"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 median_base:
   desc: "沿给定的轴 axis 计算 x 中元素的中位数"
@@ -3555,6 +3591,10 @@ min_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.min"
+    mapping:
+      ins: { x: input }
 
 min_0:
   desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
@@ -3630,6 +3670,10 @@ minimum_base:
         type: "Tensor"
         dtype: "float32"
         value: [2, -2, 0, 3]
+  pytorch:
+    api_name: "torch.minimum"
+    mapping:
+      ins: { x: input, y: other }
 
 minimum_0:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更小的元素保存到返回结果中"
@@ -3648,6 +3692,10 @@ minimum_0:
         dtype: "float32"
         shape: [1, 2, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.minimum"
+    mapping:
+      ins: { x: input, y: other }
 
 minimum_1:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更小的元素保存到返回结果中"
@@ -3666,6 +3714,10 @@ minimum_1:
         dtype: "float32"
         shape: [2, 2]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.minimum"
+    mapping:
+      ins: { x: input, y: other }
 
 minimum_2:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更小的元素保存到返回结果中"
@@ -3684,6 +3736,10 @@ minimum_2:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.minimum"
+    mapping:
+      ins: { x: input, y: other }
 
 mm_base:
   desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
@@ -3793,6 +3849,50 @@ mm_4:
         shape: [7]
         range: [ -1, 1]
 
+mm_5:
+  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
+  paddle:
+    api_name: "paddle.mm"
+    inputs:
+      input:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 4]
+        range: [ -1, 1]
+      mat2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 4]
+        range: [ -1, 1]
+  pytorch:
+    api_name: "torch.mm"
+    mapping:
+      ins: { input: input, mat2: mat2 }
+
+mm_6:
+  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
+  paddle:
+    api_name: "paddle.mm"
+    inputs:
+      input:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 3]
+        range: [ -1, 1]
+      mat2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4]
+        range: [ -1, 1]
+  pytorch:
+    api_name: "torch.mm"
+    mapping:
+      ins: { input: input, mat2: mat2 }
+
 ## 测试框架暂不支持
 #multiplex:
 #  desc: "根据给定的index参数，从每个输入Tensor中选择特定行构造输出Tensor"
@@ -3821,6 +3921,10 @@ multiply_base:
         type: "Tensor"
         dtype: "float32"
         value: [1, -1, 4, 5]
+  pytorch:
+    api_name: "torch.multiply"
+    mapping:
+      ins: { x: input, y: other }
 
 multiply_0:
   desc: "逐元素相乘算子，输入 x 与输入 y 逐元素相乘，并将各个位置的输出元素保存到返回结果中"
@@ -3839,6 +3943,10 @@ multiply_0:
         dtype: "float32"
         shape: [1, 2, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.multiply"
+    mapping:
+      ins: { x: input, y: other }
 
 multiply_1:
   desc: "逐元素相乘算子，输入 x 与输入 y 逐元素相乘，并将各个位置的输出元素保存到返回结果中"
@@ -3857,6 +3965,10 @@ multiply_1:
         dtype: "float32"
         shape: [2, 2]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.multiply"
+    mapping:
+      ins: { x: input, y: other }
 
 multiply_2:
   desc: "逐元素相乘算子，输入 x 与输入 y 逐元素相乘，并将各个位置的输出元素保存到返回结果中"
@@ -3875,6 +3987,10 @@ multiply_2:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.multiply"
+    mapping:
+      ins: { x: input, y: other }
 
 neg_base:
   desc: "计算输入 x 的相反数并返回"
@@ -3887,6 +4003,10 @@ neg_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.neg"
+    mapping:
+      ins: { x: input }
 
 neg_0:
   desc: "计算输入 x 的相反数并返回"
@@ -3899,6 +4019,10 @@ neg_0:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -5, 5]
+  pytorch:
+    api_name: "torch.neg"
+    mapping:
+      ins: { x: input }
 
 neg_1:
   desc: "计算输入 x 的相反数并返回"
@@ -3910,6 +4034,10 @@ neg_1:
         type: "Tensor"
         dtype: "float32"
         value: [[0, 0, 0], [0, 0, 0]]
+  pytorch:
+    api_name: "torch.neg"
+    mapping:
+      ins: { x: input }
 
 not_equal_base:
   desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
@@ -3926,6 +4054,10 @@ not_equal_base:
         type: "Tensor"
         dtype: "int32"
         value: [[-2.0, 1.1, -3.5], [-2.5, 1.5, 3.5], [0.5, 4.2, 8.3]]
+  pytorch:
+    api_name: "torch.not_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 not_equal_0:
   desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
@@ -3942,6 +4074,10 @@ not_equal_0:
         type: "Tensor"
         dtype: "int32"
         value: [1, -1, 2, -4]
+  pytorch:
+    api_name: "torch.not_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 not_equal_1:
   desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
@@ -3960,6 +4096,10 @@ not_equal_1:
         dtype: "int32"
         shape: [1, 2, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.not_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 not_equal_2:
   desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
@@ -3978,6 +4118,10 @@ not_equal_2:
         dtype: "int32"
         shape: [2, 2]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.not_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 not_equal_3:
   desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
@@ -3994,6 +4138,10 @@ not_equal_3:
         type: "Tensor"
         dtype: "int32"
         value: [True, False, True]
+  pytorch:
+    api_name: "torch.not_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 not_equal_4:
   desc: "返回 x!=y 逐元素比较x和y是否相等，相同位置的元素不相同则返回True，否则返回False"
@@ -4012,6 +4160,10 @@ not_equal_4:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.not_equal"
+    mapping:
+      ins: { x: input, y: other }
 
 pow_base:
   desc: "指数算子，逐元素计算 x 的 y 次幂指数算子，逐元素计算 x 的 y 次幂"
@@ -4030,6 +4182,10 @@ pow_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -2, 6]
+  pytorch:
+    api_name: "torch.pow"
+    mapping:
+      ins: { x: input, y: exponent }
 
 pow_0:
   desc: "指数算子，逐元素计算 x 的 y 次幂指数算子，逐元素计算 x 的 y 次幂"
@@ -4065,6 +4221,10 @@ pow_1:
         type: "Tensor"
         dtype: "float32"
         value: [0]
+  pytorch:
+    api_name: "torch.pow"
+    mapping:
+      ins: { x: input, y: exponent }
 
 pow_2:
   desc: "指数算子，逐元素计算 x 的 y 次幂指数算子，逐元素计算 x 的 y 次幂"
@@ -4083,6 +4243,10 @@ pow_2:
         dtype: "float32"
         shape: [1, 2, 3]
         range: [ -2, 6]
+  pytorch:
+    api_name: "torch.pow"
+    mapping:
+      ins: { x: input, y: exponent }
 
 prod_base:
   desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
