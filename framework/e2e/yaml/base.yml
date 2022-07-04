@@ -6219,6 +6219,10 @@ linspace_base:
       stop: 15.0
       num: 4
       dtype: "float32"
+  pytorch:
+    api_name: "torch.linspace"
+    mapping:
+      ins: { start: start, stop: end, num: steps }
 
 linspace_0:
   desc: "返回一个Tensor，Tensor的值为在区间start和stop上均匀间隔的num个值，输出Tensor的长度为num"
@@ -6228,6 +6232,10 @@ linspace_0:
       start: 3.5
       stop: 9.6
       num: 5
+  pytorch:
+    api_name: "torch.linspace"
+    mapping:
+      ins: { start: start, stop: end, num: steps }
 
 linspace_1:
   desc: "返回一个Tensor，Tensor的值为在区间start和stop上均匀间隔的num个值，输出Tensor的长度为num"
@@ -6267,6 +6275,10 @@ linspace_3:
       start: 3
       stop: 9
       num: 1
+  pytorch:
+    api_name: "torch.linspace"
+    mapping:
+      ins: { start: start, stop: end, num: steps }
 
 linspace_4:
   desc: "返回一个Tensor，Tensor的值为在区间start和stop上均匀间隔的num个值，输出Tensor的长度为num"
@@ -6276,6 +6288,10 @@ linspace_4:
       start: 9
       stop: 3
       num: 5
+  pytorch:
+    api_name: "torch.linspace"
+    mapping:
+      ins: { start: start, stop: end, num: steps }
 
 linspace_5:
   desc: "返回一个Tensor，Tensor的值为在区间start和stop上均匀间隔的num个值，输出Tensor的长度为num"
@@ -6301,6 +6317,10 @@ numel_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.numel"
+    mapping:
+      ins: { x: input }
 
 ones_base:
   desc: "创建形状为 shape 、数据类型为 dtype 且值全为1的Tensor"
@@ -6308,6 +6328,10 @@ ones_base:
     api_name: "paddle.ones"
     params:
       shape: [2, 3, 4, 4]
+  pytorch:
+    api_name: "torch.ones"
+    mapping:
+      ins: { shape: size }
 
 ones_0:
   desc: "创建形状为 shape 、数据类型为 dtype 且值全为1的Tensor"
@@ -6315,6 +6339,10 @@ ones_0:
     api_name: "paddle.ones"
     params:
       shape: !!python/tuple [2, 3, 4, 4]
+  pytorch:
+    api_name: "torch.ones"
+    mapping:
+      ins: { shape: size }
 
 ones_1:
   desc: "创建形状为 shape 、数据类型为 dtype 且值全为1的Tensor"
@@ -6323,6 +6351,10 @@ ones_1:
     params:
       shape: [2, 3, 4, 4]
       dtype: 'bool'
+  pytorch:
+    api_name: "torch.ones"
+    mapping:
+      ins: { shape: size }
 
 ones_2:
   desc: "创建形状为 shape 、数据类型为 dtype 且值全为1的Tensor"
@@ -6330,6 +6362,10 @@ ones_2:
     api_name: "paddle.ones"
     params:
       shape: []
+  pytorch:
+    api_name: "torch.ones"
+    mapping:
+      ins: { shape: size }
 
 ones_like_base:
   desc: "返回一个和输入参数 x 具有相同形状的数值都为1的Tensor"
@@ -6342,6 +6378,10 @@ ones_like_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.ones_like"
+    mapping:
+      ins: { x: input }
 
 ones_like_0:
   desc: "返回一个和输入参数 x 具有相同形状的数值都为1的Tensor"
@@ -6354,6 +6394,10 @@ ones_like_0:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -100, 100]
+  pytorch:
+    api_name: "torch.ones_like"
+    mapping:
+      ins: { x: input }
 
 zeros_base:
   desc: "创建形状为 shape 、数据类型为 dtype 且值全为0的Tensor"
@@ -6361,6 +6405,10 @@ zeros_base:
     api_name: "paddle.zeros"
     params:
       shape: [2, 3, 4, 4]
+  pytorch:
+    api_name: "torch.zeros"
+    mapping:
+      ins: { shape: size }
 
 zeros_0:
   desc: "创建形状为 shape 、数据类型为 dtype 且值全为0的Tensor"
@@ -6368,6 +6416,10 @@ zeros_0:
     api_name: "paddle.zeros"
     params:
       shape: !!python/tuple [2, 3, 4, 4]
+  pytorch:
+    api_name: "torch.zeros"
+    mapping:
+      ins: { shape: size }
 
 zeros_1:
   desc: "创建形状为 shape 、数据类型为 dtype 且值全为0的Tensor"
@@ -6388,6 +6440,10 @@ zeros_2:
     params:
       shape: [1, 2, 3]
       dtype: 'bool'
+  pytorch:
+    api_name: "torch.zeros"
+    mapping:
+      ins: { shape: size }
 
 zeros_3:
   desc: "创建形状为 shape 、数据类型为 dtype 且值全为0的Tensor"
@@ -6411,6 +6467,10 @@ zeros_like_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.zeros_like"
+    mapping:
+      ins: { x: input }
 
 zeros_like_0:
   desc: "返回一个和 x 具有相同的形状的全零Tensor，数据类型为 dtype 或者和 x 相同"
@@ -6423,6 +6483,10 @@ zeros_like_0:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -100, 100]
+  pytorch:
+    api_name: "torch.zeros_like"
+    mapping:
+      ins: { x: input }
 
 argmax_base:
   desc: "沿参数``axis`` 计算输入 x 的最大元素的索引"
@@ -6435,6 +6499,10 @@ argmax_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.argmax"
+    mapping:
+      ins: { x: input }
 
 argmax_0:
   desc: "沿参数``axis`` 计算输入 x 的最大元素的索引"
@@ -6451,6 +6519,10 @@ argmax_0:
       axis: 0
       dtype: "int32"
       keepdim: False
+  pytorch:
+    api_name: "torch.argmax"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 argmax_1:
   desc: "沿参数``axis`` 计算输入 x 的最大元素的索引"
@@ -6465,6 +6537,10 @@ argmax_1:
         range: [ -1, 1]
     params:
       axis: 2
+  pytorch:
+    api_name: "torch.argmax"
+    mapping:
+      ins: { x: input, axis: dim }
 
 argmax_2:
   desc: "沿参数``axis`` 计算输入 x 的最大元素的索引"
@@ -6479,6 +6555,10 @@ argmax_2:
         range: [ -1, 1]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.argmax"
+    mapping:
+      ins: { x: input, axis: dim }
 
 argmax_3:
   desc: "沿参数``axis`` 计算输入 x 的最大元素的索引"
@@ -6493,6 +6573,10 @@ argmax_3:
     params:
       axis: -1
       keepdim: True
+  pytorch:
+    api_name: "torch.argmax"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 argmax_4:
   desc: "沿参数``axis`` 计算输入 x 的最大元素的索引"
@@ -6508,6 +6592,10 @@ argmax_4:
     params:
       axis: 1
       keepdim: False
+  pytorch:
+    api_name: "torch.argmax"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 argmin_base:
   desc: "沿参数``axis`` 计算输入 x 的最小元素的索引"
@@ -6520,6 +6608,10 @@ argmin_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.argmin"
+    mapping:
+      ins: { x: input }
 
 argmin_0:
   desc: "沿参数``axis`` 计算输入 x 的最小元素的索引"
@@ -6536,6 +6628,10 @@ argmin_0:
       axis: 0
       dtype: "int32"
       keepdim: False
+  pytorch:
+    api_name: "torch.argmin"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 argmin_1:
   desc: "沿参数``axis`` 计算输入 x 的最小元素的索引"
@@ -6550,6 +6646,10 @@ argmin_1:
         range: [ -1, 1]
     params:
       axis: 2
+  pytorch:
+    api_name: "torch.argmin"
+    mapping:
+      ins: { x: input, axis: dim }
 
 argmin_2:
   desc: "沿参数``axis`` 计算输入 x 的最小元素的索引"
@@ -6564,6 +6664,10 @@ argmin_2:
         range: [ -1, 1]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.argmin"
+    mapping:
+      ins: { x: input, axis: dim }
 
 argmin_3:
   desc: "沿参数``axis`` 计算输入 x 的最小元素的索引"
@@ -6578,6 +6682,10 @@ argmin_3:
     params:
       axis: -1
       keepdim: True
+  pytorch:
+    api_name: "torch.argmin"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 argmin_4:
   desc: "沿参数``axis`` 计算输入 x 的最小元素的索引"
@@ -6593,6 +6701,10 @@ argmin_4:
     params:
       axis: 1
       keepdim: False
+  pytorch:
+    api_name: "torch.argmin"
+    mapping:
+      ins: { x: input, axis: dim, keepdim: keepdim }
 
 argsort_base:
   desc: "对输入变量沿给定轴进行排序，输出排序好的数据的相应索引，其维度和输入相同。默认升序排列"
@@ -6605,6 +6717,10 @@ argsort_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.argsort"
+    mapping:
+      ins: { x: input }
 
 argsort_0:
   desc: "对输入变量沿给定轴进行排序，输出排序好的数据的相应索引，其维度和输入相同。默认升序排列"
@@ -6619,6 +6735,10 @@ argsort_0:
         range: [ -1, 1]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.argsort"
+    mapping:
+      ins: { x: input, axis: dim }
 
 argsort_1:
   desc: "对输入变量沿给定轴进行排序，输出排序好的数据的相应索引，其维度和输入相同。默认升序排列"
@@ -6633,6 +6753,10 @@ argsort_1:
         range: [ -1, 1]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.argsort"
+    mapping:
+      ins: { x: input, axis: dim }
 
 argsort_2:
   desc: "对输入变量沿给定轴进行排序，输出排序好的数据的相应索引，其维度和输入相同。默认升序排列"
@@ -6647,6 +6771,10 @@ argsort_2:
         range: [ -1, 1]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.argsort"
+    mapping:
+      ins: { x: input, axis: dim }
 
 argsort_3:
   desc: "对输入变量沿给定轴进行排序，输出排序好的数据的相应索引，其维度和输入相同。默认升序排列"
@@ -6662,6 +6790,10 @@ argsort_3:
     params:
       axis: 0
       descending: True
+  pytorch:
+    api_name: "torch.argsort"
+    mapping:
+      ins: { x: input, axis: dim, descending: descending }
 
 index_sample_base:
   desc: "对输入 x 中的元素进行批量抽样，取 index 指定的对应下标的元素，按index中出现的先后顺序组织，填充为一个新的张量"
@@ -6734,6 +6866,10 @@ masked_select_base:
         type: "Tensor"
         dtype: "bool"
         shape: [2, 3, 4, 4]
+  pytorch:
+    api_name: "torch.masked_select"
+    mapping:
+      ins: { x: input, mask: mask }
 
 nonzero_base:
   desc: "返回输入 x 中非零元素的坐标"
@@ -6746,6 +6882,10 @@ nonzero_base:
         dtype: "int32"
         shape: [2, 3, 4, 4]
         range: [ -1, 2]
+  pytorch:
+    api_name: "torch.nonzero"
+    mapping:
+      ins: { x: input }
 
 nonzero_0:
   desc: "返回输入 x 中非零元素的坐标"
@@ -6759,6 +6899,10 @@ nonzero_0:
         value: [[1.0, 1.0, 4.0], [0.0, 2.0, 0.0], [0.0, 0.0, 3.0]]
     params:
       as_tuple: False
+  pytorch:
+    api_name: "torch.nonzero"
+    mapping:
+      ins: { x: input, as_tuple: as_tuple }
 
 nonzero_1:
   desc: "返回输入 x 中非零元素的坐标"
@@ -6873,6 +7017,10 @@ searchsorted_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.searchsorted"
+    mapping:
+      ins: { sorted_sequence: sorted_sequence, values: values }
 
 searchsorted_0:
   desc: "根据给定的 values 在 sorted_sequence 的最后一个维度查找合适的索引"
@@ -6894,6 +7042,10 @@ searchsorted_0:
     params:
       out_int32: True
       right: False
+  pytorch:
+    api_name: "torch.searchsorted"
+    mapping:
+      ins: { sorted_sequence: sorted_sequence, values: values, out_int32: out_int32, right: right }
 
 searchsorted_1:
   desc: "根据给定的 values 在 sorted_sequence 的最后一个维度查找合适的索引"
@@ -6915,6 +7067,10 @@ searchsorted_1:
     params:
       out_int32: False
       right: True
+  pytorch:
+    api_name: "torch.searchsorted"
+    mapping:
+      ins: { sorted_sequence: sorted_sequence, values: values, out_int32: out_int32, right: right }
 
 topk_base:
   desc: "沿着可选的 axis 查找topk最大或者最小的结果和结果所在的索引信息"
@@ -6929,6 +7085,10 @@ topk_base:
         range: [ -1, 1]
     params:
       k: 3
+  pytorch:
+    api_name: "torch.topk"
+    mapping:
+      ins: { x: input, k: k }
 
 topk_0:
   desc: "沿着可选的 axis 查找topk最大或者最小的结果和结果所在的索引信息"
@@ -6946,6 +7106,10 @@ topk_0:
       axis: -1
       largest: True
       sorted: True
+  pytorch:
+    api_name: "torch.topk"
+    mapping:
+      ins: { x: input, k: k, axis: dim, largest: largest, sorted: sorted }
 
 topk_1:
   desc: "沿着可选的 axis 查找topk最大或者最小的结果和结果所在的索引信息"
@@ -6963,6 +7127,10 @@ topk_1:
       axis: -1
       largest: False
       sorted: True
+  pytorch:
+    api_name: "torch.topk"
+    mapping:
+      ins: { x: input, k: k, axis: dim, largest: largest, sorted: sorted }
 
 topk_2:
   desc: "沿着可选的 axis 查找topk最大或者最小的结果和结果所在的索引信息"
@@ -6980,6 +7148,10 @@ topk_2:
       axis: -2
       largest: True
       sorted: False
+  pytorch:
+    api_name: "torch.topk"
+    mapping:
+      ins: { x: input, k: k, axis: dim, largest: largest, sorted: sorted }
 
 topk_3:
   desc: "沿着可选的 axis 查找topk最大或者最小的结果和结果所在的索引信息"
@@ -6997,6 +7169,10 @@ topk_3:
       axis: -1
       largest: True
       sorted: True
+  pytorch:
+    api_name: "torch.topk"
+    mapping:
+      ins: { x: input, k: k, axis: dim, largest: largest, sorted: sorted }
 
 assign_base:
   desc: "将输入Tensor或numpy数组拷贝至输出Tensor"
@@ -7117,6 +7293,10 @@ bernoulli_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ 0, 1]
+  pytorch:
+    api_name: "torch.bernoulli"
+    mapping:
+      ins: { x: input }
 
 multinomial_base:
   desc: "以输入 x 为概率，生成一个多项分布的Tensor"
@@ -7366,6 +7546,10 @@ bincount_base:
         dtype: "int32"
         shape: [10]
         range: [ 1, 20]
+  pytorch:
+    api_name: "torch.bincount"
+    mapping:
+      ins: { x: input }
 
 bincount_0:
   desc: "统计输入张量中每个元素出现的次数，如果传入weights张量则每次计数加一时会乘以weights张量对应的值"
@@ -7442,6 +7626,10 @@ bmm_base:
         dtype: "float32"
         shape: [2, 4, 5]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.bmm"
+    mapping:
+      ins: { x: input, y: mat2 }
 
 cross_base:
   desc: "计算张量 x 和 y 在 axis 维度上的向量积（叉积）"
@@ -7460,6 +7648,10 @@ cross_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.cross"
+    mapping:
+      ins: { x: input, y: other }
 
 cross_0:
   desc: "计算张量 x 和 y 在 axis 维度上的向量积（叉积）"
@@ -7480,6 +7672,10 @@ cross_0:
         range: [ -1, 1]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.cross"
+    mapping:
+      ins: { x: input, y: other, axis: dim }
 
 cross_1:
   desc: "计算张量 x 和 y 在 axis 维度上的向量积（叉积）"
@@ -7500,6 +7696,10 @@ cross_1:
         range: [ -1, 1]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.cross"
+    mapping:
+      ins: { x: input, y: other, axis: dim }
 
 cross_2:
   desc: "计算张量 x 和 y 在 axis 维度上的向量积（叉积）"
@@ -7520,6 +7720,10 @@ cross_2:
         range: [ -1, 1]
     params:
       axis: 2
+  pytorch:
+    api_name: "torch.cross"
+    mapping:
+      ins: { x: input, y: other, axis: dim }
 
 cross_3:
   desc: "计算张量 x 和 y 在 axis 维度上的向量积（叉积）"
@@ -7540,6 +7744,10 @@ cross_3:
         range: [ -1, 1]
     params:
       axis: -2
+  pytorch:
+    api_name: "torch.cross"
+    mapping:
+      ins: { x: input, y: other, axis: dim }
 
 dist_base:
   desc: "计算 (x-y) 的 p 范数（p-norm）"
@@ -7558,6 +7766,10 @@ dist_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.dist"
+    mapping:
+      ins: { x: input, y: other }
 
 dist_0:
   desc: "计算 (x-y) 的 p 范数（p-norm）"
@@ -7578,6 +7790,10 @@ dist_0:
         range: [ -1, 1]
     params:
       p: -.inf
+  pytorch:
+    api_name: "torch.dist"
+    mapping:
+      ins: { x: input, y: other, p: p }
 
 dist_1:
   desc: "计算 (x-y) 的 p 范数（p-norm）"
@@ -7598,6 +7814,10 @@ dist_1:
         range: [ -1, 1]
     params:
       p: .inf
+  pytorch:
+    api_name: "torch.dist"
+    mapping:
+      ins: { x: input, y: other, p: p }
 
 dist_2:
   desc: "计算 (x-y) 的 p 范数（p-norm）"
@@ -7618,6 +7838,10 @@ dist_2:
         range: [ -1, 1]
     params:
       p: 5
+  pytorch:
+    api_name: "torch.dist"
+    mapping:
+      ins: { x: input, y: other, p: p }
 
 dot_base:
   desc: "计算向量的内积"
@@ -7636,6 +7860,28 @@ dot_base:
         dtype: "float32"
         shape: [2, 3]
         range: [ -1, 1]
+
+dot_0:
+  desc: "计算向量的内积"
+  paddle:
+    api_name: "paddle.dot"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3]
+        range: [ -1, 1]
+  pytorch:
+    api_name: "torch.dot"
+    mapping:
+      ins: { x: input, y: other }
 
 histogram_base:
   desc: "计算输入张量的直方图。以min和max为range边界，将其均分成bins个直条"
