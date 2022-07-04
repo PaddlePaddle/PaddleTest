@@ -7148,10 +7148,10 @@ topk_2:
       axis: -2
       largest: True
       sorted: False
-  pytorch:
-    api_name: "torch.topk"
-    mapping:
-      ins: { x: input, k: k, axis: dim, largest: largest, sorted: sorted }
+#  pytorch:
+#    api_name: "torch.topk"
+#    mapping:
+#      ins: { x: input, k: k, axis: dim, largest: largest, sorted: sorted }
 
 topk_3:
   desc: "沿着可选的 axis 查找topk最大或者最小的结果和结果所在的索引信息"
@@ -7293,10 +7293,6 @@ bernoulli_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ 0, 1]
-  pytorch:
-    api_name: "torch.bernoulli"
-    mapping:
-      ins: { x: input }
 
 multinomial_base:
   desc: "以输入 x 为概率，生成一个多项分布的Tensor"

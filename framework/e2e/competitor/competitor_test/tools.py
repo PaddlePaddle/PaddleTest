@@ -36,6 +36,9 @@ class FrontAPIBase(object):
         return self.encapsulation(*args, **kwargs)
 
 
+logger = Logger("compare")
+
+
 def compare(paddle, torch, delta=1e-6, rtol=1e-5):
     """
     比较函数
@@ -44,7 +47,6 @@ def compare(paddle, torch, delta=1e-6, rtol=1e-5):
     :param delta: 误差值
     :return:
     """
-    logger = Logger("compare")
     if isinstance(paddle, np.ndarray):
         expect = np.array(torch)
         res = np.allclose(paddle, torch, atol=delta, rtol=rtol, equal_nan=True)
