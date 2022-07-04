@@ -8018,6 +8018,10 @@ matmul_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.matmul"
+    mapping:
+      ins: { x: input, y: other }
 
 matmul_0:
   desc: "计算两个Tensor的乘积，遵循完整的广播规则"
@@ -8036,6 +8040,10 @@ matmul_0:
         dtype: "float32"
         shape: [2]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.matmul"
+    mapping:
+      ins: { x: input, y: other }
 
 matmul_1:
   desc: "计算两个Tensor的乘积，遵循完整的广播规则"
@@ -8054,6 +8062,10 @@ matmul_1:
         dtype: "float32"
         shape: [1, 3, 2, 5]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.matmul"
+    mapping:
+      ins: { x: input, y: other }
 
 mv_base:
   desc: "计算矩阵 x 和向量 vec 的乘积"
@@ -8073,6 +8085,10 @@ mv_base:
         dtype: "float32"
         shape: [4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.mv"
+    mapping:
+      ins: { x: input, vec: vec }
 
 mv_0:
   desc: "计算矩阵 x 和向量 vec 的乘积"
@@ -8091,6 +8107,10 @@ mv_0:
         type: "Tensor"
         dtype: "float32"
         value: [0, 0, 0, 0]
+  pytorch:
+    api_name: "torch.mv"
+    mapping:
+      ins: { x: input, vec: vec }
 
 rank_base:
   desc: "计算输入Tensor的维度（秩）"
@@ -8136,6 +8156,10 @@ t_base:
         dtype: "float32"
         shape: [7, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.t"
+    mapping:
+      ins: { input: input }
 
 t_0:
   desc: "对小于等于2维的Tensor进行数据转置。0维和1维Tensor返回本身"
@@ -8148,6 +8172,10 @@ t_0:
         dtype: "float32"
         shape: []
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.t"
+    mapping:
+      ins: { input: input }
 
 t_1:
   desc: "对小于等于2维的Tensor进行数据转置。0维和1维Tensor返回本身"
@@ -8160,6 +8188,10 @@ t_1:
         dtype: "float32"
         shape: [4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.t"
+    mapping:
+      ins: { input: input }
 
 tril_base:
   desc: "返回输入矩阵 input 的下三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8172,6 +8204,10 @@ tril_base:
         dtype: "float32"
         shape: [7, 6, 3, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.tril"
+    mapping:
+      ins: { x: input }
 
 tril_0:
   desc: "返回输入矩阵 input 的下三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8186,6 +8222,10 @@ tril_0:
         range: [ -1, 1]
     params:
       diagonal: 0
+  pytorch:
+    api_name: "torch.tril"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 tril_1:
   desc: "返回输入矩阵 input 的下三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8200,6 +8240,10 @@ tril_1:
         range: [ -1, 1]
     params:
       diagonal: 1
+  pytorch:
+    api_name: "torch.tril"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 tril_2:
   desc: "返回输入矩阵 input 的下三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8214,6 +8258,10 @@ tril_2:
         range: [ -1, 1]
     params:
       diagonal: -1
+  pytorch:
+    api_name: "torch.tril"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 tril_3:
   desc: "返回输入矩阵 input 的下三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8228,6 +8276,10 @@ tril_3:
         range: [ -1, 1]
     params:
       diagonal: -5
+  pytorch:
+    api_name: "torch.tril"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 tril_4:
   desc: "返回输入矩阵 input 的下三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8242,6 +8294,10 @@ tril_4:
         range: [ -1, 1]
     params:
       diagonal: 5
+  pytorch:
+    api_name: "torch.tril"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 triu_base:
   desc: "返回输入矩阵 input 的上三角部分，其余部分被设为0。 矩形的上三角部分被定义为对角线上和上方的元素"
@@ -8254,6 +8310,10 @@ triu_base:
         dtype: "float32"
         shape: [2, 3, 7, 7]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.triu"
+    mapping:
+      ins: { x: input }
 
 triu_0:
   desc: "返回输入矩阵 input 的上三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8268,6 +8328,10 @@ triu_0:
         range: [ -1, 1]
     params:
       diagonal: 0
+  pytorch:
+    api_name: "torch.triu"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 triu_1:
   desc: "返回输入矩阵 input 的上三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8282,6 +8346,10 @@ triu_1:
         range: [ -1, 1]
     params:
       diagonal: 1
+  pytorch:
+    api_name: "torch.triu"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 triu_2:
   desc: "返回输入矩阵 input 的上三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8296,6 +8364,10 @@ triu_2:
         range: [ -1, 1]
     params:
       diagonal: -1
+  pytorch:
+    api_name: "torch.triu"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 triu_3:
   desc: "返回输入矩阵 input 的上三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8310,6 +8382,10 @@ triu_3:
         range: [ -1, 1]
     params:
       diagonal: -5
+  pytorch:
+    api_name: "torch.triu"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 triu_4:
   desc: "返回输入矩阵 input 的上三角部分，其余部分被设为0。 矩形的下三角部分被定义为对角线上和下方的元素"
@@ -8324,6 +8400,10 @@ triu_4:
         range: [ -1, 1]
     params:
       diagonal: 5
+  pytorch:
+    api_name: "torch.triu"
+    mapping:
+      ins: { x: input, diagonal: diagonal }
 
 broadcast_to_base:
   desc: "根据 shape 指定的形状广播 x ，广播后， x 的形状和 shape 指定的形状一致"
@@ -8338,8 +8418,12 @@ broadcast_to_base:
         range: [ -1, 1]
     params:
       shape: [2, 3, 4, 3, 5]
+  pytorch:
+    api_name: "torch.broadcast_to"
+    mapping:
+      ins: { x: input, shape: size }
 
-broadcast_0:
+broadcast_to_0:
   desc: "根据 shape 指定的形状广播 x ，广播后， x 的形状和 shape 指定的形状一致"
   paddle:
     api_name: "paddle.broadcast_to"
@@ -8352,6 +8436,10 @@ broadcast_0:
         range: [ -1, 1]
     params:
       shape: [1, 2, 1, 3]
+  pytorch:
+    api_name: "torch.broadcast_to"
+    mapping:
+      ins: { x: input, shape: size }
 
 cast_base:
   desc: "将 x 的数据类型转换为 dtype 并输出。支持输出和输入的数据类型相同"
@@ -8394,6 +8482,10 @@ chunk_base:
         range: [ -1, 1]
     params:
       chunks: 3
+  pytorch:
+    api_name: "torch.chunk"
+    mapping:
+      ins: { x: input, chunks: chunks }
 
 chunk_0:
   desc: "将输入Tensor分割成多个子Tensor"
@@ -8409,6 +8501,10 @@ chunk_0:
     params:
       chunks: 3
       axis: 0
+  pytorch:
+    api_name: "torch.chunk"
+    mapping:
+      ins: { x: input, chunks: chunks, axis: dim }
 
 chunk_1:
   desc: "将输入Tensor分割成多个子Tensor"
@@ -8424,6 +8520,10 @@ chunk_1:
     params:
       chunks: 2
       axis: -1
+  pytorch:
+    api_name: "torch.chunk"
+    mapping:
+      ins: { x: input, chunks: chunks, axis: dim }
 
 chunk_2:
   desc: "将输入Tensor分割成多个子Tensor"
@@ -8500,6 +8600,10 @@ expand_base:
         range: [ -1, 1]
     params:
       shape: [2, 3, 4, 3, 5]
+  pytorch:
+    api_name: "torch.Tensor.expand"
+    mapping:
+      ins: { x: input, shape: size }
 
 expand_0:
   desc: "根据 shape 指定的形状扩展 x ，扩展后， x 的形状和 shape 指定的形状一致"
@@ -8514,6 +8618,10 @@ expand_0:
         range: [ -1, 1]
     params:
       shape: !!python/tuple [2, 3, 4, 3, 5]
+  pytorch:
+    api_name: "torch.Tensor.expand"
+    mapping:
+      ins: { x: input, shape: size }
 
 expand_1:
   desc: "根据 shape 指定的形状扩展 x ，扩展后， x 的形状和 shape 指定的形状一致"
@@ -8550,6 +8658,10 @@ expand_as_base:
         dtype: "float32"
         shape: [2, 3, 4, 3, 5]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.Tensor.expand_as"
+    mapping:
+      ins: { x: input, y: other }
 
 expand_as_0:
   desc: "根据 y 的形状扩展 x ，扩展后， x 的形状和 y 的形状相同"
@@ -8568,6 +8680,10 @@ expand_as_0:
         dtype: "int32"
         shape: [2, 3, 4, 3, 5]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.Tensor.expand_as"
+    mapping:
+      ins: { x: input, y: other }
 
 flatten_base:
   desc: "根据给定的start_axis 和 stop_axis 将连续的维度展平"
@@ -8580,6 +8696,10 @@ flatten_base:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.flatten"
+    mapping:
+      ins: { x: input }
 
 flatten_0:
   desc: "根据给定的start_axis 和 stop_axis 将连续的维度展平"
@@ -8595,6 +8715,10 @@ flatten_0:
     params:
       start_axis: 0
       stop_axis: -1
+  pytorch:
+    api_name: "torch.flatten"
+    mapping:
+      ins: { x: input, start_axis: start_dim, stop_axis: end_dim }
 
 flatten_1:
   desc: "根据给定的start_axis 和 stop_axis 将连续的维度展平"
@@ -8610,6 +8734,10 @@ flatten_1:
     params:
       start_axis: 1
       stop_axis: -1
+  pytorch:
+    api_name: "torch.flatten"
+    mapping:
+      ins: { x: input, start_axis: start_dim, stop_axis: end_dim }
 
 flatten_2:
   desc: "根据给定的start_axis 和 stop_axis 将连续的维度展平"
@@ -8625,6 +8753,10 @@ flatten_2:
     params:
       start_axis: 1
       stop_axis: 2
+  pytorch:
+    api_name: "torch.flatten"
+    mapping:
+      ins: { x: input, start_axis: start_dim, stop_axis: end_dim }
 
 flip_base:
   desc: "沿指定轴反转n维tensor"
@@ -8639,6 +8771,10 @@ flip_base:
         range: [ -1, 1]
     params:
       axis: [2, 0, 1]
+  pytorch:
+    api_name: "torch.flip"
+    mapping:
+      ins: { x: input, axis: dims }
 
 flip_0:
   desc: "沿指定轴反转n维tensor"
@@ -8653,6 +8789,10 @@ flip_0:
         range: [ -1, 1]
     params:
       axis: [0]
+  pytorch:
+    api_name: "torch.flip"
+    mapping:
+      ins: { x: input, axis: dims }
 
 flip_1:
   desc: "沿指定轴反转n维tensor"
@@ -8667,6 +8807,10 @@ flip_1:
         range: [ -1, 1]
     params:
       axis: [-1, 0, 1, 2]
+  pytorch:
+    api_name: "torch.flip"
+    mapping:
+      ins: { x: input, axis: dims }
 
 gather_base:
   desc: "根据索引 index 获取输入 x 的指定 aixs 维度的条目，并将它们拼接在一起"
@@ -8774,6 +8918,10 @@ reshape_base:
         range: [ -1, 1]
     params:
       shape: [6, 4, 4]
+  pytorch:
+    api_name: "torch.reshape"
+    mapping:
+      ins: { x: input, shape: shape }
 
 reshape_0:
   desc: "在保持输入 x 数据不变的情况下，改变 x 的形状"
@@ -8787,6 +8935,10 @@ reshape_0:
         value: [[8, 4], [7, 9]]
     params:
       shape: [1, -1]
+  pytorch:
+    api_name: "torch.reshape"
+    mapping:
+      ins: { x: input, shape: shape }
 
 reshape_1:
   desc: "在保持输入 x 数据不变的情况下，改变 x 的形状"
@@ -8813,6 +8965,27 @@ reshape_2:
         value: [[8, 4], [7, 9]]
     params:
       shape: !!python/tuple [1, 4]
+  pytorch:
+    api_name: "torch.reshape"
+    mapping:
+      ins: { x: input, shape: shape }
+
+reshape_3:
+  desc: "在保持输入 x 数据不变的情况下，改变 x 的形状"
+  paddle:
+    api_name: "paddle.reshape"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[8, 4], [7, 9]]
+    params:
+      shape: !!python/tuple [2, 2]
+  pytorch:
+    api_name: "torch.reshape"
+    mapping:
+      ins: { x: input, shape: shape }
 
 reshape__base:
   desc: "在保持输入 x 数据不变的情况下，改变 x 的形状, inplace策略"
@@ -8827,6 +9000,10 @@ reshape__base:
         range: [ -1, 1]
     params:
       shape: [6, 4, 4]
+  pytorch:
+    api_name: "torch.reshape"
+    mapping:
+      ins: { x: input, shape: shape }
 
 reshape__0:
   desc: "在保持输入 x 数据不变的情况下，改变 x 的形状, inplace策略"
@@ -8840,6 +9017,10 @@ reshape__0:
         value: [[8, 4], [7, 9]]
     params:
       shape: [1, -1]
+  pytorch:
+    api_name: "torch.reshape"
+    mapping:
+      ins: { x: input, shape: shape }
 
 reshape__1:
   desc: "在保持输入 x 数据不变的情况下，改变 x 的形状, inplace策略"
@@ -8866,6 +9047,27 @@ reshape__2:
         value: [[8, 4], [7, 9]]
     params:
       shape: !!python/tuple [1, 4]
+  pytorch:
+    api_name: "torch.reshape"
+    mapping:
+      ins: { x: input, shape: shape }
+
+reshape__3:
+  desc: "在保持输入 x 数据不变的情况下，改变 x 的形状, inplace策略"
+  paddle:
+    api_name: "paddle.reshape"
+    inputs:
+      x:
+        random: False
+        type: "Tensor"
+        dtype: "float32"
+        value: [[8, 4], [7, 9]]
+    params:
+      shape: !!python/tuple [2, 2]
+  pytorch:
+    api_name: "torch.reshape"
+    mapping:
+      ins: { x: input, shape: shape }
 
 roll_base:
   desc: "沿着指定维度 axis 对输入 x 进行循环滚动，当元素移动到最后位置时，会从第一个位置重新插入"
@@ -8880,6 +9082,10 @@ roll_base:
         range: [ -1, 1]
     params:
       shifts: 2
+  pytorch:
+    api_name: "torch.roll"
+    mapping:
+      ins: { x: input, shifts: shifts }
 
 roll_0:
   desc: "沿着指定维度 axis 对输入 x 进行循环滚动，当元素移动到最后位置时，会从第一个位置重新插入"
@@ -8895,6 +9101,10 @@ roll_0:
     params:
       shifts: 0
       axis: 0
+  pytorch:
+    api_name: "torch.roll"
+    mapping:
+      ins: { x: input, shifts: shifts, axis: dims }
 
 roll_1:
   desc: "沿着指定维度 axis 对输入 x 进行循环滚动，当元素移动到最后位置时，会从第一个位置重新插入"
@@ -8909,6 +9119,10 @@ roll_1:
     params:
       shifts: -1
       axis: 0
+  pytorch:
+    api_name: "torch.roll"
+    mapping:
+      ins: { x: input, shifts: shifts, axis: dims }
 
 roll_2:
   desc: "沿着指定维度 axis 对输入 x 进行循环滚动，当元素移动到最后位置时，会从第一个位置重新插入"
@@ -8923,6 +9137,10 @@ roll_2:
     params:
       shifts: [-1, 1]
       axis: [0, 1]
+  pytorch:
+    api_name: "torch.roll"
+    mapping:
+      ins: { x: input, shifts: shifts, axis: dims }
 
 scatter_nd_base:
   desc: "根据 index ，将 updates 添加到一个新的张量中，从而得到输出的Tensor"
@@ -9164,6 +9382,10 @@ squeeze_base:
         dtype: "float32"
         shape: [4, 1, 3, 2, 1]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.squeeze"
+    mapping:
+      ins: { x: input }
 
 squeeze_0:
   desc: "删除输入Tensor的Shape中尺寸为1的维度"
@@ -9178,6 +9400,10 @@ squeeze_0:
         range: [ -1, 1]
     params:
       axis: -4
+  pytorch:
+    api_name: "torch.squeeze"
+    mapping:
+      ins: { x: input, axis: dim }
 
 squeeze_1:
   desc: "删除输入Tensor的Shape中尺寸为1的维度"
@@ -9218,6 +9444,10 @@ squeeze__base:
         dtype: "float32"
         shape: [4, 1, 3, 2, 1]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.squeeze"
+    mapping:
+      ins: { x: input }
 
 squeeze__0:
   desc: "删除输入Tensor的Shape中尺寸为1的维度, inplace策略"
@@ -9308,6 +9538,10 @@ tile_base:
         range: [ -1, 1]
     params:
       repeat_times: [2, 1]
+  pytorch:
+    api_name: "torch.tile"
+    mapping:
+      ins: { x: input, repeat_times: dims }
 
 transpose_base:
   desc: "根据参数 repeat_times 对输入 x 的各维度进行复制"
@@ -9411,6 +9645,78 @@ tensordot_1:
     params:
       axes: 1
 
+tensordot_2:
+  desc: "张量缩并运算（Tensor Contraction），即沿着axes给定的多个轴对两个张量对应元素的乘积进行加和操作"
+  paddle:
+    api_name: "paddle.tensordot"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 4, 5]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 3, 2]
+        range: [ -1, 1]
+    params:
+      axes: [[1, 0], [0, 1]]
+  pytorch:
+    api_name: "torch.tensordot"
+    mapping:
+      ins: { x: a, y: b,  axes: dims }
+
+tensordot_3:
+  desc: "张量缩并运算（Tensor Contraction），即沿着axes给定的多个轴对两个张量对应元素的乘积进行加和操作"
+  paddle:
+    api_name: "paddle.tensordot"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 5, 6]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 2, 4, 5, 6]
+        range: [ -1, 1]
+    params:
+      axes: [[0, 1], [1, 0]]
+  pytorch:
+    api_name: "torch.tensordot"
+    mapping:
+      ins: { x: a, y: b,  axes: dims }
+
+tensordot_4:
+  desc: "张量缩并运算（Tensor Contraction），即沿着axes给定的多个轴对两个张量对应元素的乘积进行加和操作"
+  paddle:
+    api_name: "paddle.tensordot"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 5, 6]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [3, 2, 4, 5, 6]
+        range: [ -1, 1]
+    params:
+      axes: !!python/tuple [[0, 1], [1, 0]]
+  pytorch:
+    api_name: "torch.tensordot"
+    mapping:
+      ins: { x: a, y: b,  axes: dims }
+
 unbind_base:
   desc: "将输入Tensor按照指定的维度分割成多个子Tensor"
   paddle:
@@ -9422,6 +9728,10 @@ unbind_base:
         dtype: "float32"
         shape: [3, 4, 5, 5]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.unbind"
+    mapping:
+      ins: { input: input }
 
 unbind_0:
   desc: "将输入Tensor按照指定的维度分割成多个子Tensor"
@@ -9436,6 +9746,10 @@ unbind_0:
         range: [ -1, 1]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.unbind"
+    mapping:
+      ins: { input: input, axis: dim }
 
 unbind_1:
   desc: "将输入Tensor按照指定的维度分割成多个子Tensor"
@@ -9450,6 +9764,10 @@ unbind_1:
         range: [ -1, 1]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.unbind"
+    mapping:
+      ins: { input: input, axis: dim }
 
 unbind_2:
   desc: "将输入Tensor按照指定的维度分割成多个子Tensor"
@@ -9464,6 +9782,10 @@ unbind_2:
         range: [ -1, 1]
     params:
       axis: 2
+  pytorch:
+    api_name: "torch.unbind"
+    mapping:
+      ins: { input: input, axis: dim }
 
 unbind_3:
   desc: "将输入Tensor按照指定的维度分割成多个子Tensor"
@@ -9478,6 +9800,10 @@ unbind_3:
         range: [ -1, 1]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.unbind"
+    mapping:
+      ins: { input: input, axis: dim }
 
 unique_base:
   desc: "返回Tensor按升序排序后的独有元素"
@@ -9490,6 +9816,10 @@ unique_base:
         dtype: "int32"
         shape: [3, 4, 5, 5]
         range: [ -5, 5]
+  pytorch:
+    api_name: "torch.unique"
+    mapping:
+      ins: { x: input }
 
 unique_0:
   desc: "返回Tensor按升序排序后的独有元素"
@@ -9503,6 +9833,10 @@ unique_0:
         value: [[0.4, 0.4], [0.7, 0.9]]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.unique"
+    mapping:
+      ins: { x: input, axis: dim }
 
 unique_1:
   desc: "返回Tensor按升序排序后的独有元素"
@@ -9516,6 +9850,10 @@ unique_1:
         value: [[8, 4], [7, 9]]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.unique"
+    mapping:
+      ins: { x: input, axis: dim }
 
 unique_consecutive_base:
   desc: "将Tensor中连续重复的元素进行去重，返回连续不重复的Tensor"
@@ -9528,6 +9866,10 @@ unique_consecutive_base:
         dtype: "int32"
         shape: [3, 4, 5, 5]
         range: [ -5, 5]
+  pytorch:
+    api_name: "torch.unique_consecutive"
+    mapping:
+      ins: { x: input }
 
 unique_consecutive_0:
   desc: "将Tensor中连续重复的元素进行去重，返回连续不重复的Tensor"
@@ -9544,6 +9886,10 @@ unique_consecutive_0:
       return_inverse: False
       return_counts: False
       axis: 0
+  pytorch:
+    api_name: "torch.unique_consecutive"
+    mapping:
+      ins: { x: input, return_inverse: return_inverse, return_counts: return_counts, axis: dim }
 
 unique_consecutive_1:
   desc: "将Tensor中连续重复的元素进行去重，返回连续不重复的Tensor"
@@ -9620,6 +9966,10 @@ unsqueeze_0:
         range: [ -1, 1]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.unsqueeze"
+    mapping:
+      ins: { x: input, axis: dim }
 
 unsqueeze__base:
   desc: "向输入Tensor的Shape中一个或多个位置（axis）插入尺寸为1的维度, inplace策略"
@@ -9648,6 +9998,10 @@ unsqueeze__0:
         range: [ -1, 1]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.unsqueeze"
+    mapping:
+      ins: { x: input, axis: dim }
 
 unstack_base:
   desc: "将单个dim为 D 的Tensor沿 axis 轴unpack为 num 个dim为 (D-1) 的Tensor"
