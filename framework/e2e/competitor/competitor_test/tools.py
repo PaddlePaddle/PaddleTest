@@ -137,4 +137,9 @@ STOP_BACKWARD = [
     *case2name("nonzero", 0),
     *case2name("searchsorted", 1),
     *case2name("bincount", 1),
+    *case2name("reshape_", 2),
+    "squeeze__base",
+    "unique_0",
+    *case2name("unique_consecutive", 2),
+    "unsqueeze__0",
 ]
