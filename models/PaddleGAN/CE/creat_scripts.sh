@@ -268,7 +268,7 @@ elif [[ ${model} == 'starganv2_celeba_hq' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml
     sed -i "" "s|loss_pixel|G/latent_adv|g" ${model}.yaml #指标
     sed -i "" "s|8462.812|27.779|g" ${model}.yaml #linux_train_单卡
-    sed -i "" "s|9151.643|7.542|g" ${model}.yaml #linux_train_多卡
+    sed -i "" "s|9151.643|27.542|g" ${model}.yaml #linux_train_多卡
 
 elif [[ ${model} == 'mprnet_denoising' ]]; then
     sed -i "" "s|P0|P1|g" ${model}.yaml

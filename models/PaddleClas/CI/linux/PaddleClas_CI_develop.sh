@@ -237,7 +237,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             params_dir=$(ls output)
             echo "######  params_dir"
             echo $params_dir
-            cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
+            # cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
 
             if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
                 && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
@@ -334,7 +334,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     params_dir=$(ls output)
     echo "######  params_dir"
     echo $params_dir
-    cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
+    # cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 
     if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
         && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
@@ -375,7 +375,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         params_dir=$(ls output)
         echo "######  params_dir"
         echo $params_dir
-        cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
+        # cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
         if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]] \
             && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
             echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
@@ -686,7 +686,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     params_dir=$(ls output/${category}_${model})
     echo "######  params_dir"
     echo $params_dir
-    cat $log_path/train/${category}_${model}.log | grep "Memory Usage (MB)"
+    # cat $log_path/train/${category}_${m？odel}.log | grep "Memory Usage (MB)"
 
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
         && [[ -f "output/${category}_${model}/$params_dir/latest.pdparams" ]];then
