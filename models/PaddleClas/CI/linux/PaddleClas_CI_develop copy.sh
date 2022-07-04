@@ -1,3 +1,4 @@
+#放在外面定义！！！！！！#放在外面定义！！！！！！#放在外面定义！！！！！！#放在外面定义！！！！！！#放在外面定义！！！！！！#放在外面定义！！！！！！
 unset GREP_OPTIONS
 echo ${cudaid1}
 echo ${cudaid2}
@@ -6,7 +7,7 @@ echo ${Data_path}
 echo ${Project_path}
 echo ${paddle_compile}
 echo ${py_paddle_flag}
-export CUDA_VISIBLE_DEVICES=${cudaid2}
+export CUDA_VISIBLE_DEVICES=${cudaid2}  #放在外面定义！！！！！！
 export FLAGS_use_virtual_memory_auto_growth=1 #wanghuan 优化显存
 export FLAGS_use_stream_safe_cuda_allocator=1 #zhengtianyu 环境变量测试功能性
 export PADDLE_LOG_LEVEL=debug  #输出多卡log信息
@@ -104,6 +105,7 @@ fi
 echo "######  paddle version"
 python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 
+# repo
 echo "######  clas version"
 git rev-parse HEAD
 
@@ -111,11 +113,11 @@ git rev-parse HEAD
 python -c 'import sys; print(sys.version_info[:])'
 echo "######  python version"
 
-#system
+# system
 if [ -d "/etc/redhat-release" ]; then
-   echo "######  system centos"
+    echo "######  system centos"
 else
-   echo "######  system linux"
+    echo "######  system linux"
 fi
 
 unset http_proxy
@@ -125,13 +127,13 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # python -m pip install --ignore-installed --upgrade \
 #    setuptools==59.5.0 -i https://mirror.baidu.com/pypi/simple #before install bcolz
 python -m pip install --ignore-installed --upgrade \
-   pip -i https://mirror.baidu.com/pypi/simple
+    pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim \
-   -i https://mirror.baidu.com/pypi/simple
+    -i https://mirror.baidu.com/pypi/simple
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \
-   -i https://mirror.baidu.com/pypi/simple
+    -i https://mirror.baidu.com/pypi/simple
 
 python -m pip list |grep opencv
 
@@ -237,7 +239,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             params_dir=$(ls output)
             echo "######  params_dir"
             echo $params_dir
-            # cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
+            cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
 
             if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
                 && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
@@ -250,6 +252,32 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             fi
         fi
 
+        if [[ ${amp_flag} =~ "on" ]];then\
+            python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
+            --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
+            #增加amp验证 只跑一个不放在循环中
+            python -m paddle.distributed.launch ppcls/static/train.py  \
+                -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml \
+                -o Global.epochs=1 \
+                -o DataLoader.Train.sampler.batch_size=1 \
+                -o DataLoader.Eval.sampler.batch_size=1  \
+                -o Global.output_dir=output \
+                > $log_path/train/ResNet50_static.log 2>&1
+            params_dir=$(ls output)
+            echo "######  params_dir"
+            echo $params_dir
+            cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
+
+            if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
+                && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
+                echo -e "\033[33m training static multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
+                echo "training_static_exit_code: 0.0" >> $log_path/train/ResNet50_static.log
+            else
+                cat $log_path/train/ResNet50_static.log
+                echo -e "\033[31m training static multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
+                echo "training_static_exit_code: 1.0" >> $log_path/train/ResNet50_static.log
+            fi
+        fi
     fi
     cat models_list | sort | uniq > models_list_run_tmp  #去重复
     shuf models_list_run_tmp > models_list_run
@@ -261,11 +289,15 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     #开始循环
     cat models_list_run | while read line
     do
-    #echo $line
-    filename=${line##*/}
-    #echo $filename
-    model=${filename%.*}
-    echo $model
+    # 获取模型名称
+    array=(${line//\// })  
+    model=${array[2]}
+    for var in ${array[@]:3}
+    do
+        array2=(${var//'.yaml'/ })  
+        model=${model}_${array2[0]}
+        echo ${model}
+    done 
 
     if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'amp' ]];then
         echo "fp16 or amp"
@@ -279,81 +311,28 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
     #train
     #多卡
-    if [[ ${model_flag} =~ "CE" ]]; then
-        if [[ ${line} =~ 'GoogLeNet' ]] || [[ ${line} =~ 'VGG' ]] || [[ ${line} =~ 'ViT' ]] \
-            || [[ ${line} =~ 'PPLCNet' ]] || [[ ${line} =~ 'MobileNetV3' ]]; then
-            sed -i 's/learning_rate:/learning_rate: 0.0001 #/g' $line #将 学习率调低为0.0001
-            echo "change lr"
-        fi
-        if  [[ ${line} =~ 'ViT' ]] || [[ ${line} =~ 'TNT_small' ]]; then
-            sed -i 's/0.1, 0.01, 0.001, 0.0001/0.05, 0.005, 0.0005, 0.00005/g' $line #调整学习率
-            echo "change lr"
-        fi
 
-        # sed -i 's/RandCropImage/ResizeImage/g' $line
-        # sed -ie '/RandFlipImage/d' $line
-        # sed -ie '/flip_code/d' $line
-        # -o Global.eval_during_train=False  \
-        python -m paddle.distributed.launch tools/train.py -c $line  \
-            -o Global.epochs=2  \
-            -o Global.seed=1234 \
-            -o Global.output_dir=output \
-            -o DataLoader.Train.loader.num_workers=0 \
-            -o DataLoader.Train.sampler.shuffle=False  \
-            -o Global.eval_interval=2  \
-            -o Global.save_interval=2 \
-            -o DataLoader.Train.sampler.batch_size=1 \
-            > $log_path/train/${model}_2card.log 2>&1
-    else
-        if [[ ! ${line} =~ "fp16.yaml" ]]; then
-            if [[ `cat ${line} |grep MultiScaleSampler|wc -l` -gt "0"  ]]; then #for tingquan 220513 change
-                echo "have MultiScaleSampler"
-                python -m paddle.distributed.launch tools/train.py  \
-                    -c $line -o Global.epochs=1 \
-                    -o Global.output_dir=output \
-                    -o DataLoader.Train.sampler.first_bs=1 \
-                    -o DataLoader.Eval.sampler.batch_size=1  \
-                    > $log_path/train/${model}_2card.log 2>&1
-            else
-                python -m paddle.distributed.launch tools/train.py  \
-                    -c $line -o Global.epochs=1 \
-                    -o Global.output_dir=output \
-                    -o DataLoader.Train.sampler.batch_size=1 \
-                    -o DataLoader.Eval.sampler.batch_size=1  \
-                    > $log_path/train/${model}_2card.log 2>&1
-            fi
-        else
-            python -m paddle.distributed.launch ppcls/static/train.py  \
-                -c $line -o Global.epochs=1 \
-                -o Global.output_dir=output \
-                -o DataLoader.Train.sampler.batch_size=1 \
-                -o DataLoader.Eval.sampler.batch_size=1  \
-                > $log_path/train/${model}_2card.log 2>&1
-        fi
-    fi
+
     params_dir=$(ls output)
     echo "######  params_dir"
     echo $params_dir
-    # cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
+    cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 
     if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
         && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
-        echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
+        echo -e "\033[33m training multi of ${model}  successfully!\033[0m"|tee -a $log_path/result.log
         echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
     else
         cat $log_path/train/${model}_2card.log
-        echo -e "\033[31m training multi of $model failed!\033[0m"|tee -a $log_path/result.log
+        echo -e "\033[31m training multi of ${model} failed!\033[0m"|tee -a $log_path/result.log
         echo "training_multi_exit_code: 1.0" >> $log_path/train/${model}_2card.log
     fi
-
-    if [[ ${line} =~ "fp16.yaml" ]]; then #无单独fp16的yaml了
-        continue
-    fi
+    }
 
     #单卡
     ls output/$params_dir/ |head -n 2
     sleep 3
-    if [[ ${model_flag} =~ "CE" ]]; then
+    if [[ ${model_flag} =~ "CE" ]]; then #只有单卡时才进行单卡验证
         rm -rf output #清空多卡cache
         python  tools/train.py -c $line  \
             -o Global.epochs=2  \
@@ -363,82 +342,21 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             -o DataLoader.Train.sampler.shuffle=False  \
             -o Global.eval_interval=2  \
             -o Global.save_interval=2 \
-            -o DataLoader.Train.sampler.batch_size=1  \
             > $log_path/train/${model}_1card.log 2>&1
-    # else  #取消CI单卡训练
-    #    python tools/train.py  \
-    #       -c $line -o Global.epochs=1 \
-    #       -o Global.output_dir=output \
-    #       -o DataLoader.Train.sampler.batch_size=1 \
-    #       -o DataLoader.Eval.sampler.batch_size=1  \
-    #       > $log_path/train/${model}_1card.log 2>&1
-        params_dir=$(ls output)
         echo "######  params_dir"
         echo $params_dir
-        # cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
+        cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
         if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]] \
             && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
-            echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
+            echo -e "\033[33m training single of ${model}  successfully!\033[0m"|tee -a $log_path/result.log
             echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
         else
             cat $log_path/train/${model}_1card.log
-            echo -e "\033[31m training single of $model failed!\033[0m"|tee -a $log_path/result.log
+            echo -e "\033[31m training single of ${model} failed!\033[0m"|tee -a $log_path/result.log
             echo "training_single_exit_code: 1.0" >> $log_path/train/${model}_1card.log
         fi
     fi
-
-    if  [[ ${model} =~ 'RedNet' ]] || [[ ${line} =~ 'LeViT' ]] || [[ ${line} =~ 'GhostNet' ]] \
-        || [[ ${line} =~ 'ResNet152' ]] || [[ ${line} =~ 'DLA169' ]] || [[ ${line} =~ 'ResNeSt101' ]] \
-        || [[ ${line} =~ 'ResNeXt152_vd_64x4d' ]] || [[ ${line} =~ 'ResNeXt152_64x4d' ]] || [[ ${line} =~ 'ResNet101' ]] \
-        || [[ ${line} =~ 'ResNet200_vd' ]] || [[ ${line} =~ 'DLA102' ]] || [[ ${model} =~ 'InceptionV4' ]];then
-        echo "######  use pretrain model"
-        echo ${model}
-        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${model}_pretrained.pdparams --no-proxy
-        rm -rf output/$params_dir/latest.pdparams
-        cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
-        rm -rf ${model}_pretrained.pdparams
-    fi
-
-    if [[ ${model} =~ 'MobileNetV3' ]] || ( [[ ${model} =~ 'PPLCNet' ]] && [[ ! ${model} =~ 'dml' ]] ) \
-        || [[ ${line} =~ 'ESNet' ]] || [[ ${line} =~ 'ResNet50.yaml' ]] || [[ ${line} =~ '/ResNet50_vd.yaml' ]];then
-        echo "######  use pretrain model"
-        echo ${model}
-        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${model}_pretrained.pdparams --no-proxy
-        rm -rf output/$params_dir/latest.pdparams
-        cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
-        rm -rf ${model}_pretrained.pdparams
-    fi
-
-    if [[ ${model} =~ 'amp' ]];then
-        echo "######  use amp pretrain model"
-        echo ${model}
-        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/${params_dir}_pretrained.pdparams --no-proxy
-        rm -rf output/$params_dir/latest.pdparams
-        cp -r ${params_dir}_pretrained.pdparams output/$params_dir/latest.pdparams
-        rm -rf ${params_dir}_pretrained.pdparams
-    fi
-
-    if [[ ${model} =~ 'distill_pphgnet_base' ]]  || [[ ${model} =~ 'PPHGNet_base' ]] ;then
-        echo "######  use distill_pphgnet_base pretrain model"
-        echo ${model}
-        echo ${params_dir}
-        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPHGNet_base_ssld_pretrained.pdparams --no-proxy
-        rm -rf output/$params_dir/latest.pdparams
-        cp -r PPHGNet_base_ssld_pretrained.pdparams output/$params_dir/latest.pdparams
-        rm -rf PPHGNet_base_ssld_pretrained_pretrained.pdparams
-    fi
-
-    if [[ ${model} =~ 'PPLCNet' ]]  && [[ ${model} =~ 'dml' ]] ;then #注意区分dml 与 udml
-        echo "######  use PPLCNet dml pretrain model"
-        echo ${model}
-        echo ${params_dir}
-        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/Distillation/${model}_pretrained.pdparams --no-proxy
-        rm -rf output/$params_dir/latest.pdparams
-        cp -r ${model}_pretrained.pdparams output/$params_dir/latest.pdparams
-        rm -rf ${model}_pretrained.pdparams
-    fi
-
-    sleep 3
+    sleep 1
 
     ls output/$params_dir/ |head -n 2
     # eval
@@ -450,7 +368,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     python tools/eval.py -c $line \
         -o Global.pretrained_model=output/$params_dir/latest \
         -o DataLoader.Eval.sampler.batch_size=1 \
-        > $log_path/eval/$model.log 2>&1
+        > $log_path/eval/${model}.log 2>&1
 
     if [[ ${line} =~ 'ultra' ]];then
         rm -rf ${line}
@@ -458,62 +376,62 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     fi
 
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
-        echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
-        echo "eval_exit_code: 0.0" >> $log_path/eval/$model.log
+        echo -e "\033[33m eval of ${model}  successfully!\033[0m"| tee -a $log_path/result.log
+        echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
     else
-        cat $log_path/eval/$model.log
-        echo -e "\033[31m eval of $model failed!\033[0m" | tee -a $log_path/result.log
-        echo "eval_exit_code: 1.0" >> $log_path/eval/$model.log
+        cat $log_path/eval/${model}.log
+        echo -e "\033[31m eval of ${model} failed!\033[0m" | tee -a $log_path/result.log
+        echo "eval_exit_code: 1.0" >> $log_path/eval/${model}.log
     fi
 
     # infer
     python tools/infer.py -c $line \
         -o Global.pretrained_model=output/$params_dir/latest \
-        > $log_path/infer/$model.log 2>&1
+        > $log_path/infer/${model}.log 2>&1
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/${model}.log) -eq 0 ]];then
-        echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
-        echo "infer_exit_code: 0.0" >> $log_path/infer/$model.log
+        echo -e "\033[33m infer of ${model}  successfully!\033[0m"| tee -a $log_path/result.log
+        echo "infer_exit_code: 0.0" >> $log_path/infer/${model}.log
     else
         cat $log_path/infer/${model}.log
-        echo -e "\033[31m infer of $model failed!\033[0m"| tee -a $log_path/result.log
-        echo "infer_exit_code: 1.0" >> $log_path/infer/$model.log
+        echo -e "\033[31m infer of ${model} failed!\033[0m"| tee -a $log_path/result.log
+        echo "infer_exit_code: 1.0" >> $log_path/infer/${model}.log
     fi
 
     # export_model
     if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'amp' ]];then
         python tools/export_model.py -c $line \
             -o Global.pretrained_model=output/$params_dir/latest \
-            -o Global.save_inference_dir=./inference/$model \
+            -o Global.save_inference_dir=./inference/${model} \
             -o Arch.data_format="NCHW" \
-            > $log_path/export_model/$model.log 2>&1
+            > $log_path/export_model/${model}.log 2>&1
     else
         python tools/export_model.py -c $line \
             -o Global.pretrained_model=output/$params_dir/latest \
-            -o Global.save_inference_dir=./inference/$model \
-            > $log_path/export_model/$model.log 2>&1
+            -o Global.save_inference_dir=./inference/${model} \
+            > $log_path/export_model/${model}.log 2>&1
     fi
 
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/export_model/${model}.log) -eq 0 ]];then
-        echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
-        echo "export_exit_code: 0.0" >> $log_path/export_model/$model.log
+        echo -e "\033[33m export_model of ${model}  successfully!\033[0m"| tee -a $log_path/result.log
+        echo "export_exit_code: 0.0" >> $log_path/export_model/${model}.log
     else
-        cat $log_path/export_model/$model.log
-        echo -e "\033[31m export_model of $model failed!\033[0m" | tee -a $log_path/result.log
-        echo "export_exit_code: 1.0" >> $log_path/export_model/$model.log
+        cat $log_path/export_model/${model}.log
+        echo -e "\033[31m export_model of ${model} failed!\033[0m" | tee -a $log_path/result.log
+        echo "export_exit_code: 1.0" >> $log_path/export_model/${model}.log
     fi
 
     # 20220325 error
     # if [[ `expr $RANDOM % 2` -eq 0 ]] && ([[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]]);then
     # # if [[ ${model_flag} =~ 'CI' ]] || [[ ${model_flag} =~ 'single' ]];then #加入随机扰动
     #    echo "model_clip"
-    #    python model_clip.py --path_prefix="./inference/$model/inference" \
-    #       --output_model_path="./inference/$model/inference" \
-    #       > $log_path/model_clip/$model.log 2>&1
+    #    python model_clip.py --path_prefix="./inference/${model}/inference" \
+    #       --output_model_path="./inference/${model}/inference" \
+    #       > $log_path/model_clip/${model}.log 2>&1
     #    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/model_clip/${model}.log) -eq 0 ]];then
-    #       echo -e "\033[33m model_clip of $model  successfully!\033[0m"| tee -a $log_path/result.log
+    #       echo -e "\033[33m model_clip of ${model}  successfully!\033[0m"| tee -a $log_path/result.log
     #    else
-    #       cat $log_path/model_clip/$model.log
-    #       echo -e "\033[31m model_clip of $model failed!\033[0m" | tee -a $log_path/result.log
+    #       cat $log_path/model_clip/${model}.log
+    #       echo -e "\033[31m model_clip of ${model} failed!\033[0m" | tee -a $log_path/result.log
     #    fi
     # fi
 
@@ -526,40 +444,40 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
 
     if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
         python python/predict_cls.py -c configs/inference_cls_ch4.yaml \
-            -o Global.inference_model_dir="../inference/"$model \
-            > ../$log_path/predict/$model.log 2>&1
+            -o Global.inference_model_dir="../inference/"${model} \
+            > ../$log_path/predict/${model}.log 2>&1
     else
         python python/predict_cls.py -c configs/inference_cls.yaml \
-            -o Global.inference_model_dir="../inference/"$model \
-            > ../$log_path/predict/$model.log 2>&1
+            -o Global.inference_model_dir="../inference/"${model} \
+            > ../$log_path/predict/${model}.log 2>&1
     fi
 
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
-        echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
+        echo -e "\033[33m predict of ${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
     else
         cat ../$log_path/predict/${model}.log
-        echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+        echo -e "\033[31m predict of ${model} failed!\033[0m"| tee -a ../$log_path/result.log
     fi
 
     if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
         python python/predict_cls.py -c configs/inference_cls_ch4.yaml  \
             -o Global.infer_imgs="./images"  \
-            -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"$model \
-            > ../$log_path/predict/$model.log 2>&1
+            -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"${model} \
+            > ../$log_path/predict/${model}.log 2>&1
     else
         python python/predict_cls.py -c configs/inference_cls.yaml  \
             -o Global.infer_imgs="./images"  \
             -o Global.batch_size=4 \
-            -o Global.inference_model_dir="../inference/"$model \
-            > ../$log_path/predict/$model.log 2>&1
+            -o Global.inference_model_dir="../inference/"${model} \
+            > ../$log_path/predict/${model}.log 2>&1
     fi
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
-        echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-        echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
+        echo -e "\033[33m multi_batch_size predict of ${model}  successfully!\033[0m"| tee -a ../$log_path/result.log
+        echo "predict_exit_code: 0.0" >> ../$log_path/predict/${model}.log
     else
         cat ../$log_path/predict/${model}.log
-        echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-        echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
+        echo -e "\033[31m multi_batch_size predict of ${model} failed!\033[0m"| tee -a ../$log_path/result.log
+        echo "predict_exit_code: 1.0" >> ../$log_path/predict/${model}.log
     fi
 
     sed -i 's/size: '${size_tmp}'/size: 224/g' configs/inference_cls.yaml #改回predict尺寸
@@ -640,39 +558,11 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     if [ -d "output" ]; then
         rm -rf output
     fi
-    echo $model
+    echo ${model}
 
     # sleep 3
 
-    if [[ ${line} =~ 'GeneralRecognition' ]]; then
-        python -m paddle.distributed.launch tools/train.py  -c $line \
-            -o Global.epochs=1 \
-            -o Global.save_interval=1 \
-            -o Global.eval_interval=1 \
-            -o DataLoader.Train.sampler.batch_size=32 \
-            -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
-            -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
-            -o Global.output_dir="./output/"${category}_${model} \
-            > $log_path/train/${category}_${model}.log 2>&1
-    elif [[ ${line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
-        python -m paddle.distributed.launch tools/train.py  -c $line \
-            -o Global.epochs=1 \
-            -o Global.save_interval=1 \
-            -o Global.eval_interval=1 \
-            -o DataLoader.Eval.sampler.batch_size=64 \
-            -o DataLoader.Train.sampler.batch_size=64 \
-            -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
-            -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
-            -o Global.output_dir="./output/"${category}_${model} \
-            > $log_path/train/${category}_${model}.log 2>&1
-    elif [[ ${line} =~ 'quantization' ]] ; then
-        python -m paddle.distributed.launch tools/train.py  -c $line \
-            -o Global.epochs=1 \
-            -o Global.save_interval=1 \
-            -o Global.eval_interval=1 \
-            -o DataLoader.Train.sampler.batch_size=32 \
-            -o Global.output_dir="./output/"${category}_${model} \
-            > $log_path/train/${category}_${model}.log 2>&1
+
     else
         python -m paddle.distributed.launch tools/train.py  -c $line \
             -o Global.epochs=1 \
@@ -686,7 +576,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     params_dir=$(ls output/${category}_${model})
     echo "######  params_dir"
     echo $params_dir
-    # cat $log_path/train/${category}_${m？odel}.log | grep "Memory Usage (MB)"
+    cat $log_path/train/${category}_${model}.log | grep "Memory Usage (MB)"
 
     if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
         && [[ -f "output/${category}_${model}/$params_dir/latest.pdparams" ]];then

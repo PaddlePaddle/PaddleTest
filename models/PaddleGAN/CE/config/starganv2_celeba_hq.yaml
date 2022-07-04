@@ -105,7 +105,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       G/latent_adv:
         latest: True
-        kpi_base: 7.542
+        kpi_base: 27.542
         threshold: 1.0
         actived: True
         evaluation: "-"
@@ -137,7 +137,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       G/latent_adv:
         latest: True
-        kpi_base: 7.542
+        kpi_base: 27.542
         threshold: 1.0
         actived: True
         evaluation: "-"

@@ -250,7 +250,7 @@ cp $log_path/train/${model}_1card.log $log_path/train/${model}_2card.log
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
-cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
+# cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
     echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "training_exit_code: 0.0" >> $log_path/train/${model}_1card.log
@@ -275,7 +275,7 @@ fi
 params_dir=$(ls output)
 echo "######  params_dir"
 echo $params_dir
-cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
+# cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
     echo -e "\033[33m train multi of $model  successfully!\033[0m"| tee -a $log_path/result.log
     echo "training_exit_code: 0.0" >> $log_path/train/${model}_2card.log
@@ -302,7 +302,7 @@ if [[ ${model_flag} =~ "CE" ]]; then
     params_dir=$(ls output)
     echo "######  params_dir"
     echo $params_dir
-    cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
+    # cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
     if [[ -f "output/$params_dir/iter_20_checkpoint.pdparams" ]] && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
         echo -e "\033[33m train single of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "training_exit_code: 0.0" >> $log_path/train/${model}_1card.log
