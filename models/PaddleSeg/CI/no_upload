@@ -3,7 +3,7 @@
 ./configs/ocrnet/ocrnet_hrnetw48_cityscapes_1024x512_40k.yml
 ./configs/ocrnet/ocrnet_hrnetw18_cityscapes_1024x512_160k_lovasz_softmax.yml
 ./configs/ocrnet/ocrnet_hrnetw18_road_extraction_768x768_15k.yml
-./configs/pointrend/pointrend_resnet101_os8_cityscapes_1024×512_80k.yml
+./configs/pointrend/pointrend_resnet101_os8_cityscapes_1024x512_80k.yml
 ./configs/fcn/fcn_hrnetw18_cityscapes_1024x512_80k_bs4_SCL.yml
 ./configs/fcn/fcn_hrnetw18_cityscapes_1024x512_80k_bs4.yml
 ./configs/u2net/u2netp_cityscapes_1024x512_160k.yml
