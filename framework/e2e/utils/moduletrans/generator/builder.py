@@ -33,7 +33,7 @@ class BuildModuleTest(object):
         # print('data type is: ', data_type)
         # print('data input is: ', data_input)
         self.data_info = builder_data.BuildData(*self.case.get_data_info())
-        # print(self.data_info.get_single_paddle_data())
+        print(self.data_info.get_single_paddle_data())
         self.input_data = self.data_info.get_single_paddle_data()
 
         # self.out = net(**self.input_data)
@@ -55,18 +55,46 @@ class BuildModuleTest(object):
         )
         # dygraph train
         for epoch in range(self.train_info.get_train_step()):
-            loss = net(**self.input_data)
-            loss.backward()
+            logit = net(**self.input_data)
+            logit.backward()
             opt.step()
             opt.clear_grad()
-        return loss
+        return logit
+
+    def predict(self, to_static=False):
+        """predict"""
+        paddle.seed(33)
+        np.random.seed(33)
+        net = self.layer_info.get_layer()
+        if to_static:
+            net = paddle.jit.to_static(net)
+        logit = net(**self.input_data)
+        return logit
+
+    def dygraph_train_test(self):
+        """dygraph train test"""
+        pass
+
+    def dygraph_predict_test(self):
+        """dygraph predict test"""
+        pass
 
     def dygraph_to_static_train_test(self):
-        """test"""
+        """dygraph_to_static train test"""
         dygraph_out = self.train(to_static=False)
         self.logger.get_log().info("dygraph to static train acc-test start~")
         self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         static_out = self.train(to_static=True)
         self.logger.get_log().info("static_out is: {}".format(static_out))
-        tool.compare(dygraph_out.numpy(), static_out.numpy(), delta=1e-8, rtol=1e-8)
+        tool.compare(dygraph_out, static_out, delta=1e-8, rtol=1e-8)
         self.logger.get_log().info("dygraph to static train acc-test Success!!!~~")
+
+    def dygraph_to_static_predict_test(self):
+        """dygraph_to_static predict test"""
+        dygraph_out = self.predict(to_static=False)
+        self.logger.get_log().info("dygraph to static predict acc-test start~")
+        self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
+        static_out = self.predict(to_static=True)
+        self.logger.get_log().info("static_out is: {}".format(static_out))
+        tool.compare(dygraph_out, static_out, delta=1e-8, rtol=1e-8)
+        self.logger.get_log().info("dygraph to static predict acc-test Success!!!~~")
