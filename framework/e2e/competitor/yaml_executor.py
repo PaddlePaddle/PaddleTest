@@ -70,7 +70,8 @@ def generate_case_info(yaml_file):
     case_info = []
     for case_name in cases_name:
         case = obj.get_case_info(case_name)
-        case_info.append([case, case_name])
+        if case["info"].get("pytorch"):
+            case_info.append([case, case_name])
     return case_info
 
 
