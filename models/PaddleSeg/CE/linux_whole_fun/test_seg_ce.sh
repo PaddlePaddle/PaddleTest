@@ -1,7 +1,7 @@
 #!/bin/bash
 
 python -m pip install --upgrade pip
-echo -e '*****************paddle_version*****'
+echo -e '*****************paddle_version******'
     python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************detection_version****'
     git rev-parse HEAD
