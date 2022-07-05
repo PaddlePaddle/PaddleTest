@@ -5,6 +5,7 @@
 yaml executor
 """
 import sys
+import os
 
 from competitor_test.competitive import CompetitorCompareTest
 from competitor_test.comptrans import CompeTrans
@@ -12,30 +13,41 @@ from competitor_test.tools import STOP_BACKWARD
 from utils.yaml_loader import YamlLoader
 
 
+def run_case(case, case_name):
+    """
+    run case
+    """
+    tans_obj = CompeTrans(case, 1, 2)
+    if tans_obj.stop:
+        return
+    api = tans_obj.get_function()
+    paddle_ins = tans_obj.get_paddle_ins()
+    torch_ins = tans_obj.get_torch_ins()
+    types = tans_obj.get_dtype()
+    torch_place = tans_obj.get_torch_place()
+    test_obj = CompetitorCompareTest(*api)
+    test_obj.types = types
+    if torch_place:
+        test_obj.torch_place = True
+    if case_name in STOP_BACKWARD:
+        test_obj.enable_backward = False
+    test_obj.run(paddle_ins, torch_ins)
+
+
 def yaml_exe(yaml_file):
     """
     competitor test run
     """
+    os.system("echo bug cases list: >> ./result.txt")
     obj = YamlLoader(yaml_file)
     cases_name = obj.get_all_case_name()
     for case_name in cases_name:
         print("====>>>>" + case_name)
         case = obj.get_case_info(case_name)
-        tans_obj = CompeTrans(case, 1, 2)
-        if tans_obj.stop:
-            continue
-        api = tans_obj.get_function()
-        paddle_ins = tans_obj.get_paddle_ins()
-        torch_ins = tans_obj.get_torch_ins()
-        types = tans_obj.get_dtype()
-        torch_place = tans_obj.get_torch_place()
-        test_obj = CompetitorCompareTest(*api)
-        test_obj.types = types
-        if torch_place:
-            test_obj.torch_place = True
-        if case_name in STOP_BACKWARD:
-            test_obj.enable_backward = False
-        test_obj.run(paddle_ins, torch_ins)
+        try:
+            run_case(case, case_name)
+        except:
+            os.system("echo %s >> ./result.txt" % case_name)
 
 
 def debug_yaml_exe(yaml_file, case_name):
