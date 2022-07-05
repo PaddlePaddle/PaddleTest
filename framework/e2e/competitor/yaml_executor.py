@@ -5,7 +5,7 @@
 yaml executor
 """
 import sys
-import os
+import pytest
 
 from competitor_test.competitive import CompetitorCompareTest
 from competitor_test.comptrans import CompeTrans
@@ -32,22 +32,6 @@ def run_case(case, case_name):
     if case_name in STOP_BACKWARD:
         test_obj.enable_backward = False
     test_obj.run(paddle_ins, torch_ins)
-
-
-def yaml_exe(yaml_file):
-    """
-    competitor test run
-    """
-    os.system("echo bug cases list: >> ./result.txt")
-    obj = YamlLoader(yaml_file)
-    cases_name = obj.get_all_case_name()
-    for case_name in cases_name:
-        print("====>>>>" + case_name)
-        case = obj.get_case_info(case_name)
-        try:
-            run_case(case, case_name)
-        except:
-            os.system("echo %s >> ./result.txt" % case_name)
 
 
 def debug_yaml_exe(yaml_file, case_name):
@@ -77,6 +61,38 @@ def debug_yaml_exe(yaml_file, case_name):
         test_obj.run(paddle_ins, torch_ins)
 
 
+def generate_case_info(yaml_file):
+    """
+    generate case info
+    """
+    obj = YamlLoader(yaml_file)
+    cases_name = obj.get_all_case_name()
+    case_info = []
+    for case_name in cases_name:
+        case = obj.get_case_info(case_name)
+        case_info.append([case, case_name])
+    return case_info
+
+
+@pytest.fixture()
+def ecp(request):
+    """
+    before run case
+    """
+    x = request.param
+    print("<<<!!! %s !!!>>>" % x[1])
+    return x
+
+
+@pytest.mark.parametrize("ecp", generate_case_info("../yaml/%s.yml" % sys.argv[1]), indirect=True)
+def test(ecp):
+    """
+    run case
+    """
+    run_case(*ecp)
+
+
 if __name__ == "__main__":
-    yaml_exe("../yaml/%s.yml" % sys.argv[1])
+    # yaml_exe("../yaml/%s.yml" % sys.argv[1])
     # debug_yaml_exe("../yaml/base.yml", sys.argv[1])
+    pytest.main(["-sv", sys.argv[0]])
