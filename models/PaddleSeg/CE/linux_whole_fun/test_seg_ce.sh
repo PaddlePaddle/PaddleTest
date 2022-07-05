@@ -65,13 +65,13 @@ pip install -r requirements.txt
 log_dir=.
 model_type_path=
 if [ "$1" == 'develop_d1' ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v deeplabv3  | grep -v benchmark | grep -v smrt | tee dynamic_config_all_temp
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v deeplabv3  | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_all_temp
 elif [ "$1" == 'develop_d2' ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep segformer | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | tee dynamic_config_segformer
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep deeplabv3 | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | tee dynamic_config_deeplabv3
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep segformer | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_segformer
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep deeplabv3 | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_deeplabv3
 cat dynamic_config_segformer dynamic_config_deeplabv3 >>dynamic_config_all_temp
 else
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v benchmark | grep -v smrt | tee dynamic_config_all_temp
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_all_temp
 fi
 sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
 skip_export_model='espnetv1_cityscapes_1024x512_120k enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k dmnet_resnet101_os8_cityscapes_1024x512_80k gscnn_resnet50_os8_cityscapes_1024x512_80k'
