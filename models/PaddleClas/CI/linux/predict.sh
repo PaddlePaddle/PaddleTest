@@ -8,7 +8,7 @@ function predict() {
     else
         #直接执行predict，下载预训练模型
         # 需要提前下载预训练模型，怎么自动瞎下载?
-        local pretrained_model=null 
+        local pretrained_model=null
 
     case $category in
     ImageNet|slim|metric_learning)
