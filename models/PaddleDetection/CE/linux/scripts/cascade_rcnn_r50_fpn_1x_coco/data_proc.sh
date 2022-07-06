@@ -23,6 +23,10 @@ if [ -d "$cur_path/../../PaddleDetection/dataset/mot" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/mot
 fi
 ln -s ${data_path}/mot $cur_path/../../PaddleDetection/dataset/mot
+if [ -d "$cur_path/../../PaddleDetection/dataset/wider_face" ];then
+rm -rf $cur_path/../../PaddleDetection/dataset/wider_face
+fi
+ln -s ${data_path}/wider_face $cur_path/../../PaddleDetection/dataset/wider_face
 if [ -d "$cur_path/../../PaddleDetection/dataset/AIchallenge" ];then
 rm -rf $cur_path/../../PaddleDetection/dataset/AIchallenge
 fi
