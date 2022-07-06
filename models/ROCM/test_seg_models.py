@@ -13,8 +13,8 @@
   **************************************************************************/
 """
 
-import subprocess
 import re
+import subprocess
 import pytest
 import numpy as np
 
@@ -27,22 +27,27 @@ from RocmTestFramework import clean_process
 
 def setup_module():
     """
-    RepoInit
+    function
     """
     RepoInit(repo="PaddleSeg")
-    RepoDataset(cmd="""cd PaddleSeg; mkdir data; cd data; rm -rf cityscapes; ln -s /data/cityscape cityscapes; cd ..""")
+    RepoDataset(
+        cmd="""cd PaddleSeg; \
+            python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple; \
+            sed -i '/batch_size: 2/batch_size: 1/' configs/danet/danet_resnet50_os8_cityscapes_1024x512_80k.yml; \
+            mkdir data; cd data; rm -rf cityscapes; ln -s /data/cityscape cityscapes; cd .."""
+    )
 
 
 def teardown_module():
     """
-    RepoRemov
+    function
     """
     RepoRemove(repo="PaddleSeg")
 
 
 def setup_function():
     """
-    clean_process
+    function
     """
     clean_process()
 

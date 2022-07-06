@@ -13,13 +13,14 @@
   **************************************************************************/
 """
 
-import subprocess
 import re
+import subprocess
 import pytest
 import numpy as np
 
 from RocmTestFramework import TestParakeetModel
 from RocmTestFramework import RepoInitCustom
+from RocmTestFramework import RepoInit
 from RocmTestFramework import RepoRemove
 from RocmTestFramework import RepoDataset
 from RocmTestFramework import clean_process
@@ -27,33 +28,34 @@ from RocmTestFramework import clean_process
 
 def setup_module():
     """
-    setup
+    function
     """
-    RepoInitCustom(repo="Parakeet")
+    RepoInit(repo="Parakeet")
+    # RepoInitCustom(repo='Parakeet')
     RepoDataset(
-        cmd="""cd Parakeet;
-                       yum install -y libsndfile;
-                       python -m pip install -e . -i https://pypi.tuna.tsinghua.edu.cn/simple;
-                       rm -rf ~/nltk_data;
-                       ln -s /data/nltk_data ~/nltk_data;"""
+        cmd=""" cd Parakeet; \
+                yum install -y libsndfile; \
+                python -m pip install -e . -i https://pypi.tuna.tsinghua.edu.cn/simple; \
+                rm -rf ~/nltk_data; \
+                ln -s /data/nltk_data ~/nltk_data;"""
     )
 
 
 def teardown_module():
     """
-    teardown
+    function
     """
     RepoRemove(repo="Parakeet")
 
 
 def setup_function():
     """
-    clean_process
+    function
     """
     clean_process()
 
 
-def test_transformer_tts():
+def test_transformer_tts():  # 切换为speech库，需要重新添加case，切换成v0.3版本就好了
     """
     transformer_tts test case
     """

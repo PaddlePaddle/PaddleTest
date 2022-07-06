@@ -13,13 +13,14 @@
   **************************************************************************/
 """
 
-import subprocess
 import re
+import subprocess
 import pytest
 import numpy as np
 
 from RocmTestFramework import TestRecModel
 from RocmTestFramework import RepoInitCustom
+from RocmTestFramework import RepoInit
 from RocmTestFramework import RepoRemove
 from RocmTestFramework import RepoDataset
 from RocmTestFramework import clean_process
@@ -27,26 +28,27 @@ from RocmTestFramework import clean_process
 
 def setup_module():
     """
-    RepoInit
+    function
     """
-    RepoInitCustom(repo="PaddleRec")
+    RepoInit(repo="PaddleRec")
+    # RepoInitCustom(repo='PaddleRec')
 
 
 def teardown_module():
     """
-    RepoRemove
+    function
     """
     RepoRemove(repo="PaddleRec")
 
 
 def setup_function():
     """
-    clean_process
+    function
     """
     clean_process()
 
 
-def test_deepfm():
+def test_deepfm():  # GPU也报错
     """
     deepfm test case
     """

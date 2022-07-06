@@ -13,10 +13,10 @@
   **************************************************************************/
 """
 
-import subprocess
 import re
-import numpy as np
+import subprocess
 import pytest
+import numpy as np
 
 from RocmTestFramework import TestDetectionDygraphModel
 from RocmTestFramework import RepoInit
@@ -27,37 +27,35 @@ from RocmTestFramework import clean_process
 
 def setup_module():
     """
-    setup
+    function
     """
     RepoInit(repo="PaddleDetection")
     RepoDataset(
-        cmd="""cd PaddleDetection/dataset;
-                     rm -rf wider_face voc coco;
-                     ln -s /data/VOC_Paddle voc;
-                     ln -s /data/COCO17 coco;
-                     ln -s /data/wider_face wider_face;
-                     cd ..;
-                     python -m pip install -U numpy==1.20.3 -i https://pypi.tuna.tsinghua.edu.cn/simple;
-                     sed -i "1i find_unused_parameters: True" configs/face_detection/_base_/blazeface.yml;
-                     sed -ie '/records = records\\[:10\\]/d'  ppdet/data/source/coco.py;
-                     sed -ie '/records = records\\[:10\\]/d'  ppdet/data/source/voc.py;
-                     sed -ie '/records = records\\[:10\\]/d'  ppdet/data/source/widerface.py;
-                     sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/coco.py;
-                     sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/voc.py;
-                     sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/widerface.py;"""
+        cmd=""" cd PaddleDetection/dataset; \
+                rm -rf wider_face voc coco; \
+                ln -s /data/VOC_Paddle voc; \
+                ln -s /data/COCO17 coco; \
+                ln -s /data/wider_face wider_face; \
+                cd ..; \
+                python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple; \
+                python -m pip install -U numpy==1.20.3 -i https://pypi.tuna.tsinghua.edu.cn/simple; \
+                sed -i "1i find_unused_parameters: True" configs/face_detection/_base_/blazeface.yml; \
+                sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/coco.py; \
+                sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/voc.py; \
+                sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/widerface.py;"""
     )
 
 
 def teardown_module():
     """
-    teardown
+    function
     """
     RepoRemove(repo="PaddleDetection")
 
 
 def setup_function():
     """
-    setup
+    function
     """
     clean_process()
 
