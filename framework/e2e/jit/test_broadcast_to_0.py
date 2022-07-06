@@ -18,7 +18,7 @@ yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", 
 yml = YamlLoader(yaml_path)
 
 
-def test_broadcast_0():
-    """test broadcast_0"""
-    jit_case = JitTrans(case=yml.get_case_info("broadcast_0"))
+def test_broadcast_to_0():
+    """test broadcast_to_0"""
+    jit_case = JitTrans(case=yml.get_case_info("broadcast_to_0"))
     jit_case.jit_run()

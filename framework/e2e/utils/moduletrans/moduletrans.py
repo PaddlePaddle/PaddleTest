@@ -47,8 +47,8 @@ class ModuleTrans(object):
 
     def get_loss_info(self):
         """get loss info"""
-        loss_api = self.loss["loss_api"]
-        return loss_api
+        loss_list = self.loss["loss_list"]
+        return loss_list
 
     def get_train_info(self):
         """get train info"""
