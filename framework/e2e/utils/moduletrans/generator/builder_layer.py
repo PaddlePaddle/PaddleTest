@@ -7,6 +7,7 @@ layer_builder
 
 import paddle
 import diy
+import ppdet
 
 
 class BuildLayer(object):
@@ -23,5 +24,6 @@ class BuildLayer(object):
         if self.repo == "DIY":
             layer = eval(self.layer_name)(**self.layer_param)
         else:
-            layer = eval(self.repo + "." + self.layer_name)(**self.layer_param)
+            # layer = eval(self.repo + "." + self.layer_name)(**self.layer_param)
+            layer = eval(self.layer_name)(**self.layer_param)
         return layer

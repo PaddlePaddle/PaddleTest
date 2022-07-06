@@ -35,6 +35,7 @@ Module_1:
     Data:
       data0:
         input:
+          random: True
           type: "Tensor"
           dtype: "float32"
           shape: [32, 32, 512]
@@ -42,6 +43,7 @@ Module_1:
         label: "None"
       data1:
         input:
+          random: True
           type: "Tensor"
           dtype: "float32"
           shape: [32, 32, 512]
@@ -96,6 +98,7 @@ Module_3:
     Data:
       pvam_feature:
         input:
+          random: True
           type: "Tensor"
           dtype: "float32"
           shape: [3, 3, 32]
@@ -103,6 +106,7 @@ Module_3:
         label: "None"
       gsrm_feature:
         input:
+          random: True
           type: "Tensor"
           dtype: "float32"
           shape: [3, 3, 32]
@@ -142,3 +146,134 @@ Module_4:
       optimizer:
         opt_api: "paddle.optimizer.SGD"
         learning_rate: 0.0001
+
+Module_5:
+  desc: "Det SEBlock结构"
+  paddle:
+    Layer:
+      repo: "PaddleDetection"
+      layer_name: "ppdet.modeling.backbones.ghostnet.SEBlock"
+      params:
+        num_channels: 10
+        lr_mult: 0.05
+        reduction_ratio: 4
+    DataLoader: "single"
+    Data:
+      inputs:
+        input:
+          random: True
+          type: "Tensor"
+          dtype: "float32"
+          shape: [3, 10, 24, 24]
+          range: [ -1, 1]
+        label: "None"
+    Loss:
+      loss_api: "None"
+    Train:
+      step: 3
+      optimizer:
+        opt_api: "paddle.optimizer.SGD"
+        learning_rate: 0.0001
+
+Module_6:
+  desc: "Det DarkNet"
+  paddle:
+    Layer:
+      repo: "PaddleDetection"
+      layer_name: "ppdet.modeling.backbones.darknet.DarkNet"
+      params:
+        depth: 53
+        freeze_at: -1
+        return_idx: [2, 3, 4]
+        num_stages: 5
+        norm_type: 'bn'
+        norm_decay: 0.
+        freeze_norm: False
+        data_format: 'NCHW'
+    DataLoader: "single"
+    Data:
+      inputs:
+        input:
+          random: True
+          type: "Tensor"
+          dtype: "float32"
+          shape: [4, 3, 224, 224]
+          range: [ -1, 1]
+        label: "None"
+    Loss:
+      loss_api: "None"
+    Train:
+      step: 3
+      optimizer:
+        opt_api: "paddle.optimizer.SGD"
+        learning_rate: 0.0001
+
+Module_7:
+  desc: "Det darknet.Blocks"
+  paddle:
+    Layer:
+      repo: "PaddleDetection"
+      layer_name: "ppdet.modeling.backbones.darknet.Blocks"
+      params:
+        ch_in: 16
+        ch_out: 16
+        count: 2
+    DataLoader: "single"
+    Data:
+      inputs:
+        input:
+          random: True
+          type: "Tensor"
+          dtype: "float32"
+          shape: [4, 16, 24, 24]
+          range: [ -1, 1]
+        label: "None"
+    Loss:
+      loss_api: "None"
+    Train:
+      step: 20
+      optimizer:
+        opt_api: "paddle.optimizer.SGD"
+        learning_rate: 0.0001
+
+#Module_8:
+#  desc: "Det swin_transformer.Blocks"
+#  paddle:
+#    Layer:
+#      repo: "PaddleDetection"
+#      layer_name: "ppdet.modeling.backbones.swin_transformer.BasicLayer"
+#      params:
+#        dim: 16
+#        depth: 2
+#        num_heads: 4
+#    DataLoader: "single"
+#    Data:
+#      x:
+#        input:
+#          random: True
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [4, 576, 16]
+#          range: [ -1, 1]
+#        label: "None"
+#      H:
+#        input:
+#          random: False
+#          type: "int"
+#          dtype: "int32"
+#          value: 24
+#        label: "None"
+#      W:
+#        input:
+#          random: False
+#          type: "int"
+#          dtype: "int32"
+#          value: 24
+#        label: "None"
+#    Loss:
+#      loss_api: "None"
+#    Train:
+#      step: 2
+#      optimizer:
+#        opt_api: "paddle.optimizer.SGD"
+#        learning_rate: 0.0001
