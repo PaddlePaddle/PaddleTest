@@ -13,8 +13,8 @@
   **************************************************************************/
 """
 
-import subprocess
 import re
+import subprocess
 import pytest
 import numpy as np
 
@@ -27,35 +27,33 @@ from RocmTestFramework import clean_process
 
 def setup_module():
     """
-    setup
+    准备数据
     """
     RepoInit(repo="PaddleDetection")
     RepoDataset(
-        cmd="""cd PaddleDetection/static/dataset;
-                     rm -rf wider_face voc coco;
-                     ln -s /data/VOC_Paddle voc;
-                     ln -s /data/COCO17 coco;
-                     ln -s /data/wider_face wider_face;
-                     cd ..;
-                     sed -ie '/records = records\\[:10\\]/d'  ppdet/data/source/coco.py;
-                     sed -ie '/records = records\\[:10\\]/d'  ppdet/data/source/voc.py;
-                     sed -ie '/records = records\\[:10\\]/d'  ppdet/data/source/widerface.py;
-                     sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/coco.py;
-                     sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/voc.py;
-                     sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/widerface.py;"""
+        cmd=""" cd PaddleDetection/static/dataset; \
+                rm -rf wider_face voc coco; \
+                ln -s /data/VOC_Paddle voc; \
+                ln -s /data/COCO17 coco; \
+                ln -s /data/wider_face wider_face; \
+                cd ..; \
+                python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple; \
+                sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/coco.py; \
+                sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/voc.py; \
+                sed -i '/samples in file/i\\        records = records[:10]'  ppdet/data/source/widerface.py;"""
     )
 
 
 def teardown_module():
     """
-    teardown
+    回收模型库
     """
     RepoRemove(repo="PaddleDetection")
 
 
 def setup_function():
     """
-    setup
+    清理进程
     """
     clean_process()
 
@@ -70,12 +68,12 @@ def test_libra_rcnn_r50_vd_fpn_1x():
     model.test_detection_train()
 
 
-def test_retinanet_r50_fpn_1x():
-    """
-    retinanet_r50_fpn_1x test case
-    """
-    model = TestDetectionStaticModel(model="retinanet_r50_fpn_1x", yaml="configs/retinanet_r50_fpn_1x.yml")
-    model.test_detection_train()
+# def test_retinanet_r50_fpn_1x():
+#     """
+#     retinanet_r50_fpn_1x test case
+#     """
+#     model = TestDetectionStaticModel(model='retinanet_r50_fpn_1x', yaml='configs/retinanet_r50_fpn_1x.yml')
+#     model.test_detection_train()
 
 
 def test_faceboxes():

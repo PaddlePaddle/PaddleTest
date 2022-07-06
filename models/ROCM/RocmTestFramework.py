@@ -13,23 +13,24 @@
   **************************************************************************/
 """
 
-import subprocess
 import re
+import subprocess
 import ast
-import logging
 import os
+import logging
 import numpy as np
 import pytest
 from pytest_assume.plugin import assume
 from pytest import approx
 
+# 删除文件的方式有变，需要增加 rsync --delete-before -d 220701
 
 logging.basicConfig(level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 def dependency_install(package):
     """
-    dependency_install
+    function
     """
     exit_code = 1
     while exit_code:
@@ -37,11 +38,12 @@ def dependency_install(package):
         os.system(cmd)
         cmd = """python -c 'import %s'""" % package
         exit_code = os.system(cmd)
+        print("###exit_code", exit_code)
 
 
 def exit_check_fucntion(exit_code, output, mode, log_dir=""):
     """
-    exit_check_fucntion
+    function
     """
     assert exit_code == 0, " %s  model pretrained failed!   log information:%s" % (mode, output)
     assert "Error" not in output, "%s  model failed!   log information:%s" % (mode, output)
@@ -61,32 +63,40 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=""):
 
 def clean_process():
     """
-    clean_process
+    function
     """
-
     print("This is clean_process!")
     pid = os.getpid()
-    cmd = """ps aux| grep python | grep -v %s | awk '{print $2}'| xargs kill -9;""" % pid
-    subprocess.getstatusoutput(cmd)
+    cmd = """ps aux| grep python | grep -v main.py |grep -v %s | awk '{print $2}'| xargs kill -9;""" % pid
+    repo_result = subprocess.getstatusoutput(cmd)
+    exit_code = repo_result[0]
+    print("###exit_code", exit_code)
 
 
 class RepoInit:
     """
-    RepoInit
+    class
     """
 
     def __init__(self, repo):
         self.repo = repo
         print("This is Repo Init!")
         pid = os.getpid()
-        cmd = """ps aux| grep python | grep -v %s | awk '{print $2}'| xargs kill -9; rm -rf %s;
-               git clone https://gitee.com/paddlepaddle/%s.git; cd %s;
-               python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple""" % (
+        cmd = """ps aux| grep python | grep -v main.py |grep -v %s | awk '{print $2}'| xargs kill -9; \
+                rm -rf %s;\
+                wget -q https://xly-devops.bj.bcebos.com/PaddleTest/%s.tar.gz --no-proxy  >/dev/null ; \
+                tar xf %s.tar.gz  >/dev/null 2>&1 ;cd %s""" % (
             pid,
             self.repo,
             self.repo,
             self.repo,
+            self.repo,
         )
+        #  cmd='''ps aux| grep python | grep -v main.py |grep -v %s | awk '{print $2}'| xargs kill -9; \
+        #       rsync --delete-before -d /root/blank/ %s; rm -rf %s; \
+        #       wget -q https://xly-devops.bj.bcebos.com/PaddleTest/%s.tar.gz --no-proxy  >/dev/null ; \
+        #       tar xf %s.tar.gz  >/dev/null 2>&1 ;\
+        #       cd %s''' % (pid, self.repo, self.repo, self.repo, self.repo, self.repo)
         repo_result = subprocess.getstatusoutput(cmd)
         exit_code = repo_result[0]
         output = repo_result[1]
@@ -94,18 +104,36 @@ class RepoInit:
         logging.info("git clone" + self.repo + "sucessfuly!")
 
 
+# class RepoInit():
+#       def __init__(self, repo):
+#          self.repo=repo
+#          print("This is Repo Init!")
+#          pid = os.getpid()
+#          cmd='''ps aux| grep python | grep -v main.py |grep -v %s | awk '{print $2}'| xargs kill -9; \
+#           rm -rf %s; \
+#           git clone https://gitee.com/paddlepaddle/%s.git; cd %s; \
+#           python -m pip install -r requirements.txt -i \
+#           https://pypi.tuna.tsinghua.edu.cn/simple''' % (pid, self.repo, self.repo, self.repo)
+#          repo_result=subprocess.getstatusoutput(cmd)
+#          exit_code=repo_result[0]
+#          output=repo_result[1]
+#          assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
+#          logging.info("git clone"+self.repo+"sucessfuly!" )
+
+
 class RepoInitSummer:
     """
-    RepoInitSummer
+    class
     """
 
     def __init__(self, repo):
         self.repo = repo
         print("This is Repo Init!")
         pid = os.getpid()
-        cmd = """ps aux | grep python | grep -v %s | awk '{print $2}'| xargs kill -9; rm -rf %s;
-               git clone https://gitee.com/summer243/%s.git;
-               cd %s; python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple""" % (
+        cmd = """ps aux | grep python |grep -v main.py |grep -v %s | awk '{print $2}'| xargs kill -9; \
+                rm -rf %s; \
+                git clone https://gitee.com/summer243/%s.git; cd %s;\
+                python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple""" % (
             pid,
             self.repo,
             self.repo,
@@ -120,15 +148,37 @@ class RepoInitSummer:
 
 class RepoInitCustom:
     """
-    RepoInitCustom
+    class
     """
 
     def __init__(self, repo):
         self.repo = repo
         print("This is Repo Init!")
         pid = os.getpid()
-        cmd = """ps aux | grep python | grep -v %s | awk '{print $2}'| xargs kill -9; rm -rf %s;
-               git clone https://gitee.com/paddlepaddle/%s.git;""" % (
+        cmd = """ps aux | grep python | grep -v main.py  |grep -v %s | awk '{print $2}'| xargs kill -9;\
+                rm -rf %s; git clone https://gitee.com/paddlepaddle/%s.git;""" % (
+            pid,
+            self.repo,
+            self.repo,
+        )
+        repo_result = subprocess.getstatusoutput(cmd)
+        exit_code = repo_result[0]
+        output = repo_result[1]
+        assert exit_code == 0, "git clone %s failed!   log information:%s" % (self.repo, output)
+        logging.info("git clone" + self.repo + "sucessfuly!")
+
+
+class RepoInitCustom_video:
+    """
+    class
+    """
+
+    def __init__(self, repo):
+        self.repo = repo
+        print("This is Repo Init!")
+        pid = os.getpid()
+        cmd = """ps aux | grep python | grep -v main.py |grep -v %s | awk '{print $2}'| xargs kill -9; \
+                rm -rf %s; git clone https://gitee.com/paddlepaddle/%s.git -b develop;""" % (
             pid,
             self.repo,
             self.repo,
@@ -142,14 +192,22 @@ class RepoInitCustom:
 
 class RepoRemove:
     """
-    RepoRemove
+    class
     """
 
     def __init__(self, repo):
         self.repo = repo
         print("This is Repo remove!")
         pid = os.getpid()
-        cmd = """ps aux | grep python | grep -v %s | awk '{print $2}'| xargs kill -9; rm -rf %s; """ % (pid, self.repo)
+        cmd = """ps aux | grep python | grep -v main.py |grep -v %s | awk '{print $2}'| xargs kill -9; \
+                rm -rf %s; rm -rf %s.tar.gz;""" % (
+            pid,
+            self.repo,
+            self.repo,
+        )
+        #  cmd='''ps aux | grep python | grep -v main.py |grep -v %s | awk '{print $2}'/| xargs kill -9; \
+        #       rsync --delete-before -d /root/blank/ %s; \
+        #           rm -rf %s; rm -rf %s.tar.gz;'''% (pid, self.repo, self.repo, self.repo)
         repo_result = subprocess.getstatusoutput(cmd)
         exit_code = repo_result[0]
         output = repo_result[1]
@@ -158,7 +216,7 @@ class RepoRemove:
 
 class RepoDataset:
     """
-    RepoDataset
+    class
     """
 
     def __init__(self, cmd):
@@ -172,7 +230,7 @@ class RepoDataset:
 
 class CustomInstruction:
     """
-    CustomInstruction
+    class
     """
 
     def __init__(self, cmd, model, mode):
@@ -187,7 +245,7 @@ class CustomInstruction:
 
 class TestClassModel:
     """
-    ClassModel
+    class
     """
 
     def __init__(self, model, yaml):
@@ -196,16 +254,17 @@ class TestClassModel:
 
     def test_class_train(self):
         """
-        class_train
+        function
         """
         cmd = (
-            """cd PaddleClas; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
--o DataLoader.Train.dataset.cls_label_path="./dataset/flowers102/train_list.txt" \
--o DataLoader.Train.dataset.image_root="./dataset/flowers102/" \
--o DataLoader.Eval.dataset.cls_label_path="./dataset/flowers102/val_list.txt" \
--o DataLoader.Eval.dataset.image_root="./dataset/flowers102/" -o Global.epochs=2 \
--o DataLoader.Train.sampler.batch_size=32 -o DataLoader.Eval.sampler.batch_size=32"""
+            'cd PaddleClas; export HIP_VISIBLE_DEVICES=0,1,2,3; \
+                python -m paddle.distributed.launch --gpus=0,1,2,3 \
+                tools/train.py  -c %s \
+                -o DataLoader.Train.dataset.cls_label_path="./dataset/flowers102/train_list.txt" \
+                -o DataLoader.Train.dataset.image_root="./dataset/flowers102/" \
+                -o DataLoader.Eval.dataset.cls_label_path="./dataset/flowers102/val_list.txt" \
+                -o DataLoader.Eval.dataset.image_root="./dataset/flowers102/" -o Global.epochs=2 \
+                -o DataLoader.Train.sampler.batch_size=32 -o DataLoader.Eval.sampler.batch_size=32'
             % self.yaml
         )
         clas_result = subprocess.getstatusoutput(cmd)
@@ -221,13 +280,13 @@ python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
         if self.model in legendary_models:
             cmd = (
                 "cd PaddleClas; \
-                 wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams"
+        wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/%s_pretrained.pdparams"
                 % self.model
             )
         else:
             cmd = (
                 "cd PaddleClas; \
-                wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams"
+                    wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/%s_pretrained.pdparams"
                 % self.model
             )
         clas_result = subprocess.getstatusoutput(cmd)
@@ -237,12 +296,11 @@ python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
 
     def test_class_export_model(self):
         """
-        class export model
-        """
+          class export model
+          """
         cmd = (
-            "cd PaddleClas; \
-             python tools/export_model.py -c %s -o Global.pretrained_model=./%s_pretrained \
--o Global.save_inference_dir=./inference/%s"
+            "cd PaddleClas;python tools/export_model.py -c %s -o Global.pretrained_model=./%s_pretrained \
+                -o Global.save_inference_dir=./inference/%s"
             % (self.yaml, self.model, self.model)
         )
         clas_result = subprocess.getstatusoutput(cmd)
@@ -255,15 +313,15 @@ python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
           class predict
           """
         cmd_gpu = (
-            "cd PaddleClas; cd deploy; \
-             python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir=../inference/%s \
--o Global.batch_size=1 -o Global.use_gpu=True -o Global.use_tensorrt=False -o Global.enable_mkldnn=False"
+            "cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml \
+                -o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 -o Global.use_gpu=True \
+                    -o Global.use_tensorrt=False -o Global.enable_mkldnn=False"
             % self.model
         )
         cmd_cpu = (
-            "cd PaddleClas; cd deploy; \
-             python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir=../inference/%s \
--o Global.batch_size=1 -o Global.use_gpu=False -o Global.use_tensorrt=False -o Global.enable_mkldnn=False"
+            "cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml \
+                -o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 -o Global.use_gpu=False \
+                -o Global.use_tensorrt=False -o Global.enable_mkldnn=False"
             % self.model
         )
         for cmd in [cmd_gpu, cmd_cpu]:
@@ -299,7 +357,7 @@ python -m paddle.distributed.launch --gpus=0,1,2,3 tools/train.py  -c %s \
 
 class TestOcrModel:
     """
-    OcrModel
+    class
     """
 
     def __init__(self, model, yaml):
@@ -308,15 +366,17 @@ class TestOcrModel:
 
     def test_ocr_train(self):
         """
-        ocr_train
+        function
         """
         cmd = (
             "cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; \
-python -m paddle.distributed.launch --gpus=0,1,2,3 --log_dir=log_%s  tools/train.py -c %s \
--o Global.use_gpu=True Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 \
-Global.print_batch_step=10 Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 \
-Global.print_batch_step=1"
+                sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s; \
+                python -m paddle.distributed.launch --gpus=0,1,2,3 --log_dir=log_%s  \
+                tools/train.py -c %s \
+                -o Global.use_gpu=True Global.epoch_num=1 Global.save_epoch_step=1 \
+                Global.eval_batch_step=200 Global.print_batch_step=10 \
+                Global.save_model_dir=output/%s Train.loader.batch_size_per_card=10 \
+                Global.print_batch_step=1"
             % (self.yaml, self.model, self.yaml, self.model)
         )
         print(cmd)
@@ -328,11 +388,11 @@ Global.print_batch_step=1"
 
     def test_ocr_eval(self):
         """
-        ocr_eval
+        function
         """
         cmd = (
-            "cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3;  \
-             python tools/eval.py -c %s  -o Global.use_gpu=True Global.checkpoints=output/%s/latest"
+            "cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3;  python tools/eval.py -c %s  \
+                -o Global.use_gpu=True Global.checkpoints=output/%s/latest"
             % (self.yaml, self.model)
         )
         detection_result = subprocess.getstatusoutput(cmd)
@@ -342,12 +402,12 @@ Global.print_batch_step=1"
 
     def test_ocr_rec_infer(self):
         """
-        ocr_rec_infer
+        function
         """
         cmd = (
-            "cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python tools/infer_rec.py -c %s  -o Global.use_gpu=True Global.checkpoints=output/%s/latest \
-Global.infer_img=doc/imgs_words/en/word_1.png"
+            "cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer_rec.py -c %s  \
+                -o Global.use_gpu=True Global.checkpoints=output/%s/latest \
+                Global.infer_img=doc/imgs_words/en/word_1.png"
             % (self.yaml, self.model)
         )
         detection_result = subprocess.getstatusoutput(cmd)
@@ -357,12 +417,12 @@ Global.infer_img=doc/imgs_words/en/word_1.png"
 
     def test_ocr_export_model(self):
         """
-        ocr_export_model
+        function
         """
         cmd = (
-            "cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python tools/export_model.py -c %s -o Global.use_gpu=True Global.checkpoints=output/%s/latest \
-Global.save_inference_dir=./models_inference/%s"
+            "cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/export_model.py -c %s \
+                -o Global.use_gpu=True Global.checkpoints=output/%s/latest  \
+                Global.save_inference_dir=./models_inference/%s"
             % (self.yaml, self.model, self.model)
         )
         print(cmd)
@@ -373,13 +433,15 @@ Global.save_inference_dir=./models_inference/%s"
 
     def test_ocr_rec_predict(self):
         """
-        ocr_rec_predict
+        function
         """
+        #   cmd='cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer/predict_rec.py \
+        #       --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"%s \
+        #       --rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=CRNN' % (self.model)
         cmd = (
-            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python tools/infer/predict_rec.py --image_dir="./doc/imgs_words_en/word_336.png" \
---rec_model_dir="./models_inference/"%s \
---rec_image_shape="3, 32, 100" --rec_char_type="en" --rec_algorithm=CRNN'
+            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer/predict_rec.py \
+                --image_dir="./doc/imgs_words_en/word_336.png" --rec_model_dir="./models_inference/"%s \
+                --rec_image_shape="3, 32, 100" --rec_algorithm=CRNN'
             % (self.model)
         )
         detection_result = subprocess.getstatusoutput(cmd)
@@ -389,12 +451,12 @@ Global.save_inference_dir=./models_inference/%s"
 
     def test_ocr_det_infer(self):
         """
-        ocr_det_infer
+        function
         """
         cmd = (
-            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python tools/infer_det.py -c %s -o Global.use_gpu=True Global.checkpoints=output/%s/latest \
-Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1'
+            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer_det.py -c %s \
+                -o Global.use_gpu=True Global.checkpoints=output/%s/latest Global.infer_img="./doc/imgs_en/" \
+                Global.test_batch_size_per_card=1'
             % (self.yaml, self.model)
         )
         detection_result = subprocess.getstatusoutput(cmd)
@@ -404,12 +466,12 @@ Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1'
 
     def test_ocr_det_predict(self):
         """
-        ocr_det_predict
+        function
         """
         cmd = (
-            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python tools/infer/predict_det.py --image_dir="./doc/imgs_en/img_10.jpg" \
---det_model_dir="./models_inference/"%s --det_algorithm=DB '
+            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer/predict_det.py \
+                --image_dir="./doc/imgs_en/img_10.jpg" \
+                --det_model_dir="./models_inference/"%s --det_algorithm=DB '
             % (self.model)
         )
         detection_result = subprocess.getstatusoutput(cmd)
@@ -419,12 +481,11 @@ Global.infer_img="./doc/imgs_en/" Global.test_batch_size_per_card=1'
 
     def test_ocr_e2e_infer(self):
         """
-        ocr_e2e_infer
+        function
         """
         cmd = (
-            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python tools/infer_e2e.py -c %s  -o Global.use_gpu=True Global.checkpoints=output/%s/latest \
-Global.infer_img="./doc/imgs_en/img_10.jpg"'
+            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer_e2e.py -c %s  \
+            -o Global.use_gpu=True Global.checkpoints=output/%s/latest Global.infer_img="./doc/imgs_en/img_10.jpg"'
             % (self.yaml, self.model)
         )
         e2eection_result = subprocess.getstatusoutput(cmd)
@@ -434,13 +495,15 @@ Global.infer_img="./doc/imgs_en/img_10.jpg"'
 
     def test_ocr_e2e_predict(self):
         """
-        ocr_e2e_predict
+        function
         """
+        #   cmd='cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer/predict_e2e.py \
+        #       --image_dir="./doc/imgs_en/img623.jpg" --e2e_model_dir=./models_inference/%s --e2e_algorithm=PGNet \
+        #       --e2e_pgnet_polygon=True --use_gpu=True' % (self.model)
         cmd = (
-            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python tools/infer/predict_e2e.py --image_dir="./doc/imgs_en/img623.jpg" \
---e2e_model_dir=./models_inference/%s \
---e2e_algorithm=PGNet --e2e_pgnet_polygon=True --use_gpu=True'
+            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer/predict_e2e.py \
+                --image_dir="./doc/imgs_en/img623.jpg" --e2e_model_dir=./models_inference/%s \
+                --e2e_algorithm=PGNet --use_gpu=True'
             % (self.model)
         )
         e2eection_result = subprocess.getstatusoutput(cmd)
@@ -450,12 +513,12 @@ Global.infer_img="./doc/imgs_en/img_10.jpg"'
 
     def test_ocr_cls_infer(self):
         """
-        ocr_cls_infer
+        function
         """
         cmd = (
-            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-python tools/infer_cls.py -c %s  -o Global.use_gpu=True Global.checkpoints=output/%s/latest \
-Global.infer_img="./doc/imgs_en/img_10.jpg"'
+            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer_cls.py -c %s  \
+                -o Global.use_gpu=True \
+                Global.checkpoints=output/%s/latest Global.infer_img="./doc/imgs_en/img_10.jpg"'
             % (self.yaml, self.model)
         )
         clsection_result = subprocess.getstatusoutput(cmd)
@@ -465,12 +528,12 @@ Global.infer_img="./doc/imgs_en/img_10.jpg"'
 
     def test_ocr_cls_predict(self):
         """
-        ocr_cls_predict
+        function
         """
         cmd = (
-            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python tools/infer/predict_cls.py --image_dir="./doc/imgs_en/img623.jpg" \
---cls_model_dir=./models_inference/%s --use_gpu=True'
+            'cd PaddleOCR; export HIP_VISIBLE_DEVICES=0,1,2,3; python tools/infer/predict_cls.py \
+                --image_dir="./doc/imgs_en/img623.jpg" --cls_model_dir=./models_inference/%s \
+                --use_gpu=True'
             % (self.model)
         )
         clsection_result = subprocess.getstatusoutput(cmd)
@@ -481,7 +544,7 @@ Global.infer_img="./doc/imgs_en/img_10.jpg"'
 
 class TestDetectionDygraphModel:
     """
-    DetectionDygraphModel
+    class
     """
 
     def __init__(self, model, yaml):
@@ -490,12 +553,11 @@ class TestDetectionDygraphModel:
 
     def test_detection_train(self):
         """
-        detection_train
+        function
         """
         cmd = (
-            "cd PaddleDetection; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python -m paddle.distributed.launch --gpus=0,1,2,3 --log_dir=log_%s tools/train.py -c %s \
--o TrainReader.batch_size=1 epoch=3"
+            "cd PaddleDetection; export HIP_VISIBLE_DEVICES=0,1,2,3; python -m paddle.distributed.launch \
+                --gpus=0,1,2,3 --log_dir=log_%s tools/train.py -c %s -o TrainReader.batch_size=1 epoch=3"
             % (self.model, self.yaml)
         )
         detection_result = subprocess.getstatusoutput(cmd)
@@ -507,7 +569,7 @@ class TestDetectionDygraphModel:
 
 class TestDetectionStaticModel:
     """
-    DetectionStaticModel
+    class
     """
 
     def __init__(self, model, yaml):
@@ -516,12 +578,13 @@ class TestDetectionStaticModel:
 
     def test_detection_train(self):
         """
-        detection_train
+        function
         """
         cmd = (
             "cd PaddleDetection/static; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python -m paddle.distributed.launch --gpus=0,1,2,3 --log_dir=log_%s tools/train.py -c %s \
--o TrainReader.batch_size=1  -o max_iters=10"
+                python -m paddle.distributed.launch \
+                --gpus=0,1,2,3 --log_dir=log_%s tools/train.py -c %s \
+                -o TrainReader.batch_size=1  -o max_iters=10"
             % (self.model, self.yaml)
         )
         detection_result = subprocess.getstatusoutput(cmd)
@@ -533,7 +596,7 @@ class TestDetectionStaticModel:
 
 class TestSegModel:
     """
-    SegModel
+    class
     """
 
     def __init__(self, model, yaml):
@@ -542,15 +605,23 @@ class TestSegModel:
 
     def test_seg_train(self):
         """
-        seg_train
+        function
         """
+        #   cmd='cd PaddleSeg; sed -i s/"iters: 80000"/"iters: 50"/g %s; \
+        #           rsync --delete-before -d /root/blank/ log; \
+        #       rm -rf log; export HIP_VISIBLE_DEVICES=0,1,2,3; \
+        #           python -u -m paddle.distributed.launch --gpus="0,1,2,3" \
+        #       --log_dir=log_%s train.py --config %s --do_eval --use_vdl \
+        #           --num_workers 6 --save_dir log/%s \
+        #       --save_interval 50 --iters 50' % (self.yaml, self.model, self.yaml, self.model)
         cmd = (
             'cd PaddleSeg; sed -i s/"iters: 80000"/"iters: 50"/g %s; \
-            sed -i s/"batch_size: 2"/"batch_size: 1"/g %s; rm -rf log; \
-             export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python -u -m paddle.distributed.launch --gpus="0,1,2,3" --log_dir=log_%s train.py --config %s \
---do_eval --use_vdl --num_workers 6 --save_dir log/%s --save_interval 50 --iters 50'
-            % (self.yaml, self.yaml, self.model, self.yaml, self.model)
+                rm -rf log; export HIP_VISIBLE_DEVICES=0,1,2,3; \
+                python -u -m paddle.distributed.launch --gpus="0,1,2,3" \
+                --log_dir=log_%s train.py --config %s \
+                --do_eval --use_vdl --num_workers 6 --save_dir log/%s \
+                --save_interval 50 --iters 50'
+            % (self.yaml, self.model, self.yaml, self.model)
         )
         print(cmd)
         detection_result = subprocess.getstatusoutput(cmd)
@@ -561,12 +632,13 @@ class TestSegModel:
 
     def test_seg_eval(self):
         """
-        seg_eval
+        function
         """
         cmd = (
-            "cd PaddleSeg; wget -p https://bj.bcebos.com/paddleseg/dygraph/cityscapes/%s/model.pdparams ; \
-             mv model.pdparams %s.pdparams; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python -m paddle.distributed.launch val.py --config %s --model_path=%s.pdparams --batch_size 1"
+            "cd PaddleSeg; \
+                wget -q https://bj.bcebos.com/paddleseg/dygraph/cityscapes/%s/model.pdparams; \
+                mv model.pdparams %s.pdparams; export HIP_VISIBLE_DEVICES=0,1,2,3; \
+                python -m paddle.distributed.launch val.py --config %s --model_path=%s.pdparams"
             % (self.model, self.model, self.yaml, self.model)
         )
         detection_result = subprocess.getstatusoutput(cmd)
@@ -577,7 +649,7 @@ class TestSegModel:
 
 class TestGanModel:
     """
-    GanModel
+    class
     """
 
     def __init__(self, model, yaml):
@@ -586,12 +658,12 @@ class TestGanModel:
 
     def test_gan_train(self):
         """
-        gan_train
+        function
         """
         cmd = (
             'cd PaddleGAN; sed -i 1s/epochs/total_iters/ %s; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python -u -m paddle.distributed.launch --gpus="0,1,2,3" tools/main.py --config-file %s \
--o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output'
+                python -u -m paddle.distributed.launch --gpus="0,1,2,3" tools/main.py --config-file %s \
+                -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output'
             % (self.yaml, self.yaml)
         )
         print(cmd)
@@ -602,7 +674,7 @@ class TestGanModel:
 
     def test_gan_eval(self, cmd):
         """
-        gan_eval
+        function
         """
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
@@ -613,7 +685,7 @@ class TestGanModel:
 
 class TestNlpModel:
     """
-    NlpModel
+    class
     """
 
     def __init__(self, directory):
@@ -621,7 +693,7 @@ class TestNlpModel:
 
     def test_nlp_train(self, cmd):
         """
-        nlp_train
+        function
         """
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
@@ -632,7 +704,7 @@ class TestNlpModel:
 
 class TestParakeetModel:
     """
-    ParakeetModel
+    class
     """
 
     def __init__(self, model):
@@ -640,12 +712,14 @@ class TestParakeetModel:
 
     def test_parakeet_train(self):
         """
-        parakeet_train
+        function
         """
         cmd = (
-            'cd Parakeet/examples/%s; ln -s /data/ljspeech_%s ljspeech_%s; export HIP_VISIBLE_DEVICES=0,1,2,3; \
-             python train.py --data=ljspeech_%s --output=output --device="gpu" --nprocs=4 --opts data.batch_size 2 \
-training.max_iteration 10 training.valid_interval 10 training.save_interval 10'
+            'cd Parakeet/examples/%s; ln -s /data/ljspeech_%s ljspeech_%s; \
+                export HIP_VISIBLE_DEVICES=0,1,2,3; \
+                python train.py --data=ljspeech_%s --output=output --device="gpu" --nprocs=4 \
+                --opts data.batch_size 2 training.max_iteration 10 \
+                training.valid_interval 10 training.save_interval 10'
             % (self.model, self.model, self.model, self.model)
         )
         print(cmd)
@@ -657,23 +731,20 @@ training.max_iteration 10 training.valid_interval 10 training.save_interval 10'
 
 class TestRecModel:
     """
-    RecModel
+    class
     """
 
     def __init__(self, model, directory):
-        """
-        rec_init
-        """
         self.model = model
         self.directory = directory
 
     def test_rec_train(self):
         """
-        rec_train
+        function
         """
         cmd = (
             'cd PaddleRec/%s; sed -i s/"use_gpu: False"/"use_gpu: True"/g config.yaml; \
-             python -u ../../../tools/static_trainer.py -m config.yaml'
+                python -u ../../../tools/static_trainer.py -m config.yaml'
             % (self.directory)
         )
         print(cmd)
@@ -685,7 +756,7 @@ class TestRecModel:
 
 class TestVideoModel:
     """
-    VideoModel
+    class
     """
 
     def __init__(self, model, yaml):
@@ -694,11 +765,11 @@ class TestVideoModel:
 
     def test_video_train(self):
         """
-        video_train
+        function
         """
         cmd = (
             'cd PaddleVideo; python -B -m paddle.distributed.launch --gpus="0,1,2,3" main.py  \
---validate -c %s -o epochs=1'
+                --validate -c %s -o epochs=1'
             % (self.yaml)
         )
         print(cmd)
@@ -709,7 +780,7 @@ class TestVideoModel:
 
     def test_video_eval(self, cmd):
         """
-        video_eval
+        function
         """
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
