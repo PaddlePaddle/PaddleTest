@@ -6,6 +6,7 @@ GIT:
   branch: $BASE_BRANCH
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/text_matching_question_matching/ #脚本的路径
   model_log_path: log/text_matching_question_matching/
 
@@ -21,8 +22,8 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh question_matching $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
   -
     priority: p0
     tag: win_download_data
@@ -35,12 +36,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU single $SET_CUDA
 
     kpis: #kpi指标
       loss:
@@ -56,10 +51,6 @@ TRAIN: # 训练步骤
     priority: p0
     tag: linux_dy_gpu2
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU multi $SET_MULTI_CUDA
 
     kpis: #kpi指标
       loss:
@@ -94,12 +85,7 @@ INFER:
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU
+
     kpis:
       exit_code:
         latest: True

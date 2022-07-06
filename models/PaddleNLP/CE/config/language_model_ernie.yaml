@@ -1,5 +1,5 @@
 MODEL: "language_model_ernie" # 模型名
-PRIORITY: P0, Dy_con
+PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -7,6 +7,7 @@ GIT:
 
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/language_model_ernie/ #脚本的路径
   model_log_path: log/language_model_ernie/
 
@@ -22,17 +23,21 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh ernie-1.0 $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
+
+  -
+    priority: p1 # 暂时不跑
+    tag: linux_download_data_con
+    run:
+      -
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh ernie-1.0 $XPU linux $SET_CUDA $SET_MULTI_CUDA CE_CON
 
 TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "single" $SET_CUDA
 
     kpis:
       loss:
@@ -47,10 +52,6 @@ TRAIN: # 训练步骤
     priority: p0
     tag: linux_dy_gpu2
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "multi" $SET_MULTI_CUDA
 
     kpis:
       loss:
@@ -65,11 +66,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_con
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "multi" $SET_MULTI_CUDA con
 
     kpis: #kpi指标
       loss:

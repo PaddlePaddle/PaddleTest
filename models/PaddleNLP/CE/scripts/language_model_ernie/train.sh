@@ -13,13 +13,7 @@ model_name=${PWD##*/}
 echo "$model_name 模型训练阶段"
 
 #路径配置
-root_path=$cur_path/../../
 code_path=$cur_path/../../models_repo/model_zoo/ernie-1.0/
-log_path=$root_path/log/$model_name/
-
-if [ ! -d $log_path ]; then
-  mkdir -p $log_path
-fi
 
 DEVICE=$1
 MULTI=$2
@@ -30,8 +24,8 @@ if [[ $4 == 'con' ]]; then
   MAX_STEPS=4000000
   SAVE_STEPS=50000
 else
-  MAX_STEPS=100
-  SAVE_STEPS=20
+  MAX_STEPS=$5
+  SAVE_STEPS=$6
 fi
 
 if [[ $2 == 'single' ]]; then
@@ -72,4 +66,4 @@ python -u  -m paddle.distributed.launch  \
     --logging_freq 20\
     --num_workers 2 \
     --eval_freq 1000 \
-    --device $1 >$log_path/train_${MULTI}_${DEVICE}.log 2>&1
+    --device $1

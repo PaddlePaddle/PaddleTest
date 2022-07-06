@@ -6,24 +6,30 @@ GIT:
   branch: $BASE_BRANCH
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/text_classification_pretrained/ #脚本的路径
   model_log_path: log/text_classification_pretrained/
 
 EXEC:
-  exec_cases: [TRAIN,INFER]
+  exec_cases: [DATA_PROC,TRAIN,INFER, PYTHON_INFER]
   exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh pretrained_models $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
 
 TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "single" $SET_CUDA
 
     kpis: #kpi指标
       loss:
@@ -38,10 +44,6 @@ TRAIN: # 训练步骤
   -
     priority: p1
     tag: linux_dy_gpu2
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "multi" $SET_MULTI_CUDA
 
     kpis: #kpi指标
       loss:
@@ -98,13 +100,7 @@ INFER:
   -
     priority: p0
     tag: "linux_dy_gpu1"
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU "single"
     kpis:
       exit_code:
         latest: True
@@ -119,13 +115,7 @@ INFER:
   -
     priority: p1
     tag: "linux_dy_gpu2"
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU "multi"
     kpis:
       exit_code:
         latest: True
@@ -155,3 +145,19 @@ INFER:
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+
+PYTHON_INFER:
+  -
+    priority: p0
+    tag: "linux_dy_gpu1"
+
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_$XPU.log

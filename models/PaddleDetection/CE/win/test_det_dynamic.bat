@@ -46,7 +46,7 @@ if exist det_dynamic_list (
 del /f det_dynamic_list
 )
 for /r configs %%i in (*.yml) do (
-echo %%i | findstr /i .yml | findstr /v /i "_base_" | findstr /v /i "kunlun" | findstr /v /i "reader" | findstr /v /i "test" | findstr /v /i "oidv5" | findstr /v /i "datasets" | findstr /v /i "runtime" | findstr /v /i "slim" | findstr /v /i "roadsign" | findstr /v /i "minicoco" | findstr /v /i "mot" | findstr /v /i "pruner" | findstr /v /i "pedestrian_detection" | findstr /v /i "keypoint" >>det_dynamic_list
+echo %%i | findstr /i .yml | findstr /v /i "_base_" | findstr /v /i "kunlun" | findstr /v /i "reader" | findstr /v /i "test" | findstr /v /i "oidv5" | findstr /v /i "datasets" | findstr /v /i "runtime" | findstr /v /i "slim" | findstr /v /i "roadsign" | findstr /v /i "minicoco" | findstr /v /i "mot" | findstr /v /i "pruner" | findstr /v /i "pedestrian_detection" | findstr /v /i "keypoint" | findstr /v /i "smrt" | findstr /v /i "xpu" | findstr /v /i "ocsort" | findstr /v /i "pphuman" | findstr /v /i "ppvehicle" >>det_dynamic_list
 )
 echo test_start !
 set absolute_path=%cd%
@@ -133,9 +133,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_train.log log_err\!model!\
 echo !model!, train, FAIL
+echo !model!,train,Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,train, SUCCESS
+echo !model!,train,Passed >>result 2>&1
 )
 )
 goto:eof
@@ -150,9 +152,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_eval.log log_err\!model!\
 echo !model!, eval, FAIL
+echo !model!,eval,Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,eval, SUCCESS
+echo !model!,eval,Passed >>result 2>&1
 )
 )
 goto:eof
@@ -165,9 +169,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
 echo !model!, infer, FAIL
+echo !model!,predict,Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,infer, SUCCESS
+echo !model!,predict,Passed >>result 2>&1
 )
 ) else (
 findstr /i /c:"!model!" "skip_infer.txt" >tmp_infer
@@ -179,9 +185,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
 echo !model!, infer, FAIL
+echo !model!,predict,Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,infer, SUCCESS
+echo !model!,predict,Passed >>result 2>&1
 )
 )
 )
@@ -197,9 +205,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_export.log log_err\!model!\
 echo !model!, export_model, FAIL
+echo !model!,export,Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,export_model, SUCCESS
+echo !model!,export,Passed >>result 2>&1
 )
 )
 goto:eof
@@ -212,9 +222,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+echo !model!,python_infer,Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
+echo !model!,python_infer,Passed >>result 2>&1
 )
 ) else (
 findstr /i /c:"!model!" "model_skip_python_infer.txt" >tmp_python_infer
@@ -224,9 +236,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+echo !model!,python_infer,Failed >>result 2>&1
 set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
+echo !model!,python_infer,Passed >>result 2>&1
 )
 ) else (
 echo !model! does not run python_infer for some reason!

@@ -48,6 +48,7 @@ sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" sc
 sh scripts/build.sh
 cd ../..
 fi
+#prepare data
 if [ -d 'dataset/coco' ];then
 rm -rf dataset/coco
 fi
@@ -68,6 +69,9 @@ ln -s ${data_path}/data/DOTA_1024_s2anet dataset/DOTA_1024_s2anet
 if [ -d "dataset/VisDrone2019_coco" ];then rm -rf dataset/VisDrone2019_coco
 fi
 ln -s ${data_path}/data/VisDrone2019_coco dataset/VisDrone2019_coco
+if [ -d "dataset/visdrone" ];then rm -rf dataset/visdrone
+fi
+ln -s ${data_path}/data/visdrone dataset/visdrone
 if [ -d "dataset/mainbody" ];then rm -rf dataset/mainbody
 fi
 ln -s ${data_path}/data/mainbody dataset/mainbody
@@ -88,6 +92,8 @@ ln -s ${data_path}/data/ppdet_pretrained /root/.cache/paddle/weights
 cd ppdet/ext_op
 python setup.py install
 cd ../..
+#avoid hang in yolox
+sed -i "s|norm_type: sync_bn|norm_type: bn|g" configs/yolox/_base_/yolox_cspdarknet.yml
 # prepare dynamic data
 sed -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 #modify coco images
@@ -106,13 +112,13 @@ sed -i '/for step_id, data in enumerate(dataloader):/i\        max_step_id=1' pp
 sed -i '/for step_id, data in enumerate(dataloader):/a\            if step_id == max_step_id: break' ppdet/engine/tracker.py
 
 if [ "$1" == 'develop_d1' ];then
-find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner |  grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep -v mask_rcnn | grep -v detector | awk '{print $NF}' | tee config_list
+find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner |  grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep -v mask_rcnn | grep -v detector | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | awk '{print $NF}' | tee config_list
 elif [ "$1" == 'develop_d2' ];then
-find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner | grep -v detector | grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep yolov3 | awk '{print $NF}' | tee config_list1
+find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner | grep -v detector | grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep yolov3 | awk '{print $NF}' | tee config_list1
 find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep  -v minicoco | grep -v detector |  grep -v pruner | grep -v bytetrack | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep faster_rcnn | awk '{print $NF}' | tee config_list2
 cat config_list1 config_list2 >>config_list
 elif [ "$1" == 'develop_d3' ];then
-find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner | grep  -v minicoco | grep -v detector | grep -v bytetrack | grep mot | awk '{print $NF}' | tee config_list3
+find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner | grep  -v minicoco | grep -v detector | grep -v bytetrack | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep mot | awk '{print $NF}' | tee config_list3
 find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner | grep  -v minicoco | grep -v mot | grep -v detector | grep -v bytetrack | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep ssd | awk '{print $NF}' | tee config_list4
 find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner |  grep  -v minicoco | grep -v mot | grep -v detector | grep -v cascade_rcnn | grep -v bytetrack | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep mask_rcnn | awk '{print $NF}' | tee mask_list
 cat  mask_list config_list3 config_list4 >>config_list
@@ -123,12 +129,13 @@ find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v s
 find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v bytetrack | grep -v centernet | grep -v picodet | grep dcn | awk '{print $NF}' | tee config_list5
 cat cascade_list centernet_list picodet_list config_list5 >>config_list
 else
-find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v gfl | grep -v bytetrack | awk '{print $NF}' | tee config_list
+find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | awk '{print $NF}' | tee config_list
 fi
 
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${model_type},${mode},FAIL"
+        echo -e "${model},${mode},Failed" >>result 2>&1
         cd log_err
         if [ ! -d ${model} ];then
             mkdir ${model}
@@ -139,7 +146,9 @@ print_result(){
         err_sign=true
     else
         echo -e "${model},${model_type},${mode},SUCCESS"
+        echo -e "${model},${mode},Passed" >>result 2>&1
     fi
+    rm -rf /dev/shm/*
 }
 TRAIN(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
@@ -422,7 +431,11 @@ else
 fi
 done
 if [ "${err_sign}" == true ];then
+    export status='Failed'
+    export exit_code='8'
     exit 1
 else
+    export status='Passed'
+    export exit_code='0'
     exit 0
 fi
