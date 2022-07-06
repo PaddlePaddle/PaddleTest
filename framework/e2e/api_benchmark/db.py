@@ -10,6 +10,7 @@ import os
 import socket
 import platform
 from datetime import datetime
+import json
 import paddle
 import torch
 import pymysql
@@ -61,8 +62,10 @@ class DB(object):
         data = self.reader()
         for k, v in data.items():
             sql = (
-                "insert into `cases`(`jid`, `case_name`, `result`, `create_time`) "
-                "values ('{}', '{}', '{}', '{}')".format(self.job_id, k, v, self.timestamp())
+                "insert into `case`(`jid`, `case_name`, `api`, `result`, `create_time`) "
+                "values ('{}', '{}', '{}', '{}', '{}')".format(
+                    self.job_id, k, json.loads(v).get("api"), v, self.timestamp()
+                )
             )
             try:
                 self.cursor.execute(sql)
@@ -71,7 +74,7 @@ class DB(object):
                 print(e)
 
         # 更新job状态
-        sql = "update `jobs` set `update_time`='{}', `status`='{}' where id='{}';".format(
+        sql = "update `job` set `update_time`='{}', `status`='{}' where id='{}';".format(
             self.timestamp(), "done", self.job_id
         )
         try:
@@ -97,23 +100,38 @@ class DB(object):
                 print(e)
                 continue
 
-    def init_mission(self, mode, place="cpu", card=None):
+    def init_mission(self, framework, mode, place, cuda, cudnn, card=None):
         """init mission"""
+        if framework == "paddle":
+            version = paddle.__version__
+            snapshot = {
+                "os": platform.platform(),
+                "card": card,
+                "cuda": paddle.version.cuda(),
+                "cudnn": paddle.version.cudnn(),
+            }
+        elif framework == "torch":
+            version = torch.__version__
+            snapshot = {"os": platform.platform(), "card": card}
+
         sql = (
-            "insert into `jobs` (`create_time`, `update_time`, `status`, `paddle_commit`, "
-            "`paddle_version`, `torch_version`, `mode`, `hostname`, `place`, `card`, `system`) "
-            "values ('{}','{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}' );".format(
-                self.timestamp(),
-                self.timestamp(),
+            "insert into `job` (`framework`, `status`, `mode`, `commit`, `version`, "
+            "`hostname`, `place`, `system`, `cuda`, `cudnn`, `snapshot`,`create_time`, "
+            "`update_time`) values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', "
+            "'{}', '{}', '{}', '{}', '{}');".format(
+                framework,
                 "running",
-                paddle.__git_commit__,
-                paddle.__version__,
-                torch.__version__,
                 mode,
+                paddle.__git_commit__,
+                version,
                 socket.gethostname(),
                 place,
-                card,
-                platform.platform(),
+                platform.system(),
+                cuda,
+                cudnn,
+                json.dumps(snapshot),
+                self.timestamp(),
+                self.timestamp(),
             )
         )
         try:
