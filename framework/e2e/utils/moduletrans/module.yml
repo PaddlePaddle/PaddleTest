@@ -50,7 +50,7 @@ Module_1:
           range: [ -1, 1]
         label: "None"
     Loss:
-      loss_api: "None"
+      loss_list: "None"
     Train:
       step: 4
       optimizer:
@@ -77,7 +77,7 @@ Module_2:
           range: [ -1, 1]
         label: "None"
     Loss:
-      loss_api: "None"
+      loss_list: "None"
     Train:
       step: 4
       optimizer:
@@ -113,7 +113,7 @@ Module_3:
           range: [ -1, 1]
         label: "None"
     Loss:
-      loss_api: "None"
+      loss_list: "None"
     Train:
       step: 17
       optimizer:
@@ -140,7 +140,7 @@ Module_4:
           range: [ -1, 1]
         label: "None"
     Loss:
-      loss_api: "None"
+      loss_list: "None"
     Train:
       step: 20
       optimizer:
@@ -168,7 +168,7 @@ Module_5:
           range: [ -1, 1]
         label: "None"
     Loss:
-      loss_api: "None"
+      loss_list: "None"
     Train:
       step: 3
       optimizer:
@@ -201,7 +201,7 @@ Module_6:
           range: [ -1, 1]
         label: "None"
     Loss:
-      loss_api: "None"
+      loss_list: "None"
     Train:
       step: 3
       optimizer:
@@ -229,51 +229,51 @@ Module_7:
           range: [ -1, 1]
         label: "None"
     Loss:
-      loss_api: "None"
+      loss_list: ['paddle.nn.functional.softmax(logit)']
     Train:
       step: 20
       optimizer:
         opt_api: "paddle.optimizer.SGD"
         learning_rate: 0.0001
 
-#Module_8:
-#  desc: "Det swin_transformer.Blocks"
-#  paddle:
-#    Layer:
-#      repo: "PaddleDetection"
-#      layer_name: "ppdet.modeling.backbones.swin_transformer.BasicLayer"
-#      params:
-#        dim: 16
-#        depth: 2
-#        num_heads: 4
-#    DataLoader: "single"
-#    Data:
-#      x:
-#        input:
-#          random: True
-#          type: "Tensor"
-#          dtype: "float32"
-#          shape: [4, 576, 16]
-#          range: [ -1, 1]
-#        label: "None"
-#      H:
-#        input:
-#          random: False
-#          type: "int"
-#          dtype: "int32"
-#          value: 24
-#        label: "None"
-#      W:
-#        input:
-#          random: False
-#          type: "int"
-#          dtype: "int32"
-#          value: 24
-#        label: "None"
-#    Loss:
-#      loss_api: "None"
-#    Train:
-#      step: 2
-#      optimizer:
-#        opt_api: "paddle.optimizer.SGD"
-#        learning_rate: 0.0001
+Module_8:
+  desc: "Det swin_transformer.Blocks"
+  paddle:
+    Layer:
+      repo: "PaddleDetection"
+      layer_name: "ppdet.modeling.backbones.swin_transformer.BasicLayer"
+      params:
+        dim: 16
+        depth: 2
+        num_heads: 4
+    DataLoader: "single"
+    Data:
+      x:
+        input:
+          random: True
+          type: "Tensor"
+          dtype: "float32"
+          shape: [4, 576, 16]
+          range: [ -1, 1]
+        label: "None"
+      H:
+        input:
+          random: False
+          type: "int"
+          dtype: "int32"
+          value: 24
+        label: "None"
+      W:
+        input:
+          random: False
+          type: "int"
+          dtype: "int32"
+          value: 24
+        label: "None"
+    Loss:
+      loss_list: ['logit[0] + logit[1]', 'paddle.nn.functional.softmax(logit)']
+    Train:
+      step: 3
+      optimizer:
+        opt_api: "paddle.optimizer.SGD"
+        learning_rate: 0.0001

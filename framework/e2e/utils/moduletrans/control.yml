@@ -1,0 +1,18 @@
+Module_7:
+  desc: "Det darknet.Blocks"
+  test:
+    dygraph_train_test:
+      delta: 1e-8
+      rtol: 1e-8
+    dygraph_to_static_train_test:
+      delta: 1e-8
+      rtol: 1e-8
+    dygraph_predict_test:
+      delta: 1e-8
+      rtol: 1e-8
+    dygraph_to_static_predict_test:
+      delta: 1e-8
+      rtol: 1e-8
+    dygraph_to_infer_predict_test:
+      delta: 1e-5
+      rtol: 1e-5
