@@ -39,7 +39,8 @@ def send(url):
         "case_detail": json.dumps(case_result),
     }
     print("params:{}".format(params))
-    res = requests.post(url, data=params)
+    proxies = {"http": None, "https": None}
+    res = requests.post(url, data=params, proxies=proxies)
     print("res.text:{}".format(res.text))
     result = res.json()
     print("result:{}".format(result))
