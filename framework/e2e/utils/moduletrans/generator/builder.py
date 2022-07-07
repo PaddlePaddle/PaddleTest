@@ -139,35 +139,35 @@ class BuildModuleTest(object):
         infer_res = output_handle.copy_to_cpu()
         return infer_res
 
-    def dygraph_train_test(self):
+    def dygraph_train_test(self, delta=1e-8, rtol=1e-8):
         """dygraph train test"""
         pass
 
-    def dygraph_predict_test(self):
+    def dygraph_predict_test(self, delta=1e-8, rtol=1e-8):
         """dygraph predict test"""
         pass
 
-    def dygraph_to_static_train_test(self):
+    def dygraph_to_static_train_test(self, delta=1e-8, rtol=1e-8):
         """dygraph_to_static train test"""
         dygraph_out = self.train(to_static=False)
         self.logger.get_log().info("dygraph to static train acc-test start~")
         self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         static_out = self.train(to_static=True)
         self.logger.get_log().info("static_out is: {}".format(static_out))
-        tool.compare(dygraph_out, static_out, delta=1e-8, rtol=1e-8)
+        tool.compare(dygraph_out, static_out, delta=delta, rtol=rtol)
         self.logger.get_log().info("dygraph to static train acc-test Success!!!~~")
 
-    def dygraph_to_static_predict_test(self):
+    def dygraph_to_static_predict_test(self, delta=1e-8, rtol=1e-8):
         """dygraph_to_static predict test"""
         dygraph_out = self.predict(to_static=False)
         self.logger.get_log().info("dygraph to static predict acc-test start~")
         self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         static_out = self.predict(to_static=True)
         self.logger.get_log().info("static_out is: {}".format(static_out))
-        tool.compare(dygraph_out, static_out, delta=1e-8, rtol=1e-8)
+        tool.compare(dygraph_out, static_out, delta=delta, rtol=rtol)
         self.logger.get_log().info("dygraph to static predict acc-test Success!!!~~")
 
-    def dygraph_to_infer_predict_test(self):
+    def dygraph_to_infer_predict_test(self, delta=1e-5, rtol=1e-5):
         """dygraph_to_static predict test"""
         dygraph_out = self.predict(to_static=False)
         self.logger.get_log().info("dygraph to infer predict acc-test start~")
@@ -176,5 +176,5 @@ class BuildModuleTest(object):
         self.logger.get_log().info("dygraph jit.save Success!!!~~")
         infer_out = self.infer_load()
         self.logger.get_log().info("static_out is: {}".format(infer_out))
-        tool.compare(dygraph_out, infer_out, delta=1e-5, rtol=1e-5)
+        tool.compare(dygraph_out, infer_out, delta=delta, rtol=rtol)
         self.logger.get_log().info("dygraph to infer predict acc-test Success!!!~~")
