@@ -1,18 +1,24 @@
-Module_7:
-  desc: "Det darknet.Blocks"
+Module_5:
+  desc: "Det SEBlock结构"
   test:
-    dygraph_train_test:
-      delta: 1e-8
-      rtol: 1e-8
     dygraph_to_static_train_test:
-      delta: 1e-8
-      rtol: 1e-8
-    dygraph_predict_test:
-      delta: 1e-8
-      rtol: 1e-8
+      delta: 0.00000001
+      rtol: 0.00000001
     dygraph_to_static_predict_test:
-      delta: 1e-8
-      rtol: 1e-8
-    dygraph_to_infer_predict_test:
-      delta: 1e-5
-      rtol: 1e-5
+      delta: 0.00000001
+      rtol: 0.00000001
+
+
+
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+#    dygraph_to_infer_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001

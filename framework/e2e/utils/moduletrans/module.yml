@@ -168,7 +168,7 @@ Module_5:
           range: [ -1, 1]
         label: "None"
     Loss:
-      loss_list: "None"
+      loss_list: ['paddle.nn.functional.softmax(logit)']
     Train:
       step: 3
       optimizer:
