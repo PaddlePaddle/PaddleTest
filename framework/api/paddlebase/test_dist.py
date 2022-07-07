@@ -210,4 +210,4 @@ def test_dist10():
     # obj.enable_backward = False
     x = np.random.rand(2, 4, 4, 3)
     y = np.random.rand(4, 3, 1)
-    obj.exception(etype=RuntimeError, mode="python", x=x, y=y)
+    obj.exception(etype=ValueError, mode="python", x=x, y=y)
