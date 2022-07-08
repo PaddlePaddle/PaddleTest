@@ -11,8 +11,9 @@ sys.path.append("../../utils/")
 from interceptor import skip_branch_not_develop
 
 
-@skip_branch_not_develop
-@pytest.mark.api_incubate_autograd_prim2orig
+# @skip_branch_not_develop
+# @pytest.mark.api_incubate_autograd_prim2orig
+@pytest.mark.skip(reason="Skip new AD grad api as the api signature was changed.")
 def test_prim2orig():
     """
     test01
