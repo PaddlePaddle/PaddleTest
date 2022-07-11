@@ -71,6 +71,8 @@ def compare(paddle, torch, delta=1e-6, rtol=1e-5):
             logger.get_log().error("the paddle is {}".format(paddle))
             logger.get_log().error("the torch is {}".format(torch))
         assert res
+    elif paddle is None:
+        assert paddle is torch
     else:
         assert paddle == pytest.approx(torch, delta)
 
