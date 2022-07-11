@@ -1,5 +1,6 @@
 cd ./task/competitor
 python3.7 -m pip install pytest
+python3.7 -m pip install allure-pytest
 
 case_dir_list=('base' 'nn')
 for case_dir in ${case_dir_list[@]}
