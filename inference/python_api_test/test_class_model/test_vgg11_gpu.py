@@ -30,6 +30,7 @@ def check_model_exist():
         tar = tarfile.open("vgg11.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./vgg11/inference", output_model_path="./vgg11/inference")
 
 
 def test_config():
