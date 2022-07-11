@@ -35,7 +35,7 @@ def setup_module():
                 python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple; \
                 ln -s /data train_data;
                 wget -q -P ./pretrain_models/ \
-                https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams
+            https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x0_5_pretrained.pdparams; \
                 wget -q https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar; \
                 tar xf en_server_pgnetA.tar; mv en_server_pgnetA e2e_r50_vd_pg; \
                 mkdir output; mv e2e_r50_vd_pg output; \
