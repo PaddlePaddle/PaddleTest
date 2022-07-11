@@ -170,6 +170,11 @@ class Jelly(object):
                     self.torch_param[key] = torch.tensor(value)
                 else:
                     self.torch_param[key] = torch.tensor(value).to("cuda")
+            elif key == "device":
+                if self.places == "cpu":
+                    self.torch_param[key] = value
+                else:
+                    self.torch_param[key] = torch.device("cuda")
             else:
                 self.torch_param[key] = value
 
@@ -185,7 +190,7 @@ class Jelly(object):
         elif self._layertypes(self.paddle_api) == "class":
             obj = self.paddle_api(**self.paddle_param)
             for i in range(self.loops):
-                forward_time = timeit.timeit(lambda: obj(**self.paddle_data), number=self.base_times)
+                forward_time = timeit.timeit(lambda: obj(*self.paddle_data.values()), number=self.base_times)
                 self.paddle_forward_time.append(forward_time)
         else:
             raise AttributeError
@@ -195,24 +200,28 @@ class Jelly(object):
         计算paddle 总体时间
         """
         if self._layertypes(self.paddle_api) == "func":
+            input_param = dict(self.paddle_data, **self.paddle_param)
+            res = self.paddle_api(**input_param)
+            grad_tensor = paddle.ones(res.shape, res.dtype)
 
             def func(input_param):
                 res = self.paddle_api(**input_param)
-                res.backward()
+                res.backward(grad_tensor)
 
-            input_param = dict(self.paddle_data, **self.paddle_param)
             for i in range(self.loops):
                 total_time = timeit.timeit(lambda: func(input_param), number=self.base_times)
                 self.paddle_total_time.append(total_time)
         elif self._layertypes(self.paddle_api) == "class":
+            obj = self.paddle_api(**self.paddle_param)
+            res = obj(*self.paddle_data.values())
+            grad_tensor = paddle.ones(res.shape, res.dtype)
 
             def clas(input_param):
-                res = obj(**input_param)
-                res.backward()
+                res = obj(*input_param)
+                res.backward(grad_tensor)
 
-            obj = self.paddle_api(**self.paddle_param)
             for i in range(self.loops):
-                total_time = timeit.timeit(lambda: clas(self.paddle_data), number=self.base_times)
+                total_time = timeit.timeit(lambda: clas(self.paddle_data.values()), number=self.base_times)
                 self.paddle_total_time.append(total_time)
         else:
             raise AttributeError
@@ -229,7 +238,7 @@ class Jelly(object):
         elif self._layertypes(self.torch_api) == "class":
             obj = self.torch_api(**self.torch_param)
             for i in range(self.loops):
-                forward_time = timeit.timeit(lambda: obj(**self.torch_data), number=self.base_times)
+                forward_time = timeit.timeit(lambda: obj(*self.torch_data.values()), number=self.base_times)
                 self.torch_forward_time.append(forward_time)
         else:
             raise AttributeError
@@ -239,25 +248,37 @@ class Jelly(object):
         torch 总时间
         """
         if self._layertypes(self.torch_api) == "func":
+            input_param = dict(self.torch_data, **self.torch_param)
+            res = self.torch_api(**input_param)
+            # init grad tensor
+            if self.places == "gpu":
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype).to("cuda")
+            else:
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype)
 
             def func(input_param):
                 res = self.torch_api(**input_param)
-                res.backward(torch.ones_like(res))
+                res.backward(grad_tensor)
 
-            input_param = dict(self.torch_data, **self.torch_param)
             for i in range(self.loops):
                 total_time = timeit.timeit(lambda: func(input_param), number=self.base_times)
                 self.torch_total_time.append(total_time)
         elif self._layertypes(self.torch_api) == "class":
+            obj = self.torch_api(**self.torch_param)
+            res = obj(*self.torch_data.values())
+            # init grad tensor
+            if self.places == "gpu":
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype).to("cuda")
+            else:
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype)
 
             def clas(input_param):
                 """ lambda clas"""
-                res = obj(**input_param)
-                res.backward(torch.ones_like(res))
+                res = obj(*input_param)
+                res.backward(grad_tensor)
 
-            obj = self.torch_api(**self.torch_param)
             for i in range(self.loops):
-                total_time = timeit.timeit(lambda: clas(self.torch_data), number=self.base_times)
+                total_time = timeit.timeit(lambda: clas(self.torch_data.values()), number=self.base_times)
                 self.torch_total_time.append(total_time)
         else:
             raise AttributeError

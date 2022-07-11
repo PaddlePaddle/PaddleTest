@@ -1,0 +1,24 @@
+Module_5:
+  desc: "Det SEBlock结构"
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+
+
+
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+#    dygraph_to_infer_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001

@@ -4,6 +4,12 @@
 """
 tools
 """
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.dirname(os.getcwd())))
+sys.path.append(os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "utils"))
+
 import numpy as np
 import paddle
 import torch
@@ -30,6 +36,9 @@ class FrontAPIBase(object):
         return self.encapsulation(*args, **kwargs)
 
 
+logger = Logger("compare")
+
+
 def compare(paddle, torch, delta=1e-6, rtol=1e-5):
     """
     比较函数
@@ -38,7 +47,6 @@ def compare(paddle, torch, delta=1e-6, rtol=1e-5):
     :param delta: 误差值
     :return:
     """
-    logger = Logger("compare")
     if isinstance(paddle, np.ndarray):
         expect = np.array(torch)
         res = np.allclose(paddle, torch, atol=delta, rtol=rtol, equal_nan=True)
@@ -49,8 +57,9 @@ def compare(paddle, torch, delta=1e-6, rtol=1e-5):
         # tools.assert_true(res)
         assert res
         # tools.assert_equal(result.shape, expect.shape)
-        assert paddle.shape == expect.shape
-    elif isinstance(paddle, list):
+        if len(paddle.shape) != 1:
+            assert paddle.shape == expect.shape
+    elif isinstance(paddle, (list, tuple)):
         for i, j in enumerate(paddle):
             if isinstance(j, (np.generic, np.ndarray)):
                 compare(j, torch[i], delta, rtol)
@@ -83,16 +92,56 @@ def solve_tuple(item, type, convert):
 
 
 TORCHDTYPE = {
+    "float16": torch.float16,
     "float32": torch.float32,
     "float64": torch.float64,
     "int32": torch.int32,
     "int64": torch.int64,
     "complex64": torch.complex64,
     "complex128": torch.complex128,
+    "bool": torch.bool,
 }
 
 
-if __name__ == "__main__":
-    a = [paddle.to_tensor(1), paddle.to_tensor([2, 3]), 3]
-    r = solve_tuple(a, paddle.Tensor, paddle.sum)
-    print(r)
+TORCHDEVICE = {"cpu": torch.device("cpu"), "gpu": torch.device("cuda"), "gpu:0": torch.device("cuda:0")}
+
+
+COMPAREGAP = {"UpsamplingBilinear2D": 1e-4, "selu": 1e-4}
+
+
+def case2name(api_name, n):
+    """
+    api_name convert api cases
+    """
+    s = ["_base"] + ["_" + str(k) for k in range(n + 1)]
+    x = [api_name + i for i in s]
+    return x
+
+
+STOP_BACKWARD = [
+    "add_1",
+    *case2name("allclose", 9),
+    *case2name("equal_all", 4),
+    *case2name("greater_equal", 2),
+    *case2name("less_equal", 2),
+    *case2name("tanh_", 2),
+    "isfinite_base",
+    "isinf_base",
+    "isnan_base",
+    *case2name("full_like", 1),
+    "numel_base",
+    *case2name("ones_like", 0),
+    *case2name("zeros_like", 0),
+    *case2name("argmax", 4),
+    *case2name("argmin", 4),
+    *case2name("argsort", 3),
+    "masked_select_base",
+    *case2name("nonzero", 0),
+    *case2name("searchsorted", 1),
+    *case2name("bincount", 1),
+    *case2name("reshape_", 2),
+    "squeeze__base",
+    "unique_0",
+    *case2name("unique_consecutive", 2),
+    "unsqueeze__0",
+]

@@ -112,6 +112,7 @@ class JitTrans(WeakTrans):
             paddle.set_device("cpu")
         self.atol = 1e-5
         self.rtol = 1e-6
+        self.seed = 33
         # 忽略全部测试的api
         self.ignore_api = [
             "paddle.add_n",
@@ -128,6 +129,20 @@ class JitTrans(WeakTrans):
         self.ignore_gpu = []
         # 忽略CPU测试的api
         self.ignore_cpu = []
+        # 需要锁定随机种子的api
+        self.use_seed = [
+            "paddle.multinomial",
+            "paddle.randint",
+            "paddle.rand",
+            "paddle.bernoulli",
+            "paddle.randint_like",
+            "paddle.normal",
+            "paddle.standard_normal",
+            "paddle.randn",
+            "paddle.uniform",
+            "paddle.poisson",
+            "paddle.randperm",
+        ]
         # 忽略jit_save测试的api
         self.ignore_api_jit_save = ["paddle.broadcast_shape", "paddle.rank"]
         # 忽略jit_save测试的case
@@ -153,8 +168,8 @@ class JitTrans(WeakTrans):
             "paddle.isnan",
             "paddle.isclose",
         ]
-        # 忽略jit_load测试的某些api的某些case
-        self.ignore_case_jit_load = ["conj0"]
+        # 忽略jit_load测试的某些api的某些case, 因为jit.load不支持bool输出
+        self.ignore_case_jit_load = ["conj_0", "ones_1", "zeros_2", "full_0", "full_1"]
         # InputSpec测试时, 设定输入Tensor[0].shape=None, 但以下api的Tensor[0].shape保持原数值
         self.ignore_none_shape_api = [
             "paddle.addmm",
@@ -166,7 +181,14 @@ class JitTrans(WeakTrans):
             "paddle.take_along_axis",
         ]
         # InputSpec测试时, 设定输入Tensor[0].shape=None, 但以下case的Tensor[0].shape保持原数值
-        self.ignore_none_shape_case = ["unbind", "unstack"]
+        self.ignore_none_shape_case = [
+            "unbind_base",
+            "unbind_0",
+            "unstack_base",
+            "cross_0",
+            "tensordot_0",
+            "tensordot_1",
+        ]
         # self.in_tensor, self.in_params, self.func = self.get_func_params("paddle")
         self.in_tensor = self.get_inputs("paddle")
         self.none_shape_tensor_list = []
@@ -209,6 +231,8 @@ class JitTrans(WeakTrans):
 
     def mk_dict_spec(self):
         """根据输入的dict, 生成InputSpec"""
+        if self.func in self.use_seed:
+            paddle.seed(self.seed)
         input_spec_dict = {}
         for k, v in self.in_tensor.items():
             v_shape = v.shape
@@ -224,6 +248,8 @@ class JitTrans(WeakTrans):
 
     def mk_list_spec(self):
         """根据输入的dict, 生成InputSpec"""
+        if self.func in self.use_seed:
+            paddle.seed(self.seed)
         input_spec_list = []
         for k, v in self.in_tensor.items():
             v_shape = v.shape
@@ -239,6 +265,8 @@ class JitTrans(WeakTrans):
 
     def init_test_object(self, method):
         """init jit test obj"""
+        if self.func in self.use_seed:
+            paddle.seed(self.seed)
         if method == "BuildClass" or method == "BuildClassWithInputSpec":
             # 仅实例化一次，防止多次实例化后，因为随机种子不固定导致多个结果值res不相等
             obj = BuildClass(self.in_params, self.func)
@@ -253,6 +281,8 @@ class JitTrans(WeakTrans):
 
     def mk_exp(self, obj, method):
         """获取动态图结果"""
+        if self.func in self.use_seed:
+            paddle.seed(self.seed)
         if method == "BuildClass" or method == "BuildClassWithInputSpec":
             inputs_value = self.sort_intensor()
             exp = obj(inputs_value)
@@ -264,6 +294,8 @@ class JitTrans(WeakTrans):
 
     def mk_res(self, obj, method):
         """获取静态图结果"""
+        if self.func in self.use_seed:
+            paddle.seed(self.seed)
         if method == "BuildClass":
             inputs_value = self.sort_intensor()
             jit_obj = paddle.jit.to_static(obj)
@@ -295,6 +327,8 @@ class JitTrans(WeakTrans):
         此时paddle.jit.save只输出 api.pdmodel一个文件
         后续只会比对测试paddle.jit.load加载api.pdmodel的输出结果
         """
+        if self.func in self.use_seed:
+            paddle.seed(self.seed)
         if method == "BuildClass":
             inputs_value = self.sort_intensor()
             jit_obj = paddle.jit.to_static(obj)
@@ -325,6 +359,8 @@ class JitTrans(WeakTrans):
 
     def jit_load(self, method=None):
         """paddle.jit.load加载"""
+        if self.func in self.use_seed:
+            paddle.seed(self.seed)
         jit = paddle.jit.load(os.path.join(self.jit_save_path, self.get_func("paddle")))
         inputs_value = self.sort_intensor()
         res = jit(*inputs_value)
@@ -332,6 +368,8 @@ class JitTrans(WeakTrans):
 
     def infer_load(self):
         """paddle预测库加载，只会用于测试nn.Layer"""
+        if self.func in self.use_seed:
+            paddle.seed(self.seed)
         config = paddle_infer.Config(
             os.path.join(self.jit_save_path, self.get_func("paddle") + ".pdmodel"),
             os.path.join(self.jit_save_path, self.get_func("paddle") + ".pdiparams"),

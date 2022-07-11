@@ -17,7 +17,7 @@ if [[ $2 == 'train_linux_convergence' ]] ; then
 elif [[ $2 == 'train_linux_gpu1' ]] ; then
     echo '#####train_linux_gpu1'
     cat ${log_path}/train/${model}_1card.log | grep Avg
-    cat ${log_path}/train/${model}_1card.log | grep Train | grep Avg | grep '5/5' > tmp_1card.log
+    cat ${log_path}/train/${model}_1card.log | grep Train | grep Avg | grep '2/2' > tmp_1card.log
     cat ${log_path}/train/${model}_1card.log | grep Eval | grep Avg > tmp_1card1.log
     sed -i 's/loss/train_eval/' tmp_1card1.log
     cat tmp_1card1.log
@@ -30,7 +30,7 @@ elif [[ $2 == 'train_linux_gpu1' ]] ; then
 elif [[ $2 == 'train_linux_gpu2' ]] ; then
     echo '#####train_linux_gpu2'
     cat ${log_path}/train/${model}_2card.log | grep Avg
-    cat ${log_path}/train/${model}_2card.log | grep Train | grep Avg | grep '5/5' > tmp_2card.log
+    cat ${log_path}/train/${model}_2card.log | grep Train | grep Avg | grep '2/2' > tmp_2card.log
     cat ${log_path}/train/${model}_2card.log | grep Eval | grep Avg > tmp_2card1.log
     sed -i 's/loss/train_eval/' tmp_2card1.log
     cat tmp_2card1.log

@@ -7,20 +7,8 @@ model_name=${PWD##*/}
 
 echo "$model_name 模型语义匹配训练阶段"
 
-#取消代理
-HTTPPROXY=$http_proxy
-HTTPSPROXY=$https_proxy
-unset http_proxy
-unset https_proxy
-
 #路径配置
-root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/model_zoo/ernie-doc/
-log_path=$root_path/log/$model_name/
-
-if [ ! -d $log_path ]; then
-  mkdir -p $log_path
-fi
+code_path=${nlp_dir}/model_zoo/ernie-doc/
 
 
 #访问RD程序
@@ -33,15 +21,6 @@ MODELNAME=$4
 TASKNAME=$5
 
 
-print_info(){
-if [ $1 -ne 0 ];then
-    cat ${log_path}/$2.log
-    echo "exit_code: 1.0" >> ${log_path}/$2.log
-else
-    echo "exit_code: 0.0" >> ${log_path}/$2.log
-fi
-}
-
 
 if [[ ${MULTI} == "single" ]]; then
     python run_sequence_labeling.py \
@@ -53,7 +32,6 @@ if [[ ${MULTI} == "single" ]]; then
         --max_steps 30 \
         --logging_steps 1\
         --device ${DEVICE} > $log_path/train_${MULTI}_${TASKNAME}_${DEVICE}.log 2>&1
-    print_info $? train_${MULTI}_${TASKNAME}_${DEVICE}
 else
     python -m paddle.distributed.launch --gpus ${CUDA} --log_dir ${TASKNAME} run_sequence_labeling.py \
         --batch_size 8\
@@ -64,8 +42,4 @@ else
         --max_steps 30 \
         --logging_steps 1\
         --device ${DEVICE} > $log_path/train_${MULTI}_${TASKNAME}_${DEVICE}.log 2>&1
-    print_info $? train_${MULTI}_${TASKNAME}_${DEVICE}
 fi
-
-export http_proxy=$HTTPPROXY
-export https_proxy=$HTTPSPROXY

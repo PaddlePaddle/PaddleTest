@@ -15,6 +15,7 @@ unset http_proxy
 unset https_proxy
 wget ${path_temp}description.txt
 export commit_time=`grep commit_time description.txt | awk -F ':' '{print $2}'`
-export branch=`grep branch description.txt | awk -F ' ' '{print $2}'`
+export branch=`grep branch description.txt | awk -F ':' '{print $2}'`
 export url=${url}
 python push_result.py
+exit ${exit_code}

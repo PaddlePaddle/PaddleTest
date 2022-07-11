@@ -46,7 +46,7 @@ if exist det_dynamic_list (
 del /f det_dynamic_list
 )
 for /r configs %%i in (*.yml) do (
-echo %%i | findstr /i .yml | findstr /v /i "_base_" | findstr /v /i "kunlun" | findstr /v /i "reader" | findstr /v /i "test" | findstr /v /i "oidv5" | findstr /v /i "datasets" | findstr /v /i "runtime" | findstr /v /i "slim" | findstr /v /i "roadsign" | findstr /v /i "minicoco" | findstr /v /i "mot" | findstr /v /i "pruner" | findstr /v /i "pedestrian_detection" | findstr /v /i "keypoint" >>det_dynamic_list
+echo %%i | findstr /i .yml | findstr /v /i "_base_" | findstr /v /i "kunlun" | findstr /v /i "reader" | findstr /v /i "test" | findstr /v /i "oidv5" | findstr /v /i "datasets" | findstr /v /i "runtime" | findstr /v /i "slim" | findstr /v /i "roadsign" | findstr /v /i "minicoco" | findstr /v /i "mot" | findstr /v /i "pruner" | findstr /v /i "pedestrian_detection" | findstr /v /i "keypoint" | findstr /v /i "smrt" | findstr /v /i "xpu" | findstr /v /i "ocsort" | findstr /v /i "pphuman" | findstr /v /i "ppvehicle" >>det_dynamic_list
 )
 echo test_start !
 set absolute_path=%cd%

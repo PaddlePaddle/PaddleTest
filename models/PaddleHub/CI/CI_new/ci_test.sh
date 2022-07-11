@@ -94,6 +94,7 @@ ci(){
   # bash ci_test.sh -t ci -p python -g True -P ${compile_path} -L ubuntu -h ${hub_config}
   build_env
 
+  root_path=`pwd`
   hub_excption=0
   hub_success=0
   hub_fail_list=
@@ -114,17 +115,17 @@ ci(){
   hub install ${module}
 
   if [ $? -ne 0 ];then
-  echo ++++++++++++++++++++++${module} predict Failed!!!++++++++++++++++++++++
+  echo ++++++++++++++++++++++${module} install Failed!!!++++++++++++++++++++++
   hub_excption=$(expr ${hub_excption} + 1)
   install_fail_list="${hub_fail_list} ${module}"
   continue
   else
-  echo ++++++++++++++++++++++${module} predict Success!!!++++++++++++++++++++++
+  echo ++++++++++++++++++++++${module} install Success!!!++++++++++++++++++++++
   #hub_success=$(expr ${hub_success} + 1)
   install_success_list="${hub_success_list} ${module}"
   fi
 
-  cd -
+  cd ${root_path}
 
   $py_cmd docbase.py --path ${module_path}/README.md --name ${module}
   sed -i "s/\/PATH\/TO\/IMAGE/doc_img.jpeg/g" test_${module}.py

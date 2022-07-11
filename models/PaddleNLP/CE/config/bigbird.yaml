@@ -14,7 +14,7 @@ VARIABLES:
   model_log_path: log/bigbird/
 
 EXEC:
-  exec_cases: [DATA_PROC,TRAIN]
+  exec_cases: [DATA_PROC,TRAIN,FINETUNE]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
@@ -112,7 +112,7 @@ FINETUNE:
     kpis:
       loss:
         latest: True
-        kpi_base: 0.751391
+        kpi_base: 0.782154
         threshold: 0.08
         actived: True
         evaluation: "-"

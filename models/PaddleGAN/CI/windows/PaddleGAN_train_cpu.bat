@@ -25,14 +25,16 @@ if !errorlevel! equ 0 (
 )
 
 set log_path=log
+md log
+@REM if exist "log" (
+@REM    rmdir log /S /Q
+@REM    md log
+@REM ) else (
+@REM    md log
+@REM )
 set params_dir=(output/*)
 @REM set 不能放在循环中
-if exist "log" (
-   rmdir log /S /Q
-   md log
-) else (
-   md log
-)
+
 rem data
 rd /s /q data
 mklink /j data %data_path%\PaddleGAN

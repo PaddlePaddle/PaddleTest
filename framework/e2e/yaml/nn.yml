@@ -4936,6 +4936,10 @@ CELU_base:
         dtype: "float32"
         shape: [2, 3, 4]
         range: [ -2, 4]
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input }
 
 CELU_0:
   desc: "CELU激活层"
@@ -4948,6 +4952,10 @@ CELU_0:
         dtype: "float32"
         shape: [2, 4, 4]
         range: [ -4, 3]
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input }
 
 CELU_1:
   desc: "CELU激活层"
@@ -4962,6 +4970,10 @@ CELU_1:
         range: [ -4, 3]
     params:
       alpha: 0.2
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 CELU_2:
   desc: "CELU激活层"
@@ -4976,6 +4988,10 @@ CELU_2:
         range: [ -4, 3]
     params:
       alpha: -0.4
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 CELU_3:
   desc: "CELU激活层"
@@ -4990,6 +5006,10 @@ CELU_3:
         range: [ -1, 1]
     params:
       alpha: 0.56
+  pytorch:
+    api_name: "torch.nn.CELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 ELU_base:
   desc: "ELU激活层"
@@ -5002,6 +5022,10 @@ ELU_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input }
 
 ELU_0:
   desc: "ELU激活层"
@@ -5016,6 +5040,10 @@ ELU_0:
         range: [ -1, 1]
     params:
       alpha: 0.56
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 ELU_1:
   desc: "ELU激活层"
@@ -5030,6 +5058,10 @@ ELU_1:
         range: [ -10, 10]
     params:
       alpha: 2
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 ELU_2:
   desc: "ELU激活层"
@@ -5044,6 +5076,10 @@ ELU_2:
         range: [ -10, 10]
     params:
       alpha: 0
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 ELU_3:
   desc: "ELU激活层"
@@ -5057,6 +5093,10 @@ ELU_3:
         value: [[-1, 6], [1, 15.6]]
     params:
       alpha: 0.2
+  pytorch:
+    api_name: "torch.nn.ELU"
+    mapping:
+      ins: { data: input, alpha: alpha }
 
 GELU_base:
   desc: "GELU激活层"
@@ -5069,6 +5109,10 @@ GELU_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.GELU"
+    mapping:
+      ins: { data: input }
 
 GELU_0:
   desc: "GELU激活层"
@@ -5108,6 +5152,10 @@ Hardshrink_base:
         type: "Tensor"
         dtype: "float32"
         value: [-1, 0.3, 2.5]
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input }
 
 Hardshrink_0:
   desc: "Hardshrink激活层"
@@ -5122,6 +5170,10 @@ Hardshrink_0:
         range: [ -1, 1]
     params:
       threshold: 0.4
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Hardshrink_1:
   desc: "Hardshrink激活层"
@@ -5135,6 +5187,10 @@ Hardshrink_1:
         value: [-1, 0.3, 2.5]
     params:
       threshold: 0
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Hardshrink_2:
   desc: "Hardshrink激活层"
@@ -5148,6 +5204,10 @@ Hardshrink_2:
         value: [-1, -0.01, 2.5]
     params:
       threshold: 0
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Hardshrink_3:
   desc: "Hardshrink激活层"
@@ -5161,6 +5221,10 @@ Hardshrink_3:
         value: [-1, -0.01, 2.5]
     params:
       threshold: -1
+  pytorch:
+    api_name: "torch.nn.Hardshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Hardsigmoid_base:
   desc: "Hardsigmoid激活层"
@@ -5173,6 +5237,10 @@ Hardsigmoid_base:
         dtype: "float32"
         shape: [2, 2]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.Hardsigmoid"
+    mapping:
+      ins: { data: input }
 
 Hardsigmoid_0:
   desc: "Hardsigmoid激活层"
@@ -5185,6 +5253,10 @@ Hardsigmoid_0:
         dtype: "float32"
         shape: [2, 3, 4, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Hardsigmoid"
+    mapping:
+      ins: { data: input }
 
 Hardsigmoid_1:
   desc: "Hardsigmoid激活层"
@@ -5196,6 +5268,10 @@ Hardsigmoid_1:
         type: "Tensor"
         dtype: "float32"
         value: [[3., 3., 3.], [-5., 0., 5.], [-3., -3., -3.]]
+  pytorch:
+    api_name: "torch.nn.Hardsigmoid"
+    mapping:
+      ins: { data: input }
 
 Hardswish_base:
   desc: "Hardswish激活层"
@@ -5208,6 +5284,10 @@ Hardswish_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.Hardswish"
+    mapping:
+      ins: { data: input }
 
 Hardswish_0:
   desc: "Hardswish激活层"
@@ -5220,6 +5300,10 @@ Hardswish_0:
         dtype: "float32"
         shape: [2, 3, 4, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Hardswish"
+    mapping:
+      ins: { data: input }
 
 Hardswish_1:
   desc: "Hardswish激活层"
@@ -5231,6 +5315,10 @@ Hardswish_1:
         type: "Tensor"
         dtype: "float32"
         value: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+  pytorch:
+    api_name: "torch.nn.Hardswish"
+    mapping:
+      ins: { data: input }
 
 Hardtanh_base:
   desc: "Hardtanh激活层"
@@ -5242,6 +5330,10 @@ Hardtanh_base:
         type: "Tensor"
         dtype: "float32"
         value: [-1.5, 0.3, 2.5]
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input }
 
 Hardtanh_0:
   desc: "Hardtanh激活层"
@@ -5257,6 +5349,10 @@ Hardtanh_0:
     params:
       min: -1.5
       max: 2.0
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 Hardtanh_1:
   desc: "Hardtanh激活层"
@@ -5272,6 +5368,10 @@ Hardtanh_1:
     params:
       min: 0
       max: 1.3
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 Hardtanh_2:
   desc: "Hardtanh激活层"
@@ -5287,6 +5387,10 @@ Hardtanh_2:
     params:
       min: -3.4
       max: 0
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 Hardtanh_3:
   desc: "Hardtanh激活层"
@@ -5347,6 +5451,10 @@ Hardtanh_6:
     params:
       min: -3.3
       max: 3.2
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 Hardtanh_7:
   desc: "Hardtanh激活层"
@@ -5362,6 +5470,10 @@ Hardtanh_7:
     params:
       min: 2.3
       max: 3.5
+  pytorch:
+    api_name: "torch.nn.Hardtanh"
+    mapping:
+      ins: { data: input, min: min_val, max: max_val }
 
 LeakyReLU_base:
   desc: "LeakyReLU激活层"
@@ -5374,6 +5486,10 @@ LeakyReLU_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.LeakyReLU"
+    mapping:
+      ins: { data: input }
 
 LeakyReLU_0:
   desc: "LeakyReLU激活层"
@@ -5388,6 +5504,10 @@ LeakyReLU_0:
         range: [ -1, 1]
     params:
       negative_slope: 0.015
+  pytorch:
+    api_name: "torch.nn.LeakyReLU"
+    mapping:
+      ins: { data: input, negative_slope: negative_slope }
 
 LeakyReLU_1:
   desc: "LeakyReLU激活层"
@@ -5402,6 +5522,10 @@ LeakyReLU_1:
         range: [ -10, 10]
     params:
       negative_slope: 0
+  pytorch:
+    api_name: "torch.nn.LeakyReLU"
+    mapping:
+      ins: { data: input, negative_slope: negative_slope }
 
 LeakyReLU_2:
   desc: "LeakyReLU激活层"
@@ -5416,6 +5540,10 @@ LeakyReLU_2:
         range: [ -10, 10]
     params:
       negative_slope: -1
+  pytorch:
+    api_name: "torch.nn.LeakyReLU"
+    mapping:
+      ins: { data: input, negative_slope: negative_slope }
 
 LogSigmoid_base:
   desc: "LogSigmoid激活层"
@@ -5428,6 +5556,10 @@ LogSigmoid_base:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.LogSigmoid"
+    mapping:
+      ins: { data: input }
 
 LogSigmoid_0:
   desc: "LogSigmoid激活层"
@@ -5440,6 +5572,10 @@ LogSigmoid_0:
         dtype: "float32"
         shape: [2, 3, 4, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.LogSigmoid"
+    mapping:
+      ins: { data: input }
 
 LogSoftmax_base:
   desc: "LogSoftmax激活层"
@@ -5453,6 +5589,10 @@ LogSoftmax_base:
         value: [[[1], [2]], [[3], [4]]]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_0:
   desc: "LogSoftmax激活层"
@@ -5467,6 +5607,10 @@ LogSoftmax_0:
         range: [ -1, 1]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_1:
   desc: "LogSoftmax激活层"
@@ -5481,6 +5625,10 @@ LogSoftmax_1:
         range: [ -10, 10]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_2:
   desc: "LogSoftmax激活层"
@@ -5495,6 +5643,10 @@ LogSoftmax_2:
         range: [ -10, 10]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_3:
   desc: "LogSoftmax激活层"
@@ -5509,6 +5661,10 @@ LogSoftmax_3:
         range: [ -10, 10]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_4:
   desc: "LogSoftmax激活层"
@@ -5523,6 +5679,10 @@ LogSoftmax_4:
         range: [ -10, 10]
     params:
       axis: 2
+  pytorch:
+    api_name: "torch.nn.LogSoftmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 LogSoftmax_5:
   desc: "LogSoftmax激活层"
@@ -5621,6 +5781,10 @@ ReLU_base:
         dtype: "float32"
         shape: [3, 10, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.ReLU"
+    mapping:
+      ins: { data: input }
 
 ReLU_0:
   desc: "ReLU激活层"
@@ -5633,6 +5797,10 @@ ReLU_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.ReLU"
+    mapping:
+      ins: { data: input }
 
 ReLU_1:
   desc: "ReLU激活层"
@@ -5644,6 +5812,10 @@ ReLU_1:
         type: "Tensor"
         dtype: "float32"
         value: [[-1, 4], [1, 15.6]]
+  pytorch:
+    api_name: "torch.nn.ReLU"
+    mapping:
+      ins: { data: input }
 
 ReLU6_base:
   desc: "ReLU激活层"
@@ -5655,6 +5827,10 @@ ReLU6_base:
         type: "Tensor"
         dtype: "float32"
         value: [-1, 0.3, 6.5]
+  pytorch:
+    api_name: "torch.nn.ReLU6"
+    mapping:
+      ins: { data: input }
 
 ReLU6_0:
   desc: "ReLU激活层"
@@ -5667,6 +5843,10 @@ ReLU6_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 10]
+  pytorch:
+    api_name: "torch.nn.ReLU6"
+    mapping:
+      ins: { data: input }
 
 ReLU6_1:
   desc: "ReLU激活层"
@@ -5678,6 +5858,10 @@ ReLU6_1:
         type: "Tensor"
         dtype: "float32"
         value: [6, 6, 6, 6]
+  pytorch:
+    api_name: "torch.nn.ReLU6"
+    mapping:
+      ins: { data: input }
 
 ReLU6_2:
   desc: "ReLU激活层"
@@ -5690,6 +5874,10 @@ ReLU6_2:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.ReLU6"
+    mapping:
+      ins: { data: input }
 
 SELU_base:
   desc: "SELU激活层"
@@ -5701,6 +5889,10 @@ SELU_base:
         type: "Tensor"
         dtype: "float32"
         value: [[0.1, 1], [2, 3]]
+  pytorch:
+    api_name: "torch.nn.SELU"
+    mapping:
+      ins: { data: input }
 
 SELU_0:
   desc: "SELU激活层"
@@ -5753,6 +5945,10 @@ Sigmoid_base:
         type: "Tensor"
         dtype: "float32"
         value: [1.0, 2.0, 3.0, 4.0]
+  pytorch:
+    api_name: "torch.nn.Sigmoid"
+    mapping:
+      ins: { data: input }
 
 Sigmoid_0:
   desc: "Sigmoid激活层"
@@ -5765,6 +5961,10 @@ Sigmoid_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Sigmoid"
+    mapping:
+      ins: { data: input }
 
 Silu_base:
   desc: "Silu激活层"
@@ -5777,6 +5977,10 @@ Silu_base:
         dtype: "float32"
         shape: [3, 10, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.SiLU"
+    mapping:
+      ins: { data: input }
 
 Silu_0:
   desc: "Silu激活层"
@@ -5789,6 +5993,10 @@ Silu_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.SiLU"
+    mapping:
+      ins: { data: input }
 
 Silu_1:
   desc: "Silu激活层"
@@ -5801,6 +6009,10 @@ Silu_1:
         dtype: "float32"
         shape: [4, 1, 3, 3]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.SiLU"
+    mapping:
+      ins: { data: input }
 
 Softmax_base:
   desc: "Softmax激活层"
@@ -5826,6 +6038,10 @@ Softmax_0:
         range: [ -1, 1]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.nn.Softmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 Softmax_1:
   desc: "Softmax激活层"
@@ -5839,6 +6055,10 @@ Softmax_1:
         value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
     params:
       axis: 1
+  pytorch:
+    api_name: "torch.nn.Softmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 Softmax_3:
   desc: "Softmax激活层"
@@ -5852,6 +6072,10 @@ Softmax_3:
         value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
     params:
       axis: 2
+  pytorch:
+    api_name: "torch.nn.Softmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 Softmax_4:
   desc: "Softmax激活层"
@@ -5865,6 +6089,10 @@ Softmax_4:
         value: [[[2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0], [7.0, 8.0, 8.0, 9.0]],[[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [6.0, 7.0, 8.0, 9.0]]]
     params:
       axis: 0
+  pytorch:
+    api_name: "torch.nn.Softmax"
+    mapping:
+      ins: { data: input, axis: dim }
 
 Softplus_base:
   desc: "Softplus激活层"
@@ -5879,6 +6107,10 @@ Softplus_base:
     params:
       beta: 1
       threshold: 15
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_0:
   desc: "Softplus激活层"
@@ -5894,6 +6126,10 @@ Softplus_0:
     params:
       beta: 1
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_1:
   desc: "Softplus激活层"
@@ -5909,6 +6145,10 @@ Softplus_1:
     params:
       beta: 0.000001
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_2:
   desc: "Softplus激活层"
@@ -5924,6 +6164,10 @@ Softplus_2:
     params:
       beta: -0.000001
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_3:
   desc: "Softplus激活层"
@@ -5939,6 +6183,10 @@ Softplus_3:
     params:
       beta: -3
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_4:
   desc: "Softplus激活层"
@@ -5954,6 +6202,10 @@ Softplus_4:
     params:
       beta: 3
       threshold: 5
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_5:
   desc: "Softplus激活层"
@@ -5969,6 +6221,10 @@ Softplus_5:
     params:
       beta: 3
       threshold: -5
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softplus_6:
   desc: "Softplus激活层"
@@ -5984,6 +6240,10 @@ Softplus_6:
     params:
       beta: 2
       threshold: 20
+  pytorch:
+    api_name: "torch.nn.Softplus"
+    mapping:
+      ins: { data: input, beta: beta, threshold: threshold }
 
 Softshrink_base:
   desc: "Softshrink激活层"
@@ -5997,6 +6257,10 @@ Softshrink_base:
         value: [-0.9, -0.2, 0.1, 0.8]
     params:
       threshold: 0.5
+  pytorch:
+    api_name: "torch.nn.Softshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Softshrink_0:
   desc: "Softshrink激活层"
@@ -6011,6 +6275,10 @@ Softshrink_0:
         range: [ -1, 1]
     params:
       threshold: 0.2
+  pytorch:
+    api_name: "torch.nn.Softshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Softshrink_1:
   desc: "Softshrink激活层"
@@ -6025,6 +6293,10 @@ Softshrink_1:
         range: [ -10, 10]
     params:
       threshold: 0
+  pytorch:
+    api_name: "torch.nn.Softshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Softshrink_2:
   desc: "Softshrink激活层"
@@ -6039,6 +6311,10 @@ Softshrink_2:
         range: [ -10, 10]
     params:
       threshold: 5
+  pytorch:
+    api_name: "torch.nn.Softshrink"
+    mapping:
+      ins: { data: input, threshold: lambd }
 
 Softsign_base:
   desc: "Softsign激活层"
@@ -6050,6 +6326,10 @@ Softsign_base:
         type: "Tensor"
         dtype: "float32"
         value: [-0.4, -0.2, 0.1, 0.3]
+  pytorch:
+    api_name: "torch.nn.Softsign"
+    mapping:
+      ins: { data: input }
 
 Softsign_0:
   desc: "Softsign激活层"
@@ -6062,6 +6342,10 @@ Softsign_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Softsign"
+    mapping:
+      ins: { data: input }
 
 Softsign_1:
   desc: "Softsign激活层"
@@ -6074,6 +6358,10 @@ Softsign_1:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.Softsign"
+    mapping:
+      ins: { data: input }
 
 Swish_base:
   desc: "Swish激活层"
@@ -6121,6 +6409,10 @@ Tanh_base:
         type: "Tensor"
         dtype: "float32"
         value: [-0.4, -0.2, 0.1, 0.3]
+  pytorch:
+    api_name: "torch.nn.Tanh"
+    mapping:
+      ins: { data: input }
 
 Tanh_0:
   desc: "Tanh激活层"
@@ -6133,6 +6425,10 @@ Tanh_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -4, 4]
+  pytorch:
+    api_name: "torch.nn.Tanh"
+    mapping:
+      ins: { data: input }
 
 Tanh_1:
   desc: "Tanh激活层"
@@ -6145,6 +6441,10 @@ Tanh_1:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Tanh"
+    mapping:
+      ins: { data: input }
 
 Tanhshrink_base:
   desc: "Tanhshrink激活层"
@@ -6156,6 +6456,10 @@ Tanhshrink_base:
         type: "Tensor"
         dtype: "float32"
         value: [-0.4, -0.2, 0.1, 0.3]
+  pytorch:
+    api_name: "torch.nn.Tanhshrink"
+    mapping:
+      ins: { data: input }
 
 Tanhshrink_0:
   desc: "Tanhshrink激活层"
@@ -6168,6 +6472,10 @@ Tanhshrink_0:
         dtype: "float32"
         shape: [2, 3, 4, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Tanhshrink"
+    mapping:
+      ins: { data: input }
 
 Tanhshrink_1:
   desc: "Tanhshrink激活层"
@@ -6180,6 +6488,10 @@ Tanhshrink_1:
         dtype: "float32"
         shape: [3, 3, 3]
         range: [ -10, 10]
+  pytorch:
+    api_name: "torch.nn.Tanhshrink"
+    mapping:
+      ins: { data: input }
 
 ThresholdedReLU_base:
   desc: "ThresholdedReLU激活层"
@@ -6572,6 +6884,12 @@ BatchNorm1D_base:
         value: [[0.6964692], [0.28613934]]
     params:
       num_features: 1
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        device:
 
 BatchNorm1D_0:
   desc: "1维BN批归一化"
@@ -6589,6 +6907,12 @@ BatchNorm1D_0:
       momentum: 0.9
       epsilon: 0.00001
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 BatchNorm1D_2:
   desc: "1维BN批归一化"
@@ -6602,6 +6926,12 @@ BatchNorm1D_2:
         value: [[[0.6964692, 0.28613934, 0.22685145]], [[0.5513148, 0.71946895, 0.42310646]]]
     params:
       num_features: 1
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        device:
 
 BatchNorm1D_3:
   desc: "1维BN批归一化"
@@ -6616,6 +6946,12 @@ BatchNorm1D_3:
     params:
       num_features: 1
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum }
+      excess:
+        device:
 
 BatchNorm1D_4:
   desc: "1维BN批归一化"
@@ -6630,6 +6966,12 @@ BatchNorm1D_4:
     params:
       num_features: 1
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum }
+      excess:
+        device:
 
 BatchNorm1D_5:
   desc: "1维BN批归一化"
@@ -6645,6 +6987,12 @@ BatchNorm1D_5:
       num_features: 1
       momentum: 0.1
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 BatchNorm1D_6:
   desc: "1维BN批归一化"
@@ -6660,6 +7008,12 @@ BatchNorm1D_6:
       num_features: 1
       momentum: 0.1
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 BatchNorm1D_7:
   desc: "1维BN批归一化"
@@ -6676,6 +7030,12 @@ BatchNorm1D_7:
       momentum: 0.1
       epsilon: 0.00001
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 BatchNorm1D_8:
   desc: "1维BN批归一化"
@@ -6708,6 +7068,12 @@ BatchNorm1D_9:
     params:
       num_features: 3
       data_format: "NC"
+  pytorch:
+    api_name: "torch.nn.BatchNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        device:
 
 BatchNorm2D_base:
   desc: "2维BN批归一化"
@@ -6725,6 +7091,12 @@ BatchNorm2D_base:
       momentum: 0.9
       epsilon: 0.00001
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 BatchNorm2D_1:
   desc: "2维BN批归一化"
@@ -6739,6 +7111,12 @@ BatchNorm2D_1:
         range: [ -1, 1]
     params:
       num_features: 1
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        device:
 
 BatchNorm2D_2:
   desc: "2维BN批归一化"
@@ -6754,6 +7132,12 @@ BatchNorm2D_2:
     params:
       num_features: 1
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum }
+      excess:
+        device:
 
 BatchNorm2D_3:
   desc: "2维BN批归一化"
@@ -6770,6 +7154,12 @@ BatchNorm2D_3:
       num_features: 1
       momentum: 0.1
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 BatchNorm2D_4:
   desc: "2维BN批归一化"
@@ -6787,6 +7177,12 @@ BatchNorm2D_4:
       momentum: 0.1
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.BatchNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 BatchNorm2D_7:
   desc: "2维BN批归一化"
@@ -6839,6 +7235,12 @@ BatchNorm3D_base:
       momentum: 0.9
       epsilon: 0.00001
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 BatchNorm3D_1:
   desc: "3维BN批归一化"
@@ -6853,6 +7255,12 @@ BatchNorm3D_1:
         range: [ -1, 1]
     params:
       num_features: 1
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        device:
 
 BatchNorm3D_2:
   desc: "3维BN批归一化"
@@ -6868,6 +7276,12 @@ BatchNorm3D_2:
     params:
       num_features: 1
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum }
+      excess:
+        device:
 
 BatchNorm3D_3:
   desc: "3维BN批归一化"
@@ -6884,6 +7298,12 @@ BatchNorm3D_3:
       num_features: 1
       momentum: 0.1
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 BatchNorm3D_4:
   desc: "3维BN批归一化"
@@ -6918,6 +7338,12 @@ BatchNorm3D_5:
       momentum: 0.1
       epsilon: 0.00001
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.BatchNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, momentum: momentum, epsilon: eps }
+      excess:
+        device:
 
 GroupNorm_base:
   desc: "分组归一化"
@@ -6933,6 +7359,12 @@ GroupNorm_base:
     params:
       num_groups: 2
       num_channels: 2
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels }
+      excess:
+        device:
 
 GroupNorm_0:
   desc: "分组归一化"
@@ -6950,6 +7382,12 @@ GroupNorm_0:
       num_channels: 6
       epsilon: 0.00001
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        device:
 
 GroupNorm_2:
   desc: "分组归一化"
@@ -6966,6 +7404,12 @@ GroupNorm_2:
       num_groups: 2
       num_channels: 2
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        device:
 
 GroupNorm_5:
   desc: "分组归一化"
@@ -6983,6 +7427,12 @@ GroupNorm_5:
       num_channels: 2
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        device:
 
 GroupNorm_6:
   desc: "分组归一化"
@@ -7000,6 +7450,12 @@ GroupNorm_6:
       num_channels: 6
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        device:
 
 GroupNorm_7:
   desc: "分组归一化"
@@ -7017,6 +7473,12 @@ GroupNorm_7:
       num_channels: 4
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        device:
 
 GroupNorm_8:
   desc: "分组归一化"
@@ -7034,6 +7496,12 @@ GroupNorm_8:
       num_channels: 6
       epsilon: 0.00001
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        device:
 
 GroupNorm_9:
   desc: "分组归一化"
@@ -7051,6 +7519,12 @@ GroupNorm_9:
       num_channels: 4
       epsilon: 0.00002
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.GroupNorm"
+    mapping:
+      ins: { data: input, num_groups: num_groups, num_channels: num_channels, epsilon: eps }
+      excess:
+        device:
 
 InstanceNorm1D_base:
   desc: "1维实例归一化"
@@ -7068,6 +7542,12 @@ InstanceNorm1D_base:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm1D_1:
   desc: "1维实例归一化"
@@ -7082,6 +7562,12 @@ InstanceNorm1D_1:
         range: [ -1, 1]
     params:
       num_features: 2
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        device:
 
 InstanceNorm1D_2:
   desc: "1维实例归一化"
@@ -7097,6 +7583,12 @@ InstanceNorm1D_2:
     params:
       num_features: 2
       epsilon: 0.00002
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps }
+      excess:
+        device:
 
 InstanceNorm1D_3:
   desc: "1维实例归一化"
@@ -7113,6 +7605,12 @@ InstanceNorm1D_3:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm1D_5:
   desc: "1维实例归一化"
@@ -7130,6 +7628,12 @@ InstanceNorm1D_5:
       epsilon: 0.00001
       momentum: 0.1
       data_format: "NCL"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm1D_6:
   desc: "1维实例归一化"
@@ -7147,6 +7651,12 @@ InstanceNorm1D_6:
       epsilon: 0.00001
       momentum: 0.1
       data_format: "NLC"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm1D_7:
   desc: "1维实例归一化"
@@ -7165,6 +7675,12 @@ InstanceNorm1D_7:
       momentum: 0.1
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.InstanceNorm1d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm1D_8:
   desc: "1维实例归一化"
@@ -7196,6 +7712,12 @@ InstanceNorm2D_base:
         range: [ -1, 1]
     params:
       num_features: 2
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        device:
 
 InstanceNorm2D_0:
   desc: "2维实例归一化"
@@ -7213,6 +7735,12 @@ InstanceNorm2D_0:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm2D_2:
   desc: "2维实例归一化"
@@ -7228,6 +7756,12 @@ InstanceNorm2D_2:
     params:
       num_features: 2
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps }
+      excess:
+        device:
 
 InstanceNorm2D_3:
   desc: "2维实例归一化"
@@ -7244,6 +7778,12 @@ InstanceNorm2D_3:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm2D_4:
   desc: "2维实例归一化"
@@ -7260,6 +7800,12 @@ InstanceNorm2D_4:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.9
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm2D_6:
   desc: "2维实例归一化"
@@ -7279,6 +7825,12 @@ InstanceNorm2D_6:
       weight_attr: False
       bias_attr: False
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm2D_8:
   desc: "2维实例归一化"
@@ -7296,6 +7848,12 @@ InstanceNorm2D_8:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm2D_9:
   desc: "2维实例归一化"
@@ -7313,6 +7871,12 @@ InstanceNorm2D_9:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NHWC'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm2d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm3D_base:
   desc: "3维实例归一化"
@@ -7327,6 +7891,12 @@ InstanceNorm3D_base:
         range: [ -1, 1]
     params:
       num_features: 2
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features }
+      excess:
+        device:
 
 InstanceNorm3D_0:
   desc: "3维实例归一化"
@@ -7344,6 +7914,12 @@ InstanceNorm3D_0:
       epsilon: 0.00001
       momentum: 0.9
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm3D_2:
   desc: "3维实例归一化"
@@ -7359,6 +7935,12 @@ InstanceNorm3D_2:
     params:
       num_features: 2
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps }
+      excess:
+        device:
 
 InstanceNorm3D_3:
   desc: "3维实例归一化"
@@ -7375,6 +7957,12 @@ InstanceNorm3D_3:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.1
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm3D_4:
   desc: "3维实例归一化"
@@ -7391,6 +7979,12 @@ InstanceNorm3D_4:
       num_features: 2
       epsilon: 0.00001
       momentum: 0.9
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm3D_5:
   desc: "3维实例归一化"
@@ -7409,6 +8003,12 @@ InstanceNorm3D_5:
       momentum: 0.9
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm3D_6:
   desc: "3维实例归一化"
@@ -7426,6 +8026,12 @@ InstanceNorm3D_6:
       epsilon: 0.00001
       momentum: 0.9
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 InstanceNorm3D_7:
   desc: "3维实例归一化"
@@ -7443,6 +8049,12 @@ InstanceNorm3D_7:
       epsilon: 0.00001
       momentum: 0.9
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.InstanceNorm3d"
+    mapping:
+      ins: { data: input, num_features: num_features, epsilon: eps, momentum: momentum }
+      excess:
+        device:
 
 LayerNorm_base:
   desc: "层归一化"
@@ -7457,6 +8069,12 @@ LayerNorm_base:
         range: [ -1, 1]
     params:
       normalized_shape: !!python/tuple [2, 2, 3]
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape }
+      excess:
+        device:
 
 LayerNorm_0:
   desc: "层归一化"
@@ -7472,6 +8090,12 @@ LayerNorm_0:
     params:
       normalized_shape: [2, 2, 3]
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        device:
 
 LayerNorm_3:
   desc: "层归一化"
@@ -7489,6 +8113,12 @@ LayerNorm_3:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        device:
 
 LayerNorm_4:
   desc: "层归一化"
@@ -7503,6 +8133,12 @@ LayerNorm_4:
         range: [ -1, 1]
     params:
       normalized_shape: [2, 3]
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape }
+      excess:
+        device:
 
 LayerNorm_5:
   desc: "层归一化"
@@ -7518,6 +8154,12 @@ LayerNorm_5:
     params:
       normalized_shape: [2, 3]
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        device:
 
 LayerNorm_6:
   desc: "层归一化"
@@ -7535,6 +8177,12 @@ LayerNorm_6:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        device:
 
 LayerNorm_7:
   desc: "层归一化"
@@ -7549,6 +8197,12 @@ LayerNorm_7:
         range: [ -1, 1]
     params:
       normalized_shape: !!python/tuple [3,]
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape }
+      excess:
+        device:
 
 LayerNorm_8:
   desc: "层归一化"
@@ -7564,6 +8218,12 @@ LayerNorm_8:
     params:
       normalized_shape: [3,]
       epsilon: 0.00001
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        device:
 
 LayerNorm_9:
   desc: "层归一化"
@@ -7581,6 +8241,12 @@ LayerNorm_9:
       epsilon: 0.00001
       weight_attr: False
       bias_attr: False
+  pytorch:
+    api_name: "torch.nn.LayerNorm"
+    mapping:
+      ins: { data: input, normalized_shape: normalized_shape, epsilon: eps }
+      excess:
+        device:
 
 LocalResponseNorm_base:
   desc: "层归一化"
@@ -7595,6 +8261,10 @@ LocalResponseNorm_base:
         range: [ -1, 1]
     params:
       size: 5
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size }
 
 LocalResponseNorm_0:
   desc: "层归一化"
@@ -7610,6 +8280,10 @@ LocalResponseNorm_0:
     params:
       size: 5
       alpha: 0.0002
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size, alpha: alpha }
 
 LocalResponseNorm_1:
   desc: "层归一化"
@@ -7625,6 +8299,10 @@ LocalResponseNorm_1:
     params:
       size: 5
       beta: 0.125
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size, beta: beta }
 
 LocalResponseNorm_2:
   desc: "层归一化"
@@ -7641,6 +8319,10 @@ LocalResponseNorm_2:
       size: 5
       k: 0.9
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size, k: k }
 
 LocalResponseNorm_3:
   desc: "层归一化"
@@ -7655,6 +8337,10 @@ LocalResponseNorm_3:
         range: [ -1, 1]
     params:
       size: 3
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size }
 
 LocalResponseNorm_4:
   desc: "层归一化"
@@ -7688,6 +8374,10 @@ LocalResponseNorm_5:
       beta: 0.665
       k: 0.9
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.LocalResponseNorm"
+    mapping:
+      ins: { data: input, size: size, alpha: alpha, beta: beta, k: k }
 
 SpectralNorm_base:
   desc: "谱归一化"
@@ -9811,6 +10501,10 @@ PixelShuffle_base:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 PixelShuffle_0:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
@@ -9826,6 +10520,10 @@ PixelShuffle_0:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 PixelShuffle_1:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
@@ -9841,6 +10539,10 @@ PixelShuffle_1:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 PixelShuffle_2:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
@@ -9871,6 +10573,10 @@ PixelShuffle_4:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 PixelShuffle_5:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
@@ -9886,6 +10592,10 @@ PixelShuffle_5:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.PixelShuffle"
+    mapping:
+      ins: { data0: input, upscale_factor: upscale_factor }
 
 Upsample_base:
   desc: "该OP用于插值调整一个batch中2D-或3D-image的大小"
@@ -10369,6 +11079,10 @@ UpsamplingBilinear2D_base:
     params:
       size: [10, 10]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_0:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -10382,8 +11096,12 @@ UpsamplingBilinear2D_0:
         shape: [4, 5, 6, 7]
         range: [ -10, 10]
     params:
-      scale_factor: [1.2, 3.3]
+      scale_factor: !!python/tuple [1.2, 3.3]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingBilinear2D_1:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -10399,6 +11117,10 @@ UpsamplingBilinear2D_1:
     params:
       size: [12, 12]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_2:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -10414,6 +11136,10 @@ UpsamplingBilinear2D_2:
     params:
       size: [100, 50]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_3:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -10429,6 +11155,10 @@ UpsamplingBilinear2D_3:
     params:
       size: [10, 10]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_4:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -10444,6 +11174,10 @@ UpsamplingBilinear2D_4:
     params:
       size: [10, 10]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_5:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -10474,6 +11208,10 @@ UpsamplingBilinear2D_6:
     params:
       size: [10, 10]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingBilinear2D_7:
   desc: "该OP用于双线性插值插值调整一个batch中图片的大小"
@@ -10487,8 +11225,12 @@ UpsamplingBilinear2D_7:
         shape: [4, 5, 6, 7]
         range: [ -10, 10]
     params:
-      scale_factor: [3.7, 4.1]
+      scale_factor: !!python/tuple [3.7, 4.1]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingBilinear2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingNearest2D_base:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -10504,6 +11246,10 @@ UpsamplingNearest2D_base:
     params:
       size: [12, 12]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingNearest2D_0:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -10519,6 +11265,10 @@ UpsamplingNearest2D_0:
     params:
       size: [12, 12]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingNearest2D_1:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -10549,6 +11299,10 @@ UpsamplingNearest2D_2:
     params:
       scale_factor: 2
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingNearest2D_3:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -10564,6 +11318,10 @@ UpsamplingNearest2D_3:
     params:
       scale_factor: 5
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingNearest2D_4:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -10594,6 +11352,10 @@ UpsamplingNearest2D_5:
     params:
       scale_factor: !!python/tuple [2, 3]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, scale_factor: scale_factor }
 
 UpsamplingNearest2D_6:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -10609,6 +11371,10 @@ UpsamplingNearest2D_6:
     params:
       size: !!python/tuple [12, 13]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingNearest2D_7:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -10624,6 +11390,10 @@ UpsamplingNearest2D_7:
     params:
       size: [12, 13]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 UpsamplingNearest2D_8:
   desc: "该OP用于最近邻插值插值调整一个batch中图片的大小"
@@ -10639,6 +11409,10 @@ UpsamplingNearest2D_8:
     params:
       size: [256, 256]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.UpsamplingNearest2d"
+    mapping:
+      ins: { data0: input, size: size }
 
 CosineSimilarity_base:
   desc: "比较两个tensor的余弦相似度"
@@ -10660,6 +11434,10 @@ CosineSimilarity_base:
     params:
       axis: 1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_0:
   desc: "比较两个tensor的余弦相似度"
@@ -10681,6 +11459,10 @@ CosineSimilarity_0:
     params:
       axis: 1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_1:
   desc: "比较两个tensor的余弦相似度"
@@ -10702,6 +11484,10 @@ CosineSimilarity_1:
     params:
       axis: -1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_2:
   desc: "比较两个tensor的余弦相似度"
@@ -10723,6 +11509,10 @@ CosineSimilarity_2:
     params:
       axis: -2
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_3:
   desc: "比较两个tensor的余弦相似度"
@@ -10744,6 +11534,10 @@ CosineSimilarity_3:
     params:
       axis: 1
       eps: 0.000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_4:
   desc: "比较两个tensor的余弦相似度"
@@ -10765,6 +11559,10 @@ CosineSimilarity_4:
     params:
       axis: -1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.CosineSimilarity"
+    mapping:
+      ins: { data0: input1, data1: input2, axis: dim, eps: eps }
 
 CosineSimilarity_5:
   desc: "比较两个tensor的余弦相似度"
@@ -10798,6 +11596,10 @@ Flatten_base:
         dtype: "float32"
         shape: [2, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input }
 
 Flatten_0:
   desc: "展开一个tensor"
@@ -10810,6 +11612,10 @@ Flatten_0:
         dtype: "float32"
         shape: [2, 3, 5, 4]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input }
 
 Flatten_1:
   desc: "展开一个tensor"
@@ -10825,6 +11631,10 @@ Flatten_1:
     params:
       start_axis: 0
       stop_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_2:
   desc: "展开一个tensor"
@@ -10839,6 +11649,10 @@ Flatten_2:
         range: [ -1, 1]
     params:
       stop_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, stop_axis: end_dim }
 
 Flatten_3:
   desc: "展开一个tensor"
@@ -10853,6 +11667,10 @@ Flatten_3:
         range: [ -1, 1]
     params:
       start_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim }
 
 Flatten_4:
   desc: "展开一个tensor"
@@ -10868,6 +11686,10 @@ Flatten_4:
     params:
       start_axis: 1
       stop_axis: 2
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_5:
   desc: "展开一个tensor"
@@ -10883,6 +11705,10 @@ Flatten_5:
     params:
       start_axis: -3
       stop_axis: -3
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_6:
   desc: "展开一个tensor"
@@ -10898,6 +11724,10 @@ Flatten_6:
     params:
       start_axis: -3
       stop_axis: 1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_7:
   desc: "展开一个tensor"
@@ -10913,6 +11743,10 @@ Flatten_7:
     params:
       start_axis: -2
       stop_axis: 1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_8:
   desc: "展开一个tensor"
@@ -10928,6 +11762,10 @@ Flatten_8:
     params:
       start_axis: 0
       stop_axis: 1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_9:
   desc: "展开一个tensor"
@@ -10943,6 +11781,10 @@ Flatten_9:
     params:
       start_axis: 0
       stop_axis: 2
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_10:
   desc: "展开一个tensor"
@@ -10955,6 +11797,10 @@ Flatten_10:
         dtype: "float32"
         shape: [3, 3, 100]
         range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input }
 
 Flatten_11:
   desc: "展开一个tensor"
@@ -10970,6 +11816,10 @@ Flatten_11:
     params:
       start_axis: -3
       stop_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 Flatten_12:
   desc: "展开一个tensor"
@@ -10985,6 +11835,10 @@ Flatten_12:
     params:
       start_axis: -2
       stop_axis: -1
+  pytorch:
+    api_name: "torch.nn.Flatten"
+    mapping:
+      ins: { data0: input, start_axis: start_dim, stop_axis: end_dim }
 
 PairwiseDistance_base:
   desc: "计算两个tensor之间pairwise的距离"
@@ -11005,6 +11859,10 @@ PairwiseDistance_base:
         range: [ -1, 1]
     params:
       p: 2.
+  pytorch:
+    api_name: "torch.nn.PairwiseDistance"
+    mapping:
+      ins: { data0: input1, data1: input2, p: p }
 
 PairwiseDistance_0:
   desc: "计算两个tensor之间pairwise的距离"
@@ -11129,6 +11987,10 @@ Unfold_base:
         shape: [2, 3, 10, 10]
     params:
       kernel_sizes: 3
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size }
 
 Unfold_0:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -11142,6 +12004,10 @@ Unfold_0:
         shape: [2, 3, 10, 10]
     params:
       kernel_sizes: [3, 3]
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size }
 
 Unfold_1:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -11156,6 +12022,10 @@ Unfold_1:
     params:
       kernel_sizes: [3, 3]
       paddings: 1
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size, paddings: padding }
 
 Unfold_2:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -11170,6 +12040,10 @@ Unfold_2:
     params:
       kernel_sizes: [2, 4]
       paddings: 1
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size, paddings: padding }
 
 Unfold_3:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -11185,6 +12059,10 @@ Unfold_3:
       kernel_sizes: [2, 4]
       paddings: 1
       strides: 2
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size, paddings: padding, strides: stride }
 
 Unfold_4:
   desc: "通被称作为im2col过程. 对于每一个输入形状为[N, C, H, W]的 x ，都将计算出一个形状为[N, Cout, Lout]的输出"
@@ -11201,6 +12079,10 @@ Unfold_4:
       strides: 1
       paddings: 0
       dilations: 1
+  pytorch:
+    api_name: "torch.nn.Unfold"
+    mapping:
+      ins: { data: input, kernel_sizes: kernel_size, paddings: padding, strides: stride, dilations: dilation }
 
 conv1d_base:
   desc: "1维卷积"
@@ -11228,6 +12110,10 @@ conv1d_base:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_0:
   desc: "1维卷积"
@@ -11252,6 +12138,10 @@ conv1d_0:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 conv1d_1:
   desc: "1维卷积"
@@ -11279,6 +12169,10 @@ conv1d_1:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_2:
   desc: "1维卷积"
@@ -11306,6 +12200,10 @@ conv1d_2:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_3:
   desc: "1维卷积"
@@ -11333,6 +12231,10 @@ conv1d_3:
         range: [ -1, 1]
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_4:
   desc: "1维卷积"
@@ -11360,6 +12262,10 @@ conv1d_4:
         range: [ -1, 1]
       stride: 2
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_5:
   desc: "1维卷积"
@@ -11388,6 +12294,10 @@ conv1d_5:
       stride: 2
       padding: 0
       groups: 3
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, groups: groups }
 
 conv1d_6:
   desc: "1维卷积"
@@ -11415,6 +12325,10 @@ conv1d_6:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv1d_7:
   desc: "1维卷积"
@@ -11425,7 +12339,7 @@ conv1d_7:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 3, 4]
+        shape: [2, 4, 3]
         range: [ -1, 1]
     params:
       weight:
@@ -11471,6 +12385,10 @@ conv1d_11:
       stride: [1]
       padding: 1
       dilation: 2
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, dilation: dilation }
 
 conv1d_12:
   desc: "1维卷积"
@@ -11499,6 +12417,10 @@ conv1d_12:
       stride: [1]
       padding: [1]
       dilation: [2,]
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, dilation: dilation }
 
 conv1d_13:
   desc: "1维卷积"
@@ -11527,6 +12449,10 @@ conv1d_13:
       stride: [1]
       padding: [1]
       dilation: !!python/tuple [2,]
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, dilation: dilation }
 
 conv1d_14:
   desc: "1维卷积"
@@ -11555,6 +12481,10 @@ conv1d_14:
       stride: [1]
       padding: [2]
       dilation: !!python/tuple [2,]
+  pytorch:
+    api_name: "torch.nn.functional.conv1d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, dilation: dilation }
 
 conv1d_transpose_base:
   desc: "1维反卷积"
@@ -11580,6 +12510,11 @@ conv1d_transpose_base:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_:
   desc: "1维反卷积"
@@ -11604,6 +12539,10 @@ conv1d_transpose_:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 conv1d_transpose_0:
   desc: "1维反卷积"
@@ -11629,6 +12568,11 @@ conv1d_transpose_0:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_1:
   desc: "1维反卷积"
@@ -11654,6 +12598,11 @@ conv1d_transpose_1:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_2:
   desc: "1维反卷积"
@@ -11679,6 +12628,11 @@ conv1d_transpose_2:
       dilation: 1
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_3:
   desc: "1维反卷积"
@@ -11704,6 +12658,11 @@ conv1d_transpose_3:
       dilation: 2
       groups: 1
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_4:
   desc: "1维反卷积"
@@ -11729,6 +12688,11 @@ conv1d_transpose_4:
       dilation: 1
       groups: 3
       data_format: 'NCL'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose1d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding,
+             dilation: dilation, groups: groups }
 
 conv1d_transpose_5:
   desc: "1维反卷积"
@@ -11799,7 +12763,6 @@ conv1d_transpose_7:
         shape: [3, 2, 3]
         range: [ -1, 1 ]
       stride: 1
-      padding: [4, 4]
       output_padding: 0
       dilation: 1
       groups: 1
@@ -11937,6 +12900,10 @@ conv2d_base:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv2d_0:
   desc: "2维卷积"
@@ -11958,6 +12925,10 @@ conv2d_0:
         range: [ -1, 1 ]
       padding: 0
       groups: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, padding: padding, groups: groups }
 
 conv2d_1:
   desc: "2维卷积"
@@ -11979,6 +12950,10 @@ conv2d_1:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding }
 
 conv2d_2:
   desc: "2维卷积"
@@ -12006,6 +12981,10 @@ conv2d_2:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv2d_3:
   desc: "2维卷积"
@@ -12027,6 +13006,10 @@ conv2d_3:
         range: [ -1, 1]
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding }
 
 conv2d_4:
   desc: "2维卷积"
@@ -12048,6 +13031,10 @@ conv2d_4:
         range: [ -1, 1]
       stride: 2
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding }
 
 conv2d_5:
   desc: "2维卷积"
@@ -12070,6 +13057,10 @@ conv2d_5:
       stride: 2
       padding: 0
       groups: 3
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, groups: groups }
 
 conv2d_6:
   desc: "2维卷积"
@@ -12097,6 +13088,10 @@ conv2d_6:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv2d_7:
   desc: "2维卷积"
@@ -12147,6 +13142,7 @@ conv2d_11:
       stride: [2, 1]
       padding: 1
       dilation: 2
+      data_format: "NHWC"
 
 conv2d_12:
   desc: "2维卷积"
@@ -12157,7 +13153,7 @@ conv2d_12:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 4, 4, 3]
+        shape: [2, 3, 4, 4]
         range: [ -1, 1]
     params:
       weight:
@@ -12169,6 +13165,10 @@ conv2d_12:
       stride: [2, 1]
       padding: 1
       dilation: [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_13:
   desc: "2维卷积"
@@ -12186,11 +13186,15 @@ conv2d_13:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [1, 3, 3, 3]
+        shape: [1, 4, 3, 3]
         range: [ -1, 1]
       stride: [2, 1]
       padding: 1
       dilation: !!python/tuple [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_14:
   desc: "2维卷积"
@@ -12208,11 +13212,15 @@ conv2d_14:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [1, 3, 3, 3]
+        shape: [1, 4, 3, 3]
         range: [ -1, 1]
       stride: [2, 1]
       padding: !!python/tuple [1, 2]
       dilation: !!python/tuple [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_15:
   desc: "2维卷积"
@@ -12235,6 +13243,7 @@ conv2d_15:
       stride: [2, 1]
       padding: [1, 2]
       dilation: !!python/tuple [2, 2]
+      data_format: "NHWC"
 
 conv2d_transpose_base:
   desc: "2维反卷积"
@@ -12265,6 +13274,10 @@ conv2d_transpose_base:
       output_padding: 0
       dilation: 1
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation }
 
 conv2d_transpose_0:
   desc: "2维反卷积"
@@ -12289,6 +13302,10 @@ conv2d_transpose_0:
       output_padding: 0
       dilation: 1
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation }
 
 conv2d_transpose_1:
   desc: "2维反卷积"
@@ -12311,6 +13328,10 @@ conv2d_transpose_1:
       stride: 1
       padding: 1
       dilation: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_transpose_2:
   desc: "2维反卷积"
@@ -12334,6 +13355,10 @@ conv2d_transpose_2:
       padding: [1, 0]
       dilation: 1
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_transpose_3:
   desc: "2维反卷积"
@@ -12357,6 +13382,10 @@ conv2d_transpose_3:
       padding: [1, 0]
       dilation: 2
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv2d_transpose_4:
   desc: "2维反卷积"
@@ -12374,7 +13403,7 @@ conv2d_transpose_4:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [3, 1, 3, 3]
+        shape: [6, 1, 3, 3]
         range: [ -1, 1 ]
       stride: 1
       padding: [1, 0]
@@ -12382,6 +13411,10 @@ conv2d_transpose_4:
       dilation: 1
       groups: 3
       data_format: "NCHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation, groups: groups }
 
 conv2d_transpose_5:
   desc: "2维反卷积"
@@ -12392,7 +13425,7 @@ conv2d_transpose_5:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 2, 2, 6]
+        shape: [2, 2, 2, 3]
         range: [ -1, 1]
     params:
       weight:
@@ -12424,7 +13457,7 @@ conv2d_transpose_6:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [3, 1, 3, 3]
+        shape: [6, 1, 3, 3]
         range: [ -1, 1 ]
       stride: 2
       padding: [1, 0]
@@ -12605,6 +13638,10 @@ conv2d_transpose_13:
       dilation: 1
       groups: 1
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose2d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 conv3d_base:
   desc: "3维卷积"
@@ -12632,6 +13669,10 @@ conv3d_base:
         range: [ -1, 1 ]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_0:
   desc: "3维卷积"
@@ -12653,6 +13694,10 @@ conv3d_0:
         range: [ -1, 1 ]
       padding: 0
       groups: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, groups: groups, padding: padding }
 
 conv3d_1:
   desc: "3维卷积"
@@ -12680,6 +13725,10 @@ conv3d_1:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_2:
   desc: "3维卷积"
@@ -12707,6 +13756,10 @@ conv3d_2:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_3:
   desc: "3维卷积"
@@ -12734,6 +13787,10 @@ conv3d_3:
         range: [ -1, 1]
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_4:
   desc: "3维卷积"
@@ -12761,6 +13818,10 @@ conv3d_4:
         range: [ -1, 1]
       stride: 2
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_5:
   desc: "3维卷积"
@@ -12789,6 +13850,10 @@ conv3d_5:
       stride: 2
       padding: 0
       groups: 3
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, groups: groups }
 
 conv3d_6:
   desc: "3维卷积"
@@ -12816,6 +13881,10 @@ conv3d_6:
         range: [ -1, 1]
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
 
 conv3d_7:
   desc: "3维卷积"
@@ -12866,6 +13935,10 @@ conv3d_11:
       stride: [2, 2, 1]
       padding: 1
       dilation: 2
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_12:
   desc: "3维卷积"
@@ -12888,6 +13961,10 @@ conv3d_12:
       stride: [2, 2, 1]
       padding: 1
       dilation: [2, 2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_13:
   desc: "3维卷积"
@@ -12910,6 +13987,10 @@ conv3d_13:
       stride: [2, 2, 1]
       padding: 1
       dilation: !!python/tuple [2, 2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_14:
   desc: "3维卷积"
@@ -12932,6 +14013,10 @@ conv3d_14:
       stride: [2, 2, 1]
       padding: !!python/tuple [1, 2, 2]
       dilation: !!python/tuple [2, 2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_15:
   desc: "3维卷积"
@@ -12954,12 +14039,16 @@ conv3d_15:
       stride: [2, 2, 1]
       padding: [1, 2, 2]
       dilation: !!python/tuple [2, 2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.conv3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 
 conv3d_transpose_base:
   desc: "2维反卷积"
   paddle:
-    api_name: "paddle.nn.functional.conv2d_transpose"
+    api_name: "paddle.nn.functional.conv3d_transpose"
     inputs:
       x:
         random: true
@@ -12985,6 +14074,10 @@ conv3d_transpose_base:
       output_padding: 0
       dilation: 1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation }
 
 conv3d_transpose_0:
   desc: "2维反卷积"
@@ -13009,6 +14102,10 @@ conv3d_transpose_0:
       output_padding: 0
       dilation: 1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation }
 
 conv3d_transpose_1:
   desc: "2维反卷积"
@@ -13031,6 +14128,10 @@ conv3d_transpose_1:
       stride: 1
       padding: 1
       dilation: 1
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_transpose_2:
   desc: "2维反卷积"
@@ -13054,6 +14155,10 @@ conv3d_transpose_2:
       padding: [1, 0, 1]
       dilation: 1
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_transpose_3:
   desc: "2维反卷积"
@@ -13077,6 +14182,10 @@ conv3d_transpose_3:
       padding: [1, 0, 1]
       dilation: 2
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation }
 
 conv3d_transpose_4:
   desc: "2维反卷积"
@@ -13087,7 +14196,7 @@ conv3d_transpose_4:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 6, 2, 2, 2]
+        shape: [2, 3, 2, 2, 2]
         range: [ -1, 1]
     params:
       weight:
@@ -13102,6 +14211,10 @@ conv3d_transpose_4:
       dilation: 1
       groups: 3
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, output_padding: output_padding, dilation: dilation, groups: groups }
 
 conv3d_transpose_5:
   desc: "2维反卷积"
@@ -13112,7 +14225,7 @@ conv3d_transpose_5:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 2, 2, 6, 6]
+        shape: [2, 2, 2, 2, 3]
         range: [ -1, 1]
     params:
       weight:
@@ -13137,7 +14250,7 @@ conv3d_transpose_6:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [2, 2, 2, 6, 6]
+        shape: [2, 2, 2, 6, 3]
         range: [ -1, 1]
     params:
       weight:
@@ -13196,7 +14309,7 @@ conv3d_transpose_8:
         shape: [3, 1, 5, 5, 5]
         range: [ -1, 1 ]
       stride: 1
-      padding: [[0, 0], [0, 0], [1, 2], [3, 4], [0, 1], [2, 0]]
+      padding: [[0, 0], [0, 0], [1, 2], [3, 4], [0, 1]]
       data_format: "NCDHW"
       dilation: 1
       output_padding: 0
@@ -13221,7 +14334,7 @@ conv3d_transpose_9:
         shape: [3, 1, 5, 5, 5]
         range: [ -1, 1 ]
       stride: 1
-      padding: [[0, 0], [0, 0], [1, 2], [3, 4], [0, 1], [2, 0]]
+      padding: [[0, 0], [0, 0], [1, 2], [3, 4], [0, 1]]
       data_format: "NCDHW"
       dilation: 1
       output_padding: 0
@@ -13246,7 +14359,7 @@ conv3d_transpose_10:
         shape: [3, 1, 5, 5, 5]
         range: [ -1, 1 ]
       stride: 1
-      padding: [[0, 0], [1, 2], [3, 4], [0, 0]]
+      padding: [[0, 0], [1, 2], [3, 4], [0, 0], [0, 0]]
       data_format: "NDHWC"
       dilation: 1
       output_padding: 0
@@ -13325,6 +14438,10 @@ conv3d_transpose_13:
       dilation: 1
       groups: 1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 conv3d_transpose_14:
   desc: "2维反卷积"
@@ -13349,6 +14466,10 @@ conv3d_transpose_14:
       dilation: 1
       groups: 1
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.conv_transpose3d"
+    mapping:
+      ins: { x: input, weight: weight, stride: stride, padding: padding, dilation: dilation, groups: groups }
 
 adaptive_avg_pool1d_base:
   desc: "1维自适应平均池化"
@@ -13363,6 +14484,10 @@ adaptive_avg_pool1d_base:
         range: [ -1, 1]
     params:
       output_size: 2
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool1d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool1d_0:
   desc: "1维自适应平均池化"
@@ -13377,6 +14502,10 @@ adaptive_avg_pool1d_0:
         range: [ -1, 1]
     params:
       output_size: 8
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool1d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool1d_1:
   desc: "1维自适应平均池化"
@@ -13391,6 +14520,10 @@ adaptive_avg_pool1d_1:
         range: [ -10, 10]
     params:
       output_size: 8
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool1d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool1d_3:
   desc: "1维自适应平均池化"
@@ -13405,6 +14538,10 @@ adaptive_avg_pool1d_3:
         range: [ -10, 10]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool1d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool2d_base:
   desc: "2维自适应平均池化"
@@ -13419,6 +14556,10 @@ adaptive_avg_pool2d_base:
         range: [ -1, 1]
     params:
       output_size: [3, 3]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool2d_0:
   desc: "2维自适应平均池化"
@@ -13433,6 +14574,10 @@ adaptive_avg_pool2d_0:
         range: [ -10, 10]
     params:
       output_size: [1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool2d_1:
   desc: "2维自适应平均池化"
@@ -13447,6 +14592,10 @@ adaptive_avg_pool2d_1:
         range: [ -10, 10]
     params:
       output_size: [2, 3]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool2d_2:
   desc: "2维自适应平均池化"
@@ -13461,6 +14610,10 @@ adaptive_avg_pool2d_2:
         range: [ -10, 10]
     params:
       output_size: [1, 4]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool2d_3:
   desc: "2维自适应平均池化"
@@ -13520,6 +14673,10 @@ adaptive_avg_pool2d_6:
         range: [ -1, 1]
     params:
       output_size: 8
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool3d_base:
   desc: "3维自适应平均池化"
@@ -13534,6 +14691,10 @@ adaptive_avg_pool3d_base:
         range: [ -1, 1]
     params:
       output_size: [3, 3, 3]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool3d_0:
   desc: "3维自适应平均池化"
@@ -13548,6 +14709,10 @@ adaptive_avg_pool3d_0:
         range: [ -10, 10]
     params:
       output_size: [1, 1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool3d_1:
   desc: "3维自适应平均池化"
@@ -13562,6 +14727,10 @@ adaptive_avg_pool3d_1:
         range: [ -10, 10]
     params:
       output_size: [2, 3, 3]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool3d_2:
   desc: "3维自适应平均池化"
@@ -13576,6 +14745,10 @@ adaptive_avg_pool3d_2:
         range: [ -10, 10]
     params:
       output_size: [2, 2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool3d_3:
   desc: "3维自适应平均池化"
@@ -13590,6 +14763,10 @@ adaptive_avg_pool3d_3:
         range: [ -10, 10]
     params:
       output_size: [1, 3, 2]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool3d_4:
   desc: "3维自适应平均池化"
@@ -13604,6 +14781,10 @@ adaptive_avg_pool3d_4:
         range: [ -10, 10]
     params:
       output_size: 3
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool3d_5:
   desc: "3维自适应平均池化"
@@ -13618,6 +14799,10 @@ adaptive_avg_pool3d_5:
         range: [ -10, 10]
     params:
       output_size: !!python/tuple [3, 3, 3]
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool3d_6:
   desc: "3维自适应平均池化"
@@ -13633,6 +14818,10 @@ adaptive_avg_pool3d_6:
     params:
       output_size: !!python/tuple [3, 3, 3]
       data_format: "NCDHW"
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_avg_pool3d_7:
   desc: "3维自适应平均池化"
@@ -13662,6 +14851,10 @@ adaptive_avg_pool3d_8:
         range: [ -1, 1]
     params:
       output_size: 8
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_avg_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_max_pool1d_base:
   desc: "1维自适应平均池化"
@@ -13676,6 +14869,10 @@ adaptive_max_pool1d_base:
         range: [ -10, 10]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool1d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_max_pool1d_0:
   desc: "1维自适应平均池化"
@@ -13690,6 +14887,10 @@ adaptive_max_pool1d_0:
         range: [ -10, 10]
     params:
       output_size: 8
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool1d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_max_pool1d_1:
   desc: "1维自适应平均池化"
@@ -13705,6 +14906,10 @@ adaptive_max_pool1d_1:
     params:
       output_size: 8
       return_mask: False
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool1d"
+    mapping:
+      ins: { x: input, output_size: output_size, return_mask: return_indices }
 
 adaptive_max_pool1d_2:
   desc: "1维自适应平均池化"
@@ -13720,6 +14925,10 @@ adaptive_max_pool1d_2:
     params:
       output_size: 8
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool1d"
+    mapping:
+      ins: { x: input, output_size: output_size, return_mask: return_indices }
 
 adaptive_max_pool2d_base:
   desc: "2维自适应平均池化"
@@ -13734,6 +14943,10 @@ adaptive_max_pool2d_base:
         range: [ -1, 1]
     params:
       output_size: 3
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_max_pool2d_0:
   desc: "2维自适应平均池化"
@@ -13749,6 +14962,10 @@ adaptive_max_pool2d_0:
     params:
       output_size: 8
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size, return_mask: return_indices }
 
 adaptive_max_pool2d_1:
   desc: "2维自适应平均池化"
@@ -13763,6 +14980,10 @@ adaptive_max_pool2d_1:
         range: [ -1, 1]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_max_pool2d_2:
   desc: "2维自适应平均池化"
@@ -13778,6 +14999,10 @@ adaptive_max_pool2d_2:
     params:
       output_size: 3
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size, return_mask: return_indices }
 
 adaptive_max_pool2d_3:
   desc: "2维自适应平均池化"
@@ -13793,6 +15018,10 @@ adaptive_max_pool2d_3:
     params:
       output_size: 8
       return_mask: False
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool2d"
+    mapping:
+      ins: { x: input, output_size: output_size, return_mask: return_indices }
 
 adaptive_max_pool3d_base:
   desc: "3维自适应平均池化"
@@ -13807,6 +15036,10 @@ adaptive_max_pool3d_base:
         range: [ -1, 1]
     params:
       output_size: 4
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size }
 
 adaptive_max_pool3d_0:
   desc: "3维自适应平均池化"
@@ -13822,6 +15055,10 @@ adaptive_max_pool3d_0:
     params:
       output_size: 8
       return_mask: False
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size, return_mask: return_indices }
 
 adaptive_max_pool3d_1:
   desc: "3维自适应平均池化"
@@ -13837,6 +15074,10 @@ adaptive_max_pool3d_1:
     params:
       output_size: 8
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size, return_mask: return_indices }
 
 adaptive_max_pool3d_2:
   desc: "3维自适应平均池化"
@@ -13852,6 +15093,10 @@ adaptive_max_pool3d_2:
     params:
       output_size: 3
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.functional.adaptive_max_pool3d"
+    mapping:
+      ins: { x: input, output_size: output_size, return_mask: return_indices }
 
 avg_pool1d_base:
   desc: "1维平均池化"
@@ -13868,6 +15113,10 @@ avg_pool1d_base:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool1d_0:
   desc: "1维平均池化"
@@ -13884,6 +15133,10 @@ avg_pool1d_0:
       kernel_size: 3
       stride: 4
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool1d_1:
   desc: "1维平均池化"
@@ -13900,6 +15153,10 @@ avg_pool1d_1:
       kernel_size: 1
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool1d_2:
   desc: "1维平均池化"
@@ -13966,6 +15223,10 @@ avg_pool2d_base:
         range: [ -1, 1]
     params:
       kernel_size: [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size }
 
 avg_pool2d_0:
   desc: "2维平均池化"
@@ -13980,6 +15241,10 @@ avg_pool2d_0:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size }
 
 avg_pool2d_1:
   desc: "2维平均池化"
@@ -13994,9 +15259,13 @@ avg_pool2d_1:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: [3, 3]
+      stride: [3, 3]
       padding: [0, 0]
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode }
 
 avg_pool2d_2:
   desc: "2维平均池化"
@@ -14011,7 +15280,7 @@ avg_pool2d_2:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: kernel_size
+      stride: [3, 3]
       padding: [0, 0, 0, 0]
       ceil_mode: False
       exclusive: False
@@ -14029,8 +15298,12 @@ avg_pool2d_3:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: [1, 1]
+      stride: [1, 1]
       padding: [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool2d_4:
   desc: "2维平均池化"
@@ -14045,8 +15318,12 @@ avg_pool2d_4:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: !!python/tuple [1, 1]
+      stride: !!python/tuple [1, 1]
       padding: [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool2d_5:
   desc: "2维平均池化"
@@ -14061,7 +15338,7 @@ avg_pool2d_5:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: !!python/tuple [1, 1]
+      stride: !!python/tuple [1, 1]
       padding: [1, 1]
 
 avg_pool2d_6:
@@ -14077,7 +15354,7 @@ avg_pool2d_6:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: !!python/tuple [1, 1]
+      stride: !!python/tuple [1, 1]
       padding: !!python/tuple [1, 1]
 
 avg_pool2d_7:
@@ -14113,6 +15390,10 @@ avg_pool3d_base:
       kernel_size: [3, 3, 3]
       stride: [1, 1, 1]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool3d_0:
   desc: "3维平均池化"
@@ -14129,6 +15410,10 @@ avg_pool3d_0:
       kernel_size: [3, 3, 3]
       stride: [2, 2, 2]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool3d_1:
   desc: "3维平均池化"
@@ -14146,6 +15431,10 @@ avg_pool3d_1:
       stride: [2, 2, 2]
       padding: [0, 0, 0]
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode }
 
 avg_pool3d_2:
   desc: "3维平均池化"
@@ -14179,6 +15468,10 @@ avg_pool3d_3:
       kernel_size: [3, 3, 3]
       stride: [1, 2, 3]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool3d_4:
   desc: "3维平均池化"
@@ -14195,6 +15488,10 @@ avg_pool3d_4:
       kernel_size: [3, 3, 3]
       stride: [3, 2, 1]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.avg_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 avg_pool3d_5:
   desc: "3维平均池化"
@@ -14361,6 +15658,10 @@ max_pool1d_base:
       kernel_size: 2
       stride: 2
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool1d_0:
   desc: "1维最大池化"
@@ -14377,6 +15678,10 @@ max_pool1d_0:
       kernel_size: 3
       stride: 4
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool1d_1:
   desc: "1维最大池化"
@@ -14393,6 +15698,10 @@ max_pool1d_1:
       kernel_size: 1
       stride: 1
       padding: 0
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool1d_2:
   desc: "1维最大池化"
@@ -14409,6 +15718,10 @@ max_pool1d_2:
       kernel_size: 2
       stride: 1
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool1d_3:
   desc: "1维最大池化"
@@ -14426,6 +15739,10 @@ max_pool1d_3:
       stride: 1
       padding: 0
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode }
 
 max_pool1d_4:
   desc: "1维最大池化"
@@ -14443,6 +15760,10 @@ max_pool1d_4:
       stride: 2
       padding: 0
       return_mask: True
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, return_mask: return_indices }
 
 max_pool1d_5:
   desc: "1维最大池化"
@@ -14459,6 +15780,10 @@ max_pool1d_5:
       kernel_size: 2
       stride: 1
       padding: [1]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool1d_6:
   desc: "1维最大池化"
@@ -14475,6 +15800,10 @@ max_pool1d_6:
       kernel_size: 2
       stride: 1
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool1d_7:
   desc: "1维最大池化"
@@ -14491,6 +15820,10 @@ max_pool1d_7:
       kernel_size: 2
       stride: [1]
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool1d_8:
   desc: "1维最大池化"
@@ -14507,6 +15840,10 @@ max_pool1d_8:
       kernel_size: 2
       stride: 2
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool1d_9:
   desc: "1维最大池化"
@@ -14523,6 +15860,10 @@ max_pool1d_9:
       kernel_size: [3]
       stride: 1
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool1d_10:
   desc: "1维最大池化"
@@ -14557,6 +15898,10 @@ max_pool1d_11:
       padding: 0
       return_mask: True
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.functional.max_pool1d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, return_mask: return_indices, ceil_mode: ceil_mode }
 
 max_pool2d_base:
   desc: "2维最大池化"
@@ -14571,6 +15916,10 @@ max_pool2d_base:
         range: [ -1, 1]
     params:
       kernel_size: [2, 2]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size }
 
 max_pool2d_0:
   desc: "2维最大池化"
@@ -14585,6 +15934,10 @@ max_pool2d_0:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size }
 
 max_pool2d_1:
   desc: "2维最大池化"
@@ -14599,8 +15952,12 @@ max_pool2d_1:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: [1, 1]
+      stride: [1, 1]
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, ceil_mode: ceil_mode }
 
 max_pool2d_2:
   desc: "2维最大池化"
@@ -14615,7 +15972,11 @@ max_pool2d_2:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: [1, 1]
+      stride: [1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride }
 
 max_pool2d_3:
   desc: "2维最大池化"
@@ -14630,8 +15991,12 @@ max_pool2d_3:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: [1, 1]
+      stride: [1, 1]
       padding: [1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool2d_4:
   desc: "2维最大池化"
@@ -14646,8 +16011,12 @@ max_pool2d_4:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: [1, 2]
+      stride: [1, 2]
       padding: [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool2d_5:
   desc: "2维最大池化"
@@ -14662,8 +16031,12 @@ max_pool2d_5:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: !!python/tuple [1, 2]
+      stride: !!python/tuple [1, 2]
       padding: [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool2d_6:
   desc: "2维最大池化"
@@ -14678,8 +16051,12 @@ max_pool2d_6:
         range: [ -1, 1]
     params:
       kernel_size: [3, 3]
-      strides: !!python/tuple [1, 2]
+      stride: !!python/tuple [1, 2]
       padding: !!python/tuple [0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool2d_7:
   desc: "2维最大池化"
@@ -14699,6 +16076,10 @@ max_pool2d_7:
       return_mask: True
       ceil_mode: True
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.max_pool2d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, return_mask: return_indices, ceil_mode: ceil_mode }
 
 max_pool2d_8:
   desc: "2维最大池化"
@@ -14732,6 +16113,10 @@ max_pool3d_base:
       kernel_size: [3, 3, 3]
       stride: [1, 1, 1]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_0:
   desc: "3维最大池化"
@@ -14748,6 +16133,10 @@ max_pool3d_0:
       kernel_size: [3, 3, 3]
       stride: [2, 2, 2]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_1:
   desc: "3维最大池化"
@@ -14765,6 +16154,10 @@ max_pool3d_1:
       stride: [1, 1, 1]
       padding: [0, 0, 0]
       ceil_mode: True
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode }
 
 max_pool3d_2:
   desc: "3维最大池化"
@@ -14798,6 +16191,10 @@ max_pool3d_3:
       kernel_size: [3, 3, 3]
       stride: [1, 2, 3]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_4:
   desc: "3维最大池化"
@@ -14814,6 +16211,10 @@ max_pool3d_4:
       kernel_size: [3, 3, 3]
       stride: [3, 2, 1]
       padding: [0, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_5:
   desc: "3维最大池化"
@@ -14830,6 +16231,10 @@ max_pool3d_5:
       kernel_size: [3, 3, 3]
       stride: [3, 2, 1]
       padding: [1, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_6:
   desc: "3维最大池化"
@@ -14846,6 +16251,10 @@ max_pool3d_6:
       kernel_size: [3, 3, 3]
       stride: [3, 2, 1]
       padding: [1, 1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_7:
   desc: "3维最大池化"
@@ -14878,6 +16287,10 @@ max_pool3d_8:
       kernel_size: [3, 3, 3]
       stride: [3, 2, 1]
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_9:
   desc: "3维最大池化"
@@ -14894,6 +16307,10 @@ max_pool3d_9:
       kernel_size: [3, 3, 3]
       stride: 2
       padding: 1
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_10:
   desc: "3维最大池化"
@@ -14910,6 +16327,10 @@ max_pool3d_10:
       kernel_size: [3, 3, 3]
       stride: !!python/tuple [3, 2, 1]
       padding: [1, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_11:
   desc: "3维最大池化"
@@ -14926,6 +16347,10 @@ max_pool3d_11:
       kernel_size: [3, 3, 3]
       stride: !!python/tuple [3, 2, 1]
       padding: !!python/tuple [1, 0, 0]
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding }
 
 max_pool3d_12:
   desc: "3维最大池化"
@@ -14945,6 +16370,10 @@ max_pool3d_12:
       return_mask: True
       ceil_mode: True
       data_format: 'NCDHW'
+  pytorch:
+    api_name: "torch.nn.functional.max_pool3d"
+    mapping:
+      ins: { x: input, kernel_size: kernel_size, stride: stride, padding: padding, ceil_mode: ceil_mode, return_mask: return_indices }
 
 max_pool3d_13:
   desc: "3维最大池化"
@@ -14979,6 +16408,10 @@ pad:
       mode: 'constant'
       value: 0.0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.pad"
+    mapping:
+      ins: { x: input, pad: pad, mode: mode, value: value }
 
 pad0:
   desc: "该OP依照 pad 和 mode 属性对 x 进行 pad"
@@ -15015,6 +16448,10 @@ celu:
         range: [ -1, 5]
     params:
       alpha: 1.0
+  pytorch:
+    api_name: "torch.nn.functional.celu"
+    mapping:
+      ins: { x: input, alpha: alpha }
 
 elu:
   desc: "elu激活层"
@@ -15029,6 +16466,10 @@ elu:
         range: [ -1, 5]
     params:
       alpha: 1.0
+  pytorch:
+    api_name: "torch.nn.functional.elu"
+    mapping:
+      ins: { x: input, alpha: alpha }
 
 #elu_:
 #  desc: "elu激活层, 对输入x采用Inplace策略"
@@ -15056,6 +16497,10 @@ gelu:
         range: [ -2, 5]
     params:
       approximate: False
+  pytorch:
+    api_name: "torch.nn.functional.gelu"
+    mapping:
+      ins: { x: input }
 
 #gumbel_softmax:
 #  desc: "该OP实现了按Gumbel-Softmax分布进行采样的功能，通过hard可选择是否离散化"
@@ -15085,6 +16530,10 @@ hardshrink:
         range: [ -2, 5]
     params:
       threshold: 0.75
+  pytorch:
+    api_name: "torch.nn.functional.hardshrink"
+    mapping:
+      ins: { x: input, threshold: lambd }
 
 hardsigmoid:
   desc: "hardsigmoid激活函数"
@@ -15100,6 +16549,10 @@ hardsigmoid:
     params:
       slope: 0.1666667
       offset: 0.5
+  pytorch:
+    api_name: "torch.nn.functional.hardsigmoid"
+    mapping:
+      ins: { x: input }
 
 hardswish:
   desc: "hardswish激活函数"
@@ -15112,6 +16565,10 @@ hardswish:
         dtype: "float32"
         shape: [2, 3, 8, 8]
         range: [ -2, 5]
+  pytorch:
+    api_name: "torch.nn.functional.hardswish"
+    mapping:
+      ins: { x: input }
 
 hardtanh:
   desc: "hardtanh激活函数"
@@ -15127,6 +16584,10 @@ hardtanh:
     params:
       min: -1.0
       max: 1.0
+  pytorch:
+    api_name: "torch.nn.functional.hardtanh"
+    mapping:
+      ins: { x: input, min: min_val, max: max_val }
 
 leaky_relu:
   desc: "leaky_relu激活函数"
@@ -15141,6 +16602,10 @@ leaky_relu:
         range: [ -2, 5]
     params:
       negative_slope: 0.01
+  pytorch:
+    api_name: "torch.nn.functional.leaky_relu"
+    mapping:
+      ins: { x: input, negative_slope: negative_slope }
 
 log_sigmoid:
   desc: "log_sigmoid激活函数"
@@ -15167,6 +16632,10 @@ log_softmax:
         range: [ -2, 5]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.nn.functional.log_softmax"
+    mapping:
+      ins: { x: input, axis: dim }
 
 maxout:
   desc: "maxout激活函数"
@@ -15202,6 +16671,10 @@ prelu:
         shape: [1]
         range: [ 0, 1]
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.prelu"
+    mapping:
+      ins: { x: input, weight: weight }
 
 relu:
   desc: "relu激活函数"
@@ -15214,6 +16687,10 @@ relu:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 5]
+  pytorch:
+    api_name: "torch.nn.functional.relu"
+    mapping:
+      ins: { x: input }
 
 relu_:
   desc: "relu_激活函数, 对输入 x 采用 Inplace 策略"
@@ -15238,6 +16715,10 @@ relu6:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 10]
+  pytorch:
+    api_name: "torch.nn.functional.relu6"
+    mapping:
+      ins: { x: input }
 
 selu:
   desc: "selu激活函数"
@@ -15253,6 +16734,10 @@ selu:
     params:
       scale: 1.0507
       alpha: 1.6732
+  pytorch:
+    api_name: "torch.nn.functional.selu"
+    mapping:
+      ins: { x: input }
 
 sigmoid:
   desc: "sigmoid激活函数"
@@ -15265,6 +16750,10 @@ sigmoid:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 5]
+  pytorch:
+    api_name: "torch.nn.functional.sigmoid"
+    mapping:
+      ins: { x: input }
 
 silu:
   desc: "silu激活函数"
@@ -15277,6 +16766,10 @@ silu:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 5]
+  pytorch:
+    api_name: "torch.nn.functional.silu"
+    mapping:
+      ins: { x: input }
 
 softmax:
   desc: "softmax激活函数"
@@ -15291,6 +16784,10 @@ softmax:
         range: [ -2, 5]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.nn.functional.softmax"
+    mapping:
+      ins: { x: input, axis: dim }
 
 #softmax_:
 #  desc: "softmax_激活函数, 对输入 x 采用 Inplace 策略"
@@ -15319,6 +16816,10 @@ softplus:
     params:
       beta: 1
       threshold: 5
+  pytorch:
+    api_name: "torch.nn.functional.softplus"
+    mapping:
+      ins: { x: input, beta: beta, threshold: threshold }
 
 softshrink:
   desc: "softshrink激活函数"
@@ -15333,6 +16834,10 @@ softshrink:
         range: [ -2, 3]
     params:
       threshold: 0.5
+  pytorch:
+    api_name: "torch.nn.functional.softshrink"
+    mapping:
+      ins: { x: input, threshold: lambd }
 
 softsign:
   desc: "softsign激活函数"
@@ -15345,6 +16850,10 @@ softsign:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 3]
+  pytorch:
+    api_name: "torch.nn.functional.softsign"
+    mapping:
+      ins: { x: input }
 
 swish:
   desc: "swish激活函数"
@@ -15369,6 +16878,10 @@ tanhshrink:
         dtype: "float32"
         shape: [2, 4, 8, 8]
         range: [ -2, 3]
+  pytorch:
+    api_name: "torch.nn.functional.tanhshrink"
+    mapping:
+      ins: { x: input }
 
 thresholded_relu:
   desc: "thresholded_relu激活函数"
@@ -15401,6 +16914,10 @@ local_response_norm:
       beta: 0.75
       k: 1.0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.local_response_norm"
+    mapping:
+      ins: { x: input, size: size, alpha: alpha, beta: beta, k: k }
 
 normalize:
   desc: "使用 Lp 范数沿维度 axis 对 x 进行归一化"
@@ -15417,6 +16934,10 @@ normalize:
       p: 2
       axis: 1
       epsilon: 0.000000000001
+  pytorch:
+    api_name: "torch.nn.functional.normalize"
+    mapping:
+      ins: { x: input, axis: dim, p: p, epsilon: eps }
 
 bilinear:
   desc: "对两个输入执行双线性张量积"
@@ -15448,6 +16969,35 @@ bilinear:
         dtype: "float32"
         shape: [1, 10]
         range: [ -1, 1]
+
+bilinear_0:
+  desc: "对两个输入执行双线性张量积"
+  paddle:
+    api_name: "paddle.nn.functional.bilinear"
+    inputs:
+      x1:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [5, 5]
+        range: [ -1, 1]
+      x2:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [5, 4]
+        range: [ -1, 1]
+    params:
+      weight:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [10, 5, 4]
+        range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.bilinear"
+    mapping:
+      ins: { x1: input1, x2: input2, weight: weight,  }
 
 linear:
   desc: "线性变换"
@@ -15503,6 +17053,10 @@ alpha_dropout_base:
     params:
       p: 0.5
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.alpha_dropout"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 alpha_dropout2:
   desc: "一种具有自归一化性质的dropout"
@@ -15518,6 +17072,10 @@ alpha_dropout2:
     params:
       p: 1.0
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.alpha_dropout"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 alpha_dropout3:
   desc: "一种具有自归一化性质的dropout"
@@ -15533,6 +17091,10 @@ alpha_dropout3:
     params:
       p: 0
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.alpha_dropout"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 #dropout:
 #  desc: "一种正则化手段"
@@ -15563,6 +17125,10 @@ dropout2d_base:
     params:
       p: 0.5
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.dropout2d"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 dropout3d_base:
   desc: "一种正则化手段"
@@ -15578,6 +17144,10 @@ dropout3d_base:
     params:
       p: 0.5
       training: False
+  pytorch:
+    api_name: "torch.nn.functional.dropout3d"
+    mapping:
+      ins: { x: input, p: p, training: training }
 
 diag_embed_base:
   desc: "其在指定的 2D 平面（由 dim1 和 dim2 指定）上的对角线由输入 input 填充"
@@ -15620,15 +17190,20 @@ affine_grid_base:
   desc: "生成仿射变换前后的feature maps的坐标映射关系"
   paddle:
     api_name: "paddle.nn.functional.affine_grid"
-    params:
+    inputs:
       theta:
         random: true
         type: "Tensor"
         dtype: "float32"
         shape: [1, 2, 3]
         range: [ -1, 2]
+    params:
       out_shape: [1, 2, 3, 3]
       align_corners: True
+  pytorch:
+    api_name: "torch.nn.functional.affine_grid"
+    mapping:
+      ins: { theta: theta, out_shape: size, align_corners: align_corners }
 
 affine_grid0:
   desc: "生成仿射变换前后的feature maps的坐标映射关系"
@@ -15668,6 +17243,10 @@ cosine_similarity_base:
     params:
       axis: 1
       eps: 0.00000001
+  pytorch:
+    api_name: "torch.nn.functional.cosine_similarity"
+    mapping:
+      ins: { x1: x1, x2: x2, axis: dim, eps: eps }
 
 grid_sample_base:
   desc: "基于flow field网格的对输入X进行双线性插值采样"
@@ -15690,6 +17269,10 @@ grid_sample_base:
       mode: 'bilinear'
       padding_mode: 'zeros'
       align_corners: True
+  pytorch:
+    api_name: "torch.nn.functional.grid_sample"
+    mapping:
+      ins: { x: input, grid: grid, mode: mode, padding_mode: padding_mode, align_corners: align_corners }
 
 label_smooth_base:
   desc: "标签平滑正则化(LSR)"
@@ -15753,6 +17336,10 @@ pixel_shuffle_base:
     params:
       upscale_factor: 3
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.pixel_shuffle"
+    mapping:
+      ins: { x: input, upscale_factor: upscale_factor }
 
 gather_tree_base:
   desc: "在整个束搜索(Beam Search)结束后使用"
@@ -15803,6 +17390,10 @@ unfold_base:
       strides: 1
       paddings: 0
       dilations: 1
+  pytorch:
+    api_name: "torch.nn.functional.unfold"
+    mapping:
+      ins: { x: input, kernel_sizes: kernel_size, strides: stride, paddings: padding, dilations: dilation }
 
 glu_base:
   desc: "glu激活函数"
@@ -15817,6 +17408,10 @@ glu_base:
         range: [ -2, 3]
     params:
       axis: -1
+  pytorch:
+    api_name: "torch.nn.functional.glu"
+    mapping:
+      ins: { x: input, axis: dim }
 
 interpolate_base:
   desc: "调整一个batch中图片的大小"
@@ -15835,6 +17430,10 @@ interpolate_base:
       align_corners: False
       align_mode: 0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.interpolate"
+    mapping:
+      ins: { x: input, size: size, mode: mode, }
 
 sequence_mask_base:
   desc: "该层根据输入 x 和 maxlen 输出一个掩码"
@@ -15882,6 +17481,10 @@ upsample_base:
       align_corners: False
       align_mode: 0
       data_format: 'NCHW'
+  pytorch:
+    api_name: "torch.nn.functional.upsample"
+    mapping:
+      ins: { x: input, size: size }
 
 class_center_sample_base:
   desc: "类别中心采样方法, 从全量的类别中心采样一个子集类别中心参与训练"

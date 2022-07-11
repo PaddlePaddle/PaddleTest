@@ -38,6 +38,7 @@ class WeakTrans(object):
         self.params = dict()
         self.logger = logger
         # desc
+        self.logger.get_log().info(self.case_name)
         self.logger.get_log().info(self.case.get("desc", "没有描述"))
         self.logger.get_log().info("default_type: {}".format(self.default_type))
         # 加载
@@ -119,6 +120,8 @@ class WeakTrans(object):
             return np.random.randint(low, high, shape).astype("int64")
         elif dtype == "float":
             return low + (high - low) * np.random.random(shape)
+        elif dtype == "float16":
+            return low + (high - low) * np.random.random(shape).astype("float16")
         elif dtype == "float32":
             return low + (high - low) * np.random.random(shape).astype("float32")
         elif dtype == "float64":

@@ -29,7 +29,15 @@ class OcrV2Test(object):
         for line in open("tipc_models_url_PaddleOCR_latest.txt"):
             self.model_url_list.append(line)
 
-        self.opset_v_list = [10, 11, 12]
+        self.opset_v_list = [11, 12]
+        self.ignore_model = [
+            "ch_PP-OCRv3_rec_PACT",
+            "rec_mtb_nrtr",
+            "rec_mv3_tps_bilstm_att_v2.0",
+            "rec_mv3_tps_bilstm_ctc_v2.0",
+            "rec_r34_vd_tps_bilstm_att_v2.0",
+            "rec_r34_vd_tps_bilstm_ctc_v2.0",
+        ]
 
     def prepare_resource(self, tgz_url):
         """
@@ -105,19 +113,19 @@ class OcrV2Test(object):
         os.system("wget -q --no-proxy {}".format(tgz_url))
         os.system("tar -xzf {}".format(tgz))
 
-        return tgz, case_name, model_path
+        return tgz, case_name, model_path, model_name
 
     def run(self):
         """
         run test
         """
         for tgz_url in self.model_url_list:
-            tgz, case_name, model_path = self.prepare_resource(tgz_url)
-
-            if platform.system() == "Windows":
-                os.system("python.exe -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
-            else:
-                os.system("python -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
+            tgz, case_name, model_path, model_name = self.prepare_resource(tgz_url)
+            if model_name not in self.ignore_model:
+                if platform.system() == "Windows":
+                    os.system("python.exe -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
+                else:
+                    os.system("python -m pytest {} --alluredir=report".format("test_" + case_name + ".py"))
             os.remove(tgz)
             shutil.rmtree(model_path)
 
