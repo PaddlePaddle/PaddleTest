@@ -66,7 +66,7 @@ class BuildModuleTest(object):
             logit = net(**self.input_data)
             # 按照list顺序构建组合loss
             for l in self.loss_list:
-                print("l is: ", l)
+                # print("l is: ", l)
                 logit = eval(l)
             # logit = eval('logit[0] + logit[3]')
             # logit.backward()
@@ -151,30 +151,32 @@ class BuildModuleTest(object):
         """dygraph_to_static train test"""
         dygraph_out = self.train(to_static=False)
         self.logger.get_log().info("dygraph to static train acc-test start~")
-        self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
+        # self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         static_out = self.train(to_static=True)
-        self.logger.get_log().info("static_out is: {}".format(static_out))
+        # self.logger.get_log().info("static_out is: {}".format(static_out))
         tool.compare(dygraph_out, static_out, delta=delta, rtol=rtol)
-        self.logger.get_log().info("dygraph to static train acc-test Success!!!~~")
+        # self.logger.get_log().info("dygraph to static train acc-test Success~~")
 
     def dygraph_to_static_predict_test(self, delta=1e-8, rtol=1e-8):
         """dygraph_to_static predict test"""
         dygraph_out = self.predict(to_static=False)
         self.logger.get_log().info("dygraph to static predict acc-test start~")
-        self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
+        # self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         static_out = self.predict(to_static=True)
-        self.logger.get_log().info("static_out is: {}".format(static_out))
+        # self.logger.get_log().info("static_out is: {}".format(static_out))
         tool.compare(dygraph_out, static_out, delta=delta, rtol=rtol)
-        self.logger.get_log().info("dygraph to static predict acc-test Success!!!~~")
+        # self.logger.get_log().info("dygraph to static predict acc-test Success~~")
 
-    def dygraph_to_infer_predict_test(self, delta=1e-5, rtol=1e-5):
+    def dygraph_to_infer_predict_test(self, acc_test=False, delta=1e-5, rtol=1e-5):
         """dygraph_to_static predict test"""
         dygraph_out = self.predict(to_static=False)
-        self.logger.get_log().info("dygraph to infer predict acc-test start~")
-        self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
+        self.logger.get_log().info("dygraph to infer export test start~")
+        # self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         self.jit_save()
-        self.logger.get_log().info("dygraph jit.save Success!!!~~")
-        infer_out = self.infer_load()
-        self.logger.get_log().info("static_out is: {}".format(infer_out))
-        tool.compare(dygraph_out, infer_out, delta=delta, rtol=rtol)
-        self.logger.get_log().info("dygraph to infer predict acc-test Success!!!~~")
+        self.logger.get_log().info("dygraph jit.save Success~~")
+        if acc_test:
+            self.logger.get_log().info("dygraph to infer predict acc-test start~")
+            infer_out = self.infer_load()
+            # self.logger.get_log().info("static_out is: {}".format(infer_out))
+            tool.compare(dygraph_out, infer_out, delta=delta, rtol=rtol)
+            # self.logger.get_log().info("dygraph to infer predict acc-test Success~~")
