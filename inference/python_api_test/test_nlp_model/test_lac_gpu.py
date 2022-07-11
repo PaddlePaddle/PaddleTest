@@ -30,6 +30,7 @@ def check_model_exist():
         tar = tarfile.open("lac.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./lac/inference", output_model_path="./lac/inference")
 
 
 def test_config():
