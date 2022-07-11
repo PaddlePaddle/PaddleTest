@@ -30,7 +30,6 @@ def check_model_exist():
         tar = tarfile.open("ppyolo.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./ppyolo/inference", output_model_path="./ppyolo/inference")
 
 
 def test_config():
