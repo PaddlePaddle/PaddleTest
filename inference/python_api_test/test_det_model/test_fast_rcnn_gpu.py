@@ -30,6 +30,7 @@ def check_model_exist():
         tar = tarfile.open("fast_rcnn.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./fast_rcnn/inference", output_model_path="./fast_rcnn/inference")
 
 
 def test_config():
