@@ -32,5 +32,12 @@ case = yml.get_case_info(case_name)
 col = YamlLoader(control_path)
 col_ = col.get_case_info(case_name)
 
-test = controller.ControlTrans(controller=col_, case=case)
-test.run_test()
+
+def test_module_layer():
+    """pytest case"""
+    test = controller.ControlTrans(controller=col_, case=case)
+    test.run_test()
+
+
+# test = controller.ControlTrans(controller=col_, case=case)
+# test.run_test()

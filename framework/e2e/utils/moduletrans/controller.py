@@ -7,6 +7,7 @@ controller
 
 import random
 from inspect import isclass
+import traceback
 import paddle
 import numpy as np
 from logger import logger
@@ -24,8 +25,6 @@ class ControlTrans(object):
         self.logger = logger
 
         self.logger.get_log().info(self.control.get("desc", "没有描述"))
-        print("self.control is: ", self.control)
-
         self.test = self.control["test"]
         self.module = generator.builder.BuildModuleTest(self.case)
         # self.data_loader = self.paddle["DataLoader"]
@@ -42,7 +41,24 @@ class ControlTrans(object):
 
     def run_test(self):
         """run some test"""
+        exc = 0
+        fail_test_list = []
         for k, v in self.test.items():
-            self.logger.get_log().info("k is: ", k)
-            self.logger.get_log().info("v is: ", v)
-            self.test_map[k](v["delta"], v["rtol"])
+            # self.logger.get_log().info("k is: {}".format(k))
+            # self.logger.get_log().info("v is: {}".format(v))
+            try:
+                # self.test_map[k](v["delta"], v["rtol"])
+                self.test_map[k](**self.test[k])
+            except Exception:
+                self.logger.get_log().info("{} Failed!!!~~".format(k))
+                # bug_trace = traceback.print_exc()
+                exc += 1
+                fail_test_list.append(k)
+            else:
+                self.logger.get_log().info("{} Success~~".format(k))
+            # self.test_map[k](v["delta"], v["rtol"])
+            # self.logger.get_log().info(bug_trace)
+
+        if exc > 0:
+            # raise Exception(bug_trace)
+            raise Exception("failed test is: {}".format(fail_test_list))
