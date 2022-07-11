@@ -30,7 +30,9 @@ def check_model_exist():
         tar = tarfile.open("swin_transformer.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./swin_transformer/inference", output_model_path="./swin_transformer/inference")
+        clip_model_extra_op(
+            path_prefix="./swin_transformer/inference", output_model_path="./swin_transformer/inference"
+        )
 
 
 def test_config():
