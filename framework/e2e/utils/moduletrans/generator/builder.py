@@ -66,7 +66,7 @@ class BuildModuleTest(object):
             logit = net(**self.input_data)
             # 按照list顺序构建组合loss
             for l in self.loss_list:
-                print("l is: ", l)
+                # print("l is: ", l)
                 logit = eval(l)
             # logit = eval('logit[0] + logit[3]')
             # logit.backward()
@@ -75,8 +75,6 @@ class BuildModuleTest(object):
             #     logit = eval(i)
             # logit = logit[1] + logit[4]
             # print('logit shape is: ', logit.shape)
-            # logit = paddle.nn.functional.softmax(logit)
-            # print('logit softmax shape is: ', logit.shape)
             logit.backward()
             opt.step()
             opt.clear_grad()
@@ -164,7 +162,7 @@ class BuildModuleTest(object):
         # self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         static_out = self.predict(to_static=True)
         # self.logger.get_log().info("static_out is: {}".format(static_out))
-        tool.compare(dygraph_out + 1, static_out, delta=delta, rtol=rtol)
+        tool.compare(dygraph_out, static_out, delta=delta, rtol=rtol)
         # self.logger.get_log().info("dygraph to static predict acc-test Success~~")
 
     def dygraph_to_infer_predict_test(self, acc_test=False, delta=1e-5, rtol=1e-5):

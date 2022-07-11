@@ -47,11 +47,11 @@ class ControlTrans(object):
             # self.logger.get_log().info("k is: {}".format(k))
             # self.logger.get_log().info("v is: {}".format(v))
             try:
-                # self.test_map[k](v["delta"], v["rtol"])
                 self.test_map[k](**self.test[k])
             except Exception:
                 self.logger.get_log().info("{} Failed!!!~~".format(k))
-                # bug_trace = traceback.print_exc()
+                bug_trace = traceback.format_exc()
+                logger.get_log().warn(bug_trace)
                 exc += 1
                 fail_test_list.append(k)
             else:
