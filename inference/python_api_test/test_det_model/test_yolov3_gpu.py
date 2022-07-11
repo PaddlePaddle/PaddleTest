@@ -30,6 +30,7 @@ def check_model_exist():
         tar = tarfile.open("yolov3.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./yolov3/inference", output_model_path="./yolov3/inference")
 
 
 @pytest.mark.win
