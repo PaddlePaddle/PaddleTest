@@ -75,8 +75,6 @@ class BuildModuleTest(object):
             #     logit = eval(i)
             # logit = logit[1] + logit[4]
             # print('logit shape is: ', logit.shape)
-            # logit = paddle.nn.functional.softmax(logit)
-            # print('logit softmax shape is: ', logit.shape)
             logit.backward()
             opt.step()
             opt.clear_grad()

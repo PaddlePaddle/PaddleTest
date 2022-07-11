@@ -47,7 +47,6 @@ class ControlTrans(object):
             # self.logger.get_log().info("k is: {}".format(k))
             # self.logger.get_log().info("v is: {}".format(v))
             try:
-                # self.test_map[k](v["delta"], v["rtol"])
                 self.test_map[k](**self.test[k])
             except Exception:
                 self.logger.get_log().info("{} Failed!!!~~".format(k))
