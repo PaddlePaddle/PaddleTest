@@ -30,6 +30,7 @@ def check_model_exist():
         tar = tarfile.open("pcpvt_base.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./pcpvt_base/inference", output_model_path="./pcpvt_base/inference")
 
 
 def test_config():
