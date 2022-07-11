@@ -20,6 +20,8 @@ export no_proxy=${no_proxy}
 set -x;
 ls;
 
+mv ../task .
+
 #通用变量[用户改]
 test_code_download_path=./task/models/PaddleClas/CE
 test_code_download_path_CI=./task/models/PaddleClas/CI
@@ -41,7 +43,7 @@ echo "teamcity path:" $tc_name
 if [ $tc_name == "release_02" ];then
     echo release_02
     sed -i "s/SET_CUDA = \"0\"/SET_CUDA = \"2\"/g"  ./Paddle_Cloud_CE/src/task/common.py
-    sed -i "s/SET_MULTI_CUDA = \"0,1\"/SET_MULTI_CUDA = \"2,3\"/g" ./Paddle_Cloud_CE/src/task/common.py 
+    sed -i "s/SET_MULTI_CUDA = \"0,1\"/SET_MULTI_CUDA = \"2,3\"/g" ./Paddle_Cloud_CE/src/task/common.py
     SET_CUDA=2;
     SET_MULTI_CUDA=2,3;
 
@@ -94,33 +96,17 @@ nvidia-docker run -i   --rm \
              -e "cudaid2=${SET_MULTI_CUDA}" \
              -w /workspace \
             ${image_name}  \
-             /bin/bash -c "
-             ldconfig;
-             echo python_version;
-             ls /opt/_internal/;
-             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:\
-                /usr/local/ssl/lib:/opt/rh/devtoolset-2/root/usr/lib64:\
-                /opt/rh/devtoolset-2/root/usr/lib:/usr/local/lib64:\
-                /usr/local/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64;
-             export PATH=/opt/_internal/cpython-3.7.0/bin/:/usr/local/ssl:\
-                /usr/local/go/bin:/root/gopath/bin:/usr/local/gcc-8.2/bin:\
-                /opt/rh/devtoolset-2/root/usr/bin:/usr/local/nvidia/bin:\
-                /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:\
-                /usr/bin:/sbin:/bin;
-             python -c 'import sys; print(sys.version_info[:])';
-             git --version;
-             python -m pip install 'numpy<=1.19.3';
+            /bin/bash -c "
+            ldconfig;
+            echo python_version;
+            ls /opt/_internal/;
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:/usr/local/ssl/lib:/opt/rh/devtoolset-2/root/usr/lib64:/opt/rh/devtoolset-2/root/usr/lib:/usr/local/lib64:/usr/local/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64;
+            export PATH=/opt/_internal/cpython-3.7.0/bin/:/usr/local/ssl:/usr/local/go/bin:/root/gopath/bin:/usr/local/gcc-8.2/bin:/opt/rh/devtoolset-2/root/usr/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;
+            python -c 'import sys; print(sys.version_info[:])';
+            git --version;
+            python -m pip install 'numpy<=1.19.3';
 
-             sh main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} \
-                --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  \
-                --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID} \
-                --owner='liuquanxiang' --priority=${priority_release} --compile_path=${paddle_compile_release} \
-                --agile_job_build_id=${AGILE_JOB_BUILD_ID}
-              #使用v2版执行任务
-              #bash main.sh --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type_id=${AGILE_PIPELINE_CONF_ID} \
-                --priority=${priority} --compile_path=${paddle_compile_release} --job_build_id=${AGILE_JOB_BUILD_ID} \
-                --email_addr='liuquanxiang@baidu.com' \
-                --email_sub='PaddleClas-Py37-Linux-Cuda102-P0小数据集精度-框架Release-${AGILE_JOB_BUILD_ID}'
+            bash main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID}  --owner='liuquanxiang' --priority=${priority_release} --compile_path=${paddle_compile_release}  --agile_job_build_id=${AGILE_JOB_BUILD_ID}
   " &
 wait $!
 exit $?
