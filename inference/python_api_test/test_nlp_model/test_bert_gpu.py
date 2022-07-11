@@ -30,7 +30,6 @@ def check_model_exist():
         tar = tarfile.open("bert.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./bert/inference", output_model_path="./bert/inference")
 
 
 def test_config():
