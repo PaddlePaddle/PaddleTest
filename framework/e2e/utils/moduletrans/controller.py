@@ -14,23 +14,20 @@ from logger import logger
 import generator
 
 
-class ControlTrans(object):
+class ControlModuleTrans(object):
     """Control Trans"""
 
-    def __init__(self, case, controller):
+    def __init__(self, case):
         """init module"""
-        self.control = controller["info"]
+        # self.control = case["info"]["test"]
         self.case = case
         self.case_name = case["name"]
         self.logger = logger
 
-        self.logger.get_log().info(self.control.get("desc", "没有描述"))
-        self.test = self.control["test"]
+        # self.logger.get_log().info(self.case.get("desc", "没有描述"))
+        self.test = case["info"]["test"]
         self.module = generator.builder.BuildModuleTest(self.case)
-        # self.data_loader = self.paddle["DataLoader"]
-        # self.data = self.paddle["Data"]
-        # self.loss = self.paddle["Loss"]
-        # self.train = self.paddle["Train"]
+
         self.test_map = {
             "dygraph_train_test": self.module.dygraph_train_test,
             "dygraph_to_static_train_test": self.module.dygraph_to_static_train_test,
