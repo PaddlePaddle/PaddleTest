@@ -96,4 +96,4 @@ def test(ecp):
 if __name__ == "__main__":
     # yaml_exe("../yaml/%s.yml" % sys.argv[1])
     # debug_yaml_exe("../yaml/base.yml", sys.argv[1])
-    pytest.main(["-sv", "--alluredir=../report", sys.argv[0]])
+    pytest.main(["-sv", "--alluredir=../report/api", sys.argv[0]])
