@@ -47,4 +47,4 @@ dir;
 
 
 @ echo off
-main.bat --build_id=%AGILE_PIPELINE_BUILD_ID% --build_type_id=%AGILE_PIPELINE_CONF_ID% --priority=%priority_develop% --compile_path=%compile_path_develop% --job_build_id=%AGILE_JOB_BUILD_ID% 
+main.bat --build_id=%AGILE_PIPELINE_BUILD_ID% --build_type_id=%AGILE_PIPELINE_CONF_ID% --priority=%priority_develop% --compile_path=%compile_path_develop% --job_build_id=%AGILE_JOB_BUILD_ID%

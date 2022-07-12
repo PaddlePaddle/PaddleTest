@@ -118,11 +118,11 @@ nvidia-docker run -i   --rm \
             export Project_path=${Project_path}
             export SET_CUDA=${SET_CUDA}
             export SET_MULTI_CUDA=${SET_MULTI_CUDA}
-             
+
             ldconfig;
             echo python_version;
             if [[ ${Python_env}=='path_way']];then
-                case ${Python_version} in 
+                case ${Python_version} in
                 36)
                 export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:/usr/local/ssl/lib:/opt/rh/devtoolset-2/root/usr/lib64:/opt/rh/devtoolset-2/root/usr/lib:/usr/local/lib64:/usr/local/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64;
                 export PATH=/opt/_internal/cpython-3.6.0/bin/:/usr/local/ssl:/usr/local/go/bin:/root/gopath/bin:/usr/local/gcc-8.2/bin:/opt/rh/devtoolset-2/root/usr/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;
