@@ -29,13 +29,13 @@ case = yml.get_case_info(case_name)
 # dygraph_to_static_predict_test = test.dygraph_to_static_predict_test()
 # print("dygraph_to_static_predict_test is: ", dygraph_to_static_predict_test)
 
-col = YamlLoader(control_path)
-col_ = col.get_case_info(case_name)
+# col = YamlLoader(control_path)
+# col_ = col.get_case_info(case_name)
 
 
 def test_module_layer():
     """pytest case"""
-    test = controller.ControlTrans(controller=col_, case=case)
+    test = controller.ControlModuleTrans(case=case)
     test.run_test()
 
 
