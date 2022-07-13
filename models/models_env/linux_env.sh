@@ -6,9 +6,6 @@ rm -rf ce && mkdir ce;
 cd ce;
 
 ####测试框架下载
-"""
-通过CE_version判断使用V1还是V2版本
-"""
 if [[ ${CE_version}=="V1" ]];then
     CE_version_name=${CE_version_name}
     wget -q ${CE_V1}
