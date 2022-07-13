@@ -1,4 +1,4 @@
-cd ./competitor
+cd ./task/competitor
 
 python3.7 -m pip install pytest
 python3.7 -m pip install allure-pytest
