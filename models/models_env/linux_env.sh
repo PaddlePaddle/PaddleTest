@@ -5,15 +5,20 @@ pwd;
 rm -rf ce && mkdir ce;
 cd ce;
 
-echo ${CE_version}
-echo ${CE_V1}
-echo ${CE_V2}
-echo ${proxy}
-echo ${Repo}
+echo $Python_env #=path_way
+echo $Python_version #=37
+echo $CE_version #=V1
+echo $Priority_version #=P0
+echo $Compile_version #=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+echo $Image_version #=registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7
+echo $Data_path #=/ssd2/ce_data/PaddleClas
+echo $Projecr_path #=/workspace/task/PaddleClas
+echo $Common_name #=cls_common_release
+echo $Repo #=PaddleClas
 
 ####测试框架下载
 if [[ ${CE_version}=="V1" ]];then
-    CE_version_name=${CE_version_name}
+    CE_version_name=Paddle_Cloud_CE
     wget -q ${CE_V1}
 else
     CE_version_name=continuous_evaluation
@@ -122,8 +127,7 @@ nvidia-docker run -i   --rm \
             export SET_CUDA=${SET_CUDA}
             export SET_MULTI_CUDA=${SET_MULTI_CUDA}
 
-            ldconfig;
-            echo python_version;
+            echo ${python_version};
             if [[ ${Python_env}=='path_way']];then
                 case ${Python_version} in
                 36)
