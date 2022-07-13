@@ -5,6 +5,12 @@ pwd;
 rm -rf ce && mkdir ce;
 cd ce;
 
+echo ${CE_version}
+echo ${CE_V1}
+echo ${CE_V2}
+echo ${proxy}
+echo ${Repo}
+
 ####测试框架下载
 if [[ ${CE_version}=="V1" ]];then
     CE_version_name=${CE_version_name}
