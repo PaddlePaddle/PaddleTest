@@ -55,7 +55,7 @@ elif [ "$1" = "linux_st_gpu2" ];then #双卡
           --log_dir='train_dy_threshold_log' \
           train.py \
           --batch_size 64 \
-          --data 'cifar10' \
+          --data 'imagenet' \
           --pruning_mode threshold \
           --lr 0.005 \
           --num_epochs 20 \
