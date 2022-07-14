@@ -57,6 +57,10 @@ if [ -d 'dataset/voc' ];then
 rm -rf dataset/voc
 fi
 ln -s ${data_path}/../PaddleSeg/pascalvoc dataset/voc
+if [ -d 'dataset/wider_face' ];then
+rm -rf dataset/wider_face
+fi
+ln -s ${data_path}/data/wider_face dataset/wider_face
 if [ -d "dataset/mot" ];then rm -rf dataset/mot
 fi
 ln -s ${data_path}/data/mot dataset/mot
