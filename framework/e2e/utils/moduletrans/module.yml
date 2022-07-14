@@ -21,6 +21,8 @@ InstanceNorm1D_base:
       excess:
         place: True
 
+#!!python/tuple [3, 4]
+
 Module_1:
   desc: "示例module结构"
   paddle:
@@ -255,6 +257,23 @@ Module_7:
 
 Module_8:
   desc: "Det swin_transformer.Blocks"
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
   paddle:
     Layer:
       repo: "PaddleDetection"
@@ -288,9 +307,105 @@ Module_8:
           value: 24
         label: "None"
     Loss:
-      loss_list: ['logit[0] + logit[1]', 'paddle.nn.functional.softmax(logit)']
+      loss_list: ['logit[0] + logit[3]']
+    Train:
+      step: 3
+      optimizer:
+        opt_api: "paddle.optimizer.SGD"
+        learning_rate: 0.0000001
+
+Module_9:
+  desc: "Clas "
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: True
+      delta: 0.000001
+      rtol: 0.000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+  paddle:
+    Layer:
+      repo: "PaddleClas"
+      layer_name: "ppcls.arch.backbone.model_zoo.resnest.SplatConv"
+      params:
+        in_channels: 32
+        channels: 64
+        kernel_size: 3
+        name: "SplatConv"
+    DataLoader: "single"
+    Data:
+      x:
+        input:
+          random: True
+          type: "Tensor"
+          dtype: "float32"
+          shape: [4, 32, 48, 48]
+          range: [ -1, 1]
+        label: "None"
+    Loss:
+      #loss_list: ['paddle.nn.functional.softmax(logit)']
+      loss_list: ['logit']
     Train:
       step: 3
       optimizer:
         opt_api: "paddle.optimizer.SGD"
         learning_rate: 0.0001
+
+Module_10:
+  desc: "Clas "
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 32, 48, 48]
+        range: [ -1, 1]
+  Layer:
+    repo: "PaddleClas"
+    layer_name: "ppcls.arch.backbone.model_zoo.resnest.SplatConv"
+    params:
+      in_channels: 32
+      channels: 64
+      kernel_size: 3
+      name: "SplatConv"
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']   #Loss也最好类似Layer、dataset从某路径调用
+#      loss_list: ['paddle.nn.functional.softmax(logit)']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.0001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: True
+      delta: 0.000001
+      rtol: 0.000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001

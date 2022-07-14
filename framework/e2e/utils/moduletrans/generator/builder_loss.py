@@ -7,16 +7,26 @@ loss builder
 
 import numpy as np
 import paddle
-import tool
+import diy
 
 
 class BuildLoss(object):
     """BuildData"""
 
-    def __init__(self, loss_list):
+    def __init__(self, loss_name, loss_param):
         """init"""
-        self.loss_list = loss_list
+        self.loss_name = loss_name
+        self.loss_param = loss_param
 
-    def get_loss_list(self):
+    def get_loss_name(self):
+        """get loss name"""
+        return self.loss_name
+
+    def get_loss_param_dict(self):
+        """get loss name"""
+        return self.loss_param
+
+    def get_loss(self, logit):
         """get loss"""
-        return self.loss_list
+        logit = eval(self.loss_name)(logit, **self.loss_param)
+        return logit

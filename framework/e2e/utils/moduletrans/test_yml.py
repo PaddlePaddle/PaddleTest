@@ -14,7 +14,7 @@ import controller
 # yaml_path = os.path.join("moduletrans", "module.yml")
 yaml_path = "module.yml"
 control_path = "control.yml"
-case_name = "Module_5"
+case_name = "Module_10"
 yml = YamlLoader(yaml_path)
 
 case = yml.get_case_info(case_name)
@@ -33,11 +33,11 @@ case = yml.get_case_info(case_name)
 # col_ = col.get_case_info(case_name)
 
 
-def test_module_layer():
-    """pytest case"""
-    test = controller.ControlModuleTrans(case=case)
-    test.run_test()
+# def test_module_layer():
+#     """pytest case"""
+#     test = controller.ControlModuleTrans(case=case)
+#     test.run_test()
 
 
-# test = controller.ControlTrans(controller=col_, case=case)
-# test.run_test()
+test = controller.ControlModuleTrans(case=case)
+test.run_test()

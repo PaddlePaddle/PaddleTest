@@ -9,4 +9,5 @@ import generator.builder
 import generator.builder_data
 import generator.builder_layer
 import generator.builder_loss
+import generator.builder_optimizer
 import generator.builder_train

@@ -4,7 +4,4 @@
 """
 __init__
 """
-import diy.data
-import diy.layer
-import diy.loss
-import diy.optimizer
+import diy.data.single_img_dataset

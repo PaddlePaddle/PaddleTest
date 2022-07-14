@@ -4,7 +4,6 @@
 """
 __init__
 """
-import diy.data
-import diy.layer
-import diy.loss
-import diy.optimizer
+import diy.layer.linear
+import diy.layer.VSFD
+import diy.layer.SEBlock
