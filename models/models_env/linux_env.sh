@@ -117,24 +117,19 @@ if  [[ ! -n "${docker_flag}" ]] ;then
                 -v $(pwd):/workspace \
                 -v /ssd2:/ssd2 \
                 -w /workspace \
+                -e "no_proxy=${no_proxy}" \
+                -e "http_proxy=${http_proxy}" \
+                -e "https_proxy=${http_proxy}" \
+                -e "paddle_compile=${Compile_version}" \
+                -e "Data_path=${Data_path}" \
+                -e "model_flag=${model_flag}" \
+                -e "Project_path=${Project_path}" \
+                -e "cudaid1=${SET_CUDA}" \
+                -e "cudaid2=${SET_MULTI_CUDA}" \
                 ${Image_version}  \
                 /bin/bash -c "
 
-                ldconfig; #环境需要
-                export no_proxy=${no_proxy}
-                export http_proxy=${http_proxy}
-                export https_proxy=${http_proxy}
-
-                if  [[ ! -n '${model_flag}' ]];then
-                    echo 'you have not input a model_flag!'
-                else
-                    export model_flag=${model_flag}
-                fi
-                export Data_path=${Data_path}
-                export Project_path=${Project_path}
-                export SET_CUDA=${SET_CUDA}
-                export SET_MULTI_CUDA=${SET_MULTI_CUDA}
-
+                ldconfig;
                 if [[ ${Python_env} == 'path_way' ]];then
                     case ${Python_version} in
                     36)
@@ -159,6 +154,10 @@ if  [[ ! -n "${docker_flag}" ]] ;then
                     ;;
                     esac
                 elif [[ ${Python_env} == 'ln_way' ]];then
+                    # rm -rf /usr/bin/python2.7
+                    # rm -rf /usr/local/python2.7.15/bin/python
+                    # rm -rf /usr/local/bin/python
+                    # export PATH=/usr/local/bin/python:${PATH}
                     case ${Python_version} in
                     36)
                     # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
@@ -213,21 +212,7 @@ if  [[ ! -n "${docker_flag}" ]] ;then
     exit $?
 else
     echo docker already build
-    ldconfig; #环境需要
-    export no_proxy=${no_proxy}
-    export http_proxy=${http_proxy}
-    export https_proxy=${http_proxy}
-
-    if  [[ ! -n '${model_flag}' ]];then
-        echo 'you have not input a model_flag!'
-    else
-        export model_flag=${model_flag}
-    fi
-    export Data_path=${Data_path}
-    export Project_path=${Project_path}
-    export SET_CUDA=${SET_CUDA}
-    export SET_MULTI_CUDA=${SET_MULTI_CUDA}
-
+    ldconfig;
     if [[ ${Python_env} == 'path_way' ]];then
         case ${Python_version} in
         36)
@@ -292,11 +277,6 @@ else
     else
         echo unset python version
     fi
-
-    python -m pip install paddlepaddle-gpu==2.3.1 -i https://mirror.baidu.com/pypi/simple
-    echo "######  paddle version"
-    python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
-    python -c "import paddle;paddle.utils.run_check()"
 
     python -c 'import sys; print(sys.version_info[:])';
     git --version;
