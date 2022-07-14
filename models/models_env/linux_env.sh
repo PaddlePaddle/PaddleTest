@@ -5,24 +5,24 @@ pwd;
 rm -rf ce && mkdir ce;
 cd ce;
 
-Repo=${Repo:-PaddleClas}
-Python_env=${Python_env:-path_way}
-Python_version=${Python_version:-37}
-CE_version=${CE_version:-V1}
-Priority_version=${Priority_version:-P0}
-Compile_version=${Compile_version:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
-Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
-Data_path=${Data_path:-/ssd2/ce_data/PaddleClas}
-Project_path=${Project_path:-/workspace/task/PaddleClas}
-Common_name=${Common_name:-cls_common_release}  #CE框架中的执行步骤，名称各异所以需要传入
-model_flag=${model_flag:-CE}  #clas gan特有，可删除
+export Repo=${Repo:-PaddleClas}
+export Python_env=${Python_env:-path_way}
+export Python_version=${Python_version:-37}
+export CE_version=${CE_version:-V1}
+export Priority_version=${Priority_version:-P0}
+export Compile_version=${Compile_version:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
+export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
+export Data_path=${Data_path:-/ssd2/ce_data/PaddleClas}
+export Project_path=${Project_path:-/workspace/task/PaddleClas}
+export Common_name=${Common_name:-cls_common_release}  #CE框架中的执行步骤，名称各异所以需要传入
+export model_flag=${model_flag:-CE}  #clas gan特有，可删除
 
 ####测试框架下载
 if [[ ${CE_version} == "V2" ]];then
-    CE_version_name=continuous_evaluation
+    export CE_version_name=continuous_evaluation
     wget -q ${CE_V2}
 else
-    CE_version_name=Paddle_Cloud_CE
+    export CE_version_name=Paddle_Cloud_CE
     wget -q ${CE_V1}
 fi
 ls
@@ -72,27 +72,26 @@ if [ $tc_name == "release_02" ];then
     echo release_02
     sed -i "s/SET_CUDA = \"0\"/SET_CUDA = \"2\"/g"  ./${CE_version_name}/src/task/common.py
     sed -i "s/SET_MULTI_CUDA = \"0,1\"/SET_MULTI_CUDA = \"2,3\"/g" ./${CE_version_name}/src/task/common.py
-    SET_CUDA=2;
-    SET_MULTI_CUDA=2,3;
+    export SET_CUDA=2;
+    export SET_MULTI_CUDA=2,3;
 
 elif [ $tc_name == "release_03" ];then
     echo release_03
     sed -i "s/SET_CUDA = \"0\"/SET_CUDA = \"4\"/g"  ./${CE_version_name}/src/task/common.py
     sed -i "s/SET_MULTI_CUDA = \"0,1\"/SET_MULTI_CUDA = \"4,5\"/g" ./${CE_version_name}/src/task/common.py
-    SET_CUDA=4;
-    SET_MULTI_CUDA=4,5;
+    export SET_CUDA=4;
+    export SET_MULTI_CUDA=4,5;
 
 elif [ $tc_name == "release_04" ];then
     echo release_04
     sed -i "s/SET_CUDA = \"0\"/SET_CUDA = \"6\"/g"  ./${CE_version_name}/src/task/common.py
     sed -i "s/SET_MULTI_CUDA = \"0,1\"/SET_MULTI_CUDA = \"6,7\"/g"  ./${CE_version_name}/src/task/common.py
-    SET_CUDA=6;
-    SET_MULTI_CUDA=6,7;
+    export SET_CUDA=6;
+    export SET_MULTI_CUDA=6,7;
 else
     echo release_01
-    SET_CUDA=0;
-    SET_MULTI_CUDA=0,1;
-
+    export SET_CUDA=0;
+    export SET_MULTI_CUDA=0,1;
 fi
 
 ####显示执行步骤
@@ -119,26 +118,13 @@ if  [[ ! -n "${docker_flag}" ]] ;then
                 -v $(pwd):/workspace \
                 -v /ssd2:/ssd2 \
                 -w /workspace \
-                -e "no_proxy=${no_proxy}" \
-                -e "http_proxy=${http_proxy}" \
-                -e "https_proxy=${http_proxy}" \
-                -e "paddle_compile=${Compile_version}" \
-                -e "Data_path=${Data_path}" \
-                -e "model_flag=${model_flag}" \
-                -e "Project_path=${Project_path}" \
-                -e "cudaid1=${SET_CUDA}" \
-                -e "cudaid2=${SET_MULTI_CUDA}" \
                 ${Image_version}  \
                 /bin/bash -c "
-
-                ldconfig;
-                bash docker_run.sh
-
+                bash docker_run.sh;
     " &
     wait $!
     exit $?
 else
     echo docker already build
-    ldconfig;
     bash docker_run.sh
 fi

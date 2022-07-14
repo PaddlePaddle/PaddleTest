@@ -1,3 +1,16 @@
+ldconfig;
+export no_proxy=${no_proxy};
+export http_proxy=${http_proxy};
+export https_proxy=${http_proxy};
+if  [[ ! -n "${model_flag}" ]];then
+    echo 'you have not input a model_flag!';
+else
+    export model_flag=${model_flag};
+fi
+export Data_path=${Data_path};
+export Project_path=${Project_path};
+export SET_CUDA=${SET_CUDA};
+export SET_MULTI_CUDA=${SET_MULTI_CUDA};
 if [[ ${Python_env} == 'path_way' ]];then
     case ${Python_version} in
     36)
