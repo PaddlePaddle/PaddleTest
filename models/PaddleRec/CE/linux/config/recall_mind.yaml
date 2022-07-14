@@ -409,7 +409,7 @@ INFER:
     kpis: #kpi指标
       recall@50:
         latest: True
-        kpi_base: 0.00874
+        kpi_base: 0.00087
         threshold: 0.1
         actived: True
         evaluation: "+"
