@@ -50,6 +50,8 @@ env
 
 echo -------start install paddleslim----
 cd ${repo_path}/PaddleSlim
+echo ---git log---
+git log -1
 python -m pip install -r requirements.txt
 python setup.py install
 echo ------finish install paddleslim -----
