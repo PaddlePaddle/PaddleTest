@@ -102,6 +102,7 @@ cd ${CE_version_name}/src
 
 #定义执行函数
 function docker_execute() {
+    ldconfig #环境需要
     export no_proxy=${no_proxy}
     export http_proxy=${http_proxy}
     export https_proxy=${https_proxy}
@@ -211,6 +212,7 @@ if  [[ ! -n "${docker_flag}" ]] ;then
                 ${Image_version}  \
                 /bin/bash -c "
 
+                ldconfig; #环境需要
                 export no_proxy=${no_proxy}
                 export http_proxy=${http_proxy}
                 export https_proxy=${http_proxy}
@@ -305,4 +307,3 @@ else
     echo docker already build
     docker_execute
 fi
-echo "finish"
