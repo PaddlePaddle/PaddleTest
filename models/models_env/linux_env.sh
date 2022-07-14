@@ -293,6 +293,11 @@ else
         echo unset python version
     fi
 
+    python -m pip install paddlepaddle-gpu==2.3.1 -i https://mirror.baidu.com/pypi/simple
+    echo "######  paddle version"
+    python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
+    python -c "import paddle;paddle.utils.run_check()"
+
     python -c 'import sys; print(sys.version_info[:])';
     git --version;
     if [[ ${CE_version} == 'V2' ]];then
