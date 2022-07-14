@@ -47,7 +47,7 @@ demo_run_func(){
             #run_case_func $1 ${model} st_infer $2 static_infer.py
         elif [ ${model} == "metaheac" ] ;then
             run_case_func $1 ${model} dy_train $2 ../../../tools/trainer.py
-            run_case_func $1 ${model} dy_infer $2 ./infer_meta.py
+            run_case_func $1 ${model} dy_infer $2 ./infer.py
         elif [ ${model} == "autofis" ] ;then
             run_case_func $1 ${model} dy_train $2 trainer.py 
             run_case_func $1 ${model} dy_train $2 trainer.py -o stage=1
