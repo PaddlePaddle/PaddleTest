@@ -5,10 +5,6 @@
 Layer trans
 """
 
-import random
-from inspect import isclass
-import paddle
-import numpy as np
 from logger import logger
 
 
@@ -19,21 +15,22 @@ class ModuleTrans(object):
         """init module"""
         self.case = case["info"]
         self.case_name = case["name"]
-        self.paddle = self.case["paddle"]
+        # self.case = self.case["paddle"]
         self.logger = logger
 
         self.logger.get_log().info(self.case.get("desc", "没有描述"))
 
-        self.layer = self.paddle["Layer"]
-        self.data_loader = self.paddle["DataLoader"]
-        self.data = self.paddle["Data"]
-        self.loss = self.paddle["Loss"]
-        self.train = self.paddle["Train"]
+        self.layer = self.case["Layer"]
+        self.data_loader = self.case["DataGenerator"]
+        # self.data = self.case["Data"]
+        self.loss = self.case["Loss"]
+        self.optimizer = self.case["optimizer"]
+        self.train = self.case["Train"]
 
     def get_layer_info(self):
         """get layer info"""
         repo = self.layer["repo"]
-        if repo not in ["DIY", "PaddleOCR", "PaddleSeg"]:
+        if repo not in ["DIY", "PaddleOCR", "PaddleSeg", "PaddleClas"]:
             self.logger.get_log().warning("{} 未知模型repo".format(repo))
         layer_name = self.layer["layer_name"]
         layer_param = self.layer["params"]
@@ -41,17 +38,20 @@ class ModuleTrans(object):
 
     def get_data_info(self):
         """get data info"""
-        if self.data_loader not in ["single", "DataLoader"]:
-            self.logger.get_log().warning("{} 未知模型repo".format(self.data_loader))
-        return self.data_loader, self.data
+        return self.data_loader
 
     def get_loss_info(self):
         """get loss info"""
-        loss_list = self.loss["loss_list"]
-        return loss_list
+        loss_name = self.loss["loss_name"]
+        loss_param = self.loss["params"]
+        return loss_name, loss_param
+
+    def get_opt_info(self):
+        """get optimizer info"""
+        optimizer_name = self.optimizer["optimizer_name"]
+        optimizer_param = self.optimizer["params"]
+        return optimizer_name, optimizer_param
 
     def get_train_info(self):
         """get train info"""
-        train_step = self.train["step"]
-        optimizer_info = self.train["optimizer"]
-        return train_step, optimizer_info
+        return self.train

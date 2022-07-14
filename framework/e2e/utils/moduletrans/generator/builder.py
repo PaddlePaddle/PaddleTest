@@ -5,6 +5,7 @@
 builder
 """
 import os
+from collections import Iterable
 import numpy as np
 import paddle
 import paddle.inference as paddle_infer
@@ -12,9 +13,10 @@ import moduletrans
 import generator.builder_layer as builder_layer
 import generator.builder_loss as builder_loss
 import generator.builder_data as builder_data
+import generator.builder_optimizer as builder_optimizer
 import generator.builder_train as builder_train
 import tool
-from logger import logger
+import diy
 
 
 class BuildModuleTest(object):
@@ -28,83 +30,85 @@ class BuildModuleTest(object):
         self.case = moduletrans.ModuleTrans(case)
         self.case_name = self.case.case_name
         self.logger = self.case.logger
+
+        self.data_info = builder_data.BuildData(self.case.get_data_info())
+        self.input_data = self.data_info.get_single_data()
+
         self.layer_info = builder_layer.BuildLayer(*self.case.get_layer_info())
-        # self.layer = self.layer_info.get_layer()
-        # self.logger.get_log().info('module层级结构: {}'.format(self.layer))
-        # print(self.layer.get_layer())
-        # net = self.layer.get_layer()
 
-        # data_type, data_input = self.case.get_data_info()
-        # print('data type is: ', data_type)
-        # print('data input is: ', data_input)
-        self.data_info = builder_data.BuildData(*self.case.get_data_info())
-        print(self.data_info.get_single_paddle_data())
-        self.input_data = self.data_info.get_single_paddle_data()
+        self.loss_info = builder_loss.BuildLoss(*self.case.get_loss_info())
 
-        # self.out = net(**self.input_data)
-        # print('out is: ', self.out)
-        self.train_info = builder_train.BuildTrain(*self.case.get_train_info())
+        self.optimizer_info = builder_optimizer.BuildOptimizer(*self.case.get_opt_info())
 
-        self.loss_info = builder_loss.BuildLoss(self.case.get_loss_info())
-        self.loss_list = self.loss_info.get_loss_list()
+        self.train_info = builder_train.BuildTrain(self.case.get_train_info())
 
     def train(self, to_static=False):
         """dygraph or static train"""
+        paddle.enable_static()
+        paddle.disable_static()
         paddle.seed(33)
         np.random.seed(33)
-        # input_data = self.data_info.get_single_paddle_data()
         net = self.layer_info.get_layer()
 
         if to_static:
             net = paddle.jit.to_static(net)
+        # net.train()
 
-        opt = eval(self.train_info.get_train_optimizer())(
-            learning_rate=self.train_info.get_train_lr(), parameters=net.parameters()
-        )
-        # dygraph train
+        # 构建optimizer用于训练
+        opt = self.optimizer_info.get_opt(net=net)
+
         for epoch in range(self.train_info.get_train_step()):
-            logit = net(**self.input_data)
-            # 按照list顺序构建组合loss
-            for l in self.loss_list:
-                # print("l is: ", l)
-                logit = eval(l)
-            # logit = eval('logit[0] + logit[3]')
-            # logit.backward()
-            # loss_list = ['logit[0] + logit[3]', 'paddle.nn.functional.softmax(logit)']
-            # for i in loss_list:
-            #     logit = eval(i)
-            # logit = logit[1] + logit[4]
-            # print('logit shape is: ', logit.shape)
-            logit.backward()
-            opt.step()
-            opt.clear_grad()
+            if isinstance(self.input_data, Iterable):  # data_module_type == 'DataLoader'
+                for i, data_dict in enumerate(self.input_data()):
+                    logit = net(**data_dict)
+                    # 构建loss用于训练
+                    logit = self.loss_info.get_loss(logit)
+                    # self.logger.get_log().info('logit is: {}'.format(logit))
+                    logit.backward()
+                    opt.step()
+                    opt.clear_grad()
+            else:  # data_module_type == 'Dataset'
+                data_dict = self.input_data[epoch]
+                logit = net(**data_dict)
+                # 构建loss用于训练
+                logit = self.loss_info.get_loss(logit)
+                self.logger.get_log().info("logit is: {}".format(logit))
+                logit.backward()
+                opt.step()
+                opt.clear_grad()
         return logit
 
     def predict(self, to_static=False):
         """predict"""
+        paddle.enable_static()
+        paddle.disable_static()
         paddle.seed(33)
         np.random.seed(33)
+        data_dict = self.input_data.__getitem__(0)
         net = self.layer_info.get_layer()
         if to_static:
             net = paddle.jit.to_static(net)
         net.eval()
-        logit = net(**self.input_data)
+        logit = net(**data_dict)
         return logit
 
     def jit_save(self):
         """jit.save(layer)"""
+        paddle.enable_static()
+        paddle.disable_static()
         paddle.seed(33)
         np.random.seed(33)
         net = self.layer_info.get_layer()
         net = paddle.jit.to_static(net)
         net.eval()
-        net(**self.input_data)
-        # inputspec_list = self.data_info.get_single_inputspec()
-        # paddle.jit.save(net, path=os.path.join(self.save_path, 'jit_save', self.case_name), input_spec=inputspec_list)
+        data_dict = self.input_data.__getitem__(0)
+        net(**data_dict)
         paddle.jit.save(net, path=os.path.join(self.save_path, "jit_save", self.case_name))
 
     def infer_load(self):
         """infer load (layer)"""
+        paddle.enable_static()
+        paddle.disable_static()
         paddle.seed(33)
         np.random.seed(33)
         config = paddle_infer.Config(
@@ -115,7 +119,7 @@ class BuildModuleTest(object):
         input_names = predictor.get_input_names()
 
         ##
-        input_dict = self.input_data
+        input_dict = self.input_data.__getitem__(0)
         inputs_key = sorted(input_dict.keys())
 
         input_list = []
