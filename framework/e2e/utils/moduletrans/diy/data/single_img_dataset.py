@@ -72,7 +72,7 @@ if __name__ == "__main__":
         print("step {}: {}".format(i, img))
     from collections import Iterable
 
-    if isinstance(dataset, Iterable):
+    if isinstance(dataset, paddle.io.Dataset):
         print("loader is!!!")
     else:
         print("loader not!!!")

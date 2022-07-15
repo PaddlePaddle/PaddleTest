@@ -33,11 +33,11 @@ case = yml.get_case_info(case_name)
 # col_ = col.get_case_info(case_name)
 
 
-# def test_module_layer():
-#     """pytest case"""
-#     test = controller.ControlModuleTrans(case=case)
-#     test.run_test()
+def test_module_layer():
+    """pytest case"""
+    test = controller.ControlModuleTrans(case=case)
+    test.run_test()
 
 
-test = controller.ControlModuleTrans(case=case)
-test.run_test()
+# test = controller.ControlModuleTrans(case=case)
+# test.run_test()
