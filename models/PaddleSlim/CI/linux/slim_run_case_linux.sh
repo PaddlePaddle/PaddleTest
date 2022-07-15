@@ -1126,6 +1126,7 @@ if [ "$1" = "run_CI" ];then
     export all_case_list=(all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI all_act_CI)
     run_case_func
     print_logs_func
+
 elif [ "$1" = "run_CE" ];then
 	# CE任务的case、
     export all_case_list=(all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas all_act_CE)
