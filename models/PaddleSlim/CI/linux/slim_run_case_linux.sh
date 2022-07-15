@@ -1116,6 +1116,11 @@ print_logs_func(){
     fi
 }
 
+python -m pip install paddleclas
+python -m pip install paddlenlp
+python -m pip install paddleseg
+python -m pip install paddledet
+
 if [ "$1" = "run_CI" ];then
 	# CI任务的case
     export all_case_list=(all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI all_act_CI)
