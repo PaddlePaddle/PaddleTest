@@ -987,11 +987,11 @@ demo_act_nlp_ERNIE_3.0(){
 	sed -i 's/eval_iter: 1070/eval_iter: 100/' ./configs/ernie3.0/afqmc.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --config_path='./configs/ernie3.0/afqmc.yaml' --save_dir='./save_afqmc_ERNIE_pruned' > ${log_path}/nlp_demo_ernie_3_single_card 2>&1
-	print_info nlp_demo_ernie_3_single_card
+	python run.py --config_path='./configs/ernie3.0/afqmc.yaml' --save_dir='./save_afqmc_ERNIE_pruned' > ${log_path}/act_nlp_demo_ernie_3_single_card 2>&1
+	print_info act_nlp_demo_ernie_3_single_card
 	sed -i 's/.\/afqmc/.\/save_afqmc_ERNIE_pruned/' ./configs/pp-minilm/auto/afqmc.yaml
-	python run.py --config_path='./configs/ernie3.0/afqmc.yaml'  --eval True > ${log_path}/nlp_demo_ernie3_single_card_eval 2>&1
-	print_info $? nlp_demo_ernie3_single_card_eval
+	python run.py --config_path='./configs/ernie3.0/afqmc.yaml'  --eval True > ${log_path}/act_nlp_demo_ernie3_single_card_eval 2>&1
+	print_info $? act_nlp_demo_ernie3_single_card_eval
 }
 
 demo_act_seg_pp_Liteseg_qat(){
@@ -1012,14 +1012,14 @@ demo_act_seg_pp_Liteseg_qat(){
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py \
     --config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
-    --save_dir='./save_pp_lite_seg_model_qat_single_card'  > ${log_path}/seg_demo_pp_Liteseg_qat_single_card 2>&1
-	print_info $? seg_demo_pp_Liteseg_qat_single_card
+    --save_dir='./save_pp_lite_seg_model_qat_single_card'  > ${log_path}/act_seg_demo_pp_Liteseg_qat_single_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_qat_single_card
 
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=pp_Liteseg_qat_log run.py \
 	--config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
-    --save_dir='./save_pp_lite_seg_model_qat_multi_card'  > ${log_path}/seg_demo_pp_Liteseg_qat_multi_card 2>&1
-	print_info $? seg_demo_pp_Liteseg_qat_multi_card
+    --save_dir='./save_pp_lite_seg_model_qat_multi_card'  > ${log_path}/act_seg_demo_pp_Liteseg_qat_multi_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_qat_multi_card
 }
 
 demo_act_seg_pp_Liteseg_auto(){
@@ -1031,14 +1031,14 @@ demo_act_seg_pp_Liteseg_auto(){
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py \
     --config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
-    --save_dir='./save_pp_lite_seg_model_auto_single_card'  > ${log_path}/seg_demo_pp_Liteseg_auto_single_card 2>&1
-	print_info $? seg_demo_pp_Liteseg_auto_single_card
+    --save_dir='./save_pp_lite_seg_model_auto_single_card'  > ${log_path}/act_seg_demo_pp_Liteseg_auto_single_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_auto_single_card
 
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=pp_Liteseg_auto_log run.py \
 	--config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
-    --save_dir='./save_pp_lite_seg_model_auto_multi_card'  > ${log_path}/seg_demo_pp_Liteseg_auto_multi_card 2>&1
-	print_info $? seg_demo_pp_Liteseg_auto_multi_card
+    --save_dir='./save_pp_lite_seg_model_auto_multi_card'  > ${log_path}/act_seg_demo_pp_Liteseg_auto_multi_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_auto_multi_card
 }
 
 
@@ -1052,19 +1052,19 @@ demo_act_seg_pp_Liteseg_sparse(){
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py \
     --save_dir='./save_pp_lite_seg_model_sparse_single_card' \
-    --config_path='configs/pp_liteseg/pp_liteseg_qat.yaml'  > ${log_path}/seg_demo_pp_Liteseg_sparse_single_card 2>&1
-	print_info $? seg_demo_pp_Liteseg_sparse_single_card
+    --config_path='configs/pp_liteseg/pp_liteseg_qat.yaml'  > ${log_path}/act_seg_demo_pp_Liteseg_sparse_single_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_sparse_single_card
 
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=pp_Liteseg_sparse_log run.py \
 	--config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
-    --save_dir='./save_pp_lite_seg_model_sparse_multi_card'  > ${log_path}/seg_demo_pp_Liteseg_sparse_multi_card 2>&1
-	print_info $? seg_demo_pp_Liteseg_sparse_multi_card
+    --save_dir='./save_pp_lite_seg_model_sparse_multi_card'  > ${log_path}/act_seg_demo_pp_Liteseg_sparse_multi_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_sparse_multi_card
 }
 
 all_act_CI(){
   demo_act_clas_MobileNetV1
-  demo_act_nlp_pp_minilm
+  #demo_act_nlp_pp_minilm
   demo_act_seg_pp_Liteseg_qat
 }
 
