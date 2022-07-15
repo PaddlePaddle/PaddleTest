@@ -27,6 +27,7 @@ class BuildModuleTest(object):
         paddle.seed(33)
         np.random.seed(33)
         self.save_path = os.path.join(os.getcwd(), "save_test")
+        self.exp_path = os.path.join(os.getcwd(), "ground_truth")
         self.case = moduletrans.ModuleTrans(case)
         self.case_name = self.case.case_name
         self.logger = self.case.logger
@@ -58,7 +59,7 @@ class BuildModuleTest(object):
         opt = self.optimizer_info.get_opt(net=net)
 
         for epoch in range(self.train_info.get_train_step()):
-            if isinstance(self.input_data, Iterable):  # data_module_type == 'DataLoader'
+            if isinstance(self.input_data, paddle.io.Dataset):  # data_module_type == 'DataLoader'
                 for i, data_dict in enumerate(self.input_data()):
                     logit = net(**data_dict)
                     # 构建loss用于训练
@@ -141,9 +142,24 @@ class BuildModuleTest(object):
         infer_res = output_handle.copy_to_cpu()
         return infer_res
 
+    def build_dygraph_train_ground_truth(self, mode="numpy"):
+        """dygraph train test"""
+        if not os.path.exists(os.path.join(self.exp_path, self.case_name)):
+            os.makedirs(os.path.join(self.exp_path, self.case_name))
+        self.logger.get_log().info("dygraph train build ground truth start~")
+        exp_out = self.train(to_static=False)
+        if mode == "numpy":
+            np.save(os.path.join(self.exp_path, self.case_name, "dygraph_train_test.npy"), exp_out.numpy())
+        else:
+            self.logger.get_log().error("unknown save type for build_dygraph_train_ground_truth!!!~")
+
     def dygraph_train_test(self, delta=1e-8, rtol=1e-8):
         """dygraph train test"""
-        pass
+        self.logger.get_log().info("dygraph train acc-test start~")
+        res_out = self.train(to_static=False)
+        self.logger.get_log().info("dygraph_out is: {}".format(res_out))
+        exp_out = np.load(os.path.join(self.exp_path, self.case_name, "dygraph_train_test.npy"))
+        tool.compare(res_out, exp_out, delta=delta, rtol=rtol)
 
     def dygraph_predict_test(self, delta=1e-8, rtol=1e-8):
         """dygraph predict test"""
@@ -151,22 +167,22 @@ class BuildModuleTest(object):
 
     def dygraph_to_static_train_test(self, delta=1e-8, rtol=1e-8):
         """dygraph_to_static train test"""
-        dygraph_out = self.train(to_static=False)
         self.logger.get_log().info("dygraph to static train acc-test start~")
+        dygraph_out = self.train(to_static=False)
         # self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         static_out = self.train(to_static=True)
         # self.logger.get_log().info("static_out is: {}".format(static_out))
-        tool.compare(dygraph_out, static_out, delta=delta, rtol=rtol)
+        tool.compare(static_out, dygraph_out, delta=delta, rtol=rtol)
         # self.logger.get_log().info("dygraph to static train acc-test Success~~")
 
     def dygraph_to_static_predict_test(self, delta=1e-8, rtol=1e-8):
         """dygraph_to_static predict test"""
-        dygraph_out = self.predict(to_static=False)
         self.logger.get_log().info("dygraph to static predict acc-test start~")
+        dygraph_out = self.predict(to_static=False)
         # self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         static_out = self.predict(to_static=True)
         # self.logger.get_log().info("static_out is: {}".format(static_out))
-        tool.compare(dygraph_out, static_out, delta=delta, rtol=rtol)
+        tool.compare(static_out, dygraph_out, delta=delta, rtol=rtol)
         # self.logger.get_log().info("dygraph to static predict acc-test Success~~")
 
     def dygraph_to_infer_predict_test(self, acc_test=False, delta=1e-5, rtol=1e-5):
@@ -180,5 +196,5 @@ class BuildModuleTest(object):
             self.logger.get_log().info("dygraph to infer predict acc-test start~")
             infer_out = self.infer_load()
             # self.logger.get_log().info("static_out is: {}".format(infer_out))
-            tool.compare(dygraph_out, infer_out, delta=delta, rtol=rtol)
+            tool.compare(infer_out, dygraph_out, delta=delta, rtol=rtol)
             # self.logger.get_log().info("dygraph to infer predict acc-test Success~~")

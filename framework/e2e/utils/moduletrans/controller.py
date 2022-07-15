@@ -34,6 +34,7 @@ class ControlModuleTrans(object):
             "dygraph_predict_test": self.module.dygraph_predict_test,
             "dygraph_to_static_predict_test": self.module.dygraph_to_static_predict_test,
             "dygraph_to_infer_predict_test": self.module.dygraph_to_infer_predict_test,
+            "build_dygraph_train_ground_truth": self.module.build_dygraph_train_ground_truth,
         }
 
     def run_test(self):

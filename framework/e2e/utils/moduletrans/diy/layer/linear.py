@@ -10,15 +10,14 @@ import paddle
 class Linear(paddle.nn.Layer):
     """Linear"""
 
-    def __init__(self, in_channels=10, pvam_ch=10, char_num=3):
+    def __init__(self, in_features=3, out_features=10):
         """init"""
         super(Linear, self).__init__()
-        self.char_num = char_num
-        self.fc0 = paddle.nn.Linear(in_features=in_channels, out_features=pvam_ch)
-        self.fc1 = paddle.nn.Linear(in_features=pvam_ch, out_features=self.char_num)
+        self.fc0 = paddle.nn.Linear(in_features=in_features, out_features=out_features)
+        self.sigmoid = paddle.nn.Sigmoid()
 
-    def forward(self, pvam_feature):
+    def forward(self, x):
         """forward"""
-        x = self.fc0(pvam_feature)
-        out = self.fc1(x)
+        out = self.fc0(x)
+        out = self.sigmoid(out)
         return out
