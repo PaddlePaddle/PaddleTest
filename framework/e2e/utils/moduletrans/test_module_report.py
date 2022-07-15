@@ -11,26 +11,6 @@ from yaml_loader import YamlLoader
 import controller
 
 
-cur_path = os.getcwd()
-
-if not os.path.exists(os.path.join(cur_path, "ground_truth.tar")):
-    os.system("wget https://paddle-qa.bj.bcebos.com/luozeyu01/framework_e2e_LayerTest/ground_truth.tar")
-    os.system("tar -xzf ground_truth.tar")
-
-if not os.path.exists(os.path.join(cur_path, "ppcls")):
-    os.system("git clone -b develop https://github.com/PaddlePaddle/PaddleClas.git")
-    os.system("cd PaddleClas")
-    os.system("python -m pip install -r requirements.txt")
-    os.system("python setup.py install")
-    os.system("cd {}".format(cur_path))
-
-if not os.path.exists(os.path.join(cur_path, "ppdet")):
-    os.system("git clone -b develop https://github.com/PaddlePaddle/PaddleDetection.git")
-    os.system("cd PaddleDetection")
-    os.system("python -m pip install -r requirements.txt")
-    os.system("python setup.py install")
-    os.system("cd {}".format(cur_path))
-
 yaml_path = "module.yml"
 yml = YamlLoader(yaml_path)
 all_cases_list = ["Module_10"]
