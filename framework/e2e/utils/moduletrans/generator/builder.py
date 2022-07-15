@@ -59,7 +59,7 @@ class BuildModuleTest(object):
         opt = self.optimizer_info.get_opt(net=net)
 
         for epoch in range(self.train_info.get_train_step()):
-            if isinstance(self.input_data, paddle.io.Dataset):  # data_module_type == 'DataLoader'
+            if isinstance(self.input_data, paddle.io.DataLoader):  # data_module_type == 'DataLoader'
                 for i, data_dict in enumerate(self.input_data()):
                     logit = net(**data_dict)
                     # 构建loss用于训练
@@ -73,7 +73,7 @@ class BuildModuleTest(object):
                 logit = net(**data_dict)
                 # 构建loss用于训练
                 logit = self.loss_info.get_loss(logit)
-                self.logger.get_log().info("logit is: {}".format(logit))
+                # self.logger.get_log().info("logit is: {}".format(logit))
                 logit.backward()
                 opt.step()
                 opt.clear_grad()
@@ -157,7 +157,7 @@ class BuildModuleTest(object):
         """dygraph train test"""
         self.logger.get_log().info("dygraph train acc-test start~")
         res_out = self.train(to_static=False)
-        self.logger.get_log().info("dygraph_out is: {}".format(res_out))
+        # self.logger.get_log().info("dygraph_out is: {}".format(res_out))
         exp_out = np.load(os.path.join(self.exp_path, self.case_name, "dygraph_train_test.npy"))
         tool.compare(res_out, exp_out, delta=delta, rtol=rtol)
 
