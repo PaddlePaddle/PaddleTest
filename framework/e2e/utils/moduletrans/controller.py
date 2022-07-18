@@ -5,6 +5,7 @@
 controller
 """
 
+import os
 import random
 from inspect import isclass
 import traceback
@@ -60,3 +61,7 @@ class ControlModuleTrans(object):
         if exc > 0:
             # raise Exception(bug_trace)
             raise Exception("failed test is: {}".format(fail_test_list))
+
+    def mk_ground_truth(self):
+        """make ground truth to bos"""
+        self.module.build_dygraph_train_ground_truth(mode="numpy")
