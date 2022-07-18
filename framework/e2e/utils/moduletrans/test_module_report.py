@@ -13,13 +13,13 @@ import controller
 
 yaml_path = "module.yml"
 yml = YamlLoader(yaml_path)
-all_cases_list = ["Module_10"]
+# all_cases_list = ["Module_10"]
 
-# all_cases_list = []
-# all_cases_dict = yml.get_all_case_name()
-# for k in all_cases_dict:
-#     all_cases_list.append(k)
-# print(all_cases_list)
+all_cases_list = []
+all_cases_dict = yml.get_all_case_name()
+for k in all_cases_dict:
+    all_cases_list.append(k)
+print(all_cases_list)
 
 
 @allure.story("e2e_Layer")
