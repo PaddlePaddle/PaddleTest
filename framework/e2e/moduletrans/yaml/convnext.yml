@@ -95,4 +95,3 @@ convnext_LayerNorm_0:
 #    dygraph_predict_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-
