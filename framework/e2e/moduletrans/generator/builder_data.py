@@ -42,6 +42,8 @@ class BuildData(object):
                 elif v["type"] == "Tensor":
                     value = paddle.to_tensor(value)
                     paddle_data_dict[k] = value
+                elif v["type"] == "int" or v["type"] == "float":
+                    paddle_data_dict[k] = value
             elif v["generate_way"] == "load":
                 self.logger.get_log().error("暂未开发加载路径下数据！！！~~~")
 
