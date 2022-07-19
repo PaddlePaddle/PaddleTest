@@ -70,6 +70,7 @@ class BuildModuleTest(object):
                     opt.clear_grad()
             else:  # data_module_type == 'Dataset'
                 data_dict = self.input_data[epoch]
+                # self.logger.get_log().info('data dict for train is: {}'.format(data_dict))
                 logit = net(**data_dict)
                 # 构建loss用于训练
                 logit = self.loss_info.get_loss(logit)
