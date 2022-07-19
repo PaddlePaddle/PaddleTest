@@ -5,7 +5,6 @@
 yaml executor
 """
 import sys
-import pytest
 
 from competitor_test.competitive import CompetitorCompareTest
 from competitor_test.comptrans import CompeTrans
@@ -13,44 +12,56 @@ from competitor_test.tools import STOP_BACKWARD
 from utils.yaml_loader import YamlLoader
 
 
-def run_case(case, case_name):
+class RunCase(object):
     """
-    run case
+    run case class
     """
-    tans_obj = CompeTrans(case, 1, 2)
-    if tans_obj.stop:
-        return
-    api = tans_obj.get_function()
-    paddle_ins = tans_obj.get_paddle_ins()
-    torch_ins = tans_obj.get_torch_ins()
-    types = tans_obj.get_dtype()
-    torch_place = tans_obj.get_torch_place()
-    test_obj = CompetitorCompareTest(*api)
-    test_obj.types = types
-    if torch_place:
-        test_obj.torch_place = True
-    if case_name in STOP_BACKWARD:
-        test_obj.enable_backward = False
-    test_obj.run(paddle_ins, torch_ins)
 
+    def __init__(self, file_dir):
+        """
+        initialize
+        """
+        self.file_dir = file_dir
+        self.yaml = YamlLoader(self.file_dir)
 
-def debug_yaml_exe(yaml_file, case_name):
-    """
-    competitor test run
-    """
-    obj = YamlLoader(yaml_file)
-    case = obj.get_case_info(case_name)
+    def get_all_case_name(self):
+        """
+        get competitor case name
+        """
+        cases = self.yaml.get_all_case_name()
+        # 返回有竞品测试的case_name
+        case_list = []
+        for case_name in cases:
+            case = self.yaml.get_case_info(case_name)
+            if case["info"].get("pytorch"):
+                case_list.append(case_name)
+        return case_list
 
-    tans_obj = CompeTrans(case, 1, 2)
-    if not tans_obj.stop:
+    def get_docstring(self, case_name):
+        """
+        get docstring
+        """
+        case = self.yaml.get_case_info(case_name)
+        return case["info"]["desc"]
+
+    def run_case(self, case_name):
+        """
+        run case
+        """
+        case = self.yaml.get_case_info(case_name)
+        self.exec(case, case_name)
+
+    def exec(self, case, case_name):
+        """
+        actuator
+        """
+        tans_obj = CompeTrans(case, 1, 2)
+        if tans_obj.stop:
+            return
         api = tans_obj.get_function()
         paddle_ins = tans_obj.get_paddle_ins()
-        # print(paddle_ins)
         torch_ins = tans_obj.get_torch_ins()
-        # print(torch_ins)
-        # print(tans_obj.ins)
         types = tans_obj.get_dtype()
-        # print(types)
         torch_place = tans_obj.get_torch_place()
         test_obj = CompetitorCompareTest(*api)
         test_obj.types = types
@@ -61,39 +72,7 @@ def debug_yaml_exe(yaml_file, case_name):
         test_obj.run(paddle_ins, torch_ins)
 
 
-def generate_case_info(yaml_file):
-    """
-    generate case info
-    """
-    obj = YamlLoader(yaml_file)
-    cases_name = obj.get_all_case_name()
-    case_info = []
-    for case_name in cases_name:
-        case = obj.get_case_info(case_name)
-        if case["info"].get("pytorch"):
-            case_info.append([case, case_name])
-    return case_info
-
-
-@pytest.fixture()
-def ecp(request):
-    """
-    before run case
-    """
-    x = request.param
-    print("<<<!!! %s !!!>>>" % x[1])
-    return x
-
-
-@pytest.mark.parametrize("ecp", generate_case_info("../yaml/%s.yml" % sys.argv[1]), indirect=True)
-def test(ecp):
-    """
-    run case
-    """
-    run_case(*ecp)
-
-
 if __name__ == "__main__":
-    # yaml_exe("../yaml/%s.yml" % sys.argv[1])
-    # debug_yaml_exe("../yaml/base.yml", sys.argv[1])
-    pytest.main(["-sv", sys.argv[0]])
+    obj = RunCase("../yaml/%s.yml" % sys.argv[1])
+    r = obj.get_docstring("Tanh")
+    print(r)

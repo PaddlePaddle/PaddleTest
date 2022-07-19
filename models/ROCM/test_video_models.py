@@ -56,7 +56,7 @@ def setup_module():
     RepoDataset(
         cmd=""" cd models/PaddleCV/video; \
                 cd data; \
-                rm -rf AttentionLSTM.pdparams \
+                rm -rf AttentionLSTM.pdparams; \
                 wget -q https://paddlemodels.bj.bcebos.com/video_classification/AttentionLSTM.pdparams; \
                 wget -q https://paddlemodels.bj.bcebos.com/video_classification/STNET.pdparams; \
                 cd ..; \
@@ -109,7 +109,7 @@ def test_slowfast():
     cmd = """cd PaddleVideo; python -B -m paddle.distributed.launch \
             --gpus="0,1,2,3" --log_dir=log_slowfast_test main.py \
             --test -c  configs/recognition/slowfast/slowfast.yaml \
-            -w data/SlowFast.pdparams -o DATASET.test.file_path=data/k400/val_small_change.list.list \
+            -w data/SlowFast.pdparams -o DATASET.test.file_path=data/k400/val_small_change.list \
             -o DATASET.test.data_prefix=data/k400"""
     model.test_video_eval(cmd=cmd)
 
@@ -148,7 +148,7 @@ def test_stnet():
     model = TestVideoModel(model="stnet", yaml="./configs/stnet.yaml")
     cmd = """cd models/PaddleCV/video; \
                 sed -i s/pkl/mp4/g configs/stnet.yaml; \
-                sed -i s/test.list/test_small.list/g ./configs/stnet.yaml; \
+                sed -i s/test.list/test_small_change.list/g ./configs/stnet.yaml; \
                 python eval.py --model_name=STNET --config=./configs/stnet.yaml \
                 --log_interval=1 --weights=data/STNET.pdparams --use_gpu=True"""
     model.test_video_eval(cmd=cmd)

@@ -30,6 +30,7 @@ def check_model_exist():
         tar = tarfile.open("AFQMC_base.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./AFQMC_base/inference", output_model_path="./AFQMC_base/inference")
 
 
 def test_config():
