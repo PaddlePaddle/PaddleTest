@@ -904,7 +904,7 @@ demo_act_det_ppyoloe(){
 }
 
 demo_act_det_yolov5(){
-	cd ${slim_dir}/example/auto_compression/detection/
+	cd ${slim_dir}/example/auto_compression/pytorch_yolov5
 	wget -q https://bj.bcebos.com/v1/paddle-slim-models/detection/yolov5s_infer.tar
 	tar -xf yolov5s_infer.tar
 	wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
@@ -921,7 +921,7 @@ demo_act_det_yolov5(){
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=yolov5s_log run.py \
           --config_path=./configs/yolov5s_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_yolov5s_multi_card 2>&1
-  print_info $? act_det_demo_yolov5s_multi_card
+        print_info $? act_det_demo_yolov5s_multi_card
 }
 
 demo_act_clas_MobileNetV1(){
