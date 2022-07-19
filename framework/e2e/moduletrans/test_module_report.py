@@ -11,15 +11,15 @@ from yaml_loader import YamlLoader
 import controller
 
 
-yaml_path = "module.yml"
+yaml_path = os.path.join("yaml", "csp_darknet.yml")
 yml = YamlLoader(yaml_path)
-# all_cases_list = ["Module_10"]
+all_cases_list = ["csp_darknet_CSPLayer_0"]
 
-all_cases_list = []
-all_cases_dict = yml.get_all_case_name()
-for k in all_cases_dict:
-    all_cases_list.append(k)
-print(all_cases_list)
+# all_cases_list = []
+# all_cases_dict = yml.get_all_case_name()
+# for k in all_cases_dict:
+#     all_cases_list.append(k)
+# print(all_cases_list)
 
 
 @allure.story("e2e_Layer")
@@ -31,3 +31,8 @@ def test_module_layer(case_name):
     case = yml.get_case_info(case_name)
     test = controller.ControlModuleTrans(case=case)
     test.run_test()
+
+
+case = yml.get_case_info(all_cases_list[0])
+test = controller.ControlModuleTrans(case=case)
+test.run_test()
