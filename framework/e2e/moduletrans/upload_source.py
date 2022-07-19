@@ -39,6 +39,6 @@ def upload_source(cases_list=all_cases_list):
 upload_source(all_cases_list)
 os.system("tar -czf {}.tar {}".format(source, source))
 os.system(
-    "python3.8 BosClient.py {}.tar paddle-qa/luozeyu01/framework_e2e_LayerTest/{} "
+    "python BosClient.py {}.tar paddle-qa/luozeyu01/framework_e2e_LayerTest/{} "
     "https://paddle-qa.bj.bcebos.com/luozeyu01/framework_e2e_LayerTest/{}".format(source, env, env)
 )
