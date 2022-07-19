@@ -954,12 +954,12 @@ demo_act_clas_ResNet50_vd(){
 	sed -i 's/data_dir: \/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/ResNet50_vd/qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --save_dir='./save_quant_mobilev1_single_card/' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_single_card 2>&1
-	print_info $? act_clas_demo_MobileNetV1_single_card
+	python run.py --save_dir='./save_quant_ResNet50_vd_single_card/' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_single_card 2>&1
+	print_info $? act_clas_demo_ResNet50_vd_single_card
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=mobilev1_log  run.py \
-		--save_dir='./save_quant_mobilev1_multi_card/' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_multi_card 2>&1
-	print_info $? act_clas_demo_MobileNetV1_multi_card
+		--save_dir='./save_quant_ResNet50_vd_multi_card/' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_multi_card 2>&1
+	print_info $? act_clas_demo_ResNet50_vd_multi_card
 }
 
 demo_act_nlp_pp_minilm(){
