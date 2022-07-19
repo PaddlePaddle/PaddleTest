@@ -1,0 +1,8 @@
+ppcls/configs/ImageNet/HRNet/HRNet_W18_C.yaml
+ppcls/configs/ImageNet/Inception/InceptionV4.yaml
+ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml
+ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
+ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml
+ppcls/configs/ImageNet/VGG/VGG11.yaml
+ppcls/configs/ImageNet/PPLCNet/PPLCNet_x1_0.yaml
