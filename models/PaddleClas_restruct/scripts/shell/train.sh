@@ -5,7 +5,7 @@ cd ${Project_path} #确定下执行路径
 ls
 ls ${Project_path}/../  #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
 ls ${Project_path}/../scripts
-cp ${Project_path}/../scripts/prepare.sh .
+cp ${Project_path}/../scripts/shell/prepare.sh .
 source prepare.sh
 bash prepare.sh ${1} ${2}
 
