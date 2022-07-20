@@ -58,7 +58,7 @@ fi
 #预先下载PaddleClas，不使用CE框架clone
 wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleClas.tar.gz --no-proxy  >/dev/null
 tar xf PaddleClas.tar.gz
-mv PaddleClas ./${CE_version_name}/src/task/
+cp -r PaddleClas ./${CE_version_name}/src/task/
 
 #通用变量[用户改]
 test_code_download_path=./task/models/${Repo}
@@ -111,6 +111,7 @@ cat ./${CE_version_name}/src/task/common.py
 #####进入执行路径创建docker容器 [用户改docker创建]
 cd ${CE_version_name}/src
 ls;
+ls ./${CE_version_name}/src/task 
 
 if [[ "${docker_flag}" == "" ]]; then
     ####创建docker
