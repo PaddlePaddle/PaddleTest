@@ -48,13 +48,6 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.88693
-        threshold: 0.0
-        actived: True
-        evaluation: "="
-        unit_repr: None
-      train_eval:
-        latest: True
         kpi_base: 215.46383
         threshold: 0.0
         actived: True
@@ -72,13 +65,6 @@ TRAIN: # 训练步骤
         cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA dynamic
     kpis: #kpi指标
       loss:
-        latest: True
-        kpi_base: 6.79202
-        threshold: 0.0
-        actived: True
-        evaluation: "="
-        unit_repr: None
-      train_eval:
         latest: True
         kpi_base: 35.54848
         threshold: 0.0
@@ -98,13 +84,6 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.88594
-        threshold: 0.0
-        actived: True
-        evaluation: "="
-        unit_repr: None
-      train_eval:
-        latest: True
         kpi_base: 242.63904
         threshold: 0.0
         actived: True
@@ -122,13 +101,6 @@ TRAIN: # 训练步骤
         cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA dynamic
     kpis: #kpi指标
       loss:
-        latest: True
-        kpi_base: 6.79078
-        threshold: 0.0
-        actived: True
-        evaluation: "="
-        unit_repr: None
-      train_eval:
         latest: True
         kpi_base: 103.30228
         threshold: 0.0

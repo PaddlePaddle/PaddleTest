@@ -67,7 +67,7 @@ cat ./${CE_version_name}/src/task/common.py;
 ls;
 
 ####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称
-if  [[ "${SET_MULTI_CUDA}" == " " ]] ;then
+if  [[ "${SET_MULTI_CUDA}" == "" ]] ;then
     tc_name=`(echo $PWD|awk -F '/' '{print $4}')`
     echo "teamcity path:" $tc_name
     if [ $tc_name == "release_02" ];then
@@ -107,7 +107,7 @@ cat ./${CE_version_name}/src/task/common.py
 cd ${CE_version_name}/src
 ls;
 
-if [[ "${docker_flag}" == " " ]]; then
+if [[ "${docker_flag}" == "" ]]; then
     ####创建docker
     set +x;
     docker_name="ce_${Repo}_${Priority_version}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
