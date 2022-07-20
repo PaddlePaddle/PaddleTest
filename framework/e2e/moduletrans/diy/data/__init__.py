@@ -5,3 +5,4 @@
 __init__
 """
 import diy.data.single_img_dataset
+import diy.data.struct_img_dataset
