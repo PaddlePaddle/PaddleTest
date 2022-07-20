@@ -951,7 +951,7 @@ demo_act_clas_ResNet50_vd(){
 	tar -xf ResNet50_vd_infer.tar
 
 	sed -i 's/eval_iter: 500/eval_iter: 50/' ./configs/ResNet50_vd/qat_dis.yaml
-	sed -i 's/data_dir: \/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/ResNet50_vd/qat_dis.yaml
+	sed -i 's/data_dir: .\/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/ResNet50_vd/qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py --save_dir='./save_quant_ResNet50_vd_single_card/' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_single_card 2>&1
@@ -969,6 +969,7 @@ demo_act_nlp_pp_minilm(){
 
 	sed -i 's/epochs: 6/train_iter: 100/' ./configs/pp-minilm/auto/afqmc.yaml
 	sed -i 's/eval_iter: 1070/eval_iter: 100/' ./configs/pp-minilm/auto/afqmc.yaml
+	sed -i 's/HyperParameterOptimization:/#HyperParameterOptimization:/' ./configs/pp-minilm/auto/afqmc.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py --config_path='./configs/pp-minilm/auto/afqmc.yaml' --save_dir='./save_afqmc_pp_minilm_pruned' > ${log_path}/act_nlp_demo_pp_minilm_single_card 2>&1
@@ -1064,7 +1065,7 @@ demo_act_seg_pp_Liteseg_sparse(){
 
 all_act_CI(){
   demo_act_clas_MobileNetV1
-  #demo_act_nlp_pp_minilm
+  demo_act_nlp_pp_minilm
   demo_act_seg_pp_Liteseg_qat
 }
 
