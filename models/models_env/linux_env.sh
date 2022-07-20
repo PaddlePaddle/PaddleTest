@@ -16,7 +16,7 @@ export Compile_version=${Compile_version:-https://paddle-qa.bj.bcebos.com/paddle
 export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
 export Data_path=${Data_path:-/ssd2/ce_data/PaddleClas}
 export Project_path=${Project_path:-/workspace/task/PaddleClas}
-export Common_name=${Common_name:-conf/cls_common_release}  #CE框架中的执行步骤，名称各异所以需要传入
+export Common_name=${Common_name:-conf/cls_common}  #CE框架中的执行步骤，名称各异所以需要传入
 
 export SET_MULTI_CUDA=${SET_MULTI_CUDA:-}  #如果不使用流水线，手动设置卡号 默认不设置，用0 1卡
 export docker_flag=${docker_flag:-}  #是否在docker内的环境 默认不设置，如果在docker中进行设置为False
@@ -57,13 +57,12 @@ fi
 
 #通用变量[用户改]
 test_code_download_path=./task/models/${Repo}
-test_code_conf_path=./task/models/${Repo}/conf  #各个repo自己管理，可以分类，根据任务类型copy对应的common配置
 
 #迁移下载路径代码和配置到框架指定执行路径 [不用改]
 mkdir -p ${test_code_download_path}/log
 ls ${test_code_download_path}/log;
 cp -r ${test_code_download_path}/.  ./${CE_version_name}/src/task
-cp ${test_code_conf_path}/${Common_name}.py ./${CE_version_name}/src/task/common.py
+cp ${test_code_download_path}/${Common_name}.py ./${CE_version_name}/src/task/common.py
 cat ./${CE_version_name}/src/task/common.py;
 ls;
 
@@ -98,9 +97,9 @@ if  [[ "${SET_MULTI_CUDA}" == " " ]] ;then
     fi
 else
     echo already seted CUDA_id
-    export SET_CUDA=0;
-    export SET_MULTI_CUDA=0,1;
-
+    export SET_CUDA=${SET_MULTI_CUDA}
+    export SET_MULTI_CUDA=${SET_MULTI_CUDA}
+fi
 ####显示执行步骤
 cat ./${CE_version_name}/src/task/common.py
 
@@ -108,7 +107,7 @@ cat ./${CE_version_name}/src/task/common.py
 cd ${CE_version_name}/src
 ls;
 
-if  [[ "${docker_flag}" == " " ]] ;then
+if [[ "${docker_flag}" == " " ]]; then
     ####创建docker
     set +x;
     docker_name="ce_${Repo}_${Priority_version}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
@@ -294,5 +293,4 @@ else
     else
         bash main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID} --owner='paddle' --priority=${Priority_version} --compile_path=${Compile_version} --agile_job_build_id=${AGILE_JOB_BUILD_ID};
     fi
-
 fi
