@@ -56,8 +56,7 @@ def send(url):
                 "threshold": 0,
                 "ratio": 0
             })
-    # print(models_result)
-        
+
     params = {
         "build_type_id": os.getenv('build_type_id'),
         "build_id": os.getenv('build_id'),
