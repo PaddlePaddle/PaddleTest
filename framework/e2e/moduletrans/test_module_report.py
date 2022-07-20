@@ -11,9 +11,9 @@ from yaml_loader import YamlLoader
 import controller
 
 
-yaml_path = os.path.join("yaml", "csp_darknet.yml")
+yaml_path = os.path.join("yaml", "esnet.yml")
 yml = YamlLoader(yaml_path)
-all_cases_list = ["csp_darknet_CSPLayer_0"]
+all_cases_list = ["esnet_ESNet_0"]
 
 # all_cases_list = []
 # all_cases_dict = yml.get_all_case_name()
