@@ -1076,8 +1076,8 @@ all_act_CE(){
   demo_act_clas_ResNet50_vd
   demo_act_nlp_pp_minilm
   demo_act_nlp_ERNIE_3
-  demo_act_seg_pp_Liteseg_auto
   demo_act_seg_pp_Liteseg_qat
+  demo_act_seg_pp_Liteseg_auto
   demo_act_seg_pp_Liteseg_sparse
 }
 
@@ -1088,8 +1088,8 @@ all_act_ALL(){
   demo_act_clas_ResNet50_vd
   demo_act_nlp_pp_minilm
   demo_act_nlp_ERNIE_3
-  demo_act_seg_pp_Liteseg_auto
   demo_act_seg_pp_Liteseg_qat
+  demo_act_seg_pp_Liteseg_auto
   demo_act_seg_pp_Liteseg_sparse
 }
 
