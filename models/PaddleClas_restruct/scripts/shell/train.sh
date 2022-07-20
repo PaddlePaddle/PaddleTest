@@ -64,7 +64,6 @@ convergence)
     python ${multi_flag} tools/train.py -c ${1}  \
         -o Global.output_dir=${output_dir}/${model_name} \
         > ${log_path}/train/${model_name}_convergence.log 2>&1
-    fi
     params_dir=$(ls ${output_dir}/${model_name})
     echo "######  params_dir"
     echo $params_dir
