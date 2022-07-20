@@ -1,0 +1,357 @@
+MODEL: "ImageNet_ResNet_ResNet50" # 模型名
+PRIORITY: P0,convergence_ImageNet_ResNet_ResNet50,ImageNet_ResNet_ResNet50,ALL
+GIT:
+  addr: $REPO_PaddleClas
+  path: $ROOT_PATH/PaddleClas
+  branch: $cls_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/
+  model_log_path: log/ImageNet_ResNet_ResNet50
+
+EXEC:
+  exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
+  exec_priority: [P0]
+  exec_tag: $EXEC_TAG
+
+TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_convergence.log
+  -
+    tag: train_linux_gpu1
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_CUDA dynamic
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.88693
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 215.46383
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_1card.log
+  -
+    tag: train_linux_gpu2
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA dynamic
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.79202
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 35.54848
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_CUDA dynamic
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.88594
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 242.63904
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA dynamic
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.79078
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 103.30228
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_2card.log
+  -
+    tag: train_win_gpu
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml train_win_gpu
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_train.log
+  -
+    tag: train_win_cpu
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml train_win_cpu
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_cpu.log
+  -
+    tag: train_mac_cpu
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU dynamic
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_cpu.log
+
+EVAL: # 训练步骤
+  -
+    tag: eval_linux
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.93207
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50.log
+  -
+    tag: eval_linux_release
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.93207
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50.log
+  -
+    tag: eval_win
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml eval_win
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50.log
+  -
+    tag: eval_mac
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50.log
+
+
+INFER: # 训练步骤
+  -
+    tag: infer_linux
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50.log
+  -
+    tag: infer_win
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml infer_win
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50.log
+  -
+    tag: infer_mac
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50.log
+
+PREDICT: # 训练步骤
+  -
+    tag: predict_linux
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50.log
+  -
+    tag: predict_win
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml predict_win
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50.log
+  -
+    tag: predict_mac
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50.log
