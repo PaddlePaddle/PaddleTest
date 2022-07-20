@@ -1,8 +1,8 @@
 # encoding: utf-8
-import json
-import requests
 import os
+import json
 import platform
+import requests
 
 
 def grep_logs(key_word, model):
