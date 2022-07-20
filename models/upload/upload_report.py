@@ -1,4 +1,7 @@
 # encoding: utf-8
+"""
+通过API上传任务回归结果（case粒度）；
+"""
 import os
 import json
 import platform
@@ -6,6 +9,9 @@ import requests
 
 
 def grep_logs(key_word, model):
+    """
+        搜索log文件
+    """
     if platform.system().lower() == 'windows':
         cmd_grep=" dir | findstr /i  {} | findstr /i {}" .format(key_word, model)
     else:
@@ -72,6 +78,7 @@ def send(url):
        print('error')
     print(params)
     print(result)
+
 if __name__ == "__main__":
     # build_url需配置在环境变量中，不允许上传到github；
     url = os.getenv('build_url')
