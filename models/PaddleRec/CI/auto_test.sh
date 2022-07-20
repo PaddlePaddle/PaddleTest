@@ -49,7 +49,7 @@ demo_run_func(){
             run_case_func $1 ${model} dy_train $2 ../../../tools/trainer.py
             run_case_func $1 ${model} dy_infer $2 ./infer.py
         elif [ ${model} == "autofis" ] ;then
-            run_case_func $1 ${model} dy_train $2 trainer.py 
+            run_case_func $1 ${model} dy_train $2 trainer.py
             run_case_func $1 ${model} dy_train $2 trainer.py -o stage=1
             run_case_func $1 ${model} dy_infer $2 ../../../tools/infer.py -o stage=1
         elif [ ${model} == "dataset" ] || [ ${model} == "slot_dnn" ];then

@@ -17,7 +17,7 @@ case $1 in
 'others')
   export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
   export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-  ;; 
+  ;;
 esac
 python -c 'import sys; print(sys.version_info[:])';
 

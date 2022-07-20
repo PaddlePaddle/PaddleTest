@@ -143,7 +143,7 @@ call :printInfo %errorlevel% %%I_demo_dy_train
 python -u models/recall/%%I/infer.py -m models/recall/%%I/config.yaml -o runner.use_gpu=%1 > %log_path%\%%I_demo_dy_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/recall/%%I/config.yaml -o runner.use_gpu=%1 > %log_path%\%%I_demo_st_train.log 2>&1 
+python -u tools/static_trainer.py -m models/recall/%%I/config.yaml -o runner.use_gpu=%1 > %log_path%\%%I_demo_st_train.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_train
 python -u models/recall/%%I/static_infer.py -m models/recall/%%I/config.yaml -o runner.use_gpu=%1 > %log_path%\%%I_demo_st_infer.log 2>&1
 call :printInfo %errorlevel% %%I_demo_st_infer
@@ -258,11 +258,11 @@ mklink /J data %dataset_path%\rec_repo\%model%\data
 call :run_con_cpu %model%
 call :run_con_gpu %model%
 python infer.py --test_dir ./data/all_test --dict_path ./data/all_dict/word_id_dict.txt ^
---batch_size 10000 --model_dir ./increment_w2v_cpu/  ^
+--batch_size 10000 --model_dir ./increment_w2v_cpu/ ^
 --start_index 0 --last_index 4 --emb_size 300 >${log_path}/%model%_infer_cpu.log 2>&1
 call :printInfo %errorlevel% %model%_infer_cpu
 python infer.py --test_dir ./data/all_test --dict_path ./data/all_dict/word_id_dict.txt ^
---batch_size 10000 --model_dir ./increment_w2v_gpu/  ^
+--batch_size 10000 --model_dir ./increment_w2v_gpu/ ^
 --start_index 0 --last_index 4 --emb_size 300 >${log_path}/%model%_infer_gpu1.log 2>&1
 call :printInfo %errorlevel% %model%_infer_gpu1
 
