@@ -10,11 +10,11 @@ ENV:
 
 VARIABLES:
   model_scripts_path: scripts/
-  model_log_path: log/ImageNet_ResNet_ResNet50
+  model_log_path: log
 
 EXEC:
-  exec_cases: [TRAIN]
-  # exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
+  # exec_cases: [TRAIN]
+  exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
   exec_priority: [P0]
   exec_tag: $EXEC_TAG
 

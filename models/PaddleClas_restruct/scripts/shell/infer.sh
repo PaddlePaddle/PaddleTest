@@ -1,9 +1,12 @@
 # 输入变量：yaml、设置卡数CPU/SET_CUDA/SET_MULTI_CUDA
 
+cd ${Project_path} #确定下执行路径
+ls
+ls ${Project_path}/../  #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
+ls ${Project_path}/../scripts
+cp ${Project_path}/../scripts/shell/prepare.sh .
 source prepare.sh
 bash prepare.sh ${1} ${2}
-
-cd ${Project_path} #确定下执行路径
 
 if [[ -d ${output_dir}/${model_name} ]];then
     params_dir=$(ls ${output_dir}/${model_name})
