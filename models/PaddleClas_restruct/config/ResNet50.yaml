@@ -13,7 +13,8 @@ VARIABLES:
   model_log_path: log/ImageNet_ResNet_ResNet50
 
 EXEC:
-  exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
+  exec_cases: [TRAIN]
+  # exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
   exec_priority: [P0]
   exec_tag: $EXEC_TAG
 
@@ -114,7 +115,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml train_win_gpu
+        cmd: bat/train.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml train_win_gpu
     kpis: #kpi指标
       training_exit_code:
         latest: True
@@ -130,7 +131,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml train_win_cpu
+        cmd: bat/train.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml train_win_cpu
     kpis: #kpi指标
       training_exit_code:
         latest: True
@@ -146,7 +147,7 @@ TRAIN: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU dynamic
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU dynamic
     kpis: #kpi指标
       training_exit_code:
         latest: True
@@ -166,7 +167,7 @@ EVAL: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
+        cmd: bash shell/eval.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
     kpis: #kpi指标
       loss:
         latest: True
@@ -184,7 +185,7 @@ EVAL: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
+        cmd: bash shell/eval.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
     kpis: #kpi指标
       loss:
         latest: True
@@ -200,7 +201,7 @@ EVAL: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml eval_win
+        cmd: bat/eval.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml eval_win
     kpis: #kpi指标
       eval_exit_code:
         latest: True
@@ -216,7 +217,7 @@ EVAL: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
+        cmd: bash shell/eval.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
     kpis: #kpi指标
       eval_exit_code:
         latest: True
@@ -235,7 +236,7 @@ INFER: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
+        cmd: bash shell/infer.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -251,7 +252,7 @@ INFER: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml infer_win
+        cmd: bat/infer.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml infer_win
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -267,7 +268,7 @@ INFER: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
+        cmd: bash shell/infer.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -285,7 +286,7 @@ PREDICT: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
+        cmd: bash shell/predict.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
     kpis: #kpi指标
       predict_exit_code:
         latest: True
@@ -301,7 +302,7 @@ PREDICT: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: grep_win_log.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml predict_win
+        cmd: bat/predict.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml predict_win
     kpis: #kpi指标
       predict_exit_code:
         latest: True
@@ -317,7 +318,7 @@ PREDICT: # 训练步骤
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash grep_mac_log.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
+        cmd: bash shell/predict.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
     kpis: #kpi指标
       predict_exit_code:
         latest: True

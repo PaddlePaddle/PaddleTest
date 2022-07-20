@@ -1,10 +1,14 @@
 
 # 输入变量：yaml、设置卡数 CPU SET_CUDA SET_MULTI_CUDA 、训练的模型动态图/静态图/收敛性( dynamic static convergence )
 
+cd ${Project_path} #确定下执行路径
+
+echo Project_path
+echo ${Project_path}
+echo $ROOT_PATH/$model_scripts_path
+cp $ROOT_PATH/$model_scripts_path/prepare.sh .
 source prepare.sh
 bash prepare.sh ${1} ${2}
-
-cd ${Project_path} #确定下执行路径
 
 #区分动态图、静态图
 if [[ ${3} =~ "dynamic" ]] || [[ ${3} =~ "convergence" ]];then
