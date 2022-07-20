@@ -13,10 +13,10 @@ def grep_logs(key_word, model):
         搜索log文件
     """
     if platform.system().lower() == 'windows':
-        cmd_grep=" dir | findstr /i  {} | findstr /i {}" .format(key_word, model)
+        cmd_grep = " dir | findstr /i  {} | findstr /i {}".format(key_word, model)
     else:
         # linux and mac
-        cmd_grep=" ls | grep -i {} | grep -i {}" .format(key_word, model)
+        cmd_grep = " ls | grep -i {} | grep -i {}".format(key_word, model)
     return cmd_grep
 
 
@@ -24,24 +24,24 @@ def send(url):
     """
     以case成功/失败的粒度上传报告
     """
-    models=os.getenv('models_list')
-    models_list=[]
+    models = os.getenv('models_list')
+    models_list = []
     for model in (models.split(',')):
         if model.strip():
             models_list.append(model.strip())
 
     os.chdir(os.getenv('log_path'))
-    models_result=[]
+    models_result = []
     for model in models_list:
         # 需grep/findstr success、避免model_name没有查询到默认为success；
         cmd_grep = grep_logs('success', model)
         cmd_res = os.system(cmd_grep)
-        if cmd_res == 0 :
+        if cmd_res == 0:
             kpi_status = "Passed"
             # grep/findstr fail log中是否包含model
             cmd_grep_fail = grep_logs('fail', model)
             cmd_res_fail = os.system(cmd_grep_fail)
-            if cmd_res_fail == 0 :
+            if cmd_res_fail == 0:
                 kpi_status = "Failed"
         else:
             kpi_status = "Failed"
@@ -70,13 +70,14 @@ def send(url):
         "case_detail": json.dumps(models_result)
     }
     res = requests.post(url, data=params)
-    result =res.json()
+    result = res.json()
     if result['code'] == 200 and result['message'] == 'success':
-       print("ok")
+        print("ok")
     else:
-       print('error')
+        print('error')
     print(params)
     print(result)
+
 
 if __name__ == "__main__":
     # build_url需配置在环境变量中，不允许上传到github；
