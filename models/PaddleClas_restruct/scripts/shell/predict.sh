@@ -1,10 +1,7 @@
 # 输入变量：yaml、设置卡数CPU/SET_CUDA/SET_MULTI_CUDA
 
 cd ${Project_path} #确定下执行路径
-ls
-ls ${Project_path}/../  #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
-ls ${Project_path}/../scripts
-cp ${Project_path}/../scripts/shell/prepare.sh .
+cp ${Project_path}/../scripts/shell/prepare.sh . # #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
 source prepare.sh
 bash prepare.sh ${1} ${2}
 
@@ -14,7 +11,7 @@ if [[ -f "../inference/${model_name}/inference.pdparams" ]];then
     pretrained_model="../inference/"${model_name}
 else
     pretrained_model="null"
-
+fi
 case ${model_type} in
 ImageNet|slim|metric_learning)
     size_tmp=`cat ${1} |grep image_shape|cut -d "," -f2|cut -d " " -f2` #获取train的shape保持和predict一致

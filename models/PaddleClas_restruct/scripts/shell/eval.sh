@@ -1,10 +1,7 @@
 # 输入变量：yaml、设置卡数CPU/SET_CUDA/SET_MULTI_CUDA
 
 cd ${Project_path} #确定下执行路径
-ls
-ls ${Project_path}/../  #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
-ls ${Project_path}/../scripts
-cp ${Project_path}/../scripts/shell/prepare.sh .
+cp ${Project_path}/../scripts/shell/prepare.sh . # #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
 source prepare.sh
 bash prepare.sh ${1} ${2}
 
@@ -21,19 +18,19 @@ if [[ -d ${output_dir}/${model_name} ]];then
     if [[ -f ${output_dir}/${model_name}/$params_dir/latest.pdparams ]];then
         pretrained_model=${output_dir}/${model_name}/$params_dir/latest
     else
-        pretrained_model="null"
+        pretrained_model="null"  #使用初始化参数评估
     fi
 else
-    pretrained_model="null"
+    pretrained_model="null"   #使用预训练模型评估 单独写一个use_pretrain在里面按逻辑获取预训练模型
 fi
 
 if [[ ${1} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
-    python ${multi_flag} tools/eval.py -c $line \
+    python ${multi_flag} tools/eval.py -c ${1} \
         -o Global.pretrained_model=${pretrained_model} \
         -o DataLoader.Eval.sampler.batch_size=64 \
         > ${log_path}/eval/${model_name}.log 2>&1
 else
-    python ${multi_flag} tools/eval.py -c $line \
+    python ${multi_flag} tools/eval.py -c ${1} \
         -o Global.pretrained_model=${pretrained_model} \
         > ${log_path}/eval/${model_name}.log 2>&1
 fi

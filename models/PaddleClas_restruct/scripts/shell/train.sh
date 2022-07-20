@@ -2,9 +2,9 @@
 # 输入变量：yaml、设置卡数 CPU SET_CUDA SET_MULTI_CUDA 、训练的模型动态图/静态图/收敛性( dynamic static convergence )
 
 cd ${Project_path} #确定下执行路径
-ls
-ls ${Project_path}/../  #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
-ls ${Project_path}/../scripts
+# ls
+# ls ${Project_path}/../  #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
+# ls ${Project_path}/../scripts
 cp ${Project_path}/../scripts/shell/prepare.sh .
 source prepare.sh
 bash prepare.sh ${1} ${2}

@@ -67,7 +67,6 @@ for var in ${array[@]:3}
 do
     array2=(${var//'.yaml'/ })
     export model_name=${model_name}_${array2[0]}
-    echo ${model_name}
 done
 export model_latest_name=${array2[0]}
 echo ${model_latest_name}

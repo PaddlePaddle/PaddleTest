@@ -1,10 +1,7 @@
 # 输入变量：yaml、设置卡数CPU/SET_CUDA/SET_MULTI_CUDA
 
 cd ${Project_path} #确定下执行路径
-ls
-ls ${Project_path}/../  #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
-ls ${Project_path}/../scripts
-cp ${Project_path}/../scripts/shell/prepare.sh .
+cp ${Project_path}/../scripts/shell/prepare.sh . # #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
 source prepare.sh
 bash prepare.sh ${1} ${2}
 
@@ -23,7 +20,7 @@ fi
 
 case ${model_type} in
 ImageNet|slim|metric_learning)
-    python tools/infer.py -c $line \
+    python tools/infer.py -c ${1} \
         -o Global.pretrained_model=${pretrained_model} \
         > ${log_path}/infer/${model_name}.log 2>&1
 ;;

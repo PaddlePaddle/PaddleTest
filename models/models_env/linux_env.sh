@@ -104,12 +104,12 @@ fi
 cat ./${CE_version_name}/src/task/common.py
 
 #####进入执行路径创建docker容器 [用户改docker创建]
-cd ./${CE_version_name}/src/task 
+cd ./${CE_version_name}/src/task
 ls;
 wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleClas.tar.gz --no-proxy  >/dev/null #预先下载PaddleClas，不使用CE框架clone
 tar xf PaddleClas.tar.gz
 rm -rf PaddleClas.tar.gz
-cd .. 
+cd ..
 ls;
 
 #cd ${CE_version_name}/src
@@ -126,7 +126,7 @@ if [[ "${docker_flag}" == "" ]]; then
     echo "end kill docker"
     }
     trap 'docker_del' SIGTERM
-    nvidia-docker run -i   --rm \
+    NV_GPU=${SET_MULTI_CUDA} nvidia-docker run -i   --rm \
                 --name=${docker_name} --net=host \
                 --shm-size=128G \
                 -v $(pwd):/workspace \
@@ -141,8 +141,16 @@ if [[ "${docker_flag}" == "" ]]; then
                 export https_proxy=${http_proxy};
                 export Data_path=${Data_path};
                 export Project_path=${Project_path};
-                export SET_CUDA=${SET_CUDA};
-                export SET_MULTI_CUDA=${SET_MULTI_CUDA};
+
+                #升级显卡策略，独立使用显卡，以逗号分割执行显卡编号，重定义从0开始赋值
+                export SET_CUDA=0;
+                string=${SET_MULTI_CUDA}
+                array=(${string//,/ })
+                SET_MULTI_CUDA=0
+                for((i=1;i<${#array[@]};i++));
+                do
+                SET_MULTI_CUDA=${SET_MULTI_CUDA},${i}
+                done
 
                 if [[ ${Python_env} == 'path_way' ]];then
                     case ${Python_version} in
