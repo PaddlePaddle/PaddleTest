@@ -56,7 +56,7 @@ else
 fi
 
 #通用变量[用户改]
-test_code_download_path_CI=./task/models/${Repo}
+test_code_download_path=./task/models/${Repo}
 test_code_conf_path=./task/models/${Repo}/conf  #各个repo自己管理，可以分类，根据任务类型copy对应的common配置
 
 #迁移下载路径代码和配置到框架指定执行路径 [不用改]
