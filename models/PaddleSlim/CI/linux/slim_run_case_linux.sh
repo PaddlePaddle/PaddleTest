@@ -979,7 +979,7 @@ demo_act_nlp_pp_minilm(){
 	print_info $? act_nlp_demo_pp_minilm_single_card_eval
 }
 
-demo_act_nlp_ERNIE_3.0(){
+demo_act_nlp_ERNIE_3(){
 	cd ${slim_dir}/example/auto_compression/nlp/
 	wget -q https://bj.bcebos.com/v1/paddle-slim-models/act/NLP/ernie3.0-medium/fp32_models/AFQMC.tar
 	tar -xf AFQMC.tar
@@ -1005,6 +1005,7 @@ demo_act_seg_pp_Liteseg_qat(){
 
 	wget -q https://paddleseg.bj.bcebos.com/tipc/easyedge/RES-paddle2-PPLIteSegSTDC1.zip
 	unzip -q RES-paddle2-PPLIteSegSTDC1.zip
+	ls
 
 	sed -i 's/epochs: 20/epochs: 1/' ./configs/pp_liteseg/pp_liteseg_qat.yaml
 	sed -i '/epochs: 1/a\  train_iter: 100'  ./configs/pp_liteseg/pp_liteseg_qat.yaml
