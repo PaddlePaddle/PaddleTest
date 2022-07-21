@@ -7,6 +7,8 @@ cd ce;
 
 ########TODO：区分下是否使用CE框架、区分下是否单独clone库(用于CI)、步骤Common_name需要再细化一下
 
+export Project_path=${Project_path:-/workspace/task/PaddleClas}
+export Data_path=${Data_path:-/ssd2/ce_data/PaddleClas}
 export Repo=${Repo:-PaddleClas}
 export Python_env=${Python_env:-path_way}
 export Python_version=${Python_version:-37}
@@ -14,8 +16,6 @@ export CE_version=${CE_version:-V1}
 export Priority_version=${Priority_version:-P0}
 export Compile_version=${Compile_version:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
-export Data_path=${Data_path:-/ssd2/ce_data/PaddleClas}
-export Project_path=${Project_path:-/workspace/task/PaddleClas}
 export Common_name=${Common_name:-conf/cls_common}  #CE框架中的执行步骤，名称各异所以需要传入
 
 export SET_MULTI_CUDA=${SET_MULTI_CUDA:-}  #如果不使用流水线，手动设置卡号 默认不设置，用0 1卡
@@ -149,7 +149,7 @@ if [[ "${docker_flag}" == "" ]]; then
                 SET_MULTI_CUDA=0
                 for((i=1;i<${#array[@]};i++));
                 do
-                SET_MULTI_CUDA=${SET_MULTI_CUDA},${i}
+                export SET_MULTI_CUDA=${SET_MULTI_CUDA},${i}
                 done
 
                 if [[ ${Python_env} == 'path_way' ]];then

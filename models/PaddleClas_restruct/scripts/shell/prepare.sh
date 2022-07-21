@@ -59,7 +59,7 @@ done
 array=(${1//\// })
 export model_type=${array[2]} #区分 分类、slim、识别等
 export model_name=${array[2]} #进行字符串拼接
-if [[ ${line} =~ "PULC" ]];then
+if [[ ${1} =~ "PULC" ]];then
     export model_type_PULC=${array[3]} #PULC为了区分9中类别单独区分
 fi
 echo ${model_type}

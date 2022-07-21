@@ -196,12 +196,46 @@ EVAL: # 训练步骤
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50.log
   -
+    tag: eval_linux_pretrained
+    priority: P0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/eval.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA pretrained
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.93207
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50.log
+  -
     tag: eval_win
     priority: P0
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bat/eval.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml eval_win
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50.log
+  -
+    tag: eval_win_pretrained
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bat/eval.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml eval_win pretrained
     kpis: #kpi指标
       eval_exit_code:
         latest: True
@@ -227,7 +261,22 @@ EVAL: # 训练步骤
         evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50.log
-
+  -
+    tag: eval_mac_pretrained
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/eval.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU pretrained
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50.log
 
 INFER: # 训练步骤
   -
@@ -237,6 +286,22 @@ INFER: # 训练步骤
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash shell/infer.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50.log
+  -
+    tag: infer_linux_pretrained
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/infer.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA pretrained
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -263,12 +328,44 @@ INFER: # 训练步骤
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50.log
   -
+    tag: infer_win_pretrained
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bat/infer.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml infer_win pretrained
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50.log
+  -
     tag: infer_mac
     priority: P0
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash shell/infer.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50.log
+  -
+    tag: infer_mac_pretrained
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/infer.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU pretrained
     kpis: #kpi指标
       infer_exit_code:
         latest: True
@@ -297,6 +394,22 @@ PREDICT: # 训练步骤
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50.log
   -
+    tag: predict_linux_pretrained
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/predict.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA pretrained
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50.log
+  -
     tag: predict_win
     priority: P0
     run:
@@ -313,12 +426,44 @@ PREDICT: # 训练步骤
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50.log
   -
+    tag: predict_win_pretrained
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bat/predict.bat ppcls/configs/ImageNet/ResNet/ResNet50.yaml predict_win pretrained
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50.log
+  -
     tag: predict_mac
     priority: P0
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash shell/predict.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50.log
+  -
+    tag: predict_mac_pretrained
+    priority: P0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/predict.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml CPU pretrained
     kpis: #kpi指标
       predict_exit_code:
         latest: True
