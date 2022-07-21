@@ -75,7 +75,7 @@ goto :eof
 cd %repo_path%/PaddleSlim/demo/quant/quant_post
 set model=quant_post_v1_T_hist
 
-wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar --no-check-certificate
+wget -qP inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar --no-check-certificate
 cd inference_model/
 tar -xf MobileNetV1_infer.tar
 cd ..
@@ -175,6 +175,7 @@ call :printInfo  %errorlevel%
 :dy_unstructured_prune_ratio
 echo run dy_unstructured_prune_ratio
 cd %repo_path%/PaddleSlim/demo/dygraph/unstructured_pruning
+set model=dy_unstructured_prune_ratio
 python -m paddle.distributed.launch ^
 --log_dir dy_ratio_prune_ratio_log train.py ^
 --data imagenet --lr 0.05 --pruning_mode ratio --ratio 0.55 ^
@@ -204,6 +205,7 @@ if %1 == 1 (
 ) else (
     move %log_path%\%model%.log %log_path%\SUCCESS_%model%.log
     echo SUCCESS_%model%.log
+    type %log_path%\SUCCESS_%model%.log
     echo SUCCESS_%model%.log >> %log_path%\result.log
 )
 goto :eof

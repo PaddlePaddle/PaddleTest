@@ -14,10 +14,16 @@ case $1 in
   export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
   export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
   ;;
+'others')
+  export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+  export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+  ;;
 esac
 python -c 'import sys; print(sys.version_info[:])';
 
 echo ---install paddle---
+python -m pip uninstall paddlepaddle-gpu -y
+python -m pip uninstall paddlepaddle -y
 python -m pip install $2 --no-cache-dir
 echo ---paddle commit---
 python -c 'import paddle; print(paddle.version.commit)';
@@ -27,10 +33,11 @@ python -m pip install opencv-python
 python -m pip install pandas
 python -m pip install sklearn
 python -m pip install scipy
-# python -m pip install tools
 python -m pip install numba
 python -m pip install pgl
 python -m pip install tqdm
+python -m pip install pyyaml
+python -m pip install requests
 echo ---pip list---
 python -m pip list
 
@@ -48,14 +55,10 @@ export log_path=/workspace/logs
 # run_CI/run_CE/run_ALL/run_CPU 、cudaid1、cudaid2
 bash rec_run_case_linux.sh $3 $4 $5
 
-
 cd ${log_path}
 FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
     echo ---fail case: ${FF}
-    ls *FAIL*
-    exit 1
 else
     echo ---all case pass---
-    exit 0
 fi

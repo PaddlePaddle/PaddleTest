@@ -141,8 +141,8 @@ print_info $? st_quant_em_word2vec
 python infer.py --infer_epoch --test_dir data/test_mid_dir \
 --dict_path data/test_build_dict_word_to_id_ \
 --batch_size 20000 --model_dir v1_cpu5_b100_lr1dir/  --start_index 0 \
---last_index 0 --emb_quant True >${log_path}/st_quant_em_afteri_nfer 2>&1
-print_info $? st_quant_em_afteri_nfer
+--last_index 0 --emb_quant True >${log_path}/st_quant_em_after_infer 2>&1
+print_info $? st_quant_em_after_infer
 }
 
 demo_st_quant_post_hist(){
@@ -882,87 +882,260 @@ CUDA_VISIBLE_DEVICES=${cudaid1}  python rl_nas_mobilenetv2.py --search_steps 1 -
 print_info $? ${model}
 }
 
-demo_auto_mbv2_qat_dis(){
-cd ${slim_dir}/demo/auto_compression/
-wget -q https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/infermodel_mobilenetv2.tar
-tar -xf infermodel_mobilenetv2.tar
+demo_act_det_ppyoloe(){
+	cd ${slim_dir}/example/auto_compression/detection/
+	wget -q https://bj.bcebos.com/v1/paddle-slim-models/detection/ppyoloe_crn_l_300e_coco.tar
+	tar -xf ppyoloe_crn_l_300e_coco.tar
+	wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
+	unzip -q coco.zip
 
-python demo_imagenet.py \
-    --model_dir='infermodel_mobilenetv2' \
-    --model_filename='inference.pdmodel' \
-    --params_filename='./inference.pdiparams' \
-    --save_dir='./save_qat_mbv2/' \
-    --devices='gpu' \
-    --batch_size=128 \
-    --data_dir='../data/ILSVRC2012/' \
-    --config_path='./configs/CV/mbv2_qat_dis.yaml' > ${log_path}/auto_mbv2_qat_dis 2>&1
-print_info $? auto_mbv2_qat_dis
+	sed -i 's/train_iter: 5000/train_iter: 30/' ./configs/ppyoloe_l_qat_dis.yaml
+	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/ppyoloe_l_qat_dis.yaml
+	sed -i 's/dataset\/coco\//coco\//g' ./configs/yolo_reader.yml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_ppyoloe_single_card 2>&1
+	print_info $? act_det_demo_ppyoloe_single_card
+
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch --log_dir=ppyoloe_log  run.py \
+	--config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_ppyoloe_multi_card 2>&1
+	print_info $? act_det_demo_ppyoloe_multi_card
 }
 
-demo_auto_mbv2_ptq_hpo(){
-cd ${slim_dir}/demo/auto_compression/
-sed -i 's/max_quant_count: 20/max_quant_count: 1/' ./configs/CV/mbv2_ptq_hpo.yaml
+demo_act_det_yolov5(){
+	cd ${slim_dir}/example/auto_compression/pytorch_yolov5
+	wget -q https://bj.bcebos.com/v1/paddle-slim-models/detection/yolov5s_infer.tar
+	tar -xf yolov5s_infer.tar
+	wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
+	unzip -q coco.zip
 
-python demo_imagenet.py \
-    --model_dir='infermodel_mobilenetv2' \
-    --model_filename='inference.pdmodel' \
-    --params_filename='./inference.pdiparams' \
-    --save_dir='./save_ptq_mbv2/' \
-    --devices='gpu' \
-    --batch_size=128 \
-    --data_dir='../data/ILSVRC2012/' \
-    --config_path='./configs/CV/mbv2_ptq_hpo.yaml' > ${log_path}/auto_mbv2_ptq_hpo 2>&1
-print_info $? auto_mbv2_ptq_hpo
+	sed -i 's/train_iter: 3000/train_iter: 30/' ./configs/yolov5s_qat_dis.yaml
+	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/yolov5s_qat_dis.yaml
+	sed -i 's/dataset\/coco\//coco\//g' ./configs/yolov5_reader.yml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --save_dir='./save_quant_mobilev1/' --config_path='./configs/yolov5s_qat_dis.yaml' > ${log_path}/act_det_demo_yolov5s_single_card 2>&1
+	print_info $? act_det_demo_yolov5s_single_card
+
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch --log_dir=yolov5s_log run.py \
+          --config_path=./configs/yolov5s_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_yolov5s_multi_card 2>&1
+        print_info $? act_det_demo_yolov5s_multi_card
 }
 
-demo_auto_bert_asp_dis(){
-CUDA_VISIBLE_DEVICES=${cudaid1}
-cd ${slim_dir}/demo/auto_compression/
-sed -i 's/epochs: 3/epochs: 1/' ./configs/NLP/bert_asp_dis.yaml
-wget -q https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/static_bert_models.tar.gz
-tar -xf static_bert_models.tar.gz
+demo_act_clas_MobileNetV1(){
+	cd ${slim_dir}/example/auto_compression/image_classification/
+	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+	tar -xf MobileNetV1_infer.tar
+
+	sed -i 's/eval_iter: 500/eval_iter: 50/' ./configs/MobileNetV1/qat_dis.yaml
+	sed -i 's/data_dir: .\/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/MobileNetV1/qat_dis.yaml
+
+	wget -q https://sys-p0.bj.bcebos.com/slim_ci/ILSVRC2012_data_demo.tar.gz --no-check-certificate
+	tar xf ILSVRC2012_data_demo.tar.gz
+	mv ILSVRC2012_data_demo data
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --save_dir='./save_quant_mobilev1_single_card/' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_single_card 2>&1
+	print_info $? act_clas_demo_MobileNetV1_single_card
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch --log_dir=mobilev1_log  run.py \
+		--save_dir='./save_quant_mobilev1_multi_card/' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_multi_card 2>&1
+	print_info $? act_clas_demo_MobileNetV1_multi_card
+}
+
+demo_act_clas_ResNet50_vd(){
+	cd ${slim_dir}/example/auto_compression/image_classification/
+	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/ResNet50_vd_infer.tar
+	tar -xf ResNet50_vd_infer.tar
+
+	sed -i 's/eval_iter: 500/eval_iter: 50/' ./configs/ResNet50_vd/qat_dis.yaml
+	sed -i 's/data_dir: .\/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/ResNet50_vd/qat_dis.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --save_dir='./save_quant_ResNet50_vd_single_card/' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_single_card 2>&1
+	print_info $? act_clas_demo_ResNet50_vd_single_card
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch --log_dir=mobilev1_log  run.py \
+		--save_dir='./save_quant_ResNet50_vd_multi_card/' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_multi_card 2>&1
+	print_info $? act_clas_demo_ResNet50_vd_multi_card
+}
+
+demo_act_nlp_pp_minilm(){
+	cd ${slim_dir}/example/auto_compression/nlp/
+	wget -q https://bj.bcebos.com/v1/paddle-slim-models/act/afqmc.tar
+	tar -xf afqmc.tar
+
+	sed -i 's/epochs: 6/train_iter: 100/' ./configs/pp-minilm/auto/afqmc.yaml
+	sed -i 's/eval_iter: 1070/eval_iter: 100/' ./configs/pp-minilm/auto/afqmc.yaml
+	sed -i 's/HyperParameterOptimization:/#HyperParameterOptimization:/' ./configs/pp-minilm/auto/afqmc.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --config_path='./configs/pp-minilm/auto/afqmc.yaml' --save_dir='./save_afqmc_pp_minilm_pruned' > ${log_path}/act_nlp_demo_pp_minilm_single_card 2>&1
+	print_info $? act_nlp_demo_pp_minilm_single_card
+	sed -i 's/.\/afqmc/.\/save_afqmc_pp_minilm_pruned/' ./configs/pp-minilm/auto/afqmc.yaml
+	python run.py --config_path='./configs/pp-minilm/auto/afqmc.yaml'  --eval True > ${log_path}/act_nlp_demo_pp_minilm_single_card_eval 2>&1
+	print_info $? act_nlp_demo_pp_minilm_single_card_eval
+}
+
+demo_act_nlp_ERNIE_3(){
+	cd ${slim_dir}/example/auto_compression/nlp/
+	wget -q https://bj.bcebos.com/v1/paddle-slim-models/act/NLP/ernie3.0-medium/fp32_models/AFQMC.tar
+	tar -xf AFQMC.tar
+
+	sed -i 's/epochs: 6/train_iter: 100/' ./configs/ernie3.0/afqmc.yaml
+	sed -i 's/eval_iter: 1070/eval_iter: 100/' ./configs/ernie3.0/afqmc.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --config_path='./configs/ernie3.0/afqmc.yaml' --save_dir='./save_afqmc_ERNIE_pruned' > ${log_path}/act_nlp_demo_ernie_3_single_card 2>&1
+	print_info act_nlp_demo_ernie_3_single_card
+	sed -i 's/.\/afqmc/.\/save_afqmc_ERNIE_pruned/' ./configs/pp-minilm/auto/afqmc.yaml
+	python run.py --config_path='./configs/ernie3.0/afqmc.yaml'  --eval True > ${log_path}/act_nlp_demo_ernie3_single_card_eval 2>&1
+	print_info $? act_nlp_demo_ernie3_single_card_eval
+}
+
+demo_act_seg_pp_Liteseg_qat(){
+	cd ${slim_dir}/example/auto_compression/semantic_segmentation/
+	cd data
+	wget -q https://bj.bcebos.com/v1/paddle-slim-models/data/mini_cityscapes/mini_cityscapes.tar
+	tar -xf mini_cityscapes.tar
+	mv mini_cityscapes cityscapes
+	cd ..
+
+	wget -q https://paddleseg.bj.bcebos.com/tipc/easyedge/RES-paddle2-PPLIteSegSTDC1.zip
+	unzip -q RES-paddle2-PPLIteSegSTDC1.zip
+	ls
+
+	sed -i 's/epochs: 20/epochs: 1/' ./configs/pp_liteseg/pp_liteseg_qat.yaml
+	sed -i '/epochs: 1/a\  train_iter: 100'  ./configs/pp_liteseg/pp_liteseg_qat.yaml
+	sed -i 's/eval_iter: 180/eval_iter: 100/' ./configs/pp_liteseg/pp_liteseg_qat.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py \
+    --config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
+    --save_dir='./save_pp_lite_seg_model_qat_single_card'  > ${log_path}/act_seg_demo_pp_Liteseg_qat_single_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_qat_single_card
+
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch --log_dir=pp_Liteseg_qat_log run.py \
+	--config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
+    --save_dir='./save_pp_lite_seg_model_qat_multi_card'  > ${log_path}/act_seg_demo_pp_Liteseg_qat_multi_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_qat_multi_card
+}
+
+demo_act_seg_pp_Liteseg_auto(){
+	cd ${slim_dir}/example/auto_compression/semantic_segmentation/
+
+	sed -i 's/epochs: 14/epochs: 1/' ./configs/pp_liteseg/pp_liteseg_auto.yaml
+	sed -i '/epochs: 1/a\ train_iter: 100'  ./configs/pp_liteseg/pp_liteseg_auto.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py \
+    --config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
+    --save_dir='./save_pp_lite_seg_model_auto_single_card'  > ${log_path}/act_seg_demo_pp_Liteseg_auto_single_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_auto_single_card
+
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch --log_dir=pp_Liteseg_auto_log run.py \
+	--config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
+    --save_dir='./save_pp_lite_seg_model_auto_multi_card'  > ${log_path}/act_seg_demo_pp_Liteseg_auto_multi_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_auto_multi_card
+}
+
+
+demo_act_seg_pp_Liteseg_sparse(){
+	cd ${slim_dir}/example/auto_compression/semantic_segmentation/
+
+	sed -i 's/epochs: 50/epochs: 1/' ./configs/pp_liteseg/pp_liteseg_sparse.yaml
+	sed -i '/epochs: 1/a\  train_iter: 100'  ./configs/pp_liteseg/pp_liteseg_sparse.yaml
+	sed -i '/eval_iter: 180/eval_iter: 100/'  ./configs/pp_liteseg/pp_liteseg_sparse.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py \
+    --save_dir='./save_pp_lite_seg_model_sparse_single_card' \
+    --config_path='configs/pp_liteseg/pp_liteseg_qat.yaml'  > ${log_path}/act_seg_demo_pp_Liteseg_sparse_single_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_sparse_single_card
+
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch --log_dir=pp_Liteseg_sparse_log run.py \
+	--config_path='configs/pp_liteseg/pp_liteseg_qat.yaml' \
+    --save_dir='./save_pp_lite_seg_model_sparse_multi_card'  > ${log_path}/act_seg_demo_pp_Liteseg_sparse_multi_card 2>&1
+	print_info $? act_seg_demo_pp_Liteseg_sparse_multi_card
+}
+
+all_act_CI(){
+  demo_act_clas_MobileNetV1
+  demo_act_nlp_pp_minilm
+  demo_act_seg_pp_Liteseg_qat
+}
+
+all_act_CE(){
+  demo_act_det_ppyoloe
+  demo_act_det_yolov5
+  demo_act_clas_MobileNetV1
+  demo_act_clas_ResNet50_vd
+  demo_act_nlp_pp_minilm
+  demo_act_nlp_ERNIE_3
+  demo_act_seg_pp_Liteseg_qat
+  demo_act_seg_pp_Liteseg_auto
+  demo_act_seg_pp_Liteseg_sparse
+}
+
+all_act_ALL(){
+  demo_act_det_ppyoloe
+  demo_act_det_yolov5
+  demo_act_clas_MobileNetV1
+  demo_act_clas_ResNet50_vd
+  demo_act_nlp_pp_minilm
+  demo_act_nlp_ERNIE_3
+  demo_act_seg_pp_Liteseg_qat
+  demo_act_seg_pp_Liteseg_auto
+  demo_act_seg_pp_Liteseg_sparse
+}
+
+run_case_func(){
+    echo --- start run case ---
+    case_num=1
+    for model in ${all_case_list[*]};do
+        echo ---$case_num/${#all_case_list[*]}: ${model}---
+        ${model}
+        let case_num++
+    done
+    echo --- end run case---
+}
+
+print_logs_func(){
+    cd ${log_path}
+    FF=`ls *FAIL*|wc -l`
+    if [ "${FF}" -gt "0" ];then
+        echo ---fail case: ${FF}
+        ls *FAIL*
+        exit ${FF}
+    else
+        echo ---all case pass---
+        exit 0
+    fi
+}
+
+python -m pip install paddleclas
 python -m pip install paddlenlp
-
-python demo_glue.py \
-    --model_dir='./static_bert_models/' \
-    --model_filename='bert.pdmodel' \
-    --params_filename='bert.pdiparams' \
-    --save_dir='./save_asp_bert/' \
-    --devices='gpu' \
-    --batch_size=64 \
-    --task='sst-2' \
-    --config_path='./configs/NLP/bert_asp_dis.yaml' > ${log_path}/auto_bert_asp_dis 2>&1
-print_info $? auto_bert_asp_dis
-}
-
-all_auto_CE(){
-    demo_auto_mbv2_qat_dis
-    demo_auto_mbv2_ptq_hpo
-    demo_auto_bert_asp_dis
-}
-
-all_auto_ALL(){
-    demo_auto_mbv2_qat_dis
-    demo_auto_mbv2_ptq_hpo
-    demo_auto_bert_asp_dis
-}
+python -m pip install paddleseg
+python -m pip install paddledet
 
 if [ "$1" = "run_CI" ];then
 	# CI任务的case
-    export all_case_list=(all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
-elif [ "$1" = "run_CE" ];then
-	# CE任务的case、暂时去掉all_auto_CE
-    export all_case_list=(all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas)
-elif [ "$1" = "ALL" ];then
-	# 全量case、暂时去掉all_auto_ALL
-    export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas)
-fi
+    export all_case_list=(all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI all_act_CI)
+    run_case_func
+    print_logs_func
 
-echo --- start run case ---
-case_num=1
-for model in ${all_case_list[*]};do
-    echo ---$case_num/${#all_case_list[*]}: ${model}---
-    ${model}
-    let case_num++
-done
-echo --- end run case---
+elif [ "$1" = "run_CE" ];then
+	# CE任务的case、
+    export all_case_list=(all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas all_act_CE)
+    run_case_func
+    # print_logs_func
+elif [ "$1" = "run_ALL" ];then
+	# 全量case、暂时去掉all_auto_ALL
+    export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas all_act_ALL)
+    run_case_func
+fi

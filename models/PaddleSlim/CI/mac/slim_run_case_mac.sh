@@ -37,7 +37,7 @@ all_distillation(){
 
 demo_st_quant_post(){
 cd ${slim_dir}/demo/quant/quant_post || catchException demo_st_quant_post
-wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+wget -qP inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
 cd inference_model/
 tar -xf MobileNetV1_infer.tar
 cd ..
@@ -85,7 +85,7 @@ print_info $? st_quant_aware_v1_T
 }
 
 all_quant(){
-    demo_st_quant_aware
+    #demo_st_quant_aware
     demo_st_quant_post
     demo_st_pact_quant_aware
     demo_dygraph_quant

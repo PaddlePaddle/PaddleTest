@@ -67,6 +67,9 @@ fi
 mkdir /workspace/logs
 export log_path=/workspace/logs
 ####################################
+git remote add upstream https://github.com/PaddlePaddle/PaddleSlim.git
+git fetch upstream
+##########################
 IF_UT=false
 for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     dir1=${file_name%%/*}
@@ -80,7 +83,8 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     fi
 done
 echo -e "\033[35m ---- IF_UT: $IF_UT  \033[0m"
-IF_UT=true
+
+#IF_UT=true
 UT_EXCODE=0
 if [ $IF_UT == 'true' ];then
     bash slim_ci_api_coverage.sh $4 $5;
@@ -117,6 +121,7 @@ EXCODE=0
 if [ $check_sty_EXCODE -eq 2 ];then
     echo -e "\033[31m ---- check code style Failed!  \033[0m"
     EXCODE=2
+    exit $EXCODE
 fi
 if [ $UT_EXCODE -eq 0 ];then
     echo -e "\033[32m ---- unit test Success  \033[0m"

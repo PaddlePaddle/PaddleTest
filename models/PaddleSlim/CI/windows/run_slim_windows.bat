@@ -67,6 +67,7 @@ if "%3"=="run_P0" (
     	echo ---skip run case with windows---
 )
 
+:prinf_logs
 cd %root_path%
 cd %log_path%
 for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
@@ -75,6 +76,7 @@ echo %result:~-1%
 for /f "delims=" %%i in (' echo %result:~-1% ') do set exitcode=%%i
 echo -----fail case:%exitcode%---------
 echo -----exit code:%exitcode%---------
-exit %exitcode%
+rem exit %exitcode%
+goto :eof
 
 goto :eof

@@ -250,6 +250,7 @@ if %1 == 1 (
 ) else (
     move %log_path%\%model%.log %log_path%\SUCCESS_%model%.log
     echo SUCCESS_%model%.log
+    type %log_path%\SUCCESS_%model%.log
     echo SUCCESS_%model%.log >> %log_path%\result.log
 )
 goto :eof

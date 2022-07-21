@@ -41,8 +41,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.992199
-        threshold: 0.02
+        kpi_base: 0.992821
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -94,17 +94,17 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.5
-        threshold: 0.001
+        kpi_base: 0.930556
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       loss:
         latest: True
-        kpi_base: 9.21024
-        threshold: 0.001
+        kpi_base: 0.19380978
+        threshold: 0.0001
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: None
       exit_code:
         latest: True
@@ -474,8 +474,8 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.992199
-        threshold: 0.02
+        kpi_base: 0.991536
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -526,8 +526,8 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.5
-        threshold: 0.001
+        kpi_base: 0.958333
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
