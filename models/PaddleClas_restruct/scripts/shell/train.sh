@@ -54,11 +54,11 @@ dynamic|static)
     if ([[ -f "${output_dir}/${model_name}/$params_dir/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
         && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_${card}.log) -eq 0 ]];then
-        echo -e "\033[33m training multi of ${model}  successfully!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[33m training in ${card} of ${model}  successfully!\033[0m"|tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 0.0" >> ${log_path}/train/${model_name}_${card}.log
     else
         cat ${log_path}/train/${model_name}_${card}.log
-        echo -e "\033[31m training multi of ${model} failed!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[31m training in ${card} of ${model} failed!\033[0m"|tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 1.0" >> ${log_path}/train/${model_name}_${card}.log
     fi
 ;;
@@ -74,11 +74,11 @@ convergence)
     if ([[ -f "${output_dir}/${model_name}/$params_dir/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
         && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_convergence.log) -eq 0 ]];then
-        echo -e "\033[33m training multi of ${model}  successfully!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[33m training in convergence of ${model}  successfully!\033[0m"|tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 0.0" >> ${log_path}/train/${model_name}_convergence.log
     else
         cat ${log_path}/train/${model_name}_convergence.log
-        echo -e "\033[31m training multi of ${model} failed!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[31m training in convergence of ${model} failed!\033[0m"|tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 1.0" >> ${log_path}/train/${model_name}_convergence.log
     fi
 ;;

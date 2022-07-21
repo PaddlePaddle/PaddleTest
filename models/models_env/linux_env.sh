@@ -116,6 +116,22 @@ ls;
 # ls
 
 if [[ "${docker_flag}" == "" ]]; then
+
+    #升级显卡策略，独立使用显卡，以逗号分割执行显卡编号，重定义从0开始赋值
+    echo SET_CUDA VS SET_MULTI_CUDA
+    echo $SET_CUDA
+    echo $SET_MULTI_CUDA
+    export SET_CUDA=0;
+    SET_MULTI_CUDA_back=${SET_MULTI_CUDA}
+    array=(${SET_MULTI_CUDA_back//,/ })
+    SET_MULTI_CUDA=0
+    for((i=1;i<${#array[@]};i++));
+    do
+    export SET_MULTI_CUDA=${SET_MULTI_CUDA},${i}
+    done
+    echo $SET_CUDA
+    echo $SET_MULTI_CUDA
+
     ####创建docker
     set +x;
     docker_name="ce_${Repo}_${Priority_version}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
@@ -126,7 +142,7 @@ if [[ "${docker_flag}" == "" ]]; then
     echo "end kill docker"
     }
     trap 'docker_del' SIGTERM
-    NV_GPU=${SET_MULTI_CUDA} nvidia-docker run -i   --rm \
+    NV_GPU=${SET_MULTI_CUDA_back} nvidia-docker run -i   --rm \
                 --name=${docker_name} --net=host \
                 --shm-size=128G \
                 -v $(pwd):/workspace \
@@ -141,16 +157,8 @@ if [[ "${docker_flag}" == "" ]]; then
                 export https_proxy=${http_proxy};
                 export Data_path=${Data_path};
                 export Project_path=${Project_path};
-
-                #升级显卡策略，独立使用显卡，以逗号分割执行显卡编号，重定义从0开始赋值
-                export SET_CUDA=0;
-                string=${SET_MULTI_CUDA}
-                array=(${string//,/ })
-                SET_MULTI_CUDA=0
-                for((i=1;i<${#array[@]};i++));
-                do
-                export SET_MULTI_CUDA=${SET_MULTI_CUDA},${i}
-                done
+                export SET_CUDA=${SET_CUDA};
+                export SET_MULTI_CUDA=${SET_MULTI_CUDA};
 
                 if [[ ${Python_env} == 'path_way' ]];then
                     case ${Python_version} in
@@ -221,6 +229,7 @@ if [[ "${docker_flag}" == "" ]]; then
                     echo unset python version;
                 fi
 
+                nvidia-smi;
                 python -c 'import sys; print(sys.version_info[:])';
                 git --version;
                 if [[ ${CE_version} == 'V2' ]];then
