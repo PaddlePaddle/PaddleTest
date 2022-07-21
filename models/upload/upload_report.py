@@ -80,6 +80,6 @@ def send(url):
 
 
 if __name__ == "__main__":
-    # build_url需配置在环境变量中，不允许上传到github；
+    # build_url 需配置在环境变量中，不允许上传到github；
     url = os.getenv("build_url")
     send(url)
