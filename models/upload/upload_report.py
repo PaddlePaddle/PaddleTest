@@ -54,7 +54,7 @@ def send(url):
                 "kpi_base": 0,
                 "kpi_value": 0,
                 "threshold": 0,
-                "ratio": 0
+                "ratio": 0,
             }
         )
 
