@@ -1120,7 +1120,7 @@ print_logs_func(){
 
 python -m pip install paddleclas
 python -m pip install paddlenlp
-python -m pip install paddleseg
+python -m pip install paddleseg==2.5.0
 python -m pip install paddledet
 
 if [ "$1" = "run_CI" ];then
