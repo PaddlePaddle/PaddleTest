@@ -67,36 +67,26 @@ cat ./${CE_version_name}/src/task/common.py;
 ls;
 
 ####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称
-if  [[ "${SET_MULTI_CUDA}" == "" ]] ;then
+if  [[ "${SET_MULTI_CUDA}" == "" ]] ;then  #换了docker启动的方式，使用默认制定方式即可，SET_MULTI_CUDA参数只是在启动时使用
     tc_name=`(echo $PWD|awk -F '/' '{print $4}')`
     echo "teamcity path:" $tc_name
     if [ $tc_name == "release_02" ];then
         echo release_02
-        sed -i "s/SET_CUDA = \"0\"/SET_CUDA = \"2\"/g"  ./${CE_version_name}/src/task/common.py
-        sed -i "s/SET_MULTI_CUDA = \"0,1\"/SET_MULTI_CUDA = \"2,3\"/g" ./${CE_version_name}/src/task/common.py
-        export SET_CUDA=2;
         export SET_MULTI_CUDA=2,3;
 
     elif [ $tc_name == "release_03" ];then
         echo release_03
-        sed -i "s/SET_CUDA = \"0\"/SET_CUDA = \"4\"/g"  ./${CE_version_name}/src/task/common.py
-        sed -i "s/SET_MULTI_CUDA = \"0,1\"/SET_MULTI_CUDA = \"4,5\"/g" ./${CE_version_name}/src/task/common.py
-        export SET_CUDA=4;
         export SET_MULTI_CUDA=4,5;
 
     elif [ $tc_name == "release_04" ];then
         echo release_04
-        sed -i "s/SET_CUDA = \"0\"/SET_CUDA = \"6\"/g"  ./${CE_version_name}/src/task/common.py
-        sed -i "s/SET_MULTI_CUDA = \"0,1\"/SET_MULTI_CUDA = \"6,7\"/g"  ./${CE_version_name}/src/task/common.py
-        export SET_CUDA=6;
         export SET_MULTI_CUDA=6,7;
     else
         echo release_01
-        export SET_CUDA=0;
         export SET_MULTI_CUDA=0,1;
     fi
 else
-    echo already seted CUDA_id
+    echo already seted CUDA_id  #这里需要再细化下，按下面的方法指定无用，直接默认按common中指定0,1卡了
     export SET_CUDA=${SET_MULTI_CUDA}
     export SET_MULTI_CUDA=${SET_MULTI_CUDA}
 fi
@@ -106,7 +96,8 @@ cat ./${CE_version_name}/src/task/common.py
 #####进入执行路径创建docker容器 [用户改docker创建]
 cd ./${CE_version_name}/src/task
 ls;
-wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleClas.tar.gz --no-proxy  >/dev/null #预先下载PaddleClas，不使用CE框架clone
+wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleClas.tar.gz --no-proxy  >/dev/null
+#预先下载PaddleClas，不使用CE框架clone
 tar xf PaddleClas.tar.gz
 rm -rf PaddleClas.tar.gz
 cd ..
@@ -117,20 +108,20 @@ ls;
 
 if [[ "${docker_flag}" == "" ]]; then
 
-    #升级显卡策略，独立使用显卡，以逗号分割执行显卡编号，重定义从0开始赋值
-    echo SET_CUDA VS SET_MULTI_CUDA
-    echo $SET_CUDA
-    echo $SET_MULTI_CUDA
-    export SET_CUDA=0;
-    SET_MULTI_CUDA_back=${SET_MULTI_CUDA}
-    array=(${SET_MULTI_CUDA_back//,/ })
-    SET_MULTI_CUDA=0
-    for((i=1;i<${#array[@]};i++));
-    do
-    export SET_MULTI_CUDA=${SET_MULTI_CUDA},${i}
-    done
-    echo $SET_CUDA
-    echo $SET_MULTI_CUDA
+    #升级显卡策略，独立使用显卡，以逗号分割执行显卡编号，重定义从0开始赋值  这种情况是适配大于两张卡的情况
+    # echo SET_CUDA VS SET_MULTI_CUDA
+    # echo $SET_CUDA
+    # echo $SET_MULTI_CUDA
+    # export SET_CUDA=0;
+    # SET_MULTI_CUDA_back=${SET_MULTI_CUDA};
+    # array=(${SET_MULTI_CUDA_back//,/ });
+    # SET_MULTI_CUDA=0;
+    # for((i=1;i<${#array[@]};i++));
+    # do
+    # export SET_MULTI_CUDA=${SET_MULTI_CUDA},${i};
+    # done
+    # echo $SET_CUDA
+    # echo $SET_MULTI_CUDA
 
     ####创建docker
     set +x;
@@ -142,7 +133,8 @@ if [[ "${docker_flag}" == "" ]]; then
     echo "end kill docker"
     }
     trap 'docker_del' SIGTERM
-    NV_GPU=${SET_MULTI_CUDA_back} nvidia-docker run -i   --rm \
+    # NV_GPU=${SET_MULTI_CUDA_back} nvidia-docker run -i   --rm \
+    NV_GPU=${SET_MULTI_CUDA} nvidia-docker run -i   --rm \
                 --name=${docker_name} --net=host \
                 --shm-size=128G \
                 -v $(pwd):/workspace \
@@ -157,8 +149,8 @@ if [[ "${docker_flag}" == "" ]]; then
                 export https_proxy=${http_proxy};
                 export Data_path=${Data_path};
                 export Project_path=${Project_path};
-                export SET_CUDA=${SET_CUDA};
-                export SET_MULTI_CUDA=${SET_MULTI_CUDA};
+                # export SET_CUDA=${SET_CUDA};
+                # export SET_MULTI_CUDA=${SET_MULTI_CUDA};
 
                 if [[ ${Python_env} == 'path_way' ]];then
                     case ${Python_version} in
