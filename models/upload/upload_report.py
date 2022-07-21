@@ -26,7 +26,7 @@ def send(url):
     """
     models = os.getenv("models_list")
     models_list = []
-    for model in (models.split(",")):
+    for model in models.split(","):
         if model.strip():
             models_list.append(model.strip())
 
@@ -55,7 +55,8 @@ def send(url):
                 "kpi_value": 0,
                 "threshold": 0,
                 "ratio": 0
-            })
+            }
+        )
 
     params = {
         "build_type_id": os.getenv("build_type_id"),
@@ -67,7 +68,7 @@ def send(url):
         "duration": 1,
         "exit_code": os.getenv("build_exit_code"),
         "status": os.getenv("build_status"),
-        "case_detail": json.dumps(models_result)
+        "case_detail": json.dumps(models_result),
     }
     res = requests.post(url, data=params)
     result = res.json()
