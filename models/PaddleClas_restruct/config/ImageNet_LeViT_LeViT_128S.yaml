@@ -392,7 +392,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_LeViT_LeViT_128S_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_LeViT_LeViT_128S_trained.log
   -
     tag: export_linux_pretrained
     priority: P1
@@ -408,7 +408,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_LeViT_LeViT_128S_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_LeViT_LeViT_128S_pretrained.log
   -
     tag: export_win
     priority: P1
@@ -424,7 +424,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_LeViT_LeViT_128S_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_LeViT_LeViT_128S_trained.log
   -
     tag: export_win_pretrained
     priority: P1
@@ -440,7 +440,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_LeViT_LeViT_128S_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_LeViT_LeViT_128S_pretrained.log
   -
     tag: export_mac
     priority: P1
@@ -456,7 +456,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_LeViT_LeViT_128S_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_LeViT_LeViT_128S_trained.log
   -
     tag: export_mac_pretrained
     priority: P1
@@ -472,7 +472,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "-"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_LeViT_LeViT_128S_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_LeViT_LeViT_128S_pretrained.log
 
 PREDICT: # 训练步骤
   -
