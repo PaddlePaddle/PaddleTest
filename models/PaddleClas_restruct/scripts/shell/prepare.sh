@@ -69,6 +69,35 @@ done
 export model_latest_name=${array2[0]}
 echo ${model_latest_name}
 
+#对32G的模型进行bs减半的操作，注意向上取整 #暂时适配了linux，未考虑MAC
+if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_patch16_224 \
+    ImageNet_EfficientNet_EfficientNetB0 ImageNet_GhostNet_GhostNet_x1_3 ImageNet_RedNet_RedNet50 \
+    ImageNet_ResNeXt101_wsl_ResNeXt101_32x8d_wsl ImageNet_ResNeXt_ResNeXt152_64x4d \
+    ImageNet_SwinTransformer_SwinTransformer_tiny_patch4_window7_224 ImageNet_TNT_TNT_small \
+    ImageNet_Twins_alt_gvt_small ImageNet_Twins_pcpvt_small ImageNet_Xception_Xception41_deeplab \
+    ImageNet_Xception_Xception71' =~ ${model_name} ]];then
+    yum install bc -y
+    apt-get install bc -y
+    function ceil(){
+    floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整
+    add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
+    echo `expr $floor  + $add`
+    }
+    index=(`cat ${1} | grep -n batch_size | awk -F ":" '{print $1}'`)
+    num=(`cat ${1} |grep batch_size|cut -d ":" -f2`)
+    for((i=0;i<${#num[@]};i++));
+    do
+    ((Num=${num[i]} % 2))
+    if [ "$Num" == 0 ];then
+        out_num=`expr ${num[i]}/2 |bc` #整除2
+    else
+        out_num=`expr ${num[i]}/2` #bs向上取整
+        out_num=`ceil ${out_num}`
+    fi
+    sed -i "${index[i]}s/batch_size:/batch_size: ${out_num} #/" ${1}
+    done
+fi
+
 #区分单卡多卡
 # export CUDA_VISIBLE_DEVICES=  #这一步让框架来集成
 if [[ ${2} =~ "SET_MULTI_CUDA" ]];then
