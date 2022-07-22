@@ -32,9 +32,9 @@ fi
 unset http_proxy
 unset https_proxy
 
-python -m pip install --ignore-installed --upgrade \
+python -m pip install --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
-python -m pip install  --ignore-installed paddleslim \
+python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1

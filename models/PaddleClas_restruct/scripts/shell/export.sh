@@ -1,4 +1,4 @@
-# 输入变量：yaml、设置卡数CPU/SET_CUDA/SET_MULTI_CUDA、trained/pretrained
+# 输入变量：yaml、设置卡数CPU/SET_CUDA/SET_MULTI_CUDA、 trained/pretrained
 
 cd ${Project_path} #确定下执行路径
 \cp -r -f ${Project_path}/../scripts/shell/prepare.sh . # #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代

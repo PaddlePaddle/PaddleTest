@@ -100,7 +100,8 @@ do
                 # echo $branch_tmp
                 # echo $branch
                 # 在这里还要判断当前模型在report中是否存在，不存在的话就不执行
-                if [[ ! `grep -c "${model_name}" ../clas_${branch_tmp}` -ne '0' ]] ;then
+                sed -i "" "s|"${base_priority}"|"${priority_tmp}"|g" ${model_name}.yaml #P0/1 #不加\$会报（正常的） sed: first RE may not be empty 加了值不会变
+                if [[ ! `grep -c "${model_name}" ../clas_${branch_tmp}` -ne '0' ]] ;then #在已有的里面不存在
                     echo "new model :${model_name}"
                 else
                     # echo priority_tmp
@@ -111,7 +112,6 @@ do
                     # grep "${base_model}" ../clas_${branch_tmp}
                     # read -p "Press enter to continue"  #卡一下
 
-                    sed -i "" "s|"${base_priority}"|"${priority_tmp}"|g" ${model_name}.yaml #P0/1 #不加\$会报（正常的） sed: first RE may not be empty 加了值不会变
                     arr_base=($(echo `grep -w "${base_model}" ../clas_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
                     arr_target=($(echo `grep -w "${model_name}" ../clas_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
                     # echo arr_base

@@ -14,7 +14,7 @@ VARIABLES:
 
 EXEC:
   # exec_cases: [TRAIN]
-  exec_cases: [TRAIN,EVAL,INFER,EXPORT,EXPORT,PREDICT]
+  exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
   exec_priority: [P0]
   exec_tag: $EXEC_TAG
 
