@@ -28,7 +28,7 @@ fi
 
 ###################
 echo --------- git repo -----
-git clone --depth=10 https://github.com/PaddlePaddle/PaddleSlim.git -b $4
+git clone  https://github.com/PaddlePaddle/PaddleSlim.git -b $4
 git clone --depth=10 https://github.com/PaddlePaddle/PaddleClas.git -b develop
 git clone --depth=10 https://github.com/PaddlePaddle/PaddleDetection.git -b develop
 git clone --depth=10 https://github.com/PaddlePaddle/PaddleOCR.git -b dygraph
@@ -50,6 +50,8 @@ env
 
 echo -------start install paddleslim----
 cd ${repo_path}/PaddleSlim
+echo ---git log---
+git log -1
 python -m pip install -r requirements.txt
 python setup.py install
 echo ------finish install paddleslim -----

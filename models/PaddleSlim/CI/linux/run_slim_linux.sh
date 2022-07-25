@@ -18,14 +18,14 @@ bash slim_prepare_data.sh
 
 # run_CI/run_CE/ALL 、cudaid1、cudaid2
 bash slim_run_case_linux.sh $4 $5 $6
-
+MODELS_EXCODE=$?
 
 cd ${log_path}
 FF=`ls *FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
     echo ---fail case: ${FF}
     ls *FAIL*
-    exit 1
+    exit ${MODELS_EXCODE}
 else
     echo ---all case pass---
     exit 0

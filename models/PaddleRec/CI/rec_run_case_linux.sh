@@ -46,7 +46,7 @@ feetrun_dy_st_train_infer(){
 
 demo_contentunderstanding(){
 declare -A dic
-dic=([dssm]='models/contentunderstanding/tagspace' [textcnn]='models/contentunderstanding/textcnn'\
+dic=([tagspace]='models/contentunderstanding/tagspace' [textcnn]='models/contentunderstanding/textcnn'\
 )
 
 for model in $(echo ${!dic[*]});do
@@ -60,6 +60,7 @@ for model in $(echo ${!dic[*]});do
     if [ "$2" == "freet_run" ];then
         feetrun_dy_st_train_infer ${model_kind} ${model}
     fi
+    rm -rf output*
 done
 }
 
@@ -79,6 +80,7 @@ for model in $(echo ${!dic[*]});do
     if [ "$2" == "freet_run" ];then
         feetrun_dy_st_train_infer ${model_kind} ${model}
     fi
+    rm -rf output*
 done
 }
 
@@ -86,7 +88,7 @@ demo_multitask(){
 declare -A dic
 dic=([aitm]='models/multitask/aitm' [dselect_k]='models/multitask/dselect_k' \
     [esmm]='models/multitask/esmm' [maml]='models/multitask/maml' [mmoe]='models/multitask/mmoe' \
-    [ple]='models/multitask/ple' [esmm]='models/multitask/share_bottom' \
+    [ple]='models/multitask/ple' [share_bottom]='models/multitask/share_bottom' \
 )
 
 for model in $(echo ${!dic[*]});do
@@ -104,7 +106,7 @@ for model in $(echo ${!dic[*]});do
             feetrun_dy_st_train_infer ${model_kind} ${model}
         fi
     fi
-
+    rm -rf output*
 done
 }
 
@@ -140,11 +142,11 @@ for model in $(echo ${!dic[*]});do
             feetrun_dy_st_train_infer ${model_kind} ${model}
         fi
     fi
+    rm -rf output*
 done
 }
 
 demo_recall(){
-
 declare -A dic
 dic=([deepwalk]='models/recall/deepwalk' [ensfm]='models/recall/ensfm' \
     [mhcn]='models/recall/mhcn' [ncf]='models/recall/ncf' [tisas]='models/recall/tisas' \
@@ -179,6 +181,7 @@ for model in $(echo ${!dic[*]});do
             feetrun_dy_st_train_infer ${model_kind} ${model}
         fi
     fi
+    rm -rf output*
 done
 }
 
@@ -228,9 +231,23 @@ run_demo_func(){
     demo_movie_recommand True
 }
 
+print_logs(){
+cd ${log_path}
+FF=`ls *FAIL*|wc -l`
+if [ "${FF}" -gt "0" ];then
+    echo ---fail case: ${FF}
+    ls *FAIL*
+    exit 1
+else
+    echo ---all case pass---
+    exit 0
+fi
+}
+
 case $1 in
 "run_CI")
     run_CI_func
+    print_logs
     ;;
 "run_CE")
     run_freet_func
@@ -239,10 +256,13 @@ case $1 in
     run_CPU_func
     ;;
 "run_ALL")
-    run_freet_func
-    run_CPU_func
+   run_freet_func
+   run_CPU_func
+   # print_logs
+   echo ---skip---
     ;;
 "run_demo")
     run_demo_func
+    print_logs
     ;;
 esac

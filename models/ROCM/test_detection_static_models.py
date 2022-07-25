@@ -58,6 +58,7 @@ def setup_function():
     clean_process()
 
 
+@pytest.mark.skip(reason="libra_rcnn_r50_vd_fpn_1x detection no sport static")
 def test_libra_rcnn_r50_vd_fpn_1x():
     """
     libra_rcnn_r50_vd_fpn_1x test case
@@ -68,14 +69,16 @@ def test_libra_rcnn_r50_vd_fpn_1x():
     model.test_detection_train()
 
 
-# def test_retinanet_r50_fpn_1x():
-#     """
-#     retinanet_r50_fpn_1x test case
-#     """
-#     model = TestDetectionStaticModel(model='retinanet_r50_fpn_1x', yaml='configs/retinanet_r50_fpn_1x.yml')
-#     model.test_detection_train()
+@pytest.mark.skip(reason="retinanet_r50_fpn_1x detection no sport static")
+def test_retinanet_r50_fpn_1x():
+    """
+    retinanet_r50_fpn_1x test case
+    """
+    model = TestDetectionStaticModel(model="retinanet_r50_fpn_1x", yaml="configs/retinanet_r50_fpn_1x.yml")
+    model.test_detection_train()
 
 
+@pytest.mark.skip(reason="faceboxes detection no sport static")
 def test_faceboxes():
     """
     faceboxes test case

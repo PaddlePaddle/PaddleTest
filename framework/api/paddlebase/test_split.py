@@ -224,12 +224,12 @@ class TestSplit3(APIBase):
 obj3 = TestSplit3(paddle.split)
 
 
-@pytest.mark.api_base_split_exception
-def test_split11():
-    """
-    TypeError:x=int8
-    """
-    x = np.arange(6).reshape(2, 3)
-    axis = 1
-    num_or_sections = 3
-    obj3.exception(mode="c", etype="NotFound", x=x, num_or_sections=num_or_sections, axis=axis)
+# @pytest.mark.api_base_split_exception
+# def test_split11():
+#    """
+#    TypeError:x=int8
+#    """
+#    x = np.arange(6).reshape(2, 3)
+#    axis = 1
+#    num_or_sections = 3
+#    obj3.exception(mode="c", etype="NotFound", x=x, num_or_sections=num_or_sections, axis=axis)

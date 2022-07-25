@@ -4,11 +4,16 @@
 """
 test_dist
 """
+import sys
 from apibase import APIBase
 from apibase import randtool
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../../utils/")
+from interceptor import skip_not_compile_gpu
+from interceptor import skip_branch_not_develop
 
 
 class TestDist(APIBase):
@@ -202,6 +207,7 @@ def test_dist9():
     obj.run(res=res, x=x, y=y, p=7)
 
 
+@skip_branch_not_develop
 @pytest.mark.api_base_dist_exception
 def test_dist10():
     """

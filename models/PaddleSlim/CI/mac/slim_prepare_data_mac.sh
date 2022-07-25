@@ -10,6 +10,7 @@ fi
 wget -q https://sys-p0.bj.bcebos.com/slim_ci/ILSVRC2012_data_demo.tar.gz --no-check-certificate
 tar xf ILSVRC2012_data_demo.tar.gz
 mv ILSVRC2012_data_demo data
+rm -rf *.tar
 
 # download pretrain model
 root_url="http://paddle-imagenet-models-name.bj.bcebos.com"
@@ -26,5 +27,6 @@ do
         tar xf ${model}_pretrained.tar
     fi
 done
+rm -rf *.tar
 
 echo --- data and pretrain models finished-----

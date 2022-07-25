@@ -63,7 +63,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/slim_st_pact_quant_aware_no_pact.log
 
   -
-    tag: linux_st_gpu2
+    tag: linux_st_gpu1
     priority: p0
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
@@ -75,14 +75,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       acc_top1:
         latest: True
-        kpi_base: 0.265234
+        kpi_base: 0.700781
         threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.503516
+        kpi_base: 0.900586
         threshold: 0
         actived: True
         evaluation: "+"

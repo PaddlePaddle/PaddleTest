@@ -96,16 +96,16 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.458974
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       loss:
         latest: True
         kpi_base: 1.6857445
-        threshold: 0.001
+        threshold: 0
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: None
       exit_code:
         latest: True
@@ -470,7 +470,7 @@ INFER:
       auc:
         latest: True
         kpi_base: 0.775602
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
