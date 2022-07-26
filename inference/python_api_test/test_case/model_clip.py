@@ -33,11 +33,19 @@ def clip_model_extra_op(path_prefix=None, model_dir=None, output_model_path=None
         if var.name in feed_target_names:
             input_var_list.append(var)
 
+    # 与模型原输入变量顺序对齐
+    input_var_list_origin = []
+    for name in feed_target_names:
+        for var in input_var_list:
+            if var.name == name:
+                input_var_list_origin.append(var)
+                break
+
     print("feed_target_names: {}".format(feed_target_names))
     print("input_var_list: {}".format(input_var_list))
     paddle.static.save_inference_model(
         path_prefix=output_model_path,
-        feed_vars=input_var_list,
+        feed_vars=input_var_list_origin,
         fetch_vars=fetch_targets,
         executor=exe,
         program=inference_program,

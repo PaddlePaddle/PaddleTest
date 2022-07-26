@@ -11,9 +11,9 @@ from yaml_loader import YamlLoader
 import controller
 
 
-yaml_path = os.path.join("yaml", "esnet.yml")
+yaml_path = os.path.join("yaml", "Det", "modeling", "backbones", "dla.yml")
 yml = YamlLoader(yaml_path)
-all_cases_list = ["esnet_ESNet_0"]
+all_cases_list = ["dla_Root_0"]
 
 # all_cases_list = []
 # all_cases_dict = yml.get_all_case_name()

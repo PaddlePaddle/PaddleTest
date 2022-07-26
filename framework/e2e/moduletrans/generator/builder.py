@@ -87,7 +87,7 @@ class BuildModuleTest(object):
         paddle.disable_static()
         paddle.seed(33)
         np.random.seed(33)
-        data_dict = self.input_data.__getitem__(0)
+        data_dict = self.input_data[0]  # self.input_data.__getitem__(0)
         net = self.layer_info.get_layer()
         if to_static:
             net = paddle.jit.to_static(net)
@@ -104,7 +104,7 @@ class BuildModuleTest(object):
         net = self.layer_info.get_layer()
         net = paddle.jit.to_static(net)
         net.eval()
-        data_dict = self.input_data.__getitem__(0)
+        data_dict = self.input_data[0]
         net(**data_dict)
         paddle.jit.save(net, path=os.path.join(self.save_path, "jit_save", self.case_name))
 
@@ -155,6 +155,17 @@ class BuildModuleTest(object):
         else:
             self.logger.get_log().error("unknown save type for build_dygraph_train_ground_truth!!!~")
 
+    def build_dygraph_predict_ground_truth(self, mode="numpy"):
+        """dygraph train test"""
+        if not os.path.exists(os.path.join(self.exp_path, self.case_name)):
+            os.makedirs(os.path.join(self.exp_path, self.case_name))
+        self.logger.get_log().info("dygraph predict build ground truth start~")
+        exp_out = self.train(to_static=False)
+        if mode == "numpy":
+            np.save(os.path.join(self.exp_path, self.case_name, "dygraph_predict_test.npy"), exp_out.numpy())
+        else:
+            self.logger.get_log().error("unknown save type for build_dygraph_predict_ground_truth!!!~")
+
     def dygraph_train_test(self, delta=1e-8, rtol=1e-8):
         """dygraph train test"""
         self.logger.get_log().info("dygraph train acc-test start~")
@@ -165,7 +176,11 @@ class BuildModuleTest(object):
 
     def dygraph_predict_test(self, delta=1e-8, rtol=1e-8):
         """dygraph predict test"""
-        pass
+        self.logger.get_log().info("dygraph predict acc-test start~")
+        res_out = self.predict(to_static=False)
+        # self.logger.get_log().info("dygraph_out is: {}".format(res_out))
+        exp_out = np.load(os.path.join(self.exp_path, self.case_name, "dygraph_predict_test.npy"))
+        tool.compare(res_out, exp_out, delta=delta, rtol=rtol)
 
     def dygraph_to_static_train_test(self, delta=1e-8, rtol=1e-8):
         """dygraph_to_static train test"""
