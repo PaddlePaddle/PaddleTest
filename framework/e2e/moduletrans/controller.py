@@ -35,7 +35,6 @@ class ControlModuleTrans(object):
             "dygraph_predict_test": self.module.dygraph_predict_test,
             "dygraph_to_static_predict_test": self.module.dygraph_to_static_predict_test,
             "dygraph_to_infer_predict_test": self.module.dygraph_to_infer_predict_test,
-            "build_dygraph_train_ground_truth": self.module.build_dygraph_train_ground_truth,
         }
 
     def run_test(self):
@@ -62,6 +61,10 @@ class ControlModuleTrans(object):
             # raise Exception(bug_trace)
             raise Exception("failed test is: {}".format(fail_test_list))
 
-    def mk_ground_truth(self):
-        """make ground truth to bos"""
+    def mk_dygraph_train_ground_truth(self):
+        """make dygraph_train ground truth"""
         self.module.build_dygraph_train_ground_truth(mode="numpy")
+
+    def mk_dygraph_predict_ground_truth(self):
+        """make dygraph_predict ground truth"""
+        self.module.build_dygraph_predict_ground_truth(mode="numpy")

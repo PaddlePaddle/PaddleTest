@@ -58,14 +58,21 @@ dla_Root_0:
       kernel_size: 3
       residual: True
   DataGenerator:
-    DataGenerator_name: "diy.data.struct_img_dataset.ListImageWithoutLabel"
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
       inputs:
-        generate_way: "random"  # random, solid, load
-        type: "Tensor"
-        dtype: "float32"
-        shape: [5, 8, 24, 24]
-        range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [5, 8, 24, 24]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [5, 8, 24, 24]
+          range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
