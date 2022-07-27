@@ -78,7 +78,6 @@ def test_Hessian_base():
     paddle.disable_static()
     res = ans.numerical_hessian(func0, paddle.to_tensor(x, dtype="float64"), is_batched=False)
     paddle.enable_static()
-    obj.enable_backward = False
     obj.base(res=res, func=func0, inputs=x)
 
 
@@ -93,7 +92,6 @@ def test_Hessian1():
     paddle.disable_static()
     res = ans.numerical_hessian(func0, paddle.to_tensor(x, dtype="float64"), is_batched=False)
     paddle.enable_static()
-    obj.enable_backward = False
     obj.run(res=res, func=func0, inputs=x)
 
 
@@ -108,7 +106,6 @@ def test_Hessian2():
     paddle.disable_static()
     res = ans.numerical_hessian(func0, paddle.to_tensor(x, dtype="float64"), is_batched=False)
     paddle.enable_static()
-    obj.enable_backward = False
     obj.run(res=res, func=func0, inputs=x)
 
 
@@ -126,7 +123,6 @@ def test_Hessian3():
         func1, [paddle.to_tensor(x, dtype="float64"), paddle.to_tensor(y, dtype="float64")], is_batched=False
     )
     paddle.enable_static()
-    obj.enable_backward = False
     obj.run(res=res, func=func1, inputs=[x, y])
 
 
