@@ -38,6 +38,11 @@ python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+if [[ ${1} =~ 'fp16' ]] || [[ ${1} =~ 'amp' ]];then
+    echo "fp16 or amp"
+    python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
+    --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
+fi
 
 
 #确定log存储位置
@@ -79,22 +84,27 @@ if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_
     yum install bc -y
     apt-get install bc -y
     function ceil(){
-    floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整
+    floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整 局部变量$1不影响
     add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
     echo `expr $floor  + $add`
     }
     index=(`cat ${1} | grep -n batch_size | awk -F ":" '{print $1}'`)
-    num=(`cat ${1} |grep batch_size|cut -d ":" -f2`)
-    for((i=0;i<${#num[@]};i++));
+    for((i=0;i<${#index[@]};i++));
     do
-    ((Num=${num[i]} % 2))
-    if [ "$Num" == 0 ];then
-        out_num=`expr ${num[i]}/2 |bc` #整除2
-    else
-        out_num=`expr ${num[i]}/2` #bs向上取整
-        out_num=`ceil ${out_num}`
-    fi
-    sed -i "${index[i]}s/batch_size:/batch_size: ${out_num} #/" ${1}
+        num_str=`sed -n ${index[i]}p ${1}`
+        if [[ ${num_str} =~ "#@" ]];then #  #@ 保证符号的唯一性
+            continue
+        fi
+        input_num=(`echo ${num_str} | grep -o -E '[0-9]+'  | sed -e 's/^0\+//'`)
+        ((Div=${input_num[0]} %2))
+        if [ "${Div}" == 0 ];then
+            out_num=`expr ${input_num[0]}/2 |bc` #整除2
+        else
+            echo "can not %2 will ceil"
+            out_num=`expr ${input_num[0]}/2` #bs向上取整
+            out_num=`ceil ${out_num}`
+        fi
+        sed -i "${index[i]}s/batch_size: /batch_size: ${out_num} #@/" ${1}
     done
 fi
 

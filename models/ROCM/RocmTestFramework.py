@@ -53,9 +53,11 @@ def exit_check_fucntion(exit_code, output, mode, log_dir=""):
         for file in all_files:
             print(file)
             filename = os.path.join(log_dir, file)
-            with open(filename) as file_obj:
-                content = file_obj.read()
-                print(content)
+            if os.path.isdir(filename) is False:  # 判断是否是文件
+                with open(filename) as file_obj:  # 这里容易出现utf-8字符问题，注意
+                    # content = file_obj.read()
+                    content = file_obj.read().decode("utf-8", "ignore")
+                    print(content)
     assert "ABORT!!!" not in output, "%s  model failed!   log information:%s" % (mode, output)
     logging.info("train model sucessfuly!")
     print(output)
