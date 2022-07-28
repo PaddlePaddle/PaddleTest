@@ -5,6 +5,7 @@
 Layer trans
 """
 
+import os
 from logger import logger
 
 
@@ -30,7 +31,7 @@ class ModuleTrans(object):
     def get_layer_info(self):
         """get layer info"""
         repo = self.layer["repo"]
-        if repo not in ["DIY", "PaddleOCR", "PaddleSeg", "PaddleClas"]:
+        if repo not in ["DIY", "PaddleOCR", "PaddleSeg", "PaddleClas", "PaddleDetection"]:
             self.logger.get_log().warning("{} 未知模型repo".format(repo))
         layer_name = self.layer["layer_name"]
         layer_param = self.layer["params"]
@@ -55,3 +56,14 @@ class ModuleTrans(object):
     def get_train_info(self):
         """get train info"""
         return self.train
+
+    def get_ground_truth_path(self):
+        """get path"""
+        layer_name = self.get_layer_info()[1]
+        str_list = layer_name.split(".")
+        save_test_path = os.path.join(os.getcwd(), "save_test")
+        ground_truth_path = os.path.join(os.getcwd(), "ground_truth")
+        for i in str_list:
+            save_test_path = os.path.join(save_test_path, i)
+            ground_truth_path = os.path.join(ground_truth_path, i)
+        return save_test_path, ground_truth_path
