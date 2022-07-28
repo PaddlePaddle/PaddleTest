@@ -38,7 +38,7 @@ python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
-if [[ ${1} =~ 'fp16' ]] || [[ ${1} =~ 'amp' ]];then
+if [[ ${yaml_line} =~ 'fp16' ]] || [[ ${yaml_line} =~ 'amp' ]];then
     echo "fp16 or amp"
     python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
     --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
@@ -62,7 +62,7 @@ done
 array=(${1//\// })
 export model_type=${array[2]} #区分 分类、slim、识别等
 export model_name=${array[2]} #进行字符串拼接
-if [[ ${1} =~ "PULC" ]];then
+if [[ ${yaml_line} =~ "PULC" ]];then
     export model_type_PULC=${array[3]} #PULC为了区分9中类别单独区分
 fi
 echo ${model_type}
@@ -88,10 +88,10 @@ if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_
     add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
     echo `expr $floor  + $add`
     }
-    index=(`cat ${1} | grep -n batch_size | awk -F ":" '{print $1}'`)
+    index=(`cat ${yaml_line} | grep -n batch_size | awk -F ":" '{print $1}'`)
     for((i=0;i<${#index[@]};i++));
     do
-        num_str=`sed -n ${index[i]}p ${1}`
+        num_str=`sed -n ${index[i]}p ${yaml_line}`
         if [[ ${num_str} =~ "#@" ]];then #  #@ 保证符号的唯一性
             continue
         fi
@@ -104,18 +104,18 @@ if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_
             out_num=`expr ${input_num[0]}/2` #bs向上取整
             out_num=`ceil ${out_num}`
         fi
-        sed -i "${index[i]}s/batch_size: /batch_size: ${out_num} #@/" ${1}
+        sed -i "${index[i]}s/batch_size: /batch_size: ${out_num} #@/" ${yaml_line}
     done
 fi
 
 #区分单卡多卡
 # export CUDA_VISIBLE_DEVICES=  #这一步让框架来集成
-if [[ ${2} =~ "SET_MULTI_CUDA" ]];then
+if [[ ${cuda_type} =~ "SET_MULTI_CUDA" ]];then
     export card="2card"
     export multi_flag="-m paddle.distributed.launch"
     export set_cuda_device="gpu"
     export set_cuda_flag=True
-elif [[ ${2} =~ "CPU" ]];then
+elif [[ ${cuda_type} =~ "CPU" ]];then
     export card="cpu"
     export multi_flag=" "
     export set_cuda_device="cpu"
