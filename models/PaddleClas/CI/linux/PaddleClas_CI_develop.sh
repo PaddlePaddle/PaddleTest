@@ -126,7 +126,8 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 #    setuptools==59.5.0 -i https://mirror.baidu.com/pypi/simple #before install bcolz
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install  --ignore-installed paddleslim \
+# python -m pip install  --ignore-installed --upgrade paddleslim \
+python -m pip install --upgrade paddleslim \
    -i https://mirror.baidu.com/pypi/simple
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
