@@ -10,7 +10,6 @@ import platform
 import pytest
 import allure
 from yaml_loader import YamlLoader
-import controller
 
 
 class ModuleSystemTest(object):
@@ -34,14 +33,14 @@ class ModuleSystemTest(object):
             )
             os.system("tar -xzf ground_truth.tar")
 
-        if "Det" in self.repo_list:
+        if "Det" in self.repo_list and not os.path.exists(os.path.join(self.cur_path, "ppdet")):
             if not os.path.exists(os.path.join(self.cur_path, "ppdet")):
                 os.system("git clone -b develop https://github.com/PaddlePaddle/PaddleDetection.git")
                 os.system("cp -r PaddleDetection/ppdet .")
                 os.system("cd PaddleDetection && python -m pip install -r requirements.txt")
                 os.system("cd PaddleDetection && python setup.py install")
 
-        if "Clas" in self.repo_list:
+        if "Clas" in self.repo_list and not os.path.exists(os.path.join(self.cur_path, "ppcls")):
             if not os.path.exists(os.path.join(self.cur_path, "ppcls")):
                 os.system("git clone -b develop https://github.com/PaddlePaddle/PaddleClas.git")
                 os.system("cp -r PaddleClas/ppcls .")
@@ -99,7 +98,7 @@ class ModuleSystemTest(object):
                         )
                     else:
                         os.system(
-                            "python3.8 -m pytest -sv test_run.py --yaml={} --case={} --alluredir={}".format(
+                            "python -m pytest -sv test_run.py --yaml={} --case={} --alluredir={}".format(
                                 yaml, case, self.report_dir
                             )
                         )

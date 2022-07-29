@@ -8,7 +8,8 @@ layer_builder
 import paddle
 import diy
 import ppdet
-import ppcls
+
+# import ppcls
 
 
 class BuildLayer(object):
