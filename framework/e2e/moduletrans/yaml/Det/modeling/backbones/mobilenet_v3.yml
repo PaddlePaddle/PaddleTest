@@ -33,7 +33,7 @@ mobilenet_v3_ConvBNLayer_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -92,7 +92,7 @@ mobilenet_v3_ResidualUnit_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -142,7 +142,7 @@ mobilenet_v3_SEModule_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -198,7 +198,7 @@ mobilenet_v3_ExtraBlockDW_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:

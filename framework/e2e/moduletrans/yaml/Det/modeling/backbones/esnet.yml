@@ -23,7 +23,7 @@ esnet_SEModule_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -74,7 +74,7 @@ esnet_InvertedResidual_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -125,7 +125,7 @@ esnet_InvertedResidualDS_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -175,7 +175,7 @@ esnet_ESNet_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
