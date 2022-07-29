@@ -28,7 +28,7 @@ csp_darknet_BaseConv_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -80,7 +80,7 @@ csp_darknet_DWConv_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -132,7 +132,7 @@ csp_darknet_Focus_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -185,7 +185,7 @@ csp_darknet_BottleNeck_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -236,7 +236,7 @@ csp_darknet_SPPLayer_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -287,7 +287,7 @@ csp_darknet_SPPFLayer_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -341,7 +341,7 @@ csp_darknet_CSPLayer_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:

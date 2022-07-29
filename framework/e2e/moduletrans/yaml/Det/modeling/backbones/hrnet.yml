@@ -30,7 +30,7 @@ hrnet_ConvNormLayer_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -85,7 +85,7 @@ hrnet_ConvNormLayer_1:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -136,7 +136,7 @@ hrnet_Layer1_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -187,7 +187,7 @@ hrnet_Layer1_0:
 #    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
 #    params:
 #      opt_api: "paddle.optimizer.SGD"
-#      learning_rate: 0.000001
+#      learning_rate: 0.00001
 #  Train:
 #    step: 3
 #  test:
@@ -240,7 +240,7 @@ hrnet_Layer1_0:
 #    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
 #    params:
 #      opt_api: "paddle.optimizer.SGD"
-#      learning_rate: 0.000001
+#      learning_rate: 0.00001
 #  Train:
 #    step: 3
 #  test:
@@ -294,7 +294,7 @@ hrnet_BottleneckBlock_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -348,7 +348,7 @@ hrnet_BasicBlock_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -397,7 +397,7 @@ hrnet_SELayer_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -458,7 +458,7 @@ hrnet_Stage_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -518,7 +518,7 @@ hrnet_HighResolutionModule_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -577,7 +577,7 @@ hrnet_FuseLayers_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -630,7 +630,7 @@ hrnet_HRNet_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:

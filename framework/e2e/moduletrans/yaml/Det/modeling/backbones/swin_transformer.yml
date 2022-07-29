@@ -25,7 +25,7 @@ swin_transformer_Mlp_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -78,7 +78,7 @@ swin_transformer_WindowAttention_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -140,7 +140,7 @@ swin_transformer_WindowAttention_0:
 #    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
 #    params:
 #      opt_api: "paddle.optimizer.SGD"
-#      learning_rate: 0.000001
+#      learning_rate: 0.00001
 #  Train:
 #    step: 3
 #  test:
