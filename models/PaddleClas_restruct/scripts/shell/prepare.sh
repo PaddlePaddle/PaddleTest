@@ -33,11 +33,11 @@ unset http_proxy
 unset https_proxy
 
 python -m pip install --ignore-installed --upgrade \
-    pip -i https://mirror.baidu.com/pypi/simple
+    pip -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  --ignore-installed paddleslim \
-    -i https://mirror.baidu.com/pypi/simple
+    -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
-    -i https://mirror.baidu.com/pypi/simple
+    -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 
 
 #确定log存储位置
@@ -46,9 +46,7 @@ export output_dir=output
 phases='train eval infer export_model predict api_test'
 for phase in $phases
 do
-if [[ -d ${log_path}/${phase} ]]; then
-   echo -e "\033[33m ${log_path}/${phase} is exsit!\033[0m"
-else
+if [[ ! -d ${log_path}/${phase} ]]; then
    mkdir -p  ${log_path}/${phase}
    echo -e "\033[33m ${log_path}/${phase} is created successfully!\033[0m"
 fi
@@ -59,7 +57,7 @@ done
 array=(${1//\// })
 export model_type=${array[2]} #区分 分类、slim、识别等
 export model_name=${array[2]} #进行字符串拼接
-if [[ ${line} =~ "PULC" ]];then
+if [[ ${1} =~ "PULC" ]];then
     export model_type_PULC=${array[3]} #PULC为了区分9中类别单独区分
 fi
 echo ${model_type}
@@ -67,7 +65,6 @@ for var in ${array[@]:3}
 do
     array2=(${var//'.yaml'/ })
     export model_name=${model_name}_${array2[0]}
-    echo ${model_name}
 done
 export model_latest_name=${array2[0]}
 echo ${model_latest_name}

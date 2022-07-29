@@ -1,0 +1,95 @@
+DataGenerator1:
+  desc: "no BatchSampler"
+  seed: 1
+  dataset:
+    generate_way:        # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_size: 1
+    shuffle: False
+    drop_last: False
+    num_workers: 0
+
+DataGenerator2:
+  desc: "set BatchSampler, no Sampler"
+  seed: 1
+  dataset:
+    generate_way:       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_sampler:
+      batch_size: 1
+      shuffle: False
+      drop_last: False
+    num_workers: 0
+
+
+DataGenerator3:
+  desc: "set BatchSampler, RandomSampler"
+  seed: 1
+  dataset:
+    generate_way:       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_sampler:
+      sampler:
+        type: RandomSampler
+        replacement: False
+        num_samples: None
+        generator: None
+      batch_size: 1
+      shuffle: False
+      drop_last: False
+    num_workers: 0
+
+
+DataGenerator4:
+  desc: "set BatchSampler, RandomSampler"
+  seed: 1
+  dataset:
+    generate_way: "./mnist.json.gz"       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_sampler:
+      sampler:
+        type: RandomSampler
+        replacement: False
+        num_samples: None
+        generator: None
+      batch_size: 1
+      shuffle: False
+      drop_last: False
+    num_workers: 0
+
+DataGenerator5:
+  desc: "set BatchSampler, no Sampler; shuffle: True"
+  seed: 1
+  dataset:
+    generate_way:       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_sampler:
+      batch_size: 1
+      shuffle: True
+      drop_last: False
+    num_workers: 0
