@@ -1,5 +1,4 @@
 echo $output_type
-export params_dir=$(ls ${output_dir}/${model_name})
 echo "######  params_dir"
 echo $params_dir
 if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的覆盖了

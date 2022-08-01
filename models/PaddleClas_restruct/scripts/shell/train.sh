@@ -50,7 +50,6 @@ dynamic|static)
         python ${multi_flag} tools/train.py -c ${yaml_line}  \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     fi
-    params_dir=$(ls ${output_dir}/${model_name})
     echo "######  params_dir"
     echo ${params_dir}
     cat ${log_path}/train/${model_name}_${card}.log | grep "Memory Usage (MB)"
@@ -71,7 +70,6 @@ convergence)
     python ${multi_flag} tools/train.py -c ${yaml_line}  \
         -o Global.output_dir=${output_dir}/${model_name} \
         > ${log_path}/train/${model_name}_convergence.log 2>&1
-    params_dir=$(ls ${output_dir}/${model_name})
     echo "######  params_dir"
     echo ${params_dir}
     cat ${log_path}/train/${model_name}_convergence.log | grep "Memory Usage (MB)"
