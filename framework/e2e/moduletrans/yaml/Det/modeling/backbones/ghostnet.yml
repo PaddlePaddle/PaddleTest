@@ -20,7 +20,7 @@ ghostnet_ExtraBlockDW_0:
       inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [5, 4, 16, 16]
         range: [ -1, 1]
   Loss:
@@ -70,7 +70,7 @@ ghostnet_SEBlock_0:
       inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [5, 14, 16, 16]
         range: [ -1, 1]
   Loss:
@@ -129,7 +129,7 @@ ghostnet_GhostBottleneck_0:
       inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [5, 16, 32, 32]
         range: [ -1, 1]
   Loss:
@@ -184,13 +184,13 @@ ghostnet_GhostNet_0:
       inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [4, 3, 224, 224]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
-      loss_list: ['paddle.nn.functional.softmax(logit[0])']
+      loss_list: ['logit[0]']
   optimizer:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:

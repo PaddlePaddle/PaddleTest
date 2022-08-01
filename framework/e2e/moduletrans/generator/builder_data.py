@@ -82,12 +82,25 @@ class BuildData(object):
                         self.logger.get_log().error("暂未开发加载路径下数据！！！~~~")
 
         paddle_data = eval(self.data_module)(paddle_data_dict)
-
-        # # data_module_type用于标识区别Dataset和DataLoader
-        # data_module_type = 'Dataset'
-        # if isinstance(paddle_data, Iterable):
-
         return paddle_data
+
+    def get_model_dtype(self):
+        """get first data type"""
+        for k, v in self.data.items():
+            if isinstance(v, dict):
+                if v["dtype"] == "float64":
+                    model_dtype = "float64"
+                    return model_dtype
+                else:
+                    model_dtype = "float32"
+            elif isinstance(v, list):
+                for i in v:
+                    if i["dtype"] == "float64":
+                        model_dtype = "float64"
+                        return model_dtype
+                    else:
+                        model_dtype = "float32"
+        return model_dtype
 
     def get_single_inputspec(self):
         """get single inputspec"""

@@ -36,6 +36,7 @@ class BuildModuleTest(object):
 
         self.data_info = builder_data.BuildData(self.case.get_data_info())
         self.input_data = self.data_info.get_single_data()
+        self.model_dtype = self.data_info.get_model_dtype()
 
         self.layer_info = builder_layer.BuildLayer(*self.case.get_layer_info())
 
@@ -44,6 +45,8 @@ class BuildModuleTest(object):
         self.optimizer_info = builder_optimizer.BuildOptimizer(*self.case.get_opt_info())
 
         self.train_info = builder_train.BuildTrain(self.case.get_train_info())
+
+        paddle.set_default_dtype(self.model_dtype)
 
     def train(self, to_static=False):
         """dygraph or static train"""

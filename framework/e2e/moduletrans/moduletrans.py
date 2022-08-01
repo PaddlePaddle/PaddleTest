@@ -19,6 +19,7 @@ class ModuleTrans(object):
         # self.case = self.case["paddle"]
         self.logger = logger
 
+        self.logger.get_log().info("The test case is: {}".format(self.case_name))
         self.logger.get_log().info(self.case.get("desc", "没有描述"))
 
         self.layer = self.case["Layer"]
