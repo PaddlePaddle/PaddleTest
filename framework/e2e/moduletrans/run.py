@@ -27,9 +27,8 @@ class ModuleSystemTest(object):
 
         if not os.path.exists(os.path.join(self.cur_path, "ground_truth.tar")):
             os.system(
-                "wget https://paddle-qa.bj.bcebos.com/luozeyu01/framework_e2e_LayerTest/{}/ground_truth.tar".format(
-                    self.env
-                )
+                "wget -q --no-proxy "
+                "https://paddle-qa.bj.bcebos.com/luozeyu01/framework_e2e_LayerTest/{}/ground_truth.tar".format(self.env)
             )
             os.system("tar -xzf ground_truth.tar")
 

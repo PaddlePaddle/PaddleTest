@@ -1,5 +1,5 @@
 swin_transformer_Mlp_0:
-  desc: "Det swin_transformer.Blocks"
+  desc: "Det swin_transformer.Mlp模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.Mlp"
@@ -49,7 +49,7 @@ swin_transformer_Mlp_0:
 #      rtol: 0.00000001
 
 swin_transformer_WindowAttention_0:
-  desc: "Det swin_transformer.Blocks"
+  desc: "Det swin_transformer.WindowAttention模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.WindowAttention"
@@ -102,7 +102,7 @@ swin_transformer_WindowAttention_0:
 #      rtol: 0.00000001
 
 #swin_transformer_SwinTransformerBlock_0:
-#  desc: "Det swin_transformer.Blocks"
+#  desc: "Det swin_transformer.SwinTransformerBlock模型结构"
 #  Layer:
 #    repo: "PaddleDetection"
 #    layer_name: "ppdet.modeling.backbones.swin_transformer.SwinTransformerBlock"
@@ -164,7 +164,7 @@ swin_transformer_WindowAttention_0:
 ##      rtol: 0.00000001
 
 swin_transformer_PatchMerging_0:
-  desc: "Det swin_transformer.Blocks"
+  desc: "Det swin_transformer.PatchMerging模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.PatchMerging"
@@ -221,7 +221,7 @@ swin_transformer_PatchMerging_0:
 #      rtol: 0.00000001
 
 swin_transformer_PatchEmbed_0:
-  desc: "Det swin_transformer.Blocks"
+  desc: "Det swin_transformer.PatchEmbed模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.PatchEmbed"
@@ -235,7 +235,7 @@ swin_transformer_PatchEmbed_0:
       x:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [4, 5, 64, 64]
         range: [ -1, 1]
   Loss:
@@ -270,7 +270,7 @@ swin_transformer_PatchEmbed_0:
 #      rtol: 0.00000001
 
 swin_transformer_BasicLayer_0:
-  desc: "Det swin_transformer.Blocks"
+  desc: "Det swin_transformer.BasicLayer模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.BasicLayer"
@@ -312,13 +312,78 @@ swin_transformer_BasicLayer_0:
     dygraph_to_static_train_test:
       delta: 0.00000001
       rtol: 0.00000001
-#    dygraph_to_static_predict_test:
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-#    dygraph_to_infer_predict_test:
-#      acc_test: False
-#      delta: 0.000001
-#      rtol: 0.000001
+#    build_dygraph_train_ground_truth:
+#      mode: 'numpy'
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+swin_transformer_SwinTransformer_0:
+  desc: "Det swin_transformer.SwinTransformer模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.backbones.swin_transformer.SwinTransformer"
+    params:
+      pretrain_img_size: 224
+      patch_size: 4
+      in_chans: 3
+      embed_dim: 96
+      depths: [2, 2, 6, 2]
+      num_heads: [3, 6, 12, 24]
+      window_size: 7
+      mlp_ratio: 4.
+      qkv_bias: True
+      qk_scale:
+      drop_rate: 0.
+      attn_drop_rate: 0.
+      drop_path_rate: 0.2
+#      norm_layer: nn.LayerNorm  # yml解析器暂不支持传入一个实例
+      ape: False
+      patch_norm: True
+      out_indices: !!python/tuple [0, 1, 2, 3]
+      frozen_stages: -1
+      pretrained:
+  DataGenerator:
+    DataGenerator_name: "diy.data.struct_img_dataset.DictImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float32"
+        shape: [4, 3, 224, 224]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit[0]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
 #    dygraph_train_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001

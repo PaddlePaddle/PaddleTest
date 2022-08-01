@@ -21,7 +21,7 @@ darknet_ConvBNLayer_0:
       inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [4, 6, 16, 16]
         range: [ -1, 1]
   Loss:
@@ -76,7 +76,7 @@ darknet_DownSample_0:
       inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [4, 16, 16, 5]
         range: [ -1, 1]
   Loss:
@@ -128,7 +128,7 @@ darknet_BasicBlock_0:
       inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [7, 16, 16, 6]
         range: [ -1, 1]
   Loss:
@@ -181,7 +181,7 @@ darknet_Blocks_0:
       inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [3, 6, 16, 16]
         range: [ -1, 1]
   Loss:
@@ -234,7 +234,7 @@ darknet_Blocks_1:
       inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [3, 16, 16, 6]
         range: [ -1, 1]
   Loss:
@@ -268,56 +268,56 @@ darknet_Blocks_1:
 #      delta: 0.00000001
 #      rtol: 0.00000001
 
-darknet_DarkNet_0:
-  desc: "Det ppdet.modeling.backbones.darknet.DarkNet模型结构"
-  Layer:
-    repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.darknet.DarkNet"
-    params:
-      depth: 53
-      freeze_at: -1
-      return_idx: [2, 3, 4]
-      num_stages: 5
-      norm_type: 'bn'
-      norm_decay: 0.
-      freeze_norm: False
-      data_format: 'NCHW'
-  DataGenerator:
-    DataGenerator_name: "diy.data.struct_img_dataset.DictImageWithoutLabel"
-    data:
-      inputs:
-        generate_way: "random"  # random, solid, load
-        type: "Tensor"
-        dtype: "float32"
-        shape: [4, 3, 224, 224]
-        range: [ -1, 1]
-  Loss:
-    loss_name: "diy.loss.diy_loss.naive_loss_list"
-    params:
-      loss_list: ['paddle.nn.functional.softmax(logit[0])']
-  optimizer:
-    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
-    params:
-      opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.00001
-  Train:
-    step: 3
-  test:
-    dygraph_to_static_train_test:
-      delta: 0.00001
-      rtol: 0.00001
-    dygraph_to_static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_infer_predict_test:
-      acc_test: False
-      delta: 0.000001
-      rtol: 0.000001
-#    dygraph_train_test:
+#darknet_DarkNet_0:
+#  desc: "Det ppdet.modeling.backbones.darknet.DarkNet模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.backbones.darknet.DarkNet"
+#    params:
+#      depth: 53
+#      freeze_at: -1
+#      return_idx: [2, 3, 4]
+#      num_stages: 5
+#      norm_type: 'bn'
+#      norm_decay: 0.
+#      freeze_norm: False
+#      data_format: 'NCHW'
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.struct_img_dataset.DictImageWithoutLabel"
+#    data:
+#      inputs:
+#        generate_way: "random"  # random, solid, load
+#        type: "Tensor"
+#        dtype: "float64"
+#        shape: [4, 3, 224, 224]
+#        range: [ -1, 1]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit[0]']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.000001
+#  Train:
+#    step: 3
+#  test:
+#    dygraph_to_static_train_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
+#    dygraph_to_static_predict_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    build_dygraph_train_ground_truth:
+##      mode: 'numpy'
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001

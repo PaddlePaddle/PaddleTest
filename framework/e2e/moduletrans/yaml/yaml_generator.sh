@@ -5,5 +5,5 @@ yml_list=`find Det -name "*.yml" | sort`
 for yml in ${yml_list}
 do
 echo ${yml}
-sed -i "" "s/learning_rate: 0.000001/learning_rate: 0.00001/g" ${yml}
+sed -i "" "s/dtype: \"float32\"/dtype: \"float64\"/g" ${yml}
 done
