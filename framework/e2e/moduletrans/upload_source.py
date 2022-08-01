@@ -36,6 +36,8 @@ def upload_source(cases_list=all_cases_list):
         test = controller.ControlModuleTrans(case=case)
         test.mk_dygraph_train_ground_truth()
         test.mk_dygraph_predict_ground_truth()
+        test.mk_static_train_ground_truth()
+        test.mk_static_predict_ground_truth()
 
 
 upload_source(all_cases_list)

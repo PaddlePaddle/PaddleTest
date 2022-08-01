@@ -17,7 +17,7 @@ hardnet_HarDBlock_0:
       x:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [3, 12, 32, 32]
         range: [ -1, 1]
   Loss:
@@ -28,7 +28,7 @@ hardnet_HarDBlock_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 4
   test:
@@ -70,7 +70,7 @@ hardnet_HarDBlock_1:
       x:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
+        dtype: "float64"
         shape: [3, 12, 32, 32]
         range: [ -1, 1]
   Loss:
@@ -81,7 +81,7 @@ hardnet_HarDBlock_1:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 4
   test:
@@ -119,7 +119,7 @@ hardnet_HarDBlock_1:
 #      inputs:
 #        generate_way: "random"  # random, solid, load
 #        type: "Tensor"
-#        dtype: "float32"
+#        dtype: "float64"
 #        shape: [4, 3, 224, 224]
 #        range: [ -1, 1]
 #  Loss:
@@ -130,9 +130,9 @@ hardnet_HarDBlock_1:
 #    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
 #    params:
 #      opt_api: "paddle.optimizer.SGD"
-#      learning_rate: 0.0000001  # 精度有问题
+#      learning_rate: 0.000001
 #  Train:
-#    step: 4
+#    step: 3
 #  test:
 #    dygraph_to_static_train_test:
 #      delta: 0.000002
