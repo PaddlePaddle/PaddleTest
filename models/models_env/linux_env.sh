@@ -9,7 +9,7 @@ cd ce;
 
 export Project_path=${Project_path:-/workspace/task/PaddleClas}
 export Data_path=${Data_path:-/ssd2/ce_data/PaddleClas}
-export Repo=${Repo:-PaddleClas}
+export Repo=${Repo:-PaddleClas_restruct}
 export Python_env=${Python_env:-path_way}
 export Python_version=${Python_version:-37}
 export CE_version=${CE_version:-V1}
