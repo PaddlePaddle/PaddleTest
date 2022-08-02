@@ -1,14 +1,14 @@
-echo $output_type
+echo $input_model_type
 echo "######  params_dir"
 echo $params_dir
 if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的覆盖了
-    if [[ ${output_type} == "trained" ]];then
+    if [[ ${input_model_type} == "trained" ]];then
         if [[ -f ${output_dir}/${model_name}/${params_dir}/latest.pdparams ]];then
             export pretrained_model=${output_dir}/${model_name}/${params_dir}/latest
         else
             export pretrained_model="None"  #使用初始化参数评估
         fi
-    elif [[ ${output_type} == "pretrained" ]];then
+    elif [[ ${input_model_type} == "pretrained" ]];then
         # PaddleClas/ppcls/arch/backbone/legendary_models/
         # esnet.py    ESNet
         # hrnet.py    HRNet
@@ -65,13 +65,13 @@ if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的
         export pretrained_model="None"  #使用初始化参数评估
     fi
 else
-    if [[ ${output_type} == "trained" ]];then
+    if [[ ${input_model_type} == "trained" ]];then
         if [[ -f "inference/${model_name}/inference.pdmodel" ]];then
             export pretrained_model="../inference/${model_name}"
         else
             export pretrained_model="None" #必须有下好的模型，不能使用初始化模型，所以不管用默认参数还是None都不能预测
         fi
-    elif [[ ${output_type} == "pretrained" ]];then
+    elif [[ ${input_model_type} == "pretrained" ]];then
         if [[ -d ${params_dir}_infer ]] && [[ -f ${params_dir}_infer/inference.pdiparams ]];then #有下载好的，或者export已导出的跳过下载
             export pretrained_model="../${params_dir}_infer"
         else
