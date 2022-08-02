@@ -86,6 +86,7 @@ echo ${model_latest_name}
 #     "`
 export params_dir=(`cat ${yaml_line} | grep name | awk -F ":" '{print $2}'`)
 export params_dir=${params_dir//\"/ }
+echo ${params_dir}
 
 #对32G的模型进行bs减半的操作，注意向上取整 #暂时适配了linux，未考虑MAC
 if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_patch16_224 \
@@ -94,6 +95,7 @@ if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_
     ImageNet_SwinTransformer_SwinTransformer_tiny_patch4_window7_224 ImageNet_TNT_TNT_small \
     ImageNet_Twins_alt_gvt_small ImageNet_Twins_pcpvt_small ImageNet_Xception_Xception41_deeplab \
     ImageNet_Xception_Xception71' =~ ${model_name} ]];then
+    echo "change ${model_name} batch_size"
     yum install bc -y
     apt-get install bc -y
     function ceil(){
