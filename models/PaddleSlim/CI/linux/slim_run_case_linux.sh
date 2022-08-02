@@ -1122,6 +1122,7 @@ python -m pip install paddleclas
 python -m pip install paddlenlp
 python -m pip install paddleseg
 python -m pip install paddledet
+python -m pip list | grep paddle
 
 if [ "$1" = "run_CI" ];then
 	# CI任务的case
