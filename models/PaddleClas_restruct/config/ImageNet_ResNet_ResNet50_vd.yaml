@@ -1,5 +1,5 @@
 MODEL: "ImageNet_ResNet_ResNet50_vd" # 模型名
-priority: P0,convergence_ImageNet_ResNet_ResNet50_vd,ImageNet_ResNet_ResNet50_vd,ALL
+PRIORITY: P0,convergence_ImageNet_ResNet_ResNet50_vd,ImageNet_ResNet_ResNet50_vd,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas

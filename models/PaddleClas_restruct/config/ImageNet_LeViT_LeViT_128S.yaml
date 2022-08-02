@@ -1,5 +1,5 @@
 MODEL: "ImageNet_LeViT_LeViT_128S" # 模型名
-priority: P1,convergence_ImageNet_LeViT_LeViT_128S,ImageNet_LeViT_LeViT_128S,ALL
+PRIORITY: P1,convergence_ImageNet_LeViT_LeViT_128S,ImageNet_LeViT_LeViT_128S,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas

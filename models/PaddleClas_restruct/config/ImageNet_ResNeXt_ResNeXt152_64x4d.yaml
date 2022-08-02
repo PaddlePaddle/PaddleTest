@@ -1,5 +1,5 @@
 MODEL: "ImageNet_ResNeXt_ResNeXt152_64x4d" # 模型名
-priority: P1,convergence_ImageNet_ResNeXt_ResNeXt152_64x4d,ImageNet_ResNeXt_ResNeXt152_64x4d,ALL
+PRIORITY: P1,convergence_ImageNet_ResNeXt_ResNeXt152_64x4d,ImageNet_ResNeXt_ResNeXt152_64x4d,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas

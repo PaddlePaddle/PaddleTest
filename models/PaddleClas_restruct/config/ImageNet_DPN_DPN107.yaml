@@ -1,5 +1,5 @@
 MODEL: "ImageNet_DPN_DPN107" # 模型名
-priority: P1,convergence_ImageNet_DPN_DPN107,ImageNet_DPN_DPN107,ALL
+PRIORITY: P1,convergence_ImageNet_DPN_DPN107,ImageNet_DPN_DPN107,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas

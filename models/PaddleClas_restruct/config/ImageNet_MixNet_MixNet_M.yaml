@@ -1,5 +1,5 @@
 MODEL: "ImageNet_MixNet_MixNet_M" # 模型名
-priority: P1,convergence_ImageNet_MixNet_MixNet_M,ImageNet_MixNet_MixNet_M,ALL
+PRIORITY: P1,convergence_ImageNet_MixNet_MixNet_M,ImageNet_MixNet_MixNet_M,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
