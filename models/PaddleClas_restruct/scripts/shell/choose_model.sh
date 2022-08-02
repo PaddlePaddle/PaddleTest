@@ -64,7 +64,6 @@ if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的
     else
         export pretrained_model="None"  #使用初始化参数评估
     fi
-    echo ${pretrained_model}
 else
     if [[ ${output_type} == "trained" ]];then
         if [[ -f "inference/${model_name}/inference.pdmodel" ]];then
@@ -89,3 +88,4 @@ else
         export pretrained_model="None"
     fi
 fi
+echo ${pretrained_model}

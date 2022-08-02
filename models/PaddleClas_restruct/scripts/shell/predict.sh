@@ -20,6 +20,8 @@ cd deploy
 sed -i 's/size: 224/size: '${size_tmp}'/g' configs/inference_cls.yaml #修改predict尺寸
 sed -i 's/resize_short: 256/resize_short: '${size_tmp}'/g' configs/inference_cls.yaml
 
+echo model_type
+echo ${model_type}
 case ${model_type} in
 ImageNet|slim|metric_learning)
     if [[ ${yaml_line} =~ 'ultra' ]];then
