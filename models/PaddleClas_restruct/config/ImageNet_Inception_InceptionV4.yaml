@@ -1,5 +1,5 @@
 MODEL: "ImageNet_Inception_InceptionV4" # 模型名
-priority: precision,function,convergence_ImageNet_Inception_InceptionV4,ImageNet_Inception_InceptionV4,ALL
+priority: P0,convergence_ImageNet_Inception_InceptionV4,ImageNet_Inception_InceptionV4,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas

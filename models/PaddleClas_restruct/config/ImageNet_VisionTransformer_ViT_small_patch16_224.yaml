@@ -1,5 +1,5 @@
 MODEL: "ImageNet_VisionTransformer_ViT_small_patch16_224" # 模型名
-priority: precision,function,convergence_ImageNet_VisionTransformer_ViT_small_patch16_224,ImageNet_VisionTransformer_ViT_small_patch16_224,ALL
+priority: P1,convergence_ImageNet_VisionTransformer_ViT_small_patch16_224,ImageNet_VisionTransformer_ViT_small_patch16_224,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas

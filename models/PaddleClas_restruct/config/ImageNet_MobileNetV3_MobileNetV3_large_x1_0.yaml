@@ -1,5 +1,5 @@
 MODEL: "ImageNet_MobileNetV3_MobileNetV3_large_x1_0" # 模型名
-priority: precision,function,convergence_ImageNet_MobileNetV3_MobileNetV3_large_x1_0,ImageNet_MobileNetV3_MobileNetV3_large_x1_0,ALL
+priority: P0,convergence_ImageNet_MobileNetV3_MobileNetV3_large_x1_0,ImageNet_MobileNetV3_MobileNetV3_large_x1_0,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas

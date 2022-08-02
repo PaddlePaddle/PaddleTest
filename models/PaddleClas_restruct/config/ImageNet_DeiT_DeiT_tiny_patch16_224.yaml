@@ -1,5 +1,5 @@
 MODEL: "ImageNet_DeiT_DeiT_tiny_patch16_224" # 模型名
-priority: precision,function,convergence_ImageNet_DeiT_DeiT_tiny_patch16_224,ImageNet_DeiT_DeiT_tiny_patch16_224,ALL
+priority: P1,convergence_ImageNet_DeiT_DeiT_tiny_patch16_224,ImageNet_DeiT_DeiT_tiny_patch16_224,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
