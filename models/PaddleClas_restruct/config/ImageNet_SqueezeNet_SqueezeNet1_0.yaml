@@ -15,13 +15,13 @@ VARIABLES:
 EXEC:
   # exec_cases: [TRAIN]
   exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
-  exec_priority: $EXEC_PRIORITY
+  exec_priority: [P1]
   exec_tag: $EXEC_TAG
 
 TRAIN: # 训练步骤
   -
     tag: train_linux_convergence
-    priority: precision,function
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -39,7 +39,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_SqueezeNet_SqueezeNet1_0_convergence.log
   -
     tag: train_linux_gpu1
-    priority: precision
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
@@ -75,7 +75,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_SqueezeNet_SqueezeNet1_0_1card.log
   -
     tag: train_linux_gpu2
-    priority: precision
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -111,7 +111,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_SqueezeNet_SqueezeNet1_0_2card.log
   -
     tag: train_linux_gpu1_release
-    priority: precision
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
@@ -147,7 +147,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_SqueezeNet_SqueezeNet1_0_1card.log
   -
     tag: train_linux_gpu2_release
-    priority: precision
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -183,7 +183,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_SqueezeNet_SqueezeNet1_0_2card.log
   -
     tag: train_win_gpu
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -199,7 +199,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_SqueezeNet_SqueezeNet1_0_train.log
   -
     tag: train_win_cpu
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -215,7 +215,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_SqueezeNet_SqueezeNet1_0_cpu.log
   -
     tag: train_mac_cpu
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -233,7 +233,7 @@ TRAIN: # 训练步骤
 EVAL: # 训练步骤
   -
     tag: eval_linux
-    priority: precision
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -269,7 +269,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: eval_linux_release
-    priority: precision
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -305,7 +305,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: eval_linux_pretrained
-    priority: precision
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -341,7 +341,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_SqueezeNet_SqueezeNet1_0_pretrained.log
   -
     tag: eval_win
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -357,7 +357,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: eval_win_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -373,7 +373,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_SqueezeNet_SqueezeNet1_0_pretrained.log
   -
     tag: eval_mac
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -389,7 +389,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: eval_mac_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -407,7 +407,7 @@ EVAL: # 训练步骤
 INFER: # 训练步骤
   -
     tag: infer_linux
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -423,7 +423,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: infer_linux_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -439,7 +439,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_SqueezeNet_SqueezeNet1_0_pretrained.log
   -
     tag: infer_win
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -455,7 +455,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: infer_win_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -471,7 +471,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_SqueezeNet_SqueezeNet1_0_pretrained.log
   -
     tag: infer_mac
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -487,7 +487,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: infer_mac_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -505,7 +505,7 @@ INFER: # 训练步骤
 EXPORT: # 导出模型
   -
     tag: export_linux
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -521,7 +521,7 @@ EXPORT: # 导出模型
     output: $ROOT_PATH/$model_log_path/export_model/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: export_linux_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -537,7 +537,7 @@ EXPORT: # 导出模型
     output: $ROOT_PATH/$model_log_path/export_model/ImageNet_SqueezeNet_SqueezeNet1_0_pretrained.log
   -
     tag: export_win
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -553,7 +553,7 @@ EXPORT: # 导出模型
     output: $ROOT_PATH/$model_log_path/export_model/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: export_win_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -569,7 +569,7 @@ EXPORT: # 导出模型
     output: $ROOT_PATH/$model_log_path/export_model/ImageNet_SqueezeNet_SqueezeNet1_0_pretrained.log
   -
     tag: export_mac
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -585,7 +585,7 @@ EXPORT: # 导出模型
     output: $ROOT_PATH/$model_log_path/export_model/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: export_mac_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -603,7 +603,7 @@ EXPORT: # 导出模型
 PREDICT: # 训练步骤
   -
     tag: predict_linux
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -619,7 +619,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: predict_linux_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -635,7 +635,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_SqueezeNet_SqueezeNet1_0_pretrained.log
   -
     tag: predict_win
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -651,7 +651,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: predict_win_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -667,7 +667,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_SqueezeNet_SqueezeNet1_0_pretrained.log
   -
     tag: predict_mac
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -683,7 +683,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_SqueezeNet_SqueezeNet1_0_trained.log
   -
     tag: predict_mac_pretrained
-    priority: precision,function
+    priority: P1,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
