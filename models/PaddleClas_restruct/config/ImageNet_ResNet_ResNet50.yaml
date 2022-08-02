@@ -14,7 +14,7 @@ VARIABLES:
 
 EXEC:
   exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
-  exec_priority: ${EXEC_PRIORITY}
+  exec_priority: $EXEC_PRIORITY
   exec_tag: $EXEC_TAG
 
 TRAIN: # 训练步骤
