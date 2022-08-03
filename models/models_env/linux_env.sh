@@ -54,6 +54,7 @@ else
     tar xf PaddleTest.tar.gz >/dev/null 2>&1
     mv PaddleTest task
 fi
+cp -r ./task/models/models_env/docker_run.sh  ./${CE_version_name}/src/docker_run.sh  #为了配合后续的source docker_run.sh
 
 #通用变量[用户改]
 test_code_download_path=./task/models/${Repo}
@@ -101,7 +102,6 @@ wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleClas.tar.gz --no-proxy
 tar xf PaddleClas.tar.gz
 rm -rf PaddleClas.tar.gz
 cd ..
-cp -r ./task/models/models_env/docker_run.sh  .  #为了配合后续的source docker_run.sh
 pwd;
 ls;
 
