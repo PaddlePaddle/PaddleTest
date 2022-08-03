@@ -31,11 +31,12 @@ class ControlModuleTrans(object):
 
         self.test_map = {
             "dygraph_train_test": self.module.dygraph_train_test,
-            "dygraph_to_static_train_test": self.module.dygraph_to_static_train_test,
             "dygraph_predict_test": self.module.dygraph_predict_test,
+            "static_train_test": self.module.static_train_test,
+            "static_predict_test": self.module.static_predict_test,
+            "dygraph_to_static_train_test": self.module.dygraph_to_static_train_test,
             "dygraph_to_static_predict_test": self.module.dygraph_to_static_predict_test,
             "dygraph_to_infer_predict_test": self.module.dygraph_to_infer_predict_test,
-            "build_dygraph_train_ground_truth": self.module.build_dygraph_train_ground_truth,
         }
 
     def run_test(self):
@@ -62,6 +63,18 @@ class ControlModuleTrans(object):
             # raise Exception(bug_trace)
             raise Exception("failed test is: {}".format(fail_test_list))
 
-    def mk_ground_truth(self):
-        """make ground truth to bos"""
+    def mk_dygraph_train_ground_truth(self):
+        """make dygraph_train ground truth"""
         self.module.build_dygraph_train_ground_truth(mode="numpy")
+
+    def mk_dygraph_predict_ground_truth(self):
+        """make dygraph_predict ground truth"""
+        self.module.build_dygraph_predict_ground_truth(mode="numpy")
+
+    def mk_static_train_ground_truth(self):
+        """make static_train ground truth"""
+        self.module.build_static_train_ground_truth(mode="numpy")
+
+    def mk_static_predict_ground_truth(self):
+        """make static_predict ground truth"""
+        self.module.build_static_predict_ground_truth(mode="numpy")

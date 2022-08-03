@@ -1,19 +1,121 @@
-esnet_SEModule_0:
-  desc: "Det ppdet.modeling.backbones.esnet.SEModule模型结构"
+lcnet_ConvBNLayer_0:
+  desc: "Det ppdet.modeling.backbones.lcnet.ConvBNLayer模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.esnet.SEModule"
+    layer_name: "ppdet.modeling.backbones.lcnet.ConvBNLayer"
     params:
-      channel: 18
+      num_channels: 8
+      filter_size: 4
+      num_filters: 16
+      stride: 2
+      num_groups: 4
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 8, 16, 16]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    build_dygraph_train_ground_truth:
+#      mode: 'numpy'
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+lcnet_DepthwiseSeparable_0:
+  desc: "Det ppdet.modeling.backbones.lcnet.DepthwiseSeparable模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.backbones.lcnet.DepthwiseSeparable"
+    params:
+      num_channels: 8
+      num_filters: 16
+      stride: 2
+      dw_size: 5
+      use_se: True
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 8, 16, 16]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    build_dygraph_train_ground_truth:
+#      mode: 'numpy'
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+lcnet_SEModule_0:
+  desc: "Det ppdet.modeling.backbones.lcnet.SEModule模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.backbones.lcnet.SEModule"
+    params:
+      channel: 33
       reduction: 3
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
-      inputs:
+      x:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
-        shape: [5, 18, 16, 16]
+        dtype: "float64"
+        shape: [4, 33, 16, 16]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
@@ -23,7 +125,7 @@ esnet_SEModule_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -46,154 +148,50 @@ esnet_SEModule_0:
 #      delta: 0.00000001
 #      rtol: 0.00000001
 
-esnet_InvertedResidual_0:
-  desc: "Det ppdet.modeling.backbones.esnet.InvertedResidual模型结构"
-  Layer:
-    repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.esnet.InvertedResidual"
-    params:
-      in_channels: 8
-      mid_channels: 4
-      out_channels: 8
-      stride: 1
-      act: "relu"
-  DataGenerator:
-    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
-    data:
-      inputs:
-        generate_way: "random"  # random, solid, load
-        type: "Tensor"
-        dtype: "float32"
-        shape: [5, 8, 16, 16]
-        range: [ -1, 1]
-  Loss:
-    loss_name: "diy.loss.diy_loss.naive_loss_list"
-    params:
-      loss_list: ['logit']
-  optimizer:
-    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
-    params:
-      opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
-  Train:
-    step: 3
-  test:
-    dygraph_to_static_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_infer_predict_test:
-      acc_test: False
-      delta: 0.000001
-      rtol: 0.000001
-#    dygraph_train_test:
+#lcnet_LCNet_0:
+#  desc: "Det ppdet.modeling.backbones.lcnet.LCNet模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.backbones.lcnet.LCNet"
+#    params:
+#      scale: 1.0
+#      feature_maps: [3, 4, 5]
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.struct_img_dataset.DictImageWithoutLabel"
+#    data:
+#      inputs:
+#        generate_way: "random"  # random, solid, load
+#        type: "Tensor"
+#        dtype: "float64"
+#        shape: [4, 3, 224, 224]
+#        range: [ -1, 1]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit[0]']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.00001
+#  Train:
+#    step: 3
+#  test:
+#    dygraph_to_static_train_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
+#    dygraph_to_static_predict_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-
-esnet_InvertedResidualDS_0:
-  desc: "Det ppdet.modeling.backbones.esnet.InvertedResidualDS模型结构"
-  Layer:
-    repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.esnet.InvertedResidualDS"
-    params:
-      in_channels: 16
-      mid_channels: 8
-      out_channels: 16
-      stride: 1
-      act: "relu"
-  DataGenerator:
-    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
-    data:
-      inputs:
-        generate_way: "random"  # random, solid, load
-        type: "Tensor"
-        dtype: "float32"
-        shape: [5, 16, 64, 64]
-        range: [ -1, 1]
-  Loss:
-    loss_name: "diy.loss.diy_loss.naive_loss_list"
-    params:
-      loss_list: ['logit']
-  optimizer:
-    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
-    params:
-      opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
-  Train:
-    step: 3
-  test:
-    dygraph_to_static_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_infer_predict_test:
-      acc_test: False
-      delta: 0.000001
-      rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-
-esnet_ESNet_0:
-  desc: "Det ppdet.modeling.backbones.esnet.ESNet模型结构"
-  Layer:
-    repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.esnet.ESNet"
-    params:
-      scale: 1.0
-      act: "hard_swish"
-      feature_maps: [4, 11, 14]
-      channel_ratio: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-  DataGenerator:
-    DataGenerator_name: "diy.data.struct_img_dataset.DictImageWithoutLabel"
-    data:
-      inputs:
-        generate_way: "random"  # random, solid, load
-        type: "Tensor"
-        dtype: "float32"
-        shape: [4, 3, 224, 224]
-        range: [ -1, 1]
-  Loss:
-    loss_name: "diy.loss.diy_loss.naive_loss_list"
-    params:
-      loss_list: ['paddle.nn.functional.softmax(logit[0])']
-  optimizer:
-    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
-    params:
-      opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
-  Train:
-    step: 3
-  test:
-    dygraph_to_static_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_infer_predict_test:
-      acc_test: False
-      delta: 0.000001
-      rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    build_dygraph_train_ground_truth:
+##      mode: 'numpy'
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001

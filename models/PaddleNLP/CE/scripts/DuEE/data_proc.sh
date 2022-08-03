@@ -34,4 +34,4 @@ cp -r /workspace/task/datasets/DuEE/*  ./data/DuEE-Fin/
 cp -r /workspace/task/datasets/DuEE/*  ./conf/DuEE-Fin/
 # 覆盖bug
 sed -i 's/title \= doc\[\"title\"\]/title \= doc\.get\(\"title\", \"\"\)/g'  ./duee_fin_data_prepare.py
-bash run_duee_fin.sh data_prepare
+# bash run_duee_fin.sh data_prepare

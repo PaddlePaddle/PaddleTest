@@ -1,5 +1,5 @@
 MODEL: "ImageNet_DeiT_DeiT_tiny_patch16_224" # 模型名
-PRIORITY: P0,convergence_ImageNet_DeiT_DeiT_tiny_patch16_224,ImageNet_DeiT_DeiT_tiny_patch16_224,ALL
+PRIORITY: P1,convergence_ImageNet_DeiT_DeiT_tiny_patch16_224,ImageNet_DeiT_DeiT_tiny_patch16_224,ALL
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -14,14 +14,14 @@ VARIABLES:
 
 EXEC:
   # exec_cases: [TRAIN]
-  exec_cases: [TRAIN,EVAL,INFER,EXPORT,EXPORT,PREDICT]
-  exec_priority: [P0]
+  exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
+  exec_priority: [P1]
   exec_tag: $EXEC_TAG
 
 TRAIN: # 训练步骤
   -
     tag: train_linux_convergence
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -39,7 +39,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_DeiT_DeiT_tiny_patch16_224_convergence.log
   -
     tag: train_linux_gpu1
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
@@ -57,7 +57,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_DeiT_DeiT_tiny_patch16_224_1card.log
   -
     tag: train_linux_gpu2
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -75,7 +75,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_DeiT_DeiT_tiny_patch16_224_2card.log
   -
     tag: train_linux_gpu1_release
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
@@ -93,7 +93,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_DeiT_DeiT_tiny_patch16_224_1card.log
   -
     tag: train_linux_gpu2_release
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -111,7 +111,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_DeiT_DeiT_tiny_patch16_224_2card.log
   -
     tag: train_win_gpu
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -127,7 +127,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_DeiT_DeiT_tiny_patch16_224_train.log
   -
     tag: train_win_cpu
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -143,7 +143,7 @@ TRAIN: # 训练步骤
     output: $ROOT_PATH/$model_log_path/train/ImageNet_DeiT_DeiT_tiny_patch16_224_cpu.log
   -
     tag: train_mac_cpu
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -161,7 +161,7 @@ TRAIN: # 训练步骤
 EVAL: # 训练步骤
   -
     tag: eval_linux
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -179,7 +179,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: eval_linux_release
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -197,7 +197,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: eval_linux_pretrained
-    priority: P0
+    priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -215,7 +215,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
   -
     tag: eval_win
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -231,7 +231,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: eval_win_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -247,7 +247,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
   -
     tag: eval_mac
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -263,7 +263,7 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: eval_mac_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -281,7 +281,7 @@ EVAL: # 训练步骤
 INFER: # 训练步骤
   -
     tag: infer_linux
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -297,7 +297,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: infer_linux_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -313,7 +313,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
   -
     tag: infer_win
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -329,7 +329,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: infer_win_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -345,7 +345,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
   -
     tag: infer_mac
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -361,7 +361,7 @@ INFER: # 训练步骤
     output: $ROOT_PATH/$model_log_path/infer/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: infer_mac_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -379,7 +379,7 @@ INFER: # 训练步骤
 EXPORT: # 导出模型
   -
     tag: export_linux
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -392,10 +392,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: export_linux_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -408,10 +408,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
   -
     tag: export_win
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -424,10 +424,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: export_win_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -440,10 +440,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
   -
     tag: export_mac
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -456,10 +456,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: export_mac_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -472,12 +472,12 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
 
 PREDICT: # 训练步骤
   -
     tag: predict_linux
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -493,7 +493,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: predict_linux_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -509,7 +509,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
   -
     tag: predict_win
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -525,7 +525,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: predict_win_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -541,7 +541,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_pretrained.log
   -
     tag: predict_mac
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -557,7 +557,7 @@ PREDICT: # 训练步骤
     output: $ROOT_PATH/$model_log_path/predict/ImageNet_DeiT_DeiT_tiny_patch16_224_trained.log
   -
     tag: predict_mac_pretrained
-    priority: P0
+    priority: P1
     run:
       -
         path: $ROOT_PATH/$model_scripts_path

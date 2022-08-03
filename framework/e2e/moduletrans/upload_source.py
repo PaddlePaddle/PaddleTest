@@ -16,6 +16,7 @@ yaml_path = "module.yml"
 yml = YamlLoader(yaml_path)
 # all_cases_list = ["Module_10"]
 
+
 all_cases_list = []
 all_cases_dict = yml.get_all_case_name()
 for k in all_cases_dict:
@@ -33,7 +34,10 @@ def upload_source(cases_list=all_cases_list):
     for case_name in cases_list:
         case = yml.get_case_info(case_name)
         test = controller.ControlModuleTrans(case=case)
-        test.mk_ground_truth()
+        test.mk_dygraph_train_ground_truth()
+        test.mk_dygraph_predict_ground_truth()
+        test.mk_static_train_ground_truth()
+        test.mk_static_predict_ground_truth()
 
 
 upload_source(all_cases_list)

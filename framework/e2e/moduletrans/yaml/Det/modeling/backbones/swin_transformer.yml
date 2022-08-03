@@ -1,16 +1,13 @@
-csp_darknet_BaseConv_0:
-  desc: "Det ppdet.modeling.backbones.csp_darknet.BaseConv模型结构"
+swin_transformer_Mlp_0:
+  desc: "Det swin_transformer.Mlp模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.csp_darknet.BaseConv"
+    layer_name: "ppdet.modeling.backbones.swin_transformer.Mlp"
     params:
-      in_channels: 6
-      out_channels: 9
-      ksize: 3
-      stride: 2
-      groups: 3
-      bias: False
-      act: "silu"
+      in_features: 5
+      hidden_features: 10
+      out_features: 15
+      drop: 0.3
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
@@ -18,7 +15,7 @@ csp_darknet_BaseConv_0:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float32"
-        shape: [4, 6, 16, 16]
+        shape: [4, 5]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
@@ -28,7 +25,7 @@ csp_darknet_BaseConv_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -51,18 +48,19 @@ csp_darknet_BaseConv_0:
 #      delta: 0.00000001
 #      rtol: 0.00000001
 
-csp_darknet_DWConv_0:
-  desc: "Det ppdet.modeling.backbones.csp_darknet.BaseConv模型结构"
+swin_transformer_WindowAttention_0:
+  desc: "Det swin_transformer.WindowAttention模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.csp_darknet.DWConv"
+    layer_name: "ppdet.modeling.backbones.swin_transformer.WindowAttention"
     params:
-      in_channels: 5
-      out_channels: 7
-      ksize: 3
-      stride: 2
-      bias: True
-      act: "silu"
+      dim: 8
+      window_size: !!python/tuple [32, 32]
+      num_heads: 2
+      qkv_bias: True
+      qk_scale: 0.03
+      attn_drop: 0.01
+      proj_drop: 0.01
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
@@ -70,7 +68,7 @@ csp_darknet_DWConv_0:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float32"
-        shape: [5, 5, 16, 16]
+        shape: [4, 1024, 8]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
@@ -80,7 +78,7 @@ csp_darknet_DWConv_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -103,27 +101,94 @@ csp_darknet_DWConv_0:
 #      delta: 0.00000001
 #      rtol: 0.00000001
 
-csp_darknet_Focus_0:
-  desc: "Det ppdet.modeling.backbones.csp_darknet.Focus模型结构"
+#swin_transformer_SwinTransformerBlock_0:
+#  desc: "Det swin_transformer.SwinTransformerBlock模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.backbones.swin_transformer.SwinTransformerBlock"
+#    params:
+#      dim: 8
+#      num_heads: 2
+#      window_size: 5
+#      shift_size: 0
+#      mlp_ratio: 4.
+#      qkv_bias: True
+#      qk_scale: 0.02
+#      drop: 0.
+#      attn_drop: 0.01
+#      drop_path: 0.01
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      x:
+#        generate_way: "random"  # random, solid, load
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [4, 25, 8]
+#        range: [ -1, 1]
+#      mask_matrix:
+#        generate_way: "random"  # random, solid, load
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [4, 25, 8]
+#        range: [ -1, 1]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.00001
+#  Train:
+#    step: 3
+#  test:
+#    dygraph_to_static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    build_dygraph_train_ground_truth:
+##      mode: 'numpy'
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+
+swin_transformer_PatchMerging_0:
+  desc: "Det swin_transformer.PatchMerging模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.csp_darknet.Focus"
+    layer_name: "ppdet.modeling.backbones.swin_transformer.PatchMerging"
     params:
-      in_channels: 5
-      out_channels: 7
-      ksize: 3
-      stride: 2
-      bias: True
-      act: "silu"
+      dim: 16
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
-      inputs:
+      x:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float32"
-        shape: [3, 5, 14, 14]  # [3, 5, 13, 13] 报错
+        shape: [4, 576, 16]
         range: [ -1, 1]
+      H:
+        generate_way: "solid"
+        type: "int"
+        dtype: "int32"
+        value: 24
+      W:
+        generate_way: "solid"
+        type: "int"
+        dtype: "int32"
+        value: 24
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
@@ -132,7 +197,7 @@ csp_darknet_Focus_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -155,27 +220,23 @@ csp_darknet_Focus_0:
 #      delta: 0.00000001
 #      rtol: 0.00000001
 
-csp_darknet_BottleNeck_0:
-  desc: "Det ppdet.modeling.backbones.csp_darknet.BottleNeck模型结构"
+swin_transformer_PatchEmbed_0:
+  desc: "Det swin_transformer.PatchEmbed模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.csp_darknet.BottleNeck"
+    layer_name: "ppdet.modeling.backbones.swin_transformer.PatchEmbed"
     params:
-      in_channels: 5
-      out_channels: 7
-      shortcut: True
-      expansion: 0.6
-      depthwise: False
-      bias: True
-      act: "silu"
+      patch_size: 4
+      in_chans: 5
+      embed_dim: 48
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
       x:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float32"
-        shape: [3, 5, 14, 14]  # [3, 5, 13, 13] 报错
+        dtype: "float64"
+        shape: [4, 5, 64, 64]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
@@ -185,7 +246,7 @@ csp_darknet_BottleNeck_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -208,17 +269,15 @@ csp_darknet_BottleNeck_0:
 #      delta: 0.00000001
 #      rtol: 0.00000001
 
-csp_darknet_SPPLayer_0:
-  desc: "Det ppdet.modeling.backbones.csp_darknet.SPPLayer模型结构"
+swin_transformer_BasicLayer_0:
+  desc: "Det swin_transformer.BasicLayer模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.csp_darknet.SPPLayer"
+    layer_name: "ppdet.modeling.backbones.swin_transformer.BasicLayer"
     params:
-      in_channels: 5
-      out_channels: 7
-      kernel_sizes: !!python/tuple [5, 7, 9]
-      bias: True
-      act: "silu"
+      dim: 16
+      depth: 2
+      num_heads: 4
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
@@ -226,17 +285,27 @@ csp_darknet_SPPLayer_0:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float32"
-        shape: [3, 5, 14, 14]  # [3, 5, 13, 13] 报错
+        shape: [4, 576, 16]
         range: [ -1, 1]
+      H:
+        generate_way: "solid"
+        type: "int"
+        dtype: "int32"
+        value: 24
+      W:
+        generate_way: "solid"
+        type: "int"
+        dtype: "int32"
+        value: 24
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
-      loss_list: ['logit']
+      loss_list: ['logit[0] + logit[3]']
   optimizer:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -259,89 +328,49 @@ csp_darknet_SPPLayer_0:
 #      delta: 0.00000001
 #      rtol: 0.00000001
 
-csp_darknet_SPPFLayer_0:
-  desc: "Det ppdet.modeling.backbones.csp_darknet.SPPFLayer模型结构"
+swin_transformer_SwinTransformer_0:
+  desc: "Det swin_transformer.SwinTransformer模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.csp_darknet.SPPFLayer"
+    layer_name: "ppdet.modeling.backbones.swin_transformer.SwinTransformer"
     params:
-      in_channels: 5
-      out_channels: 7
-      ksize: 3
-      bias: True
-      act: "silu"
+      pretrain_img_size: 224
+      patch_size: 4
+      in_chans: 3
+      embed_dim: 96
+      depths: [2, 2, 6, 2]
+      num_heads: [3, 6, 12, 24]
+      window_size: 7
+      mlp_ratio: 4.
+      qkv_bias: True
+      qk_scale:
+      drop_rate: 0.
+      attn_drop_rate: 0.
+      drop_path_rate: 0.2
+#      norm_layer: nn.LayerNorm  # yml解析器暂不支持传入一个实例
+      ape: False
+      patch_norm: True
+      out_indices: !!python/tuple [0, 1, 2, 3]
+      frozen_stages: -1
+      pretrained:
   DataGenerator:
-    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    DataGenerator_name: "diy.data.struct_img_dataset.DictImageWithoutLabel"
     data:
       x:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float32"
-        shape: [3, 5, 14, 14]  # [3, 5, 13, 13] 报错
+        shape: [4, 3, 224, 224]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
-      loss_list: ['logit']
+      loss_list: ['logit[0]']
   optimizer:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
-  Train:
-    step: 3
-  test:
-    dygraph_to_static_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_infer_predict_test:
-      acc_test: False
-      delta: 0.000001
-      rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-
-csp_darknet_CSPLayer_0:
-  desc: "Det ppdet.modeling.backbones.csp_darknet.CSPLayer模型结构"
-  Layer:
-    repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.csp_darknet.CSPLayer"
-    params:
-      in_channels: 5
-      out_channels: 7
-      num_blocks: 2
-      shortcut: True
-      expansion: 0.55
-      depthwise: False
-      bias: True
-      act: "silu"
-  DataGenerator:
-    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
-    data:
-      x:
-        generate_way: "random"  # random, solid, load
-        type: "Tensor"
-        dtype: "float32"
-        shape: [3, 5, 32, 32]  # [3, 5, 13, 13] 报错
-        range: [ -1, 1]
-  Loss:
-    loss_name: "diy.loss.diy_loss.naive_loss_list"
-    params:
-      loss_list: ['logit']
-  optimizer:
-    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
-    params:
-      opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:

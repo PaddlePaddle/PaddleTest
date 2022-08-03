@@ -14,7 +14,7 @@ VARIABLES:
 
 EXEC:
   # exec_cases: [TRAIN]
-  exec_cases: [TRAIN,EVAL,INFER,EXPORT,EXPORT,PREDICT]
+  exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
   exec_priority: [P0]
   exec_tag: $EXEC_TAG
 
@@ -392,7 +392,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_vd_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_vd_trained.log
   -
     tag: export_linux_pretrained
     priority: P0
@@ -408,7 +408,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_vd_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_vd_pretrained.log
   -
     tag: export_win
     priority: P0
@@ -424,7 +424,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_vd_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_vd_trained.log
   -
     tag: export_win_pretrained
     priority: P0
@@ -440,7 +440,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_vd_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_vd_pretrained.log
   -
     tag: export_mac
     priority: P0
@@ -456,7 +456,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_vd_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_vd_trained.log
   -
     tag: export_mac_pretrained
     priority: P0
@@ -472,7 +472,7 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_vd_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_vd_pretrained.log
 
 PREDICT: # 训练步骤
   -
