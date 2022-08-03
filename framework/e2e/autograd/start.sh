@@ -1,4 +1,4 @@
-#cd ./task/autograd
+cd ./task/autograd
 
 python3.7 -m pip install pytest
 python3.7 -m pip install allure-pytest
