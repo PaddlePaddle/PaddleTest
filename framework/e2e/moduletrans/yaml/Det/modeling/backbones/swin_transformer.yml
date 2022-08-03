@@ -1,5 +1,5 @@
 swin_transformer_Mlp_0:
-  desc: "Det swin_transformer.Mlp模型结构"
+  desc: "Det ppdet.modeling.backbones.swin_transformer.Mlp模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.Mlp"
@@ -39,17 +39,15 @@ swin_transformer_Mlp_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 swin_transformer_WindowAttention_0:
-  desc: "Det swin_transformer.WindowAttention模型结构"
+  desc: "Det ppdet.modeling.backbones.swin_transformer.WindowAttention模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.WindowAttention"
@@ -92,14 +90,12 @@ swin_transformer_WindowAttention_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 #swin_transformer_SwinTransformerBlock_0:
 #  desc: "Det swin_transformer.SwinTransformerBlock模型结构"
@@ -164,7 +160,7 @@ swin_transformer_WindowAttention_0:
 ##      rtol: 0.00000001
 
 swin_transformer_PatchMerging_0:
-  desc: "Det swin_transformer.PatchMerging模型结构"
+  desc: "Det ppdet.modeling.backbones.swin_transformer.PatchMerging模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.PatchMerging"
@@ -211,14 +207,12 @@ swin_transformer_PatchMerging_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 swin_transformer_PatchEmbed_0:
   desc: "Det swin_transformer.PatchEmbed模型结构"
@@ -260,17 +254,15 @@ swin_transformer_PatchEmbed_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 swin_transformer_BasicLayer_0:
-  desc: "Det swin_transformer.BasicLayer模型结构"
+  desc: "Det ppdet.modeling.backbones.swin_transformer.BasicLayer模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.BasicLayer"
@@ -319,17 +311,15 @@ swin_transformer_BasicLayer_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 swin_transformer_SwinTransformer_0:
-  desc: "Det swin_transformer.SwinTransformer模型结构"
+  desc: "Det ppdet.modeling.backbones.swin_transformer.SwinTransformer模型结构"
   Layer:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.backbones.swin_transformer.SwinTransformer"
@@ -384,11 +374,9 @@ swin_transformer_SwinTransformer_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001

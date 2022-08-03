@@ -45,12 +45,12 @@ lite_hrnet_ConvNormLayer_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 lite_hrnet_DepthWiseSeparableConvNormLayer_0:
   desc: "Det ppdet.modeling.backbones.lite_hrnet.DepthWiseSeparableConvNormLayer模型结构"
@@ -99,12 +99,12 @@ lite_hrnet_DepthWiseSeparableConvNormLayer_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 lite_hrnet_CrossResolutionWeightingModule_0:
   desc: "Det ppdet.modeling.backbones.lite_hrnet.CrossResolutionWeightingModule模型结构"
@@ -155,12 +155,12 @@ lite_hrnet_CrossResolutionWeightingModule_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 lite_hrnet_SpatialWeightingModule_0:
   desc: "Det ppdet.modeling.backbones.lite_hrnet.SpatialWeightingModule模型结构"
@@ -203,12 +203,12 @@ lite_hrnet_SpatialWeightingModule_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 lite_hrnet_ConditionalChannelWeightingBlock_0:
   desc: "Det ppdet.modeling.backbones.lite_hrnet.ConditionalChannelWeightingBlock模型结构"
@@ -260,12 +260,12 @@ lite_hrnet_ConditionalChannelWeightingBlock_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 lite_hrnet_ShuffleUnit_0:
   desc: "Det ppdet.modeling.backbones.lite_hrnet.ShuffleUnit模型结构"
@@ -310,12 +310,12 @@ lite_hrnet_ShuffleUnit_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 lite_hrnet_IterativeHead_0:
   desc: "Det ppdet.modeling.backbones.lite_hrnet.IterativeHead模型结构"
@@ -371,12 +371,12 @@ lite_hrnet_IterativeHead_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 lite_hrnet_Stem_0:
   desc: "Det ppdet.modeling.backbones.lite_hrnet.Stem模型结构"
@@ -422,12 +422,12 @@ lite_hrnet_Stem_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 lite_hrnet_LiteHRNetModule_0:
   desc: "Det ppdet.modeling.backbones.lite_hrnet.LiteHRNetModule模型结构"
@@ -483,12 +483,12 @@ lite_hrnet_LiteHRNetModule_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 #lite_hrnet_LiteHRNet_0:
 #  desc: "Det ppdet.modeling.backbones.lite_hrnet.LiteHRNet模型结构"

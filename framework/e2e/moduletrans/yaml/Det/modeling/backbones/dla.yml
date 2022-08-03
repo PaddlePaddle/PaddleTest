@@ -38,14 +38,12 @@ dla_BasicBlock_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 dla_Root_0:
   desc: "Det ppdet.modeling.backbones.dla.Root模型结构"
@@ -95,14 +93,12 @@ dla_Root_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 #dla_Tree_0:
 #  desc: "Det ppdet.modeling.backbones.dla.Tree模型结构"
