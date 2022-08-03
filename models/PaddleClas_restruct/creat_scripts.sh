@@ -28,11 +28,14 @@
 #     基准值不能只局限于resnet50，也应该可配置化，增加判断条件如果是作为基准值的模型不复制（要用全等号）  done
 
 
+echo priority_all
+echo ${priority_all}
+export priority_all=${1:-P0}
 export base_model=ImageNet_ResNet_ResNet50
 export base_model_latest_name=ResNet50
 export base_priority=P0
 # priority_all='P0' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
-priority_all='P0 P1' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
+# priority_all='P0 P1' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
 branch='develop release'  # develop release  #顺序不能反
 # read -p "Press enter to continue"  #卡一下
 

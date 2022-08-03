@@ -70,7 +70,7 @@ with open("clas_release", "w", encoding="utf-8") as f:
                 b.append(tmp)
                 tmp = []
                 k = 0
-            if i == lie_index or (i == 1 and k == 0):  # 5是第五列
+            if i == lie_index or (i == 1 and k == 0):  # 5是第五列 不规范报错
                 # if i<=8:
                 # print('###',t.get_text())
                 tmp.append(t.get_text())

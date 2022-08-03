@@ -54,7 +54,8 @@ else
     tar xf PaddleTest.tar.gz >/dev/null 2>&1
     mv PaddleTest task
 fi
-cp -r ./task/models/models_env/docker_run.sh  ./${CE_version_name}/src/docker_run.sh  #为了配合后续的source docker_run.sh
+# cp -r ./task/models/models_env/docker_run.sh  ./${CE_version_name}/src/docker_run.sh
+#为了配合后续的source docker_run.sh，此方案不好用
 
 #通用变量[用户改]
 test_code_download_path=./task/models/${Repo}
@@ -111,6 +112,7 @@ ls;
 if [[ "${docker_flag}" == "" ]]; then
 
     #升级显卡策略，独立使用显卡，以逗号分割执行显卡编号，重定义从0开始赋值  这种情况是适配大于两张卡的情况
+    # 暂时考虑2张卡，后续优化后使用
     # echo SET_CUDA VS SET_MULTI_CUDA
     # echo $SET_CUDA
     # echo $SET_MULTI_CUDA
@@ -146,6 +148,7 @@ if [[ "${docker_flag}" == "" ]]; then
                 ${Image_version}  \
                 /bin/bash -c "
 
+                ldconfig;
                 export no_proxy=${no_proxy};
                 export http_proxy=${http_proxy};
                 export https_proxy=${http_proxy};
@@ -154,10 +157,159 @@ if [[ "${docker_flag}" == "" ]]; then
                 # export SET_CUDA=${SET_CUDA};
                 # export SET_MULTI_CUDA=${SET_MULTI_CUDA};
 
-                source docker_run.sh
+                if [[ ${Python_env} == 'ln_way' ]];then
+                    # rm -rf /usr/bin/python2.7
+                    # rm -rf /usr/local/python2.7.15/bin/python
+                    # rm -rf /usr/local/bin/python
+                    # export PATH=/usr/local/bin/python:${PATH}
+                    case ${Python_version} in
+                    36)
+                    # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+                    mkdir run_env_py36;
+                    ln -s $(which python3.6) run_env_py36/python;
+                    ln -s $(which pip3.6) run_env_py36/pip;
+                    export PATH=$(pwd)/run_env_py36:${PATH};
+                    ;;
+                    37)
+                    # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+                    mkdir run_env_py37;
+                    ln -s $(which python3.7) run_env_py37/python;
+                    ln -s $(which pip3.7) run_env_py37/pip;
+                    export PATH=$(pwd)/run_env_py37:${PATH};
+                    ;;
+                    38)
+                    # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+                    mkdir run_env_py38;
+                    ln -s $(which python3.8) run_env_py38/python;
+                    ln -s $(which pip3.8) run_env_py38/pip;
+                    export PATH=$(pwd)/run_env_py38:${PATH};
+                    ;;
+                    39)
+                    # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+                    mkdir run_env_py39;
+                    ln -s $(which python3.9) run_env_py39/python;
+                    ln -s $(which pip3.9) run_env_py39/pip;
+                    export PATH=$(pwd)/run_env_py39:${PATH};
+                    ;;
+                    310)
+                    # ln -s /usr/local/bin/python3.10 /usr/local/bin/python
+                    mkdir run_env_py310;
+                    ln -s $(which python3.10) run_env_py310/python;
+                    ln -s $(which pip3.10) run_env_py310/pip;
+                    export PATH=$(pwd)/run_env_py310:${PATH};
+                    ;;
+                    esac
+                else
+                    case ${Python_version} in
+                    36)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
+                    ;;
+                    37)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+                    ;;
+                    38)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
+                    ;;
+                    39)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
+                    ;;
+                    310)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+                    ;;
+                    esac
+                fi
+
+                nvidia-smi;
+                python -c 'import sys; print(sys.version_info[:])';
+                git --version;
+                if [[ ${CE_version} == 'V2' ]];then
+                    bash main.sh --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type_id=${AGILE_PIPELINE_CONF_ID} --priority=${Priority_version} --compile_path=${Compile_version} --job_build_id=${AGILE_JOB_BUILD_ID};
+                else
+                    bash main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID} --owner='paddle' --priority=${Priority_version} --compile_path=${Compile_version} --agile_job_build_id=${AGILE_JOB_BUILD_ID};
+                fi
     " &
     wait $!
     exit $?
 else
-    source docker_run.sh
+    ldconfig;
+    if [[ ${Python_env} == 'ln_way' ]];then
+        # rm -rf /usr/bin/python2.7
+        # rm -rf /usr/local/python2.7.15/bin/python
+        # rm -rf /usr/local/bin/python
+        # export PATH=/usr/local/bin/python:${PATH}
+        case ${Python_version} in
+        36)
+        # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+        mkdir run_env_py36;
+        ln -s $(which python3.6) run_env_py36/python;
+        ln -s $(which pip3.6) run_env_py36/pip;
+        export PATH=$(pwd)/run_env_py36:${PATH};
+        ;;
+        37)
+        # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+        mkdir run_env_py37;
+        ln -s $(which python3.7) run_env_py37/python;
+        ln -s $(which pip3.7) run_env_py37/pip;
+        export PATH=$(pwd)/run_env_py37:${PATH};
+        ;;
+        38)
+        # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+        mkdir run_env_py38;
+        ln -s $(which python3.8) run_env_py38/python;
+        ln -s $(which pip3.8) run_env_py38/pip;
+        export PATH=$(pwd)/run_env_py38:${PATH};
+        ;;
+        39)
+        # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+        mkdir run_env_py39;
+        ln -s $(which python3.9) run_env_py39/python;
+        ln -s $(which pip3.9) run_env_py39/pip;
+        export PATH=$(pwd)/run_env_py39:${PATH};
+        ;;
+        310)
+        # ln -s /usr/local/bin/python3.10 /usr/local/bin/python
+        mkdir run_env_py310;
+        ln -s $(which python3.10) run_env_py310/python;
+        ln -s $(which pip3.10) run_env_py310/pip;
+        export PATH=$(pwd)/run_env_py310:${PATH};
+        ;;
+        esac
+    else
+        case ${Python_version} in
+        36)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
+        ;;
+        37)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+        ;;
+        38)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
+        ;;
+        39)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
+        ;;
+        310)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+        ;;
+        esac
+    fi
+
+    nvidia-smi;
+    python -c 'import sys; print(sys.version_info[:])';
+    git --version;
+    if [[ ${CE_version} == 'V2' ]];then
+        bash main.sh --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type_id=${AGILE_PIPELINE_CONF_ID} --priority=${Priority_version} --compile_path=${Compile_version} --job_build_id=${AGILE_JOB_BUILD_ID};
+    else
+        bash main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID} --owner='paddle' --priority=${Priority_version} --compile_path=${Compile_version} --agile_job_build_id=${AGILE_JOB_BUILD_ID};
+    fi
 fi
