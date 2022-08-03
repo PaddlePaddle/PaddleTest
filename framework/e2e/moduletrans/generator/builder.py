@@ -98,6 +98,7 @@ class BuildModuleTest(object):
             net = paddle.jit.to_static(net)
         net.eval()
         logit = net(**data_dict)
+        logit = self.loss_info.get_loss(logit)
         return logit
 
     def jit_save(self):
@@ -165,7 +166,7 @@ class BuildModuleTest(object):
         if not os.path.exists(os.path.join(self.exp_path, self.case_name)):
             os.makedirs(os.path.join(self.exp_path, self.case_name))
         self.logger.get_log().info("dygraph predict build ground truth start~")
-        exp_out = self.train(to_static=False)
+        exp_out = self.predict(to_static=False)
         if mode == "numpy":
             np.save(os.path.join(self.exp_path, self.case_name, "dygraph_predict_test.npy"), exp_out.numpy())
         else:
@@ -203,7 +204,7 @@ class BuildModuleTest(object):
         if not os.path.exists(os.path.join(self.exp_path, self.case_name)):
             os.makedirs(os.path.join(self.exp_path, self.case_name))
         self.logger.get_log().info("static predict build ground truth start~")
-        exp_out = self.train(to_static=True)
+        exp_out = self.predict(to_static=True)
         if mode == "numpy":
             np.save(os.path.join(self.exp_path, self.case_name, "static_predict_test.npy"), exp_out.numpy())
         else:
