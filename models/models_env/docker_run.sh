@@ -1,3 +1,5 @@
+echo Python_version
+echo ${Python_version}
 ldconfig;
 if [[ ${Python_env} == 'ln_way' ]];then
     # rm -rf /usr/bin/python2.7
@@ -41,7 +43,7 @@ if [[ ${Python_env} == 'ln_way' ]];then
     export PATH=$(pwd)/run_env_py310:${PATH};
     ;;
     esac
-else [[ ${Python_env} == 'path_way' ]];then
+else
     case ${Python_version} in
     36)
     export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
