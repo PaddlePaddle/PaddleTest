@@ -125,9 +125,10 @@ if [[ "${docker_flag}" == "" ]]; then
     # echo $SET_CUDA
     # echo $SET_MULTI_CUDA
 
+    Priority_version_tmp=(${Priority_version//,/ })
     ####创建docker
     set +x;
-    docker_name="ce_${Repo}_${Priority_version}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
+    docker_name="ce_${Repo}_${Priority_version_tmp[0]}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
     echo "begin kill docker"
