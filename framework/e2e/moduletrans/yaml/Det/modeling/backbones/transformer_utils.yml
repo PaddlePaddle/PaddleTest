@@ -1,0 +1,93 @@
+#transformer_utils_DropPath_0:
+#  desc: "Det ppdet.modeling.backbones.transformer_utils.DropPath模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.backbones.transformer_utils.DropPath"
+#    params:
+#      drop_prob: 0.3
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      x:
+#        generate_way: "random"  # random, solid, load
+#        type: "Tensor"
+#        dtype: "float64"
+#        shape: [3, 5, 16, 16]
+#        range: [ -1, 1]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.00001
+#  Train:
+#    step: 3
+#  test:
+#    dygraph_to_static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    build_dygraph_train_ground_truth:
+##      mode: 'numpy'
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+
+#transformer_utils_Identity_0:
+#  desc: "Det ppdet.modeling.backbones.transformer_utils.Identity模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.backbones.transformer_utils.Identity"
+#    params:
+#      # 测试框架暂不支持Layer参数无输入
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      x:
+#        generate_way: "random"  # random, solid, load
+#        type: "Tensor"
+#        dtype: "float64"
+#        shape: [3, 5, 16, 16]
+#        range: [ -1, 1]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.00001
+#  Train:
+#    step: 3
+#  test:
+#    dygraph_to_static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    build_dygraph_train_ground_truth:
+##      mode: 'numpy'
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001

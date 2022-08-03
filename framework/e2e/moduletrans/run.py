@@ -90,21 +90,30 @@ class ModuleSystemTest(object):
         os.system("wget -q --no-proxy https://xly-devops.bj.bcebos.com/home/bos_new.tar.gz")
         os.system("tar -xzf bos_new.tar.gz")
         final_dict = self.case_set()
+        fail_upload_dict = {}
+        fail_upload_list = []
         for k, v in final_dict.items():
             for yaml, case_list in v.items():
+                fail_upload_dict[yaml] = []
                 for case_name in case_list:
                     yml = YamlLoader(yaml)
                     case = yml.get_case_info(case_name)
                     test = controller.ControlModuleTrans(case=case)
-                    test.mk_dygraph_train_ground_truth()
-                    test.mk_dygraph_predict_ground_truth()
-                    test.mk_static_train_ground_truth()
-                    test.mk_static_predict_ground_truth()
+                    try:
+                        test.mk_dygraph_train_ground_truth()
+                        test.mk_dygraph_predict_ground_truth()
+                        test.mk_static_train_ground_truth()
+                        test.mk_static_predict_ground_truth()
+                    except Exception:
+                        fail_upload_dict[yaml].append(case_name)
+                        fail_upload_list.append(case_name)
         os.system("tar -czf ground_truth.tar ground_truth")
         os.system(
             "python BosClient.py ground_truth.tar paddle-qa/luozeyu01/framework_e2e_LayerTest/{} "
             "https://paddle-qa.bj.bcebos.com/luozeyu01/framework_e2e_LayerTest/{}".format(self.env, self.env)
         )
+        print("fail upload dict is: ", fail_upload_dict)
+        print("fail upload list is: ", fail_upload_list)
 
     def run(self):
         """run test"""
@@ -127,7 +136,7 @@ class ModuleSystemTest(object):
 
 
 if __name__ == "__main__":
-    execute = ModuleSystemTest(env="cuda102", repo_list=["Det"])
-    # execute.upload_resource()  # baseline上传
-    execute.prepare()
-    execute.run()
+    execute = ModuleSystemTest(env="Mac_0", repo_list=["Det"])
+    execute.upload_resource()  # baseline上传
+    # execute.prepare()
+    # execute.run()
