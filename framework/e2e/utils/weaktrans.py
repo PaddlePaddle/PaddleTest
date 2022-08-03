@@ -20,6 +20,7 @@ class Framework(object):
 
     PADDLE = "paddle"
     TORCH = "pytorch"
+    JAX = "jax"
 
 
 class WeakTrans(object):
