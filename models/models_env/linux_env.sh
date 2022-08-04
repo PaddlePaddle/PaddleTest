@@ -127,10 +127,21 @@ if [[ "${docker_flag}" == "" ]]; then
     # echo $SET_CUDA
     # echo $SET_MULTI_CUDA
 
-    Priority_version_tmp=(${Priority_version//,/ })
+    Priority_version_tmp=(${Priority_version//,/ }) #解析出来docker名称，针对多个优先级的情况
+    if [[ ${Priority_version_tmp} =~ '/' ]];then
+        array=(${Priority_version_tmp//\// })
+        Priority_version_tmp=${Repo}
+        for var in ${array[@]}
+        do
+            array2=(${var//'.yaml'/ })
+            Priority_version_tmp=${Priority_version_tmp}_${array2[0]} #进行字符串拼接
+        done
+    else
+        Priority_version_tmp=${Repo}_${Priority_version_tmp} #进行字符串拼接
+    fi
     ####创建docker
     set +x;
-    docker_name="ce_${Repo}_${Priority_version_tmp[0]}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
+    docker_name="ce_${Priority_version_tmp}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
     echo "begin kill docker"
