@@ -27,39 +27,38 @@
 # 如果resnet50 release 和 develop一致，其它的不一致怎么办
 #     基准值不能只局限于resnet50，也应该可配置化，增加判断条件如果是作为基准值的模型不复制（要用全等号）  done
 
-
+Repo=${1:-PaddleClas}
+priority_all=${1:-P0}
 echo priority_all
 echo ${priority_all}
-export priority_all=${1:-P0}
-export base_model=ImageNet_ResNet_ResNet50
-export base_model_latest_name=ResNet50
-export base_priority=P0
+base_model=ImageNet_ResNet_ResNet50
+base_model_latest_name=ResNet50
+base_priority=P0
 # priority_all='P0' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
 # priority_all='P0 P1' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
 branch='develop release'  # develop release  #顺序不能反
 # read -p "Press enter to continue"  #卡一下
 
 echo base_model
-echo $base_model
+echo ${base_model}
 for priority_tmp in $priority_all
 do
     cat models_list_cls_test_${priority_tmp} | while read line
     do
 
         array=(${line//\// })
-        export model_type=${array[2]} #区分 分类、slim、识别等
-        export model_name=${array[2]} #进行字符串拼接
+        model_type=${array[2]} #区分 分类、slim、识别等
+        model_name=${array[2]} #进行字符串拼接
         if [[ ${1} =~ "PULC" ]];then
-            export model_type_PULC=${array[3]} #PULC为了区分9中类别单独区分
+            model_type_PULC=${array[3]} #PULC为了区分9中类别单独区分
         fi
-        echo ${model_type}
         for var in ${array[@]:3}
         do
             array2=(${var//'.yaml'/ })
-            export model_name=${model_name}_${array2[0]}
+            model_name=${model_name}_${array2[0]}
         done
-        export model_latest_name=${array2[0]}
-        echo ${model_latest_name}
+        model_latest_name=${array2[0]}
+
 
         if [[ ${base_model} = ${model_name} ]]; then
             # echo "#####"
@@ -69,32 +68,32 @@ do
             cd config
             rm -rf ${model_name}.yaml
             cp -r ${base_model}.yaml ${model_name}.yaml
-            sed -i "" "s|ppcls/configs/ImageNet/ResNet/${base_model_latest_name}.yaml|$line|g" ${model_name}.yaml #待优化，去掉ResNet
-            sed -i "" s/${base_model}/${model_name}/g ${model_name}.yaml
+            sed -i "s|ppcls/configs/ImageNet/ResNet/${base_model_latest_name}.yaml|$line|g" ${model_name}.yaml #待优化，去掉ResNet
+            sed -i s/${base_model}/${model_name}/g ${model_name}.yaml
 
             #记录一些特殊规则
             if [[ ${model_latest_name} == 'HRNet_W18_C' ]]; then
-                sed -i "" "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
-                sed -i "" 's|"="|"-"|g' ${model_name}.yaml
+                sed -i "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
+                sed -i 's|"="|"-"|g' ${model_name}.yaml
             elif [[ ${model_latest_name} == 'LeViT_128S' ]]; then
-                sed -i "" "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
-                sed -i "" 's|"="|"-"|g' ${model_name}.yaml
-                # sed -i "" "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                # sed -i "" "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
+                sed -i "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
+                sed -i 's|"="|"-"|g' ${model_name}.yaml
+                # sed -i "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
+                # sed -i "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
             elif [[ ${model_latest_name} == 'RedNet50' ]]; then
-                sed -i "" "s|train_eval|exit_code|g" ${model_name}.yaml #训练后评估失败，改为搜集退出码exit_code
+                sed -i "s|train_eval|exit_code|g" ${model_name}.yaml #训练后评估失败，改为搜集退出码exit_code
             elif [[ ${model_latest_name} == 'ResNet50_vd' ]]; then
-                sed -i "" "s|ResNet50_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
-                sed -i "" "s|ResNet50_vd_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
+                sed -i "s|ResNet50_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
+                sed -i "s|ResNet50_vd_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
             # elif [[ ${model_latest_name} == 'TNT_small' ]]; then
-            #     sed -i "" "s|threshold: 0.0|threshold: 0.1|g" ${model_name}.yaml #bodong
-            #     sed -i "" 's|"="|"-"|g' ${model_name}.yaml
-                # sed -i "" "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                # sed -i "" "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
+            #     sed -i "s|threshold: 0.0|threshold: 0.1|g" ${model_name}.yaml #bodong
+            #     sed -i 's|"="|"-"|g' ${model_name}.yaml
+                # sed -i "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
+                # sed -i "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
                 #暂时监控linux通过改学习率不出nan
             # elif [[ ${model_latest_name} == 'ViT_small_patch16_224' ]]; then
-            #     sed -i "" "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                # sed -i "" "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
+            #     sed -i "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
+                # sed -i "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
             fi
             for branch_tmp in $branch
             do
@@ -103,8 +102,8 @@ do
                 # echo $branch_tmp
                 # echo $branch
                 # 在这里还要判断当前模型在report中是否存在，不存在的话就不执行
-                sed -i "" "s|"${base_priority}"|"${priority_tmp}"|g" ${model_name}.yaml #P0/1 #不加\$会报（正常的） sed: first RE may not be empty 加了值不会变
-                if [[ ! `grep -c "${model_name}" ../clas_${branch_tmp}` -ne '0' ]] ;then #在已有的里面不存在
+                sed -i "s|"${base_priority}"|"${priority_tmp}"|g" ${model_name}.yaml #P0/1 #不加\$会报（正常的） sed: first RE may not be empty 加了值不会变
+                if [[ ! `grep -c "${model_name}" ../${Repo}_${branch_tmp}` -ne '0' ]] ;then #在已有的里面不存在
                     echo "new model :${model_name}"
                 else
                     # echo priority_tmp
@@ -112,11 +111,11 @@ do
                     # echo ${priority_tmp}
                     # echo $base_model
                     # echo $branch_tmpbranch
-                    # grep "${base_model}" ../clas_${branch_tmp}
+                    # grep "${base_model}" ../${Repo}_${branch_tmp}
                     # read -p "Press enter to continue"  #卡一下
 
-                    arr_base=($(echo `grep -w "${base_model}" ../clas_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
-                    arr_target=($(echo `grep -w "${model_name}" ../clas_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
+                    arr_base=($(echo `grep -w "${base_model}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
+                    arr_target=($(echo `grep -w "${model_name}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
                     # echo arr_base
                     # echo ${arr_base[*]}
                     # echo ${arr_target[*]}
@@ -125,9 +124,9 @@ do
                         do
                         # echo ${arr_base[${num_lisrt_tmp}]}
                         # echo ${arr_target[${num_lisrt_tmp}]}
-                        sed -i "" "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model_name}.yaml
+                        sed -i "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model_name}.yaml
                         #mac命令只替换第一个，linux有所区别需要注意
-                        # sed -i "" "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model_name}.yaml #linux_train_单卡
+                        # sed -i "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model_name}.yaml #linux_train_单卡
 
                         done
                 fi

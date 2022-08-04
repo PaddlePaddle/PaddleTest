@@ -16,7 +16,7 @@ export CE_version=${CE_version:-V1}
 export Priority_version=${Priority_version:-P0}
 export Compile_version=${Compile_version:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
-export Common_name=${Common_name:-conf/cls_common}  #CE框架中的执行步骤，名称各异所以需要传入
+
 
 export SET_MULTI_CUDA=${SET_MULTI_CUDA:-}  #如果不使用流水线，手动设置卡号 默认不设置，用0 1卡
 export docker_flag=${docker_flag:-}  #是否在docker内的环境 默认不设置，如果在docker中进行设置为False
@@ -64,7 +64,7 @@ test_code_download_path=./task/models/${Repo}
 mkdir -p ${test_code_download_path}/log
 ls ${test_code_download_path}/log;
 cp -r ${test_code_download_path}/.  ./${CE_version_name}/src/task
-cp ${test_code_download_path}/${Common_name}.py ./${CE_version_name}/src/task/common.py
+cp ${test_code_download_path}/conf/${Repo}_common.py ./${CE_version_name}/src/task/common.py
 cat ./${CE_version_name}/src/task/common.py;
 ls;
 

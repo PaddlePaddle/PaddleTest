@@ -1,12 +1,14 @@
+cd task
 rm -rf models_list_cls_test_ADD
-echo ${Priority_version}
+echo "before ${Priority_version}"
 priority_list=(${Priority_version//,/ })
 export Priority_version=" "
 for priority_tmp in ${priority_list[@]}
 do
+    echo priority_tmp
     echo ${priority_tmp}
     if [[ ${priority_tmp} =~ "/" ]];then #针对输入多个模型，输入yaml信息
-        echo 
+        echo
         echo ${priority_tmp} >> models_list_cls_test_ADD
         array=(${priority_tmp//\// })
         export model_name=${array[2]} #进行字符串拼接
@@ -25,4 +27,5 @@ export Priority_version=${Priority_version// ,/}
 if [[ -f "models_list_cls_test_ADD" ]];then
     source creat_scripts.sh "ADD"
 fi
-echo ${Priority_version}
+echo "after ${Priority_version}"
+cd ..
