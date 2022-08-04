@@ -5,11 +5,11 @@ set sed="C:\Program Files\Git\usr\bin\sed.exe"
 rem prepare dynamic data
 %sed% -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
 rem modify coco images
-%sed% -i 's/coco.getImgIds()/coco.getImgIds()[:100]/g' ppdet/data/source/coco.py
+%sed% -i 's/coco.getImgIds()/coco.getImgIds()[:10]/g' ppdet/data/source/coco.py
 %sed% -i 's/coco.getImgIds()/coco.getImgIds()[:2]/g' ppdet/data/source/keypoint_coco.py
 %sed% -i 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
 rem modify dynamic_train_iter
-%sed% -i '/for step_id, data in enumerate(self.loader):/i\            max_step_id =90' ppdet/engine/trainer.py
+%sed% -i '/for step_id, data in enumerate(self.loader):/i\            max_step_id =10' ppdet/engine/trainer.py
 %sed% -i '/for step_id, data in enumerate(self.loader):/a\                if step_id == max_step_id: break' ppdet/engine/trainer.py
 rem mot_eval iter
 %sed% -i '/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
