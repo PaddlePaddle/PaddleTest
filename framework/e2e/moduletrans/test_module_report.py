@@ -11,9 +11,9 @@ from yaml_loader import YamlLoader
 import controller
 
 
-yaml_path = os.path.join("yaml", "Det", "modeling", "backbones", "convnext.yml")
+yaml_path = os.path.join("yaml", "Det", "modeling", "backbones", "hrnet.yml")
 yml = YamlLoader(yaml_path)
-all_cases_list = ["convnext_ConvNeXt_0"]
+all_cases_list = ["hrnet_TransitionLayer_0"]
 
 # all_cases_list = []
 # all_cases_dict = yml.get_all_case_name()

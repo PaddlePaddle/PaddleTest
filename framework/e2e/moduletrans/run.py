@@ -85,12 +85,15 @@ class ModuleSystemTest(object):
                     all_yaml.append(yaml_path)
         return all_yaml
 
-    def upload_resource(self):
+    def upload_resource(self, case_dict=None):
         """upload resource"""
         self.prepare()
         os.system("wget -q --no-proxy https://xly-devops.bj.bcebos.com/home/bos_new.tar.gz")
         os.system("tar -xzf bos_new.tar.gz")
-        final_dict = self.case_set()
+        if case_dict is None:
+            final_dict = self.case_set()
+        else:
+            final_dict = case_dict
         fail_upload_dict = {}
         fail_upload_list = []
         for k, v in final_dict.items():
@@ -98,8 +101,8 @@ class ModuleSystemTest(object):
                 fail_upload_dict[yaml] = []
                 for case_name in case_list:
                     yml = YamlLoader(yaml)
-                    case = yml.get_case_info(case_name)
-                    test = controller.ControlModuleTrans(case=case)
+                    case_ = yml.get_case_info(case_name)
+                    test = controller.ControlModuleTrans(case=case_)
                     try:
                         test.mk_dygraph_train_ground_truth()
                         test.mk_dygraph_predict_ground_truth()
@@ -108,13 +111,13 @@ class ModuleSystemTest(object):
                     except Exception:
                         fail_upload_dict[yaml].append(case_name)
                         fail_upload_list.append(case_name)
+        print("fail upload dict is: ", fail_upload_dict)
+        print("fail upload list is: ", fail_upload_list)
         os.system("tar -czf ground_truth.tar ground_truth")
         os.system(
             "python BosClient.py ground_truth.tar paddle-qa/luozeyu01/framework_e2e_LayerTest/{} "
             "https://paddle-qa.bj.bcebos.com/luozeyu01/framework_e2e_LayerTest/{}".format(self.env, self.env)
         )
-        print("fail upload dict is: ", fail_upload_dict)
-        print("fail upload list is: ", fail_upload_list)
 
     def run(self):
         """run test"""
@@ -138,7 +141,9 @@ class ModuleSystemTest(object):
 
 if __name__ == "__main__":
     execute = ModuleSystemTest(env="cuda102", repo_list=["Det"])
-    # execute.upload_resource()  # baseline上传,请勿调用！！
+    # execute.upload_resource(
+    #     case_dict={"Det": {"yaml/Det/modeling/backbones/hrnet.yml": ["hrnet_TransitionLayer_0"]}}
+    # )  # baseline上传,请勿调用！！
     execute.prepare()
     start = time.time()
     execute.run()
