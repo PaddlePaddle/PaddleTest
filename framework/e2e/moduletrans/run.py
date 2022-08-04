@@ -136,7 +136,7 @@ class ModuleSystemTest(object):
 
 
 if __name__ == "__main__":
-    execute = ModuleSystemTest(env="Mac_0", repo_list=["Det"])
-    execute.upload_resource()  # baseline上传
-    # execute.prepare()
-    # execute.run()
+    execute = ModuleSystemTest(env="cuda102", repo_list=["Det"])
+    # execute.upload_resource()  # baseline上传,请勿调用！！
+    execute.prepare()
+    execute.run()
