@@ -4,10 +4,14 @@
 """
 test_split.py
 """
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../../utils/")
+from interceptor import skip_branch_not_develop
 
 
 class TestSplit(APIBase):
@@ -30,6 +34,7 @@ class TestSplit(APIBase):
 obj = TestSplit(paddle.split)
 
 
+@skip_branch_not_develop
 @pytest.mark.api_base_split_vartype
 def test_split_base():
     """
