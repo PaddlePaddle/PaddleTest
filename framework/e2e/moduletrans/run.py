@@ -7,6 +7,7 @@ run module test
 
 import os
 import platform
+import time
 import pytest
 import allure
 from yaml_loader import YamlLoader
@@ -139,4 +140,7 @@ if __name__ == "__main__":
     execute = ModuleSystemTest(env="cuda102", repo_list=["Det"])
     # execute.upload_resource()  # baseline上传,请勿调用！！
     execute.prepare()
+    start = time.time()
     execute.run()
+    end = time.time()
+    print("all test using time: ", end - start)
