@@ -1312,6 +1312,45 @@ cos_base:
     api_name: "torch.cos"
     mapping:
       ins: { x: input }
+  jax:
+    api_name: "jax.numpy.cos"
+    mapping:
+      ins: { x: input }
+      init: 1
+
+cos_0:
+  desc: "余弦函数"
+  paddle:
+    api_name: "paddle.cos"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -2, 2]
+  jax:
+    api_name: "jax.numpy.cos"
+    mapping:
+      ins: { x: input }
+      init: -1
+
+cos_1:
+  desc: "余弦函数"
+  paddle:
+    api_name: "paddle.cos"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -2, 2]
+  jax:
+    api_name: "jax.numpy.cos"
+    mapping:
+      ins: { x: input }
+      init: "random"
 
 cosh_base:
   desc: "双曲余弦函数"
@@ -2032,6 +2071,45 @@ exp_base:
     api_name: "torch.exp"
     mapping:
       ins: { x: input }
+  jax:
+    api_name: "jax.numpy.exp"
+    mapping:
+      ins: { x: input }
+      init: 1
+
+exp_0:
+  desc: "AD测试：init=-1"
+  paddle:
+    api_name: "paddle.exp"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -2, 2]
+  jax:
+    api_name: "jax.numpy.exp"
+    mapping:
+      ins: { x: input }
+      init: -1
+
+exp_1:
+  desc: "AD测试：init=-1"
+  paddle:
+    api_name: "paddle.exp"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 4]
+        range: [ -2, 2]
+  jax:
+    api_name: "jax.numpy.exp"
+    mapping:
+      ins: { x: input }
+      init: -1
 
 expm1_base:
   desc: "对输入，逐元素进行以自然数e为底指数运算并减1"
@@ -4577,6 +4655,11 @@ sin_base:
     api_name: "torch.sin"
     mapping:
       ins: { x: input }
+  jax:
+    api_name: "jax.numpy.sin"
+    mapping:
+      ins: { x: input }
+      init: 1
 
 sin_0:
   desc: "计算输入的正弦值"
@@ -4593,6 +4676,29 @@ sin_0:
     api_name: "torch.sin"
     mapping:
       ins: { x: input }
+  jax:
+    api_name: "jax.numpy.sin"
+    mapping:
+      ins: { x: input }
+      init: 2
+
+sin_1:
+  desc: "计算输入的正弦值"
+  paddle:
+    api_name: "paddle.sin"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -10, 10]
+  jax:
+    api_name: "jax.numpy.sin"
+    mapping:
+      ins: { x: input }
+      init: "random"
+
 
 sinh_base:
   desc: "双曲正弦函数"

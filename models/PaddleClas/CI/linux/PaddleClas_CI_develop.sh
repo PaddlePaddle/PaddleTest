@@ -126,7 +126,8 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 #    setuptools==59.5.0 -i https://mirror.baidu.com/pypi/simple #before install bcolz
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install  --ignore-installed paddleslim \
+# python -m pip install  --ignore-installed --upgrade paddleslim \
+python -m pip install --upgrade paddleslim \
    -i https://mirror.baidu.com/pypi/simple
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
@@ -240,7 +241,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             # cat $log_path/train/ResNet50_static.log | grep "Memory Usage (MB)"
 
             if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
-                && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
+                ;then
+                # && [[ $(grep -c  "Error" $log_path/train/ResNet50_static.log) -eq 0 ]];then
                 echo -e "\033[33m training static multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
                 echo "training_static_exit_code: 0.0" >> $log_path/train/ResNet50_static.log
             else
@@ -337,7 +339,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     # cat $log_path/train/${model}_2card.log | grep "Memory Usage (MB)"
 
     if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
-        && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
+        ;then
+        # && [[ $(grep -c  "Error" $log_path/train/${model}_2card.log) -eq 0 ]];then
         echo -e "\033[33m training multi of $model  successfully!\033[0m"|tee -a $log_path/result.log
         echo "training_multi_exit_code: 0.0" >> $log_path/train/${model}_2card.log
     else
@@ -377,7 +380,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         echo $params_dir
         # cat $log_path/train/${model}_1card.log | grep "Memory Usage (MB)"
         if [[ -f "output/$params_dir/latest.pdparams" ]] && [[ $? -eq 0 ]] \
-            && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
+            ;then
+            # && [[ $(grep -c  "Error" $log_path/train/${model}_1card.log) -eq 0 ]];then
             echo -e "\033[33m training single of $model  successfully!\033[0m"|tee -a $log_path/result.log
             echo "training_single_exit_code: 0.0" >> $log_path/train/${model}_1card.log
         else
@@ -457,7 +461,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         mv ${line}_tmp ${line} #220413 fix tingquan
     fi
 
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]];then
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${model}.log) -eq 0 ]];then
         echo -e "\033[33m eval of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "eval_exit_code: 0.0" >> $log_path/eval/$model.log
     else
@@ -470,7 +475,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     python tools/infer.py -c $line \
         -o Global.pretrained_model=output/$params_dir/latest \
         > $log_path/infer/$model.log 2>&1
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]];then
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/${model}.log) -eq 0 ]];then
         echo -e "\033[33m infer of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "infer_exit_code: 0.0" >> $log_path/infer/$model.log
     else
@@ -493,7 +499,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             > $log_path/export_model/$model.log 2>&1
     fi
 
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/export_model/${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]];then
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/export_model/${model}.log) -eq 0 ]];then
         echo -e "\033[33m export_model of $model  successfully!\033[0m"| tee -a $log_path/result.log
         echo "export_exit_code: 0.0" >> $log_path/export_model/$model.log
     else
@@ -534,7 +541,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             > ../$log_path/predict/$model.log 2>&1
     fi
 
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]];then
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
         echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
     else
         cat ../$log_path/predict/${model}.log
@@ -553,7 +561,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             -o Global.inference_model_dir="../inference/"$model \
             > ../$log_path/predict/$model.log 2>&1
     fi
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]];then
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
         echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
         echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
     else
@@ -688,7 +697,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     echo $params_dir
     # cat $log_path/train/${category}_${m？odel}.log | grep "Memory Usage (MB)"
 
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/train/${category}_${model}.log) -eq 0 ]] \
+    if [[ $? -eq 0 ]] \
         && [[ -f "output/${category}_${model}/$params_dir/latest.pdparams" ]];then
         echo -e "\033[33m training of ${category}_${model}  successfully!\033[0m"|tee -a $log_path/result.log
     else
@@ -709,7 +719,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             -o Global.pretrained_model=output/${category}_${model}/$params_dir/latest \
             > $log_path/eval/${category}_${model}.log 2>&1
     fi
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${category}_${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]];then
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/eval/${category}_${model}.log) -eq 0 ]];then
         echo -e "\033[33m eval of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
     else
         cat $log_path/eval/${category}_${model}.log
@@ -721,7 +732,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
         -o Global.pretrained_model=output/${category}_${model}/$params_dir/latest  \
         -o Global.save_inference_dir=./inference/${category}_${model} \
         > $log_path/export_model/${category}_${model}.log 2>&1
-    if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/export_model/${category}_${model}.log) -eq 0 ]];then
+    if [[ $? -eq 0 ]];then
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/export_model/${category}_${model}.log) -eq 0 ]];then
         echo -e "\033[33m export_model of ${category}_${model}  successfully!\033[0m"| tee -a $log_path/result.log
     else
         cat $log_path/export_model/${category}_${model}.log

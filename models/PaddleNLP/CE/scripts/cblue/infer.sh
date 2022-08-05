@@ -36,7 +36,7 @@ fi
 
 python export_model.py \
     --train_dataset CHIP-STS \
-    --params_path=./checkpoint/CHIP-STS/single/model_10/model_state.pdparams \
+    --params_path=./checkpoint/CHIP-STS/single/model_10/\
     --output_path=./export > $log_path/infer_$1.log 2>&1
 print_info $? infer_$1
 

@@ -19,7 +19,8 @@ class Logger:
         initialize
         """
         # 创建一个logger
-        self.logger = logging.getLogger(loggername)
+        # self.logger = logging.getLogger(loggername)
+        self.logger = logging.Logger(loggername)
         self.logger.setLevel(logging.DEBUG)
 
         # 创建一个handler，用于写入日志文件

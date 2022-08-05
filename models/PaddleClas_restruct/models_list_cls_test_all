@@ -5,6 +5,7 @@ ppcls/configs/ImageNet/DPN/DPN107.yaml
 ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml
 ppcls/configs/ImageNet/DeiT/DeiT_tiny_patch16_224.yaml
 ppcls/configs/ImageNet/DenseNet/DenseNet121.yaml
+ppcls/configs/ImageNet/ESNet/ESNet_x1_0.yaml
 ppcls/configs/ImageNet/EfficientNet/EfficientNetB0.yaml
 ppcls/configs/ImageNet/GhostNet/GhostNet_x1_3.yaml
 ppcls/configs/ImageNet/Inception/GoogLeNet.yaml
@@ -12,6 +13,11 @@ ppcls/configs/ImageNet/HarDNet/HarDNet68.yaml
 ppcls/configs/ImageNet/LeViT/LeViT_128S.yaml
 ppcls/configs/ImageNet/MixNet/MixNet_M.yaml
 ppcls/configs/ImageNet/MobileNetV2/MobileNetV2.yaml
+ppcls/configs/ImageNet/MobileViT/MobileViT_S.yaml
+ppcls/configs/ImageNet/PPHGNet/PPHGNet_tiny.yaml
+ppcls/configs/ImageNet/PPLCNetV2/PPLCNetV2_base.yaml
+ppcls/configs/ImageNet/PVTV2/PVT_V2_B0.yaml
+ppcls/configs/ImageNet/PeleeNet/PeleeNet.yaml
 ppcls/configs/ImageNet/ReXNet/ReXNet_1_0.yaml
 ppcls/configs/ImageNet/RedNet/RedNet50.yaml
 ppcls/configs/ImageNet/Res2Net/Res2Net50_26w_4s.yaml

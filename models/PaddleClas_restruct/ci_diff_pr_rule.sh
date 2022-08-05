@@ -1,3 +1,7 @@
+
+find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \;| awk '{print $NF;}'| grep -v 'eval' \
+    | grep -v 'kunlun' |grep -v 'ResNeXt101_32x48d_wsl' |grep -v 'ResNeSt101' > models_list
+    #ResNeXt101_32x48d_wsl ResNeSt101 OOM
 find ppcls/configs/Cartoonface/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list
 find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list
 find ppcls/configs/Products/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
@@ -5,11 +9,14 @@ find ppcls/configs/Vehicle/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}
 find ppcls/configs/slim/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
 find ppcls/configs/GeneralRecognition/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' \
     |grep -v 'Gallery2FC_PPLCNet_x2_5' >> models_list
-find ppcls/configs/DeepHash/ -name '*.yaml' -exec ls -l {} | awk '{print $NF;}'  >> models_list
+find ppcls/configs/DeepHash/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
+find ppcls/configs/PULC/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
+find ppcls/configs/metric_learning/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
+find ppcls/configs/reid/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
+#317个
 
-find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} | awk '{print $NF;}'| grep -v 'eval' \
-    | grep -v 'kunlun' |grep -v 'ResNeXt101_32x48d_wsl' |grep -v 'ResNeSt101' > models_list
-    #ResNeXt101_32x48d_wsl ResNeSt101 OOM
+
+
 
 
 if [[ ${model_flag} =~ "pr" ]];then

@@ -7,8 +7,6 @@ yaml base
 
 import yaml
 
-# from old_design.logger import Logger, logger
-
 
 class YamlLoader(object):
     """
@@ -22,7 +20,6 @@ class YamlLoader(object):
                 self.yml = yaml.load(f, Loader=yaml.FullLoader)
         except Exception as e:
             print(e)
-        # self.logger = logger
 
     def __str__(self):
         """str"""
@@ -32,7 +29,6 @@ class YamlLoader(object):
         """
         get case info
         """
-        # self.logger.get_log().info("get ->{}<- case profile".format(case_name))
         return {"info": self.yml.get(case_name), "name": case_name}
 
     def get_all_case_name(self):
