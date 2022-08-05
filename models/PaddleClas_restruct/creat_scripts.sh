@@ -27,11 +27,11 @@
 # 如果resnet50 release 和 develop一致，其它的不一致怎么办
 #     基准值不能只局限于resnet50，也应该可配置化，增加判断条件如果是作为基准值的模型不复制（要用全等号）  done
 
-Repo=${1:-PaddleClas}
+Repo=${Repo:-PaddleClas}
 priority_all=${1:-P0}
 echo priority_all
 echo ${priority_all}
-base_model=ImageNet_ResNet_ResNet50
+base_model=ImageNet-ResNet-ResNet50
 base_model_latest_name=ResNet50
 base_priority=P0
 # priority_all='P0' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
@@ -55,7 +55,7 @@ do
         for var in ${array[@]:3}
         do
             array2=(${var//'.yaml'/ })
-            model_name=${model_name}_${array2[0]}
+            model_name=${model_name}-${array2[0]}
         done
         model_latest_name=${array2[0]}
 

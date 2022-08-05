@@ -165,6 +165,7 @@ if [[ "${docker_flag}" == "" ]]; then
                 export https_proxy=${http_proxy};
                 export Data_path=${Data_path};
                 export Project_path=${Project_path};
+                export Priority_version=${Priority_version};
                 # export SET_CUDA=${SET_CUDA};
                 # export SET_MULTI_CUDA=${SET_MULTI_CUDA};
 

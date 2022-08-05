@@ -71,10 +71,11 @@ echo ${model_type}
 for var in ${array[@]:3}
 do
     array2=(${var//'.yaml'/ })
-    export model_name=${model_name}_${array2[0]}
+    export model_name=${model_name}-${array2[0]}
 done
 export model_latest_name=${array2[0]}
 echo ${model_latest_name}
+echo ${model_name}
 
 #获取模型输出名
 # import yaml
