@@ -34,6 +34,8 @@ unset https_proxy
 
 python -m pip install --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+# python -m pip install -U pyyaml \
+#     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
@@ -59,7 +61,7 @@ done
 
 # 获取模型名称
 # array=(${line//\// })
-array=(${1//\// })
+array=(${yaml_line//\// })
 export model_type=${array[2]} #区分 分类、slim、识别等
 export model_name=${array[2]} #进行字符串拼接
 if [[ ${yaml_line} =~ "PULC" ]];then
@@ -73,6 +75,17 @@ do
 done
 export model_latest_name=${array2[0]}
 echo ${model_latest_name}
+
+#获取模型输出名
+# import yaml
+# params_dir=`python -c "
+#     import yaml; \
+#     with open('${yaml_line}', 'r', encoding='utf-8') as y:; \
+#     cfg = yaml.full_load(y); \
+#     print(cfg['Arch']['name']); \
+#     "`
+export params_dir=(`cat ${yaml_line} | grep name | awk -F ":" '{print $2}'`)
+export params_dir=${params_dir//\"/ }
 
 #对32G的模型进行bs减半的操作，注意向上取整 #暂时适配了linux，未考虑MAC
 if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_patch16_224 \

@@ -5,13 +5,7 @@
 controller
 """
 
-import os
-import random
-from inspect import isclass
 import traceback
-import paddle
-import numpy as np
-from logger import logger
 import generator
 
 
@@ -23,11 +17,12 @@ class ControlModuleTrans(object):
         # self.control = case["info"]["test"]
         self.case = case
         self.case_name = case["name"]
-        self.logger = logger
+        # self.logger = logger
 
         # self.logger.get_log().info(self.case.get("desc", "没有描述"))
         self.test = case["info"]["test"]
         self.module = generator.builder.BuildModuleTest(self.case)
+        self.logger = self.module.logger
 
         self.test_map = {
             "dygraph_train_test": self.module.dygraph_train_test,
@@ -51,7 +46,7 @@ class ControlModuleTrans(object):
             except Exception:
                 self.logger.get_log().info("{} Failed!!!~~".format(k))
                 bug_trace = traceback.format_exc()
-                logger.get_log().warn(bug_trace)
+                self.logger.get_log().warn(bug_trace)
                 exc += 1
                 fail_test_list.append(k)
             else:
