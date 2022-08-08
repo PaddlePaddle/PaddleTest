@@ -1,14 +1,6 @@
 #定义环境变量
 export FLAGS_cudnn_deterministic=True #固定随机量使用，使cuda算法保持一致
 
-echo "######  ----ln  data-----"
-rm -rf dataset
-ln -s ${Data_path} dataset
-ls dataset |head -n 2
-cd deploy
-ln -s ${Data_path}/rec_demo/* .  #预训练模型和demo数据集
-cd ..
-
 # paddle
 echo "######  paddle version"
 python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
@@ -143,5 +135,70 @@ else
     export set_cuda_flag=True
 fi
 
+get_image_name(){
+    #传入split参数 image_root
+    image_root_name=(`cat ${yaml_line} | grep  ${image_root} | awk -F ":" '{print $2}'`)
+    image_root_name=(${image_root_name//dataset// })
+    image_root_name=(${image_root_name[1]//\// })
+    export image_root_name=(${image_root_name//\"/ })
+}
+
+download_data(){
+    #传入参数 image_root_name
+    cd dataset #这里是默认按照已经进入repo路径来看
+    if [[ -f "dataset/${image_root_name}.tar" ]] && [[ -d "dataset/${image_root_name}" ]] ;then
+        echo already download ${image_root_name}
+    else
+        rm -rf ${image_root_name}
+wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/${image_root_name}.tar --no-proxy --no-check-certificate
+        tar xf ${image_root_name}.tar
+    fi
+    cd ..
+}
+
+#准备数据
+
+# echo "######  ----ln  data-----"
+# rm -rf dataset
+# ln -s ${Data_path} dataset
+# ls dataset |head -n 2
+# cd deploy
+# ln -s ${Data_path}/rec_demo/* .  #预训练模型和demo数据集
+# cd ..
+
+cd deploy
+if [[ -f "dataset/rec_demo.tar" ]] && [[ -d "dataset/rec_demo" ]] ;then
+    echo already download rec_demo
+else
+wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/rec_demo.tar --no-proxy --no-check-certificate
+tar xf rec_demo.tar
+fi
+cd ..
+
+if [[ ${yaml_line} =~ "face" ]];then
+    image_root=root_dir
+    get_image_name image_root
+    download_data
+elif [[ ${yaml_line} =~ "traffic_sign" ]];then
+    image_root=cls_label_path
+    get_image_name image_root
+    download_data
+elif [[ ${yaml_line} =~ "GeneralRecognition" ]];then
+    export image_root_name=Inshop
+    download_data
+elif [[ ${yaml_line} =~ "strong_baseline" ]];then
+    export image_root_name=market1501
+    download_data
+elif [[ ${yaml_line} =~ "MV3_Large_1x_Aliproduct_DLBHC" ]];then
+    image_root=image_root
+    get_image_name image_root
+    download_data
+    export image_root_name=Inshop
+    download_data
+else
+    image_root=image_root
+    get_image_name image_root
+    download_data
+fi
 
 ####TODO，抽象出epoch数，CI 跑1个epoch，CE 跑2个epoch，控制下执行时间

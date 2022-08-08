@@ -18,6 +18,7 @@ find ppcls/configs/reid/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  
 #308个模型总量
 #11个类型
 
+# cat models_list | sort | uniq > models_list_run_tmp  #去重复
 
 
 

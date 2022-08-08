@@ -67,7 +67,7 @@ dynamic|static)
     fi
 ;;
 convergence)
-    python ${multi_flag} tools/train.py -c ${yaml_line}  \
+    python ${multi_flag} ${train_mold} -c ${yaml_line}  \
         -o Global.output_dir=${output_dir}/${model_name} \
         > ${log_path}/train/${model_name}_convergence.log 2>&1
     echo "######  params_dir"
