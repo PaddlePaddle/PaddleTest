@@ -146,7 +146,7 @@ get_image_name(){
 
 download_data(){
     #传入参数 image_root_name
-    echo "download image_root_name : ${image_root_name}"
+    echo "download start image_root_name : ${image_root_name}"
     cd dataset #这里是默认按照已经进入repo路径来看
     if [[ -f "dataset/${image_root_name}.tar" ]] && [[ -d "dataset/${image_root_name}" ]] ;then
         echo already download ${image_root_name}
@@ -155,54 +155,59 @@ download_data(){
 wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/${image_root_name}.tar --no-proxy --no-check-certificate
         tar xf ${image_root_name}.tar
     fi
+    echo "download done image_root_name : ${image_root_name}"
     cd ..
 }
 
 #准备数据
-
-# echo "######  ----ln  data-----"
-# rm -rf dataset
-# ln -s ${Data_path} dataset
-# ls dataset |head -n 2
-# cd deploy
-# ln -s ${Data_path}/rec_demo/* .  #预训练模型和demo数据集
-# cd ..
-
-cd deploy
-if [[ -f "dataset/rec_demo.tar" ]] && [[ -d "dataset/rec_demo" ]] ;then
-    echo already download rec_demo
+if [[ ${get_data_way} == "ln_way" ]];then
+    if [[ ${Data_path} == "" ]];then
+        echo " you must set Data_path first "
+    fi
+    echo "######  ----ln  data-----"
+    rm -rf dataset
+    ln -s ${Data_path} dataset
+    ls dataset |head -n 2
+    cd deploy
+    ln -s ${Data_path}/rec_demo/* .  #预训练模型和demo数据集
+    cd ..
 else
-wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/rec_demo.tar --no-proxy --no-check-certificate
-tar xf rec_demo.tar
-fi
-cd ..
+    echo "######  ----download  data-----"
+    cd deploy
+    if [[ -f "dataset/rec_demo.tar" ]] && [[ -d "dataset/rec_demo" ]] ;then
+        echo already download rec_demo
+    else
+    wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/rec_demo.tar --no-proxy --no-check-certificate
+    tar xf rec_demo.tar
+    fi
+    cd ..
 
-if [[ ${yaml_line} =~ "face" ]];then
-    image_root=root_dir
-    get_image_name image_root
-    download_data
-elif [[ ${yaml_line} =~ "traffic_sign" ]];then
-    image_root=cls_label_path
-    get_image_name image_root
-    download_data
-elif [[ ${yaml_line} =~ "GeneralRecognition" ]];then
-    export image_root_name=Inshop
-    download_data
-    export image_root_name=Aliproduct
-    download_data
-elif [[ ${yaml_line} =~ "strong_baseline" ]];then
-    export image_root_name=market1501
-    download_data
-elif [[ ${yaml_line} =~ "MV3_Large_1x_Aliproduct_DLBHC" ]];then
-    image_root=image_root
-    get_image_name image_root
-    download_data
-    export image_root_name=Inshop
-    download_data
-else
-    image_root=image_root
-    get_image_name image_root
-    download_data
+    if [[ ${yaml_line} =~ "face" ]] && [[ ${yaml_line} =~ "metric_learning" ]];then
+        image_root="root_dir"
+        get_image_name image_root
+        download_data
+    elif [[ ${yaml_line} =~ "traffic_sign" ]] && [[ ${yaml_line} =~ "PULC" ]];then
+        image_root="cls_label_path"
+        get_image_name image_root
+        download_data
+    elif [[ ${yaml_line} =~ "GeneralRecognition" ]];then
+        export image_root_name="Inshop"
+        download_data
+        export image_root_name="Aliproduct"
+        download_data
+    elif [[ ${yaml_line} =~ "strong_baseline" ]] && [[ ${yaml_line} =~ "reid" ]];then
+        export image_root_name="market1501"
+        download_data
+    elif [[ ${yaml_line} =~ "MV3_Large_1x_Aliproduct_DLBHC" ]] && [[ ${yaml_line} =~ "Products" ]];then
+        image_root="image_root"
+        get_image_name image_root
+        download_data
+        export image_root_name="Inshop"
+        download_data
+    else
+        image_root="image_root"
+        get_image_name image_root
+        download_data
+    fi
 fi
-
 ####TODO，抽象出epoch数，CI 跑1个epoch，CE 跑2个epoch，控制下执行时间
