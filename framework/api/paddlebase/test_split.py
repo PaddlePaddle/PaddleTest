@@ -4,10 +4,14 @@
 """
 test_split.py
 """
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../../utils/")
+from interceptor import skip_branch_not_develop
 
 
 class TestSplit(APIBase):
@@ -19,7 +23,7 @@ class TestSplit(APIBase):
         """
         implement
         """
-        self.types = [np.float16, np.float32, np.float64, np.int32, np.int64]
+        self.types = [np.float16, np.float32, np.float64, np.int32, np.int64, np.int8, np.uint8]
         self.enable_backward = False
         # static_graph of split api is not supported in this frame
         self.static = False
@@ -30,6 +34,7 @@ class TestSplit(APIBase):
 obj = TestSplit(paddle.split)
 
 
+@skip_branch_not_develop
 @pytest.mark.api_base_split_vartype
 def test_split_base():
     """
