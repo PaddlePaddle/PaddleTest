@@ -39,27 +39,27 @@ cls_BRANCH = "develop"
 
 EXEC_PRIORITY = ["precision"]
 # EXEC_PRIORITY = ["precision", "function"]
-#precision表示精度，有指标评估步骤
-#function表示功能性，只关注是否报错
-
+# precision表示精度，有指标评估步骤
+# function表示功能性，只关注是否报错
 
 
 EXEC_TAG = ["train_linux_gpu1", "train_linux_gpu2", "eval_linux", "infer_linux", "export_linux", "predict_linux"]
 
 # Linux 不增加预训练模型
-#develop
+# develop
 # EXEC_TAG = ["train_linux_gpu1","train_linux_gpu2","eval_linux","infer_linux","export_linux","predict_linux"]
-#release
+# release
 # EXEC_TAG = ["train_linux_gpu1_release","train_linux_gpu2_release","eval_linux_release",
 #   "infer_linux_release","export_linux_release","predict_linux_release"]
 
 # Linux 加载预训练模型
-#develop
+# develop
 # EXEC_TAG = ["train_linux_gpu1","train_linux_gpu2","eval_linux","eval_linux_pretrained","infer_linux",
 #   "infer_linux_pretrained","export_linux","export_linux_pretrained","predict_linux","predict_linux_pretrained"]
-#release
+# release
 # EXEC_TAG = ["train_linux_gpu1_release","train_linux_gpu2_release","eval_linux_release","eval_linux_pretrained",
-# "infer_linux_release","infer_linux_pretrained","export_linux","export_linux_pretrained","predict_linux_release","predict_linux_pretrained"]
+#   "infer_linux_release","infer_linux_pretrained",
+#   "export_linux","export_linux_pretrained","predict_linux_release","predict_linux_pretrained"]
 
 # Windows 执行步骤
 # EXEC_TAG = ["win_function_test", "train_win_gpu", "eval_win", "infer_win", "predict_win"]
