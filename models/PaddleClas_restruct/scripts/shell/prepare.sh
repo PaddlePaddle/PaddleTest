@@ -140,11 +140,13 @@ get_image_name(){
     image_root_name=(`cat ${yaml_line} | grep  ${image_root} | awk -F ":" '{print $2}'`)
     image_root_name=(${image_root_name//dataset// })
     image_root_name=(${image_root_name[1]//\// })
+    image_root_name=(${image_root_name//\"/ })
     export image_root_name=(${image_root_name//\"/ })
 }
 
 download_data(){
     #传入参数 image_root_name
+    echo "download image_root_name : ${image_root_name}"
     cd dataset #这里是默认按照已经进入repo路径来看
     if [[ -f "dataset/${image_root_name}.tar" ]] && [[ -d "dataset/${image_root_name}" ]] ;then
         echo already download ${image_root_name}
@@ -185,6 +187,8 @@ elif [[ ${yaml_line} =~ "traffic_sign" ]];then
     download_data
 elif [[ ${yaml_line} =~ "GeneralRecognition" ]];then
     export image_root_name=Inshop
+    download_data
+    export image_root_name=Aliproduct
     download_data
 elif [[ ${yaml_line} =~ "strong_baseline" ]];then
     export image_root_name=market1501

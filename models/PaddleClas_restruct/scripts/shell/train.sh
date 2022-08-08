@@ -52,7 +52,7 @@ dynamic|static)
     fi
     echo "######  params_dir"
     echo ${params_dir}
-    cat ${log_path}/train/${model_name}_${card}.log | grep "Memory Usage (MB)"
+    # cat ${log_path}/train/${model_name}_${card}.log | grep "Memory Usage (MB)" #查看显存
 
     if ([[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
@@ -72,7 +72,7 @@ convergence)
         > ${log_path}/train/${model_name}_convergence.log 2>&1
     echo "######  params_dir"
     echo ${params_dir}
-    cat ${log_path}/train/${model_name}_convergence.log | grep "Memory Usage (MB)"
+    # cat ${log_path}/train/${model_name}_convergence.log | grep "Memory Usage (MB)" #查看显存
 
     if ([[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
