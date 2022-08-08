@@ -1,5 +1,5 @@
-MODEL: "ImageNet_ResNet_ResNet50" # 模型名
-PRIORITY: P0,convergence_ImageNet_ResNet_ResNet50,ImageNet_ResNet_ResNet50,ALL
+MODEL: "ImageNet-ResNet-ResNet50" # 模型名
+PRIORITY: P0,ImageNet-ResNet-ResNet50,ALL,ADD
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -13,15 +13,14 @@ VARIABLES:
   model_log_path: log
 
 EXEC:
-  # exec_cases: [TRAIN]
   exec_cases: [TRAIN,EVAL,INFER,EXPORT,PREDICT]
-  exec_priority: [P0]
+  exec_priority: $EXEC_PRIORITY
   exec_tag: $EXEC_TAG
 
 TRAIN: # 训练步骤
   -
     tag: train_linux_convergence
-    priority: P0
+    priority: precision
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -36,10 +35,10 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "+"
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_convergence.log
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_convergence.log
   -
     tag: train_linux_gpu1
-    priority: P0
+    priority: precision
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
@@ -54,10 +53,28 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_1card.log
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_1card.log
+  -
+    tag: train_linux_gpu1
+    priority: function
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_CUDA dynamic
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_1card.log
   -
     tag: train_linux_gpu2
-    priority: P0
+    priority: precision
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -72,10 +89,28 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_2card.log
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_2card.log
+  -
+    tag: train_linux_gpu2
+    priority: function
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA dynamic
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_2card.log
   -
     tag: train_linux_gpu1_release
-    priority: P0
+    priority: precision
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
     run:
@@ -90,10 +125,28 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_1card.log
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_1card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: function
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_CUDA dynamic
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_1card.log
   -
     tag: train_linux_gpu2_release
-    priority: P0
+    priority: precision
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -108,10 +161,28 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_2card.log
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_2card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: function
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA dynamic
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_2card.log
   -
     tag: train_win_gpu
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -124,10 +195,10 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_train.log
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_train.log
   -
     tag: train_win_cpu
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -140,10 +211,10 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_cpu.log
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_cpu.log
   -
     tag: train_mac_cpu
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -156,12 +227,12 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/train/ImageNet_ResNet_ResNet50_cpu.log
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_cpu.log
 
 EVAL: # 训练步骤
   -
     tag: eval_linux
-    priority: P0
+    priority: precision
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -176,10 +247,28 @@ EVAL: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_trained.log
+  -
+    tag: eval_linux
+    priority: function
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/eval.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA trained
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: eval_linux_release
-    priority: P0
+    priority: precision
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -194,10 +283,28 @@ EVAL: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_trained.log
+  -
+    tag: eval_linux_release
+    priority: function
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/eval.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA trained
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: eval_linux_pretrained
-    priority: P0
+    priority: precision
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -212,10 +319,28 @@ EVAL: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_pretrained.log
+  -
+    tag: eval_linux_pretrained
+    priority: function
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/eval.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA pretrained
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_pretrained.log
   -
     tag: eval_win
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -228,10 +353,10 @@ EVAL: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: eval_win_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -244,10 +369,10 @@ EVAL: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_pretrained.log
   -
     tag: eval_mac
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -260,10 +385,10 @@ EVAL: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: eval_mac_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -276,12 +401,12 @@ EVAL: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/eval/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_pretrained.log
 
 INFER: # 训练步骤
   -
     tag: infer_linux
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -294,10 +419,10 @@ INFER: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: infer_linux_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -310,10 +435,10 @@ INFER: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet-ResNet-ResNet50_pretrained.log
   -
     tag: infer_win
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -326,10 +451,10 @@ INFER: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: infer_win_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -342,10 +467,10 @@ INFER: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet-ResNet-ResNet50_pretrained.log
   -
     tag: infer_mac
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -358,10 +483,10 @@ INFER: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: infer_mac_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -374,12 +499,12 @@ INFER: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/infer/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/infer/ImageNet-ResNet-ResNet50_pretrained.log
 
 EXPORT: # 导出模型
   -
     tag: export_linux
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -392,10 +517,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: export_linux_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -408,10 +533,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet-ResNet-ResNet50_pretrained.log
   -
     tag: export_win
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -424,10 +549,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: export_win_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -440,10 +565,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet-ResNet-ResNet50_pretrained.log
   -
     tag: export_mac
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -456,10 +581,10 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: export_mac_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -472,12 +597,12 @@ EXPORT: # 导出模型
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/export_model/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/export_model/ImageNet-ResNet-ResNet50_pretrained.log
 
 PREDICT: # 训练步骤
   -
     tag: predict_linux
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -490,10 +615,10 @@ PREDICT: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: predict_linux_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -506,10 +631,10 @@ PREDICT: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet-ResNet-ResNet50_pretrained.log
   -
     tag: predict_win
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -522,10 +647,10 @@ PREDICT: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: predict_win_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -538,10 +663,10 @@ PREDICT: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet-ResNet-ResNet50_pretrained.log
   -
     tag: predict_mac
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -554,10 +679,10 @@ PREDICT: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_trained.log
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: predict_mac_pretrained
-    priority: P0
+    priority: precision,function
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -570,4 +695,4 @@ PREDICT: # 训练步骤
         actived: True
         evaluation: "="
         unit_repr: None
-    output: $ROOT_PATH/$model_log_path/predict/ImageNet_ResNet_ResNet50_pretrained.log
+    output: $ROOT_PATH/$model_log_path/predict/ImageNet-ResNet-ResNet50_pretrained.log

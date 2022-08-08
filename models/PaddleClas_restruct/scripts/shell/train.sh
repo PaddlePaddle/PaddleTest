@@ -14,9 +14,9 @@ source prepare.sh
 
 #区分动态图、静态图
 if [[ ${train_type} =~ "dynamic" ]] || [[ ${train_type} =~ "convergence" ]];then
-    export train_type="tools/train.py"
+    export train_mold="tools/train.py"
 else
-    export train_type="ppcls/static/train.py"
+    export train_mold="ppcls/static/train.py"
 fi
 
 case ${train_type} in #动态图/静态图/收敛性
@@ -30,20 +30,20 @@ dynamic|static)
     -o Global.output_dir=${output_dir}/${model_name} \
     -o Global.device=${set_cuda_device}"
     if [[ ${yaml_line} =~ 'GeneralRecognition' ]]; then
-        python ${multi_flag} ${train_type} -c ${yaml_line} \
+        python ${multi_flag} ${train_mold} -c ${yaml_line} \
             -o DataLoader.Train.sampler.batch_size=32 \
             -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     elif [[ ${yaml_line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
-        python ${multi_flag} ${train_type} -c ${yaml_line} \
+        python ${multi_flag} ${train_mold} -c ${yaml_line} \
             -o DataLoader.Eval.sampler.batch_size=64 \
             -o DataLoader.Train.sampler.batch_size=64 \
             -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     elif [[ ${yaml_line} =~ 'quantization' ]] ; then
-        python ${multi_flag} ${train_type} -c ${yaml_line} \
+        python ${multi_flag} ${train_mold} -c ${yaml_line} \
             -o DataLoader.Train.sampler.batch_size=32 \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     else
@@ -59,11 +59,11 @@ dynamic|static)
         ;then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_${card}.log) -eq 0 ]];then
         echo -e "\033[33m training in ${card} of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
-        echo "training_multi_exit_code: 0.0" >> ${log_path}/train/${model_name}_${card}.log
+        echo "training_exit_code: 0.0" >> ${log_path}/train/${model_name}_${card}.log
     else
         cat ${log_path}/train/${model_name}_${card}.log
         echo -e "\033[31m training in ${card} of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
-        echo "training_multi_exit_code: 1.0" >> ${log_path}/train/${model_name}_${card}.log
+        echo "training_exit_code: 1.0" >> ${log_path}/train/${model_name}_${card}.log
     fi
 ;;
 convergence)

@@ -1,4 +1,5 @@
 """解析html结果"""
+# Repo=${1:-PaddleClas}
 
 import requests
 from bs4 import BeautifulSoup
@@ -20,14 +21,14 @@ url_all = [
     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15777850/result/reportUrl.html",
 ]  # release
 
-# with open("clas_develop", "w", encoding="utf-8") as f:
-with open("clas_release", "w", encoding="utf-8") as f:
+# with open("${Repo}_develop", "w", encoding="utf-8") as f:
+with open("${Repo}_release", "w", encoding="utf-8") as f:
 
     # url_all = [
     #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15715846/result/reportUrl.html",
     #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15779389/result/reportUrl.html",
     # ] #develop
-    # with open("clas_develop", "w", encoding="utf-8") as f:
+    # with open("${Repo}_develop", "w", encoding="utf-8") as f:
 
     for i, _ in enumerate(url_all):
         # for i in range(len(url_all)): #code style error
@@ -70,7 +71,7 @@ with open("clas_release", "w", encoding="utf-8") as f:
                 b.append(tmp)
                 tmp = []
                 k = 0
-            if i == lie_index or (i == 1 and k == 0):  # 5是第五列
+            if i == lie_index or (i == 1 and k == 0):  # 5是第五列 不规范报错
                 # if i<=8:
                 # print('###',t.get_text())
                 tmp.append(t.get_text())
