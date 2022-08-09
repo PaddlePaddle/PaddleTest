@@ -63,7 +63,7 @@ dynamic|static)
             -o DataLoader.Train.sampler.batch_size=32 \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     else
-        python ${multi_flag} tools/train.py -c ${yaml_line}  \
+        python ${multi_flag} ${train_mold} -c ${yaml_line}  \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     fi
     # if ([[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
