@@ -13,6 +13,10 @@ echo "CE"| findstr %model_flag% >nul
 if !errorlevel! equ 0 (
 	echo "CE step"
 	set FLAGS_cudnn_deterministic=True
+
+        rem set FLAGS_enable_eager_mode=1
+        rem #验证天宇 220329 pr
+
 	cd %Project_path%
 	echo "path after"
 	echo %1 >clas_models_list_P0_cpu
@@ -21,19 +25,22 @@ if !errorlevel! equ 0 (
 )
 
 set log_path=log
-set gpu_flag=True
-if exist "log" (
-   rmdir log /S /Q
-	md log
-) else (
-	md log
-)
+md log
+@REM if exist "log" (
+@REM    rmdir log /S /Q
+@REM 	md log
+@REM ) else (
+@REM 	md log
+@REM )
+
 cd dataset
 if not exist ILSVRC2012 (mklink /j ILSVRC2012 %data_path%\PaddleClas\ILSVRC2012)
 cd ..
 
 rem dependency
-python -m pip install -r requirements.txt
+set http_proxy=
+set https_proxy=
+python -m pip install -r requirements.txt  -i https://mirror.baidu.com/pypi/simple
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
@@ -72,7 +79,7 @@ if !errorlevel! equ 0 (
 )
 
 if not !errorlevel! == 0 (
-        type   %log_path%\!model!_train.log
+        type   "%log_path%\!model!_train.log"
         echo   !model!,train,FAIL  >> %log_path%\result.log
         echo  training of !model! failed!
         echo "training_exit_code: 1.0" >> %log_path%\!model!_train.log
@@ -110,7 +117,7 @@ if !errorlevel! equ 0 (
 rem eval
 python tools/eval.py -c %%i -o Global.pretrained_model="./output/!model!/latest" -o DataLoader.Eval.sampler.batch_size=1 -o Global.device=cpu >%log_path%/!model!_eva.log 2>&1
 if not !errorlevel! == 0 (
-        type   %log_path%\!model!_eval.log
+        type   "%log_path%\!model!_eval.log"
         echo   !model!,eval,FAIL  >> %log_path%\result.log
         echo  evaling of !model! failed!
         echo "eval_exit_code: 1.0" >> %log_path%\!model!_eval.log
@@ -123,7 +130,7 @@ if not !errorlevel! == 0 (
 rem infer
 python tools/infer.py -c %%i -o Global.pretrained_model="./output/!model!/latest" -o Global.device=cpu > %log_path%/!model!_infer.log 2>&1
 if not !errorlevel! == 0 (
-        type   %log_path%\!model!_infer.log
+        type   "%log_path%\!model!_infer.log"
         echo   !model!,infer,FAIL  >> %log_path%\result.log
         echo  infering of !model! failed!
         echo "infer_exit_code: 1.0" >> %log_path%\!model!_infer.log
@@ -136,7 +143,7 @@ if not !errorlevel! == 0 (
 rem export_model
 python tools/export_model.py -c  %%i -o Global.pretrained_model="./output/!model!/latest" -o Global.save_inference_dir=./inference/!model! -o Global.device=cpu >%log_path%/!model!_export_model.log 2>&1
 if not !errorlevel! == 0 (
-        type   %log_path%\!model!_export.log
+        type   "%log_path%\!model!_export.log"
         echo   !model!,export_model,FAIL  >> %log_path%\result.log
         echo  export_modeling of !model! failed!
         echo "export_exit_code: 1.0" >> %log_path%\!model!_export.log
@@ -149,7 +156,7 @@ rem predict
 cd deploy
 python python/predict_cls.py -c configs/inference_cls.yaml -o Global.inference_model_dir="../inference/!model!" -o Global.use_gpu=False > ../%log_path%/!model!_predict.log 2>&1
 if not !errorlevel! == 0 (
-        type   ..\%log_path%\!model!_predict.log
+        type   "..\%log_path%\!model!_predict.log"
         echo   !model!,predict,FAIL  >> ..\%log_path%\result.log
         echo  predicting of !model! failed!
         echo "predict_exit_code: 1.0" >> ..\%log_path%\!model!_predict.log

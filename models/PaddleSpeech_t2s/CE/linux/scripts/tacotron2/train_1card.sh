@@ -25,11 +25,14 @@ if [ $? -eq 0 ];then
    echo -e "\033[33m data preprocess of tacotron2 successfully! \033[0m"
 else
    cat preprocess.log
+   rm -rf ./dump
+   ln -s ${Data_path}/preprocess_data/new_tacotron2/dump/ ./
    echo -e "\033[31m data preprocess of tacotron2 failed! \033[0m"
 fi
 
 # train
-sed -i "s/max_epoch: 200/max_epoch: 5/g" ${conf_path}
+sed -i "s/max_epoch: 200/max_epoch: 5/g;s/batch_size: 64/batch_size: 32/g" ${conf_path}
+cat ${conf_path}
 sed -i "s/python3/python/g" ./local/train.sh
 rm -rf exp
 ./local/train.sh ${conf_path} ${train_output_path} > train_1card.log 2>&1
@@ -41,4 +44,4 @@ else
    echo -e "\033[31m training_1card of tacotron2 failed! \033[0m"
 fi
 sed -i "s/max_epoch: 5/max_epoch: 200/g" ${conf_path}
-cat train_1card.log | grep "765/765" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $7}' > ../../../../log/tacotron2_1card.log
+cat train_1card.log | grep "1530/1530" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $7}' > ../../../../log/tacotron2_1card.log

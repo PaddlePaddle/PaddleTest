@@ -1,4 +1,0 @@
-configs/cyclegan_cityscapes.yaml
-configs/edvr_m_wo_tsa.yaml
-configs/esrgan_x4_div2k.yaml
-configs/firstorder_fashion.yaml

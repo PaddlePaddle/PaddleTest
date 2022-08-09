@@ -53,7 +53,7 @@ def test_trt_fp16_more_bz():
 
     file_path = "./pcpvt_base"
     images_size = 224
-    batch_size_pool = [1, 2]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
@@ -71,7 +71,7 @@ def test_trt_fp16_more_bz():
             model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
         )
         test_suite2.trt_more_bz_test(
-            input_data_dict, output_data_dict, delta=1e-1, max_batch_size=10, precision="trt_fp16"
+            input_data_dict, output_data_dict, delta=1e-1, max_batch_size=1, precision="trt_fp16"
         )
 
         del test_suite2  # destroy class to save memory

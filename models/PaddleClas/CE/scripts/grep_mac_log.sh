@@ -9,6 +9,7 @@ ls
 
 if [[ $2 == 'train_mac_cpu' ]] ; then
     echo '#####train_mac_cpu'
+    tail -n 5 ${log_path}/train/${model}.log
     # cat ${log_path}/train/${model}_cpu.log | grep Avg
     # cat ${log_path}/train/${model}_cpu.log | grep Train | grep Avg | grep '1/1' > tmp_cpu.log
     # cat ${log_path}/train/${model}_cpu.log | grep Eval | grep Avg > tmp_cpu1.log
@@ -26,6 +27,7 @@ if [[ $2 == 'train_mac_cpu' ]] ; then
 
 elif [[ $2 == 'eval_mac' ]] ; then
     echo '#####eval_mac'
+    tail -n 5 ${log_path}/eval/${model}.log
     # cat ${log_path}/eval/${model}.log | grep Avg
     # cat ${log_path}/eval/${model}.log | grep Eval | grep Avg > tmp_eval.log
     # cat ${log_path}/eval/${model}.log | grep exit_code
@@ -39,19 +41,28 @@ elif [[ $2 == 'eval_mac' ]] ; then
 
 elif [[ $2 == 'infer_mac' ]] ; then
     echo '#####infer_mac'
+    tail -n 5 ${log_path}/infer/${model}.log
+
     cat ${log_path}/infer/${model}.log | grep infer_exit_code
     cat ${log_path}/infer/${model}.log | grep infer_exit_code >../${log_path}/${model}_infer.log
     cat ../${log_path}/${model}_infer.log
 
 elif [[ $2 == 'export_mac' ]] ; then
     echo '#####export_mac'
+
     cat ${log_path}/export_model/${model}.log | grep export_exit_code
     cat ${log_path}/export_model/${model}.log | grep export_exit_code >../${log_path}/${model}_export.log
     cat ../${log_path}/${model}_export.log
 
 elif [[ $2 == 'predict_mac' ]] ; then
     echo '#####predict_mac'
+    tail -n 5 ${log_path}/predict/${model}.log
+
     cat ${log_path}/predict/${model}.log | grep predict_exit_code
     cat ${log_path}/predict/${model}.log | grep predict_exit_code >../${log_path}/${model}_predict.log
     cat ../${log_path}/${model}_predict.log
+
+else
+    echo '##### unknown type'
+
 fi

@@ -1,5 +1,5 @@
 MODEL: "TNT_small" # 模型名
-PRIORITY: P1
+PRIORITY: P1,convergence_TNT_small,TNT_small
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
@@ -34,8 +34,6 @@ FUNCTION: # 训练步骤
   -
     tag: win_function_test
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
@@ -43,8 +41,6 @@ FUNCTION: # 训练步骤
   -
     tag: win_cpu_function_test
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_win
@@ -52,35 +48,56 @@ FUNCTION: # 训练步骤
   -
     tag: mac_function_test
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: None  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_function_path_mac
-        cmd: bash PaddleClas_P1_CPU.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml
-
-TRAIN: # 训练步骤
+        cmd: bash PaddleClas_train_cpu.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml
   -
-    tag: train_linux_gpu1
+    tag: linux_convergence_test
     priority: P1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
+        path: $ROOT_PATH/$model_function_path_linux
+        cmd: bash PaddleClas_convergence_develop.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml
+
+TRAIN: # 训练步骤
+  -
+    tag: train_linux_convergence
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_convergence
+    kpis: #kpi指标
+      metric:
+        latest: True
+        kpi_base: 0.512
+        threshold: 0.1
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/TNT_small_convergence.log
+  -
+    tag: train_linux_gpu1
+    priority: P1
+    run:
+      -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu1
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.1
+        kpi_base: 7.81988
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
-      exit_code:
+      train_eval:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.10001
+        kpi_base: 12.23977
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -88,17 +105,68 @@ TRAIN: # 训练步骤
   -
     tag: train_linux_gpu2
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu2
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.1
+        kpi_base: 6.77878
+        threshold: 0.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 8.11172
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/TNT_small_2card.log
+  -
+    tag: train_linux_gpu1_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu1
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 8.10042
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 10.28908
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/TNT_small_1card.log
+  -
+    tag: train_linux_gpu2_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml train_linux_gpu2
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 6.67185
+        threshold: 0.0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      train_eval:
+        latest: True
+        kpi_base: 8.0366
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -106,8 +174,6 @@ TRAIN: # 训练步骤
   -
     tag: train_win_gpu
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -116,16 +182,14 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_train.log
   -
     tag: train_win_cpu
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -134,16 +198,14 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_train.log
   -
     tag: train_mac_cpu
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -152,9 +214,9 @@ TRAIN: # 训练步骤
       training_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_cpu.log
 
@@ -162,17 +224,31 @@ EVAL: # 训练步骤
   -
     tag: eval_linux
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml eval_linux
     kpis: #kpi指标
-      exit_code:
+      loss:
         latest: True
-        kpi_base: 0.0
-        threshold: 0.10001
+        kpi_base: 12.23977
+        threshold: 0.00001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/TNT_small_eval.log
+  -
+    tag: eval_linux_release
+    priority: P1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash grep_linux_log.sh ppcls/configs/ImageNet/TNT/TNT_small.yaml eval_linux
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 10.28908
+        threshold: 0.00001
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -180,8 +256,6 @@ EVAL: # 训练步骤
   -
     tag: eval_win
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -190,16 +264,14 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_eval.log
   -
     tag: eval_mac
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -208,9 +280,9 @@ EVAL: # 训练步骤
       eval_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_eval.log
 
@@ -219,8 +291,6 @@ INFER: # 训练步骤
   -
     tag: infer_linux
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -229,16 +299,14 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_infer.log
   -
     tag: infer_win
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -247,16 +315,14 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_infer.log
   -
     tag: infer_mac
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -265,9 +331,9 @@ INFER: # 训练步骤
       infer_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_infer.log
 
@@ -275,8 +341,6 @@ PREDICT: # 训练步骤
   -
     tag: predict_linux
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -285,16 +349,14 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_predict.log
   -
     tag: predict_win
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -303,16 +365,14 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_predict.log
   -
     tag: predict_mac
     priority: P1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
@@ -321,8 +381,8 @@ PREDICT: # 训练步骤
       predict_exit_code:
         latest: True
         kpi_base: 0.0
-        threshold: 0.1
+        threshold: 0.0
         actived: True
-        evaluation: "-"
+        evaluation: "="
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/TNT_small_predict.log

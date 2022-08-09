@@ -2,7 +2,7 @@ home=$PWD
 echo "branch is ${AGILE_COMPILE_BRANCH}"
 python3.7 -m pip install pytest
 python3.7 -m pip install scipy
-
+export FLAGS_use_curand=1
 
 # api
 cd api
@@ -15,7 +15,7 @@ cd $home
 # jit
 cd e2e
 cd jit
-bash ./run.sh
+#bash ./run.sh
 jit=$?
 echo ${jit}
 cd $home

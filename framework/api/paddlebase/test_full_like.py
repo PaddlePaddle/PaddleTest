@@ -170,3 +170,25 @@ def test_full_like12():
     fill_value = 1
     res = np.full_like(x, fill_value)
     obj.run(res=res, x=x, fill_value=fill_value, dtype="int64")
+
+
+@pytest.mark.api_base_full_like_parameters
+def test_full_like13():
+    """
+    fill_value is inf
+    """
+    x = np.array([2.0, 3.0])
+    fill_value = float("inf")
+    res = np.full_like(x, fill_value)
+    obj.run(res=res, x=x, fill_value=fill_value)
+
+
+@pytest.mark.api_base_full_like_parameters
+def test_full_like14():
+    """
+    fill_value is -inf
+    """
+    x = np.array([2.0, 3.0])
+    fill_value = float("-inf")
+    res = np.full_like(x, fill_value)
+    obj.run(res=res, x=x, fill_value=fill_value)

@@ -1,3 +1,9 @@
+echo "Project_path"
+echo ${Project_path}
+cd ${Project_path}
+echo "path after"
+pwd
+
 sed -i '' 's!batch_size_per_card: 512!batch_size_per_card: 16!g' configs/cls/cls_mv3.yml
 sed -ie '/- RecAug:/{N;d;}' configs/cls/cls_mv3.yml
 sed -ie '/- RandAugment:/d' configs/cls/cls_mv3.yml #删除 RandAugment 字段行

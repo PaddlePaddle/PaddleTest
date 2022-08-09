@@ -46,7 +46,8 @@ if [ "$1" = "linux_st_gpu1" ];then #单卡
     --num_epochs 1 \
     --test_period 1 \
     --model_period 1 \
-    --model_path dy_ratio_models > ${log_path}/$2.log 2>&1
+    --model_path dy_ratio_models \
+    --ce_test True > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu2" ];then #多卡
@@ -54,14 +55,14 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
           --log_dir='train_dy_ratio_log' \
           train.py \
           --batch_size 64 \
-          --data 'cifar10' \
+          --data imagenet \
           --pruning_mode ratio \
           --ratio 0.75 \
           --lr 0.005 \
           --num_epochs 20 \
           --step_epochs 13 17 \
           --initial_ratio 0.15 \
-          --pruning_steps 10 \
+          --pruning_steps 2 \
           --stable_epochs 0 \
           --pruning_epochs 10 \
           --tunning_epochs 10 \

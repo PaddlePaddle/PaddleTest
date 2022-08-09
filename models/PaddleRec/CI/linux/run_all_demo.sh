@@ -13,10 +13,10 @@ print_info(){
 if [ $1 -ne 0 ];then
     exit_flag=1
     echo -e "\033[31m FAIL_$2 \033[0m"
-    echo -e "\033[31m FAIL_$2 \033[0m"  >>${repo_path}/result.log
+    echo -e "\033[31m FAIL_$2 \033[0m" >>${repo_path}/result.log
 else
     echo -e "\033[32m SUCCESS_$2 \033[0m"
-    echo -e "\033[32m SUCCESS_$2 \033[0m"  >>${repo_path}/result.log
+    echo -e "\033[32m SUCCESS_$2 \033[0m" >>${repo_path}/result.log
 fi
 }
 

@@ -26,8 +26,8 @@ def dygraph_base(p):
         for t in types:
             paddle.disable_static(place)
             paddle.set_default_dtype(t)
-            x_data = np.arange(1, 7).reshape((1, 2, 1, 3)).astype(t)
-            y_data = np.arange(0, 6).reshape((1, 2, 3)).astype(t)
+            x_data = np.arange(1, 7).reshape((2, 3)).astype(t)
+            y_data = np.arange(0, 6).reshape((2, 3)).astype(t)
             x = paddle.to_tensor(x_data, stop_gradient=False)
             y = paddle.to_tensor(y_data)
             pairwise_distance = paddle.nn.PairwiseDistance(p=p)
@@ -42,8 +42,8 @@ def test_dygraph_0_norm():
     dygraph_0_norm
     """
     out, grad = dygraph_base(0)
-    res_out = np.array([[[2.0, 2.0, 2.0], [2.0, 2.0, 2.0]]])
-    res_grad = np.array([[[[0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0]]]])
+    res_out = np.array([3.0, 3.0])
+    res_grad = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)
 
@@ -54,8 +54,8 @@ def test_dygraph_1_norm():
     dygraph_1_norm
     """
     out, grad = dygraph_base(1)
-    res_out = np.array([[[5.0, 5.0, 5.0], [3.0, 3.0, 3.0]]])
-    res_grad = np.array([[[[0.0, 0.0, 0.0]], [[1.9999981, 1.9999981, 1.9999981]]]])
+    res_out = np.array([3.0, 3.0])
+    res_grad = np.array([[0.999999, 0.999999, 0.999999], [0.999999, 0.999999, 0.999999]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)
 
@@ -66,8 +66,8 @@ def test_dygraph_2_norm():
     dygraph_2_norm
     """
     out, grad = dygraph_base(2)
-    res_out = np.array([[[4.1231055, 4.1231055, 4.1231055], [2.236068, 2.236068, 2.236068]]])
-    res_grad = np.array([[[[-0.65189123, -0.65189123, -0.65189123]], [[1.4173558, 1.4173558, 1.4173558]]]])
+    res_out = np.array([1.73205081, 1.73205081])
+    res_grad = np.array([[0.57734994, 0.57734994, 0.57734994], [0.57734994, 0.57734994, 0.57734994]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)
 
@@ -78,8 +78,8 @@ def test_dygraph_positive_inf_norm():
     dygraph_positive_inf_norm
     """
     out, grad = dygraph_base(np.inf)
-    res_out = np.array([[[4.0, 4.0, 4.0], [2.0, 2.0, 2.0]]])
-    res_grad = np.array([[[[-1.0, -1.0, -1.0]], [[1.0, 1.0, 1.0]]]])
+    res_out = np.array([1.0, 1.0])
+    res_grad = np.array([[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)
 
@@ -90,8 +90,8 @@ def test_dygraph_negative_inf_norm():
     dygraph_negative_inf_norm
     """
     out, grad = dygraph_base(-np.inf)
-    res_out = np.array([[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]])
-    res_grad = np.array([[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]])
+    res_out = np.array([1.0, 1.0])
+    res_grad = np.array([[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)
 
@@ -107,8 +107,8 @@ def static_base(p):
             main_program = paddle.static.Program()
             startup_program = paddle.static.Program()
             with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
-                input1 = paddle.static.data(name="x", shape=[1, 2, 1, 3], dtype=t)
-                input2 = paddle.static.data(name="y", shape=[1, 2, 3], dtype=t)
+                input1 = paddle.static.data(name="x", shape=[2, 3], dtype=t)
+                input2 = paddle.static.data(name="y", shape=[2, 3], dtype=t)
                 input1.stop_gradient = False
                 pairwise_distance = paddle.nn.PairwiseDistance(p=p)
                 output = pairwise_distance(input1, input2)
@@ -116,8 +116,8 @@ def static_base(p):
 
                 exe = paddle.static.Executor(place)
                 exe.run(startup_program)
-                x = np.arange(1, 7).reshape((1, 2, 1, 3)).astype(t)
-                y = np.arange(0, 6).reshape((1, 2, 3)).astype(t)
+                x = np.arange(1, 7).reshape((2, 3)).astype(t)
+                y = np.arange(0, 6).reshape((2, 3)).astype(t)
 
                 out, g = exe.run(main_program, feed={"x": x, "y": y}, fetch_list=[output, g])
     return out, g
@@ -129,8 +129,8 @@ def test_static_0_norm():
     static_0_norm
     """
     out, grad = static_base(0)
-    res_out = np.array([[[2.0, 2.0, 2.0], [2.0, 2.0, 2.0]]])
-    res_grad = np.array([[[[0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0]]]])
+    res_out = np.array([3.0, 3.0])
+    res_grad = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)
 
@@ -141,8 +141,8 @@ def test_static_1_norm():
     static_1_norm
     """
     out, grad = static_base(1)
-    res_out = np.array([[[5.0, 5.0, 5.0], [3.0, 3.0, 3.0]]])
-    res_grad = np.array([[[[0.0, 0.0, 0.0]], [[1.9999981, 1.9999981, 1.9999981]]]])
+    res_out = np.array([3.0, 3.0])
+    res_grad = np.array([[0.999999, 0.999999, 0.999999], [0.999999, 0.999999, 0.999999]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)
 
@@ -153,8 +153,8 @@ def test_static_2_norm():
     static_2_norm
     """
     out, grad = static_base(2)
-    res_out = np.array([[[4.1231055, 4.1231055, 4.1231055], [2.236068, 2.236068, 2.236068]]])
-    res_grad = np.array([[[[-0.65189123, -0.65189123, -0.65189123]], [[1.4173558, 1.4173558, 1.4173558]]]])
+    res_out = np.array([1.73205081, 1.73205081])
+    res_grad = np.array([[0.57734994, 0.57734994, 0.57734994], [0.57734994, 0.57734994, 0.57734994]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)
 
@@ -165,8 +165,8 @@ def test_static_positive_inf_norm():
     static_positive_inf_norm
     """
     out, grad = static_base(np.inf)
-    res_out = np.array([[[4.0, 4.0, 4.0], [2.0, 2.0, 2.0]]])
-    res_grad = np.array([[[[-1.0, -1.0, -1.0]], [[1.0, 1.0, 1.0]]]])
+    res_out = np.array([1.0, 1.0])
+    res_grad = np.array([[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)
 
@@ -177,7 +177,7 @@ def test_static_negative_inf_norm():
     static_negative_inf_norm
     """
     out, grad = static_base(-np.inf)
-    res_out = np.array([[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]])
-    res_grad = np.array([[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]])
+    res_out = np.array([1.0, 1.0])
+    res_grad = np.array([[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]])
     assert np.allclose(out, res_out)
     assert np.allclose(grad, res_grad)

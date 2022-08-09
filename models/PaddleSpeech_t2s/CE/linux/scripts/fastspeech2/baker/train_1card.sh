@@ -11,6 +11,8 @@ python -m pip install pytest-runner -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install --ignore-installed numpy==1.20.0
 python -m pip list | grep numpy
+echo "======paddle commit======"
+python -c 'import paddle;print(paddle.version.commit)'
 
 cd examples/csmsc/tts3
 source ${PWD}/path.sh
@@ -30,6 +32,8 @@ if [ $? -eq 0 ];then
    echo -e "\033[33m data preprocess of fastspeech2_baker successfully! \033[0m"
 else
    cat preprocess.log
+   rm -rf ./dump
+   ln -s ${Data_path}/preprocess_data/fastspeech2/dump/ ./
    echo -e "\033[31m data preprocess of fastspeech2_baker failed! \033[0m"
 fi
 

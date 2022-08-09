@@ -83,7 +83,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_dmr_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_rank_dmr_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p1
@@ -96,16 +96,16 @@ TRAIN: # 训练步骤
       auc:
         latest: True
         kpi_base: 0.458974
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       loss:
         latest: True
         kpi_base: 1.6857445
-        threshold: 0.001
+        threshold: 0
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: None
       exit_code:
         latest: True
@@ -171,7 +171,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_dmr_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_rank_dmr_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu
@@ -457,7 +457,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_dmr_infer_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_rank_dmr_infer_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu
     priority: p1
@@ -470,7 +470,7 @@ INFER:
       auc:
         latest: True
         kpi_base: 0.775602
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -535,7 +535,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_dmr_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_rank_dmr_infer_linux_st_gpu2.log
   -
     tag: linux_st_cpu
     priority: p1

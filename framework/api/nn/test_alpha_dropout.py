@@ -258,8 +258,8 @@ class TestAlphaDropout(APIBase):
 
 
 obj = TestAlphaDropout(paddle.nn.AlphaDropout)
-np_random_tensor = np.array([[0.55355287, 0.20714243, 0.01162981], [0.51577556, 0.36369765, 0.26091650]])
-np_random_tensor_gpu = np.array([[0.00224779, 0.50324494, 0.13526054], [0.16112770, 0.79557019, 0.96897715]])
+np_random_tensor = np.array([[0.55355281, 0.20714243, 0.01162981], [0.51577556, 0.36369765, 0.26091650]])
+np_random_tensor_gpu = np.array([[0.35628906, 0.03034166, 0.70878232], [0.20091671, 0.02237142, 0.98958546]])
 
 
 def numpy_alpha_dropout(x, p, random_tensor, training=True):

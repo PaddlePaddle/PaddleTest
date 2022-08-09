@@ -19,28 +19,32 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "multi"
+        cmd: bash train.sh $XPU "multi" $SET_MULTI_CUDA
 
     kpis: #kpi指标
       nll:
         latest: True
-        kpi_base: 105.65
-        threshold: 0.01
+        kpi_base: 101.9640
+        threshold: 0.05
         actived: True
         evaluation: "-"
         unit_repr: "s"
       ppl:
         latest: True
-        kpi_base: 11.241
+        kpi_base: 11.3264
         threshold: 0.05
         actived: True
         evaluation: "+"
+        unit_repr: "s"
+      loss:
+        latest: True
+        kpi_base: 85.2620
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
 

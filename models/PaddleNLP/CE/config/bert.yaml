@@ -1,5 +1,5 @@
 MODEL: "bert" # 模型名
-PRIORITY: P0, Dy_con, Pre_test #P0天级别 和 动态图收敛任务
+PRIORITY: P0, Pre_test #P0天级别 和 动态图收敛任务
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -147,7 +147,7 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.58601
+        kpi_base: 0.61697
         threshold: 0.01
         actived: True
         evaluation: "+"
@@ -183,8 +183,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.6797
-        threshold: 0.01
+        kpi_base: 0.6631887
+        threshold: 0.02
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -201,8 +201,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.6994
-        threshold: 0.01
+        kpi_base: 0.676002
+        threshold: 0.02
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -305,14 +305,14 @@ FINETUNE:
     kpis: #kpi指标
       pearson:
         latest: True
-        kpi_base: 0.277244
+        kpi_base: 0.150857
         threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
       spearman:
         latest: True
-        kpi_base: 0.19406690225195655
+        kpi_base: 0.1128988
         threshold: 0.05
         actived: True
         evaluation: "+"
@@ -330,14 +330,14 @@ FINETUNE:
     kpis: #kpi指标
       pearson:
         latest: True
-        kpi_base: 0.277777
+        kpi_base: 0.185028
         threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: "s"
       spearman:
         latest: True
-        kpi_base: 0.2086750296333465
+        kpi_base: 0.106759
         threshold: 0.01
         actived: True
         evaluation: "+"
@@ -355,8 +355,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.631288647044274
-        threshold: 0.001
+        kpi_base: 0.6297551
+        threshold: 0.01
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -427,7 +427,7 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.5776
+        kpi_base: 0.47292
         threshold: 0.05
         actived: True
         evaluation: "+"
@@ -445,8 +445,8 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.55596
-        threshold: 0.01
+        kpi_base: 0.52708
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"

@@ -70,7 +70,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.985405
+        kpi_base: 0.971771
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -83,7 +83,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_esmm_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p1
@@ -95,8 +95,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.07118973
-        threshold: 0.001
+        kpi_base: 0.07118976
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -165,7 +165,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_esmm_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu
@@ -361,7 +361,7 @@ INFER:
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.528072
+        kpi_base: 0.531002
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -402,7 +402,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_esmm_infer_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_infer_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu
     priority: p1
@@ -414,8 +414,8 @@ INFER:
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.965278
-        threshold: 0.001
+        kpi_base: 1.0
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -479,7 +479,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_esmm_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_infer_linux_st_gpu2.log
   -
     tag: linux_st_cpu
     priority: p1

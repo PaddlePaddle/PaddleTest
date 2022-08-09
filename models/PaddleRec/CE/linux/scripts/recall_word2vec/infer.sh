@@ -64,6 +64,7 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
 elif [ "$1" = "linux_st_cpu" ];then
     python -u static_infer.py -m config.yaml > ${log_path}/$2.log 2>&1
     print_info $? $2
+
 # mac small_data infer
 elif [ "$1" = "mac_dy_cpu" ];then
     python -u infer.py -m config.yaml > ${log_path}/$2.log 2>&1

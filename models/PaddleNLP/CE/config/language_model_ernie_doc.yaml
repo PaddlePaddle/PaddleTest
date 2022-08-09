@@ -7,28 +7,34 @@ GIT:
 
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/language_model_ernie_doc/ #脚本的路径
   model_log_path: log/language_model_ernie_doc/
   linux_nltk_data: /workspace/task/datasets/ernie-doc/nltk_data
   win_nltk_data:  D:/ce_data/paddleNLP/ernie_doc/nltk_data
 
 EXEC:
-  exec_cases: [CLASSIFIER_TRAIN, MRC_TRAIN, MCQ_TRAIN, SEMANTIC_TRAIN, SEQUENCE_TRAIN]
+  exec_cases: [DATA_PROC, CLASSIFIER_TRAIN, MRC_TRAIN, MCQ_TRAIN, SEMANTIC_TRAIN, SEQUENCE_TRAIN]
   exec_priority: [p0]
   exec_tag: $EXEC_TAG
 
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    env: #去掉，自动调度
+      NLTK_DATA: $linux_nltk_data
+    run:
+      -
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh ernie-doc $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
 
 CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1_imdb
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-en imdb
+
     kpis: #kpi指标
       loss:
         latest: True
@@ -42,16 +48,11 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_imdb
-    env: #去掉，自动调度
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash classifier.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-en imdb
+
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.43669
+        kpi_base: 0.70852
         threshold: 0.08
         actived: True
         evaluation: "-"
@@ -71,8 +72,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.71198
-        threshold: 0.05
+        kpi_base: 0.75264
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -81,13 +82,7 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1_hyp
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-en hyp
+
 
     kpis: #kpi指标
       loss:
@@ -102,17 +97,11 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_hyp
-    env:
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash classifier.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-en hyp
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.96382
+        kpi_base: 1.20898
         threshold: 0.08
         actived: True
         evaluation: "-"
@@ -133,8 +122,8 @@ CLASSIFIER_TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.72946
-        threshold: 0.05
+        kpi_base: 0.78717
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -143,18 +132,12 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1_iflytek
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-zh iflytek
+
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 4.18687
+        kpi_base: 4.88022
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -164,17 +147,11 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_iflytek
-    env:
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash classifier.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-zh iflytek
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 3.99273
+        kpi_base: 4.80661
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -205,13 +182,7 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1_thucnews
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash classifier.sh $XPU "single" $SET_CUDA ernie-doc-base-zh thucnews
+
 
     kpis: #kpi指标
       loss:
@@ -226,12 +197,7 @@ CLASSIFIER_TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_thucnews
-    env:
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash classifier.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-zh thucnews
+
 
     kpis: #kpi指标
       loss:
@@ -268,18 +234,12 @@ MRC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu1_dureader_robust
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA ernie-doc-base-zh dureader_robust
+
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.54583
+        kpi_base: 5.824758
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -288,17 +248,11 @@ MRC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu2_dureader_robust
-    env:
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh dureader_robust
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.856103
+        kpi_base: 4.786088
         threshold: 0.2
         actived: True
         evaluation: "-"
@@ -329,18 +283,12 @@ MRC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu1_drcd
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA ernie-doc-base-zh drcd
+
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 3.772181
+        kpi_base: 6.121913
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -349,17 +297,12 @@ MRC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu2_drcd
-    env:
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-zh drcd
+
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.768226
+        kpi_base: 5.760335
         threshold: 0.08
         actived: True
         evaluation: "-"
@@ -390,18 +333,12 @@ MRC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu1_cmrc2018
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "single" $SET_CUDA  ernie-doc-base-zh cmrc2018
+
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.855367
+        kpi_base: 5.608638
         threshold: 0.1
         actived: True
         evaluation: "-"
@@ -410,17 +347,11 @@ MRC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu2_cmrc2018
-    env:
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash reading_cmp.sh $XPU "multi" $SET_MULTI_CUDA ernie-doc-base-zh cmrc2018
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 1.997002
+        kpi_base: 5.28824
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -452,13 +383,6 @@ MCQ_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash single_choice.sh $XPU "single" $SET_CUDA ernie-doc-base-zh c3
 
     kpis: #kpi指标
       loss:
@@ -472,12 +396,6 @@ MCQ_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu2
-    env:
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash single_choice.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh c3
 
     kpis: #kpi指标
       loss:
@@ -513,13 +431,6 @@ SEMANTIC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash semantic.sh $XPU "single" $SET_CUDA ernie-doc-base-zh cail2019_scm
 
     kpis: #kpi指标
       loss:
@@ -533,12 +444,6 @@ SEMANTIC_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu2
-    env:
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash semantic.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh cail2019_scm
 
     kpis: #kpi指标
       loss:
@@ -574,19 +479,12 @@ SEQUENCE_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash sequence.sh $XPU "single" $SET_CUDA ernie-doc-base-zh msra_ner
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.754475
-        threshold: 0.2
+        kpi_base: 1.902349
+        threshold: 0.3
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -594,18 +492,12 @@ SEQUENCE_TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu2
-    env:
-      NLTK_DATA: $linux_nltk_data
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash sequence.sh $XPU "multi" $SET_MULTI_CUDA  ernie-doc-base-zh msra_ner
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.38958
-        threshold: 0.05
+        kpi_base: 1.904706
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"

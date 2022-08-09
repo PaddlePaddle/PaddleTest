@@ -77,4 +77,5 @@ EXEC_TAG = [
     "win_dy_gpu1_BQ_Corpus",
     "win_dy_gpu1_LCQMC",
     "win_dy_gpu1_sst-2",
+    "win_dy_gpu1_CHIP-STS",
 ]

@@ -3,7 +3,7 @@ model_name=${PWD##*/}
 echo "$model_name 模型样例测试阶段"
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/language_model/$model_name/
+code_path=$cur_path/../../models_repo/model_zoo/$model_name/
 log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #访问RD程序

@@ -25,4 +25,4 @@ else
    cat train_2card.log
    echo -e "\033[31m training_2card of tacotron2 failed! \033[0m"
 fi
-cat train_2card.log | grep "380/380" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $7}' > ../../../../log/tacotron2_2card.log
+cat train_2card.log | grep "765/765" | grep "Rank: 0" | awk 'BEGIN{FS=","} {print $7}' > ../../../../log/tacotron2_2card.log

@@ -56,7 +56,7 @@ def test_ifft0():
     """
     default
     """
-    obj.dtype = np.complex128
+    obj.types = [np.complex128]
     x_data = np.exp(3j * np.pi * np.arange(7) / 7)
     res = np.array(
         [
@@ -77,7 +77,6 @@ def test_fft1():
     """
     n = 1
     """
-    obj.dtype = np.complex128
     x_data = np.exp(3j * np.pi * np.arange(7) / 7)
     res = np.array([1.0 + 0.0j])
     obj.run(res=res, x=x_data, n=1)
@@ -88,7 +87,6 @@ def test_fft2():
     """
     axis = 0
     """
-    obj.dtype = np.complex128
     x_data = np.exp(3j * np.pi * np.arange(7) / 7)
     res = np.array(
         [
@@ -109,7 +107,6 @@ def test_fft3():
     """
     norm = forward
     """
-    obj.dtype = np.complex128
     x_data = np.exp(3j * np.pi * np.arange(7) / 7)
     res = np.array(
         [
@@ -130,7 +127,6 @@ def test_fft4():
     """
     norm = ortho
     """
-    obj.dtype = np.complex128
     x_data = np.exp(3j * np.pi * np.arange(7) / 7)
     res = np.array(
         [

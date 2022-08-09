@@ -45,6 +45,7 @@ i_sed 's/records, cname2cid/records[:2], cname2cid/g' ppdet/data/source/voc.py
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${model_type},${mode},FAIL"
+        echo -e "${model},${mode},Failed" >>result 2>&1
         cd log_err
         if [ ! -d ${model} ];then
             mkdir ${model}
@@ -55,6 +56,7 @@ print_result(){
         err_sign=true
     else
         echo -e "${model},${model_type},${mode},SUCCESS"
+        echo -e "${model},${mode},Passed" >>result 2>&1
     fi
 }
 
@@ -132,7 +134,7 @@ PYTHON_INFER(){
 MOT_PYTHON_INFER(){
     mode=mot_python_infer
     export PYTHONPATH=`pwd`
-    python deploy/python/mot_jde_infer.py \
+    python deploy/pptracking/python/mot_jde_infer.py \
            --model_dir=./inference_model/${model} \
            --video_file=test_demo.mp4 \
            --device=CPU \
@@ -196,7 +198,11 @@ else
 fi
 done
 if [ "${err_sign}" = true ];then
+    export status='Failed'
+    export exit_code='8'
     exit 1
 else
+    export status='Passed'
+    export exit_code='0'
     exit 0
 fi

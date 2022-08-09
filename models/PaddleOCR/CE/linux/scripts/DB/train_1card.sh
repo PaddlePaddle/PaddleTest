@@ -38,4 +38,5 @@ fi
 python -m pip install -r requirements.txt
 
 python tools/train.py -c configs/det/det_mv3_db.yml -o Global.epoch_num=10 > log/det_mv3_db_1card.log 2>&1
+cat log/det_mv3_db_1card.log
 cat log/det_mv3_db_1card.log | grep "10/10" > ../log/det_mv3_db_1card.log

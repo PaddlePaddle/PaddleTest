@@ -83,7 +83,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_naml_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_rank_naml_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p1
@@ -95,8 +95,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc:
         latest: True
-        kpi_base: 0.647500
-        threshold: 0.001
+        kpi_base: 0.6475
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -165,7 +165,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_naml_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_rank_naml_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu
@@ -398,7 +398,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_naml_infer_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_rank_naml_infer_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu
     priority: p1
@@ -410,7 +410,7 @@ INFER:
       auc:
         latest: True
         kpi_base: 0.590417
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -475,7 +475,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/rank_naml_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_rank_naml_infer_linux_st_gpu2.log
   -
     tag: linux_st_cpu
     priority: p1

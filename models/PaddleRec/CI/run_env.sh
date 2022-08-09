@@ -20,13 +20,16 @@ case $1 in
   ;;
 esac
 python -c 'import sys; print(sys.version_info[:])'
+python -m pip install faiss-cpu
+python -m pip install faiss-gpu
+python -m pip list | grep faiss
 echo "python="$1
 ####################################
 # for paddle env
 set -x
 python -m pip install pip==20.2.4;
-python -m pip install faiss-gpu;
-python -m pip install faiss-cpu;
+python -m pip install faiss-gpu -i https://pypi.org/simple;
+python -m pip install faiss-cpu -i https://pypi.org/simple;
 paddle=$2
 version=${paddle%_*}
 version_num=${paddle#*_}

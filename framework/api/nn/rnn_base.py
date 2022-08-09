@@ -40,7 +40,10 @@ class RnnBase(object):
         paddle.disable_static(place)
         cell = self.func(**self.kwargs)
         r = cell(*self.data)
-        loss = paddle.mean(r)
+        if isinstance(r, tuple):
+            loss = paddle.mean(r[0])
+        else:
+            loss = paddle.mean(r)
         # loss.backward(retain_graph=True)
         loss.backward()
         return r[0], self.data[0].grad
@@ -101,6 +104,8 @@ class RnnBase(object):
         loss_inputs[0] = inputs
         cell = self.func(**self.kwargs)
         res = cell(*loss_inputs)
+        if isinstance(res, (list, tuple)):
+            res = res[0]
         loss = paddle.mean(res).numpy()
         return loss
 

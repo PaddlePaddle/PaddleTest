@@ -29,6 +29,10 @@ python -m pip install numpy==1.20.1 --ignore-installed
 python -m pip install pyparsing==2.4.7 --ignore-installed
 #pip install -e .
 pip install .
+# fix protobuf upgrade
+python -m pip uninstall protobuf -y
+python -m pip install protobuf==3.20.1
+python -m pip list | grep protobuf
 python -c "import sys; print('python version:',sys.version_info[:])";
 
 #system
@@ -530,11 +534,11 @@ done
 if [[ $5 == 'all' ]];then
    # test_cli
    cd tests/unit/cli
-   python -m pip uninstall importlib-metadata -y
-   python -m pip install importlib-metadata==2.0.0
-   export CUDA_VISIBLE_DEVICES=${gpus}
+   echo $2
+   export CUDA_VISIBLE_DEVICES=$2
    bash test_cli.sh > ../../../$log_path/test_cli.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/test_cli.log) -eq 0 ]];then
+      cat ../../../$log_path/test_cli.log
       echo -e "\033[33m test_cli successfully! \033[0m" | tee -a ../../../$log_path/result.log
    else
       cat ../../../$log_path/test_cli.log

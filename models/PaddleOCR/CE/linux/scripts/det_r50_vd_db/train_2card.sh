@@ -38,4 +38,5 @@ fi
 python -m pip install -r requirements.txt
 sed -i 's!batch_size_per_card: 16!batch_size_per_card: 4!g' configs/det/det_r50_vd_db.yml
 python -m paddle.distributed.launch tools/train.py -c configs/det/det_r50_vd_db.yml -o Global.epoch_num=2 > log/det_r50_vd_db_2card.log 2>&1
+cat log/det_r50_vd_db_2card.log
 cat log/det_r50_vd_db_2card.log | grep "2/2" > ../log/det_r50_vd_db_2card.log

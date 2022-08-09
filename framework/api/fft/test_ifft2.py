@@ -85,7 +85,7 @@ def test_fft2_1():
     """
     x: complex
     """
-    obj.dtype = np.complex128
+    obj.types = [np.complex128]
     x_data = np.exp(3j * np.pi * np.arange(12).reshape(3, 4) / 7)
     res = np.array(
         [
@@ -118,7 +118,6 @@ def test_fft2_2():
     input dim = 3
     x = np.mgrid[:2, :4]
     """
-    obj.dtypes = np.complex64
     x_data = np.mgrid[:2, :4]
     res = np.array(
         [
@@ -135,7 +134,6 @@ def test_fft2_3():
     """
     input dim = 4
     """
-    obj.dtypes = np.complex128
     x_data = np.mgrid[:2, :4, -4:-2:2j]
     res = np.array(
         [
@@ -159,7 +157,6 @@ def test_fft2_4():
     input dim = 4
     s = (1, 2)
     """
-    obj.dtype = np.complex128
     x_data = np.mgrid[4:10:3j, 2:4:2j, -4:-2:2j]
     res = np.array(
         [
@@ -177,7 +174,6 @@ def test_fft2_5():
     x: tensor-3D
     dim = (1, 2)
     """
-    obj.dtype = np.complex64
     x_data = np.exp(3j * np.pi * np.arange(16).reshape((2, 4, 2)))
     res = np.array(
         [
@@ -208,7 +204,6 @@ def test_fft2_6():
     dim = (1, 2)
     norm = 'forward'
     """
-    obj.types = [np.complex64]
     x_data = np.exp(3j * np.pi * np.arange(16).reshape((2, 4, 2)))
     res = np.array(
         [

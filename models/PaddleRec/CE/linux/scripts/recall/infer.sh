@@ -76,7 +76,7 @@ elif [ "$1" = "linux_dy_gpu2" ];then #多卡
     python -m paddle.distributed.launch ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_all_dy_gpu2" > ${log_path}/$2.log 2>&1
     print_info $? $2
     rm -rf result.txt;
-    cp log/wokerlog.0 result.txt;
+    cp ${log_path}/S_$2.log result.txt;
 
 elif [ "$1" = "linux_dy_cpu" ];then
     sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
@@ -98,8 +98,7 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
     python -m paddle.distributed.launch ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_ncf_all_st_gpu2" > ${log_path}/$2.log 2>&1
     print_info $? $2
     rm -rf result.txt;
-    cp log/wokerlog.0 result.txt;
-    mv $code_path/log $log_path/$2_dist_log
+    cp ${log_path}/S_$2.log result.txt;
 
 elif [ "$1" = "linux_st_cpu" ];then
     sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml

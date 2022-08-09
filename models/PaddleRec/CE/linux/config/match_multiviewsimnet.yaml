@@ -70,7 +70,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       Acc:
         latest: True
-        kpi_base: 0.86015624
+        kpi_base: 0.9789063
         threshold: 0.08
         actived: True
         evaluation: "+"
@@ -83,7 +83,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p1
@@ -103,7 +103,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.1000087
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -172,7 +172,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu
@@ -448,7 +448,7 @@ INFER:
     kpis: #kpi指标
       PNR:
         latest: True
-        kpi_base: 0.806
+        kpi_base: 0.9789063
         threshold: 0.05
         actived: True
         evaluation: "+"
@@ -473,8 +473,8 @@ INFER:
     kpis: #kpi指标
       query_pt_sim:
         latest: True
-        kpi_base: 0.2187728
-        threshold: 0.001
+        kpi_base: 0.21877283
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None

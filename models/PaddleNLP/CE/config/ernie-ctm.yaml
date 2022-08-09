@@ -7,6 +7,7 @@ GIT:
 
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/ernie-ctm/ #脚本的路径
   model_log_path: log/ernie-ctm/
 
@@ -22,8 +23,8 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh ernie-ctm $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
   -
     priority: p0
     tag: win_download_data
@@ -36,10 +37,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU 'single' $SET_CUDA
 
     kpis: #kpi指标
       loss:
@@ -92,10 +89,7 @@ INFER:
   -
     priority: p1
     tag: linux_dy_gpu1
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU $SET_CUDA
+
     kpis:
       exit_code:
         latest: True

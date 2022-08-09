@@ -51,7 +51,7 @@ print_result(){
 TRAIN(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
     mode=train
-    python -m paddle.distributed.launch main.py \
+    timeout 20m python -m paddle.distributed.launch main.py \
               -c ${config} \
               -o epochs=1 >log/${model}/${model}_train.log 2>&1
     print_result

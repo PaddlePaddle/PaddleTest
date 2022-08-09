@@ -23,8 +23,8 @@ fi
 cd $root_path/models_repo
 
 print_info(){
+cat ${log_path}/$2.log
 if [ $1 -ne 0 ];then
-    cat ${log_path}/$2.log
     echo "exit_code: 1.0" >> ${log_path}/$2.log
 else
     echo "exit_code: 0.0" >> ${log_path}/$2.log

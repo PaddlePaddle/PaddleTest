@@ -60,7 +60,6 @@ elif [ "$1" = "linux_dy_gpu2" ];then #多卡
     # 多卡的运行方式
     python -m paddle.distributed.launch ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_sharebottom_all_dy_gpu2" >${log_path}/$2.log 2>&1
     print_info $? $2
-    mv $code_path/log $log_path/$2_dist_log
 elif [ "$1" = "linux_dy_cpu" ];then
     python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_sharebottom_all_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
@@ -74,7 +73,6 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
     # 多卡的运行方式
     python -m paddle.distributed.launch ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_sharebottom_all_st_gpu2" >${log_path}/$2.log 2>&1
     print_info $? $2
-    mv $code_path/log $log_path/$2_dist_log
 
 elif [ "$1" = "linux_st_cpu" ];then
     python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_sharebottom_all_st_cpu" > ${log_path}/$2.log 2>&1

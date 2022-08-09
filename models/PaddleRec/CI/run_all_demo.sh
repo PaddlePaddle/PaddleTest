@@ -1,24 +1,45 @@
 #!/bin/bash
 ####################################
 export CUDA_VISIBLE_DEVICES=0
+echo ---current path:---
+pwd
+
 export all_data=/paddle/all_data/rec
+
+mkdir /workspace/logs
+export log_path=/workspace/logs
+
 #运行目录 PaddleRec/
 export repo_path=$PWD
 cd ${repo_path}
 # git repo
 #git clone https://github.com/PaddlePaddle/PaddleRec.git -b master
 python -m pip list
-export exit_flag=0
+
 print_info(){
 if [ $1 -ne 0 ];then
-    exit_flag=1
-    echo -e "\033[31m FAIL_$2 \033[0m"
-    echo -e "\033[31m FAIL_$2 \033[0m"  >>${repo_path}/result.log
+    mv ${log_path}/$2 ${log_path}/FAIL_$2.log
+    echo ---${log_path}/FAIL_$2---
+    echo "fail log as follow"
+    cat  ${log_path}/FAIL_$2.log
 else
-    echo -e "\033[32m SUCCESS_$2 \033[0m"
-    echo -e "\033[32m SUCCESS_$2 \033[0m"  >>${repo_path}/result.log
+    mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
+    echo ---${log_path}/SUCCESS_$2---
+    cat  ${log_path}/SUCCESS_$2.log | grep -i 'Memory Usage'
 fi
 }
+
+# export exit_flag=0
+# print_info(){
+# if [ $1 -ne 0 ];then
+#     exit_flag=1
+#     echo -e "\033[31m FAIL_$2 \033[0m"
+#     echo -e "\033[31m FAIL_$2 \033[0m"  >>${repo_path}/result.log
+# else
+#     echo -e "\033[32m SUCCESS_$2 \033[0m"
+#     echo -e "\033[32m SUCCESS_$2 \033[0m"  >>${repo_path}/result.log
+# fi
+# }
 
 ###########
 demo27(){
@@ -42,59 +63,59 @@ for model in $(echo ${!dic[*]});do
     echo -e "\033[31m -------------$PWD---------------\n  \033[0m"
     # dy_cpu
     echo -e "\033[31m start _dy_train_cpu ${i} ${model}  \033[0m "
-    python -u ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=False
+    python -u ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=False > ${log_path}/${i}_${model}_dy_train_cpu 2>&1
     print_info $? ${i}_${model}_dy_train_cpu
     echo -e "\033[31m start _dy_infer_cpu ${model}  \033[0m "
-    python -u ../../../tools/infer.py -m config.yaml -o runner.use_gpu=False
+    python -u ../../../tools/infer.py -m config.yaml -o runner.use_gpu=False > ${log_path}/${i}_${model}_dy_infer_cpu 2>&1
     print_info $? ${i}_${model}_dy_infer_cpu
     rm -rf output_model_*
 
     # st_cpu
     echo -e "\033[31m start _st_train_cpu ${model}  \033[0m "
-    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=False
+    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=False > ${log_path}/${i}_${model}_st_train_cpu 2>&1
     print_info $? ${i}_${model}_st_train_cpu
     echo -e "\033[31m start _st_infer_gpu1 ${model}  \033[0m "
-    python -u ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=False
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=False > ${log_path}/${i}_${model}_st_infer_cpu 2>&1
     print_info $? ${i}_${model}_st_infer_cpu
     rm -rf output_model_*
 
     # dy_gpu1
     echo -e "\033[31m start _dy_train_gpu1 ${model}  \033[0m "
-    python -u ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True
+    python -u ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${i}_${model}_dy_train_gpu1 2>&1
     print_info $? ${i}_${model}_dy_train_gpu1
     echo -e "\033[31m start _dy_infer_gpu1 ${model}  \033[0m "
-    python -u ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True
+    python -u ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${i}_${model}_dy_infer_gpu1 2>&1
     print_info $? ${i}_${model}_dy_infer_gpu1
     rm -rf output_model_*
 
     # st_gpu1
     echo -e "\033[31m start _st_train_gpu1 ${model}  \033[0m "
-    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=True
+    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${i}_${model}_st_train_gpu1 2>&1
     print_info $? ${i}_${model}_st_train_gpu1
     echo -e "\033[31m start _st_infer_gpu1 ${model}  \033[0m "
-    python -u ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${i}_${model}_st_infer_gpu1 2>&1
     print_info $? ${i}_${model}_st_infer_gpu1
     rm -rf output_model_*
 
     # dy_gpu2
     echo -e "\033[31m start _dy_train_gpu2 ${model}  \033[0m "
     # sed -i '/runner:/a\  use_fleet: True' config.yaml
-    fleetrun ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true
+    fleetrun ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true > ${log_path}/${i}_${model}_dy_train_gpu2 2>&1
     print_info $? ${i}_${model}_dy_train_gpu2
     mv log ${i}_${model}_dy_train_gpu2_dist_logs
     echo -e "\033[31m start _dy_infer_gpu2 ${model}  \033[0m "
-    fleetrun ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true
+    fleetrun ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true > ${log_path}/${i}_${model}_dy_infer_gpu2 2>&1
     print_info $? ${i}_${model}_dy_infer_gpu2
     mv log ${i}_${model}_dy_infer_gpu2_dist_logs
     rm -rf output_model_*
 
     # st_gpu2
     echo -e "\033[31m start _st_train_gpu2 ${model}  \033[0m "
-    fleetrun ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=true runner.use_fleet=true
+    fleetrun ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=true runner.use_fleet=true > ${log_path}/${i}_${model}_st_train_gpu2 2>&1
     print_info $? ${i}_${model}_st_train_gpu2
     mv log ${i}_${model}_st_train_gpu2_dist_logs
     echo -e "\033[31m start _st_infer_gpu2 ${model}  \033[0m "
-    fleetrun ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true
+    fleetrun ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True runner.use_fleet=true > ${log_path}/${i}_${model}_st_infer_gpu2 2>&1
     print_info $? ${i}_${model}_st_infer_gpu2
     mv log ${i}_${model}_st_infer_gpu2_dist_logs
     let i+=1
@@ -113,23 +134,23 @@ yaml_mode=config_bigdata
 fi
 # dygraph
 echo -e "\033[31m start dy train 16 ${model} \n \033[0m "
-python -u ../../../tools/trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True
+python -u ../../../tools/trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True > ${log_path}/${model}_dy_train 2>&1
 print_info $? ${model}_dy_train
 
 echo -e "\033[31m start dy infer 16 ${model} \n \033[0m "
-python -u infer.py -m ${yaml_mode}.yaml
+python -u infer.py -m ${yaml_mode}.yaml > ${log_path}/{model}_dy_infer 2>&1
 print_info $? ${model}_dy_infer
 
 rm -rf output_model_*
 
 # 静态图训练
 echo -e "\033[31m start st train 16 ${model} \n \033[0m "
-python -u ../../../tools/static_trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True
+python -u ../../../tools/static_trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True > ${log_path}/${model}_st_train 2>&1
 print_info $? ${model}_st_train
 
 # 静态图预测
 echo -e "\033[31m start st infer 16 ${model} \n \033[0m "
-python -u static_infer.py -m ${yaml_mode}.yaml
+python -u static_infer.py -m ${yaml_mode}.yaml > ${log_path}/${model}_st_infer 2>&1
 print_info $? ${model}_st_infer
 
 }
@@ -145,23 +166,23 @@ yaml_mode=config_bigdata
 fi
 # dygraph
 echo -e "\033[31m start dy train 20 ${model} \n \033[0m "
-python -u ../../../tools/trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True
+python -u ../../../tools/trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True > ${log_path}/${model}_dy_train 2>&1
 print_info $? ${model}_dy_train
 
 echo -e "\033[31m start dy infer 20 ${model} \n \033[0m "
-python -u infer.py -m ${yaml_mode}.yaml
+python -u infer.py -m ${yaml_mode}.yaml > ${log_path}/${model}_dy_infer 2>&1
 print_info $? ${model}_dy_infer
 
 rm -rf output_model_*
 
 # 静态图训练
 echo -e "\033[31m start st train 20 ${model} \n \033[0m "
-python -u ../../../tools/static_trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True
+python -u ../../../tools/static_trainer.py -m ${yaml_mode}.yaml -o runner.use_gpu=True > ${log_path}/${model}_st_train 2>&1
 print_info $? ${model}_st_train
 
 # 静态图预测
 echo -e "\033[31m start st infer 20 ${model} \n \033[0m "
-python -u static_infer.py -m ${yaml_mode}.yaml
+python -u static_infer.py -m ${yaml_mode}.yaml > ${log_path}/${model}_st_infer 2>&1
 print_info $? ${model}_st_infer
 
 }
@@ -174,31 +195,31 @@ bash data_prepare.sh
 
 model=demo_movie_recommand_rank
 # 动态图训练
-python -u ../../../tools/trainer.py -m rank/config.yaml
+python -u ../../../tools/trainer.py -m rank/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # 动态图预测
-python -u infer.py -m rank/config.yaml
+python -u infer.py -m rank/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # rank模型的测试结果解析
-python parse.py rank_offline rank_infer_result
+python parse.py rank_offline rank_infer_result > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # 静态图训练
-python -u ../../../tools/static_trainer.py -m rank/config.yaml
+python -u ../../../tools/static_trainer.py -m rank/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # 静态图预测
-python -u static_infer.py -m rank/config.yaml
+python -u static_infer.py -m rank/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # recall模型的测试结果解析
-python parse.py recall_offline recall_infer_result
+python parse.py recall_offline recall_infer_result > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 
 model=demo_movie_recommand_recall
 # 动态图训练
-python -u ../../../tools/trainer.py -m recall/config.yaml
+python -u ../../../tools/trainer.py -m recall/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # 动态图预测
-python -u infer.py -m recall/config.yaml
+python -u infer.py -m recall/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # rank模型的测试结果解析
-python parse.py rank_offline rank_infer_result
+python parse.py rank_offline rank_infer_result > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # 静态图训练
-python -u ../../../tools/static_trainer.py -m recall/config.yaml
+python -u ../../../tools/static_trainer.py -m recall/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # 静态图预测
-python -u static_infer.py -m recall/config.yaml
+python -u static_infer.py -m recall/config.yaml > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 # recall模型的测试结果解析
-python parse.py recall_offline recall_infer_result
+python parse.py recall_offline recall_infer_result > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 }
 
 dnn_all(){
@@ -206,59 +227,59 @@ dnn_all(){
     model=demo_dnn_all
     # dy_cpu
     echo -e "\033[31m start _dy_train_cpu dnn_all \033[0m "
-    python -u ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=False
+    python -u ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=False > ${log_path}/${model}_dy_train_cpu 2>&1
     print_info $? ${model}_dy_train_cpu
     echo -e "\033[31m start _dy_infer_cpu dnn_all \033[0m "
-    python -u ../../../tools/infer.py -m config.yaml -o runner.use_gpu=False
+    python -u ../../../tools/infer.py -m config.yaml -o runner.use_gpu=False > ${log_path}/${model}_dy_infer_cpu 2>&1
     print_info $? ${model}_dy_infer_cpu
     rm -rf output
 
     # st_cpu
     echo -e "\033[31m start _st_train_cpu dnn_all \033[0m "
-    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=False
+    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=False > ${log_path}/${model}_st_train_cpu 2>&1
     print_info $? ${model}_st_train_cpu
     echo -e "\033[31m start _st_infer_gpu1 dnn_all \033[0m "
-    python -u ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=False
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=False > ${log_path}/${model}_st_infer_cpu 2>&1
     print_info $? ${model}_st_infer_cpu
     rm -rf output
 
     # dy_gpu1
     echo -e "\033[31m start _dy_train_gpu1 dnn_all \033[0m "
-    python -u ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True
+    python -u ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${model}_dy_train_gpu1 2>&1
     print_info $? ${model}_dy_train_gpu1
     echo -e "\033[31m start _dy_infer_gpu1 dnn_all \033[0m "
-    python -u ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True
+    python -u ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${model}_dy_infer_gpu1 2>&1
     print_info $? ${model}_dy_infer_gpu1
     rm -rf output
 
     # st_gpu1
     echo -e "\033[31m start _st_train_gpu1 dnn_all \033[0m "
-    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=True
+    python -u ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${model}_st_train_gpu1 2>&1
     print_info $? ${model}_st_train_gpu1
     echo -e "\033[31m start _st_infer_gpu1 dnn_all \033[0m "
-    python -u ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${model}_st_infer_gpu1 2>&1
     print_info $? ${model}_st_infer_gpu1
     rm -rf output
 
     # dy_gpu2
     echo -e "\033[31m start _dy_train_gpu2 dnn_all \033[0m "
     sed -i '/runner:/a\  use_fleet: True' config.yaml
-    fleetrun ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True
+    fleetrun ../../../tools/trainer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${model}_dy_train_gpu2 2>&1
     print_info $? ${model}_dy_train_gpu2
     mv log ${model}_dy_train_gpu2_dist_logs
     echo -e "\033[31m start _dy_infer_gpu2 dnn_all \033[0m "
-    fleetrun ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True
+    fleetrun ../../../tools/infer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${model}_dy_infer_gpu2 2>&1
     print_info $? ${model}_dy_infer_gpu2
     mv log ${model}_dy_infer_gpu2_dist_logs
     rm -rf output
 
     # st_gpu2
     echo -e "\033[31m start _st_train_gpu2 dnn_all \033[0m "
-    fleetrun ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=True
+    fleetrun ../../../tools/static_trainer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${model}_st_train_gpu2 2>&1
     print_info $? ${model}_st_train_gpu2
     mv log ${model}_st_train_gpu2_dist_logs
     echo -e "\033[31m start _st_infer_gpu2 dnn_all \033[0m "
-    fleetrun ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True
+    fleetrun ../../../tools/static_infer.py -m config.yaml -o runner.use_gpu=True > ${log_path}/${model}_st_infer_gpu2 2>&1
     print_info $? ${model}_st_infer_gpu2
     mv log ${model}_st_infer_gpu2_dist_logs
 
@@ -376,7 +397,17 @@ run_demo
 #run_con
 
 ################################################
-$1 || True
-echo -e "\033[31m -------------result:-------------  \033[0m"
-cat ${repo_path}/result.log
-exit ${exit_flag}
+# $1 || True
+# echo -e "\033[31m -------------result:-------------  \033[0m"
+# cat ${repo_path}/result.log
+# exit ${exit_flag}
+cd ${log_path}
+FF=`ls *FAIL*|wc -l`
+if [ "${FF}" -gt "0" ];then
+    echo ---fail case: ${FF}
+    ls *FAIL*
+    exit 1
+else
+    echo ---all case pass---
+    exit 0
+fi

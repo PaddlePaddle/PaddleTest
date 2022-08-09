@@ -45,10 +45,9 @@ def test_config():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.jetson
-@pytest.mark.mkldnn_more
-def test_mkldnn_more_bz():
+def test_trt_fp32_more_bz():
     """
-    compared mkldnn mask_rcnn batch size = [1] outputs with true val
+    compared trt_fp32 mask_rcnn batch size = [1] outputs with true val
     """
     check_model_exist()
 

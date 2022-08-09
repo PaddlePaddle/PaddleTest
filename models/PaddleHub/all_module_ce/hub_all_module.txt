@@ -1,14 +1,5 @@
 ace2p
 alexnet_imagenet
-animegan_v1_hayao_60
-animegan_v2_hayao_64
-animegan_v2_hayao_99
-animegan_v2_paprika_54
-animegan_v2_paprika_74
-animegan_v2_paprika_97
-animegan_v2_paprika_98
-animegan_v2_shinkai_33
-animegan_v2_shinkai_53
 arabic_ocr_db_crnn_mobile
 attgan_celeba
 auto_punc
@@ -88,10 +79,7 @@ fastspeech2_baker
 fastspeech2_ljspeech
 fasttext_crawl_target_word-word_dim300_en
 fasttext_wiki-news_target_word-word_dim300_en
-fcn_hrnetw18_cityscapes
 FCN_HRNet_W18_Face_Seg
-fcn_hrnetw18_voc
-fcn_hrnetw48_cityscapes
 first_order_motion
 french_ocr_db_crnn_mobile
 ge2e_fastspeech2_pwgan
@@ -109,7 +97,6 @@ glove_wiki2014-gigaword_target_word-word_dim200_en
 glove_wiki2014-gigaword_target_word-word_dim300_en
 glove_wiki2014-gigaword_target_word-word_dim50_en
 googlenet_imagenet
-hardnet_cityscapes
 hrnet18_imagenet
 hrnet18_imagenet_ssld
 hrnet30_imagenet
@@ -149,8 +136,6 @@ msgnet
 multi_languages_ocr_db_crnn
 nonlocal_kinetics400
 nptag
-ocrnet_hrnetw18_cityscapes
-ocrnet_hrnetw18_voc
 Photo2Cartoon
 photo_restoration
 pixel2style2pixel

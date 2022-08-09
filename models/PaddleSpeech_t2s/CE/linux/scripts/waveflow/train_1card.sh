@@ -23,6 +23,8 @@ if [ $? -eq 0 ];then
    echo -e "\033[33m data preprocess of waveflow successfully! \033[0m"
 else
    cat preprocess.log
+   rm -rf ./preprocessed_ljspeech
+   ln -s ${Data_path}/preprocess_data/waveflow/preprocessed_ljspeech/ ./
    echo -e "\033[31m data preprocess of waveflow failed! \033[0m"
 fi
 

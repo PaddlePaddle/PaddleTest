@@ -1,49 +1,43 @@
 @echo off
-set python_version="3"
-set PATH=C:\Python38;C:\Python38\Lib;C:\Python38\Scripts;%PATH%
-::set FLAGS_eager_delete_tensor_gb=0.0;
-::set FLAGS_fast_eager_deletion_mode=1;
-::set FLAGS_fraction_of_gpu_memory_to_use=0.8;
 set MKL_NUM_THREADS=1
 set OMP_NUM_THREADS=1
-
-set http_proxy=http://172.19.57.45:3128
-set https_proxy=http://172.19.57.45:3128
-::set PATH=C:\Python37;C:\Python37\Lib;C:\Python37\Scripts;%PATH%
-python -c "import sys; print(sys.version_info[:])"
-
-set repos=D:\ce_data\yanmeng02\rec\rec_demo
-::set dataset_path=D:\guomengmeng01\all_data
-set log_path=D:\ce_data\yanmeng02\rec\rec_log
-::########################################################################
-::注意软链的时候路径的分割是\,cd 路径的时候可以是/
-::set rec_branch=develop
 set rec_branch=master
 
-echo git clone : %rec_branch%
-cd %repos%
+set root_path=%cd%
+echo %root_path%
 
+::存放 PaddleRec repo代码
+if exist ./repos rd /s /q repos
+mkdir repos && cd repos
+set repos_path=%cd%
+echo %repos_path%
+cd ..
+
+::log文件统一存储
+if exist ./logs rd /s /q logs
+mkdir logs && cd logs
+set log_path=%cd%
+echo %log_path%
+cd ..
+
+cd %repos_path%
 rd /q /s  PaddleRec
-git clone -b %rec_branch% http://github.com/PaddlePaddle/PaddleRec.git
-::git clone -b %rec_branch% https://github.com/frankwhzhang/PaddleRec.git
-set repo_path=%repos%\PaddleRec
+git clone -b %1 http://github.com/PaddlePaddle/PaddleRec.git
+set repo_path=%repos_path%/PaddleRec
+echo ---list---
+dir
 
-::########################################################################
-::选择调用的函数
-set result_time=%date:~0,4%%date:~5,2%%date:~8,2%%time:~0,2%%time:~3,2%%time:~6,2%
-mkdir %log_path%\rec_logs_%result_time%
-set log_path_rec=%log_path%\rec_logs_%result_time%
 call :rec_demo
-move %log_path_rec% %log_path_rec%_demo
 
-::set result_time=%date:~0,4%%date:~5,2%%date:~8,2%%time:~0,2%%time:~3,2%%time:~6,2%
-::mkdir %log_path%\rec_logs_%result_time%
-::set log_path_rec=%log_path%\rec_logs_%result_time%
-::call :rec_con $1
-::move %log_path_rec% %log_path_rec%_con
-goto :eof
+cd %log_path%
+for /f "delims=" %%i in (' find /C "FAIL" result.log ') do set result=%%i
+echo %result:~-1%
 
-::########################################################################
+for /f "delims=" %%i in (' echo %result:~-1% ') do set exitcode=%%i
+echo -----fail case:%exitcode%---------
+echo -----exit code:%exitcode%---------
+exit %exitcode%
+
 
 :rec_demo
 cd %repo_path%
@@ -52,103 +46,130 @@ call :match_demo
 call :multitask_demo
 call :rank_demo
 call :recall_demo
-call :recall_word2vec
+call :recall_demo_2
 goto :eof
 
-:contentunderstanding_demo
-echo start run contentunderstanding
-for  %%I in (tagspace textcnn) do (
-python -u tools/trainer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
-call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_infer.py -m models/contentunderstanding/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_st_infer
+:contentunderstanding_demo
+echo ----start run contentunderstanding---
+setlocal enabledelayedexpansion
+for %%I in (tagspace textcnn) do (
+echo ----%%I running----
+python -u tools/trainer.py -m models/contentunderstanding/%%I/config.yaml > %log_path%\%%I_demo_dy_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_train
+python -u tools/infer.py -m models/contentunderstanding/%%I/config.yaml > %log_path%\%%I_demo_dy_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_infer
+
+python -u tools/static_trainer.py -m models/contentunderstanding/%%I/config.yaml >%log_path%\%%I_demo_st_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_train
+python -u tools/static_infer.py -m models/contentunderstanding/%%I/config.yaml >%log_path%\%%I_demo_st_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_infer
 )
 goto :eof
 
 echo 2 match(3/3)
 :match_demo
-echo start run match
-for  %%I in (dssm match-pyramid multiview-simnet) do (
-python -u tools/trainer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_infer
+echo ----start run match----
+setlocal enabledelayedexpansion
+for %%I in (dssm match-pyramid multiview-simnet) do (
+echo ----%%I running----
+python -u tools/trainer.py -m models/match/%%I/config.yaml > %log_path%\%%I_demo_dy_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_train
+python -u tools/infer.py -m models/match/%%I/config.yaml > %log_path%\%%I_demo_dy_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
-call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_infer.py -m models/match/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_st_infer
+python -u tools/static_trainer.py -m models/match/%%I/config.yaml >%log_path%\%%I_demo_st_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_train
+python -u tools/static_infer.py -m models/match/%%I/config.yaml >%log_path%\%%I_demo_st_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_infer
 )
 goto :eof
 
 echo 3 multitask (4/4)
 :multitask_demo
 echo start run multitask
+setlocal enabledelayedexpansion
 for  %%I in (esmm mmoe ple share_bottom) do (
-python -u tools/trainer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_infer
+echo ----%%I running----
+python -u tools/trainer.py -m models/multitask/%%I/config.yaml > %log_path%\%%I_demo_dy_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_train
+python -u tools/infer.py -m models/multitask/%%I/config.yaml > %log_path%\%%I_demo_dy_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
-call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_trainer.py -m models/multitask/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_st_infer
+python -u tools/static_trainer.py -m models/multitask/%%I/config.yaml > %log_path%\%%I_demo_st_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_train
+python -u tools/static_trainer.py -m models/multitask/%%I/config.yaml > %log_path%\%%I_demo_st_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_infer
 )
 goto :eof
 
 echo 4 rank(8/21)
 :rank_demo
 echo start run rank
-for  %%I in (deepfm dnn fm logistic_regression wide_deep gatenet xdeepfm ffm naml bst dcn dien din deepfefm dlrm dmr difm) do (
-python -u tools/trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_infer
+setlocal enabledelayedexpansion
+for  %%I in (deepfm dnn fm logistic_regression wide_deep gatenet xdeepfm ffm) do (
+echo ----%%I running----
+python -u tools/trainer.py -m models/rank/%%I/config.yaml >%log_path%\%%I_demo_dy_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_train
+python -u tools/infer.py -m models/rank/%%I/config.yaml >%log_path%\%%I_demo_dy_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
-call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_trainer.py -m models/rank/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_st_infer
+python -u tools/static_trainer.py -m models/rank/%%I/config.yaml >%log_path%\%%I_demo_st_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_train
+python -u tools/static_infer.py -m models/rank/%%I/config.yaml >%log_path%\%%I_demo_st_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_infer
 )
 goto :eof
 
-echo 5 recall(3/21)
+echo 5 recall(1/21)
 :recall_demo
 echo start run recall
-for  %%I in (word2vec ncf mind) do (
-python -u tools/trainer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_train
-python -u tools/infer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_infer
+setlocal enabledelayedexpansion
+for  %%I in (ncf) do (
+echo ----%%I running----
+python -u tools/trainer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_dy_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_train
+python -u tools/infer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_dy_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_st_train 2>&1
-call :printInfo %errorlevel% %%I_demo_st_train
-python -u tools/static_infer.py -m models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_st_infer 2>&1
-call :printInfo %errorlevel% %%I_demo_st_infer
+python -u tools/static_trainer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_st_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_train
+python -u tools/static_infer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_st_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_infer
 )
 goto :eof
 
-echo 5 recall_word2vec
-:recall_word2vec
-echo start run word2vec
-for  %%I in (word2vec) do (
-python -u tools/trainer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_train
-python -u %repo_path%/models/recall/%%I/infer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo 2>&1
-call :printInfo %errorlevel% %%I_demo_dy_infer
+echo 5 recall(2/21)
+:recall_demo_2
+setlocal enabledelayedexpansion
+echo start run recall
+for  %%I in (word2vec mind) do (
+echo ----%%I running----
+python -u tools/trainer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_dy_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_train
+python -u models/recall/%%I/infer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_dy_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_dy_infer
 
-python -u tools/static_trainer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo_dy_train 2>&1
-call :printInfo %errorlevel% %%I_demo_st_train
-python -u %repo_path%/models/recall/%%I/static_infer.py -m %repo_path%/models/recall/%%I/config.yaml >%log_path_rec%\%%I_demo 2>&1
-call :printInfo %errorlevel% %%I_demo_st_infer
+python -u tools/static_trainer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_st_train.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_train
+python -u models/recall/%%I/static_infer.py -m models/recall/%%I/config.yaml > %log_path%\%%I_demo_st_infer.log 2>&1
+call :printInfo !errorlevel! %%I_demo_st_infer
 )
 goto :eof
+
+:printInfo
+
+if %1 == 0 (
+    move %log_path%\%2.log %log_path%\SUCCESS_%2.log
+    echo SUCCESS_%2.log
+    echo SUCCESS_%2.log >> %log_path%\result.log
+) else (
+    move %log_path%\%2.log %log_path%\FAIL_%2.log
+    echo  FAIL_%2.log
+    echo  FAIL_%2.log >> %log_path%\result.log
+)
+goto :eof
+
 ::########################################################################
 :rec_con
 echo ----------------- starting run con cpu -------------------------
@@ -254,12 +275,12 @@ call :run_con_cpu %model%
 call :run_con_gpu %model%
 python infer.py --test_dir ./data/all_test --dict_path ./data/all_dict/word_id_dict.txt ^
 --batch_size 10000 --model_dir ./increment_w2v_cpu/  ^
---start_index 0 --last_index 4 --emb_size 300 >${log_path_rec}/%model%_infer_cpu 2>&1
-call :printInfo %errorlevel% %model%_infer_cpu
+--start_index 0 --last_index 4 --emb_size 300 >${log_path}/%model%_infer_cpu.log 2>&1
+call :printInfo !errorlevel! %model%_infer_cpu
 python infer.py --test_dir ./data/all_test --dict_path ./data/all_dict/word_id_dict.txt ^
 --batch_size 10000 --model_dir ./increment_w2v_gpu/  ^
---start_index 0 --last_index 4 --emb_size 300 >${log_path_rec}/%model%_infer_gpu1 2>&1
-call :printInfo %errorlevel% %model%_infer_gpu1
+--start_index 0 --last_index 4 --emb_size 300 >${log_path}/%model%_infer_gpu1.log 2>&1
+call :printInfo !errorlevel! %model%_infer_gpu1
 
 echo 5.3 youtube_dnn
 set model=youtube_dnn
@@ -270,40 +291,43 @@ call :run_con_cpu %model%
 call :run_con_gpu %model%
 python infer.py --test_epoch 19 --inference_model_dir ./inference_youtubednn_cpu ^
 --increment_model_dir ./increment_youtubednn_cpu --watch_vec_size 64 ^
---search_vec_size 64 --other_feat_size 64 --topk 5 >${log_path_rec}/%model%_infer_cpu 2>&1
-call :printInfo %errorlevel% %model%_infer_cpu
+--search_vec_size 64 --other_feat_size 64 --topk 5 > ${log_path}/%model%_infer_cpu.log 2>&1
+call :printInfo !errorlevel! %model%_infer_cpu
 python infer.py --use_gpu 1 --test_epoch 19 ^
 --inference_model_dir ./inference_youtubednn_gpu ^
 --increment_model_dir ./increment_youtubednn_gpu ^
 --watch_vec_size 64 --search_vec_size 64 ^
---other_feat_size 64 --topk 5 >${log_path_rec}/%model%_infer_gpu1 2>&1
-call :printInfo %errorlevel% %model%_infer_gpu1
+--other_feat_size 64 --topk 5 >${log_path}/%model%_infer_gpu1.log 2>&1
+call :printInfo !errorlevel! %model%_infer_gpu1
 echo ----------------- run con cpu end -------------------------
 goto :eof
 
 ::########################################################################
-:printInfo
+
+:printInfo_old
 echo "%1, %2:" %1, %2
 if %1 == 1 (
-    move %log_path_rec%\%2 %log_path_rec%\FAIL_%2.log
-    echo  FAIL_%2.log >> %log_path_rec%\result_%result_time%.log
+    move %log_path%\%2.log %log_path%\FAIL_%2.log
+    echo  FAIL_%2.log >> %log_path%\result_%result_time%.log
+    type %log_path%\FAIL_%2.log
 ) else (
-    move %log_path_rec%\%2 %log_path_rec%\SUCCESS_%2.log
-    echo SUCCESS_%2.log >> %log_path_rec%\result_%result_time%.log
+    move %log_path%\%2.log %log_path%\SUCCESS_%2.log
+    echo SUCCESS_%2.log >> %log_path%\result_%result_time%.log
 )
 goto :eof
 
 :run_con_cpu
 copy %dataset_path%\rec_repo\rec_config\%1_cpu_config.yaml .
 echo start run cpu : python -m paddlerec.run -m %1_cpu_config.yaml
-python -m paddlerec.run -m %1_cpu_config.yaml >%log_path_rec%\%1_cpu 2>&1
-call :printInfo %errorlevel% %1_cpu
+python -m paddlerec.run -m %1_cpu_config.yaml >%log_path%\%1_cpu 2>&1
+call :printInfo !errorlevel! %1_cpu
 goto :eof
 
 :run_con_gpu
 copy %dataset_path%\rec_repo\rec_config\%1_gpu_config.yaml .
 echo start run gpu : python -m paddlerec.run -m %1_gpu_config.yaml
-python -m paddlerec.run -m %1_gpu_config.yaml >%log_path_rec%\%1_gpu1 2>&1
-call :printInfo %errorlevel% %1_gpu1
+python -m paddlerec.run -m %1_gpu_config.yaml >%log_path%\%1_gpu1 2>&1
+call :printInfo !errorlevel! %1_gpu1
 goto :eof
-::########################################################################
+
+::#######################################################################

@@ -83,7 +83,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_sharebottom_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p1
@@ -96,7 +96,7 @@ TRAIN: # 训练步骤
       auc_marital:
         latest: True
         kpi_base: 0.652778
-        threshold: 0.001
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -165,7 +165,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_sharebottom_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu
@@ -404,7 +404,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_sharebottom_infer_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_infer_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu
     priority: p1
@@ -416,8 +416,8 @@ INFER:
     kpis: #kpi指标
       auc_marital:
         latest: True
-        kpi_base: 0.740741
-        threshold: 0.001
+        kpi_base: 0.875
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -483,7 +483,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_sharebottom_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_sharebottom_infer_linux_st_gpu2.log
   -
     tag: linux_st_cpu
     priority: p1

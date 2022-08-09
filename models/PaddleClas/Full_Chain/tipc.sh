@@ -89,7 +89,7 @@ bash tipc_run.sh
 set +x
 cd $REPO
 log_file="results"
-for f in `find . -name *.log`; do
+for f in `find . -name '*.log'`; do
    cat $f >> $log_file
 done
 EXIT_CODE=0

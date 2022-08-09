@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -67,7 +67,7 @@ def test_disable_gpu():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.jetson
-@pytest.mark.gpu_more
+@pytest.mark.gpu
 def test_gpu_more_bz():
     """
     compared gpu ppyolo batch size = [1] outputs with true val

@@ -31,7 +31,7 @@ SET_MULTI_CUDA = "0,1"
 #         SET_CUDA = '0'
 #         SET_MULTI_CUDA = '0,1'
 
-# PaddleRec
+# PaddleClas
 REPO_PaddleClas = "https://github.com/PaddlePaddle/PaddleClas.git"
 BASE_BRANCH = "develop"
 cls_BRANCH = "develop"

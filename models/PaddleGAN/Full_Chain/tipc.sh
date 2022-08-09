@@ -54,6 +54,7 @@ mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export REPO=$REPO
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
 python -m pip install  --retries 50 --upgrade pip
 cd ./AutoLog
@@ -62,6 +63,7 @@ python setup.py bdist_wheel
 cd -
 python -m pip install ./AutoLog/dist/*.whl
 cd ./${REPO}
+python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro
 python -m pip install --retries 10 opencv-python
@@ -78,8 +80,7 @@ python -m pip install -v -e . #安装ppgan
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./${COMPILE_PATH##*/}
 cp ../PaddleTest/models/PaddleGAN/Full_Chain/tipc_run.sh .
-cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_unrun .
-cp ../PaddleTest/models/PaddleClas/Full_Chain/full_chain_list_clas_all .
+cp ../PaddleTest/models/PaddleGAN/Full_Chain/upload.sh .
 bash tipc_run.sh
 "
 
@@ -88,7 +89,7 @@ bash tipc_run.sh
 set +x
 cd $REPO
 log_file="results"
-for f in `find . -name *.log`; do
+for f in `find . -name '*.log'`; do
    cat $f >> $log_file
 done
 EXIT_CODE=0

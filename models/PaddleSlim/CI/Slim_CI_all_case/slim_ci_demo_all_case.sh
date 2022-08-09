@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 ##################
-#bash slim_ci_demo_all_case.sh $5 $6;z
+#bash slim_ci_demo_all_case.sh $5 $6;
+
 print_info(){
 if [ $1 -ne 0 ];then
     mv ${log_path}/$2 ${log_path}/FAIL_$2.log
@@ -22,6 +23,8 @@ cudaid1=$1;
 cudaid2=$2;
 echo "cudaid1,cudaid2", ${cudaid1}, ${cudaid2}
 export CUDA_VISIBLE_DEVICES=${cudaid1}
+#分布式log输出方式
+export PADDLE_LOG_LEVEL=debug
 
 export FLAGS_fraction_of_gpu_memory_to_use=0.98
 # data PaddleSlim/demo/data/ILSVRC2012
@@ -48,7 +51,7 @@ do
 done
 
 # 1 dist
-demo_distillation(){
+demo_distillation_01(){
 cd ${slim_dir}/demo/distillation || catchException demo_distillation
 if [ -d "output" ];then
     rm -rf output
@@ -56,6 +59,14 @@ fi
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 python distill.py --num_epochs 1 --save_inference True >${log_path}/demo_distillation_ResNet50_vd_T 2>&1
 print_info $? demo_distillation_ResNet50_vd_T
+
+}
+
+demo_distillation_02(){
+cd ${slim_dir}/demo/distillation || catchException demo_distillation
+if [ -d "output" ];then
+    rm -rf output
+fi
 
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 python distill.py --num_epochs 1 --batch_size 64 --save_inference True \
@@ -68,6 +79,7 @@ python distill.py --num_epochs 1 --batch_size 64 --save_inference True \
 --teacher_pretrained_model ../pretrain/MobileNetV2_pretrained >${log_path}/demo_distillation_MobileNetV2_MobileNetV2_x0_25_T 2>&1
 print_info $? demo_distillation_MobileNetV2_MobileNetV2_x0_25_T
 }
+
 demo_deep_mutual_learning(){
 cd ${slim_dir}/demo/deep_mutual_learning || catchException demo_deep_mutual_learning
 export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -82,8 +94,9 @@ print_info $? ${model}
 }
 
 all_distillation(){ # 大数据 5个模型
-    demo_distillation   # 3
-    demo_deep_mutual_learning   # 2
+    demo_distillation_01   # 3
+    #demo_distillation_02
+    #demo_deep_mutual_learning   # 2
 }
 # 2.1 quant/quant_aware 使用小数据集即可
 demo_quant_quant_aware(){
@@ -139,34 +152,16 @@ demo_quant_quant_post(){
 # 20210425 新增4种离线量化方法
 cd ${slim_dir}/demo/quant/quant_post || catchException demo_quant_quant_post
 export CUDA_VISIBLE_DEVICES=${cudaid1}
-# 1 导出模型
-python export_model.py --model "MobileNet" --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---data imagenet >${log_path}/st_quant_post_v1_export 2>&1
-print_info $? st_quant_post_v1_export
-# 量化前eval
-python eval.py --model_path ./inference_model/MobileNet --model_name model \
---params_name weights >${log_path}/st_quant_post_v1_eval1 2>&1
-print_info $? st_quant_post_v1_eval1
 
-# 3 离线量化
-# 4 量化后eval
-for algo in hist avg mse
+wget -P inference_model https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
+cd inference_model/
+tar -xf MobileNetV1_infer.tar
+cd ..
+
+for algo in hist avg mse emd
 do
-## 不带bc 离线量化
-echo "quant_post train no bc " ${algo}
-python quant_post.py --model_path ./inference_model/MobileNet \
---save_path ./quant_model/${algo}/MobileNet \
---model_filename model --params_filename weights --algo ${algo} >${log_path}/st_quant_post_v1_T_${algo} 2>&1
-print_info $? st_quant_post_v1_T_${algo}
-# 量化后eval
-echo "quant_post eval no bc " ${algo}
-python eval.py --model_path ./quant_model/${algo}/MobileNet --model_name __model__ \
---params_name __params__ > ${log_path}/st_quant_post_${algo}_eval2 2>&1
-print_info $? st_quant_post_${algo}_eval2
-
-# 带bc参数的 离线量化
-echo "quant_post train bc " ${algo}
-python quant_post.py --model_path ./inference_model/MobileNet \
+# 带bc参数、指定algo、且为新存储格式的离线量化
+python quant_post.py --model_path ./inference_model/MobileNetV1_infer/ \
 --save_path ./quant_model/${algo}_bc/MobileNet \
 --model_filename model --params_filename weights \
 --algo ${algo} --bias_correction True >${log_path}/st_quant_post_T_${algo}_bc 2>&1
@@ -176,10 +171,11 @@ print_info $? st_quant_post_T_${algo}_bc
 echo "quant_post eval bc " ${algo}
 python eval.py --model_path ./quant_model/${algo}_bc/MobileNet --model_name __model__ \
 --params_name __params__ > ${log_path}/st_quant_post_${algo}_bc_eval2 2>&1
-print_info $? st_quant_post_${algo}_bc_eval2
+print_info $? st_quant_post_${algo}_bc_eval
 
 done
 }
+
 
 # 2.3 quant_post_hpo # 小数据集
 demo_quant_quant_post_hpo(){
@@ -344,7 +340,7 @@ do
 done
 }
 
-ce_tests_dygraph_qat4(){
+ce_tests_dygraph_qat(){
 cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dygraph_qat4
 ln -s ${slim_dir}/demo/data/ILSVRC2012
 test_samples=1000  # if set as -1, use all test samples
@@ -354,7 +350,8 @@ epoch=1
 lr=0.0001
 num_workers=1
 output_dir=$PWD/output_models
-for model in mobilenet_v1 mobilenet_v2 resnet50 vgg16
+for model in mobilenet_v1
+#for model in mobilenet_v1 mobilenet_v2 resnet50 vgg16
 do
 
 #    if [ $1 == nopact ];then
@@ -426,7 +423,7 @@ do
 done
 }
 
-ce_tests_dygraph_ptq4(){
+ce_tests_dygraph_ptq(){
 cd ${slim_dir}/ce_tests/dygraph/quant || catchException ce_tests_dygraph_ptq4
 ln -s ${slim_dir}/demo/data/ILSVRC2012
 test_samples=1000  # if set as -1, use all test samples
@@ -436,7 +433,9 @@ epoch=1
 output_dir="./output_ptq"
 quant_batch_num=10
 quant_batch_size=10
-for model in mobilenet_v1 mobilenet_v2 resnet50 vgg16
+for model in mobilenet_v1
+#for model in mobilenet_v1 mobilenet_v2 resnet50 vgg16
+
 do
     echo "--------quantize model: ${model}-------------"
     export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -477,14 +476,16 @@ is_develop="True"
 
 all_quant(){ # 10个模型
     if [ "${is_develop}" == "True" ];then
-      ce_tests_dygraph_ptq4
+      #ce_tests_dygraph_ptq4
+      ce_tests_dygraph_ptq
     fi
     demo_quant_quant_aware    # 2个模型
     demo_quant_quant_embedding  # 1个模型
-    demo_quant_quant_post   # 4个策略
+    #demo_quant_quant_post   # 4个策略
     demo_dygraph_quant    # 2个模型
     demo_quant_pact_quant_aware  # 1个模型
-    ce_tests_dygraph_qat4  # 4个模型
+    ce_tests_dygraph_qat  # 4个模型
+    #ce_tests_dygraph_qat4
     demo_quant_quant_post_hpo
 }
 
@@ -503,22 +504,22 @@ print_info $? prune_v1_T
 
 #3.2 prune_fpgm
 # slim_prune_fpgm_v1_T
-export CUDA_VISIBLE_DEVICES=${cudaid1}
-python train.py \
-    --model="MobileNet" \
-    --pretrained_model="../pretrain/MobileNetV1_pretrained" \
-    --data="imagenet" \
-    --pruned_ratio=0.3125 \
-    --lr=0.1 \
-    --num_epochs=1 \
-    --test_period=1 \
-    --step_epochs 30 60 90\
-    --l2_decay=3e-5 \
-    --lr_strategy="piecewise_decay" \
-    --criterion="geometry_median" \
-    --model_path="./fpgm_mobilenetv1_models" \
-    --save_inference True  >${log_path}/slim_prune_fpgm_v1_T 2>&1
-print_info $? slim_prune_fpgm_v1_T
+# export CUDA_VISIBLE_DEVICES=${cudaid1}
+# python train.py \
+#     --model="MobileNet" \
+#     --pretrained_model="../pretrain/MobileNetV1_pretrained" \
+#     --data="imagenet" \
+#     --pruned_ratio=0.3125 \
+#     --lr=0.1 \
+#     --num_epochs=1 \
+#     --test_period=1 \
+#     --step_epochs 30 60 90\
+#     --l2_decay=3e-5 \
+#     --lr_strategy="piecewise_decay" \
+#     --criterion="geometry_median" \
+#     --model_path="./fpgm_mobilenetv1_models" \
+#     --save_inference True  >${log_path}/slim_prune_fpgm_v1_T 2>&1
+# print_info $? slim_prune_fpgm_v1_T
 
 #slim_prune_fpgm_v2_T
 export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -541,27 +542,29 @@ print_info $? slim_prune_fpgm_v2_T
 python eval.py --model "MobileNetV2" --data "imagenet" \
 --model_path "./output/fpgm_mobilenetv2_models/0" >${log_path}/slim_prune_fpgm_v2_eval 2>&1
 print_info $? slim_prune_fpgm_v2_eval
+
 # ResNet34 -50
-export CUDA_VISIBLE_DEVICES=${cudaid1}
-python train.py \
-    --model="ResNet34" \
-    --pretrained_model="../pretrain/ResNet34_pretrained" \
-    --data="imagenet" \
-    --pruned_ratio=0.3125 \
-    --lr=0.001 \
-    --num_epochs=2 \
-    --test_period=1 \
-    --step_epochs 30 60 \
-    --l2_decay=1e-4 \
-    --lr_strategy="piecewise_decay" \
-    --criterion="geometry_median" \
-    --model_path="./output/fpgm_resnet34_50_models" \
-    --save_inference True >${log_path}/slim_prune_fpgm_resnet34_50_T 2>&1
-print_info $? slim_prune_fpgm_resnet34_50_T
-python eval.py --model "ResNet34" --data "imagenet" \
---model_path "./output/fpgm_resnet34_50_models/0" >${log_path}/slim_prune_fpgm_resnet34_50_eval 2>&1
-print_info $? slim_prune_fpgm_resnet34_50_eval
-# ResNet34 -42 slim_prune_fpgm_resnet34_42_T
+# export CUDA_VISIBLE_DEVICES=${cudaid1}
+# python train.py \
+#     --model="ResNet34" \
+#     --pretrained_model="../pretrain/ResNet34_pretrained" \
+#     --data="imagenet" \
+#     --pruned_ratio=0.3125 \
+#     --lr=0.001 \
+#     --num_epochs=2 \
+#     --test_period=1 \
+#     --step_epochs 30 60 \
+#     --l2_decay=1e-4 \
+#     --lr_strategy="piecewise_decay" \
+#     --criterion="geometry_median" \
+#     --model_path="./output/fpgm_resnet34_50_models" \
+#     --save_inference True >${log_path}/slim_prune_fpgm_resnet34_50_T 2>&1
+# print_info $? slim_prune_fpgm_resnet34_50_T
+# python eval.py --model "ResNet34" --data "imagenet" \
+# --model_path "./output/fpgm_resnet34_50_models/0" >${log_path}/slim_prune_fpgm_resnet34_50_eval 2>&1
+# print_info $? slim_prune_fpgm_resnet34_50_eval
+# # ResNet34 -42 slim_prune_fpgm_resnet34_42_T
+
 cd ${slim_dir}/demo/prune
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 python train.py \
@@ -587,6 +590,7 @@ python train.py --model ResNet50 --pruned_ratio 0.31 --data "imagenet" \
 --num_epochs 1 --batch_size 128 >${log_path}/prune_ResNet50_T 2>&1
 print_info $? prune_ResNet50_T
 }
+
 # 3.4 dygraph_prune
 #dy_prune_ResNet34_f42
 demo_dygraph_pruning(){
@@ -651,21 +655,21 @@ train.py \
 print_info $? dy_prune_fpgm_mobilenetv1_50_T
 
 #add dy_prune_fpgm_mobilenetv2_50_T
-CUDA_VISIBLE_DEVICES=${cudaid2} python -m paddle.distributed.launch \
---log_dir="fpgm_mobilenetv2_train_log" \
-train.py \
-    --model="mobilenet_v2" \
-    --data="imagenet" \
-    --pruned_ratio=0.325 \
-    --lr=0.001 \
-    --num_epochs=1 \
-    --test_period=1 \
-    --step_epochs 30 60 80\
-    --l2_decay=1e-4 \
-    --lr_strategy="piecewise_decay" \
-    --criterion="fpgm" \
-    --model_path="./fpgm_mobilenetv2_models" > ${log_path}/dy_prune_fpgm_mobilenetv2_50_T 2>&1
-print_info $? dy_prune_fpgm_mobilenetv2_50_T
+# CUDA_VISIBLE_DEVICES=${cudaid2} python -m paddle.distributed.launch \
+# --log_dir="fpgm_mobilenetv2_train_log" \
+# train.py \
+#     --model="mobilenet_v2" \
+#     --data="imagenet" \
+#     --pruned_ratio=0.325 \
+#     --lr=0.001 \
+#     --num_epochs=1 \
+#     --test_period=1 \
+#     --step_epochs 30 60 80\
+#     --l2_decay=1e-4 \
+#     --lr_strategy="piecewise_decay" \
+#     --criterion="fpgm" \
+#     --model_path="./fpgm_mobilenetv2_models" > ${log_path}/dy_prune_fpgm_mobilenetv2_50_T 2>&1
+# print_info $? dy_prune_fpgm_mobilenetv2_50_T
 
 #add
 CUDA_VISIBLE_DEVICES=${cudaid2} python -m paddle.distributed.launch \
@@ -709,25 +713,6 @@ python evaluate.py \
        --pruned_model=st_unstructured_models \
        --data="imagenet"  >${log_path}/st_unstructured_prune_threshold_eval 2>&1
 print_info $? st_unstructured_prune_threshold_eval
-# load
-export CUDA_VISIBLE_DEVICES=${cudaid2}
-python -m paddle.distributed.launch \
---log_dir="st_unstructured_prune_threshold_load_gpu2_log" train.py \
---batch_size 256 \
---pretrained_model ../pretrain/MobileNetV1_pretrained \
---lr 0.05 \
---pruning_mode threshold \
---threshold 0.01 \
---data imagenet \
---lr_strategy piecewise_decay \
---step_epochs 1 2 3 \
---num_epochs 3 \
---test_period 1 \
---model_period 1 \
---model_path st_unstructured_models \
---pretrained_model st_unstructured_models \
---last_epoch 1 >${log_path}/st_unstructured_prune_threshold_load 2>&1
-print_info $? st_unstructured_prune_threshold_load
 
 ## sparsity: -55%, accuracy: 67%+/87%+
 export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -747,20 +732,20 @@ python train.py \
 print_info $? st_unstructured_prune_ratio_T
 
 # MNIST数据集
-python train.py \
---batch_size 256 \
---pretrained_model ../pretrain/MobileNetV1_pretrained \
---lr 0.05 \
---pruning_mode threshold \
---threshold 0.01 \
---data mnist \
---lr_strategy piecewise_decay \
---step_epochs 1 2 3 \
---num_epochs 1 \
---test_period 1 \
---model_period 1 \
---model_path st_unstructured_models_mnist >${log_path}/st_unstructured_prune_threshold_mnist_T 2>&1
-print_info $? st_unstructured_prune_threshold_mnist_T
+# python train.py \
+# --batch_size 256 \
+# --pretrained_model ../pretrain/MobileNetV1_pretrained \
+# --lr 0.05 \
+# --pruning_mode threshold \
+# --threshold 0.01 \
+# --data mnist \
+# --lr_strategy piecewise_decay \
+# --step_epochs 1 2 3 \
+# --num_epochs 1 \
+# --test_period 1 \
+# --model_period 1 \
+# --model_path st_unstructured_models_mnist >${log_path}/st_unstructured_prune_threshold_mnist_T 2>&1
+# print_info $? st_unstructured_prune_threshold_mnist_T
 # eval
 python evaluate.py \
        --pruned_model=st_unstructured_models_mnist \
@@ -784,12 +769,12 @@ python -m paddle.distributed.launch \
           --model_path "./models" \
           --step_epochs  71 88 \
           --initial_ratio 0.15 \
-          --pruning_steps 100 \
+          --pruning_steps 5 \
           --stable_epochs 0 \
           --pruning_epochs 54 \
           --tunning_epochs 54 \
           --last_epoch -1 \
-          --skip_params_type exclude_conv1x1 \
+          --prune_params_type conv1x1_only \
           --pruning_strategy gmp > ${log_path}/st_unstructured_prune_ratio_gmp 2>&1
 print_info $? st_unstructured_prune_ratio_gmp
 }
@@ -852,12 +837,12 @@ python -m paddle.distributed.launch \
 --last_epoch 1 > ${log_path}/dy_threshold_prune_T_load 2>&1
 print_info $? dy_threshold_prune_T_load
 # cifar10
-python train.py --data cifar10 --lr 0.05 \
---pruning_mode threshold \
---threshold 0.01 \
---model_period 1 \
---num_epochs 2 >${log_path}/dy_threshold_prune_cifar10_T 2>&1
-print_info $? dy_threshold_prune_cifar10_T
+# python train.py --data cifar10 --lr 0.05 \
+# --pruning_mode threshold \
+# --threshold 0.01 \
+# --model_period 1 \
+# --num_epochs 2 >${log_path}/dy_threshold_prune_cifar10_T 2>&1
+# print_info $? dy_threshold_prune_cifar10_T
 
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch \
@@ -880,7 +865,7 @@ python -m paddle.distributed.launch \
           --tunning_epochs 54 \
           --last_epoch -1 \
           --pruning_strategy gmp \
-          --skip_params_type exclude_conv1x1 ${log_path}/dy_unstructured_prune_ratio_gmp 2>&1
+          --prune_params_type conv1x1_only ${log_path}/dy_unstructured_prune_ratio_gmp 2>&1
 print_info $? dy_unstructured_prune_ratio_gmp
 }
 
@@ -903,7 +888,7 @@ print_info $? ${model}
 demo_nas4(){
 cd ${slim_dir}/demo/nas || catchException demo_nas4
 model=sa_nas_v2_T_1card
-CUDA_VISIBLE_DEVICES=${cudaid1} python sa_nas_mobilenetv2.py --search_steps 1 --port 8881 >${log_path}/${model} 2>&1
+CUDA_VISIBLE_DEVICES=${cudaid1} python sa_nas_mobilenetv2.py --search_steps 1 --retain_epoch 1 --port 8881 >${log_path}/${model} 2>&1
 print_info $? ${model}
 # 4.2 block_sa_nas_mobilenetv2
 model=block_sa_nas_v2_T_1card
@@ -976,28 +961,12 @@ all_darts(){  # 2个模型
     #slimfacenet  需要删掉
 }
 
-demo_latency(){
-cd ${slim_dir}/demo/analysis  || catchException demo_latency
-model=latency_mobilenet_v1_fp32
-python latency_predictor.py --model mobilenet_v1 --data_type fp32 >${log_path}/${model} 2>&1
-print_info $? ${model}
-model=latency_mobilenet_v1_int8
-python latency_predictor.py --model mobilenet_v1 --data_type int8 >${log_path}/${model} 2>&1
-print_info $? ${model}
-model=latency_mobilenet_v2_fp32
-python latency_predictor.py --model mobilenet_v2 --data_type fp32 >${log_path}/${model} 2>&1
-print_info $? ${model}
-model=latency_mobilenet_v2_int8
-python latency_predictor.py --model mobilenet_v2 --data_type int8 >${log_path}/${model} 2>&1
-print_info $? ${model}
-}
-
 all_latency(){
   demo_latency
 }
 
 ####################################
-export all_case_list=(all_distillation all_quant all_prune all_nas all_darts all_latency)
+export all_case_list=(all_distillation all_quant all_prune  )
 
 export all_case_time=0
 declare -A all_P0case_dic

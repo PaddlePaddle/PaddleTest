@@ -1,1 +1,3 @@
 faster_rcnn_r101_1x_coco
+cascade_rcnn_vit_large_hrfpn_cae_1x_coco
+ppyoloe_crn_l_p2_alpha_largesize_80e_visdrone

@@ -1,5 +1,5 @@
 MODEL: "distill_lstm" # 模型名
-PRIORITY: P2
+PRIORITY: P3
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -9,6 +9,7 @@ ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/distill_lstm/ #脚本的路径
   model_log_path: log/distill_lstm/
 
@@ -24,19 +25,16 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/scripts
-        cmd: bash compile_package.sh
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh distilbert $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
 
   -
     priority: p0
     tag: mac_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh distilbert $XPU mac $SET_CUDA $SET_MULTI_CUDA CE
 
   -
     priority: p0
@@ -50,13 +48,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1_chnsenticorp
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU single chnsenticorp
 
     kpis: #kpi指标
       acc:
@@ -71,13 +62,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_chnsenticorp
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU multi chnsenticorp
 
     kpis: #kpi指标
       acc:
@@ -92,13 +76,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1_sst-2
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU single sst-2 '/root/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
 
     kpis: #kpi指标
       acc:
@@ -113,13 +90,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_sst-2
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU multi sst-2 '/root/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
 
     kpis: #kpi指标
       acc:
@@ -145,7 +115,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.295562
+        kpi_base: 0.34954
         threshold: 0.08
         actived: True
         evaluation: "-"
@@ -155,13 +125,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1_qqp
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU single qqp '/root/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
 
     kpis: #kpi指标
       acc:
@@ -176,13 +139,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu2_qqp
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU multi qqp '/root/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
 
     kpis: #kpi指标
       acc:
@@ -197,10 +153,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: mac_dy_cpu_chnsenticorp # mac的case
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU mac chnsenticorp
 
     kpis: #kpi指标
       exit_code:
@@ -216,10 +168,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: mac_dy_cpu_sst-2 # mac的case
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU mac sst-2 '/Users/paddle/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
 
     kpis: #kpi指标
       exit_code:
@@ -235,10 +183,6 @@ TRAIN: # 训练步骤
   -
     priority: p0
     tag: mac_dy_cpu_qqp # mac的case
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU mac qqp '/Users/paddle/.paddlenlp/models/bert-base-uncased/bert-base-uncased-vocab.txt'
 
     kpis: #kpi指标
       exit_code:
@@ -297,13 +241,7 @@ DISTILL:
   -
     priority: p1
     tag: linux_dy_gpu1_sst-2
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU single sst-2
 
     kpis: #kpi指标
       exit_code:
@@ -318,13 +256,6 @@ DISTILL:
   -
     priority: p1
     tag: linux_dy_gpu2_sst-2
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash distill.sh $XPU multi sst-2
 
     kpis: #kpi指标
       exit_code:

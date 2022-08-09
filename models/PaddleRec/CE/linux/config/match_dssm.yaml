@@ -16,6 +16,7 @@ EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p0]
   exec_tag: $EXEC_TAG
+
 #测试套
 DATA_PROC:
   -
@@ -41,8 +42,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3920
-        threshold: 0.02
+        kpi_base: 0.38071522
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -82,7 +83,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_dssm_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p0
@@ -95,7 +96,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.6477209
-        threshold: 0.0
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -164,7 +165,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_dssm_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu
@@ -422,8 +423,8 @@ INFER:
     kpis: #kpi指标
       pnr:
         latest: True
-        kpi_base: 0.9300
-        threshold: 0.02
+        kpi_base: 14.14537902
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -474,8 +475,8 @@ INFER:
     kpis: #kpi指标
       query_doc_sim:
         latest: True
-        kpi_base: 0.78475714
-        threshold: 0.001
+        kpi_base: 0.7847572
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None

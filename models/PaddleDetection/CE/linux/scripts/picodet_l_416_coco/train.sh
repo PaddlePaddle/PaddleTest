@@ -29,7 +29,7 @@ fi
 train_model_multi(){
     python -m paddle.distributed.launch \
     tools/train.py \
-           -c configs/picodet/picodet_l_416_coco.yml \
+           -c configs/picodet/legacy_model/picodet_l_416_coco.yml \
            --enable_ce True \
            -o TrainReader.shuffle=false epoch=1 worker_num=0 \
            LearningRate.base_lr=0.1 TrainReader.batch_size=24 >../log/${model}/${model}_train_multi.log 2>&1
@@ -37,7 +37,7 @@ train_model_multi(){
 }
 train_model_single(){
     python tools/train.py \
-           -c configs/picodet/picodet_l_416_coco.yml \
+           -c configs/picodet/legacy_model/picodet_l_416_coco.yml \
            --enable_ce True \
            -o TrainReader.shuffle=false epoch=1 worker_num=0 \
            LearningRate.base_lr=0.05 TrainReader.batch_size=24  >../log/${model}/${model}_train_single.log 2>&1

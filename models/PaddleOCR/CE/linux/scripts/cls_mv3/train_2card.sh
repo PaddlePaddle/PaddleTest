@@ -16,4 +16,5 @@ fi
 python -m pip install -r requirements.txt
 
 python -m paddle.distributed.launch tools/train.py -c configs/cls/cls_mv3.yml -o Global.epoch_num=10 > log/cls_mv3_2card.log 2>&1
+cat log/cls_mv3_2card.log
 cat log/cls_mv3_2card.log | grep "10/10" > ../log/cls_mv3_2card.log

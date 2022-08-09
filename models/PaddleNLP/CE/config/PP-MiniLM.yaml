@@ -122,7 +122,7 @@ OFA: # 训练步骤
     output: $ROOT_PATH/$model_log_path/ofa_TNEWS_1e-4_32_$XPU.log
 
   -
-    priority: p0
+    priority: p1
     tag: win_dy_gpu1_tnews
     run:
       -
@@ -164,7 +164,7 @@ QUANTIZATION:
     output: $ROOT_PATH/$model_log_path/quantization_TNEWS_1e-4_32_$XPU.log
 
   -
-    priority: p0
+    priority: p1
     tag: win_dy_gpu1_tnews
     run:
       -
@@ -199,7 +199,7 @@ INFER:
     output: $ROOT_PATH/$model_log_path/infer_TNEWS_1e-4_32_$XPU.log
 
   -
-    priority: p0
+    priority: p1
     tag: win_dy_gpu1_tnews
     run:
       -
