@@ -78,7 +78,7 @@ echo ${model_name}
 #     print(cfg['Arch']['name']); \
 #     "`
 export params_dir=(`cat ${yaml_line} | grep name | awk -F ":" '{print $2}'`)
-export params_dir=${params_dir//\"/ }
+export params_dir=(${params_dir//\"/ })
 echo ${params_dir}
 
 #对32G的模型进行bs减半的操作，注意向上取整 #暂时适配了linux，未考虑MAC

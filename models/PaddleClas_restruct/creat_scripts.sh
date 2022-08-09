@@ -36,7 +36,7 @@ base_model_latest_name=ResNet50
 base_priority=P0
 # priority_all='P0' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
 # priority_all='P0 P1' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
-branch='develop release'  # develop release  #顺序不能反
+branch='develop release'  # develop release  #顺序不能反 更改分支值，所以下面循环注意是两遍
 # read -p "Press enter to continue"  #卡一下
 
 echo base_model
