@@ -12,7 +12,6 @@ import platform
 from datetime import datetime
 import json
 import paddle
-import torch
 import pymysql
 
 
@@ -111,6 +110,8 @@ class DB(object):
                 "cudnn": paddle.version.cudnn(),
             }
         elif framework == "torch":
+            import torch
+
             version = torch.__version__
             snapshot = {"os": platform.platform(), "card": card}
 
