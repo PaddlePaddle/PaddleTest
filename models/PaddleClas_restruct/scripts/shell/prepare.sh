@@ -20,6 +20,10 @@ else
     echo "######  system linux"
 fi
 
+#安装依赖包，需要代理
+yum install bc -y
+apt-get install bc -y
+
 #取消代理用镜像安装包
 unset http_proxy
 unset https_proxy
@@ -118,8 +122,6 @@ echo ${params_dir}
 #     done
 # fi
 
-yum install bc -y
-apt-get install bc -y
 function ceil(){
 floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整 局部变量$1不影响
 add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
