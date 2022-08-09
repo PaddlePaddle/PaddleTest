@@ -73,6 +73,24 @@ TRAIN: # 训练步骤
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_1card.log
   -
+    tag: train_linux_gpu1_static
+    priority: function
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/train.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_CUDA static
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/train/ImageNet-ResNet-ResNet50_1card.log
+  -
     tag: train_linux_gpu2
     priority: precision
     env: #去掉，自动调度
