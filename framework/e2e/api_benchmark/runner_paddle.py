@@ -14,10 +14,11 @@ import sys
 sys.path.append("..")
 from utils.yaml_loader import YamlLoader
 from utils.logger import logger
-from utils import delete
 from benchtrans import BenchTrans
 from jelly_v2 import Jelly_v2
 from db import DB
+from tools import delete
+
 
 SKIP_DICT = {"Windows": ["fft"], "Darwin": ["fft"], "Linux": []}
 
@@ -33,7 +34,7 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
         for case_name in cases_name:
             # Skip cases
             if case_name in SKIP_DICT[platform.system()]:
-                logger.get_log().warn("skip case -->{}<--".format(case_name))
+                logger.get_log().warning("skip case -->{}<--".format(case_name))
                 continue
             case_info = yaml_loader.get_case_info(case_name)
             try:
@@ -96,21 +97,21 @@ if __name__ == "__main__":
     if args.mode == "schedule":
         # 判断log文件是否干净
         delete("./log")
-        # db = DB()
+        db = DB()
         try:
-            # db.init_mission(
-            #     framework=args.framework,
-            #     mode=args.mode,
-            #     place=args.place,
-            #     cuda=args.cuda,
-            #     cudnn=args.cudnn,
-            #     card=args.card,
-            # )
+            db.init_mission(
+                framework=args.framework,
+                mode=args.mode,
+                place=args.place,
+                cuda=args.cuda,
+                cudnn=args.cudnn,
+                card=args.card,
+            )
             schedule(yaml_path=args.yaml, framework=args.framework, place=args.place, card=args.card)
-            # db.save()
+            db.save()
         except Exception as e:
             logger.get_log().error(e)
-            # db.error()
+            db.error()
     elif args.mode == "testing":
         testing(args.yaml, args.case, framework=args.framework, place=args.place, card=args.card)
     elif args.mode == "rerun":

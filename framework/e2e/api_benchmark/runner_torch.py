@@ -13,10 +13,10 @@ import platform
 sys.path.append("..")
 from utils.yaml_loader import YamlLoader
 from utils.logger import logger
-from utils import delete
 from benchtrans import BenchTrans
 from jelly_v2_torch import Jelly_v2_torch
 from db import DB
+from tools import delete
 
 
 SKIP_DICT = {"Windows": [], "Darwin": [], "Linux": []}
@@ -33,7 +33,7 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
         for case_name in cases_name:
             # Skip cases
             if case_name in SKIP_DICT[platform.system()]:
-                logger.get_log().warn("skip case -->{}<--".format(case_name))
+                logger.get_log().warning("skip case -->{}<--".format(case_name))
                 continue
             case_info = yaml_loader.get_case_info(case_name)
             try:
