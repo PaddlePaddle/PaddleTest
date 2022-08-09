@@ -50,7 +50,7 @@ class BuildData(object):
                 elif v["generate_way"] == "load":
                     self.logger.get_log().error("暂未开发加载路径下数据！！！~~~")
 
-            elif isinstance(v, list):
+            elif isinstance(v, list) or isinstance(v, tuple):
                 paddle_data_dict[k] = []
                 for i in v:
                     if i["generate_way"] == "random":
@@ -80,6 +80,8 @@ class BuildData(object):
                             paddle_data_dict[k].append(value)
                     elif i["generate_way"] == "load":
                         self.logger.get_log().error("暂未开发加载路径下数据！！！~~~")
+                if isinstance(v, tuple):
+                    paddle_data_dict[k] = tuple(paddle_data_dict[k])
 
         paddle_data = eval(self.data_module)(paddle_data_dict)
         return paddle_data
@@ -93,7 +95,7 @@ class BuildData(object):
                     return model_dtype
                 else:
                     model_dtype = "float32"
-            elif isinstance(v, list):
+            elif isinstance(v, list) or isinstance(v, tuple):
                 for i in v:
                     if i["dtype"] == "float64":
                         model_dtype = "float64"

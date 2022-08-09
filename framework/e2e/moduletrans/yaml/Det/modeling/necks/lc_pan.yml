@@ -1,0 +1,127 @@
+#lc_pan_LCPAN_0:
+#  desc: "Det ppdet.modeling.necks.lc_pan.LCPAN模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.necks.lc_pan.LCPAN"
+#    params:
+#      in_channels: [16, 32, 64]
+#      out_channels: 64
+#      kernel_size: 5
+#      num_features: 3
+#      use_depthwise: True
+#      act: 'hard_swish'
+#      spatial_scales: [0.125, 0.0625, 0.03125]
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      inputs:
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 16, 32, 32]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 32, 16, 16]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 64, 8, 8]
+#          range: [ -1, 1]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit[0]']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.0000001
+#  Train:
+#    step: 3
+#  test:
+#    dygraph_to_static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+
+lc_pan_LCPAN_1:
+  desc: "Det ppdet.modeling.necks.lc_pan.LCPAN模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.lc_pan.LCPAN"
+    params:
+      in_channels: [16, 32, 64]
+      out_channels: 64
+      kernel_size: 5
+      num_features: 3
+      use_depthwise: True
+      act: 'hard_swish'
+      spatial_scales: [0.125, 0.0625, 0.03125]
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      inputs:
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 16, 32, 32]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 32, 16, 16]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 64, 8, 8]
+          range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit[2]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.000001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
