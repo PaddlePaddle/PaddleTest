@@ -17,7 +17,7 @@ do
         export yaml_tmp="${yaml_tmp}.yaml"
         echo ${yaml_tmp} >> models_list_cls_test_ADD
     elif [[ ${priority_tmp} =~ "ImageNet" ]];then
-        cat models_list_cls_test_ALL |grep ImageNet > models_list_cls_test_ImageNet
+        cat models_list_cls_test_all |grep ImageNet > models_list_cls_test_ImageNet
     else #针对 P0 1 2 3 4
         source creat_scripts.sh ${priority_tmp}
     fi

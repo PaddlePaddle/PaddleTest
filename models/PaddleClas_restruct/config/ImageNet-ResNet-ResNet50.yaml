@@ -1,5 +1,5 @@
 MODEL: "ImageNet-ResNet-ResNet50" # 模型名
-PRIORITY: P0,ImageNet-ResNet-ResNet50,ALL,ImageNet,ADD
+PRIORITY: P0,ImageNet-ResNet-ResNet50,all,ImageNet,ADD
 GIT:
   addr: $REPO_PaddleClas
   path: $ROOT_PATH/PaddleClas
