@@ -21,6 +21,8 @@ fi
 
 case ${train_type} in #动态图/静态图/收敛性
 dynamic|static)
+    echo "######  params_dir"
+    echo ${params_dir}
     common_par="-o Global.epochs=2 \
     -o Global.save_interval=2 \
     -o Global.eval_interval=2 \
@@ -50,13 +52,11 @@ dynamic|static)
         python ${multi_flag} tools/train.py -c ${yaml_line}  \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     fi
-    echo "######  params_dir"
-    echo ${params_dir}
-    # cat ${log_path}/train/${model_name}_${card}.log | grep "Memory Usage (MB)" #查看显存
-
-    if ([[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
-        || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
-        ;then
+    # if ([[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
+    #     || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
+    #     ;then
+    if [[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
+        || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]];then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_${card}.log) -eq 0 ]];then
         echo -e "\033[33m training in ${card} of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
         echo "training_exit_code: 0.0" >> ${log_path}/train/${model_name}_${card}.log
@@ -65,18 +65,19 @@ dynamic|static)
         echo -e "\033[31m training in ${card} of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
         echo "training_exit_code: 1.0" >> ${log_path}/train/${model_name}_${card}.log
     fi
+    # cat ${log_path}/train/${model_name}_${card}.log | grep "Memory Usage (MB)" #查看显存
 ;;
 convergence)
+    echo "######  params_dir"
+    echo ${params_dir}
     python ${multi_flag} ${train_mold} -c ${yaml_line}  \
         -o Global.output_dir=${output_dir}/${model_name} \
         > ${log_path}/train/${model_name}_convergence.log 2>&1
-    echo "######  params_dir"
-    echo ${params_dir}
-    # cat ${log_path}/train/${model_name}_convergence.log | grep "Memory Usage (MB)" #查看显存
-
-    if ([[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
-        || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
-        ;then
+    # if ([[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
+    #     || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
+    #     ;then
+    if [[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
+        || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]];then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_convergence.log) -eq 0 ]];then
         echo -e "\033[33m training in convergence of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 0.0" >> ${log_path}/train/${model_name}_convergence.log
@@ -85,5 +86,6 @@ convergence)
         echo -e "\033[31m training in convergence of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 1.0" >> ${log_path}/train/${model_name}_convergence.log
     fi
+    # cat ${log_path}/train/${model_name}_convergence.log | grep "Memory Usage (MB)" #查看显存
 ;;
 esac

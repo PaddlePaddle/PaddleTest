@@ -1,0 +1,30 @@
+
+cd ${Project_path} #确定下执行路径
+
+# 增加一下判断，别直接cd到空
+if [[ -d dataset ]];then
+    rm -rf dataset
+fi
+
+infer_file=(`echo *_infer`)
+if [[ ${infer_file} == "*_infer" ]];then
+    echo " do not have infer_file"
+else
+    rm -rf *_infer*
+fi
+
+infer_tar=(`echo *_infer.tar`)
+if [[ ${infer_tar} == "*_infer.tar" ]];then
+    echo " do not have infer_tar"
+else
+    rm -rf *_infer.tar
+fi
+
+pretrained_pdparams=(`echo _pretrained.pdparams`)
+if [[ ${pretrained_pdparams} == "_pretrained.pdparams" ]];then
+    echo " do not have pretrained_pdparams"
+else
+    rm -rf *_pretrained*
+fi
+
+#回收数据，避免产生过多缓存
