@@ -10,6 +10,7 @@ import argparse
 import platform
 import sys
 
+import paddle
 
 sys.path.append("..")
 from utils.yaml_loader import YamlLoader
@@ -45,6 +46,8 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
                     jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
                     jelly.run_schedule()
             except Exception as e:
+                paddle.enable_static()
+                paddle.disable_static()
                 logger.get_log().warn(e)
     else:
         case_info = yaml_loader.get_case_info(case_name)
