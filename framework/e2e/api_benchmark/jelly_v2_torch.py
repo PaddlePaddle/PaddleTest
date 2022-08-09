@@ -13,18 +13,18 @@ import timeit
 import os
 import json
 from inspect import isclass
-import paddle
+import torch
 import numpy as np
 from paddle import to_tensor
 from utils.logger import logger
 
 
-PADDLE_DTYPE = {"float32": np.float32, "float64": np.float64}
+TORCH_DTYPE = {"float32": torch.float32, "float64": torch.float64}
 # 计算精度，保留6位有效数字
 ACCURACY = "%.6g"
 
 
-class Jelly_v2(object):
+class Jelly_v2_torch(object):
     """
     compare tools
     """
@@ -43,7 +43,7 @@ class Jelly_v2(object):
         self.debug = True
         self.framework = framework
 
-        paddle.set_default_dtype(PADDLE_DTYPE[default_dtype])
+        torch.set_default_dtype(TORCH_DTYPE[default_dtype])
 
         # 循环次数
         self.loops = 50
@@ -80,8 +80,9 @@ class Jelly_v2(object):
         :return:
         """
         np.random.seed(self.seed)
-        paddle.seed(self.seed)
+        torch.manual_seed(self.seed)
         random.seed(self.seed)
+        torch.cuda.manual_seed(self.seed)
 
     def _set_place(self, card=None):
         """
@@ -89,19 +90,22 @@ class Jelly_v2(object):
         :return:
         """
         if self.places is None:
-            if paddle.is_compiled_with_cuda() is True:
-                paddle.set_device("gpu:0")
+            if torch.cuda.is_available() is True:
+                if card is None:
+                    torch.device(0)
+                else:
+                    torch.device(card)
             else:
                 self.places = "cpu"
-                paddle.set_device("cpu")
+                torch.device("cpu")
         else:
             if self.places == "cpu":
-                paddle.set_device("cpu")
+                torch.device("cpu")
             else:
                 if card is None:
-                    paddle.set_device("gpu:0")
+                    torch.device(0)
                 else:
-                    paddle.set_device("gpu:{}".format(card))
+                    torch.device(card)
 
     def _layertypes(self, func):
         """
@@ -117,22 +121,33 @@ class Jelly_v2(object):
     # def baseline(self):
     #     print(timeit.timeit('"-".join(str(n) for n in range(100))', number=10000))
 
-    def set_paddle_param(self, inputs: dict, param: dict):
+    def set_torch_param(self, inputs: dict, param: dict):
         """
-        设置paddle 输入参数
+        设置torch 输入参数
         """
         for key, value in inputs.items():
-            self.data[key] = to_tensor(value)
-            self.data[key].stop_gradient = False
+            if self.places == "cpu":
+                self.data[key] = torch.tensor(value)
+            else:
+                self.data[key] = torch.tensor(value).to("cuda")
+            self.data[key].requires_grad = True
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
-                self.param[key] = to_tensor(value)
+                if self.places == "cpu":
+                    self.param[key] = torch.tensor(value)
+                else:
+                    self.param[key] = torch.tensor(value).to("cuda")
+            elif key == "device":
+                if self.places == "cpu":
+                    self.param[key] = value
+                else:
+                    self.param[key] = torch.device("cuda")
             else:
                 self.param[key] = value
 
-    def paddle_forward(self):
+    def torch_forward(self):
         """
-        主体测试逻辑
+        torch 前向时间
         """
         if self._layertypes(self.api) == "func":
             input_param = dict(self.data, **self.param)
@@ -147,14 +162,18 @@ class Jelly_v2(object):
         else:
             raise AttributeError
 
-    def paddle_total(self):
+    def torch_total(self):
         """
-        计算paddle 总体时间
+        torch 总时间
         """
         if self._layertypes(self.api) == "func":
             input_param = dict(self.data, **self.param)
             res = self.api(**input_param)
-            grad_tensor = paddle.ones(res.shape, res.dtype)
+            # init grad tensor
+            if self.places == "gpu":
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype).to("cuda")
+            else:
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype)
 
             def func(input_param):
                 res = self.api(**input_param)
@@ -166,9 +185,14 @@ class Jelly_v2(object):
         elif self._layertypes(self.api) == "class":
             obj = self.api(**self.param)
             res = obj(*self.data.values())
-            grad_tensor = paddle.ones(res.shape, res.dtype)
+            # init grad tensor
+            if self.places == "gpu":
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype).to("cuda")
+            else:
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype)
 
             def clas(input_param):
+                """ lambda clas"""
                 res = obj(*input_param)
                 res.backward(grad_tensor)
 
@@ -206,15 +230,15 @@ class Jelly_v2(object):
         """
         测试前向时间
         """
-        if self.framework == "paddle":
-            self.paddle_forward()
+        if self.framework == "torch":
+            self.torch_forward()
 
     def _run_total(self):
         """
         测试总时间
         """
-        if self.framework == "paddle":
-            self.paddle_total()
+        if self.framework == "torch":
+            self.torch_total()
 
     def _compute(self):
         """

@@ -5,8 +5,6 @@
 """
 benchmark trans extend weaktrans
 """
-import torch
-
 from utils.weaktrans import WeakTrans, Framework
 import numpy as np
 
