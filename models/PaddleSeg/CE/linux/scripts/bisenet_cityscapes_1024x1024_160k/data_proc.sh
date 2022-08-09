@@ -9,7 +9,8 @@ root_path=$cur_path/../../
 
 
 
-
+cd $cur_path/../../PaddleSeg
+pip install -r requirements.txt
 # 准备数据
 if [ -d "$cur_path/../../PaddleSeg/data" ];then
 rm -rf $cur_path/../../PaddleSeg/data
@@ -18,8 +19,8 @@ mkdir $cur_path/../../PaddleSeg/data
 if [ -d "$cur_path/../../PaddleSeg/data/cityscapes" ];then
 rm -rf $cur_path/../../PaddleSeg/data/cityscapes
 fi
-ln -s /ssd2/ce_data/PaddleSeg/cityscape $cur_path/../../PaddleSeg/data/cityscapes
+ln -s ${data_path}/cityscape $cur_path/../../PaddleSeg/data/cityscapes
 if [ -d "$cur_path/../../PaddleSeg/data/VOCdevkit" ]; then
 rm -rf $cur_path/../../PaddleSeg/data/VOCdevkit
 fi
-ln -s /ssd2/ce_data/PaddleSeg/pascalvoc/VOCdevkit $cur_path/../../PaddleSeg/data/VOCdevkit
+ln -s ${data_path}/pascalvoc/VOCdevkit $cur_path/../../PaddleSeg/data/VOCdevkit

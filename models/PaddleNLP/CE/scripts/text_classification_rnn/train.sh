@@ -26,7 +26,7 @@ cd $code_path
 DEVICE=$1
 
 python -m paddle.distributed.launch --gpus $3 train.py \
-  --vocab_path='./senta_word_dict.txt' \
+  --vocab_path='./vocab.json' \
   --device=${DEVICE} \
   --network=bilstm \
   --lr=5e-4 \

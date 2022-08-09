@@ -65,7 +65,7 @@ def test_disable_gpu():
 @pytest.mark.gpu
 def test_gpu_bz1():
     """
-    compared mkldnn bert outputs with true val
+    compared gpu bert outputs with true val
     """
     check_model_exist()
 

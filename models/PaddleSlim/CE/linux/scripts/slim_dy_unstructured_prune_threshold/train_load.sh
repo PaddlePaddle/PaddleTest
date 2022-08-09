@@ -46,7 +46,7 @@ if [ "$1" = "linux_st_gpu1" ];then #单卡
     --model_period 1 \
     --model_path dy_threshold_models_load_gpu1 \
     --pretrained_model dy_threshold_models_gpu1/model-pruned.pdparams \
-    --resume_epoch 1 > ${log_path}/$2.log 2>&1
+    --last_epoch 1 > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu2" ];then #单卡
@@ -64,7 +64,7 @@ elif [ "$1" = "linux_st_gpu2" ];then #单卡
     --model_period 1 \
     --model_path dy_threshold_models_load_gpu1 \
     --pretrained_model dy_threshold_models_gpu2/model-pruned.pdparams \
-    --resume_epoch 1 > ${log_path}/$2.log 2>&1
+    --last_epoch 1 > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_cpu" ];then #单卡
@@ -81,7 +81,7 @@ elif [ "$1" = "linux_st_cpu" ];then #单卡
     --model_period 1 \
     --model_path dy_threshold_models_load_cpu \
     --pretrained_model dy_threshold_models_cpu/model-pruned.pdparams \
-    --resume_epoch 1 \
+    --last_epoch 1 \
     --use_gpu False > ${log_path}/$2.log 2>&1
     print_info $? $2
 

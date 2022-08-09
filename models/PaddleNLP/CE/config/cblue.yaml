@@ -1,0 +1,230 @@
+MODEL: "cblue" # 模型名
+PRIORITY: P3
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/cblue/
+  model_log_path: log/cblue/
+
+EXEC:
+  exec_cases: [DATA_PROC, CLASSIFICATION_TRAIN, IDENTIFY_TRAIN, EXTRACT_TRAIN, INFER]
+  exec_priority: [p0,p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
+
+CLASSIFICATION_TRAIN: # 分类训练
+  -
+    priority: p0
+    tag: linux_dy_gpu1_CHIP-STS
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classification.sh $XPU 'single' $SET_CUDA 'CHIP-STS'
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.68303
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/classification_CHIP-STS_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2_CHIP-STS
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash classification.sh $XPU 'multi' $SET_MULTI_CUDA CHIP-STS
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.67998
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/classification_CHIP-STS_multi_$XPU.log
+  -
+    priority: p0
+    tag: win_dy_gpu1_CHIP-STS
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: classification.bat $XPU CHIP-STS $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.68303
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/classification_CHIP-STS_$XPU.log
+
+IDENTIFY_TRAIN: # 识别训练
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash identify.sh $XPU 'single' $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.78338
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/identify_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash identify.sh $XPU 'multi' $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.78166
+        threshold: 0.08
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/identify_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: identify.bat $XPU $SET_CUDA
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.78338
+        threshold: 0.05
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/identify_$XPU.log
+
+EXTRACT_TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash extract.sh $XPU 'single' $SET_CUDA
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/extract_single_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash extract.sh $XPU 'multi' $SET_MULTI_CUDA
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/extract_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: extract.bat $XPU $SET_CUDA
+
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/extract_$XPU.log
+
+
+INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash infer.sh $XPU
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log

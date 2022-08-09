@@ -19,12 +19,12 @@ mkdir -p $log_path
 print_info(){
 if [ $1 -ne 0 ];then
     echo "exit_code: 1.0" >> ${log_path}/$2.log
-    tail -100  ${log_path}/$2.log
+    cat ${log_path}/$2.log
     mv ${log_path}/$2.log ${log_path}/F_$2.log
     echo -e "\033[31m ${log_path}/F_$2 \033[0m"
 else
-#    cat ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
+    cat ${log_path}/$2.log
     mv ${log_path}/$2.log ${log_path}/S_$2.log
     echo -e "\033[32m ${log_path}/S_$2 \033[0m"
 fi
@@ -53,20 +53,21 @@ fi
 # rank模型功能运行
 sed -i "s/  epochs: 4/  epochs: 1/g" config_bigdata.yaml
 sed -i "s/  infer_end_epoch: 4/  infer_end_epoch: 1/g" config_bigdata.yaml
-
+# linux infer
 if [ "$1" = "linux_dy_gpu1" ];then #单卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     python -u ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_dnn_all_dy_gpu1" > ${log_path}/$2.log 2>&1
     print_info $? $2
+
 elif [ "$1" = "linux_dy_gpu2" ];then #多卡
     sed -i "s/  use_gpu: False/  use_gpu: True/g" config_bigdata.yaml
     # 多卡的运行方式
     python -m paddle.distributed.launch ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_dnn_all_dy_gpu2" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    mv $code_path/log $log_path/$2_dist_log
+#    mv $code_path/log $log_path/$2_dist_log
+
 elif [ "$1" = "linux_dy_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u ../../../tools/infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_dnn_all_dy_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_dnn_all_dy_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
 
 elif [ "$1" = "linux_st_gpu1" ];then #单卡
@@ -78,12 +79,19 @@ elif [ "$1" = "linux_st_gpu2" ];then #多卡
     # 多卡的运行方式
     python -m paddle.distributed.launch ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_dnn_all_st_gpu2" > ${log_path}/$2.log 2>&1
     print_info $? $2
-    mv $code_path/log $log_path/$2_dist_log
 
 elif [ "$1" = "linux_st_cpu" ];then
-    sed -i "s/  use_gpu: True/  use_gpu: False/g" config_bigdata.yaml
-    python -u ../../../tools/static_infer.py -m config_bigdata.yaml -o runner.infer_load_path="output_model_dnn_all_st_cpu" > ${log_path}/$2.log 2>&1
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_dnn_all_st_cpu" > ${log_path}/$2.log 2>&1
     print_info $? $2
+# mac small_data infer
+elif [ "$1" = "mac_dy_cpu" ];then
+    python -u ../../../tools/infer.py -m config.yaml -o runner.infer_load_path="output_model_dnn_all_mac_dy_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
+elif [ "$1" = "mac_st_cpu" ];then
+    python -u ../../../tools/static_infer.py -m config.yaml -o runner.infer_load_path="output_model_dnn_all_mac_st_cpu" > ${log_path}/$2.log 2>&1
+    print_info $? $2
+
 else
     echo "$model_name infer.sh  parameter error "
 fi

@@ -3,7 +3,7 @@ PRIORITY: P1
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
-  branch: $multitask_esmm_BRANCH
+  branch: $rec_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
@@ -15,7 +15,7 @@ VARIABLES:
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p1]
-  exec_tag: $EXEC_TAG_LINUX_GPU2
+  exec_tag: $EXEC_TAG
 
 #测试套
 DATA_PROC:
@@ -42,7 +42,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.985405
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -70,7 +70,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.985405
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -83,7 +83,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_esmm_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p1
@@ -93,10 +93,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_cpu multitask_esmm_linux_dy_cpu
 
     kpis: #kpi指标
-      auc_ctr:
+      loss:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.07118973
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -124,7 +124,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.985405
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -152,7 +152,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.985405
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -165,7 +165,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_esmm_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu
@@ -176,10 +176,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu multitask_esmm_linux_st_cpu
 
     kpis: #kpi指标
-      auc_ctr:
+      cost:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.0719007
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -192,7 +192,162 @@ TRAIN: # 训练步骤
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_multitask_esmm_linux_st_cpu.log
+# mac train(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_dy_cpu multitask_esmm_mac_dy_cpu
 
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.16342288
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_st_cpu multitask_esmm_mac_st_cpu
+
+    kpis: #kpi指标
+      cost:
+        latest: True
+        kpi_base: 0.16401488
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_mac_st_cpu.log
+# win train(small data)
+  -
+    tag: win_dy_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_dy_gpu multitask_esmm_win_dy_gpu esmm
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.07118973
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_esmm_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_dy_cpu multitask_esmm_win_dy_cpu esmm
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.07118973
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_esmm_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_st_gpu multitask_esmm_win_st_gpu esmm
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.07118973
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_esmm_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_st_cpu multitask_esmm_win_st_cpu esmm
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.07118973
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_esmm_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -206,7 +361,7 @@ INFER:
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.528072
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -234,7 +389,7 @@ INFER:
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.528072
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -247,7 +402,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_esmm_infer_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_infer_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu
     priority: p1
@@ -259,8 +414,8 @@ INFER:
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.965278
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -284,7 +439,7 @@ INFER:
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.528072
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -311,7 +466,7 @@ INFER:
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
+        kpi_base: 0.528072
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -324,7 +479,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/multitask_esmm_infer_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_infer_linux_st_gpu2.log
   -
     tag: linux_st_cpu
     priority: p1
@@ -336,8 +491,8 @@ INFER:
     kpis: #kpi指标
       auc_ctr:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 1.0
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -350,3 +505,159 @@ INFER:
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_multitask_esmm_infer_linux_st_cpu.log
+# mac infer(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_dy_cpu multitask_esmm_infer_mac_dy_cpu
+
+    kpis: #kpi指标
+      auc_ctr:
+        latest: True
+        kpi_base: 0.996528
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_infer_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_st_cpu multitask_esmm_infer_mac_st_cpu
+
+    kpis: #kpi指标
+      auc_ctr:
+        latest: True
+        kpi_base: 1.0
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_esmm_infer_mac_st_cpu.log
+# win infer(small data)
+  -
+    tag: win_dy_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_dy_gpu multitask_esmm_infer_win_dy_gpu esmm
+
+    kpis: #kpi指标
+      auc_ctr:
+        latest: True
+        kpi_base: 0.965278
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_esmm_infer_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_dy_cpu multitask_esmm_infer_win_dy_cpu esmm
+
+    kpis: #kpi指标
+      auc_ctr:
+        latest: True
+        kpi_base: 0.965278
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_esmm_infer_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_st_gpu multitask_esmm_infer_win_st_gpu esmm
+
+    kpis: #kpi指标
+      auc_ctr:
+        latest: True
+        kpi_base: 0.965278
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_esmm_infer_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_st_cpu multitask_esmm_infer_win_st_cpu esmm
+
+    kpis: #kpi指标
+      auc_ctr:
+        latest: True
+        kpi_base: 0.965278
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_esmm_infer_win_st_cpu.log

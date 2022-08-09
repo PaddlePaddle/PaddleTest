@@ -2,6 +2,7 @@
 @setlocal enabledelayedexpansion
 set CUDA_VISIBLE_DEVICES=''
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
+rem set sed="C:\Program Files (x86)\Git\usr\bin\sed.exe"
 %sed% -i '/samples in file/i\        records = records[:30]' ppdet/data/source/coco.py
 %sed% -i 's#~/.cache/paddle/weights#D:/ce_data/paddledetection/det_pretrained#g' ppdet/utils/download.py
 %sed% -i '/for step_id, data in enumerate(self.loader):/i\            max_step_id =20' ppdet/engine/trainer.py
@@ -24,6 +25,7 @@ md log_err
 )
 
 echo test_start !
+set err_sign=0
 set absolute_path=%cd%
 for  /f %%i in (det_win_cpu_list) do (
 echo %%i
@@ -87,14 +89,22 @@ if !errorlevel! EQU 0 (
 )
 )
 
+if !err_sign! EQU 1 (
+exit /b 1
+)
+
+
 :train
 python tools/train.py -c !config_path! -o TrainReader.batch_size=1 epoch=2 use_gpu=false >log/!model!/!model!_train.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_train.log log_err\!model!\
 echo !model!, train, FAIL
+echo !model!,train,Failed >>result 2>&1
+set err_sign=1
 ) else (
 echo !model!,train, SUCCESS
+echo !model!,train,Passed >>result 2>&1
 )
 goto:eof
 
@@ -108,8 +118,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_eval.log log_err\!model!\
 echo !model!, eval, FAIL
+echo !model!,eval,Failed >>result 2>&1
+set err_sign=1
 ) else (
-echo !model!,eval, SUCCESS
+echo !model!, eval, SUCCESS
+echo !model!,eval,Passed >>result 2>&1
 )
 )
 goto:eof
@@ -121,25 +134,30 @@ python tools/!infer_method!.py -c !config_path! --video_file=./test_demo.mp4 --o
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
-echo !model!, infer, FAIL
+echo !model!, predict, FAIL
+echo !model!,predict,Failed >>result 2>&1
+set err_sign=1
 ) else (
-echo !model!,infer, SUCCESS
+echo !model!, predict, SUCCESS
+echo !model!,predict,Passed >>result 2>&1
 )
 ) else (
 python tools/!infer_method!.py -c !config_path! --infer_img=!infer_img! --output_dir=./infer_output/!model!/ -o weights=!url! use_gpu=false >log/!model!/!model!_infer.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_infer.log log_err\!model!\
-echo !model!, infer, FAIL
+echo !model!, predict, FAIL
+echo !model!,predict,Failed >>result 2>&1
+set err_sign=1
 ) else (
-echo !model!,infer, SUCCESS
+echo !model!,predict, SUCCESS
+echo !model!,predict,Passed >>result 2>&1
 )
 )
 goto:eof
 
 :export
 findstr /i /c:"!model!" "skip_export.txt" >tmp_export
-rem echo !model! | findstr /i "cascade" >tmp_export
 if !errorlevel! EQU 0 (
 echo !model! does not test export for some reason!
 ) else (
@@ -148,8 +166,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_export.log log_err\!model!\
 echo !model!, export_model, FAIL
+echo !model!,export,Failed >>result 2>&1
+set err_sign=1
 ) else (
 echo !model!,export_model, SUCCESS
+echo !model!,export,Passed >>result 2>&1
 )
 )
 goto:eof
@@ -162,8 +183,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+echo !model!,python_infer,Failed >>result 2>&1
+set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
+echo !model!,python_infer,Passed >>result 2>&1
 )
 ) else (
 python deploy/python/!python_infer_method!.py --model_dir=./inference_model/!model! --image_file=!infer_img! --device=CPU --output_dir=python_infer_output/!model!/ >log/!model!/!model!_python_infer.log 2>&1
@@ -171,8 +195,11 @@ if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_python_infer.log log_err\!model!\
 echo !model!, python_infer, FAIL
+echo !model!,python_infer,Failed >>result 2>&1
+set err_sign=1
 ) else (
 echo !model!,python_infer, SUCCESS
+echo !model!,python_infer,Passed >>result 2>&1
 )
 )
 goto:eof

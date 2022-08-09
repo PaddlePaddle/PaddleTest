@@ -20,13 +20,16 @@ case $1 in
   ;;
 esac
 python -c 'import sys; print(sys.version_info[:])'
+python -m pip install faiss-cpu
+python -m pip install faiss-gpu
+python -m pip list | grep faiss
 echo "python="$1
 ####################################
 # for paddle env
 set -x
 python -m pip install pip==20.2.4;
-python -m pip install faiss-gpu;
-python -m pip install faiss-cpu;
+python -m pip install faiss-gpu -i https://pypi.org/simple;
+python -m pip install faiss-cpu -i https://pypi.org/simple;
 paddle=$2
 version=${paddle%_*}
 version_num=${paddle#*_}
@@ -40,9 +43,9 @@ release)
 develop)
   unset http_proxy
   unset https_proxy
-#  python -m pip install paddlepaddle-gpu==2.1.0.dev0.post110 -f https://paddlepaddle.org.cn/whl/cu110/mkl/develop.html
-#  python -m pip install paddlepaddle-gpu==0.0.0.post102 -f https://paddlepaddle.org.cn/whl/cu102/mkl/develop.html
-  python -m pip install paddlepaddle-gpu==0.0.0.post102 -f https://www.paddlepaddle.org.cn/whl/linux/gpu/develop.html
+#  python -m pip install paddlepaddle-gpu==0.0.0.post102 -f https://www.paddlepaddle.org.cn/whl/linux/gpu/develop.html
+  wget https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxCentos_Gcc82_Cuda10.2_Trton_Py37_Compile_D_Develop/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+  python -m pip install paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
   export http_proxy=$3;
   export https_proxy=$3;
   ;;

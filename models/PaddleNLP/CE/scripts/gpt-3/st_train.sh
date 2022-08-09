@@ -21,6 +21,15 @@ if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
 
+print_info(){
+if [ $1 -ne 0 ];then
+    cat ${log_path}/$2.log
+    echo "exit_code: 1.0" >> ${log_path}/$2.log
+else
+    echo "exit_code: 0.0" >> ${log_path}/$2.log
+fi
+}
+
 #删除分布式日志重新记录
 rm -rf $code_path/log/workerlog.0
 #访问RD程序

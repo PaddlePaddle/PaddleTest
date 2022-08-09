@@ -67,10 +67,10 @@ def test_disable_gpu():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.jetson
-@pytest.mark.gpu_more
+@pytest.mark.gpu
 def test_gpu_more_bz():
     """
-    compared gpu ppyolo batch size = [1,4,8] outputs with true val
+    compared gpu ppyolo batch size = [1] outputs with true val
     """
     check_model_exist()
 

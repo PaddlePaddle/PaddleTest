@@ -1,9 +1,9 @@
 MODEL: "bert" # 模型名
-PRIORITY: P0, Dy_con, Pre_test #P0天级别 和 动态图收敛任务
+PRIORITY: P0, Pre_test #P0天级别 和 动态图收敛任务
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $BERT_BRANCH
+  branch: $BASE_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
@@ -30,9 +30,6 @@ DATA_PROC:
     priority: p0
     tag: mac_download_data
     run:
-      # -
-      #   path: $ROOT_PATH/scripts
-      #   cmd: bash compile_package.sh
       -
         path: $ROOT_PATH/$model_scripts_path
         cmd: bash data_proc.sh
@@ -145,17 +142,17 @@ FINETUNE:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh 'SST-2' $SET_CUDA single
+        cmd: bash finetune.sh 'SST2' $SET_CUDA single
 
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.58601
+        kpi_base: 0.61697
         threshold: 0.01
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/SST-2-_single_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/SST2_single_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -163,7 +160,7 @@ FINETUNE:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh 'SST-2' $SET_MULTI_CUDA multi
+        cmd: bash finetune.sh 'SST2' $SET_MULTI_CUDA multi
 
     kpis: #kpi指标
       acc:
@@ -173,7 +170,7 @@ FINETUNE:
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/SST-2-_multi_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/SST2_multi_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -186,12 +183,12 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.6797
-        threshold: 0.01
+        kpi_base: 0.6631887
+        threshold: 0.02
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/QNLI-_single_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/QNLI_single_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -204,12 +201,12 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.6994
-        threshold: 0.01
+        kpi_base: 0.676002
+        threshold: 0.02
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/QNLI-_multi_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/QNLI_multi_fine-tune.log
 
   - #可以有多步
     priority: p9
@@ -227,7 +224,7 @@ FINETUNE:
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/CoLA-_single_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/CoLA_single_fine-tune.log
 
   - #可以有多步
     priority: p9
@@ -245,7 +242,7 @@ FINETUNE:
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/CoLA-_multi_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/CoLA_multi_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -270,7 +267,7 @@ FINETUNE:
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/MRPC-_single_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/MRPC_single_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -295,7 +292,7 @@ FINETUNE:
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/MRPC-_multi_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/MRPC_multi_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -303,24 +300,24 @@ FINETUNE:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh 'STS-B' $SET_CUDA single
+        cmd: bash finetune.sh 'STSB' $SET_CUDA single
 
     kpis: #kpi指标
       pearson:
         latest: True
-        kpi_base: 0.277244
+        kpi_base: 0.150857
         threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
       spearman:
         latest: True
-        kpi_base: 0.19406690225195655
+        kpi_base: 0.1128988
         threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/STS-B-_single_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/STSB_single_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -328,24 +325,24 @@ FINETUNE:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash finetune.sh 'STS-B' $SET_MULTI_CUDA multi
+        cmd: bash finetune.sh 'STSB' $SET_MULTI_CUDA multi
 
     kpis: #kpi指标
       pearson:
         latest: True
-        kpi_base: 0.277777
-        threshold: 0.01
+        kpi_base: 0.185028
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: "s"
       spearman:
         latest: True
-        kpi_base: 0.2086750296333465
+        kpi_base: 0.106759
         threshold: 0.01
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/STS-B-_multi_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/STSB_multi_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -358,12 +355,12 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.631288647044274
-        threshold: 0.001
+        kpi_base: 0.6297551
+        threshold: 0.01
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/QQP-_single_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/QQP_single_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -381,7 +378,8 @@ FINETUNE:
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/QQP-_multi_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/QQP_multi_fine-tune.log
+
   - #可以有多步
     priority: p0
     tag: linux_gpu1_MNLI
@@ -393,12 +391,12 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.3846
-        threshold: 0.01
+        kpi_base: 0.31982
+        threshold: 0.03
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/MNLI-_single_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/MNLI_single_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -411,12 +409,12 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.39338
-        threshold: 0.01
+        kpi_base: 0.32155
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/MNLI-_multi_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/MNLI_multi_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -429,12 +427,12 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.5776
+        kpi_base: 0.47292
         threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/RTE-_single_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/RTE_single_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -447,12 +445,12 @@ FINETUNE:
     kpis: #kpi指标
       acc:
         latest: True
-        kpi_base: 0.55596
-        threshold: 0.01
+        kpi_base: 0.52708
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
-    output: $ROOT_PATH/$model_log_path/RTE-_multi_fine-tune.log
+    output: $ROOT_PATH/$model_log_path/RTE_multi_fine-tune.log
 
   - #可以有多步
     priority: p0
@@ -463,12 +461,12 @@ FINETUNE:
         cmd: finetune.bat $XPU $SET_CUDA
 
     kpis: #kpi指标
-      acc:
+      loss:
         latest: True
-        kpi_base: 0.49197
-        threshold: 0.05
+        kpi_base: 0.88869
+        threshold: 0.5
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/finetune_win_$XPU.log
 

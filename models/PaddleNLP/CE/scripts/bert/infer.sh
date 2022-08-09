@@ -3,15 +3,14 @@ model_name=${PWD##*/}
 echo "$model_name 模型样例测试阶段"
 #路径配置
 root_path=$cur_path/../../
-code_path=$cur_path/../../models_repo/examples/language_model/$model_name/
+code_path=$cur_path/../../models_repo/model_zoo/$model_name/
 log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #访问RD程序
 if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
-echo "当前CUDA配置"
-echo $CUDA_VISIBLE_DEVICES
+
 cd $code_path
 
 print_info(){
@@ -29,11 +28,10 @@ python -u ./export_model.py \
     --output_path ./infer_model/model
 
 python -u ./predict_glue.py \
-    --task_name SST-2 \
+    --task_name SST2 \
     --model_type bert \
     --model_path ./infer_model/model \
     --batch_size 32 \
     --max_seq_length 128 > $log_path/bert_predict.log 2>&1
 
 print_info $? "bert_predict"
-#cat $log_path/bert_predict.log

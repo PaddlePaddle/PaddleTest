@@ -3,7 +3,6 @@ configs/ppyolo/ppyolov2_r50vd_dcn_365e_coco.yml
 configs/solov2/solov2_r50_fpn_1x_coco.yml
 configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.yml
 configs/mask_rcnn/mask_rcnn_r50_1x_coco.yml
-configs/dota/s2anet_conv_2x_dota.yml
 configs/ssd/ssd_mobilenet_v1_300_120e_voc.yml
 configs/ttfnet/ttfnet_darknet53_1x_coco.yml
 configs/fcos/fcos_r50_fpn_1x_coco.yml

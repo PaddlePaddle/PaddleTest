@@ -3,7 +3,7 @@ PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $DGU_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:
@@ -93,7 +93,7 @@ FINETUNE: # 训练步骤，还未提测
 EVAL:
   -
     priority: p0
-    tag: linux_dy_gpu1_AFQMC
+    tag: linux_dy_gpu1_afqmc
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -104,8 +104,8 @@ EVAL:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.384716
-        threshold: 0.05
+        kpi_base: 0.461773
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -114,7 +114,7 @@ EVAL:
 
   -
     priority: p0
-    tag: win_dy_gpu1_AFQMC
+    tag: win_dy_gpu1_afqmc
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -125,8 +125,8 @@ EVAL:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.584723
-        threshold: 0.05
+        kpi_base: 0.639531
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -134,7 +134,7 @@ EVAL:
 
   -
     priority: p0
-    tag: linux_dy_gpu1_TNEWS
+    tag: linux_dy_gpu1_tnews
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -145,8 +145,8 @@ EVAL:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.686274
-        threshold: 0.05
+        kpi_base: 1.985658
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -154,7 +154,7 @@ EVAL:
 
   -
     priority: p0
-    tag: win_dy_gpu1_TNEWS
+    tag: win_dy_gpu1_tnews
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -164,8 +164,8 @@ EVAL:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.691236
-        threshold: 0.05
+        kpi_base: 2.864874
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -173,7 +173,7 @@ EVAL:
 
   -
     priority: p0
-    tag: linux_dy_gpu1_IFLYTEK
+    tag: linux_dy_gpu1_iflytek
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:
@@ -183,8 +183,8 @@ EVAL:
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.995393
-        threshold: 0.05
+        kpi_base: 4.148392
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -192,7 +192,7 @@ EVAL:
 
   -
     priority: p0
-    tag: win_dy_gpu1_IFLYTEK
+    tag: win_dy_gpu1_iflytek
     env:
       CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
     run:

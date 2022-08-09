@@ -84,3 +84,16 @@ def test_median2():
     keepdims = True
     res = np.median(x, axis=axis, keepdims=keepdims)
     obj.base(res=res, x=x, axis=axis, keepdim=keepdims)
+
+
+@pytest.mark.api_base_median_parameters
+def test_median3():
+    """
+    none
+    """
+    paddle.disable_static()
+    x = np.array([[2, 3, 1, 1], [10, 1, 15, float("nan")], [4, 8, float("nan"), 7]])
+    xp = paddle.to_tensor(x)
+    res = paddle.median(xp, 0)
+    expect = np.array([4.0, 3.0, np.nan, np.nan])
+    assert np.allclose(np.isnan(res.numpy()), np.isnan(expect))

@@ -1,6 +1,6 @@
 @echo off
 cd ../..
-md log\glue
+if not exist log\glue md log\glue
 set logpath=%cd%\log\glue
 
 cd models_repo\examples\benchmark\glue\

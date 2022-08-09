@@ -34,7 +34,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 4.123021
-        threshold: 1 # 0.9
+        threshold: 0.5 # 0.9
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/det_mv3_db_1card.log
@@ -53,7 +53,7 @@ TRAIN: # 训练步骤
       loss:
         latest: True
         kpi_base: 4.210940
-        threshold: 1 # 0.9
+        threshold: 0.5 # 0.9
         actived: True
         evaluation: "-"
     output: $ROOT_PATH/$model_log_path/det_mv3_db_2card.log

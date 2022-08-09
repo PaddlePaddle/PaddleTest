@@ -3,74 +3,57 @@ PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $TEXT_CLASSIFICATION_PRETRAINED_BRANCH
+  branch: $BASE_BRANCH
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/text_classification_pretrained/ #脚本的路径
   model_log_path: log/text_classification_pretrained/
 
 EXEC:
-  exec_cases: $EXEC_CASES
-  exec_priority: $EXEC_PRIORITY
+  exec_cases: [DATA_PROC,TRAIN,INFER, PYTHON_INFER]
+  exec_priority: [p0, p1]
   exec_tag: $EXEC_TAG
 
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh pretrained_models $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
 
 TRAIN: # 训练步骤
   -
     priority: p0
-    tag: "linux_dy_gpu1"
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    tag: linux_dy_gpu1
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "single"
 
     kpis: #kpi指标
       loss:
         latest: True
         kpi_base: 0.19159
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "-"
-        unit_repr: "s"
-      accu:
-        latest: True
-        kpi_base: 0.93083
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_single_$XPU.log
 
   -
     priority: p1
-    tag: "linux_dy_gpu2"
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU "multi"
+    tag: linux_dy_gpu2
 
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.19222
-        threshold: 0.01
+        kpi_base: 0.14233
+        threshold: 0.5
         actived: True
         evaluation: "-"
         unit_repr: "s"
 
-      accu:
-        latest: True
-        kpi_base: 0.93000
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
 
   -
@@ -90,13 +73,6 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: "s"
 
-      accu:
-        latest: True
-        kpi_base: 0.95250
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_$XPU.log
 
   -
@@ -118,26 +94,13 @@ TRAIN: # 训练步骤
         actived: True
         evaluation: "-"
         unit_repr: "s"
-      accu:
-        latest: True
-        kpi_base: 0.93083
-        threshold: 0.01
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_$XPU.log
 
 INFER:
   -
     priority: p0
     tag: "linux_dy_gpu1"
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU "single"
     kpis:
       exit_code:
         latest: True
@@ -152,13 +115,7 @@ INFER:
   -
     priority: p1
     tag: "linux_dy_gpu2"
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU "multi"
     kpis:
       exit_code:
         latest: True
@@ -188,3 +145,19 @@ INFER:
         evaluation: "-"
         unit_repr: None
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+
+PYTHON_INFER:
+  -
+    priority: p0
+    tag: "linux_dy_gpu1"
+
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/python_infer_$XPU.log

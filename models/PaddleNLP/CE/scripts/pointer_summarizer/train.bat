@@ -12,6 +12,8 @@ set sed="C:\Program Files\Git\usr\bin\sed.exe"
 %sed% -i "s/max_iterations = 100000/max_iterations = 30/g" config.py
 %sed% -i "s/if iter % 5000 == 0 or iter == 1000:/if iter % 30 == 0 :/g" train.py
 %sed% -i "s/with open(vocab_file, 'r') as vocab_f\:/with open(vocab_file, 'r', encoding='utf-8') as vocab_f\:/g" data.py
+%sed% -i '1 i\# -*- coding: utf-8 -*- ' train.py
+%sed% -i '1 i\# -*- coding: utf-8 -*- ' data.py
 python train.py > %logpath%/train_%1.log 2>&1
 
 if %ERRORLEVEL% == 1 (

@@ -6,6 +6,8 @@ print_info(){
 if [ $1 -ne 0 ];then
     mv ${log_path}/$2 ${log_path}/FAIL_$2.log
     echo -e "\033[31m ${log_path}/FAIL_$2 \033[0m"
+    echo "fail log as belows"
+    cat ${log_path}/$2_FAIL.log
 else
     mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
     echo -e "\033[32m ${log_path}/SUCCESS_$2 \033[0m"
@@ -21,6 +23,8 @@ cudaid2=$2
 echo "cudaid1,cudaid2", ${cudaid1}, ${cudaid2}
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 export FLAGS_fraction_of_gpu_memory_to_use=0.98
+#分布式log输出方式
+export PADDLE_LOG_LEVEL=debug
 # data PaddleSlim/demo/data/ILSVRC2012
 cd ${slim_dir}/demo
 if [ -d "data" ];then
@@ -81,8 +85,8 @@ print_info $? ${model}
 
 all_distillation(){ # 大数据 5个模型
 distillation
-distillation2
-dml
+#distillation2
+#dml
 }
 # 2.1 quant/quant_aware 使用小数据集即可
 quant_aware(){
@@ -151,7 +155,8 @@ print_info $? st_quant_post_v1_eval1
 
 # 3 离线量化
 # 4 量化后eval
-for algo in hist avg mse
+#for algo in hist avg mse
+for algo in hist
 do
 ## 不带bc 离线量化
 echo "quant_post train no bc " ${algo}
@@ -190,17 +195,17 @@ export CUDA_VISIBLE_DEVICES=${cudaid1}
 # 2.1版本时默认BS=128 会报显存不足，故暂时修改成64
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 1 --lr 0.0001 --use_pact False --batch_size 128 >${log_path}/pact_quant_aware1 2>&1
+--num_epochs 1 --lr 0.0001 --use_pact False --batch_size 64 >${log_path}/pact_quant_aware1 2>&1
 print_info $? pact_quant_aware1
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 1 --lr 0.0001 --use_pact True --batch_size 128 --lr_strategy=piecewise_decay \
+--num_epochs 1 --lr 0.0001 --use_pact True --batch_size 64 --lr_strategy=piecewise_decay \
 --step_epochs 2 --l2_decay 1e-5 >${log_path}/pact_quant_aware2 2>&1
 print_info $? pact_quant_aware2
 # load
 python train.py --model MobileNetV3_large_x1_0 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
---num_epochs 2 --lr 0.0001 --use_pact True --batch_size 128 --lr_strategy=piecewise_decay \
+--num_epochs 2 --lr 0.0001 --use_pact True --batch_size 64 --lr_strategy=piecewise_decay \
 --step_epochs 20 --l2_decay 1e-5 \
 --checkpoint_dir ./output/MobileNetV3_large_x1_0/0 \
 --checkpoint_epoch 0 >${log_path}/pact_quant_aware_load 2>&1
@@ -224,8 +229,10 @@ CUDA_VISIBLE_DEVICES=${cudaid1}  python train.py  --lr=0.001 \
 --num_epochs 1 > ${log_path}/dy_pact_quant_v3_gpu1 2>&1
 print_info $? dy_pact_quant_v3_gpu1
 # 多卡训练，以0到3号卡为例
-CUDA_VISIBLE_DEVICES=${cudaid2}  python -m paddle.distributed.launch \
-train.py  --lr=0.001 \
+#CUDA_VISIBLE_DEVICES=${cudaid2}  python -m paddle.distributed.launch \
+#--log_dir dy_pact_quant_v3_gpu4_log \
+CUDA_VISIBLE_DEVICES=${cudaid1}
+python train.py  --lr=0.001 \
 --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained \
 --use_pact=True --num_epochs=1 \
 --l2_decay=2e-5 \
@@ -247,7 +254,7 @@ output_dir=$PWD/output_models
 for model in mobilenet_v1
 do
 
-    if [ $1 == nopact ];then
+    if [[ $1 == "nopact" ]];then
         # 1 quant train
         echo "------1 nopact train--------", ${model}
         export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -280,7 +287,7 @@ do
         --data_dir=${data_path} \
         --test_samples=${test_samples} \
         --batch_size=${batch_size} > cpu_eval_after_save_${model} 2>&1
-    elif [ $1 == pact ];then
+    elif [[ $1 == "pact" ]];then
     # 1 pact quant train
         echo "------1 pact train--------", ${model}
         export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -497,7 +504,7 @@ ce_tests_demo(){
 
 quant(){
     quant_aware
-    st_quant_post
+    #st_quant_post
     pact_quant_aware
     dy_quant
 }
@@ -512,10 +519,8 @@ all_quant(){ # 10个模型
     st_quant_post
     pact_quant_aware
     dy_quant
-    dy_qat4
-    if [ "${is_develop}" == "True" ];then
-        ce_tests_dygraph_ptq4
-    fi
+    #dy_qat4
+
 }
 
 # 3 prune
@@ -699,29 +704,10 @@ python evaluate.py \
        --pruned_model=st_unstructured_models \
        --data="imagenet"  > ${log_path}/st_unstructured_prune_threshold_eval 2>&1
 print_info $? st_unstructured_prune_threshold_eval
-# load
-export CUDA_VISIBLE_DEVICES=${cudaid2}
-python -m paddle.distributed.launch \
---log_dir="st_unstructured_prune_threshold_load_gpu2_log" train.py \
---batch_size 512 \
---pretrained_model ../pretrain/MobileNetV1_pretrained \
---lr 0.05 \
---pruning_mode threshold \
---threshold 0.01 \
---data imagenet \
---lr_strategy piecewise_decay \
---step_epochs 1 2 3 \
---num_epochs 1 \
---test_period 1 \
---model_path st_unstructured_models \
-----pretrained_model st_unstructured_models \
---last_epoch 1 > ${log_path}/st_unstructured_prune_threshold_load 2>&1
-print_info $? st_unstructured_prune_threshold_load
 
-## sparsity: -55%, accuracy: 67%+/87%+
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 python train.py \
---batch_size 512 \
+--batch_size 256 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode ratio \
@@ -734,25 +720,25 @@ python train.py \
 --model_path st_ratio_models > ${log_path}/st_ratio_prune_ratio_T 2>&1
 print_info $? st_ratio_prune_ratio_T
 
-# MNIST数据集
-python train.py \
---batch_size 256 \
---pretrained_model ../pretrain/MobileNetV1_pretrained \
---lr 0.05 \
---pruning_mode threshold \
---threshold 0.01 \
---data mnist \
---lr_strategy piecewise_decay \
---step_epochs 1 2 3 \
---num_epochs 1 \
---test_period 1 \
---model_path st_unstructured_models_mnist >${log_path}/st_unstructured_prune_threshold_mnist_T 2>&1
-print_info $? st_unstructured_prune_threshold_mnist_T
-# eval
-python evaluate.py \
-       --pruned_model=st_unstructured_models_mnist \
-       --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval 2>&1
-print_info $? st_unstructured_prune_threshold_mnist_eval
+# # MNIST数据集
+# python train.py \
+# --batch_size 256 \
+# --pretrained_model ../pretrain/MobileNetV1_pretrained \
+# --lr 0.05 \
+# --pruning_mode threshold \
+# --threshold 0.01 \
+# --data mnist \
+# --lr_strategy piecewise_decay \
+# --step_epochs 1 2 3 \
+# --num_epochs 1 \
+# --test_period 1 \
+# --model_path st_unstructured_models_mnist >${log_path}/st_unstructured_prune_threshold_mnist_T 2>&1
+# print_info $? st_unstructured_prune_threshold_mnist_T
+# # eval
+# python evaluate.py \
+#        --pruned_model=st_unstructured_models_mnist \
+#        --data="mnist"  >${log_path}/st_unstructured_prune_threshold_mnist_eval 2>&1
+# print_info $? st_unstructured_prune_threshold_mnist_eval
 }
 dy_unstructured_prune(){
 # dy_threshold
@@ -810,10 +796,10 @@ python -m paddle.distributed.launch \
 --last_epoch 1 >${log_path}/dy_threshold_prune_T 2>&1
 print_info $? dy_threshold_prune_T
 # cifar10
-python train.py --data cifar10 --lr 0.05 \
---pruning_mode threshold  --num_epochs 1 \
---threshold 0.01 > ${log_path}/dy_threshold_prune_cifar10_T 2>&1
-print_info $? dy_threshold_prune_cifar10_T
+# python train.py --data cifar10 --lr 0.05 \
+# --pruning_mode threshold  --num_epochs 1 \
+# --threshold 0.01 > ${log_path}/dy_threshold_prune_cifar10_T 2>&1
+# print_info $? dy_threshold_prune_cifar10_T
 
 }
 
@@ -832,8 +818,8 @@ prune(){
 all_prune(){ # 7个模型
     prune_v1
     slim_prune_fpgm_v1_T
-    slim_prune_fpgm_v2_T
-    slim_prune_fpgm_resnet34_42_T
+    #slim_prune_fpgm_v2_T
+    #slim_prune_fpgm_resnet34_42_T
     slim_prune_fpgm_resnet34_50_T
     prune_ResNet50
     dy_prune_ResNet34_f42
@@ -961,7 +947,8 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
 done
 }
 set -e
-get_diff_TO_P0case
+#get_diff_TO_P0case
+P0case_list=(distillation quant prune unstructured_prune )
 echo -e "\033[35m ---- P0case_list length: ${#P0case_list[*]}, cases: ${P0case_list[*]} \033[0m"
 echo -e "\033[35m ---- P0case_time: $P0case_time min \033[0m"
 set +e

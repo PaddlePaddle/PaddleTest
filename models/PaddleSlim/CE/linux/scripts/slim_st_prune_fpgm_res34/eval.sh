@@ -15,6 +15,8 @@ log_path=$root_path/log/$model_name/
 mkdir -p $log_path
 #临时环境更改
 
+export FLAGS_cudnn_deterministic=True
+
 #访问RD程序
 print_info(){
 if [ $1 -ne 0 ];then

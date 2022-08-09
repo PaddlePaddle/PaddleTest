@@ -3,7 +3,7 @@ cd ../..
 
 cd models_repo
 
-cd examples\language_model\electra
+cd model_zoo\electra
 
 md BookCorpus
 

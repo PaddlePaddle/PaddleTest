@@ -34,14 +34,12 @@ if __name__ == "__main__":
     if os.path.exists(args.output_dir):
         shutil.rmtree(args.output_dir)
 
-    ocr = hub.Module(name=args.model_name)
+    ocr = hub.Module(name=args.model_name, use_gpu=args.use_gpu)
     img_list = os.listdir(args.img_path)
     inputs_1 = []
     for img in img_list:
         inputs_1.append(cv2.imread(os.path.join(args.img_path, img)))
-    result = ocr.recognize_text(
-        images=inputs_1, use_gpu=args.use_gpu, visualization=args.visualization, output_dir=args.output_dir
-    )
+    result = ocr.recognize_text(images=inputs_1, visualization=args.visualization, output_dir=args.output_dir)
     for i in range(len(result[0]["data"])):
         print(result[0]["data"][i]["text"])
     assert len(result[0]["data"]) > 20

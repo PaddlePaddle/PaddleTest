@@ -20,10 +20,7 @@ if [ ! -d $log_path ]; then
   mkdir -p $log_path
 fi
 
-# 准备数据
-#配置目标数据存储路径
-
-cp -r /workspace/task/datasets/DuIE/*  /workspace/task/models_repo/examples/information_extraction/DuIE/data/
 cd $code_path
+cp -r /workspace/task/datasets/DuIE/*  ./data/
 # 替换代码
 sed -i "s/python3 .\/re_official_evaluation.py/python .\/re_official_evaluation.py/g"  ./utils.py

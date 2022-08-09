@@ -4,10 +4,14 @@
 """
 test randint
 """
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../..")
+from utils.interceptor import skip_platform_not_linux, skip_not_compile_gpu
 
 
 class TestRandint(APIBase):
@@ -30,34 +34,43 @@ class TestRandint(APIBase):
 obj = TestRandint(paddle.randint)
 
 
+@skip_not_compile_gpu
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_vartype
 def test_randint_base():
     """
     base
     """
-    res = np.array([[9, 9], [5, 8]])
+    obj.places = [paddle.CUDAPlace(0)]
+    res = np.array([[5, 4], [9, 2]])
     obj.base(res=res, low=0, high=10, shape=[2, 2])
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_parameters
 def test_randint():
     """
     default
     """
+    obj.places = [paddle.CPUPlace()]
     res = np.array([[[9, 9], [5, 8], [3, 4]], [[9, 4], [4, 7], [2, 9]], [[8, 4], [6, 2], [9, 3]]])
     obj.run(res=res, low=0, high=10, shape=[3, 3, 2])
 
 
+@skip_not_compile_gpu
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_parameters
 def test_randint1():
     """
     seed = 1
     """
     obj.seed = 1
-    res = np.array([[0, 7], [6, 0]])
+    obj.places = [paddle.CUDAPlace(0)]
+    res = np.array([[2, 0], [9, 7]])
     obj.run(res=res, low=0, high=10, shape=[2, 2])
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_exception
 def test_randint2():
     """
@@ -67,34 +80,39 @@ def test_randint2():
     obj.exception(etype=AttributeError, mode="python", low=0, high=10, shape="2")
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_parameters
 def test_randint3():
     """
     dtype is int64
     """
     obj.seed = 1
+    obj.places = [paddle.CPUPlace()]
     res = np.array([[0, 7], [6, 0]])
     obj.run(res=res, low=0, high=10, shape=[2, 2], dtype=np.int64)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_exception
 def test_randint4():
     """
     exception dtype is float BUG
     """
     # res = np.array([[9, 9], [5, 8]])
-    obj.exception(etype="NotFoundError", low=0, high=10, shape=[2, 2], dtype=np.float32)
+    obj.exception(etype="NotFound", low=0, high=10, shape=[2, 2], dtype=np.float32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_exception
 def test_randint5():
     """
     exception low > high
     """
     # res = np.array([[9, 9], [5, 8]])
-    obj.exception(etype="InvalidArgumentError", low=100, high=10, shape=[2, 2])
+    obj.exception(etype="InvalidArgument", low=100, high=10, shape=[2, 2])
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_randint_exception
 def test_randint6():
     """

@@ -35,7 +35,7 @@ DEVICE=$1
 
 MULTI=$2
 if [[ ${MULTI} == "multi" ]]; then
-    python -m paddle.distributed.launch train.py \
+    python -m paddle.distributed.launch --gpus "$3" --log_level=debug train.py \
         --batch_size 32 \
         --init_scale 0.1 \
         --max_grad_norm 5.0 \

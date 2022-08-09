@@ -34,6 +34,7 @@ if [[ ${DEVICE} == "gpu" ]]; then
     --batch_size=64 \
     --epochs=1 \
     --save_dir='./checkpoints' > $log_path/train_$2_${DEVICE}.log 2>&1
+  cat $log_path/train_$2_${DEVICE}.log
 else
   python train.py --vocab_path='./simnet_vocab.txt' \
    --device=${DEVICE} \

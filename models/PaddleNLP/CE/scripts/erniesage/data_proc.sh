@@ -9,5 +9,8 @@ code_path=$cur_path/../../models_repo/examples/text_graph/erniesage/
 
 #数据处理逻辑
 cd $code_path
+
+sed -i "s/epoch: 30/epoch: 1/g" ./config/erniesage_link_prediction.yaml
+
 mkdir -p graph_workdir
 python ./preprocessing/dump_graph.py --conf ./config/erniesage_link_prediction.yaml

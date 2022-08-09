@@ -25,22 +25,21 @@ fi
 cd $code_path
 
 python -m paddle.distributed.launch --gpus $3 run_du.py \
-    --task_name dureader_robust \
-    --model_type bert \
-    --model_name_or_path bert-base-chinese \
-    --max_seq_length 384 \
-    --batch_size 12 \
-    --learning_rate 3e-5 \
-    --num_train_epochs 1 \
-    --logging_steps 10 \
-    --save_steps 10 \
-    --max_steps 20 \
-    --warmup_proportion 0.1 \
-    --weight_decay 0.01 \
-    --output_dir ./tmp/dureader-robust/ \
-    --do_train \
-    --do_predict \
-    --device $1 > $log_path/finetune_$2_$1.log 2>&1
+  --model_type ernie_gram \
+  --model_name_or_path ernie-gram-zh \
+  --max_seq_length 384 \
+  --batch_size 12 \
+  --learning_rate 3e-5 \
+  --num_train_epochs 1 \
+  --logging_steps 10 \
+  --save_steps 10 \
+  --max_steps 20 \
+  --warmup_proportion 0.1 \
+  --weight_decay 0.01 \
+  --output_dir ./tmp/dureader-robust/ \
+  --do_train \
+  --do_predict \
+  --device $1 > $log_path/finetune_$2_$1.log 2>&1
 #cat $model_name-base_finetune.log
 export http_proxy=$HTTPPROXY
 export https_proxy=$HTTPSPROXY

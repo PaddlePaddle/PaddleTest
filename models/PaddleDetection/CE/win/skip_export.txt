@@ -1,3 +1,9 @@
 sparse_rcnn_r50_fpn_3x_pro100_coco
 sparse_rcnn_r50_fpn_3x_pro300_coco
 detr_r50_1x_coco
+faster_rcnn_swin_tiny_fpn_1x_coco
+faster_rcnn_swin_tiny_fpn_2x_coco
+faster_rcnn_swin_tiny_fpn_3x_coco
+gflv2_r50_fpn_1x_coco
+tood_r50_fpn_1x_coco
+ssdlite_mobilenet_v3_large_320_coco

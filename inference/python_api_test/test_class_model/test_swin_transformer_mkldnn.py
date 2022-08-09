@@ -54,7 +54,7 @@ def test_mkldnn():
     check_model_exist()
     file_path = "./swin_transformer"
     images_size = 384
-    batch_size_pool = [1, 5]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(

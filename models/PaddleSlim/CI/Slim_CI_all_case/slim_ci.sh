@@ -31,9 +31,12 @@ echo "python="$1
 set -x
 echo -e "\033[35m ---- install paddle: python=$1, paddle= $2   \033[0m"
 python -m pip install --upgrade pip
-python -m pip install $2;
+python -m pip install $2 --no-cache-dir
 python -c 'import paddle; print(paddle.version.commit)';
 set +x;
+
+
+
 ####################################
 # for paddleslim env
 slim1_install (){
@@ -96,6 +99,12 @@ if [ $P0case_EXCODE -ne 0 ] ; then
     FF=`ls *_FAIL*|wc -l`
     echo -e "\033[31m ---- P0case failed number: ${FF} \033[0m"
     ls *_FAIL*
+    for i in `ls *_FAIL*`
+    do
+      echo -----fail log as follow:$i----------
+      cat $i
+    done
+
     exit $P0case_EXCODE
 else
     echo -e "\033[32m ---- P0case Success \033[0m"

@@ -1,5 +1,5 @@
 MODEL: "hardnet_cityscapes_1024x1024_160k" # 模型名
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleSeg
   path: $ROOT_PATH/PaddleSeg
