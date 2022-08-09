@@ -23,7 +23,6 @@ case ${train_type} in #动态图/静态图/收敛性
 dynamic|static)
     echo "######  params_dir"
     echo ${params_dir}
-    echo "${output_dir}/${model_name}/${params_dir}/latest.pdparams"
     if [[ `cat ${yaml_line} |grep MultiScaleSampler|wc -l` -gt "0"  ]]; then #for tingquan 220513 change
         echo "have MultiScaleSampler"
         common_par="-o Global.epochs=2 \
@@ -68,6 +67,8 @@ dynamic|static)
     # if ([[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
     #     || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
     #     ;then
+    echo " ${output_dir}/${model_name}/${params_dir} "
+    echo $(ls ${output_dir}/${model_name}/${params_dir}|head -n 2)
     if [[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]];then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_${card}.log) -eq 0 ]];then
