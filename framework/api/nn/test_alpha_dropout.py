@@ -52,7 +52,7 @@ class TestAlphaDropout(APIBase):
                 logging.info("[test dtype] " + self.__class__.__name__ + str(dtype))
                 try:
                     self.dtype = dtype
-                    if str(place) == "CPUPlace":
+                    if isinstance(place, paddle.CPUPlace):
                         self._baserun(res[0], data, **kwargs)
                     else:
                         self._baserun(res[1], data, **kwargs)
@@ -81,7 +81,7 @@ class TestAlphaDropout(APIBase):
             # start run paddle dygraph
             if self.dygraph:
                 paddle.disable_static(self.place)
-                if str(self.place) == "CPUPlace":
+                if isinstance(self.place, paddle.CPUPlace):
                     paddle.set_device("cpu")
                 else:
                     paddle.set_device("gpu:0")
@@ -144,7 +144,7 @@ class TestAlphaDropout(APIBase):
             # start run paddle dygraph
             logging.info("[start] run " + self.__class__.__name__ + " dygraph")
             paddle.disable_static(self.place)
-            if str(self.place) == "CPUPlace":
+            if isinstance(self.place, paddle.CPUPlace):
                 paddle.set_device("cpu")
             else:
                 paddle.set_device("gpu:0")
@@ -207,7 +207,7 @@ class TestAlphaDropout(APIBase):
         for place in self.places:
             self.place = place
             paddle.disable_static(self.place)
-            if str(self.place) == "CPUPlace":
+            if isinstance(self.place, paddle.CPUPlace):
                 paddle.set_device("cpu")
                 res = res_list[0]
             else:
@@ -258,8 +258,8 @@ class TestAlphaDropout(APIBase):
 
 
 obj = TestAlphaDropout(paddle.nn.AlphaDropout)
-np_random_tensor = np.array([[0.55355287, 0.20714243, 0.01162981], [0.51577556, 0.36369765, 0.26091650]])
-np_random_tensor_gpu = np.array([[0.00224779, 0.50324494, 0.13526054], [0.16112770, 0.79557019, 0.96897715]])
+np_random_tensor = np.array([[0.55355281, 0.20714243, 0.01162981], [0.51577556, 0.36369765, 0.26091650]])
+np_random_tensor_gpu = np.array([[0.35628906, 0.03034166, 0.70878232], [0.20091671, 0.02237142, 0.98958546]])
 
 
 def numpy_alpha_dropout(x, p, random_tensor, training=True):

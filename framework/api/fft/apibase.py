@@ -121,11 +121,10 @@ class APIBase(object):
             Assertion
         """
         # 取默认type
-        if self.dtype is None:
-            if np.float64 in self.types:
-                self.dtype = np.float64
-            else:
-                self.dtype = self.types[0]
+        if np.float64 in self.types:
+            self.dtype = np.float64
+        else:
+            self.dtype = self.types[0]
         if self.debug:
             for place in self.places:
                 self.place = place
@@ -133,7 +132,7 @@ class APIBase(object):
                 # start run paddle dygraph
                 if self.dygraph:
                     paddle.disable_static(self.place)
-                    if str(self.place) == "CPUPlace":
+                    if isinstance(self.place, paddle.CPUPlace):
                         paddle.set_device("cpu")
                     else:
                         paddle.set_device("gpu:0")
@@ -202,7 +201,7 @@ class APIBase(object):
                 # (1) start run paddle dygraph
                 if self.dygraph:
                     paddle.disable_static(self.place)
-                    if str(self.place) == "CPUPlace":
+                    if isinstance(self.place, paddle.CPUPlace):
                         paddle.set_device("cpu")
                     else:
                         paddle.set_device("gpu:0")
@@ -276,7 +275,7 @@ class APIBase(object):
             # start run paddle dygraph
             if self.dygraph:
                 paddle.disable_static(self.place)
-                if str(self.place) == "CPUPlace":
+                if isinstance(self.place, paddle.CPUPlace):
                     paddle.set_device("cpu")
                 else:
                     paddle.set_device("gpu:0")
@@ -339,7 +338,7 @@ class APIBase(object):
             # (1) start run paddle dygraph
             if self.dygraph:
                 paddle.disable_static(self.place)
-                if str(self.place) == "CPUPlace":
+                if isinstance(self.place, paddle.CPUPlace):
                     paddle.set_device("cpu")
                 else:
                     paddle.set_device("gpu:0")

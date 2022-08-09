@@ -1,0 +1,8 @@
+model_name::ppyolo
+yaml::DetForONNX/configs/ppyolo/ppyolo_tiny_650e_coco.yml
+pretrain_link::https://paddledet.bj.bcebos.com/models/ppyolo_tiny_650e_coco.pdparams
+model_type::BaseDet
+opt_ver::11
+opt_ver::11
+atol::3e-4
+rtol::1e-8

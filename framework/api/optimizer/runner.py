@@ -36,7 +36,7 @@ class Runner(object):
                 print(loss)
             self.result.append(loss.numpy()[0])
 
-    def check(self, expect=None):
+    def check(self, expect=None, rtol=1e-05, atol=1e-08):
         """
         check result
         """
@@ -45,7 +45,7 @@ class Runner(object):
         if self.debug:
             print(self.result)
         try:
-            assert np.allclose(self.result, expect), "Error in check loss"
+            assert np.allclose(self.result, expect, rtol=rtol, atol=atol), "Error in check loss"
         except Exception as e:
             print(e)
             print("expect loss is {}".format(expect))

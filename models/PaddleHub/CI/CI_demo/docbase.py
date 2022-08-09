@@ -53,7 +53,10 @@ class HubDocTest(object):
             raise Exception("predict code in README.md is not unique!!!")
         if len(tmp_list) > 1:
             raise Exception("predict code in README.md dose not exit!!!")
-        predict_python = self.python_pattern.findall(tmp_list[0])
+        try:
+            predict_python = self.python_pattern.findall(tmp_list[0])
+        except Exception:
+            raise IndexError("README.md format is wrong!!! hub CI cannot catch keywords of predict code.")
         self.mk_doc(predict_python[0], new_doc_name="doc_tmp.py")
         tmp_list = self.read_doc(os.path.join(self.pwd, "doc_tmp.py"))
 

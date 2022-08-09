@@ -72,7 +72,7 @@ def test_index_select3():
     x = np.arange(6).reshape(2, 3)
     index = np.array([0, 2]).astype("float32")
     axis = 1
-    obj.exception(mode="c", etype="InvalidArgumentError", x=x, index=index, axis=axis)
+    obj.exception(mode="c", etype="InvalidArgument", x=x, index=index, axis=axis)
 
 
 @pytest.mark.api_base_index_select_exception
@@ -83,7 +83,7 @@ def test_index_select4():
     x = np.arange(6).reshape(2, 3)
     index = 0
     axis = 1
-    obj.exception(mode="c", etype="InvalidArgumentError", x=x, index=index, axis=axis)
+    obj.exception(mode="c", etype="InvalidArgument", x=x, index=index, axis=axis)
 
 
 @pytest.mark.api_base_index_select_exception
@@ -94,7 +94,7 @@ def test_index_select5():
     x = np.arange(6).reshape(2, 3)
     index = np.array([0, 5]).astype("int64")
     axis = 1
-    obj.exception(mode="c", etype="InvalidArgumentError", x=x, index=index, axis=axis)
+    obj.exception(mode="c", etype="InvalidArgument", x=x, index=index, axis=axis)
 
 
 @pytest.mark.api_base_index_select_exception
@@ -105,7 +105,7 @@ def test_index_select6():
     x = np.arange(6).reshape(2, 3)
     index = np.array([0, 2]).astype("int64")
     axis = 2
-    obj.exception(mode="c", etype="OutOfRangeError", x=x, index=index, axis=axis)
+    obj.exception(mode="c", etype="OutOfRange", x=x, index=index, axis=axis)
 
 
 class TestIndexSelect1(APIBase):
@@ -134,7 +134,7 @@ def test_index_select7():
     x = 32
     index = np.array([0])
     axis = 1
-    obj1.exception(mode="c", etype="InvalidArgumentError", x=x, index=index, axis=axis)
+    obj1.exception(mode="c", etype="InvalidArgument", x=x, index=index, axis=axis)
 
 
 @pytest.mark.api_base_index_select_exception
@@ -145,7 +145,7 @@ def test_index_select8():
     x = np.arange(6).reshape(2, 3).astype("float16")
     index = np.array([0, 2])
     axis = 1
-    obj1.exception(mode="c", etype="NotFoundError", x=x, index=index, axis=axis)
+    obj1.exception(mode="c", etype="NotFound", x=x, index=index, axis=axis)
 
 
 @pytest.mark.api_base_index_select_exception
@@ -156,4 +156,4 @@ def test_index_select9():
     x = np.arange(6).reshape(2, 3).astype("int32")
     index = np.array([0, 2])
     axis = 1.3
-    obj1.exception(mode="c", etype="InvalidArgumentError", x=x, index=index, axis=axis)
+    obj1.exception(mode="c", etype="InvalidArgument", x=x, index=index, axis=axis)

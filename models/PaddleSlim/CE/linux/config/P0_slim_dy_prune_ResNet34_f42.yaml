@@ -1,4 +1,4 @@
-MODEL: "slim_dy_prune_ResNet34_f42" # 模型名
+MODEL: "dy_prune_ResNet34" # 模型名
 PRIORITY: P0,PreTest
 GIT:
   addr: $REPO_PaddleSlim
@@ -24,7 +24,7 @@ DATA_PROC:
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: sh data_proc.sh all
+        cmd: sh data_proc.sh demo
 
 TRAIN: # 训练步骤
   -
@@ -39,17 +39,24 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 prune_r34_f42_linux_dy_gpu1
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 1.2211
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.4952
-        threshold: 0.2
+        kpi_base: 0.734
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.7511
-        threshold: 0.2
+        kpi_base: 0.886
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -74,17 +81,24 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 prune_r34_f42_linux_dy_gpu2
 
     kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 3.3247
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
       acc_top1:
         latest: True
-        kpi_base: 0.5108
-        threshold: 0.2
+        kpi_base: 0.216
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.7576
-        threshold: 0.2
+        kpi_base: 0.474
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -181,17 +195,11 @@ EVAL:
         cmd: sh eval.sh linux_dy_gpu1 prune_r34_f42_eval_linux_dy_gpu1
 
     kpis: #kpi指标
-      acc_top1:
-        latest: True
-        kpi_base: 0.5052
-        threshold: 0.2
-        actived: True
-        evaluation: "+"
-        unit_repr: None
+
       acc_top5:
         latest: True
-        kpi_base: 0.7511
-        threshold: 0.2
+        kpi_base: 0.005
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -215,17 +223,10 @@ EVAL:
         cmd: sh eval.sh linux_dy_gpu2 prune_r34_f42_eval_linux_dy_gpu2
 
     kpis: #kpi指标
-      acc_top1:
-        latest: True
-        kpi_base: 0.5052
-        threshold: 0.2
-        actived: True
-        evaluation: "+"
-        unit_repr: None
       acc_top5:
         latest: True
-        kpi_base: 0.7511
-        threshold: 0.2
+        kpi_base: 0.005
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None

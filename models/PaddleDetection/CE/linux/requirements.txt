@@ -7,3 +7,8 @@ shapely
 scipy
 Cython
 pycocotools
+setuptools>=42.0.0
+lap
+sklearn
+motmetrics
+openpyxl

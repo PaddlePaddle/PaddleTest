@@ -43,7 +43,6 @@ elif [ "$1" = "multi" ];then #多卡
     # 多卡的运行方式
     python -m paddle.distributed.launch ../../../tools/infer.py -m config_bigdata.yaml ${log_path}/$2.log 2>&1
     print_info $? $2
-    mv $code_path/log $log_path/$2_dist_log
 elif [ "$1" = "cpu" ];then
     # CPU
     python -u ../../../tools/infer.py -m config_bigdata.yaml > ${log_path}/$2.log 2>&1

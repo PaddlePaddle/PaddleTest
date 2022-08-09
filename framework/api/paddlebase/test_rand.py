@@ -4,11 +4,15 @@
 """
 test rand
 """
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 from paddle import fluid
 import numpy as np
+
+sys.path.append("../..")
+from utils.interceptor import skip_platform_not_linux
 
 
 class TestRand(APIBase):
@@ -32,6 +36,7 @@ class TestRand(APIBase):
 obj = TestRand(paddle.rand)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_rand_vartype
 def test_rand_base():
     """
@@ -41,6 +46,7 @@ def test_rand_base():
     obj.base(res=res, shape=[2, 2])
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_rand_parameters
 def test_rand():
     """
@@ -50,6 +56,7 @@ def test_rand():
     obj.run(res=res, shape=[2, 2], dtype=np.float32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_rand_exception
 def test_rand1():
     """
@@ -57,9 +64,10 @@ def test_rand1():
     """
     obj.seed = 1
     # res = np.array([[0, 7], [6, 0]])
-    obj.exception(etype="NotFoundError", shape=[2, 2], dtype=np.int32)
+    obj.exception(etype="NotFound", shape=[2, 2], dtype=np.int32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_rand_parameters
 def test_rand2():
     """
@@ -70,6 +78,7 @@ def test_rand2():
     obj.run(res=res, shape=[2, 2], dtype=np.float32)
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_rand_parameters
 def test_rand3():
     """
@@ -80,6 +89,7 @@ def test_rand3():
     obj.run(res=res, shape=(2, 2))
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_rand_parameters
 def test_rand4():
     """
@@ -90,6 +100,7 @@ def test_rand4():
     obj.run(res=res, shape=np.array([2, 2]))
 
 
+@skip_platform_not_linux
 @pytest.mark.api_base_rand_parameters
 def test_rand5():
     """
@@ -97,5 +108,5 @@ def test_rand5():
     """
     obj.places = [fluid.CUDAPlace(0)]
     obj.seed = 33
-    res = np.array([[7.4177142e-04, 8.0607080e-01], [8.4463596e-01, 4.2317215e-01]])
+    res = np.array([[0.7515413, 0.72745854], [0.7739062, 0.41597638]])
     obj.run(res=res, shape=np.array([2, 2]))

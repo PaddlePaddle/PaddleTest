@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +30,7 @@ def check_model_exist():
         tar = tarfile.open("vgg11.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(path_prefix="./vgg11/inference", output_model_path="./vgg11/inference")
 
 
 def test_config():
@@ -70,7 +71,7 @@ def test_gpu_more_bz():
 
     file_path = "./vgg11"
     images_size = 224
-    batch_size_pool = [1, 5, 10]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")

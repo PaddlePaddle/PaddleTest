@@ -1,0 +1,11 @@
+model_name::rec_resnet_stn_bilstm_att
+yaml::configs/rec/rec_resnet_stn_bilstm_att.yml
+pretrain_link::https://paddleocr.bj.bcebos.com/dygraph_v2.1/rec/rec_resnet_stn_bilstm_att.tar
+test_data::https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/ocr_data/ocr_data.tar
+model_type::rec
+opt_ver::11
+opt_ver::11
+atol::1e-5
+rtol::1e-8
+
+rec_resnet_stn_bilstm_att export Failed!!!

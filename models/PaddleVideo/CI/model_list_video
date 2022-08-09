@@ -1,0 +1,2 @@
+configs/recognition/tsm/tsm_ucf101_frames.yaml
+configs/recognition/pptsn/pptsn_k400_videos.yaml

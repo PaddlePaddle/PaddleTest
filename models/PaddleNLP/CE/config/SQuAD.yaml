@@ -3,17 +3,18 @@ PRIORITY: P0
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $SQuAD_BRANCH
+  branch: $BASE_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/SQuAD/ #脚本的路径
   model_log_path: log/SQuAD/
 
 EXEC:
-  exec_cases: [DATA_PROC,TRAIN]
+  exec_cases: [DATA_PROC, TRAIN]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
@@ -24,8 +25,8 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh squad $XPU linux $SET_CUDA $SET_MULTI_CUDA CE
   -
     priority: p0
     tag: win_download_data
@@ -34,17 +35,12 @@ DATA_PROC:
         path: $ROOT_PATH/scripts
         cmd: compile_package.bat
 
-TRAIN: # 训练步骤
+TRAIN:
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
 
     run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh gpu 1.1
       -
         path: $PROJECT_ROOT/utils
         cmd: python process_log.py --log_path=$ROOT_PATH/$model_log_path/train_gpu_1.1.log --reg='"' --obj=""
@@ -57,25 +53,18 @@ TRAIN: # 训练步骤
       #   actived: True
       #   evaluation: "-"
       #   unit_repr: "s"
-      f1:
+      loss:
         latest: True
-        kpi_base: 15.69993
-        threshold: 0.01
+        kpi_base: 4.60107
+        threshold: 0.08
         actived: True
-        evaluation: "+"
+        evaluation: "-"
         unit_repr: "s"
     output: $ROOT_PATH/$model_log_path/train_gpu_1.1.log
 
   -
     priority: p1
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: sh train.sh gpu 2.0
     kpis:
       exit_code:
         latest: True

@@ -27,6 +27,8 @@ if [ $1 -ne 0 ];then
 else
     tail -1 ${log_path}/$2.log|grep epoch |grep top1 |awk -F ' ' \
         '{print"top1:" $6"\ttop5:"$8}' | tr -d ',' >>${log_path}/$2.log
+    echo $2 log as follows
+    cat ${log_path}/$2.log
     echo "exit_code: 0.0" >> ${log_path}/$2.log
 fi
 }

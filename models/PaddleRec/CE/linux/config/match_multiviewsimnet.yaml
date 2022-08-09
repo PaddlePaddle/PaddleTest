@@ -3,7 +3,7 @@ PRIORITY: P1
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
-  branch: $match_simnet_BRANCH
+  branch: $rec_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
@@ -15,7 +15,7 @@ VARIABLES:
 EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p1]
-  exec_tag: $EXEC_TAG_LINUX_GPU2
+  exec_tag: $EXEC_TAG
 
 #测试套
 DATA_PROC:
@@ -40,10 +40,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu1 match_multiviewsimnet_linux_dy_gpu1
 
     kpis: #kpi指标
-      pnr:
+      Acc:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.86015624
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -68,10 +68,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_gpu2 match_multiviewsimnet_linux_dy_gpu2
 
     kpis: #kpi指标
-      pnr:
+      Acc:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.9789063
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -83,7 +83,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p1
@@ -93,10 +93,17 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_dy_cpu match_multiviewsimnet_linux_dy_cpu
 
     kpis: #kpi指标
-      pnr:
+      Acc:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.5
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1000087
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -124,8 +131,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       pnr:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.86015624
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -152,8 +159,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       pnr:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.86015624
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -165,7 +172,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu
@@ -176,10 +183,17 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu match_multiviewsimnet_linux_st_cpu
 
     kpis: #kpi指标
-      pnr:
+      Acc:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.5
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      Loss:
+        latest: True
+        kpi_base: 0.1000087
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -192,6 +206,205 @@ TRAIN: # 训练步骤
         unit_repr: None
 
     output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_linux_st_cpu.log
+
+# mac train(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_dy_cpu match_multiviewsimnet_mac_dy_cpu
+
+    kpis: #kpi指标
+      Acc:
+        latest: True
+        kpi_base: 0.5
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.10000869
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu # st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_st_cpu match_multiviewsimnet_mac_st_cpu
+
+    kpis: #kpi指标
+      Acc:
+        latest: True
+        kpi_base: 0.5
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      Loss:
+        latest: True
+        kpi_base: 0.10000869
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_mac_st_cpu.log
+# win train(small data)
+  -
+    tag: win_dy_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_dy_gpu match_multiviewsimnet_win_dy_gpu multiview-simnet
+
+    kpis: #kpi指标
+      Acc:
+        latest: True
+        kpi_base: 0.5
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1000087
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_dy_cpu match_multiviewsimnet_win_dy_cpu multiview-simnet
+
+    kpis: #kpi指标
+      Acc:
+        latest: True
+        kpi_base: 0.5
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1000087
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_st_gpu match_multiviewsimnet_win_st_gpu multiview-simnet
+
+    kpis: #kpi指标
+      Acc:
+        latest: True
+        kpi_base: 0.5
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1000087
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_win_st_gpu.log
+
+  -
+    tag: win_st_cpu # st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_st_cpu match_multiviewsimnet_win_st_cpu multiview-simnet
+
+    kpis: #kpi指标
+      Acc:
+        latest: True
+        kpi_base: 0.5
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.1000087
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_win_st_cpu.log
 
 
 INFER:
@@ -206,10 +419,10 @@ INFER:
         cmd: sh infer.sh linux_dy_gpu1 match_multiviewsimnet_infer_linux_dy_gpu1
 
     kpis: #kpi指标
-      pnr:
+      PNR:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.806
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -233,10 +446,10 @@ INFER:
         path: $ROOT_PATH/$model_scripts_path
         cmd: sh infer.sh linux_dy_gpu2 match_multiviewsimnet_infer_linux_dy_gpu2
     kpis: #kpi指标
-      pnr:
+      PNR:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.9789063
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -258,10 +471,10 @@ INFER:
         cmd: sh infer.sh linux_dy_cpu match_multiviewsimnet_infer_linux_dy_cpu
 
     kpis: #kpi指标
-      pnr:
+      query_pt_sim:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: 0.21877283
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -273,7 +486,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_linux_dy_cpu_pair.log
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_linux_dy_cpu.log
   - #可以有多步
     tag: linux_st_gpu1
     priority: p1
@@ -286,7 +499,7 @@ INFER:
       pnr:
         latest: True
         kpi_base: 0.82
-        threshold: 0.02
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -314,7 +527,7 @@ INFER:
       pnr:
         latest: True
         kpi_base: 0.82
-        threshold: 0.02
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -336,10 +549,10 @@ INFER:
         cmd: sh infer.sh linux_st_cpu match_multiviewsimnet_infer_linux_st_cpu
 
     kpis: #kpi指标
-      pnr:
+      query_pt_sim:
         latest: True
-        kpi_base: 0.82
-        threshold: 0.02
+        kpi_base: [0.21877281]
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -351,4 +564,161 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_linux_st_cpu_pair.log
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_linux_st_cpu.log
+
+# mac infer(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_dy_cpu match_multiviewsimnet_infer_mac_dy_cpu
+
+    kpis: #kpi指标
+      query_pt_sim:
+        latest: True
+        kpi_base: 0.21877277
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_st_cpu match_multiviewsimnet_infer_mac_st_cpu
+
+    kpis: #kpi指标
+      query_pt_sim:
+        latest: True
+        kpi_base: [0.21680667]
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_multiviewsimnet_infer_mac_st_cpu.log
+# win infer(small data)
+  -
+    tag: win_dy_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_dy_gpu match_multiviewsimnet_infer_win_dy_gpu multiview-simnet
+
+    kpis: #kpi指标
+      query_pt_sim:
+        latest: True
+        kpi_base: 0.2187728
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_infer_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_dy_cpu match_multiviewsimnet_infer_win_dy_cpu multiview-simnet
+
+    kpis: #kpi指标
+      query_pt_sim:
+        latest: True
+        kpi_base: 0.2187728
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_infer_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_st_gpu match_multiviewsimnet_infer_win_st_gpu multiview-simnet
+
+    kpis: #kpi指标
+      query_pt_sim:
+        latest: True
+        kpi_base: 0.2187728
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_infer_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_st_cpu match_multiviewsimnet_infer_win_st_cpu multiview-simnet
+
+    kpis: #kpi指标
+      query_pt_sim:
+        latest: True
+        kpi_base: 0.2187728
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_multiviewsimnet_infer_win_st_cpu.log

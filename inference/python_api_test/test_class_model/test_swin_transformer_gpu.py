@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +30,9 @@ def check_model_exist():
         tar = tarfile.open("swin_transformer.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(
+            path_prefix="./swin_transformer/inference", output_model_path="./swin_transformer/inference"
+        )
 
 
 def test_config():
@@ -70,7 +73,7 @@ def test_gpu_more_bz():
     check_model_exist()
     file_path = "./swin_transformer"
     images_size = 384
-    batch_size_pool = [1, 5]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(

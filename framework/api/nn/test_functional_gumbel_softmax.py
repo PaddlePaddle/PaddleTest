@@ -4,10 +4,14 @@
 """
 test_functional_gumbel_softmax
 """
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../..")
+from utils.interceptor import skip_not_compile_gpu
 
 
 class TestFunctionalGumbelSoftmax(APIBase):
@@ -29,9 +33,6 @@ class TestFunctionalGumbelSoftmax(APIBase):
 # cpu
 obj = TestFunctionalGumbelSoftmax(paddle.nn.functional.gumbel_softmax)
 obj.places = [paddle.CPUPlace()]
-# gpu
-obj1 = TestFunctionalGumbelSoftmax(paddle.nn.functional.gumbel_softmax)
-obj1.places = [paddle.CUDAPlace(0)]
 
 
 @pytest.mark.api_nn_gumbel_softmax_vartype
@@ -193,6 +194,7 @@ def test_functional_gumbel_softmax4():
     obj.run(res=res, x=x, temperature=4.0, hard=True, axis=0)
 
 
+@skip_not_compile_gpu
 @pytest.mark.api_nn_gumbel_softmax_parameters
 def test_functional_gumbel_softmax5():
     """
@@ -200,6 +202,9 @@ def test_functional_gumbel_softmax5():
     hard = True
     axis = 0
     """
+    # gpu
+    obj1 = TestFunctionalGumbelSoftmax(paddle.nn.functional.gumbel_softmax)
+    obj1.places = [paddle.CUDAPlace(0)]
     x = np.array(
         [
             [

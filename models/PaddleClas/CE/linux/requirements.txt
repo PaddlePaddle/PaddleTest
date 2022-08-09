@@ -1,6 +1,0 @@
-prettytable
-ujson
-pillow
-tqdm
-PyYAML
-scipy

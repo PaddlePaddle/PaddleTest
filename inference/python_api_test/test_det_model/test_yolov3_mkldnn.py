@@ -53,7 +53,7 @@ def test_more_bz_mkldnn():
 
     file_path = "./yolov3"
     images_size = 608
-    batch_size_pool = [1, 4, 8, 10]
+    batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()

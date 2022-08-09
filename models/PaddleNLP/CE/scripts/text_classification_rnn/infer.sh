@@ -35,7 +35,7 @@ fi
 }
 
 python predict.py \
-  --vocab_path='./senta_word_dict.txt' \
+  --vocab_path='./vocab.json' \
   --device=${DEVICE} \
   --network=bilstm \
   --params_path='./checkpoints/final.pdparams' > $log_path/infer_${DEVICE}.log 2>&1

@@ -3,7 +3,7 @@ PRIORITY: P0, Dy_con  # 收敛性任务
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $TRANSFORMER_BRANCH
+  branch: $BASE_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
@@ -13,7 +13,7 @@ VARIABLES:
   model_log_path: log/transformer/
 
 EXEC:
-  exec_cases: [TRAIN]
+  exec_cases: [DATA_PROC, TRAIN]
   exec_priority: [p0,p1]
   exec_tag: $EXEC_TAG
 
@@ -21,11 +21,11 @@ EXEC:
 DATA_PROC:
   -
     priority: p0
-    tag: linux_download_data
+    tag: linux_download_data_con
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/scripts
+        cmd: bash compile_package.sh
 
 TRAIN: # 训练步骤
   -
@@ -42,8 +42,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       ppl:
         latest: True
-        kpi_base: 14.429425
-        threshold: 0.1
+        kpi_base: 22818.65
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -61,8 +61,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       ppl:
         latest: True
-        kpi_base: 14.429425
-        threshold: 0.01
+        kpi_base: 21584.79
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -70,12 +70,12 @@ TRAIN: # 训练步骤
 
   -
     priority: p1
-    tag: linux_dy_gpu2_con  # 多卡收敛
+    tag: linux_dy_gpu4_con  # 多卡收敛
 
     run:
       -
         path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh 'multi' $XPU $SET_MULTI_CUDA con
+        cmd: bash train.sh 'multi' $XPU $SET_MULTI_CUDA
 
     kpis: #kpi指标
       ppl:

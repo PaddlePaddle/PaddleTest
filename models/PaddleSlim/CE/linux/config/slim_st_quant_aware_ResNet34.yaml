@@ -1,5 +1,5 @@
 MODEL: "slim_st_quant_aware_ResNet34" # 模型名
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleSlim
   path: $ROOT_PATH/PaddleSlim

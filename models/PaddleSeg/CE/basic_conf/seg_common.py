@@ -22,6 +22,7 @@ XPU = "gpu"  # 取值gpu或cpu
 # 配置文件中SET_CUDA为None，框架不配置gpu cuda，使用cpu场景
 SET_CUDA = "0"
 SET_MULTI_CUDA = "0,1"
+SET_MULTI_CUDA_CONVERGENCE = "0,1,2,3"
 """
 if XPU == 'gpu':
     if IS_SINGLE_CUDA:

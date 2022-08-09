@@ -1,0 +1,6 @@
+model_name::MobileNetV1
+yaml::ClasForONNX/ppcls/configs/ImageNet/MobileNetV1/MobileNetV1.yaml
+pretrain_link::https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/MobileNetV1_pretrained.pdparams
+opt_ver::11
+atol::1e-5
+rtol::1e-8

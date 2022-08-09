@@ -32,11 +32,13 @@ python -m pip list;
 ####################################
 print_info(){
 if [ $1 -ne 0 ];then
-    mv ${log_path}/$2 ${log_path}/F_$2.log
-    echo -e "\033[31m ${log_path}/F_$2 \033[0m"
+    mv ${log_path}/$2 ${log_path}/FAIL_$2.log
+    echo -e "\033[31m ${log_path}/FAIL_$2 \033[0m"
+    echo "fail log as blows"
+    cat FAIL_$2.log
 else
-    mv ${log_path}/$2 ${log_path}/S_$2.log
-    echo -e "\033[32m ${log_path}/S_$2 \033[0m"
+    mv ${log_path}/$2 ${log_path}/Sucess_$2.log
+    echo -e "\033[32m ${log_path}/Sucess_$2 \033[0m"
 fi
 }
 
@@ -363,7 +365,7 @@ all_quant(){
   demo_quant_aware
   demo_quant_embedding
   demo_st_quant_post
-  demo_quant_pact_quant_aware
+  # demo_quant_pact_quant_aware
   demo_dygraph_quant
   demo_dy_qat1
 
@@ -495,10 +497,10 @@ python evaluate.py --pruned_model dy_threshold_models/model.pdparams \
 --data imagenet --use_gpu False >${log_path}/dy_threshold_prune_eval 2>&1
 print_info $? dy_threshold_prune_eval
 # cifar10
-#python train.py --data cifar10 --lr 0.05 \
-#--pruning_mode threshold \
-#--threshold 0.01 --use_gpu False >${log_path}/dy_unstructured_prune_threshold_prune_cifar10_T 2>&1
-#print_info $? dy_unstructured_prune_threshold_prune_cifar10_T
+python train.py --data cifar10 --lr 0.05 \
+--pruning_mode threshold --num_epochs 1 \
+--threshold 0.01 --use_gpu False  >${log_path}/dy_unstructured_prune_threshold_prune_cifar10_T 2>&1
+print_info $? dy_unstructured_prune_threshold_prune_cifar10_T
 
 }
 
@@ -514,7 +516,7 @@ all_prune(){
 # 4.1 sa_nas_mobilenetv2
 demo_nas(){
 cd ${slim_dir}/demo/nas || catchException demo_nas
-python sa_nas_mobilenetv2.py --search_steps 1 --port 8881 --use_gpu False >${log_path}/sa_nas_v2_T_1card 2>&1
+python sa_nas_mobilenetv2.py --search_steps 1 --port 8881 --retain_epoch 1 --use_gpu False >${log_path}/sa_nas_v2_T_1card 2>&1
 print_info $? sa_nas_v2_T_1card
 
 # 4.4 parl_nas

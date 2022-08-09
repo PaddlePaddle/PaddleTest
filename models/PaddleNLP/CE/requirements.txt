@@ -1,5 +1,8 @@
-numpy
+numpy>=1.14.5
+multiprocess
 sentencepiece==0.1.95
+datasets==2.2.2
+xlrd==1.2.0
 regex
 jieba
 colorlog
@@ -9,20 +12,18 @@ attrdict
 pyyaml
 h5py
 pandas
-sentencepiece
 termcolor
 gensim
-tqdm
-nltk
+nltk==3.5
 easydict
-multiprocess
 sklearn
 paddleslim
 visualdl
 pyrouge
-nltk
 chardet
 tqdm
 beautifulsoup4
 bs4
+pypinyin
+yacs
 pgl >= 2.1

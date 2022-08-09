@@ -1,0 +1,6 @@
+model_name::SE_ResNet50_vd
+yaml::ClasForONNX/ppcls/configs/ImageNet/SENet/SE_ResNet50_vd.yaml
+pretrain_link::https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/SE_ResNet50_vd_pretrained.pdparams
+opt_ver::11
+atol::1e-5
+rtol::1e-8

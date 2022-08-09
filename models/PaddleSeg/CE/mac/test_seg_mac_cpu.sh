@@ -20,22 +20,25 @@ fi
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
+        echo -e "${model},${mode},Failed" >>result 2>&1
         cd ${log_dir}/log_err
         if [ ! -d ${model} ];then
             mkdir ${model}
         fi
         cd ../${model_type_path}
+        cat ${log_dir}/log/${model}/${model}_${mode}.log
         mv ${log_dir}/log/${model}/${model}_${mode}.log ${log_dir}/log_err/${model}/
         err_sign=true
         #exit 1
     else
         echo -e "${model},${mode},SUCCESS"
+        echo -e "${model},${mode},Passed" >>result 2>&1
     fi
 }
 
 
 # run dynamic models
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 log_dir=.
 model_type_path=
 sed -i '' "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
@@ -115,7 +118,7 @@ if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model
         PYTHON_INFER_DYNAMIC
     fi
 elif [[ -z `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
-    wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/cityscapes/${model}/model.pdparams
+    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/cityscapes/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} url is bad!"
     else
@@ -135,5 +138,11 @@ fi
 done
 
 if [ "${err_sign}" = true ];then
+    export status='Failed'
+    export exit_code='8'
     exit 1
+else
+    export status='Passed'
+    export exit_code='0'
+    exit 0
 fi

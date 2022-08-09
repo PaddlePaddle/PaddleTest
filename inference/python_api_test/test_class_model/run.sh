@@ -1,16 +1,14 @@
+[[ -n $1 ]] && export CUDA_VISIBLE_DEVICES=$1
 export FLAGS_call_stack_level=2
 cases="./test_resnet50_gpu.py \
        ./test_resnet50_mkldnn.py \
        ./test_resnet50_trt_fp16.py \
        ./test_resnet50_trt_fp32.py \
        ./test_tnt_small_gpu.py \
-       ./test_swin_transformer_trt_fp16.py \
        ./test_swin_transformer_mkldnn.py \
        ./test_resnet50_slim.py \
        ./test_pcpvt_base_gpu.py \
-       ./test_pcpvt_base_mkldnn.py \
-       ./test_pcpvt_base_trt_fp16.py \
-       ./test_pcpvt_base_trt_fp32.py"
+       ./test_pcpvt_base_mkldnn.py"
 ignore=""
 bug=0
 

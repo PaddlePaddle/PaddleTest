@@ -1,12 +1,13 @@
 MODEL: "msra_ner" # 模型名
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
-  branch: $msra_ner_BRANCH
+  branch: $BASE_BRANCH
 
 
 VARIABLES:
+  scripts_path: scripts
   model_scripts_path: scripts/msra_ner/ #脚本的路径
   model_log_path: log/msra_ner/
 
@@ -22,40 +23,33 @@ DATA_PROC:
     tag: linux_download_data
     run:
       -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash data_proc.sh
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh msra_ner gpu linux $SET_CUDA $SET_MULTI_CUDA CE
 
 TRAIN: # 训练步骤
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
-
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU single
 
     kpis: #kpi指标
       precision:
         latest: True
-        kpi_base: 0.523947
-        threshold: 0.02
+        kpi_base: 0.840970
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
       recall:
         latest: True
-        kpi_base: 0.61003
-        threshold: 0.02
+        kpi_base: 0.875749
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
       f1:
         latest: True
-        kpi_base: 0.563721
-        threshold: 0.02
+        kpi_base: 0.858007
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -64,30 +58,26 @@ TRAIN: # 训练步骤
     priority: p0
     tag: linux_dy_gpu2
 
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash train.sh $XPU multi $SET_MULTI_CUDA
 
     kpis: #kpi指标
       precision:
         latest: True
-        kpi_base: 0.602226
-        threshold: 0.02
+        kpi_base: 0.862350
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
       recall:
         latest: True
-        kpi_base: 0.658121
-        threshold: 0.02
+        kpi_base: 0.889783
+        threshold: 0.08
         actived: True
         evaluation: "+"
         unit_repr: "s"
       f1:
         latest: True
-        kpi_base: 0.628934
-        threshold: 0.02
+        kpi_base: 0.875852
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -132,12 +122,7 @@ INFER:
   -
     priority: p0
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-        CUDA_VISIBLE_DEVICES: $SET_CUDA
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash infer.sh $XPU
+
     kpis:
       exit_code:
         latest: True
@@ -149,7 +134,7 @@ INFER:
     output: $ROOT_PATH/$model_log_path/infer_$XPU.log
 
   -
-    priority: p2 # 显卡不足，关闭
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
         CUDA_VISIBLE_DEVICES: $SET_CUDA
@@ -171,12 +156,7 @@ EVAL:
   - #可以有多步
     priority: p1
     tag: linux_dy_gpu1
-    env: #去掉，自动调度
-      CUDA_VISIBLE_DEVICES: $SET_CUDA
-    run:
-      -
-        path: $ROOT_PATH/$model_scripts_path
-        cmd: bash eval.sh $XPU
+
     kpis: #kpi指标
       precision:
         latest: True
@@ -202,7 +182,7 @@ EVAL:
     output: $ROOT_PATH/$model_log_path/eval_$XPU.log
 
   - #可以有多步
-    priority: p2  # 显卡不足，先关闭
+    priority: p1
     tag: win_dy_gpu1
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_CUDA
@@ -211,25 +191,11 @@ EVAL:
         path: $ROOT_PATH/$model_scripts_path
         cmd: eval.bat $XPU
     kpis: #kpi指标
-      precision:
+      exit_code:
         latest: True
-        kpi_base: 0.809076
-        threshold: 0.02
+        kpi_base: 0
+        threshold: 0
         actived: True
-        evaluation: "+"
-        unit_repr: "s"
-      recall:
-        latest: True
-        kpi_base: 0.854042
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
-      f1:
-        latest: True
-        kpi_base: 0.830951
-        threshold: 0.02
-        actived: True
-        evaluation: "+"
-        unit_repr: "s"
+        evaluation: "-"
+        unit_repr: None
     output: $ROOT_PATH/$model_log_path/eval_$XPU.log

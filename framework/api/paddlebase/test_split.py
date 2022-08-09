@@ -4,10 +4,14 @@
 """
 test_split.py
 """
+import sys
 from apibase import APIBase
 import paddle
 import pytest
 import numpy as np
+
+sys.path.append("../../utils/")
+from interceptor import skip_branch_not_develop
 
 
 class TestSplit(APIBase):
@@ -19,7 +23,7 @@ class TestSplit(APIBase):
         """
         implement
         """
-        self.types = [np.float16, np.float32, np.float64, np.int32, np.int64]
+        self.types = [np.float16, np.float32, np.float64, np.int32, np.int64, np.int8, np.uint8]
         self.enable_backward = False
         # static_graph of split api is not supported in this frame
         self.static = False
@@ -30,6 +34,7 @@ class TestSplit(APIBase):
 obj = TestSplit(paddle.split)
 
 
+@skip_branch_not_develop
 @pytest.mark.api_base_split_vartype
 def test_split_base():
     """
@@ -154,6 +159,22 @@ def test_split8():
     obj1.exception(mode="c", etype="InvalidArgument", x=x, num_or_sections=num_or_sections, axis=axis)
 
 
+@pytest.mark.api_base_split_parameters
+def test_split9():
+    """
+    num_or_sections include 0
+    """
+    x = np.arange(13)
+    paddle.disable_static()
+    xp = paddle.to_tensor(x)
+    num_or_sections = [5, 4, 0, 4]
+    rslt = paddle.split(xp, num_or_sections)
+    idx = [0, 5, 9, 9, 13]
+    len1 = len(rslt)
+    for i in range(len1):
+        assert np.allclose(rslt[i], x[idx[i] : idx[i + 1]])
+
+
 class TestSplit2(APIBase):
     """
     test split
@@ -176,7 +197,7 @@ obj2 = TestSplit2(paddle.split)
 
 
 @pytest.mark.api_base_split_vartype
-def test_split9():
+def test_split10():
     """
     x=bool
     """
@@ -208,12 +229,12 @@ class TestSplit3(APIBase):
 obj3 = TestSplit3(paddle.split)
 
 
-@pytest.mark.api_base_split_exception
-def test_split10():
-    """
-    TypeError:x=int8
-    """
-    x = np.arange(6).reshape(2, 3)
-    axis = 1
-    num_or_sections = 3
-    obj3.exception(mode="c", etype="NotFound", x=x, num_or_sections=num_or_sections, axis=axis)
+# @pytest.mark.api_base_split_exception
+# def test_split11():
+#    """
+#    TypeError:x=int8
+#    """
+#    x = np.arange(6).reshape(2, 3)
+#    axis = 1
+#    num_or_sections = 3
+#    obj3.exception(mode="c", etype="NotFound", x=x, num_or_sections=num_or_sections, axis=axis)

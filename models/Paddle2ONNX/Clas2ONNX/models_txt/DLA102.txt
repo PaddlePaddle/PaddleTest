@@ -1,0 +1,6 @@
+model_name::DLA102
+yaml::ClasForONNX/ppcls/configs/ImageNet/DLA/DLA102.yaml
+pretrain_link::https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/DLA102_pretrained.pdparams
+opt_ver::11
+atol::1e-5
+rtol::1e-8

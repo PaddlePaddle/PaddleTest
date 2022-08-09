@@ -85,6 +85,9 @@ def test_trt_fp32_more_bz():
         test_suite.trt_more_bz_test(
             input_data_dict, output_data_dict, repeat=1, delta=1e-5, precision="trt_fp32", dynamic=True, tuned=True
         )
+        del test_suite
+        test_suite = InferenceTest()
+        test_suite.load_config(model_file="./solov2/model.pdmodel", params_file="./solov2/model.pdiparams")
         test_suite.trt_more_bz_test(
             input_data_dict, output_data_dict, repeat=1, delta=1e-5, precision="trt_fp32", dynamic=True, tuned=False
         )

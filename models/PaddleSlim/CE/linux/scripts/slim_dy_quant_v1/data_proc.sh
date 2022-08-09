@@ -27,7 +27,6 @@ fi
 # download pretrain model
 cd ${root_path}/PaddleSlim/demo
 root_url="http://paddle-imagenet-models-name.bj.bcebos.com"
-#pre_models="MobileNetV1 MobileNetV3_large_x1_0_ssld"
 pre_models="MobileNetV1 MobileNetV2 MobileNetV3_large_x1_0_ssld ResNet101_vd MobileNetV2 ResNet34 ResNet50 ResNet50_vd"
 if [ ! -d "pretrain" ];then
     mkdir pretrain;
@@ -52,4 +51,4 @@ python -m pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install -r requirements.txt
 python setup.py install
 echo "------- after install slim --------"
-python -m pip list;
+python -m pip list | grep paddle;

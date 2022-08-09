@@ -1,5 +1,5 @@
 MODEL: "few_shot_ptuing" # 模型名 不支持多卡
-PRIORITY: P1
+PRIORITY: P2
 GIT:
   addr: $REPO_PaddleNLP
   path: $ROOT_PATH/models_repo
@@ -28,8 +28,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 3.39592
-        threshold: 0.05
+        kpi_base: 5.33982
+        threshold: 0.1
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -54,8 +54,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 3.58819
-        threshold: 0.05
+        kpi_base: 3.90871
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -79,8 +79,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 2.32216
-        threshold: 0.05
+        kpi_base: 3.79971
+        threshold: 0.08
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -129,7 +129,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       test_accuracy:
         latest: True
-        kpi_base: 58.689
+        kpi_base: 50.0
         threshold: 0.01
         actived: True
         evaluation: "+"
@@ -147,7 +147,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       test_accuracy:
         latest: True
-        kpi_base: 58.689
+        kpi_base: 50.0
         threshold: 0.01
         actived: True
         evaluation: "+"
@@ -273,7 +273,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 4.25746
+        kpi_base: 4.96726
         threshold: 0.05
         actived: True
         evaluation: "-"
@@ -298,8 +298,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 3.60824
-        threshold: 0.05
+        kpi_base: 4.06283
+        threshold: 0.2
         actived: True
         evaluation: "-"
         unit_repr: "s"
@@ -342,7 +342,7 @@ TRAIN: # 训练步骤
       test_accuracy:
         latest: True
         kpi_base: 50.512
-        threshold: 0.01
+        threshold: 0.05
         actived: True
         evaluation: "+"
         unit_repr: "s"
@@ -359,7 +359,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       test_accuracy:
         latest: True
-        kpi_base: 36.414
+        kpi_base: 15.035
         threshold: 0.01
         actived: True
         evaluation: "+"

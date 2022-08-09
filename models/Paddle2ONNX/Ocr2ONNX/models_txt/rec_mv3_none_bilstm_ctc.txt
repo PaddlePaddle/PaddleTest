@@ -1,0 +1,9 @@
+model_name::rec_mv3_none_bilstm_ctc
+yaml::configs/rec/rec_mv3_none_bilstm_ctc.yml
+pretrain_link::https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_none_bilstm_ctc_v2.0_train.tar
+test_data::https://paddle-qa.bj.bcebos.com/Paddle2ONNX/data_set/ocr_data/ocr_data.tar
+model_type::rec
+opt_ver::11
+opt_ver::11
+atol::1e-5
+rtol::1e-8

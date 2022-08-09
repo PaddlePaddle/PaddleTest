@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -65,7 +65,7 @@ def test_disable_gpu():
 @pytest.mark.gpu
 def test_gpu_bz1():
     """
-    compared mkldnn bert outputs with true val
+    compared gpu bert outputs with true val
     """
     check_model_exist()
 

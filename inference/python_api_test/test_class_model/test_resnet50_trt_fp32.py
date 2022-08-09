@@ -54,8 +54,8 @@ def test_trt_fp32_more_bz():
 
     file_path = "./resnet50"
     images_size = 224
-    batch_size_pool = [1, 5, 10]
-    max_batch_size = 10
+    batch_size_pool = [1, 2]
+    max_batch_size = 2
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
@@ -86,7 +86,7 @@ def test_jetson_trt_fp32_more_bz():
     file_path = "./resnet50"
     images_size = 224
     batch_size_pool = [1]
-    max_batch_size = 10
+    max_batch_size = 1
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(model_file="./resnet50/inference.pdmodel", params_file="./resnet50/inference.pdiparams")
@@ -106,8 +106,6 @@ def test_jetson_trt_fp32_more_bz():
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.win
-@pytest.mark.server
 @pytest.mark.trt_fp32_multi_thread
 def test_trt_fp32_bz1_multi_thread():
     """

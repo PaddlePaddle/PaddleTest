@@ -31,7 +31,8 @@ SET_MULTI_CUDA = "0,1"
 #         SET_CUDA = '0'
 #         SET_MULTI_CUDA = '0,1'
 
-# PaddleRec
+# PaddleClas
 REPO_PaddleClas = "https://github.com/PaddlePaddle/PaddleClas.git"
 BASE_BRANCH = "develop"
 cls_BRANCH = "develop"
+EXEC_TAG = ["linux_function_test", "train_linux_gpu1", "train_linux_gpu2", "eval_linux", "infer_linux", "predict_linux"]

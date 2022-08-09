@@ -1,0 +1,6 @@
+model_name::HarDNet68
+yaml::ClasForONNX/ppcls/configs/ImageNet/HarDNet/HarDNet68.yaml
+pretrain_link::https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/HarDNet68_pretrained.pdparams
+opt_ver::11
+atol::1e-5
+rtol::1e-8

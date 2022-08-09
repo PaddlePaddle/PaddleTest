@@ -1,0 +1,6 @@
+model_name::ESNet_x0_75
+yaml::ClasForONNX/ppcls/configs/ImageNet/ESNet/ESNet_x0_75.yaml
+pretrain_link::https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/ESNet_x0_75_pretrained.pdparams
+opt_ver::11
+atol::1e-5
+rtol::1e-8

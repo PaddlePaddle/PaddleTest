@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -75,7 +75,7 @@ def test_gpu_more_bz():
 
     file_path = "./ppyolov2"
     images_size = 640
-    batch_size_pool = [1, 5]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()

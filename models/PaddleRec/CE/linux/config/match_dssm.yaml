@@ -3,7 +3,7 @@ PRIORITY: P0
 GIT:
   addr: $REPO_PaddleRec
   path: $ROOT_PATH/PaddleRec
-  branch: $match_dssm_BRANCH
+  branch: $rec_BRANCH
 
 ENV:
   PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
@@ -16,6 +16,7 @@ EXEC:
   exec_cases: [DATA_PROC,TRAIN,INFER]
   exec_priority: [p0]
   exec_tag: $EXEC_TAG
+
 #测试套
 DATA_PROC:
   -
@@ -41,8 +42,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3953
-        threshold: 0.02
+        kpi_base: 0.38071522
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -69,7 +70,7 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3953
+        kpi_base: 0.3920
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -82,7 +83,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_dssm_linux_dy_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_dy_gpu2.log
   -
     tag: linux_dy_cpu   # dy_cpu
     priority: p0
@@ -94,8 +95,8 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 0.3953
-        threshold: 0.02
+        kpi_base: 0.6477209
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -121,9 +122,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu1 match_dssm_linux_st_gpu1
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
-        kpi_base: 0.3953
+        kpi_base: 0.4045
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -149,9 +150,9 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_gpu2 match_dssm_linux_st_gpu2
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
-        kpi_base: 0.3953
+        kpi_base: 0.4045
         threshold: 0.02
         actived: True
         evaluation: "+"
@@ -164,7 +165,7 @@ TRAIN: # 训练步骤
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/match_dssm_linux_st_gpu2_dist_log/workerlog.0
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_st_gpu2.log
 
   -
     tag: linux_st_cpu # st_cpu
@@ -175,10 +176,10 @@ TRAIN: # 训练步骤
         cmd: sh train.sh linux_st_cpu match_dssm_linux_st_cpu
 
     kpis: #kpi指标
-      loss:
+      Loss:
         latest: True
-        kpi_base: 0.3953
-        threshold: 0.02
+        kpi_base: 0.6477209
+        threshold: 0.0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -250,6 +251,163 @@ TRAIN: # 训练步骤
 
     output: $ROOT_PATH/$model_log_path/S_match_dssm_linux_st_gpu1_con.log
 
+# mac train(small data)
+  -
+    tag: mac_dy_cpu # dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_dy_cpu match_dssm_mac_dy_cpu
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.6482178
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu # st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_st_cpu match_dssm_mac_st_cpu
+
+    kpis: #kpi指标
+      Loss:
+        latest: True
+        kpi_base: 0.6482178
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_mac_st_cpu.log
+
+# win train(small data)
+  -
+    tag: win_dy_gpu # dy_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_dy_gpu match_dssm_win_dy_gpu dssm
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.6477209
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_dssm_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu # dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_dy_cpu match_dssm_win_dy_cpu dssm
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.6477209
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_dssm_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu # st_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_st_gpu match_dssm_win_st_gpu dssm
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.6477209
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_dssm_win_st_gpu.log
+
+  -
+    tag: win_st_cpu # st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_st_cpu match_dssm_win_st_cpu dssm
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.6477209
+        threshold: 0.0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_dssm_win_st_cpu.log
 
 INFER:
   - #可以有多步
@@ -265,8 +423,8 @@ INFER:
     kpis: #kpi指标
       pnr:
         latest: True
-        kpi_base: 0.9300
-        threshold: 0.02
+        kpi_base: 14.14537902
+        threshold: 0.003
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -315,10 +473,10 @@ INFER:
         cmd: sh infer.sh linux_dy_cpu match_dssm_infer_linux_dy_cpu
 
     kpis: #kpi指标
-      pnr:
+      query_doc_sim:
         latest: True
-        kpi_base: 0.9300
-        threshold: 0.02
+        kpi_base: 0.7847572
+        threshold: 0
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -330,7 +488,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_cpu_pair.log
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_cpu.log
   - #可以有多步
     tag: linux_st_gpu1
     priority: p0
@@ -395,10 +553,10 @@ INFER:
         cmd: sh infer.sh linux_st_cpu match_dssm_infer_linux_st_cpu
 
     kpis: #kpi指标
-      pnr:
+      query_doc_sim:
         latest: True
-        kpi_base: 0.9300
-        threshold: 0.02
+        kpi_base: [0.7847573]
+        threshold: 0.001
         actived: True
         evaluation: "+"
         unit_repr: None
@@ -410,7 +568,7 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_cpu_pair.log
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_cpu.log
 
   -
     tag: linux_dy_gpu1_con
@@ -438,8 +596,8 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    #output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_gpu1_con_pair.log
-    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_gpu1_con.log
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_gpu1_con_pair.log
+    #output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_dy_gpu1_con.log
 
   -
     tag: linux_st_gpu1_con
@@ -466,5 +624,162 @@ INFER:
         evaluation: "-"
         unit_repr: None
 
-    #output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_gpu1_con_pair.log
-    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_gpu1_con.log
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_gpu1_con_pair.log
+#    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_linux_st_gpu1_con.log
+
+# mac infer(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_dy_cpu match_dssm_infer_mac_dy_cpu
+
+    kpis: #kpi指标
+      query_doc_sim:
+        latest: True
+        kpi_base: 0.5060781
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_st_cpu match_dssm_infer_mac_st_cpu
+
+    kpis: #kpi指标
+      query_doc_sim:
+        latest: True
+        kpi_base: [0.50607795]
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_match_dssm_infer_mac_st_cpu.log
+# win infer(small data)
+  -
+    tag: win_dy_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_dy_gpu match_dssm_infer_win_dy_gpu dssm
+
+    kpis: #kpi指标
+      query_doc_sim:
+        latest: True
+        kpi_base: 0.78475714
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_dssm_infer_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_dy_cpu match_dssm_infer_win_dy_cpu dssm
+
+    kpis: #kpi指标
+      query_doc_sim:
+        latest: True
+        kpi_base: 0.78475714
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_dssm_infer_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_st_gpu match_dssm_infer_win_st_gpu dssm
+
+    kpis: #kpi指标
+      query_doc_sim:
+        latest: True
+        kpi_base: 0.78475714
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_dssm_infer_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_st_cpu match_dssm_infer_win_st_cpu dssm
+
+    kpis: #kpi指标
+      query_doc_sim:
+        latest: True
+        kpi_base: 0.78475714
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/match_dssm_infer_win_st_cpu.log
