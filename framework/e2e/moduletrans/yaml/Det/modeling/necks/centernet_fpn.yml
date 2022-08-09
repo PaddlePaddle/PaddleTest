@@ -1,0 +1,462 @@
+centernet_fpn_BasicConv_0:
+  desc: "Det ppdet.modeling.necks.centernet_fpn.BasicConv模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.centernet_fpn.BasicConv"
+    params:
+      in_planes: 13
+      out_planes: 17
+      kernel_size: 3
+      stride: 1
+      padding: 0
+      dilation: 1
+      groups: 1
+      relu: True
+      bn: True
+      bias_attr: False
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 13, 16, 16]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+centernet_fpn_ChannelPool_0:
+  desc: "Det ppdet.modeling.necks.centernet_fpn.ChannelPool模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.centernet_fpn.ChannelPool"
+    params:
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 8, 16, 16]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+centernet_fpn_SpatialGate_0:
+  desc: "Det ppdet.modeling.necks.centernet_fpn.SpatialGate模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.centernet_fpn.SpatialGate"
+    params:
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 8, 16, 16]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+centernet_fpn_DLAUp_0:
+  desc: "Det ppdet.modeling.necks.centernet_fpn.DLAUp模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.centernet_fpn.DLAUp"
+    params:
+      start_level: 3
+      channels: [64, 256, 256]
+      scales: [4, 8, 16]
+      ch_in:
+      dcn_v2: True
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      inputs:
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 64, 128, 128]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 256, 32, 32]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 256, 32, 32]
+          range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit[1]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 1
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+#centernet_fpn_DLAUp_1:
+#  desc: "Det ppdet.modeling.necks.centernet_fpn.DLAUp模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.necks.centernet_fpn.DLAUp"
+#    params:
+#      start_level: 2
+#      channels: [64, 128, 256, 512]
+#      scales: [4, 8, 16, 32]
+#      ch_in:
+#      dcn_v2: True
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      inputs:
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 64, 128, 128]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 128, 64, 64]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 256, 32, 32]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 512, 16, 16]
+#          range: [ -1, 1]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit[1]']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.00001
+#  Train:
+#    step: 1
+#  test:
+#    dygraph_to_static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+##    dygraph_to_infer_predict_test:
+##      acc_test: False
+##      delta: 0.000001
+##      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+
+#centernet_fpn_CenterNetDLAFPN_0:
+#  desc: "Det ppdet.modeling.necks.centernet_fpn.CenterNetDLAFPN模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.necks.centernet_fpn.CenterNetDLAFPN"
+#    params:
+#      in_channels: [8, 16, 32, 64, 128, 256]
+#      down_ratio: 4
+#      last_level: 5
+#      out_channel: 0
+#      first_level:
+#      dcn_v2: True
+#      with_sge: False
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      body_feats:
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 8, 256, 256]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 16, 128, 128]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 32, 64, 64]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 64, 32, 32]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 128, 16, 16]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 256, 8, 8]
+#          range: [ -1, 1]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit[3]']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.00001
+#  Train:
+#    step: 3
+#  test:
+#    dygraph_to_static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+
+centernet_fpn_TransitionUp_0:
+  desc: "Det ppdet.modeling.necks.centernet_fpn.TransitionUp模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.centernet_fpn.TransitionUp"
+    params:
+      in_channels: 8
+      out_channels: 8
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 8, 16, 16]
+        range: [ -1, 1]
+      skip:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 8, 20, 20]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+centernet_fpn_CenterNetHarDNetFPN_0:
+  desc: "Det ppdet.modeling.necks.centernet_fpn.CenterNetHarDNetFPN模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.centernet_fpn.CenterNetHarDNetFPN"
+    params:
+      in_channels: [96, 214, 458, 784]
+      num_layers: 85
+      down_ratio: 4
+      first_level:
+      last_level: 4
+      out_channel: 0
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      body_feats:
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 96, 64, 64]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 214, 32, 32]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 458, 16, 16]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 784, 8, 8]
+          range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit[3]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.0000001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001

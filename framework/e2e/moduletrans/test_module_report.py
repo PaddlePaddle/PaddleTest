@@ -11,9 +11,9 @@ from yaml_loader import YamlLoader
 import controller
 
 
-yaml_path = os.path.join("yaml", "Det", "modeling", "heads", "cascade_head.yml")
+yaml_path = os.path.join("yaml", "Det", "modeling", "necks", "yolo_fpn.yml")
 yml = YamlLoader(yaml_path)
-all_cases_list = ["cascade_head_CascadeHead_0"]
+all_cases_list = ["yolo_fpn_PPYOLOPAN_0"]
 
 # all_cases_list = []
 # all_cases_dict = yml.get_all_case_name()
