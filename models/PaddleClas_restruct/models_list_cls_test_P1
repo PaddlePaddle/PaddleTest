@@ -2,7 +2,6 @@ ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x0_35.yaml
 ppcls/configs/ImageNet/DenseNet/DenseNet121.yaml
 ppcls/configs/ImageNet/MobileNetV2/MobileNetV2_x0_25.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B0.yaml
-ppcls/configs/ImageNet/ConvNeXt/ConvNeXt_tiny.yaml
 ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml
 ppcls/configs/ImageNet/ReXNet/ReXNet_1_0.yaml
 ppcls/configs/ImageNet/DLA/DLA34.yaml

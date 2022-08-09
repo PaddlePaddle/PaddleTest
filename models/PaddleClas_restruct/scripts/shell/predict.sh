@@ -73,7 +73,7 @@ PULC)
         > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
 ;;
 reid)
-    echo "predict_exit_code: unspported" > ../${log_path}/predict/${model_name}_${input_model_type}.log
+    echo "predict unspported ${model_name}" > ../${log_path}/predict/${model_name}_${input_model_type}.log
 ;;
 Vehicle)
     python  python/predict_system.py -c configs/inference_vehicle.yaml \

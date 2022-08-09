@@ -60,7 +60,7 @@ do
         model_latest_name=${array2[0]}
 
 
-        if [[ ${base_model} = ${model_name} ]]; then
+        if [[ ${base_model} == ${model_name} ]]; then
             # echo "#####"
             continue
         else

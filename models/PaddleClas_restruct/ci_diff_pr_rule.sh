@@ -20,7 +20,8 @@ find ppcls/configs/reid/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  
 
 # cat models_list | sort | uniq > models_list_run_tmp  #去重复
 
-
+# ppcls/configs/ImageNet/ConvNeXt/ConvNeXt_tiny.yaml
+# 暂时剔除，hang
 
 
 if [[ ${model_flag} =~ "pr" ]];then
