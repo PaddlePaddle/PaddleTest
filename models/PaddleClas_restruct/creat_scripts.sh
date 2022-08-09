@@ -34,6 +34,7 @@ echo ${priority_all}
 base_model=ImageNet-ResNet-ResNet50
 base_model_latest_name=ResNet50
 base_priority=P0
+base_model_type="ALL,ImageNet"
 # priority_all='P0' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
 # priority_all='P0 P1' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
 branch='develop release'  # develop release  #顺序不能反 更改分支值，所以下面循环注意是两遍
@@ -45,7 +46,6 @@ for priority_tmp in $priority_all
 do
     cat models_list_cls_test_${priority_tmp} | while read line
     do
-
         array=(${line//\// })
         model_type=${array[2]} #区分 分类、slim、识别等
         model_name=${array[2]} #进行字符串拼接
@@ -102,6 +102,7 @@ do
                 # echo $branch
                 # 在这里还要判断当前模型在report中是否存在，不存在的话就不执行
                 sed -i "s|"${base_priority}"|"${priority_tmp}"|g" ${model_name}.yaml #P0/1 #不加\$会报（正常的） sed: first RE may not be empty 加了值不会变
+                sed -i "s|"${base_model_type}"|"ALL,${model_type}"|g" ${model_name}.yaml #修改Imagenet类型
                 if [[ -f ../${Repo}_${branch_tmp} ]];then
                     if [[ ! `grep -c "${model_name}" ../${Repo}_${branch_tmp}` -ne '0' ]] ;then #在已有的里面不存在
                         echo "new model :${model_name}"

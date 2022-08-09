@@ -23,14 +23,27 @@ case ${train_type} in #动态图/静态图/收敛性
 dynamic|static)
     echo "######  params_dir"
     echo ${params_dir}
-    common_par="-o Global.epochs=2 \
-    -o Global.save_interval=2 \
-    -o Global.eval_interval=2 \
-    -o Global.seed=1234 \
-    -o DataLoader.Train.loader.num_workers=0 \
-    -o DataLoader.Train.sampler.shuffle=False  \
-    -o Global.output_dir=${output_dir}/${model_name} \
-    -o Global.device=${set_cuda_device}"
+    echo "${output_dir}/${model_name}/${params_dir}/latest.pdparams"
+    if [[ `cat ${yaml_line} |grep MultiScaleSampler|wc -l` -gt "0"  ]]; then #for tingquan 220513 change
+        echo "have MultiScaleSampler"
+        common_par="-o Global.epochs=2 \
+        -o Global.save_interval=2 \
+        -o Global.eval_interval=2 \
+        -o Global.seed=1234 \
+        -o DataLoader.Train.loader.num_workers=0 \
+        -o DataLoader.Train.sampler.first_bs=32 \
+        -o Global.output_dir=${output_dir}/${model_name} \
+        -o Global.device=${set_cuda_device}"
+    else
+        common_par="-o Global.epochs=2 \
+        -o Global.save_interval=2 \
+        -o Global.eval_interval=2 \
+        -o Global.seed=1234 \
+        -o DataLoader.Train.loader.num_workers=0 \
+        -o DataLoader.Train.sampler.shuffle=False  \
+        -o Global.output_dir=${output_dir}/${model_name} \
+        -o Global.device=${set_cuda_device}"
+    fi
     if [[ ${yaml_line} =~ 'GeneralRecognition' ]]; then
         python ${multi_flag} ${train_mold} -c ${yaml_line} \
             -o DataLoader.Train.sampler.batch_size=32 \

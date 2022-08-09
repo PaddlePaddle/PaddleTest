@@ -77,44 +77,73 @@ echo ${model_name}
 #     cfg = yaml.full_load(y); \
 #     print(cfg['Arch']['name']); \
 #     "`
-export params_dir=(`cat ${yaml_line} | grep name | awk -F ":" '{print $2}'`)
+Arch_index=`cat ${yaml_line} | grep -n Arch | awk -F ":" '{print $1}'`
+Arch_word=`sed -n "${Arch_index},$[${Arch_index}+3]p" ${yaml_line}`
+export params_dir=(`echo ${Arch_word} | grep name | awk -F ":" '{print $3}'`)
 export params_dir=(${params_dir//\"/ })
 echo ${params_dir}
 
 #对32G的模型进行bs减半的操作，注意向上取整 #暂时适配了linux，未考虑MAC
-if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_patch16_224 \
-    ImageNet_EfficientNet_EfficientNetB0 ImageNet_GhostNet_GhostNet_x1_3 ImageNet_RedNet_RedNet50 \
-    ImageNet_ResNeXt101_wsl_ResNeXt101_32x8d_wsl ImageNet_ResNeXt_ResNeXt152_64x4d \
-    ImageNet_SwinTransformer_SwinTransformer_tiny_patch4_window7_224 ImageNet_TNT_TNT_small \
-    ImageNet_Twins_alt_gvt_small ImageNet_Twins_pcpvt_small ImageNet_Xception_Xception41_deeplab \
-    ImageNet_Xception_Xception71' =~ ${model_name} ]];then
-    echo "change ${model_name} batch_size"
-    yum install bc -y
-    apt-get install bc -y
-    function ceil(){
-    floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整 局部变量$1不影响
-    add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
-    echo `expr $floor  + $add`
-    }
-    index=(`cat ${yaml_line} | grep -n batch_size | awk -F ":" '{print $1}'`)
-    for((i=0;i<${#index[@]};i++));
-    do
-        num_str=`sed -n ${index[i]}p ${yaml_line}`
-        if [[ ${num_str} =~ "#@" ]];then #  #@ 保证符号的唯一性
-            continue
-        fi
-        input_num=(`echo ${num_str} | grep -o -E '[0-9]+'  | sed -e 's/^0\+//'`)
-        ((Div=${input_num[0]} %2))
-        if [ "${Div}" == 0 ];then
-            out_num=`expr ${input_num[0]}/2 |bc` #整除2
-        else
-            echo "can not %2 will ceil"
-            out_num=`expr ${input_num[0]}/2` #bs向上取整
-            out_num=`ceil ${out_num}`
-        fi
-        sed -i "${index[i]}s/batch_size: /batch_size: ${out_num} #@/" ${yaml_line}
-    done
-fi
+# if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_patch16_224 \
+#     ImageNet_EfficientNet_EfficientNetB0 ImageNet_GhostNet_GhostNet_x1_3 ImageNet_RedNet_RedNet50 \
+#     ImageNet_ResNeXt101_wsl_ResNeXt101_32x8d_wsl ImageNet_ResNeXt_ResNeXt152_64x4d \
+#     ImageNet_SwinTransformer_SwinTransformer_tiny_patch4_window7_224 ImageNet_TNT_TNT_small \
+#     ImageNet_Twins_alt_gvt_small ImageNet_Twins_pcpvt_small ImageNet_Xception_Xception41_deeplab \
+#     ImageNet_Xception_Xception71' =~ ${model_name} ]];then
+#     echo "change ${model_name} batch_size"
+#     yum install bc -y
+#     apt-get install bc -y
+#     function ceil(){
+#     floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整 局部变量$1不影响
+#     add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
+#     echo `expr $floor  + $add`
+#     }
+#     index=(`cat ${yaml_line} | grep -n batch_size | awk -F ":" '{print $1}'`)
+#     for((i=0;i<${#index[@]};i++));
+#     do
+#         num_str=`sed -n ${index[i]}p ${yaml_line}`
+#         if [[ ${num_str} =~ "#@" ]];then #  #@ 保证符号的唯一性
+#             continue
+#         fi
+#         input_num=(`echo ${num_str} | grep -o -E '[0-9]+'  | sed -e 's/^0\+//'`)
+#         ((Div=${input_num[0]} %2))
+#         if [ "${Div}" == 0 ];then
+#             out_num=`expr ${input_num[0]}/2 |bc` #整除2
+#         else
+#             echo "can not %2 will ceil"
+#             out_num=`expr ${input_num[0]}/2` #bs向上取整
+#             out_num=`ceil ${out_num}`
+#         fi
+#         sed -i "${index[i]}s/batch_size: /batch_size: ${out_num} #@/" ${yaml_line}
+#     done
+# fi
+
+yum install bc -y
+apt-get install bc -y
+function ceil(){
+floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整 局部变量$1不影响
+add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
+echo `expr $floor  + $add`
+}
+index=(`cat ${yaml_line} | grep -n batch_size | awk -F ":" '{print $1}'`)
+for((i=0;i<${#index[@]};i++));
+do
+    num_str=`sed -n ${index[i]}p ${yaml_line}`
+    if [[ ${num_str} =~ "#@" ]];then #  #@ 保证符号的唯一性
+        continue
+    fi
+    input_num=(`echo ${num_str} | grep -o -E '[0-9]+'  | sed -e 's/^0\+//'`)
+    ((Div=${input_num[0]} %3))
+    if [ "${Div}" == 0 ];then
+        out_num=`expr ${input_num[0]}/3 |bc` #整除2
+    else
+        echo "can not %3 will ceil"
+        out_num=`expr ${input_num[0]}/3` #bs向上取整
+        out_num=`ceil ${out_num}`
+    fi
+    sed -i "${index[i]}s/batch_size: /batch_size: ${out_num} #@/" ${yaml_line}
+    echo "change ${model_name} batch_size from ${input_num[0]} to ${out_num}"
+done
 
 #区分单卡多卡
 # export CUDA_VISIBLE_DEVICES=  #这一步让框架来集成
