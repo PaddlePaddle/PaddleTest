@@ -13,11 +13,13 @@ cd ${Project_path} #确定下执行路径
 source prepare.sh
 
 #区分动态图、静态图
+echo ${train_type}
 if [[ ${train_type} =~ "dynamic" ]] || [[ ${train_type} =~ "convergence" ]];then
     export train_mold="tools/train.py"
 else
     export train_mold="ppcls/static/train.py"
 fi
+echo ${train_mold}
 
 case ${train_type} in #动态图/静态图/收敛性
 dynamic|static)
@@ -72,11 +74,11 @@ dynamic|static)
     if [[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]];then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_${card}.log) -eq 0 ]];then
-        echo -e "\033[33m training in ${card} of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[33m ${train_type} training in ${card} of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
         echo "training_exit_code: 0.0" >> ${log_path}/train/${model_name}_${card}.log
     else
         cat ${log_path}/train/${model_name}_${card}.log
-        echo -e "\033[31m training in ${card} of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[31m ${train_type} training in ${card} of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
         echo "training_exit_code: 1.0" >> ${log_path}/train/${model_name}_${card}.log
     fi
     # cat ${log_path}/train/${model_name}_${card}.log | grep "Memory Usage (MB)" #查看显存
@@ -93,11 +95,11 @@ convergence)
     if [[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]];then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_convergence.log) -eq 0 ]];then
-        echo -e "\033[33m training in convergence of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[33m ${train_type} training in convergence of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 0.0" >> ${log_path}/train/${model_name}_convergence.log
     else
         cat ${log_path}/train/${model_name}_convergence.log
-        echo -e "\033[31m training in convergence of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[31m ${train_type} training in convergence of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 1.0" >> ${log_path}/train/${model_name}_convergence.log
     fi
     # cat ${log_path}/train/${model_name}_convergence.log | grep "Memory Usage (MB)" #查看显存
