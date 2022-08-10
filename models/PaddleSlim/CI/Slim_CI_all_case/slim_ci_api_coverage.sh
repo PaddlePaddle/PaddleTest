@@ -59,10 +59,12 @@ if [ -d ${slim_dir}/tests/dygraph ];then
 cd ${slim_dir}/tests/dygraph
 for line in `ls test_*.py`
 do
+    {
     name=`echo ${line} | cut -d \. -f 1`
     echo ${test_num}_"/"_${all_test_num}_dygraph_${name}
     python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_dygraph_${name} 2>&1
     print_info $? ${test_num}_dygraph_${name}
+    }&
     let test_num++
 done
 else
@@ -70,16 +72,18 @@ else
 fi
 }
 run_api_case_dygraph
-
+wait
 run_api_case_act(){
 if [ -d ${slim_dir}/tests/act ];then
 cd ${slim_dir}/tests/act
 for line in `ls test_*.py`
 do
+    {
     name=`echo ${line} | cut -d \. -f 1`
     echo ${test_num}_"/"_${all_test_num}_act_${name}
     python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_act_${name} 2>&1
     print_info $? ${test_num}_act_${name}
+    }&
     let test_num++
 done
 else
@@ -87,6 +91,7 @@ else
 fi
 }
 run_api_case_act
+wait
 
 cd ${slim_dir}/tests
 
