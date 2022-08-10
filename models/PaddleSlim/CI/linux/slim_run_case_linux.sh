@@ -32,7 +32,7 @@ if [ -d "output" ];then
     rm -rf output
 fi
 
-python distill.py --num_epochs 1 --save_inference True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+python distill.py --num_epochs 1 batch_size 64 --save_inference True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 print_info $? st_distill_ResNet50_vd_MobileNet
 }
 
@@ -674,7 +674,7 @@ all_dy_prune_ALL(){
 demo_st_unstructured_prune_threshold(){
 cd ${slim_dir}/demo/unstructured_prune  || catchException demo_st_unstructured_prune_threshold
 python train.py \
---batch_size 256 \
+--batch_size 128 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode threshold \
