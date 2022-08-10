@@ -20,9 +20,16 @@ find ppcls/configs/reid/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  
 
 # cat models_list | sort | uniq > models_list_run_tmp  #去重复
 
-# ppcls/configs/ImageNet/ConvNeXt/ConvNeXt_tiny.yaml
+# ppcls/configs/ImageNet/ConvNeXt/ConvNeXt_tiny.yaml  P2
 # 暂时剔除，hang
 
+# P2
+# ppcls/configs/ImageNet/CSWinTransformer/CSWinTransformer_base_384.yaml
+# ppcls/configs/ImageNet/CSWinTransformer/CSWinTransformer_large_224.yaml
+# ppcls/configs/ImageNet/CSWinTransformer/CSWinTransformer_base_224.yaml
+# ppcls/configs/ImageNet/CSWinTransformer/CSWinTransformer_large_384.yaml
+# ppcls/configs/ImageNet/CSWinTransformer/CSWinTransformer_small_224.yaml
+# maybe hang
 
 if [[ ${model_flag} =~ "pr" ]];then
     git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
