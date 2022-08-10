@@ -13,6 +13,7 @@ from datetime import datetime
 import json
 import paddle
 import pymysql
+from utils.logger import logger
 
 
 class DB(object):
@@ -43,7 +44,7 @@ class DB(object):
         return data
 
     def save(self):
-        """更新job状态"""
+        """更新job状态, retry 重试保持链接"""
         retry = 3
         for i in range(retry):
             sql = "update `jobs` set `update_time`='{}', `status`='{}' where id='{}';".format(
@@ -52,6 +53,7 @@ class DB(object):
             try:
                 self.cursor.execute(sql)
                 self.db.commit()
+                logger.get_log().info('开始写入数据库: 日志位置"./log"')
                 break
             except Exception:
                 # 防止超时失联
@@ -79,8 +81,10 @@ class DB(object):
         try:
             self.cursor.execute(sql)
             self.db.commit()
+            logger.get_log().info("数据库录入完毕")
         except Exception as e:
-            print(e)
+            logger.get_log().info("数据库录入失败")
+            logger.get_log().error(e)
 
     def error(self):
         """错误配置"""
