@@ -39,6 +39,7 @@ cases=`find ./ -name "test*.py" | sort`
 ignore=""
 for line in `ls test_*.py`
 do
+    {
     name=`echo ${line} | cut -d \. -f 1`
     echo ${test_num}_"/"_${all_test_num}_${name}
     if [[ ${ignore} =~ ${line##*/} ]]; then
@@ -48,9 +49,11 @@ do
        print_info $? ${test_num}_${name}
     fi
     let test_num++
+    }&
 done
 }
 run_api_case
+wait
 run_api_case_dygraph(){
 if [ -d ${slim_dir}/tests/dygraph ];then
 cd ${slim_dir}/tests/dygraph
