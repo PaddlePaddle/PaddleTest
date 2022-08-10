@@ -22,25 +22,25 @@ ImageNet|slim|metric_learning)
         > ${log_path}/infer/${model_name}_${input_model_type}.log 2>&1
 ;;
 Cartoonface)
-    echo "infer_exit_code: unspported" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
 DeepHash|GeneralRecognition)
-    echo "infer_exit_code: unspported" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
 Logo)
-    echo "infer_exit_code: unspported" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
 Products)
-    echo "infer_exit_code: unspported" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
 PULC)
-    echo "infer_exit_code: unspported" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
 reid)
-    echo "infer_exit_code: unspported" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
 Vehicle)
-    echo "infer_exit_code: unspported" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
 esac
 

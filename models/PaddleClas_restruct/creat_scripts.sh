@@ -34,9 +34,10 @@ echo ${priority_all}
 base_model=ImageNet-ResNet-ResNet50
 base_model_latest_name=ResNet50
 base_priority=P0
+base_model_type="all,ImageNet"
 # priority_all='P0' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
 # priority_all='P0 P1' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
-branch='develop release'  # develop release  #顺序不能反
+branch='develop release'  # develop release  #顺序不能反 更改分支值，所以下面循环注意是两遍
 # read -p "Press enter to continue"  #卡一下
 
 echo base_model
@@ -45,7 +46,6 @@ for priority_tmp in $priority_all
 do
     cat models_list_cls_test_${priority_tmp} | while read line
     do
-
         array=(${line//\// })
         model_type=${array[2]} #区分 分类、slim、识别等
         model_name=${array[2]} #进行字符串拼接
@@ -60,7 +60,7 @@ do
         model_latest_name=${array2[0]}
 
 
-        if [[ ${base_model} = ${model_name} ]]; then
+        if [[ ${base_model} == ${model_name} ]]; then
             # echo "#####"
             continue
         else
@@ -97,38 +97,42 @@ do
             fi
             for branch_tmp in $branch
             do
-
                 # echo branch_tmp
                 # echo $branch_tmp
                 # echo $branch
                 # 在这里还要判断当前模型在report中是否存在，不存在的话就不执行
                 sed -i "s|"${base_priority}"|"${priority_tmp}"|g" ${model_name}.yaml #P0/1 #不加\$会报（正常的） sed: first RE may not be empty 加了值不会变
-                if [[ ! `grep -c "${model_name}" ../${Repo}_${branch_tmp}` -ne '0' ]] ;then #在已有的里面不存在
-                    echo "new model :${model_name}"
+                sed -i "s|"${base_model_type}"|"all,${model_type}"|g" ${model_name}.yaml #修改Imagenet类型
+                if [[ -f ../${Repo}_${branch_tmp} ]];then
+                    if [[ ! `grep -c "${model_name}" ../${Repo}_${branch_tmp}` -ne '0' ]] ;then #在已有的里面不存在
+                        echo "new model :${model_name}"
+                    else
+                        # echo priority_tmp
+                        # echo ${base_priority}
+                        # echo ${priority_tmp}
+                        # echo $base_model
+                        # echo $branch_tmpbranch
+                        # grep "${base_model}" ../${Repo}_${branch_tmp}
+                        # read -p "Press enter to continue"  #卡一下
+
+                        arr_base=($(echo `grep -w "${base_model}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
+                        arr_target=($(echo `grep -w "${model_name}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
+                        # echo arr_base
+                        # echo ${arr_base[*]}
+                        # echo ${arr_target[*]}
+                        num_lisrt='1 2 3 4 5 6 7 8' #一共有8个值需要改变
+                        for num_lisrt_tmp in $num_lisrt
+                            do
+                            # echo ${arr_base[${num_lisrt_tmp}]}
+                            # echo ${arr_target[${num_lisrt_tmp}]}
+                            sed -i "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model_name}.yaml
+                            #mac命令只替换第一个，linux有所区别需要注意
+                            # sed -i "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model_name}.yaml #linux_train_单卡
+
+                            done
+                    fi
                 else
-                    # echo priority_tmp
-                    # echo ${base_priority}
-                    # echo ${priority_tmp}
-                    # echo $base_model
-                    # echo $branch_tmpbranch
-                    # grep "${base_model}" ../${Repo}_${branch_tmp}
-                    # read -p "Press enter to continue"  #卡一下
-
-                    arr_base=($(echo `grep -w "${base_model}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
-                    arr_target=($(echo `grep -w "${model_name}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
-                    # echo arr_base
-                    # echo ${arr_base[*]}
-                    # echo ${arr_target[*]}
-                    num_lisrt='1 2 3 4 5 6 7 8' #一共有8个值需要改变
-                    for num_lisrt_tmp in $num_lisrt
-                        do
-                        # echo ${arr_base[${num_lisrt_tmp}]}
-                        # echo ${arr_target[${num_lisrt_tmp}]}
-                        sed -i "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model_name}.yaml
-                        #mac命令只替换第一个，linux有所区别需要注意
-                        # sed -i "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model_name}.yaml #linux_train_单卡
-
-                        done
+                    echo "new model :${model_name}"
                 fi
             done
 
