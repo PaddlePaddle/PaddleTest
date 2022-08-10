@@ -48,8 +48,8 @@ do
        python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_${name} 2>&1
        print_info $? ${test_num}_${name}
     fi
-    let test_num++
     }&
+    let test_num++
 done
 }
 run_api_case
