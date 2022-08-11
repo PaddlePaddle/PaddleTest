@@ -1120,18 +1120,19 @@ print_logs_func(){
 
 python -m pip install paddleclas
 python -m pip install paddlenlp
-python -m pip install paddleseg
+python -m pip install paddleseg==2.5.0
 python -m pip install paddledet
+python -m pip list | grep paddle
 
 if [ "$1" = "run_CI" ];then
 	# CI任务的case
-    export all_case_list=(all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI all_act_CI)
+    export all_case_list=(all_act_CI all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
     run_case_func
     print_logs_func
 
 elif [ "$1" = "run_CE" ];then
 	# CE任务的case、
-    export all_case_list=(all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas all_act_CE)
+    export all_case_list=(all_act_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas )
     run_case_func
     # print_logs_func
 elif [ "$1" = "run_ALL" ];then

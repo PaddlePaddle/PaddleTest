@@ -41,5 +41,6 @@ git clone https://github.com/PaddlePaddle/PaddleTest.git
 
 cd PaddleTest/tree/develop/framework/e2e/competitor
 
-python yaml_executor.py
+python generate.py nn
+python test_nn.py nn
 ```
