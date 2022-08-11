@@ -1,5 +1,6 @@
-
 cd ${Project_path} #确定下执行路径
+echo "end.sh"
+echo $PWD
 
 if [[ ${get_data_way} == "ln_way" ]];then
     if [[ ${Data_path} == "" ]];then
@@ -33,4 +34,6 @@ else
         rm -rf *_pretrained*
     fi
 fi
+
+cd ../../
 #回收数据，避免产生过多缓存
