@@ -1,52 +1,52 @@
-#yolo_fpn_YoloDetBlock_0:
-#  desc: "Det ppdet.modeling.necks.yolo_fpn.YoloDetBlock模型结构"
-#  Layer:
-#    repo: "PaddleDetection"
-#    layer_name: "ppdet.modeling.necks.yolo_fpn.YoloDetBlock"
-#    params:
-#      ch_in: 16
-#      channel: 16
-#      norm_type: "bn"
-#      freeze_norm: False
-#      name: "YoloDetBlock"
-#      data_format: 'NCHW'
-#  DataGenerator:
-#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
-#    data:
-#      inputs:
-#        generate_way: "random"  # random, solid, load
-#        type: "Tensor"
-#        dtype: "float64"
-#        shape: [4, 16, 32, 32]
-#        range: [ -1, 1]
-#  Loss:
-#    loss_name: "diy.loss.diy_loss.naive_loss_list"
-#    params:
-#      loss_list: ['logit[0]']
-#  optimizer:
-#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
-#    params:
-#      opt_api: "paddle.optimizer.SGD"
-#      learning_rate: 0.00001
-#  Train:
-#    step: 3
-#  test:
-#    dygraph_to_static_train_test:
+yolo_fpn_YoloDetBlock_0:
+  desc: "Det ppdet.modeling.necks.yolo_fpn.YoloDetBlock模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.yolo_fpn.YoloDetBlock"
+    params:
+      ch_in: 16
+      channel: 16
+      norm_type: "bn"
+      freeze_norm: False
+      name: "YoloDetBlock"
+      data_format: 'NCHW'
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      inputs:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 16, 32, 32]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit[0]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-#    dygraph_to_static_predict_test:
+#    dygraph_predict_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-#    dygraph_to_infer_predict_test:
-#      acc_test: False
-#      delta: 0.000001
-#      rtol: 0.000001
-##    dygraph_train_test:
-##      delta: 0.00000001
-##      rtol: 0.00000001
-##    dygraph_predict_test:
-##      delta: 0.00000001
-##      rtol: 0.00000001
 
 yolo_fpn_SPP_0:
   desc: "Det ppdet.modeling.necks.yolo_fpn.SPP模型结构"
@@ -440,131 +440,131 @@ yolo_fpn_PPYOLOTinyFPN_0:
 #      delta: 0.00000001
 #      rtol: 0.00000001
 
-#yolo_fpn_PPYOLOPAN_0:
-#  desc: "Det ppdet.modeling.necks.yolo_fpn.PPYOLOPAN模型结构"
-#  Layer:
-#    repo: "PaddleDetection"
-#    layer_name: "ppdet.modeling.necks.yolo_fpn.PPYOLOPAN"
-#    params:
-#      in_channels: [8, 16, 32]
-#      norm_type: 'bn'
-#      data_format: 'NCHW'
-#      act: 'mish'
-#      conv_block_num: 3
-#      drop_block: False
-#      block_size: 3
-#      keep_prob: 0.9
-#      spp: False
-#  DataGenerator:
-#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
-#    data:
-#      blocks:
-#        -
-#          generate_way: "random"  # random, solid, load
-#          type: "Tensor"
-#          dtype: "float64"
-#          shape: [4, 8, 32, 32]
-#          range: [ -1, 1]
-#        -
-#          generate_way: "random"  # random, solid, load
-#          type: "Tensor"
-#          dtype: "float64"
-#          shape: [4, 16, 16, 16]
-#          range: [ -1, 1]
-#        -
-#          generate_way: "random"  # random, solid, load
-#          type: "Tensor"
-#          dtype: "float64"
-#          shape: [4, 32, 8, 8]
-#          range: [ -1, 1]
-#  Loss:
-#    loss_name: "diy.loss.diy_loss.naive_loss_list"
-#    params:
-#      loss_list: ['logit[2]']
-#  optimizer:
-#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
-#    params:
-#      opt_api: "paddle.optimizer.SGD"
-#      learning_rate: 0.0000001
-#  Train:
-#    step: 3
-#  test:
-#    dygraph_to_static_train_test:
+yolo_fpn_PPYOLOPAN_0:
+  desc: "Det ppdet.modeling.necks.yolo_fpn.PPYOLOPAN模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.yolo_fpn.PPYOLOPAN"
+    params:
+      in_channels: [8, 16, 32]
+      norm_type: 'bn'
+      data_format: 'NCHW'
+      act: 'mish'
+      conv_block_num: 3
+      drop_block: False
+      block_size: 3
+      keep_prob: 0.9
+      spp: False
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      blocks:
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 8, 32, 32]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 16, 16, 16]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 32, 8, 8]
+          range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit[2]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.0000001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-#    dygraph_to_static_predict_test:
+#    dygraph_predict_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-#    dygraph_to_infer_predict_test:
-#      acc_test: False
-#      delta: 0.000001
-#      rtol: 0.000001
-##    dygraph_train_test:
-##      delta: 0.00000001
-##      rtol: 0.00000001
-##    dygraph_predict_test:
-##      delta: 0.00000001
-##      rtol: 0.00000001
 
-#yolo_fpn_PPYOLOPAN_0:
-#  desc: "Det ppdet.modeling.necks.yolo_fpn.YOLOCSPPAN模型结构"
-#  Layer:
-#    repo: "PaddleDetection"
-#    layer_name: "ppdet.modeling.necks.yolo_fpn.YOLOCSPPAN"
-#    params:
-#      depth_mult: 1.0
-#      in_channels: [8, 16, 32]
-#      depthwise: False
-#      data_format: 'NCHW'
-#      act: 'silu'
-#      trt: False
-#  DataGenerator:
-#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
-#    data:
-#      feats:
-#        -
-#          generate_way: "random"  # random, solid, load
-#          type: "Tensor"
-#          dtype: "float64"
-#          shape: [4, 8, 32, 32]
-#          range: [ -1, 1]
-#        -
-#          generate_way: "random"  # random, solid, load
-#          type: "Tensor"
-#          dtype: "float64"
-#          shape: [4, 16, 16, 16]
-#          range: [ -1, 1]
-#        -
-#          generate_way: "random"  # random, solid, load
-#          type: "Tensor"
-#          dtype: "float64"
-#          shape: [4, 32, 8, 8]
-#          range: [ -1, 1]
-#  Loss:
-#    loss_name: "diy.loss.diy_loss.naive_loss_list"
-#    params:
-#      loss_list: ['logit[0]']
-#  optimizer:
-#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
-#    params:
-#      opt_api: "paddle.optimizer.SGD"
-#      learning_rate: 0.0000001
-#  Train:
-#    step: 3
-#  test:
-#    dygraph_to_static_train_test:
+yolo_fpn_YOLOCSPPAN_0:
+  desc: "Det ppdet.modeling.necks.yolo_fpn.YOLOCSPPAN模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.necks.yolo_fpn.YOLOCSPPAN"
+    params:
+      depth_mult: 1.0
+      in_channels: [8, 16, 32]
+      depthwise: False
+      data_format: 'NCHW'
+      act: 'silu'
+      trt: False
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      feats:
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 8, 32, 32]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 16, 16, 16]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float64"
+          shape: [4, 32, 8, 8]
+          range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit[0]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.0000001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-#    dygraph_to_static_predict_test:
+#    dygraph_predict_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-#    dygraph_to_infer_predict_test:
-#      acc_test: False
-#      delta: 0.000001
-#      rtol: 0.000001
-##    dygraph_train_test:
-##      delta: 0.00000001
-##      rtol: 0.00000001
-##    dygraph_predict_test:
-##      delta: 0.00000001
-##      rtol: 0.00000001
