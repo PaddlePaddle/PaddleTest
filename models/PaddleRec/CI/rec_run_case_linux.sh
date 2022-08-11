@@ -210,11 +210,11 @@ run_CI_func(){
 }
 
 run_freet_func(){
-    demo_contentunderstanding True freet_run
-    demo_match True freet_run
-    demo_multitask True freet_run
-    demo_rank True freet_run
-    demo_recall True freet_run
+    demo_contentunderstanding True # freet_run
+    demo_match True # freet_run
+    demo_multitask True # freet_run
+    demo_rank True # freet_run
+    demo_recall True # freet_run
 }
 
 run_CPU_func(){

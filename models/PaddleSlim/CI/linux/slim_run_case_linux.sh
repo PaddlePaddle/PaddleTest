@@ -32,7 +32,7 @@ if [ -d "output" ];then
     rm -rf output
 fi
 
-python distill.py --num_epochs 1 --save_inference True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+python distill.py --num_epochs 1 --batch_size 64 --save_inference True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 print_info $? st_distill_ResNet50_vd_MobileNet
 }
 
@@ -102,7 +102,7 @@ if [ -d "output" ];then
 fi
 
 python train.py --model MobileNet --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 32 >${log_path}/st_quant_aware_v1 2>&1
+--checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 16 >${log_path}/st_quant_aware_v1 2>&1
 print_info $? st_quant_aware_v1
 }
 
@@ -674,7 +674,7 @@ all_dy_prune_ALL(){
 demo_st_unstructured_prune_threshold(){
 cd ${slim_dir}/demo/unstructured_prune  || catchException demo_st_unstructured_prune_threshold
 python train.py \
---batch_size 256 \
+--batch_size 128 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode threshold \
@@ -697,7 +697,7 @@ print_info $? st_unstructured_prune_threshold_eval
 demo_st_unstructured_prune_ratio(){
 cd ${slim_dir}/demo/unstructured_prune  || catchException demo_st_unstructured_prune_ratio
 python train.py \
---batch_size 256 \
+--batch_size 128 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode ratio \
@@ -766,7 +766,7 @@ python -m paddle.distributed.launch \
 --lr 0.05 \
 --pruning_mode ratio \
 --ratio 0.55 \
---batch_size 256 \
+--batch_size 128 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
 --num_epochs 1 \
@@ -785,7 +785,7 @@ python -m paddle.distributed.launch \
 --lr 0.05 \
 --pruning_mode threshold \
 --threshold 0.01 \
---batch_size 256 \
+--batch_size 128 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
 --num_epochs 1 \
@@ -805,7 +805,7 @@ python -m paddle.distributed.launch \
 --lr 0.05 \
 --pruning_mode threshold \
 --threshold 0.01 \
---batch_size 256 \
+--batch_size 128 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
 --num_epochs 3 \
@@ -1098,8 +1098,10 @@ run_case_func(){
     echo --- start run case ---
     case_num=1
     for model in ${all_case_list[*]};do
+    	{
         echo ---$case_num/${#all_case_list[*]}: ${model}---
         ${model}
+	}&
         let case_num++
     done
     echo --- end run case---
@@ -1128,15 +1130,18 @@ if [ "$1" = "run_CI" ];then
 	# CI任务的case
     export all_case_list=(all_act_CI all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
     run_case_func
+    wait
     print_logs_func
 
 elif [ "$1" = "run_CE" ];then
 	# CE任务的case
     export all_case_list=(all_act_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas )
     run_case_func
+     wait
     # print_logs_func
 elif [ "$1" = "run_ALL" ];then
 	# 全量case
     export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas all_act_ALL)
     run_case_func
+     wait
 fi
