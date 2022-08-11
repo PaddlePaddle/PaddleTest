@@ -257,7 +257,7 @@ print_info $? st_pact_quant_aware_v3_load
 #cd demo/quant/quant_aware_with_infermodel/ 所需训练时间较长，UT中自定义model覆盖
 
 all_st_quant_CI(){
-    demo_st_quant_aware_v1
+    #demo_st_quant_aware_v1
     demo_st_quant_aware_ResNet34
     demo_st_quant_post_hist
     demo_st_pact_quant_aware_v3
@@ -272,7 +272,7 @@ all_st_quant_CE(){
 all_st_quant_ALL(){
     demo_st_quant_post_hpo
     demo_st_quant_post_hist
-    demo_st_quant_aware_v1
+    #demo_st_quant_aware_v1
     demo_st_pact_quant_aware_v3
     #demo_st_quant_aware_ResNet34
     demo_st_quant_embedding
@@ -674,7 +674,7 @@ all_dy_prune_ALL(){
 demo_st_unstructured_prune_threshold(){
 cd ${slim_dir}/demo/unstructured_prune  || catchException demo_st_unstructured_prune_threshold
 python train.py \
---batch_size 128 \
+--batch_size 256 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode threshold \
@@ -697,7 +697,7 @@ print_info $? st_unstructured_prune_threshold_eval
 demo_st_unstructured_prune_ratio(){
 cd ${slim_dir}/demo/unstructured_prune  || catchException demo_st_unstructured_prune_ratio
 python train.py \
---batch_size 128 \
+--batch_size 256 \
 --pretrained_model ../pretrain/MobileNetV1_pretrained \
 --lr 0.05 \
 --pruning_mode ratio \
@@ -766,7 +766,7 @@ python -m paddle.distributed.launch \
 --lr 0.05 \
 --pruning_mode ratio \
 --ratio 0.55 \
---batch_size 128 \
+--batch_size 256 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
 --num_epochs 1 \
@@ -785,7 +785,7 @@ python -m paddle.distributed.launch \
 --lr 0.05 \
 --pruning_mode threshold \
 --threshold 0.01 \
---batch_size 128 \
+--batch_size 256 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
 --num_epochs 1 \
@@ -805,7 +805,7 @@ python -m paddle.distributed.launch \
 --lr 0.05 \
 --pruning_mode threshold \
 --threshold 0.01 \
---batch_size 128 \
+--batch_size 256 \
 --lr_strategy piecewise_decay \
 --step_epochs 1 2 3 \
 --num_epochs 3 \
@@ -823,7 +823,7 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch \
           --log_dir="dy_unstructured_prune_gmp_log" \
           train.py \
-          --batch_size 64 \
+          --batch_size 128 \
           --data imagenet \
           --pruning_mode ratio \
           --ratio 0.75 \
@@ -845,7 +845,7 @@ print_info $? dy_unstructured_prune_ratio_gmp
 }
 
 all_dy_unstr_prune_CI(){
-    demo_dy_unstructured_pruning_threshold
+    #demo_dy_unstructured_pruning_threshold
     demo_dy_unstructured_pruning_ratio_gmp
 }
 
@@ -855,7 +855,7 @@ all_dy_unstr_prune_CE(){
 
 all_dy_unstr_prune_ALL(){
     demo_dy_unstructured_pruning_ratio
-    demo_dy_unstructured_pruning_threshold
+    #demo_dy_unstructured_pruning_threshold
     demo_dy_unstructured_pruning_ratio_gmp
 }
 
@@ -1107,6 +1107,12 @@ run_case_func(){
     echo --- end run case---
 }
 
+run_case_without_multiprocess(){
+  demo_st_quant_aware_v1
+  demo_dy_unstructured_pruning_threshold
+}
+
+
 print_logs_func(){
     cd ${log_path}
     FF=`ls *FAIL*|wc -l`
@@ -1131,6 +1137,7 @@ if [ "$1" = "run_CI" ];then
     export all_case_list=(all_act_CI all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
     run_case_func
     wait
+    run_case_without_multiprocess
     print_logs_func
 
 elif [ "$1" = "run_CE" ];then
@@ -1143,5 +1150,6 @@ elif [ "$1" = "run_ALL" ];then
 	# 全量case
     export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas all_act_ALL)
     run_case_func
-     wait
+    wait
+    run_case_without_multiprocess
 fi
