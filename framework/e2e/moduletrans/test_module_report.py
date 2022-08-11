@@ -11,9 +11,9 @@ from yaml_loader import YamlLoader
 import controller
 
 
-yaml_path = os.path.join("yaml", "Det", "modeling", "heads", "yolo_head.yml")
+yaml_path = os.path.join("yaml", "Det", "modeling", "backbones", "res2net.yml")
 yml = YamlLoader(yaml_path)
-all_cases_list = ["yolo_head_YOLOv3Head_0"]
+all_cases_list = ["res2net_Res2Net_0"]
 
 # all_cases_list = []
 # all_cases_dict = yml.get_all_case_name()
