@@ -74,11 +74,13 @@ dynamic|static)
     if [[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]];then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_${card}.log) -eq 0 ]];then
-        echo -e "\033[33m ${train_type} training successfully in ${card} of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[33m ${train_type} successfully! training in ${card} of ${model_name} successfully!\033[0m" \
+            |tee -a ${log_path}/result.log
         echo "training_exit_code: 0.0" >> ${log_path}/train/${model_name}_${card}.log
     else
         cat ${log_path}/train/${model_name}_${card}.log
-        echo -e "\033[31m ${train_type} training failed in ${card} of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[31m ${train_type} failed! training in ${card} of ${model_name} failed!\033[0m" \
+            |tee -a ${log_path}/result.log
         echo "training_exit_code: 1.0" >> ${log_path}/train/${model_name}_${card}.log
     fi
     # cat ${log_path}/train/${model_name}_${card}.log | grep "Memory Usage (MB)" #查看显存
@@ -95,11 +97,13 @@ convergence)
     if [[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]];then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_convergence.log) -eq 0 ]];then
-        echo -e "\033[33m ${train_type} training successfully in ${card} of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[33m ${train_type} training successfully! in ${card} of ${model_name}  successfully!\033[0m" \
+            |tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 0.0" >> ${log_path}/train/${model_name}_convergence.log
     else
         cat ${log_path}/train/${model_name}_convergence.log
-        echo -e "\033[31m ${train_type} training failed in ${card} of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[31m ${train_type} training failed! in ${card} of ${model_name} failed!\033[0m" \
+            |tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 1.0" >> ${log_path}/train/${model_name}_convergence.log
     fi
     # cat ${log_path}/train/${model_name}_convergence.log | grep "Memory Usage (MB)" #查看显存

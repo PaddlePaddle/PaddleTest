@@ -10,6 +10,8 @@ if [[ ${get_data_way} == "ln_way" ]];then
 else
     # 增加一下判断，别直接cd到空
     if [[ -d dataset ]];then
+        echo $(ls dataset|head -n 2)
+        echo " have dataset"
         rm -rf dataset
     fi
 

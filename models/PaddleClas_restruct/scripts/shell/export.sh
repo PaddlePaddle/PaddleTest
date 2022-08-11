@@ -40,13 +40,13 @@ fi
 # if [[ $? -eq 0 ]] && \
     # [[ $(grep -c  "Error" ${log_path}/export_model/${model_name}_${input_model_type}.log) -eq 0 ]];then
 if [[ $? -eq 0 ]];then
-    echo -e "\033[33m export_model of ${model_name}_${input_model_type}  \
-    successfully!\033[0m"| tee -a ${log_path}/result.log
+    echo -e "\033[33m successfully! export_model of ${model_name}_${input_model_type} successfully!\033[0m" \
+        | tee -a ${log_path}/result.log
     echo "export_exit_code: 0.0" >> ${log_path}/export_model/${model_name}_${input_model_type}.log
 else
     cat ${log_path}/export_model/${model_name}_${input_model_type}.log
-    echo -e "\033[31m export_model of ${model_name}_${input_model_type} \
-    failed!\033[0m" | tee -a ${log_path}/result.log
+    echo -e "\033[31m failed! export_model of ${model_name}_${input_model_type} failed!\033[0m" \
+        | tee -a ${log_path}/result.log
     echo "export_exit_code: 1.0" >> ${log_path}/export_model/${model_name}_${input_model_type}.log
 fi
 

@@ -1,4 +1,4 @@
-cd ${Project_path}../ #确定下执行路径
+cd ${Project_path}/../ #确定下执行路径
 echo "start.sh"
 echo $PWD
 # cd task
