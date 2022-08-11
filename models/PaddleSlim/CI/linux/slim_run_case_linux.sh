@@ -272,7 +272,7 @@ all_st_quant_CE(){
 all_st_quant_ALL(){
     demo_st_quant_post_hpo
     demo_st_quant_post_hist
-    #demo_st_quant_aware_v1
+    demo_st_quant_aware_v1
     demo_st_pact_quant_aware_v3
     #demo_st_quant_aware_ResNet34
     demo_st_quant_embedding
@@ -660,7 +660,7 @@ all_dy_prune_CI(){
 all_dy_prune_CE(){
 	demo_dy_pruning_v1
 	demo_dy_pruning_v2
-        demo_dy_pruning_ResNet34_f42
+  demo_dy_pruning_ResNet34_f42
 }
 
 
@@ -845,8 +845,8 @@ print_info $? dy_unstructured_prune_ratio_gmp
 }
 
 all_dy_unstr_prune_CI(){
-    #demo_dy_unstructured_pruning_threshold
-    demo_dy_unstructured_pruning_ratio_gmp
+    demo_dy_unstructured_pruning_threshold
+    #demo_dy_unstructured_pruning_ratio_gmp
 }
 
 all_dy_unstr_prune_CE(){
@@ -855,7 +855,7 @@ all_dy_unstr_prune_CE(){
 
 all_dy_unstr_prune_ALL(){
     demo_dy_unstructured_pruning_ratio
-    #demo_dy_unstructured_pruning_threshold
+    demo_dy_unstructured_pruning_threshold
     demo_dy_unstructured_pruning_ratio_gmp
 }
 
@@ -1101,15 +1101,10 @@ run_case_func(){
     	{
         echo ---$case_num/${#all_case_list[*]}: ${model}---
         ${model}
-	}&
+	}
         let case_num++
     done
     echo --- end run case---
-}
-
-run_case_without_multiprocess(){
-  demo_st_quant_aware_v1
-  demo_dy_unstructured_pruning_threshold
 }
 
 
@@ -1136,8 +1131,6 @@ if [ "$1" = "run_CI" ];then
 	# CI任务的case
     export all_case_list=(all_act_CI all_st_quant_CI all_distill_CI  all_dy_quant_CI all_st_prune_CI all_dy_prune_CI all_st_unstr_prune_CI all_dy_unstr_prune_CI )
     run_case_func
-    wait
-    run_case_without_multiprocess
     print_logs_func
 
 elif [ "$1" = "run_CE" ];then
