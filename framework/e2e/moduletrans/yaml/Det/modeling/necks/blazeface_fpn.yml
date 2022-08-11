@@ -161,7 +161,7 @@ blazeface_fpn_BlazeNeck_0:
     repo: "PaddleDetection"
     layer_name: "ppdet.modeling.necks.blazeface_fpn.BlazeNeck"
     params:
-      in_channels: 12
+      in_channel: 12
       out_channels: 20
       name: 'SSH'
   DataGenerator:

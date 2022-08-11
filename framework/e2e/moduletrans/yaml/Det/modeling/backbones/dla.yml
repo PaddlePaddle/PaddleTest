@@ -149,8 +149,6 @@ dla_Tree_0:
     dygraph_train_test:
       delta: 0.00000001
       rtol: 0.00000001
-    build_dygraph_train_ground_truth:
-      mode: 'numpy'
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
