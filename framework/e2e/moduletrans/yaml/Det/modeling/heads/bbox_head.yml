@@ -1,0 +1,240 @@
+bbox_head_TwoFCHead_0:
+  desc: "Det ppdet.modeling.heads.bbox_head.TwoFCHead模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.heads.bbox_head.TwoFCHead"
+    params:
+      in_channel: 256
+      out_channel: 1024
+      resolution: 7
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      rois_feat:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 256, 7, 7]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+bbox_head_XConvNormHead_0:
+  desc: "Det ppdet.modeling.heads.bbox_head.XConvNormHead模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.heads.bbox_head.XConvNormHead"
+    params:
+      in_channel: 256
+      num_convs: 4
+      conv_dim: 256
+      out_channel: 1024
+      resolution: 7
+      norm_type: 'gn'
+      freeze_norm: False
+      stage_name: 'XConvNormHead'
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      rois_feat:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 256, 7, 7]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.0000001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+#bbox_head_BBoxHead_0:
+#  desc: "Det ppdet.modeling.heads.bbox_head.BBoxHead模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.heads.bbox_head.BBoxHead"
+#    params:
+#      head: "**ppdet.modeling.heads.bbox_head.XConvNormHead()"
+#      in_channel: 256
+#      #roi_extractor: "**_get_class_default_kwargs(RoIAlign)"
+#      bbox_assigner: "**ppdet.modeling.proposal_generator.target_layer.BBoxAssigner()"
+#      with_pool: False
+#      num_classes: 80
+#      bbox_weight: [10., 10., 5., 5.]
+#      bbox_loss:
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      body_feats:
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [1, 256, 184, 280]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [1, 256, 92, 140]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [1, 256, 46, 70]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [1, 256, 23, 35]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [1, 256, 12, 18]
+#          range: [ -1, 1]
+#      rois:
+#        -
+#          generate_way: "random"
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [1000, 4]
+#          range: [ 0, 1]
+#      rois_num:
+#        generate_way: "solid"
+#        type: "Tensor"
+#        dtype: "int32"
+#        value: [1000]
+#      inputs:
+#        im_id:
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "int64"
+#          shape: [1, 1]
+#          range: [ 424481, 424482]
+#        is_crowd:
+#          -
+#            generate_way: "solid"  # random, solid, load
+#            type: "Tensor"
+#            dtype: "int32"
+#            value: [[0], [0]]
+#        gt_class:
+#          -
+#            generate_way: "solid"
+#            type: "Tensor"
+#            dtype: "int32"
+#            value: [[4], [0]]
+#        gt_bbox:
+#          -
+#            generate_way: "random"  # random, solid, load
+#            type: "Tensor"
+#            dtype: "float32"
+#            shape: [2, 4]
+#            range: [ 0, 1000]
+#        curr_iter:
+#          generate_way: "solid"
+#          type: "Tensor"
+#          dtype: "int64"
+#          value: [0]
+#        image:
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [1, 3, 736, 1120]
+#          range: [ -1, 1]
+#        im_shape:
+#          generate_way: "solid"
+#          type: "Tensor"
+#          dtype: "float32"
+#          value: [[736., 1103.13818359]]
+#        scale_factor:
+#          generate_way: "solid"
+#          type: "Tensor"
+#          dtype: "float32"
+#          value: [[1.72365344, 1.72365344]]
+#        epoch_id:
+#          generate_way: "solid"
+#          type: "int"
+#          dtype: "int64"
+#          value: 0
+#
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.0000001
+#  Train:
+#    step: 3
+#  test:
+#    dygraph_to_static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+##    dygraph_to_static_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    dygraph_to_infer_predict_test:
+##      acc_test: False
+##      delta: 0.000001
+##      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
