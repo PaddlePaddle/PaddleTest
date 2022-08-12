@@ -989,7 +989,7 @@ demo_act_nlp_ERNIE_3(){
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py --config_path='./configs/ernie3.0/afqmc.yaml' --save_dir='./save_afqmc_ERNIE_pruned' > ${log_path}/act_nlp_demo_ernie_3_single_card 2>&1
-	print_info act_nlp_demo_ernie_3_single_card
+	print_info $? act_nlp_demo_ernie_3_single_card
 	sed -i 's/.\/afqmc/.\/save_afqmc_ERNIE_pruned/' ./configs/pp-minilm/auto/afqmc.yaml
 	python run.py --config_path='./configs/ernie3.0/afqmc.yaml'  --eval True > ${log_path}/act_nlp_demo_ernie3_single_card_eval 2>&1
 	print_info $? act_nlp_demo_ernie3_single_card_eval
