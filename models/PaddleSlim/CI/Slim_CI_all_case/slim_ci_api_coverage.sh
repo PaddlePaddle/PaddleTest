@@ -13,7 +13,7 @@ fi
 cudaid1=$1;
 cudaid2=$2;
 echo "cudaid1,cudaid2", ${cudaid1}, ${cudaid2}
-export CUDA_VISIBLE_DEVICES=${cudaid1}
+export CUDA_VISIBLE_DEVICES=${cudaid2}
 
 # install lcov
 curl -o /lcov-1.14.tar.gz -s https://paddle-ci.gz.bcebos.com/coverage%2Flcov-1.14.tar.gz
