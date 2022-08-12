@@ -520,7 +520,7 @@ lite_hrnet_LiteHRNet_0:
       opt_api: "paddle.optimizer.SGD"
       learning_rate: 0.000001
   Train:
-    step: 3
+    step: 1
   test:
     dygraph_to_static_train_test:
       delta: 0.00000001
