@@ -98,12 +98,6 @@ centernet_fpn_ChannelPool_0:
     static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
-    static_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
 
 centernet_fpn_SpatialGate_0:
   desc: "Det ppdet.modeling.necks.centernet_fpn.SpatialGate模型结构"
