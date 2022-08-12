@@ -42,12 +42,18 @@ ttf_head_HMHead_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 ttf_head_WHHead_0:
   desc: "Det ppdet.modeling.heads.ttf_head.WHHead模型结构"

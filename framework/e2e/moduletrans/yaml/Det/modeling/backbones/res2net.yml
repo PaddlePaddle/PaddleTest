@@ -54,6 +54,12 @@ res2net_BottleNeck_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 res2net_Blocks_0:
   desc: "Det ppdet.modeling.backbones.res2net.Blocks模型结构"
@@ -109,6 +115,12 @@ res2net_Blocks_0:
       delta: 0.00000001
       rtol: 0.00000001
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
 
@@ -214,5 +226,11 @@ res2net_Res2NetC5_0:
       delta: 0.00000001
       rtol: 0.00000001
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001

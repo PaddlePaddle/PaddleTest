@@ -42,12 +42,18 @@ vgg_ConvBlock_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 vgg_ExtraBlock_0:
   desc: "Det ppdet.modeling.backbones.vgg.ExtraBlock模型结构"
@@ -99,6 +105,12 @@ vgg_ExtraBlock_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 vgg_L2NormScale_0:
   desc: "Det ppdet.modeling.backbones.vgg.L2NormScale模型结构"
@@ -143,6 +155,12 @@ vgg_L2NormScale_0:
       delta: 0.00000001
       rtol: 0.00000001
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
 
