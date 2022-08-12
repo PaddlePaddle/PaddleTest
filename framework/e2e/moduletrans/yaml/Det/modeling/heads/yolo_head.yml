@@ -62,7 +62,7 @@ yolo_head_YOLOv3Head_0:
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
-      loss_list: ['logit']
+      loss_list: ['logit[0]']
   optimizer:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
@@ -81,6 +81,8 @@ yolo_head_YOLOv3Head_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
+    build_dygraph_predict_ground_truth:
+      mode: "numpy"
 #    dygraph_train_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
