@@ -81,8 +81,6 @@ yolo_head_YOLOv3Head_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-    build_dygraph_predict_ground_truth:
-      mode: "numpy"
 #    dygraph_train_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
