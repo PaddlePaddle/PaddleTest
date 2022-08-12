@@ -912,7 +912,7 @@ demo_act_det_yolov5(){
 
 	sed -i 's/train_iter: 3000/train_iter: 30/' ./configs/yolov5s_qat_dis.yaml
 	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/yolov5s_qat_dis.yaml
-	sed -i 's/dataset\/coco\//coco\//g' ./configs/yolov5_reader.yml
+	sed -i 's/dataset\/coco\//coco\//g' /configs/yolov5s_qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py --save_dir='./save_quant_mobilev1/' --config_path='./configs/yolov5s_qat_dis.yaml' > ${log_path}/act_det_demo_yolov5s_single_card 2>&1
