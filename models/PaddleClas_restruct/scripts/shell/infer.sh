@@ -46,11 +46,13 @@ esac
 
 # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ${log_path}/infer/${model_name}_${input_model_type}.log) -eq 0 ]];then
 if [[ $? -eq 0 ]];then
-    echo -e "\033[33m infer of ${model_name}_${input_model_type}  successfully!\033[0m"| tee -a ${log_path}/result.log
+    echo -e "\033[33m successfully! infer of ${model_name}_${input_model_type} successfully!\033[0m" \
+        | tee -a ${log_path}/result.log
     echo "infer_exit_code: 0.0" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 else
     cat ${log_path}/infer/${model_name}_${input_model_type}.log
-    echo -e "\033[31m infer of ${model_name}_${input_model_type} failed!\033[0m"| tee -a ${log_path}/result.log
+    echo -e "\033[31m failed! infer of ${model_name}_${input_model_type} failed!\033[0m" \
+        | tee -a ${log_path}/result.log
     echo "infer_exit_code: 1.0" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 fi
 

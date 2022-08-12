@@ -73,7 +73,7 @@ export model_latest_name=${array2[0]}
 echo ${model_latest_name}
 echo ${model_name}
 
-#获取模型输出名
+#获取模型输出名称、评估下载名称、预测下载名称
 # import yaml
 # params_dir=`python -c "
 #     import yaml; \
@@ -81,11 +81,42 @@ echo ${model_name}
 #     cfg = yaml.full_load(y); \
 #     print(cfg['Arch']['name']); \
 #     "`
-Arch_index=`cat ${yaml_line} | grep -n Arch | awk -F ":" '{print $1}'`
-Arch_word=`sed -n "${Arch_index},$[${Arch_index}+3]p" ${yaml_line}`
-export params_dir=(`echo ${Arch_word} | grep name | awk -F ":" '{print $3}'`)
-export params_dir=(${params_dir//\"/ })
+function get_params(){
+    params_index=(`cat ${yaml_line} | grep -n $1 | awk -F ":" '{print $1}'`)
+    params_word=`sed -n "${params_index[0]},$[${params_index[0]}+3]p" ${yaml_line}`
+    params_dir=(`echo ${params_word} | grep name: | awk -F ":" '{print $3}'`)
+    params_dir=(${params_dir//\"/ })
+    params_dir=(${params_dir//\"/ })
+    echo ${params_dir}
+}
+export params_dir=`get_params Arch:`
 echo ${params_dir}
+if [[ ${params_dir} == "RecModel" ]];then
+    if [[ `cat ${yaml_line}` =~ "Backbone" ]];then
+        pdparams_pretrain=`get_params Backbone:`
+    else
+        pdparams_pretrain=`get_params Arch:`
+    fi
+elif [[ ${params_dir} == "DistillationModel" ]];then
+    if [[ `cat ${yaml_line}` =~ "Backbone" ]];then
+        pdparams_pretrain=`get_params Backbone:`
+    else
+        pdparams_pretrain=`get_params Student:`
+    fi
+else
+    pdparams_pretrain=${params_dir}
+fi
+export pdparams_pretrain=(${pdparams_pretrain//"_Tanh"/ })
+export pdparams_pretrain=(${pdparams_pretrain//"_last_stage_stride1"/ })
+if [[ ${model_type} == "PULC" ]];then
+    export infer_pretrain=${model_type_PULC}
+else
+    export infer_pretrain=${pdparams_pretrain}
+fi
+echo ${pdparams_pretrain}
+
+
+
 
 #对32G的模型进行bs减半的操作，注意向上取整 #暂时适配了linux，未考虑MAC
 # if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_patch16_224 \
@@ -122,6 +153,7 @@ echo ${params_dir}
 #     done
 # fi
 
+#默认bath_size除以3
 function ceil(){
 floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整 局部变量$1不影响
 add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
