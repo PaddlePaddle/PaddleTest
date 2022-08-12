@@ -52,6 +52,12 @@ darknet_ConvBNLayer_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 darknet_DownSample_0:
   desc: "Det ppdet.modeling.backbones.darknet.DownSample模型结构"
@@ -105,6 +111,12 @@ darknet_DownSample_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 darknet_BasicBlock_0:
   desc: "Det ppdet.modeling.backbones.darknet.BasicBlock模型结构"
@@ -153,6 +165,12 @@ darknet_BasicBlock_0:
       delta: 0.00000001
       rtol: 0.00000001
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
 
@@ -206,6 +224,12 @@ darknet_Blocks_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 darknet_Blocks_1:
   desc: "Det ppdet.modeling.backbones.darknet.Blocks模型结构"
@@ -257,6 +281,12 @@ darknet_Blocks_1:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 darknet_DarkNet_0:
   desc: "Det ppdet.modeling.backbones.darknet.DarkNet模型结构"
@@ -303,11 +333,15 @@ darknet_DarkNet_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001

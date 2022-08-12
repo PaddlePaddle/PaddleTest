@@ -48,6 +48,12 @@ csp_darknet_BaseConv_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 csp_darknet_DWConv_0:
   desc: "Det ppdet.modeling.backbones.csp_darknet.DWConv模型结构"
@@ -98,6 +104,12 @@ csp_darknet_DWConv_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 csp_darknet_Focus_0:
   desc: "Det ppdet.modeling.backbones.csp_darknet.Focus模型结构"
@@ -146,6 +158,12 @@ csp_darknet_Focus_0:
       delta: 0.00000001
       rtol: 0.00000001
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
 
@@ -199,6 +217,12 @@ csp_darknet_BottleNeck_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 csp_darknet_SPPLayer_0:
   desc: "Det ppdet.modeling.backbones.csp_darknet.SPPLayer模型结构"
@@ -248,6 +272,12 @@ csp_darknet_SPPLayer_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 csp_darknet_SPPFLayer_0:
   desc: "Det ppdet.modeling.backbones.csp_darknet.SPPFLayer模型结构"
@@ -295,6 +325,12 @@ csp_darknet_SPPFLayer_0:
       delta: 0.00000001
       rtol: 0.00000001
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
 
@@ -349,6 +385,12 @@ csp_darknet_CSPLayer_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 csp_darknet_CSPDarkNet_0:
   desc: "Det ppdet.modeling.backbones.csp_darknet.CSPDarkNet模型结构"
@@ -394,11 +436,15 @@ csp_darknet_CSPDarkNet_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    build_dygraph_train_ground_truth:
-#      mode: 'numpy'
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001

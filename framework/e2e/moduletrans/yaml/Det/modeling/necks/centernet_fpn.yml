@@ -45,12 +45,18 @@ centernet_fpn_BasicConv_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 centernet_fpn_ChannelPool_0:
   desc: "Det ppdet.modeling.necks.centernet_fpn.ChannelPool模型结构"
@@ -86,9 +92,18 @@ centernet_fpn_ChannelPool_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 centernet_fpn_SpatialGate_0:
   desc: "Det ppdet.modeling.necks.centernet_fpn.SpatialGate模型结构"
@@ -127,12 +142,18 @@ centernet_fpn_SpatialGate_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 #centernet_fpn_DLAUp_0:
 #  desc: "Det ppdet.modeling.necks.centernet_fpn.DLAUp模型结构"
@@ -388,9 +409,12 @@ centernet_fpn_TransitionUp_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 centernet_fpn_CenterNetHarDNetFPN_0:
   desc: "Det ppdet.modeling.necks.centernet_fpn.CenterNetHarDNetFPN模型结构"
@@ -454,9 +478,15 @@ centernet_fpn_CenterNetHarDNetFPN_0:
 #      acc_test: False
 #      delta: 0.000001
 #      rtol: 0.000001
-#    dygraph_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
