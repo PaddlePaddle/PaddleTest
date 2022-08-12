@@ -41,45 +41,42 @@ ImageNet|slim|metric_learning)
             > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
     fi
 ;;
+DeepHash|GeneralRecognition) #待支持
+    echo "predict unspported ${model_name}" > ../${log_path}/predict/${model_name}_${input_model_type}.log
+    # python python/predict_rec.py -c configs/inference_rec.yaml \
+    #     -o Global.rec_inference_model_dir=${pretrained_model} \
+    #     -o Global.use_gpu=${set_cuda_flag} \
+    #     > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
+;;
 Cartoonface)
     python  python/predict_system.py -c configs/inference_cartoon.yaml \
-        -o Global.inference_model_dir=${pretrained_model} \
-        -o Global.use_gpu=${set_cuda_flag} \
-        > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
-;;
-DeepHash|GeneralRecognition)
-    python python/predict_rec.py -c configs/inference_rec.yaml \
-        -o Global.rec_inference_model_dir=${pretrained_model} \
         -o Global.use_gpu=${set_cuda_flag} \
         > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
 ;;
 Logo)
     python  python/predict_system.py -c configs/inference_logo.yaml \
-        -o Global.inference_model_dir=${pretrained_model} \
         -o Global.use_gpu=${set_cuda_flag} \
         > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
 ;;
 Products)
     python  python/predict_system.py -c configs/inference_product.yaml \
-        -o Global.inference_model_dir=${pretrained_model} \
+        -o Global.use_gpu=${set_cuda_flag} \
+        > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
+;;
+Vehicle)
+    python  python/predict_system.py -c configs/inference_vehicle.yaml \
         -o Global.use_gpu=${set_cuda_flag} \
         > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
 ;;
 PULC)
     # 9中方向用 model_type_PULC 区分
-    python python/predict_cls.py -c configs/PULC/${model_type_PULC}/inference_/${model_type_PULC}.yaml
+    python python/predict_cls.py -c configs/PULC/${model_type_PULC}/inference_${model_type_PULC}.yaml \
         -o Global.inference_model_dir=${pretrained_model} \
         -o Global.use_gpu=${set_cuda_flag} \
         > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
 ;;
 reid)
     echo "predict unspported ${model_name}" > ../${log_path}/predict/${model_name}_${input_model_type}.log
-;;
-Vehicle)
-    python  python/predict_system.py -c configs/inference_vehicle.yaml \
-        -o Global.inference_model_dir=${pretrained_model} \
-        -o Global.use_gpu=${set_cuda_flag} \
-        > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
 ;;
 esac
 
