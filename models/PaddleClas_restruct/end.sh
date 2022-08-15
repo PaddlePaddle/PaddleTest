@@ -29,6 +29,12 @@ else
         rm -rf *_infer*
     fi
 
+    if [[ -d "deploy/models" ]];then
+        echo " do not have deploy/models"
+    else
+        rm -rf deploy/models
+    fi
+
     pretrained_pdparams=(`echo *_pretrained.pdparams`)
     if [[ ${pretrained_pdparams} == "_pretrained.pdparams" ]];then
         echo " do not have pretrained_pdparams"
