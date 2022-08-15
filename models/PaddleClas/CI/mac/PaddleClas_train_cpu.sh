@@ -49,6 +49,8 @@ python -m pip install  --ignore-installed paddleslim \
 #    -i https://mirror.baidu.com/pypi/simple
 python -m pip install --ignore-installed -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple
+python -m pip uninstall opencv-python -y
+python -m pip install -U opencv-python
 # python -m pip uninstall opencv-python-headless -y #fix '_registerMatType' from 'cv2.cv2'
 # python -m pip install  --ignore-installed "opencv-python-headless<4.3" -i https://mirror.baidu.com/pypi/simple
 
