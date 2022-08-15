@@ -13,7 +13,7 @@ from utils.logger import Logger
 from io_trans import DataLoaderTrans
 from io_reader import GenDataset, SetBatchSampler
 from io_loader import GenDataLoader
-from io_test import TestDataset
+from io_test import TestDataset, TestDataLoader
 
 logger = Logger("generate dataloader")
 
@@ -78,7 +78,10 @@ class GTCase(object):
                 # obj_test_dataset.run(dataset_info)
                 obj_test_dataset.run([10, dataset_info])  # todo: 应传入num_samples
 
-            # TODO: (2)测试dataset
+            # (2)测试dataset
+            dataloader_info = self._gen_dataloader_info(batch_sampler_info, other_params_info)
+            test_dl_obj = TestDataLoader(data_loader)
+            test_dl_obj.run(dataset, dataloader_info)
 
     def generate(self, case_name):
         """
@@ -92,6 +95,22 @@ class GTCase(object):
         dataset = self._generate_dataset(dataset_info)
         data_loader = self._generate_dataloader(dataset, batch_sampler_info, other_params_info)
         return dataset, data_loader
+
+    def _gen_dataloader_info(self, batch_sampler_info, other_params_info):
+        """
+        生成dataloader-info， 主要获取batch_size、shuffle、drop_last；用于测试
+        """
+        dataloader_info = {}
+        if batch_sampler_info:
+            for k in batch_sampler_info.keys():
+                dataloader_info[k] = batch_sampler_info[k]
+        else:
+            for k in other_params_info.keys():
+                dataloader_info[k] = other_params_info[k]
+        if not dataloader_info:
+            self.logger.get_log().error("data-loader info must be set !!!")
+            assert ValueError
+        return dataloader_info
 
 
 if __name__ == "__main__":
