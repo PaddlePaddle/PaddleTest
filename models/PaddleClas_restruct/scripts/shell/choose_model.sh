@@ -12,7 +12,6 @@ function download_infer_tar(){
         mkdir models
     fi
     cd models
-    echo ${PWD}
     if [[ -f "${1}.tar" ]] && [[ -d "${1}" ]];then
         echo "already download ${1}"
     else
@@ -20,14 +19,12 @@ function download_infer_tar(){
             https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/models/inference/${1}.tar
         tar xf ${1}.tar
     fi
-    echo $(ls ${PWD})
     if [[ $? -eq 0 ]];then
         echo "\033[31m successfully! predict pretrained download ${model_name}/${infer_pretrain} successfully!\033[0m"
     else
         echo "\033[31m failed! predict pretrained download ${model_name}/${infer_pretrain} failed!\033[0m"
     fi
     cd ../../
-    echo ${PWD}
 }
 
 if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的覆盖了
