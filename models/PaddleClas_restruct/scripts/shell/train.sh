@@ -4,6 +4,7 @@
 export yaml_line=${1:-ppcls/configs/ImageNet/ResNet/ResNet50.yaml}
 export cuda_type=${2:-SET_MULTI_CUDA}
 export train_type=${3:-dynamic}
+export Project_path=${Project_path:-$PWD}
 
 cd ${Project_path} #确定下执行路径
 # ls

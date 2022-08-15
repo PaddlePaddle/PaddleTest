@@ -3,6 +3,7 @@
 export yaml_line=${1:-ppcls/configs/ImageNet/ResNet/ResNet50.yaml}
 export cuda_type=${2:-SET_MULTI_CUDA}
 export input_model_type=${3:-pretrained}
+export Project_path=${Project_path:-$PWD}
 
 cd ${Project_path} #确定下执行路径
 \cp -r -f ${Project_path}/../scripts/shell/prepare.sh . # #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代

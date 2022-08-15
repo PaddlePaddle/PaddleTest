@@ -20,7 +20,7 @@ else
     echo "######  system linux"
 fi
 
-#安装依赖包，需要代理
+#安装向上取整依赖包，需要代理
 yum install bc -y
 apt-get install bc -y
 
@@ -41,7 +41,6 @@ if [[ ${yaml_line} =~ 'fp16' ]] || [[ ${yaml_line} =~ 'amp' ]];then
     python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
     --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
 fi
-
 
 #确定log存储位置
 export log_path=../log
@@ -108,14 +107,15 @@ else
 fi
 export pdparams_pretrain=(${pdparams_pretrain//"_Tanh"/ })
 export pdparams_pretrain=(${pdparams_pretrain//"_last_stage_stride1"/ })
+if [[ ${pdparams_pretrain} == "AttentionModel" ]];then
+    export pdparams_pretrain="ResNet18"
+fi
 if [[ ${model_type} == "PULC" ]];then
     export infer_pretrain=${model_type_PULC}
 else
     export infer_pretrain=${pdparams_pretrain}
 fi
 echo ${pdparams_pretrain}
-
-
 
 
 #对32G的模型进行bs减半的操作，注意向上取整 #暂时适配了linux，未考虑MAC
@@ -198,6 +198,8 @@ else
     export set_cuda_flag=True
 fi
 
+
+#准备数据下载函数
 get_image_name(){
     #传入split参数 image_root
     image_root_name=(`cat ${yaml_line} | grep  ${image_root} | awk -F ":" '{print $2}'`)
@@ -223,6 +225,16 @@ wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/${image_root_name}
 }
 
 #准备数据
+cd deploy
+if [[ -f "recognition_demo_data_en_v1.1.tar" ]] && [[ -d "recognition_demo_data_en_v1.1" ]] ;then
+    echo already download rec_demo
+else
+wget -q -c https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/recognition_demo_data_en_v1.1.tar \
+    --no-proxy --no-check-certificate && tar -xf recognition_demo_data_en_v1.1.tar
+tar xf rec_demo.tar
+fi
+cd ..
+
 if [[ ${get_data_way} == "ln_way" ]];then
     if [[ ${Data_path} == "" ]];then
         echo " you must set Data_path first "
@@ -231,20 +243,8 @@ if [[ ${get_data_way} == "ln_way" ]];then
     rm -rf dataset
     ln -s ${Data_path} dataset
     ls dataset |head -n 2
-    cd deploy
-    ln -s ${Data_path}/rec_demo/* .  #预训练模型和demo数据集
-    cd ..
 else
     echo "######  ----download  data-----"
-    cd deploy
-    if [[ -f "dataset/rec_demo.tar" ]] && [[ -d "dataset/rec_demo" ]] ;then
-        echo already download rec_demo
-    else
-    wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/rec_demo.tar --no-proxy --no-check-certificate
-    tar xf rec_demo.tar
-    fi
-    cd ..
-
     if [[ ${yaml_line} =~ "face" ]] && [[ ${yaml_line} =~ "metric_learning" ]];then
         image_root="root_dir"
         get_image_name image_root

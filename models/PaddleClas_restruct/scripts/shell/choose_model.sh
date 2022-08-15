@@ -1,6 +1,35 @@
+
 echo $input_model_type
 echo "######  pdparams_pretrain"
 echo $pdparams_pretrain
+export Project_path=${Project_path:-$PWD}
+
+cd ${Project_path} #确定下执行路径
+
+function download_infer_tar(){
+    cd deploy
+    if [[ ! -d "models" ]];then
+        mkdir models
+    fi
+    cd models
+    echo ${PWD}
+    if [[ -f "${1}.tar" ]] && [[ -d "${1}" ]];then
+        echo "already download ${1}"
+    else
+        wget  -c  \
+            https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/models/inference/${1}.tar
+        tar xf ${1}.tar
+    fi
+    echo $(ls ${PWD})
+    if [[ $? -eq 0 ]];then
+        echo "\033[31m successfully! predict pretrained download ${model_name}/${infer_pretrain} successfully!\033[0m"
+    else
+        echo "\033[31m failed! predict pretrained download ${model_name}/${infer_pretrain} failed!\033[0m"
+    fi
+    cd ../../
+    echo ${PWD}
+}
+
 if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的覆盖了
     if [[ ${input_model_type} == "trained" ]];then
         if [[ -f ${output_dir}/${model_name}/${pdparams_pretrain}/latest.pdparams ]];then
@@ -65,22 +94,79 @@ if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的
         export pretrained_model="None"  #使用初始化参数评估
     fi
 else
-    if [[ ${input_model_type} == "trained" ]];then
-        if [[ -f "inference/${model_name}/inference.pdmodel" ]];then
-            export pretrained_model="../inference/${model_name}"
-        else
-            export pretrained_model="None" #必须有下好的模型，不能使用初始化模型，所以不管用默认参数还是None都不能预测
-        fi
+    if [[ ${input_model_type} == "trained" ]];then #用训好的模型
+
+        case ${model_type} in
+        ImageNet|slim|metric_learning|PULC)
+            if [[ -f "inference/${model_name}/inference.pdmodel" ]];then
+                export pretrained_model="../inference/${model_name}"
+            else
+                export pretrained_model="None" #必须有下好的模型，不能使用初始化模型，所以不管用默认参数还是None都不能预测
+            fi
+        ;;
+        DeepHash|GeneralRecognition) #待支持
+            echo "predict unspported ${model_name}" > tmp.log
+        ;;
+        Cartoonface) #暂时用训好的模型 220815
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
+        ;;
+        Logo)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
+        ;;
+        Products)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
+        ;;
+        Vehicle)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
+        ;;
+        reid)
+            echo "predict unspported ${model_name}" > tmp.log
+        ;;
+        esac
+
     elif [[ ${input_model_type} == "pretrained" ]];then
-        if [[ -d ${infer_pretrain}_infer ]] && [[ -f ${infer_pretrain}_infer/inference.pdiparams ]];then #有下载好的，或者export已导出的跳过下载
-            export pretrained_model="../${infer_pretrain}_infer"
-        elif [[ ${model_type} == "PULC" ]];then
-            wget -q https://paddleclas.bj.bcebos.com/models/PULC/${infer_pretrain}_infer.tar --no-proxy
-        else
-            wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/${infer_pretrain}_infer.tar --no-proxy
-        fi
+        case ${model_type} in
+        ImageNet|slim|metric_learning|PULC)
+            if [[ -d ${infer_pretrain}_infer ]] && [[ -f ${infer_pretrain}_infer/inference.pdiparams ]];then #有下载好的，或者export已导出的跳过下载
+                export pretrained_model="../${infer_pretrain}_infer"
+            elif [[ ${model_type} == "PULC" ]];then
+                wget -q https://paddleclas.bj.bcebos.com/models/PULC/${infer_pretrain}_infer.tar --no-proxy
+            else
+                wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/${infer_pretrain}_infer.tar --no-proxy
+            fi
+        ;;
+        DeepHash|GeneralRecognition) #待支持
+            echo "predict unspported ${model_name}" > ../${log_path}/predict/${model_name}_${input_model_type}.log
+        ;;
+        Cartoonface)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar cartoon_rec_ResNet50_iCartoon_v1.0_infer
+        ;;
+        Logo)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
+        ;;
+        Products)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar product_ResNet50_vd_aliproduct_v1.0_infer
+        ;;
+        Vehicle)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar vehicle_cls_ResNet50_CompCars_v1.0_infer
+        ;;
+        reid)
+            echo "predict unspported ${model_name}" > ../${log_path}/predict/${model_name}_${input_model_type}.log
+        ;;
+        esac
+
         if [[ $? -eq 0 ]];then
-            tar xf ${infer_pretrain}_infer.tar
+            if [[ -f ${infer_pretrain}_infer.tar ]];then
+                tar xf ${infer_pretrain}_infer.tar
+            fi
             export pretrained_model="../${infer_pretrain}_infer"
         else
             echo "\033[31m failed! predict pretrained download ${model_name}/${infer_pretrain} failed!\033[0m"
