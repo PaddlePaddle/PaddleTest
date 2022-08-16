@@ -2,7 +2,6 @@ ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x0_35.yaml
 ppcls/configs/ImageNet/DenseNet/DenseNet121.yaml
 ppcls/configs/ImageNet/MobileNetV2/MobileNetV2_x0_25.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B0.yaml
-ppcls/configs/ImageNet/ConvNeXt/ConvNeXt_tiny.yaml
 ppcls/configs/ImageNet/CSPNet/CSPDarkNet53.yaml
 ppcls/configs/ImageNet/ReXNet/ReXNet_1_0.yaml
 ppcls/configs/ImageNet/DLA/DLA34.yaml
@@ -13,7 +12,6 @@ ppcls/configs/ImageNet/HRNet/HRNet_W32_C.yaml
 ppcls/configs/ImageNet/HarDNet/HarDNet39_ds.yaml
 ppcls/configs/ImageNet/ResNeSt/ResNeSt50_fast_1s1x64d.yaml
 ppcls/configs/ImageNet/VisionTransformer/ViT_small_patch16_224.yaml
-ppcls/configs/ImageNet/ResNet/ResNet50_amp_O1.yaml
 ppcls/configs/ImageNet/ResNet/ResNet18.yaml
 ppcls/configs/ImageNet/DPN/DPN68.yaml
 ppcls/configs/ImageNet/VAN/VAN_tiny.yaml
@@ -40,7 +38,6 @@ ppcls/configs/ImageNet/MobileViT/MobileViT_XXS.yaml
 ppcls/configs/ImageNet/PPLCNet/PPLCNet_x0_5.yaml
 ppcls/configs/ImageNet/SENet/SE_ResNet18_vd.yaml
 ppcls/configs/ImageNet/ResNeXt/ResNeXt50_64x4d.yaml
-ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra.yaml
 ppcls/configs/ImageNet/Res2Net/Res2Net50_14w_8s.yaml
 ppcls/configs/ImageNet/PeleeNet/PeleeNet.yaml
 ppcls/configs/ImageNet/Xception/Xception41.yaml

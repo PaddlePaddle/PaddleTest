@@ -29,7 +29,9 @@ class Jelly_v2(object):
     compare tools
     """
 
-    def __init__(self, api, framework="paddle", default_dtype="float32", place=None, card=None, title=None):
+    def __init__(
+        self, api, framework="paddle", default_dtype="float32", place=None, card=None, title=None, enable_backward=True
+    ):
         """
 
         :param paddle_api:
@@ -39,7 +41,7 @@ class Jelly_v2(object):
         :param explain: case的说明 会打印在日志中
         """
         self.seed = 33
-        self.enable_backward = True
+        self.enable_backward = enable_backward
         self.debug = True
         self.framework = framework
 
@@ -224,6 +226,7 @@ class Jelly_v2(object):
         self.result["forward"] = ACCURACY % (sum(sorted(self.forward_time)[head:tail]) / (tail - head))
         self.result["total"] = ACCURACY % (sum(sorted(self.total_time)[head:tail]) / (tail - head))
         self.result["backward"] = ACCURACY % (float(self.result["total"]) - float(self.result["forward"]))
+        self.result["best_total"] = ACCURACY % min(self.total_time)
 
     def _show(self):
         """
@@ -234,6 +237,9 @@ class Jelly_v2(object):
             "{} {} times backward cost {}s".format(self.framework, self.base_times, self.result["backward"])
         )
         self.logger.info("{} {} times total cost {}s".format(self.framework, self.base_times, self.result["total"]))
+        self.logger.info(
+            "{} {} times best_total cost {}s".format(self.framework, self.base_times, self.result["best_total"])
+        )
 
     def _save(self, data):
         """
