@@ -38,8 +38,20 @@ python -m pip install  -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 if [[ ${yaml_line} =~ 'fp16' ]] || [[ ${yaml_line} =~ 'amp' ]];then
     echo "fp16 or amp"
-    python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
-    --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
+    # python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
+    # --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
+    if [[ -f "nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl" ]] && \
+        [[ -f "nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl" ]] ;then
+        echo "already download nvidia_dali_cuda102 nvidia_dali_cuda110"
+    else
+        wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl --no-proxy
+        wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl --no-proxy
+    fi
+    python -m pip install nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
+    python -m pip install nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
+
+    export FLAGS_cudnn_deterministic=False #amp单独考虑，不能固定随机量，否则报错如下
+    # InvalidArgumentError: Cann't set exhaustive_search True and FLAGS_cudnn_deterministic True at same time.
 fi
 
 #确定log存储位置
@@ -213,10 +225,9 @@ download_data(){
     #传入参数 image_root_name
     echo "download start image_root_name : ${image_root_name}"
     cd dataset #这里是默认按照已经进入repo路径来看
-    if [[ -f "dataset/${image_root_name}.tar" ]] && [[ -d "dataset/${image_root_name}" ]] ;then
+    if [[ -f "${image_root_name}.tar" ]] && [[ -d "${image_root_name}" ]] ;then
         echo already download ${image_root_name}
     else
-        rm -rf ${image_root_name}
 wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/${image_root_name}.tar --no-proxy --no-check-certificate
         tar xf ${image_root_name}.tar
     fi
@@ -230,8 +241,7 @@ if [[ -f "recognition_demo_data_en_v1.1.tar" ]] && [[ -d "recognition_demo_data_
     echo already download rec_demo
 else
 wget -q -c https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/recognition_demo_data_en_v1.1.tar \
-    --no-proxy --no-check-certificate && tar -xf recognition_demo_data_en_v1.1.tar
-tar xf rec_demo.tar
+    --no-proxy --no-check-certificate && tar xf recognition_demo_data_en_v1.1.tar
 fi
 cd ..
 

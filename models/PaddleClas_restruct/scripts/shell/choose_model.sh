@@ -50,10 +50,10 @@ if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的
         if [[ -f ${pdparams_pretrain}_pretrained.pdparams ]];then #有下载好的跳过下载
             export pretrained_model=${pdparams_pretrain}_pretrained
         else
-            if [[ ${pdparams_pretrain} =~ "ESNet" ]] || [[ ${pdparams_pretrain} =~ "HRNet" ]] || [[ ${pdparams_pretrain} =~ "InceptionV3" ]] || \
-                [[ ${pdparams_pretrain} =~ "MobileNetV1" ]] || [[ ${pdparams_pretrain} =~ "MobileNetV3" ]] || [[ ${pdparams_pretrain} =~ "PPHGNet" ]] || \
-                [[ ${pdparams_pretrain} =~ "PPLCNet" ]] || [[ ${pdparams_pretrain} =~ "PPLCNetV2" ]] || [[ ${pdparams_pretrain} =~ "ResNet" ]] || \
-                [[ ${pdparams_pretrain} =~ "SwinTransformer" ]] || [[ ${pdparams_pretrain} =~ "VGG" ]];then
+            if [[ ${pdparams_pretrain} =~ "-ESNet" ]] || [[ ${pdparams_pretrain} =~ "-HRNet" ]] || [[ ${pdparams_pretrain} =~ "-InceptionV3" ]] || \
+                [[ ${pdparams_pretrain} =~ "-MobileNetV1" ]] || [[ ${pdparams_pretrain} =~ "-MobileNetV3" ]] || [[ ${pdparams_pretrain} =~ "-PPHGNet" ]] || \
+                [[ ${pdparams_pretrain} =~ "-PPLCNet" ]] || [[ ${pdparams_pretrain} =~ "-PPLCNetV2" ]] || [[ ${pdparams_pretrain} =~ "-ResNet" ]] || \
+                [[ ${pdparams_pretrain} =~ "-SwinTransformer" ]] || [[ ${pdparams_pretrain} =~ "-VGG" ]];then
                 echo "######  use legendary_models pretrain model"
                 wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${pdparams_pretrain}_pretrained.pdparams --no-proxy
             else
