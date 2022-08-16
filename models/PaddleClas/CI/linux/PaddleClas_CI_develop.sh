@@ -544,9 +544,11 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     if [[ $? -eq 0 ]];then
     # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
         echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
+        echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
     else
         cat ../$log_path/predict/${model}.log
         echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+        echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
     fi
 
     # if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
@@ -562,7 +564,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
     #         > ../$log_path/predict/$model.log 2>&1
     # fi
     # if [[ $? -eq 0 ]];then
-    # # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
     #     echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
     #     echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
     # else
