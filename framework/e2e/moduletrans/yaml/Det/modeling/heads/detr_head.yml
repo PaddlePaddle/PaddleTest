@@ -1,40 +1,31 @@
-senet_SENet_0:
-  desc: "Det ppdet.modeling.backbones.senet.SENet模型结构"
+detr_head_ConvLayer_0:
+  desc: "Det ppdet.modeling.heads.detr_head.MLP模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.senet.SENet"
+    layer_name: "ppdet.modeling.heads.detr_head.MLP"
     params:
-      depth: 50
-      variant: 'b'
-      lr_mult_list: [1.0, 1.0, 1.0, 1.0]
-      groups: 1
-      base_width: 64
-      norm_type: 'bn'
-      norm_decay: 0
-      freeze_norm: True
-      freeze_at: 0
-      return_idx: [0, 1, 2, 3]
-      dcn_v2_stages: [-1]
-      std_senet: True
-      num_stages: 4
+      input_dim: 16
+      hidden_dim: 32
+      output_dim: 16
+      num_layers: 3
   DataGenerator:
-    DataGenerator_name: "diy.data.struct_img_dataset.DictImageWithoutLabel"
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
-      inputs:
+      x:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float64"
-        shape: [4, 3, 224, 224]
+        shape: [4, 16, 16, 16]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
-      loss_list: ['0.1 * logit[3]']
+      loss_list: ['logit']
   optimizer:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:
@@ -61,30 +52,31 @@ senet_SENet_0:
       delta: 0.00000001
       rtol: 0.00000001
 
-#senet_SERes5Head_0:
-#  desc: "Det ppdet.modeling.backbones.senet.SERes5Head模型结构"
+#detr_head_MultiHeadAttentionMap_0:
+#  desc: "Det ppdet.modeling.heads.detr_head.MultiHeadAttentionMap模型结构"
 #  Layer:
 #    repo: "PaddleDetection"
-#    layer_name: "ppdet.modeling.backbones.senet.SERes5Head"
+#    layer_name: "ppdet.modeling.heads.detr_head.MultiHeadAttentionMap"
 #    params:
-#      depth: 50
-#      variant: 'b'
-#      lr_mult: 1.0
-#      groups: 1
-#      base_width: 64
-#      norm_type: 'bn'
-#      norm_decay: 0
-#      dcn_v2: False
-#      freeze_norm: False
-#      std_senet: True
+#      query_dim: 32
+#      hidden_dim: 32
+#      num_heads: 8
+#      dropout: 0.
+#      bias: True
 #  DataGenerator:
 #    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
 #    data:
-#      roi_feat:
+#      q:
 #        generate_way: "random"  # random, solid, load
 #        type: "Tensor"
 #        dtype: "float64"
-#        shape: [4, 1024, 16, 16]
+#        shape: [4, 32, 8, 32]
+#        range: [ -1, 1]
+#      k:
+#        generate_way: "random"  # random, solid, load
+#        type: "Tensor"
+#        dtype: "float64"
+#        shape: [4, 32, 8, 32]
 #        range: [ -1, 1]
 #  Loss:
 #    loss_name: "diy.loss.diy_loss.naive_loss_list"
@@ -111,8 +103,6 @@ senet_SENet_0:
 ##    dygraph_train_test:
 ##      delta: 0.00000001
 ##      rtol: 0.00000001
-##    build_dygraph_train_ground_truth:
-##      mode: 'numpy'
 ##    dygraph_predict_test:
 ##      delta: 0.00000001
 ##      rtol: 0.00000001

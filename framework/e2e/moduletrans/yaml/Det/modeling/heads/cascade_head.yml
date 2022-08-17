@@ -45,6 +45,12 @@ cascade_head_CascadeTwoFCHead_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 cascade_head_CascadeXConvNormHead_0:
   desc: "Det ppdet.modeling.heads.cascade_head.CascadeXConvNormHead模型结构"
@@ -95,6 +101,12 @@ cascade_head_CascadeXConvNormHead_0:
       delta: 0.00000001
       rtol: 0.00000001
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
 

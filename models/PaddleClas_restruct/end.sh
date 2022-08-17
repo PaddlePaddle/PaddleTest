@@ -1,5 +1,6 @@
-
 cd ${Project_path} #确定下执行路径
+echo "end.sh"
+echo $PWD
 
 if [[ ${get_data_way} == "ln_way" ]];then
     if [[ ${Data_path} == "" ]];then
@@ -9,6 +10,8 @@ if [[ ${get_data_way} == "ln_way" ]];then
 else
     # 增加一下判断，别直接cd到空
     if [[ -d dataset ]];then
+        echo $(ls dataset|head -n 2)
+        echo " have dataset"
         rm -rf dataset
     fi
 
@@ -26,6 +29,12 @@ else
         rm -rf *_infer*
     fi
 
+    if [[ -d "deploy/models" ]];then
+        echo " do not have deploy/models"
+    else
+        rm -rf deploy/models
+    fi
+
     pretrained_pdparams=(`echo *_pretrained.pdparams`)
     if [[ ${pretrained_pdparams} == "_pretrained.pdparams" ]];then
         echo " do not have pretrained_pdparams"
@@ -33,4 +42,6 @@ else
         rm -rf *_pretrained*
     fi
 fi
+
+cd ../../
 #回收数据，避免产生过多缓存

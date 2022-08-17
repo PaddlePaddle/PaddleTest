@@ -3,6 +3,7 @@
 export yaml_line=${1:-ppcls/configs/ImageNet/ResNet/ResNet50.yaml}
 export cuda_type=${2:-SET_MULTI_CUDA}
 export input_model_type=${3:-pretrained}
+export Project_path=${Project_path:-$PWD}
 
 cd ${Project_path} #确定下执行路径
 \cp -r -f ${Project_path}/../scripts/shell/prepare.sh . # #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
@@ -46,11 +47,13 @@ esac
 
 # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ${log_path}/infer/${model_name}_${input_model_type}.log) -eq 0 ]];then
 if [[ $? -eq 0 ]];then
-    echo -e "\033[33m infer of ${model_name}_${input_model_type}  successfully!\033[0m"| tee -a ${log_path}/result.log
+    echo -e "\033[33m successfully! infer of ${model_name}_${input_model_type} successfully!\033[0m" \
+        | tee -a ${log_path}/result.log
     echo "infer_exit_code: 0.0" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 else
     cat ${log_path}/infer/${model_name}_${input_model_type}.log
-    echo -e "\033[31m infer of ${model_name}_${input_model_type} failed!\033[0m"| tee -a ${log_path}/result.log
+    echo -e "\033[31m failed! infer of ${model_name}_${input_model_type} failed!\033[0m" \
+        | tee -a ${log_path}/result.log
     echo "infer_exit_code: 1.0" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 fi
 

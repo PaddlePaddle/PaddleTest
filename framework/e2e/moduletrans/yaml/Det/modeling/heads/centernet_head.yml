@@ -1,30 +1,25 @@
-mobileone_MobileOneBlock_0:
-  desc: "Det ppdet.modeling.backbones.mobileone.MobileOneBlock模型结构"
+centernet_head_ConvLayer_0:
+  desc: "Det ppdet.modeling.heads.centernet_head.ConvLayer模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.mobileone.MobileOneBlock"
+    layer_name: "ppdet.modeling.heads.centernet_head.ConvLayer"
     params:
-      ch_in: 3
-      ch_out: 128
+      ch_in: 17
+      ch_out: 23
+      kernel_size: 5
       stride: 2
-      kernel_size: 3
-      conv_num: 1
-      norm_type: 'bn'
-      norm_decay: 0.
-      norm_groups: 32
-      bias_on: False
-      lr_scale: 1.
-      freeze_norm: False
-      skip_quant: False
-      act: 'relu'
+      padding: 0
+      dilation: 1
+      groups: 1
+      bias: False
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
-      x:
+      inputs:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float64"
-        shape: [4, 3, 224, 224]
+        shape: [4, 17, 16, 16]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
@@ -34,7 +29,7 @@ mobileone_MobileOneBlock_0:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.00000001
+      learning_rate: 0.00001
   Train:
     step: 3
   test:

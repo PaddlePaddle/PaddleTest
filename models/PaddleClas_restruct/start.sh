@@ -1,4 +1,8 @@
-cd task
+cd ${Project_path}/../ #确定下执行路径
+echo "start.sh"
+echo $PWD
+# cd task
+
 rm -rf models_list_cls_test_ADD
 echo Priority_version
 echo ${Priority_version}
@@ -28,4 +32,5 @@ fi
 if [[ -f "models_list_cls_test_ImageNet" ]];then
     source creat_scripts.sh "ImageNet"
 fi
+
 cd ..

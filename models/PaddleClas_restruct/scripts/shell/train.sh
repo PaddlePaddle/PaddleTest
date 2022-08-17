@@ -4,6 +4,7 @@
 export yaml_line=${1:-ppcls/configs/ImageNet/ResNet/ResNet50.yaml}
 export cuda_type=${2:-SET_MULTI_CUDA}
 export train_type=${3:-dynamic}
+export Project_path=${Project_path:-$PWD}
 
 cd ${Project_path} #确定下执行路径
 # ls
@@ -21,24 +22,26 @@ else
 fi
 echo ${train_mold}
 
+sleep 3
+#防止训练过程太快导致显存未释放hang
 case ${train_type} in #动态图/静态图/收敛性
 dynamic|static)
     echo "######  params_dir"
     echo ${params_dir}
-    if [[ `cat ${yaml_line} |grep MultiScaleSampler|wc -l` -gt "0"  ]]; then #for tingquan 220513 change
+    if [[ `cat ${yaml_line} |grep MultiScaleSampler|wc -l` -gt "0" ]]; then #for tingquan 220513 change
         echo "have MultiScaleSampler"
-        common_par="-o Global.epochs=2 \
-        -o Global.save_interval=2 \
-        -o Global.eval_interval=2 \
+        common_par="-o Global.epochs=${Global_epochs} \
+        -o Global.save_interval=${Global_epochs} \
+        -o Global.eval_interval=${Global_epochs} \
         -o Global.seed=1234 \
         -o DataLoader.Train.loader.num_workers=0 \
         -o DataLoader.Train.sampler.first_bs=32 \
         -o Global.output_dir=${output_dir}/${model_name} \
         -o Global.device=${set_cuda_device}"
     else
-        common_par="-o Global.epochs=2 \
-        -o Global.save_interval=2 \
-        -o Global.eval_interval=2 \
+        common_par="-o Global.epochs=${Global_epochs} \
+        -o Global.save_interval=${Global_epochs} \
+        -o Global.eval_interval=${Global_epochs} \
         -o Global.seed=1234 \
         -o DataLoader.Train.loader.num_workers=0 \
         -o DataLoader.Train.sampler.shuffle=False  \
@@ -74,11 +77,13 @@ dynamic|static)
     if [[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]];then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_${card}.log) -eq 0 ]];then
-        echo -e "\033[33m ${train_type} training successfully in ${card} of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[33m ${train_type} successfully! training in ${card} of ${model_name} successfully!\033[0m" \
+            |tee -a ${log_path}/result.log
         echo "training_exit_code: 0.0" >> ${log_path}/train/${model_name}_${card}.log
     else
         cat ${log_path}/train/${model_name}_${card}.log
-        echo -e "\033[31m ${train_type} training failed in ${card} of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[31m ${train_type} failed! training in ${card} of ${model_name} failed!\033[0m" \
+            |tee -a ${log_path}/result.log
         echo "training_exit_code: 1.0" >> ${log_path}/train/${model_name}_${card}.log
     fi
     # cat ${log_path}/train/${model_name}_${card}.log | grep "Memory Usage (MB)" #查看显存
@@ -95,11 +100,13 @@ convergence)
     if [[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
         || [[ -f "${output_dir}/${model_name}/${params_dir}/0/ppcls.pdmodel" ]];then
         # && [[ $(grep -c  "Error" ${log_path}/train/${model_name}_convergence.log) -eq 0 ]];then
-        echo -e "\033[33m ${train_type} training successfully in ${card} of ${model_name}  successfully!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[33m ${train_type} successfully! training in ${card} of ${model_name}  successfully!\033[0m" \
+            |tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 0.0" >> ${log_path}/train/${model_name}_convergence.log
     else
         cat ${log_path}/train/${model_name}_convergence.log
-        echo -e "\033[31m ${train_type} training failed in ${card} of ${model_name} failed!\033[0m"|tee -a ${log_path}/result.log
+        echo -e "\033[31m ${train_type} failed! training in ${card} of ${model_name} failed!\033[0m" \
+            |tee -a ${log_path}/result.log
         echo "training_multi_exit_code: 1.0" >> ${log_path}/train/${model_name}_convergence.log
     fi
     # cat ${log_path}/train/${model_name}_convergence.log | grep "Memory Usage (MB)" #查看显存

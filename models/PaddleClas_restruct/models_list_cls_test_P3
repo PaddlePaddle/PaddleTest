@@ -22,7 +22,6 @@ ppcls/configs/ImageNet/MobileNetV2/MobileNetV2_x2_0.yaml
 ppcls/configs/ImageNet/MobileNetV2/MobileNetV2_x1_5.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B2.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B3.yaml
-ppcls/configs/ImageNet/PVTV2/PVT_V2_B4.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B2_Linear.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B1.yaml
 ppcls/configs/ImageNet/ReXNet/ReXNet_3_0.yaml
@@ -39,7 +38,6 @@ ppcls/configs/ImageNet/DLA/DLA46x_c.yaml
 ppcls/configs/ImageNet/DLA/DLA60.yaml
 ppcls/configs/ImageNet/DLA/DLA102x.yaml
 ppcls/configs/ImageNet/RedNet/RedNet101.yaml
-ppcls/configs/ImageNet/RedNet/RedNet152.yaml
 ppcls/configs/ImageNet/RedNet/RedNet26.yaml
 ppcls/configs/ImageNet/RedNet/RedNet50.yaml
 ppcls/configs/ImageNet/HRNet/HRNet_W30_C.yaml

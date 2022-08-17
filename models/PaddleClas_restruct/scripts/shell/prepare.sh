@@ -20,7 +20,7 @@ else
     echo "######  system linux"
 fi
 
-#安装依赖包，需要代理
+#安装向上取整依赖包，需要代理
 yum install bc -y
 apt-get install bc -y
 
@@ -38,10 +38,22 @@ python -m pip install  -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 if [[ ${yaml_line} =~ 'fp16' ]] || [[ ${yaml_line} =~ 'amp' ]];then
     echo "fp16 or amp"
-    python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
-    --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
-fi
+    # python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
+    # --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
+    if [[ -f "nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl" ]] && \
+        [[ -f "nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl" ]] ;then
+        echo "already download nvidia_dali_cuda102 nvidia_dali_cuda110"
+    else
+        wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl --no-proxy
+        wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl --no-proxy
+    fi
+    python -m pip install nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
+    python -m pip install nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
 
+    export FLAGS_cudnn_deterministic=False #amp单独考虑，不能固定随机量，否则报错如下
+    # InvalidArgumentError: Cann't set exhaustive_search True and FLAGS_cudnn_deterministic True at same time.
+fi
+python setup.py install >/dev/null 2>&1 #安装whl包
 
 #确定log存储位置
 export log_path=../log
@@ -63,6 +75,7 @@ export model_name=${array[2]} #进行字符串拼接
 if [[ ${yaml_line} =~ "PULC" ]];then
     export model_type_PULC=${array[3]} #PULC为了区分9中类别单独区分
 fi
+echo "### model_type"
 echo ${model_type}
 for var in ${array[@]:3}
 do
@@ -70,10 +83,12 @@ do
     export model_name=${model_name}-${array2[0]}
 done
 export model_latest_name=${array2[0]}
+echo "### model_latest_name"
 echo ${model_latest_name}
+echo "### model_name"
 echo ${model_name}
 
-#获取模型输出名
+#获取模型输出名称、评估下载名称、预测下载名称
 # import yaml
 # params_dir=`python -c "
 #     import yaml; \
@@ -81,11 +96,47 @@ echo ${model_name}
 #     cfg = yaml.full_load(y); \
 #     print(cfg['Arch']['name']); \
 #     "`
-Arch_index=`cat ${yaml_line} | grep -n Arch | awk -F ":" '{print $1}'`
-Arch_word=`sed -n "${Arch_index},$[${Arch_index}+3]p" ${yaml_line}`
-export params_dir=(`echo ${Arch_word} | grep name | awk -F ":" '{print $3}'`)
-export params_dir=(${params_dir//\"/ })
+function get_params(){
+    params_index=(`cat ${yaml_line} | grep -n $1 | awk -F ":" '{print $1}'`)
+    params_word=`sed -n "${params_index[0]},$[${params_index[0]}+3]p" ${yaml_line}`
+    params_dir=(`echo ${params_word} | grep name: | awk -F ":" '{print $3}'`)
+    params_dir=(${params_dir//\"/ })
+    params_dir=(${params_dir//\"/ })
+    echo ${params_dir}
+}
+export params_dir=`get_params Arch:`
+echo "#### params_dir"
 echo ${params_dir}
+if [[ ${params_dir} == "RecModel" ]];then
+    if [[ `cat ${yaml_line}` =~ "Backbone" ]];then
+        pdparams_pretrain=`get_params Backbone:`
+    else
+        pdparams_pretrain=`get_params Arch:`
+    fi
+elif [[ ${params_dir} == "DistillationModel" ]];then
+    if [[ `cat ${yaml_line}` =~ "Backbone" ]];then
+        pdparams_pretrain=`get_params Backbone:`
+    else
+        pdparams_pretrain=`get_params Student:`
+    fi
+else
+    pdparams_pretrain=${params_dir}
+fi
+export pdparams_pretrain=(${pdparams_pretrain//"_Tanh"/ })
+export pdparams_pretrain=(${pdparams_pretrain//"_last_stage_stride1"/ })
+if [[ ${pdparams_pretrain} == "AttentionModel" ]];then
+    export pdparams_pretrain="ResNet18"
+fi
+if [[ ${model_type} == "PULC" ]];then
+    export infer_pretrain=${model_type_PULC}
+else
+    export infer_pretrain=${pdparams_pretrain}
+fi
+echo "#### pdparams_pretrain"
+echo ${pdparams_pretrain}
+echo "#### infer_pretrain"
+echo ${infer_pretrain}
+
 
 #对32G的模型进行bs减半的操作，注意向上取整 #暂时适配了linux，未考虑MAC
 # if [[ 'ImageNet_CSPNet_CSPDarkNet53 ImageNet_DPN_DPN107 ImageNet_DeiT_DeiT_tiny_patch16_224 \
@@ -122,6 +173,7 @@ echo ${params_dir}
 #     done
 # fi
 
+#默认bath_size除以3
 function ceil(){
 floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整 局部变量$1不影响
 add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
@@ -151,21 +203,26 @@ done
 # export CUDA_VISIBLE_DEVICES=  #这一步让框架来集成
 if [[ ${cuda_type} =~ "SET_MULTI_CUDA" ]];then
     export card="2card"
+    export Global_epochs="5"
     export multi_flag="-m paddle.distributed.launch"
     export set_cuda_device="gpu"
     export set_cuda_flag=True
 elif [[ ${cuda_type} =~ "CPU" ]];then
     export card="cpu"
+    export Global_epochs="2"
     export multi_flag=" "
     export set_cuda_device="cpu"
     export set_cuda_flag=Flase
 else
     export card="1card"
+    export Global_epochs="2"
     export multi_flag=" "
     export set_cuda_device="gpu"
     export set_cuda_flag=True
 fi
 
+
+#准备数据下载函数
 get_image_name(){
     #传入split参数 image_root
     image_root_name=(`cat ${yaml_line} | grep  ${image_root} | awk -F ":" '{print $2}'`)
@@ -179,10 +236,9 @@ download_data(){
     #传入参数 image_root_name
     echo "download start image_root_name : ${image_root_name}"
     cd dataset #这里是默认按照已经进入repo路径来看
-    if [[ -f "dataset/${image_root_name}.tar" ]] && [[ -d "dataset/${image_root_name}" ]] ;then
+    if [[ -f "${image_root_name}.tar" ]] && [[ -d "${image_root_name}" ]] ;then
         echo already download ${image_root_name}
     else
-        rm -rf ${image_root_name}
 wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/${image_root_name}.tar --no-proxy --no-check-certificate
         tar xf ${image_root_name}.tar
     fi
@@ -191,6 +247,15 @@ wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/${image_root_name}
 }
 
 #准备数据
+cd deploy
+if [[ -f "recognition_demo_data_en_v1.1.tar" ]] && [[ -d "recognition_demo_data_en_v1.1" ]] ;then
+    echo already download rec_demo
+else
+wget -q -c https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/recognition_demo_data_en_v1.1.tar \
+    --no-proxy --no-check-certificate && tar xf recognition_demo_data_en_v1.1.tar
+fi
+cd ..
+
 if [[ ${get_data_way} == "ln_way" ]];then
     if [[ ${Data_path} == "" ]];then
         echo " you must set Data_path first "
@@ -199,20 +264,8 @@ if [[ ${get_data_way} == "ln_way" ]];then
     rm -rf dataset
     ln -s ${Data_path} dataset
     ls dataset |head -n 2
-    cd deploy
-    ln -s ${Data_path}/rec_demo/* .  #预训练模型和demo数据集
-    cd ..
 else
     echo "######  ----download  data-----"
-    cd deploy
-    if [[ -f "dataset/rec_demo.tar" ]] && [[ -d "dataset/rec_demo" ]] ;then
-        echo already download rec_demo
-    else
-    wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/rec_demo.tar --no-proxy --no-check-certificate
-    tar xf rec_demo.tar
-    fi
-    cd ..
-
     if [[ ${yaml_line} =~ "face" ]] && [[ ${yaml_line} =~ "metric_learning" ]];then
         image_root="root_dir"
         get_image_name image_root

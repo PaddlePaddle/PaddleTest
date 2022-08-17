@@ -230,7 +230,7 @@ class BuildModuleTest(object):
         """dygraph_to_static train test"""
         self.logger.get_log().info("dygraph to static train acc-test start~")
         dygraph_out = self.train(to_static=False)
-        self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
+        # self.logger.get_log().info("dygraph_out is: {}".format(dygraph_out))
         static_out = self.train(to_static=True)
         # self.logger.get_log().info("static_out is: {}".format(static_out))
         tool.compare(static_out, dygraph_out, delta=delta, rtol=rtol)

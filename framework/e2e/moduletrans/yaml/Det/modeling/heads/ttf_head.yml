@@ -1,22 +1,24 @@
-lcnet_ConvBNLayer_0:
-  desc: "Det ppdet.modeling.backbones.lcnet.ConvBNLayer模型结构"
+ttf_head_HMHead_0:
+  desc: "Det ppdet.modeling.heads.ttf_head.HMHead模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.lcnet.ConvBNLayer"
+    layer_name: "ppdet.modeling.heads.ttf_head.HMHead"
     params:
-      num_channels: 8
-      filter_size: 4
-      num_filters: 16
-      stride: 2
-      num_groups: 4
+      ch_in: 64
+      ch_out: 128
+      num_classes: 80
+      conv_num: 2
+      dcn_head: False
+      lite_head: False
+      norm_type: 'bn'
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
-      x:
+      feat:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float64"
-        shape: [4, 8, 16, 16]
+        shape: [4, 64, 16, 16]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
@@ -53,35 +55,36 @@ lcnet_ConvBNLayer_0:
       delta: 0.00000001
       rtol: 0.00000001
 
-lcnet_DepthwiseSeparable_0:
-  desc: "Det ppdet.modeling.backbones.lcnet.DepthwiseSeparable模型结构"
+ttf_head_WHHead_0:
+  desc: "Det ppdet.modeling.heads.ttf_head.WHHead模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.lcnet.DepthwiseSeparable"
+    layer_name: "ppdet.modeling.heads.ttf_head.WHHead"
     params:
-      num_channels: 8
-      num_filters: 16
-      stride: 2
-      dw_size: 5
-      use_se: True
+      ch_in: 32
+      ch_out: 64
+      conv_num: 2
+      dcn_head: False
+      lite_head: False
+      norm_type: 'bn'
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
-      x:
+      feat:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float64"
-        shape: [4, 8, 16, 16]
+        shape: [4, 32, 16, 16]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
-      loss_list: ['logit']
+      loss_list: ['10 * logit']
   optimizer:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.00001
+      learning_rate: 0.00000001
   Train:
     step: 3
   test:
@@ -95,45 +98,51 @@ lcnet_DepthwiseSeparable_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-    dygraph_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    static_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
 
-lcnet_SEModule_0:
-  desc: "Det ppdet.modeling.backbones.lcnet.SEModule模型结构"
+ttf_head_TTFHead_0:
+  desc: "Det ppdet.modeling.heads.ttf_head.TTFHead模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.lcnet.SEModule"
+    layer_name: "ppdet.modeling.heads.ttf_head.TTFHead"
     params:
-      channel: 33
-      reduction: 3
+      in_channels: 60
+      num_classes: 80
+      hm_head_planes: 128
+      wh_head_planes: 64
+      hm_head_conv_num: 2
+      wh_head_conv_num: 2
+      hm_loss: 'CTFocalLoss'
+      wh_loss: 'GIoULoss'
+      wh_offset_base: 16.
+      down_ratio: 4
+      dcn_head: False
+      lite_head: False
+      norm_type: 'bn'
+      ags_module: False
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
-      x:
+      feats:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float64"
-        shape: [4, 33, 16, 16]
+        shape: [4, 60, 32, 32]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
-      loss_list: ['logit']
+      loss_list: ['logit[1]']
   optimizer:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
       opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.00001
+      learning_rate: 0.000000001
   Train:
     step: 3
   test:
@@ -147,35 +156,41 @@ lcnet_SEModule_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-    dygraph_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    static_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
 
-lcnet_LCNet_0:
-  desc: "Det ppdet.modeling.backbones.lcnet.LCNet模型结构"
+ttf_head_TTFHead_1:
+  desc: "Det ppdet.modeling.heads.ttf_head.TTFHead模型结构"
   Layer:
     repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.backbones.lcnet.LCNet"
+    layer_name: "ppdet.modeling.heads.ttf_head.TTFHead"
     params:
-      scale: 1.0
-      feature_maps: [3, 4, 5]
+      in_channels: 60
+      num_classes: 80
+      hm_head_planes: 128
+      wh_head_planes: 64
+      hm_head_conv_num: 2
+      wh_head_conv_num: 2
+      hm_loss: 'CTFocalLoss'
+      wh_loss: 'GIoULoss'
+      wh_offset_base: 16.
+      down_ratio: 4
+      dcn_head: False
+      lite_head: False
+      norm_type: 'bn'
+      ags_module: False
   DataGenerator:
-    DataGenerator_name: "diy.data.struct_img_dataset.DictImageWithoutLabel"
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
-      inputs:
+      feats:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
         dtype: "float64"
-        shape: [4, 3, 224, 224]
+        shape: [4, 60, 32, 32]
         range: [ -1, 1]
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
@@ -199,15 +214,9 @@ lcnet_LCNet_0:
       acc_test: False
       delta: 0.000001
       rtol: 0.000001
-    dygraph_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    static_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
