@@ -32,7 +32,6 @@ python -m pip install --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 # python -m pip install -U pyyaml \
 #     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
-python setup.py install >/dev/null 2>&1
 python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
@@ -54,6 +53,7 @@ if [[ ${yaml_line} =~ 'fp16' ]] || [[ ${yaml_line} =~ 'amp' ]];then
     export FLAGS_cudnn_deterministic=False #amp单独考虑，不能固定随机量，否则报错如下
     # InvalidArgumentError: Cann't set exhaustive_search True and FLAGS_cudnn_deterministic True at same time.
 fi
+python setup.py install >/dev/null 2>&1 #安装whl包
 
 #确定log存储位置
 export log_path=../log
@@ -203,16 +203,19 @@ done
 # export CUDA_VISIBLE_DEVICES=  #这一步让框架来集成
 if [[ ${cuda_type} =~ "SET_MULTI_CUDA" ]];then
     export card="2card"
+    export Global_epochs="5"
     export multi_flag="-m paddle.distributed.launch"
     export set_cuda_device="gpu"
     export set_cuda_flag=True
 elif [[ ${cuda_type} =~ "CPU" ]];then
     export card="cpu"
+    export Global_epochs="2"
     export multi_flag=" "
     export set_cuda_device="cpu"
     export set_cuda_flag=Flase
 else
     export card="1card"
+    export Global_epochs="2"
     export multi_flag=" "
     export set_cuda_device="gpu"
     export set_cuda_flag=True
