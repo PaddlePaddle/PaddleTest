@@ -94,8 +94,8 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
                     P0case_list[${#P0case_list[*]}]=${dir3}
                     P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir3}]}`
                 elif [[ ${dir3} =~ "ernie" ]];then # paddlenlp.transformers.model.ernie
-                    P0case_list=(ernie-1.0) 
-                    P0case_time=${all_P0case_time} 
+                    P0case_list=(ernie-1.0)
+                    P0case_time=${all_P0case_time}
                 else
                     P0case_list=(bert gpt transformer)
                     P0case_time=${all_P0case_time}
@@ -105,7 +105,7 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
         if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
                 P0case_list[${#P0case_list[*]}]=${dir3}
                 P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir3}]}`
-        fi 
+        fi
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
                 P0case_list[${#P0case_list[*]}]=${dir2}
@@ -117,8 +117,8 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
         elif [[ ${dir2} =~ "transformers" ]] ;then
             APIcase_list[${#APIcase_list[*]}]=${dir3}
         fi
-       
-    
+
+
     else
         echo "changed files no in P0case, skip "
         break
@@ -199,4 +199,3 @@ fi
 ####################################
 echo -e "\033[35m ---- EXCODE: $EXCODE \033[0m"
 exit $EXCODE
-
