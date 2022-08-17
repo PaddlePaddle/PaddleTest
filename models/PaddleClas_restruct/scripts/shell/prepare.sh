@@ -32,6 +32,7 @@ python -m pip install --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 # python -m pip install -U pyyaml \
 #     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+python setup.py install >/dev/null 2>&1
 python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
@@ -74,6 +75,7 @@ export model_name=${array[2]} #进行字符串拼接
 if [[ ${yaml_line} =~ "PULC" ]];then
     export model_type_PULC=${array[3]} #PULC为了区分9中类别单独区分
 fi
+echo "### model_type"
 echo ${model_type}
 for var in ${array[@]:3}
 do
@@ -81,7 +83,9 @@ do
     export model_name=${model_name}-${array2[0]}
 done
 export model_latest_name=${array2[0]}
+echo "### model_latest_name"
 echo ${model_latest_name}
+echo "### model_name"
 echo ${model_name}
 
 #获取模型输出名称、评估下载名称、预测下载名称
@@ -101,6 +105,7 @@ function get_params(){
     echo ${params_dir}
 }
 export params_dir=`get_params Arch:`
+echo "#### params_dir"
 echo ${params_dir}
 if [[ ${params_dir} == "RecModel" ]];then
     if [[ `cat ${yaml_line}` =~ "Backbone" ]];then
@@ -127,7 +132,10 @@ if [[ ${model_type} == "PULC" ]];then
 else
     export infer_pretrain=${pdparams_pretrain}
 fi
+echo "#### pdparams_pretrain"
 echo ${pdparams_pretrain}
+echo "#### infer_pretrain"
+echo ${infer_pretrain}
 
 
 #对32G的模型进行bs减半的操作，注意向上取整 #暂时适配了linux，未考虑MAC

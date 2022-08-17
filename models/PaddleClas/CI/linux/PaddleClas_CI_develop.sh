@@ -126,6 +126,7 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 #    setuptools==59.5.0 -i https://mirror.baidu.com/pypi/simple #before install bcolz
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
+python setup.py install
 # python -m pip install  --ignore-installed --upgrade paddleslim \
 python -m pip install --upgrade paddleslim \
    -i https://mirror.baidu.com/pypi/simple
