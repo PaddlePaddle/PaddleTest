@@ -30,18 +30,18 @@ dynamic|static)
     echo ${params_dir}
     if [[ `cat ${yaml_line} |grep MultiScaleSampler|wc -l` -gt "0" ]]; then #for tingquan 220513 change
         echo "have MultiScaleSampler"
-        common_par="-o Global.epochs=2 \
-        -o Global.save_interval=2 \
-        -o Global.eval_interval=2 \
+        common_par="-o Global.epochs=${Global_epochs} \
+        -o Global.save_interval=${Global_epochs} \
+        -o Global.eval_interval=${Global_epochs} \
         -o Global.seed=1234 \
         -o DataLoader.Train.loader.num_workers=0 \
         -o DataLoader.Train.sampler.first_bs=32 \
         -o Global.output_dir=${output_dir}/${model_name} \
         -o Global.device=${set_cuda_device}"
     else
-        common_par="-o Global.epochs=2 \
-        -o Global.save_interval=2 \
-        -o Global.eval_interval=2 \
+        common_par="-o Global.epochs=${Global_epochs} \
+        -o Global.save_interval=${Global_epochs} \
+        -o Global.eval_interval=${Global_epochs} \
         -o Global.seed=1234 \
         -o DataLoader.Train.loader.num_workers=0 \
         -o DataLoader.Train.sampler.shuffle=False  \
