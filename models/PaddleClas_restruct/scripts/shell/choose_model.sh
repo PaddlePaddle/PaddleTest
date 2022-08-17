@@ -1,7 +1,6 @@
 
-echo $input_model_type
-echo "######  pdparams_pretrain"
-echo $pdparams_pretrain
+echo "#### input_model_type"
+echo ${input_model_type}
 export Project_path=${Project_path:-$PWD}
 
 cd ${Project_path} #确定下执行路径
@@ -15,22 +14,22 @@ function download_infer_tar(){
     if [[ -f "${1}.tar" ]] && [[ -d "${1}" ]];then
         echo "already download ${1}"
     else
-        wget  -c  \
+        wget -q -c  \
             https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/models/inference/${1}.tar
         tar xf ${1}.tar
     fi
     if [[ $? -eq 0 ]];then
-        echo "\033[31m successfully! predict pretrained download ${model_name}/${infer_pretrain} successfully!\033[0m"
+        echo -e "\033[31m successfully! predict pretrained download ${model_name}/${infer_pretrain} successfully!\033[0m"
     else
-        echo "\033[31m failed! predict pretrained download ${model_name}/${infer_pretrain} failed!\033[0m"
+        echo -e "\033[31m failed! predict pretrained download ${model_name}/${infer_pretrain} failed!\033[0m"
     fi
     cd ../../
 }
 
 if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的覆盖了
     if [[ ${input_model_type} == "trained" ]];then
-        if [[ -f ${output_dir}/${model_name}/${pdparams_pretrain}/latest.pdparams ]];then
-            export pretrained_model=${output_dir}/${model_name}/${pdparams_pretrain}/latest
+        if [[ -d ${output_dir}/${model_name} ]];then
+            export pretrained_model=${output_dir}/${model_name}/${params_dir}/latest
         else
             export pretrained_model="None"  #使用初始化参数评估
         fi
@@ -53,7 +52,7 @@ if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的
             if [[ ${pdparams_pretrain} =~ "-ESNet" ]] || [[ ${pdparams_pretrain} =~ "-HRNet" ]] || [[ ${pdparams_pretrain} =~ "-InceptionV3" ]] || \
                 [[ ${pdparams_pretrain} =~ "-MobileNetV1" ]] || [[ ${pdparams_pretrain} =~ "-MobileNetV3" ]] || [[ ${pdparams_pretrain} =~ "-PPHGNet" ]] || \
                 [[ ${pdparams_pretrain} =~ "-PPLCNet" ]] || [[ ${pdparams_pretrain} =~ "-PPLCNetV2" ]] || [[ ${pdparams_pretrain} =~ "-ResNet" ]] || \
-                [[ ${pdparams_pretrain} =~ "-SwinTransformer" ]] || [[ ${pdparams_pretrain} =~ "-VGG" ]];then
+                [[ ${pdparams_pretrain} =~ "-GeneralRecognition_PPLCNet" ]] || [[ ${pdparams_pretrain} =~ "-SwinTransformer" ]] || [[ ${pdparams_pretrain} =~ "-VGG" ]];then
                 echo "######  use legendary_models pretrain model"
                 wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/${pdparams_pretrain}_pretrained.pdparams --no-proxy
             else
@@ -62,8 +61,8 @@ if [[ ${predict_step} == "" ]];then     #要区分下不能把之前的训好的
             if [[ $? -eq 0 ]];then
                 export pretrained_model=${pdparams_pretrain}_pretrained
             else
-                echo "\033[31m failed! eval pretrained download ${model_name}/${pdparams_pretrain} failed!\033[0m"
-                export pretrained_model=${output_dir}/${model_name}/${pdparams_pretrain}/latest
+                echo -e "\033[31m failed! eval pretrained download ${model_name}/${pdparams_pretrain} failed!\033[0m"
+                export pretrained_model=${output_dir}/${model_name}/${params_dir}/latest
             fi
         fi
         # 单独考虑
@@ -95,7 +94,7 @@ else
 
         case ${model_type} in
         ImageNet|slim|metric_learning|PULC)
-            if [[ -f "inference/${model_name}/inference.pdmodel" ]];then
+            if [[ -d "inference/${model_name}" ]];then
                 export pretrained_model="../inference/${model_name}"
             else
                 export pretrained_model="None" #必须有下好的模型，不能使用初始化模型，所以不管用默认参数还是None都不能预测
@@ -106,7 +105,7 @@ else
         ;;
         Cartoonface) #暂时用训好的模型 220815
             download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
-            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
+            download_infer_tar cartoon_rec_ResNet50_iCartoon_v1.0_infer
         ;;
         Logo)
             download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
@@ -114,11 +113,11 @@ else
         ;;
         Products)
             download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
-            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
+            download_infer_tar product_ResNet50_vd_aliproduct_v1.0_infer
         ;;
         Vehicle)
             download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
-            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
+            download_infer_tar vehicle_cls_ResNet50_CompCars_v1.0_infer
         ;;
         reid)
             echo "predict unspported ${model_name}" > tmp.log
@@ -166,11 +165,12 @@ else
             fi
             export pretrained_model="../${infer_pretrain}_infer"
         else
-            echo "\033[31m failed! predict pretrained download ${model_name}/${infer_pretrain} failed!\033[0m"
+            echo -e "\033[31m failed! predict pretrained download ${model_name}/${infer_pretrain} failed!\033[0m"
             export pretrained_model="../inference/${model_name}"
         fi
     else
         export pretrained_model="None"
     fi
 fi
+echo "##### pretrained_model"
 echo ${pretrained_model}
