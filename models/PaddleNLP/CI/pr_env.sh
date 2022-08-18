@@ -65,11 +65,11 @@ export log_path=/workspace/model_logs
 export P0case_list=()
 export APIcase_list=()
 declare -A all_P0case_dic
-all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["xlnet"]=2 \
+all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["SQuAD"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
   ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5)
-P0case_key_list=(bert gpt ernie-1.0 transformer)
+
 get_diff_TO_P0case(){
 for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     arr_file_name=(${file_name//// })
@@ -89,7 +89,7 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
                 elif [[ ${dir3} =~ "ernie" ]];then
                     P0case_list=(ernie-1.0)
                 else
-                    P0case_list=(bert gpt ernie-1.0 transformer)
+                    P0case_list=(bert gpt transformer)
                 fi
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
