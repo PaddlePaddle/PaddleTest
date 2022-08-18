@@ -63,8 +63,6 @@ export log_path=/workspace/model_logs
 ####################################
 # get diff case
 export P0case_list=()
-export P0case_time=0
-export all_P0case_time=0
 export APIcase_list=()
 declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["xlnet"]=2 \
@@ -73,9 +71,6 @@ all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=
   ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5)
 P0case_key_list=(bert gpt ernie-1.0 transformer)
 get_diff_TO_P0case(){
-for key in $(echo ${!all_P0case_dic[*]});do
-    all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
-done
 for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     arr_file_name=(${file_name//// })
     dir1=${arr_file_name[0]}
@@ -88,29 +83,22 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then # paddelnlp.taskflow
                 P0case_list[${#P0case_list[*]}]=${dir2}
-                P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir2}]}`
         elif [[ ${dir2} =~ "transformers" ]];then
                 if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then # paddlenlp.transformers.model.albert
                     P0case_list[${#P0case_list[*]}]=${dir3}
-                    P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir3}]}`
-                # elif [[ ${dir3} =~ "ernie" ]];then
-                #     echo "ernie test!!!"
-                #     P0case_list=(ernie-1.0)
-                #     P0case_time=${all_P0case_time}
+                elif [[ ${dir3} =~ "ernie" ]];then
+                    P0case_list=(ernie-1.0)
                 else
                     P0case_list=(bert gpt ernie-1.0 transformer)
-                    P0case_time=${all_P0case_time}
                 fi
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
                 P0case_list[${#P0case_list[*]}]=${dir3}
-                P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir3}]}`
         fi
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
                 P0case_list[${#P0case_list[*]}]=${dir2}
-                P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir2}]}`
         fi
     elif [[ ${dir1} =~ "tests" ]];then #新增单测
         if [[ ${dir3##*.} == "py" ]];then
