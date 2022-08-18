@@ -79,5 +79,7 @@ def compare(result, expect, delta=1e-10, rtol=1e-10):
                 compare(result[i], expect[i], delta, rtol)
     elif isinstance(expect, (bool, int, float)):
         assert expect == result
+    elif expect is None:
+        pass
     else:
         raise Exception("expect is unknown data struction in compare_tool!!!")

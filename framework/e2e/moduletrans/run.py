@@ -144,8 +144,41 @@ if __name__ == "__main__":
     # execute.upload_resource(
     #     case_dict={"Det": {"yaml/Det/modeling/backbones/hrnet.yml": ["hrnet_TransitionLayer_0"]}}
     # )  # baseline上传,请勿调用！！
-    execute.prepare()
-    start = time.time()
-    execute.run()
-    end = time.time()
-    print("all test using time: ", end - start)
+    execute.upload_resource(
+        case_dict={
+            "Det": {
+                "yaml/Det/modeling/heads/detr_head.yml": [
+                    "detr_head_MultiHeadAttentionMap_0",
+                    "detr_head_DETRHead_0",
+                    "detr_head_DETRHead_1",
+                    "detr_head_DeformableDETRHead_1",
+                ],
+                "yaml/Det/modeling/heads/fcos_head.yml": ["fcos_head_ScaleReg_0", "fcos_head_FCOSFeat_0"],
+                "yaml/Det/modeling/heads/gfl_head.yml": [
+                    "gfl_head_ScaleReg_0",
+                    "gfl_head_Integral_0",
+                    "gfl_head_DGQP_0",
+                ],
+                "yaml/Det/modeling/heads/mask_head.yml": ["mask_head_MaskFeat_0"],
+                "yaml/Det/modeling/heads/keypoint_hrhrnet_head.yml": ["keypoint_hrhrnet_head_HrHRNetHead_1"],
+                "yaml/Det/modeling/heads/pico_head.yml": ["pico_head_PicoSE_0", "pico_head_PicoFeat_0"],
+                "yaml/Det/modeling/heads/ppyoloe_head.yml": ["ppyoloe_head_ESEAttn_0"],
+                "yaml/Det/modeling/heads/solov2_head.yml": ["solov2_head_SOLOv2MaskHead_0"],
+                "yaml/Det/modeling/heads/sparsercnn_head.yml": ["sparsercnn_head_DynamicConv_0"],
+                "yaml/Det/modeling/heads/ssd_head.yml": ["ssd_head_SepConvLayer_0"],
+                "yaml/Det/modeling/heads/tood_head.yml": ["tood_head_ScaleReg_0"],
+                "yaml/Det/modeling/heads/ttf_head.yml": [
+                    "ttf_head_HMHead_0",
+                    "ttf_head_WHHead_0",
+                    "ttf_head_TTFHead_0",
+                    "ttf_head_TTFHead_1",
+                ],
+                "yaml/Det/modeling/heads/YOLOv3Head.yml": ["yolo_head_YOLOv3Head_0"],
+            }
+        }
+    )
+    # execute.prepare()
+    # start = time.time()
+    # execute.run()
+    # end = time.time()
+    # print("all test using time: ", end - start)
