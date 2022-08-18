@@ -21,10 +21,10 @@ else
 fi
 
 #安装向上取整依赖包，需要代理
-yum install bc -y
-apt-get install bc -y
+yum install bc -y >/dev/null 2>&1
+apt-get install bc -y >/dev/null 2>&1
 
-#取消代理用镜像安装包
+#取消代理用镜像安装包，安装依赖包
 unset http_proxy
 unset https_proxy
 
@@ -36,6 +36,16 @@ python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+
+if [[ ${yaml_line} =~ "face" ]] && [[ ${yaml_line} =~ "metric_learning" ]];then
+    echo "metric_learning face"
+    # 更新 pip/setuptools
+    python -m  pip install -U pip setuptools cython \
+        -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+    # 安装 bcolz
+    python -m  pip install bcolz==1.2.0  \
+        -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+fi
 if [[ ${yaml_line} =~ 'fp16' ]] || [[ ${yaml_line} =~ 'amp' ]];then
     echo "fp16 or amp"
     # python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
@@ -248,9 +258,11 @@ wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/${image_root_name}
 
 #准备数据
 cd deploy
-if [[ -f "recognition_demo_data_en_v1.1.tar" ]] && [[ -d "recognition_demo_data_en_v1.1" ]] ;then
+if [[ -f "recognition_demo_data_en_v1.1.tar" ]] && [[ -f "drink_dataset_v1.0.tar" ]] ;then
     echo already download rec_demo
 else
+wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/drink_dataset_v1.0.tar --no-proxy \
+    && tar -xf drink_dataset_v1.0.tar
 wget -q -c https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/recognition_demo_data_en_v1.1.tar \
     --no-proxy --no-check-certificate && tar xf recognition_demo_data_en_v1.1.tar
 fi

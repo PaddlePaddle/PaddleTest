@@ -16,11 +16,15 @@ source prepare.sh
 source choose_model.sh
 
 case ${model_type} in
-ImageNet|slim|metric_learning)
+ImageNet|slim)
+    if [[ ${params_dir} == "RecModel" ]];then
     python tools/infer.py -c ${yaml_line} \
         -o Global.pretrained_model=${pretrained_model} \
         -o Global.output_dir=${output_dir}/${model_name} \
         > ${log_path}/infer/${model_name}_${input_model_type}.log 2>&1
+    else
+        echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    fi
 ;;
 Cartoonface)
     echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
@@ -37,7 +41,7 @@ Products)
 PULC)
     echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
-reid)
+reid|metric_learning)
     echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
 Vehicle)
