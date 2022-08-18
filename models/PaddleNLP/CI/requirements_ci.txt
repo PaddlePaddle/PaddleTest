@@ -22,3 +22,8 @@ packaging
 psutil
 pynvml
 GPUtil
+lac
+yacs
+coverage
+h5py
+pytest
