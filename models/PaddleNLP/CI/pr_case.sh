@@ -299,7 +299,7 @@ mkdir data && cd data
 wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_ids.npy
 wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_idx.npz
 cd ../
-time (python -u  -m paddle.distributed.launch --gpus \
+time (python -u  -m paddle.distributed.launch \
     --log_dir "./log" \
     run_pretrain_static.py \
     --model_type "ernie" \
