@@ -46,15 +46,7 @@ ppcls/configs/ImageNet/ShuffleNet/ShuffleNetV2_swish.yaml
 ppcls/configs/ImageNet/ShuffleNet/ShuffleNetV2_x0_33.yaml
 ppcls/configs/ImageNet/LeViT/LeViT_128.yaml
 ppcls/configs/ImageNet/DarkNet/DarkNet53.yaml
-ppcls/configs/ImageNet/DataAugment/ResNet50_RandomErasing.yaml
-ppcls/configs/ImageNet/DataAugment/ResNet50_Cutout.yaml
-ppcls/configs/ImageNet/DataAugment/ResNet50_RandAugment.yaml
 ppcls/configs/ImageNet/DataAugment/ResNet50_Mixup.yaml
-ppcls/configs/ImageNet/DataAugment/ResNet50_AutoAugment.yaml
-ppcls/configs/ImageNet/DataAugment/ResNet50_Baseline.yaml
-ppcls/configs/ImageNet/DataAugment/ResNet50_GridMask.yaml
-ppcls/configs/ImageNet/DataAugment/ResNet50_Cutmix.yaml
-ppcls/configs/ImageNet/DataAugment/ResNet50_HideAndSeek.yaml
 ppcls/configs/ImageNet/AlexNet/AlexNet.yaml
 ppcls/configs/ImageNet/VGG/VGG13.yaml
 ppcls/configs/ImageNet/ESNet/ESNet_x0_25.yaml
