@@ -5,7 +5,7 @@ if [ $1 -ne 0 ];then
     mv ${log_path}/$2 ${log_path}/$2_FAIL.log
     echo -e "\033[31m ${log_path}/$2_FAIL \033[0m"
     cat ${log_path}/$2_FAIL.log
-elseF
+else
     # mv ${log_path}/$2 ${log_path}/$2_SUCCESS.log
     echo -e "\033[32m ${log_path}/$2_SUCCESS \033[0m"
 fi
@@ -99,7 +99,7 @@ time (python -m paddle.distributed.launch run_pretrain.py \
     --weight_decay 1e-2 \
     --adam_epsilon 1e-6 \
     --warmup_steps 10000 \
-    --input_dir data/hdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en/training/ \
+    --input_dir ./data/hdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en/training/ \
     --output_dir pretrained_models/ \
     --logging_steps 1 \
     --save_steps 1 \
@@ -1046,5 +1046,10 @@ python predict.py --vocab_path=./robot_chat_word_dict.txt \
     --device=gpu \
     --params_path=./checkpoints/final.pdparams >${log_path}/textcnn_predict >>${log_path}/textcnn_predict 2>&1
 print_info $? textcnn_predict
+}
+#33 taskflow
+taskflow (){
+cd ${nlp_dir}
+python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
 }
 $1

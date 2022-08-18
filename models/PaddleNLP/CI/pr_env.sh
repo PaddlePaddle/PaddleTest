@@ -67,7 +67,7 @@ export P0case_time=0
 export all_P0case_time=0
 export APIcase_list=()
 declare -A all_P0case_dic
-all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
+all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["SQuAD"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
   ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5)
@@ -93,11 +93,12 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
                 if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then # paddlenlp.transformers.model.albert
                     P0case_list[${#P0case_list[*]}]=${dir3}
                     P0case_time=`expr ${P0case_time} + ${all_P0case_dic[${dir3}]}`
-                elif [[ ${dir3} =~ "ernie" ]];then # paddlenlp.transformers.model.ernie
-                    P0case_list=(ernie-1.0)
-                    P0case_time=${all_P0case_time}
+                # elif [[ ${dir3} =~ "ernie" ]];then
+                #     echo "ernie test!!!"
+                #     P0case_list=(ernie-1.0)
+                #     P0case_time=${all_P0case_time}
                 else
-                    P0case_list=(bert gpt transformer)
+                    P0case_list=(bert gpt ernie-1.0 transformer)
                     P0case_time=${all_P0case_time}
                 fi
         fi
@@ -131,12 +132,11 @@ set -e
 get_diff_TO_P0case
 echo -e "\033[35m =======CI Check P0case========= \033[0m"
 echo -e "\033[35m ---- P0case_list length: ${#P0case_list[*]}, cases: ${P0case_list[*]} \033[0m"
-echo -e "\033[35m ---- P0case_time: $P0case_time min \033[0m"
 set +e
 echo -e "\033[35m ---- start run P0case  \033[0m"
 case_num=1
 for p0case in ${P0case_list[*]};do
-    echo -e "\033[35m ---- running P0case $case_num/${#P0case_list[*]}: ${p0case} , task time: ${all_P0case_dic[${p0case}]} min \033[0m"
+    echo -e "\033[35m ---- running P0case $case_num/${#P0case_list[*]}: ${p0case} \033[0m"
     bash pr_case.sh ${p0case}
     let case_num++
 done
