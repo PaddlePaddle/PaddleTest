@@ -180,7 +180,7 @@ keypoint_hrhrnet_head_HrHRNetHead_1:
   Loss:
     loss_name: "diy.loss.diy_loss.naive_loss_list"
     params:
-      loss_list: ['logit']
+      loss_list: ['logit[0]']
   optimizer:
     optimizer_name: "diy.optimizer.diy_opt.naive_opt"
     params:
