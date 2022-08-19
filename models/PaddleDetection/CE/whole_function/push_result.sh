@@ -1,4 +1,4 @@
-export branch='release'
+export task_type='release'
 bash test_det_ce.sh
 if [ $? -ne 0 ];then
     export status='Failed'
