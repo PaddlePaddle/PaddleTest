@@ -84,12 +84,14 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then # paddelnlp.taskflow
                 P0case_list[${#P0case_list[*]}]=${dir2}
         elif [[ ${dir2} =~ "transformers" ]];then
-                if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then # paddlenlp.transformers.model.albert
+                if [[ ${dir3} =~ "ernie" ]];then
+                    P0case_list[${#P0case_list[*]}]=ernie-1.0
+                elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then # paddlenlp.transformers.model.albert
                     P0case_list[${#P0case_list[*]}]=${dir3}
-                elif [[ ${dir3} =~ "ernie" ]];then
-                    P0case_list=(ernie-1.0)
                 else
-                    P0case_list=(bert gpt transformer)
+                    P0case_list[${#P0case_list[*]}]=bert
+                    P0case_list[${#P0case_list[*]}]=gpt
+                    P0case_list[${#P0case_list[*]}]=transformer
                 fi
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
@@ -98,7 +100,7 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
         fi
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
-                P0case_list[${#P0case_list[*]}]=${dir2}
+            P0case_list[${#P0case_list[*]}]=${dir2}
         fi
     elif [[ ${dir1} =~ "tests" ]];then #新增单测
         if [[ ${dir3##*.} == "py" ]];then
@@ -106,18 +108,17 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
         elif [[ ${dir2} =~ "transformers" ]] ;then
             APIcase_list[${#APIcase_list[*]}]=${dir3}
         fi
-
-
     else
         echo "changed files no in P0case, skip "
         break
     fi
 done
 }
+get_diff_TO_P0case
+P0case_list=($(awk -v RS=' ' '!a[$1]++' <<< ${P0case_list[*]}))
+APIcase_list=($(awk -v RS=' ' '!a[$1]++' <<< ${APIcase_list[*]}))
 ####################################
 # run changed models case
-set -e
-get_diff_TO_P0case
 echo -e "\033[35m =======CI Check P0case========= \033[0m"
 echo -e "\033[35m ---- P0case_list length: ${#P0case_list[*]}, cases: ${P0case_list[*]} \033[0m"
 set +e
@@ -148,8 +149,8 @@ fi
 ####################################
 # run unittest
 cd ${nlp_dir}
-echo ${APIcase_list}
 echo -e "\033[35m =======CI Check Unittest========= \033[0m"
+echo -e "\033[35m ---- unittest length: ${#APIcase_list[*]}, unittest cases: ${APIcase_list[*]} \033[0m"
 for apicase in ${APIcase_list[*]};do
     pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
     # sh run_coverage.sh paddlenlp.transformers.${apicase} >unittest_logs/${apicase}_coverage.log 2>&1
