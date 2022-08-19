@@ -14,8 +14,8 @@ if [ -d "log_err" ];then rm -rf log_err
 fi
 mkdir log_err
 
-echo ${branch}
-if [ "${branch}" != 'release' ];then
+echo ${task_type}
+if [ "${task_type}" != 'release' ];then
 python -m pip install --upgrade pip --ignore-installed;
 pip install Cython --ignore-installed;
 pip install -r requirements.txt --ignore-installed;
@@ -115,18 +115,18 @@ sed -i '/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/i\        max_step_id=1' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/a\            if step_id == max_step_id: break' ppdet/engine/tracker.py
 
-if [ "${branch}" == 'develop_d1' ];then
+if [ "${task_type}" == 'develop_d1' ];then
 find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner |  grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep -v mask_rcnn | grep -v detector | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v deploy | awk '{print $NF}' | tee config_list
-elif [ "${branch}" == 'develop_d2' ];then
+elif [ "${task_type}" == 'develop_d2' ];then
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v mot | grep yolov3/ | awk '{print $NF}' | tee yolov3_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v smrt | grep -v multiscaletest | grep faster_rcnn/ | awk '{print $NF}' | tee faster_list
 cat yolov3_list faster_list >>config_list
-elif [ "${branch}" == 'develop_d3' ];then
+elif [ "${task_type}" == 'develop_d3' ];then
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v datasets | grep -v ppvehicle | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v test_tipc | grep mot/ | awk '{print $NF}' | tee mot_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep ssd/ | awk '{print $NF}' | tee ssd_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v dcn | grep -v cascade_rcnn | grep mask_rcnn/ | awk '{print $NF}' | tee mask_list
 cat  mask_list mot_list ssd_list >>config_list
-elif [ "${branch}" == 'develop_d4' ];then
+elif [ "${task_type}" == 'develop_d4' ];then
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v dcn | grep -v smrt | grep -v vitdet | grep cascade_rcnn/ | awk '{print $NF}' | tee cascade_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep centernet/ | awk '{print $NF}' | tee centernet_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v smrt | grep -v pruner | grep picodet/ | awk '{print $NF}' | tee picodet_list
@@ -353,7 +353,7 @@ POSE_PYTHON_INFER(){
     fi
 }
 CPP_INFER(){
-    if [ "${branch}" == 'release' ];then
+    if [ "${task_type}" == 'release' ];then
         if [ ! -d ./inference_model/${model} ];then
             echo "${model} doesn't run export case,so can't run CPP_INFER case!"
         else

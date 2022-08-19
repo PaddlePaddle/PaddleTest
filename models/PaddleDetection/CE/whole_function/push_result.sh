@@ -1,4 +1,5 @@
-bash test_det_ce.sh 'release'
+export task_type='release'
+bash test_det_ce.sh
 if [ $? -ne 0 ];then
     export status='Failed'
     export exit_code='8'
