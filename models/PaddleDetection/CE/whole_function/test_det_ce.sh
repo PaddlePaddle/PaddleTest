@@ -14,8 +14,8 @@ if [ -d "log_err" ];then rm -rf log_err
 fi
 mkdir log_err
 
-echo "$1"
-if [ "$1" != 'release' ];then
+echo ${branch}
+if [ "${branch}" != 'release' ];then
 python -m pip install --upgrade pip --ignore-installed;
 pip install Cython --ignore-installed;
 pip install -r requirements.txt --ignore-installed;
@@ -115,25 +115,25 @@ sed -i '/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/i\        max_step_id=1' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/a\            if step_id == max_step_id: break' ppdet/engine/tracker.py
 
-if [ "$1" == 'develop_d1' ];then
-find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner |  grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep -v mask_rcnn | grep -v detector | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | awk '{print $NF}' | tee config_list
-elif [ "$1" == 'develop_d2' ];then
+if [ "${branch}" == 'develop_d1' ];then
+find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner |  grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep -v mask_rcnn | grep -v detector | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v deploy | awk '{print $NF}' | tee config_list
+elif [ "${branch}" == 'develop_d2' ];then
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v mot | grep yolov3/ | awk '{print $NF}' | tee yolov3_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v smrt | grep -v multiscaletest | grep faster_rcnn/ | awk '{print $NF}' | tee faster_list
 cat yolov3_list faster_list >>config_list
-elif [ "$1" == 'develop_d3' ];then
+elif [ "${branch}" == 'develop_d3' ];then
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v datasets | grep -v ppvehicle | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v test_tipc | grep mot/ | awk '{print $NF}' | tee mot_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep ssd/ | awk '{print $NF}' | tee ssd_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v dcn | grep -v cascade_rcnn | grep mask_rcnn/ | awk '{print $NF}' | tee mask_list
 cat  mask_list mot_list ssd_list >>config_list
-elif [ "$1" == 'develop_d4' ];then
+elif [ "${branch}" == 'develop_d4' ];then
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v dcn | grep -v smrt | grep -v vitdet | grep cascade_rcnn/ | awk '{print $NF}' | tee cascade_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep centernet/ | awk '{print $NF}' | tee centernet_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v smrt | grep -v pruner | grep picodet/ | awk '{print $NF}' | tee picodet_list
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep dcn/ | awk '{print $NF}' | tee dcn_list
 cat cascade_list centernet_list picodet_list dcn_list >>config_list
 else
-find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v vitdet | awk '{print $NF}' | tee config_list
+find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v vitdet | grep -v deploy | awk '{print $NF}' | tee config_list
 fi
 
 print_result(){
@@ -353,7 +353,7 @@ POSE_PYTHON_INFER(){
     fi
 }
 CPP_INFER(){
-    if [ "$1" == 'release' ];then
+    if [ "${branch}" == 'release' ];then
         if [ ! -d ./inference_model/${model} ];then
             echo "${model} doesn't run export case,so can't run CPP_INFER case!"
         else
@@ -383,6 +383,10 @@ model_skip_pyinfer='retinanet_r50_fpn_mstrain_1x_coco retinanet_r50_fpn_1x_coco 
 model_skip_cpp='centernet_mbv3_small_140e_coco centernet_mbv3_large_140e_coco centernet_shufflenetv2_140e_coco centernet_mbv1_140e_coco centernet_shufflenetv2_1x_140e_coco centernet_mbv3_small_1x_140e_coco centernet_mbv3_large_1x_140e_coco centernet_mbv1_1x_140e_coco centernet_r50_140e_coco centernet_dla34_140e_coco solov2_r50_fpn_1x_coco solov2_r50_fpn_3x_coco solov2_r101_vd_fpn_3x_coco solov2_r50_enhance_coco faster_rcnn_r101_fpn_1x_coco ppyolov2_r50vd_dcn_voc yolov3_darknet53_270e_voc yolov3_darknet53_original_270e_coco tood_r50_fpn_1x_coco'
 err_sign=false
 model_type=dynamic
+if [ "$1" ];then
+    cat config_list | grep "${1}" > config_list_tmp
+    mv config_list_tmp config_list
+fi
 for config in `cat config_list`
 do
 tmp=${config##*/}
@@ -401,18 +405,21 @@ elif [[ -n `cat model_keypoint | grep -w "${model}"` ]];then
     image=demo/hrnet_demo.jpg
 fi
 cd log && mkdir ${model} && cd ..
+if [ "$2" ];then
+    $2
+else
 if [[ -n `echo "${model}" | grep "pedestrian_yolov3_darknet"` ]];then
     image=configs/pedestrian/demo/001.png
     INFER
     EXPORT
     PYTHON_INFER
-    CPP_INFER "$1"
+    CPP_INFER
 elif [[ -n `echo "${model}" | grep "vehicle_yolov3_darknet"` ]];then
     image=configs/vehicle/demo/003.png
     INFER
     EXPORT
     PYTHON_INFER
-    CPP_INFER "$1"
+    CPP_INFER
 elif [[ -n `cat model_mot | grep -w "${model}"` ]];then
     TRAIN
     EVAL_MOT
@@ -431,7 +438,8 @@ else
     INFER
     EXPORT
     PYTHON_INFER
-    CPP_INFER "$1"
+    CPP_INFER
+fi
 fi
 done
 if [ "${err_sign}" == true ];then
