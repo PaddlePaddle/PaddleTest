@@ -1,5 +1,5 @@
 export task_type='release'
-bash test_det_ce.sh
+bash run_PaddleDetection.sh
 if [ $? -ne 0 ];then
     export status='Failed'
     export exit_code='8'

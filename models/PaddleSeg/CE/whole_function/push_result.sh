@@ -1,4 +1,5 @@
-bash test_seg_ce.sh 'release'
+export task_type='release'
+bash run_PaddleSeg.sh
 if [ $? -ne 0 ];then
     export status='Failed'
     export exit_code='8'
