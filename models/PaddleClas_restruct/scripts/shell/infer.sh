@@ -18,12 +18,12 @@ source choose_model.sh
 case ${model_type} in
 ImageNet|slim)
     if [[ ${params_dir} == "RecModel" ]];then
-    python tools/infer.py -c ${yaml_line} \
-        -o Global.pretrained_model=${pretrained_model} \
-        -o Global.output_dir=${output_dir}/${model_name} \
-        > ${log_path}/infer/${model_name}_${input_model_type}.log 2>&1
-    else
         echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    else
+        python tools/infer.py -c ${yaml_line} \
+            -o Global.pretrained_model=${pretrained_model} \
+            -o Global.output_dir=${output_dir}/${model_name} \
+            > ${log_path}/infer/${model_name}_${input_model_type}.log 2>&1
     fi
 ;;
 Cartoonface)
