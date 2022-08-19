@@ -385,8 +385,8 @@ err_sign=false
 model_type=dynamic
 if [ "$1" ];then
     cat config_list | grep "${1}" > config_list_tmp
-    mv config_list_tmp config_list   
-fi    
+    mv config_list_tmp config_list 
+fi
 for config in `cat config_list`
 do
 tmp=${config##*/}
@@ -413,13 +413,13 @@ if [[ -n `echo "${model}" | grep "pedestrian_yolov3_darknet"` ]];then
     INFER
     EXPORT
     PYTHON_INFER
-    CPP_INFER 
+    CPP_INFER
 elif [[ -n `echo "${model}" | grep "vehicle_yolov3_darknet"` ]];then
     image=configs/vehicle/demo/003.png
     INFER
     EXPORT
     PYTHON_INFER
-    CPP_INFER 
+    CPP_INFER
 elif [[ -n `cat model_mot | grep -w "${model}"` ]];then
     TRAIN
     EVAL_MOT
@@ -438,7 +438,7 @@ else
     INFER
     EXPORT
     PYTHON_INFER
-    CPP_INFER 
+    CPP_INFER
 fi
 fi
 done
