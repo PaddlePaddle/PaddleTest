@@ -93,50 +93,16 @@ else
     if [[ ${input_model_type} == "trained" ]];then #用训好的模型
 
         case ${model_type} in
-        ImageNet|slim|metric_learning|PULC)
+        ImageNet|slim|PULC|DeepHash)
             if [[ -d "inference/${model_name}" ]];then
                 export pretrained_model="../inference/${model_name}"
             else
                 export pretrained_model="None" #必须有下好的模型，不能使用初始化模型，所以不管用默认参数还是None都不能预测
             fi
         ;;
-        DeepHash|GeneralRecognition) #待支持
-            echo "predict unspported ${model_name}" > tmp.log
-        ;;
-        Cartoonface) #暂时用训好的模型 220815
-            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
-            download_infer_tar cartoon_rec_ResNet50_iCartoon_v1.0_infer
-        ;;
-        Logo)
-            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
-            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
-        ;;
-        Products)
-            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
-            download_infer_tar product_ResNet50_vd_aliproduct_v1.0_infer
-        ;;
-        Vehicle)
-            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
-            download_infer_tar vehicle_cls_ResNet50_CompCars_v1.0_infer
-        ;;
-        reid)
-            echo "predict unspported ${model_name}" > tmp.log
-        ;;
-        esac
-
-    elif [[ ${input_model_type} == "pretrained" ]];then
-        case ${model_type} in
-        ImageNet|slim|metric_learning|PULC)
-            if [[ -d ${infer_pretrain}_infer ]] && [[ -f ${infer_pretrain}_infer/inference.pdiparams ]];then #有下载好的，或者export已导出的跳过下载
-                export pretrained_model="../${infer_pretrain}_infer"
-            elif [[ ${model_type} == "PULC" ]];then
-                wget -q https://paddleclas.bj.bcebos.com/models/PULC/${infer_pretrain}_infer.tar --no-proxy
-            else
-                wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/${infer_pretrain}_infer.tar --no-proxy
-            fi
-        ;;
-        DeepHash|GeneralRecognition) #待支持
-            echo "predict unspported ${model_name}" > tmp.log
+        GeneralRecognition) #暂时用训好的模型 220815
+            download_infer_tar picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer
+            download_infer_tar general_PPLCNet_x2_5_lite_v1.0_infer
         ;;
         Cartoonface)
             download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
@@ -154,7 +120,43 @@ else
             download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
             download_infer_tar vehicle_cls_ResNet50_CompCars_v1.0_infer
         ;;
-        reid)
+        reid|metric_learning)
+            echo "predict unspported ${model_name}" > tmp.log
+        ;;
+        esac
+
+    elif [[ ${input_model_type} == "pretrained" ]];then
+        case ${model_type} in
+        ImageNet|slim|PULC|DeepHash)
+            if [[ -d ${infer_pretrain}_infer ]] && [[ -f ${infer_pretrain}_infer/inference.pdiparams ]];then #有下载好的，或者export已导出的跳过下载
+                export pretrained_model="../${infer_pretrain}_infer"
+            elif [[ ${model_type} == "PULC" ]];then
+                wget -q https://paddleclas.bj.bcebos.com/models/PULC/${infer_pretrain}_infer.tar --no-proxy
+            else
+                wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/${infer_pretrain}_infer.tar --no-proxy
+            fi
+        ;;
+        GeneralRecognition)
+            download_infer_tar picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer
+            download_infer_tar general_PPLCNet_x2_5_lite_v1.0_infer
+        ;;
+        Cartoonface)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar cartoon_rec_ResNet50_iCartoon_v1.0_infer
+        ;;
+        Logo)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar logo_rec_ResNet50_Logo3K_v1.0_infer
+        ;;
+        Products)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar product_ResNet50_vd_aliproduct_v1.0_infer
+        ;;
+        Vehicle)
+            download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
+            download_infer_tar vehicle_cls_ResNet50_CompCars_v1.0_infer
+        ;;
+        reid|metric_learning)
             echo "predict unspported ${model_name}" > tmp.log
         ;;
         esac

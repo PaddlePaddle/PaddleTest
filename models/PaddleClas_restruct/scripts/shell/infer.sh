@@ -16,11 +16,15 @@ source prepare.sh
 source choose_model.sh
 
 case ${model_type} in
-ImageNet|slim|metric_learning)
-    python tools/infer.py -c ${yaml_line} \
-        -o Global.pretrained_model=${pretrained_model} \
-        -o Global.output_dir=${output_dir}/${model_name} \
-        > ${log_path}/infer/${model_name}_${input_model_type}.log 2>&1
+ImageNet|slim)
+    if [[ ${params_dir} == "RecModel" ]];then
+        echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
+    else
+        python tools/infer.py -c ${yaml_line} \
+            -o Global.pretrained_model=${pretrained_model} \
+            -o Global.output_dir=${output_dir}/${model_name} \
+            > ${log_path}/infer/${model_name}_${input_model_type}.log 2>&1
+    fi
 ;;
 Cartoonface)
     echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
@@ -37,7 +41,7 @@ Products)
 PULC)
     echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
-reid)
+reid|metric_learning)
     echo "infer unspported ${model_name}" >> ${log_path}/infer/${model_name}_${input_model_type}.log
 ;;
 Vehicle)
@@ -47,6 +51,7 @@ esac
 
 # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ${log_path}/infer/${model_name}_${input_model_type}.log) -eq 0 ]];then
 if [[ $? -eq 0 ]];then
+    cat ${log_path}/infer/${model_name}_${input_model_type}.log
     echo -e "\033[33m successfully! infer of ${model_name}_${input_model_type} successfully!\033[0m" \
         | tee -a ${log_path}/result.log
     echo "infer_exit_code: 0.0" >> ${log_path}/infer/${model_name}_${input_model_type}.log

@@ -21,10 +21,10 @@ else
 fi
 
 #安装向上取整依赖包，需要代理
-yum install bc -y
-apt-get install bc -y
+yum install bc -y >/dev/null 2>&1
+apt-get install bc -y >/dev/null 2>&1
 
-#取消代理用镜像安装包
+#取消代理用镜像安装包，安装依赖包
 unset http_proxy
 unset https_proxy
 
@@ -36,6 +36,16 @@ python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+
+if [[ ${yaml_line} =~ "face" ]] && [[ ${yaml_line} =~ "metric_learning" ]];then
+    echo "metric_learning face"
+    # 更新 pip/setuptools
+    python -m  pip install -U pip setuptools cython \
+        -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+    # 安装 bcolz
+    python -m  pip install bcolz==1.2.0  \
+        -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+fi
 if [[ ${yaml_line} =~ 'fp16' ]] || [[ ${yaml_line} =~ 'amp' ]];then
     echo "fp16 or amp"
     # python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
@@ -174,30 +184,34 @@ echo ${infer_pretrain}
 # fi
 
 #默认bath_size除以3
-function ceil(){
-floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整 局部变量$1不影响
-add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
-echo `expr $floor  + $add`
-}
-index=(`cat ${yaml_line} | grep -n batch_size | awk -F ":" '{print $1}'`)
-for((i=0;i<${#index[@]};i++));
-do
-    num_str=`sed -n ${index[i]}p ${yaml_line}`
-    if [[ ${num_str} =~ "#@" ]];then #  #@ 保证符号的唯一性
-        continue
-    fi
-    input_num=(`echo ${num_str} | grep -o -E '[0-9]+'  | sed -e 's/^0\+//'`)
-    ((Div=${input_num[0]} %3))
-    if [ "${Div}" == 0 ];then
-        out_num=`expr ${input_num[0]}/3 |bc` #整除2
-    else
-        echo "can not %3 will ceil"
-        out_num=`expr ${input_num[0]}/3` #bs向上取整
-        out_num=`ceil ${out_num}`
-    fi
-    sed -i "${index[i]}s/batch_size: /batch_size: ${out_num} #@/" ${yaml_line}
-    echo "change ${model_name} batch_size from ${input_num[0]} to ${out_num}"
-done
+if [[ ${model_name} =~ "reid-strong_baseline" ]] || [[ ${model_name} =~ "Logo-ResNet50_ReID" ]];then
+    echo "do no need change bs" #针对特殊的sampler 需要满足整除某数的bs
+else
+    function ceil(){
+    floor=`echo "scale=0;$1/1"|bc -l ` # 向上取整 局部变量$1不影响
+    add=`awk -v num1=$floor -v num2=$1 'BEGIN{print(num1<num2)?"1":"0"}'`
+    echo `expr $floor  + $add`
+    }
+    index=(`cat ${yaml_line} | grep -n batch_size | awk -F ":" '{print $1}'`)
+    for((i=0;i<${#index[@]};i++));
+    do
+        num_str=`sed -n ${index[i]}p ${yaml_line}`
+        if [[ ${num_str} =~ "#@" ]];then #  #@ 保证符号的唯一性
+            continue
+        fi
+        input_num=(`echo ${num_str} | grep -o -E '[0-9]+'  | sed -e 's/^0\+//'`)
+        ((Div=${input_num[0]} %3))
+        if [ "${Div}" == 0 ];then
+            out_num=`expr ${input_num[0]}/3 |bc` #整除2
+        else
+            echo "can not %3 will ceil"
+            out_num=`expr ${input_num[0]}/3` #bs向上取整
+            out_num=`ceil ${out_num}`
+        fi
+        sed -i "${index[i]}s/batch_size: /batch_size: ${out_num} #@/" ${yaml_line}
+        echo "change ${model_name} batch_size from ${input_num[0]} to ${out_num}"
+    done
+fi
 
 #区分单卡多卡
 # export CUDA_VISIBLE_DEVICES=  #这一步让框架来集成
@@ -248,9 +262,11 @@ wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/${image_root_name}
 
 #准备数据
 cd deploy
-if [[ -f "recognition_demo_data_en_v1.1.tar" ]] && [[ -d "recognition_demo_data_en_v1.1" ]] ;then
+if [[ -f "recognition_demo_data_en_v1.1.tar" ]] && [[ -f "drink_dataset_v1.0.tar" ]] ;then
     echo already download rec_demo
 else
+wget -q -c https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/drink_dataset_v1.0.tar --no-proxy \
+    && tar -xf drink_dataset_v1.0.tar
 wget -q -c https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/recognition_demo_data_en_v1.1.tar \
     --no-proxy --no-check-certificate && tar xf recognition_demo_data_en_v1.1.tar
 fi

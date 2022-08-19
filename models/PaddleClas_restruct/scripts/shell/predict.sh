@@ -23,10 +23,15 @@ cd deploy
 sed -i 's/size: 224/size: '${size_tmp}'/g' configs/inference_cls.yaml #修改predict尺寸
 sed -i 's/resize_short: 256/resize_short: '${size_tmp}'/g' configs/inference_cls.yaml
 
+# 因为训练不足导致预测BN算子报错,直接使用预训练模型
+if [[ ${model_name} == "PULC-language_classification-PPLCNet_x1_0" ]] || [[ ${model_name} == "PULC-language_classification-MobileNetV3_small_x0_35" ]];then
+    export input_model_type=pretrained
+fi
+
 echo model_type
 echo ${model_type}
 case ${model_type} in
-ImageNet|slim|metric_learning)
+ImageNet|slim|DeepHash)
     if [[ ${yaml_line} =~ 'ultra' ]];then
         python python/predict_cls.py -c configs/inference_cls_ch4.yaml  \
             -o Global.infer_imgs="./images"  \
@@ -42,12 +47,10 @@ ImageNet|slim|metric_learning)
             > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
     fi
 ;;
-DeepHash|GeneralRecognition) #待支持
-    echo "predict unspported ${model_name}" > ../${log_path}/predict/${model_name}_${input_model_type}.log
-    # python python/predict_rec.py -c configs/inference_rec.yaml \
-    #     -o Global.rec_inference_model_dir=${pretrained_model} \
-    #     -o Global.use_gpu=${set_cuda_flag} \
-    #     > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
+GeneralRecognition)
+    python  python/predict_system.py -c configs/inference_general.yaml \
+        -o Global.use_gpu=${set_cuda_flag} \
+        > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
 ;;
 Cartoonface)
     python  python/predict_system.py -c configs/inference_cartoon.yaml \
@@ -76,7 +79,7 @@ PULC)
         -o Global.use_gpu=${set_cuda_flag} \
         > ../${log_path}/predict/${model_name}_${input_model_type}.log 2>&1
 ;;
-reid)
+reid|metric_learning)
     echo "predict unspported ${model_name}" > ../${log_path}/predict/${model_name}_${input_model_type}.log
 ;;
 esac
@@ -84,6 +87,7 @@ esac
 # if [[ $? -eq 0 ]] \
     # && [[ $(grep -c  "Error" ../${log_path}/predict/${model_name}_${input_model_type}.log) -eq 0 ]];then
 if [[ $? -eq 0 ]];then
+    cat ../${log_path}/predict/${model_name}_${input_model_type}.log
     echo -e "\033[33m successfully! predict of ${model_name}_${input_model_type} successfully!\033[0m" \
         | tee -a ../${log_path}/result.log
     echo "predict_exit_code: 0.0" >> ../${log_path}/predict/${model_name}_${input_model_type}.log
