@@ -385,7 +385,7 @@ err_sign=false
 model_type=dynamic
 if [ "$1" ];then
     cat config_list | grep "${1}" > config_list_tmp
-    mv config_list_tmp config_list 
+    mv config_list_tmp config_list
 fi
 for config in `cat config_list`
 do
