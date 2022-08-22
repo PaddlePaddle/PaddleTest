@@ -19,7 +19,7 @@ from paddle import to_tensor
 from utils.logger import logger
 
 
-PADDLE_DTYPE = {"float32": np.float32, "float64": np.float64}
+PADDLE_DTYPE = {"float16": np.float16, "float32": np.float32, "float64": np.float64}
 # 计算精度，保留6位有效数字
 ACCURACY = "%.6g"
 
