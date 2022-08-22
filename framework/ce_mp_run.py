@@ -136,8 +136,7 @@ if __name__ == "__main__":
                 "paddlebase",
                 "distribution",
                 "utils",
-            ],
-            "e2e": ["jit"],
+            ]
         }
         worker = Erwin(case_dict, thread_num=4)
         worker.run()

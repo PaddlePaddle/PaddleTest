@@ -16,8 +16,8 @@ source prepare.sh
 # do
 source choose_model.sh
 
-if [[ ${input_model_type} == 'pretrained' ]];then
-    export save_inference_dir=${params_dir}_infer
+if [[ ${input_model_type} == "pretrained" ]];then
+    export save_inference_dir=${infer_pretrain}_infer
 else
     export save_inference_dir=./inference/${model_name}
 fi

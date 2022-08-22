@@ -95,13 +95,18 @@ fi
 ####显示执行步骤
 cat ./${CE_version_name}/src/task/common.py
 
-#####进入执行路径创建docker容器 [用户改docker创建]
+#####进入执行路径创建docker容器 [用户改docker创建]  临时写一下后面再细化
 cd ./${CE_version_name}/src/task
 ls;
-wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleClas.tar.gz --no-proxy  >/dev/null
-#预先下载PaddleClas，不使用CE框架clone
-tar xf PaddleClas.tar.gz
-rm -rf PaddleClas.tar.gz
+if [[ -d "../../../../PaddleClas" ]];then
+    mv ../../../../PaddleClas .
+else
+    echo "download PaddleClas.tar.gz"
+    wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleClas.tar.gz --no-proxy  >/dev/null
+    #预先下载PaddleClas，不使用CE框架clone
+    tar xf PaddleClas.tar.gz
+    rm -rf PaddleClas.tar.gz
+fi
 cd ..
 pwd;
 ls;

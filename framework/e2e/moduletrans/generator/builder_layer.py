@@ -8,6 +8,7 @@ layer_builder
 import paddle
 import diy
 import ppdet
+from ppdet.modeling.proposal_generator.target_layer import RBoxAssigner
 
 # import ppcls
 
