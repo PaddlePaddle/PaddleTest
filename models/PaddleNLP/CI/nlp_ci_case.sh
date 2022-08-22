@@ -241,7 +241,8 @@ print_info $? gpt_pretrain
 # FT
 cd ${nlp_dir}/
 export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-wget https://paddle-qa.bj.bcebos.com/paddlenlp/paddle_inference.tgz
+# wget https://paddle-qa.bj.bcebos.com/paddlenlp/paddle_inference.tgz
+wegt https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
 tar -xzvf paddle_inference.tgz
 cd ${nlp_dir}/paddlenlp/ops
 export CC=/usr/local/gcc-8.2/bin/gcc
@@ -1014,7 +1015,7 @@ export http_proxy=${http_proxy};
 export https_proxy=${http_proxy}
 }
 #32 taskflow
-clue (){
+taskflow (){
 cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
 }
