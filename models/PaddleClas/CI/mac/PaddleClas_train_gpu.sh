@@ -51,6 +51,7 @@ python -m pip install --ignore-installed -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple
 python -m pip uninstall opencv-python -y
 python -m pip install -U opencv-python
+python setup.py install
 
 if [ -d "log" ]; then
     rm -rf log
