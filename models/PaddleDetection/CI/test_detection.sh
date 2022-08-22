@@ -79,9 +79,9 @@ ln -s ${file_path}/data/pascalvoc dataset/voc
 if [ -d "dataset/mot" ];then rm -rf dataset/mot
 fi
 ln -s ${file_path}/data/mot dataset/mot
-if [ -d "dataset/DOTA_1024_s2anet" ];then rm -rf dataset/DOTA_1024_s2anet
+if [ -d "dataset/dota" ];then rm -rf dataset/dota
 fi
-ln -s ${file_path}/data/DOTA_1024_s2anet dataset/DOTA_1024_s2anet
+ln -s ${file_path}/data/dota dataset/dota
 if [ -d "dataset/mainbody" ];then rm -rf dataset/mainbody
 fi
 ln -s ${file_path}/data/mainbody dataset/mainbody
