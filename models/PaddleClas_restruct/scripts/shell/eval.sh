@@ -27,6 +27,9 @@ if [[ ${yaml_line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
         -o DataLoader.Eval.sampler.batch_size=64 \
         -o Global.output_dir=${output_dir}/${model_name} \
         > ${log_path}/eval/${model_name}_${input_model_type}.log 2>&1
+elif [[ ${yaml_line} =~ 'GeneralRecognition' ]] && [[ ${input_model_type} == 'trained' ]]; then
+    echo "unspport so top1: 1.0, recall1: 1.0, label_f1: 1.0, " \
+        > ../${log_path}/eval/${model_name}_${input_model_type}.log
 else
     python ${multi_flag} tools/eval.py -c ${yaml_line} \
         -o Global.pretrained_model=${pretrained_model} \

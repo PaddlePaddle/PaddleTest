@@ -53,6 +53,7 @@ python -m pip uninstall opencv-python -y
 python -m pip install -U opencv-python
 # python -m pip uninstall opencv-python-headless -y #fix '_registerMatType' from 'cv2.cv2'
 # python -m pip install  --ignore-installed "opencv-python-headless<4.3" -i https://mirror.baidu.com/pypi/simple
+python setup.py install
 
 python -m pip list |grep opencv
 if [ -d "log" ]; then
