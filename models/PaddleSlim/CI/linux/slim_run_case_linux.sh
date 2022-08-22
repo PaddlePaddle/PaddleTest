@@ -904,7 +904,7 @@ demo_act_det_ppyoloe(){
 }
 
 demo_act_det_yolov5(){
-	cd ${slim_dir}/example/auto_compression/pytorch_yolov5
+	cd ${slim_dir}/example/auto_compression/pytorch_yolo_series
 	wget -q https://bj.bcebos.com/v1/paddle-slim-models/detection/yolov5s_infer.tar
 	tar -xf yolov5s_infer.tar
 	wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
