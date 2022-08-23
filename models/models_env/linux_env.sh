@@ -7,7 +7,6 @@ cd ce;
 
 ########TODO：区分下是否使用CE框架、区分下是否单独clone库(用于CI)、步骤Common_name需要再细化一下
 
-export Project_path=${Project_path:-/workspace/task/PaddleClas}
 export Data_path=${Data_path:-/ssd2/ce_data/PaddleClas}
 export Repo=${Repo:-PaddleClas_restruct}
 export Python_env=${Python_env:-path_way}
@@ -97,6 +96,7 @@ cat ./${CE_version_name}/src/task/common.py
 
 #####进入执行路径创建docker容器 [用户改docker创建]  临时写一下后面再细化
 cd ./${CE_version_name}/src/task
+export Project_path=${Project_path:-${PWD}/PaddleClas}
 ls;
 if [[ -d "../../../../PaddleClas" ]];then
     mv ../../../../PaddleClas .

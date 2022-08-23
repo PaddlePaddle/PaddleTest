@@ -217,7 +217,11 @@ fi
 # export CUDA_VISIBLE_DEVICES=  #这一步让框架来集成
 if [[ ${cuda_type} =~ "SET_MULTI_CUDA" ]];then
     export card="2card"
-    export Global_epochs="5"
+    if [[ ${model_type} == "PULC" ]];then
+        export Global_epochs="5"
+    else
+        export Global_epochs="3"
+    fi
     export multi_flag="-m paddle.distributed.launch"
     export set_cuda_device="gpu"
     export set_cuda_flag=True
@@ -229,7 +233,11 @@ elif [[ ${cuda_type} =~ "CPU" ]];then
     export set_cuda_flag=Flase
 else
     export card="1card"
-    export Global_epochs="2"
+    if [[ ${model_type} == "PULC" ]];then
+        export Global_epochs="5"
+    else
+        export Global_epochs="1"
+    fi
     export multi_flag=" "
     export set_cuda_device="gpu"
     export set_cuda_flag=True
