@@ -33,7 +33,7 @@ def setup_module():
     RepoDataset(
         cmd="rm -rf /root/.visualdl/conf;cd PaddleClas; \
             python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple; \
-            python setup.py install \
+            python setup.py install; \
             cd dataset; rm -rf ILSVRC2012; ln -s /data/ILSVRC2012 ILSVRC2012; rm -rf flowers102; \
             ln -s /data/flowers102 flowers102; cd .."
     )
