@@ -97,6 +97,8 @@ cat ./${CE_version_name}/src/task/common.py
 #####进入执行路径创建docker容器 [用户改docker创建]  临时写一下后面再细化
 cd ./${CE_version_name}/src/task
 export Project_path=${Project_path:-${PWD}/PaddleClas}
+echo "#### Project_path"
+echo ${Project_path}
 ls;
 if [[ -d "../../../../PaddleClas" ]];then
     mv ../../../../PaddleClas .

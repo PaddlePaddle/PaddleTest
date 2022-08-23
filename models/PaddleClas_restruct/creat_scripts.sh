@@ -72,8 +72,8 @@ do
             sed -i s/${base_model}/${model_name}/g ${model_name}.yaml
 
             # 处理不同的指标 6只是个估算
-            params_index=(`cat ../${Repo}/${yaml_line} | grep -n "Metric" | awk -F ":" '{print $1}'`)
-            params_word=`sed -n "${params_index[0]},$[${params_index[0]}+6]p" ../${Repo}/${yaml_line}`
+            params_index=(`cat ${Project_path}/${yaml_line} | grep -n "Metric" | awk -F ":" '{print $1}'`)
+            params_word=`sed -n "${params_index[0]},$[${params_index[0]}+6]p" ${Project_path}/${yaml_line}`
             # echo "#### params_index"
             # echo ${params_index}
             # echo ${params_word}
