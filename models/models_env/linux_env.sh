@@ -96,9 +96,6 @@ cat ./${CE_version_name}/src/task/common.py
 
 #####进入执行路径创建docker容器 [用户改docker创建]  临时写一下后面再细化
 cd ./${CE_version_name}/src/task
-export Project_path=${Project_path:-${PWD}/PaddleClas}
-echo "#### Project_path"
-echo ${Project_path}
 ls;
 if [[ -d "../../../../PaddleClas" ]];then
     mv ../../../../PaddleClas .
@@ -161,7 +158,8 @@ if [[ "${docker_flag}" == "" ]]; then
                 export http_proxy=${http_proxy};
                 export https_proxy=${http_proxy};
                 export Data_path=${Data_path};
-                export Project_path=${Project_path};
+                export Project_path=${Project_path:-${PWD}/task/PaddleClas}
+                echo ${Project_path}
                 export Priority_version=${Priority_version};
                 # export SET_CUDA=${SET_CUDA};
                 # export SET_MULTI_CUDA=${SET_MULTI_CUDA};
@@ -245,6 +243,8 @@ if [[ "${docker_flag}" == "" ]]; then
     wait $!
     exit $?
 else
+    export Project_path=${Project_path:-${PWD}/task/PaddleClas}
+    echo ${Project_path}
     ldconfig;
     if [[ ${Python_env} == 'ln_way' ]];then
         # rm -rf /usr/bin/python2.7
