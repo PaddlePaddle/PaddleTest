@@ -158,8 +158,8 @@ if [[ "${docker_flag}" == "" ]]; then
                 export http_proxy=${http_proxy};
                 export https_proxy=${http_proxy};
                 export Data_path=${Data_path};
-                export Project_path=${Project_path:-${PWD}/task/PaddleClas}
-                echo ${Project_path}
+                export Project_path=${Project_path:-/workspace/task/PaddleClas};
+                echo ${Project_path};
                 export Priority_version=${Priority_version};
                 # export SET_CUDA=${SET_CUDA};
                 # export SET_MULTI_CUDA=${SET_MULTI_CUDA};
