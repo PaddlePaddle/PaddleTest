@@ -12,16 +12,18 @@ source prepare.sh
 
 \cp -r -f ${Project_path}/../scripts/shell/choose_model.sh .
 export predict_step=True
-source choose_model.sh
+
+# source choose_model.sh
 # 因为训练不足导致预测BN算子报错,直接使用预训练模型  根因是epoch数不能小于5
-# if [[ ${model_name} == "PULC-language_classification-PPLCNet_x1_0" ]] || [[ ${model_name} == "PULC-language_classification-MobileNetV3_small_x0_35" ]];then
-#     input_model_type_tmp=${input_model_type}
-#     export input_model_type=pretrained
-#     source choose_model.sh
-#     export input_model_type=${input_model_type_tmp}
-# else
-#     source choose_model.sh
-# fi
+if [[ ${model_name} == "PULC-language_classification-PPLCNet_x1_0" ]] \
+    || [[ ${model_name} == "PULC-language_classification-MobileNetV3_small_x0_35" ]];then
+    input_model_type_tmp=${input_model_type}
+    export input_model_type=pretrained
+    source choose_model.sh
+    export input_model_type=${input_model_type_tmp}
+else
+    source choose_model.sh
+fi
 
 size_tmp=`cat ${yaml_line} |grep image_shape|cut -d "," -f2|cut -d " " -f2`
 #获取train的shape保持和predict一致
