@@ -996,7 +996,7 @@ cd ${nlp_dir}/examples/benchmark/clue/mrc
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 unset http_proxy=${http_proxy}
 unset https_proxy=${http_proxy}
-python -m paddle.distributed.launch run_cmrc.py \
+python -m paddle.distributed.launch run_cmrc2018.py \
     --model_name_or_path ernie-3.0-base-zh \
     --batch_size 16 \
     --learning_rate 3e-5 \
