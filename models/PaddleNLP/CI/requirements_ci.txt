@@ -27,4 +27,3 @@ yacs
 coverage
 h5py
 pytest
-zmq
