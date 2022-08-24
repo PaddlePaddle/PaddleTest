@@ -18,7 +18,7 @@ for file_name in `cat file_list`;do
     if ! pre-commit run --files $file_name ; then
         codestyle=off
     fi
-done 
+done
 if [ $codestyle == 'off' ];then
     echo "code format error"
     exit 1
