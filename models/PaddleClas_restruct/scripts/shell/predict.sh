@@ -10,23 +10,26 @@ cd ${Project_path} #确定下执行路径
 # #通过相对路径找到 scripts 的路径，需要想一个更好的方法替代
 source prepare.sh
 
-# arr=("trained" "pretrained") #或者抽象出来到输入参数，现在是默认训好的、预训练的全跑
-# for input_model_type in ${arr[@]}
-# do
 \cp -r -f ${Project_path}/../scripts/shell/choose_model.sh .
 export predict_step=True
-source choose_model.sh
+
+# source choose_model.sh
+# 因为训练不足导致预测BN算子报错,直接使用预训练模型  根因是epoch数不能小于5
+if [[ ${model_name} == "PULC-language_classification-PPLCNet_x1_0" ]] \
+    || [[ ${model_name} == "PULC-language_classification-MobileNetV3_small_x0_35" ]];then
+    input_model_type_tmp=${input_model_type}
+    export input_model_type=pretrained
+    source choose_model.sh
+    export input_model_type=${input_model_type_tmp}
+else
+    source choose_model.sh
+fi
 
 size_tmp=`cat ${yaml_line} |grep image_shape|cut -d "," -f2|cut -d " " -f2`
 #获取train的shape保持和predict一致
 cd deploy
 sed -i 's/size: 224/size: '${size_tmp}'/g' configs/inference_cls.yaml #修改predict尺寸
 sed -i 's/resize_short: 256/resize_short: '${size_tmp}'/g' configs/inference_cls.yaml
-
-# 因为训练不足导致预测BN算子报错,直接使用预训练模型
-if [[ ${model_name} == "PULC-language_classification-PPLCNet_x1_0" ]] || [[ ${model_name} == "PULC-language_classification-MobileNetV3_small_x0_35" ]];then
-    export input_model_type=pretrained
-fi
 
 echo model_type
 echo ${model_type}
@@ -100,4 +103,3 @@ fi
 sed -i 's/size: '${size_tmp}'/size: 224/g' configs/inference_cls.yaml #改回predict尺寸
 sed -i 's/resize_short: '${size_tmp}'/resize_short: 256/g' configs/inference_cls.yaml
 cd ..
-# done

@@ -7,7 +7,6 @@ cd ce;
 
 ########TODO：区分下是否使用CE框架、区分下是否单独clone库(用于CI)、步骤Common_name需要再细化一下
 
-export Project_path=${Project_path:-/workspace/task/PaddleClas}
 export Data_path=${Data_path:-/ssd2/ce_data/PaddleClas}
 export Repo=${Repo:-PaddleClas_restruct}
 export Python_env=${Python_env:-path_way}
@@ -159,7 +158,8 @@ if [[ "${docker_flag}" == "" ]]; then
                 export http_proxy=${http_proxy};
                 export https_proxy=${http_proxy};
                 export Data_path=${Data_path};
-                export Project_path=${Project_path};
+                export Project_path=${Project_path:-/workspace/task/PaddleClas};
+                echo ${Project_path};
                 export Priority_version=${Priority_version};
                 # export SET_CUDA=${SET_CUDA};
                 # export SET_MULTI_CUDA=${SET_MULTI_CUDA};
@@ -243,6 +243,8 @@ if [[ "${docker_flag}" == "" ]]; then
     wait $!
     exit $?
 else
+    export Project_path=${Project_path:-${PWD}/task/PaddleClas}
+    echo ${Project_path}
     ldconfig;
     if [[ ${Python_env} == 'ln_way' ]];then
         # rm -rf /usr/bin/python2.7
