@@ -32,11 +32,9 @@ python -m pip install --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+python -m pip install -U paddleslim \
+    -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 
-if [[ ${yaml_line} =~ "slim" ]];then
-    python -m pip install -U paddleslim \
-        -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
-fi
 if [[ ${yaml_line} =~ "face" ]] && [[ ${yaml_line} =~ "metric_learning" ]];then
     echo "metric_learning face"
     # 更新 pip/setuptools
