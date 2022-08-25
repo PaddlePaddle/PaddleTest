@@ -1006,9 +1006,8 @@ python -m paddle.distributed.launch run_cmrc2018.py \
     --do_predict \
     --warmup_proportion 0.1 \
     --weight_decay 0.01 \
-    --gradient_accumulation_steps 2 \
+    --gradient_accumulation_steps 4 \
     --max_steps 1 \
-    --save_steps 1 \
     --output_dir ./tmp >${log_path}/clue-mrc >>${log_path}/clue-mrc 2>&1
 print_info $? clue-mrc
 export http_proxy=${http_proxy};
