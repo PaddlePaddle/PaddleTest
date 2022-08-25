@@ -997,27 +997,26 @@ python -u run_clue_classifier.py  \
     --max_steps 1 \
     --do_train  >${log_path}/clue-class >>${log_path}/clue-class 2>&1
 print_info $? clue-class
-# cd ${nlp_dir}/examples/benchmark/clue/mrc
-# export CUDA_VISIBLE_DEVICES=${cudaid1}
-# unset http_proxy
-# unset https_proxy
-# python -m paddle.distributed.launch run_cmrc.py \
-#     --model_name_or_path ernie-3.0-base-zh \
-#     --batch_size 16 \
-#     --learning_rate 3e-5 \
-#     --max_seq_length 512 \
-#     --num_train_epochs 2 \
-#     --do_train \
-#     --do_predict \
-#     --warmup_proportion 0.1 \
-#     --weight_decay 0.01 \
-#     --gradient_accumulation_steps 2 \
-#     --max_steps 1 \
-#     --save_steps 1 \
-#     --output_dir ./tmp >${log_path}/clue-mrc >>${log_path}/clue-mrc 2>&1
-# print_info $? clue-mrc
-# export http_proxy=${http_proxy};
-# export https_proxy=${http_proxy}
+cd ${nlp_dir}/examples/benchmark/clue/mrc
+export CUDA_VISIBLE_DEVICES=${cudaid1}
+unset http_proxy
+unset https_proxy
+python -m paddle.distributed.launch run_cmrc2018.py \
+    --model_name_or_path ernie-3.0-base-zh \
+    --batch_size 16 \
+    --learning_rate 3e-5 \
+    --max_seq_length 512 \
+    --num_train_epochs 2 \
+    --do_train \
+    --do_predict \
+    --warmup_proportion 0.1 \
+    --weight_decay 0.01 \
+    --gradient_accumulation_steps 2 \
+    --max_steps 1 \
+    --output_dir ./tmp >${log_path}/clue-mrc >>${log_path}/clue-mrc 2>&1
+print_info $? clue-mrc
+export http_proxy=${http_proxy};
+export https_proxy=${http_proxy}
 }
 #32 textcnn
 textcnn(){
