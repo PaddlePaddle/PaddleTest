@@ -55,7 +55,7 @@ get_diff_TO_P0case
 P0case_list=($(awk -v RS=' ' '!a[$1]++' <<< ${P0case_list[*]}))
 APIcase_list=($(awk -v RS=' ' '!a[$1]++' <<< ${APIcase_list[*]}))
 ####################################
-if [[${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
+if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     ####################################
     # set python env
     case $1 in
@@ -187,10 +187,8 @@ if [[${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     #     echo -e "\033[32m ---- Coverage Success \033[0m"
     # fi
     ####################################
-    echo -e "\033[35m ---- EXCODE: $EXCODE \033[0m"
-    exit $EXCODE
 else
     echo "changed files no in CI case, skip"
     $EXCODE=0
-    exit $EXCODE
 fi
+exit $EXCODE
