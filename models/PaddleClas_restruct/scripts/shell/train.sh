@@ -53,7 +53,7 @@ dynamic|static)
             -o DataLoader.Train.sampler.batch_size=32 \
             -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
-            -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/    \   
+            -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/    \
             -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/    \
             -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt   \
             -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt \

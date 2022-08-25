@@ -28,7 +28,7 @@ elif [[ ${yaml_line} =~ 'GeneralRecognition' ]] && [[ ${input_model_type} == 'tr
     python ${multi_flag} tools/eval.py -c ${yaml_line} \
         -o Global.pretrained_model=${pretrained_model} \
         -o Global.output_dir=${output_dir}/${model_name} \
-        -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/    \   
+        -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/    \
         -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/    \
         -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt   \
         -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt \
