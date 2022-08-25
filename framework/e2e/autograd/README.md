@@ -23,13 +23,13 @@
 ```
 
 ## case描述
-case是通过yaml文件描述，内容包括paddle和Jax的对比信息。[存放位置](https://github.com/PaddlePaddle/PaddleTest/tree/develop/framework/e2e/yaml)
+case是通过yaml文件描述，内容包括paddle和Jax的对比信息。[存放位置](https://github.com/PaddlePaddle/PaddleTest/tree/develop/framework/e2e/yaml) <br>
 具体内容可参考： [API竞品测试case描述](https://github.com/PaddlePaddle/PaddleTest/tree/develop/framework/e2e/competitor#case%E6%8F%8F%E8%BF%B0)
 
 ## 测试内容
 不同初始梯度下：
-① Paddle反向自动微分高阶精度，与Jax对齐，测试5阶；
-② Paddle前向自动微分高阶精度，与Jax对齐，测试5阶；
+① Paddle与Jax的反向自动微分高阶精度对齐，测试5阶；<br>
+② Paddle与Jax的前向自动微分高阶精度对齐，测试5阶；<br>
 ③ Paddle反向自动微分与前向自动微分高阶精度对齐，测试5阶。
 ## 执行
 
@@ -38,6 +38,6 @@ git clone https://github.com/PaddlePaddle/PaddleTest.git
 
 cd PaddleTest/tree/develop/framework/e2e/autograd
 
-python generate.py base
-python test_base.py base
+python generate.py base   # 生成测试case
+python test_base.py base  # 执行测试case
 ```

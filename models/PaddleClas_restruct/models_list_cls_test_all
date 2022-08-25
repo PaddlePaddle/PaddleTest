@@ -23,7 +23,6 @@ ppcls/configs/ImageNet/MobileNetV2/MobileNetV2_x1_5.yaml
 ppcls/configs/ImageNet/MobileNetV2/MobileNetV2_x0_25.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B2.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B3.yaml
-ppcls/configs/ImageNet/PVTV2/PVT_V2_B4.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B2_Linear.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B0.yaml
 ppcls/configs/ImageNet/PVTV2/PVT_V2_B1.yaml
@@ -45,7 +44,6 @@ ppcls/configs/ImageNet/DLA/DLA60.yaml
 ppcls/configs/ImageNet/DLA/DLA102x.yaml
 ppcls/configs/ImageNet/RedNet/RedNet101.yaml
 ppcls/configs/ImageNet/RedNet/RedNet38.yaml
-ppcls/configs/ImageNet/RedNet/RedNet152.yaml
 ppcls/configs/ImageNet/RedNet/RedNet26.yaml
 ppcls/configs/ImageNet/RedNet/RedNet50.yaml
 ppcls/configs/ImageNet/Inception/InceptionV4.yaml
@@ -73,17 +71,14 @@ ppcls/configs/ImageNet/VisionTransformer/ViT_base_patch16_224.yaml
 ppcls/configs/ImageNet/ResNet/ResNet152.yaml
 ppcls/configs/ImageNet/ResNet/ResNet101_vd.yaml
 ppcls/configs/ImageNet/ResNet/ResNet50_vd.yaml
-ppcls/configs/ImageNet/ResNet/ResNet50_amp_O1_ultra.yaml
 ppcls/configs/ImageNet/ResNet/ResNet50.yaml
 ppcls/configs/ImageNet/ResNet/ResNet152_vd.yaml
 ppcls/configs/ImageNet/ResNet/ResNet101.yaml
-ppcls/configs/ImageNet/ResNet/ResNet50_amp_O1.yaml
 ppcls/configs/ImageNet/ResNet/ResNet34_vd.yaml
 ppcls/configs/ImageNet/ResNet/ResNet18.yaml
 ppcls/configs/ImageNet/ResNet/ResNet34.yaml
 ppcls/configs/ImageNet/ResNet/ResNet18_vd.yaml
 ppcls/configs/ImageNet/ResNet/ResNet200_vd.yaml
-ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
 ppcls/configs/ImageNet/VAN/VAN_tiny.yaml
 ppcls/configs/ImageNet/DPN/DPN98.yaml
 ppcls/configs/ImageNet/DPN/DPN92.yaml
@@ -157,7 +152,6 @@ ppcls/configs/ImageNet/SENet/SENet154_vd.yaml
 ppcls/configs/ImageNet/SENet/SE_ResNeXt50_vd_32x4d.yaml
 ppcls/configs/ImageNet/SENet/SE_ResNeXt50_32x4d.yaml
 ppcls/configs/ImageNet/SENet/SE_ResNet34_vd.yaml
-ppcls/configs/ImageNet/SENet/SE_ResNeXt101_32x4d_amp_O2_ultra.yaml
 ppcls/configs/ImageNet/ResNeXt/ResNeXt101_32x4d.yaml
 ppcls/configs/ImageNet/ResNeXt/ResNeXt101_64x4d.yaml
 ppcls/configs/ImageNet/ResNeXt/ResNeXt101_vd_64x4d.yaml

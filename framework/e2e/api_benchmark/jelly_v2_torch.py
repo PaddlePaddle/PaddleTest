@@ -19,7 +19,7 @@ from paddle import to_tensor
 from utils.logger import logger
 
 
-TORCH_DTYPE = {"float32": torch.float32, "float64": torch.float64}
+TORCH_DTYPE = {"float16": torch.float16, "float32": torch.float32, "float64": torch.float64}
 # 计算精度，保留6位有效数字
 ACCURACY = "%.6g"
 

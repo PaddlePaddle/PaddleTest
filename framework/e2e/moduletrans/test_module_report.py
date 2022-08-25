@@ -3,7 +3,7 @@
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
 yml test
-"""
+# """
 import os
 import pytest
 import allure
@@ -11,9 +11,9 @@ from yaml_loader import YamlLoader
 import controller
 
 
-yaml_path = os.path.join("yaml", "Det", "modeling", "heads", "yolo_head.yml")
+yaml_path = os.path.join("yaml", "Det", "modeling", "heads", "keypoint_hrhrnet_head.yml")
 yml = YamlLoader(yaml_path)
-all_cases_list = ["yolo_head_YOLOv3Head_0"]
+all_cases_list = ["keypoint_hrhrnet_head_HrHRNetHead_0"]
 
 # all_cases_list = []
 # all_cases_dict = yml.get_all_case_name()

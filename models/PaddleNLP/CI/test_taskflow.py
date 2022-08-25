@@ -1,25 +1,27 @@
 """Test taskflow."""
 import os
+import numpy as np
+
 import paddle
 import paddlenlp
 
-import numpy as np
 from paddlenlp import Taskflow
 
 
 def test_knowledge_mining():
     """
-    taskflow knowledge_mining test case
+    test_knowledge_mining
     """
     wordtag = Taskflow("knowledge_mining", model="wordtag", batch_size=2, max_seq_len=128, linking=True)
     wordtag("《孤女》是2010年九州出版社出版的小说，作者是余兼羽。")
+
     nptag = Taskflow("knowledge_mining", model="nptag", batch_size=2, max_seq_len=128, linking=True)
     nptag(["糖醋排骨", "红曲霉菌"])
 
 
 def test_name_entity_recognition():
     """
-    taskflow name_entity_recognition test case
+    test_name_entity_recognition
     """
     ner = Taskflow("ner", batch_size=2)
     ner("《长津湖》收尾，北美是最大海外票仓")
@@ -31,7 +33,7 @@ def test_name_entity_recognition():
 
 def test_word_segmetation():
     """
-    taskflow word_segmetation test case
+    test_word_segmetation
     """
     seg = Taskflow("word_segmentation", batch_size=2)
     seg(["第十四届全运会在西安举办", "三亚是一个美丽的城市"])
@@ -43,7 +45,7 @@ def test_word_segmetation():
 
 def test_pos_tagging():
     """
-    taskflow pos_tagging test case
+    test_pos_tagging
     """
     tag = Taskflow("pos_tagging", batch_size=2)
     tag("第十四届全运会在西安举办")
@@ -51,7 +53,7 @@ def test_pos_tagging():
 
 def test_corrector():
     """
-    taskflow corrector test case
+    test_corrector
     """
     corrector = Taskflow("text_correction", batch_size=2)
     corrector("遇到逆竟时，我们必须勇于面对，而且要愈挫愈勇，这样我们才能朝著成功之路前进。")
@@ -59,13 +61,15 @@ def test_corrector():
 
 def test_dependency_parsing():
     """
-    taskflow dependency_parsing test case
+    test_dependency_parsing
     """
     ddp = Taskflow("dependency_parsing", model="ddparser", batch_size=2, prob=True, use_pos=True)
     print(ddp("9月9日上午纳达尔在亚瑟·阿什球场击败俄罗斯球员梅德韦杰夫"))
     print(ddp.from_segments([["9月9日", "上午", "纳达尔", "在", "亚瑟·阿什球场", "击败", "俄罗斯", "球员", "梅德韦杰夫"]]))
+
     ddp_ernie = Taskflow("dependency_parsing", model="ddparser-ernie-1.0", batch_size=2, prob=True, use_pos=True)
     print(ddp_ernie("9月9日上午纳达尔在亚瑟·阿什球场击败俄罗斯球员梅德韦杰夫"))
+
     ddp_ernie_gram = Taskflow(
         "dependency_parsing", model="ddparser-ernie-gram-zh", batch_size=2, prob=True, use_pos=True
     )
@@ -74,7 +78,7 @@ def test_dependency_parsing():
 
 def test_sentiment_analysis():
     """
-    taskflow sentiment_analysis test case
+    test_sentiment_analysis
     """
     skep = Taskflow("sentiment_analysis", batch_size=2)
     skep("这个产品用起来真的很流畅，我非常喜欢")
@@ -85,7 +89,7 @@ def test_sentiment_analysis():
 
 def test_text_similarity():
     """
-    taskflow text_similarity test case
+    test_text_similarity
     """
     similarity = Taskflow("text_similarity", batch_size=2)
     similarity([["世界上什么东西最小", "世界上什么东西最小？"]])
@@ -93,7 +97,7 @@ def test_text_similarity():
 
 def test_question_answering():
     """
-    taskflow question_answering test case
+    test_question_answering
     """
     qa = Taskflow("question_answering", batch_size=2)
     qa("中国的国土面积有多大？")
@@ -101,7 +105,7 @@ def test_question_answering():
 
 def test_poetry():
     """
-    taskflow poetry test case
+    test_poetry
     """
     poetry = Taskflow("poetry_generation", batch_size=2)
     poetry("林密不见人")
@@ -109,7 +113,7 @@ def test_poetry():
 
 def test_dialogue():
     """
-    taskflow dialogue test case
+    test_dialogue
     """
     dialogue = Taskflow("dialogue", batch_size=2, max_seq_len=512)
     dialogue(["吃饭了吗"])
@@ -117,10 +121,10 @@ def test_dialogue():
 
 def test_uie():
     """
-    taskflow uie test case
+    test_uie
     """
     schema_ner = ["时间", "选手", "赛事名称"]  # Define the schema for entity extraction
-    ie = Taskflow("information_extraction", schema=schema_ner, model="uie-large", batch_size=2, prob=True, use_pos=True)
+    ie = Taskflow("information_extraction", schema=schema_ner, model="uie-base", batch_size=2, prob=True, use_pos=True)
     ie("2月8日上午北京冬奥会自由式滑雪女子大跳台决赛中中国选手谷爱凌以188.25分获得金牌！")
 
     ie = Taskflow("information_extraction", schema=schema_ner, model="uie-tiny", batch_size=2, prob=True, use_pos=True)
@@ -140,7 +144,6 @@ def test_uie():
     schema_sa = "情感倾向[正向，负向]"  # Define the schema for sentence-level sentiment classification
     ie.set_schema(schema_sa)  # Reset schema
     ie("这个产品用起来真的很流畅，我非常喜欢")
-    # [{'情感倾向[正向，负向]': [{'text': '正向', 'probability': 0.9990110458312529}]}]
 
     schema_bre = ["寺庙", {"丈夫": "妻子"}]
     ie.set_schema(schema_bre)

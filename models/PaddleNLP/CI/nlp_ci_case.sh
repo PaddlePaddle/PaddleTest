@@ -241,7 +241,8 @@ print_info $? gpt_pretrain
 # FT
 cd ${nlp_dir}/
 export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-wget https://paddle-qa.bj.bcebos.com/paddlenlp/paddle_inference.tgz
+# wget https://paddle-qa.bj.bcebos.com/paddlenlp/paddle_inference.tgz
+wget https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
 tar -xzvf paddle_inference.tgz
 cd ${nlp_dir}/paddlenlp/ops
 export CC=/usr/local/gcc-8.2/bin/gcc
@@ -256,7 +257,7 @@ cd ../
 #c++
 mkdir build_gpt_cc
 cd build_gpt_cc/
-cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON
+cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON -DWITH_ONNXRUNTIME=ON
 make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
 print_info $? gpt_C_FT
 #depoly python
@@ -735,7 +736,7 @@ cd ../
 #C++ op
 mkdir build_tr_cc
 cd build_tr_cc/
-cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON
+cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON -DWITH_ONNXRUNTIME=ON
 make -j >${log_path}/transformer_C_FT >>${log_path}/transformer_C_FT 2>&1
 print_info $? transformer_C_FT
 #deploy python
@@ -951,7 +952,7 @@ print_info $? ernie-m
 clue (){
 cd ${nlp_dir}/examples/benchmark/clue/classification
 python -u ./run_clue_classifier_trainer.py \
-    --model_name_or_path roberta-wwm-ext-large \
+    --model_name_or_path ernie-3.0-base-zh \
     --dataset "clue afqmc" \
     --max_seq_length 128 \
     --per_device_train_batch_size 32   \
@@ -995,7 +996,7 @@ cd ${nlp_dir}/examples/benchmark/clue/mrc
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 unset http_proxy=${http_proxy}
 unset https_proxy=${http_proxy}
-python -m paddle.distributed.launch run_cmrc.py \
+python -m paddle.distributed.launch run_cmrc2018.py \
     --model_name_or_path ernie-3.0-base-zh \
     --batch_size 16 \
     --learning_rate 3e-5 \
@@ -1005,16 +1006,15 @@ python -m paddle.distributed.launch run_cmrc.py \
     --do_predict \
     --warmup_proportion 0.1 \
     --weight_decay 0.01 \
-    --gradient_accumulation_steps 2 \
+    --gradient_accumulation_steps 4 \
     --max_steps 1 \
-    --save_steps 1 \
     --output_dir ./tmp >${log_path}/clue-mrc >>${log_path}/clue-mrc 2>&1
 print_info $? clue-mrc
 export http_proxy=${http_proxy};
 export https_proxy=${http_proxy}
 }
 #32 taskflow
-clue (){
+taskflow (){
 cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
 }

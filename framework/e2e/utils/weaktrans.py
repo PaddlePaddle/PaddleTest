@@ -41,7 +41,7 @@ class WeakTrans(object):
         # desc
         self.logger.get_log().info(self.case_name)
         self.logger.get_log().info(self.case.get("desc", "没有描述"))
-        self.logger.get_log().info("default_type: {}".format(self.default_type))
+        # self.logger.get_log().info("default_type: {}".format(self.default_type))
         # 加载
         # self._run()
 

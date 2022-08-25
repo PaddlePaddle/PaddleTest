@@ -1,6 +1,8 @@
 
 find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \;| awk '{print $NF;}'| grep -v 'eval' \
     |grep -v 'ResNeXt101_32x48d_wsl' |grep -v 'ResNeSt101' |grep -v 'ConvNeXt' \
+    |grep -v 'RedNet152' \
+    |grep -v 'PVT_V2_B4' \
     |grep -v 'DeiT_base_patch16_384' \
     |grep -v 'SwinTransformer_base_patch4_window12_384' \
     |grep -v 'EfficientNetB4' \
@@ -15,8 +17,10 @@ find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \;| awk '{print $NF;}
     |grep -v 'ViT_large_patch16_384' \
     |grep -v 'PVT_V2_B5' \
     |grep -v 'ResNeXt101_32x32d_wsl' \
+    |grep -v 'amp_' \
     > models_list
     #OOM 支持原 bs/3 向上取整
+    #amp 单独处理
 find ppcls/configs/Cartoonface/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list
 find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list
 find ppcls/configs/Products/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
