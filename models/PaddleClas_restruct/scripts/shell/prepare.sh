@@ -306,6 +306,8 @@ else
         download_data
         export image_root_name="Aliproduct"
         download_data
+        export image_root_name="iCartoonFace"
+        download_data
     elif [[ ${yaml_line} =~ "strong_baseline" ]] && [[ ${yaml_line} =~ "reid" ]];then
         export image_root_name="market1501"
         download_data
