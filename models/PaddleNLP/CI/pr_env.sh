@@ -189,8 +189,8 @@ if [[${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     ####################################
     echo -e "\033[35m ---- EXCODE: $EXCODE \033[0m"
     exit $EXCODE
-else 
+else
     echo "changed files no in CI case, skip"
     $EXCODE=0
     exit $EXCODE
-    
+
