@@ -193,3 +193,6 @@ else
     echo "changed files no in CI case, skip"
     $EXCODE=0
     exit $EXCODE
+fi
+
+
