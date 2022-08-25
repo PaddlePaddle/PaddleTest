@@ -90,3 +90,13 @@ def test_cumsum_3():
     obj.enable_backward = False
     obj.delta = 1e-4
     obj.run(res=res, x=x_data, axis=2)
+
+
+@pytest.mark.api_base_cumsum_parameters
+def test_cumsum_axis_4():
+    """
+    axis = tensor([-4])
+    """
+    x_data = np.arange(1, 7).reshape((1, 2, 1, 3)).astype(np.float32)
+    res = np.cumsum(x_data, axis=-4)
+    obj.run(res=res, x=x_data, axis=np.array([-4]))
