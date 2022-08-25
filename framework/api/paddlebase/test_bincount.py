@@ -86,3 +86,14 @@ def test_bincount3():
     minlength = 4
     res = np.bincount(x, minlength=minlength)
     obj.run(res=res, x=x, minlength=minlength)
+
+
+@pytest.mark.api_base_bincount_parameters
+def test_bincount4():
+    """
+    minlength = tensor(4)
+    """
+    x = randtool("int", 0, 10, (10,))
+    minlength = np.array([4])
+    res = np.bincount(x, minlength=4)
+    obj.run(res=res, x=x, minlength=minlength)
