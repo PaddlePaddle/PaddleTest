@@ -101,9 +101,13 @@ do
             elif [[ ${model_name} =~ 'ResNet50_vd' ]]; then
                 sed -i "s|ResNet50_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
                 sed -i "s|ResNet50_vd_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
-            elif [[ `echo ${params_word} | grep -c "ATTRMetric"` -ne '0' ]] ;then #存在特殊字符
+            fi
+            #记录特殊评价指标
+            if [[ `echo ${params_word} | grep -c "ATTRMetric"` -ne '0' ]] ;then #存在特殊字符
+                echo "${model_name} have ATTRMetric"
                 change_kpi_tag label_f1
             elif [[ `echo ${params_word} | grep -c "Recallk"` -ne '0' ]] ;then #存在特殊字符
+                echo "${model_name} have Recallk"
                 change_kpi_tag recall1
             fi
 

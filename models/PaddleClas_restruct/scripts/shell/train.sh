@@ -32,6 +32,7 @@ dynamic|static)
         echo "have MultiScaleSampler"
         common_par="-o Global.epochs=${Global_epochs} \
         -o Global.save_interval=${Global_epochs} \
+        -o Global.eval_interval=${Global_epochs} \
         -o Global.seed=1234 \
         -o DataLoader.Train.loader.num_workers=0 \
         -o DataLoader.Train.sampler.first_bs=32 \
@@ -40,6 +41,7 @@ dynamic|static)
     else
         common_par="-o Global.epochs=${Global_epochs} \
         -o Global.save_interval=${Global_epochs} \
+        -o Global.eval_interval=${Global_epochs} \
         -o Global.seed=1234 \
         -o DataLoader.Train.loader.num_workers=0 \
         -o DataLoader.Train.sampler.shuffle=False  \
@@ -51,7 +53,10 @@ dynamic|static)
             -o DataLoader.Train.sampler.batch_size=32 \
             -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
-            -o Global.eval_interval=999 \
+            -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/    \
+            -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/    \
+            -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt   \
+            -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     elif [[ ${yaml_line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
         python ${multi_flag} ${train_mold} -c ${yaml_line} \
@@ -59,16 +64,13 @@ dynamic|static)
             -o DataLoader.Train.sampler.batch_size=64 \
             -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
-            -o Global.eval_interval=${Global_epochs} \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     elif [[ ${yaml_line} =~ 'quantization' ]] ; then
         python ${multi_flag} ${train_mold} -c ${yaml_line} \
             -o DataLoader.Train.sampler.batch_size=32 \
-            -o Global.eval_interval=${Global_epochs} \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     else
         python ${multi_flag} ${train_mold} -c ${yaml_line}  \
-            -o Global.eval_interval=${Global_epochs} \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     fi
     # if ([[ -f "${output_dir}/${model_name}/${params_dir}/latest.pdparams" ]] \
