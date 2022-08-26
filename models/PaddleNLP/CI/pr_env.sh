@@ -22,7 +22,7 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then # paddelnlp.taskflow
                 P0case_list[${#P0case_list[*]}]=${dir2}
         elif [[ ${dir2} =~ "transformers" ]];then
-                if [[ ${dir3} =~ "ernie" ]];then
+                if [[ ${dir3} == "ernie" ]];then
                     P0case_list[${#P0case_list[*]}]=ernie-1.0
                 elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then # paddlenlp.transformers.model.albert
                     P0case_list[${#P0case_list[*]}]=${dir3}
@@ -83,7 +83,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     python -c 'import sys; print(sys.version_info[:])'
     echo "python="$1
     ####################################
-    # for paddle env
+    # set paddle env
     set -x
     python -m pip install --ignore-installed --upgrade pip
     python -m pip install -r requirements_ci.txt
@@ -91,7 +91,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
     python -c 'from visualdl import LogWriter'
     ####################################
-    # for paddlenlp env
+    # set paddlenlp env
     nlp1_build (){
         echo -e "\033[35m ---- only install paddlenlp \033[0m"
         python -m pip install -U paddlenlp
@@ -112,7 +112,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     pip list
     set +x
     ####################################
-    # for logs env
+    # set logs env
     export nlp_dir=/workspace
     mkdir /workspace/model_logs
     mkdir /workspace/unittest_logs
@@ -188,7 +188,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     # fi
     ####################################
 else
-    echo "changed files no in CI case, skip"
+    echo -e "\033[32m Changed files no in ci case, Skips \033[0m"
     EXCODE=0
 fi
 exit $EXCODE
