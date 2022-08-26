@@ -26,6 +26,12 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
                     P0case_list[${#P0case_list[*]}]=ernie-1.0
                 elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then # paddlenlp.transformers.model.albert
                     P0case_list[${#P0case_list[*]}]=${dir3}
+                elif [[ ${dir3} == "ernie_m" ]];then
+                    P0case_list[${#P0case_list[*]}]=ernie-m
+                elif [[ ${dir3} == "ernie_doc" ]];then
+                    P0case_list[${#P0case_list[*]}]=ernie-doc
+                elif [[ ${dir3} == "ernie_ctm" ]];then
+                    P0case_list[${#P0case_list[*]}]=ernie-ctm
                 else
                     P0case_list[${#P0case_list[*]}]=bert
                     P0case_list[${#P0case_list[*]}]=gpt
@@ -143,7 +149,6 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     if [ $P0case_EXCODE -ne 0 ] ; then
         echo -e "\033[31m ---- P0case Failed number: ${FF} \033[0m"
         ls *_FAIL*
-        exit $P0case_EXCODE
     else
         echo -e "\033[32m ---- P0case Success \033[0m"
     fi
@@ -171,7 +176,6 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     if [ $UT_EXCODE -ne 0 ] ; then
         echo -e "\033[31m ---- Unittest Failed \033[0m"
         ls *_FAIL*
-        exit $UT_EXCODE
     else
         echo -e "\033[32m ---- Unittest Success \033[0m"
     fi
