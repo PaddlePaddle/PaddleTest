@@ -8,6 +8,7 @@ layer_builder
 import paddle
 import diy
 import ppdet
+from ppdet.modeling.proposal_generator.target_layer import RBoxAssigner
 
 # import ppcls
 
@@ -20,11 +21,22 @@ class BuildLayer(object):
         self.repo = repo
         self.layer_name = layer_name
         self.layer_param = layer_param
+        if self.layer_param is not None:
+            # 带有**标记的字符串转换为python object
+            for k, v in layer_param.items():
+                if isinstance(v, str):
+                    if "**" in v:
+                        try:
+                            tmp = v
+                            tmp = tmp.replace("**", "")
+                            layer_param[k] = eval(tmp)
+                        except:
+                            layer_param[k] = v
 
     def get_layer(self):
         """get_layer"""
-        if self.repo == "DIY":
+        if self.layer_param is not None:
             layer = eval(self.layer_name)(**self.layer_param)
         else:
-            layer = eval(self.layer_name)(**self.layer_param)
+            layer = eval(self.layer_name)()
         return layer

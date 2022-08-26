@@ -5,8 +5,6 @@
 """
 benchmark trans extend weaktrans
 """
-import torch
-
 from utils.weaktrans import WeakTrans, Framework
 import numpy as np
 
@@ -15,7 +13,7 @@ class BenchTrans(WeakTrans):
     """BenchTrans"""
 
     def __init__(self, case, default_type=np.float32, seed=None):
-        super().__init__(case, default_type=np.float32, seed=None)
+        super().__init__(case, default_type=default_type, seed=None)
         self._check_exists_torch()
         self.paddle_inputs = None
         self.paddle_param = None

@@ -7,7 +7,7 @@ cd examples/cylinder/2d_unsteady_continuous
 python download_dataset.py
 cd -
 
-ignore="log.py dataset.py download_dataset.py loading_cfd_data.py cylinder2d_unsteady_predict.py utils.py"
+ignore="log.py dataset.py download_dataset.py loading_cfd_data.py cylinder2d_unsteady_predict.py utils.py cylinder3d_unsteady_ad.py"
 bug=0
 
 export CUDA_VISIBLE_DEVICES=0
@@ -34,7 +34,7 @@ echo ============================= serial ${file_name}  end! ===================
 done
 
 export CUDA_VISIBLE_DEVICES=0,1
-ignore="log.py dataset.py download_dataset.py loading_cfd_data.py viv_inverse_predict.py viv_inverse_train.py cylinder2d_unsteady_train.py cylinder2d_unsteady_predict.py utils.py"
+ignore="log.py dataset.py download_dataset.py loading_cfd_data.py viv_inverse_predict.py viv_inverse_train.py cylinder2d_unsteady_train.py cylinder2d_unsteady_predict.py utils.py cylinder3d_unsteady_ad.py"
 echo "========= distributed bug file list =========" >> ${root_dir}/result.txt
 for file in ${cases}
 do

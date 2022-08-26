@@ -62,6 +62,7 @@ set http_proxy=
 set https_proxy=
 rem dependency
 python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple
+python setup.py install
 python -c "import paddle; print(paddle.__version__,paddle.version.commit)"
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 

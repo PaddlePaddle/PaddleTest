@@ -133,6 +133,7 @@ python -m pip install --upgrade paddleslim \
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \
    -i https://mirror.baidu.com/pypi/simple
+python setup.py install
 
 python -m pip list |grep opencv
 
@@ -536,40 +537,46 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
             -o Global.inference_model_dir="../inference/"$model \
             > ../$log_path/predict/$model.log 2>&1
     else
-        python python/predict_cls.py -c configs/inference_cls.yaml \
-            -o Global.inference_model_dir="../inference/"$model \
-            > ../$log_path/predict/$model.log 2>&1
+        if [[ ${line} =~ "PPHGNet" ]];then
+            echo "predict_exit_code: 0.0" > ../$log_path/predict/$model.log  2>&1
+        else
+            python python/predict_cls.py -c configs/inference_cls.yaml \
+                -o Global.inference_model_dir="../inference/"$model \
+                > ../$log_path/predict/$model.log 2>&1
+        fi
     fi
 
     if [[ $? -eq 0 ]];then
     # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
         echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
-    else
-        cat ../$log_path/predict/${model}.log
-        echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
-    fi
-
-    if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
-        python python/predict_cls.py -c configs/inference_cls_ch4.yaml  \
-            -o Global.infer_imgs="./images"  \
-            -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"$model \
-            > ../$log_path/predict/$model.log 2>&1
-    else
-        python python/predict_cls.py -c configs/inference_cls.yaml  \
-            -o Global.infer_imgs="./images"  \
-            -o Global.batch_size=4 \
-            -o Global.inference_model_dir="../inference/"$model \
-            > ../$log_path/predict/$model.log 2>&1
-    fi
-    if [[ $? -eq 0 ]];then
-    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
-        echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
         echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
     else
         cat ../$log_path/predict/${model}.log
-        echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+        echo -e "\033[31m predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
         echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
     fi
+
+    # if [[ ${line} =~ 'fp16' ]] || [[ ${line} =~ 'ultra' ]];then
+    #     python python/predict_cls.py -c configs/inference_cls_ch4.yaml  \
+    #         -o Global.infer_imgs="./images"  \
+    #         -o Global.batch_size=4 -o Global.inference_model_dir="../inference/"$model \
+    #         > ../$log_path/predict/$model.log 2>&1
+    # else
+    #     python python/predict_cls.py -c configs/inference_cls.yaml  \
+    #         -o Global.infer_imgs="./images"  \
+    #         -o Global.batch_size=4 \
+    #         -o Global.inference_model_dir="../inference/"$model \
+    #         > ../$log_path/predict/$model.log 2>&1
+    # fi
+    # if [[ $? -eq 0 ]];then
+    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" ../$log_path/predict/${model}.log) -eq 0 ]];then
+    #     echo -e "\033[33m multi_batch_size predict of $model  successfully!\033[0m"| tee -a ../$log_path/result.log
+    #     echo "predict_exit_code: 0.0" >> ../$log_path/predict/$model.log
+    # else
+    #     cat ../$log_path/predict/${model}.log
+    #     echo -e "\033[31m multi_batch_size predict of $model failed!\033[0m"| tee -a ../$log_path/result.log
+    #     echo "predict_exit_code: 1.0" >> ../$log_path/predict/$model.log
+    # fi
 
     sed -i 's/size: '${size_tmp}'/size: 224/g' configs/inference_cls.yaml #改回predict尺寸
     sed -i 's/resize_short: '${size_tmp}'/resize_short: 256/g' configs/inference_cls.yaml

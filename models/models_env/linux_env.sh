@@ -7,7 +7,6 @@ cd ce;
 
 ########TODO：区分下是否使用CE框架、区分下是否单独clone库(用于CI)、步骤Common_name需要再细化一下
 
-export Project_path=${Project_path:-/workspace/task/PaddleClas}
 export Data_path=${Data_path:-/ssd2/ce_data/PaddleClas}
 export Repo=${Repo:-PaddleClas_restruct}
 export Python_env=${Python_env:-path_way}
@@ -16,7 +15,7 @@ export CE_version=${CE_version:-V1}
 export Priority_version=${Priority_version:-P0}
 export Compile_version=${Compile_version:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
-export Common_name=${Common_name:-conf/cls_common}  #CE框架中的执行步骤，名称各异所以需要传入
+
 
 export SET_MULTI_CUDA=${SET_MULTI_CUDA:-}  #如果不使用流水线，手动设置卡号 默认不设置，用0 1卡
 export docker_flag=${docker_flag:-}  #是否在docker内的环境 默认不设置，如果在docker中进行设置为False
@@ -54,6 +53,8 @@ else
     tar xf PaddleTest.tar.gz >/dev/null 2>&1
     mv PaddleTest task
 fi
+# cp -r ./task/models/models_env/docker_run.sh  ./${CE_version_name}/src/docker_run.sh
+#为了配合后续的source docker_run.sh，此方案不好用
 
 #通用变量[用户改]
 test_code_download_path=./task/models/${Repo}
@@ -62,11 +63,11 @@ test_code_download_path=./task/models/${Repo}
 mkdir -p ${test_code_download_path}/log
 ls ${test_code_download_path}/log;
 cp -r ${test_code_download_path}/.  ./${CE_version_name}/src/task
-cp ${test_code_download_path}/${Common_name}.py ./${CE_version_name}/src/task/common.py
+cp ${test_code_download_path}/conf/${Repo}_common.py ./${CE_version_name}/src/task/common.py
 cat ./${CE_version_name}/src/task/common.py;
 ls;
 
-####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称
+####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称  ##TODO:暂时先考虑两张卡，后续优化
 if  [[ "${SET_MULTI_CUDA}" == "" ]] ;then  #换了docker启动的方式，使用默认制定方式即可，SET_MULTI_CUDA参数只是在启动时使用
     tc_name=`(echo $PWD|awk -F '/' '{print $4}')`
     echo "teamcity path:" $tc_name
@@ -93,14 +94,20 @@ fi
 ####显示执行步骤
 cat ./${CE_version_name}/src/task/common.py
 
-#####进入执行路径创建docker容器 [用户改docker创建]
+#####进入执行路径创建docker容器 [用户改docker创建]  临时写一下后面再细化
 cd ./${CE_version_name}/src/task
 ls;
-wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleClas.tar.gz --no-proxy  >/dev/null
-#预先下载PaddleClas，不使用CE框架clone
-tar xf PaddleClas.tar.gz
-rm -rf PaddleClas.tar.gz
+if [[ -d "../../../../PaddleClas" ]];then
+    mv ../../../../PaddleClas .
+else
+    echo "download PaddleClas.tar.gz"
+    wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleClas.tar.gz --no-proxy  >/dev/null
+    #预先下载PaddleClas，不使用CE框架clone
+    tar xf PaddleClas.tar.gz
+    rm -rf PaddleClas.tar.gz
+fi
 cd ..
+pwd;
 ls;
 
 #cd ${CE_version_name}/src
@@ -109,6 +116,7 @@ ls;
 if [[ "${docker_flag}" == "" ]]; then
 
     #升级显卡策略，独立使用显卡，以逗号分割执行显卡编号，重定义从0开始赋值  这种情况是适配大于两张卡的情况
+    # 暂时考虑2张卡，后续优化后使用
     # echo SET_CUDA VS SET_MULTI_CUDA
     # echo $SET_CUDA
     # echo $SET_MULTI_CUDA
@@ -123,9 +131,11 @@ if [[ "${docker_flag}" == "" ]]; then
     # echo $SET_CUDA
     # echo $SET_MULTI_CUDA
 
+    Priority_version_tmp=(${Priority_version//,/ }) #解析出来docker名称，针对多个优先级的情况
+    Priority_version_tmp=${Repo}_${Priority_version_tmp} #进行字符串拼接
     ####创建docker
     set +x;
-    docker_name="ce_${Repo}_${Priority_version}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
+    docker_name="ce_${Priority_version_tmp}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
     echo "begin kill docker"
@@ -148,34 +158,13 @@ if [[ "${docker_flag}" == "" ]]; then
                 export http_proxy=${http_proxy};
                 export https_proxy=${http_proxy};
                 export Data_path=${Data_path};
-                export Project_path=${Project_path};
+                export Project_path=${Project_path:-/workspace/task/PaddleClas};
+                echo ${Project_path};
+                export Priority_version=${Priority_version};
                 # export SET_CUDA=${SET_CUDA};
                 # export SET_MULTI_CUDA=${SET_MULTI_CUDA};
 
-                if [[ ${Python_env} == 'path_way' ]];then
-                    case ${Python_version} in
-                    36)
-                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
-                    export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
-                    ;;
-                    37)
-                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
-                    export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-                    ;;
-                    38)
-                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
-                    export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-                    ;;
-                    39)
-                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
-                    export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
-                    ;;
-                    310)
-                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
-                    export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
-                    ;;
-                    esac
-                elif [[ ${Python_env} == 'ln_way' ]];then
+                if [[ ${Python_env} == 'ln_way' ]];then
                     # rm -rf /usr/bin/python2.7
                     # rm -rf /usr/local/python2.7.15/bin/python
                     # rm -rf /usr/local/bin/python
@@ -218,7 +207,28 @@ if [[ "${docker_flag}" == "" ]]; then
                     ;;
                     esac
                 else
-                    echo unset python version;
+                    case ${Python_version} in
+                    36)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
+                    ;;
+                    37)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+                    ;;
+                    38)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
+                    ;;
+                    39)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
+                    ;;
+                    310)
+                    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
+                    export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+                    ;;
+                    esac
                 fi
 
                 nvidia-smi;
@@ -227,37 +237,16 @@ if [[ "${docker_flag}" == "" ]]; then
                 if [[ ${CE_version} == 'V2' ]];then
                     bash main.sh --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type_id=${AGILE_PIPELINE_CONF_ID} --priority=${Priority_version} --compile_path=${Compile_version} --job_build_id=${AGILE_JOB_BUILD_ID};
                 else
-                    bash main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID} --owner='paddle' --priority=${Priority_version} --compile_path=${Compile_version} --agile_job_build_id=${AGILE_JOB_BUILD_ID};
+                    bash main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID} --owner='paddle' --priority=${Priority_version} --compile_path=${Compile_version} --start_scripts='./task/start.sh'  --agile_job_build_id=${AGILE_JOB_BUILD_ID};
                 fi
     " &
     wait $!
     exit $?
 else
+    export Project_path=${Project_path:-${PWD}/task/PaddleClas}
+    echo ${Project_path}
     ldconfig;
-    if [[ ${Python_env} == 'path_way' ]];then
-        case ${Python_version} in
-        36)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
-        ;;
-        37)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-        ;;
-        38)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-        ;;
-        39)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
-        ;;
-        310)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
-        ;;
-        esac
-    elif [[ ${Python_env} == 'ln_way' ]];then
+    if [[ ${Python_env} == 'ln_way' ]];then
         # rm -rf /usr/bin/python2.7
         # rm -rf /usr/local/python2.7.15/bin/python
         # rm -rf /usr/local/bin/python
@@ -300,14 +289,36 @@ else
         ;;
         esac
     else
-        echo unset python version;
+        case ${Python_version} in
+        36)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
+        ;;
+        37)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+        ;;
+        38)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
+        ;;
+        39)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
+        ;;
+        310)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+        ;;
+        esac
     fi
 
+    nvidia-smi;
     python -c 'import sys; print(sys.version_info[:])';
     git --version;
     if [[ ${CE_version} == 'V2' ]];then
         bash main.sh --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type_id=${AGILE_PIPELINE_CONF_ID} --priority=${Priority_version} --compile_path=${Compile_version} --job_build_id=${AGILE_JOB_BUILD_ID};
     else
-        bash main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID} --owner='paddle' --priority=${Priority_version} --compile_path=${Compile_version} --agile_job_build_id=${AGILE_JOB_BUILD_ID};
+        bash main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID} --owner='paddle' --priority=${Priority_version} --compile_path=${Compile_version} --start_scripts='./task/start.sh'  --agile_job_build_id=${AGILE_JOB_BUILD_ID};
     fi
 fi

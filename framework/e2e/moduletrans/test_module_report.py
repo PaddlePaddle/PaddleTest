@@ -3,7 +3,7 @@
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
 yml test
-"""
+# """
 import os
 import pytest
 import allure
@@ -11,9 +11,9 @@ from yaml_loader import YamlLoader
 import controller
 
 
-yaml_path = os.path.join("yaml", "Det", "modeling", "backbones", "hrnet.yml")
+yaml_path = os.path.join("yaml", "Det", "modeling", "heads", "keypoint_hrhrnet_head.yml")
 yml = YamlLoader(yaml_path)
-all_cases_list = ["hrnet_TransitionLayer_0"]
+all_cases_list = ["keypoint_hrhrnet_head_HrHRNetHead_0"]
 
 # all_cases_list = []
 # all_cases_dict = yml.get_all_case_name()
@@ -26,7 +26,7 @@ all_cases_list = ["hrnet_TransitionLayer_0"]
 @pytest.mark.parametrize("case_name", all_cases_list)
 def test_module_layer(case_name):
     """pytest case"""
-    allure.dynamic.title(case_name)
+    # allure.dynamic.title(case_name)
     allure.dynamic.description("Layer 测试")
     case = yml.get_case_info(case_name)
     test = controller.ControlModuleTrans(case=case)
