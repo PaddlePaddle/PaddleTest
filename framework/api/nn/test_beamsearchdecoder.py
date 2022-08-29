@@ -519,7 +519,6 @@ def test_beamsearchdecoder5():
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_exception
-@pytest.mark.skip(reason="Skip because Paddle rename python c api.")
 def test_beamsearchdecoder6():
     """
     error shape

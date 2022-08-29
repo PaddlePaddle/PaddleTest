@@ -241,7 +241,6 @@ def test_cosinesimilarity7():
             raise Exception
 
 
-@pytest.mark.skip(reason="Skip because Paddle rename python c api.")
 def test_cosinesimilarity8():
     """
     error shape
