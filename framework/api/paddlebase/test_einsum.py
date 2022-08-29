@@ -28,7 +28,7 @@ def test_einsum():
     op = "i->"
     paddle_res = paddle.einsum(op, paddle.to_tensor(x))
     expect = np.einsum(op, x)
-    np.allclose(paddle_res.numpy(), expect)
+    assert np.allclose(paddle_res.numpy(), expect)
 
 
 @pytest.mark.api_base_einsum_parameters
@@ -39,7 +39,7 @@ def test_einsum1():
     op = "i,i->"
     paddle_res = paddle.einsum(op, paddle.to_tensor(x), paddle.to_tensor(x))
     expect = np.einsum(op, x, x)
-    np.allclose(paddle_res.numpy(), expect)
+    assert np.allclose(paddle_res.numpy(), expect)
 
 
 @pytest.mark.api_base_einsum_parameters
@@ -50,7 +50,7 @@ def test_einsum2():
     op = "i,j->ij"
     paddle_res = paddle.einsum(op, paddle.to_tensor(x), paddle.to_tensor(y))
     expect = np.einsum(op, x, y)
-    np.allclose(paddle_res.numpy(), expect)
+    assert np.allclose(paddle_res.numpy(), expect)
 
 
 @pytest.mark.api_base_einsum_parameters
@@ -61,7 +61,7 @@ def test_einsum3():
     op = "ijk, ikl->ijl"
     paddle_res = paddle.einsum(op, paddle.to_tensor(x1), paddle.to_tensor(y1))
     expect = np.einsum(op, x1, y1)
-    np.allclose(paddle_res.numpy(), expect)
+    assert np.allclose(paddle_res.numpy(), expect)
 
 
 @pytest.mark.api_base_einsum_parameters
@@ -72,7 +72,7 @@ def test_einsum4():
     op = "ijk->kji"
     paddle_res = paddle.einsum(op, paddle.to_tensor(x1))
     expect = np.einsum(op, x1)
-    np.allclose(paddle_res.numpy(), expect)
+    assert np.allclose(paddle_res.numpy(), expect)
 
 
 @pytest.mark.api_base_einsum_parameters
@@ -83,7 +83,7 @@ def test_einsum5():
     op = "...jk->...kj"
     paddle_res = paddle.einsum(op, paddle.to_tensor(x1))
     expect = np.einsum(op, x1)
-    np.allclose(paddle_res.numpy(), expect)
+    assert np.allclose(paddle_res.numpy(), expect)
 
 
 @pytest.mark.api_base_einsum_parameters
@@ -94,4 +94,17 @@ def test_einsum6():
     op = "...jk, ...kl->...jl"
     paddle_res = paddle.einsum(op, paddle.to_tensor(x1), paddle.to_tensor(y1))
     expect = np.einsum(op, x1, y1)
-    np.allclose(paddle_res.numpy(), expect)
+    assert np.allclose(paddle_res.numpy(), expect)
+
+
+@pytest.mark.api_base_einsum_parameters
+def test_einsum7():
+    """
+    test batch matrix multiplication op = '...jk, ...kl->...jl'
+    """
+    op = "xy,yz->xz"
+    x7 = randtool("float", -1, 1, [4, 4])
+    y7 = randtool("float", -1, 1, [4, 4])
+    paddle_res = paddle.einsum(op, paddle.to_tensor(x7), paddle.to_tensor(y7))
+    expect = np.einsum(op, x7, y7)
+    assert np.allclose(paddle_res.numpy(), expect)
