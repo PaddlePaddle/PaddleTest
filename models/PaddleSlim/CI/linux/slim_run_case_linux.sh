@@ -224,9 +224,9 @@ python quant_post_hpo.py  \
 --max_model_quant_count=1 > ${log_path}/st_quant_post_hpo 2>&1
 print_info $? st_quant_post_hpo
 # 3. 量化后eval
-python ../quant_post/eval.py \
---model_path=./inference_model/MobileNetV1_quant/ > ${log_path}/st_quant_post_hpo_eval 2>&1
-print_info $? st_quant_post_hpo_eval
+#python ../quant_post/eval.py \
+#--model_path=./inference_model/MobileNetV1_quant/ > ${log_path}/st_quant_post_hpo_eval 2>&1
+#print_info $? st_quant_post_hpo_eval
 }
 
 demo_st_pact_quant_aware_v3(){
