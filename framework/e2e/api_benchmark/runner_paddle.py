@@ -76,7 +76,9 @@ def testing(yaml_path, case_name, framework, place=None, card=None):
     bt = BenchTrans(case_info)
     if framework == "paddle":
         api = bt.get_paddle_api()
-        jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
+        jelly = Jelly_v2(
+            api=api, framework=framework, title=case_name, place=place, card=card, enable_backward=bt.enable_backward()
+        )
         jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
         jelly.run()
 
