@@ -52,6 +52,12 @@ class BenchTrans(WeakTrans):
         else:
             RuntimeError("No torch yaml settings")
 
+    def enable_backward(self):
+        """
+        获取reload状态
+        """
+        return self.case.get("enable_backward", True)
+
     def get_paddle_inputs(self):
         """
         获取paddle输入，只初始化一次
