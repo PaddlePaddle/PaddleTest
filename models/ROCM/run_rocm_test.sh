@@ -34,6 +34,9 @@ python -m pip install pytest-assume -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install pytest-html -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install pytest-timeout -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install pytest-repeat -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip uninstall opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install -U opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
+
 pytest -sv . --html=report_${tar}/rocm_${tar}.html --capture=tee-sys
 tar cf report_${tar}.tar report_${tar}
 
