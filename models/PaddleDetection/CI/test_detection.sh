@@ -26,7 +26,7 @@ echo -e '*****************detection_version****'
 git rev-parse HEAD
 #find modified config file of this pr
 rm -rf config_list
-git diff --numstat --diff-filter=AMR upstream/${branch} | grep .yml | grep configs | grep -v kunlun | grep -v xpu | grep -v reader | grep -v test | grep -v oidv5 |grep -v _base_ |grep -v datasets | grep -v runtime |grep -v slim | grep -v roadsign | grep -v pruner | grep -v bytetrack | grep -v deepsort | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v deploy | awk '{print $NF}' | tee config_list
+git diff --numstat --diff-filter=AMR upstream/${branch} | grep .yml | grep configs | grep -v kunlun | grep -v xpu | grep -v reader | grep -v test | grep -v oidv5 |grep -v _base_ |grep -v datasets | grep -v runtime |grep -v slim | grep -v roadsign | grep -v pruner | grep -v bytetrack | grep -v deepsort | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v deploy | grep -v layout | awk '{print $NF}' | tee config_list
 echo -e '******************config_list****'
 cat config_list
 #create log dir
@@ -79,9 +79,9 @@ ln -s ${file_path}/data/pascalvoc dataset/voc
 if [ -d "dataset/mot" ];then rm -rf dataset/mot
 fi
 ln -s ${file_path}/data/mot dataset/mot
-if [ -d "dataset/DOTA_1024_s2anet" ];then rm -rf dataset/DOTA_1024_s2anet
+if [ -d "dataset/dota" ];then rm -rf dataset/dota
 fi
-ln -s ${file_path}/data/DOTA_1024_s2anet dataset/DOTA_1024_s2anet
+ln -s ${file_path}/data/dota dataset/dota
 if [ -d "dataset/mainbody" ];then rm -rf dataset/mainbody
 fi
 ln -s ${file_path}/data/mainbody dataset/mainbody

@@ -20,6 +20,8 @@ from tools import delete
 
 
 SKIP_DICT = {"Windows": [], "Darwin": [], "Linux": []}
+INDEX_DICT = {}
+SPECIAL = True  # speacial for emergency
 
 
 def schedule(yaml_path, framework, case_name=None, place=None, card=None):
@@ -35,6 +37,9 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
             if case_name in SKIP_DICT[platform.system()]:
                 logger.get_log().warning("skip case -->{}<--".format(case_name))
                 continue
+            if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
+                logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
+                continue
             case_info = yaml_loader.get_case_info(case_name)
             try:
                 bt = BenchTrans(case_info)
@@ -43,7 +48,9 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
                         logger.get_log().info("{} 缺少Torch配置, Skip...".format(case_name))
                         continue
                     api = bt.get_torch_api()
-                    jelly = Jelly_v2_torch(api=api, framework=framework, title=case_name, place=place, card=card)
+                    jelly = Jelly_v2_torch(
+                        api=api, framework=framework, title=case_name, place=place, card=card, default_dtype="float32"
+                    )
                     jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
                     jelly.run_schedule()
             except Exception as e:

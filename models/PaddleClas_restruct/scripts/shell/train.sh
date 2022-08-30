@@ -53,6 +53,10 @@ dynamic|static)
             -o DataLoader.Train.sampler.batch_size=32 \
             -o DataLoader.Train.dataset.image_root=./dataset/Inshop/ \
             -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt \
+            -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/    \
+            -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/    \
+            -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt   \
+            -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt \
             ${common_par} > ${log_path}/train/${model_name}_${card}.log 2>&1
     elif [[ ${yaml_line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
         python ${multi_flag} ${train_mold} -c ${yaml_line} \

@@ -13,7 +13,7 @@ class BenchTrans(WeakTrans):
     """BenchTrans"""
 
     def __init__(self, case, default_type=np.float32, seed=None):
-        super().__init__(case, default_type=np.float32, seed=None)
+        super().__init__(case, default_type=default_type, seed=None)
         self._check_exists_torch()
         self.paddle_inputs = None
         self.paddle_param = None
@@ -51,6 +51,12 @@ class BenchTrans(WeakTrans):
             return torch_inputs
         else:
             RuntimeError("No torch yaml settings")
+
+    def enable_backward(self):
+        """
+        获取reload状态
+        """
+        return self.case.get("enable_backward", True)
 
     def get_paddle_inputs(self):
         """

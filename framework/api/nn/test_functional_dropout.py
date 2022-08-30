@@ -38,6 +38,26 @@ def test_dygraph():
 
 
 @pytest.mark.api_nn_dropout_parameters
+def test_dygraph1():
+    """
+    test_dygraph
+    """
+    for place in places:
+        for t in types:
+            paddle.disable_static(place)
+            x_data = np.arange(1, 7).reshape(6).astype(t)
+            x = paddle.to_tensor(x_data, stop_gradient=False)
+            for i in range(1):
+                out = paddle.nn.functional.dropout(x, p=paddle.to_tensor(0.5))
+                out.backward()
+
+            index = np.flatnonzero(out)
+            for i in index:
+                assert np.allclose(x_data[i] * 2, out.numpy()[i])
+                assert np.allclose(x.gradient()[i], 2)
+
+
+@pytest.mark.api_nn_dropout_parameters
 def test_static():
     """
     test_static

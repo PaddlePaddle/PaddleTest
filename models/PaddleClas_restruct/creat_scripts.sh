@@ -44,9 +44,9 @@ echo base_model
 echo ${base_model}
 for priority_tmp in $priority_all
 do
-    cat models_list_cls_test_${priority_tmp} | while read line
+    cat models_list_cls_test_${priority_tmp} | while read yaml_line
     do
-        array=(${line//\// })
+        array=(${yaml_line//\// })
         model_type=${array[2]} #区分 分类、slim、识别等
         model_name=${array[2]} #进行字符串拼接
         if [[ ${1} =~ "PULC" ]];then
@@ -68,33 +68,50 @@ do
             cd config
             rm -rf ${model_name}.yaml
             cp -r ${base_model}.yaml ${model_name}.yaml
-            sed -i "s|ppcls/configs/ImageNet/ResNet/${base_model_latest_name}.yaml|$line|g" ${model_name}.yaml #待优化，去掉ResNet
+            sed -i "s|ppcls/configs/ImageNet/ResNet/${base_model_latest_name}.yaml|$yaml_line|g" ${model_name}.yaml #待优化，去掉ResNet
             sed -i s/${base_model}/${model_name}/g ${model_name}.yaml
 
+            # 处理不同的指标 6只是个估算
+            params_index=(`cat ${Project_path}/${yaml_line} | grep -n "Metric" | awk -F ":" '{print $1}'`)
+            params_word=`sed -n "${params_index[0]},$[${params_index[0]}+6]p" ${Project_path}/${yaml_line}`
+            # echo "#### params_index"
+            # echo ${params_index}
+            # echo ${params_word}
+            function change_kpi_tag(){
+                #先粗暴的的以行数计算进行替换，暂时报错的eval，写死第9行
+                params_index=(`cat ${model_name}.yaml | grep -n "eval_linux" | awk -F ":" '{print $1}'`)
+                # echo "#### params_index"
+                # echo ${params_index}
+                # echo $[${params_index}+9]
+                for index_tmp in ${params_index[@]}
+                do
+                    sed -i "$[${index_tmp}+9]s/loss:/${1}:/" ${model_name}.yaml
+                done
+            }
             #记录一些特殊规则
-            if [[ ${model_latest_name} == 'HRNet_W18_C' ]]; then
+            if [[ ${model_name} =~ 'HRNet' ]]; then
                 sed -i "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
                 sed -i 's|"="|"-"|g' ${model_name}.yaml
-            elif [[ ${model_latest_name} == 'LeViT_128S' ]]; then
+            elif [[ ${model_name} =~ 'LeViT' ]]; then
                 sed -i "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
                 sed -i 's|"="|"-"|g' ${model_name}.yaml
-                # sed -i "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                # sed -i "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-            elif [[ ${model_latest_name} == 'RedNet50' ]]; then
-                sed -i "s|train_eval|exit_code|g" ${model_name}.yaml #训练后评估失败，改为搜集退出码exit_code
-            elif [[ ${model_latest_name} == 'ResNet50_vd' ]]; then
+            elif [[ ${model_name} =~ 'SwinTransformer' ]]; then
+                sed -i "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
+                sed -i 's|"="|"-"|g' ${model_name}.yaml
+            elif [[ ${model_name} =~ 'ResNet50_vd' ]]; then
                 sed -i "s|ResNet50_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
                 sed -i "s|ResNet50_vd_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
-            # elif [[ ${model_latest_name} == 'TNT_small' ]]; then
-            #     sed -i "s|threshold: 0.0|threshold: 0.1|g" ${model_name}.yaml #bodong
-            #     sed -i 's|"="|"-"|g' ${model_name}.yaml
-                # sed -i "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                # sed -i "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                #暂时监控linux通过改学习率不出nan
-            # elif [[ ${model_latest_name} == 'ViT_small_patch16_224' ]]; then
-            #     sed -i "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                # sed -i "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
             fi
+            #记录特殊评价指标
+            if [[ `echo ${params_word} | grep -c "ATTRMetric"` -ne '0' ]] ;then #存在特殊字符
+                echo "${model_name} have ATTRMetric"
+                change_kpi_tag label_f1
+            elif [[ `echo ${params_word} | grep -c "Recallk"` -ne '0' ]] ;then #存在特殊字符
+                echo "${model_name} have Recallk"
+                change_kpi_tag recall1
+            fi
+
+            #循环修改值
             for branch_tmp in $branch
             do
                 # echo branch_tmp

@@ -22,6 +22,8 @@ from tools import delete
 
 
 SKIP_DICT = {"Windows": ["fft"], "Darwin": ["fft"], "Linux": []}
+INDEX_DICT = {}
+SPECIAL = False  # speacial for emergency
 
 
 def schedule(yaml_path, framework, case_name=None, place=None, card=None):
@@ -37,12 +39,17 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
             if case_name in SKIP_DICT[platform.system()]:
                 logger.get_log().warning("skip case -->{}<--".format(case_name))
                 continue
+            if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
+                logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
+                continue
             case_info = yaml_loader.get_case_info(case_name)
             try:
                 bt = BenchTrans(case_info)
                 if framework == "paddle":
                     api = bt.get_paddle_api()
-                    jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
+                    jelly = Jelly_v2(
+                        api=api, framework=framework, title=case_name, place=place, card=card, default_dtype="float32"
+                    )
                     jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
                     jelly.run_schedule()
             except Exception as e:
@@ -69,7 +76,9 @@ def testing(yaml_path, case_name, framework, place=None, card=None):
     bt = BenchTrans(case_info)
     if framework == "paddle":
         api = bt.get_paddle_api()
-        jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
+        jelly = Jelly_v2(
+            api=api, framework=framework, title=case_name, place=place, card=card, enable_backward=bt.enable_backward()
+        )
         jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
         jelly.run()
 
@@ -118,20 +127,20 @@ if __name__ == "__main__":
     elif args.mode == "testing":
         testing(args.yaml, args.case, framework=args.framework, place=args.place, card=args.card)
     elif args.mode == "rerun":
-        db = DB()
+        # db = DB()
         try:
-            db.init_mission(
-                framework=args.framework,
-                mode=args.mode,
-                place=args.place,
-                cuda=args.cuda,
-                cudnn=args.cudnn,
-                card=args.card,
-            )
+            # db.init_mission(
+            #     framework=args.framework,
+            #     mode=args.mode,
+            #     place=args.place,
+            #     cuda=args.cuda,
+            #     cudnn=args.cudnn,
+            #     card=args.card,
+            # )
             schedule(args.yaml, framework=args.framework, case_name=args.case, place=args.place, card=args.card)
-            db.save()
+            # db.save()
         except Exception as e:
             logger.get_log().error(e)
-            db.error()
+            # db.error()
     else:
         raise AttributeError

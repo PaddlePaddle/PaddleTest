@@ -16,9 +16,6 @@ if [[ ${yaml_line} =~ 'ultra' ]];then
 fi
 
 source prepare.sh
-# arr=("trained" "pretrained") #或者抽象出来到输入参数，现在是默认训好的、预训练的全跑
-# for input_model_type in ${arr[@]}
-# do
 source choose_model.sh
 
 if [[ ${yaml_line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
@@ -26,6 +23,15 @@ if [[ ${yaml_line} =~ 'MV3_Large_1x_Aliproduct_DLBHC' ]] ; then
         -o Global.pretrained_model=${pretrained_model} \
         -o DataLoader.Eval.sampler.batch_size=64 \
         -o Global.output_dir=${output_dir}/${model_name} \
+        > ${log_path}/eval/${model_name}_${input_model_type}.log 2>&1
+elif [[ ${yaml_line} =~ 'GeneralRecognition' ]] && [[ ${input_model_type} == 'trained' ]]; then
+    python ${multi_flag} tools/eval.py -c ${yaml_line} \
+        -o Global.pretrained_model=${pretrained_model} \
+        -o Global.output_dir=${output_dir}/${model_name} \
+        -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/    \
+        -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/    \
+        -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt   \
+        -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt \
         > ${log_path}/eval/${model_name}_${input_model_type}.log 2>&1
 else
     python ${multi_flag} tools/eval.py -c ${yaml_line} \
@@ -45,8 +51,6 @@ else
         | tee -a ${log_path}/result.log
     echo "eval_exit_code: 1.0" >> ${log_path}/eval/${model_name}_${input_model_type}.log
 fi
-
-# done
 
 # 廷权临时增加规则 220413
 if [[ ${yaml_line} =~ 'ultra' ]];then

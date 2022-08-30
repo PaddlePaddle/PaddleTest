@@ -30,11 +30,9 @@ unset https_proxy
 
 python -m pip install --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
-# python -m pip install -U pyyaml \
-#     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
-python -m pip install -U paddleslim \
-    -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
+    -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 
 if [[ ${yaml_line} =~ "face" ]] && [[ ${yaml_line} =~ "metric_learning" ]];then
@@ -217,19 +215,32 @@ fi
 # export CUDA_VISIBLE_DEVICES=  #这一步让框架来集成
 if [[ ${cuda_type} =~ "SET_MULTI_CUDA" ]];then
     export card="2card"
-    export Global_epochs="1"
+    if [[ ${model_name} =~ "language_classification" ]];then
+        export Global_epochs="5"
+    else
+        export Global_epochs="2"
+    fi
     export multi_flag="-m paddle.distributed.launch"
     export set_cuda_device="gpu"
     export set_cuda_flag=True
 elif [[ ${cuda_type} =~ "CPU" ]];then
     export card="cpu"
+    if [[ ${model_name} =~ "language_classification" ]];then
+        export Global_epochs="5"
+    else
+        export Global_epochs="1"
+    fi
     export Global_epochs="1"
     export multi_flag=" "
     export set_cuda_device="cpu"
     export set_cuda_flag=Flase
 else
     export card="1card"
-    export Global_epochs="1"
+    if [[ ${model_name} =~ "language_classification" ]];then
+        export Global_epochs="5"
+    else
+        export Global_epochs="1"
+    fi
     export multi_flag=" "
     export set_cuda_device="gpu"
     export set_cuda_flag=True
@@ -294,6 +305,8 @@ else
         export image_root_name="Inshop"
         download_data
         export image_root_name="Aliproduct"
+        download_data
+        export image_root_name="iCartoonFace"
         download_data
     elif [[ ${yaml_line} =~ "strong_baseline" ]] && [[ ${yaml_line} =~ "reid" ]];then
         export image_root_name="market1501"

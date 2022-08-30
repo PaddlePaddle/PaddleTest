@@ -6,6 +6,7 @@
 test_Tensor_isclose
 """
 
+import os
 import sys
 from apibase import APIBase
 
@@ -15,7 +16,6 @@ import numpy as np
 
 sys.path.append("../..")
 from utils.interceptor import skip_branch_is_2_2
-import os
 
 
 class TestIsClose(APIBase):
@@ -31,6 +31,7 @@ class TestIsClose(APIBase):
         # self.debug = True
         # enable check grad
         self.enable_backward = False
+
 
 if os.getenv("AGILE_COMPILE_BRANCH") != "release/2.2":
     obj = TestIsClose(paddle.Tensor.isclose)
