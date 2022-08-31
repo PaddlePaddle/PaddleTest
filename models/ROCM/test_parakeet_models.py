@@ -55,6 +55,7 @@ def setup_function():
     clean_process()
 
 
+@pytest.mark.skip(reason="transformer_tts parakeet no sport")
 def test_transformer_tts():  # 切换为speech库，需要重新添加case，切换成v0.3版本就好了
     """
     transformer_tts test case
@@ -63,6 +64,7 @@ def test_transformer_tts():  # 切换为speech库，需要重新添加case，切
     model.test_parakeet_train()
 
 
+@pytest.mark.skip(reason="waveflow parakeet no sport")
 def test_waveflow():
     """
     waveflow test case
