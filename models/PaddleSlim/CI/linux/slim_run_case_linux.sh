@@ -894,12 +894,12 @@ demo_act_det_ppyoloe(){
 	sed -i 's/dataset\/coco\//coco\//g' ./configs/yolo_reader.yml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_ppyoloe_single_card 2>&1
+	python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./act_det_demo_ppyoloe_single_card' > ${log_path}/act_det_demo_ppyoloe_single_card 2>&1
 	print_info $? act_det_demo_ppyoloe_single_card
 
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=ppyoloe_log  run.py \
-	--config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_ppyoloe_multi_card 2>&1
+	--config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./act_det_demo_ppyoloe_multi_card' > ${log_path}/act_det_demo_ppyoloe_multi_card 2>&1
 	print_info $? act_det_demo_ppyoloe_multi_card
 }
 
@@ -915,12 +915,12 @@ demo_act_det_yolov5(){
 	sed -i 's/dataset\/coco\//coco\//g' ./configs/yolov5s_qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --save_dir='./save_quant_mobilev1/' --config_path='./configs/yolov5s_qat_dis.yaml' > ${log_path}/act_det_demo_yolov5s_single_card 2>&1
+	python run.py --save_dir='./act_det_demo_yolov5s_single_card' --config_path='./configs/yolov5s_qat_dis.yaml' > ${log_path}/act_det_demo_yolov5s_single_card 2>&1
 	print_info $? act_det_demo_yolov5s_single_card
 
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=yolov5s_log run.py \
-          --config_path=./configs/yolov5s_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_yolov5s_multi_card 2>&1
+          --config_path=./configs/yolov5s_qat_dis.yaml --save_dir='./act_det_demo_yolov5s_multi_card' > ${log_path}/act_det_demo_yolov5s_multi_card 2>&1
         print_info $? act_det_demo_yolov5s_multi_card
 }
 
@@ -937,11 +937,11 @@ demo_act_clas_MobileNetV1(){
 	mv ILSVRC2012_data_demo data
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --save_dir='./save_quant_mobilev1_single_card/' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_single_card 2>&1
+	python run.py --save_dir='./clas_demo_MobileNetV1_single_card' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_single_card 2>&1
 	print_info $? act_clas_demo_MobileNetV1_single_card
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=mobilev1_log  run.py \
-		--save_dir='./save_quant_mobilev1_multi_card/' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_multi_card 2>&1
+		--save_dir='./clas_demo_MobileNetV1_multi_card' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_multi_card 2>&1
 	print_info $? act_clas_demo_MobileNetV1_multi_card
 }
 
@@ -954,11 +954,11 @@ demo_act_clas_ResNet50_vd(){
 	sed -i 's/data_dir: .\/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/ResNet50_vd/qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --save_dir='./save_quant_ResNet50_vd_single_card/' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_single_card 2>&1
+	python run.py --save_dir='./clas_demo_ResNet50_vd_single_card' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_single_card 2>&1
 	print_info $? act_clas_demo_ResNet50_vd_single_card
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=mobilev1_log  run.py \
-		--save_dir='./save_quant_ResNet50_vd_multi_card/' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_multi_card 2>&1
+		--save_dir='./clas_demo_ResNet50_vd_multi_card' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_multi_card 2>&1
 	print_info $? act_clas_demo_ResNet50_vd_multi_card
 }
 
