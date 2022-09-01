@@ -332,7 +332,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       eval_exit_code:
         latest: True
-        kpi_base: 0.0
+        kpi_base: 0.93207
         threshold: 0.0
         actived: True
         evaluation: "="

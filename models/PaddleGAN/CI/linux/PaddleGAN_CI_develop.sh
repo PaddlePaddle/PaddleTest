@@ -159,9 +159,7 @@ python -m pip install --ignore-installed  --upgrade pip \
 echo "######  install ppgan "
 python -m pip install  ppgan \
     -i https://mirror.baidu.com/pypi/simple
-# python -m pip install  clip \
-#     -i https://mirror.baidu.com/pypi/simple
-# python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
 # python -m pip install --ignore-installed  dlib
 python -m pip install  dlib \
@@ -171,7 +169,6 @@ python -m pip install  dlib \
 python -c 'import dlib'
 python -m pip install -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple
-    
 
 echo "######  install done "
 
