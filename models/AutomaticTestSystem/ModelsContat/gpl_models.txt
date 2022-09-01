@@ -1,0 +1,22 @@
+python train.py --conf config/gcn.yaml  --dataset cora --epoch 2
+python train.py --conf config/gcn.yaml  --dataset pubmed --epoch 2
+python train.py --conf config/gcn.yaml  --dataset citeseer --epoch 2
+python train.py --conf config/gat.yaml --dataset cora --epoch 2
+python train.py --conf config/gat.yaml --dataset pubmed --epoch 2
+python train.py --conf config/gat.yaml --dataset citeseer --epoch 2
+python train.py --conf config/sgc.yaml --dataset cora --epoch 2
+python train.py --conf config/sgc.yaml --dataset pubmed --epoch 2
+python train.py --conf config/sgc.yaml --dataset citeseer --epoch 2
+python train.py --conf config/appnp.yaml --dataset cora --epoch 2
+python train.py --conf config/appnp.yaml --dataset pubmed --epoch 2
+python train.py --conf config/appnp.yaml --dataset citeseer --epoch 2
+python train.py --conf config/gcnii.yaml --dataset cora --epoch 2
+python train.py --conf config/gcnii.yaml --dataset pubmed --epoch 2
+python train.py --conf config/gcnii.yaml --dataset citeseer --epoch 2
+python train.py --conf config/transformer.yaml --dataset cora --epoch 2
+python train.py --conf config/transformer.yaml --dataset pubmed --epoch 2
+python train.py --conf config/transformer.yaml --dataset citeseer --epoch 2
+python train.py --conf config/ssgc.yaml --dataset cora --epoch 2
+python train.py --conf config/ssgc.yaml --dataset pubmed --epoch 2
+python train.py --conf config/ssgc.yaml --dataset citeseer --epoch 2
+

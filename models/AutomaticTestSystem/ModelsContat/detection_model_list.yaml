@@ -1,0 +1,9 @@
+configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.yml
+configs/mask_rcnn/mask_rcnn_r50_fpn_1x_coco.yml
+configs/cascade_rcnn/cascade_mask_rcnn_r50_fpn_1x_coco.yml
+configs/ssd/ssd_vgg16_300_240e_voc.yml
+configs/yolov3/yolov3_darknet53_270e_coco.yml
+configs/picodet/picodet_s_320_coco_lcnet.yml
+configs/ppyoloe/ppyoloe_crn_l_300e_coco.yml
+configs/keypoint/tiny_pose/tinypose_128x96.yml
+configs/mot/fairmot/fairmot_dla34_30e_1088x608.yml

@@ -1,0 +1,14 @@
+pytest
+pytest-assume
+pytest-html
+pytest-timeout
+pytest-repeat
+allure-pytest
+matplotlib
+chardet
+pyyaml
+paddleclas
+paddlenlp
+h5py
+attrdict
+pgl

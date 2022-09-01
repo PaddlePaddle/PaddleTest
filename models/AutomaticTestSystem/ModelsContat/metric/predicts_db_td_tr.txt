@@ -1,0 +1,1 @@
+./doc/imgs_en/img_10.jpg	[{"transcription": "", "points": [[43, 88], [202, 78], [203, 98], [44, 109]]}, {"transcription": "", "points": [[37, 58], [205, 54], [206, 77], [37, 81]]}, {"transcription": "", "points": [[23, 24], [251, 30], [250, 48], [22, 42]]}]

@@ -1,0 +1,8 @@
+configs/rec/rec_vitstr_none_ce.yml
+configs/rec/rec_r45_abinet.yml
+configs/det/det_r50_db++_icdar15.yml
+configs/det/det_r50_db++_td_tr.yml
+configs/table/table_master.yml
+configs/rec/rec_r45_visionlan.yml
+configs/sr/sr_tsrn_transformer_strock.yml
+configs/table/SLANet.yml

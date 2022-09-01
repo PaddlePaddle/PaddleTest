@@ -1,0 +1,4 @@
+configs/pix2pix_cityscapes.yaml 
+configs/cyclegan_horse2zebra.yaml 
+configs/edvr_m_wo_tsa.yaml 
+configs/stylegan_v2_256_ffhq.yaml 
