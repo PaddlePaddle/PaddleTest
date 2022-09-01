@@ -159,7 +159,9 @@ python -m pip install --ignore-installed  --upgrade pip \
 echo "######  install ppgan "
 python -m pip install  ppgan \
     -i https://mirror.baidu.com/pypi/simple
-python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
+# python -m pip install  clip \
+#     -i https://mirror.baidu.com/pypi/simple
+# python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
 # python -m pip install --ignore-installed  dlib
 python -m pip install  dlib \
@@ -169,6 +171,7 @@ python -m pip install  dlib \
 python -c 'import dlib'
 python -m pip install -r requirements.txt  \
     -i https://mirror.baidu.com/pypi/simple
+    
 
 echo "######  install done "
 
@@ -242,7 +245,7 @@ sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 sleep 3
 case ${model} in
 #只支持单卡
-lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal|prenet)
+lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal|prenet|firstorder_vox_mobile_256)
 python tools/main.py --config-file $line \
     -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
     > $log_path/train/${model}_1card.log 2>&1
