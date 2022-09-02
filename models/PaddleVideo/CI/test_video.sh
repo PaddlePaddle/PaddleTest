@@ -27,7 +27,7 @@ if [ -d "data/k400" ]; then rm -rf data/k400
 fi
 cd data
 wget https://paddle-qa.bj.bcebos.com/PaddleVideo/k400.zip
-unzip k400.zip 
+unzip k400.zip
 wget https://videotag.bj.bcebos.com/PaddleVideo/PretrainModel/ResNet50_pretrain.pdparams
 wget https://videotag.bj.bcebos.com/PaddleVideo/PretrainModel/ResNet50_vd_ssld_v2_pretrained.pdparams
 cd ..
