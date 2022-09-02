@@ -16,7 +16,7 @@ elif [[ $1 =~ '.whl' ]]; then
     python -m pip install $whl -i https://mirror.baidu.com/pypi/simple
     tar="publish"
 else
-    wget -q https://paddle-qa.bj.bcebos.com/rocm/release/paddlepaddle_rocm-0.0.0-cp37-cp37m-linux_x86_64.whl
+    wget -q https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-ROCM-LinuxCentos-Gcc73-Py37-Compile/latest/paddlepaddle_rocm-0.0.0-cp37-cp37m-linux_x86_64.whl
     whl=`ls |grep ".whl"`
     echo $whl
     python -m pip uninstall -y paddlepaddle-rocm
