@@ -345,6 +345,9 @@ else
 fi
     INFER
 fi
+if [[ -n `echo "${model_s2anet}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mask}" | grep -w "${model}"` ]];then
+    echo -e "skip model ${model} for export temporarily"
+else
 EXPORT
 if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "skip model ${model} for python_infer"
@@ -359,6 +362,7 @@ elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
     CPP_INFER_KEYPOINT
 else
     CPP_INFER
+fi
 fi
 done
 if [ "${err_sign}" = true ];then
