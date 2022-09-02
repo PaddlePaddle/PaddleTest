@@ -1,4 +1,0 @@
-[console_scripts]
-test_init = Test.command:init
-test_start = Test.command:start
-

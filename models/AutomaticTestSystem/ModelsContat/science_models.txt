@@ -1,9 +1,0 @@
-test_cylinder3d_steady.py
-test_cylinder3d_unsteady_optimize.py
-test_cylinder3d_unsteady.py
-test_darcy2d.py
-test_kovasznay.py
-test_laplace2d.py
-test_ldc2d_steady0.py
-test_ldc2d_steady1.py
-test_ldc2d_unsteady_t.py

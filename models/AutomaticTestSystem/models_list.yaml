@@ -1,7 +1,0 @@
-configs/rec/rec_r45_visionlan.yml
-configs/sr/sr_tsrn_transformer_strock.yml
-configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml
-configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh_udml.yml
-configs/table/SLANet.yml
-configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml
-configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml

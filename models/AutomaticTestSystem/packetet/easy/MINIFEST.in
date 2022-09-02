@@ -1,6 +1,0 @@
-global-include *
-global-exclude *.pyc
-global-exclude .git
-global-exclude .idea
-
-
