@@ -74,7 +74,7 @@ EXPORT(){
 INFER(){
     mode=infer
     python tools/predict.py \
-           --input_file data/k400/abseiling/_UtLXOVn5Jk_000083_000093.mp4 \
+           --input_file data/k400/videos/abseiling/_UtLXOVn5Jk_000083_000093.mp4 \
            --config ${config} \
            --model_file inference/${model}/${model}.pdmodel \
            --params_file inference/${model}/${model}.pdiparams \
@@ -85,7 +85,7 @@ INFER(){
 TRT(){
     mode=trt
     python tools/predict.py \
-           --input_file data/k400/abseiling/_UtLXOVn5Jk_000083_000093.mp4 \
+           --input_file data/k400/videos/abseiling/_UtLXOVn5Jk_000083_000093.mp4 \
            --config ${config} \
            --model_file inference/${model}/${model}.pdmodel \
            --params_file inference/${model}/${model}.pdiparams \
