@@ -5936,7 +5936,7 @@ logical_or_0:
   pytorch:
     api_name: "torch.logical_or"
     mapping:
-      ins: { x: input, y: other }
+      ins: { x: input, y: other}
 
 logical_or_1:
   desc: "逐元素的对 X 和 Y 进行逻辑或运算"
