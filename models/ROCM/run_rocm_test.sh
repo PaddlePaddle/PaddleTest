@@ -16,7 +16,7 @@ elif [[ $1 =~ '.whl' ]]; then
     python -m pip install $whl -i https://mirror.baidu.com/pypi/simple
     tar="publish"
 else
-    wget -q https://paddle-qa.bj.bcebos.com/rocm/release/paddlepaddle_rocm-0.0.0-cp37-cp37m-linux_x86_64.whl
+    wget -q https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-ROCM-LinuxCentos-Gcc73-Py37-Compile/latest/paddlepaddle_rocm-0.0.0-cp37-cp37m-linux_x86_64.whl
     whl=`ls |grep ".whl"`
     echo $whl
     python -m pip uninstall -y paddlepaddle-rocm
@@ -34,6 +34,9 @@ python -m pip install pytest-assume -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install pytest-html -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install pytest-timeout -i https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip install pytest-repeat -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip uninstall opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip install -U opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
+
 pytest -sv . --html=report_${tar}/rocm_${tar}.html --capture=tee-sys
 tar cf report_${tar}.tar report_${tar}
 

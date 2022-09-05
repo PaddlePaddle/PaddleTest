@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 # pylint: enable=wrong-import-position
 
@@ -30,7 +30,6 @@ def check_model_exist():
         tar = tarfile.open("pcpvt_base.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./pcpvt_base/inference", output_model_path="./pcpvt_base/inference")
 
 
 def test_config():
@@ -45,10 +44,10 @@ def test_config():
 
 @pytest.mark.win
 @pytest.mark.server
-@pytest.mark.onnxruntime
-def test_onnxruntime():
+@pytest.mark.mkldnn_int8
+def test_mkldnn_int8():
     """
-    compared onnxruntime pcpvt_base outputs with true val
+    compared mkldnn_int8 pcpvt_base outputs with true val
     """
     check_model_exist()
 
@@ -66,6 +65,6 @@ def test_onnxruntime():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
-    test_suite2.onnxruntime_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-2, precision="int8")
 
     del test_suite2  # destroy class to save memory

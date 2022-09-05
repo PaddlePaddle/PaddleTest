@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test pcpvt_base model
+test TNT_small model
 """
 
 import os
@@ -24,13 +24,13 @@ def check_model_exist():
     """
     check model exist
     """
-    pcpvt_base_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.1/class/pcpvt_base.tgz"
-    if not os.path.exists("./pcpvt_base/inference.pdiparams"):
-        wget.download(pcpvt_base_url, out="./")
-        tar = tarfile.open("pcpvt_base.tgz")
+    tnt_small_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2rc/class/TNT_small.tgz"
+    if not os.path.exists("./TNT_small/inference.pdiparams"):
+        wget.download(tnt_small_url, out="./")
+        tar = tarfile.open("TNT_small.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./pcpvt_base/inference", output_model_path="./pcpvt_base/inference")
+        clip_model_extra_op(path_prefix="./TNT_small/inference", output_model_path="./TNT_small/inference")
 
 
 def test_config():
@@ -39,24 +39,24 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
+    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
     test_suite.config_test()
 
 
 @pytest.mark.win
 @pytest.mark.server
-@pytest.mark.onnxruntime
-def test_onnxruntime():
+@pytest.mark.mkldnn
+def test_mkldnn_int8():
     """
-    compared onnxruntime pcpvt_base outputs with true val
+    compared mkldnn_int8 TNT_small outputs with true val
     """
     check_model_exist()
 
-    file_path = "./pcpvt_base"
+    file_path = "./TNT_small"
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
+    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"x": fake_input}
@@ -65,7 +65,7 @@ def test_onnxruntime():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
-    test_suite2.onnxruntime_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    test_suite2.mkldnn_test(input_data_dict, output_data_dict, precision="int8")
 
     del test_suite2  # destroy class to save memory

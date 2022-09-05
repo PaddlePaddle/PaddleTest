@@ -23,14 +23,12 @@ if [ -d "log_err" ];then rm -rf log_err
 fi
 mkdir log_err
 #prepare data
-if [ -d "data/ucf101" ]; then rm -rf data/ucf101
-fi
-ln -s ${file_path}/data/ucf101 data/ucf101
 if [ -d "data/k400" ]; then rm -rf data/k400
 fi
-ln -s ${file_path}/data/k400 data/k400
 cd data
-wget https://videotag.bj.bcebos.com/PaddleVideo-release2.1/TSM/TSM_k400.pdparams
+wget https://paddle-qa.bj.bcebos.com/PaddleVideo/k400.zip
+unzip k400.zip
+wget https://videotag.bj.bcebos.com/PaddleVideo/PretrainModel/ResNet50_pretrain.pdparams
 wget https://videotag.bj.bcebos.com/PaddleVideo/PretrainModel/ResNet50_vd_ssld_v2_pretrained.pdparams
 cd ..
 print_result(){
@@ -76,7 +74,7 @@ EXPORT(){
 INFER(){
     mode=infer
     python tools/predict.py \
-           --input_file data/ucf101/videos/PizzaTossing/v_PizzaTossing_g10_c02.avi \
+           --input_file data/k400/videos/abseiling/_UtLXOVn5Jk_000083_000093.mp4 \
            --config ${config} \
            --model_file inference/${model}/${model}.pdmodel \
            --params_file inference/${model}/${model}.pdiparams \
@@ -87,7 +85,7 @@ INFER(){
 TRT(){
     mode=trt
     python tools/predict.py \
-           --input_file data/ucf101/videos/PizzaTossing/v_PizzaTossing_g10_c02.avi \
+           --input_file data/k400/videos/abseiling/_UtLXOVn5Jk_000083_000093.mp4 \
            --config ${config} \
            --model_file inference/${model}/${model}.pdmodel \
            --params_file inference/${model}/${model}.pdiparams \

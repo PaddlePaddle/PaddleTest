@@ -32,7 +32,7 @@ if [ -d "output" ];then
     rm -rf output
 fi
 
-python distill.py --num_epochs 1 --save_inference True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
+python distill.py --num_epochs 1 --batch_size 64 --save_inference True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 print_info $? st_distill_ResNet50_vd_MobileNet
 }
 
@@ -102,7 +102,7 @@ if [ -d "output" ];then
 fi
 
 python train.py --model MobileNet --pretrained_model ../../pretrain/MobileNetV1_pretrained \
---checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 32 >${log_path}/st_quant_aware_v1 2>&1
+--checkpoint_dir ./output/mobilenetv1 --num_epochs 1 --batch_size 16 >${log_path}/st_quant_aware_v1 2>&1
 print_info $? st_quant_aware_v1
 }
 
@@ -224,9 +224,9 @@ python quant_post_hpo.py  \
 --max_model_quant_count=1 > ${log_path}/st_quant_post_hpo 2>&1
 print_info $? st_quant_post_hpo
 # 3. 量化后eval
-python ../quant_post/eval.py \
---model_path=./inference_model/MobileNetV1_quant/ > ${log_path}/st_quant_post_hpo_eval 2>&1
-print_info $? st_quant_post_hpo_eval
+# python ../quant_post/eval.py \
+# --model_path=./inference_model/MobileNetV1_quant/ > ${log_path}/st_quant_post_hpo_eval 2>&1
+# print_info $? st_quant_post_hpo_eval
 }
 
 demo_st_pact_quant_aware_v3(){
@@ -257,7 +257,7 @@ print_info $? st_pact_quant_aware_v3_load
 #cd demo/quant/quant_aware_with_infermodel/ 所需训练时间较长，UT中自定义model覆盖
 
 all_st_quant_CI(){
-    demo_st_quant_aware_v1
+    #demo_st_quant_aware_v1
     demo_st_quant_aware_ResNet34
     demo_st_quant_post_hist
     demo_st_pact_quant_aware_v3
@@ -660,7 +660,7 @@ all_dy_prune_CI(){
 all_dy_prune_CE(){
 	demo_dy_pruning_v1
 	demo_dy_pruning_v2
-        demo_dy_pruning_ResNet34_f42
+  demo_dy_pruning_ResNet34_f42
 }
 
 
@@ -823,7 +823,7 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch \
           --log_dir="dy_unstructured_prune_gmp_log" \
           train.py \
-          --batch_size 64 \
+          --batch_size 128 \
           --data imagenet \
           --pruning_mode ratio \
           --ratio 0.75 \
@@ -846,7 +846,7 @@ print_info $? dy_unstructured_prune_ratio_gmp
 
 all_dy_unstr_prune_CI(){
     demo_dy_unstructured_pruning_threshold
-    demo_dy_unstructured_pruning_ratio_gmp
+    #demo_dy_unstructured_pruning_ratio_gmp
 }
 
 all_dy_unstr_prune_CE(){
@@ -894,17 +894,17 @@ demo_act_det_ppyoloe(){
 	sed -i 's/dataset\/coco\//coco\//g' ./configs/yolo_reader.yml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_ppyoloe_single_card 2>&1
+	python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./act_det_demo_ppyoloe_single_card' > ${log_path}/act_det_demo_ppyoloe_single_card 2>&1
 	print_info $? act_det_demo_ppyoloe_single_card
 
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=ppyoloe_log  run.py \
-	--config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_ppyoloe_multi_card 2>&1
+	--config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./act_det_demo_ppyoloe_multi_card' > ${log_path}/act_det_demo_ppyoloe_multi_card 2>&1
 	print_info $? act_det_demo_ppyoloe_multi_card
 }
 
 demo_act_det_yolov5(){
-	cd ${slim_dir}/example/auto_compression/pytorch_yolov5
+	cd ${slim_dir}/example/auto_compression/pytorch_yolo_series
 	wget -q https://bj.bcebos.com/v1/paddle-slim-models/detection/yolov5s_infer.tar
 	tar -xf yolov5s_infer.tar
 	wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
@@ -912,15 +912,15 @@ demo_act_det_yolov5(){
 
 	sed -i 's/train_iter: 3000/train_iter: 30/' ./configs/yolov5s_qat_dis.yaml
 	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/yolov5s_qat_dis.yaml
-	sed -i 's/dataset\/coco\//coco\//g' ./configs/yolov5_reader.yml
+	sed -i 's/dataset\/coco\//coco\//g' ./configs/yolov5s_qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --save_dir='./save_quant_mobilev1/' --config_path='./configs/yolov5s_qat_dis.yaml' > ${log_path}/act_det_demo_yolov5s_single_card 2>&1
+	python run.py --save_dir='./act_det_demo_yolov5s_single_card' --config_path='./configs/yolov5s_qat_dis.yaml' > ${log_path}/act_det_demo_yolov5s_single_card 2>&1
 	print_info $? act_det_demo_yolov5s_single_card
 
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=yolov5s_log run.py \
-          --config_path=./configs/yolov5s_qat_dis.yaml --save_dir='./output/' > ${log_path}/act_det_demo_yolov5s_multi_card 2>&1
+          --config_path=./configs/yolov5s_qat_dis.yaml --save_dir='./act_det_demo_yolov5s_multi_card' > ${log_path}/act_det_demo_yolov5s_multi_card 2>&1
         print_info $? act_det_demo_yolov5s_multi_card
 }
 
@@ -937,11 +937,11 @@ demo_act_clas_MobileNetV1(){
 	mv ILSVRC2012_data_demo data
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --save_dir='./save_quant_mobilev1_single_card/' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_single_card 2>&1
+	python run.py --save_dir='./clas_demo_MobileNetV1_single_card' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_single_card 2>&1
 	print_info $? act_clas_demo_MobileNetV1_single_card
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=mobilev1_log  run.py \
-		--save_dir='./save_quant_mobilev1_multi_card/' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_multi_card 2>&1
+		--save_dir='./clas_demo_MobileNetV1_multi_card' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_multi_card 2>&1
 	print_info $? act_clas_demo_MobileNetV1_multi_card
 }
 
@@ -954,11 +954,11 @@ demo_act_clas_ResNet50_vd(){
 	sed -i 's/data_dir: .\/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/ResNet50_vd/qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --save_dir='./save_quant_ResNet50_vd_single_card/' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_single_card 2>&1
+	python run.py --save_dir='./clas_demo_ResNet50_vd_single_card' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_single_card 2>&1
 	print_info $? act_clas_demo_ResNet50_vd_single_card
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=mobilev1_log  run.py \
-		--save_dir='./save_quant_ResNet50_vd_multi_card/' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_multi_card 2>&1
+		--save_dir='./clas_demo_ResNet50_vd_multi_card' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_multi_card 2>&1
 	print_info $? act_clas_demo_ResNet50_vd_multi_card
 }
 
@@ -989,7 +989,7 @@ demo_act_nlp_ERNIE_3(){
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py --config_path='./configs/ernie3.0/afqmc.yaml' --save_dir='./save_afqmc_ERNIE_pruned' > ${log_path}/act_nlp_demo_ernie_3_single_card 2>&1
-	print_info act_nlp_demo_ernie_3_single_card
+	print_info $? act_nlp_demo_ernie_3_single_card
 	sed -i 's/.\/afqmc/.\/save_afqmc_ERNIE_pruned/' ./configs/pp-minilm/auto/afqmc.yaml
 	python run.py --config_path='./configs/ernie3.0/afqmc.yaml'  --eval True > ${log_path}/act_nlp_demo_ernie3_single_card_eval 2>&1
 	print_info $? act_nlp_demo_ernie3_single_card_eval
@@ -1098,12 +1098,15 @@ run_case_func(){
     echo --- start run case ---
     case_num=1
     for model in ${all_case_list[*]};do
+    	{
         echo ---$case_num/${#all_case_list[*]}: ${model}---
         ${model}
+	}
         let case_num++
     done
     echo --- end run case---
 }
+
 
 print_logs_func(){
     cd ${log_path}
@@ -1131,12 +1134,15 @@ if [ "$1" = "run_CI" ];then
     print_logs_func
 
 elif [ "$1" = "run_CE" ];then
-	# CE任务的case、
+	# CE任务的case
     export all_case_list=(all_act_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas )
     run_case_func
+     wait
     # print_logs_func
 elif [ "$1" = "run_ALL" ];then
-	# 全量case、暂时去掉all_auto_ALL
+	# 全量case
     export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas all_act_ALL)
     run_case_func
+    wait
+    run_case_without_multiprocess
 fi
