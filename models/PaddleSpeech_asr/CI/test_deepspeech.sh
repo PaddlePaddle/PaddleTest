@@ -24,7 +24,7 @@ python -m pip install pyparsing==2.4.7 --ignore-installed
 pip install -e .
 cd dataset
 rm -rf librispeech
-ln -s /ssd1/xiege/data/librispeech librispeech
+/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/deepspeech/librispeech librispeech
 cd ..
 cd examples/tiny/asr0
 source path.sh

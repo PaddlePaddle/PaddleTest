@@ -49,7 +49,13 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
                         continue
                     api = bt.get_torch_api()
                     jelly = Jelly_v2_torch(
-                        api=api, framework=framework, title=case_name, place=place, card=card, default_dtype="float32"
+                        api=api,
+                        framework=framework,
+                        title=case_name,
+                        place=place,
+                        card=card,
+                        default_dtype="float32",
+                        enable_backward=bt.enable_backward(),
                     )
                     jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
                     jelly.run_schedule()
@@ -60,7 +66,14 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
         bt = BenchTrans(case_info)
         if framework == "torch":
             api = bt.get_torch_api()
-            jelly = Jelly_v2_torch(api=api, framework=framework, title=case_name, place=place, card=card)
+            jelly = Jelly_v2_torch(
+                api=api,
+                framework=framework,
+                title=case_name,
+                place=place,
+                card=card,
+                enable_backward=bt.enable_backward(),
+            )
             jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
             jelly.run_schedule()
 
@@ -75,7 +88,9 @@ def testing(yaml_path, case_name, framework, place=None, card=None):
     bt = BenchTrans(case_info)
     if framework == "torch":
         api = bt.get_torch_api()
-        jelly = Jelly_v2_torch(api=api, framework=framework, title=case_name, place=place, card=card)
+        jelly = Jelly_v2_torch(
+            api=api, framework=framework, title=case_name, place=place, card=card, enable_backward=bt.enable_backward()
+        )
         jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
         jelly.run()
 
@@ -96,6 +111,7 @@ if __name__ == "__main__":
     parser.add_argument("--cuda", type=str, default=None, help="cuda version like v10.2 | v11.2 etc.")
     parser.add_argument("--cudnn", type=str, default=None, help="cudnn version like v7.6.5 etc.")
     parser.add_argument("--card", type=str, default=None, help="card number , default is 0")
+    parser.add_argument("--comment", type=str, default=None, help="your comment")
     args = parser.parse_args()
 
     # 验证参数组合正确性
@@ -114,6 +130,7 @@ if __name__ == "__main__":
                 cuda=args.cuda,
                 cudnn=args.cudnn,
                 card=args.card,
+                comment=args.comment,
             )
             schedule(yaml_path=args.yaml, framework=args.framework, place=args.place, card=args.card)
             db.save()
