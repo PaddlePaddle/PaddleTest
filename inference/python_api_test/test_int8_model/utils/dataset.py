@@ -1,3 +1,4 @@
+"""
 # Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,14 +12,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 
-import cv2
 import os
+import cv2
 import numpy as np
 import paddle
 
 
 class COCOValDataset(paddle.io.Dataset):
+    """
+    COCO val dataset class
+    """
+
     def __init__(
         self, dataset_dir=None, image_dir=None, anno_path=None, img_size=[640, 640], input_name="x2paddle_images"
     ):
@@ -92,6 +98,9 @@ class COCOValDataset(paddle.io.Dataset):
         return im_scale_y, im_scale_x
 
     def image_preprocess(self, img, target_shape):
+        """
+        image_preprocess func
+        """
         # Resize image
         im_scale_y, im_scale_x = self._generate_scale(img, target_shape)
         img = cv2.resize(img, None, None, fx=im_scale_x, fy=im_scale_y, interpolation=cv2.INTER_LINEAR)
@@ -109,6 +118,10 @@ class COCOValDataset(paddle.io.Dataset):
 
 
 class COCOTrainDataset(COCOValDataset):
+    """
+    COCO train dataset class
+    """
+
     def __getitem__(self, idx):
         img_id = self.ids[idx]
         img = self._get_img_data_from_img_id(img_id)
@@ -131,6 +144,9 @@ def _generate_scale(im, target_shape):
 
 
 def yolo_image_preprocess(img, target_shape=[640, 640]):
+    """
+    YOLO series image preprocess func
+    """
     # Resize image
     im_scale_y, im_scale_x = _generate_scale(img, target_shape)
     img = cv2.resize(img, None, None, fx=im_scale_x, fy=im_scale_y, interpolation=cv2.INTER_LINEAR)

@@ -1,3 +1,4 @@
+"""
 # Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,11 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 
-import numpy as np
-import cv2
 import json
 import sys
+import numpy as np
+import cv2
 
 
 def box_area(boxes):
@@ -164,6 +166,9 @@ class YOLOPostProcess(object):
 
 
 def coco_metric(anno_file, bboxes_list, bbox_nums_list, image_id_list):
+    """
+    COCO metric func
+    """
     try:
         from pycocotools.coco import COCO
         from pycocotools.cocoeval import COCOeval
@@ -193,7 +198,7 @@ def coco_metric(anno_file, bboxes_list, bbox_nums_list, image_id_list):
 def _get_det_res(bboxes, bbox_nums, image_id, label_to_cat_id_map):
     det_res = []
     k = 0
-    for i in range(len(bbox_nums)):
+    for i, _ in enumerate(bbox_nums):
         cur_image_id = int(image_id[i][0])
         det_nums = bbox_nums[i]
         for j in range(det_nums):

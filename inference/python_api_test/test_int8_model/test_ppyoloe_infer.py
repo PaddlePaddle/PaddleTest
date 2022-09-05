@@ -1,3 +1,4 @@
+"""
 # Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,12 +12,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 
 import os
-import cv2
-import numpy as np
 import argparse
 import time
+import cv2
+import numpy as np
 
 import paddle
 from paddle.inference import Config
@@ -26,6 +28,9 @@ from ppdet.metrics import COCOMetric
 
 
 def argsparser():
+    """
+    argsparser func
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_path", type=str, help="inference model filepath")
     parser.add_argument(
@@ -163,6 +168,9 @@ def generate_scale(im, target_shape, keep_ratio=True):
 
 
 def image_preprocess(img_path, target_shape):
+    """
+    image_preprocess func
+    """
     img = cv2.imread(img_path)
     im_scale_y, im_scale_x = generate_scale(img, target_shape, keep_ratio=False)
     img = cv2.resize(img, (target_shape[0], target_shape[0]), interpolation=cv2.INTER_LANCZOS4)
@@ -178,6 +186,9 @@ def image_preprocess(img_path, target_shape):
 
 
 def get_color_map_list(num_classes):
+    """
+    get_color_map_list func
+    """
     color_map = num_classes * [0, 0, 0]
     for i in range(0, num_classes):
         j = 0
@@ -193,6 +204,9 @@ def get_color_map_list(num_classes):
 
 
 def draw_box(image_file, results, class_label, threshold=0.5):
+    """
+    draw_box func
+    """
     srcimg = cv2.imread(image_file, 1)
     for i in range(len(results)):
         color_list = get_color_map_list(len(class_label))
@@ -298,8 +312,6 @@ def load_predictor(
 
     # enable shared memory
     config.enable_memory_optim()
-    # disable feed, fetch OP, needed by zero_copy_run
-    config.switch_use_feed_fetch_ops(False)
     predictor = create_predictor(config)
     return predictor, rerun_flag
 
@@ -309,24 +321,6 @@ def get_current_memory_mb():
     It is used to Obtain the memory usage of the CPU and GPU during the running of the program.
     And this function Current program is time-consuming.
     """
-    try:
-        pkg.require("pynvml")
-    except:
-        from pip._internal import main
-
-        main(["install", "pynvml"])
-    try:
-        pkg.require("psutil")
-    except:
-        from pip._internal import main
-
-        main(["install", "psutil"])
-    try:
-        pkg.require("GPUtil")
-    except:
-        from pip._internal import main
-
-        main(["install", "GPUtil"])
     import pynvml
     import psutil
     import GPUtil
@@ -350,12 +344,15 @@ def get_current_memory_mb():
 
 
 def predict_image(predictor, image_file, image_shape=[640, 640], warmup=1, repeats=1, threshold=0.5):
+    """
+    predict image main func
+    """
     img, scale_factor = image_preprocess(image_file, image_shape)
     inputs = {}
     inputs["image"] = img
     inputs["scale_factor"] = scale_factor
     input_names = predictor.get_input_names()
-    for i in range(len(input_names)):
+    for i, _ in enumerate(input_names):
         input_tensor = predictor.get_input_handle(input_names[i])
         input_tensor.copy_from_cpu(inputs[input_names[i]])
 
@@ -397,6 +394,9 @@ def predict_image(predictor, image_file, image_shape=[640, 640], warmup=1, repea
 
 
 def eval(predictor, val_loader, metric, rerun_flag=False):
+    """
+    eval main func
+    """
     cpu_mems, gpu_mems = 0, 0
     predict_time = 0.0
     time_min = float("inf")
@@ -405,7 +405,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
         input_names = predictor.get_input_names()
-        for i in range(len(input_names)):
+        for i, _ in enumerate(input_names):
             input_tensor = predictor.get_input_handle(input_names[i])
             input_tensor.copy_from_cpu(data_all[input_names[i]])
         start_time = time.time()
@@ -440,6 +440,9 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
 
 
 def main():
+    """
+    main func
+    """
     predictor, rerun_flag = load_predictor(
         FLAGS.model_path,
         run_mode=FLAGS.run_mode,

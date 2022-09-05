@@ -1,3 +1,4 @@
+"""
 # Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,14 +12,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 
+import time
 import os
+import argparse
 import cv2
 import numpy as np
-import argparse
 from tqdm import tqdm
 import pkg_resources as pkg
-import time
 
 import paddle
 from paddle.inference import Config
@@ -28,6 +30,9 @@ from utils.post_process import YOLOPostProcess, coco_metric
 
 
 def argsparser():
+    """
+    argsparser func
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model_path", type=str, help="inference model filepath")
     parser.add_argument(
@@ -142,6 +147,9 @@ CLASS_LABEL = [
 
 
 def preprocess(image, input_size, mean=None, std=None, swap=(2, 0, 1)):
+    """
+    image preprocess func
+    """
     if len(image.shape) == 3:
         padded_img = np.ones((input_size[0], input_size[1], 3)) * 114.0
     else:
@@ -167,6 +175,9 @@ def preprocess(image, input_size, mean=None, std=None, swap=(2, 0, 1)):
 
 
 def get_color_map_list(num_classes):
+    """
+    get_color_map_list func
+    """
     color_map = num_classes * [0, 0, 0]
     for i in range(0, num_classes):
         j = 0
@@ -182,8 +193,11 @@ def get_color_map_list(num_classes):
 
 
 def draw_box(img, boxes, scores, cls_ids, conf=0.5, class_names=None):
+    """
+    draw_box func
+    """
     color_list = get_color_map_list(len(class_names))
-    for i in range(len(boxes)):
+    for i, _ in enumerate(boxes):
         box = boxes[i]
         cls_id = int(cls_ids[i])
         color = tuple(color_list[cls_id])
@@ -211,24 +225,6 @@ def get_current_memory_mb():
     It is used to Obtain the memory usage of the CPU and GPU during the running of the program.
     And this function Current program is time-consuming.
     """
-    try:
-        pkg.require("pynvml")
-    except:
-        from pip._internal import main
-
-        main(["install", "pynvml"])
-    try:
-        pkg.require("psutil")
-    except:
-        from pip._internal import main
-
-        main(["install", "psutil"])
-    try:
-        pkg.require("GPUtil")
-    except:
-        from pip._internal import main
-
-        main(["install", "GPUtil"])
     import pynvml
     import psutil
     import GPUtil
@@ -329,13 +325,14 @@ def load_predictor(
 
     # enable shared memory
     config.enable_memory_optim()
-    # disable feed, fetch OP, needed by zero_copy_run
-    config.switch_use_feed_fetch_ops(False)
     predictor = create_predictor(config)
     return predictor, rerun_flag
 
 
 def eval(predictor, val_loader, anno_file, rerun_flag=False):
+    """
+    eval main func
+    """
     bboxes_list, bbox_nums_list, image_id_list = [], [], []
     cpu_mems, gpu_mems = 0, 0
     sample_nums = len(val_loader)
@@ -350,7 +347,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
         else:
             inputs["x2paddle_images"] = data_all["image"]
         input_names = predictor.get_input_names()
-        for i in range(len(input_names)):
+        for i, _ in enumerate(input_names):
             input_tensor = predictor.get_input_handle(input_names[i])
             input_tensor.copy_from_cpu(inputs[input_names[i]])
         start_time = time.time()
@@ -387,6 +384,9 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
 
 
 def infer(predictor):
+    """
+    infer image main func
+    """
     warmup, repeats = 1, 1
     if FLAGS.benchmark:
         warmup, repeats = 50, 100
@@ -400,7 +400,7 @@ def infer(predictor):
     else:
         inputs["x2paddle_images"] = input_image
     input_names = predictor.get_input_names()
-    for i in range(len(input_names)):
+    for i, _ in enumerate(input_names):
         input_tensor = predictor.get_input_handle(input_names[i])
         input_tensor.copy_from_cpu(inputs[input_names[i]])
 
@@ -446,6 +446,9 @@ def infer(predictor):
 
 
 def main():
+    """
+    main func
+    """
     predictor, rerun_flag = load_predictor(
         FLAGS.model_path,
         run_mode=FLAGS.run_mode,
