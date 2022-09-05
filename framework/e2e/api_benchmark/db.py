@@ -103,7 +103,7 @@ class DB(object):
                 print(e)
                 continue
 
-    def init_mission(self, framework, mode, place, cuda, cudnn, card=None):
+    def init_mission(self, framework, mode, place, cuda, cudnn, card=None, comment=None):
         """init mission"""
         if framework == "paddle":
             version = paddle.__version__
@@ -112,12 +112,13 @@ class DB(object):
                 "card": card,
                 "cuda": paddle.version.cuda(),
                 "cudnn": paddle.version.cudnn(),
+                "comment": comment,
             }
         elif framework == "torch":
             import torch
 
             version = torch.__version__
-            snapshot = {"os": platform.platform(), "card": card}
+            snapshot = {"os": platform.platform(), "card": card, "cuda": cuda, "cudnn": cudnn, "comment": comment}
 
         sql = (
             "insert into `job` (`framework`, `status`, `mode`, `commit`, `version`, "
