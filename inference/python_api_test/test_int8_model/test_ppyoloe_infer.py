@@ -304,6 +304,51 @@ def load_predictor(
     return predictor, rerun_flag
 
 
+def get_current_memory_mb():
+    """
+    It is used to Obtain the memory usage of the CPU and GPU during the running of the program.
+    And this function Current program is time-consuming.
+    """
+    try:
+        pkg.require("pynvml")
+    except:
+        from pip._internal import main
+
+        main(["install", "pynvml"])
+    try:
+        pkg.require("psutil")
+    except:
+        from pip._internal import main
+
+        main(["install", "psutil"])
+    try:
+        pkg.require("GPUtil")
+    except:
+        from pip._internal import main
+
+        main(["install", "GPUtil"])
+    import pynvml
+    import psutil
+    import GPUtil
+
+    gpu_id = int(os.environ.get("CUDA_VISIBLE_DEVICES", 0))
+
+    pid = os.getpid()
+    p = psutil.Process(pid)
+    info = p.memory_full_info()
+    cpu_mem = info.uss / 1024.0 / 1024.0
+    gpu_mem = 0
+    gpu_percent = 0
+    gpus = GPUtil.getGPUs()
+    if gpu_id is not None and len(gpus) > 0:
+        gpu_percent = gpus[gpu_id].load
+        pynvml.nvmlInit()
+        handle = pynvml.nvmlDeviceGetHandleByIndex(0)
+        meminfo = pynvml.nvmlDeviceGetMemoryInfo(handle)
+        gpu_mem = meminfo.used / 1024.0 / 1024.0
+    return round(cpu_mem, 4), round(gpu_mem, 4)
+
+
 def predict_image(predictor, image_file, image_shape=[640, 640], warmup=1, repeats=1, threshold=0.5):
     img, scale_factor = image_preprocess(image_file, image_shape)
     inputs = {}
@@ -318,6 +363,7 @@ def predict_image(predictor, image_file, image_shape=[640, 640], warmup=1, repea
         predictor.run()
 
     np_boxes, np_boxes_num = None, None
+    cpu_mems, gpu_mems = 0, 0
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
@@ -334,10 +380,14 @@ def predict_image(predictor, image_file, image_shape=[640, 640], warmup=1, repea
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
+        cpu_mem, gpu_mem = get_current_memory_mb()
+        cpu_mems += cpu_mem
+        gpu_mems += gpu_mem
 
     time_avg = predict_time / repeats
+    print("[Benchmark]Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / repeats, gpu_mems / repeats))
     print(
-        "Inference time(ms): min={}, max={}, avg={}".format(
+        "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
             round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
         )
     )
@@ -347,9 +397,11 @@ def predict_image(predictor, image_file, image_shape=[640, 640], warmup=1, repea
 
 
 def eval(predictor, val_loader, metric, rerun_flag=False):
+    cpu_mems, gpu_mems = 0, 0
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
+    sample_nums = len(val_loader)
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
         input_names = predictor.get_input_names()
@@ -368,6 +420,9 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
+        cpu_mem, gpu_mem = get_current_memory_mb()
+        cpu_mems += cpu_mem
+        gpu_mems += gpu_mem
         res = {"bbox": np_boxes, "bbox_num": np_boxes_num}
         metric.update(data_all, res)
         if batch_id % 100 == 0:
@@ -375,9 +430,10 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     metric.accumulate()
     metric.log()
     metric.reset()
-    time_avg = predict_time / len(val_loader)
+    time_avg = predict_time / sample_nums
+    print("[Benchmark]Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / sample_nums, gpu_mems / sample_nums))
     print(
-        "Inference time(ms): min={}, max={}, avg={}".format(
+        "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
             round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
         )
     )

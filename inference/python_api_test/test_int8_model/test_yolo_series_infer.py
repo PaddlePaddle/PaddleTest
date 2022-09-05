@@ -339,34 +339,49 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     bboxes_list, bbox_nums_list, image_id_list = [], [], []
     cpu_mems, gpu_mems = 0, 0
     sample_nums = len(val_loader)
-    with tqdm(total=sample_nums, bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80) as t:
-        for data in val_loader:
-            data_all = {k: np.array(v) for k, v in data.items()}
-            inputs = {}
-            if FLAGS.arch == "YOLOv6":
-                inputs["x2paddle_image_arrays"] = data_all["image"]
-            else:
-                inputs["x2paddle_images"] = data_all["image"]
-            input_names = predictor.get_input_names()
-            for i in range(len(input_names)):
-                input_tensor = predictor.get_input_handle(input_names[i])
-                input_tensor.copy_from_cpu(inputs[input_names[i]])
-            predictor.run()
-            output_names = predictor.get_output_names()
-            boxes_tensor = predictor.get_output_handle(output_names[0])
-            outs = boxes_tensor.copy_to_cpu()
-            if rerun_flag:
-                return
-            postprocess = YOLOPostProcess(score_threshold=0.001, nms_threshold=0.65, multi_label=True)
-            res = postprocess(np.array(outs), data_all["scale_factor"])
-            bboxes_list.append(res["bbox"])
-            bbox_nums_list.append(res["bbox_num"])
-            image_id_list.append(np.array(data_all["im_id"]))
-            cpu_mem, gpu_mem = get_current_memory_mb()
-            cpu_mems += cpu_mem
-            gpu_mems += gpu_mem
-            t.update()
-    print("Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / sample_nums, gpu_mems / sample_nums))
+    predict_time = 0.0
+    time_min = float("inf")
+    time_max = float("-inf")
+    for batch_id, data in enumerate(val_loader):
+        data_all = {k: np.array(v) for k, v in data.items()}
+        inputs = {}
+        if FLAGS.arch == "YOLOv6":
+            inputs["x2paddle_image_arrays"] = data_all["image"]
+        else:
+            inputs["x2paddle_images"] = data_all["image"]
+        input_names = predictor.get_input_names()
+        for i in range(len(input_names)):
+            input_tensor = predictor.get_input_handle(input_names[i])
+            input_tensor.copy_from_cpu(inputs[input_names[i]])
+        start_time = time.time()
+        predictor.run()
+        output_names = predictor.get_output_names()
+        boxes_tensor = predictor.get_output_handle(output_names[0])
+        outs = boxes_tensor.copy_to_cpu()
+        end_time = time.time()
+        timed = end_time - start_time
+        time_min = min(time_min, timed)
+        time_max = max(time_max, timed)
+        predict_time += timed
+        if rerun_flag:
+            return
+        postprocess = YOLOPostProcess(score_threshold=0.001, nms_threshold=0.65, multi_label=True)
+        res = postprocess(np.array(outs), data_all["scale_factor"])
+        bboxes_list.append(res["bbox"])
+        bbox_nums_list.append(res["bbox_num"])
+        image_id_list.append(np.array(data_all["im_id"]))
+        cpu_mem, gpu_mem = get_current_memory_mb()
+        cpu_mems += cpu_mem
+        gpu_mems += gpu_mem
+        if batch_id % 100 == 0:
+            print("Eval iter:", batch_id)
+    print("[Benchmark]Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / sample_nums, gpu_mems / sample_nums))
+    time_avg = predict_time / sample_nums
+    print(
+        "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
+            round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
+        )
+    )
 
     coco_metric(anno_file, bboxes_list, bbox_nums_list, image_id_list)
 
