@@ -1,0 +1,2 @@
+tqdm
+paddledet>=2.4.0
