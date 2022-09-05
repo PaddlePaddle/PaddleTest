@@ -1521,7 +1521,11 @@ mm_0:
         dtype: "float32"
         shape: [1, 1, 1, 1]
         range: [ -1, 1]
-
+  pytorch:
+    api_name: "torch.mm"
+    mapping:
+      ins: { input: input, mat2: mat2 }
+      
 mm_1:
   desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
   paddle:
@@ -1539,7 +1543,11 @@ mm_1:
         dtype: "float32"
         shape: [10, 10, 10, 10]
         range: [ -1, 1]
-
+  pytorch:
+    api_name: "torch.mm"
+    mapping:
+      ins: { input: input, mat2: mat2 }
+      
 mm_2:
   desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
   paddle:
@@ -1557,7 +1565,11 @@ mm_2:
         dtype: "float32"
         shape: [10, 10, 100, 100]
         range: [ -1, 1]
-
+  pytorch:
+    api_name: "torch.mm"
+    mapping:
+      ins: { input: input, mat2: mat2 }
+      
 logical_or_0:
   desc: "逐元素的对 X 和 Y 进行逻辑或运算"
   paddle:
