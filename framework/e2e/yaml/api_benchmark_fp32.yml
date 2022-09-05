@@ -5881,7 +5881,7 @@ mm_0:
         range: [ -1, 1]
 
 mm_1:
-  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
+  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度, 但当任一输入维度大于3时, 两个输入的维度必须相等"
   paddle:
     api_name: "paddle.mm"
     inputs:
@@ -5899,7 +5899,7 @@ mm_1:
         range: [ -1, 1]
 
 mm_2:
-  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度，但当任一输入维度大于3时，两个输入的维度必须相等"
+  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度, 但当任一输入维度大于3时, 两个输入的维度必须相等"
   paddle:
     api_name: "paddle.mm"
     inputs:
@@ -5917,7 +5917,7 @@ mm_2:
         range: [ -1, 1]
 
 logical_or_0:
-  desc: "逐元素的对 X 和 Y 进行逻辑或运算"
+  desc: "逐元素的对X和Y进行逻辑或运算"
   paddle:
     api_name: "paddle.logical_or"
     inputs:
@@ -5948,7 +5948,6 @@ logical_or_1:
         type: "Tensor"
         dtype: "int32"
         shape: [10, 10, 10, 10]
-
         range: [ -1, 1]
       y:
         random: true
