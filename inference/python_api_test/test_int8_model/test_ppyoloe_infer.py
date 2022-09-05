@@ -40,9 +40,8 @@ def argsparser():
         "--reader_config", type=str, default=None, help="path of datset and reader config.", required=True
     )
     parser.add_argument("--benchmark", type=bool, default=False, help="Whether run benchmark or not.")
-    parser.add_argument(
-        "--run_mode", type=str, default="paddle", help="mode of running(paddle/trt_fp32/trt_fp16/trt_int8)"
-    )
+    parser.add_argument("--use_trt", type=bool, default=False, help="Whether use TensorRT or not.")
+    parser.add_argument("--precision", type=str, default="paddle", help="mode of running(fp32/fp16/int8)")
     parser.add_argument(
         "--device",
         type=str,
@@ -50,7 +49,7 @@ def argsparser():
         help="Choose the device you want to run, it can be: CPU/GPU/XPU, default is GPU",
     )
     parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
-    parser.add_argument("--enable_mkldnn", type=bool, default=False, help="Whether enable mkldnn or not.")
+    parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--img_shape", type=int, default=640, help="input_size")
 
@@ -236,7 +235,9 @@ def draw_box(image_file, results, class_label, threshold=0.5):
 
 def load_predictor(
     model_dir,
-    run_mode="paddle",
+    precision="fp32",
+    use_trt=False,
+    use_mkldnn=False,
     batch_size=1,
     device="CPU",
     min_subgraph_size=3,
@@ -244,32 +245,34 @@ def load_predictor(
     trt_min_shape=1,
     trt_max_shape=1280,
     trt_opt_shape=640,
-    trt_calib_mode=False,
     cpu_threads=1,
-    enable_mkldnn=False,
 ):
     """set AnalysisConfig, generate AnalysisPredictor
     Args:
         model_dir (str): root path of __model__ and __params__
-        device (str): Choose the device you want to run, it can be: CPU/GPU/XPU, default is CPU
-        run_mode (str): mode of running(paddle/trt_fp32/trt_fp16/trt_int8)
+        precision (str): mode of running(fp32/fp16/int8)
+        use_trt (bool): whether use TensorRT or not.
+        use_mkldnn (bool): whether use MKLDNN or not in CPU.
+        device (str): Choose the device you want to run, it can be: CPU/GPU, default is CPU
         use_dynamic_shape (bool): use dynamic shape or not
         trt_min_shape (int): min shape for dynamic shape in trt
         trt_max_shape (int): max shape for dynamic shape in trt
         trt_opt_shape (int): opt shape for dynamic shape in trt
-        trt_calib_mode (bool): If the model is produced by TRT offline quantitative
-            calibration, trt_calib_mode need to set True
     Returns:
         predictor (PaddlePredictor): AnalysisPredictor
     Raises:
         ValueError: predict by TensorRT need device == 'GPU'.
     """
     rerun_flag = False
-    if device != "GPU" and run_mode != "paddle":
+    if device != "GPU" and use_trt:
         raise ValueError(
-            "Predict by TensorRT mode: {}, expect device=='GPU', but device == {}".format(run_mode, device)
+            "Predict by TensorRT mode: {}, expect device=='GPU', but device == {}".format(precision, device)
         )
     config = Config(os.path.join(model_dir, "model.pdmodel"), os.path.join(model_dir, "model.pdiparams"))
+    if precision == "int8":
+        scale_file_path = os.path.join(model_dir, "calibration_table.txt")
+        assert os.path.exists(scale_file_path)
+        config.set_calibration_file_path(scale_file_path)
     if device == "GPU":
         # initial GPU memory(M), device ID
         config.enable_use_gpu(200, 0)
@@ -279,25 +282,24 @@ def load_predictor(
         config.disable_gpu()
         config.set_cpu_math_library_num_threads(cpu_threads)
         config.switch_ir_optim()
-        if enable_mkldnn:
-            scale_file_path = os.path.join(model_dir, "calibration_table.txt")
-            config.set_calibration_file_path(scale_file_path)
-            config.enable_mkldnn_int8()
+        if use_mkldnn:
             config.enable_mkldnn()
+            if precision == "int8":
+                config.enable_mkldnn_int8()
 
     precision_map = {
-        "trt_int8": Config.Precision.Int8,
-        "trt_fp32": Config.Precision.Float32,
-        "trt_fp16": Config.Precision.Half,
+        "int8": Config.Precision.Int8,
+        "fp32": Config.Precision.Float32,
+        "fp16": Config.Precision.Half,
     }
-    if run_mode in precision_map.keys():
+    if precision in precision_map.keys() and use_trt:
         config.enable_tensorrt_engine(
             workspace_size=(1 << 25) * batch_size,
             max_batch_size=batch_size,
             min_subgraph_size=min_subgraph_size,
-            precision_mode=precision_map[run_mode],
-            use_static=False,
-            use_calib_mode=trt_calib_mode,
+            precision_mode=precision_map[precision],
+            use_static=True,
+            use_calib_mode=False,
         )
 
         if use_dynamic_shape:
@@ -445,11 +447,12 @@ def main():
     """
     predictor, rerun_flag = load_predictor(
         FLAGS.model_path,
-        run_mode=FLAGS.run_mode,
         device=FLAGS.device,
+        use_trt=FLAGS.use_trt,
+        use_mkldnn=FLAGS.use_mkldnn,
+        precision=FLAGS.precision,
         use_dynamic_shape=FLAGS.use_dynamic_shape,
         cpu_threads=FLAGS.cpu_threads,
-        enable_mkldnn=FLAGS.enable_mkldnn,
     )
 
     if FLAGS.image_file:
