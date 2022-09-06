@@ -267,7 +267,7 @@ case $1 in
     print_logs
     ;;
 *)
-    echo "$1 models is running"
+    echo " $1 models is running"
     $1
     ;;
 esac
