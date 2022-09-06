@@ -20,7 +20,7 @@ python -m pip install ${paddle_whl} --no-cache-dir
 pip install -e .
 cd dataset
 rm -rf librispeech
-/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/deepspeech/librispeech librispeech
+ln -s /ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/deepspeech/librispeech librispeech
 cd ..
 cd examples/tiny/asr0
 source path.sh
