@@ -46,7 +46,7 @@ def argsparser():
         default="GPU",
         help="Choose the device you want to run, it can be: CPU/GPU/XPU, default is GPU",
     )
-    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
+    parser.add_argument("--use_dynamic_shape", type=bool, default=False, help="Whether use dynamic shape or not.")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--img_shape", type=int, default=640, help="input_size")
