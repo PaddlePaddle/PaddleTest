@@ -1145,4 +1145,7 @@ elif [ "$1" = "run_ALL" ];then
     run_case_func
     wait
     run_case_without_multiprocess
+else
+    echo "slim's $1 case is running"
+    $1
 fi
