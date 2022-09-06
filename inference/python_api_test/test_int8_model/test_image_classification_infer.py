@@ -33,7 +33,7 @@ def argsparser():
     argsparser func
     """
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model_dir", type=str, default="./MobileNetV1_infer", help="model directory")
+    parser.add_argument("--model_path", type=str, default="./MobileNetV1_infer", help="model directory")
     parser.add_argument("--model_filename", type=str, default="inference.pdmodel", help="model file name")
     parser.add_argument("--params_filename", type=str, default="inference.pdiparams", help="params file name")
     parser.add_argument("--batch_size", type=int, default=1)
@@ -79,7 +79,7 @@ class Predictor(object):
         self.output_tensor = self.paddle_predictor.get_output_handle(output_names[0])
 
     def _create_paddle_predictor(self):
-        inference_model_dir = args.model_dir
+        inference_model_dir = args.model_path
         model_file = os.path.join(inference_model_dir, args.model_filename)
         params_file = os.path.join(inference_model_dir, args.params_filename)
         config = paddle.inference.Config(model_file, params_file)
@@ -137,10 +137,14 @@ class Predictor(object):
 
         fp_message = "FP16" if args.use_fp16 else "FP32"
         fp_message = "INT8" if args.use_int8 else fp_message
-        trt_msg = "using tensorrt" if args.use_trt else "not using tensorrt"
+        print_msg = "Paddle"
+        if args.use_trt:
+            print_msg = "using TensorRT"
+        elif args.use_mkldnn:
+            print_msg = "using MKLDNN"
         print(
-            "{0}\t{1}\tbatch size: {2}\ttime(ms): {3}".format(
-                trt_msg, fp_message, args.batch_size, 1000 * test_time / test_num
+            "[Benchmark]{0}\t{1}\tbatch size: {2}\ttime(ms): {3}".format(
+                print_msg, fp_message, args.batch_size, 1000 * test_time / test_num
             )
         )
 
@@ -186,7 +190,7 @@ class Predictor(object):
                 print("Eval iter:", batch_id)
 
         result = np.mean(np.array(results), axis=0)
-        print("[Benchmark]Evaluation result: {}".format(result[0]))
+        print("[Benchmark] Evaluation result: {}".format(result[0]))
 
 
 if __name__ == "__main__":

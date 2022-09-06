@@ -382,7 +382,8 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
         )
     )
 
-    coco_metric(anno_file, bboxes_list, bbox_nums_list, image_id_list)
+    map_res = coco_metric(anno_file, bboxes_list, bbox_nums_list, image_id_list)
+    print("[Benchmark] COCO mAP: {}".format(map_res[0]))
 
 
 def infer(predictor):
@@ -428,11 +429,11 @@ def infer(predictor):
         cpu_mem, gpu_mem = get_current_memory_mb()
         cpu_mems += cpu_mem
         gpu_mems += gpu_mem
-    print("Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / repeats, gpu_mems / repeats))
+    print("[Benchmark]Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / repeats, gpu_mems / repeats))
 
     time_avg = predict_time / repeats
     print(
-        "Inference time(ms): min={}, max={}, avg={}".format(
+        "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
             round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
         )
     )

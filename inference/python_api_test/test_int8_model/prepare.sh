@@ -1,5 +1,6 @@
 pip install -r requirements.txt
 
+# ======== download Val Dataset
 mkdir dataset
 # download coco val dataset
 wget https://bj.bcebos.com/v1/paddle-slim-models/data/coco_val2017.tar
@@ -9,6 +10,14 @@ rm -rf coco_val2017.tar
 wget https://bj.bcebos.com/v1/paddle-slim-models/data/ILSVRC2012_val.tar
 tar -xf ILSVRC2012_val.tar -C ./dataset
 rm -rf ILSVRC2012_val.tar
+# download cityscapes val dataset
+wget https://bj.bcebos.com/v1/paddle-slim-models/data/cityscapes_val.tar
+tar -xf cityscapes_val.tar -C ./dataset
+rm -rf cityscapes_val.tar
+# download portrait14k val dataset
+wget https://bj.bcebos.com/v1/paddle-slim-models/data/portrait14k_val.tar
+tar -xf portrait14k_val.tar -C ./dataset
+rm -rf portrait14k_val.tar
 
 mkdir models
 
@@ -53,6 +62,25 @@ rm -rf PPHGNet_tiny_QAT.tar
 wget https://paddle-slim-models.bj.bcebos.com/act/EfficientNetB0_QAT.tar
 tar -xf EfficientNetB0_QAT.tar -C ./models
 rm -rf EfficientNetB0_QAT.tar
+# PP-HumanSeg-Lite
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/pp_humanseg_qat.zip
+unzip -q pp_humanseg_qat.zip -d ./models
+rm -rf pp_humanseg_qat.zip
+# PP-Liteseg
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/pp-liteseg.zip
+unzip -q pp-liteseg.zip -d ./models
+rm -rf pp-liteseg.zip
+# HRNet
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/hrnet.zip
+unzip -q hrnet.zip -d ./models
+rm -rf hrnet.zip
+# UNet
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/unet.zip
+unzip -q unet.zip -d ./models
+rm -rf unet.zip
+# Deeplabv3-ResNet50
+# TODO
+
 
 
 # ====== download FP32 inference model ======
@@ -96,3 +124,23 @@ rm -rf PPHGNet_tiny_infer.tar
 wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/EfficientNetB0_infer.tar
 tar -xf EfficientNetB0_infer.tar -C ./models
 rm -rf EfficientNetB0_infer.tar
+# PP-HumanSeg-Lite
+wget https://paddleseg.bj.bcebos.com/dygraph/ppseg/ppseg_lite_portrait_398x224_with_softmax.tar.gz
+tar -xf ppseg_lite_portrait_398x224_with_softmax.tar.gz -C ./models
+rm -rf ppseg_lite_portrait_398x224_with_softmax.tar.gz
+# PP-Liteseg
+wget https://paddleseg.bj.bcebos.com/tipc/easyedge/RES-paddle2-PPLIteSegSTDC1.zip
+unzip -q RES-paddle2-PPLIteSegSTDC1.zip -d ./models
+rm -rf RES-paddle2-PPLIteSegSTDC1.zip
+# HRNet
+wget https://paddleseg.bj.bcebos.com/tipc/easyedge/RES-paddle2-HRNetW18-Seg.zip
+unzip -q RES-paddle2-HRNetW18-Seg.zip -d ./models
+rm -rf RES-paddle2-HRNetW18-Seg.zip
+# UNet
+wget https://paddleseg.bj.bcebos.com/tipc/easyedge/RES-paddle2-UNet.zip
+unzip -q RES-paddle2-UNet.zip -d ./models
+rm -rf RES-paddle2-UNet.zip
+# Deeplabv3-ResNet50
+wget https://paddleseg.bj.bcebos.com/tipc/easyedge/RES-paddle2-Deeplabv3-ResNet50.zip
+unzip -q RES-paddle2-Deeplabv3-ResNet50.zip -d ./models
+rm -rf RES-paddle2-Deeplabv3-ResNet50.zip

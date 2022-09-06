@@ -36,9 +36,7 @@ def argsparser():
     parser.add_argument(
         "--image_file", type=str, default=None, help="image path, if set image_file, it will not eval coco."
     )
-    parser.add_argument(
-        "--reader_config", type=str, default=None, help="path of datset and reader config.", required=True
-    )
+    parser.add_argument("--reader_config", type=str, default=None, help="path of datset and reader config.")
     parser.add_argument("--benchmark", type=bool, default=False, help="Whether run benchmark or not.")
     parser.add_argument("--use_trt", type=bool, default=False, help="Whether use TensorRT or not.")
     parser.add_argument("--precision", type=str, default="paddle", help="mode of running(fp32/fp16/int8)")
@@ -431,6 +429,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
             print("Eval iter:", batch_id)
     metric.accumulate()
     metric.log()
+    map_res = metric.get_results()
     metric.reset()
     time_avg = predict_time / sample_nums
     print("[Benchmark]Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / sample_nums, gpu_mems / sample_nums))
@@ -439,6 +438,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
             round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
         )
     )
+    print("[Benchmark] COCO mAP: {}".format(map_res["bbox"][0]))
 
 
 def main():
