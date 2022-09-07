@@ -17,6 +17,7 @@
 import argparse
 import time
 import os
+import sys
 import cv2
 import numpy as np
 import paddle
@@ -40,29 +41,11 @@ def _transforms(dataset):
     return transforms
 
 
-def auto_tune_trt(args, data):
-    """
-    auto_tune_trt func
-    """
-    auto_tuned_shape_file = "./auto_tuning_shape"
-    model_file = os.path.join(args.model_path, args.model_filename)
-    params_file = os.path.join(args.model_path, args.params_filename)
-    pred_cfg = PredictConfig(model_file, params_file)
-    pred_cfg.enable_use_gpu(100, 0)
-    pred_cfg.collect_shape_range_info("./auto_tuning_shape")
-    predictor = create_predictor(pred_cfg)
-    input_names = predictor.get_input_names()
-    input_handle = predictor.get_input_handle(input_names[0])
-    input_handle.reshape(data.shape)
-    input_handle.copy_from_cpu(data)
-    predictor.run()
-    return auto_tuned_shape_file
-
-
-def load_predictor(args, data):
+def load_predictor(args):
     """
     load predictor func
     """
+    rerun_flag = False
     model_file = os.path.join(args.model_path, args.model_filename)
     params_file = os.path.join(args.model_path, args.params_filename)
     pred_cfg = PredictConfig(model_file, params_file)
@@ -83,21 +66,26 @@ def load_predictor(args, data):
                 pred_cfg.enable_mkldnn_int8()
 
     if args.use_trt:
-        # To collect the dynamic shapes of inputs for TensorRT engine
-        auto_tuned_shape_file = auto_tune_trt(args, data)
         precision_map = {"fp16": PrecisionType.Half, "fp32": PrecisionType.Float32, "int8": PrecisionType.Int8}
         pred_cfg.enable_tensorrt_engine(
             workspace_size=1 << 30,
             max_batch_size=1,
             min_subgraph_size=4,
             precision_mode=precision_map[args.precision],
-            use_static=False,
+            use_static=True,
             use_calib_mode=False,
         )
-        allow_build_at_runtime = True
-        pred_cfg.enable_tuned_tensorrt_dynamic_shape(auto_tuned_shape_file, allow_build_at_runtime)
+        dynamic_shape_file = os.path.join(args.model_path, "dynamic_shape.txt")
+        if os.path.exists(dynamic_shape_file):
+            pred_cfg.enable_tuned_tensorrt_dynamic_shape(dynamic_shape_file, True)
+            print("trt set dynamic shape done!")
+        else:
+            pred_cfg.collect_shape_range_info(dynamic_shape_file)
+            print("Start collect dynamic shape...")
+            rerun_flag = True
+
     predictor = create_predictor(pred_cfg)
-    return predictor
+    return predictor, rerun_flag
 
 
 def predict_image(args):
@@ -113,7 +101,7 @@ def predict_image(args):
     data = np.array(data)[np.newaxis, :]
 
     # Step2: Prepare prdictor
-    predictor = load_predictor(args, data)
+    predictor, rerun_flag = load_predictor(args)
 
     # Step3: Inference
     input_names = predictor.get_input_names()
@@ -134,9 +122,12 @@ def predict_image(args):
     for i in range(repeats):
         predictor.run()
         results = output_handle.copy_to_cpu()
+        if rerun_flag:
+            print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
+            return
     total_time = time.time() - start_time
     avg_time = float(total_time) / repeats
-    print(f"Average inference time: \033[91m{round(avg_time*1000, 2)}ms\033[0m")
+    print(f"[Benchmark]Average inference time: \033[91m{round(avg_time*1000, 2)}ms\033[0m")
 
     # Step4: Post process
     if args.dataset == "human":
@@ -168,17 +159,11 @@ def eval(args):
     label_area_all = 0
 
     print("Start evaluating (total_samples: {}, total_iters: {})...".format(len(eval_dataset), total_iters))
-
-    init_predictor = False
+    predictor = load_predictor(args)
     for batch_id, (image, label) in enumerate(loader):
         label = np.array(label).astype("int64")
         ori_shape = np.array(label).shape[-2:]
         data = np.array(image)
-
-        if not init_predictor:
-            predictor = load_predictor(args, data)
-            init_predictor = True
-
         input_names = predictor.get_input_names()
         input_handle = predictor.get_input_handle(input_names[0])
         input_handle.reshape(data.shape)
@@ -189,6 +174,9 @@ def eval(args):
         output_names = predictor.get_output_names()
         output_handle = predictor.get_output_handle(output_names[0])
         results = output_handle.copy_to_cpu()
+        if rerun_flag:
+            print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
+            return
 
         logit = reverse_transform(
             paddle.to_tensor(results), ori_shape, eval_dataset.transforms.transforms, mode="bilinear"
@@ -205,6 +193,7 @@ def eval(args):
         label_area_all = label_area_all + label_area
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
+            sys.stdout.flush()
 
     _, miou = metrics.mean_iou(intersect_area_all, pred_area_all, label_area_all)
     _, acc = metrics.accuracy(intersect_area_all, pred_area_all)
@@ -215,6 +204,7 @@ def eval(args):
         len(eval_dataset), miou, acc, kappa, mdice
     )
     print(infor)
+    sys.stdout.flush()
 
 
 if __name__ == "__main__":

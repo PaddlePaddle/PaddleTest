@@ -35,15 +35,16 @@ $PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_QA
 
 # PP-HumanSeg-Lite MKLDNN int8
 echo "[Benchmark] Run PP-HumanSeg-Lite MKLDNN int8"
-$PYTHON test_segmentation_infer.py --model_path=models/pp_humanseg_qat --dataset='human' --dataset_config=configs/humanseg_dataset.yaml --device=CPU --use_mkldnn=True --precision=int8 --cpu_num_threads=10
+$PYTHON test_segmentation_infer.py --model_path=models/pp_humanseg_qat --dataset='human' --dataset_config=configs/humanseg_dataset.yaml --device=CPU --use_mkldnn=True --precision=int8 --cpu_threads=10
 # PP-Liteseg MKLDNN int8
 echo "[Benchmark] Run PP-Liteseg MKLDNN int8"
-$PYTHON test_segmentation_infer.py --model_path=models/pp-liteseg --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --precision=int8 --cpu_num_threads=10
+$PYTHON test_segmentation_infer.py --model_path=models/pp_liteseg_qat --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --precision=int8 --cpu_threads=10
 # HRNet MKLDNN int8
 echo "[Benchmark] Run HRNet MKLDNN int8"
-$PYTHON test_segmentation_infer.py --model_path=models/hrnet --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --precision=int8 --cpu_num_threads=10
+$PYTHON test_segmentation_infer.py --model_path=models/hrnet_qat --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --precision=int8 --cpu_threads=10
 # UNet MKLDNN int8
 echo "[Benchmark] Run UNet MKLDNN int8"
-$PYTHON test_segmentation_infer.py --model_path=models/unet --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --precision=int8 --cpu_num_threads=10
+$PYTHON test_segmentation_infer.py --model_path=models/unet_qat --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --precision=int8 --cpu_threads=10
 # Deeplabv3-ResNet50 MKLDNN int8
 echo "[Benchmark] Run Deeplabv3-ResNet50 MKLDNN int8"
+$PYTHON test_segmentation_infer.py --model_path=models/deeplabv3_qat --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --precision=int8 --cpu_threads=10
