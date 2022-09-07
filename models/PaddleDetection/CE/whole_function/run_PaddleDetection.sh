@@ -406,13 +406,13 @@ if [ "$2" ];then
     $2
 else
 if [[ -n `echo "${model}" | grep "pedestrian_yolov3_darknet"` ]];then
-    image=configs/pedestrian/demo/001.png
+    image=configs/pphuman/pedestrian_yolov3/demo/001.png
     INFER
     EXPORT
     PYTHON_INFER
     CPP_INFER
 elif [[ -n `echo "${model}" | grep "vehicle_yolov3_darknet"` ]];then
-    image=configs/vehicle/demo/003.png
+    image=configs/ppvehicle/vehicle_yolov3/demo/003.png
     INFER
     EXPORT
     PYTHON_INFER
