@@ -15,16 +15,16 @@ obj = TestUpsample(paddle.nn.Upsample)
 @pytest.mark.api_nn_Upsample_vartype
 def test_upsample_linear_base():
     """
-     mode = 'linear'
+    mode = 'linear'
 
-     test all data types in self.types = [np.float32, np.float64]
-     which is defined in TestUpsample.hook().
+    test all data types in self.types = [np.float32, np.float64]
+    which is defined in TestUpsample.hook().
 
-     data_format = 'NCW',
-     when size is None and scale_factor is not None,
-     test all combinations of align_corners and align_mode;
-     when size is not None and scale_factor is None,
-     test all combinations of align_corners and align_mode;
+    data_format = 'NCW',
+    when size is None and scale_factor is not None,
+    test all combinations of align_corners and align_mode;
+    when size is not None and scale_factor is None,
+    test all combinations of align_corners and align_mode;
     """
     x = randtool("float", -10, 10, [2, 4, 10]).transpose((0, 2, 1))
     mode = "linear"
@@ -80,12 +80,12 @@ def test_upsample_linear_base():
 @pytest.mark.api_nn_Upsample_parameters
 def test_upsample_linear():
     """
-     mode = 'linear'
-     data_format = 'NWC',
-     when size is None and scale_factor is not None,
-     test all combinations of align_corners and align_mode;
-     when size is not None and scale_factor is None,
-     test all combinations of align_corners and align_mode;
+    mode = 'linear'
+    data_format = 'NWC',
+    when size is None and scale_factor is not None,
+    test all combinations of align_corners and align_mode;
+    when size is not None and scale_factor is None,
+    test all combinations of align_corners and align_mode;
     """
     x = randtool("float", -10, 10, [2, 4, 10]).transpose((0, 2, 1))
     mode = "linear"
@@ -278,14 +278,14 @@ def test_upsample_linear6():
 @pytest.mark.api_nn_Upsample_vartype
 def test_upsample_bilinear_base():
     """
-     mode = 'bilinear'
-     test all data types in self.types = [np.float32, np.float64]
-     which is defined in TestUpsample.hook().
-     data_format = 'NCHW',
-     when size is None and scale_factor is not None,
-     test all combinations of align_corners and align_mode;
-     when size is not None and scale_factor is None,
-     test all combinations of align_corners and align_mode;
+    mode = 'bilinear'
+    test all data types in self.types = [np.float32, np.float64]
+    which is defined in TestUpsample.hook().
+    data_format = 'NCHW',
+    when size is None and scale_factor is not None,
+    test all combinations of align_corners and align_mode;
+    when size is not None and scale_factor is None,
+    test all combinations of align_corners and align_mode;
     """
     x = randtool("float", -10, 10, [2, 2, 10, 10])
     mode = "bilinear"
@@ -344,12 +344,12 @@ def test_upsample_bilinear_base():
 @pytest.mark.api_nn_Upsample_parameters
 def test_upsample_bilinear():
     """
-     mode = 'bilinear'
-     data_format = 'NHWC',
-     when size is None and scale_factor is not None,
-     test all combinations of align_corners and align_mode;
-     when size is not None and scale_factor is None,
-     test all combinations of align_corners and align_mode;
+    mode = 'bilinear'
+    data_format = 'NHWC',
+    when size is None and scale_factor is not None,
+    test all combinations of align_corners and align_mode;
+    when size is not None and scale_factor is None,
+    test all combinations of align_corners and align_mode;
     """
     x = randtool("float", -10, 10, [2, 2, 10, 10]).transpose((0, 2, 3, 1))
     mode = "bilinear"
@@ -440,14 +440,14 @@ def test_upsample_bilinear2():
 @pytest.mark.api_nn_Upsample_vartype
 def test_upsample_trilinear_base():
     """
-     mode = 'trilinear'
-     test all data types in self.types = [np.float32, np.float64]
-     which is defined in TestUpsample.hook().
-     data_format = 'NCDHW',
-     when size is None and scale_factor is not None,
-     test all combinations of align_corners and align_mode;
-     when size is not None and scale_factor is None,
-     test all combinations of align_corners and align_mode;
+    mode = 'trilinear'
+    test all data types in self.types = [np.float32, np.float64]
+    which is defined in TestUpsample.hook().
+    data_format = 'NCDHW',
+    when size is None and scale_factor is not None,
+    test all combinations of align_corners and align_mode;
+    when size is not None and scale_factor is None,
+    test all combinations of align_corners and align_mode;
     """
     x = randtool("float", -10, 10, [2, 4, 10, 10, 10])
     mode = "trilinear"
@@ -509,12 +509,12 @@ def test_upsample_trilinear_base():
 @pytest.mark.api_nn_Upsample_parameters
 def test_upsample_trilinear():
     """
-     mode = 'trilinear'
-     data_format = 'NDHWC',
-     when size is None and scale_factor is not None,
-     test all combinations of align_corners and align_mode;
-     when size is not None and scale_factor is None,
-     test all combinations of align_corners and align_mode;
+    mode = 'trilinear'
+    data_format = 'NDHWC',
+    when size is None and scale_factor is not None,
+    test all combinations of align_corners and align_mode;
+    when size is not None and scale_factor is None,
+    test all combinations of align_corners and align_mode;
     """
     x = randtool("float", -10, 10, [2, 4, 10, 10, 10]).transpose((0, 2, 3, 4, 1))
     mode = "trilinear"
@@ -609,17 +609,17 @@ def test_upsample_trilinear2():
 @pytest.mark.api_nn_Upsample_vartype
 def test_upsample_nearest_base():
     """
-     mode = 'nearest'
-     test all data types in self.types = [np.float32, np.float64]
-     which is defined in TestUpsample.hook().
-     data_format = 'NCHW',
-     when size is None and scale_factor is not None,
-     test all combinations of align_corners and align_mode;
-     when size is not None and scale_factor is None,
-     test all combinations of align_corners and align_mode;
-     note:
-     when using mode = 'nearest', align_corners must be set False;
-     when using mode = 'nearest', align_mode has no effect
+    mode = 'nearest'
+    test all data types in self.types = [np.float32, np.float64]
+    which is defined in TestUpsample.hook().
+    data_format = 'NCHW',
+    when size is None and scale_factor is not None,
+    test all combinations of align_corners and align_mode;
+    when size is not None and scale_factor is None,
+    test all combinations of align_corners and align_mode;
+    note:
+    when using mode = 'nearest', align_corners must be set False;
+    when using mode = 'nearest', align_mode has no effect
     """
     x = randtool("float", -10, 10, [2, 2, 10, 10])
     mode = "nearest"
@@ -668,15 +668,15 @@ def test_upsample_nearest_base():
 @pytest.mark.api_nn_Upsample_parameters
 def test_upsample_nearest():
     """
-     mode = 'nearest'
-     data_format = 'NHWC',
-     when size is None and scale_factor is not None,
-     test all combinations of align_corners and align_mode;
-     when size is not None and scale_factor is None,
-     test all combinations of align_corners and align_mode;
-     note:
-     when using mode = 'nearest', align_corners must be set False;
-     when using mode = 'nearest', align_mode has no effect
+    mode = 'nearest'
+    data_format = 'NHWC',
+    when size is None and scale_factor is not None,
+    test all combinations of align_corners and align_mode;
+    when size is not None and scale_factor is None,
+    test all combinations of align_corners and align_mode;
+    note:
+    when using mode = 'nearest', align_corners must be set False;
+    when using mode = 'nearest', align_mode has no effect
     """
     x = randtool("float", -10, 10, [2, 2, 10, 10]).transpose((0, 2, 3, 1))
     mode = "NeAReSt"

@@ -82,7 +82,10 @@ rm -rf unet_qat.tar
 wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/deeplabv3_qat.tar
 tar -xf deeplabv3_qat.tar -C ./models
 rm -rf deeplabv3_qat.tar
-
+# ERNIE 3.0-Medium
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/save_ernie3_afqmc_new_cablib.tar
+tar -xf save_ernie3_afqmc_new_cablib.tar -C ./models
+rm -rf save_ernie3_afqmc_new_cablib.tar
 
 
 # ====== download FP32 inference model ======
@@ -146,3 +149,15 @@ rm -rf RES-paddle2-UNet.zip
 wget https://paddleseg.bj.bcebos.com/tipc/easyedge/RES-paddle2-Deeplabv3-ResNet50.zip
 unzip -q RES-paddle2-Deeplabv3-ResNet50.zip -d ./models
 rm -rf RES-paddle2-Deeplabv3-ResNet50.zip
+# ERNIE 3.0-Medium
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/NLP/ernie3.0-medium/fp32_models/AFQMC.tar
+tar -xf AFQMC.tar -C ./models
+rm -rf AFQMC.tar
+# PP-MiniLM
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/afqmc.tar
+tar -xf afqmc.tar -C ./models
+rm -rf afqmc.tar
+# BERT Base
+wget https://paddle-slim-models.bj.bcebos.com/act/x2paddle_cola.tar
+tar xf x2paddle_cola.tar -C ./models
+rm -rf x2paddle_cola.tar

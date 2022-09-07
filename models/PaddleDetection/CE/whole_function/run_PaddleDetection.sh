@@ -85,9 +85,6 @@ ln -s ${data_path}/data/aic_coco_train_cocoformat.json dataset/aic_coco_train_co
 if [ -d "dataset/AIchallenge" ];then rm -rf dataset/AIchallenge
 fi
 ln -s ${data_path}/data/AIchallenge dataset/AIchallenge
-if [ -d "dataset/spine_coco" ];then rm -rf dataset/spine_coco
-fi
-ln -s ${data_path}/data/spine_coco dataset/spine_coco
 if [ -d "/root/.cache/paddle/weights" ];then rm -rf /root/.cache/paddle/weights
 fi
 ln -s ${data_path}/data/ppdet_pretrained /root/.cache/paddle/weights
@@ -409,13 +406,13 @@ if [ "$2" ];then
     $2
 else
 if [[ -n `echo "${model}" | grep "pedestrian_yolov3_darknet"` ]];then
-    image=configs/pedestrian/demo/001.png
+    image=configs/pphuman/pedestrian_yolov3/demo/001.png
     INFER
     EXPORT
     PYTHON_INFER
     CPP_INFER
 elif [[ -n `echo "${model}" | grep "vehicle_yolov3_darknet"` ]];then
-    image=configs/vehicle/demo/003.png
+    image=configs/ppvehicle/vehicle_yolov3/demo/003.png
     INFER
     EXPORT
     PYTHON_INFER
