@@ -32,6 +32,7 @@ mkdir log
 if [ -d "log_err" ];then rm -rf log_err
 fi
 mkdir log_err
+sed -i 's/CUDA_VISIBLE_DEVICES=${gpus}//g' run.sh
 bash run.sh >log/run.log 2>&1
 if [ $? -ne 0 ];then
     echo -e "tiny/s0, FAIL"
