@@ -186,3 +186,15 @@ def test_argmin12():
     x = randtool("int", -100, 10, [3, 3])
     dtype = None
     obj.exception(mode="python", etype=ValueError, x=x, dtype=dtype)
+
+
+@pytest.mark.api_base_argmax_parameters
+def test_argmax13():
+    """
+    axis = Tensor(-R)
+    """
+    x = randtool("int", -100, 10, [3, 3])
+    axis = -2
+    res = np.argmax(a=x, axis=axis)
+    exp = paddle.argmax(paddle.to_tensor(x), axis=paddle.to_tensor(axis))
+    assert np.allclose(exp.numpy(), res)

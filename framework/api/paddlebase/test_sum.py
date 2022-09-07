@@ -160,3 +160,16 @@ def test_sum10():
     x = np.array([[3, 5], [6, 2]])
     res = [np.sum(x)]
     obj1.run(res=res, x=x)
+
+
+@pytest.mark.api_base_sum_parameters
+def test_sum11():
+    """
+    axis=Tensor
+    """
+    paddle.disable_static()
+    x = np.array([[0.8, 0.4], [0.7, 0.9]])
+    axis = np.array([0, 1])
+    res = np.array([2.8])
+    exp = paddle.sum(paddle.to_tensor(x), axis=paddle.to_tensor(axis))
+    assert np.allclose(exp.numpy(), res)
