@@ -160,3 +160,16 @@ def test_mean11():
     x = np.array([[[2.0, 3.0, 4.0]], [[4.0, 3.0, 4.0]]]).astype("float32")
     res = np.mean(x, axis=(-3, 1, 2), keepdims=False)
     obj.run(res=[res], x=x, axis=(0, 1, 2), keepdim=False)
+
+
+@pytest.mark.api_base_mean_parameters
+def test_mean12():
+    """
+    run axis is int and axis is Tensor, axis<0
+    :return:
+    """
+    paddle.disable_static()
+    x = np.array([[1, 2, 5, 4]]).astype("float32")
+    res = np.mean(x, axis=-2)
+    exp = paddle.mean(paddle.to_tensor(x), axis=paddle.to_tensor(-2))
+    assert np.allclose(exp.numpy(), res)

@@ -20,7 +20,7 @@ def test_clone0():
     x = paddle.to_tensor(xp)
     x.stop_gradient = False
     clone_x = paddle.clone(x)
-    y = clone_x ** 3
+    y = clone_x**3
     y.backward()
     assert np.allclose(x.numpy(), clone_x.numpy())
     assert np.allclose(x.grad.numpy(), clone_x.grad.numpy())
@@ -37,7 +37,7 @@ def test_clone1():
     x = paddle.to_tensor(xp)
     x.stop_gradient = False
     clone_x = paddle.clone(x)
-    y = clone_x ** 3
+    y = clone_x**3
     y.backward()
     assert np.allclose(x.numpy(), clone_x.numpy())
     assert np.allclose(x.grad.numpy(), clone_x.grad.numpy())
@@ -54,7 +54,7 @@ def test_clone2():
     x = paddle.to_tensor(xp)
     x.stop_gradient = False
     clone_x = paddle.clone(x)
-    y = clone_x ** 3
+    y = clone_x**3
     y.backward()
     assert np.allclose(x.numpy(), clone_x.numpy())
     assert np.allclose(x.grad.numpy(), clone_x.grad.numpy())
@@ -71,7 +71,7 @@ def test_clone3():
     x = paddle.to_tensor(xp)
     x.stop_gradient = False
     clone_x = paddle.clone(x)
-    y = clone_x ** 3
+    y = clone_x**3
     y.backward()
     assert np.allclose(x.numpy(), clone_x.numpy())
     assert np.allclose(x.grad.numpy(), clone_x.grad.numpy())
