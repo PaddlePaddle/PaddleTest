@@ -16,6 +16,7 @@
 
 import time
 import os
+import sys
 import argparse
 import cv2
 import numpy as np
@@ -277,9 +278,9 @@ def load_predictor(
         ValueError: predict by TensorRT need device == 'GPU'.
     """
     rerun_flag = False
-    if device != "GPU" and run_mode != "paddle":
+    if device != "GPU" and use_trt:
         raise ValueError(
-            "Predict by TensorRT mode: {}, expect device=='GPU', but device == {}".format(run_mode, device)
+            "Predict by TensorRT mode: {}, expect device=='GPU', but device == {}".format(precision, device)
         )
     config = Config(os.path.join(model_dir, "model.pdmodel"), os.path.join(model_dir, "model.pdiparams"))
     if precision == "int8":
@@ -374,6 +375,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
         gpu_mems += gpu_mem
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
+            sys.stdout.flush()
     print("[Benchmark]Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / sample_nums, gpu_mems / sample_nums))
     time_avg = predict_time / sample_nums
     print(
@@ -384,6 +386,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
 
     map_res = coco_metric(anno_file, bboxes_list, bbox_nums_list, image_id_list)
     print("[Benchmark] COCO mAP: {}".format(map_res[0]))
+    sys.stdout.flush()
 
 
 def infer(predictor):

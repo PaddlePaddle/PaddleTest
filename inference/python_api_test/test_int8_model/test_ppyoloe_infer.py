@@ -17,6 +17,7 @@
 import os
 import argparse
 import time
+import sys
 import cv2
 import numpy as np
 
@@ -46,7 +47,7 @@ def argsparser():
         default="GPU",
         help="Choose the device you want to run, it can be: CPU/GPU/XPU, default is GPU",
     )
-    parser.add_argument("--use_dynamic_shape", type=bool, default=False, help="Whether use dynamic shape or not.")
+    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--img_shape", type=int, default=640, help="input_size")
@@ -415,6 +416,8 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         np_boxes = boxes_tensor.copy_to_cpu()
         boxes_num = predictor.get_output_handle(output_names[1])
         np_boxes_num = boxes_num.copy_to_cpu()
+        if rerun_flag:
+            return
         end_time = time.time()
         timed = end_time - start_time
         time_min = min(time_min, timed)
@@ -427,6 +430,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         metric.update(data_all, res)
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
+            sys.stdout.flush()
     metric.accumulate()
     metric.log()
     map_res = metric.get_results()
@@ -439,6 +443,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         )
     )
     print("[Benchmark] COCO mAP: {}".format(map_res["bbox"][0]))
+    sys.stdout.flush()
 
 
 def main():
