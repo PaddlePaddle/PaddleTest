@@ -1,0 +1,202 @@
+case:
+  linux: 
+    base: ./base/reid_base.yaml
+    train:
+      -
+        name: multi
+        cmd : -m paddle.distributed.launch tools/train.py
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
+          - -o Global.seed=1234
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single
+        cmd : tools/train.py
+        params:
+          - -o Global.epochs=2
+          - -o Global.save_interval=2
+          - -o Global.eval_interval=2
+          - -o Global.seed=1234
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: multi_static
+        cmd : -m paddle.distributed.launch ppcls/static/train.py
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
+          - -o Global.seed=1234
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single_static
+        cmd : ppcls/static/train.py
+        params:
+          - -o Global.epochs=2
+          - -o Global.save_interval=2
+          - -o Global.eval_interval=2
+          - -o Global.seed=1234
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: multi_convergence
+        cmd : -m paddle.distributed.launch tools/train.py
+        params:
+          - -o Global.epochs=delete
+          - -o Global.save_interval=delete
+          - -o Global.eval_interval=delete
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single_convergence
+        cmd : tools/train.py
+        params:
+          - -o Global.epochs=delete
+          - -o Global.save_interval=delete
+          - -o Global.eval_interval=delete
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+    eval:
+      -
+        name: trained
+        cmd: -m paddle.distributed.launch tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: pretrained
+        cmd: -m paddle.distributed.launch tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}_pretrain
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single_trained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single_pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+    infer: skipped
+    export: 
+      -
+        name: trained
+        cmd: tools/infer.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${save_inference_dir}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: pretrained
+        cmd: tools/infer.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${save_inference_dir}
+          - -o Global.output_dir=output/${qa_yaml_name}_pretrain
+        result:
+          loss:
+            base: 0.90
+            threshold: 0.01
+            evaluation: "-"
+    predict: skipped
+
+  # linux_cpu: #考虑是否剔除，只用mac覆盖cpu的情况  #暂时只写了cpu，一般不会有人用cpu_eval
+  #   base: ./base/base.yaml
+  #   train:
+  #     -
+  #       name : cpu
+  #       params:
+  #         - Global.device=cpu #覆盖
+  #       result:
+  #         exit_code: 0
+
+  windows:
+    base: ./base/base.yaml
+
+  # windows_cpu: #考虑是否剔除，只用mac覆盖cpu的情况
+  #   base: ./base/base.yaml
+
+  mac:
+    base: ./base/base.yaml
+    train:
+      -
+        name : mac
+        params:
+          - Global.device=${set_cuda_flag} #覆盖
+    eval:
+      -
+        name : eval
+        params:
+          - Global.device=${set_cuda_flag} #覆盖
+    infer: skipped
+    export:
+      -
+        name : export
+        params:
+          - Global.device=${set_cuda_flag} #覆盖
+    predict: skipped
+
+function: paddlelas_imagenet_parse
