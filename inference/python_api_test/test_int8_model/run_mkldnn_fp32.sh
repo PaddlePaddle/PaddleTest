@@ -35,16 +35,25 @@ $PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_QA
 
 # PP-HumanSeg-Lite MKLDNN fp32
 echo "[Benchmark] Run PP-HumanSeg-Lite MKLDNN fp32"
-$PYTHON test_segmentation_infer.py --model_path=models/ppseg_lite_portrait_398x224_with_softmax --dataset='human' --dataset_config=configs/humanseg_dataset.yaml --device=CPU --use_mkldnn=True --cpu_num_threads=10
+$PYTHON test_segmentation_infer.py --model_path=models/ppseg_lite_portrait_398x224_with_softmax --dataset='human' --dataset_config=configs/humanseg_dataset.yaml --device=CPU --use_mkldnn=True --cpu_threads=10
 # PP-Liteseg MKLDNN fp32
 echo "[Benchmark] Run PP-Liteseg MKLDNN fp32"
-$PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-PPLIteSegSTDC1 --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --cpu_num_threads=10
+$PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-PPLIteSegSTDC1 --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --cpu_threads=10
 # HRNet MKLDNN fp32
 echo "[Benchmark] Run HRNet MKLDNN fp32"
-$PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-HRNetW18-Seg --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --cpu_num_threads=10
+$PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-HRNetW18-Seg --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --cpu_threads=10
 # UNet MKLDNN fp32
-echo "[Benchmark] Run UNet MKLDNN int8"
-$PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-UNet --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --cpu_num_threads=10
+echo "[Benchmark] Run UNet MKLDNN fp32"
+$PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-UNet --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --cpu_threads=10
 # Deeplabv3-ResNet50 MKLDNN fp32
 echo "[Benchmark] Run Deeplabv3-ResNet50 MKLDNN fp32"
-$PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-Deeplabv3-ResNet50 --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --cpu_num_threads=10
+$PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-Deeplabv3-ResNet50 --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --cpu_threads=10
+
+# ERNIE 3.0-Medium MKLDNN fp32
+echo "[Benchmark] Run ERNIE 3.0-Medium MKLDNN fp32"
+$PYTHON test_nlp_infer.py --model_path=models/AFQMC --model_filename=infer.pdmodel --params_filename=infer.pdiparams --task_name='afqmc' --device=cpu --use_mkldnn=True --cpu_threads=10
+# PP-MiniLM MKLDNN fp32
+echo "[Benchmark] Run PP-MiniLM MKLDNN fp32"
+$PYTHON test_nlp_infer.py --model_path=models/afqmc --task_name='afqmc' --device=cpu --use_mkldnn=True --cpu_threads=10
+# BERT Base MKLDNN fp32
+echo "[Benchmark] Run BERT Base MKLDNN fp32"

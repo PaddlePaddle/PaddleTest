@@ -48,3 +48,11 @@ $PYTHON test_segmentation_infer.py --model_path=models/unet_qat --dataset='citys
 # Deeplabv3-ResNet50 MKLDNN int8
 echo "[Benchmark] Run Deeplabv3-ResNet50 MKLDNN int8"
 $PYTHON test_segmentation_infer.py --model_path=models/deeplabv3_qat --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --device=CPU --use_mkldnn=True --precision=int8 --cpu_threads=10
+
+# ERNIE 3.0-Medium MKLDNN int8
+echo "[Benchmark] Run ERNIE 3.0-Medium MKLDNN int8"
+$PYTHON test_nlp_infer.py --model_path=models/save_ernie3_afqmc_new_cablib --task_name='afqmc' --device=cpu --use_mkldnn=True --cpu_threads=10 --precision=int8
+# PP-MiniLM MKLDNN int8
+echo "[Benchmark] Run PP-MiniLM MKLDNN int8"
+# BERT Base MKLDNN int8
+echo "[Benchmark] Run BERT Base MKLDNN int8"
