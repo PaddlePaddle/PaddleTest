@@ -33,8 +33,8 @@ obj = TestUpsamplingBilinear2D(paddle.nn.UpsamplingBilinear2D)
 
 def upsampling_bilinear2D_using_numpy(x, size, scale_factor=None, data_format="NCHW"):
     """implementation of paddle.nn.UpsamplingBilinear2D using numpy
-        size: None, or a list or tuple of 2 ints
-        scale_factor: None, or a list or tuple of 2 floats
+    size: None, or a list or tuple of 2 ints
+    scale_factor: None, or a list or tuple of 2 floats
     """
     if data_format == "NHWC":
         x = np.transpose(x, (0, 3, 1, 2))  # NHWC => NCHW
