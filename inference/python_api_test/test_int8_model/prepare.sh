@@ -63,23 +63,25 @@ wget https://paddle-slim-models.bj.bcebos.com/act/EfficientNetB0_QAT.tar
 tar -xf EfficientNetB0_QAT.tar -C ./models
 rm -rf EfficientNetB0_QAT.tar
 # PP-HumanSeg-Lite
-wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/pp_humanseg_qat.zip
-unzip -q pp_humanseg_qat.zip -d ./models
-rm -rf pp_humanseg_qat.zip
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/pp_humanseg_qat.tar
+tar -xf pp_humanseg_qat.tar -C ./models
+rm -rf pp_humanseg_qat.tar
 # PP-Liteseg
-wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/pp-liteseg.zip
-unzip -q pp-liteseg.zip -d ./models
-rm -rf pp-liteseg.zip
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/pp_liteseg_qat.tar
+tar -xf pp_liteseg_qat.tar -C ./models
+rm -rf pp_liteseg_qat.tar
 # HRNet
-wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/hrnet.zip
-unzip -q hrnet.zip -d ./models
-rm -rf hrnet.zip
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/hrnet_qat.tar
+tar -xf hrnet_qat.tar -C ./models
+rm -rf hrnet_qat.tar
 # UNet
-wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/unet.zip
-unzip -q unet.zip -d ./models
-rm -rf unet.zip
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/unet_qat.tar
+tar -xf unet_qat.tar -C ./models
+rm -rf unet_qat.tar
 # Deeplabv3-ResNet50
-# TODO
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PaddleSeg/qat/deeplabv3_qat.tar
+tar -xf deeplabv3_qat.tar -C ./models
+rm -rf deeplabv3_qat.tar
 
 
 

@@ -49,6 +49,7 @@ def argsparser():
     parser.add_argument("--use_trt", type=bool, default=True, help="Whether to use tensorrt")
     parser.add_argument("--gpu_mem", type=int, default=8000, help="GPU memory")
     parser.add_argument("--ir_optim", type=bool, default=True)
+    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
     return parser
 
 
@@ -77,6 +78,7 @@ class Predictor(object):
 
         output_names = self.paddle_predictor.get_output_names()
         self.output_tensor = self.paddle_predictor.get_output_handle(output_names[0])
+        self.rerun_flag = False
 
     def _create_paddle_predictor(self):
         inference_model_dir = args.model_path
@@ -111,8 +113,19 @@ class Predictor(object):
                 max_batch_size=args.batch_size,
                 workspace_size=1 << 30,
                 min_subgraph_size=30,
+                use_static=True,
                 use_calib_mode=False,
             )
+
+            if args.use_dynamic_shape:
+                dynamic_shape_file = os.path.join(inference_model_dir, "dynamic_shape.txt")
+                if os.path.exists(dynamic_shape_file):
+                    config.enable_tuned_tensorrt_dynamic_shape(dynamic_shape_file, True)
+                    print("trt set dynamic shape done!")
+                else:
+                    config.collect_shape_range_info(dynamic_shape_file)
+                    print("Start collect dynamic shape...")
+                    self.rerun_flag = True
 
         config.enable_memory_optim()
         predictor = create_predictor(config)
@@ -131,6 +144,8 @@ class Predictor(object):
             self.input_tensor.copy_from_cpu(inputs)
             self.paddle_predictor.run()
             batch_output = self.output_tensor.copy_to_cpu().flatten()
+            if self.rerun_flag:
+                return
             if i >= 10:
                 test_time += time.time() - start_time
             time.sleep(0.01)  # sleep for T4 GPU
@@ -172,6 +187,8 @@ class Predictor(object):
             input_tensor.copy_from_cpu(image)
             self.paddle_predictor.run()
             batch_output = output_tensor.copy_to_cpu()
+            if self.rerun_flag:
+                return
             sort_array = batch_output.argsort(axis=1)
             top_1_pred = sort_array[:, -1:][:, ::-1]
             if label is None:
@@ -188,9 +205,11 @@ class Predictor(object):
             results.append([top_1, top_5])
             if batch_id % 100 == 0:
                 print("Eval iter:", batch_id)
+                sys.stdout.flush()
 
         result = np.mean(np.array(results), axis=0)
         print("[Benchmark] Evaluation result: {}".format(result[0]))
+        sys.stdout.flush()
 
 
 if __name__ == "__main__":
@@ -200,3 +219,5 @@ if __name__ == "__main__":
     predictor.predict()
     if args.eval:
         predictor.eval()
+    if predictor.rerun_flag:
+        print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
