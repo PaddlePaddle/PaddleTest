@@ -1,5 +1,6 @@
 paddledet>=2.4.0
 paddleseg>=2.5.0
+paddlenlp>=2.3.0
 GPUtil
 psutil
 pynvml

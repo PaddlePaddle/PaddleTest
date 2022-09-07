@@ -49,3 +49,12 @@ $PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-UNet --model_
 # Deeplabv3-ResNet50 MKLDNN fp16
 echo "[Benchmark] Run Deeplabv3-ResNet50 MKLDNN fp16"
 $PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-Deeplabv3-ResNet50 --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --use_trt=True --precision=fp16
+
+# ERNIE 3.0-Medium trt fp16
+echo "[Benchmark] Run ERNIE 3.0-Medium trt fp16"
+$PYTHON test_nlp_infer.py --model_path=models/AFQMC --model_filename=infer.pdmodel --params_filename=infer.pdiparams --task_name='afqmc' --use_trt --precision=fp16
+# PP-MiniLM trt fp16
+echo "[Benchmark] Run PP-MiniLM trt fp16"
+$PYTHON test_nlp_infer.py --model_path=models/afqmc --task_name='afqmc' --use_trt --precision=fp16
+# BERT Base trt fp16
+echo "[Benchmark] Run BERT Base trt fp16"

@@ -66,20 +66,23 @@ def load_predictor(args):
                 pred_cfg.enable_mkldnn_int8()
 
     if args.use_trt:
-        precision_map = {"fp16": PrecisionType.Half, "fp32": PrecisionType.Float32, "int8": PrecisionType.Int8}
-        pred_cfg.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=1,
-            min_subgraph_size=4,
-            precision_mode=precision_map[args.precision],
-            use_static=True,
-            use_calib_mode=False,
-        )
+        # To collect the dynamic shapes of inputs for TensorRT engine
         dynamic_shape_file = os.path.join(args.model_path, "dynamic_shape.txt")
         if os.path.exists(dynamic_shape_file):
             pred_cfg.enable_tuned_tensorrt_dynamic_shape(dynamic_shape_file, True)
             print("trt set dynamic shape done!")
+            precision_map = {"fp16": PrecisionType.Half, "fp32": PrecisionType.Float32, "int8": PrecisionType.Int8}
+            pred_cfg.enable_tensorrt_engine(
+                workspace_size=1 << 30,
+                max_batch_size=1,
+                min_subgraph_size=4,
+                precision_mode=precision_map[args.precision],
+                use_static=True,
+                use_calib_mode=False,
+            )
         else:
+            pred_cfg.disable_gpu()
+            pred_cfg.set_cpu_math_library_num_threads(10)
             pred_cfg.collect_shape_range_info(dynamic_shape_file)
             print("Start collect dynamic shape...")
             rerun_flag = True
@@ -159,15 +162,15 @@ def eval(args):
     label_area_all = 0
 
     print("Start evaluating (total_samples: {}, total_iters: {})...".format(len(eval_dataset), total_iters))
-    predictor = load_predictor(args)
-    for batch_id, (image, label) in enumerate(loader):
-        label = np.array(label).astype("int64")
+    predictor, rerun_flag = load_predictor(args)
+    for batch_id, data in enumerate(loader):
+        image = np.array(data[0])
+        label = np.array(data[1]).astype("int64")
         ori_shape = np.array(label).shape[-2:]
-        data = np.array(image)
         input_names = predictor.get_input_names()
         input_handle = predictor.get_input_handle(input_names[0])
-        input_handle.reshape(data.shape)
-        input_handle.copy_from_cpu(data)
+        input_handle.reshape(image.shape)
+        input_handle.copy_from_cpu(image)
 
         predictor.run()
 
