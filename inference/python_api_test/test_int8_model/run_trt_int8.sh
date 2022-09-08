@@ -52,7 +52,7 @@ $PYTHON test_segmentation_infer.py --model_path=models/deeplabv3_qat --dataset='
 
 # ERNIE 3.0-Medium trt int8
 echo "[Benchmark] Run ERNIE 3.0-Medium trt int8"
-$PYTHON test_nlp_infer.py --model_path=models/save_ernie3_afqmc_new_cablib --task_name='afqmc' --use_trt --precision=int8
+$PYTHON test_nlp_infer.py --model_path=models/save_ernie3_afqmc_new_cablib --model_filename=infer.pdmodel --params_filename=infer.pdiparams --task_name='afqmc' --use_trt --precision=int8
 # PP-MiniLM MKLDNN trt int8
 echo "[Benchmark] Run PP-MiniLM trt int8"
 # BERT Base MKLDNN trt int8
