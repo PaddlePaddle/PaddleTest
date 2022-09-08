@@ -28,7 +28,7 @@ echo "[Benchmark] Run PPLCNetV2 MKLDNN int8"
 $PYTHON test_image_classification_infer.py --model_path=models/PPLCNetV2_base_QAT --cpu_num_threads=10 --use_mkldnn=True --eval=True --use_int8=True
 # PPHGNet_tiny MKLDNN int8
 echo "[Benchmark] Run PPHGNet_tiny MKLDNN int8"
-$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_QAT --cpu_num_threads=10e --use_mkldnn=True --eval=True --use_int8=True
+$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_QAT --cpu_num_threads=10 --use_mkldnn=True --eval=True --use_int8=True
 # EfficientNetB0 MKLDNN int8
 echo "[Benchmark] Run EfficientNetB0 MKLDNN int8"
 $PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_QAT --cpu_num_threads=10 --use_mkldnn=True --eval=True --use_int8=True
@@ -51,8 +51,9 @@ $PYTHON test_segmentation_infer.py --model_path=models/deeplabv3_qat --dataset='
 
 # ERNIE 3.0-Medium MKLDNN int8
 echo "[Benchmark] Run ERNIE 3.0-Medium MKLDNN int8"
-$PYTHON test_nlp_infer.py --model_path=models/save_ernie3_afqmc_new_cablib --task_name='afqmc' --device=cpu --use_mkldnn=True --cpu_threads=10 --precision=int8
+$PYTHON test_nlp_infer.py --model_path=models/save_ernie3_afqmc_new_cablib --model_filename=infer.pdmodel --params_filename=infer.pdiparams --task_name='afqmc' --device=cpu --use_mkldnn=True --cpu_threads=10 --precision=int8
 # PP-MiniLM MKLDNN int8
 echo "[Benchmark] Run PP-MiniLM MKLDNN int8"
 # BERT Base MKLDNN int8
 echo "[Benchmark] Run BERT Base MKLDNN int8"
+$PYTHON test_bert_infer.py --model_path=models/x2paddle_cola_new_calib --device=cpu --use_mkldnn=True --cpu_threads=10 --batch_size=1 --precision=int8
