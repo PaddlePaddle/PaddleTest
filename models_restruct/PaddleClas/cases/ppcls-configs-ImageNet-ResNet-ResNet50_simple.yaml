@@ -9,7 +9,7 @@
 # bs=1 避免OOM
 # TODO：params_dir看是否要加，要加的话能串联起train eval和后面阶段，否则eval是使用的就是初始化参数，无法判断最新训出的模型是什么情况
 case:
-  linux: 
+  linux:
     base: ./base/ImageNet_base.yaml
     train:
       name: base_train
@@ -55,7 +55,7 @@ case:
           base: 0
           threshold: 0
           evaluation: "="
-    predict: 
+    predict:
       name: base_predict
       cmd: python/predict_cls.py
       params:

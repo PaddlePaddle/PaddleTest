@@ -1,6 +1,6 @@
 # have MultiScaleSampler 单独处理
 case:
-  linux: 
+  linux:
     base: ./base/ImageNet_base.yaml
     train:
       -
@@ -136,7 +136,7 @@ case:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
-    infer: 
+    infer:
       -
         name: trained
         cmd: tools/infer.py
@@ -159,7 +159,7 @@ case:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
-    export: 
+    export:
       -
         name: trained
         cmd: tools/infer.py
@@ -215,7 +215,7 @@ case:
             evaluation: "-"
 
   # linux_cpu: #考虑是否剔除，只用mac覆盖cpu的情况  #暂时只写了cpu，一般不会有人用cpu_eval
-  #   base: ./base/base.yaml
+    # base: ./base/ImageNet_base.yaml
   #   train:
   #     -
   #       name : cpu
@@ -225,13 +225,13 @@ case:
   #         exit_code: 0
 
   windows:
-    base: ./base/base.yaml
+    base: ./base/ImageNet_base.yaml
 
   # windows_cpu: #考虑是否剔除，只用mac覆盖cpu的情况
-  #   base: ./base/base.yaml
+    # base: ./base/ImageNet_base.yaml
 
   mac:
-    base: ./base/base.yaml
+    base: ./base/ImageNet_base.yaml
     train:
       -
         name : mac

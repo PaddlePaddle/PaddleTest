@@ -1,5 +1,5 @@
 case:
-  linux: 
+  linux:
     base: ./base/Cartoonface_base.yaml
     train:
       -
@@ -136,7 +136,7 @@ case:
             threshold: 0.01
             evaluation: "-"
     infer: skipped
-    export: 
+    export:
       -
         name: trained
         cmd: tools/infer.py
@@ -188,7 +188,7 @@ case:
             evaluation: "-"
 
   # linux_cpu: #考虑是否剔除，只用mac覆盖cpu的情况  #暂时只写了cpu，一般不会有人用cpu_eval
-  #   base: ./base/base.yaml
+    # base: ./base/Cartoonface_base.yaml
   #   train:
   #     -
   #       name : cpu
@@ -198,13 +198,13 @@ case:
   #         exit_code: 0
 
   windows:
-    base: ./base/base.yaml
+    base: ./base/Cartoonface_base.yaml
 
   # windows_cpu: #考虑是否剔除，只用mac覆盖cpu的情况
-  #   base: ./base/base.yaml
+    # base: ./base/Cartoonface_base.yaml
 
   mac:
-    base: ./base/base.yaml
+    base: ./base/Cartoonface_base.yaml
     train:
       -
         name : mac

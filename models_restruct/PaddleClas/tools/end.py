@@ -4,29 +4,37 @@
 """
 import os
 import sys
-import wget
-import yaml
 import json
 import shutil
 import argparse
+import yaml
+import wget
 import numpy as np
 
+
 class PaddleClas_End(object):
+    """
+    回收类
+    """
+
     def __init__(self):
-        self.reponame = os.environ['reponame']
+        """
+        初试化
+        """
+        self.reponame = os.environ["reponame"]
 
     def remove_data(self):
         """
         回收之前下载的数据
         """
-        print('####', os.listdir(self.reponame))
+        print("####", os.listdir(self.reponame))
         return 0
 
     def build_prepare(self):
         """
         执行准备过程
         """
-        #进入repo中
+        # 进入repo中
         ret = 0
         ret = self.remove_data()
         if ret:
@@ -43,5 +51,6 @@ def run():
     model.build_prepare()
     return 0
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     run()
