@@ -7,7 +7,7 @@ echo "[Benchmark] Run PPYOLOE trt fp16"
 $PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_crn_l_300e_coco --reader_config=configs/ppyoloe_reader.yml --use_trt=True --precision=fp16
 # PicoDet trt fp16
 echo "[Benchmark] Run PicoDet trt fp16"
-$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_quant --reader_config=configs/picodet_reader.yml --use_trt=True --precision=fp16
+$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu --reader_config=configs/picodet_reader.yml --use_trt=True --precision=fp16
 # YOLOv5s trt fp16
 echo "[Benchmark] Run YOLOv5s trt fp16"
 $PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_infer --use_trt=True --precision=fp16 --arch=YOLOv5
@@ -58,3 +58,4 @@ echo "[Benchmark] Run PP-MiniLM trt fp16"
 $PYTHON test_nlp_infer.py --model_path=models/afqmc --task_name='afqmc' --use_trt --precision=fp16
 # BERT Base trt fp16
 echo "[Benchmark] Run BERT Base trt fp16"
+$PYTHON test_bert_infer.py --model_path=models/x2paddle_cola --use_trt --precision=fp16 --batch_size=1

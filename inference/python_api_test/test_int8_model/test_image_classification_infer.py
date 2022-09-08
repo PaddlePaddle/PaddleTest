@@ -40,13 +40,13 @@ def argsparser():
     parser.add_argument("--img_size", type=int, default=224)
     parser.add_argument("--resize_size", type=int, default=256)
     parser.add_argument("--eval", type=bool, default=False, help="Whether to evaluate")
-    parser.add_argument("--data_path", type=str, default="./datatset/ILSVRC2012_val/")
+    parser.add_argument("--data_path", type=str, default="./dataset/ILSVRC2012_val/")
     parser.add_argument("--use_gpu", type=bool, default=False, help="Whether to use gpu")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether to use mkldnn")
     parser.add_argument("--cpu_num_threads", type=int, default=10, help="Number of cpu threads")
     parser.add_argument("--use_fp16", type=bool, default=False, help="Whether to use fp16")
     parser.add_argument("--use_int8", type=bool, default=False, help="Whether to use int8")
-    parser.add_argument("--use_trt", type=bool, default=True, help="Whether to use tensorrt")
+    parser.add_argument("--use_trt", type=bool, default=False, help="Whether to use tensorrt")
     parser.add_argument("--gpu_mem", type=int, default=8000, help="GPU memory")
     parser.add_argument("--ir_optim", type=bool, default=True)
     parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
@@ -101,7 +101,7 @@ class Predictor(object):
             config.disable_gpu()
             config.set_cpu_math_library_num_threads(args.cpu_num_threads)
             config.switch_ir_optim()
-            if use_mkldnn:
+            if args.use_mkldnn:
                 config.enable_mkldnn()
                 if args.use_int8:
                     config.enable_mkldnn_int8()
@@ -208,7 +208,7 @@ class Predictor(object):
                 sys.stdout.flush()
 
         result = np.mean(np.array(results), axis=0)
-        print("[Benchmark] Evaluation result: {}".format(result[0]))
+        print("[Benchmark] Evaluation acc result: {}".format(result[0]))
         sys.stdout.flush()
 
 
