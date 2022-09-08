@@ -318,4 +318,5 @@ def main():
 
 
 if __name__ == "__main__":
+    paddle.set_device("cpu")
     main()

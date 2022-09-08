@@ -299,7 +299,7 @@ def load_predictor(
         if use_mkldnn:
             config.enable_mkldnn()
             if precision == "int8":
-                config.enable_mkldnn_int8()
+                config.enable_mkldnn_int8({"conv2d", "transpose2", "pool2d"})
 
     precision_map = {
         "int8": Config.Precision.Int8,

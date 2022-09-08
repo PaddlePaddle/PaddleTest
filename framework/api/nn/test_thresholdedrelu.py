@@ -53,7 +53,7 @@ def test_thresholdedrelu_base():
 @pytest.mark.api_nn_ThresholdedReLU_parameters
 def test_thresholdedrelu():
     """
-     default: threshold = 1.0
+    default: threshold = 1.0
     """
     x = randtool("float", -10, 10, [100, 4, 3, 3])
     # x = np.random.rand(1, 2, 2, 2)
