@@ -39,6 +39,7 @@ find ppcls/configs/reid/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  
 # MAC执行后 会有// 区分linux只有/  要进行替换//
 #282个模型总量
 #11个类型
+#新增了1个类型TODO添加
 
 #P优先级删除all中没有的
 cat models_list_cls_test_P0 |while read line; do if [[ ! `grep -c "${line}" models_list_cls_test_all` -ne '0' ]] ;then
