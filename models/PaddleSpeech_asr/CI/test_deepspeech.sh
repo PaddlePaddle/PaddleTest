@@ -16,7 +16,8 @@ if [ $? -ne 0 ];then
 fi
 source tools/venv/bin/activate
 python -m pip install pip --ignore-installed;
-python -m pip install ${paddle_whl} --no-cache-dir
+# python -m pip install ${paddle_whl} --no-cache-dir
+ python -m pip install paddlepaddle-gpu==2.3.2.post101 -f https://www.paddlepaddle.org.cn/whl/linux/mkl/avx/stable.html
 pip install -e .
 cd dataset
 rm -rf librispeech
