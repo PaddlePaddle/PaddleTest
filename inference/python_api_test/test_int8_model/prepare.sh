@@ -86,7 +86,14 @@ rm -rf deeplabv3_qat.tar
 wget https://bj.bcebos.com/v1/paddle-slim-models/act/save_ernie3_afqmc_new_cablib.tar
 tar -xf save_ernie3_afqmc_new_cablib.tar -C ./models
 rm -rf save_ernie3_afqmc_new_cablib.tar
-
+# PP-MiniLM
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/save_ppminilm_afqmc_new_calib.tar
+tar -xf save_ppminilm_afqmc_new_calib.tar -C ./models
+rm -rf save_ppminilm_afqmc_new_calib.tar
+# BERT Base
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/x2paddle_cola_new_calib.tar
+tar -xf x2paddle_cola_new_calib.tar -C ./models
+rm -rf x2paddle_cola_new_calib.tar
 
 # ====== download FP32 inference model ======
 # PPYOLOE

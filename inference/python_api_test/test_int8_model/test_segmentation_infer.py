@@ -63,7 +63,7 @@ def load_predictor(args):
         if args.use_mkldnn:
             pred_cfg.enable_mkldnn()
             if args.precision == "int8":
-                pred_cfg.enable_mkldnn_int8()
+                pred_cfg.enable_mkldnn_int8({"conv2d", "depthwise_conv2d", "pool2d", "elementwise_mul"})
 
     if args.use_trt:
         # To collect the dynamic shapes of inputs for TensorRT engine

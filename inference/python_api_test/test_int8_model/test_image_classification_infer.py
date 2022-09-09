@@ -104,7 +104,7 @@ class Predictor(object):
             if args.use_mkldnn:
                 config.enable_mkldnn()
                 if args.use_int8:
-                    config.enable_mkldnn_int8()
+                    config.enable_mkldnn_int8({"conv2d", "depthwise_conv2d", "transpose2", "pool2d"})
 
         config.switch_ir_optim(args.ir_optim)  # default true
         if args.use_trt:

@@ -276,6 +276,8 @@ def main():
     """
     paddle.seed(42)
     args = parse_args()
+    if args.use_mkldnn:
+        paddle.set_device("cpu")
 
     predictor = Predictor.create_predictor(args)
 
