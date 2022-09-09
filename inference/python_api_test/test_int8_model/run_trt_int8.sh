@@ -55,6 +55,7 @@ echo "[Benchmark] Run ERNIE 3.0-Medium trt int8"
 $PYTHON test_nlp_infer.py --model_path=models/save_ernie3_afqmc_new_cablib --model_filename=infer.pdmodel --params_filename=infer.pdiparams --task_name='afqmc' --use_trt --precision=int8
 # PP-MiniLM MKLDNN trt int8
 echo "[Benchmark] Run PP-MiniLM trt int8"
+$PYTHON test_nlp_infer.py --model_path=models/save_ppminilm_afqmc_new_calib --task_name='afqmc' --use_trt --precision=int8
 # BERT Base MKLDNN trt int8
 echo "[Benchmark] Run BERT Base trt int8"
 $PYTHON test_bert_infer.py --model_path=models/x2paddle_cola_new_calib --use_trt --precision=int8 --batch_size=1
