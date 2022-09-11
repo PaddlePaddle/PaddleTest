@@ -24,10 +24,10 @@ export set_cuda=${set_cuda:-} #预先不设置
 export docker_flag=${docker_flag:-}
 export http_proxy=${http_proxy:-}
 export no_proxy=${no_proxy:-}
-export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.2-cudnn7-gcc82}
 export Python_env=${Python_env:-ln_way}
 #后续docker都是用paddlepaddle(ln_way)，不用manylinux(path_way)
 export Python_version=${Python_version:-37}
+export Image_version=${Image_version:-37}
 
 # 预设一些可能会修改的变量
 export CE_version_name=${CE_version_name:-TestFrameWork}
@@ -62,7 +62,6 @@ fi
 #复制模型相关文件到指定位置
 cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
 ls ./${CE_version_name}/
-cd ./${CE_version_name}/
 
 ####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称  ##TODO:暂时先考虑两张卡，后续优化
 if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认制定方式即可，SET_MULTI_CUDA参数只是在启动时使用
@@ -114,8 +113,6 @@ if [[ "${docker_flag}" == "" ]]; then
         export no_proxy=${no_proxy};
         export http_proxy=${http_proxy};
         export https_proxy=${http_proxy};
-        ls /usr/local/bin
-        ls /usr/bin/
 
         if [[ ${Python_env} == 'ln_way' ]];then
             rm -rf /usr/bin/python2.7
