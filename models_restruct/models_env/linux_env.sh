@@ -48,7 +48,6 @@ else
 fi
 export no_proxy=${no_proxy}
 set -x;
-ls CE_version_name
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -62,6 +61,7 @@ fi
 #复制模型相关文件到指定位置
 cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
 ls ./${CE_version_name}/
+cd ./${CE_version_name}/
 
 ####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称  ##TODO:暂时先考虑两张卡，后续优化
 if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认制定方式即可，SET_MULTI_CUDA参数只是在启动时使用
@@ -193,45 +193,45 @@ else
     echo ${Project_path}
     ldconfig;
     if [[ ${Python_env} == 'ln_way' ]];then
-        rm -rf /usr/bin/python2.7
-        rm -rf /usr/local/python2.7.15/bin/python
-        rm -rf /usr/local/bin/python
-        export PATH=/usr/local/bin/python:${PATH}
+        # rm -rf /usr/bin/python2.7
+        # rm -rf /usr/local/python2.7.15/bin/python
+        # rm -rf /usr/local/bin/python
+        # export PATH=/usr/local/bin/python:${PATH}
         case ${Python_version} in
         36)
-        ln -s /usr/local/bin/python3.6 /usr/local/bin/python
-        # mkdir run_env_py36;
-        # ln -s $(which python3.6) run_env_py36/python;
-        # ln -s $(which pip3.6) run_env_py36/pip;
-        # export PATH=$(pwd)/run_env_py36:${PATH};
+        # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+        mkdir run_env_py36;
+        ln -s $(which python3.6) run_env_py36/python;
+        ln -s $(which pip3.6) run_env_py36/pip;
+        export PATH=$(pwd)/run_env_py36:${PATH};
         ;;
         37)
-        ln -s /usr/local/bin/python3.7 /usr/local/bin/python
-        # mkdir run_env_py37;
-        # ln -s $(which python3.7) run_env_py37/python;
-        # ln -s $(which pip3.7) run_env_py37/pip;
-        # export PATH=$(pwd)/run_env_py37:${PATH};
+        # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+        mkdir run_env_py37;
+        ln -s $(which python3.7) run_env_py37/python;
+        ln -s $(which pip3.7) run_env_py37/pip;
+        export PATH=$(pwd)/run_env_py37:${PATH};
         ;;
         38)
-        ln -s /usr/local/bin/python3.8 /usr/local/bin/python
-        # mkdir run_env_py38;
-        # ln -s $(which python3.8) run_env_py38/python;
-        # ln -s $(which pip3.8) run_env_py38/pip;
-        # export PATH=$(pwd)/run_env_py38:${PATH};
+        # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+        mkdir run_env_py38;
+        ln -s $(which python3.8) run_env_py38/python;
+        ln -s $(which pip3.8) run_env_py38/pip;
+        export PATH=$(pwd)/run_env_py38:${PATH};
         ;;
         39)
-        ln -s /usr/local/bin/python3.9 /usr/local/bin/python
-        # mkdir run_env_py39;
-        # ln -s $(which python3.9) run_env_py39/python;
-        # ln -s $(which pip3.9) run_env_py39/pip;
-        # export PATH=$(pwd)/run_env_py39:${PATH};
+        # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+        mkdir run_env_py39;
+        ln -s $(which python3.9) run_env_py39/python;
+        ln -s $(which pip3.9) run_env_py39/pip;
+        export PATH=$(pwd)/run_env_py39:${PATH};
         ;;
         310)
-        ln -s /usr/local/bin/python3.10 /usr/local/bin/python
-        # mkdir run_env_py310;
-        # ln -s $(which python3.10) run_env_py310/python;
-        # ln -s $(which pip3.10) run_env_py310/pip;
-        # export PATH=$(pwd)/run_env_py310:${PATH};
+        # ln -s /usr/local/bin/python3.10 /usr/local/bin/python
+        mkdir run_env_py310;
+        ln -s $(which python3.10) run_env_py310/python;
+        ln -s $(which pip3.10) run_env_py310/pip;
+        export PATH=$(pwd)/run_env_py310:${PATH};
         ;;
         esac
     else
