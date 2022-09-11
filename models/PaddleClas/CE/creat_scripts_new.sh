@@ -31,7 +31,8 @@
 export base_model=ResNet50
 export base_priority=P0
 priority_all='P0 P1' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
-branch='develop release'  # develop release  #顺序不能反
+# branch='develop release'  # develop release  #顺序不能反
+branch='release'  # develop release  #顺序不能反
 # read -p "Press enter to continue"  #卡一下
 
 echo base_model
@@ -59,6 +60,9 @@ do
 
             #记录一些特殊规则
             if [[ ${model} == 'HRNet_W18_C' ]]; then
+                sed -i "" "s|threshold: 0.0|threshold: 1.0 #|g" ${model}.yaml #bodong
+                sed -i "" 's|"="|"-"|g' ${model}.yaml
+            elif [[ ${model} == 'SwinTransformer_tiny_patch4_window7_224' ]]; then
                 sed -i "" "s|threshold: 0.0|threshold: 1.0 #|g" ${model}.yaml #bodong
                 sed -i "" 's|"="|"-"|g' ${model}.yaml
             elif [[ ${model} == 'LeViT_128S' ]]; then
@@ -110,9 +114,9 @@ do
                         do
                         # echo ${arr_base[${num_lisrt_tmp}]}
                         # echo ${arr_target[${num_lisrt_tmp}]}
-                        sed -i "" "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model}.yaml
+                        # sed -i "" "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model}.yaml
                         #mac命令只替换第一个，linux有所区别需要注意
-                        # sed -i "" "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model}.yaml #linux_train_单卡
+                        sed -i "" "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model}.yaml #linux_train_单卡
 
                         done
                 fi
