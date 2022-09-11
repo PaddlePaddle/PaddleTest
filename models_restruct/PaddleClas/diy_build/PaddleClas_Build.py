@@ -26,21 +26,19 @@ class PaddleClas_Build(Model_Build):
         self.reponame = args.reponame
         self.dataset_org = args.dataset_org
         self.models_list = args.models_list
-        # print('####models_list', self.models_list)
         self.models_file = args.models_file
-        # print('####models_file', self.models_file)
         self.clas_model_list = []
-        if self.models_file:  # 获取要执行的yaml文件列表
+        if self.models_list != "None":
+            for line in self.models_list.split(","):
+                if ".yaml" in line:
+                    self.clas_model_list.append(line.strip().replace("-", "/"))
+        elif self.models_file != "None":  # 获取要执行的yaml文件列表
             for file_name in self.models_file.split(","):
                 with open(file_name, encoding="utf-8") as readfile:
                     line = readfile.readline()
                     while line:
                         if ".yaml" in line:
                             self.clas_model_list.append(line.strip().replace("-", "/"))
-        elif self.models_list:
-            for line in self.models_list.split(","):
-                if ".yaml" in line:
-                    self.clas_model_list.append(line.strip().replace("-", "/"))
         else:
             for file_name in os.listdir("cases"):
                 if ".yaml" in file_name:

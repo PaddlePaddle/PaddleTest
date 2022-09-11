@@ -184,7 +184,7 @@ if [[ "${docker_flag}" == "" ]]; then
         nvidia-smi;
         python -c 'import sys; print(sys.version_info[:])';
         git --version;
-        python main.py models_list=${models_list:-None} models_file=${models_file:-None} system=${system:-linux} step=${step:-train} reponame=${reponame:-PaddleClas} mode=${mode:-function} use_build=${use_build:-yes} branch=${branch:-develop} get_repo=${get_repo:-clone} paddle_whl=${paddle_whl:-None} dataset_org=${dataset_org:-None} dataset_target=${dataset_target:-None}
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-clone} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
     " &
     wait $!
     exit $?
@@ -262,6 +262,6 @@ else
     nvidia-smi;
     python -c 'import sys; print(sys.version_info[:])';
     git --version;
-    python main.py models_list=${models_list:-None} models_file=${models_file:-None} system=${system:-linux} step=${step:-train} reponame=${reponame:-PaddleClas} mode=${mode:-function} use_build=${use_build:-yes} branch=${branch:-develop} get_repo=${get_repo:-clone} paddle_whl=${paddle_whl:-None} dataset_org=${dataset_org:-None} dataset_target=${dataset_target:-None}
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-clone} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
 
 fi
