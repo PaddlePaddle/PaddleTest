@@ -11,8 +11,8 @@ lie_index = 5
 b = []
 
 url_all = [
-    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15746602/result/reportUrl.html",
-    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15777850/result/reportUrl.html",
+    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/18334479/result/reportUrl.html",
+    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/18334453/result/reportUrl.html",
 ]  # release
 with open("clas_release", "w", encoding="utf-8") as f:
 
