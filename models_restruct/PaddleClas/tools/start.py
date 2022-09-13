@@ -147,30 +147,31 @@ class PaddleClas_Start(object):
         基于base yaml创造新的yaml
         """
         print("###self.mode", self.mode)
+        # TODO 优化
         # 增加 function 和 precision 的选项，只有在precision时才进行复制,function时只用base验证
-        if self.mode == "function":
-            if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is True:  # cases 是基于最原始的路径的
-                os.remove(os.path.join("cases", self.qa_yaml_name))  # 删除已有的 precision 用 base
-                try:
-                    shutil.copy(
-                        os.path.join("base", self.model_type + "_base.yaml"), \
-                            os.path.join("cases", self.qa_yaml_name) + ".yaml"
-                    )
-                except IOError as e:
-                    print("Unable to copy file. %s" % e)
-                except:
-                    print("Unexpected error:", sys.exc_info())
-        else:
-            if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is False:  # cases 是基于最原始的路径的
-                source_yaml_name = self.base_yaml_dict[self.model_type]
-                try:
-                    shutil.copy(
-                        os.path.join("cases", source_yaml_name), os.path.join("cases", self.qa_yaml_name) + ".yaml"
-                    )
-                except IOError as e:
-                    print("Unable to copy file. %s" % e)
-                except:
-                    print("Unexpected error:", sys.exc_info())
+        # if self.mode == "function":
+        #     if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is True:  # cases 是基于最原始的路径的
+        #         os.remove(os.path.join("cases", self.qa_yaml_name))  # 删除已有的 precision 用 base
+        #     try:
+        #         shutil.copy(
+        #             os.path.join("base", self.model_type + "_base.yaml"), \
+        #                 os.path.join("cases", self.qa_yaml_name) + ".yaml"
+        #         )
+        #     except IOError as e:
+        #         print("Unable to copy file. %s" % e)
+        #     except:
+        #         print("Unexpected error:", sys.exc_info())
+        # else:
+        if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is False:  # cases 是基于最原始的路径的
+            source_yaml_name = self.base_yaml_dict[self.model_type]
+            try:
+                shutil.copy(
+                    os.path.join("cases", source_yaml_name), os.path.join("cases", self.qa_yaml_name) + ".yaml"
+                )
+            except IOError as e:
+                print("Unable to copy file. %s" % e)
+            except:
+                print("Unexpected error:", sys.exc_info())
         return 0
 
     def prepare_gpu_env(self):
