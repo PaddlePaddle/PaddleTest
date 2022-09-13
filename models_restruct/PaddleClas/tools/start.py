@@ -25,10 +25,11 @@ class PaddleClas_Start(object):
         初始化变量
         """
         self.qa_yaml_name = os.environ["qa_yaml_name"]
+        self.rd_yaml_path = os.environ["rd_yaml_path"]
         print("###self.qa_yaml_name", self.qa_yaml_name)
-        # self.qa_yaml_name = "ppcls-configs-ImageNet-ResNet-ResNet18.yaml"
         self.reponame = os.environ["reponame"]
         self.mode = os.environ["mode"]  # function or precision
+        self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)  # 所有和yaml相关的变量与此拼接
 
         self.env_dict = {}
         self.base_yaml_dict = {
@@ -47,7 +48,7 @@ class PaddleClas_Start(object):
         self.model_type = self.qa_yaml_name.split("-")[2]  # 固定格式为 ppcls-config-model_type
         self.env_dict["clas_model_type"] = self.model_type
         if "-PULC-" in self.qa_yaml_name:
-            self.clas_model_type_PULC = self.qa_yaml_name.split("-")[3]
+            self.clas_model_type_PULC = self.qa_yaml_name.split("-")[3]  # 固定格式为 ppcls-config-model_type-PULC_type
             self.env_dict["clas_model_type_PULC"] = self.clas_model_type_PULC
 
     def download_data(self, value=None):
@@ -81,7 +82,7 @@ class PaddleClas_Start(object):
             os.mkdir("models")
         os.chdir("models")
 
-        if os.path.exists(value) and os.path.exists(value.replace(".tar")):
+        if os.path.exists(value) and os.path.exists(value.replace(".tar", "")):
             print("####already download {}".format(value))
         else:
             self.download_data(
@@ -93,24 +94,57 @@ class PaddleClas_Start(object):
         os.chdir(path_now)
         return 0
 
+    def get_params_type(self):
+        """
+        获取模型输出路径
+        """
+        with open(os.path.join(self.REPO_PATH, self.rd_yaml_path), "r") as f:
+            content = yaml.load(f, Loader=yaml.FullLoader)
+        self.params_dir = content["Arch"]["name"]
+        try:
+            if "ATTRMetric" in content["Metric"]["Eval"][0]:
+                self.kpi_value = "label_f1"
+            elif "Recallk" in content["Metric"]["Eval"][0]:
+                self.kpi_value = "recall1"
+            elif "TopkAcc" in content["Metric"]["Eval"][0]:
+                self.kpi_value = "loss"
+            else:
+                self.kpi_value = "loss"
+        except:
+            print("### can not get kpi_value")
+        return 0
+
     def prepare_eval_env(self):
         """
-        准备评估需要的环境变量
+        准备训好模型需要的环境变量
         """
-        # print('###', os.path.exists(os.path.join(self.reponame, "output", self.qa_yaml_name)))
-        if os.path.exists(os.path.join(self.reponame, "output", self.qa_yaml_name)):
-            params_dir = os.listdir(os.path.join(self.reponame, "output", self.qa_yaml_name))[0]
-            self.env_dict["eval_pretrained_model"] = os.path.join("output", self.qa_yaml_name, params_dir, "latest")
-        else:
+        try:
+            self.get_params_type()
+            self.env_dict["kpi_value"] = self.kpi_value
+            self.env_dict["eval_pretrained_model"] = os.path.join(
+                "output", self.qa_yaml_name, self.params_dir, "latest"
+            )
+        except:
             self.env_dict["eval_pretrained_model"] = None
         return 0
+
+    # def prepare_pretrained_env(self):
+    #     """
+    #     准备预训练模型需要的环境变量
+    #     """
+    #     # print('###', os.path.exists(os.path.join(self.reponame, "output", self.qa_yaml_name)))
+    #     try:
+    #         params_dir = self.get_params_dir()
+    #         self.env_dict["eval_pretrained_model"] = os.path.join("output", self.qa_yaml_name, params_dir, "latest")
+    #     except:
+    #         self.env_dict["eval_pretrained_model"] = None
+    #     return 0
 
     def prepare_predict_env(self):
         """
         准备预测需要的环境变量
         """
         # 下载预训练模型
-
         if (
             self.model_type == "ImageNet"
             or self.model_type == "slim"
@@ -124,20 +158,20 @@ class PaddleClas_Start(object):
             else:
                 self.env_dict["predict_pretrained_model"] = None
         elif self.model_type == "GeneralRecognition":  # 暂时用训好的模型 220815
-            self.download_infer_tar("picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer.tar")
-            self.download_infer_tar("general_PPLCNet_x2_5_lite_v1.0_infer.tar")
+            self.download_infer_tar("picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer")
+            self.download_infer_tar("general_PPLCNet_x2_5_lite_v1.0_infer")
         elif self.model_type == "Cartoonface":
-            self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer.tar")
-            self.download_infer_tar("cartoon_rec_ResNet50_iCartoon_v1.0_infer.tar")
+            self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer")
+            self.download_infer_tar("cartoon_rec_ResNet50_iCartoon_v1.0_infer")
         elif self.model_type == "Logo":
-            self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer.tar")
-            self.download_infer_tar("logo_rec_ResNet50_Logo3K_v1.0_infer.tar")
+            self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer")
+            self.download_infer_tar("logo_rec_ResNet50_Logo3K_v1.0_infer")
         elif self.model_type == "Products":
-            self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer.tar")
-            self.download_infer_tar("product_ResNet50_vd_aliproduct_v1.0_infer.tar")
+            self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer")
+            self.download_infer_tar("product_ResNet50_vd_aliproduct_v1.0_infer")
         elif self.model_type == "Vehicle":
-            self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer.tar")
-            self.download_infer_tar("vehicle_cls_ResNet50_CompCars_v1.0_infer.tar")
+            self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer")
+            self.download_infer_tar("vehicle_cls_ResNet50_CompCars_v1.0_infer")
         else:
             print("####{} not sport predict".format(self.qa_yaml_name))
         return 0
@@ -147,7 +181,6 @@ class PaddleClas_Start(object):
         基于base yaml创造新的yaml
         """
         print("###self.mode", self.mode)
-        # TODO 优化
         # 增加 function 和 precision 的选项，只有在precision时才进行复制,function时只用base验证
         # if self.mode == "function":
         #     if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is True:  # cases 是基于最原始的路径的
@@ -165,9 +198,7 @@ class PaddleClas_Start(object):
         if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is False:  # cases 是基于最原始的路径的
             source_yaml_name = self.base_yaml_dict[self.model_type]
             try:
-                shutil.copy(
-                    os.path.join("cases", source_yaml_name), os.path.join("cases", self.qa_yaml_name) + ".yaml"
-                )
+                shutil.copy(os.path.join("cases", source_yaml_name), os.path.join("cases", self.qa_yaml_name) + ".yaml")
             except IOError as e:
                 print("Unable to copy file. %s" % e)
             except:
@@ -208,6 +239,7 @@ class PaddleClas_Start(object):
         # print('####save_inference_dir', self.env_dict['save_inference_dir'])
         # print('####predict_pretrained_model', self.env_dict['predict_pretrained_model'])
         # print('####set_cuda_flag', self.env_dict['set_cuda_flag'])
+        # print('####kpi_value', self.env_dict['kpi_value'])
         # input()
         os.environ[self.reponame] = json.dumps(self.env_dict)
         return ret

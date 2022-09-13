@@ -141,7 +141,7 @@ case:
     export:
       -
         name: trained
-        cmd: tools/infer.py
+        cmd: tools/export_model.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${save_inference_dir}
@@ -153,7 +153,7 @@ case:
             evaluation: "-"
       -
         name: pretrained
-        cmd: tools/infer.py
+        cmd: tools/export_model.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${save_inference_dir}
