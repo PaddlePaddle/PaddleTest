@@ -25,6 +25,7 @@ class PaddleClas_Start(object):
         初始化变量
         """
         self.qa_yaml_name = os.environ["qa_yaml_name"]
+        print("###self.qa_yaml_name", self.qa_yaml_name)
         # self.qa_yaml_name = "ppcls-configs-ImageNet-ResNet-ResNet18.yaml"
         self.reponame = os.environ["reponame"]
         self.mode = os.environ["mode"]  # function or precision

@@ -322,7 +322,25 @@ EVAL: # 训练步骤
     output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_trained.log
   -
     tag: eval_linux_pretrained
-    priority: precision,function
+    priority: precision
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash shell/eval.sh ppcls/configs/ImageNet/ResNet/ResNet50.yaml SET_MULTI_CUDA pretrained
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 0.93207
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval/ImageNet-ResNet-ResNet50_pretrained.log
+  -
+    tag: eval_linux_pretrained
+    priority: function
     env: #去掉，自动调度
       CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA
     run:
@@ -332,7 +350,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       eval_exit_code:
         latest: True
-        kpi_base: 0.93207
+        kpi_base: 0.0
         threshold: 0.0
         actived: True
         evaluation: "="

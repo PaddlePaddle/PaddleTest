@@ -164,7 +164,7 @@ case:
     predict:
       -
         name: train
-        cmd: tools/predict_cls.py
+        cmd: python/predict_cls.py
         params:
           - -c configs/PULC/${model_type_PULC}/inference_${model_type_PULC}.yaml
           - -o Global.use_gpu=${set_cuda_flag}
@@ -176,7 +176,7 @@ case:
             evaluation: "-"
       -
         name: pretrained
-        cmd: tools/predict_cls.py
+        cmd: python/predict_cls.py
         params:
           - -c configs/PULC/${model_type_PULC}/inference_${model_type_PULC}.yaml
           - -o Global.use_gpu=${set_cuda_flag}

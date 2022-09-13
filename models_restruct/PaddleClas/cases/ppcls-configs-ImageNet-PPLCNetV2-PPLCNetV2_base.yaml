@@ -187,7 +187,7 @@ case:
     predict:
       -
         name: train
-        cmd: tools/predict_cls.py
+        cmd: python/predict_cls.py
         params:
           - -c configs/inference_cls.yaml
           - -o Global.infer_imgs="./images"
@@ -201,7 +201,7 @@ case:
             evaluation: "-"
       -
         name: pretrained
-        cmd: tools/predict_cls.py
+        cmd: python/predict_cls.py
         params:
           - -c configs/inference_cls.yaml
           - -o Global.infer_imgs="./images"

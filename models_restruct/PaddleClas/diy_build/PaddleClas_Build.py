@@ -21,26 +21,29 @@ class PaddleClas_Build(Model_Build):
         """
         初始化变量
         """
-        # print('###args', args.models_file)
+        self.paddle_whl = args.paddle_whl
+        self.get_repo = args.get_repo
+        self.branch = args.branch
+        self.set_cuda = args.set_cuda
+        self.dataset_org = args.dataset_org
+        self.dataset_target = args.dataset_target
+
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
-        self.dataset_org = args.dataset_org
         self.models_list = args.models_list
-        # print('####models_list', self.models_list)
         self.models_file = args.models_file
-        # print('####models_file', self.models_file)
         self.clas_model_list = []
-        if self.models_file:  # 获取要执行的yaml文件列表
-            for file_name in self.models_file.split(","):
-                with open(file_name, encoding="utf-8") as readfile:
-                    line = readfile.readline()
-                    while line:
-                        if ".yaml" in line:
-                            self.clas_model_list.append(line.strip().replace("-", "/"))
-        elif self.models_list:
+        if str(self.models_list) != "None":
             for line in self.models_list.split(","):
                 if ".yaml" in line:
                     self.clas_model_list.append(line.strip().replace("-", "/"))
+        elif str(self.models_file) != "None":  # 获取要执行的yaml文件列表
+            for file_name in self.models_file.split(","):
+                with open(file_name, encoding="utf-8") as readfile:
+                    line = readfile.readline()
+                    if ".yaml" in line:
+                        print("####line", line)
+                        self.clas_model_list.append(line.strip().replace("-", "/"))
         else:
             for file_name in os.listdir("cases"):
                 if ".yaml" in file_name:
@@ -282,11 +285,11 @@ class PaddleClas_Build(Model_Build):
             # amp单独考虑，不能固定随机量，否则报错如下
         return 0
 
-    def build_env(self, args):
+    def build_env(self):
         """
         使用父类实现好的能力
         """
-        super(PaddleClas_Build, self).build_env(args)
+        super(PaddleClas_Build, self).build_env()
         ret = 0
         ret = self.build_paddleclas()
         if ret:
