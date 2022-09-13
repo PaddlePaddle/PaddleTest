@@ -15,7 +15,7 @@ case:
           - -o DataLoader.Train.loader.num_workers=0
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -31,7 +31,7 @@ case:
           - -o DataLoader.Train.loader.num_workers=0
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -47,7 +47,7 @@ case:
           - -o DataLoader.Train.loader.num_workers=0
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -63,7 +63,7 @@ case:
           - -o DataLoader.Train.loader.num_workers=0
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -75,7 +75,7 @@ case:
           - -o Global.save_interval=delete
           - -o Global.eval_interval=delete
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -87,7 +87,7 @@ case:
           - -o Global.save_interval=delete
           - -o Global.eval_interval=delete
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -99,7 +99,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -110,7 +110,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}_pretrain
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -121,7 +121,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -132,7 +132,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -144,7 +144,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -155,7 +155,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}_pretrain
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -168,7 +168,7 @@ case:
           - -o Global.save_inference_dir=${save_inference_dir}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -180,7 +180,7 @@ case:
           - -o Global.save_inference_dir=${save_inference_dir}
           - -o Global.output_dir=output/${qa_yaml_name}_pretrain
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -195,7 +195,7 @@ case:
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -209,7 +209,7 @@ case:
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}_pretrain
         result:
-          loss:
+          ${kpi_value}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"

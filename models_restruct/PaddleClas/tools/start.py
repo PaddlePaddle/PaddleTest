@@ -153,10 +153,7 @@ class PaddleClas_Start(object):
         ):
             # 定义变量
             self.env_dict["save_inference_dir"] = os.path.join("inference", self.qa_yaml_name)
-            if os.path.exists(os.path.join(self.reponame, "inference", self.qa_yaml_name)):
-                self.env_dict["predict_pretrained_model"] = os.path.join("inference", self.qa_yaml_name)
-            else:
-                self.env_dict["predict_pretrained_model"] = None
+            self.env_dict["predict_pretrained_model"] = self.env_dict["save_inference_dir"]
         elif self.model_type == "GeneralRecognition":  # 暂时用训好的模型 220815
             self.download_infer_tar("picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer")
             self.download_infer_tar("general_PPLCNet_x2_5_lite_v1.0_infer")
@@ -195,7 +192,7 @@ class PaddleClas_Start(object):
         #     except:
         #         print("Unexpected error:", sys.exc_info())
         # else:
-        if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is False:  # cases 是基于最原始的路径的
+        if os.path.exists(os.path.join("cases", self.qa_yaml_name) + ".yaml") is False:  # cases 是基于最原始的路径的
             source_yaml_name = self.base_yaml_dict[self.model_type]
             try:
                 shutil.copy(os.path.join("cases", source_yaml_name), os.path.join("cases", self.qa_yaml_name) + ".yaml")
