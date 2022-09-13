@@ -151,6 +151,15 @@ class PaddleClas_Start(object):
         if self.mode == "function":
             if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is True:  # cases 是基于最原始的路径的
                 os.remove(os.path.join("cases", self.qa_yaml_name))  # 删除已有的 precision 用 base
+                try:
+                    shutil.copy(
+                        os.path.join("base", self.model_type + "_base.yaml"), \
+                            os.path.join("cases", self.qa_yaml_name) + ".yaml"
+                    )
+                except IOError as e:
+                    print("Unable to copy file. %s" % e)
+                except:
+                    print("Unexpected error:", sys.exc_info())
         else:
             if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is False:  # cases 是基于最原始的路径的
                 source_yaml_name = self.base_yaml_dict[self.model_type]
