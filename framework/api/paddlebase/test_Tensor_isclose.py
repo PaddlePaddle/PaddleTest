@@ -65,7 +65,7 @@ def test_isclose0():
 @pytest.mark.api_base_isclose_parameters
 def test_isclose1():
     """
-     equal_nan=True
+    equal_nan=True
     """
     x = np.array([10000.0, 1e-07, np.NAN, 1.0, 3.0, 0.0])
     y = np.array([10000.01, 1e-06, np.NAN, np.NAN, 3.0, np.NAN])

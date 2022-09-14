@@ -182,8 +182,8 @@ def test_dist8():
     z = np.abs(z)
     res = 0
     for i in z.flatten():
-        res += i ** 4
-    res = res ** 0.25
+        res += i**4
+    res = res**0.25
     res = np.array([res])
     obj.run(res=res, x=x, y=y, p=4)
 
@@ -201,7 +201,7 @@ def test_dist9():
     z = np.abs(z)
     res = 0
     for i in z.flatten():
-        res += i ** 7
+        res += i**7
     res = res ** (1 / 7)
     res = np.array([res])
     obj.run(res=res, x=x, y=y, p=7)

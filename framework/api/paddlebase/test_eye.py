@@ -141,3 +141,21 @@ def test_eye10():
     dtype = np.float16
     res = np.eye(num_rows)
     obj.run(res=res, num_rows=num_rows, dtype=dtype)
+
+
+@pytest.mark.api_base_eye_parameters
+def test_eye11():
+    """
+    num_rows = Tensor(5)
+    num_columns = Tensor(3)
+    dtype='float32'
+    """
+    paddle.disable_static()
+    num_rows = 5
+    num_columns = 3
+    dtype = "float32"
+    res = np.eye(num_rows, num_columns)
+    if paddle.is_compiled_with_cuda():
+        paddle.set_device("gpu")
+        exp = paddle.eye(num_rows=paddle.to_tensor(num_rows), num_columns=paddle.to_tensor(num_columns), dtype=dtype)
+        assert np.allclose(exp.numpy(), res)

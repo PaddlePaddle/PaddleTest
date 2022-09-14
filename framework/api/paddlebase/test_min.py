@@ -71,6 +71,18 @@ def test_min_axis_2():
 
 
 @pytest.mark.api_base_min_parameters
+def test_min_axis_3():
+    """
+    axis = Tensor(-2)
+    """
+    paddle.disable_static()
+    x_data = np.arange(6).reshape(2, 3).astype(np.float32)
+    res = np.min(x_data, axis=-2)
+    exp = paddle.min(paddle.to_tensor(x_data), axis=paddle.to_tensor(-2))
+    assert np.allclose(exp.numpy(), res)
+
+
+@pytest.mark.api_base_min_parameters
 def test_min_2D_keepdim():
     """
     keepdim=True

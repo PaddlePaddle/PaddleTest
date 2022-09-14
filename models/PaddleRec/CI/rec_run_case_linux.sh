@@ -266,4 +266,8 @@ case $1 in
     run_demo_func
     print_logs
     ;;
+*)
+    echo " $1 models is running"
+    $1
+    ;;
 esac

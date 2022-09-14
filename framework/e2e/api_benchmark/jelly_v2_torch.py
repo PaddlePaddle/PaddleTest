@@ -17,6 +17,7 @@ import torch
 import numpy as np
 from paddle import to_tensor
 from utils.logger import logger
+from reload_config import OPERATOR_RELOAD
 
 
 TORCH_DTYPE = {"float16": torch.float16, "float32": torch.float32, "float64": torch.float64}
@@ -29,7 +30,9 @@ class Jelly_v2_torch(object):
     compare tools
     """
 
-    def __init__(self, api, framework="paddle", default_dtype="float32", place=None, card=None, title=None):
+    def __init__(
+        self, api, framework="paddle", default_dtype="float32", place=None, card=None, title=None, enable_backward=True
+    ):
         """
 
         :param paddle_api:
@@ -39,7 +42,7 @@ class Jelly_v2_torch(object):
         :param explain: case的说明 会打印在日志中
         """
         self.seed = 33
-        self.enable_backward = True
+        self.enable_backward = enable_backward
         self.debug = True
         self.framework = framework
 
@@ -64,8 +67,13 @@ class Jelly_v2_torch(object):
         # set log file name
         self.log_file_name = title
         self.result["yaml"] = self.log_file_name
+        # set Reload API DICT
+        self.reload = OPERATOR_RELOAD
         # trans "str api" to obj
-        self.api = eval(api)
+        if api not in self.reload.keys():
+            self.api = eval(api)
+        else:
+            self.api = api
         self.compare_dict = None
         self.param = dict()
         self.data = dict()
@@ -111,9 +119,11 @@ class Jelly_v2_torch(object):
         """
         define layertypes
         """
-        types = {0: "func", 1: "class"}
+        types = {0: "func", 1: "class", 2: "reload"}
+        if self.api in self.reload.keys():
+            return types[2]
         # 设置函数执行方式，函数式还是声明式.
-        if isclass(func):
+        elif isclass(func):
             return types[1]
         else:
             return types[0]
@@ -130,7 +140,8 @@ class Jelly_v2_torch(object):
                 self.data[key] = torch.tensor(value)
             else:
                 self.data[key] = torch.tensor(value).to("cuda")
-            self.data[key].requires_grad = True
+            if self.enable_backward:
+                self.data[key].requires_grad = True
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 if self.places == "cpu":
@@ -158,6 +169,18 @@ class Jelly_v2_torch(object):
             obj = self.api(**self.param)
             for i in range(self.loops):
                 forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
+                self.forward_time.append(forward_time)
+        elif self._layertypes(self.api) == "reload":
+            print(self.data)
+            x = self.data["x"]
+            y = self.data["y"]
+            expression = self.reload.get(self.api).format("x", "y")
+
+            def func(x, y):
+                eval(expression)
+
+            for i in range(self.loops):
+                forward_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
                 self.forward_time.append(forward_time)
         else:
             raise AttributeError
@@ -199,6 +222,23 @@ class Jelly_v2_torch(object):
             for i in range(self.loops):
                 total_time = timeit.timeit(lambda: clas(self.data.values()), number=self.base_times)
                 self.total_time.append(total_time)
+        elif self._layertypes(self.api) == "reload":
+            x = self.data["x"]
+            y = self.data["y"]
+            expression = self.reload.get(self.api).format("x", "y")
+            res = eval(expression)
+            if self.places == "gpu":
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype).to("cuda")
+            else:
+                grad_tensor = torch.ones(res.shape, dtype=res.dtype)
+
+            def func(x, y):
+                res = eval(expression)
+                res.backward(grad_tensor)
+
+            for i in range(self.loops):
+                total_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
+                self.total_time.append(total_time)
         else:
             raise AttributeError
 
@@ -208,7 +248,8 @@ class Jelly_v2_torch(object):
         """
         # 前反向时间
         self._run_forward()
-        self._run_total()
+        if self.enable_backward:
+            self._run_total()
         # 数据处理
         self._compute()
         # 数据对比打印
@@ -220,7 +261,8 @@ class Jelly_v2_torch(object):
         """
         # 前反向时间
         self._run_forward()
-        self._run_total()
+        if self.enable_backward:
+            self._run_total()
         # 数据处理
         self._compute()
         # 写文件
@@ -247,8 +289,14 @@ class Jelly_v2_torch(object):
         head = int(self.loops / 5)
         tail = int(self.loops - self.loops / 5)
         self.result["forward"] = ACCURACY % (sum(sorted(self.forward_time)[head:tail]) / (tail - head))
-        self.result["total"] = ACCURACY % (sum(sorted(self.total_time)[head:tail]) / (tail - head))
-        self.result["backward"] = ACCURACY % (float(self.result["total"]) - float(self.result["forward"]))
+        if self.enable_backward:
+            self.result["total"] = ACCURACY % (sum(sorted(self.total_time)[head:tail]) / (tail - head))
+            self.result["backward"] = ACCURACY % (float(self.result["total"]) - float(self.result["forward"]))
+            self.result["best_total"] = ACCURACY % min(self.total_time)
+        else:
+            self.result["total"] = self.result["forward"]
+            self.result["backward"] = 0
+            self.result["best_total"] = ACCURACY % min(self.forward_time)
 
     def _show(self):
         """
@@ -259,6 +307,9 @@ class Jelly_v2_torch(object):
             "{} {} times backward cost {}s".format(self.framework, self.base_times, self.result["backward"])
         )
         self.logger.info("{} {} times total cost {}s".format(self.framework, self.base_times, self.result["total"]))
+        self.logger.info(
+            "{} {} times best_total cost {}s".format(self.framework, self.base_times, self.result["best_total"])
+        )
 
     def _save(self, data):
         """

@@ -71,6 +71,18 @@ def test_max_axis_2():
 
 
 @pytest.mark.api_base_max_parameters
+def test_max_axis_3():
+    """
+    axis = Tensor(1)
+    """
+    paddle.disable_static()
+    x_data = np.arange(6).reshape(2, 3).astype(np.float32)
+    res = np.max(x_data, axis=1)
+    exp = paddle.max(paddle.to_tensor(x_data), axis=paddle.to_tensor(1))
+    assert np.allclose(exp.numpy(), res)
+
+
+@pytest.mark.api_base_max_parameters
 def test_max_2D_keepdim():
     """
     keepdim=True
