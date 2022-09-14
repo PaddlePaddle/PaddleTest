@@ -42,7 +42,6 @@ class PaddleClas_Build(Model_Build):
                 with open(file_name, encoding="utf-8") as readfile:
                     line = readfile.readline()
                     if ".yaml" in line:
-                        print("####line", line)
                         self.clas_model_list.append(line.strip().replace("-", "/"))
         else:
             for file_name in os.listdir("cases"):
