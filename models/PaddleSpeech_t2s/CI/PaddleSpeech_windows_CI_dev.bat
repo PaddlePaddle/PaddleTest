@@ -80,7 +80,7 @@ echo %~dp0
 cd %~dp0
 xcopy  "log\*"  D:\jiaxiao01\log\  /s /e /y /d
 
-rem result 
+rem result
 findstr "failed" %log_path%\result.log >nul
 if %errorlevel%==0 (
 echo test_case failed!!!
@@ -118,4 +118,3 @@ if not %errorlevel% == 0 (
         echo  %~1 predict successfully! >> %log_path%\result.log
 )
 EXIT /B 0
-

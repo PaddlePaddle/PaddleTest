@@ -168,7 +168,7 @@ killFun
 cd ../streaming_asr_server
 if [ ! -f "zh.wav" ]; then
 wget -c https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav
-fi 
+fi
 
 # sed -i "s/device: 'cpu' /device: 'gpu:5'/g"  ./conf/ws_conformer_wenetspeech_application.yaml
 rnd=$(rand 8000 9000)
@@ -179,7 +179,7 @@ paddlespeech_server start --config_file ./conf/ws_conformer_wenetspeech_applicat
 sleep 90
 # asr
 paddlespeech_client asr_online --server_ip 127.0.0.1 --port $rnd --input ./zh.wav
-printFun asr_online_websockert 
+printFun asr_online_websockert
 displayFun $log_path/asr_online_websockert.log asr_online_websockert
 killFun
 
