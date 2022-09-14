@@ -14,8 +14,13 @@ function download_infer_tar(){
     if [[ -f "${1}.tar" ]] && [[ -d "${1}" ]];then
         echo "already download ${1}"
     else
-        wget -q -c  \
+        if [[ ${1} =~ "general_PPLCNetV2" ]];then
+            wget -q -c  \
+            https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/models/inference/PP-ShiTuV2/${1}.tar
+        else
+            wget -q -c  \
             https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/models/inference/${1}.tar
+        fi
         tar xf ${1}.tar
     fi
     if [[ $? -eq 0 ]];then
@@ -102,7 +107,7 @@ else
         ;;
         GeneralRecognition) #暂时用训好的模型 220815
             download_infer_tar picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer
-            download_infer_tar general_PPLCNet_x2_5_lite_v1.0_infer
+            download_infer_tar general_PPLCNetV2_base_pretrained_v1.0_infer
         ;;
         Cartoonface)
             download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
@@ -138,7 +143,7 @@ else
         ;;
         GeneralRecognition)
             download_infer_tar picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer
-            download_infer_tar general_PPLCNet_x2_5_lite_v1.0_infer
+            download_infer_tar general_PPLCNetV2_base_pretrained_v1.0_infer
         ;;
         Cartoonface)
             download_infer_tar ppyolov2_r50vd_dcn_mainbody_v1.0_infer
