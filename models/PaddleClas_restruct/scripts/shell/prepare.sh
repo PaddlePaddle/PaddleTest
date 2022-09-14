@@ -24,6 +24,29 @@ fi
 yum install bc -y >/dev/null 2>&1
 apt-get install bc -y >/dev/null 2>&1
 
+#slim要用develop
+if [[ ${yaml_line} =~ "slim" ]];then
+    # python -m pip install -U paddleslim \
+    #     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+    echo "start clone paddleslim"
+    if [[ ! -d "PaddleSlim" ]];then
+        # git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
+        wget -q -c https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim.tar.gz --no-proxy
+        tar xf PaddleSlim.tar.gz
+    fi
+    echo "end clone paddleslim"
+    if [[ -d "PaddleSlim" ]];then
+        cd PaddleSlim
+        git checkout develop
+        git pull
+        python -m pip install -r requirements.txt
+        python setup.py install
+        cd ..
+        python -m pip list|grep paddleslim
+        echo "end install paddleslim"
+    fi
+fi
+
 #取消代理用镜像安装包，安装依赖包
 unset http_proxy
 unset https_proxy
@@ -31,8 +54,6 @@ unset https_proxy
 python -m pip install --upgrade \
     pip -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 python -m pip install  -r requirements.txt  \
-    -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
-python -m pip install -U paddleslim \
     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 
 if [[ ${yaml_line} =~ "face" ]] && [[ ${yaml_line} =~ "metric_learning" ]];then
@@ -269,13 +290,16 @@ wget -q -c https://paddle-qa.bj.bcebos.com/PaddleClas/ce_data/${image_root_name}
 
 #准备数据
 cd deploy
-if [[ -f "recognition_demo_data_en_v1.1.tar" ]] && [[ -f "drink_dataset_v1.0.tar" ]] ;then
+if [[ -f "recognition_demo_data_en_v1.1.tar" ]] && [[ -f "drink_dataset_v1.0.tar" ]] \
+    && [[ -f "drink_dataset_v2.0.tar" ]];then
     echo already download rec_demo
 else
-wget -q -c https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/drink_dataset_v1.0.tar --no-proxy \
-    && tar -xf drink_dataset_v1.0.tar
+wget -q -c https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/drink_dataset_v1.0.tar \
+    --no-proxy --no-check-certificate && tar -xf drink_dataset_v1.0.tar
 wget -q -c https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/recognition_demo_data_en_v1.1.tar \
     --no-proxy --no-check-certificate && tar xf recognition_demo_data_en_v1.1.tar
+wget -nc https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/data/drink_dataset_v2.0.tar \
+    --no-proxy --no-check-certificate && tar -xf drink_dataset_v2.0.tar
 fi
 cd ..
 
