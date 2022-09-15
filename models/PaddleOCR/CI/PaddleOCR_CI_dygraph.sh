@@ -535,7 +535,7 @@ if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
       echo -e "\033[31m export_model of prune failed!\033[0m" | tee -a $log_path/result.log
    fi
 fi
-
+'''
 if [[ ${quant_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
    tar -xf ch_ppocr_mobile_v2.0_det_train.tar
@@ -554,7 +554,7 @@ if [[ ${quant_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
       echo -e "\033[31m export_model of quant failed!\033[0m" | tee -a $log_path/result.log
    fi
 fi
-
+'''
 num=`cat $log_path/result.log | grep "failed" | wc -l`
 if [ "${num}" -gt "0" ];then
 echo -e "-----------------------------base cases-----------------------------"
