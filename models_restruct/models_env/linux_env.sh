@@ -18,6 +18,9 @@ export get_repo=${get_repo:-wget} #现支持10个库，需要的话可以加，w
 export paddle_whl=${paddle_whl:-None}
 export dataset_org=${dataset_org:-None}
 export dataset_target=${dataset_target:-None}
+export export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID
+export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID
+export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID
 export set_cuda=${set_cuda:-} #预先不设置
 
 #额外的变量
