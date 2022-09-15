@@ -103,15 +103,15 @@ class PaddleClas_Start(object):
         self.params_dir = content["Arch"]["name"]
         try:
             if "ATTRMetric" in content["Metric"]["Eval"][0]:
-                self.kpi_value = "label_f1"
+                self.kpi_value_eval = "label_f1"
             elif "Recallk" in content["Metric"]["Eval"][0]:
-                self.kpi_value = "recall1"
+                self.kpi_value_eval = "recall1"
             elif "TopkAcc" in content["Metric"]["Eval"][0]:
-                self.kpi_value = "loss"
+                self.kpi_value_eval = "loss"
             else:
-                self.kpi_value = "loss"
+                self.kpi_value_eval = "loss"
         except:
-            print("### can not get kpi_value")
+            print("### can not get kpi_value_eval")
         return 0
 
     def prepare_eval_env(self):
@@ -120,7 +120,7 @@ class PaddleClas_Start(object):
         """
         try:
             self.get_params_type()
-            self.env_dict["kpi_value"] = self.kpi_value
+            self.env_dict["kpi_value_eval"] = self.kpi_value_eval
             self.env_dict["eval_pretrained_model"] = os.path.join(
                 "output", self.qa_yaml_name, self.params_dir, "latest"
             )
@@ -153,7 +153,7 @@ class PaddleClas_Start(object):
         ):
             # 定义变量
             self.env_dict["save_inference_dir"] = os.path.join("inference", self.qa_yaml_name)
-            self.env_dict["predict_pretrained_model"] = self.env_dict["save_inference_dir"]
+            self.env_dict["predict_pretrained_model"] = os.path.join("inference", self.qa_yaml_name)
         elif self.model_type == "GeneralRecognition":  # 暂时用训好的模型 220815
             self.download_infer_tar("picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer")
             self.download_infer_tar("general_PPLCNet_x2_5_lite_v1.0_infer")
@@ -236,7 +236,7 @@ class PaddleClas_Start(object):
         # print('####save_inference_dir', self.env_dict['save_inference_dir'])
         # print('####predict_pretrained_model', self.env_dict['predict_pretrained_model'])
         # print('####set_cuda_flag', self.env_dict['set_cuda_flag'])
-        # print('####kpi_value', self.env_dict['kpi_value'])
+        # print('####kpi_value_eval', self.env_dict['kpi_value_eval'])
         # input()
         os.environ[self.reponame] = json.dumps(self.env_dict)
         return ret

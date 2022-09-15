@@ -39,8 +39,7 @@ class PaddleClas_Build(Model_Build):
                     self.clas_model_list.append(line.strip().replace("-", "/"))
         elif str(self.models_file) != "None":  # 获取要执行的yaml文件列表
             for file_name in self.models_file.split(","):
-                with open(file_name, encoding="utf-8") as readfile:
-                    line = readfile.readline()
+                for line in open(file_name):
                     if ".yaml" in line:
                         self.clas_model_list.append(line.strip().replace("-", "/"))
         else:

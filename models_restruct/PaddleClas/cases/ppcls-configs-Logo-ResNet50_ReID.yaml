@@ -14,7 +14,7 @@ case:
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -30,7 +30,7 @@ case:
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -46,7 +46,7 @@ case:
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -62,7 +62,7 @@ case:
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -74,7 +74,7 @@ case:
           - -o Global.save_interval=delete
           - -o Global.eval_interval=delete
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -86,7 +86,7 @@ case:
           - -o Global.save_interval=delete
           - -o Global.eval_interval=delete
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -98,7 +98,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -109,7 +109,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}_pretrain
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -120,7 +120,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -131,7 +131,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          ${kpi_value}:
+          ${kpi_value_eval}:
             base: 0.90
             threshold: 0.01
             evaluation: "-"
@@ -144,11 +144,6 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${save_inference_dir}
           - -o Global.output_dir=output/${qa_yaml_name}
-        result:
-          ${kpi_value}:
-            base: 0.90
-            threshold: 0.01
-            evaluation: "-"
       -
         name: pretrained
         cmd: tools/export_model.py
@@ -156,11 +151,6 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${save_inference_dir}
           - -o Global.output_dir=output/${qa_yaml_name}_pretrain
-        result:
-          ${kpi_value}:
-            base: 0.90
-            threshold: 0.01
-            evaluation: "-"
     predict:
       -
         name: train
@@ -170,10 +160,10 @@ case:
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
-          ${kpi_value}:
-            base: 0.90
-            threshold: 0.01
-            evaluation: "-"
+          scores:
+            base: [443, 84, 808, 511]
+            threshold: 0
+            evaluation: "="
       -
         name: pretrained
         cmd: python/predict_cls.py
@@ -182,10 +172,10 @@ case:
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}_pretrain
         result:
-          ${kpi_value}:
-            base: 0.90
-            threshold: 0.01
-            evaluation: "-"
+          scores:
+            base: [443, 84, 808, 511]
+            threshold: 0
+            evaluation: "="
 
   # linux_cpu: #考虑是否剔除，只用mac覆盖cpu的情况  #暂时只写了cpu，一般不会有人用cpu_eval
     # base: ./base/Logo_base.yaml
