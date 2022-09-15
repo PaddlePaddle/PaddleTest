@@ -114,7 +114,7 @@ if [[ "${docker_flag}" == "" ]]; then
         export https_proxy=${http_proxy};
         export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID;
         export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID;
-        export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID; 
+        export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID;
 
         if [[ ${Python_env} == 'ln_way' ]];then
             # rm -rf /usr/bin/python2.7
