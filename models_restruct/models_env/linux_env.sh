@@ -187,6 +187,7 @@ if [[ "${docker_flag}" == "" ]]; then
         python -c 'import sys; print(sys.version_info[:])';
         git --version;
         python -m pip install -r requirements.txt #预先安装依赖包
+        sed -i '/set_env(/d' main.py
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
     " &
     wait $!
@@ -266,5 +267,6 @@ else
     python -c 'import sys; print(sys.version_info[:])';
     git --version;
     python -m pip install -r requirements.txt #预先安装依赖包
+    sed -i '/set_env(/d' main.py
     python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
 fi
