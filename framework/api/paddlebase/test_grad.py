@@ -85,7 +85,7 @@ def test_dygraph2():
             z = x * x * x
             # res = paddle.grad(outputs=z, inputs=x, retain_graph=False, create_graph=False)
             # assert res[0].numpy() == 3 * 8 * 8
-            res, = paddle.grad(outputs=z, inputs=x, retain_graph=True, create_graph=True)
+            (res,) = paddle.grad(outputs=z, inputs=x, retain_graph=True, create_graph=True)
             res.backward()
             assert x.gradient() == 6 * 8
             paddle.enable_static()
@@ -110,7 +110,7 @@ def test_dygraph3():
             z = x * x * x
             # res = paddle.grad(outputs=z, inputs=x, retain_graph=False, create_graph=False)
             # assert res[0].numpy() == 3 * 8 * 8
-            res, = paddle.grad(outputs=z, inputs=x, retain_graph=True, create_graph=True)
+            (res,) = paddle.grad(outputs=z, inputs=x, retain_graph=True, create_graph=True)
             o = z + res
             o.backward()
             assert x.gradient() == 3 * x1 * x1 + 6 * x

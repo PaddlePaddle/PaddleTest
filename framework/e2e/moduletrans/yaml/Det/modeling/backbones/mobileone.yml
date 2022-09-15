@@ -54,3 +54,9 @@ mobileone_MobileOneBlock_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001

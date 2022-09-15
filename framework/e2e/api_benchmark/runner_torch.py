@@ -8,14 +8,20 @@ runner
 
 import argparse
 import sys
+import platform
 
 sys.path.append("..")
 from utils.yaml_loader import YamlLoader
 from utils.logger import logger
 from benchtrans import BenchTrans
-from jelly import Jelly
-from jelly_v2 import Jelly_v2
+from jelly_v2_torch import Jelly_v2_torch
 from db import DB
+from tools import delete
+
+
+SKIP_DICT = {"Windows": [], "Darwin": [], "Linux": []}
+INDEX_DICT = {}
+SPECIAL = True  # speacial for emergency
 
 
 def schedule(yaml_path, framework, case_name=None, place=None, card=None):
@@ -27,20 +33,30 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
     if case_name is None:
         cases_name = yaml_loader.get_all_case_name()
         for case_name in cases_name:
+            # Skip cases
+            if case_name in SKIP_DICT[platform.system()]:
+                logger.get_log().warning("skip case -->{}<--".format(case_name))
+                continue
+            if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
+                logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
+                continue
             case_info = yaml_loader.get_case_info(case_name)
             try:
                 bt = BenchTrans(case_info)
-                if framework == "paddle":
-                    api = bt.get_paddle_api()
-                    jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
-                    jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
-                    jelly.run_schedule()
-                elif framework == "torch":
+                if framework == "torch":
                     if not bt.check_torch:
                         logger.get_log().info("{} 缺少Torch配置, Skip...".format(case_name))
                         continue
                     api = bt.get_torch_api()
-                    jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
+                    jelly = Jelly_v2_torch(
+                        api=api,
+                        framework=framework,
+                        title=case_name,
+                        place=place,
+                        card=card,
+                        default_dtype="float32",
+                        enable_backward=bt.enable_backward(),
+                    )
                     jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
                     jelly.run_schedule()
             except Exception as e:
@@ -48,15 +64,16 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
     else:
         case_info = yaml_loader.get_case_info(case_name)
         bt = BenchTrans(case_info)
-        if framework == "paddle":
-            api = bt.get_paddle_api()
-            jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
-            jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
-            jelly.run_schedule()
-
-        elif framework == "torch":
+        if framework == "torch":
             api = bt.get_torch_api()
-            jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
+            jelly = Jelly_v2_torch(
+                api=api,
+                framework=framework,
+                title=case_name,
+                place=place,
+                card=card,
+                enable_backward=bt.enable_backward(),
+            )
             jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
             jelly.run_schedule()
 
@@ -69,21 +86,11 @@ def testing(yaml_path, case_name, framework, place=None, card=None):
     yaml_loader = YamlLoader(yaml_file)
     case_info = yaml_loader.get_case_info(case_name)
     bt = BenchTrans(case_info)
-    if framework == "all":
-        jelly = Jelly(bt.get_paddle_api(), bt.get_torch_api(), title=case_name, place=place, card=card)
-        jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
-        jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
-        jelly.run()
-
-    elif framework == "paddle":
-        api = bt.get_paddle_api()
-        jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
-        jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
-        jelly.run()
-
-    elif framework == "torch":
+    if framework == "torch":
         api = bt.get_torch_api()
-        jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
+        jelly = Jelly_v2_torch(
+            api=api, framework=framework, title=case_name, place=place, card=card, enable_backward=bt.enable_backward()
+        )
         jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
         jelly.run()
 
@@ -104,6 +111,7 @@ if __name__ == "__main__":
     parser.add_argument("--cuda", type=str, default=None, help="cuda version like v10.2 | v11.2 etc.")
     parser.add_argument("--cudnn", type=str, default=None, help="cudnn version like v7.6.5 etc.")
     parser.add_argument("--card", type=str, default=None, help="card number , default is 0")
+    parser.add_argument("--comment", type=str, default=None, help="your comment")
     args = parser.parse_args()
 
     # 验证参数组合正确性
@@ -112,6 +120,7 @@ if __name__ == "__main__":
         raise AttributeError
 
     if args.mode == "schedule":
+        delete("./log")
         db = DB()
         try:
             db.init_mission(
@@ -121,6 +130,7 @@ if __name__ == "__main__":
                 cuda=args.cuda,
                 cudnn=args.cudnn,
                 card=args.card,
+                comment=args.comment,
             )
             schedule(yaml_path=args.yaml, framework=args.framework, place=args.place, card=args.card)
             db.save()

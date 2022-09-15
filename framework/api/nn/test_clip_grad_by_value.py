@@ -142,18 +142,18 @@ def test_clip_grad_by_value_norm2():
 @pytest.mark.api_nn_ClipGradByValue_parameters
 def test_clip_grad_by_value_norm3():
     """
-   Test ClipGradByValue when clip_min and clip_max changes.
+    Test ClipGradByValue when clip_min and clip_max changes.
 
-    Test base config:
-        input grad shape = [10, 10]
-        input grad number = 4
-        input data dtype = 'float32'
-        clip_min = None
-        clip_max = 1.0
-    Changes:
-        input parameters: clip_min = None -> clip_min = -2.0, clip_max = 1.0 -> clip_max = -1.0
-    Expected Results:
-        The output of ClipGradByValue implemented by numpy and paddle should be equal.
+     Test base config:
+         input grad shape = [10, 10]
+         input grad number = 4
+         input data dtype = 'float32'
+         clip_min = None
+         clip_max = 1.0
+     Changes:
+         input parameters: clip_min = None -> clip_min = -2.0, clip_max = 1.0 -> clip_max = -1.0
+     Expected Results:
+         The output of ClipGradByValue implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 4
@@ -175,18 +175,18 @@ def test_clip_grad_by_value_norm3():
 @pytest.mark.api_nn_ClipGradByValue_parameters
 def test_clip_grad_by_value_norm4():
     """
-   Test ClipGradByValue when clip_min and clip_max are equal.
+    Test ClipGradByValue when clip_min and clip_max are equal.
 
-    Test base config:
-        input grad shape = [10, 10]
-        input grad number = 4
-        input data dtype = 'float32'
-        clip_min = None
-        clip_max = 1.0
-    Changes:
-        input parameters: clip_min = None -> clip_min = 2.0, clip_max = 1.0 -> clip_max = 2.0
-    Expected Results:
-        The output of ClipGradByValue implemented by numpy and paddle should be equal.
+     Test base config:
+         input grad shape = [10, 10]
+         input grad number = 4
+         input data dtype = 'float32'
+         clip_min = None
+         clip_max = 1.0
+     Changes:
+         input parameters: clip_min = None -> clip_min = 2.0, clip_max = 1.0 -> clip_max = 2.0
+     Expected Results:
+         The output of ClipGradByValue implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 4
@@ -208,18 +208,18 @@ def test_clip_grad_by_value_norm4():
 @pytest.mark.api_nn_ClipGradByValue_parameters
 def test_clip_grad_by_value_norm5():
     """
-   Test ClipGradByValue when input type changes.
+    Test ClipGradByValue when input type changes.
 
-    Test base config:
-        input grad shape = [10, 10]
-        input grad number = 4
-        input data dtype = 'float32'
-        clip_min = None
-        clip_max = 1.0
-    Changes:
-        input data dtype: float32 -> float16
-    Expected Results:
-        The output of ClipGradByValue implemented by numpy and paddle should be equal.
+     Test base config:
+         input grad shape = [10, 10]
+         input grad number = 4
+         input data dtype = 'float32'
+         clip_min = None
+         clip_max = 1.0
+     Changes:
+         input data dtype: float32 -> float16
+     Expected Results:
+         The output of ClipGradByValue implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 4
@@ -242,18 +242,18 @@ def test_clip_grad_by_value_norm5():
 @pytest.mark.api_nn_ClipGradByValue_parameters
 def test_clip_grad_by_value_norm6():
     """
-   Test ClipGradByValue when clip_max value changes.
+    Test ClipGradByValue when clip_max value changes.
 
-    Test base config:
-        input grad shape = [10, 10]
-        input grad number = 4
-        input data dtype = 'float32'
-        clip_min = None
-        clip_max = 1.0
-    Changes:
-        clip_max: 1.0 -> -1.0
-    Expected Results:
-        The output of ClipGradByValue implemented by numpy and paddle should be equal.
+     Test base config:
+         input grad shape = [10, 10]
+         input grad number = 4
+         input data dtype = 'float32'
+         clip_min = None
+         clip_max = 1.0
+     Changes:
+         clip_max: 1.0 -> -1.0
+     Expected Results:
+         The output of ClipGradByValue implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 4
@@ -269,18 +269,18 @@ def test_clip_grad_by_value_norm6():
 @pytest.mark.api_nn_ClipGradByValue_parameters
 def test_clip_grad_by_value_norm7():
     """
-   Test ClipGradByValue when clip_max type changes.
+    Test ClipGradByValue when clip_max type changes.
 
-    Test base config:
-        input grad shape = [10, 10]
-        input grad number = 4
-        input data dtype = 'float32'
-        clip_min = None
-        clip_max = 1.0
-    Changes:
-        clip_max: float32 -> '1'
-    Expected Results:
-        The output of ClipGradByValue implemented by numpy and paddle should be equal.
+     Test base config:
+         input grad shape = [10, 10]
+         input grad number = 4
+         input data dtype = 'float32'
+         clip_min = None
+         clip_max = 1.0
+     Changes:
+         clip_max: float32 -> '1'
+     Expected Results:
+         The output of ClipGradByValue implemented by numpy and paddle should be equal.
     """
     shape = [10, 10]
     length = 4

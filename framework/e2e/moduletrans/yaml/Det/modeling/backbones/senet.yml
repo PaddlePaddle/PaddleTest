@@ -54,6 +54,12 @@ senet_SENet_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 #senet_SERes5Head_0:
 #  desc: "Det ppdet.modeling.backbones.senet.SERes5Head模型结构"

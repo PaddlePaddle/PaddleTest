@@ -80,6 +80,7 @@ def test_prod4():
     obj.run(res=res, x=x, axis=axis)
 
 
+@pytest.mark.api_base_prod_parameters
 def test_prod5():
     """
     axis=tuple
@@ -90,6 +91,7 @@ def test_prod5():
     obj.run(res=res, x=x, axis=axis)
 
 
+@pytest.mark.api_base_prod_parameters
 def test_prod6():
     """
     dtype=float32
@@ -99,6 +101,7 @@ def test_prod6():
     obj.base(res=res, x=x, dtype="float32")
 
 
+@pytest.mark.api_base_prod_parameters
 def test_prod7():
     """
     keepdim=True
@@ -124,6 +127,7 @@ class TestProd1(APIBase):
 obj1 = TestProd1(paddle.prod)
 
 
+@pytest.mark.api_base_prod_parameters
 def test_prod8():
     """
     dtype=int64
@@ -133,6 +137,7 @@ def test_prod8():
     obj1.base(res=res, x=x, dtype="int64")
 
 
+@pytest.mark.api_base_prod_parameters
 def test_prod9():
     """
     input is int32, int64
@@ -140,3 +145,16 @@ def test_prod9():
     x = np.array([[3, 5], [6, 2]])
     res = [np.prod(x)]
     obj1.run(res=res, x=x)
+
+
+@pytest.mark.api_base_prod_parameters
+def test_prod10():
+    """
+    axis<rank(x)
+    """
+    paddle.disable_static()
+    x = np.array([[-0.8, -0.4], [0.7, 0.9]])
+    axis = 1
+    res = np.prod(x, axis=axis)
+    exp = paddle.prod(paddle.to_tensor(x), axis=paddle.to_tensor(axis))
+    assert np.allclose(exp.numpy(), res)

@@ -1,0 +1,7 @@
+batch_size: 16
+val_dataset:
+  type: Cityscapes
+  dataset_root: dataset/cityscapes_val
+  transforms:
+    - type: Normalize
+  mode: val

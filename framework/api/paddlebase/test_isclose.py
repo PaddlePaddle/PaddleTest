@@ -6,6 +6,7 @@
 test_isclose
 """
 
+import os
 import sys
 from apibase import APIBase
 
@@ -15,7 +16,6 @@ import numpy as np
 
 sys.path.append("../../utils/")
 from interceptor import skip_branch_is_2_2
-import os
 
 
 class TestIsClose(APIBase):
@@ -31,6 +31,7 @@ class TestIsClose(APIBase):
         # self.debug = True
         # enable check grad
         self.enable_backward = False
+
 
 if os.getenv("AGILE_COMPILE_BRANCH") != "release/2.2":
     obj = TestIsClose(paddle.isclose)
@@ -64,7 +65,7 @@ def test_isclose0():
 @pytest.mark.api_base_isclose_parameters
 def test_isclose1():
     """
-     equal_nan=True
+    equal_nan=True
     """
     x = np.array([10000.0, 1e-07, np.NAN, 1.0, 3.0, 0.0])
     y = np.array([10000.01, 1e-06, np.NAN, np.NAN, 3.0, np.NAN])

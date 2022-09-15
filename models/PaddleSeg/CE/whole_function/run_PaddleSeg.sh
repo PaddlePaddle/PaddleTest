@@ -64,9 +64,9 @@ print_result(){
 pip install -r requirements.txt
 log_dir=.
 model_type_path=
-if [ "$1" == 'develop_d1' ];then
+if [ "${task_type}" == 'develop_d1' ];then
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v deeplabv3  | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_all_temp
-elif [ "$1" == 'develop_d2' ];then
+elif [ "${task_type}" == 'develop_d2' ];then
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep segformer | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_segformer
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep deeplabv3 | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_deeplabv3
 cat dynamic_config_segformer dynamic_config_deeplabv3 >>dynamic_config_all_temp
@@ -168,6 +168,10 @@ PYTHON_INFER_DYNAMIC(){
     fi
 }
 grep -F -v -f no_upload dynamic_config_all_temp | sort | uniq | tee dynamic_config_all
+if [ "$1" ];then
+    cat dynamic_config_all | grep "${1}" > config_list_tmp
+    mv config_list_tmp dynamic_config_all
+fi
 for config in `cat dynamic_config_all`
 do
 tmp=${config##*/}
@@ -188,6 +192,9 @@ elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${mo
 elif [[ -n `echo ${model} | grep camvid` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/camvid/${model}/model.pdparams
 fi
+if [ "$2" ];then
+    $2
+else
 if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
     echo "${model} url is bad!"
 else
@@ -198,6 +205,7 @@ else
     PREDICT_DYNAMIC
     EXPORT_DYNAMIC
     PYTHON_INFER_DYNAMIC
+fi
 fi
 done
 

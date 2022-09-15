@@ -13,7 +13,7 @@ convnext_Block_0:
       x:
         generate_way: "random"  # random, solid, load
         type: "Tensor"
-        dtype: "float64"
+        dtype: "float32"
         shape: [4, 8, 24, 24]
         range: [ -1, 1]
   Loss:
@@ -28,20 +28,26 @@ convnext_Block_0:
   Train:
     step: 3
   test:
-#    dygraph_to_static_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_to_static_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_to_infer_predict_test:
-#      acc_test: False
-#      delta: 0.000001
-#      rtol: 0.000001
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
     dygraph_train_test:
       delta: 0.00000001
       rtol: 0.00000001
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
 
@@ -91,6 +97,12 @@ convnext_LayerNorm_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 convnext_ConvNeXt_0:
   desc: "Det ppdet.modeling.backbones.convnext.ConvNeXt模型结构"
@@ -126,19 +138,25 @@ convnext_ConvNeXt_0:
   Train:
     step: 3
   test:
-#    dygraph_to_static_train_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_to_static_predict_test:
-#      delta: 0.00000001
-#      rtol: 0.00000001
-#    dygraph_to_infer_predict_test:
-#      acc_test: False
-#      delta: 0.000001
-#      rtol: 0.000001
+    dygraph_to_static_train_test:
+      delta: 0.000002
+      rtol: 0.000002
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
     dygraph_train_test:
       delta: 0.000001
       rtol: 0.0000001
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.000001
+      rtol: 0.0000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001

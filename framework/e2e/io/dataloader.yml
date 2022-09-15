@@ -1,5 +1,53 @@
+DataGenerator0:
+  desc: "no BatchSampler, batch_size=2"
+  seed: 1
+  dataset:
+    generate_way:        # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_size: 2
+    shuffle: False
+    drop_last: False
+    num_workers: 0
+
 DataGenerator1:
-  desc: "no BatchSampler"
+  desc: "no BatchSampler, drop_last=True"
+  seed: 1
+  dataset:
+    generate_way:        # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_size: 3
+    shuffle: False
+    drop_last: True
+    num_workers: 0
+
+DataGenerator2:
+  desc: "no BatchSampler, drop_last=True"
+  seed: 1
+  dataset:
+    generate_way:        # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_size: 3
+    shuffle: False
+    drop_last: True
+    num_workers: 0
+
+DataGenerator3:
+  desc: "no BatchSampler, batch_size=1"
   seed: 1
   dataset:
     generate_way:        # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
@@ -14,7 +62,7 @@ DataGenerator1:
     drop_last: False
     num_workers: 0
 
-DataGenerator2:
+DataGenerator4:
   desc: "set BatchSampler, no Sampler"
   seed: 1
   dataset:
@@ -24,7 +72,7 @@ DataGenerator2:
       dtype: "int64"
       shape: [ 4, ]
       range: [ -1, 1 ]
-  params:
+  params:     # 若设置了batch_sampler，则batch_size、shuffle、drop_last需设置在batch_sampler下，params不需再设置
     batch_sampler:
       batch_size: 1
       shuffle: False
@@ -32,7 +80,7 @@ DataGenerator2:
     num_workers: 0
 
 
-DataGenerator3:
+DataGenerator5:
   desc: "set BatchSampler, RandomSampler"
   seed: 1
   dataset:
@@ -54,9 +102,60 @@ DataGenerator3:
       drop_last: False
     num_workers: 0
 
+DataGenerator6:
+  desc: "set BatchSampler, SequenceSampler"
+  seed: 1
+  dataset:
+    generate_way:       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_sampler:
+      sampler:
+        type: SequenceSampler
+      batch_size: 1
+      shuffle: False
+      drop_last: False
+    num_workers: 0
 
-DataGenerator4:
-  desc: "set BatchSampler, RandomSampler"
+DataGenerator7:
+  desc: "set BatchSampler, no Sampler; shuffle: True"
+  seed: 1
+  dataset:
+    generate_way:       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_sampler:
+      batch_size: 1
+      shuffle: True
+      drop_last: False
+    num_workers: 0
+
+DataGenerator8:
+  desc: "load data, no BatchSampler, batch_size=10"
+  seed: 1
+  dataset:
+    generate_way: "./mnist.json.gz"       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    data:
+      type: "random"
+      dtype: "int64"
+      shape: [ 4, ]
+      range: [ -1, 1 ]
+  params:
+    batch_size: 1
+    shuffle: False
+    drop_last: False
+    num_workers: 0
+
+DataGenerator9:
+  desc: "load data, set BatchSampler, RandomSampler"
   seed: 1
   dataset:
     generate_way: "./mnist.json.gz"       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
@@ -77,11 +176,11 @@ DataGenerator4:
       drop_last: False
     num_workers: 0
 
-DataGenerator5:
-  desc: "set BatchSampler, no Sampler; shuffle: True"
+DataGenerator10:
+  desc: "load data, set BatchSampler, no Sampler"
   seed: 1
   dataset:
-    generate_way:       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
+    generate_way: "./mnist.json.gz"       # 如果generate_way不为none，则优先采用generate_way，即使设置data也无效
     data:
       type: "random"
       dtype: "int64"
@@ -90,6 +189,6 @@ DataGenerator5:
   params:
     batch_sampler:
       batch_size: 1
-      shuffle: True
+      shuffle: False
       drop_last: False
     num_workers: 0

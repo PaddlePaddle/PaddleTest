@@ -34,19 +34,19 @@ echo ${priority_all}
 base_model=ImageNet-ResNet-ResNet50
 base_model_latest_name=ResNet50
 base_priority=P0
+base_model_type="all,ImageNet"
 # priority_all='P0' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
 # priority_all='P0 P1' # P0 P1 #还可以控制单独生成某一个yaml models_list_cls_test${某一个或几个模型}
-branch='develop release'  # develop release  #顺序不能反
+branch='develop release'  # develop release  #顺序不能反 更改分支值，所以下面循环注意是两遍
 # read -p "Press enter to continue"  #卡一下
 
 echo base_model
 echo ${base_model}
 for priority_tmp in $priority_all
 do
-    cat models_list_cls_test_${priority_tmp} | while read line
+    cat models_list_cls_test_${priority_tmp} | while read yaml_line
     do
-
-        array=(${line//\// })
+        array=(${yaml_line//\// })
         model_type=${array[2]} #区分 分类、slim、识别等
         model_name=${array[2]} #进行字符串拼接
         if [[ ${1} =~ "PULC" ]];then
@@ -60,7 +60,7 @@ do
         model_latest_name=${array2[0]}
 
 
-        if [[ ${base_model} = ${model_name} ]]; then
+        if [[ ${base_model} == ${model_name} ]]; then
             # echo "#####"
             continue
         else
@@ -68,67 +68,88 @@ do
             cd config
             rm -rf ${model_name}.yaml
             cp -r ${base_model}.yaml ${model_name}.yaml
-            sed -i "s|ppcls/configs/ImageNet/ResNet/${base_model_latest_name}.yaml|$line|g" ${model_name}.yaml #待优化，去掉ResNet
+            sed -i "s|ppcls/configs/ImageNet/ResNet/${base_model_latest_name}.yaml|$yaml_line|g" ${model_name}.yaml #待优化，去掉ResNet
             sed -i s/${base_model}/${model_name}/g ${model_name}.yaml
 
+            # 处理不同的指标 6只是个估算
+            params_index=(`cat ${Project_path}/${yaml_line} | grep -n "Metric" | awk -F ":" '{print $1}'`)
+            params_word=`sed -n "${params_index[0]},$[${params_index[0]}+6]p" ${Project_path}/${yaml_line}`
+            # echo "#### params_index"
+            # echo ${params_index}
+            # echo ${params_word}
+            function change_kpi_tag(){
+                #先粗暴的的以行数计算进行替换，暂时报错的eval，写死第9行
+                params_index=(`cat ${model_name}.yaml | grep -n "eval_linux" | awk -F ":" '{print $1}'`)
+                # echo "#### params_index"
+                # echo ${params_index}
+                # echo $[${params_index}+9]
+                for index_tmp in ${params_index[@]}
+                do
+                    sed -i "$[${index_tmp}+9]s/loss:/${1}:/" ${model_name}.yaml
+                done
+            }
             #记录一些特殊规则
-            if [[ ${model_latest_name} == 'HRNet_W18_C' ]]; then
+            if [[ ${model_name} =~ 'HRNet' ]]; then
                 sed -i "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
                 sed -i 's|"="|"-"|g' ${model_name}.yaml
-            elif [[ ${model_latest_name} == 'LeViT_128S' ]]; then
+            elif [[ ${model_name} =~ 'LeViT' ]]; then
                 sed -i "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
                 sed -i 's|"="|"-"|g' ${model_name}.yaml
-                # sed -i "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                # sed -i "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-            elif [[ ${model_latest_name} == 'RedNet50' ]]; then
-                sed -i "s|train_eval|exit_code|g" ${model_name}.yaml #训练后评估失败，改为搜集退出码exit_code
-            elif [[ ${model_latest_name} == 'ResNet50_vd' ]]; then
+            elif [[ ${model_name} =~ 'SwinTransformer' ]]; then
+                sed -i "s|threshold: 0.0|threshold: 1.0 #|g" ${model_name}.yaml #bodong
+                sed -i 's|"="|"-"|g' ${model_name}.yaml
+            elif [[ ${model_name} =~ 'ResNet50_vd' ]]; then
                 sed -i "s|ResNet50_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
                 sed -i "s|ResNet50_vd_vd_vd|ResNet50_vd|g" ${model_name}.yaml #replace
-            # elif [[ ${model_latest_name} == 'TNT_small' ]]; then
-            #     sed -i "s|threshold: 0.0|threshold: 0.1|g" ${model_name}.yaml #bodong
-            #     sed -i 's|"="|"-"|g' ${model_name}.yaml
-                # sed -i "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                # sed -i "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                #暂时监控linux通过改学习率不出nan
-            # elif [[ ${model_latest_name} == 'ViT_small_patch16_224' ]]; then
-            #     sed -i "s|loss|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
-                # sed -i "s|train_eval|exit_code|g" ${model_name}.yaml # windows 训练、训练后评估都报错，暂时增加豁免为退出码为真
             fi
+            #记录特殊评价指标
+            if [[ `echo ${params_word} | grep -c "ATTRMetric"` -ne '0' ]] ;then #存在特殊字符
+                echo "${model_name} have ATTRMetric"
+                change_kpi_tag label_f1
+            elif [[ `echo ${params_word} | grep -c "Recallk"` -ne '0' ]] ;then #存在特殊字符
+                echo "${model_name} have Recallk"
+                change_kpi_tag recall1
+            fi
+
+            #循环修改值
             for branch_tmp in $branch
             do
-
                 # echo branch_tmp
                 # echo $branch_tmp
                 # echo $branch
                 # 在这里还要判断当前模型在report中是否存在，不存在的话就不执行
                 sed -i "s|"${base_priority}"|"${priority_tmp}"|g" ${model_name}.yaml #P0/1 #不加\$会报（正常的） sed: first RE may not be empty 加了值不会变
-                if [[ ! `grep -c "${model_name}" ../${Repo}_${branch_tmp}` -ne '0' ]] ;then #在已有的里面不存在
-                    echo "new model :${model_name}"
+                sed -i "s|"${base_model_type}"|"all,${model_type}"|g" ${model_name}.yaml #修改Imagenet类型
+                if [[ -f ../${Repo}_${branch_tmp} ]];then
+                    if [[ ! `grep -c "${model_name}" ../${Repo}_${branch_tmp}` -ne '0' ]] ;then #在已有的里面不存在
+                        echo "new model :${model_name}"
+                    else
+                        # echo priority_tmp
+                        # echo ${base_priority}
+                        # echo ${priority_tmp}
+                        # echo $base_model
+                        # echo $branch_tmpbranch
+                        # grep "${base_model}" ../${Repo}_${branch_tmp}
+                        # read -p "Press enter to continue"  #卡一下
+
+                        arr_base=($(echo `grep -w "${base_model}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
+                        arr_target=($(echo `grep -w "${model_name}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
+                        # echo arr_base
+                        # echo ${arr_base[*]}
+                        # echo ${arr_target[*]}
+                        num_lisrt='1 2 3 4 5 6 7 8' #一共有8个值需要改变
+                        for num_lisrt_tmp in $num_lisrt
+                            do
+                            # echo ${arr_base[${num_lisrt_tmp}]}
+                            # echo ${arr_target[${num_lisrt_tmp}]}
+                            sed -i "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model_name}.yaml
+                            #mac命令只替换第一个，linux有所区别需要注意
+                            # sed -i "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model_name}.yaml #linux_train_单卡
+
+                            done
+                    fi
                 else
-                    # echo priority_tmp
-                    # echo ${base_priority}
-                    # echo ${priority_tmp}
-                    # echo $base_model
-                    # echo $branch_tmpbranch
-                    # grep "${base_model}" ../${Repo}_${branch_tmp}
-                    # read -p "Press enter to continue"  #卡一下
-
-                    arr_base=($(echo `grep -w "${base_model}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
-                    arr_target=($(echo `grep -w "${model_name}" ../${Repo}_${branch_tmp}` | awk 'BEGIN{FS=",";OFS=" "} {print $1,$2,$3,$4,$5,$6,$7,$8}'))
-                    # echo arr_base
-                    # echo ${arr_base[*]}
-                    # echo ${arr_target[*]}
-                    num_lisrt='1 2 3 4 5 6 7 8' #一共有8个值需要改变
-                    for num_lisrt_tmp in $num_lisrt
-                        do
-                        # echo ${arr_base[${num_lisrt_tmp}]}
-                        # echo ${arr_target[${num_lisrt_tmp}]}
-                        sed -i "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model_name}.yaml
-                        #mac命令只替换第一个，linux有所区别需要注意
-                        # sed -i "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model_name}.yaml #linux_train_单卡
-
-                        done
+                    echo "new model :${model_name}"
                 fi
             done
 

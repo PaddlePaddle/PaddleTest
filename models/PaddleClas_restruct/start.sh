@@ -1,4 +1,8 @@
-cd task
+cd ${Project_path}/../ #确定下执行路径
+echo "start.sh"
+echo $PWD
+# cd task
+
 rm -rf models_list_cls_test_ADD
 echo Priority_version
 echo ${Priority_version}
@@ -15,7 +19,9 @@ do
             export yaml_tmp=${yaml_tmp}/${var}
         done
         export yaml_tmp="${yaml_tmp}.yaml"
-        echo ${yaml_tmp} >>models_list_cls_test_ADD
+        echo ${yaml_tmp} >> models_list_cls_test_ADD
+    elif [[ ${priority_tmp} =~ "ImageNet" ]];then
+        cat models_list_cls_test_all |grep ImageNet > models_list_cls_test_ImageNet
     else #针对 P0 1 2 3 4
         source creat_scripts.sh ${priority_tmp}
     fi
@@ -23,4 +29,8 @@ done
 if [[ -f "models_list_cls_test_ADD" ]];then
     source creat_scripts.sh "ADD"
 fi
+if [[ -f "models_list_cls_test_ImageNet" ]];then
+    source creat_scripts.sh "ImageNet"
+fi
+
 cd ..

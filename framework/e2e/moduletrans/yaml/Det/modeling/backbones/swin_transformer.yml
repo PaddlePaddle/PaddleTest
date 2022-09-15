@@ -45,6 +45,12 @@ swin_transformer_Mlp_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 swin_transformer_WindowAttention_0:
   desc: "Det ppdet.modeling.backbones.swin_transformer.WindowAttention模型结构"
@@ -81,8 +87,8 @@ swin_transformer_WindowAttention_0:
     step: 3
   test:
     dygraph_to_static_train_test:
-      delta: 0.00000001
-      rtol: 0.00000001
+      delta: 0.0000005
+      rtol: 0.0000005
     dygraph_to_static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
@@ -91,9 +97,15 @@ swin_transformer_WindowAttention_0:
       delta: 0.000001
       rtol: 0.000001
     dygraph_train_test:
+      delta: 0.0000002
+      rtol: 0.0000002
+    dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
-    dygraph_predict_test:
+    static_train_test:
+      delta: 0.0000002
+      rtol: 0.0000002
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
 
@@ -213,6 +225,12 @@ swin_transformer_PatchMerging_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 swin_transformer_PatchEmbed_0:
   desc: "Det swin_transformer.PatchEmbed模型结构"
@@ -260,6 +278,12 @@ swin_transformer_PatchEmbed_0:
     dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
 
 swin_transformer_BasicLayer_0:
   desc: "Det ppdet.modeling.backbones.swin_transformer.BasicLayer模型结构"
@@ -303,7 +327,7 @@ swin_transformer_BasicLayer_0:
   test:
     dygraph_to_static_train_test:
       delta: 0.00005
-      rtol: 0.000005
+      rtol: 0.00005
     dygraph_to_static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
@@ -312,9 +336,15 @@ swin_transformer_BasicLayer_0:
       delta: 0.000001
       rtol: 0.000001
     dygraph_train_test:
-      delta: 0.00005
-      rtol: 0.000005
+      delta: 0.0002
+      rtol: 0.0002
     dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.0002
+      rtol: 0.0002
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
 
@@ -365,7 +395,7 @@ swin_transformer_SwinTransformer_0:
     step: 3
   test:
     dygraph_to_static_train_test:
-      delta: 0.00005
+      delta: 0.00003
       rtol: 0.00001
     dygraph_to_static_predict_test:
       delta: 0.00000001
@@ -375,8 +405,14 @@ swin_transformer_SwinTransformer_0:
       delta: 0.000001
       rtol: 0.000001
     dygraph_train_test:
+      delta: 0.000001
+      rtol: 0.000001
+    dygraph_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
-    dygraph_predict_test:
+    static_train_test:
+      delta: 0.000001
+      rtol: 0.000001
+    static_predict_test:
       delta: 0.00000001
       rtol: 0.00000001
