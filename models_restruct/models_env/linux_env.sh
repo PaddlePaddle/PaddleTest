@@ -1,4 +1,3 @@
-set +x;
 pwd;
 
 ####ce框架根目录
@@ -50,8 +49,6 @@ else
     export https_proxy=${http_proxy}
 fi
 export no_proxy=${no_proxy}
-set -x;
-
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
     mv ../task .  #如果预先下载直接mv
