@@ -375,3 +375,40 @@ def test_transpose_conv2d7():
         data_format="NHWC",
         dilation=dilation,
     )
+
+
+@pytest.mark.api_nn_transpose_conv2d_parameters
+def test_transpose_conv2d8():
+    """
+    base
+    """
+    paddle.disable_static()
+    np.random.seed(obj.seed)
+    x = randtool("float", 0, 1, [2, 3, 2, 2]).astype("float32")
+    weight = np.ones(shape=[3, 1, 3, 3]).astype("float32")
+    bias = np.zeros(shape=[1]).astype("float32")
+    output_size = [4, 4]
+    res = np.array(
+        [
+            [
+                [
+                    [1.79935658, 2.92095995, 2.92095995, 1.12160349],
+                    [3.19498563, 5.92353964, 5.92353916, 2.72855401],
+                    [3.19498563, 5.92353916, 5.92353964, 2.72855401],
+                    [1.39562905, 3.00257969, 3.00257969, 1.60695052],
+                ]
+            ],
+            [
+                [
+                    [1.68106270, 2.77430201, 2.77430201, 1.09323919],
+                    [2.86843705, 5.53858328, 5.53858376, 2.67014623],
+                    [2.86843705, 5.53858328, 5.53858328, 2.67014623],
+                    [1.18737435, 2.76428127, 2.76428127, 1.57690704],
+                ]
+            ],
+        ]
+    )
+    exp = paddle.nn.functional.conv2d_transpose(
+        paddle.to_tensor(x), paddle.to_tensor(weight), paddle.to_tensor(bias), output_size=paddle.to_tensor(output_size)
+    )
+    assert np.allclose(exp.numpy(), res)
