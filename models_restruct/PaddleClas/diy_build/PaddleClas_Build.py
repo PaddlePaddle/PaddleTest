@@ -183,7 +183,6 @@ class PaddleClas_Build(Model_Build):
                             self.reponame
                         )
                     )
-                    del image_name
                 elif "strong_baseline" in line and "reid" in line:
                     self.download_data(
                         value="https://paddle-qa.bj.bcebos.com\
@@ -191,7 +190,6 @@ class PaddleClas_Build(Model_Build):
                             self.reponame
                         )
                     )
-                    del image_name
                 elif "MV3_Large_1x_Aliproduct_DLBHC" in line and "Products" in line:
                     image_name = self.get_image_name(value=line, label="image_root")
                     self.download_data(
