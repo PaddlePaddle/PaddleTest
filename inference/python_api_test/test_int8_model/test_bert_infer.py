@@ -192,7 +192,7 @@ class Predictor(object):
             if args.use_mkldnn:
                 config.enable_mkldnn()
                 if args.precision == "int8":
-                    config.enable_mkldnn_int8()
+                    config.enable_mkldnn_int8({"fc", "reshape2", "transpose2", "slice"})
 
         precision_map = {
             "int8": inference.PrecisionType.Int8,
