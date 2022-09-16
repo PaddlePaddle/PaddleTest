@@ -20,11 +20,10 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
         if kpi_name == "class_ids":
             if "class_ids" in line and ": [" in line:
                 kpi_value_all.append(ast.literal_eval(line.replace("[{", "{").replace("}]", "}"))["class_ids"])
-        elif kpi_name == "scores":
-            if "rec_scores" in line and ": [" in line:
+            elif "bbox" in line and ": [" in line:
                 kpi_value_all.append(ast.literal_eval(line.replace("[{", "{").replace("}]", "}"))["bbox"])
-            elif "score(s)" in line and ": [" in line:
-                line = line[line.rfind("score(s): ") : line.rfind(", label_name(s):")]
+            elif "class id(s)" in line and ": [" in line:
+                line = line[line.rfind("class id(s): ") : line.rfind(", score(s):")]
                 kpi_value_all.append(line[line.rfind("[") :])
         else:
             if kpi_name + ":" in line:
