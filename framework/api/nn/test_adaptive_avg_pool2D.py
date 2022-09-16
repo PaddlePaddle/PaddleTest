@@ -31,8 +31,7 @@ obj = TestAdaptiveAvgPool2D(paddle.nn.AdaptiveAvgPool2D)
 
 
 def adaptive_start_index(index, input_size, output_size):
-    """adaptive_start_index
-    """
+    """adaptive_start_index"""
     return int(np.floor(index * input_size / output_size))
 
 

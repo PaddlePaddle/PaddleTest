@@ -241,7 +241,6 @@ def test_cosinesimilarity7():
             raise Exception
 
 
-@pytest.mark.skip(reason="Skip because Paddle rename python c api.")
 def test_cosinesimilarity8():
     """
     error shape
@@ -264,7 +263,9 @@ def test_cosinesimilarity8():
     except Exception as e:
         print(e)
         if is_in_eager:
-            if "multiply_dygraph_function" in e.args[0] and "InvalidArgumentError" in e.args[0]:
+            if (
+                ("multiply_ad_func" in e.args[0]) or ("multiply_dygraph_function" in e.args[0])
+            ) and "InvalidArgumentError" in e.args[0]:
                 pass
             else:
                 raise Exception

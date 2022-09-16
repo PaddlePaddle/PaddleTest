@@ -204,19 +204,30 @@ class InferenceTest(object):
         gpu_max_mem = max([float(i["used(MB)"]) for i in _gpu_mem_lists])
         assert abs(gpu_max_mem - ori_gpu_mem) < 1, "set disable_gpu(), but gpu activity found"
 
-    def mkldnn_test(self, input_data_dict: dict, output_data_dict: dict, mkldnn_cache_capacity=1, repeat=2, delta=1e-5):
+    def mkldnn_test(
+        self,
+        input_data_dict: dict,
+        output_data_dict: dict,
+        mkldnn_cache_capacity=1,
+        repeat=2,
+        delta=1e-5,
+        precision="fp32",
+    ):
         """
-        test enable_mkldnn()
+        test enable_mkldnn() or enable_mkldnn_int8()
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
             mkldnn_cache_capacity(int): MKLDNN cache capacity
             repeat(int): inference repeat time
             delta(float): difference threshold between inference outputs and thruth value
+            precision(str): mkldnn precision mode, [fp32, int8]
         Returns:
             None
         """
         self.pd_config.enable_mkldnn()
+        if precision == "int8":
+            self.pd_config.enable_mkldnn_int8()
         self.pd_config.set_mkldnn_cache_capacity(mkldnn_cache_capacity)
         predictor = paddle_infer.create_predictor(self.pd_config)
 
