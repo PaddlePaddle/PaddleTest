@@ -85,10 +85,6 @@ class Predictor(object):
         model_file = os.path.join(inference_model_dir, args.model_filename)
         params_file = os.path.join(inference_model_dir, args.params_filename)
         config = paddle.inference.Config(model_file, params_file)
-        if args.use_int8:
-            scale_file_path = os.path.join(inference_model_dir, "calibration_table.txt")
-            assert os.path.exists(scale_file_path)
-            config.set_calibration_file_path(scale_file_path)
         precision = paddle.inference.Config.Precision.Float32
         if args.use_int8:
             precision = paddle.inference.Config.Precision.Int8

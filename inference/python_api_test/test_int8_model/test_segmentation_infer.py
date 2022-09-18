@@ -49,10 +49,6 @@ def load_predictor(args):
     model_file = os.path.join(args.model_path, args.model_filename)
     params_file = os.path.join(args.model_path, args.params_filename)
     pred_cfg = PredictConfig(model_file, params_file)
-    if args.precision == "int8":
-        scale_file_path = os.path.join(args.model_path, "calibration_table.txt")
-        assert os.path.exists(scale_file_path)
-        pred_cfg.set_calibration_file_path(scale_file_path)
     pred_cfg.enable_memory_optim()
     pred_cfg.switch_ir_optim(True)
     if args.device == "GPU":
