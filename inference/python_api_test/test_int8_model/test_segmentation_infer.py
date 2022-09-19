@@ -150,7 +150,7 @@ def eval(args):
     eval_dataset = data_cfg.val_dataset
 
     batch_sampler = paddle.io.BatchSampler(eval_dataset, batch_size=1, shuffle=False, drop_last=False)
-    loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=1, return_list=True)
+    loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=0, return_list=True)
 
     total_iters = len(loader)
     intersect_area_all = 0
