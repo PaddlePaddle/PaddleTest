@@ -7,9 +7,12 @@ import sys
 import json
 import shutil
 import argparse
+import logging
 import yaml
 import wget
 import numpy as np
+
+logger = logging.getLogger("ce")
 
 
 class PaddleClas_End(object):
@@ -27,7 +30,7 @@ class PaddleClas_End(object):
         """
         回收之前下载的数据
         """
-        print("####", os.listdir(self.reponame))
+        logger.info("#### {}".format(os.listdir(self.reponame)))
         return 0
 
     def build_prepare(self):
@@ -38,7 +41,7 @@ class PaddleClas_End(object):
         ret = 0
         ret = self.remove_data()
         if ret:
-            print("build remove_data failed")
+            logger.info("build remove_data failed")
             return ret
         return ret
 

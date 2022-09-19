@@ -43,7 +43,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -59,7 +59,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -75,7 +75,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -87,7 +87,7 @@ case:
           - -o Global.eval_interval=delete
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -99,7 +99,7 @@ case:
           - -o Global.eval_interval=delete
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
     eval:
@@ -122,7 +122,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -144,7 +144,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
     infer:
