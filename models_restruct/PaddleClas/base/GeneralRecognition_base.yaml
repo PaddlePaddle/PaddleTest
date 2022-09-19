@@ -31,6 +31,10 @@ eval:
   cmd: -m paddle.distributed.launch tools/eval.py
   params:
     - -c ${rd_yaml_path}
+    - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
+    - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
+    - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
+    - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
   result:
     exit_code:
       base: 0

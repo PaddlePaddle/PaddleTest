@@ -4,12 +4,15 @@
 """
 import os
 import sys
+import logging
 import tarfile
 import argparse
 import numpy as np
 import yaml
 import wget
 from Model_Build import Model_Build
+
+logger = logging.getLogger("ce")
 
 
 class PaddleClas_Build(Model_Build):
@@ -64,11 +67,11 @@ class PaddleClas_Build(Model_Build):
 
         tar_name = value.split("/")[-1]
         if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
-            print("#### already download {}".format(tar_name))
+            logger.info("#### already download {}".format(tar_name))
         else:
-            print("#### start download {}".format(tar_name))
+            logger.info("#### start download {}".format(tar_name))
             wget.download(value.replace(" ", ""))
-            print("#### end download {}".format(tar_name))
+            logger.info("#### end download {}".format(tar_name))
             if os.path.exists(tar_name):
                 tf = tarfile.open(tar_name)
                 tf.extractall(os.getcwd())
@@ -83,13 +86,13 @@ class PaddleClas_Build(Model_Build):
         with open(os.path.join(self.REPO_PATH, value), "r", encoding="utf-8") as y:
             cfg = yaml.full_load(y)
             image_name = cfg["DataLoader"]["Train"]["dataset"][label]
-            # print('####image_name', image_name)
+            # logger.info('####image_name: {}'.format(image_name))
             image_name = image_name.split("dataset")[1]
-            # print('####image_name', image_name)
+            # logger.info('####image_name: {}'.format(image_name))
             image_name = image_name.split("/")[1]
-            # print('####image_name', image_name)
+            # logger.info('####image_name: {}'.format(image_name))
             image_name = image_name.replace('"', "")
-            # print('####image_name', image_name)
+            # logger.info('####image_name: {}'.format(image_name))
         return image_name
 
     def change_yaml_batch_size(self, data_json):
@@ -99,8 +102,8 @@ class PaddleClas_Build(Model_Build):
         if isinstance(data_json, dict):
             for key, val in data_json.items():
                 if key == "batch_size":
-                    # print("###data_json[key]",data_json[key])
-                    # print("###val",val)
+                    # logger.info("###data_json[key]",data_json[key])
+                    # logger.info("###val",val)
                     # input()
                     data_json[key] = int(np.ceil(float(val) / 3))  # batch_size除以3向上取整，TODO 添加特殊符号标识，防止多次除以3
                 if isinstance(data_json[key], dict):
@@ -114,24 +117,17 @@ class PaddleClas_Build(Model_Build):
         """
         if os.path.exists(self.reponame):
             for line in self.clas_model_list:
-                if "strong_baseline" in line or "Logo" in line:
-                    print("{} do no need change bs".format(line))  # 针对特殊的sampler 需要满足整除某数的bs
+                with open(os.path.join(self.REPO_PATH, line), "r") as f:
+                    content = yaml.load(f, Loader=yaml.FullLoader)
+                if "PKSampler" in str(content) or "DistributedRandomIdentitySampler" in str(content):
+                    logger.info("#### do not change batch_size in {}".format(line))
                 else:
-                    with open(os.path.join(self.REPO_PATH, line), "r") as f:
-                        content = yaml.load(f, Loader=yaml.FullLoader)
                     content_new = self.change_yaml_batch_size(content)  # 卸载with里面不能够全部生效
                     with open(os.path.join(self.REPO_PATH, line), "w") as f:
                         yaml.dump(content_new, f)
         else:
-            print("check you {} path".format(self.reponame))
+            logger.info("check you {} path".format(self.reponame))
         return 0
-
-    # def build_pretrain(self):
-    #     """
-    #     自定义下载预训练模型
-    #     """
-    #     print("待支持下载预训练模型")
-    #     retrun 0
 
     def build_dataset(self):
         """
@@ -143,9 +139,9 @@ class PaddleClas_Build(Model_Build):
             os.chdir(self.reponame)
             os.chdir("deploy")
             if os.path.exists("recognition_demo_data_en_v1.1.tar") and os.path.exists("drink_dataset_v1.0.tar"):
-                print("#### already download rec_demo")
+                logger.info("#### already download rec_demo")
             else:
-                print("#### start download rec_demo")
+                logger.info("#### start download rec_demo")
                 self.download_data(
                     value="https://paddle-imagenet-models-name.bj.bcebos.com\
                     /dygraph/rec/data/drink_dataset_v1.0.tar"
@@ -154,7 +150,7 @@ class PaddleClas_Build(Model_Build):
                     value="https://paddle-imagenet-models-name.bj.bcebos.com\
                     /dygraph/rec/data/recognition_demo_data_en_v1.1.tar"
                 )
-                print("#### end download rec_demo")
+                logger.info("#### end download rec_demo")
             os.chdir(path_now)
 
             # 下载dataset数据集 解析yaml下载
@@ -165,7 +161,6 @@ class PaddleClas_Build(Model_Build):
             os.chdir("dataset")
             # 根据不同的模型下载数据
             for line in self.clas_model_list:
-                image_name = None
                 if "face" in line and "metric_learning" in line:
                     image_name = self.get_image_name(value=line, label="root_dir")
                 elif "traffic_sign" in line and "PULC" in line:
@@ -183,6 +178,7 @@ class PaddleClas_Build(Model_Build):
                             self.reponame
                         )
                     )
+                    del image_name
                 elif "strong_baseline" in line and "reid" in line:
                     self.download_data(
                         value="https://paddle-qa.bj.bcebos.com\
@@ -190,6 +186,7 @@ class PaddleClas_Build(Model_Build):
                             self.reponame
                         )
                     )
+                    del image_name
                 elif "MV3_Large_1x_Aliproduct_DLBHC" in line and "Products" in line:
                     image_name = self.get_image_name(value=line, label="image_root")
                     self.download_data(
@@ -201,8 +198,8 @@ class PaddleClas_Build(Model_Build):
                 else:
                     image_name = self.get_image_name(value=line, label="image_root")
 
-                if image_name is None:
-                    print("do not need download")
+                if "image_name" in dir() is False:
+                    logger.info("do not need download")
                 else:
                     self.download_data(
                         value="https://paddle-qa.bj.bcebos.com\
@@ -212,7 +209,7 @@ class PaddleClas_Build(Model_Build):
                     )
             os.chdir(path_now)
         else:
-            print("check you {} path".format(self.reponame))
+            logger.info("check you {} path".format(self.reponame))
         return 0
 
     def build_paddleclas(self):
@@ -221,37 +218,49 @@ class PaddleClas_Build(Model_Build):
         """
         # 固定随机量需要，默认打开
         os.environ["FLAGS_cudnn_deterministic"] = "True"
-        print("#### set FLAGS_cudnn_deterministic as {}".format(os.environ["FLAGS_cudnn_deterministic"]))
+        logger.info("#### set FLAGS_cudnn_deterministic as {}".format(os.environ["FLAGS_cudnn_deterministic"]))
 
-        cmd_return = os.system("python -m pip install paddleclas==2.4.3")
+        cmd_return = os.system("python -m pip install paddleclas")
         if cmd_return:
-            print("repo {} python -m pip install paddleclas failed".format(self.reponame))
+            logger.info("repo {} python -m pip install paddleclas failed".format(self.reponame))
             return 1
 
         if self.value_in_modellist(value="slim"):
-            print("#### slim install")
-            cmd_return = os.system("python -m pip install paddleslim")
+            logger.info("#### slim install")
+            if os.path.exists("PaddleSlim") is False:
+                wget.download("https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim.tar.gz")
+                if os.path.exists("PaddleSlim.tar.gz"):
+                    tf = tarfile.open("PaddleSlim.tar.gz")
+                    tf.extractall(os.getcwd())
+            if os.path.exists("PaddleSlim"):
+                path_now = os.getcwd()
+                os.chdir("PaddleSlim")
+                os.system("git checkout develop")
+                os.system("git pull")
+                os.system("python -m pip install -r requirements.txt")
+                cmd_return = os.system("python setup.py install")
+                os.chdir(path_now)
             if cmd_return:
-                print("repo {} python -m pip install paddleslim failed".format(self.reponame))
+                logger.info("repo {} python -m pip install paddleslim failed".format(self.reponame))
                 return 1
 
         if self.value_in_modellist(value="face") and self.value_in_modellist(value="metric_learning"):
-            print("#### face and metric_learning install")
+            logger.info("#### face and metric_learning install")
             cmd_return = os.system(" python -m  pip install -U pip setuptools cython")
             if cmd_return:
-                print("repo {} python -m pip install setuptools failed".format(self.reponame))
+                logger.info("repo {} python -m pip install setuptools failed".format(self.reponame))
                 return 1
             cmd_return = os.system("python -m  pip install bcolz==1.2.0")
             if cmd_return:
-                print("repo {} python -m pip install bcolz failed".format(self.reponame))
+                logger.info("repo {} python -m pip install bcolz failed".format(self.reponame))
                 return 1
 
         if self.value_in_modellist(value="amp"):
-            print("#### fp16 or amp install")
+            logger.info("#### fp16 or amp install")
             if os.path.exists("nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl") and os.path.exists(
                 "nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
             ):
-                print("#### already download nvidia_dali_cuda102 nvidia_dali_cuda110")
+                logger.info("#### already download nvidia_dali_cuda102 nvidia_dali_cuda110")
             else:
                 wget.download(
                     "https://paddle-qa.bj.bcebos.com/PaddleClas/\
@@ -267,18 +276,18 @@ class PaddleClas_Build(Model_Build):
                nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
             )
             if cmd_return:
-                print("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
+                logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
                 return 1
             cmd_return = os.system(
                 "python -m  pip install \
                nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
             )
             if cmd_return:
-                print("repo {} python -m pip install nvidia_dali_cuda110 failed".format(self.reponame))
+                logger.info("repo {} python -m pip install nvidia_dali_cuda110 failed".format(self.reponame))
                 return 1
 
             os.environ["FLAGS_cudnn_deterministic"] = False
-            print("set FLAGS_cudnn_deterministic as {}".format("False"))
+            logger.info("set FLAGS_cudnn_deterministic as {}".format("False"))
             # amp单独考虑，不能固定随机量，否则报错如下
         return 0
 
@@ -290,15 +299,15 @@ class PaddleClas_Build(Model_Build):
         ret = 0
         ret = self.build_paddleclas()
         if ret:
-            print("build env whl failed")
+            logger.info("build env whl failed")
             return ret
         ret = self.build_yaml()
         if ret:
-            print("build env yaml failed")
+            logger.info("build env yaml failed")
             return ret
         ret = self.build_dataset()
         if ret:
-            print("build env dataset failed")
+            logger.info("build env dataset failed")
             return ret
         return ret
 
@@ -318,7 +327,7 @@ if __name__ == "__main__":
 
     args = parse_args()
 
-    # print('###args', args.models_file)
+    # logger.info('###args {}'.format(args.models_file))
     model = PaddleClas_Build(args)
     model.build_paddleclas()
     # model.build_yaml()

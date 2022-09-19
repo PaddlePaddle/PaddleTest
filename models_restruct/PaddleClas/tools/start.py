@@ -6,12 +6,14 @@ import os
 import sys
 import json
 import shutil
+import logging
 import tarfile
 import argparse
 import yaml
 import wget
 import numpy as np
 
+logger = logging.getLogger("ce")
 # TODO wget容易卡死，增加超时计时器 https://blog.csdn.net/weixin_42368421/article/details/101354628
 
 
@@ -26,7 +28,7 @@ class PaddleClas_Start(object):
         """
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
-        print("###self.qa_yaml_name", self.qa_yaml_name)
+        logger.info("###self.qa_yaml_name: {}".format(self.qa_yaml_name))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
         self.step = os.environ["step"]
@@ -61,12 +63,12 @@ class PaddleClas_Start(object):
 
         tar_name = value.split("/")[-1]
         if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
-            print("#### already download {}".format(tar_name))
+            logger.info("#### already download {}".format(tar_name))
         else:
-            print("#### start download {}".format(tar_name))
-            print("####value", value.replace(" ", ""))
+            logger.info("#### start download {}".format(tar_name))
+            logger.info("#### value: {}".format(value.replace(" ", "")))
             wget.download(value.replace(" ", ""))
-            print("#### end download {}".format(tar_name))
+            logger.info("#### end download {}".format(tar_name))
             if os.path.exists(tar_name):
                 tf = tarfile.open(tar_name)
                 tf.extractall(os.getcwd())
@@ -85,7 +87,7 @@ class PaddleClas_Start(object):
             os.mkdir("models")
         os.chdir("models")
         if os.path.exists(value) and os.path.exists(value.replace(".tar", "")):
-            print("####already download {}".format(value))
+            logger.info("####already download {}".format(value))
         else:
             self.download_data(
                 "https://paddle-imagenet-models-name.bj.bcebos.com/\
@@ -150,7 +152,7 @@ class PaddleClas_Start(object):
             else:
                 self.kpi_value_eval = "loss"
         except:
-            print("### can not get kpi_value_eval")
+            logger.info("### can not get kpi_value_eval")
         return 0
 
     def prepare_env(self):
@@ -194,7 +196,7 @@ class PaddleClas_Start(object):
             self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer")
             self.download_infer_tar("vehicle_cls_ResNet50_CompCars_v1.0_infer")
         else:
-            print("####{} not sport predict".format(self.qa_yaml_name))
+            logger.info("####{} not sport predict".format(self.qa_yaml_name))
 
         # 下载预训练模型
         # TODO 路径需要优化，现在在repo外层
@@ -204,7 +206,7 @@ class PaddleClas_Start(object):
                 "eval" in step_single or "infer" in step_single or "export" in step_single
             ) and "pretrained" in step_single:
                 if os.path.exists(self.eval_pretrained_params + "_pretrained.pdparams"):
-                    print("### already have {}_pretrained.pdparams".format(self.eval_pretrained_params))
+                    logger.info("### already have {}_pretrained.pdparams".format(self.eval_pretrained_params))
                 else:
                     if (
                         "-ESNet" in self.qa_yaml_name
@@ -220,22 +222,22 @@ class PaddleClas_Start(object):
                         or "-SwinTransformer" in self.qa_yaml_name
                         or "-VGG" in self.qa_yaml_name
                     ):
-                        print("#### use legendary_models pretrain model")
-                        print("#### start download {}".format(self.eval_pretrained_params))
+                        logger.info("#### use legendary_models pretrain model")
+                        logger.info("#### start download {}".format(self.eval_pretrained_params))
                         value = "https://paddle-imagenet-models-name.bj.bcebos.com/\
                             dygraph/legendary_models/{}_pretrained.pdparams".format(
                             self.eval_pretrained_params
                         )
                         wget.download(value.replace(" ", ""))
-                        print("#### end download {}".format(self.eval_pretrained_params))
+                        logger.info("#### end download {}".format(self.eval_pretrained_params))
                     else:
-                        print("#### start download {}".format(self.eval_pretrained_params))
+                        logger.info("#### start download {}".format(self.eval_pretrained_params))
                         value = "https://paddle-imagenet-models-name.bj.bcebos.com/\
                             dygraph/{}_pretrained.pdparams".format(
                             self.eval_pretrained_params
                         )
                         wget.download(value.replace(" ", ""))
-                        print("#### end download {}".format(self.eval_pretrained_params))
+                        logger.info("#### end download {}".format(self.eval_pretrained_params))
                 self.env_dict["eval_pretrained_model"] = self.eval_pretrained_params + "_pretrained"
                 # 准备导出模型
                 self.env_dict["export_pretrained_model"] = self.predict_pretrain_params + "_infer"
@@ -253,7 +255,7 @@ class PaddleClas_Start(object):
                     if os.path.exists(self.predict_pretrain_params + "_infer") and os.path.exists(
                         os.path.join(self.predict_pretrain_params + "_infer", "inference.pdiparams")
                     ):
-                        print("#### already download {}".format(self.predict_pretrain_params))
+                        logger.info("#### already download {}".format(self.predict_pretrain_params))
                     elif self.model_type == "PULC":
                         self.download_data(
                             "https://paddleclas.bj.bcebos.com/models\
@@ -284,9 +286,9 @@ class PaddleClas_Start(object):
                     self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer")
                     self.download_infer_tar("vehicle_cls_ResNet50_CompCars_v1.0_infer")
                 else:
-                    print("####{} not sport predict".format(self.qa_yaml_name))
+                    logger.info("####{} not sport predict".format(self.qa_yaml_name))
             else:
-                print("### {} do not download pretrained model".format(self.qa_yaml_name))
+                logger.info("### {} do not download pretrained model".format(self.qa_yaml_name))
 
         os.chdir(path_now)  # 切回路径
         return 0
@@ -295,7 +297,7 @@ class PaddleClas_Start(object):
         """
         基于base yaml创造新的yaml
         """
-        print("###self.mode", self.mode)
+        logger.info("###self.mode {}".format(self.mode))
         # 增加 function 和 precision 的选项，只有在precision时才进行复制,function时只用base验证
         # if self.mode == "function":
         #     if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is True:  # cases 是基于最原始的路径的
@@ -306,18 +308,19 @@ class PaddleClas_Start(object):
         #                 os.path.join("cases", self.qa_yaml_name) + ".yaml"
         #         )
         #     except IOError as e:
-        #         print("Unable to copy file. %s" % e)
+        #         logger.info("Unable to copy file. %s" % e)
         #     except:
-        #         print("Unexpected error:", sys.exc_info())
+        #         logger.info("Unexpected error: {}".format(sys.exc_info()))
         # else:
         if os.path.exists(os.path.join("cases", self.qa_yaml_name) + ".yaml") is False:  # cases 是基于最原始的路径的
+            logger.info("#### build new yaml :{}".format(os.path.join("cases", self.qa_yaml_name) + ".yaml"))
             source_yaml_name = self.base_yaml_dict[self.model_type]
             try:
                 shutil.copy(os.path.join("cases", source_yaml_name), os.path.join("cases", self.qa_yaml_name) + ".yaml")
             except IOError as e:
-                print("Unable to copy file. %s" % e)
+                logger.info("Unable to copy file. %s" % e)
             except:
-                print("Unexpected error:", sys.exc_info())
+                logger.info("Unexpected error:", sys.exc_info())
         return 0
 
     def prepare_gpu_env(self):
@@ -338,25 +341,25 @@ class PaddleClas_Start(object):
         ret = 0
         ret = self.prepare_env()
         if ret:
-            print("build prepare_env failed")
+            logger.info("build prepare_env failed")
             return ret
         ret = self.prepare_gpu_env()
         if ret:
-            print("build prepare_gpu_env failed")
+            logger.info("build prepare_gpu_env failed")
             return ret
         ret = self.prepare_creat_yaml()
         if ret:
-            print("build prepare_creat_yaml failed")
+            logger.info("build prepare_creat_yaml failed")
             return ret
 
-        # print('####eval_trained_model', self.env_dict['eval_trained_model'])
-        # print('####eval_pretrained_model', self.env_dict['eval_pretrained_model'])
-        # print('####export_trained_model', self.env_dict['export_trained_model'])
-        # print('####export_pretrained_model', self.env_dict['export_pretrained_model'])
-        # print('####predict_trained_model', self.env_dict['predict_trained_model'])
-        # print('####predict_pretrained_model', self.env_dict['predict_pretrained_model'])
-        # print('####set_cuda_flag', self.env_dict['set_cuda_flag'])
-        # print('####kpi_value_eval', self.env_dict['kpi_value_eval'])
+        # logger.info('####eval_trained_model: {}'.format(self.env_dict['eval_trained_model']))
+        # logger.info('####eval_pretrained_model: {}'.format(self.env_dict['eval_pretrained_model']))
+        # logger.info('####export_trained_model: {}'.format(self.env_dict['export_trained_model']))
+        # logger.info('####export_pretrained_model: {}'.format(self.env_dict['export_pretrained_model']))
+        # logger.info('####predict_trained_model: {}'.format(self.env_dict['predict_trained_model']))
+        # logger.info('####predict_pretrained_model: {}'.format(self.env_dict['predict_pretrained_model']))
+        # logger.info('####set_cuda_flag: {}'.format(self.env_dict['set_cuda_flag']))
+        # logger.info('####kpi_value_eval: {}'.format(self.env_dict['kpi_value_eval']))
         # input()
         os.environ[self.reponame] = json.dumps(self.env_dict)
         return ret

@@ -20,7 +20,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -41,7 +41,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -62,7 +62,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -83,7 +83,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -97,6 +97,10 @@ case:
         name: trained
         cmd: -m paddle.distributed.launch tools/eval.py
         params:
+          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
+          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
+          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
+          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -108,17 +112,25 @@ case:
         name: pretrained
         cmd: -m paddle.distributed.launch tools/eval.py
         params:
+          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
+          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
+          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
+          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
         name: single_trained
         cmd:  tools/eval.py
         params:
+          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
+          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
+          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
+          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -130,11 +142,15 @@ case:
         name: single_pretrained
         cmd:  tools/eval.py
         params:
+          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
+          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
+          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
+          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
     infer: skipped
@@ -156,7 +172,7 @@ case:
     predict:
       -
         name: trained
-        cmd: python/predict_cls.py
+        cmd: python/predict_system.py
         params:
           - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
@@ -168,7 +184,7 @@ case:
             evaluation: "="
       -
         name: pretrained
-        cmd: python/predict_cls.py
+        cmd: python/predict_system.py
         params:
           - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
