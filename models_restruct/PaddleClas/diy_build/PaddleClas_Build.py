@@ -161,6 +161,7 @@ class PaddleClas_Build(Model_Build):
             os.chdir("dataset")
             # 根据不同的模型下载数据
             for line in self.clas_model_list:
+                image_name = None #初始化
                 if "face" in line and "metric_learning" in line:
                     image_name = self.get_image_name(value=line, label="root_dir")
                 elif "traffic_sign" in line and "PULC" in line:
@@ -198,7 +199,7 @@ class PaddleClas_Build(Model_Build):
                 else:
                     image_name = self.get_image_name(value=line, label="image_root")
 
-                if "image_name" in dir() is False:
+                if image_name is None:
                     logger.info("do not need download")
                 else:
                     self.download_data(
