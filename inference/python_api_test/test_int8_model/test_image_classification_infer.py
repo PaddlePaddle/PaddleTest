@@ -72,23 +72,19 @@ class Predictor(object):
         if args.use_fp16 is True:
             assert args.use_trt is True
 
+        self.rerun_flag = False
         self.paddle_predictor = self._create_paddle_predictor()
         input_names = self.paddle_predictor.get_input_names()
         self.input_tensor = self.paddle_predictor.get_input_handle(input_names[0])
 
         output_names = self.paddle_predictor.get_output_names()
         self.output_tensor = self.paddle_predictor.get_output_handle(output_names[0])
-        self.rerun_flag = False
 
     def _create_paddle_predictor(self):
         inference_model_dir = args.model_path
         model_file = os.path.join(inference_model_dir, args.model_filename)
         params_file = os.path.join(inference_model_dir, args.params_filename)
         config = paddle.inference.Config(model_file, params_file)
-        if args.use_int8:
-            scale_file_path = os.path.join(inference_model_dir, "calibration_table.txt")
-            assert os.path.exists(scale_file_path)
-            config.set_calibration_file_path(scale_file_path)
         precision = paddle.inference.Config.Precision.Float32
         if args.use_int8:
             precision = paddle.inference.Config.Precision.Int8

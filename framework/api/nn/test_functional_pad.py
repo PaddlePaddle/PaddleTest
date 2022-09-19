@@ -339,34 +339,35 @@ def test_pad7():
     obj.run(res=res, x=x, pad=pad, mode=mode, data_format=data_format)
 
 
-# @pytest.mark.api_nn_functional_pad_parameters
-# def test_pad_8():
-#     """
-#     x = np.array([[1, 3], [-3, 1]])
-#     pad = [1, 1, 2, 3]
-#     mode = "constant"
-#     value = Tensor(2.0)
-#     data_format = "NCHW"
-#     """
-#     x = np.array([[[[1.0, 3.0], [-3.0, 1.0]]]])
-#     pad = [1, 1, 1, 2]
-#     mode = "constant"
-#     value = np.array(2.0)
-#     data_format = "NCHW"
-#     res = np.array(
-#         [
-#             [
-#                 [
-#                     [2.0, 2.0, 2.0, 2.0],
-#                     [2.0, 1.0, 3.0, 2.0],
-#                     [2.0, -3.0, 1.0, 2.0],
-#                     [2.0, 2.0, 2.0, 2.0],
-#                     [2.0, 2.0, 2.0, 2.0],
-#                 ]
-#             ]
-#         ]
-#     )
-#     exp = paddle.nn.functional.pad(
-#         x=paddle.to_tensor(x), pad=pad, mode=mode, value=paddle.to_tensor(value), data_format=data_format
-#     )
-#     assert np.allclose(exp.numpy(), res)
+@pytest.mark.api_nn_functional_pad_parameters
+def test_pad_8():
+    """
+    x = np.array([[1, 3], [-3, 1]])
+    pad = [1, 1, 2, 3]
+    mode = "constant"
+    value = Tensor(2.0)
+    data_format = "NCHW"
+    """
+    paddle.disable_static()
+    x = np.array([[[[1.0, 3.0], [-3.0, 1.0]]]])
+    pad = [1, 1, 1, 2]
+    mode = "constant"
+    value = np.array(2.0)
+    data_format = "NCHW"
+    res = np.array(
+        [
+            [
+                [
+                    [2.0, 2.0, 2.0, 2.0],
+                    [2.0, 1.0, 3.0, 2.0],
+                    [2.0, -3.0, 1.0, 2.0],
+                    [2.0, 2.0, 2.0, 2.0],
+                    [2.0, 2.0, 2.0, 2.0],
+                ]
+            ]
+        ]
+    )
+    exp = paddle.nn.functional.pad(
+        x=paddle.to_tensor(x), pad=pad, mode=mode, value=paddle.to_tensor(value), data_format=data_format
+    )
+    assert np.allclose(exp.numpy(), res)

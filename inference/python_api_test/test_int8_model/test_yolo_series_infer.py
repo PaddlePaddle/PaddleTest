@@ -283,10 +283,6 @@ def load_predictor(
             "Predict by TensorRT mode: {}, expect device=='GPU', but device == {}".format(precision, device)
         )
     config = Config(os.path.join(model_dir, "model.pdmodel"), os.path.join(model_dir, "model.pdiparams"))
-    if precision == "int8":
-        scale_file_path = os.path.join(model_dir, "calibration_table.txt")
-        assert os.path.exists(scale_file_path)
-        config.set_calibration_file_path(scale_file_path)
     if device == "GPU":
         # initial GPU memory(M), device ID
         config.enable_use_gpu(200, 0)

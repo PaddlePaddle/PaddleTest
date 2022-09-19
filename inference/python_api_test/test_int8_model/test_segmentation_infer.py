@@ -49,10 +49,6 @@ def load_predictor(args):
     model_file = os.path.join(args.model_path, args.model_filename)
     params_file = os.path.join(args.model_path, args.params_filename)
     pred_cfg = PredictConfig(model_file, params_file)
-    if args.precision == "int8":
-        scale_file_path = os.path.join(args.model_path, "calibration_table.txt")
-        assert os.path.exists(scale_file_path)
-        pred_cfg.set_calibration_file_path(scale_file_path)
     pred_cfg.enable_memory_optim()
     pred_cfg.switch_ir_optim(True)
     if args.device == "GPU":
@@ -154,7 +150,7 @@ def eval(args):
     eval_dataset = data_cfg.val_dataset
 
     batch_sampler = paddle.io.BatchSampler(eval_dataset, batch_size=1, shuffle=False, drop_last=False)
-    loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=1, return_list=True)
+    loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=0, return_list=True)
 
     total_iters = len(loader)
     intersect_area_all = 0
