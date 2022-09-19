@@ -191,10 +191,6 @@ class Predictor(object):
         config = paddle.inference.Config(
             os.path.join(args.model_path, args.model_filename), os.path.join(args.model_path, args.params_filename)
         )
-        if args.precision == "int8":
-            scale_file_path = os.path.join(args.model_path, "calibration_table.txt")
-            assert os.path.exists(scale_file_path)
-            config.set_calibration_file_path(scale_file_path)
         if args.device == "gpu":
             # set GPU configs accordingly
             config.enable_use_gpu(100, 0)
