@@ -11,5 +11,4 @@ for %%i in (".\dist\*.whl") do (
 )
 
 python -m pip uninstall -y paddlenlp
-
 python -m pip install dist\%FileName%
