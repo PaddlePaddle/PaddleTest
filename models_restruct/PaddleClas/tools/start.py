@@ -65,15 +65,15 @@ class PaddleClas_Start(object):
         if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
             logger.info("#### already download {}".format(tar_name))
         else:
-            logger.info("#### start download {}".format(tar_name))
             logger.info("#### value: {}".format(value.replace(" ", "")))
-            wget.download(value.replace(" ", ""))
-            logger.info("#### end download {}".format(tar_name))
-            if os.path.exists(tar_name):
+            try:
+                logger.info("#### start download {}".format(tar_name))
+                wget.download(value.replace(" ", ""))
+                logger.info("#### end download {}".format(tar_name))
                 tf = tarfile.open(tar_name)
                 tf.extractall(os.getcwd())
-            else:
-                return 1
+            except:
+                logger.info("#### start download failed {} failed".format(value.replace(" ", "")))
         return 0
 
     def download_infer_tar(self, value=None):
@@ -223,21 +223,28 @@ class PaddleClas_Start(object):
                         or "-VGG" in self.qa_yaml_name
                     ):
                         logger.info("#### use legendary_models pretrain model")
-                        logger.info("#### start download {}".format(self.eval_pretrained_params))
                         value = "https://paddle-imagenet-models-name.bj.bcebos.com/\
                             dygraph/legendary_models/{}_pretrained.pdparams".format(
                             self.eval_pretrained_params
                         )
-                        wget.download(value.replace(" ", ""))
-                        logger.info("#### end download {}".format(self.eval_pretrained_params))
+                        try:
+                            logger.info("#### start download {}".format(self.eval_pretrained_params))
+                            wget.download(value.replace(" ", ""))
+                            logger.info("#### end download {}".format(self.eval_pretrained_params))
+                        except:
+                            logger.info("#### start download failed {} failed".format(value.replace(" ", "")))
                     else:
-                        logger.info("#### start download {}".format(self.eval_pretrained_params))
                         value = "https://paddle-imagenet-models-name.bj.bcebos.com/\
                             dygraph/{}_pretrained.pdparams".format(
                             self.eval_pretrained_params
                         )
-                        wget.download(value.replace(" ", ""))
-                        logger.info("#### end download {}".format(self.eval_pretrained_params))
+                        try:
+                            logger.info("#### start download {}".format(self.eval_pretrained_params))
+                            wget.download(value.replace(" ", ""))
+                            logger.info("#### end download {}".format(self.eval_pretrained_params))
+                        except:
+                            logger.info("#### start download failed {} failed".format(value.replace(" ", "")))
+
                 self.env_dict["eval_pretrained_model"] = self.eval_pretrained_params + "_pretrained"
                 # 准备导出模型
                 self.env_dict["export_pretrained_model"] = self.predict_pretrain_params + "_infer"
