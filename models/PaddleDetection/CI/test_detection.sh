@@ -20,7 +20,7 @@ python -m pip install ${paddle_dev_wheel} --no-cache-dir
 else
 python -m pip install ${paddle_release_wheel} --no-cache-dir
 fi
-echo -e '*****************paddle_version*****'
+echo -e '******************paddle_version*****'
 python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************detection_version****'
 git rev-parse HEAD
