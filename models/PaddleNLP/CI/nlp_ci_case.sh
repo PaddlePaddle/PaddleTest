@@ -1054,7 +1054,6 @@ for p0case in ${P0case_list[*]};do
     let case_num++
 done
 echo -e "\033[35m ---- end run P0case  \033[0m"
-
 cd ${nlp_dir}/
 cp -r /ssd1/paddlenlp/bos/* ./
 tar -zcvf logs.tar logs/
