@@ -1031,12 +1031,14 @@ get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
     all_P0case_time=`expr ${all_P0case_time} + ${all_P0case_dic[$key]}`
 done
-if [[ ${Testcase} == 'null']];then
+if [[ ${Testcase} == 'null' ]];then
     P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie-1.0 xlnet ofa  squad tinybert lexical_analysis seq2seq \
     pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
     nptag ernie-m clue taskflow)
+    echo "success"
 else
     P0case_list=${Testcase}
+    echo ${Testcase}
 fi
 P0case_time=${all_P0case_time}
 }
