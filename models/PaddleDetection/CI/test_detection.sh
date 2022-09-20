@@ -22,7 +22,7 @@ python -m pip install ${paddle_release_wheel} --no-cache-dir
 fi
 echo -e '******************paddle_version*****'
 python -c 'import paddle;print(paddle.version.commit)'
-echo -e '*****************detection_version****'
+echo -e '******************detection_version****'
 git rev-parse HEAD
 #find modified config file of this pr
 rm -rf config_list
