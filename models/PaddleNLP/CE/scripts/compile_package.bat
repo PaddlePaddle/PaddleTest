@@ -1,7 +1,5 @@
 @echo off
 cd ..
-python -m pip uninstall Pillow
-python -m pip install Pillow==8.4.0
 cd models_repo
 
 python setup.py bdist_wheel
