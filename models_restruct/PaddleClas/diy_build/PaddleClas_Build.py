@@ -69,14 +69,14 @@ class PaddleClas_Build(Model_Build):
         if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
             logger.info("#### already download {}".format(tar_name))
         else:
-            logger.info("#### start download {}".format(tar_name))
-            wget.download(value.replace(" ", ""))
-            logger.info("#### end download {}".format(tar_name))
-            if os.path.exists(tar_name):
+            try:
+                logger.info("#### start download {}".format(tar_name))
+                wget.download(value.replace(" ", ""))
+                logger.info("#### end download {}".format(tar_name))
                 tf = tarfile.open(tar_name)
                 tf.extractall(os.getcwd())
-            else:
-                return 1
+            except:
+                logger.info("#### prepare download failed {} failed".format(tar_name))
         return 0
 
     def get_image_name(self, value=None, label=None):
@@ -161,7 +161,7 @@ class PaddleClas_Build(Model_Build):
             os.chdir("dataset")
             # 根据不同的模型下载数据
             for line in self.clas_model_list:
-                image_name = None #初始化
+                image_name = None  # 初始化
                 if "face" in line and "metric_learning" in line:
                     image_name = self.get_image_name(value=line, label="root_dir")
                 elif "traffic_sign" in line and "PULC" in line:
@@ -179,7 +179,6 @@ class PaddleClas_Build(Model_Build):
                             self.reponame
                         )
                     )
-                    del image_name
                 elif "strong_baseline" in line and "reid" in line:
                     self.download_data(
                         value="https://paddle-qa.bj.bcebos.com\
@@ -187,7 +186,6 @@ class PaddleClas_Build(Model_Build):
                             self.reponame
                         )
                     )
-                    del image_name
                 elif "MV3_Large_1x_Aliproduct_DLBHC" in line and "Products" in line:
                     image_name = self.get_image_name(value=line, label="image_root")
                     self.download_data(
@@ -229,10 +227,12 @@ class PaddleClas_Build(Model_Build):
         if self.value_in_modellist(value="slim"):
             logger.info("#### slim install")
             if os.path.exists("PaddleSlim") is False:
-                wget.download("https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim.tar.gz")
-                if os.path.exists("PaddleSlim.tar.gz"):
+                try:
+                    wget.download("https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim.tar.gz")
                     tf = tarfile.open("PaddleSlim.tar.gz")
                     tf.extractall(os.getcwd())
+                except:
+                    logger.info("#### prepare download failed {} failed".format("PaddleSlim.tar.gz"))
             if os.path.exists("PaddleSlim"):
                 path_now = os.getcwd()
                 os.chdir("PaddleSlim")
@@ -263,14 +263,17 @@ class PaddleClas_Build(Model_Build):
             ):
                 logger.info("#### already download nvidia_dali_cuda102 nvidia_dali_cuda110")
             else:
-                wget.download(
-                    "https://paddle-qa.bj.bcebos.com/PaddleClas/\
-                    nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
-                )
-                wget.download(
-                    "https://paddle-qa.bj.bcebos.com/PaddleClas/\
-                    nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl"
-                )
+                try:
+                    wget.download(
+                        "https://paddle-qa.bj.bcebos.com/PaddleClas/\
+                        nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
+                    )
+                    wget.download(
+                        "https://paddle-qa.bj.bcebos.com/PaddleClas/\
+                        nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl"
+                    )
+                except:
+                    logger.info("#### prepare download failed {} failed".format("nvidia_dali"))
 
             cmd_return = os.system(
                 "python -m  pip install \
