@@ -42,12 +42,10 @@ cd deploy/cpp
 wget ${paddle_inference}
 tar xvf paddle_inference.tgz
 sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
-sed -i "s|WITH_TENSORRT=OFF|WITH_TENSORRT=ON|g" scripts/build.sh
 sed -i "s|WITH_KEYPOINT=OFF|WITH_KEYPOINT=ON|g" scripts/build.sh
 sed -i "s|WITH_MOT=OFF|WITH_MOT=ON|g" scripts/build.sh
 sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh
-sed -i "s|/path/to/paddle_inference|../paddle_inference_install_dir|g" scripts/build.sh
-sed -i "s|TENSORRT_LIB_DIR=/path/to/tensorrt/lib|TENSORRT_LIB_DIR=/usr/local/TensorRT6-cuda10.1-cudnn7/lib|g" scripts/build.sh
+sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh
 sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh
 sh scripts/build.sh
 cd ../..
