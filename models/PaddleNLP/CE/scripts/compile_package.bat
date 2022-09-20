@@ -1,6 +1,6 @@
 @echo off
 cd ..
-python -m pip uninstall Pillow
+python -m pip uninstall Pillow -y
 python -m pip install Pillow==8.4.0
 cd models_repo
 
@@ -11,5 +11,4 @@ for %%i in (".\dist\*.whl") do (
 )
 
 python -m pip uninstall -y paddlenlp
-
 python -m pip install dist\%FileName%
