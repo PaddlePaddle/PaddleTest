@@ -17,8 +17,8 @@ export predict_step=True
 # 因为训练不足导致预测BN算子报错,直接使用预训练模型  根因是epoch数不能小于5
 if [[ ${model_name} == "PULC-language_classification-PPLCNet_x1_0" ]] \
     || [[ ${model_name} == "PULC-language_classification-MobileNetV3_small_x0_35" ]] \
-    || [[ ${model_name} == "PULC-textline_orientation-PPLCNet_x1_0" ]] \
-    || [[ ${model_name} == "PULC-textline_orientation-PPLCNet_x1_0_search" ]];then
+    || [[ ${model_name} =~ "PULC-textline_orientation" ]] \
+    || [[ ${model_name} =~ "PULC-textline_orientation" ]];then
     input_model_type_tmp=${input_model_type}
     export input_model_type=pretrained
     source choose_model.sh
