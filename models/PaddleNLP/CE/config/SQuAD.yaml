@@ -55,7 +55,7 @@ TRAIN:
       #   unit_repr: "s"
       loss:
         latest: True
-        kpi_base: 4.60107
+        kpi_base: 5.070976
         threshold: 0.08
         actived: True
         evaluation: "-"
