@@ -487,15 +487,17 @@ class APIBase(object):
                     self.kwargs[k].stop_gradient = False
         if data is None:
             for k, v in self.kwargs.items():
-                if isinstance(v, paddle.Tensor):
+                if isinstance(v, paddle.Tensor) and k not in self.no_grad_var:
                     grad = []
                     shape = v.numpy().shape
+                    logging.info("key is {}".format(k))
                     for i in range(len(v.numpy().flatten())):
                         tmp = v.numpy().flatten()
                         tmp[i] = tmp[i] + self.gap
                         tmp = tmp.reshape(shape)
                         # print(tmp)
                         self.kwargs[k] = to_tensor(tmp.astype(self.dtype))
+                        # logging.info("self.kwargs[k] is {}".format(self.kwargs[k]))
                         # enable compute gradient
                         if self.enable_backward is True:
                             self.kwargs[k].stop_gradient = False
@@ -509,6 +511,7 @@ class APIBase(object):
         else:
             # change data to correct dtype
             data = data.astype(self.dtype)
+            logging.info("data is {}".format(data))
             grad = []
             shape = data.shape
             for i in range(len(data.flatten())):

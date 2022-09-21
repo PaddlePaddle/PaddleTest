@@ -21,6 +21,7 @@ class TestProd(APIBase):
         """
         self.types = [np.float32, np.float64]
         self.enable_backward = True
+        self.no_grad_var = ["axis"]
 
 
 obj = TestProd(paddle.prod)
@@ -158,3 +159,16 @@ def test_prod10():
     res = np.prod(x, axis=axis)
     exp = paddle.prod(paddle.to_tensor(x), axis=paddle.to_tensor(axis))
     assert np.allclose(exp.numpy(), res)
+
+
+@pytest.mark.api_base_prod_parameters
+def test_prod11():
+    """
+    axis=negtive num
+    """
+    x = np.array([[0.8, 0.4], [0.7, 0.9]])
+    axis = np.array([-1])
+    res = np.prod(x, axis=-1)
+    obj.static = False
+    obj.run(res=res, x=x, axis=axis)
+    obj.static = True

@@ -25,7 +25,7 @@ class TestBincount(APIBase):
         # self.debug = True
         # self.static = True
         # enable check grad
-        self.enable_backward = False
+        self.no_grad_var = ["minlength"]
 
 
 obj = TestBincount(paddle.bincount)

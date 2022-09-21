@@ -27,6 +27,7 @@ class TestFunctionalTransposeConv2d(APIBase):
         # self.static = True
         # enable check grad
         # self.enable_backward = True
+        self.no_grad_var = ["output_size"]
 
 
 obj = TestFunctionalTransposeConv2d(paddle.nn.functional.conv2d_transpose)
@@ -412,3 +413,76 @@ def test_transpose_conv2d8():
         paddle.to_tensor(x), paddle.to_tensor(weight), paddle.to_tensor(bias), output_size=paddle.to_tensor(output_size)
     )
     assert np.allclose(exp.numpy(), res)
+
+
+@pytest.mark.api_nn_transpose_conv2d_parameters
+def test_transpose_conv2d9():
+    """
+    out_channels = 3 groups=3 data_format="NHWC" output_size=Tensor([4, 6])
+    """
+    np.random.seed(obj.seed)
+    x = randtool("float", 0, 1, [2, 6, 2, 2]).astype("float32").transpose(0, 2, 3, 1)
+    weight = np.ones(shape=[6, 1, 3, 3]).astype("float32")
+    bias = np.zeros(shape=[3]).astype("float32")
+    stride = 2
+    padding = [1, 0]
+    dilation = 1
+    groups = 3
+    output_size = np.array([4, 6]).astype("int32")
+    res = np.array(
+        [
+            [
+                [
+                    [1.1189, 1.1189, 1.7539, 0.6350, 0.6350, 0.0000],
+                    [1.5495, 1.5495, 3.3981, 1.8486, 1.8486, 0.0000],
+                    [0.4306, 0.4306, 1.6442, 1.2136, 1.2136, 0.0000],
+                    [0.4306, 0.4306, 1.6442, 1.2136, 1.2136, 0.0000],
+                ],
+                [
+                    [0.7600, 0.7600, 1.5980, 0.8380, 0.8380, 0.0000],
+                    [1.8887, 1.8887, 4.1032, 2.2146, 2.2146, 0.0000],
+                    [1.1287, 1.1287, 2.5052, 1.3766, 1.3766, 0.0000],
+                    [1.1287, 1.1287, 2.5052, 1.3766, 1.3766, 0.0000],
+                ],
+                [
+                    [1.6015, 1.6015, 2.3433, 0.7418, 0.7418, 0.0000],
+                    [2.6252, 2.6252, 3.9608, 1.3356, 1.3356, 0.0000],
+                    [1.0237, 1.0237, 1.6175, 0.5937, 0.5937, 0.0000],
+                    [1.0237, 1.0237, 1.6175, 0.5937, 0.5937, 0.0000],
+                ],
+            ],
+            [
+                [
+                    [0.8007, 0.8007, 1.6049, 0.8042, 0.8042, 0.0000],
+                    [2.7245, 2.7245, 4.4060, 1.6815, 1.6815, 0.0000],
+                    [1.9238, 1.9238, 2.8011, 0.8773, 0.8773, 0.0000],
+                    [1.9238, 1.9238, 2.8011, 0.8773, 0.8773, 0.0000],
+                ],
+                [
+                    [1.0835, 1.0835, 1.5807, 0.4973, 0.4973, 0.0000],
+                    [1.7327, 1.7327, 3.1496, 1.4169, 1.4169, 0.0000],
+                    [0.6492, 0.6492, 1.5689, 0.9196, 0.9196, 0.0000],
+                    [0.6492, 0.6492, 1.5689, 0.9196, 0.9196, 0.0000],
+                ],
+                [
+                    [0.8349, 0.8349, 1.9073, 1.0724, 1.0724, 0.0000],
+                    [2.3186, 2.3186, 3.6639, 1.3453, 1.3453, 0.0000],
+                    [1.4836, 1.4836, 1.7566, 0.2730, 0.2730, 0.0000],
+                    [1.4836, 1.4836, 1.7566, 0.2730, 0.2730, 0.0000],
+                ],
+            ],
+        ]
+    ).transpose(0, 2, 3, 1)
+    print(res.shape)
+    obj.run(
+        res=res,
+        x=x,
+        weight=weight,
+        bias=bias,
+        output_size=output_size,
+        stride=stride,
+        padding=padding,
+        groups=groups,
+        data_format="NHWC",
+        dilation=dilation,
+    )

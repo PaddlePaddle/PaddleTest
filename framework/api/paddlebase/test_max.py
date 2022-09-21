@@ -25,6 +25,7 @@ class TestMax(APIBase):
         # self.static = True
         # enable check grad
         self.enable_backward = True
+        self.no_grad_var = ["axis"]
 
 
 obj = TestMax(paddle.max)
@@ -83,6 +84,19 @@ def test_max_axis_3():
 
 
 @pytest.mark.api_base_max_parameters
+def test_max_axis_4():
+    """
+    axis = Tensor([1])
+    """
+    x_data = np.arange(6).reshape(2, 3).astype(np.float32)
+    axis = np.array([1])
+    res = np.max(x_data, axis=1)
+    obj.static = False
+    obj.run(res=res, x=x_data, axis=axis)
+    obj.static = True
+
+
+@pytest.mark.api_base_max_parameters
 def test_max_2D_keepdim():
     """
     keepdim=True
@@ -100,8 +114,3 @@ def test_max_1():
     x_data = np.array([[-1.00595951, -0.20009832], [-0.35623679, -0.95880121]])
     res = np.array([-0.20009832])
     obj.run(res=res, x=x_data, axis=[-2, 1], keepdim=False)
-
-
-# x1 = paddle.to_tensor([[-1.00595951, -0.20009832], [-0.35623679, -0.95880121]])
-# out = paddle.max(x1, axis=[-2, 1], keepdim=False)
-# print(out)

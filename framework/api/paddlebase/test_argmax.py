@@ -179,7 +179,7 @@ def test_argmax11():
 
 
 @pytest.mark.api_base_argmax_exception
-def test_argmin12():
+def test_argmax12():
     """
     dtype = None
     """
@@ -188,13 +188,12 @@ def test_argmin12():
     obj.exception(mode="python", etype=ValueError, x=x, dtype=dtype)
 
 
-@pytest.mark.api_base_argmax_parameters
+@pytest.mark.api_base_argmin_parameters
 def test_argmax13():
     """
     axis = Tensor(-R)
     """
     x = randtool("int", -100, 10, [3, 3])
-    axis = -2
-    res = np.argmax(a=x, axis=axis)
-    exp = paddle.argmax(paddle.to_tensor(x), axis=paddle.to_tensor(axis))
-    assert np.allclose(exp.numpy(), res)
+    axis = np.array([-2])
+    res = np.argmax(a=x, axis=-2)
+    obj.run(res=res, x=x, axis=axis)
