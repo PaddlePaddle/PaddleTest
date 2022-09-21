@@ -18,6 +18,9 @@ export get_repo=${get_repo:-wget} #现支持10个库，需要的话可以加，w
 export paddle_whl=${paddle_whl:-None}
 export dataset_org=${dataset_org:-None}
 export dataset_target=${dataset_target:-None}
+export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID
+export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID
+export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID
 export set_cuda=${set_cuda:-} #预先不设置
 
 #额外的变量
@@ -48,7 +51,6 @@ else
 fi
 export no_proxy=${no_proxy}
 set -x;
-
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
     mv ../task .  #如果预先下载直接mv
@@ -112,6 +114,9 @@ if [[ "${docker_flag}" == "" ]]; then
         export no_proxy=${no_proxy};
         export http_proxy=${http_proxy};
         export https_proxy=${http_proxy};
+        export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID;
+        export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID;
+        export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID;
 
         if [[ ${Python_env} == 'ln_way' ]];then
             # rm -rf /usr/bin/python2.7
@@ -183,6 +188,7 @@ if [[ "${docker_flag}" == "" ]]; then
         nvidia-smi;
         python -c 'import sys; print(sys.version_info[:])';
         git --version;
+        python -m pip install -r requirements.txt #预先安装依赖包
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
     " &
     wait $!
@@ -261,5 +267,6 @@ else
     nvidia-smi;
     python -c 'import sys; print(sys.version_info[:])';
     git --version;
+    python -m pip install -r requirements.txt #预先安装依赖包
     python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
 fi
