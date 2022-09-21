@@ -67,6 +67,6 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
 
 if __name__ == "__main__":
     logger.info("###")
-    log_content = "out_test.log"
+    log_content = "out_type"
     kpi_name = "class_ids"
     paddlelas_imagenet_parse(log_content, kpi_name)

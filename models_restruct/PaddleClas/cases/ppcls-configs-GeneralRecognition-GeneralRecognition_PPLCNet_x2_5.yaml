@@ -9,12 +9,6 @@ case:
           - -o Global.epochs=5
           - -o Global.save_interval=5
           - -o DataLoader.Train.sampler.batch_size=32
-          - -o DataLoader.Train.dataset.image_root=./dataset/Inshop/
-          - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
-          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
-          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -30,12 +24,6 @@ case:
           - -o Global.epochs=2
           - -o Global.save_interval=2
           - -o DataLoader.Train.sampler.batch_size=32
-          - -o DataLoader.Train.dataset.image_root=./dataset/Inshop/
-          - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
-          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
-          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -51,12 +39,6 @@ case:
           - -o Global.epochs=5
           - -o Global.save_interval=5
           - -o DataLoader.Train.sampler.batch_size=32
-          - -o DataLoader.Train.dataset.image_root=./dataset/Inshop/
-          - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
-          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
-          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -72,12 +54,6 @@ case:
           - -o Global.epochs=2
           - -o Global.save_interval=2
           - -o DataLoader.Train.sampler.batch_size=32
-          - -o DataLoader.Train.dataset.image_root=./dataset/Inshop/
-          - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
-          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
-          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -97,10 +73,6 @@ case:
         name: trained
         cmd: -m paddle.distributed.launch tools/eval.py
         params:
-          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
-          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -112,10 +84,6 @@ case:
         name: pretrained
         cmd: -m paddle.distributed.launch tools/eval.py
         params:
-          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
-          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -127,10 +95,6 @@ case:
         name: single_trained
         cmd:  tools/eval.py
         params:
-          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
-          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -142,10 +106,6 @@ case:
         name: single_pretrained
         cmd:  tools/eval.py
         params:
-          - -o DataLoader.Eval.Query.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Gallery.dataset.image_root=./dataset/iCartoonFace/
-          - -o DataLoader.Eval.Query.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
-          - -o DataLoader.Eval.Gallery.dataset.cls_label_path=./dataset/iCartoonFace/gallery.txt
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
