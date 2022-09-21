@@ -602,13 +602,9 @@ class APIBase(object):
                         if isinstance(v, (np.generic, np.ndarray)):
                             # no_grad_Var不需要转换类型
                             if self.no_grad_var is not None and k in self.no_grad_var:
-                                logging.info("kwargs[{}] is: {}".format(k, kwargs[k].dtype))
                                 kwargs[k] = v
-                                logging.info("kwargs[{}] is: {}".format(k, kwargs[k].dtype))
                             else:
-                                logging.info("kwargs[{}] is: {}".format(k, kwargs[k].dtype))
                                 kwargs[k] = v.astype(self.dtype)
-                                logging.info("kwargs[{}] is: {}".format(k, kwargs[k].dtype))
                     for k, v in params.items():
                         if isinstance(v, (np.generic, np.ndarray)):
                             # no_grad_Var不需要转换类型
@@ -639,6 +635,8 @@ class APIBase(object):
                             # logging.info("success~~~")
                         exe = paddle.static.Executor(self.place)
                         exe.run(startup_program)
+                        # print(list(grad_var.values()))
+                        # print([output] + list(grad_var.values()))
                         res = exe.run(
                             main_program, feed=kwargs, fetch_list=[output] + list(grad_var.values()), return_numpy=True
                         )
@@ -648,6 +646,8 @@ class APIBase(object):
                     else:
                         exe = paddle.static.Executor(self.place)
                         exe.run(startup_program)
+                        # print(list(grad_var.values()))
+                        # print([output] + list(grad_var.values()))
                         res = exe.run(main_program, feed=kwargs, fetch_list=[output], return_numpy=True)
                         return res[0]
         elif self.__layertype == "class":
