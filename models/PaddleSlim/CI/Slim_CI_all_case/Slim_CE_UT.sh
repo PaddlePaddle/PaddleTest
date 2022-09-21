@@ -9,7 +9,7 @@ if [ $1 -ne 0 ];then
 else
     mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
     echo ---${log_path}/SUCCESS_$2---
-    # grep -i 'Memory Usage' ${log_path}/SUCCESS_$2.log
+    #grep -i 'Memory Usage' ${log_path}/SUCCESS_$2.log
 fi
 }
 
