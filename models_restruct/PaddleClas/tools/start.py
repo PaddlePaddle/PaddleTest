@@ -110,7 +110,8 @@ class PaddleClas_Start(object):
         with open(os.path.join(self.REPO_PATH, self.rd_yaml_path), "r") as f:
             content = yaml.load(f, Loader=yaml.FullLoader)
         self.eval_trained_params = content["Arch"]["name"]
-
+        self.input_image_shape = list(content["Global"]["image_shape"])[1]  # 格式 [3, 384, 384]
+        # logger.info('#### self.input_image_shape: {}'.format(self.input_image_shape))
         # 获取下载模型的名称
         if self.eval_trained_params == "RecModel":
             if "Backbone" in str(content):
@@ -155,13 +156,28 @@ class PaddleClas_Start(object):
             logger.info("### can not get kpi_value_eval")
         return 0
 
+    def change_inference_yaml(self):
+        """
+        根据输入尺寸改变预测时使用的参数
+        """
+        with open(os.path.join(self.REPO_PATH, "deploy/configs/inference_cls.yaml"), "r") as f:
+            content = yaml.load(f, Loader=yaml.FullLoader)
+        content["PreProcess"]["transform_ops"][0]["ResizeImage"]["resize_short"] = self.input_image_shape
+        content["PreProcess"]["transform_ops"][1]["CropImage"]["size"] = self.input_image_shape
+        with open(os.path.join(self.REPO_PATH, "deploy/configs/inference_cls.yaml"), "w") as f:
+            yaml.dump(content, f)
+        return 0
+
     def prepare_env(self):
         """
         下载预训练模型，指定路径
         """
-        self.get_params()
-        path_now = os.getcwd()
-        os.chdir(self.reponame)  # 切入路径
+        self.get_params()  #  准备参数
+        if self.model_type == "ImageNet":
+            self.change_inference_yaml()
+
+        path_now = os.getcwd()  # 切入路径
+        os.chdir(self.reponame)
 
         # 准备评估内容
         self.env_dict["kpi_value_eval"] = self.kpi_value_eval
@@ -199,7 +215,6 @@ class PaddleClas_Start(object):
             logger.info("####{} not sport predict".format(self.qa_yaml_name))
 
         # 下载预训练模型
-        # TODO 路径需要优化，现在在repo外层
         step = self.step.split("+")  # 各个阶段按+分割
         for step_single in step:
             if (
