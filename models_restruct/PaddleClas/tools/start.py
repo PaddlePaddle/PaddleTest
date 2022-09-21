@@ -62,7 +62,9 @@ class PaddleClas_Start(object):
         # 调用函数路径已切换至PaddleClas
 
         tar_name = value.split("/")[-1]
-        if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
+        # if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
+        # 有end回收数据，只判断文件夹
+        if os.path.exists(tar_name.replace(".tar", "")):
             logger.info("#### already download {}".format(tar_name))
         else:
             logger.info("#### value: {}".format(value.replace(" ", "")))
@@ -81,20 +83,29 @@ class PaddleClas_Start(object):
         下载预测需要的预训练模型
         """
         path_now = os.getcwd()
-        # os.chdir(self.reponame)
         os.chdir("deploy")
         if os.path.exists("models") is False:
             os.mkdir("models")
         os.chdir("models")
-        if os.path.exists(value) and os.path.exists(value.replace(".tar", "")):
+        # if os.path.exists(value) and os.path.exists(value.replace(".tar", "")):
+        # 有end回收数据，只判断文件夹
+        if os.path.exists(value):  # 这里判断tar是否存在，以便于替换掉export传出的
             logger.info("####already download {}".format(value))
         else:
-            self.download_data(
-                "https://paddle-imagenet-models-name.bj.bcebos.com/\
-                dygraph/rec/models/inference/{}.tar".format(
-                    value
+            if "general_PPLCNetV2" in value:
+                self.download_data(
+                    "https://paddle-imagenet-models-name.bj.bcebos.com/\
+                    dygraph/rec/models/inference/PP-ShiTuV2/{}.tar".format(
+                        value
+                    )
                 )
-            )
+            else:
+                self.download_data(
+                    "https://paddle-imagenet-models-name.bj.bcebos.com/\
+                    dygraph/rec/models/inference/{}.tar".format(
+                        value
+                    )
+                )
         os.chdir(path_now)
         return 0
 
@@ -220,6 +231,10 @@ class PaddleClas_Start(object):
             if (
                 "eval" in step_single or "infer" in step_single or "export" in step_single
             ) and "pretrained" in step_single:
+                self.env_dict["eval_pretrained_model"] = self.eval_pretrained_params + "_pretrained"
+                # 准备导出模型
+                self.env_dict["export_pretrained_model"] = self.predict_pretrain_params + "_infer"
+
                 if os.path.exists(self.eval_pretrained_params + "_pretrained.pdparams"):
                     logger.info("### already have {}_pretrained.pdparams".format(self.eval_pretrained_params))
                 else:
@@ -260,14 +275,21 @@ class PaddleClas_Start(object):
                         except:
                             logger.info("#### start download failed {} failed".format(value.replace(" ", "")))
 
-                self.env_dict["eval_pretrained_model"] = self.eval_pretrained_params + "_pretrained"
-                # 准备导出模型
-                self.env_dict["export_pretrained_model"] = self.predict_pretrain_params + "_infer"
-
-            elif "predict" in step_single and "pretrained" in step_single:
+            elif "predict" in step_single and (
+                "pretrained" in step_single
+                or "PULC-language_classification" in self.qa_yaml_name
+                or "PULC-textline_orientation" in self.qa_yaml_name
+            ):
                 self.env_dict["predict_pretrained_model"] = os.path.join(
                     "../{}_infer".format(self.predict_pretrain_params)
                 )
+                # 添加额外的规则 注意要在上面if添加同样的规则
+                if (
+                    "PULC-language_classification" in self.qa_yaml_name
+                    or "PULC-textline_orientation" in self.qa_yaml_name
+                ):  # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
+                    self.env_dict["predict_trained_model"] = self.env_dict["predict_pretrained_model"]
+
                 if (
                     self.model_type == "ImageNet"
                     or self.model_type == "slim"
@@ -295,6 +317,7 @@ class PaddleClas_Start(object):
                 elif self.model_type == "GeneralRecognition":  # 暂时用训好的模型 220815
                     self.download_infer_tar("picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer")
                     self.download_infer_tar("general_PPLCNet_x2_5_lite_v1.0_infer")
+                    self.download_infer_tar("general_PPLCNetV2_base_pretrained_v1.0_infer")
                 elif self.model_type == "Cartoonface":
                     self.download_infer_tar("ppyolov2_r50vd_dcn_mainbody_v1.0_infer")
                     self.download_infer_tar("cartoon_rec_ResNet50_iCartoon_v1.0_infer")
@@ -374,14 +397,15 @@ class PaddleClas_Start(object):
             logger.info("build prepare_creat_yaml failed")
             return ret
 
-        # logger.info('####eval_trained_model: {}'.format(self.env_dict['eval_trained_model']))
-        # logger.info('####eval_pretrained_model: {}'.format(self.env_dict['eval_pretrained_model']))
-        # logger.info('####export_trained_model: {}'.format(self.env_dict['export_trained_model']))
-        # logger.info('####export_pretrained_model: {}'.format(self.env_dict['export_pretrained_model']))
-        # logger.info('####predict_trained_model: {}'.format(self.env_dict['predict_trained_model']))
-        # logger.info('####predict_pretrained_model: {}'.format(self.env_dict['predict_pretrained_model']))
-        # logger.info('####set_cuda_flag: {}'.format(self.env_dict['set_cuda_flag']))
-        # logger.info('####kpi_value_eval: {}'.format(self.env_dict['kpi_value_eval']))
+        #   debug用print  中途输出用logger
+        # print('####eval_trained_model: {}'.format(self.env_dict['eval_trained_model']))
+        # print('####eval_pretrained_model: {}'.format(self.env_dict['eval_pretrained_model']))
+        # print('####export_trained_model: {}'.format(self.env_dict['export_trained_model']))
+        # print('####export_pretrained_model: {}'.format(self.env_dict['export_pretrained_model']))
+        # print('####predict_trained_model: {}'.format(self.env_dict['predict_trained_model']))
+        # print('####predict_pretrained_model: {}'.format(self.env_dict['predict_pretrained_model']))
+        # print('####set_cuda_flag: {}'.format(self.env_dict['set_cuda_flag']))
+        # print('####kpi_value_eval: {}'.format(self.env_dict['kpi_value_eval']))
         # input()
         os.environ[self.reponame] = json.dumps(self.env_dict)
         return ret

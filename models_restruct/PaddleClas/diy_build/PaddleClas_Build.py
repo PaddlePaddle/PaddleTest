@@ -66,7 +66,9 @@ class PaddleClas_Build(Model_Build):
         # 调用函数路径已切换至PaddleClas
 
         tar_name = value.split("/")[-1]
-        if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
+        # if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
+        # 有end回收数据，只判断文件夹
+        if os.path.exists(tar_name.replace(".tar", "")):
             logger.info("#### already download {}".format(tar_name))
         else:
             try:
@@ -119,12 +121,29 @@ class PaddleClas_Build(Model_Build):
             for line in self.clas_model_list:
                 with open(os.path.join(self.REPO_PATH, line), "r") as f:
                     content = yaml.load(f, Loader=yaml.FullLoader)
+
+                # 改变 batch_size
                 if "PKSampler" in str(content) or "DistributedRandomIdentitySampler" in str(content):
                     logger.info("#### do not change batch_size in {}".format(line))
                 else:
-                    content_new = self.change_yaml_batch_size(content)  # 卸载with里面不能够全部生效
+                    content_new = self.change_yaml_batch_size(content)  # 写在with里面不能够全部生效
                     with open(os.path.join(self.REPO_PATH, line), "w") as f:
                         yaml.dump(content_new, f)
+
+                # 改变 GeneralRecognition 依赖的数据集
+                if "GeneralRecognition" in line:
+                    content["DataLoader"]["Train"]["dataset"]["image_root"] = "./dataset/Inshop/"
+                    content["DataLoader"]["Train"]["dataset"]["cls_label_path"] = "./dataset/Inshop/train_list.txt"
+                    content["DataLoader"]["Eval"]["Query"]["dataset"]["image_root"] = "./dataset/iCartoonFace/"
+                    content["DataLoader"]["Eval"]["Gallery"]["dataset"]["image_root"] = "./dataset/iCartoonFace/"
+                    content["DataLoader"]["Eval"]["Query"]["dataset"][
+                        "cls_label_path"
+                    ] = "./dataset/iCartoonFace/gallery.txt"
+                    content["DataLoader"]["Eval"]["Gallery"]["dataset"][
+                        "cls_label_path"
+                    ] = "./dataset/iCartoonFace/gallery.txt"
+                    with open(os.path.join(self.REPO_PATH, line), "w") as f:
+                        yaml.dump(content, f)
         else:
             logger.info("check you {} path".format(self.reponame))
         return 0
@@ -138,13 +157,21 @@ class PaddleClas_Build(Model_Build):
             path_now = os.getcwd()
             os.chdir(self.reponame)
             os.chdir("deploy")
-            if os.path.exists("recognition_demo_data_en_v1.1.tar") and os.path.exists("drink_dataset_v1.0.tar"):
+            if (
+                os.path.exists("recognition_demo_data_en_v1.1")
+                and os.path.exists("drink_dataset_v1.0")
+                and os.path.exists("drink_dataset_v2.0")
+            ):
                 logger.info("#### already download rec_demo")
             else:
                 logger.info("#### start download rec_demo")
                 self.download_data(
                     value="https://paddle-imagenet-models-name.bj.bcebos.com\
                     /dygraph/rec/data/drink_dataset_v1.0.tar"
+                )
+                self.download_data(
+                    value="https://paddle-imagenet-models-name.bj.bcebos.com\
+                    /dygraph/rec/data/drink_dataset_v2.0.tar"
                 )
                 self.download_data(
                     value="https://paddle-imagenet-models-name.bj.bcebos.com\
