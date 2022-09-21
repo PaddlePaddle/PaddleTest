@@ -71,7 +71,14 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
+# python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
+# dev
+git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
+cd PaddleSlim
+python -m pip install -r requirements.txt
+python setup.py install
+cd ..
+
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 num=`python -m pip list | grep fasttext | wc -l`
 if [ "${num}" -eq "0" ]; then
@@ -268,6 +275,15 @@ fi
 
 elif [ ${algorithm} == "SAR" ];then
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words/en/word_1.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 48, 48, 160" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+if [[ $? -eq 0 ]]; then
+   echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/predict/${model}.log
+   echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
+fi
+
+elif [ ${algorithm} == "NRTR" ];then
+python tools/infer/predict_rec.py --image_dir='./doc/imgs_words_en/word_10.png' --rec_model_dir='./inference/rec_mtb_nrtr/' --rec_algorithm='NRTR' --rec_image_shape='1,32,100' --rec_char_dict_path='./ppocr/utils/EN_symbol_dict.txt' > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
