@@ -1,3 +1,4 @@
+case:
   linux:
     base: ./base/Products_base.yaml
     train:
@@ -14,7 +15,7 @@
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -30,7 +31,7 @@
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -46,7 +47,7 @@
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -62,7 +63,7 @@
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -74,7 +75,7 @@
           - -o Global.eval_interval=delete
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -86,7 +87,7 @@
           - -o Global.eval_interval=delete
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
     eval:
@@ -109,7 +110,7 @@
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
       -
@@ -131,7 +132,7 @@
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
-            base: 0.90
+            base: 20
             threshold: 0.01
             evaluation: "-"
     infer: skipped
@@ -153,7 +154,7 @@
     predict:
       -
         name: trained
-        cmd: python/predict_cls.py
+        cmd: python/predict_system.py
         params:
           - -c configs/inference_product.yaml
           - -o Global.use_gpu=${set_cuda_flag}
@@ -165,7 +166,7 @@
             evaluation: "="
       -
         name: pretrained
-        cmd: python/predict_cls.py
+        cmd: python/predict_system.py
         params:
           - -c configs/inference_product.yaml
           - -o Global.use_gpu=${set_cuda_flag}
