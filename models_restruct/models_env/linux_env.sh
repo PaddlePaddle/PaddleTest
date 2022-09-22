@@ -189,8 +189,6 @@ if [[ "${docker_flag}" == "" ]]; then
     wait $!
     exit $?
 else
-    export Project_path=${Project_path:-${PWD}/task/PaddleClas}
-    echo ${Project_path}
     ldconfig;
     if [[ ${Python_env} == 'ln_way' ]];then
         # rm -rf /usr/bin/python2.7

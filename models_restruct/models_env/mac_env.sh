@@ -63,9 +63,6 @@ cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
-export Project_path=${Project_path:-${PWD}/task/PaddleClas}
-echo ${Project_path}
-
 python -c 'import sys; print(sys.version_info[:])';
 git --version;
 python -m pip install -r requirements.txt #预先安装依赖包
