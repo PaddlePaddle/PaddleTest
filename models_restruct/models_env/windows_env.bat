@@ -58,7 +58,7 @@ if exist "../task" (
 chdir
 dir
 rem 复制模型相关文件到指定位置
-xcopy  .\task\%models_name%\%reponame%\.  .\%CE_version_name%\
+xcopy  .\task\%models_name%\%reponame%\. .\%CE_version_name%\ /s /e
 cd .\%CE_version_name%\
 dir
 
