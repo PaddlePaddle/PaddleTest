@@ -156,7 +156,7 @@ case:
         name: trained
         cmd: python/predict_system.py
         params:
-          - -c configs/inference_cartoon.yaml
+          - -c configs/inference_vehicle.yaml
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -168,7 +168,7 @@ case:
         name: pretrained
         cmd: python/predict_system.py
         params:
-          - -c configs/inference_cartoon.yaml
+          - -c configs/inference_vehicle.yaml
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
