@@ -260,7 +260,11 @@ class Predictor(object):
             metric.update(correct)
 
         sequences_num = i * args.batch_size
-        print("[benchmark]task name: %s, time: %s qps/s, " % (args.task_name, sequences_num / predict_time))
+        print(
+            "[benchmark]task name: {}, batch size: {} Inference time pre batch: {}ms, qps: {}.".format(
+                args.task_name, args.batch_size, round(predict_time / i, 2), ronud(sequences_num / predict_time, 2)
+            )
+        )
         res = metric.accumulate()
         print("[benchmark]task name: %s, acc: %s. \n" % (args.task_name, res), end="")
         sys.stdout.flush()
