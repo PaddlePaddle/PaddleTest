@@ -191,7 +191,7 @@ def test_argmax12():
 @pytest.mark.api_base_argmin_parameters
 def test_argmax13():
     """
-    axis = Tensor(-R)
+    axis = Tensor([-2])
     """
     x = randtool("int", -100, 10, [3, 3])
     axis = np.array([-2])
