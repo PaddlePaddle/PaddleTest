@@ -5,6 +5,7 @@
 import os
 import sys
 import json
+import glob
 import shutil
 import argparse
 import logging
@@ -24,25 +25,69 @@ class PaddleClas_End(object):
         """
         初试化
         """
-        self.reponame = os.environ["reponame"]
+        # self.reponame = os.environ["reponame"]
+        self.reponame = "PaddleClas"
 
     def remove_data(self):
         """
         回收之前下载的数据
         """
-        logger.info("#### {}".format(os.listdir(self.reponame)))
+        list_dir = os.listdir(self.reponame)
+        path_now = os.getcwd()
+        os.chdir(self.reponame)
+
+        for file_name in list_dir:
+            if ".tar" in file_name:
+                os.remove(file_name)
+                if os.path.exists(file_name.replace(".tar", "")):
+                    shutil.rmtree(file_name.replace(".tar", ""))
+                logger.info("#### clean data _infer: {}".format(file_name))
+
+            if "_pretrained.pdparams" in file_name:
+                os.remove(file_name)
+                logger.info("#### clean data: {}".format(file_name))
+
+            if file_name == "inference":
+                shutil.rmtree("inference")
+                logger.info("#### clean data inference: {}".format("inference"))
+
+            if file_name == "output":
+                del_pdparams = glob.glob(r"output/*/*/*.pdparams")
+                del_pdopt = glob.glob(r"output/*/*/*.pdopt")
+                if del_pdparams != [] and del_pdopt != []:
+                    logger.info("#### clean data pdparams: {}".format("pdparams"))
+                    for del_name in del_pdparams:
+                        if "latest" not in del_name:  # 保留最后一个epoch是完整的，其它只保留结构参数
+                            os.remove(del_name)
+                    for del_name in del_pdopt:
+                        if "latest" not in del_name:
+                            os.remove(del_name)
+
+            if file_name == "dataset":
+                del_dataset = glob.glob(r"dataset/*.tar")
+                if del_dataset != []:
+                    logger.info("#### clean data dataset: {}".format("dataset"))
+                    for del_name in del_dataset:
+                        os.remove(del_name)
+                if os.path.exists(os.path.join("dataset", "face")):
+                    shutil.rmtree(os.path.join("dataset", "face"))
+                    logger.info("#### clean data face: {}".format("dataset"))
+
+        os.chdir(path_now)
         return 0
 
-    def build_prepare(self):
+    def build_end(self):
         """
         执行准备过程
         """
         # 进入repo中
+        logger.info("build remove_data start")
         ret = 0
         ret = self.remove_data()
         if ret:
             logger.info("build remove_data failed")
             return ret
+        logger.info("build remove_data end")
         return ret
 
 
@@ -51,7 +96,7 @@ def run():
     执行入口
     """
     model = PaddleClas_End()
-    model.build_prepare()
+    model.build_end()
     return 0
 
 

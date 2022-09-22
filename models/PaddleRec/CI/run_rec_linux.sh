@@ -54,6 +54,7 @@ export log_path=/workspace/logs
 
 # run_CI/run_CE/run_ALL/run_CPU 、cudaid1、cudaid2
 bash rec_run_case_linux.sh $3 $4 $5
+exit $?
 
 cd ${log_path}
 FF=`ls *FAIL*|wc -l`
