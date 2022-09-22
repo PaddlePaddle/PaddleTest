@@ -154,7 +154,6 @@ def eval(args):
 
     predictor, rerun_flag = load_predictor(args)
 
-    total_iters = len(loader)
     intersect_area_all = 0
     pred_area_all = 0
     label_area_all = 0
@@ -162,12 +161,13 @@ def eval(args):
     input_handle = predictor.get_input_handle(input_names[0])
     output_names = predictor.get_output_names()
     output_handle = predictor.get_output_handle(output_names[0])
-    batch_size = int(eval_dataset / total_iters)
-    sample_nums = len(total_iters)
+    total_samples = len(eval_dataset)
+    sample_nums = len(loader)
+    batch_size = int(total_samples / sample_nums)
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
-    print("Start evaluating (total_samples: {}, total_iters: {}).".format(len(eval_dataset), sample_nums))
+    print("Start evaluating (total_samples: {}, total_iters: {}).".format(total_samples, sample_nums))
     for batch_id, data in enumerate(loader):
         image = np.array(data[0])
         label = np.array(data[1]).astype("int64")
@@ -215,7 +215,7 @@ def eval(args):
         )
     )
     infor = "[Benchmark] #Images: {} mIoU: {:.4f} Acc: {:.4f} Kappa: {:.4f} Dice: {:.4f}".format(
-        len(eval_dataset), miou, acc, kappa, mdice
+        total_samples, miou, acc, kappa, mdice
     )
     print(infor)
     sys.stdout.flush()
