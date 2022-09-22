@@ -262,7 +262,7 @@ class Predictor(object):
         sequences_num = i * args.batch_size
         print(
             "[benchmark]task name: {}, batch size: {} Inference time pre batch: {}ms, qps: {}.".format(
-                args.task_name, args.batch_size, round(predict_time / i, 2), ronud(sequences_num / predict_time, 2)
+                args.task_name, args.batch_size, round(predict_time / i, 2), round(sequences_num / predict_time, 2)
             )
         )
         res = metric.accumulate()
