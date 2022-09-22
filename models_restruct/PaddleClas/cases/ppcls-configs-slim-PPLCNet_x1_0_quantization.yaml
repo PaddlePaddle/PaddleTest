@@ -159,6 +159,7 @@ case:
           - -c configs/inference_cls.yaml
             -o Global.infer_imgs="./images"
           - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.inference_model_dir=${predict_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
@@ -172,6 +173,7 @@ case:
           - -c configs/inference_cls.yaml
             -o Global.infer_imgs="./images"
           - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.inference_model_dir=${predict_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
