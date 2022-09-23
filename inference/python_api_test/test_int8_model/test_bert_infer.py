@@ -261,7 +261,7 @@ class Predictor(object):
 
         sequences_num = i * args.batch_size
         print(
-            "[benchmark]task name: {}, batch size: {} Inference time pre batch: {}ms, qps: {}.".format(
+            "[benchmark]task name: {}, batch size: {} Inference time per batch: {}ms, qps: {}.".format(
                 args.task_name,
                 args.batch_size,
                 round(predict_time * 1000 / i, 2),
