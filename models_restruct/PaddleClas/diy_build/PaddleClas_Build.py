@@ -27,6 +27,7 @@ class PaddleClas_Build(Model_Build):
         self.paddle_whl = args.paddle_whl
         self.get_repo = args.get_repo
         self.branch = args.branch
+        self.system = args.system
         self.set_cuda = args.set_cuda
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
