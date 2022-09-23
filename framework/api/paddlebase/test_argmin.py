@@ -186,3 +186,14 @@ def test_argmin12():
     x = randtool("int", -100, 10, [3, 3])
     dtype = None
     obj.exception(mode="python", etype=ValueError, x=x, dtype=dtype)
+
+
+@pytest.mark.api_base_argmin_parameters
+def test_argmin13():
+    """
+    axis = Tensor(-R)
+    """
+    x = randtool("int", -100, 10, [3, 3])
+    axis = np.array([-2])
+    res = np.argmin(a=x, axis=-2)
+    obj.run(res=res, x=x, axis=axis)
