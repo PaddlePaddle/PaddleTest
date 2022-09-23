@@ -14,7 +14,7 @@ from jittrans import JitTrans
 
 yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", "base.yml")
 
-case_name = "shard_index_4"
+case_name = "split_0"
 
 
 # loading yaml
