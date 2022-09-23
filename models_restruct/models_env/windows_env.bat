@@ -7,7 +7,7 @@ cd ce
 rem 预设默认参数
 if not defined models_list set models_list=None
 if not defined models_file set models_file=None
-if not defined system set system=linux
+if not defined system set system=windows
 if not defined step set step=train
 if not defined reponame set reponame=PaddleClas
 if not defined mode set mode=function

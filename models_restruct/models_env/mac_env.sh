@@ -8,7 +8,7 @@ cd ce;
 #### 预设默认参数
 export models_list=${models_list:-None}
 export models_file=${models_file:-None} #预先不设置，二选一
-export system=${system:-linux}
+export system=${system:-mac}
 export step=${step:-train}
 export reponame=${reponame:-PaddleClas}
 export mode=${mode:-function}
