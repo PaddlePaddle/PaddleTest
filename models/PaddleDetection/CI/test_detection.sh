@@ -401,6 +401,7 @@ else
     CPP_INFER
 fi
 fi
+done
 model='pphuman'
 cd log && mkdir ${model} && cd ..
 PPHuman
@@ -408,7 +409,6 @@ PPHuman_reid
 model='ppvehicle'
 cd log && mkdir ${model} && cd ..
 PPVehicle
-done
 if [ "${err_sign}" = true ];then
     exit 1
 fi
