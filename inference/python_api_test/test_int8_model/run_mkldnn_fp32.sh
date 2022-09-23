@@ -6,7 +6,7 @@ echo "[Benchmark] Run PPYOLOE MKLDNN fp32"
 $PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_crn_l_300e_coco --reader_config=configs/ppyoloe_reader.yml --device=CPU --use_mkldnn=True --cpu_threads=10
 # PicoDet MKLDNN
 echo "[Benchmark] Run PicoDet MKLDNN fp32"
-$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu --reader_config=configs/picodet_reader.yml
+$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu --reader_config=configs/picodet_reader.yml --device=CPU --use_mkldnn=True --cpu_threads=10
 # YOLOv5s MKLDNN
 echo "[Benchmark] Run YOLOv5s MKLDNN fp32"
 $PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_infer --device=CPU --use_mkldnn=True --cpu_threads=10 --arch=YOLOv5
