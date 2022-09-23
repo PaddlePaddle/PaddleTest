@@ -487,7 +487,7 @@ class APIBase(object):
                     self.kwargs[k].stop_gradient = False
         if data is None:
             for k, v in self.kwargs.items():
-                if isinstance(v, paddle.Tensor):
+                if isinstance(v, paddle.Tensor) and k not in self.no_grad_var:
                     grad = []
                     shape = v.numpy().shape
                     for i in range(len(v.numpy().flatten())):

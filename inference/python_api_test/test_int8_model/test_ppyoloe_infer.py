@@ -399,18 +399,18 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     time_min = float("inf")
     time_max = float("-inf")
     sample_nums = len(val_loader)
+    input_names = predictor.get_input_names()
+    output_names = predictor.get_output_names()
+    boxes_tensor = predictor.get_output_handle(output_names[0])
+    boxes_num = predictor.get_output_handle(output_names[1])
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
-        input_names = predictor.get_input_names()
         for i, _ in enumerate(input_names):
             input_tensor = predictor.get_input_handle(input_names[i])
             input_tensor.copy_from_cpu(data_all[input_names[i]])
         start_time = time.time()
         predictor.run()
-        output_names = predictor.get_output_names()
-        boxes_tensor = predictor.get_output_handle(output_names[0])
         np_boxes = boxes_tensor.copy_to_cpu()
-        boxes_num = predictor.get_output_handle(output_names[1])
         np_boxes_num = boxes_num.copy_to_cpu()
         if rerun_flag:
             return

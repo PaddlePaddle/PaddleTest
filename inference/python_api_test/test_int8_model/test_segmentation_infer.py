@@ -152,27 +152,36 @@ def eval(args):
     batch_sampler = paddle.io.BatchSampler(eval_dataset, batch_size=1, shuffle=False, drop_last=False)
     loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=0, return_list=True)
 
-    total_iters = len(loader)
+    predictor, rerun_flag = load_predictor(args)
+
     intersect_area_all = 0
     pred_area_all = 0
     label_area_all = 0
-
-    print("Start evaluating (total_samples: {}, total_iters: {})...".format(len(eval_dataset), total_iters))
-    predictor, rerun_flag = load_predictor(args)
+    input_names = predictor.get_input_names()
+    input_handle = predictor.get_input_handle(input_names[0])
+    output_names = predictor.get_output_names()
+    output_handle = predictor.get_output_handle(output_names[0])
+    total_samples = len(eval_dataset)
+    sample_nums = len(loader)
+    batch_size = int(total_samples / sample_nums)
+    predict_time = 0.0
+    time_min = float("inf")
+    time_max = float("-inf")
+    print("Start evaluating (total_samples: {}, total_iters: {}).".format(total_samples, sample_nums))
     for batch_id, data in enumerate(loader):
         image = np.array(data[0])
         label = np.array(data[1]).astype("int64")
         ori_shape = np.array(label).shape[-2:]
-        input_names = predictor.get_input_names()
-        input_handle = predictor.get_input_handle(input_names[0])
         input_handle.reshape(image.shape)
         input_handle.copy_from_cpu(image)
-
+        start_time = time.time()
         predictor.run()
-
-        output_names = predictor.get_output_names()
-        output_handle = predictor.get_output_handle(output_names[0])
         results = output_handle.copy_to_cpu()
+        end_time = time.time()
+        timed = end_time - start_time
+        time_min = min(time_min, timed)
+        time_max = max(time_max, timed)
+        predict_time += timed
         if rerun_flag:
             print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
             return
@@ -199,8 +208,14 @@ def eval(args):
     kappa = metrics.kappa(intersect_area_all, pred_area_all, label_area_all)
     _, mdice = metrics.dice(intersect_area_all, pred_area_all, label_area_all)
 
+    time_avg = predict_time / sample_nums
+    print(
+        "[Benchmark]Batch size: {}, Inference time(ms): min={}, max={}, avg={}".format(
+            batch_size, round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
+        )
+    )
     infor = "[Benchmark] #Images: {} mIoU: {:.4f} Acc: {:.4f} Kappa: {:.4f} Dice: {:.4f}".format(
-        len(eval_dataset), miou, acc, kappa, mdice
+        total_samples, miou, acc, kappa, mdice
     )
     print(infor)
     sys.stdout.flush()

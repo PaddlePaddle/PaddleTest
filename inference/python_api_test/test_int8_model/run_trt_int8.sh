@@ -20,19 +20,19 @@ $PYTHON test_yolo_series_infer.py --model_path=models/yolov7_quant --use_trt=Tru
 
 # ResNet_vd trt int8
 echo "[Benchmark] Run ResNet_vd trt int8"
-$PYTHON test_image_classification_infer.py --model_path=models/ResNet50_vd_QAT --use_trt=True --use_int8=True --eval=True --use_gpu=True
+$PYTHON test_image_classification_infer.py --model_path=models/ResNet50_vd_QAT --use_trt=True --use_int8=True --use_gpu=True
 # MobileNetV3_large trt int8
 echo "[Benchmark] Run MobileNetV3_large trt int8"
-$PYTHON test_image_classification_infer.py --model_path=models/MobileNetV3_large_x1_0_QAT --use_trt=True --use_int8=True --eval=True --use_gpu=True
+$PYTHON test_image_classification_infer.py --model_path=models/MobileNetV3_large_x1_0_QAT --use_trt=True --use_int8=True --use_gpu=True
 # PPLCNetV2 trt int8
 echo "[Benchmark] Run PPLCNetV2 trt int8"
-$PYTHON test_image_classification_infer.py --model_path=models/PPLCNetV2_base_QAT --use_trt=True --use_int8=True --eval=True --use_gpu=True
+$PYTHON test_image_classification_infer.py --model_path=models/PPLCNetV2_base_QAT --use_trt=True --use_int8=True --use_gpu=True
 # PPHGNet_tiny trt int8
 echo "[Benchmark] Run PPHGNet_tiny trt int8"
-$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_QAT --use_trt=True --use_int8=True --eval=True --use_gpu=True
+$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_QAT --use_trt=True --use_int8=True --use_gpu=True
 # EfficientNetB0 trt int8
 echo "[Benchmark] Run EfficientNetB0 trt int8"
-$PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_QAT --use_trt=True --use_int8=True --eval=True --use_gpu=True
+$PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_QAT --use_trt=True --use_int8=True --use_gpu=True
 
 # PP-HumanSeg-Lite trt int8
 echo "[Benchmark] Run PP-HumanSeg-Lite trt int8"

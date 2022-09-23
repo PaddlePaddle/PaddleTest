@@ -39,7 +39,6 @@ def argsparser():
     parser.add_argument("--batch_size", type=int, default=1)
     parser.add_argument("--img_size", type=int, default=224)
     parser.add_argument("--resize_size", type=int, default=256)
-    parser.add_argument("--eval", type=bool, default=False, help="Whether to evaluate")
     parser.add_argument("--data_path", type=str, default="./dataset/ILSVRC2012_val/")
     parser.add_argument("--use_gpu", type=bool, default=False, help="Whether to use gpu")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether to use mkldnn")
@@ -128,37 +127,6 @@ class Predictor(object):
 
         return predictor
 
-    def predict(self):
-        """
-        predict func
-        """
-        test_num = 1000
-        test_time = 0.0
-        for i in range(0, test_num + 10):
-            inputs = np.random.rand(args.batch_size, 3, args.img_size, args.img_size).astype(np.float32)
-            start_time = time.time()
-            self.input_tensor.copy_from_cpu(inputs)
-            self.paddle_predictor.run()
-            batch_output = self.output_tensor.copy_to_cpu().flatten()
-            if self.rerun_flag:
-                return
-            if i >= 10:
-                test_time += time.time() - start_time
-            time.sleep(0.01)  # sleep for T4 GPU
-
-        fp_message = "FP16" if args.use_fp16 else "FP32"
-        fp_message = "INT8" if args.use_int8 else fp_message
-        print_msg = "Paddle"
-        if args.use_trt:
-            print_msg = "using TensorRT"
-        elif args.use_mkldnn:
-            print_msg = "using MKLDNN"
-        print(
-            "[Benchmark]{0}\t{1}\tbatch size: {2}\ttime(ms): {3}".format(
-                print_msg, fp_message, args.batch_size, 1000 * test_time / test_num
-            )
-        )
-
     def eval(self):
         """
         eval func
@@ -172,17 +140,26 @@ class Predictor(object):
             label = None
             val_loader = [[image, label]]
         results = []
+        input_names = self.paddle_predictor.get_input_names()
+        input_tensor = self.paddle_predictor.get_input_handle(input_names[0])
+        output_names = self.paddle_predictor.get_output_names()
+        output_tensor = self.paddle_predictor.get_output_handle(output_names[0])
+        predict_time = 0.0
+        time_min = float("inf")
+        time_max = float("-inf")
+        sample_nums = len(val_loader)
         for batch_id, (image, label) in enumerate(val_loader):
-            input_names = self.paddle_predictor.get_input_names()
-            input_tensor = self.paddle_predictor.get_input_handle(input_names[0])
-            output_names = self.paddle_predictor.get_output_names()
-            output_tensor = self.paddle_predictor.get_output_handle(output_names[0])
-
             image = np.array(image)
 
             input_tensor.copy_from_cpu(image)
+            start_time = time.time()
             self.paddle_predictor.run()
             batch_output = output_tensor.copy_to_cpu()
+            end_time = time.time()
+            timed = end_time - start_time
+            time_min = min(time_min, timed)
+            time_max = max(time_max, timed)
+            predict_time += timed
             if self.rerun_flag:
                 return
             sort_array = batch_output.argsort(axis=1)
@@ -204,6 +181,24 @@ class Predictor(object):
                 sys.stdout.flush()
 
         result = np.mean(np.array(results), axis=0)
+        fp_message = "FP16" if args.use_fp16 else "FP32"
+        fp_message = "INT8" if args.use_int8 else fp_message
+        print_msg = "Paddle"
+        if args.use_trt:
+            print_msg = "using TensorRT"
+        elif args.use_mkldnn:
+            print_msg = "using MKLDNN"
+        time_avg = predict_time / sample_nums
+        print(
+            "[Benchmark]{}\t{}\tbatch size: {}.Inference time(ms): min={}, max={}, avg={}".format(
+                print_msg,
+                fp_message,
+                args.batch_size,
+                round(time_min * 1000, 2),
+                round(time_max * 1000, 1),
+                round(time_avg * 1000, 1),
+            )
+        )
         print("[Benchmark] Evaluation acc result: {}".format(result[0]))
         sys.stdout.flush()
 
@@ -212,8 +207,6 @@ if __name__ == "__main__":
     parser = argsparser()
     args = parser.parse_args()
     predictor = Predictor()
-    predictor.predict()
-    if args.eval:
-        predictor.eval()
+    predictor.eval()
     if predictor.rerun_flag:
         print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")

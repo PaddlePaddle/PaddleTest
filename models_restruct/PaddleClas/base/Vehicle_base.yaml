@@ -47,7 +47,6 @@ predict:
   cmd: python/predict_system.py
   params:
     - -c configs/inference_vehicle.yaml
-    - -o Global.inference_model_dir=../inference/${qa_yaml_name}
   result:
     exit_code:
       base: 0
