@@ -74,4 +74,4 @@ case:
       -
         name : mac_train
         params:
-          - Global.device=cpu #覆盖
+          - Global.device=cpu
