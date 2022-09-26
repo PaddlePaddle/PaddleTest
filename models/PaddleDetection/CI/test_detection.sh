@@ -408,6 +408,8 @@ done
 model='pphuman'
 cd log && mkdir ${model} && cd ..
 PPHuman
+model='pphuman_reid'
+cd log && mkdir ${model} && cd ..
 PPHuman_reid
 model='ppvehicle'
 cd log && mkdir ${model} && cd ..
