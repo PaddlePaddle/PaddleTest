@@ -360,11 +360,7 @@ fi
 config=`cat model_list_ci | grep ${model}`
 cd log && mkdir ${model} && cd ..
 TRAIN
-if [[ -n `echo "${model_s2anet}" | grep -w "${model}"` ]];then
-    echo -e "The model ${model} not support train_cpu!"
-else
 TRAIN_CPU
-fi
 if [[ -n `echo "${model_ppyolov2}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "skip train with eval for model ${model}!"
 else
@@ -383,9 +379,6 @@ else
 fi
     INFER
 fi
-if [[ -n `echo "${model_s2anet}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mask}" | grep -w "${model}"` ]];then
-    echo -e "skip model ${model} for export temporarily"
-else
 EXPORT
 if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "skip model ${model} for python_infer"
@@ -394,13 +387,12 @@ elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
 else
     PYTHON_INFER
 fi
-if [[ -n `echo "${model_solov2}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
+if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "The model ${model} not support cpp_infer!"
 elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
     CPP_INFER_KEYPOINT
 else
     CPP_INFER
-fi
 fi
 done
 model='pphuman'
