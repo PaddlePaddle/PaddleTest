@@ -17238,7 +17238,7 @@ dropout2d_0:
         type: "Tensor"
         dtype: "float32"
         value: [0.5]
-      training: False
+      training: True
 
 dropout3d_base:
   desc: "一种正则化手段"

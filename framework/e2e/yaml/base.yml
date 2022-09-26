@@ -9626,7 +9626,7 @@ shard_index_4:
         type: "Tensor"
         dtype: "int32"
         shape: [2, 1]
-        range: [ 2, 17]
+        range: [ 2, 5]
     params:
       index_num: 6
       nshards: 40
