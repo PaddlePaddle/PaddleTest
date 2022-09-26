@@ -275,6 +275,7 @@ PPHuman(){
         --do_break_in_counting \
         --region_type=custom \
         --region_polygon 200 200 400 200 300 400 100 400 >log/${model}/${model}_${mode}.log 2>&1
+    print_result
 }
 PPHuman_reid(){
     mode=python_infer
@@ -283,6 +284,7 @@ PPHuman_reid(){
         --video_dir=video_dir \
         --device=gpu \
         -o REID.enable=True >log/${model}/${model}_${mode}.log
+    print_result
 }
 PPVehicle(){
     mode=python_infer
@@ -297,6 +299,7 @@ PPVehicle(){
         --do_break_in_counting \
         --region_type=custom \
         --region_polygon 580 450 950 450 1200 550 650 550 >log/${model}/${model}_${mode}.log
+    print_result
 }
 model_list='ppyolov2_r50vd_dcn_365e_coco yolov3_darknet53_270e_coco solov2_r50_fpn_1x_coco cascade_mask_rcnn_r50_fpn_1x_coco s2anet_conv_2x_dota hrnet_w32_256x192 fairmot_dla34_30e_1088x608 picodet_m_416_coco'
 model_mask='cascade_mask_rcnn_r50_fpn_1x_coco'
@@ -401,14 +404,16 @@ else
     CPP_INFER
 fi
 fi
+done
 model='pphuman'
 cd log && mkdir ${model} && cd ..
 PPHuman
+model='pphuman_reid'
+cd log && mkdir ${model} && cd ..
 PPHuman_reid
 model='ppvehicle'
 cd log && mkdir ${model} && cd ..
 PPVehicle
-done
 if [ "${err_sign}" = true ];then
     exit 1
 fi
