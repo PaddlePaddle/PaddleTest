@@ -9210,7 +9210,7 @@ gather_2:
         type: "Tensor"
         dtype: "int32"
         value: [2, 0, 1]
-      axis: -1
+      axis: 2
 
 gather_nd_base:
   desc: "gather 的高维推广，并且支持多轴同时索引"
