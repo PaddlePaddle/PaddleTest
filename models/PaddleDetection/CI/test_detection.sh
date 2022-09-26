@@ -275,7 +275,7 @@ PPHuman(){
         --do_break_in_counting \
         --region_type=custom \
         --region_polygon 200 200 400 200 300 400 100 400 >log/${model}/${model}_${mode}.log 2>&1
-        print_result
+    print_result
 }
 PPHuman_reid(){
     mode=python_infer
