@@ -9194,7 +9194,7 @@ gather_1:
       axis: 1
 
 gather_2:
-  desc: "根据索引 index 获取输入 x 的指定 aixs 维度的条目，并将它们拼接在一起"
+  desc: "根据索引 index 获取输入 x 的指定 aixs 维度的条目, 并将它们拼接在一起"
   paddle:
     api_name: "paddle.gather"
     inputs:
@@ -9210,7 +9210,7 @@ gather_2:
         type: "Tensor"
         dtype: "int32"
         value: [2, 0, 1]
-      axis: -1
+      axis: 2
 
 gather_nd_base:
   desc: "gather 的高维推广，并且支持多轴同时索引"
