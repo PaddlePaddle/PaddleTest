@@ -42,12 +42,10 @@ cd deploy/cpp
 wget ${paddle_inference}
 tar xvf paddle_inference.tgz
 sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
-sed -i "s|WITH_TENSORRT=OFF|WITH_TENSORRT=ON|g" scripts/build.sh
 sed -i "s|WITH_KEYPOINT=OFF|WITH_KEYPOINT=ON|g" scripts/build.sh
 sed -i "s|WITH_MOT=OFF|WITH_MOT=ON|g" scripts/build.sh
 sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh
-sed -i "s|/path/to/paddle_inference|../paddle_inference_install_dir|g" scripts/build.sh
-sed -i "s|TENSORRT_LIB_DIR=/path/to/tensorrt/lib|TENSORRT_LIB_DIR=/usr/local/TensorRT6-cuda10.1-cudnn7/lib|g" scripts/build.sh
+sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh
 sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh
 sh scripts/build.sh
 cd ../..
@@ -362,11 +360,7 @@ fi
 config=`cat model_list_ci | grep ${model}`
 cd log && mkdir ${model} && cd ..
 TRAIN
-if [[ -n `echo "${model_s2anet}" | grep -w "${model}"` ]];then
-    echo -e "The model ${model} not support train_cpu!"
-else
 TRAIN_CPU
-fi
 if [[ -n `echo "${model_ppyolov2}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "skip train with eval for model ${model}!"
 else
@@ -385,9 +379,6 @@ else
 fi
     INFER
 fi
-if [[ -n `echo "${model_s2anet}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mask}" | grep -w "${model}"` ]];then
-    echo -e "skip model ${model} for export temporarily"
-else
 EXPORT
 if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "skip model ${model} for python_infer"
@@ -396,13 +387,12 @@ elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
 else
     PYTHON_INFER
 fi
-if [[ -n `echo "${model_solov2}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
+if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "The model ${model} not support cpp_infer!"
 elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
     CPP_INFER_KEYPOINT
 else
     CPP_INFER
-fi
 fi
 done
 model='pphuman'
