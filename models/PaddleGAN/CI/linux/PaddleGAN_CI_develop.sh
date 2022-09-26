@@ -117,39 +117,39 @@ python -c 'import sys; print(sys.version_info[:])'
 echo "######  python version"
 
 # env
-# # dependency
-# if [ -f "/etc/redhat-release" ]; then
-#     echo "######  system centos"
-#     # ppgan
-#     set +x
-#     echo "######  ffmpeg"
-#     yum update -y
-#     yum install epel-release -y
-#     # rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
-#     # rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
-#     yum install boost -y
-#     yum install opencv -y
-#     yum install ffmpeg -y
-#     #install  dlib
-#     echo "######  gcc"
-#     yum install gcc -y
-#     yum install centos-release-scl -y
-#     yum install devtoolset-8-gcc -y
-#     source /opt/rh/devtoolset-8/enable
-#     set -x
+# dependency
+if [ -f "/etc/redhat-release" ]; then
+    echo "######  system centos"
+    # ppgan
+    set +x
+    echo "######  ffmpeg"
+    yum update -y
+    yum install epel-release -y
+    # rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+    # rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+    yum install boost -y
+    yum install opencv -y
+    yum install ffmpeg -y
+    #install  dlib
+    echo "######  gcc"
+    yum install gcc -y
+    yum install centos-release-scl -y
+    yum install devtoolset-8-gcc -y
+    source /opt/rh/devtoolset-8/enable
+    set -x
 
-#     gcc -v
-#     ffmpeg
-#     echo "######  cmake"
-#     yum install cmake -y
-#     cmake -version
-# else
-#     echo "######  system linux"
-#     apt-get update
-#     apt-get install ffmpeg -y
-#     apt-get install cmake -y
-#     apt-get install gcc -y
-# fi
+    gcc -v
+    ffmpeg
+    echo "######  cmake"
+    yum install cmake -y
+    cmake -version
+else
+    echo "######  system linux"
+    apt-get update
+    apt-get install ffmpeg -y
+    apt-get install cmake -y
+    apt-get install gcc -y
+fi
 
 unset http_proxy
 unset https_proxy
