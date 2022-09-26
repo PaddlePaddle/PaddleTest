@@ -1,6 +1,6 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
-# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
+# encoding=utf-8 vi:ts=5:sw=5:expandtab:ft=python
 """
 test jit cases
 """
@@ -14,11 +14,11 @@ sys.path.append(os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "uti
 from utils.yaml_loader import YamlLoader
 from jittrans import JitTrans
 
-yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", "nn.yml")
+yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", "base.yml")
 yml = YamlLoader(yaml_path)
 
 
-def test_Dropout2D_base():
-    """test Dropout2D_base"""
-    jit_case = JitTrans(case=yml.get_case_info("Dropout2D_base"))
+def test_mean_5():
+    """test mean_5"""
+    jit_case = JitTrans(case=yml.get_case_info("mean_5"))
     jit_case.jit_run()

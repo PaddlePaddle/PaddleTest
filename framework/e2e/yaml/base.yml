@@ -3418,23 +3418,23 @@ max_3:
       axis: [-2, 1]
       keepdim: False
 
-#max_4:
-#  desc: "对指定维度上的Tensor元素求最大值运算，并输出相应的计算结果"
-#  paddle:
-#    api_name: "paddle.max"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [2, 3, 4, 4]
-#        range: [ -1, 1]
-#    params:
-#      axis:
-#        random: false
-#        type: "Tensor"
-#        dtype: "int32"
-#        value: [1]
+max_4:
+  desc: "对指定维度上的Tensor元素求最大值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.max"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis:
+        random: false
+        type: "Tensor"
+        dtype: "int32"
+        value: [1]
 
 maximum_base:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更大的元素保存到返回结果中"
@@ -3610,24 +3610,24 @@ mean_4:
     mapping:
       ins: { x: input, axis: dim, keepdim: keepdim }
 
-#mean_5:
-#  desc: "沿参数 axis 计算 x 的平均值"
-#  paddle:
-#    api_name: "paddle.mean"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [2, 3, 4, 4]
-#        range: [ -1, 1]
-#    params:
-#      axis:
-#        random: false
-#        type: "Tensor"
-#        dtype: "int32"
-#        value: [1]
-#      keepdim: True
+mean_5:
+  desc: "沿参数 axis 计算 x 的平均值"
+  paddle:
+    api_name: "paddle.mean"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis:
+        random: false
+        type: "Tensor"
+        dtype: "int32"
+        value: [1]
+      keepdim: True
 
 median_base:
   desc: "沿给定的轴 axis 计算 x 中元素的中位数"
@@ -3788,23 +3788,23 @@ min_3:
       axis: [-2, 1]
       keepdim: False
 
-#min_4:
-#  desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
-#  paddle:
-#    api_name: "paddle.min"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [2, 3, 4, 4]
-#        range: [ -1, 1]
-#    params:
-#      axis:
-#        random: false
-#        type: "Tensor"
-#        dtype: "int32"
-#        value: [-2]
+min_4:
+  desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.min"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis:
+        random: false
+        type: "Tensor"
+        dtype: "int32"
+        value: [-2]
 
 minimum_base:
   desc: "逐元素对比输入的两个Tensor，并且把各个位置更小的元素保存到返回结果中"
@@ -4490,24 +4490,24 @@ prod_3:
     mapping:
       ins: { x: input, axis: dim, keepdim: keepdim }
 
-#prod_4:
-#  desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
-#  paddle:
-#    api_name: "paddle.prod"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [2, 3, 4, 4]
-#        range: [ -1, 1]
-#    params:
-#      axis:
-#        random: false
-#        type: "Tensor"
-#        dtype: "int32"
-#        value: [-2]
-#      keepdim: True
+prod_4:
+  desc: "对指定维度上的Tensor元素进行求乘积运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.prod"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis:
+        random: false
+        type: "Tensor"
+        dtype: "int32"
+        value: [-2]
+      keepdim: True
 
 reciprocal_base:
   desc: "对输入Tensor取倒数"
@@ -5189,24 +5189,24 @@ sum_2:
     mapping:
       ins: { x: input, axis: dim, keepdim: keepdim }
 
-#sum_3:
-#  desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
-#  paddle:
-#    api_name: "paddle.sum"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [2, 3, 4, 4]
-#        range: [ -1, 1]
-#    params:
-#      axis:
-#        random: false
-#        type: "Tensor"
-#        dtype: "int32"
-#        value: [1]
-#      keepdim: True
+sum_3:
+  desc: "对指定维度上的Tensor元素进行求和运算，并输出相应的计算结果"
+  paddle:
+    api_name: "paddle.sum"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3, 4, 4]
+        range: [ -1, 1]
+    params:
+      axis:
+        random: false
+        type: "Tensor"
+        dtype: "int32"
+        value: [1]
+      keepdim: True
 
 tan_base:
   desc: "三角函数tangent"

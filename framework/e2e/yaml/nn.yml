@@ -17221,24 +17221,24 @@ dropout2d_base:
     mapping:
       ins: { x: input, p: p, training: training }
 
-#dropout2d_0:
-#  desc: "一种正则化手段"
-#  paddle:
-#    api_name: "paddle.nn.functional.dropout2d"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [2, 4, 8, 8]
-#        range: [ -2, 3]
-#    params:
-#      p:
-#        random: false
-#        type: "Tensor"
-#        dtype: "float32"
-#        value: [0.5]
-#      training: False
+dropout2d_0:
+  desc: "一种正则化手段"
+  paddle:
+    api_name: "paddle.nn.functional.dropout2d"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 4, 8, 8]
+        range: [ -2, 3]
+    params:
+      p:
+        random: false
+        type: "Tensor"
+        dtype: "float32"
+        value: [0.5]
+      training: False
 
 dropout3d_base:
   desc: "一种正则化手段"
