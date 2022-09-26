@@ -14,11 +14,11 @@ sys.path.append(os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "uti
 from utils.yaml_loader import YamlLoader
 from jittrans import JitTrans
 
-yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", "nn.yml")
+yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", "base.yml")
 yml = YamlLoader(yaml_path)
 
 
-def test_Dropout2D_base():
-    """test Dropout2D_base"""
-    jit_case = JitTrans(case=yml.get_case_info("Dropout2D_base"))
+def test_min_4():
+    """test min_4"""
+    jit_case = JitTrans(case=yml.get_case_info("min_4"))
     jit_case.jit_run()

@@ -18,7 +18,7 @@ yaml_path = os.path.join(os.path.abspath(os.path.dirname(os.getcwd())), "yaml", 
 yml = YamlLoader(yaml_path)
 
 
-def test_Dropout2D_base():
-    """test Dropout2D_base"""
-    jit_case = JitTrans(case=yml.get_case_info("Dropout2D_base"))
+def test_dropout2d_0():
+    """test dropout2d_0"""
+    jit_case = JitTrans(case=yml.get_case_info("dropout2d_0"))
     jit_case.jit_run()
