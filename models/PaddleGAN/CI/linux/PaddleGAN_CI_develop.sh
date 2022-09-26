@@ -117,39 +117,39 @@ python -c 'import sys; print(sys.version_info[:])'
 echo "######  python version"
 
 # env
-# dependency
-if [ -f "/etc/redhat-release" ]; then
-    echo "######  system centos"
-    # ppgan
-    set +x
-    echo "######  ffmpeg"
-    yum update -y
-    yum install epel-release -y
-    # rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
-    # rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
-    yum install boost -y
-    yum install opencv -y
-    yum install ffmpeg -y
-    #install  dlib
-    echo "######  gcc"
-    yum install gcc -y
-    yum install centos-release-scl -y
-    yum install devtoolset-8-gcc -y
-    source /opt/rh/devtoolset-8/enable
-    set -x
+# # dependency
+# if [ -f "/etc/redhat-release" ]; then
+#     echo "######  system centos"
+#     # ppgan
+#     set +x
+#     echo "######  ffmpeg"
+#     yum update -y
+#     yum install epel-release -y
+#     # rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+#     # rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+#     yum install boost -y
+#     yum install opencv -y
+#     yum install ffmpeg -y
+#     #install  dlib
+#     echo "######  gcc"
+#     yum install gcc -y
+#     yum install centos-release-scl -y
+#     yum install devtoolset-8-gcc -y
+#     source /opt/rh/devtoolset-8/enable
+#     set -x
 
-    gcc -v
-    ffmpeg
-    echo "######  cmake"
-    yum install cmake -y
-    cmake -version
-else
-    echo "######  system linux"
-    apt-get update
-    apt-get install ffmpeg -y
-    apt-get install cmake -y
-    apt-get install gcc -y
-fi
+#     gcc -v
+#     ffmpeg
+#     echo "######  cmake"
+#     yum install cmake -y
+#     cmake -version
+# else
+#     echo "######  system linux"
+#     apt-get update
+#     apt-get install ffmpeg -y
+#     apt-get install cmake -y
+#     apt-get install gcc -y
+# fi
 
 unset http_proxy
 unset https_proxy
@@ -453,43 +453,43 @@ if [[ ! ${model_flag} =~ "single" ]] && [[ ${model} =~ "edvr_m_wo_tsa" ]];then
         fi
     fi
 
-    # face_parse
-    python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-    if [[ $? -eq 0 ]];then
-    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/face_parse.log) -eq 0 ]];then
-        echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
-    else
-        cat $log_path/infer/face_parse.log
-        echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
-    fi
-    # psgan
-    python tools/psgan_infer.py \
-        --config-file configs/makeup.yaml \
-        --source_path  docs/imgs/ps_source.png \
-        --reference_dir docs/imgs/ref \
-        --evaluate-only \
-        > $log_path/infer/psgan.log 2>&1
-    if [[ $? -eq 0 ]];then
-    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/psgan.log) -eq 0 ]];then
-        echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
-    else
-        cat $log_path/infer/psgan.log
-        echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
-    fi
+    # # face_parse
+    # python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
+    # if [[ $? -eq 0 ]];then
+    # # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/face_parse.log) -eq 0 ]];then
+    #     echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
+    # else
+    #     cat $log_path/infer/face_parse.log
+    #     echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
+    # fi
+    # # psgan
+    # python tools/psgan_infer.py \
+    #     --config-file configs/makeup.yaml \
+    #     --source_path  docs/imgs/ps_source.png \
+    #     --reference_dir docs/imgs/ref \
+    #     --evaluate-only \
+    #     > $log_path/infer/psgan.log 2>&1
+    # if [[ $? -eq 0 ]];then
+    # # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/psgan.log) -eq 0 ]];then
+    #     echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
+    # else
+    #     cat $log_path/infer/psgan.log
+    #     echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
+    # fi
 
-    # video restore
-    python applications/tools/video-enhance.py \
-        --input data/Peking_input360p_clip_10_11.mp4 \
-        --process_order DAIN DeOldify EDVR \
-        --output video_restore_infer \
-        > $log_path/infer/video_restore.log 2>&1
-    if [[ $? -eq 0 ]];then
-    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/video_restore.log) -eq 0 ]];then
-        echo -e "\033[33m infer of video restore  successfully!\033[0m"| tee -a $log_path/result.log
-    else
-        cat $log_path/infer/video_restore.log
-        echo -e "\033[31m infer of video restore failed!\033[0m"| tee -a $log_path/result.log
-    fi
+    # # video restore
+    # python applications/tools/video-enhance.py \
+    #     --input data/Peking_input360p_clip_10_11.mp4 \
+    #     --process_order DAIN DeOldify EDVR \
+    #     --output video_restore_infer \
+    #     > $log_path/infer/video_restore.log 2>&1
+    # if [[ $? -eq 0 ]];then
+    # # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/video_restore.log) -eq 0 ]];then
+    #     echo -e "\033[33m infer of video restore  successfully!\033[0m"| tee -a $log_path/result.log
+    # else
+    #     cat $log_path/infer/video_restore.log
+    #     echo -e "\033[31m infer of video restore failed!\033[0m"| tee -a $log_path/result.log
+    # fi
 fi
 done
 
