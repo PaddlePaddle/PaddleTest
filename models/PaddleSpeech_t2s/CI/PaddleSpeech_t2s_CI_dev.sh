@@ -182,7 +182,7 @@ else
 fi
 
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
+# CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/inference/$line.log) -eq 0 ]];then
    echo -e "\033[33m inference of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
