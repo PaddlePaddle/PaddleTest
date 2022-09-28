@@ -117,6 +117,14 @@ TRAIN_CPU(){
            -o TrainReader.batch_size=1 epoch=1 use_gpu=false >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
+TRAIN_AMP(){
+    mode=train_amp
+    python tools/train.py \
+           --amp \
+           -c ${config} \
+           -o TrainReader.batch_size=1 epoch=1 >log/${model}/${model}_${mode}.log 2>&1 
+    print_result
+}
 TRAIN_WITH_EVAL(){
     mode=train_with_eval
     python -m paddle.distributed.launch \
@@ -361,6 +369,7 @@ config=`cat model_list_ci | grep ${model}`
 cd log && mkdir ${model} && cd ..
 TRAIN
 TRAIN_CPU
+TRAIN_AMP
 if [[ -n `echo "${model_ppyolov2}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "skip train with eval for model ${model}!"
 else
