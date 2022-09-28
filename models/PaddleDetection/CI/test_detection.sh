@@ -122,7 +122,7 @@ TRAIN_AMP(){
     python tools/train.py \
            --amp \
            -c ${config} \
-           -o TrainReader.batch_size=1 epoch=1 >log/${model}/${model}_${mode}.log 2>&1 
+           -o TrainReader.batch_size=1 epoch=1 >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 TRAIN_WITH_EVAL(){
