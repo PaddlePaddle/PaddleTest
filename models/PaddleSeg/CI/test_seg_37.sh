@@ -1,14 +1,11 @@
 #!/bin/bash
 unset GREP_OPTIONS
-rm -rf /usr/local/python2.7.15/bin/python
-rm -rf /usr/local/python2.7.15/bin/pip
-ln -s /usr/local/bin/python3.7 /usr/local/python2.7.15/bin/python
-ln -s /usr/local/bin/pip3.7 /usr/local/python2.7.15/bin/pip
-export PYTHONPATH=`pwd`
+mkdir run_env_py37;
+ln -s $(which python3.7) run_env_py37/python;
+ln -s $(which pip3.7) run_env_py37/pip;
+export PATH=$(pwd)/run_env_py37:${PATH};
 
-
-python -m pip install --upgrade pip --ignore-installed
-# python -m pip install --upgrade numpy --ignore-installed
+python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip uninstall paddlepaddle-gpu -y
 if [[ ${branch} == 'develop' ]];then
 echo "checkout develop !"
