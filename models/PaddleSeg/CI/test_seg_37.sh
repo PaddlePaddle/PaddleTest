@@ -135,7 +135,15 @@ PREDICT_DYNAMIC(){
 }
 EXPORT_DYNAMIC(){
     mode=export_dynamic
-    if [[ -z `echo ${skip_export_model} | grep -w ${model}` ]];then
+    if [[ ${model} =~ 'rtformer' ]];then
+        export CUDA_VISIBLE_DEVICES=$cudaid1
+        python export.py \
+           --config ${config} \
+           --model_path seg_dynamic_pretrain/${model}/model.pdparams \
+           --save_dir ./inference_model/${model} \
+           --input_shape 1 3 512 512 >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
+        print_result
+    elif [[ -z `echo ${skip_export_model} | grep -w ${model}` ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
         python export.py \
            --config ${config} \
