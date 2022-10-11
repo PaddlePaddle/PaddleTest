@@ -139,7 +139,7 @@ if [[ ${1} =~ "pr" ]];then
 fi
 echo "######  diff models_list"
 cp models_list models_list_backup
-cat models_list_backup | sort | uniq > models_list  #去重复
+cat models_list_backup | sort | uniq | grep -v 'drrg_ctw' > models_list  #去重复
 wc -l models_list
 cat models_list
 
