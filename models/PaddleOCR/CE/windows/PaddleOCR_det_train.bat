@@ -3,8 +3,8 @@
 set log_path=log
 md log
 python -m pip install -r requirements.txt
-if not exist train_data (mklink /j train_data %data_path%\PaddleOCR\train_data)
-if not exist pretrain_models (mklink /j pretrain_models %data_path%\PaddleOCR\pretrain_models)
+if not exist train_data (mklink /d train_data %data_path%\PaddleOCR\train_data)
+if not exist pretrain_models (mklink /d pretrain_models %data_path%\PaddleOCR\pretrain_models)
 
 
 set gpu_flag=True
