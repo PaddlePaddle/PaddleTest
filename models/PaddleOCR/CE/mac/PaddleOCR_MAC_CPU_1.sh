@@ -6,7 +6,7 @@ pwd
 # env
 unset http_proxy
 unset https_proxy
-python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
+# python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # dir
 log_path=log
