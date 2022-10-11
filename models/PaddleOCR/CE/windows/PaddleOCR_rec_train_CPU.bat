@@ -1,6 +1,6 @@
 @ echo off
 rem set gpu_flag=False
-set sed="C:\Program Files\Git\usr\bin\sed.exe"
+rem set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
 set log_path=log
 echo %Project_path%

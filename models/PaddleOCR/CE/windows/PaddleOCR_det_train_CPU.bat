@@ -10,7 +10,7 @@ rem dependency
 python -m pip install -r requirements.txt
 
 rem set gpu_flag=False
-set sed="C:\Program Files\Git\usr\bin\sed.exe"
+rem set sed="C:\Program Files\Git\usr\bin\sed.exe"
 setlocal enabledelayedexpansion
 for /f %%i in (ocr_det_models_list.txt) do (
 echo %%i
