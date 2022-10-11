@@ -7,7 +7,7 @@ pwd
 unset http_proxy
 unset https_proxy
 # python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
-
+python -m pip uninstall -y  opencv-python
 # dir
 log_path=log
 gpu_flag=False
