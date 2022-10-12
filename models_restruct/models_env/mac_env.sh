@@ -1,86 +1,69 @@
-set +x
-rm -rf ce && mkdir ce; #设置根目录
+set +x;
+pwd;
+
+####ce框架根目录
+rm -rf ce && mkdir ce;
 cd ce;
 
-#### 预设参数
-Repo=${Repo:-${Repo}}
-Python_version=${Python_version:-39}
-CE_version=${CE_version:-V1}
-Priority_version=${Priority_version:-P0}
-Compile_version=${Compile_version:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Cpu-Mac-Avx-Openblas-Python39-Compile/latest/paddlepaddle-0.0.0-cp39-cp39-macosx_10_14_x86_64.whl}
-Data_path=${Data_path:-/Users/paddle/ce_data/PaddleClas}
-Common_name=${Common_name:-cls_common_mac}  #CE框架中的执行步骤，名称各异所以需要传入
-model_flag=${model_flag:-CE}  #clas gan特有，待完善后删除，可以不设置
+#### 预设默认参数
+export models_list=${models_list:-None}
+export models_file=${models_file:-None} #预先不设置，二选一
+export system=${system:-mac}
+export step=${step:-train}
+export reponame=${reponame:-PaddleClas}
+export mode=${mode:-function}
+export use_build=${use_build:-yes}
+export branch=${branch:-develop}
+export get_repo=${get_repo:-wget} #现支持10个库，需要的话可以加，wget快很多
+export paddle_whl=${paddle_whl:-None}
+export dataset_org=${dataset_org:-None}
+export dataset_target=${dataset_target:-None}
+export set_cuda=${set_cuda:-} #预先不设置
 
-#### 激活环境
-source ~/.bashrc
-pyenv activate ${Repo}_${Python_version}
-which python
+#额外的变量
+export docker_flag=${docker_flag:-}
+export http_proxy=${http_proxy:-}
+export no_proxy=${no_proxy:-}
+export Python_env=${Python_env:-path_way}
+#paddlepaddle(ln_way)，manylinux(path_way)
+export Python_version=${Python_version:-37}
+export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
 
-####查看python版本
-python  --version
-git --version
+# 预设一些可能会修改的变量
+export CE_version_name=${CE_version_name:-TestFrameWork}
+export models_name=${models_name:-models_restruct}
 
 ####测试框架下载
-if [[ ${CE_version} == "V2" ]];then
-    CE_version_name=continuous_evaluation
-    wget -q ${CE_V2}
-else
-    CE_version_name=Paddle_Cloud_CE
-    wget -q ${CE_V1}
-fi
-unzip -P ${CE_pass}  ${CE_version_name}.zip
-
-##### 预设Project_path路径
-if  [ ! -n "${Project_path}" ] ;then  #通过判断CE框架版本找到绝对路径
-    export Project_path=${PWD}/ce/${CE_version_name}/src/task/${Repo}
-else
-    echo already have Project_path
-fi
+wget -q ${CE_Link} #需要全局定义
+unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export
 if  [[ ! -n "${http_proxy}" ]] ;then
     echo unset http_proxy
+    export http_proxy=${http_proxy}
+    export https_proxy=${http_proxy}
 else
     export http_proxy=${http_proxy}
     export https_proxy=${http_proxy}
 fi
 export no_proxy=${no_proxy}
 set -x;
-ls;
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
-    mv ../task .  #task路径是CE框架写死的
+    mv ../task .  #如果预先下载直接mv
 else
     wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy  >/dev/null
     tar xf PaddleTest.tar.gz >/dev/null 2>&1
     mv PaddleTest task
 fi
 
-set -x;
-#通用变量[用户改]
-test_code_download_path=./task/models/${Repo}/CE
-test_code_download_path_CI=./task/models/${Repo}/CI
-test_code_conf_path=./task/models/${Repo}/CE/conf  #各个repo自己管理，可以分类，根据任务类型copy对应的common配置
+#复制模型相关文件到指定位置
+cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
+ls ./${CE_version_name}/
+cd ./${CE_version_name}/
 
-#迁移下载路径代码和配置到框架指定执行路径 [不用改]
-mkdir -p ${test_code_download_path}/log
-ls ${test_code_download_path}/log;
-cp -r ${test_code_download_path}/.  ./${CE_version_name}/src/task
-cp -r ${test_code_download_path_CI}/.  ./${CE_version_name}/src/task
-cp ${test_code_conf_path}/${Common_name}.py ./${CE_version_name}/src/task/common.py
-cat ./${CE_version_name}/src/task/common.py;
-
-#进入执行路径创建docker容器 [用户改docker创建]
-cd ${CE_version_name}/src
-ls
-
-pwd
-echo "begin"
-if [[ ${CE_version} == 'V2' ]];then
-    #V2版本
-    bash main.sh --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type_id=${AGILE_PIPELINE_CONF_ID} --priority=${priority_develop} --compile_path=${compile_path_develop} --job_build_id=${AGILE_JOB_BUILD_ID}
-else
-    #V1版本
-    bash main.sh --task_type='model' --build_number=${AGILE_PIPELINE_BUILD_NUMBER} --project_name=${AGILE_MODULE_NAME} --task_name=${AGILE_PIPELINE_NAME}  --build_id=${AGILE_PIPELINE_BUILD_ID} --build_type=${AGILE_PIPELINE_UUID} --owner='paddle' --priority=${Priority_version} --compile_path=${Compile_version} --agile_job_build_id=${AGILE_JOB_BUILD_ID}
+python -c 'import sys; print(sys.version_info[:])';
+git --version;
+python -m pip install -r requirements.txt #预先安装依赖包
+python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}

@@ -1,7 +1,7 @@
 @ echo off
 rem set log_path=log
 set gpu_flag=True
-set sed="C:\Program Files\Git\usr\bin\sed.exe"
+rem set sed="C:\Program Files\Git\usr\bin\sed.exe"
 
 set log_path=log
 echo %Project_path%
@@ -13,8 +13,8 @@ chdir
 dir
 
 md log
-if not exist train_data (mklink /j train_data %data_path%\PaddleOCR\train_data)
-if not exist pretrain_models (mklink /j pretrain_models %data_path%\PaddleOCR\pretrain_models)
+if not exist train_data (mklink /d train_data %data_path%\PaddleOCR\train_data)
+if not exist pretrain_models (mklink /d pretrain_models %data_path%\PaddleOCR\pretrain_models)
 rem dependency
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt

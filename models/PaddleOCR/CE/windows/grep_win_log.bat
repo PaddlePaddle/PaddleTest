@@ -1,6 +1,6 @@
 @ echo off
 setlocal enabledelayedexpansion
-set sed="C:\Program Files\Git\usr\bin\sed.exe"
+rem set sed="C:\Program Files\Git\usr\bin\sed.exe"
 echo "grep log step"
 echo %Project_path%
 echo %1

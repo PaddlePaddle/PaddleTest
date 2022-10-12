@@ -150,12 +150,10 @@ def test_eye11():
     num_columns = Tensor(3)
     dtype='float32'
     """
-    paddle.disable_static()
-    num_rows = 5
-    num_columns = 3
+    # paddle.disable_static()
+    num_rows = np.array([5])
+    num_columns = np.array([3])
     dtype = "float32"
-    res = np.eye(num_rows, num_columns)
-    if paddle.is_compiled_with_cuda():
-        paddle.set_device("gpu")
-        exp = paddle.eye(num_rows=paddle.to_tensor(num_rows), num_columns=paddle.to_tensor(num_columns), dtype=dtype)
-        assert np.allclose(exp.numpy(), res)
+    res = np.eye(5, 3)
+    # exp = paddle.eye(num_rows=paddle.to_tensor(num_rows), num_columns=paddle.to_tensor(num_columns), dtype=dtype)
+    obj.run(res=res, num_rows=num_rows, num_columns=num_columns, dtype=dtype)

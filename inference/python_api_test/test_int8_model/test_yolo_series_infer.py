@@ -338,6 +338,9 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
+    input_names = predictor.get_input_names()
+    output_names = predictor.get_output_names()
+    boxes_tensor = predictor.get_output_handle(output_names[0])
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
         inputs = {}
@@ -345,14 +348,11 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
             inputs["x2paddle_image_arrays"] = data_all["image"]
         else:
             inputs["x2paddle_images"] = data_all["image"]
-        input_names = predictor.get_input_names()
         for i, _ in enumerate(input_names):
             input_tensor = predictor.get_input_handle(input_names[i])
             input_tensor.copy_from_cpu(inputs[input_names[i]])
         start_time = time.time()
         predictor.run()
-        output_names = predictor.get_output_names()
-        boxes_tensor = predictor.get_output_handle(output_names[0])
         outs = boxes_tensor.copy_to_cpu()
         end_time = time.time()
         timed = end_time - start_time

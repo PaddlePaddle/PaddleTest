@@ -221,7 +221,7 @@ case:
   #     -
   #       name : cpu
   #       params:
-  #         - Global.device=cpu #覆盖
+  #         - -o Global.device=cpu
   #       result:
   #         exit_code: 0
 
@@ -237,26 +237,26 @@ case:
       -
         name : mac
         params:
-          - Global.device=${set_cuda_flag} #覆盖
+          - -o Global.device=${set_cuda_flag}
     eval:
       -
         name : eval
         params:
-          - Global.device=${set_cuda_flag} #覆盖
+          - -o Global.device=${set_cuda_flag}
     infer:
       -
         name : infer
         params:
-          - Global.device=${set_cuda_flag} #覆盖
+          - -o Global.device=${set_cuda_flag}
     export:
       -
         name : export
         params:
-          - Global.device=${set_cuda_flag} #覆盖
+          - -o Global.device=${set_cuda_flag}
     predict:
       -
         name : predict
         params:
-          - Global.device=${set_cuda_flag} #覆盖
+          - -o Global.device=${set_cuda_flag}
 
 function: paddlelas_imagenet_parse

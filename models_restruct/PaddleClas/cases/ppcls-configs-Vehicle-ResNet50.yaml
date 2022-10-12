@@ -156,7 +156,7 @@ case:
         name: trained
         cmd: python/predict_system.py
         params:
-          - -c configs/inference_cartoon.yaml
+          - -c configs/inference_vehicle.yaml
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -168,7 +168,7 @@ case:
         name: pretrained
         cmd: python/predict_system.py
         params:
-          - -c configs/inference_cartoon.yaml
+          - -c configs/inference_vehicle.yaml
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -183,7 +183,7 @@ case:
   #     -
   #       name : cpu
   #       params:
-  #         - Global.device=cpu #覆盖
+  #         - -o Global.device=cpu
   #       result:
   #         exit_code: 0
 
@@ -199,22 +199,22 @@ case:
       -
         name : mac
         params:
-          - Global.device=${set_cuda_flag} #覆盖
+          - -o Global.device=${set_cuda_flag}
     eval:
       -
         name : eval
         params:
-          - Global.device=${set_cuda_flag} #覆盖
+          - -o Global.device=${set_cuda_flag}
     infer: skipped
     export:
       -
         name : export
         params:
-          - Global.device=${set_cuda_flag} #覆盖
+          - -o Global.device=${set_cuda_flag}
     predict:
       -
         name : predict
         params:
-          - Global.device=${set_cuda_flag} #覆盖
+          - -o Global.device=${set_cuda_flag}
 
 function: paddlelas_imagenet_parse

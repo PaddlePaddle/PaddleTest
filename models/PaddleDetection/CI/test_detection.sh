@@ -42,12 +42,10 @@ cd deploy/cpp
 wget ${paddle_inference}
 tar xvf paddle_inference.tgz
 sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
-sed -i "s|WITH_TENSORRT=OFF|WITH_TENSORRT=ON|g" scripts/build.sh
 sed -i "s|WITH_KEYPOINT=OFF|WITH_KEYPOINT=ON|g" scripts/build.sh
 sed -i "s|WITH_MOT=OFF|WITH_MOT=ON|g" scripts/build.sh
 sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh
-sed -i "s|/path/to/paddle_inference|../paddle_inference_install_dir|g" scripts/build.sh
-sed -i "s|TENSORRT_LIB_DIR=/path/to/tensorrt/lib|TENSORRT_LIB_DIR=/usr/local/TensorRT6-cuda10.1-cudnn7/lib|g" scripts/build.sh
+sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh
 sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh
 sh scripts/build.sh
 cd ../..
@@ -90,16 +88,16 @@ fi
 ln -s ${file_path}/data/visdrone dataset/visdrone
 print_result(){
     if [ $? -ne 0 ];then
-        echo -e "${model},${model_type},${mode},FAIL"
+        echo -e "${model},${mode},FAIL"
         cd log_err
         if [ ! -d ${model} ];then
             mkdir ${model}
         fi
         cd ../
-        mv log/${model}/${model}_${model_type}_${mode}.log log_err/${model}/
+        mv log/${model}/${model}_${mode}.log log_err/${model}/
         err_sign=true
     else
-        echo -e "${model},${model_type},${mode},SUCCESS"
+        echo -e "${model},${mode},SUCCESS"
     fi
 }
 TRAIN(){
@@ -108,7 +106,7 @@ TRAIN(){
     python -m paddle.distributed.launch \
     tools/train.py \
            -c ${config} \
-           -o TrainReader.batch_size=1 epoch=1 >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o TrainReader.batch_size=1 epoch=1 >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 TRAIN_CPU(){
@@ -116,7 +114,15 @@ TRAIN_CPU(){
     export CPU_NUM=10
     python tools/train.py \
            -c ${config} \
-           -o TrainReader.batch_size=1 epoch=1 use_gpu=false >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o TrainReader.batch_size=1 epoch=1 use_gpu=false >log/${model}/${model}_${mode}.log 2>&1
+    print_result
+}
+TRAIN_AMP(){
+    mode=train_amp
+    python tools/train.py \
+           --amp \
+           -c ${config} \
+           -o TrainReader.batch_size=1 epoch=1 >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 TRAIN_WITH_EVAL(){
@@ -124,7 +130,7 @@ TRAIN_WITH_EVAL(){
     python -m paddle.distributed.launch \
     tools/train.py \
            -c ${config} \
-           -o TrainReader.batch_size=1 epoch=1 --eval >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o TrainReader.batch_size=1 epoch=1 --eval >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 EVAL(){
@@ -132,7 +138,7 @@ EVAL(){
     mode=eval
     python tools/eval.py \
            -c ${config} \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams EvalReader.batch_size=1 >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams EvalReader.batch_size=1 >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 EVAL_bs2(){
@@ -140,7 +146,7 @@ EVAL_bs2(){
     mode=eval_bs2
     python tools/eval.py \
            -c ${config} \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams EvalReader.batch_size=2 >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams EvalReader.batch_size=2 >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 EVAL_MOT(){
@@ -148,7 +154,7 @@ EVAL_MOT(){
     mode=eval
     python tools/eval_mot.py \
            -c ${config} \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 EVAL_MOT_bs2(){
@@ -156,7 +162,7 @@ EVAL_MOT_bs2(){
     mode=eval_bs2
     python tools/eval_mot.py \
            -c ${config} \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 INFER(){
@@ -166,7 +172,7 @@ INFER(){
            -c ${config} \
            --infer_img=${image} \
            --output_dir=infer_output/${model}/ \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 INFER_MOT(){
@@ -177,7 +183,7 @@ INFER_MOT(){
            --video_file=video.mp4 \
            --output_dir=infer_output/${model}/ \
            --save_videos \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 EXPORT(){
@@ -185,7 +191,7 @@ EXPORT(){
     python tools/export_model.py \
            -c ${config} \
            --output_dir=inference_model \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 PYTHON_INFER(){
@@ -197,7 +203,7 @@ PYTHON_INFER(){
            --run_mode=paddle \
            --device=GPU \
            --threshold=0.5 \
-           --output_dir=python_infer_output/${model}/ >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           --output_dir=python_infer_output/${model}/ >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 PYTHON_INFER_MOT(){
@@ -210,7 +216,7 @@ PYTHON_INFER_MOT(){
            --run_mode=paddle \
            --device=GPU \
            --threshold=0.5 \
-           --output_dir=python_infer_output/${model}/ >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           --output_dir=python_infer_output/${model}/ >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 PYTHON_INFER_KEYPOINT(){
@@ -222,7 +228,7 @@ PYTHON_INFER_KEYPOINT(){
            --run_mode=paddle \
            --device=GPU \
            --threshold=0.5 \
-           --output_dir=python_infer_output/${model}/ >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           --output_dir=python_infer_output/${model}/ >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 CPP_INFER(){
@@ -233,7 +239,7 @@ CPP_INFER(){
         --device=GPU \
         --run_mode=paddle \
         --threshold=0.5 \
-        --output_dir=cpp_infer_output/${model} >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+        --output_dir=cpp_infer_output/${model} >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 CPP_INFER_MOT(){
@@ -244,7 +250,7 @@ CPP_INFER_MOT(){
         --device=GPU \
         --run_mode=paddle \
         --threshold=0.5 \
-        --output_dir=cpp_infer_output/${model} >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+        --output_dir=cpp_infer_output/${model} >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 CPP_INFER_KEYPOINT(){
@@ -256,7 +262,49 @@ CPP_INFER_KEYPOINT(){
         --device=GPU \
         --run_mode=paddle \
         --threshold=0.5 \
-        --output_dir=cpp_infer_output/${model} >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+        --output_dir=cpp_infer_output/${model} >log/${model}/${model}_${mode}.log 2>&1
+    print_result
+}
+PPHuman(){
+    mode=python_infer
+    python deploy/pipeline/pipeline.py \
+        --config deploy/pipeline/config/infer_cfg_pphuman.yml \
+        --video_file=video.mp4 \
+        --device=gpu \
+        -o MOT.enable=True \
+        ATTR.enable=True \
+        VIDEO_ACTION.enable=True \
+        SKELETON_ACTION.enable=True \
+        ID_BASED_DETACTION.enable=True \
+        ID_BASED_CLSACTION.enable=True \
+        --draw_center_traj \
+        --do_break_in_counting \
+        --region_type=custom \
+        --region_polygon 200 200 400 200 300 400 100 400 >log/${model}/${model}_${mode}.log 2>&1
+    print_result
+}
+PPHuman_reid(){
+    mode=python_infer
+    python deploy/pipeline/pipeline.py \
+        --config deploy/pipeline/config/infer_cfg_pphuman.yml \
+        --video_dir=video_dir \
+        --device=gpu \
+        -o REID.enable=True >log/${model}/${model}_${mode}.log
+    print_result
+}
+PPVehicle(){
+    mode=python_infer
+    python deploy/pipeline/pipeline.py \
+        --config deploy/pipeline/config/infer_cfg_ppvehicle.yml \
+        --video_file=vehicle.mp4 \
+        --device=gpu \
+        -o VEHICLE_PLATE.enable=True \
+        VEHICLE_ATTR.enable=True \
+        MOT.enable=True \
+        --draw_center_traj \
+        --do_break_in_counting \
+        --region_type=custom \
+        --region_polygon 580 450 950 450 1200 550 650 550 >log/${model}/${model}_${mode}.log
     print_result
 }
 model_list='ppyolov2_r50vd_dcn_365e_coco yolov3_darknet53_270e_coco solov2_r50_fpn_1x_coco cascade_mask_rcnn_r50_fpn_1x_coco s2anet_conv_2x_dota hrnet_w32_256x192 fairmot_dla34_30e_1088x608 picodet_m_416_coco'
@@ -267,7 +315,6 @@ model_mot='fairmot_dla34_30e_1088x608'
 model_keypoint='hrnet_w32_256x192'
 model_ppyolov2='ppyolov2_r50vd_dcn_365e_coco'
 err_sign=false
-model_type=dynamic
 image=demo/000000570688.jpg
 config_num=`cat config_list | wc -l`
 if [ ${config_num} -ne 0 ];then
@@ -302,7 +349,6 @@ fi
 fi
 done
 fi
-
 for model in ${model_list}
 do
 weight_dir=
@@ -322,11 +368,8 @@ fi
 config=`cat model_list_ci | grep ${model}`
 cd log && mkdir ${model} && cd ..
 TRAIN
-if [[ -n `echo "${model_s2anet}" | grep -w "${model}"` ]];then
-    echo -e "The model ${model} not support train_cpu!"
-else
 TRAIN_CPU
-fi
+TRAIN_AMP
 if [[ -n `echo "${model_ppyolov2}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "skip train with eval for model ${model}!"
 else
@@ -345,9 +388,6 @@ else
 fi
     INFER
 fi
-if [[ -n `echo "${model_s2anet}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mask}" | grep -w "${model}"` ]];then
-    echo -e "skip model ${model} for export temporarily"
-else
 EXPORT
 if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "skip model ${model} for python_infer"
@@ -356,15 +396,23 @@ elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
 else
     PYTHON_INFER
 fi
-if [[ -n `echo "${model_solov2}" | grep -w "${model}"` ]] || [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
+if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
     echo -e "The model ${model} not support cpp_infer!"
 elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
     CPP_INFER_KEYPOINT
 else
     CPP_INFER
 fi
-fi
 done
+model='pphuman'
+cd log && mkdir ${model} && cd ..
+PPHuman
+model='pphuman_reid'
+cd log && mkdir ${model} && cd ..
+PPHuman_reid
+model='ppvehicle'
+cd log && mkdir ${model} && cd ..
+PPVehicle
 if [ "${err_sign}" = true ];then
     exit 1
 fi

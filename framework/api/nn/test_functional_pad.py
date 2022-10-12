@@ -26,6 +26,7 @@ class TestFunctionalPad(APIBase):
         # self.static = True
         # enable check grad
         # self.enable_backward = True
+        self.no_grad_var = ["value"]
 
 
 obj = TestFunctionalPad(paddle.nn.functional.pad)
@@ -371,3 +372,19 @@ def test_pad_8():
         x=paddle.to_tensor(x), pad=pad, mode=mode, value=paddle.to_tensor(value), data_format=data_format
     )
     assert np.allclose(exp.numpy(), res)
+
+
+@pytest.mark.api_nn_functional_pad_parameters
+def test_pad9():
+    """
+    x = np.array([[[[[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]]]])
+    pad = [0, 0, 0, 0, 0, 0, 1, 1, 0, 0]
+    mode = "constant"
+    value = Tensor([0]）
+    """
+    x = np.array([[[[[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]]]])
+    pad = [0, 0, 0, 0, 0, 0, 1, 1, 0, 0]
+    mode = "constant"
+    value = np.array([0.0])
+    res = np.array([[[[[0.0, 0.0, 0.0], [1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [0.0, 0.0, 0.0]]]]])
+    obj.run(res=res, x=x, pad=pad, mode=mode, value=value)

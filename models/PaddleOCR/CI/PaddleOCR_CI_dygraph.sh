@@ -40,6 +40,14 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    esac
    python -c "import sys; print('python version:',sys.version_info[:])";
 
+
+   # PaddleSlim dev
+   git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
+   cd PaddleSlim
+   python -m pip install -r requirements.txt
+   python setup.py install
+   cd ..
+
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"
@@ -72,12 +80,6 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
 # python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
-# dev
-git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
-cd PaddleSlim
-python -m pip install -r requirements.txt
-python setup.py install
-cd ..
 
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 num=`python -m pip list | grep fasttext | wc -l`
@@ -137,7 +139,7 @@ if [[ ${1} =~ "pr" ]];then
 fi
 echo "######  diff models_list"
 cp models_list models_list_backup
-cat models_list_backup | sort | uniq > models_list  #去重复
+cat models_list_backup | sort | uniq | grep -v 'drrg_ctw' > models_list  #去重复
 wc -l models_list
 cat models_list
 
@@ -283,7 +285,7 @@ else
 fi
 
 elif [ ${algorithm} == "NRTR" ];then
-python tools/infer/predict_rec.py --image_dir='./doc/imgs_words_en/word_10.png' --rec_model_dir='./inference/rec_mtb_nrtr/' --rec_algorithm='NRTR' --rec_image_shape='1,32,100' --rec_char_dict_path='./ppocr/utils/EN_symbol_dict.txt' > $log_path/predict/${model}.log 2>&1
+python tools/infer/predict_rec.py --image_dir='./doc/imgs_words_en/word_10.png' --rec_model_dir="./models_inference/"${model} --rec_algorithm='NRTR' --rec_image_shape='1,32,100' --rec_char_dict_path='./ppocr/utils/EN_symbol_dict.txt' > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else

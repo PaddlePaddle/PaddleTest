@@ -17,8 +17,8 @@ case:
       params:
         - -c ${rd_yaml_path}
         - -o Global.epochs=1
-        - Global.save_interval=1
-        - Global.eval_interval=1
+        - -o Global.save_interval=1
+        - -o Global.eval_interval=1
       result:
         exit_code:
           base: 0
@@ -74,4 +74,4 @@ case:
       -
         name : mac_train
         params:
-          - Global.device=cpu #覆盖
+          - -o Global.device=cpu
