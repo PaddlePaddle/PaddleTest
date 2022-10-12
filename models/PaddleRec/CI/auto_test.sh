@@ -59,7 +59,7 @@ demo_run_func(){
             run_case_func $1 ${model} dy_infer $2 infer.py
         elif [ ${model} == "aitm" ] || [ ${model} == "maml" ] || [ ${model} == "bert4rec" ] || [ ${model} == "dcn_v2" ] \
             || [ ${model} == "fat_deepffm" ] || [ ${model} == "fgcnn" ] || [ ${model} == "flen" ] || [ ${model} == "iprec" ] \
-            || [ ${model} == "sign" ] ;then
+            || [ ${model} == "sign" ] || [ ${model} == "dpin" ] ;;then
             run_case_func $1 ${model} dy_train $2 ../../../tools/trainer.py
             run_case_func $1 ${model} dy_infer $2 ../../../tools/infer.py
         elif [ ${model} == "deepwalk" ] ;then
