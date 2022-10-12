@@ -66,7 +66,6 @@ def load_predictor(args):
 
     if args.use_trt:
         if args.precision == "bf16":
-            pred_cfg.enable_mkldnn_bfloat16()
             print("trt does not support bf16, switching to fp16")
             args.precision = "fp16"
         # To collect the dynamic shapes of inputs for TensorRT engine
