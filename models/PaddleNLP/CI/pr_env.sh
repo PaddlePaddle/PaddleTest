@@ -137,12 +137,11 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
         let case_num++
     done
     echo -e "\033[35m ---- end run P0case  \033[0m"
-    EXCODE=0
     cd ${nlp_dir}/model_logs
     FF=`ls *FAIL*|wc -l`
     if [ "${FF}" -gt "0" ];then
         P0case_EXCODE=1
-        $EXCODE=2
+        EXCODE=2
     else
         P0case_EXCODE=0
     fi
@@ -169,7 +168,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     UF=`ls *FAIL*|wc -l`
     if [ "${UF}" -gt "0" ];then
         UT_EXCODE=1
-        $EXCODE=3
+        EXCODE=3
     else
         UT_EXCODE=0
     fi
