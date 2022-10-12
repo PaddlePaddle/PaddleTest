@@ -60,7 +60,7 @@ def load_predictor(args):
             pred_cfg.enable_mkldnn()
             if args.precision == "int8":
                 pred_cfg.enable_mkldnn_int8({"conv2d", "depthwise_conv2d", "pool2d", "elementwise_mul"})
-            
+
             if args.precision == "bf16":
                 pred_cfg.enable_mkldnn_bfloat16()
 
@@ -258,7 +258,10 @@ if __name__ == "__main__":
         type=str,
         default="fp32",
         choices=["fp32", "fp16", "int8", "bf16"],
-        help="The precision of inference. It can be 'fp32', 'fp16' or 'int8'. 'bf16' is available when using mkldnn. Default is 'fp16'.",
+        help=(
+            "The precision of inference. It can be 'fp32', 'fp16' or 'int8'."
+            "'bf16' is available when using mkldnn. Default is 'fp16'."
+        ),
     )
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
