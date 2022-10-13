@@ -53,7 +53,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             APIcase_list[${#APIcase_list[*]}]=${dir3}
         fi
     else
-        break
+        continue
     fi
 done
 }
@@ -139,6 +139,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     echo -e "\033[35m ---- end run P0case  \033[0m"
     cd ${nlp_dir}/model_logs
     FF=`ls *FAIL*|wc -l`
+    EXCODE=0
     if [ "${FF}" -gt "0" ];then
         P0case_EXCODE=1
         EXCODE=2
