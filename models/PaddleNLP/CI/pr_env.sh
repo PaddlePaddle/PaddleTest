@@ -9,7 +9,7 @@ all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
   ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5)
 get_diff_TO_P0case(){
-for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
+for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     arr_file_name=(${file_name//// })
     dir1=${arr_file_name[0]}
     dir2=${arr_file_name[1]}
@@ -53,7 +53,7 @@ for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
             APIcase_list[${#APIcase_list[*]}]=${dir3}
         fi
     else
-        break
+        continue
     fi
 done
 }
@@ -137,12 +137,12 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
         let case_num++
     done
     echo -e "\033[35m ---- end run P0case  \033[0m"
-    EXCODE=0
     cd ${nlp_dir}/model_logs
     FF=`ls *FAIL*|wc -l`
+    EXCODE=0
     if [ "${FF}" -gt "0" ];then
         P0case_EXCODE=1
-        $EXCODE=2
+        EXCODE=2
     else
         P0case_EXCODE=0
     fi
@@ -169,7 +169,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     UF=`ls *FAIL*|wc -l`
     if [ "${UF}" -gt "0" ];then
         UT_EXCODE=1
-        $EXCODE=3
+        EXCODE=3
     else
         UT_EXCODE=0
     fi
