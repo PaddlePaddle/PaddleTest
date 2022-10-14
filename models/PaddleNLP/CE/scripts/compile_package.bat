@@ -1,7 +1,7 @@
 @echo off
 cd ..
 python -m pip uninstall --user Pillow -y
-python -m pip install --user Pillow==8.4.0
+python -m pip install --user Pillow==9.2
 cd models_repo
 
 python setup.py bdist_wheel
