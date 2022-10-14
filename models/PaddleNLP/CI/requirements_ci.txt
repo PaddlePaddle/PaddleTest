@@ -22,4 +22,4 @@ yacs
 coverage
 h5py
 pytest
-parameterized 
+parameterized
