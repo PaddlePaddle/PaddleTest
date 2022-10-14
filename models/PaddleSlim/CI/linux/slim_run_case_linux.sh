@@ -924,6 +924,31 @@ demo_act_det_yolov5(){
         print_info $? act_det_demo_yolov5s_multi_card
 }
 
+demo_act_det_ppyoloe_l(){
+	cd ${slim_dir}/example/auto_compression/detection/
+	python -m pip install paddledet
+
+	wget https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco.tar
+	tar -xf ppyoloe_crn_l_300e_coco.tar
+	mkdir dataset && cd dataset
+	wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
+	unzip -q coco.zip
+	cd ..
+
+	sed -i 's/train_iter: 3000/train_iter: 30/' ./configs/ppyoloe_l_qat_dis.yaml
+	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/ppyoloe_l_qat_dis.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir='./act_det_demo_ppyoloe_l_single_card' > ${log_path}/act_det_demo_ppyoloe_l_single_card 2>&1
+	print_info $? act_det_demo_ppyoloe_l_single_card
+
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch --log_dir=ppyoloe_l_log run.py \
+          --config_path=./configs/ppyoloe_l_qat_dis.yaml \
+          --save_dir='./act_det_demo_ppyoloe_l_mutil_card/'> ${log_path}/act_det_demo_ppyoloe_l_mutil_card 2>&1
+        print_info $? act_det_demo_ppyoloe_l_mutil_card
+}
+
 demo_act_clas_MobileNetV1(){
 	cd ${slim_dir}/example/auto_compression/image_classification/
 	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar
@@ -960,6 +985,31 @@ demo_act_clas_ResNet50_vd(){
 	python -m paddle.distributed.launch --log_dir=mobilev1_log  run.py \
 		--save_dir='./clas_demo_ResNet50_vd_multi_card' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_multi_card 2>&1
 	print_info $? act_clas_demo_ResNet50_vd_multi_card
+}
+
+demo_act_clas_MobileNetV3(){
+	cd ${slim_dir}/example/auto_compression/image_classification/
+	wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_ssld_infer.tar
+  tar -xf MobileNetV3_large_x1_0_ssld_infer.tar
+
+  wget -q https://sys-p0.bj.bcebos.com/slim_ci/ILSVRC2012_data_demo.tar.gz --no-check-certificate
+	tar xf ILSVRC2012_data_demo.tar.gz
+	mv ILSVRC2012_data_demo data
+	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
+	sed -i 's/epochs: 2/epochs: 1/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --save_dir='./save_quant_mobilev3_single_card/' \
+	--config_path='./configs/MobileNetV3_large_x1_0/qat_dis.yaml' \
+	> ${log_path}/act_clas_demo_mobilev3_single_card 2>&1
+	print_info $? act_clas_demo_mobilev3_single_card
+
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch run.py \
+	--save_dir='./save_quant_mobilev3_mutli_card/' \
+	--config_path='./configs/MobileNetV3_large_x1_0/qat_dis.yaml' \
+	> ${log_path}/act_clas_demo_mobilev3_multi_card 2>&1
+  print_info $? act_clas_demo_mobilev3_multi_card
 }
 
 demo_act_nlp_pp_minilm(){
@@ -1071,20 +1121,25 @@ all_act_CI(){
 }
 
 all_act_CE(){
+  demo_act_det_ppyoloe_l
   demo_act_det_ppyoloe
   demo_act_det_yolov5
   demo_act_clas_MobileNetV1
+  demo_act_clas_MobileNetV3
   demo_act_clas_ResNet50_vd
   demo_act_nlp_pp_minilm
   demo_act_nlp_ERNIE_3
   demo_act_seg_pp_Liteseg_qat
   demo_act_seg_pp_Liteseg_auto
   demo_act_seg_pp_Liteseg_sparse
+
 }
 
 all_act_ALL(){
+  demo_act_det_ppyoloe_l
   demo_act_det_ppyoloe
   demo_act_det_yolov5
+  demo_act_clas_MobileNetV3
   demo_act_clas_MobileNetV1
   demo_act_clas_ResNet50_vd
   demo_act_nlp_pp_minilm
@@ -1092,6 +1147,66 @@ all_act_ALL(){
   demo_act_seg_pp_Liteseg_qat
   demo_act_seg_pp_Liteseg_auto
   demo_act_seg_pp_Liteseg_sparse
+
+}
+
+demo_full_quant_clas_MobileNetV3(){
+	cd ${slim_dir}/example/full_quantization/image_classification/
+	wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_ssld_infer.tar
+  tar -xf MobileNetV3_large_x1_0_ssld_infer.tar
+
+  wget -q https://sys-p0.bj.bcebos.com/slim_ci/ILSVRC2012_data_demo.tar.gz --no-check-certificate
+	tar xf ILSVRC2012_data_demo.tar.gz
+	mv ILSVRC2012_data_demo data
+	mv data/ILSVRC2012 ./
+
+	sed -i 's/epochs: 2/epochs: 1/' ./configs/mobilenetv3_large_qat_dis.yaml
+	sed -i 's/eval_iter: 5000/eval_iter: 10/' ./configs/mobilenetv3_large_qat_dis.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --save_dir='./full_quant_save_quant_mobilev3_single_card/' \
+	--config_path='./configs/mobilenetv3_large_qat_dis.yaml' \
+	> ${log_path}/full_quant_clas_demo_mobilev3_single_card 2>&1
+	print_info $? full_quant_clas_demo_mobilev3_single_card
+
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch run.py \
+	--save_dir='./full_quant_save_quant_mobilev3_multi_card/' \
+	--config_path='./configs/mobilenetv3_large_qat_dis.yaml' \
+	> ${log_path}/full_quant_clas_demo_mobilev3_multi_card 2>&1
+	print_info $? full_quant_clas_demo_mobilev3_multi_card
+}
+
+demo_full_quant_det_picodet(){
+	cd ${slim_dir}/example/full_quantization/picodet/
+	wget -q https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu.tar
+  	tar -xf picodet_s_416_coco_npu.tar
+
+  cd dataset
+  wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
+	unzip -q coco.zip
+	cd ..
+
+	sed -i 's/train_iter: 8000/train_iter: 20/' ./configs/picodet_npu_with_postprocess.yaml
+	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/picodet_npu_with_postprocess.yaml
+
+	export CUDA_VISIBLE_DEVICES=${cudaid1}
+	python run.py --config_path=./configs/picodet_npu_with_postprocess.yaml \
+	--save_dir='./full_quant_det_picodet_single_card/' \
+	> ${log_path}/full_quant_det_picodet_single_card 2>&1
+	print_info $? full_quant_det_picodet_single_card
+
+	export CUDA_VISIBLE_DEVICES=${cudaid2}
+	python -m paddle.distributed.launch --log_dir=log \
+	--save_dir='./full_quant_det_picodet_multi_card/' \
+	-config_path=./configs/picodet_npu_with_postprocess.yaml \ \
+	> ${log_path}/full_quant_det_picodet_multi_card 2>&1
+	print_info $? full_quant_det_picodet_multi_card
+}
+
+all_full_quant_CE(){
+  demo_full_quant_clas_MobileNetV3
+  demo_full_quant_det_picodet
 }
 
 run_case_func(){
@@ -1135,13 +1250,13 @@ if [ "$1" = "run_CI" ];then
 
 elif [ "$1" = "run_CE" ];then
 	# CE任务的case
-    export all_case_list=(all_act_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas )
+    export all_case_list=(all_full_quant_CE all_act_CE all_st_quant_CE all_dy_quant_CE all_st_prune_CE all_dy_prune_CE all_st_unstr_prune_CE all_dy_unstr_prune_CE demo_sa_nas )
     run_case_func
      wait
     # print_logs_func
 elif [ "$1" = "run_ALL" ];then
 	# 全量case
-    export all_case_list=(all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas all_act_ALL)
+    export all_case_list=(all_full_quant_CE all_distill_ALL all_st_quant_ALL all_dy_quant_ALL all_st_prune_ALL all_dy_prune_ALL all_st_unstr_prune_ALL all_dy_unstr_prune_ALL demo_sa_nas all_act_ALL)
     run_case_func
     wait
     run_case_without_multiprocess
