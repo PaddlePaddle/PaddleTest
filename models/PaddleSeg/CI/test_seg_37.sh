@@ -86,7 +86,7 @@ shuf dynamic_config_all -n 2 -o dynamic_config_list_temp
 fi
 grep -F -v -f no_upload dynamic_config_list_temp | sort | uniq | tee dynamic_config_list
 sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
-skip_export_model='gscnn_resnet50_os8_cityscapes_1024x512_80k espnetv1_cityscapes_1024x512_120k enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k dmnet_resnet101_os8_cityscapes_1024x512_80k'
+skip_export_model='gscnn_resnet50_os8_cityscapes_1024x512_80k espnetv1_cityscapes_1024x512_120k enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k'
 # dynamic fun
 TRAIN_MUlTI_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
@@ -135,7 +135,7 @@ PREDICT_DYNAMIC(){
 }
 EXPORT_DYNAMIC(){
     mode=export_dynamic
-    if [[ ${model} =~ 'rtformer' ]];then
+    if [[ ${model} =~ 'rtformer' || ${model} =~ 'dmnet' ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
         python export.py \
            --config ${config} \
