@@ -12,7 +12,7 @@ rem set sed="C:\Program Files\Git\usr\bin\sed.exe"
 setlocal enabledelayedexpansion
 for /f %%i in (ocr_det_models_list.txt) do (
 echo %%i
-%sed% -i s/"training"/"validation"/g %%i
+sed -i s/"training"/"validation"/g %%i
 set target=%%i
 rem echo !target!
 set target1=!target:*/=!
