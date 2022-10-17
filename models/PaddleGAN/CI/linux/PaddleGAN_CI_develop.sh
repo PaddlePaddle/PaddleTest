@@ -234,7 +234,7 @@ model=${filename%.*}
 if [ -d "output" ]; then
     rm -rf output
 fi
-sed -i '1s/epochs/total_iters/' $line
+sed -i '1,5s/epochs/total_iters/' $line
 # animeganv2
 sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 
@@ -264,7 +264,7 @@ else
 fi
     ;;
 *)
-if [[ ! ${line} =~ 'makeup' ]]; then
+if [[ ! ${line} =~ 'makeup' ]] || [[ ! ${line} =~ 'aotgan' ]]; then
     python  -m paddle.distributed.launch tools/main.py --config-file $line \
         -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
         > $log_path/train/${model}_2card.log 2>&1
@@ -292,7 +292,7 @@ ls output/$params_dir/ |head -n 2
 sleep 3
 if [[ ${model_flag} =~ "CE" ]]; then
     rm -rf output #清空多卡cache
-    if [[ ! ${line} =~ 'makeup' ]]; then
+    if [[ ! ${line} =~ 'makeup' ]] || [[ ! ${line} =~ 'aotgan' ]]; then
         python tools/main.py --config-file $line \
             -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
             > $log_path/train/${model}_1card.log 2>&1
