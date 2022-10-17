@@ -8,8 +8,8 @@
 # TODO: rd_yaml_path  qa_yaml_name 需要约定
 
 train:
-  name: multi
-  cmd : -m paddle.distributed.launch tools/train.py
+  name: single
+  cmd :   tools/train.py
   params:
     - -c ${rd_yaml_path}
     - -o Global.epochs=1
@@ -22,7 +22,7 @@ train:
       evaluation: "="
 eval:
   name: trained
-  cmd: -m paddle.distributed.launch tools/eval.py
+  cmd:   tools/eval.py
   params:
     - -c ${rd_yaml_path}
   result:

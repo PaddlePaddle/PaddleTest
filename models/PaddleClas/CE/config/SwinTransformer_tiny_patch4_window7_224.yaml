@@ -89,14 +89,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.69151
+        kpi_base: 6.67461
         threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.5818
+        kpi_base: 7.58698
         threshold: 1.0 #
         actived: True
         evaluation: "-"
@@ -112,14 +112,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.75353
+        kpi_base: 6.80481
         threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.65577
+        kpi_base: 7.49545
         threshold: 1.0 #
         actived: True
         evaluation: "-"
@@ -135,14 +135,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.69151
+        kpi_base: 6.67461
         threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.5818
+        kpi_base: 7.58698
         threshold: 1.0 #
         actived: True
         evaluation: "-"
@@ -158,14 +158,14 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.75353
+        kpi_base: 6.80481
         threshold: 1.0 #
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 7.65577
+        kpi_base: 7.49545
         threshold: 1.0 #
         actived: True
         evaluation: "-"
@@ -231,7 +231,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 7.5818
+        kpi_base: 7.58698
         threshold: 1.0 #
         actived: True
         evaluation: "-"
@@ -247,7 +247,7 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 7.5818
+        kpi_base: 7.58698
         threshold: 1.0 #
         actived: True
         evaluation: "-"
