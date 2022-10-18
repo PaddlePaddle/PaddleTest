@@ -209,7 +209,12 @@ case:
 
   windows:
     base: ./base/Products_base.yaml
+    train:
+      -
+        name: single
     eval:
+      -
+        name: trained
       -
         name: pretrained
         cmd:  tools/eval.py
@@ -225,6 +230,8 @@ case:
     infer: skipped
     export:
       -
+        name: trained
+      -
         name: pretrained
         cmd: tools/export_model.py
         params:
@@ -232,6 +239,8 @@ case:
           - -o Global.save_inference_dir=${export_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
     predict:
+      -
+        name: trained
       -
         name: pretrained
         cmd: python/predict_system.py
