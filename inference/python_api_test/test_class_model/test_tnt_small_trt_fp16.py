@@ -71,8 +71,15 @@ def test_trt_fp16_more_bz():
         test_suite2.load_config(
             model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
         )
+        # TODO:DLTP-58929修复后去掉delete pass
         test_suite2.trt_more_bz_test(
-            input_data_dict, output_data_dict, delta=1e-2, max_batch_size=10, min_subgraph_size=30, precision="trt_fp16"
+            input_data_dict,
+            output_data_dict,
+            delta=1e-2,
+            max_batch_size=10,
+            min_subgraph_size=30,
+            precision="trt_fp16",
+            delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
         )
 
         del test_suite2  # destroy class to save memory
@@ -105,8 +112,15 @@ def test_jetson_trt_fp16_more_bz():
         test_suite2.load_config(
             model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
         )
+        # TODO:DLTP-58929修复后去掉delete pass
         test_suite2.trt_more_bz_test(
-            input_data_dict, output_data_dict, delta=1e-2, max_batch_size=10, min_subgraph_size=30, precision="trt_fp16"
+            input_data_dict,
+            output_data_dict,
+            delta=1e-2,
+            max_batch_size=10,
+            min_subgraph_size=30,
+            precision="trt_fp16",
+            delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
         )
 
         del test_suite2  # destroy class to save memory
@@ -135,6 +149,13 @@ def test_trt_fp16_bz1_multi_thread():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
-    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, min_subgraph_size=30, precision="trt_fp16")
+    # TODO:DLTP-58929修复后去掉delete pass
+    test_suite2.trt_bz1_multi_thread_test(
+        input_data_dict,
+        output_data_dict,
+        min_subgraph_size=30,
+        precision="trt_fp16",
+        delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
+    )
 
     del test_suite2  # destroy class to save memory
