@@ -65,16 +65,16 @@ pip install -r requirements.txt
 log_dir=.
 model_type_path=
 if [ "${task_type}" == 'develop_d1' ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v deeplabv3  | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_all_temp
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v deeplabv3  | grep -v benchmark | grep -v smrt | grep -v pssl | grep -v mscale_ocrnet | tee dynamic_config_all_temp
 elif [ "${task_type}" == 'develop_d2' ];then
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep segformer | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_segformer
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v setr | grep deeplabv3 | grep -v contrib | grep -v EISeg | grep -v Matting | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_deeplabv3
 cat dynamic_config_segformer dynamic_config_deeplabv3 >>dynamic_config_all_temp
 else
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_all_temp
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v setr | grep -v portraitnet | grep -v contrib | grep -v Matting | grep -v segformer | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | grep -v mscale_ocrnet | tee dynamic_config_all_temp
 fi
 sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
-skip_export_model='espnetv1_cityscapes_1024x512_120k enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k dmnet_resnet101_os8_cityscapes_1024x512_80k gscnn_resnet50_os8_cityscapes_1024x512_80k'
+skip_export_model='espnetv1_cityscapes_1024x512_120k enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k gscnn_resnet50_os8_cityscapes_1024x512_80k'
 # dynamic fun
 TRAIN_MUlTI_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
@@ -143,7 +143,15 @@ PREDICT_DYNAMIC(){
 }
 EXPORT_DYNAMIC(){
     mode=export_dynamic
-    if [[ -z `echo ${skip_export_model} | grep -w ${model}` ]];then
+    if [[ ${model} =~ 'rtformer' || ${model} =~ 'dmnet' ]];then
+        export CUDA_VISIBLE_DEVICES=$cudaid1
+        python export.py \
+           --config ${config} \
+           --model_path seg_dynamic_pretrain/${model}/model.pdparams \
+           --save_dir ./inference_model/${model} \
+           --input_shape 1 3 512 512 >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
+        print_result
+    elif [[ -z `echo ${skip_export_model} | grep -w ${model}` ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
         python export.py \
            --config ${config} \
@@ -156,7 +164,7 @@ EXPORT_DYNAMIC(){
 }
 PYTHON_INFER_DYNAMIC(){
     mode=python_infer_dynamic
-    if [[ ${model} =~ 'gscnn' || ${model} =~ 'dmnet' || ${model} =~ 'enet' || ${model} =~ 'segnet' || ${model} =~ 'espnetv1' ]];then
+    if [[ ${model} =~ 'gscnn' || ${model} =~ 'enet' || ${model} =~ 'segnet' || ${model} =~ 'espnetv1' ]];then
         echo -e "${model} does not test python_infer！"
     else
         export PYTHONPATH=`pwd`
@@ -184,13 +192,13 @@ if [[ -n `echo ${model} | grep voc12` ]];then
     predict_pic='2007_000033.jpg'
 fi
 if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
-    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/pascal_voc12/${model}/model.pdparams
+    wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/pascal_voc12/${model}/model.pdparams
 elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
-    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/cityscapes/${model}/model.pdparams
+    wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/cityscapes/${model}/model.pdparams
 elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
-    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/ade20k/${model}/model.pdparams
+    wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/ade20k/${model}/model.pdparams
 elif [[ -n `echo ${model} | grep camvid` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
-    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/camvid/${model}/model.pdparams
+    wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/camvid/${model}/model.pdparams
 fi
 if [ "$2" ];then
     $2

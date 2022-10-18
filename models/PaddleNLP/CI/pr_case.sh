@@ -240,19 +240,19 @@ print_info $? gpt_pretrain
 # time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
 # print_info $? gpt_test_acc
 # FT
-# cd ${nlp_dir}/
-# export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-# wget https://paddle-qa.bj.bcebos.com/paddlenlp/paddle_inference.tgz
-# tar -xzvf paddle_inference.tgz
-# cd ${nlp_dir}/paddlenlp/ops
-# export CC=/usr/local/gcc-8.2/bin/gcc
-# export CXX=/usr/local/gcc-8.2/bin/g++
-# #python
-# mkdir build_gpt_so
-# cd build_gpt_so/
-# cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ONcd
-# make -j >${log_path}/GPT_python_FT >>${log_path}/gpt_python_FT 2>&1
-# print_info $? gpt_python_FT
+cd ${nlp_dir}/
+export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
+wget https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+tar -xzvf paddle_inference.tgz
+cd ${nlp_dir}/paddlenlp/ops
+export CC=/usr/local/gcc-8.2/bin/gcc
+export CXX=/usr/local/gcc-8.2/bin/g++
+#python
+mkdir build_gpt_so
+cd build_gpt_so/
+cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ONcd
+make -j >${log_path}/GPT_python_FT >>${log_path}/gpt_python_FT 2>&1
+print_info $? gpt_python_FT
 # cd ../
 # #c++
 # mkdir build_gpt_cc
@@ -727,7 +727,7 @@ python ./deploy/python/inference.py --config ./configs/transformer.base.yaml \
     --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
     --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_infer) >>${log_path}/transformer_infer 2>&1
 print_info $? transformer_infer
-# FT
+# # FT
 # export CC=/usr/local/gcc-8.2/bin/gcc
 # export CXX=/usr/local/gcc-8.2/bin/g++
 # cd ${nlp_dir}/paddlenlp/ops
@@ -1051,4 +1051,5 @@ taskflow (){
 cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
 }
+
 $1

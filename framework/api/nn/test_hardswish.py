@@ -53,7 +53,7 @@ def test_hardswish_base():
 @pytest.mark.api_nn_Hardswish_parameters
 def test_hardswish():
     """
-     x = np.zeros((3, 4))
+    x = np.zeros((3, 4))
     """
     x = np.zeros((3, 4)).astype(np.float32)
     res = np.zeros((3, 4)).astype(np.float32)

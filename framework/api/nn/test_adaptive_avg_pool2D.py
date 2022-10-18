@@ -25,14 +25,14 @@ class TestAdaptiveAvgPool2D(APIBase):
         # self.static = True
         # enable check grad
         # self.enable_backward = True
+        self.no_grad_var = ["output_size"]
 
 
 obj = TestAdaptiveAvgPool2D(paddle.nn.AdaptiveAvgPool2D)
 
 
 def adaptive_start_index(index, input_size, output_size):
-    """adaptive_start_index
-    """
+    """adaptive_start_index"""
     return int(np.floor(index * input_size / output_size))
 
 
@@ -177,3 +177,14 @@ def test_adaptive_avg_pood2D6():
     output_size = (3, 3)
     compute_adaptive_pool2D(x=x, output_size=output_size, data_format="wrong")
     obj.exception(etype=ValueError, mode="python", data=x, output_size=output_size, data_format="wrong")
+
+
+@pytest.mark.api_nn_AdaptiveAvgPool2D_parameters
+def test_adaptive_avg_pood2D7():
+    """
+    output_size = Tensor(3)
+    """
+    x = randtool("float", -10, 10, [2, 4, 4, 3])
+    output_size = np.array([3, 3]).astype("int32")
+    res = compute_adaptive_pool2D(x=x, output_size=[3, 3], data_format="NHWC")
+    obj.run(res=res, data=x, output_size=output_size, data_format="NHWC")

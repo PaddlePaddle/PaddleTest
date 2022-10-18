@@ -3,18 +3,18 @@
 set log_path=log
 md log
 
-if not exist train_data (mklink /j train_data %data_path%\PaddleOCR\train_data)
-if not exist pretrain_models (mklink /j pretrain_models %data_path%\PaddleOCR\pretrain_models)
+if not exist train_data (mklink /d train_data %data_path%\PaddleOCR\train_data)
+if not exist pretrain_models (mklink /d pretrain_models %data_path%\PaddleOCR\pretrain_models)
 
 rem dependency
 python -m pip install -r requirements.txt
 
 rem set gpu_flag=False
-set sed="C:\Program Files\Git\usr\bin\sed.exe"
+rem set sed="C:\Program Files\Git\usr\bin\sed.exe"
 setlocal enabledelayedexpansion
 for /f %%i in (ocr_det_models_list.txt) do (
 echo %%i
-%sed% -i s/"training"/"validation"/g %%i
+sed -i s/"training"/"validation"/g %%i
 set target=%%i
 rem echo !target!
 set target1=!target:*/=!

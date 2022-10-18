@@ -519,7 +519,6 @@ def test_beamsearchdecoder5():
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_exception
-@pytest.mark.skip(reason="Skip because Paddle rename python c api.")
 def test_beamsearchdecoder6():
     """
     error shape
@@ -538,7 +537,7 @@ def test_beamsearchdecoder6():
     except Exception as e:
         print(e)
         if is_in_eager:
-            if ("matmul_dygraph_function" in e.args[0]) and ("InvalidArgumentError" in e.args[0]):
+            if "InvalidArgument" in e.args[0]:
                 pass
             else:
                 raise Exception
@@ -613,7 +612,7 @@ def test_beamsearchdecoder9():
         dynamic_decode(decoder=decoder, inits=decoder_cell.get_initial_states(encoder_output), max_step_num=5)
     except Exception as e:
         # print(e)
-        if "[operator < matmul_v2 > error]" in e.args[0] or "phi::MatmulKernel" in e.args[0]:
+        if "InvalidArgument" in e.args[0]:
             pass
         else:
             raise Exception

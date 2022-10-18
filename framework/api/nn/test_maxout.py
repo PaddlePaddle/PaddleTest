@@ -54,7 +54,7 @@ def test_maxout_base():
 @pytest.mark.api_nn_Maxout_parameters
 def test_maxout():
     """
-     default axis = 1
+    default axis = 1
     """
     x = randtool("float", -10, 10, [10, 9, 3, 3])
     # print(x)

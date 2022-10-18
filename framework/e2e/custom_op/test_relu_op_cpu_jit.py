@@ -29,5 +29,6 @@ def test_relu_op_jit():
     print(out.numpy())
     print(np.maximum(data, 0))
     assert np.allclose(out.numpy(), np.maximum(data, 0).astype("float32"))
+    out.retain_grads()
     out.backward()
     assert np.allclose(out.grad, np.ones(shape=[2, 2, 2]).astype("float32"))

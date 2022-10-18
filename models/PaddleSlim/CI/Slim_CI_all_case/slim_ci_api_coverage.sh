@@ -37,8 +37,9 @@ run_api_case(){
 cases=`find ./ -name "test*.py" | sort`
 #ignore="test_analysis_helper.py"
 ignore=""
-for line in `ls test_*.py`
+for line in `ls test_*.py | sort`
 do
+    {
     name=`echo ${line} | cut -d \. -f 1`
     echo ${test_num}_"/"_${all_test_num}_${name}
     if [[ ${ignore} =~ ${line##*/} ]]; then
@@ -47,19 +48,23 @@ do
        python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_${name} 2>&1
        print_info $? ${test_num}_${name}
     fi
+    }&
     let test_num++
 done
 }
 run_api_case
+wait
 run_api_case_dygraph(){
 if [ -d ${slim_dir}/tests/dygraph ];then
 cd ${slim_dir}/tests/dygraph
-for line in `ls test_*.py`
+for line in `ls test_*.py | sort`
 do
+    {
     name=`echo ${line} | cut -d \. -f 1`
     echo ${test_num}_"/"_${all_test_num}_dygraph_${name}
     python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_dygraph_${name} 2>&1
     print_info $? ${test_num}_dygraph_${name}
+    }&
     let test_num++
 done
 else
@@ -67,16 +72,18 @@ else
 fi
 }
 run_api_case_dygraph
-
+wait
 run_api_case_act(){
 if [ -d ${slim_dir}/tests/act ];then
 cd ${slim_dir}/tests/act
-for line in `ls test_*.py`
+for line in `ls test_*.py | sort`
 do
+    {
     name=`echo ${line} | cut -d \. -f 1`
     echo ${test_num}_"/"_${all_test_num}_act_${name}
     python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_act_${name} 2>&1
     print_info $? ${test_num}_act_${name}
+    }&
     let test_num++
 done
 else
@@ -84,6 +91,7 @@ else
 fi
 }
 run_api_case_act
+wait
 
 cd ${slim_dir}/tests
 

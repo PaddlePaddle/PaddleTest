@@ -10,17 +10,17 @@ lie = 9
 lie_index = 5
 b = []
 
-url_all = [
-    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15746602/result/reportUrl.html",
-    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15777850/result/reportUrl.html",
-]  # release
-with open("clas_release", "w", encoding="utf-8") as f:
+# url_all = [
+#     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/18334479/result/reportUrl.html",
+#     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/18334453/result/reportUrl.html",
+# ]  # release
+# with open("clas_release", "w", encoding="utf-8") as f:
 
-    # url_all = [
-    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15715846/result/reportUrl.html",
-    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15779389/result/reportUrl.html",
-    # ] #develop
-    # with open("clas_develop", "w", encoding="utf-8") as f:
+url_all = [
+    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19385728/result/reportUrl.html",
+    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19387433/result/reportUrl.html",
+]  # develop
+with open("clas_develop", "w", encoding="utf-8") as f:
 
     for i, _ in enumerate(url_all):
         # for i in range(len(url_all)): #code style error

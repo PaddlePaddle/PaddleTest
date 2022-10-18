@@ -278,7 +278,7 @@ def numpy_alpha_dropout(x, p, random_tensor, training=True):
         alpha = 1.6732632423543772848170429916717
         scale = 1.0507009873554804934193349852946
         alpha_p = -alpha * scale
-        a = ((1 - p) * (1 + p * alpha_p ** 2)) ** -0.5
+        a = ((1 - p) * (1 + p * alpha_p**2)) ** -0.5
         b = -a * alpha_p * p
 
         dtype = x.dtype

@@ -125,6 +125,20 @@ def test_dygraph7():
             paddle.enable_static()
 
 
+@pytest.mark.api_base_uniform_parameters
+def test_dygraph8():
+    """
+    shape=list, min=tensor(-1.0), max=tensor(1.0)
+    :return:
+    """
+    for place in places:
+        for t in types:
+            paddle.disable_static(place)
+            res = paddle.uniform(shape=[3, 4], dtype=t, min=paddle.to_tensor(-1.0), max=paddle.to_tensor(1.0))
+            assert res.shape == [3, 4]
+            paddle.enable_static()
+
+
 @pytest.mark.api_base_uniform_vartype
 def test_static1():
     """

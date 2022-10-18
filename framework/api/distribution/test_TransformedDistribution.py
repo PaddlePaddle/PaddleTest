@@ -12,6 +12,7 @@ import pytest
 paddle.seed(33)
 
 
+@pytest.mark.skip(reason="Skip TransformedDistribution for fix event shape bug.")
 @pytest.mark.api_distribution_TransformedDistribution_parameters
 def test_TransformedDistribution0():
     """
@@ -31,6 +32,7 @@ def test_TransformedDistribution0():
     assert np.allclose(log_prob_value.numpy(), np.array([-1.64333570]))
 
 
+@pytest.mark.skip(reason="Skip TransformedDistribution for fix event shape bug.")
 @pytest.mark.api_distribution_TransformedDistribution_parameters
 def test_TransformedDistribution1():
     """
@@ -50,6 +52,7 @@ def test_TransformedDistribution1():
     assert np.allclose(log_prob_value.numpy(), np.array([-0.69314718]))
 
 
+@pytest.mark.skip(reason="Skip TransformedDistribution for fix event shape bug.")
 @pytest.mark.api_distribution_TransformedDistribution_parameters
 def test_TransformedDistribution2():
     """
@@ -72,6 +75,7 @@ def test_TransformedDistribution2():
     assert np.allclose(log_prob_value.numpy(), np.array([-1.17594624]))
 
 
+@pytest.mark.skip(reason="Skip TransformedDistribution for fix event shape bug.")
 @pytest.mark.api_distribution_TransformedDistribution_parameters
 def test_TransformedDistribution3():
     """
@@ -94,6 +98,7 @@ def test_TransformedDistribution3():
     assert np.allclose(log_prob_value.numpy(), np.array([-0.27615857]))
 
 
+@pytest.mark.skip(reason="Skip TransformedDistribution for fix event shape bug.")
 @pytest.mark.api_distribution_TransformedDistribution_parameters
 def test_TransformedDistribution4():
     """

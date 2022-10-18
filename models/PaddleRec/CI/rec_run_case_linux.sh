@@ -202,19 +202,19 @@ done
 
 # rerank 暂时无模型
 run_CI_func(){
-    demo_contentunderstanding True
-    demo_match True
-    demo_multitask True
-    demo_rank True
-    demo_recall True
+    demo_contentunderstanding True &
+    demo_match True &
+    demo_multitask True &
+    demo_rank True &
+    demo_recall True &
 }
 
 run_freet_func(){
-    demo_contentunderstanding True freet_run
-    demo_match True freet_run
-    demo_multitask True freet_run
-    demo_rank True freet_run
-    demo_recall True freet_run
+    demo_contentunderstanding True # freet_run
+    demo_match True # freet_run
+    demo_multitask True # freet_run
+    demo_rank True # freet_run
+    demo_recall True # freet_run
 }
 
 run_CPU_func(){
@@ -247,6 +247,7 @@ fi
 case $1 in
 "run_CI")
     run_CI_func
+    wait
     print_logs
     ;;
 "run_CE")
@@ -264,5 +265,9 @@ case $1 in
 "run_demo")
     run_demo_func
     print_logs
+    ;;
+*)
+    echo " $1 models is running"
+    $1
     ;;
 esac

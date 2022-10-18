@@ -234,7 +234,7 @@ model=${filename%.*}
 if [ -d "output" ]; then
     rm -rf output
 fi
-sed -i '1s/epochs/total_iters/' $line
+sed -i '1,5s/epochs/total_iters/' $line
 # animeganv2
 sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 
@@ -242,7 +242,7 @@ sed -i 's/pretrain_ckpt:/pretrain_ckpt: #/g' $line
 sleep 3
 case ${model} in
 #只支持单卡
-lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal|prenet)
+lapstyle_draft|lapstyle_rev_first|lapstyle_rev_second|singan_finetune|singan_animation|singan_sr|singan_universal|prenet|firstorder_vox_mobile_256)
 python tools/main.py --config-file $line \
     -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output \
     > $log_path/train/${model}_1card.log 2>&1
@@ -264,7 +264,7 @@ else
 fi
     ;;
 *)
-if [[ ! ${line} =~ 'makeup' ]]; then
+if [[ ! ${line} =~ 'makeup' ]] || [[ ! ${line} =~ 'aotgan' ]]; then
     python  -m paddle.distributed.launch tools/main.py --config-file $line \
         -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
         > $log_path/train/${model}_2card.log 2>&1
@@ -292,7 +292,7 @@ ls output/$params_dir/ |head -n 2
 sleep 3
 if [[ ${model_flag} =~ "CE" ]]; then
     rm -rf output #清空多卡cache
-    if [[ ! ${line} =~ 'makeup' ]]; then
+    if [[ ! ${line} =~ 'makeup' ]] || [[ ! ${line} =~ 'aotgan' ]]; then
         python tools/main.py --config-file $line \
             -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
             > $log_path/train/${model}_1card.log 2>&1
@@ -453,43 +453,43 @@ if [[ ! ${model_flag} =~ "single" ]] && [[ ${model} =~ "edvr_m_wo_tsa" ]];then
         fi
     fi
 
-    # face_parse
-    python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
-    if [[ $? -eq 0 ]];then
-    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/face_parse.log) -eq 0 ]];then
-        echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
-    else
-        cat $log_path/infer/face_parse.log
-        echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
-    fi
-    # psgan
-    python tools/psgan_infer.py \
-        --config-file configs/makeup.yaml \
-        --source_path  docs/imgs/ps_source.png \
-        --reference_dir docs/imgs/ref \
-        --evaluate-only \
-        > $log_path/infer/psgan.log 2>&1
-    if [[ $? -eq 0 ]];then
-    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/psgan.log) -eq 0 ]];then
-        echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
-    else
-        cat $log_path/infer/psgan.log
-        echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
-    fi
+    # # face_parse
+    # python applications/tools/face_parse.py --input_image ./docs/imgs/face.png > $log_path/infer/face_parse.log 2>&1
+    # if [[ $? -eq 0 ]];then
+    # # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/face_parse.log) -eq 0 ]];then
+    #     echo -e "\033[33m infer of face_parse  successfully!\033[0m"| tee -a $log_path/result.log
+    # else
+    #     cat $log_path/infer/face_parse.log
+    #     echo -e "\033[31m infer of face_parse failed!\033[0m"| tee -a $log_path/result.log
+    # fi
+    # # psgan
+    # python tools/psgan_infer.py \
+    #     --config-file configs/makeup.yaml \
+    #     --source_path  docs/imgs/ps_source.png \
+    #     --reference_dir docs/imgs/ref \
+    #     --evaluate-only \
+    #     > $log_path/infer/psgan.log 2>&1
+    # if [[ $? -eq 0 ]];then
+    # # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/psgan.log) -eq 0 ]];then
+    #     echo -e "\033[33m infer of psgan  successfully!\033[0m"| tee -a $log_path/result.log
+    # else
+    #     cat $log_path/infer/psgan.log
+    #     echo -e "\033[31m infer of psgan failed!\033[0m"| tee -a $log_path/result.log
+    # fi
 
-    # video restore
-    python applications/tools/video-enhance.py \
-        --input data/Peking_input360p_clip_10_11.mp4 \
-        --process_order DAIN DeOldify EDVR \
-        --output video_restore_infer \
-        > $log_path/infer/video_restore.log 2>&1
-    if [[ $? -eq 0 ]];then
-    # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/video_restore.log) -eq 0 ]];then
-        echo -e "\033[33m infer of video restore  successfully!\033[0m"| tee -a $log_path/result.log
-    else
-        cat $log_path/infer/video_restore.log
-        echo -e "\033[31m infer of video restore failed!\033[0m"| tee -a $log_path/result.log
-    fi
+    # # video restore
+    # python applications/tools/video-enhance.py \
+    #     --input data/Peking_input360p_clip_10_11.mp4 \
+    #     --process_order DAIN DeOldify EDVR \
+    #     --output video_restore_infer \
+    #     > $log_path/infer/video_restore.log 2>&1
+    # if [[ $? -eq 0 ]];then
+    # # if [[ $? -eq 0 ]] && [[ $(grep -c  "Error" $log_path/infer/video_restore.log) -eq 0 ]];then
+    #     echo -e "\033[33m infer of video restore  successfully!\033[0m"| tee -a $log_path/result.log
+    # else
+    #     cat $log_path/infer/video_restore.log
+    #     echo -e "\033[31m infer of video restore failed!\033[0m"| tee -a $log_path/result.log
+    # fi
 fi
 done
 

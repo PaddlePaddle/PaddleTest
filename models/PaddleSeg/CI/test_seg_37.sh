@@ -1,14 +1,11 @@
 #!/bin/bash
 unset GREP_OPTIONS
-rm -rf /usr/local/python2.7.15/bin/python
-rm -rf /usr/local/python2.7.15/bin/pip
-ln -s /usr/local/bin/python3.7 /usr/local/python2.7.15/bin/python
-ln -s /usr/local/bin/pip3.7 /usr/local/python2.7.15/bin/pip
-export PYTHONPATH=`pwd`
+mkdir run_env_py37;
+ln -s $(which python3.7) run_env_py37/python;
+ln -s $(which pip3.7) run_env_py37/pip;
+export PATH=$(pwd)/run_env_py37:${PATH};
 
-
-python -m pip install --upgrade pip --ignore-installed
-# python -m pip install --upgrade numpy --ignore-installed
+python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip uninstall paddlepaddle-gpu -y
 if [[ ${branch} == 'develop' ]];then
 echo "checkout develop !"
@@ -24,7 +21,7 @@ echo -e '*****************paddleseg_version****'
 git rev-parse HEAD
 
 
-git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep -v quick_start | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib |  grep -v Matting |  grep -v test_tipc | grep -v benchmark | grep -v smrt | awk '{print $NF}' | tee dynamic_config_list_temp
+git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep -v quick_start | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib |  grep -v Matting |  grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | awk '{print $NF}' | tee dynamic_config_list_temp
 echo =================
 cat dynamic_config_list_temp
 echo =================
@@ -84,12 +81,12 @@ log_dir=.
 model_type_path=
 dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
 if [ ${dynamic_config_num} -eq 0 ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v contrib | grep -v Matting | grep -v setr | grep -v test_tipc | grep -v benchmark | tee dynamic_config_all
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v contrib | grep -v Matting | grep -v setr | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_all
 shuf dynamic_config_all -n 2 -o dynamic_config_list_temp
 fi
 grep -F -v -f no_upload dynamic_config_list_temp | sort | uniq | tee dynamic_config_list
 sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
-skip_export_model='gscnn_resnet50_os8_cityscapes_1024x512_80k'
+skip_export_model='gscnn_resnet50_os8_cityscapes_1024x512_80k espnetv1_cityscapes_1024x512_120k enet_cityscapes_1024x512_80k segnet_cityscapes_1024x512_80k'
 # dynamic fun
 TRAIN_MUlTI_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
@@ -138,7 +135,15 @@ PREDICT_DYNAMIC(){
 }
 EXPORT_DYNAMIC(){
     mode=export_dynamic
-    if [[ -z `echo ${skip_export_model} | grep -w ${model}` ]];then
+    if [[ ${model} =~ 'rtformer' || ${model} =~ 'dmnet' ]];then
+        export CUDA_VISIBLE_DEVICES=$cudaid1
+        python export.py \
+           --config ${config} \
+           --model_path seg_dynamic_pretrain/${model}/model.pdparams \
+           --save_dir ./inference_model/${model} \
+           --input_shape 1 3 512 512 >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
+        print_result
+    elif [[ -z `echo ${skip_export_model} | grep -w ${model}` ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
         python export.py \
            --config ${config} \
@@ -188,7 +193,7 @@ if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model
         PYTHON_INFER_DYNAMIC
     fi
 elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
-    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/cityscapes/${model}/model.pdparams
+    wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/cityscapes/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} doesn't upload bos !!!"
         seg_model_sign=True
@@ -201,7 +206,7 @@ elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/
         PYTHON_INFER_DYNAMIC
     fi
 elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
-    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/ade20k/${model}/model.pdparams
+    wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/ade20k/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} doesn't upload bos !!!"
         seg_model_sign=True
@@ -214,7 +219,7 @@ elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${mo
         PYTHON_INFER_DYNAMIC
     fi
 elif [[ -n `echo ${model} | grep camvid` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
-    wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/camvid/${model}/model.pdparams
+    wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/camvid/${model}/model.pdparams
     if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
         echo "${model} doesn't upload bos !!!"
         seg_model_sign=True
