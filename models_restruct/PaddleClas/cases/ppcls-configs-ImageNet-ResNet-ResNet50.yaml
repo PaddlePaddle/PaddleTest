@@ -227,7 +227,12 @@ case:
 
   windows:
     base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single
     eval:
+      -
+        name: trained
       -
         name: pretrained
         cmd:  tools/eval.py
@@ -241,6 +246,8 @@ case:
             evaluation: "-"
     infer:
       -
+        name: trained
+      -
         name: pretrained
         cmd: tools/infer.py
         params:
@@ -253,6 +260,8 @@ case:
             evaluation: "="
     export:
       -
+        name: trained
+      -
         name: pretrained
         cmd: tools/export_model.py
         params:
@@ -260,6 +269,8 @@ case:
           - -o Global.save_inference_dir=${export_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
     predict:
+      -
+        name: trained
       -
         name: pretrained
         cmd: python/predict_cls.py
@@ -301,7 +312,7 @@ case:
             evaluation: "-"
     infer:
       -
-        name: infer
+        name: trained
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -376,7 +387,7 @@ case:
             evaluation: "-"
     infer:
       -
-        name: infer
+        name: trained
         params:
           - -o Global.device=${set_cuda_flag}
       -
