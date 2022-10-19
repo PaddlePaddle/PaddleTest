@@ -181,7 +181,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
-            base: [11, 11, 11, 11]
+            base: "[11, 11, 11, 11]"
             threshold: 0
             evaluation: "="
       -
@@ -193,7 +193,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
-            base: [443, 84, 808, 511]
+            base: "[443, 84, 808, 511]"
             threshold: 0
             evaluation: "="
 
@@ -250,7 +250,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
-            base: [443, 84, 808, 511]
+            base: "[443, 84, 808, 511]"
             threshold: 0
             evaluation: "="
 
@@ -308,7 +308,7 @@ case:
           - -o Global.device=${set_cuda_flag}
         result:
           class_ids:
-            base: [443, 84, 808, 511]
+            base: "[443, 84, 808, 511]"
             threshold: 0
             evaluation: "="
 
@@ -366,7 +366,7 @@ case:
           - -o Global.device=${set_cuda_flag}
         result:
           class_ids:
-            base: [443, 84, 808, 511]
+            base: "[443, 84, 808, 511]"
             threshold: 0
             evaluation: "="
 

@@ -378,6 +378,65 @@ class PaddleClas_Start(object):
             self.env_dict["set_cuda_flag"] = "gpu"  # 根据操作系统判断
         return 0
 
+    def load_json(self):
+        """
+        解析report路径下allure json
+        """
+        files = os.listdir(self.report_path)
+        for file in files:
+            if file.endswith("result.json"):
+                file_path = os.path.join(self.report_path, file)
+                with open(file_path, encoding="UTF-8") as f:
+                    for line in f.readlines():
+                        data = json.loads(line)
+                        yield data
+
+    def update_kpi(self):
+        """
+        根据之前的字典更新kpi监控指标, 原来的数据只起到确定格式, 没有实际用途
+        其实可以在这一步把QA需要替换的全局变量给替换了,就不需要框架来做了，重组下qa的yaml
+        """
+        # 读取上次执行的产出
+        # #先本地用result测试 后续考虑拉取bos上的 TODO: 暂时在本机上测试了mac的所以只考虑mac
+        self.report_path = "result"
+
+        # 更新部分
+        case_info_list = list()
+        for case_detail in self.load_json():
+            case_info = dict()
+            labels = case_detail.get("labels")
+            for label in labels:
+                if label.get("name") == "case_info":
+                    case_info_list_tmp = json.loads(label.get("value"))
+                    for item in case_info_list_tmp:
+                        if item.get("kpi_status") != "Passed":
+                            status = "Failed"
+                    case_info_list.extend(case_info_list_tmp)
+
+        for i, case_value in enumerate(case_info_list):
+            if case_value["kpi_name"] != "exit_code":
+                with open(os.path.join("cases", case_value["model_name"] + ".yaml"), "r") as f:
+                    content = yaml.load(f, Loader=yaml.FullLoader)
+                for index, tag_value in enumerate(content["case"]["mac"][case_value["tag"].split("_")[0]]):
+                    if tag_value["name"] == case_value["tag"].split("_")[1]:
+                        # content["case"]这一层是写死的
+                        logger.info("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
+                        # logger.info('####content: {}'\
+                        #     .format(content["case"]["mac"][case_value["tag"].split("_")[0]]\
+                        #     [index]["result"][case_value["kpi_name"]]["base"])) #因为粗暴替换暂时不打开
+                        logger.info("####case_info_list   kpi_tag_value: {}".format(case_value["kpi_tag_value"]))
+                        try:
+                            content["case"]["mac"][case_value["tag"].split("_")[0]][index]["result"][
+                                case_value["kpi_name"]
+                            ]["base"] = case_value["kpi_tag_value"]
+                        except:  # 这里粗暴的替换了，欠考虑 TODO:优化!!!!!
+                            content["case"]["mac"][case_value["tag"].split("_")[0]][index]["result"][
+                                "${kpi_tag_value_eval}"
+                            ]["base"] = case_value["kpi_tag_value"]
+                        # 这里进行替换时要考虑到全局变量如何替换
+                with open(os.path.join("cases", case_value["model_name"] + ".yaml"), "w") as f:
+                    yaml.dump(content, f, sort_keys=False)
+
     def build_prepare(self):
         """
         执行准备过程
@@ -395,6 +454,10 @@ class PaddleClas_Start(object):
         ret = self.prepare_creat_yaml()
         if ret:
             logger.info("build prepare_creat_yaml failed")
+            return ret
+        ret = self.update_kpi()
+        if ret:
+            logger.info("build update_kpi failed")
             return ret
 
         #   debug用print  中途输出用logger
