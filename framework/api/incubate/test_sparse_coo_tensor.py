@@ -27,7 +27,7 @@ def test_sparse_sparse_coo_tensor_base():
         values = [1.0, 2.0, 3.0]
         dense_shape = [3, 3]
         for dtype in types:
-            coo = paddle.incubate.sparse.sparse_coo_tensor(indices, values, dense_shape, dtype=dtype)
+            coo = paddle.sparse.sparse_coo_tensor(indices, values, dense_shape, dtype=dtype)
             dense = coo.to_dense()
             dense_res = np.array([[0.0, 1.0, 0.0], [0.0, 0.0, 2.0], [3.0, 0.0, 0.0]])
 
@@ -48,7 +48,7 @@ def test_sparse_sparse_coo_tensor1():
         values = [1.0, 2.0, 3.0]
         dense_shape = [3, 3, 3]
         for dtype in types:
-            coo = paddle.incubate.sparse.sparse_coo_tensor(indices, values, dense_shape, dtype=dtype)
+            coo = paddle.sparse.sparse_coo_tensor(indices, values, dense_shape, dtype=dtype)
             dense = coo.to_dense()
             dense_res = np.zeros((3, 3, 3))
             for i in range(3):
