@@ -81,6 +81,7 @@ def test_trt_fp32_more_bz():
             im_shape_pool.append(im_shape)
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
+        test_suite.collect_shape_info(model_path="./ppyolo/", input_data_dict=input_data_dict, device="gpu")
 
         scale_0 = []
         for batch in range(0, batch_size * 2, 2):
@@ -92,5 +93,12 @@ def test_trt_fp32_more_bz():
         output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
         test_suite.trt_more_bz_test(
-            input_data_dict, output_data_dict, min_subgraph_size=10, repeat=1, delta=1, precision="trt_fp32"
+            input_data_dict,
+            output_data_dict,
+            min_subgraph_size=10,
+            repeat=1,
+            delta=1,
+            precision="trt_fp32",
+            dynamic=True,
+            shape_range_file="./ppyolo/shape_range.pbtxt",
         )
