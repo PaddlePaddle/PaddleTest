@@ -394,7 +394,8 @@ class PaddleClas_Start(object):
     def update_kpi(self):
         """
         根据之前的字典更新kpi监控指标, 原来的数据只起到确定格式, 没有实际用途
-        其实可以在这一步把QA需要替换的全局变量给替换了,就不需要框架来做了，重组下qa的yaml
+        其实可以在这一步把QA需要替换的全局变量给替换了,就不需要框架来做了,重组下qa的yaml
+        kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
         # 读取上次执行的产出
         # #先本地用result测试 后续考虑拉取bos上的 TODO: 暂时在本机上测试了mac的所以只考虑mac
@@ -417,22 +418,35 @@ class PaddleClas_Start(object):
             if case_value["kpi_name"] != "exit_code":
                 with open(os.path.join("cases", case_value["model_name"] + ".yaml"), "r") as f:
                     content = yaml.load(f, Loader=yaml.FullLoader)
-                for index, tag_value in enumerate(content["case"]["mac"][case_value["tag"].split("_")[0]]):
+                for index, tag_value in enumerate(
+                    content["case"][case_value["system"]][case_value["tag"].split("_")[0]]
+                ):
                     if tag_value["name"] == case_value["tag"].split("_")[1]:
                         # content["case"]这一层是写死的
                         logger.info("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
-                        # logger.info('####content: {}'\
-                        #     .format(content["case"]["mac"][case_value["tag"].split("_")[0]]\
-                        #     [index]["result"][case_value["kpi_name"]]["base"])) #因为粗暴替换暂时不打开
-                        logger.info("####case_info_list   kpi_tag_value: {}".format(case_value["kpi_tag_value"]))
+                        logger.info("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
                         try:
-                            content["case"]["mac"][case_value["tag"].split("_")[0]][index]["result"][
+                            logger.info(
+                                "####case_info_list change: {}".format(
+                                    content["case"][case_value["system"]][case_value["tag"].split("_")[0]][index][
+                                        "result"
+                                    ][case_value["kpi_name"]]["base"]
+                                )
+                            )
+                            content["case"][case_value["system"]][case_value["tag"].split("_")[0]][index]["result"][
                                 case_value["kpi_name"]
-                            ]["base"] = case_value["kpi_tag_value"]
+                            ]["base"] = case_value["kpi_value"]
                         except:  # 这里粗暴的替换了，欠考虑 TODO:优化!!!!!
-                            content["case"]["mac"][case_value["tag"].split("_")[0]][index]["result"][
-                                "${kpi_tag_value_eval}"
-                            ]["base"] = case_value["kpi_tag_value"]
+                            logger.info(
+                                "####case_info_list change: {}".format(
+                                    content["case"][case_value["system"]][case_value["tag"].split("_")[0]][index][
+                                        "result"
+                                    ]["${kpi_value_eval}"]["base"]
+                                )
+                            )
+                            content["case"][case_value["system"]][case_value["tag"].split("_")[0]][index]["result"][
+                                "${kpi_value_eval}"
+                            ]["base"] = case_value["kpi_value"]
                         # 这里进行替换时要考虑到全局变量如何替换
                 with open(os.path.join("cases", case_value["model_name"] + ".yaml"), "w") as f:
                     yaml.dump(content, f, sort_keys=False)
