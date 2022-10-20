@@ -404,14 +404,13 @@ class PaddleClas_Start(object):
         # 更新部分
         case_info_list = list()
         for case_detail in self.load_json():
-            case_info = dict()
             labels = case_detail.get("labels")
             for label in labels:
                 if label.get("name") == "case_info":
                     case_info_list_tmp = json.loads(label.get("value"))
-                    for item in case_info_list_tmp:
-                        if item.get("kpi_status") != "Passed":
-                            status = "Failed"
+                    # for item in case_info_list_tmp: #TODO 设计退出码
+                    #     if item.get("kpi_status") != "Passed":
+                    #         status = "Failed"
                     case_info_list.extend(case_info_list_tmp)
 
         for i, case_value in enumerate(case_info_list):
