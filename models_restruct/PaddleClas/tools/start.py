@@ -469,10 +469,10 @@ class PaddleClas_Start(object):
         if ret:
             logger.info("build prepare_creat_yaml failed")
             return ret
-        ret = self.update_kpi()
-        if ret:
-            logger.info("build update_kpi failed")
-            return ret
+        # ret = self.update_kpi()
+        # if ret:
+        #     logger.info("build update_kpi failed")
+        #     return ret
 
         #   debug用print  中途输出用logger
         # print('####eval_trained_model: {}'.format(self.env_dict['eval_trained_model']))
