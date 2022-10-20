@@ -399,18 +399,51 @@ do
         --ir_optim=False > ${log_path}/dy_ptq_eval_fp32_${model} 2>&1
         print_info $? dy_ptq_eval_fp32_${model}
 
-    echo "-------- eval int8_infer model -------------", ${model}
-    python ./src/test.py \
-        --model_path=${output_dir}/${model}/int8_infer \
-        --data_dir=${data_path} \
-        --batch_size=${batch_size} \
-        --use_gpu=False \
-        --test_samples=${test_samples} \
-        --ir_optim=False > ${log_path}/dy_ptq_eval_int8_${model} 2>&1
-        print_info $? dy_ptq_eval_int8_${model}
+#    echo "-------- eval int8_infer model -------------", ${model}
+#    python ./src/test.py \
+#        --model_path=${output_dir}/${model}/int8_infer \
+#        --data_dir=${data_path} \
+#        --batch_size=${batch_size} \
+#        --use_gpu=False \
+#        --test_samples=${test_samples} \
+#        --ir_optim=False > ${log_path}/dy_ptq_eval_int8_${model} 2>&1
+#        print_info $? dy_ptq_eval_int8_${model}
 done
 }
 
+demo_ptq_yolo_series(){
+cd ${slim_dir}/example/post_training_quantization/pytorch_yolo_series/
+
+wget -q https://paddle-slim-models.bj.bcebos.com/act/yolov6s.onnx
+wget https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
+unzip -q coco.zip
+
+sed -i 's/epochs=20/epochs=1/' fine_tune.py
+sed -i 's/\/dataset\/coco/coco/' ./configs/yolov6s_fine_tune.yaml
+
+python fine_tune.py \
+--config_path=./configs/yolov6s_fine_tune.yaml \
+--recon_level=region-wise \
+--save_dir=region_ptq_out > ${log_path}/ptq_yolo_series_region_train 2>&1
+print_info $? ptq_yolo_series_region_train
+
+sed -i  's/yolov6s.onnx/region_ptq_out/' ./configs/yolov6s_fine_tune.yaml
+python eval.py \
+--config_path=./configs/yolov6s_fine_tune.yaml > ${log_path}/ptq_yolo_series_region_eval 2>&1
+print_info $? ptq_yolo_series_region_eval
+
+sed -i  's/region_ptq_out/yolov6s.onnx/' ./configs/yolov6s_fine_tune.yaml
+python fine_tune.py \
+--config_path=./configs/yolov6s_fine_tune.yaml \
+--recon_level=layer-wise \
+--save_dir=layer_ptq_out > ${log_path}/ptq_yolo_series_region_layer 2>&1
+print_info $? ptq_yolo_series_region_layer
+
+sed -i  's/yolov6s.onnx/layer_ptq_out/' ./configs/yolov6s_fine_tune.yaml
+python eval.py \
+--config_path=./configs/yolov6s_fine_tune.yaml > ${log_path}/ptq_yolo_series_layer_eval 2>&1
+print_info $? ptq_yolo_series_layer_eval
+}
 
 all_dy_quant_CI(){
     demo_dy_quant_v1
@@ -420,6 +453,7 @@ all_dy_quant_CE(){
     demo_dy_quant_v3
     ce_tests_dy_qat4
     ce_tests_dy_ptq4
+    demo_ptq_yolo_series
 }
 
 all_dy_quant_ALL(){
@@ -427,6 +461,7 @@ all_dy_quant_ALL(){
     demo_dy_quant_v3
     ce_tests_dy_qat4
     ce_tests_dy_ptq4
+    demo_ptq_yolo_series
 }
 
 demo_st_prune_v1(){
@@ -467,7 +502,7 @@ demo_st_prune_fpgm_v2(){
 cd ${slim_dir}/demo/prune  || catchException demo_st_prune_fpgm_v2
 if [ -d "models" ];then
     rm -rf models
-fi
+fifull_quant_clas_demo_mobilev3_multi_card
 python train.py \
     --model="MobileNetV2" \
     --pretrained_model="../pretrain/MobileNetV2_pretrained" \
@@ -1152,8 +1187,8 @@ all_act_ALL(){
 
 demo_full_quant_clas_MobileNetV3(){
 	cd ${slim_dir}/example/full_quantization/image_classification/
-	wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_ssld_infer.tar
-  tar -xf MobileNetV3_large_x1_0_ssld_infer.tar
+  wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_infer.tar
+  tar -xf MobileNetV3_large_x1_0_infer.tar
 
   wget -q https://sys-p0.bj.bcebos.com/slim_ci/ILSVRC2012_data_demo.tar.gz --no-check-certificate
 	tar xf ILSVRC2012_data_demo.tar.gz
@@ -1180,7 +1215,7 @@ demo_full_quant_clas_MobileNetV3(){
 demo_full_quant_det_picodet(){
 	cd ${slim_dir}/example/full_quantization/picodet/
 	wget -q https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu.tar
-  	tar -xf picodet_s_416_coco_npu.tar
+  tar -xf picodet_s_416_coco_npu.tar
 
   cd dataset
   wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
