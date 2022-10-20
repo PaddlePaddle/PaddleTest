@@ -502,7 +502,7 @@ demo_st_prune_fpgm_v2(){
 cd ${slim_dir}/demo/prune  || catchException demo_st_prune_fpgm_v2
 if [ -d "models" ];then
     rm -rf models
-fifull_quant_clas_demo_mobilev3_multi_card
+fi
 python train.py \
     --model="MobileNetV2" \
     --pretrained_model="../pretrain/MobileNetV2_pretrained" \
@@ -1024,7 +1024,7 @@ demo_act_clas_ResNet50_vd(){
 
 demo_act_clas_MobileNetV3(){
 	cd ${slim_dir}/example/auto_compression/image_classification/
-	wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_ssld_infer.tar
+	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_ssld_infer.tar
   tar -xf MobileNetV3_large_x1_0_ssld_infer.tar
 
   wget -q https://sys-p0.bj.bcebos.com/slim_ci/ILSVRC2012_data_demo.tar.gz --no-check-certificate
