@@ -175,7 +175,7 @@ rm -rf x2paddle_cola.tar
 wget https://bj.bcebos.com/v1/paddle-slim-models/data/ocr_det/test_set.tar
 wget https://bj.bcebos.com/v1/paddle-slim-models/data/ocr_det/test_label.txt
 wget https://bj.bcebos.com/v1/paddle-slim-models/data/ocr_det/test.jpg
-tar -xf test_set.tar 
+tar -xf test_set.tar
 
 # download inference model
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar
@@ -190,4 +190,4 @@ export PYTHONPATH=/PaddleOCR:$PYTHONPATH
 python3.7 infer.py model_path="./PPOCRV3_det_QAT" model_filename="inference.pdmodel" params_filename="inference.pdiparams" image_file="test.jpg" device='GPU' use_trt=True precision='int8' benchmark=True
 
 # 测精度
-python3.7 infer.py model_path="./PPOCRV3_det_QAT" model_filename="inference.pdmodel" params_filename="inference.pdiparams" dataset_config="./configs/ppocrv3_det.yaml" device='GPU' use_trt=True precision='int8' 
+python3.7 infer.py model_path="./PPOCRV3_det_QAT" model_filename="inference.pdmodel" params_filename="inference.pdiparams" dataset_config="./configs/ppocrv3_det.yaml" device='GPU' use_trt=True precision='int8'
