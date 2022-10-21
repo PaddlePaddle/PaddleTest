@@ -64,7 +64,8 @@ WITH_MKL=ON
 WITH_GPU=ON
 USE_TENSORRT=OFF
 DEMO_NAME=test_seg
-LIB_DIR="./paddle_inference"
+work_path=$(dirname $(readlink -f $0))
+LIB_DIR="${work_path}/paddle_inference"
 mkdir -p build
 cd build
 rm -rf *
