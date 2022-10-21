@@ -11,7 +11,7 @@ fi
 run_example(){
 cd $model_dir
 for exec_file in `ls`;do
-    # Data Prepare 
+    # Data Prepare
     if [[ ${exec_file} == "run_prepare.py" ]];then
         python run_prepare.py  >${log_path}/${example}_prepare >>${log_path}/${example}_prepare 2>&1
         print_info $? ${example}_prepare
@@ -21,7 +21,7 @@ for exec_file in `ls`;do
     #TRAIN
     elif [[ ${exec_file} == "train.py" ]] || [[ ${exec_file} =~ "run_train" ]] ;then
         python -m paddle.distributed.launch ${exec_file} --devices ${devices} --epoch ${epoch} --max_steps ${max_steps} --save_steps ${save_steps} --output ${output}  >${log_path}/${example}_train>>${log_path}/${example}_train 2>&1
-        print_info $? ${example}_train    
+        print_info $? ${example}_train
     #EVAL
     elif [[ ${exec_file} == "eval.py" ]] || [[ ${exec_file} =~ "run_eval" ]] ;then
         python ${exec_file} --deveices ${devices}  --checkpoint ${output}  >${log_path}/${example}_eval >>${log_path}/${example}_eval 2>&1
@@ -49,4 +49,3 @@ for exec_file in `ls`;do
 done
 }
 run_example
-
