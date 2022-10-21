@@ -241,8 +241,7 @@ print_info $? gpt_pretrain
 # FT
 cd ${nlp_dir}/
 export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-# wget https://paddle-qa.bj.bcebos.com/paddlenlp/paddle_inference.tgz
-wget https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+wget -q https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
 tar -xzvf paddle_inference.tgz
 cd ${nlp_dir}/paddlenlp/ops
 export CC=/usr/local/gcc-8.2/bin/gcc
@@ -599,7 +598,7 @@ print_info $? word_embedding_paddle_train
 ernie-ctm(){
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${nlp_dir}/examples/text_to_knowledge/ernie-ctm/
-wget https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/wordtag_dataset_v2.tar.gz && tar -zxvf wordtag_dataset_v2.tar.gz
+wget -q https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/wordtag_dataset_v2.tar.gz && tar -zxvf wordtag_dataset_v2.tar.gz
 time (python -m paddle.distributed.launch  train.py \
     --max_seq_len 128 \
     --batch_size 8   \
@@ -742,7 +741,7 @@ print_info $? transformer_C_FT
 #deploy python
 cd ${nlp_dir}/examples/machine_translation/transformer/faster_transformer/
 sed -i "s#./trained_models/step_final/#./base_trained_models/step_final/#g" ../configs/transformer.base.yaml
-wget https://paddlenlp.bj.bcebos.com/models/transformers/transformer/transformer-base-wmt_ende_bpe.tar.gz
+wget -q https://paddlenlp.bj.bcebos.com/models/transformers/transformer/transformer-base-wmt_ende_bpe.tar.gz
 tar -zxf transformer-base-wmt_ende_bpe.tar.gz
 export FLAGS_fraction_of_gpu_memory_to_use=0.1
 cp -rf ${nlp_dir}/paddlenlp/ops/build_tr_so/third-party/build/fastertransformer/bin/decoding_gemm ./
@@ -994,8 +993,6 @@ python -u run_clue_classifier.py  \
 print_info $? clue-class
 cd ${nlp_dir}/examples/benchmark/clue/mrc
 export CUDA_VISIBLE_DEVICES=${cudaid1}
-unset http_proxy=${http_proxy}
-unset https_proxy=${http_proxy}
 python -m paddle.distributed.launch run_cmrc2018.py \
     --model_name_or_path ernie-3.0-base-zh \
     --batch_size 16 \
