@@ -56,7 +56,7 @@ do
             rm -rf ${model}.yaml
             cp -r ${base_model}.yaml ${model}.yaml
             sed -i "" "s|ppcls/configs/ImageNet/ResNet/${base_model}.yaml|$line|g" ${model}.yaml #待优化，去掉ResNet
-            sed -i "" s/${base_model}/$model/g ${model}.yaml
+            sed -i "" "s/${base_model}/$model/g" ${model}.yaml
 
             #记录一些特殊规则
             if [[ ${model} == 'HRNet_W18_C' ]]; then
@@ -117,7 +117,7 @@ do
                         # sed -i "" "1,/"${arr_base[${num_lisrt_tmp}]}"/s/"${arr_base[${num_lisrt_tmp}]}"/"${arr_target[${num_lisrt_tmp}]}"/" ${model}.yaml
                         #mac命令只替换第一个，linux有所区别需要注意
                         sed -i "" "s|"${arr_base[${num_lisrt_tmp}]}"|"${arr_target[${num_lisrt_tmp}]}"|g" ${model}.yaml #linux_train_单卡
-
+                        #TODO 先获取相同的行数，对第一行处理
                         done
                 fi
             done

@@ -153,11 +153,11 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
     predict: skipped
 
-  # linux_cpu: #考虑是否剔除，只用mac覆盖cpu的情况  #暂时只写了cpu，一般不会有人用cpu_eval
+  # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
     # base: ./base/metric_learning_base.yaml
   #   train:
   #     -
-  #       name : cpu
+  #       name: cpu
   #       params:
   #         - -o Global.device=cpu
   #       result:
@@ -165,27 +165,113 @@ case:
 
   windows:
     base: ./base/metric_learning_base.yaml
+    train:
+      -
+        name: single
+    eval:
+      -
+        name: trained
+      -
+        name: pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+    infer: skipped
+    export:
+      -
+        name: trained
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+    predict: skipped
 
-  # windows_cpu: #考虑是否剔除，只用mac覆盖cpu的情况
-    # base: ./base/metric_learning_base.yaml
+  windows_cpu:
+    base: ./base/metric_learning_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: trained
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+    infer: skipped
+    export:
+      -
+        name: trained
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+    predict: skipped
 
   mac:
     base: ./base/metric_learning_base.yaml
     train:
       -
-        name : mac
+        name: single
         params:
           - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name : eval
+        name: trained
         params:
           - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
     infer: skipped
     export:
       -
-        name : export
+        name: trained
         params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
           - -o Global.device=${set_cuda_flag}
     predict: skipped
 

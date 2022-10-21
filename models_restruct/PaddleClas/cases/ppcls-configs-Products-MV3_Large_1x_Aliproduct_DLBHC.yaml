@@ -181,7 +181,7 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
-            base: [11, 11, 11, 11]
+            base: "[11, 11, 11, 11]"
             threshold: 0
             evaluation: "="
       -
@@ -193,15 +193,15 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
-            base: [443, 84, 808, 511]
+            base: "[443, 84, 808, 511]"
             threshold: 0
             evaluation: "="
 
-  # linux_cpu: #考虑是否剔除，只用mac覆盖cpu的情况  #暂时只写了cpu，一般不会有人用cpu_eval
+  # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
     # base: ./base/Products_base.yaml
   #   train:
   #     -
-  #       name : cpu
+  #       name: cpu
   #       params:
   #         - -o Global.device=cpu
   #       result:
@@ -209,32 +209,165 @@ case:
 
   windows:
     base: ./base/Products_base.yaml
+    train:
+      -
+        name: single
+    eval:
+      -
+        name: trained
+      -
+        name: pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+    infer: skipped
+    export:
+      -
+        name: trained
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+    predict:
+      -
+        name: trained
+      -
+        name: pretrained
+        cmd: python/predict_system.py
+        params:
+          - -c configs/inference_product.yaml
+          - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          class_ids:
+            base: "[443, 84, 808, 511]"
+            threshold: 0
+            evaluation: "="
 
-  # windows_cpu: #考虑是否剔除，只用mac覆盖cpu的情况
-    # base: ./base/Products_base.yaml
+  windows_cpu:
+    base: ./base/Products_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: trained
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+    infer: skipped
+    export:
+      -
+        name: trained
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+    predict:
+      -
+        name: trained
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd: python/predict_system.py
+        params:
+          - -c configs/inference_product.yaml
+          - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+        result:
+          class_ids:
+            base: "[443, 84, 808, 511]"
+            threshold: 0
+            evaluation: "="
 
   mac:
     base: ./base/Products_base.yaml
     train:
       -
-        name : mac
+        name: single
         params:
           - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name : eval
+        name: trained
         params:
           - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
     infer: skipped
     export:
       -
-        name : export
+        name: trained
         params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name : predict
+        name: trained
         params:
           - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd: python/predict_system.py
+        params:
+          - -c configs/inference_product.yaml
+          - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+        result:
+          class_ids:
+            base: "[443, 84, 808, 511]"
+            threshold: 0
+            evaluation: "="
 
 function: paddlelas_imagenet_parse

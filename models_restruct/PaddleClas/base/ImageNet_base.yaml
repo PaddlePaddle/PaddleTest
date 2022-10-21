@@ -4,8 +4,8 @@
 # 基准值框架给托管起来（分支+硬件信息+系统/ 分支+系统）存储
 
 train:
-  name: multi
-  cmd : -m paddle.distributed.launch tools/train.py
+  name: single
+  cmd :   tools/train.py
   params:
     - -c ${rd_yaml_path}
     - -o Global.epochs=1
@@ -18,7 +18,7 @@ train:
       evaluation: "="
 eval:
   name: trained
-  cmd: -m paddle.distributed.launch tools/eval.py
+  cmd:   tools/eval.py
   params:
     - -c ${rd_yaml_path}
   result:

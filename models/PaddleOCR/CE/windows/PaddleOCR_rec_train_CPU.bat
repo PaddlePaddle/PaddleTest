@@ -28,7 +28,7 @@ xcopy ..\ocr_det_models_list_2.txt  .\
 for /f %%i in (ocr_rec_models_list.txt) do (
 rem echo %%i
 rem sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' %%i
-%sed% -i s/"training"/"validation"/g %%i
+sed -i s/"training"/"validation"/g %%i
 set target=%%i
 rem echo !target!
 set target1=!target:*/=!
@@ -110,7 +110,7 @@ setlocal enabledelayedexpansion
 for /f %%i in (ocr_rec_models_list_2.txt) do (
 rem echo %%i
 rem sed -i 's!data_lmdb_release/training!data_lmdb_release/validation!g' %%i
-%sed% -i s/"training"/"validation"/g %%i
+sed -i s/"training"/"validation"/g %%i
 set target=%%i
 rem echo !target!
 set target1=!target:*/=!

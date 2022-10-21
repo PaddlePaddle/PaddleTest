@@ -6,37 +6,37 @@ rm -rf ce && mkdir ce;
 cd ce;
 
 #### 预设默认参数
-export models_list=${models_list:-None}
-export models_file=${models_file:-None} #预先不设置，二选一
-export system=${system:-linux}
-export step=${step:-train}
-export reponame=${reponame:-PaddleClas}
-export mode=${mode:-function}
-export use_build=${use_build:-yes}
-export branch=${branch:-develop}
+export models_list=${models_list:-None} #模型列表
+export models_file=${models_file:-None} #模型列表文件   #预先不设置，二选一
+export system=${system:-linux}  # linux windows windows_cpu mac 与yaml case下字段保持一致
+export step=${step:-train}  #阶段 demo:train:multi,single+eval:trained,pretrained
+export reponame=${reponame:-PaddleClas} #repo的名称
+export branch=${branch:-develop}    # repo的分支，大部分为develop，如果有master dygraph等注意设置!!
+export mode=${mode:-function}   #function只验证功能是否正常  precision验证功能&小数据集精度
+export use_build=${use_build:-yes}  #流水线默认为yes，是否在main中执行环境部署
 export get_repo=${get_repo:-wget} #现支持10个库，需要的话可以加，wget快很多
-export paddle_whl=${paddle_whl:-None}
-export dataset_org=${dataset_org:-None}
-export dataset_target=${dataset_target:-None}
-export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID
-export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID
-export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID
-export set_cuda=${set_cuda:-} #预先不设置
+export paddle_whl=${paddle_whl:-None}   #paddlewhl包地址，为None则认为已安装不用安装
+export dataset_org=${dataset_org:-None}     #如需软链数据基于根目录的原始地址 demo: /ssd2/ce_data
+export dataset_target=${dataset_target:-None}   #如需软链数据基于reponame的目标地址 demo: data/flower102
+export set_cuda=${set_cuda:-} #预先不设置   #设置显卡号，流水线不用设置，后面有通过release_01后缀判断
 
 #额外的变量
-export docker_flag=${docker_flag:-}
-export http_proxy=${http_proxy:-}
+export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID   #效率云依赖参数
+export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID #效率云依赖参数
+export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID   #效率云依赖参数
+export docker_flag=${docker_flag:-} # 如果北京集群cce环境为False，自己的开发机不用设置
+export http_proxy=${http_proxy:-}   # 代理在效率云全局变量设置
 export no_proxy=${no_proxy:-}
-export Python_env=${Python_env:-path_way}
-#paddlepaddle(ln_way)，manylinux(path_way)
-export Python_version=${Python_version:-37}
+export Python_env=${Python_env:-path_way}   # manylinux使用 path_way  paddle:latest使用 ln_way
+export Python_version=${Python_version:-37} # 指定ython版本
 export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
+#指定docker版本
 
 # 预设一些可能会修改的变量
-export CE_version_name=${CE_version_name:-TestFrameWork}
-export models_name=${models_name:-models_restruct}
+export CE_version_name=${CE_version_name:-TestFrameWork}    #与测试框架的名称一致
+export models_name=${models_name:-models_restruct}  #后面复制使用，和模型库的父路径目录一致（后续改为models）
 
-####测试框架下载
+####    测试框架下载    #####
 wget -q ${CE_Link} #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 

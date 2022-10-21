@@ -63,6 +63,11 @@ def test_trt_fp32_more_bz():
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+        del test_suite.pd_config
+        test_suite.load_config(
+            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+        )
+        test_suite.collect_shape_info(model_path="./pcpvt_base/", input_data_dict=input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
 
@@ -71,7 +76,13 @@ def test_trt_fp32_more_bz():
             model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
         )
         test_suite2.trt_more_bz_test(
-            input_data_dict, output_data_dict, max_batch_size=batch_size, precision="trt_fp32", delta=5e-2
+            input_data_dict,
+            output_data_dict,
+            max_batch_size=batch_size,
+            precision="trt_fp32",
+            delta=5e-2,
+            dynamic=True,
+            shape_range_file="./pcpvt_base/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory
@@ -97,6 +108,11 @@ def test_jetson_trt_fp32_more_bz():
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+        del test_suite.pd_config
+        test_suite.load_config(
+            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+        )
+        test_suite.collect_shape_info(model_path="./pcpvt_base/", input_data_dict=input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
 
@@ -105,7 +121,13 @@ def test_jetson_trt_fp32_more_bz():
             model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
         )
         test_suite2.trt_more_bz_test(
-            input_data_dict, output_data_dict, max_batch_size=batch_size, precision="trt_fp32", delta=4e-1
+            input_data_dict,
+            output_data_dict,
+            max_batch_size=batch_size,
+            precision="trt_fp32",
+            delta=4e-1,
+            dynamic=True,
+            shape_range_file="./pcpvt_base/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory
