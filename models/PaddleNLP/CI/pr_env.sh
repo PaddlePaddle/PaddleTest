@@ -3,6 +3,7 @@
 # get diff case
 export P0case_list=()
 export APIcase_list=()
+declare -A Normal_dic
 declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["SQuAD"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
@@ -22,16 +23,16 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then # paddelnlp.taskflow
                 P0case_list[${#P0case_list[*]}]=${dir2}
         elif [[ ${dir2} =~ "transformers" ]];then
-                if [[ ${dir3} == "ernie" ]];then
-                    P0case_list[${#P0case_list[*]}]=ernie-1.0
-                elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then # paddlenlp.transformers.model.albert
-                    P0case_list[${#P0case_list[*]}]=${dir3}
-                elif [[ ${dir3} == "ernie_m" ]];then
+                if [[ ${dir3} == "ernie_m" ]];then
                     P0case_list[${#P0case_list[*]}]=ernie-m
                 elif [[ ${dir3} == "ernie_doc" ]];then
                     P0case_list[${#P0case_list[*]}]=ernie-doc
                 elif [[ ${dir3} == "ernie_ctm" ]];then
                     P0case_list[${#P0case_list[*]}]=ernie-ctm
+                elif [[ ${dir3} == "ernie" ]];then
+                    P0case_list[${#P0case_list[*]}]=ernie-1.0
+                elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then # paddlenlp.transformers.model.albert
+                    P0case_list[${#P0case_list[*]}]=${dir3}
                 else
                     P0case_list[${#P0case_list[*]}]=bert
                     P0case_list[${#P0case_list[*]}]=gpt
@@ -113,7 +114,6 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
         python -m pip install --ignore-installed  dist/paddlenlp****.whl
     }
     $3
-    python -m pip install paddleslim
     export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
     pip list
     set +x

@@ -81,6 +81,7 @@ def test_trt_fp16_more_bz():
             im_shape_pool.append(im_shape)
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
+        test_suite.collect_shape_info(model_path="./ppyolo/", input_data_dict=input_data_dict, device="gpu")
 
         scale_0 = []
         for batch in range(0, batch_size * 2, 2):
@@ -99,4 +100,6 @@ def test_trt_fp16_more_bz():
             delta=1,
             precision="trt_fp16",
             result_sort=True,
+            dynamic=True,
+            shape_range_file="./ppyolo/shape_range.pbtxt",
         )

@@ -450,6 +450,7 @@ class InferenceTest(object):
         shape_range_file="shape_range.pbtxt",
         tuned=False,
         result_sort=False,
+        delete_pass_list=None,
     ):
         """
         test enable_tensorrt_engine()
@@ -496,6 +497,9 @@ class InferenceTest(object):
                 use_static=use_static,
                 use_calib_mode=use_calib_mode,
             )
+        if delete_pass_list:
+            for ir_pass in delete_pass_list:
+                self.pd_config.delete_pass(ir_pass)
 
         predictor = paddle_infer.create_predictor(self.pd_config)
 
@@ -618,6 +622,7 @@ class InferenceTest(object):
         precision="trt_fp32",
         use_static=False,
         use_calib_mode=False,
+        delete_pass_list=None,
     ):
         """
         test enable_tensorrt_engine()
@@ -653,6 +658,10 @@ class InferenceTest(object):
             use_static=use_static,
             use_calib_mode=use_calib_mode,
         )
+        if delete_pass_list:
+            for ir_pass in delete_pass_list:
+                self.pd_config.delete_pass(ir_pass)
+
         predictors = paddle_infer.PredictorPool(self.pd_config, thread_num)
         for i in range(thread_num):
             record_thread = threading.Thread(
