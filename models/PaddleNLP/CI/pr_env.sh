@@ -44,19 +44,19 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
-                P0case_list[${#P0case_list[*]}]=${dir3}
+            P0case_list[${#P0case_list[*]}]=${dir3}
         elif [[ ${dir3##*.} == "py" ]] && [[ !(${all_example_dict[*]} =~ ${dir2}) ]];then #新增规范模型
-            example_list[${#example_list[*]}]=${dir2}
+            P0case_list[${#P0case_list[*]}]=${dir2}
             Normal_dic[${dir2}]="${dir1}/${dir2}/"
         elif [[ !(${all_example_dict[*]} =~ ${dir3}) ]] ;then
-            example_list[${#example_list[*]}]=${dir3}
+            P0case_list[${#P0case_list[*]}]=${dir3}
             Normal_dic[${dir3}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
             P0case_list[${#P0case_list[*]}]=${dir2}
         elif [[ !(${all_example_dict[*]} =~ ${dir2}) ]];then #新增规范模型
-            example_list[${#example_list[*]}]=${dir2}
+            P0case_list[${#P0case_list[*]}]=${dir2}
             Normal_dic[${dir2}]="${dir1}/${dir2}/"
         fi
     elif [[ ${dir1} =~ "tests" ]];then #新增单测
