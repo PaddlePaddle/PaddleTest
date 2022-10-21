@@ -963,7 +963,7 @@ demo_act_det_ppyoloe_l(){
 	cd ${slim_dir}/example/auto_compression/detection/
 	python -m pip install paddledet
 
-	wget https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco.tar
+	wget -q https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco.tar
 	tar -xf ppyoloe_crn_l_300e_coco.tar
 	mkdir dataset && cd dataset
 	wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
