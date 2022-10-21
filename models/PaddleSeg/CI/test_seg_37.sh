@@ -217,7 +217,7 @@ CPP_INFER(){
     else
         ./deploy/cpp/build/test_seg \
            --model_dir=inference_model/${model} \
-           --image_path=demo/${predict_pic} \
+           --img_path=demo/${predict_pic} \
            --save_dir=cpp_infer_output/${model} \
            --devices=GPU >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
         print_result
