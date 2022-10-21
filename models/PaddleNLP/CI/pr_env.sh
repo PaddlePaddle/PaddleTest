@@ -114,7 +114,6 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
         python -m pip install --ignore-installed  dist/paddlenlp****.whl
     }
     $3
-    python -m pip install paddleslim
     export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
     pip list
     set +x
