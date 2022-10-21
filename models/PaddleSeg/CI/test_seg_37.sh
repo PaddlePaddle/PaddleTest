@@ -79,6 +79,7 @@ cmake .. \
 make -j
 cd ..
 cd ..
+cd ..
 # prepare dynamic data
 mkdir data
 if [ -d "data/cityscapes" ];then rm -rf data/cityscapes
