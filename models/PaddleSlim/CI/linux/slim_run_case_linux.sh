@@ -970,7 +970,7 @@ demo_act_det_ppyoloe_l(){
 	unzip -q coco.zip
 	cd ..
 
-	sed -i 's/train_iter: 3000/train_iter: 30/' ./configs/ppyoloe_l_qat_dis.yaml
+	sed -i 's/train_iter: 5000/train_iter: 30/' ./configs/ppyoloe_l_qat_dis.yaml
 	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/ppyoloe_l_qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
