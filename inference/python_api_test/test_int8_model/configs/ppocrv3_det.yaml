@@ -8,7 +8,7 @@ PostProcess:
   box_thresh: 0.6
   max_candidates: 1000
   unclip_ratio: 1.5
-  
+
 Metric:
   name: DetMetric
   main_indicator: hmean
@@ -48,5 +48,3 @@ Eval:
     drop_last: false
     batch_size_per_card: 1
     num_workers: 2
-
-
