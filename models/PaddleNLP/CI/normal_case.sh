@@ -18,25 +18,25 @@ for exec_file in `ls`;do
     elif  [[ ${exec_file} == "run_prepare.sh" ]];then
         bash run_prepare.sh  >${log_path}/${example}_prepare >>${log_path}/${example}_prepare 2>&1
         print_info $? ${example}_prepare
-    #TRAIN
+    # TRAIN
     elif [[ ${exec_file} == "train.py" ]] || [[ ${exec_file} =~ "run_train" ]] ;then
         python -m paddle.distributed.launch ${exec_file} --devices ${devices} --epoch ${epoch} --max_steps ${max_steps} --save_steps ${save_steps} --output ${output}  >${log_path}/${example}_train>>${log_path}/${example}_train 2>&1
         print_info $? ${example}_train
-    #EVAL
+    # EVAL
     elif [[ ${exec_file} == "eval.py" ]] || [[ ${exec_file} =~ "run_eval" ]] ;then
-        python ${exec_file} --deveices ${devices}  --checkpoint ${output}  >${log_path}/${example}_eval >>${log_path}/${example}_eval 2>&1
-        rint_info $? ${example}_eval
-    #PREDICT
+        python ${exec_file} --devices ${devices}  --checkpoint ${output}  >${log_path}/${example}_eval >>${log_path}/${example}_eval 2>&1
+        print_info $? ${example}_eval
+    # PREDICT
     elif [[ ${exec_file} == "predict.py" ]] || [[ ${exec_file} =~ "run_predict" ]] ;then
-        python ${exec_file} --deveices ${devices}  --checkpoint ${output}  >${log_path}/${example}_predict >>${log_path}/${example}_predcit 2>&1
+        python ${exec_file} --devices ${devices}  --checkpoint ${output}  >${log_path}/${example}_predict >>${log_path}/${example}_predcit 2>&1
         print_info $? ${example}_predict
-    #EXPORT_MODEL
+    # EXPORT_MODEL
     elif [[ ${exec_file} == "export_model.py" ]] ;then
-        python ${exec_file} --deveices ${devices}  --checkpoint ${output} --infer_dir ${infer_dir}  >${log_path}/${example}_export_model >>${log_path}/${example}_export_model 2>&1
+        python ${exec_file} --devices ${devices}  --checkpoint ${output} --infer_dir ${infer_dir}  >${log_path}/${example}_export_model >>${log_path}/${example}_export_model 2>&1
         print_info $? ${example}_export_model
-    #INFER
+    # INFER
     elif [[ ${exec_file} == "infer.py" ]] || [[ ${exec_file} =~ "run_infer" ]] ;then
-        python ${exec_file} --deveices ${devices}  --infer_dir ${infer_dir}   >${log_path}/${example}_predict >>${log_path}/${example}_predcit 2>&1
+        python ${exec_file} --devices ${devices}  --infer_dir ${infer_dir}   >${log_path}/${example}_predict >>${log_path}/${example}_predcit 2>&1
         print_info $? ${example}_predict
     # CUSTOM
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "py" ]];then
