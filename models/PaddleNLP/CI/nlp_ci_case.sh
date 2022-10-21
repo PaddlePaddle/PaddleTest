@@ -684,7 +684,7 @@ print_info $? stacl_wk-1
 # 22 transformer
 transformer (){
 cd ${nlp_dir}/examples/machine_translation/transformer/
-wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/WMT14.en-de.partial.tar.gz 
+wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/WMT14.en-de.partial.tar.gz
 # cp -r /ssd1/paddlenlp/download/transformer/WMT14.en-de.partial.tar.gz  ./
 tar -xzvf WMT14.en-de.partial.tar.gz
 time (
