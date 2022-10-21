@@ -213,8 +213,7 @@ CPP_INFER(){
     if [[ ${model} =~ 'dnlnet' || ${model} =~ 'gscnn' ]];then
         echo -e "${model} does not test cpp_infer！"
     else
-        export PYTHONPATH=`pwd`
-        python deploy/cpp/build/test_seg \
+        ./deploy/cpp/build/test_seg \
            --model_dir=inference_model/${model} \
            --image_path=demo/${predict_pic} \
            --save_dir=cpp_infer_output/${model} \
