@@ -1,4 +1,10 @@
 export model_dir=$1
+export devices=gpu
+export epoch=1
+export max_steps=2
+export save_steps=2
+export output=$model_dir/output
+export infer_dir=$model_dir/infer_dir
 print_info(){
 if [ $1 -ne 0 ];then
     mv ${log_path}/$2 ${log_path}/$2_FAIL.log
@@ -30,7 +36,7 @@ for exec_file in `ls`;do
     elif [[ ${exec_file} == "predict.py" ]] || [[ ${exec_file} =~ "run_predict" ]] ;then
         python ${exec_file} --devices ${devices}  --checkpoint ${output}  >${log_path}/${example}_predict >>${log_path}/${example}_predcit 2>&1
         print_info $? ${example}_predict
-    # EXPORT_MODEL
+    # EXPORT MODEL
     elif [[ ${exec_file} == "export_model.py" ]] ;then
         python ${exec_file} --devices ${devices}  --checkpoint ${output} --infer_dir ${infer_dir}  >${log_path}/${example}_export_model >>${log_path}/${example}_export_model 2>&1
         print_info $? ${example}_export_model
@@ -43,7 +49,7 @@ for exec_file in `ls`;do
         python ${exec_file}  >${log_path}/${example}_${exec_file} >>${log_path}/${example}_${exec_file} 2>&1
         print_info $? ${example}_${exec_file}
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "sh" ]];then
-        sh ${exec_file}  >${log_path}/${example}_${exec_file} >>${log_path}/${example}_${exec_file} 2>&1
+        bash ${exec_file}  >${log_path}/${example}_${exec_file} >>${log_path}/${example}_${exec_file} 2>&1
         print_info $? ${example}_${exec_file}
     fi
 done
