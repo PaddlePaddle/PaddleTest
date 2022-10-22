@@ -130,8 +130,13 @@ class PaddleClas_Start(object):
             else:
                 self.eval_pretrained_params = content["Arch"]["name"]
         elif self.eval_trained_params == "DistillationModel":
-            if "Backbone" in str(content):
-                self.eval_pretrained_params = content["Arch"]["Backbone"]["name"]
+            if "Backbone" in str(content):  # 针对GeneralRecognition_PPLCNet_x2_5_udml.yaml
+                if isinstance(content["Arch"]["models"], list):
+                    for i in range(len(content["Arch"]["models"])):
+                        if "Student" in content["Arch"]["models"][i].keys():
+                            self.eval_pretrained_params = content["Arch"]["models"][i]["Student"]["Backbone"]["name"]
+                        else:
+                            assert "do not matched in {}".format(self.rd_yaml_path)
             else:
                 if isinstance(content["Arch"]["models"], list):
                     for i in range(len(content["Arch"]["models"])):
