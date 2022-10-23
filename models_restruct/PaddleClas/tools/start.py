@@ -159,32 +159,15 @@ class PaddleClas_Start(object):
             self.predict_pretrain_params = self.eval_pretrained_params
 
         # 获取kpi 的标签
-        try:
-            if "Eval" in content["Metric"].keys():
-                if "ATTRMetric" in content["Metric"]["Eval"][0]:
-                    self.kpi_value_eval = "label_f1"
-                elif "Recallk" in content["Metric"]["Eval"][0]:
-                    self.kpi_value_eval = "recall1"
-                elif "TopkAcc" in content["Metric"]["Eval"][0]:
-                    self.kpi_value_eval = "loss"
-                else:
-                    logger.info("### use default kpi_value_eval {}".format(content["Metric"]["Eval"]))
-                    self.kpi_value_eval = "loss"
-            elif "Train" in content["Metric"].keys():
-                if "ATTRMetric" in content["Metric"]["Train"][0]:
-                    self.kpi_value_eval = "label_f1"
-                elif "Recallk" in content["Metric"]["Train"][0]:
-                    self.kpi_value_eval = "recall1"
-                elif "TopkAcc" in content["Metric"]["Train"][0]:
-                    self.kpi_value_eval = "loss"
-                else:
-                    logger.info("### use default kpi_value_eval {}".format(content["Metric"]["Train"]))
-                    self.kpi_value_eval = "loss"
-            else:
-                logger.info("### use default kpi_value_eval {}".format(content["Metric"]))
-                self.kpi_value_eval = "loss"
-        except:
-            logger.info("### can not get kpi_value_eval")
+        if "ATTRMetric" in str(content):
+            self.kpi_value_eval = "label_f1"
+        elif "Recallk" in str(content):
+            self.kpi_value_eval = "recall1"
+        elif "TopkAcc" in str(content):
+            self.kpi_value_eval = "loss"
+        else:
+            logger.info("### use default kpi_value_eval {}".format(content["Metric"]))
+            self.kpi_value_eval = "loss"
         return 0
 
     def change_inference_yaml(self):
