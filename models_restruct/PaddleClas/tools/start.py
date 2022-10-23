@@ -160,13 +160,22 @@ class PaddleClas_Start(object):
 
         # 获取kpi 的标签
         try:
-            if "ATTRMetric" in content["Metric"]["Eval"][0]:
-                self.kpi_value_eval = "label_f1"
-            elif "Recallk" in content["Metric"]["Eval"][0]:
-                self.kpi_value_eval = "recall1"
-            elif "TopkAcc" in content["Metric"]["Eval"][0]:
-                self.kpi_value_eval = "loss"
+            if "Eval" in content["Metric"].keys():
+                if "ATTRMetric" in content["Metric"]["Eval"][0]:
+                    self.kpi_value_eval = "label_f1"
+                elif "Recallk" in content["Metric"]["Eval"][0]:
+                    self.kpi_value_eval = "recall1"
+                elif "TopkAcc" in content["Metric"]["Eval"][0]:
+                    self.kpi_value_eval = "loss"
+            elif "Train" in content["Metric"].keys():
+                if "ATTRMetric" in content["Metric"]["Train"][0]:
+                    self.kpi_value_eval = "label_f1"
+                elif "Recallk" in content["Metric"]["Train"][0]:
+                    self.kpi_value_eval = "recall1"
+                elif "TopkAcc" in content["Metric"]["Train"][0]:
+                    self.kpi_value_eval = "loss"
             else:
+                logger.info("### use default kpi_value_eval loss")
                 self.kpi_value_eval = "loss"
         except:
             logger.info("### can not get kpi_value_eval")
