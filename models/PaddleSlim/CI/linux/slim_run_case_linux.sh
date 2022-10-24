@@ -1237,7 +1237,7 @@ demo_full_quant_det_picodet(){
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=log \
 	--save_dir='./full_quant_det_picodet_multi_card/' \
-	-config_path=./configs/picodet_npu_with_postprocess.yaml \ \
+	--config_path=./configs/picodet_npu_with_postprocess.yaml \ \
 	> ${log_path}/full_quant_det_picodet_multi_card 2>&1
 	print_info $? full_quant_det_picodet_multi_card
 }
