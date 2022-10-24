@@ -1,6 +1,7 @@
 export model_dir=$1
 export example=$2
 export device=gpu
+export epoch=1
 export max_steps=2
 export save_steps=2
 export output=$model_dir/output
@@ -47,7 +48,7 @@ for exec_file in `ls`;do
         print_info $? ${example}_predict
     # CUSTOM
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "py" ]];then
-        python ${exec_file} --max_steps ${max_steps}  >${log_path}/${example}_${exec_file} >>${log_path}/${example}_${exec_file} 2>&1
+        python ${exec_file}  >${log_path}/${example}_${exec_file} >>${log_path}/${example}_${exec_file} 2>&1
         print_info $? ${example}_${exec_file}
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "sh" ]];then
         bash ${exec_file}  >${log_path}/${example}_${exec_file} >>${log_path}/${example}_${exec_file} 2>&1
