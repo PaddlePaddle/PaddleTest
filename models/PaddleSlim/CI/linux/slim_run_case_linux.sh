@@ -990,15 +990,19 @@ demo_act_clas_MobileNetV1(){
 	tar -xf MobileNetV1_infer.tar
 
 	sed -i 's/eval_iter: 500/eval_iter: 50/' ./configs/MobileNetV1/qat_dis.yaml
-	sed -i 's/data_dir: .\/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/MobileNetV1/qat_dis.yaml
+	#sed -i 's/data_dir: .\/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/MobileNetV1/qat_dis.yaml
 
 	wget -q https://sys-p0.bj.bcebos.com/slim_ci/ILSVRC2012_data_demo.tar.gz --no-check-certificate
 	tar xf ILSVRC2012_data_demo.tar.gz
 	mv ILSVRC2012_data_demo data
+	mv data/ILSVRC2012 ./
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
-	python run.py --save_dir='./clas_demo_MobileNetV1_single_card' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_single_card 2>&1
+	python run.py --save_dir='./clas_demo_MobileNetV1_single_card' \
+	--config_path='./configs/MobileNetV1/qat_dis.yaml' \
+	> ${log_path}/act_clas_demo_MobileNetV1_single_card 2>&1
 	print_info $? act_clas_demo_MobileNetV1_single_card
+
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=mobilev1_log  run.py \
 		--save_dir='./clas_demo_MobileNetV1_multi_card' --config_path='./configs/MobileNetV1/qat_dis.yaml' > ${log_path}/act_clas_demo_MobileNetV1_multi_card 2>&1
@@ -1011,7 +1015,7 @@ demo_act_clas_ResNet50_vd(){
 	tar -xf ResNet50_vd_infer.tar
 
 	sed -i 's/eval_iter: 500/eval_iter: 50/' ./configs/ResNet50_vd/qat_dis.yaml
-	sed -i 's/data_dir: .\/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/ResNet50_vd/qat_dis.yaml
+	#sed -i 's/data_dir: .\/ILSVRC2012/data_dir: .\/data\/ILSVRC2012/' ./configs/ResNet50_vd/qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py --save_dir='./clas_demo_ResNet50_vd_single_card' --config_path='./configs/ResNet50_vd/qat_dis.yaml' > ${log_path}/act_clas_demo_ResNet50_vd_single_card 2>&1
@@ -1026,11 +1030,6 @@ demo_act_clas_MobileNetV3(){
 	cd ${slim_dir}/example/auto_compression/image_classification/
 	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_ssld_infer.tar
   tar -xf MobileNetV3_large_x1_0_ssld_infer.tar
-
-  wget -q https://sys-p0.bj.bcebos.com/slim_ci/ILSVRC2012_data_demo.tar.gz --no-check-certificate
-	tar xf ILSVRC2012_data_demo.tar.gz
-	mv ILSVRC2012_data_demo data
-	mv data/ILSVRC2012 ./
 
 	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
 	sed -i 's/epochs: 2/epochs: 1/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
@@ -1237,7 +1236,7 @@ demo_full_quant_det_picodet(){
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
 	python -m paddle.distributed.launch --log_dir=log \
 	--save_dir='./full_quant_det_picodet_multi_card/' \
-	--config_path=./configs/picodet_npu_with_postprocess.yaml \ \
+	--config_path=./configs/picodet_npu_with_postprocess.yaml \
 	> ${log_path}/full_quant_det_picodet_multi_card 2>&1
 	print_info $? full_quant_det_picodet_multi_card
 }
