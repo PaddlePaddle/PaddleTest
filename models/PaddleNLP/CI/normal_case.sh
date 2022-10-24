@@ -28,7 +28,7 @@ for exec_file in `ls`;do
         print_info $? ${example}_prepare
     # TRAIN
     elif [[ ${exec_file} == "train.py" ]] || [[ ${exec_file} =~ "run_train" ]] ;then
-        python -m paddle.distributed.launch ${exec_file} --device ${devices} --epoch ${epoch} --max_steps ${max_steps} --save_steps ${save_steps} --output ${output}  >${log_path}/${example}_train>>${log_path}/${example}_train 2>&1
+        python -m paddle.distributed.launch ${exec_file} --device ${devices} --max_steps ${max_steps} --save_steps ${save_steps} --output ${output}  >${log_path}/${example}_train>>${log_path}/${example}_train 2>&1
         print_info $? ${example}_train
     # EVAL
     elif [[ ${exec_file} == "eval.py" ]] || [[ ${exec_file} =~ "run_eval" ]] ;then

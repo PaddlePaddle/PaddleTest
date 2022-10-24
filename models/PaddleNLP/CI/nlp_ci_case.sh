@@ -95,7 +95,7 @@ time (python -m paddle.distributed.launch run_pretrain.py \
     --model_type bert \
     --model_name_or_path bert-base-uncased \
     --max_predictions_per_seq 20 \
-    --batch_size 32  \
+    --batch_size 16  \
     --learning_rate 1e-4 \
     --weight_decay 1e-2 \
     --adam_epsilon 1e-6 \
@@ -237,9 +237,9 @@ python deploy/python/inference.py \
     --model_path ./infer_model/model >${log_path}/gpt_p_depoly) >>${log_path}/gpt_p_depoly 2>&1
 print_info $? gpt_p_depoly
 # test acc
-cd ${nlp_dir}/tests/examples/gpt/
-time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
-print_info $? gpt_test_acc
+# cd ${nlp_dir}/tests/examples/gpt/
+# time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
+# print_info $? gpt_test_acc
 # FT
 # cd ${nlp_dir}/
 # export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
