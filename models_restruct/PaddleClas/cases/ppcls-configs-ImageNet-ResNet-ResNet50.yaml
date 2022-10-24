@@ -1,15 +1,3 @@
-# 目标是减少写case的冗余
-# 或者都不设置，就会默认支持全量(linux的全量是: 单卡、双卡，cpu，windows：单卡+cpu， mac：cpu)
-# 框架应该在pytest的基础上做一层封装调度；支持指定模型列表，全量列表，部分阶段
-# 基准值框架给托管起来（分支+硬件信息+系统/ 分支+系统）存储
-
-# TODO 在最前面build的操作中执行要跑的模型bs除以3
-# TODO pretrained_model qa_yaml_name 自动替换
-# TODO pretrained_model 要根据使用训好的模型和预训练的模型进行替换，默认显示用训好的模型，预训练模型TODO
-# TODO Global_epochs根据不同模型在在生成时自动替换
-# TODO 只写特殊的yaml，其它的进行自动生成，主要难点在于 pretrained_model 的路径以及一些全局变量的传递
-# TODO multi_convergence 和 amp时 要unset掉环境变量
-
 case:
   linux:
     base: ./base/ImageNet_base.yaml
