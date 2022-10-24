@@ -353,15 +353,15 @@ do
    	--ir_optim=False > ${log_path}/dy_qat_eval_fp32_${model} 2>&1
     print_info $? dy_qat_eval_fp32_${model}
 
-    echo "---eval qat int8_infer : ${model}---"
-    python ./src/test.py \
-   	--model_path=int8_qat_models/${model}  \
-   	--data_dir=${data_path} \
-   	--test_samples=-1 \
-   	--batch_size=32 \
-   	--use_gpu=False \
-   	--ir_optim=False  > ${log_path}/dy_qat_eval_int8_${model} 2>&1
-    print_info $? dy_qat_eval_int8_${model}
+#    echo "---eval qat int8_infer : ${model}---"
+#    python ./src/test.py \
+#   	--model_path=int8_qat_models/${model}  \
+#   	--data_dir=${data_path} \
+#   	--test_samples=-1 \
+#   	--batch_size=32 \
+#   	--use_gpu=False \
+#   	--ir_optim=False  > ${log_path}/dy_qat_eval_int8_${model} 2>&1
+#    print_info $? dy_qat_eval_int8_${model}
 done
 
 }
@@ -1030,6 +1030,8 @@ demo_act_clas_MobileNetV3(){
   wget -q https://sys-p0.bj.bcebos.com/slim_ci/ILSVRC2012_data_demo.tar.gz --no-check-certificate
 	tar xf ILSVRC2012_data_demo.tar.gz
 	mv ILSVRC2012_data_demo data
+	mv data/ILSVRC2012 ./
+
 	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
 	sed -i 's/epochs: 2/epochs: 1/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
 
@@ -1217,6 +1219,7 @@ demo_full_quant_det_picodet(){
 	wget -q https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu.tar
   tar -xf picodet_s_416_coco_npu.tar
 
+  mkdir dataset
   cd dataset
   wget -q https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
 	unzip -q coco.zip
