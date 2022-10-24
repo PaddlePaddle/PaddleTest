@@ -437,7 +437,7 @@ python fine_tune.py \
 --config_path=./configs/yolov6s_fine_tune.yaml \
 --recon_level=layer-wise \
 --save_dir=layer_ptq_out > ${log_path}/ptq_yolo_series_region_layer 2>&1
-print_info $? ptq_yolo_series_region_layer
+print_info $? ptq_yolo_series_layer_train
 
 sed -i  's/yolov6s.onnx/layer_ptq_out/' ./configs/yolov6s_fine_tune.yaml
 python eval.py \
