@@ -16,7 +16,9 @@ export predict_step=True
 # source choose_model.sh
 # 因为训练不足导致预测BN算子报错,直接使用预训练模型  根因是epoch数不能小于5
 if [[ ${model_name} == "PULC-language_classification-PPLCNet_x1_0" ]] \
-    || [[ ${model_name} == "PULC-language_classification-MobileNetV3_small_x0_35" ]];then
+    || [[ ${model_name} == "PULC-language_classification-MobileNetV3_small_x0_35" ]] \
+    || [[ ${model_name} =~ "PULC-textline_orientation" ]] \
+    || [[ ${model_name} =~ "PULC-textline_orientation" ]];then
     input_model_type_tmp=${input_model_type}
     export input_model_type=pretrained
     source choose_model.sh
@@ -90,7 +92,7 @@ esac
 # if [[ $? -eq 0 ]] \
     # && [[ $(grep -c  "Error" ../${log_path}/predict/${model_name}_${input_model_type}.log) -eq 0 ]];then
 if [[ $? -eq 0 ]];then
-    cat ../${log_path}/predict/${model_name}_${input_model_type}.log
+    # cat ../${log_path}/predict/${model_name}_${input_model_type}.log
     echo -e "\033[33m successfully! predict of ${model_name}_${input_model_type} successfully!\033[0m" \
         | tee -a ../${log_path}/result.log
     echo "predict_exit_code: 0.0" >> ../${log_path}/predict/${model_name}_${input_model_type}.log

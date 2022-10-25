@@ -30,7 +30,11 @@ class DetV2Test(object):
             self.model_url_list.append(line)
 
         self.opset_v_list = [10, 11, 12]
-        self.ignore_model = ["ttfnet_darknet53_1x_coco", "yolov3_darknet53_270e_coco_PACT"]
+        self.ignore_model = [
+            "ttfnet_darknet53_1x_coco",
+            "yolov3_darknet53_270e_coco_PACT",
+            "ssdlite_mobilenet_v1_300_coco",
+        ]
 
     def prepare_resource(self, tgz_url):
         """

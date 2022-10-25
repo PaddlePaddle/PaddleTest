@@ -207,8 +207,11 @@ sed -i "s/python3/python/g" Makefile
 sed -i "s/python-config/python3.7m-config/g" Makefile
 #pretrain
 cd ${nlp_dir}/model_zoo/gpt/
-cp -r /ssd1/paddlenlp/download/gpt/* ./
-export CUDA_VISIBLE_DEVICES=${cudaid2}
+mkdir pre_data
+cd ./pre_data
+wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy
+wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz
+cd ../
 time (python -m paddle.distributed.launch run_pretrain.py \
     --model_type gpt \
     --model_name_or_path gpt2-en \
@@ -223,26 +226,24 @@ time (python -m paddle.distributed.launch run_pretrain.py \
     --micro_batch_size 2 \
     --device gpu >${log_path}/gpt_pretrain) >>${log_path}/gpt_pretrain 2>&1
 print_info $? gpt_pretrain
-# # OOM
 # time (
-# python export_model.py \
-#     --model_type=gpt-cn \
-#     --model_path=gpt-cpm-large-cn \
+# python export_model.py --model_type=gpt \
+#     --model_path=gpt2-medium-en \
 #     --output_path=./infer_model/model >${log_path}/gpt_export) >>${log_path}/gpt_export 2>&1
 # print_info $? gpt_export
 # time (
 # python deploy/python/inference.py \
-#     --model_type gpt-cn \
+#     --model_type gpt \
 #     --model_path ./infer_model/model >${log_path}/gpt_p_depoly) >>${log_path}/gpt_p_depoly 2>&1
 # print_info $? gpt_p_depoly
 # test acc
 # cd ${nlp_dir}/tests/examples/gpt/
 # time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
 # print_info $? gpt_test_acc
-# FT
+# # FT
 # cd ${nlp_dir}/
 # export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-# wget https://paddle-qa.bj.bcebos.com/paddlenlp/paddle_inference.tgz
+# wget -q https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
 # tar -xzvf paddle_inference.tgz
 # cd ${nlp_dir}/paddlenlp/ops
 # export CC=/usr/local/gcc-8.2/bin/gcc
@@ -727,7 +728,7 @@ python ./deploy/python/inference.py --config ./configs/transformer.base.yaml \
     --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
     --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_infer) >>${log_path}/transformer_infer 2>&1
 print_info $? transformer_infer
-# FT
+# # FT
 # export CC=/usr/local/gcc-8.2/bin/gcc
 # export CXX=/usr/local/gcc-8.2/bin/g++
 # cd ${nlp_dir}/paddlenlp/ops
@@ -918,7 +919,7 @@ print_info $? ernie-csc_deploy
 #30 nptag
 nptag() {
 cd ${nlp_dir}/examples/text_to_knowledge/nptag/
-wget https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/nptag_dataset.tar.gz && tar -zxvf nptag_dataset.tar.gz
+wget -q https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/nptag_dataset.tar.gz && tar -zxvf nptag_dataset.tar.gz
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch  train.py \
     --batch_size 64 \

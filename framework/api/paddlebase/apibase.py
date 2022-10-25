@@ -487,7 +487,7 @@ class APIBase(object):
                     self.kwargs[k].stop_gradient = False
         if data is None:
             for k, v in self.kwargs.items():
-                if isinstance(v, paddle.Tensor):
+                if isinstance(v, paddle.Tensor) and k not in self.no_grad_var:
                     grad = []
                     shape = v.numpy().shape
                     for i in range(len(v.numpy().flatten())):
@@ -609,9 +609,13 @@ class APIBase(object):
                         if isinstance(v, (np.generic, np.ndarray)):
                             # no_grad_Var不需要转换类型
                             if self.no_grad_var is not None and k in self.no_grad_var:
+                                # logging.info("params[{}] is: {}".format(k, params[k].dtype))
                                 params[k] = paddle.static.data(name=k, shape=v.shape, dtype=v.dtype)
+                                # logging.info("params[{}] is: {}".format(k, params[k]))
                             else:
+                                # logging.info("params[{}] is: {}".format(k, params[k].dtype))
                                 params[k] = paddle.static.data(name=k, shape=v.shape, dtype=self.dtype)
+                                # logging.info("params[{}] is: {}".format(k, params[k]))
                             xyz.append(k)
                             # enable compute gradient
                             if self.enable_backward is True:
@@ -621,7 +625,14 @@ class APIBase(object):
                         loss = paddle.mean(output)
                         grad_var = {}
                         for k in xyz:
+                            # logging.info("xyz is: {}".format(params))
+                            # logging.info("params is: {}".format(params))
+                            # # if k not in self.no_grad_var:
+                            # logging.info("start~~~")
+                            # logging.info("value in xyz is: {}".format(params[k]))
+                            # logging.info("loss dtype is: {}".format(loss))
                             grad_var[k] = paddle.static.gradients(loss, params[k])
+                            # logging.info("success~~~")
                         exe = paddle.static.Executor(self.place)
                         exe.run(startup_program)
                         # print(list(grad_var.values()))

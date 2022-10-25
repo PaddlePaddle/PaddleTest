@@ -42,13 +42,22 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
             if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
                 logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
                 continue
+            # if not case_name.endswith("_0"):
+            #     logger.get_log().warning("skip case -->{}<--".format(case_name))
+            #     continue
             case_info = yaml_loader.get_case_info(case_name)
             try:
                 bt = BenchTrans(case_info)
                 if framework == "paddle":
                     api = bt.get_paddle_api()
                     jelly = Jelly_v2(
-                        api=api, framework=framework, title=case_name, place=place, card=card, default_dtype="float32"
+                        api=api,
+                        framework=framework,
+                        title=case_name,
+                        place=place,
+                        card=card,
+                        default_dtype="float32",
+                        enable_backward=bt.enable_backward(),
                     )
                     jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
                     jelly.run_schedule()
@@ -61,7 +70,14 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
         bt = BenchTrans(case_info)
         if framework == "paddle":
             api = bt.get_paddle_api()
-            jelly = Jelly_v2(api=api, framework=framework, title=case_name, place=place, card=card)
+            jelly = Jelly_v2(
+                api=api,
+                framework=framework,
+                title=case_name,
+                place=place,
+                card=card,
+                enable_backward=bt.enable_backward(),
+            )
             jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
             jelly.run_schedule()
 
@@ -99,6 +115,7 @@ if __name__ == "__main__":
     parser.add_argument("--cuda", type=str, default=None, help="cuda version like v10.2 | v11.2 etc.")
     parser.add_argument("--cudnn", type=str, default=None, help="cudnn version like v7.6.5 etc.")
     parser.add_argument("--card", type=str, default=None, help="card number , default is 0")
+    parser.add_argument("--comment", type=str, default=None, help="your comment")
     args = parser.parse_args()
 
     # 验证参数组合正确性
@@ -118,6 +135,7 @@ if __name__ == "__main__":
                 cuda=args.cuda,
                 cudnn=args.cudnn,
                 card=args.card,
+                comment=args.comment,
             )
             schedule(yaml_path=args.yaml, framework=args.framework, place=args.place, card=args.card)
             db.save()

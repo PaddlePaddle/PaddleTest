@@ -31,8 +31,7 @@ obj = TestFunctionalAdaptiveAvgPool2d(paddle.nn.functional.adaptive_avg_pool2d)
 
 
 def adaptive_start_index(index, input_size, output_size):
-    """adaptive_start_index
-    """
+    """adaptive_start_index"""
     return int(np.floor(index * input_size / output_size))
 
 
@@ -92,7 +91,7 @@ def compute_adaptive_pool2d(x, output_size, data_format="NCHW", pool_type="avg")
 
 
 @pytest.mark.api_nn_adaptive_avg_pool2d_vartype
-def test_adaptive_avg_pood2d_base():
+def test_adaptive_avg_pool2d_base():
     """
     base
     """
@@ -103,7 +102,7 @@ def test_adaptive_avg_pood2d_base():
 
 
 @pytest.mark.api_nn_adaptive_avg_pool2d_parameters
-def test_adaptive_avg_pood2d():
+def test_adaptive_avg_pool2d():
     """
     default
     """
@@ -114,7 +113,7 @@ def test_adaptive_avg_pood2d():
 
 
 @pytest.mark.api_nn_adaptive_avg_pool2d_parameters
-def test_adaptive_avg_pood2d1():
+def test_adaptive_avg_pool2d1():
     """
     output_size = [2, 3]
     """
@@ -125,7 +124,7 @@ def test_adaptive_avg_pood2d1():
 
 
 @pytest.mark.api_nn_adaptive_avg_pool2d_parameters
-def test_adaptive_avg_pood2d2():
+def test_adaptive_avg_pool2d2():
     """
     output_size = [1, 4]
     """
@@ -136,7 +135,7 @@ def test_adaptive_avg_pood2d2():
 
 
 @pytest.mark.api_nn_adaptive_avg_pool2d_parameters
-def test_adaptive_avg_pood2d3():
+def test_adaptive_avg_pool2d3():
     """
     output_size = [3, 3]
     """
@@ -147,7 +146,7 @@ def test_adaptive_avg_pood2d3():
 
 
 @pytest.mark.api_nn_adaptive_avg_pool2d_parameters
-def test_adaptive_avg_pood2d4():
+def test_adaptive_avg_pool2d4():
     """
     output_size = int(3)
     """
@@ -158,7 +157,7 @@ def test_adaptive_avg_pood2d4():
 
 
 @pytest.mark.api_nn_adaptive_avg_pool2d_parameters
-def test_adaptive_avg_pood2d5():
+def test_adaptive_avg_pool2d5():
     """
     output_size = tuple(3, 3)
     """
@@ -169,7 +168,7 @@ def test_adaptive_avg_pood2d5():
 
 
 @pytest.mark.api_nn_adaptive_avg_pool2d_parameters
-def test_adaptive_avg_pood2d6():
+def test_adaptive_avg_pool2d6():
     """
     exception data_format = wrong
     """
@@ -177,3 +176,15 @@ def test_adaptive_avg_pood2d6():
     output_size = (3, 3)
     # res = compute_adaptive_pool2d(x=x, output_size=output_size, data_format="wrong")
     obj.exception(etype=ValueError, mode="python", x=x, output_size=output_size, data_format="wrong")
+
+
+@pytest.mark.api_nn_adaptive_avg_pool2d_parameters
+def test_adaptive_avg_pool2d7():
+    """
+    output_size = Tensor([1, 4])
+    """
+    x = randtool("float", -10, 10, [2, 3, 4, 4])
+    output_size = [1, 4]
+    res = compute_adaptive_pool2d(x=x, output_size=output_size)
+    exp = paddle.nn.functional.adaptive_avg_pool2d(paddle.to_tensor(x), output_size=paddle.to_tensor(output_size))
+    assert np.allclose(exp.numpy(), res)

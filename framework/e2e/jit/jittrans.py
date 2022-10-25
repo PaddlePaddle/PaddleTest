@@ -142,6 +142,7 @@ class JitTrans(WeakTrans):
             "paddle.uniform",
             "paddle.poisson",
             "paddle.randperm",
+            "paddle.nn.functional.dropout2d",
         ]
         # 忽略jit_save测试的api
         self.ignore_api_jit_save = ["paddle.broadcast_shape", "paddle.rank"]

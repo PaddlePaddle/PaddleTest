@@ -96,6 +96,36 @@ class InferenceTest(object):
             output_data_dict[output_data_name] = output_data
         return output_data_dict
 
+    def collect_shape_info(self, model_path: str, input_data_dict: dict, device: str = "gpu") -> None:
+        """
+        collect_shape_range_info for TRT dynamic shape
+        Args:
+            model_path(str): model path
+            device(str): infer device
+            input_data_dict(dict): input_data
+        Returns:
+            None
+        """
+        if device == "cpu":
+            self.pd_config.disable_gpu()
+        elif device == "gpu":
+            self.pd_config.enable_use_gpu(256, 0)
+        self.pd_config.enable_memory_optim()
+        self.pd_config.collect_shape_range_info(f"{model_path}/shape_range.pbtxt")
+        predictor = paddle_infer.create_predictor(self.pd_config)
+
+        input_names = predictor.get_input_names()
+        for i, input_data_name in enumerate(input_names):
+            input_handle = predictor.get_input_handle(input_data_name)
+            input_handle.copy_from_cpu(input_data_dict[input_data_name])
+
+        predictor.run()
+
+        output_names = predictor.get_output_names()
+        for _, output_data_name in enumerate(output_names):
+            output_handle = predictor.get_output_handle(output_data_name)
+            output_data = output_handle.copy_to_cpu()
+
     def get_images_npy(
         self, file_path: str, images_size: int, center=True, model_type="class", with_true_data=True
     ) -> list:
@@ -417,8 +447,10 @@ class InferenceTest(object):
         use_static=True,
         use_calib_mode=False,
         dynamic=False,
+        shape_range_file="shape_range.pbtxt",
         tuned=False,
         result_sort=False,
+        delete_pass_list=None,
     ):
         """
         test enable_tensorrt_engine()
@@ -455,7 +487,7 @@ class InferenceTest(object):
                     use_static=use_static,
                     use_calib_mode=use_calib_mode,
                 )
-                self.pd_config.enable_tuned_tensorrt_dynamic_shape("shape_range.pbtxt", True)
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape(shape_range_file, True)
         else:
             self.pd_config.enable_tensorrt_engine(
                 workspace_size=1 << 30,
@@ -465,6 +497,9 @@ class InferenceTest(object):
                 use_static=use_static,
                 use_calib_mode=use_calib_mode,
             )
+        if delete_pass_list:
+            for ir_pass in delete_pass_list:
+                self.pd_config.delete_pass(ir_pass)
 
         predictor = paddle_infer.create_predictor(self.pd_config)
 
@@ -587,6 +622,7 @@ class InferenceTest(object):
         precision="trt_fp32",
         use_static=False,
         use_calib_mode=False,
+        delete_pass_list=None,
     ):
         """
         test enable_tensorrt_engine()
@@ -622,6 +658,10 @@ class InferenceTest(object):
             use_static=use_static,
             use_calib_mode=use_calib_mode,
         )
+        if delete_pass_list:
+            for ir_pass in delete_pass_list:
+                self.pd_config.delete_pass(ir_pass)
+
         predictors = paddle_infer.PredictorPool(self.pd_config, thread_num)
         for i in range(thread_num):
             record_thread = threading.Thread(
@@ -747,9 +787,9 @@ def get_gpu_mem(gpu_id=0):
     gpu_mem_info = pynvml.nvmlDeviceGetMemoryInfo(gpu_handle)
     gpu_utilization_info = pynvml.nvmlDeviceGetUtilizationRates(gpu_handle)
     gpu_mem = {}
-    gpu_mem["total(MB)"] = gpu_mem_info.total / 1024.0 ** 2
-    gpu_mem["free(MB)"] = gpu_mem_info.free / 1024.0 ** 2
-    gpu_mem["used(MB)"] = gpu_mem_info.used / 1024.0 ** 2
+    gpu_mem["total(MB)"] = gpu_mem_info.total / 1024.0**2
+    gpu_mem["free(MB)"] = gpu_mem_info.free / 1024.0**2
+    gpu_mem["used(MB)"] = gpu_mem_info.used / 1024.0**2
     gpu_mem["gpu_utilization_rate(%)"] = gpu_utilization_info.gpu
     gpu_mem["gpu_mem_utilization_rate(%)"] = gpu_utilization_info.memory
     pynvml.nvmlShutdown()

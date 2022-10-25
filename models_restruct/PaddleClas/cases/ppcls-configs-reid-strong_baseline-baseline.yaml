@@ -1,0 +1,278 @@
+case:
+  linux:
+    base: ./base/reid_base.yaml
+    train:
+      -
+        name: multi
+        cmd : -m paddle.distributed.launch tools/train.py
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
+          - -o Global.seed=1234
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single
+        cmd : tools/train.py
+        params:
+          - -o Global.epochs=2
+          - -o Global.save_interval=2
+          - -o Global.eval_interval=2
+          - -o Global.seed=1234
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: multi_static
+        cmd : -m paddle.distributed.launch ppcls/static/train.py
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
+          - -o Global.seed=1234
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single_static
+        cmd : ppcls/static/train.py
+        params:
+          - -o Global.epochs=2
+          - -o Global.save_interval=2
+          - -o Global.eval_interval=2
+          - -o Global.seed=1234
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: multi_convergence
+        cmd : -m paddle.distributed.launch tools/train.py
+        params:
+          - -o Global.epochs=delete
+          - -o Global.save_interval=delete
+          - -o Global.eval_interval=delete
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single_convergence
+        cmd : tools/train.py
+        params:
+          - -o Global.epochs=delete
+          - -o Global.save_interval=delete
+          - -o Global.eval_interval=delete
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+    eval:
+      -
+        name: trained
+        cmd: -m paddle.distributed.launch tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_trained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: pretrained
+        cmd: -m paddle.distributed.launch tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single_trained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_trained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+      -
+        name: single_pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+    infer: skipped
+    export:
+      -
+        name: trained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_trained_model}
+          - -o Global.save_inference_dir=${export_trained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+    predict: skipped
+
+  # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
+    # base: ./base/reid_base.yaml
+  #   train:
+  #     -
+  #       name: cpu
+  #       params:
+  #         - -o Global.device=cpu
+  #       result:
+  #         exit_code: 0
+
+  windows:
+    base: ./base/reid_base.yaml
+    train:
+      -
+        name: single
+    eval:
+      -
+        name: trained
+      -
+        name: pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+    infer: skipped
+    export:
+      -
+        name: trained
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+    predict: skipped
+
+  windows_cpu:
+    base: ./base/reid_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: trained
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+    infer: skipped
+    export:
+      -
+        name: trained
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+    predict: skipped
+
+  mac:
+    base: ./base/reid_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: trained
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd:  tools/eval.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0.01
+            evaluation: "-"
+    infer: skipped
+    export:
+      -
+        name: trained
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        cmd: tools/export_model.py
+        params:
+          - -o Global.pretrained_model=${eval_pretrained_model}
+          - -o Global.save_inference_dir=${export_pretrained_model}
+          - -o Global.output_dir=output/${qa_yaml_name}
+          - -o Global.device=${set_cuda_flag}
+    predict: skipped
+
+function: paddlelas_imagenet_parse

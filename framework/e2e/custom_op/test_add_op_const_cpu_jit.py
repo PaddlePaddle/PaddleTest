@@ -29,6 +29,7 @@ def test_add_op_jit():
     print(x)
     out = custom_ops.add_test(x, x1)
     assert np.allclose(out.numpy(), np.array([[2, 2], [2, 2]]).astype("float32"))
+    out.retain_grads()
     out.backward()
     assert np.allclose(out.grad, np.array([[1, 1], [1, 1]]).astype("float32"))
     assert np.allclose(x.grad, np.array([[1, 1], [1, 1]]).astype("float32"))

@@ -134,7 +134,7 @@ def test_rnncellbase6():
         obj.get_initial_states(batch_ref=x, shape=shape, dtype=dtype, batch_dim_idx=batch_dim_idx)
     except Exception as e:
         if is_in_eager:
-            if "full_batch_size_like" in e.args[0] and "InvalidArgumentError" in e.args[0]:
+            if "InvalidArgument" in e.args[0]:
                 pass
             else:
                 raise Exception
@@ -209,7 +209,7 @@ def test_rnncellbase10():
     except Exception as e:
         print(e.args[0])
         if is_in_eager:
-            if "full_batch_size_like" in e.args[0] and "PreconditionNotMetError" in e.args[0]:
+            if "PreconditionNotMet" in e.args[0]:
                 pass
             else:
                 raise Exception

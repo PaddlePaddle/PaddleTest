@@ -71,6 +71,7 @@ def test_trt_fp16_more_bz():
         test_suite2.load_config(
             model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
         )
+        # TODO:DLTP-58929修复后去掉delete pass
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -79,6 +80,7 @@ def test_trt_fp16_more_bz():
             min_subgraph_size=40,
             precision="trt_fp16",
             max_batch_size=batch_size,
+            delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
         )
 
         del test_suite2  # destroy class to save memory
@@ -111,6 +113,7 @@ def test_jetson_trt_fp16_more_bz():
         test_suite2.load_config(
             model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
         )
+        # TODO:DLTP-58929修复后去掉delete pass
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -119,6 +122,7 @@ def test_jetson_trt_fp16_more_bz():
             min_subgraph_size=10,
             precision="trt_fp16",
             max_batch_size=batch_size,
+            delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
         )
 
         del test_suite2  # destroy class to save memory
@@ -149,8 +153,15 @@ def test_trt_fp16_bz1_multi_thread():
     test_suite2.load_config(
         model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
     )
+    # TODO:DLTP-58929修复后去掉delete pass
     test_suite2.trt_bz1_multi_thread_test(
-        input_data_dict, output_data_dict, repeat=1, delta=1e-4, min_subgraph_size=10, precision="trt_fp16"
+        input_data_dict,
+        output_data_dict,
+        repeat=1,
+        delta=1e-4,
+        min_subgraph_size=10,
+        precision="trt_fp16",
+        delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
     )
 
     del test_suite2  # destroy class to save memory

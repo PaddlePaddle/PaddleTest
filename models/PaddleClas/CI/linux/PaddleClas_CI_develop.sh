@@ -127,8 +127,29 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed --upgrade \
    pip -i https://mirror.baidu.com/pypi/simple
 # python -m pip install  --ignore-installed --upgrade paddleslim \
-python -m pip install --upgrade paddleslim \
-   -i https://mirror.baidu.com/pypi/simple
+
+#slim要用develop
+# python -m pip install -U paddleslim \
+#     -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+echo "start clone paddleslim"
+if [[ ! -d "PaddleSlim" ]];then
+    # git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
+    wget -q -c https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim.tar.gz --no-proxy
+    tar xf PaddleSlim.tar.gz
+fi
+echo "end clone paddleslim"
+if [[ -d "PaddleSlim" ]];then
+    cd PaddleSlim
+    git checkout develop
+    git pull
+    python -m pip install -r requirements.txt \
+        -i https://mirror.baidu.com/pypi/simple
+    python setup.py install
+    cd ..
+    python -m pip list|grep paddleslim
+    echo "end install paddleslim"
+fi
+
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \
