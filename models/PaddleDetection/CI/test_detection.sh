@@ -80,6 +80,9 @@ ln -s ${file_path}/data/mot dataset/mot
 if [ -d "dataset/dota" ];then rm -rf dataset/dota
 fi
 ln -s ${file_path}/data/dota dataset/dota
+if [ -d "dataset/dota_ms" ];then rm -rf dataset/dota_ms
+fi
+ln -s ${file_path}/data/dota dataset/dota_ms
 if [ -d "dataset/mainbody" ];then rm -rf dataset/mainbody
 fi
 ln -s ${file_path}/data/mainbody dataset/mainbody
