@@ -199,8 +199,8 @@ EXPORT_DYNAMIC(){
 }
 PYTHON_INFER_DYNAMIC(){
     mode=python_infer_dynamic
-    if [[ ${model} =~ 'dnlnet' || ${model} =~ 'gscnn' ]];then
-        echo -e "${model} does not test python_infer！"
+    if [ ! -d ./inference_model/${model} ];then
+        echo -e "${model} doesn't run export case,so can't run PYTHON_INFER case!"
     else
         export PYTHONPATH=`pwd`
         python deploy/python/infer.py \
@@ -212,8 +212,8 @@ PYTHON_INFER_DYNAMIC(){
 }
 CPP_INFER(){
     mode=cpp_infer
-    if [[ ${model} =~ 'dnlnet' || ${model} =~ 'gscnn' ]];then
-        echo -e "${model} does not test cpp_infer！"
+    if [ ! -d ./inference_model/${model} ];then
+        echo -e "${model} doesn't run export case,so can't run CPP_INFER case!"
     else
         ./deploy/cpp/build/test_seg \
            --model_dir=inference_model/${model} \
