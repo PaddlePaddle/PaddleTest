@@ -37,6 +37,49 @@ fi
 mkdir log_err
 if [ -d "output" ];then rm -rf output
 fi
+#cpp infer compile
+cd deploy/cpp
+wget https://github.com/opencv/opencv/archive/3.4.7.tar.gz
+tar -xf 3.4.7.tar.gz
+mkdir -p opencv-3.4.7/build
+cd opencv-3.4.7/build
+install_path=/usr/local/opencv3
+cmake .. -DCMAKE_INSTALL_PREFIX=${install_path} -DCMAKE_BUILD_TYPE=Release
+make -j
+make install
+cd ..
+cd ..
+wget https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.zip
+unzip yaml-cpp-0.7.0.zip
+mkdir -p yaml-cpp-yaml-cpp-0.7.0/build
+cd yaml-cpp-yaml-cpp-0.7.0/build
+cmake -DYAML_BUILD_SHARED_LIBS=ON ..
+make -j
+make install
+cd ..
+cd ..
+wget ${paddle_inference}
+tar xvf paddle_inference.tgz
+WITH_MKL=ON
+WITH_GPU=ON
+USE_TENSORRT=OFF
+DEMO_NAME=test_seg
+work_path=$(dirname $(readlink -f $0))
+LIB_DIR="${work_path}/paddle_inference"
+mkdir -p build
+cd build
+rm -rf *
+cmake .. \
+  -DDEMO_NAME=${DEMO_NAME} \
+  -DWITH_MKL=${WITH_MKL} \
+  -DWITH_GPU=${WITH_GPU} \
+  -DUSE_TENSORRT=${USE_TENSORRT} \
+  -DWITH_STATIC_LIB=OFF \
+  -DPADDLE_LIB=${LIB_DIR}
+make -j
+cd ..
+cd ..
+cd ..
 # prepare dynamic data
 mkdir data
 if [ -d "data/cityscapes" ];then rm -rf data/cityscapes
@@ -156,14 +199,27 @@ EXPORT_DYNAMIC(){
 }
 PYTHON_INFER_DYNAMIC(){
     mode=python_infer_dynamic
-    if [[ ${model} =~ 'dnlnet' || ${model} =~ 'gscnn' ]];then
-        echo -e "${model} does not test python_infer！"
+    if [ ! -d ./inference_model/${model} ];then
+        echo -e "${model} doesn't run export case,so can't run PYTHON_INFER case!"
     else
         export PYTHONPATH=`pwd`
         python deploy/python/infer.py \
            --config ./inference_model/${model}/deploy.yaml \
            --image_path ./demo/${predict_pic} \
            --save_dir ./python_infer_output/${model} >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
+        print_result
+    fi
+}
+CPP_INFER(){
+    mode=cpp_infer
+    if [ ! -d ./inference_model/${model} ];then
+        echo -e "${model} doesn't run export case,so can't run CPP_INFER case!"
+    else
+        ./deploy/cpp/build/test_seg \
+           --model_dir=inference_model/${model} \
+           --img_path=demo/${predict_pic} \
+           --save_dir=cpp_infer_output/${model} \
+           --devices=GPU >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
         print_result
     fi
 }
@@ -181,56 +237,16 @@ if [[ -n `echo ${model} | grep voc12` ]];then
 fi
 if [[ -n `echo ${model} | grep voc12` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://bj.bcebos.com/paddleseg/dygraph/pascal_voc12/${model}/model.pdparams
-    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} doesn't upload bos !!!"
-        seg_model_sign=True
-    else
-        TRAIN_MUlTI_DYNAMIC
-        TRAIN_SINGLE_DYNAMIC
-        EVAL_DYNAMIC
-        PREDICT_DYNAMIC
-        EXPORT_DYNAMIC
-        PYTHON_INFER_DYNAMIC
-    fi
 elif [[ -n `echo ${model} | grep cityscapes` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/cityscapes/${model}/model.pdparams
-    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} doesn't upload bos !!!"
-        seg_model_sign=True
-    else
-        TRAIN_MUlTI_DYNAMIC
-        TRAIN_SINGLE_DYNAMIC
-        EVAL_DYNAMIC
-        PREDICT_DYNAMIC
-        EXPORT_DYNAMIC
-        PYTHON_INFER_DYNAMIC
-    fi
 elif [[ -n `echo ${model} | grep ade20k` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/ade20k/${model}/model.pdparams
-    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} doesn't upload bos !!!"
-        seg_model_sign=True
-    else
-        TRAIN_MUlTI_DYNAMIC
-        TRAIN_SINGLE_DYNAMIC
-        EVAL_DYNAMIC
-        PREDICT_DYNAMIC
-        EXPORT_DYNAMIC
-        PYTHON_INFER_DYNAMIC
-    fi
 elif [[ -n `echo ${model} | grep camvid` ]] && [[ ! -f seg_dynamic_pretrain/${model}/model.pdparams ]];then
     wget -P seg_dynamic_pretrain/${model}/ https://paddleseg.bj.bcebos.com/dygraph/camvid/${model}/model.pdparams
-    if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
-        echo "${model} doesn't upload bos !!!"
-        seg_model_sign=True
-    else
-        TRAIN_MUlTI_DYNAMIC
-        TRAIN_SINGLE_DYNAMIC
-        EVAL_DYNAMIC
-        PREDICT_DYNAMIC
-        EXPORT_DYNAMIC
-        PYTHON_INFER_DYNAMIC
-    fi
+fi
+if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
+    echo "${model} doesn't upload bos !!!"
+    seg_model_sign=True
 else
     TRAIN_MUlTI_DYNAMIC
     TRAIN_SINGLE_DYNAMIC
@@ -238,6 +254,7 @@ else
     PREDICT_DYNAMIC
     EXPORT_DYNAMIC
     PYTHON_INFER_DYNAMIC
+    CPP_INFER
 fi
 done
 

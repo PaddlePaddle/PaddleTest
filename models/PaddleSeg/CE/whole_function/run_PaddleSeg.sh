@@ -15,7 +15,51 @@ fi
 mkdir log_err
 if [ -d "output" ];then rm -rf output
 fi
-
+#cpp infer compile
+if [ "${task_type}" == 'release' ];then
+cd deploy/cpp
+wget https://github.com/opencv/opencv/archive/3.4.7.tar.gz
+tar -xf 3.4.7.tar.gz
+mkdir -p opencv-3.4.7/build
+cd opencv-3.4.7/build
+install_path=/usr/local/opencv3
+cmake .. -DCMAKE_INSTALL_PREFIX=${install_path} -DCMAKE_BUILD_TYPE=Release
+make -j
+make install
+cd ..
+cd ..
+wget https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.zip
+unzip yaml-cpp-0.7.0.zip
+mkdir -p yaml-cpp-yaml-cpp-0.7.0/build
+cd yaml-cpp-yaml-cpp-0.7.0/build
+cmake -DYAML_BUILD_SHARED_LIBS=ON ..
+make -j
+make install
+cd ..
+cd ..
+wget ${paddle_inference}
+tar xvf paddle_inference.tgz
+WITH_MKL=ON
+WITH_GPU=ON
+USE_TENSORRT=OFF
+DEMO_NAME=test_seg
+work_path=$(dirname $(readlink -f $0))
+LIB_DIR="${work_path}/paddle_inference"
+mkdir -p build
+cd build
+rm -rf *
+cmake .. \
+  -DDEMO_NAME=${DEMO_NAME} \
+  -DWITH_MKL=${WITH_MKL} \
+  -DWITH_GPU=${WITH_GPU} \
+  -DUSE_TENSORRT=${USE_TENSORRT} \
+  -DWITH_STATIC_LIB=OFF \
+  -DPADDLE_LIB=${LIB_DIR}
+make -j
+cd ..
+cd ..
+cd ..
+fi
 # prepare dynamic data
 mkdir data
 if [ -d "data/cityscapes" ];then rm -rf data/cityscapes
@@ -164,8 +208,8 @@ EXPORT_DYNAMIC(){
 }
 PYTHON_INFER_DYNAMIC(){
     mode=python_infer_dynamic
-    if [[ ${model} =~ 'gscnn' || ${model} =~ 'enet' || ${model} =~ 'segnet' || ${model} =~ 'espnetv1' ]];then
-        echo -e "${model} does not test python_infer！"
+    if [ ! -d ./inference_model/${model} ];then
+        echo -e "${model} doesn't run export case,so can't run PYTHON_INFER case!"
     else
         export PYTHONPATH=`pwd`
         python deploy/python/infer.py \
@@ -173,6 +217,23 @@ PYTHON_INFER_DYNAMIC(){
            --image_path ./demo/${predict_pic} \
            --save_dir ./python_infer_output/${model} >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
         print_result
+    fi
+}
+CPP_INFER(){
+    if [ "${task_type}" == 'release' ];then
+        mode=cpp_infer
+        if [ ! -d ./inference_model/${model} ];then
+            echo -e "${model} doesn't run export case,so can't run CPP_INFER case!"
+        else
+            ./deploy/cpp/build/test_seg \
+               --model_dir=inference_model/${model} \
+               --img_path=demo/${predict_pic} \
+               --save_dir=cpp_infer_output/${model} \
+               --devices=GPU >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
+            print_result
+        fi
+    else
+        echo "${model} is not support c++ predict!"
     fi
 }
 grep -F -v -f no_upload dynamic_config_all_temp | sort | uniq | tee dynamic_config_all
@@ -213,6 +274,7 @@ else
     PREDICT_DYNAMIC
     EXPORT_DYNAMIC
     PYTHON_INFER_DYNAMIC
+    CPP_INFER
 fi
 fi
 done
