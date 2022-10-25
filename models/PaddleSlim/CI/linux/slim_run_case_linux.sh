@@ -1031,7 +1031,7 @@ demo_act_clas_MobileNetV3(){
 	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_ssld_infer.tar
   tar -xf MobileNetV3_large_x1_0_ssld_infer.tar
 
-	sed -i 's/eval_iter: 1000/eval_iter: 10/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
+	sed -i 's/eval_iter: 5000/eval_iter: 10/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
 	sed -i 's/epochs: 2/epochs: 1/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -1175,9 +1175,9 @@ all_act_ALL(){
   demo_act_det_ppyoloe_l
   demo_act_det_ppyoloe
   demo_act_det_yolov5
-  demo_act_clas_MobileNetV3
   demo_act_clas_MobileNetV1
   demo_act_clas_ResNet50_vd
+  demo_act_clas_MobileNetV3
   demo_act_nlp_pp_minilm
   demo_act_nlp_ERNIE_3
   demo_act_seg_pp_Liteseg_qat
@@ -1234,7 +1234,7 @@ demo_full_quant_det_picodet(){
 	print_info $? full_quant_det_picodet_single_card
 
 	export CUDA_VISIBLE_DEVICES=${cudaid2}
-	python -m paddle.distributed.launch --log_dir=log \
+	python -m paddle.distributed.launch --log_dir=log run.py \
 	--save_dir='./full_quant_det_picodet_multi_card/' \
 	--config_path=./configs/picodet_npu_with_postprocess.yaml \
 	> ${log_path}/full_quant_det_picodet_multi_card 2>&1
