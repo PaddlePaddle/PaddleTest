@@ -353,6 +353,7 @@ do
    	--ir_optim=False > ${log_path}/dy_qat_eval_fp32_${model} 2>&1
     print_info $? dy_qat_eval_fp32_${model}
 
+#    从2022.10.20开始不再支持
 #    echo "---eval qat int8_infer : ${model}---"
 #    python ./src/test.py \
 #   	--model_path=int8_qat_models/${model}  \
