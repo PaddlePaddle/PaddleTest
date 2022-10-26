@@ -14,7 +14,7 @@ import wget
 import numpy as np
 
 
-#为什么要单独预先作，是因为不能每次执行case时有从一个庞大的tar包中找需要的值，应该生成一个中间状态的yaml文件作为存储
+# 为什么要单独预先作，是因为不能每次执行case时有从一个庞大的tar包中找需要的值，应该生成一个中间状态的yaml文件作为存储
 class PaddleClas_Collect(object):
     """
     自定义环境准备
@@ -24,14 +24,16 @@ class PaddleClas_Collect(object):
         """
         初始化参数
         """
-        self.report_linux_cuda102_py37_develop = \
-            {"P0":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619465/report/result.tar",\
-            "P1":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619464/report/result.tar",\
-            "P2":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619463/report/result.tar",\
-            "P2_1":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619462/report/result.tar",\
-            "P2_2":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619461/report/result.tar"}
+        self.repo_name = "PaddleClas"
         # self.report_linux_cuda102_py37_develop = \
-        #     {"P0":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619465/report/result.tar"}
+        #     {"P0":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19651406/report/result.tar",\
+        #     "P1":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19651405/report/result.tar",\
+        #     "P2":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619463/report/result.tar",\
+        #     "P2_1":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19651402/report/result.tar",\
+        #     "P2_2":"https://xly.bce.baidu.com/ipipe/ipipe-report/report/19651399/report/result.tar"}
+        self.report_linux_cuda102_py37_develop = {
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619465/report/result.tar"
+        }
 
         self.report_linux_cuda102_py37_release = {}
 
@@ -56,7 +58,7 @@ class PaddleClas_Collect(object):
         # 调用函数路径已切换至PaddleClas
 
         tar_name = value.split("/")[-1]
-        if os.path.exists(tar_name.replace(".tar", "_"+priority)):
+        if os.path.exists(tar_name.replace(".tar", "_" + priority)):
             print("#### already download {}".format(tar_name))
         else:
             print("#### value: {}".format(value.replace(" ", "")))
@@ -70,13 +72,13 @@ class PaddleClas_Collect(object):
             #     print("#### start download failed {} failed".format(value.replace(" ", "")))
             try:
                 print("#### start download {}".format(tar_name))
-                cmd = "wget {} --no-proxy && tar xf {}".format(value.replace(" ", ""),tar_name)
+                cmd = "wget {} --no-proxy && tar xf {}".format(value.replace(" ", ""), tar_name)
                 cmd_res = os.system(cmd)
             except:
                 print("#### start download failed {} failed".format(value.replace(" ", "")))
-            os.rename(tar_name.replace(".tar", ""), tar_name.replace(".tar", "_"+ priority))
-            os.remove(tar_name) #删除下载的tar包防止重名
-        return tar_name.replace(".tar", "_"+priority)
+            os.rename(tar_name.replace(".tar", ""), tar_name.replace(".tar", "_" + priority))
+            os.remove(tar_name)  # 删除下载的tar包防止重名
+        return tar_name.replace(".tar", "_" + priority)
 
     def load_json(self):
         """
@@ -92,13 +94,21 @@ class PaddleClas_Collect(object):
                         yield data
 
     def clean_report(self):
+        """
+        清理中间保存的数据
+        """
         for name in self.report_path_list:
             shutil.rmtree(name)
+        os.remove(self.repo_name + ".tar.gz")
+        shutil.rmtree(self.repo_name)
 
     def get_result_yaml(self):
+        """
+        获取yaml结果
+        """
         self.report_path_list = list()
         self.case_info_list = list()
-        for (key,value) in self.report_linux_cuda102_py37_develop.items():
+        for (key, value) in self.report_linux_cuda102_py37_develop.items():
             self.report_path = self.download_data(key, value)
             self.report_path_list.append(self.report_path)
             for case_detail in self.load_json():
@@ -118,7 +128,7 @@ class PaddleClas_Collect(object):
                 elif isinstance(data_json[key], list):
                     # print('###data_json[key]',data_json[key])
                     for name in data_json[key]:
-                        key_pop=[]
+                        key_pop = []
                         for key1, val1 in name.items():
                             if key1 != "result" and key1 != "name":
                                 key_pop.append(key1)
@@ -138,15 +148,18 @@ class PaddleClas_Collect(object):
         其实可以在这一步把QA需要替换的全局变量给替换了,就不需要框架来做了,重组下qa的yaml
         kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
-        # TODO: 添加PaddleClas自动下载的方式
+        cmd = "wget https://xly-devops.bj.bcebos.com/PaddleTest/{}.tar.gz --no-proxy \
+            && tar xf {}.tar.gz".format(
+            self.repo_name, self.repo_name
+        )
+        os.system(cmd)  # 下载并解压PaddleClas
 
-        self.get_result_yaml()
-
-        for (key,value) in self.base_yaml_dict.items():
+        self.get_result_yaml()  # 更新yaml
+        for (key, value) in self.base_yaml_dict.items():
             with open(os.path.join("../cases", value), "r") as f:
                 content = yaml.load(f, Loader=yaml.FullLoader)
             globals()[key] = content
-        content={}
+        content = {}
         for i, case_value in enumerate(self.case_info_list):
             # print('###case_value111', case_value)
             # print('###case_value111', content.keys())
@@ -161,7 +174,7 @@ class PaddleClas_Collect(object):
                 # print('###content', content)
                 # print('###content', type(content))
                 # print("    ")
-                with open(os.path.join("PaddleClas", case_value["model_name"].replace("-","/")+".yaml"), "r") as f:
+                with open(os.path.join("PaddleClas", case_value["model_name"].replace("-", "/") + ".yaml"), "r") as f:
                     content_rd_yaml = yaml.load(f, Loader=yaml.FullLoader)
                 if "ATTRMetric" in str(content_rd_yaml):
                     self.kpi_value_eval = "label_f1"
@@ -181,25 +194,25 @@ class PaddleClas_Collect(object):
                     content[case_value["model_name"]]["case"][case_value["system"]][case_value["tag"].split("_")[0]]
                 ):
                     if tag_value["name"] == case_value["tag"].split("_")[1]:
-                        # content[case_value["model_name"]]["case"]这一层是写死的
-                        print("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
-                        print("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
-                        print(
-                            "####case_info_list   change: {}".format(
-                                content[case_value["model_name"]]["case"][case_value["system"]][case_value["tag"].split("_")[0]][index][
-                                    "result"
-                                ][case_value["kpi_name"]]["base"]
+                        if case_value["kpi_value"] != -1.0:  # 异常值不保存
+                            print("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
+                            print("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
+                            print(
+                                "####case_info_list   change: {}".format(
+                                    content[case_value["model_name"]]["case"][case_value["system"]][
+                                        case_value["tag"].split("_")[0]
+                                    ][index]["result"][case_value["kpi_name"]]["base"]
+                                )
                             )
-                        )
-                        content[case_value["model_name"]]["case"][case_value["system"]][case_value["tag"].split("_")[0]][index]["result"][
-                            case_value["kpi_name"]
-                        ]["base"] = case_value["kpi_value"]
-                        # 这里进行替换时要考虑到全局变量如何替换
+                            content[case_value["model_name"]]["case"][case_value["system"]][
+                                case_value["tag"].split("_")[0]
+                            ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
+                            # 这里进行替换时要考虑到全局变量如何替换
             # print('###content333', content)
             # print('###content333', type(content))
             # print("    ")
             # input()
-        with open(os.path.join("report_linux_cuda102_py37_develop.yaml"), "w") as f:
+        with open(os.path.join("report_linux_cuda102_py37_develop.yaml"), "w") as f:  # 会删除之前的，重新生成一份
             yaml.dump(content, f, sort_keys=False)
 
 

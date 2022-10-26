@@ -387,68 +387,15 @@ class PaddleClas_Start(object):
         递归修改变量值,直接全部整体替换,不管现在需要的是什么阶段
         """
         if isinstance(content, dict):
-            # print('@@@@')
             for key, val in content.items():
-                # print('####key',key)
-                # print('####content[key]',content[key])
-                # print('####content[key]',type(content[key]))
-                # print("   ")
-                # print('####content_result[key]',content_result[key])
-                # print("   ")
                 if isinstance(content[key], dict):
                     self.change_yaml_kpi(content[key], content_result[key])
                 elif isinstance(content[key], list):
-                    # print('####content[key]',content[key])
                     for i, case_value in enumerate(content[key]):
-                        # print("   ")
-                        # print('####case_value',case_value)
-                        # print('####content_result',content_result)
                         for key1, val1 in case_value.items():
-                            if key1 == "result" and key + ":" in self.step:
-                                # print('####key1',key1)
-                                # print('####content[key][i][key1]',content[key][i][key1])
-                                # print('####content_result[key][i][key1]',content_result[key][i][key1])
+                            if key1 == "result" and key + ":" in self.step:  # 结果和阶段同时满足
                                 content[key][i][key1] = content_result[key][i][key1]
         return content, content_result
-
-    # def change_yaml_kpi(self, data_json, key_value):
-    #     """
-    #     递归使所有batch_size,默认除以3
-    #     """
-    #     if isinstance(data_json, dict):
-    #         for key, val in data_json.items():
-    #             print('###data_json[key]111111',data_json[key])
-    #             print('###key00000',key)
-    #             print('###self.system',self.system)
-    #             if isinstance(data_json[key], dict):
-    #                 self.change_yaml_kpi(data_json[key],key) #这里用key保留了原始yaml的上一个层级，暂时先这么写
-    #             elif isinstance(data_json[key], list):
-    #                 print('###key_value',key_value)
-    #                 for name in data_json[key]:
-    #                     for key1, val1 in name.items():
-    #                         if key1 == "result" and key+":" in self.step and key_value == self.system:
-    #                             # for
-    #                             # step = self.step.split("+")  # 各个阶段按+分割
-    #                             # for step_single in step:
-    #                             #     if (
-    #                             #         "eval" in step_single or "infer" in step_single or "export" in step_single
-    #                             print('    ')
-    #                             print('    ')
-    #                             print('    ')
-    #                             print('###key111111',key)
-    #                             print('###name',name)
-    #                             print('###key1',key1)
-    #                             print('###name[key1]',name[key1])
-    #                             print('###latest1',self.content_result[self.qa_yaml_name]["case"])
-    #                             print('###latest2',self.content_result[self.qa_yaml_name]["case"][self.system])
-    #                             print('###latest3',self.content_result[self.qa_yaml_name]["case"][self.system][key])
-    #                             for tag in self.content_result[self.qa_yaml_name]["case"][self.system][key]:
-    #                                 if "result" in tag.keys():
-    #                                     print('###latest4',tag[self.kpi_value_eval]["base"])
-    #                                     name[key1][self.kpi_value_eval]["base"] = tag[self.kpi_value_eval]["base"]
-    #                                     print('###name[key1]',name[key1])
-    #                             input()
-    # return data_json
 
     def update_kpi(self):
         """
