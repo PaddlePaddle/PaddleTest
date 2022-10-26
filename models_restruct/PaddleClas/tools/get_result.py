@@ -73,7 +73,7 @@ class PaddleClas_Collect(object):
             try:
                 print("#### start download {}".format(tar_name))
                 cmd = "wget {} --no-proxy && tar xf {}".format(value.replace(" ", ""), tar_name)
-                cmd_res = os.system(cmd)
+                os.system(cmd)
             except:
                 print("#### start download failed {} failed".format(value.replace(" ", "")))
             os.rename(tar_name.replace(".tar", ""), tar_name.replace(".tar", "_" + priority))
