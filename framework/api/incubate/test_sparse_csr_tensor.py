@@ -28,7 +28,7 @@ def test_sparse_sparse_csr_tensor_base():
         values = [1, 2, 3, 4, 5]
         dense_shape = [3, 4]
         for dtype in types:
-            csr = paddle.incubate.sparse.sparse_csr_tensor(crows, cols, values, dense_shape, dtype=dtype)
+            csr = paddle.sparse.sparse_csr_tensor(crows, cols, values, dense_shape, dtype=dtype)
             dense = csr.to_dense()
             dense_res = np.array([[0, 1, 0, 2], [0, 0, 3, 0], [4, 5, 0, 0]])
 
@@ -50,7 +50,7 @@ def test_sparse_sparse_csr_tensor1():
         values = [1, 2, 3, 4]
         dense_shape = [4, 4]
         for dtype in types:
-            csr = paddle.incubate.sparse.sparse_csr_tensor(crows, cols, values, dense_shape, dtype=dtype)
+            csr = paddle.sparse.sparse_csr_tensor(crows, cols, values, dense_shape, dtype=dtype)
             dense = csr.to_dense()
             dense_res = np.diag([1, 2, 3, 4])
 
@@ -72,7 +72,7 @@ def test_sparse_csr_tensor2():
         values = [1, 2, 3, 4]
         dense_shape = [4, 4]
         for dtype in types:
-            csr = paddle.incubate.sparse.sparse_csr_tensor(crows, cols, values, dense_shape, dtype=dtype)
+            csr = paddle.sparse.sparse_csr_tensor(crows, cols, values, dense_shape, dtype=dtype)
             dense = csr.to_dense()
             dense_res = np.diag([1, 2, 3, 4])
 

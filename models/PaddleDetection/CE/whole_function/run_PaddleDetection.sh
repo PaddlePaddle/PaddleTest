@@ -65,6 +65,9 @@ ln -s ${data_path}/data/mpii_tar dataset/mpii
 if [ -d "dataset/dota" ];then rm -rf dataset/dota
 fi
 ln -s ${data_path}/data/dota dataset/dota
+if [ -d "dataset/dota_ms" ];then rm -rf dataset/dota_ms
+fi
+ln -s ${data_path}/data/dota dataset/dota_ms
 if [ -d "dataset/mot" ];then rm -rf dataset/mot
 fi
 ln -s ${data_path}/data/mot dataset/mot

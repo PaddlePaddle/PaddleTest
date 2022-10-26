@@ -3,11 +3,15 @@
 # get diff case
 export P0case_list=()
 export APIcase_list=()
+declare -A Normal_dic
 declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["SQuAD"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["pretrained_models"]=10 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
   ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5)
+for line in `cat model_list.txt`;do
+    all_example_dict[${#all_example_dict[*]}]=$line
+done
 get_diff_TO_P0case(){
 for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     arr_file_name=(${file_name//// })
@@ -19,32 +23,41 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     if [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
-        if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then # paddelnlp.taskflow
-                P0case_list[${#P0case_list[*]}]=${dir2}
+        if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
+            P0case_list[${#P0case_list[*]}]=${dir2}
         elif [[ ${dir2} =~ "transformers" ]];then
-                if [[ ${dir3} == "ernie" ]];then
-                    P0case_list[${#P0case_list[*]}]=ernie-1.0
-                elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then # paddlenlp.transformers.model.albert
-                    P0case_list[${#P0case_list[*]}]=${dir3}
-                elif [[ ${dir3} == "ernie_m" ]];then
-                    P0case_list[${#P0case_list[*]}]=ernie-m
-                elif [[ ${dir3} == "ernie_doc" ]];then
-                    P0case_list[${#P0case_list[*]}]=ernie-doc
-                elif [[ ${dir3} == "ernie_ctm" ]];then
-                    P0case_list[${#P0case_list[*]}]=ernie-ctm
-                else
-                    P0case_list[${#P0case_list[*]}]=bert
-                    P0case_list[${#P0case_list[*]}]=gpt
-                    P0case_list[${#P0case_list[*]}]=transformer
-                fi
+            if [[ ${dir3} == "ernie_m" ]];then
+                P0case_list[${#P0case_list[*]}]=ernie-m
+            elif [[ ${dir3} == "ernie_doc" ]];then
+                P0case_list[${#P0case_list[*]}]=ernie-doc
+            elif [[ ${dir3} == "ernie_ctm" ]];then
+                P0case_list[${#P0case_list[*]}]=ernie-ctm
+            elif [[ ${dir3} == "ernie" ]];then
+                P0case_list[${#P0case_list[*]}]=ernie-1.0
+            elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
+                P0case_list[${#P0case_list[*]}]=${dir3}
+            else
+                P0case_list[${#P0case_list[*]}]=bert
+                P0case_list[${#P0case_list[*]}]=gpt
+                P0case_list[${#P0case_list[*]}]=transformer
+            fi
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
-                P0case_list[${#P0case_list[*]}]=${dir3}
+            P0case_list[${#P0case_list[*]}]=${dir3}
+        elif [[ ${dir3##*.} == "py" ]] && [[ !(${all_example_dict[*]} =~ ${dir2}) ]];then #新增规范模型
+            P0case_list[${#P0case_list[*]}]=${dir2}
+            Normal_dic[${dir2}]="${dir1}/${dir2}/"
+        elif [[ !(${all_example_dict[*]} =~ ${dir3}) ]] ;then
+            P0case_list[${#P0case_list[*]}]=${dir3}
+            Normal_dic[${dir3}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
             P0case_list[${#P0case_list[*]}]=${dir2}
+        elif [[ !(${all_example_dict[*]} =~ ${dir2}) ]];then #新增规范模型
+            P0case_list[${#P0case_list[*]}]=${dir2}
+            Normal_dic[${dir2}]="${dir1}/${dir2}/"
         fi
     elif [[ ${dir1} =~ "tests" ]];then #新增单测
         if [[ ${dir3##*.} == "py" ]];then
@@ -113,7 +126,6 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
         python -m pip install --ignore-installed  dist/paddlenlp****.whl
     }
     $3
-    python -m pip install paddleslim
     export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
     pip list
     set +x
@@ -133,8 +145,13 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     case_num=1
     for p0case in ${P0case_list[*]};do
         echo -e "\033[35m ---- running P0case $case_num/${#P0case_list[*]}: ${p0case} \033[0m"
-        bash pr_case.sh ${p0case}
-        let case_num++
+        if [[ ${!Normal_dic[*]} =~ ${p0case} ]];then
+            bash normal_case.sh ${Normal_dic[${p0case}]} ${p0case}
+            let case_num++
+        else
+            bash pr_case.sh ${p0case}
+            let case_num++
+        fi
     done
     echo -e "\033[35m ---- end run P0case  \033[0m"
     cd ${nlp_dir}/model_logs

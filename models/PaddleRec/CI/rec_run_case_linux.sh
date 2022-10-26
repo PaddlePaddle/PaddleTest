@@ -158,7 +158,7 @@ for model in $(echo ${!dic[*]});do
     echo ${model} : ${model_path}
     cd ${rec_dir}/${model_path}
     model_kind=`echo ${model_path} | awk -F '/' '{print $2}'`
-    if [ ${model} == "ensfm" ] || [ ${model} == "tisas" ];then
+    if [ ${model} == "ensfm" ] || [ ${model} == "tisas" ] || [ ${model} == "dpin" ];then
         run_case_func ${model_kind}  ${model} dy_train $1 "../../../tools/trainer.py"
         run_case_func ${model_kind}  ${model} dy_infer $1 "infer.py"
     elif [ ${model} == "mhcn" ] ;then

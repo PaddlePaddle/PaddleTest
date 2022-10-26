@@ -20,7 +20,6 @@ def test_rbt3_predict():
         ["作为老的四星酒店，房间依然很整洁，相当不错。机场接机服务很好，可以在车上办理入住手续，节省时间。"],
     ]
     label_map = {0: "negative", 1: "positive"}
-
     model = hub.Module(name="rbt3", task="seq-cls", label_map=label_map)
     results = model.predict(data, max_seq_len=50, batch_size=1, use_gpu=use_gpu)
     for idx, text in enumerate(data):

@@ -168,3 +168,19 @@ rm -rf afqmc.tar
 wget https://paddle-slim-models.bj.bcebos.com/act/x2paddle_cola.tar
 tar xf x2paddle_cola.tar -C ./models
 rm -rf x2paddle_cola.tar
+
+
+# ====== ocr model and datset======
+# download val dataset
+wget https://bj.bcebos.com/v1/paddle-slim-models/data/ocr_det/test_set.tar
+wget https://bj.bcebos.com/v1/paddle-slim-models/data/ocr_det/test_label.txt
+wget https://bj.bcebos.com/v1/paddle-slim-models/data/ocr_det/test.jpg
+tar -xf test_set.tar
+
+# download inference model
+wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar
+tar -xvf ch_PP-OCRv3_det_infer.tar # fp32
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/PPOCRV3_det_QAT.tar
+tar -xvf PPOCRV3_det_QAT.tar # int8
+
+git clone -b release/2.6 https://github.com/PaddlePaddle/PaddleOCR.git

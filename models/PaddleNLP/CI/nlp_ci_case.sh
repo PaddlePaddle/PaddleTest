@@ -87,18 +87,20 @@ print_info $? glue_${TASK_NAME}_train
 bert() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/model_zoo/bert/
+wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert.tar.gz
+tar -xzvf bert.tar.gz
 cp -r /ssd1/paddlenlp/download/bert/* ./data/
 ## pretrain
 time (python -m paddle.distributed.launch run_pretrain.py \
     --model_type bert \
     --model_name_or_path bert-base-uncased \
     --max_predictions_per_seq 20 \
-    --batch_size 32  \
+    --batch_size 16  \
     --learning_rate 1e-4 \
     --weight_decay 1e-2 \
     --adam_epsilon 1e-6 \
     --warmup_steps 10000 \
-    --input_dir data/hdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en/training/ \
+    --input_dir bert/ \
     --output_dir pretrained_models/ \
     --logging_steps 1 \
     --save_steps 1 \
@@ -179,7 +181,9 @@ electra(){
 cd ${nlp_dir}/model_zoo/electra/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export DATA_DIR=./BookCorpus/
-cp -r /ssd1/paddlenlp/download/electra/BookCorpus/ ./
+wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/BookCorpus.tar.gz
+tar -xzvf BookCorpus.tar.gz
+# cp -r /ssd1/paddlenlp/download/electra/BookCorpus/ ./
 time (python -u ./run_pretrain.py \
     --model_type electra \
     --model_name_or_path electra-small \
@@ -222,77 +226,74 @@ time (python -m paddle.distributed.launch run_pretrain.py \
     --micro_batch_size 2 \
     --device gpu >${log_path}/gpt_pretrain) >>${log_path}/gpt_pretrain 2>&1
 print_info $? gpt_pretrain
-# # OOM
-# time (
-# python export_model.py \
-#     --model_type=gpt-cn \
-#     --model_path=gpt-cpm-large-cn \
-#     --output_path=./infer_model/model >${log_path}/gpt_export) >>${log_path}/gpt_export 2>&1
-# print_info $? gpt_export
-# time (
-# python deploy/python/inference.py \
-#     --model_type gpt-cn \
-#     --model_path ./infer_model/model >${log_path}/gpt_p_depoly) >>${log_path}/gpt_p_depoly 2>&1
-# print_info $? gpt_p_depoly
+time (
+python export_model.py --model_type=gpt \
+    --model_path=gpt2-medium-en \
+    --output_path=./infer_model/model >${log_path}/gpt_export) >>${log_path}/gpt_export 2>&1
+print_info $? gpt_export
+time (
+python deploy/python/inference.py \
+    --model_type gpt \
+    --model_path ./infer_model/model >${log_path}/gpt_p_depoly) >>${log_path}/gpt_p_depoly 2>&1
+print_info $? gpt_p_depoly
 # test acc
 # cd ${nlp_dir}/tests/examples/gpt/
 # time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
 # print_info $? gpt_test_acc
 # FT
-cd ${nlp_dir}/
-export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-# wget https://paddle-qa.bj.bcebos.com/paddlenlp/paddle_inference.tgz
-wget https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
-tar -xzvf paddle_inference.tgz
-cd ${nlp_dir}/paddlenlp/ops
-export CC=/usr/local/gcc-8.2/bin/gcc
-export CXX=/usr/local/gcc-8.2/bin/g++
-#python
-mkdir build_gpt_so
-cd build_gpt_so/
-cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ON
-make -j >${log_path}/GPT_python_FT >>${log_path}/gpt_python_FT 2>&1
-print_info $? gpt_python_FT
-cd ../
-#c++
-mkdir build_gpt_cc
-cd build_gpt_cc/
-cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON -DWITH_ONNXRUNTIME=ON
-make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
-print_info $? gpt_C_FT
-#depoly python
-cd ${nlp_dir}/model_zoo/gpt/faster_gpt/
-python infer.py \
-    --model_name_or_path gpt2-medium-en \
-    --batch_size 1 \
-    --topk 4 \
-    --topp 0.0 \
-    --max_length 32 \
-    --start_token "<|endoftext|>" \
-    --end_token "<|endoftext|>" \
-    --temperature 1.0  >${log_path}/gpt_deploy_P_FT >>${log_path}/gpt_deploy_P_FT 2>&1
-print_info $? gpt_deploy_P_FT
-#depoly C++
-python export_model.py \
-    --model_name_or_path gpt2-medium-en \
-    --decoding_lib ${nlp_dir}/paddlenlp/ops/build_gpt_so/lib/libdecoding_op.so \
-    --topk 4 \
-    --topp 0.0 \
-    --max_out_len 32 \
-    --temperature 1.0 \
-    --inference_model_dir ./infer_model/
-mv infer_model/ ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
-cd ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
-./gpt -batch_size 1 -gpu_id 0 -model_dir ./infer_model -vocab_file ./infer_model/vocab.txt -start_token "<|endoftext|>" -end_token "<|endoftext|>"  >${log_path}/gpt_deploy_C_FT >>${log_path}/gpt_deploy_C_FT 2>&1
-print_info $? gpt_deploy_C_FT
+# cd ${nlp_dir}/
+# export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
+# wget -q https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+# tar -xzvf paddle_inference.tgz
+# cd ${nlp_dir}/paddlenlp/ops
+# export CC=/usr/local/gcc-8.2/bin/gcc
+# export CXX=/usr/local/gcc-8.2/bin/g++
+# #python
+# mkdir build_gpt_so
+# cd build_gpt_so/
+# cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ON
+# make -j >${log_path}/GPT_python_FT >>${log_path}/gpt_python_FT 2>&1
+# print_info $? gpt_python_FT
+# cd ../
+# #c++
+# mkdir build_gpt_cc
+# cd build_gpt_cc/
+# cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON -DWITH_ONNXRUNTIME=ON
+# make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
+# print_info $? gpt_C_FT
+# #depoly python
+# cd ${nlp_dir}/model_zoo/gpt/faster_gpt/
+# python infer.py \
+#     --model_name_or_path gpt2-medium-en \
+#     --batch_size 1 \
+#     --topk 4 \
+#     --topp 0.0 \
+#     --max_length 32 \
+#     --start_token "<|endoftext|>" \
+#     --end_token "<|endoftext|>" \
+#     --temperature 1.0  >${log_path}/gpt_deploy_P_FT >>${log_path}/gpt_deploy_P_FT 2>&1
+# print_info $? gpt_deploy_P_FT
+# #depoly C++
+# python export_model.py \
+#     --model_name_or_path gpt2-medium-en \
+#     --decoding_lib ${nlp_dir}/paddlenlp/ops/build_gpt_so/lib/libdecoding_op.so \
+#     --topk 4 \
+#     --topp 0.0 \
+#     --max_out_len 32 \
+#     --temperature 1.0 \
+#     --inference_model_dir ./infer_model/
+# mv infer_model/ ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
+# cd ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
+# ./gpt -batch_size 1 -gpu_id 0 -model_dir ./infer_model -vocab_file ./infer_model/vocab.txt -start_token "<|endoftext|>" -end_token "<|endoftext|>"  >${log_path}/gpt_deploy_C_FT >>${log_path}/gpt_deploy_C_FT 2>&1
+# print_info $? gpt_deploy_C_FT
 }
 # 9 ernie-1.0
 ernie-1.0 (){
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/model_zoo/ernie-1.0/
 mkdir data && cd data
-wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_ids.npy
-wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_idx.npz
+wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_ids.npy
+wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_idx.npz
 cd ../
 time (python -u  -m paddle.distributed.launch  \
     --log_dir "./log" \
@@ -599,7 +600,7 @@ print_info $? word_embedding_paddle_train
 ernie-ctm(){
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${nlp_dir}/examples/text_to_knowledge/ernie-ctm/
-wget https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/wordtag_dataset_v2.tar.gz && tar -zxvf wordtag_dataset_v2.tar.gz
+wget -q https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/wordtag_dataset_v2.tar.gz && tar -zxvf wordtag_dataset_v2.tar.gz
 time (python -m paddle.distributed.launch  train.py \
     --max_seq_len 128 \
     --batch_size 8   \
@@ -662,29 +663,29 @@ sed -i "s/max_iter: None/max_iter: 3/g" config/transformer.yaml
 sed -i "s/batch_size: 4096/batch_size: 500/g" config/transformer.yaml
 python -m paddle.distributed.launch train.py --config ./config/transformer.yaml  >${log_path}/stacl_wk-1) >>${log_path}/stacl_wk-1 2>&1
 print_info $? stacl_wk-1
+# time (
+# sed -i "s/waitk: -1/waitk: 3/g" config/transformer.yaml
+# sed -i 's/save_model: "trained_models"/save_model: "trained_models_3"/g' config/transformer.yaml
+# sed -i 's#init_from_checkpoint: ""#init_from_checkpoint: "./trained_models/step_1/"#g' config/transformer.yaml
+# python -m paddle.distributed.launch  train.py --config ./config/transformer.yaml >${log_path}/stacl_wk3) >>${log_path}/stacl_wk3 2>&1
+# print_info $? stacl_wk3
 
-time (
-sed -i "s/waitk: -1/waitk: 3/g" config/transformer.yaml
-sed -i 's/save_model: "trained_models"/save_model: "trained_models_3"/g' config/transformer.yaml
-sed -i 's#init_from_checkpoint: ""#init_from_checkpoint: "./trained_models/step_1/"#g' config/transformer.yaml
-python -m paddle.distributed.launch  train.py --config ./config/transformer.yaml >${log_path}/stacl_wk3) >>${log_path}/stacl_wk3 2>&1
-print_info $? stacl_wk3
+# time (sed -i "s/waitk: 3/waitk: 5/g" config/transformer.yaml
+# sed -i 's/save_model: "trained_models_3"/save_model: "trained_models_5"/g' config/transformer.yaml
+# sed -i 's#init_from_checkpoint: "./trained_models/step_1/"#init_from_checkpoint: "./trained_models_3/step_1/"#g' config/transformer.yaml
+# python -m paddle.distributed.launch train.py --config ./config/transformer.yaml >${log_path}/stacl_wk5) >>${log_path}/stacl_wk5 2>&1
+# print_info $? stacl_wk5
 
-time (sed -i "s/waitk: 3/waitk: 5/g" config/transformer.yaml
-sed -i 's/save_model: "trained_models_3"/save_model: "trained_models_5"/g' config/transformer.yaml
-sed -i 's#init_from_checkpoint: "./trained_models/step_1/"#init_from_checkpoint: "./trained_models_3/step_1/"#g' config/transformer.yaml
-python -m paddle.distributed.launch train.py --config ./config/transformer.yaml >${log_path}/stacl_wk5) >>${log_path}/stacl_wk5 2>&1
-print_info $? stacl_wk5
-
-time (sed -i "s/batch_size: 500/batch_size: 100/g" config/transformer.yaml
-sed -i 's#init_from_params: "trained_models/step_final/"#init_from_params: "./trained_models_5/step_1/"#g' config/transformer.yaml
-python predict.py --config ./config/transformer.yaml >${log_path}/stacl_predict) >>${log_path}/stacl_predict 2>&1
-print_info $? stacl_predict
+# time (sed -i "s/batch_size: 500/batch_size: 100/g" config/transformer.yaml
+# sed -i 's#init_from_params: "trained_models/step_final/"#init_from_params: "./trained_models_5/step_1/"#g' config/transformer.yaml
+# python predict.py --config ./config/transformer.yaml >${log_path}/stacl_predict) >>${log_path}/stacl_predict 2>&1
+# print_info $? stacl_predict
 }
 # 22 transformer
 transformer (){
 cd ${nlp_dir}/examples/machine_translation/transformer/
-cp -r /ssd1/paddlenlp/download/transformer/WMT14.en-de.partial.tar.gz  ./
+wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/WMT14.en-de.partial.tar.gz
+# cp -r /ssd1/paddlenlp/download/transformer/WMT14.en-de.partial.tar.gz  ./
 tar -xzvf WMT14.en-de.partial.tar.gz
 time (
 sed -i "s/save_step: 10000/save_step: 1/g" configs/transformer.base.yaml
@@ -723,6 +724,10 @@ python ./deploy/python/inference.py --config ./configs/transformer.base.yaml \
     --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_infer) >>${log_path}/transformer_infer 2>&1
 print_info $? transformer_infer
 # FT
+cd ${nlp_dir}/
+export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
+wget -q https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+tar -xzvf paddle_inference.tgz
 export CC=/usr/local/gcc-8.2/bin/gcc
 export CXX=/usr/local/gcc-8.2/bin/g++
 cd ${nlp_dir}/paddlenlp/ops
@@ -742,7 +747,7 @@ print_info $? transformer_C_FT
 #deploy python
 cd ${nlp_dir}/examples/machine_translation/transformer/faster_transformer/
 sed -i "s#./trained_models/step_final/#./base_trained_models/step_final/#g" ../configs/transformer.base.yaml
-wget https://paddlenlp.bj.bcebos.com/models/transformers/transformer/transformer-base-wmt_ende_bpe.tar.gz
+wget -q https://paddlenlp.bj.bcebos.com/models/transformers/transformer/transformer-base-wmt_ende_bpe.tar.gz
 tar -zxf transformer-base-wmt_ende_bpe.tar.gz
 export FLAGS_fraction_of_gpu_memory_to_use=0.1
 cp -rf ${nlp_dir}/paddlenlp/ops/build_tr_so/third-party/build/fastertransformer/bin/decoding_gemm ./
@@ -994,8 +999,6 @@ python -u run_clue_classifier.py  \
 print_info $? clue-class
 cd ${nlp_dir}/examples/benchmark/clue/mrc
 export CUDA_VISIBLE_DEVICES=${cudaid1}
-unset http_proxy=${http_proxy}
-unset https_proxy=${http_proxy}
 python -m paddle.distributed.launch run_cmrc2018.py \
     --model_name_or_path ernie-3.0-base-zh \
     --batch_size 16 \
