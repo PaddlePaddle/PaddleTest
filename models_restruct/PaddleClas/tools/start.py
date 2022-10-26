@@ -32,6 +32,7 @@ class PaddleClas_Start(object):
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
         self.step = os.environ["step"]
+        self.paddle_whl = os.environ["paddle_whl"]
         self.mode = os.environ["mode"]  # function or precision
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)  # 所有和yaml相关的变量与此拼接
 
@@ -130,8 +131,13 @@ class PaddleClas_Start(object):
             else:
                 self.eval_pretrained_params = content["Arch"]["name"]
         elif self.eval_trained_params == "DistillationModel":
-            if "Backbone" in str(content):
-                self.eval_pretrained_params = content["Arch"]["Backbone"]["name"]
+            if "Backbone" in str(content):  # 针对GeneralRecognition_PPLCNet_x2_5_udml.yaml
+                if isinstance(content["Arch"]["models"], list):
+                    for i in range(len(content["Arch"]["models"])):
+                        if "Student" in content["Arch"]["models"][i].keys():
+                            self.eval_pretrained_params = content["Arch"]["models"][i]["Student"]["Backbone"]["name"]
+                        else:
+                            assert "do not matched in {}".format(self.rd_yaml_path)
             else:
                 if isinstance(content["Arch"]["models"], list):
                     for i in range(len(content["Arch"]["models"])):
@@ -154,17 +160,15 @@ class PaddleClas_Start(object):
             self.predict_pretrain_params = self.eval_pretrained_params
 
         # 获取kpi 的标签
-        try:
-            if "ATTRMetric" in content["Metric"]["Eval"][0]:
-                self.kpi_value_eval = "label_f1"
-            elif "Recallk" in content["Metric"]["Eval"][0]:
-                self.kpi_value_eval = "recall1"
-            elif "TopkAcc" in content["Metric"]["Eval"][0]:
-                self.kpi_value_eval = "loss"
-            else:
-                self.kpi_value_eval = "loss"
-        except:
-            logger.info("### can not get kpi_value_eval")
+        if "ATTRMetric" in str(content):
+            self.kpi_value_eval = "label_f1"
+        elif "Recallk" in str(content):
+            self.kpi_value_eval = "recall1"
+        elif "TopkAcc" in str(content):
+            self.kpi_value_eval = "loss"
+        else:
+            logger.info("### use default kpi_value_eval {}".format(content["Metric"]))
+            self.kpi_value_eval = "loss"
         return 0
 
     def change_inference_yaml(self):
@@ -378,18 +382,20 @@ class PaddleClas_Start(object):
             self.env_dict["set_cuda_flag"] = "gpu"  # 根据操作系统判断
         return 0
 
-    def load_json(self):
+    def change_yaml_kpi(self, content, content_result):
         """
-        解析report路径下allure json
+        递归修改变量值,直接全部整体替换,不管现在需要的是什么阶段
         """
-        files = os.listdir(self.report_path)
-        for file in files:
-            if file.endswith("result.json"):
-                file_path = os.path.join(self.report_path, file)
-                with open(file_path, encoding="UTF-8") as f:
-                    for line in f.readlines():
-                        data = json.loads(line)
-                        yield data
+        if isinstance(content, dict):
+            for key, val in content.items():
+                if isinstance(content[key], dict):
+                    self.change_yaml_kpi(content[key], content_result[key])
+                elif isinstance(content[key], list):
+                    for i, case_value in enumerate(content[key]):
+                        for key1, val1 in case_value.items():
+                            if key1 == "result" and key + ":" in self.step:  # 结果和阶段同时满足
+                                content[key][i][key1] = content_result[key][i][key1]
+        return content, content_result
 
     def update_kpi(self):
         """
@@ -398,57 +404,22 @@ class PaddleClas_Start(object):
         kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
         # 读取上次执行的产出
-        # #先本地用result测试 后续考虑拉取bos上的 TODO: 暂时在本机上测试了mac的所以只考虑mac
-        self.report_path = "result"
+        # 通过whl包的地址，判断是release还是develop  report_linux_cuda102_py37_develop
 
-        # 更新部分
-        case_info_list = list()
-        for case_detail in self.load_json():
-            labels = case_detail.get("labels")
-            for label in labels:
-                if label.get("name") == "case_info":
-                    case_info_list_tmp = json.loads(label.get("value"))
-                    # for item in case_info_list_tmp: #TODO 设计退出码
-                    #     if item.get("kpi_status") != "Passed":
-                    #         status = "Failed"
-                    case_info_list.extend(case_info_list_tmp)
+        with open(os.path.join("tools", "report_linux_cuda102_py37_develop.yaml"), "r") as f:
+            content_result = yaml.load(f, Loader=yaml.FullLoader)
 
-        for i, case_value in enumerate(case_info_list):
-            if case_value["kpi_name"] != "exit_code":
-                with open(os.path.join("cases", case_value["model_name"] + ".yaml"), "r") as f:
-                    content = yaml.load(f, Loader=yaml.FullLoader)
-                for index, tag_value in enumerate(
-                    content["case"][case_value["system"]][case_value["tag"].split("_")[0]]
-                ):
-                    if tag_value["name"] == case_value["tag"].split("_")[1]:
-                        # content["case"]这一层是写死的
-                        logger.info("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
-                        logger.info("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
-                        try:
-                            logger.info(
-                                "####case_info_list change: {}".format(
-                                    content["case"][case_value["system"]][case_value["tag"].split("_")[0]][index][
-                                        "result"
-                                    ][case_value["kpi_name"]]["base"]
-                                )
-                            )
-                            content["case"][case_value["system"]][case_value["tag"].split("_")[0]][index]["result"][
-                                case_value["kpi_name"]
-                            ]["base"] = case_value["kpi_value"]
-                        except:  # 这里粗暴的替换了，欠考虑 TODO:优化!!!!!
-                            logger.info(
-                                "####case_info_list change: {}".format(
-                                    content["case"][case_value["system"]][case_value["tag"].split("_")[0]][index][
-                                        "result"
-                                    ]["${kpi_value_eval}"]["base"]
-                                )
-                            )
-                            content["case"][case_value["system"]][case_value["tag"].split("_")[0]][index]["result"][
-                                "${kpi_value_eval}"
-                            ]["base"] = case_value["kpi_value"]
-                        # 这里进行替换时要考虑到全局变量如何替换
-                with open(os.path.join("cases", case_value["model_name"] + ".yaml"), "w") as f:
-                    yaml.dump(content, f, sort_keys=False)
+        with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r") as f:
+            content = yaml.load(f, Loader=yaml.FullLoader)
+
+        content = json.dumps(content)
+        content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
+        content = json.loads(content)
+
+        content, content_result = self.change_yaml_kpi(content, content_result[self.qa_yaml_name])
+
+        with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
+            yaml.dump(content, f, sort_keys=False)
 
     def build_prepare(self):
         """
@@ -468,10 +439,11 @@ class PaddleClas_Start(object):
         if ret:
             logger.info("build prepare_creat_yaml failed")
             return ret
-        # ret = self.update_kpi()
-        # if ret:
-        #     logger.info("build update_kpi failed")
-        #     return ret
+        if self.mode == "precision":
+            ret = self.update_kpi()
+            if ret:
+                logger.info("build update_kpi failed")
+                return ret
 
         #   debug用print  中途输出用logger
         # print('####eval_trained_model: {}'.format(self.env_dict['eval_trained_model']))
