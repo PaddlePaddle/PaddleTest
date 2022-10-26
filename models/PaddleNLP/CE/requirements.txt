@@ -17,7 +17,7 @@ gensim
 nltk==3.5
 easydict
 sklearn
-paddleslim
+paddleslim=2.4rc0
 visualdl
 pyrouge
 chardet
