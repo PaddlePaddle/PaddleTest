@@ -409,17 +409,18 @@ class PaddleClas_Start(object):
         with open(os.path.join("tools", "report_linux_cuda102_py37_develop.yaml"), "r") as f:
             content_result = yaml.load(f, Loader=yaml.FullLoader)
 
-        with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r") as f:
-            content = yaml.load(f, Loader=yaml.FullLoader)
+        if self.qa_yaml_name in content_result.keys():  # 查询yaml中是否存在已获取的模型指标
+            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r") as f:
+                content = yaml.load(f, Loader=yaml.FullLoader)
 
-        content = json.dumps(content)
-        content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
-        content = json.loads(content)
+            content = json.dumps(content)
+            content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
+            content = json.loads(content)
 
-        content, content_result = self.change_yaml_kpi(content, content_result[self.qa_yaml_name])
+            content, content_result = self.change_yaml_kpi(content, content_result[self.qa_yaml_name])
 
-        with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
-            yaml.dump(content, f, sort_keys=False)
+            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
+                yaml.dump(content, f, sort_keys=False)
 
     def build_prepare(self):
         """
