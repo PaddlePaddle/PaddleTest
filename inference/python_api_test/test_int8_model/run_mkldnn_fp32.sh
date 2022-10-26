@@ -19,19 +19,19 @@ $PYTHON test_yolo_series_infer.py --model_path=models/yolov7_infer --device=CPU 
 
 # ResNet_vd MKLDNN
 echo "[Benchmark] Run ResNet_vd MKLDNN fp32"
-$PYTHON test_image_classification_infer.py --model_path=models/ResNet50_vd_QAT --cpu_num_threads=10 --use_mkldnn=True
+$PYTHON test_image_classification_infer.py --model_path=models/ResNet50_vd_infer --cpu_num_threads=10 --use_mkldnn=True
 # MobileNetV3_large MKLDNN
 echo "[Benchmark] Run MobileNetV3_large MKLDNN fp32"
-$PYTHON test_image_classification_infer.py --model_path=models/MobileNetV3_large_x1_0_QAT --cpu_num_threads=10 --use_mkldnn=True
+$PYTHON test_image_classification_infer.py --model_path=models/MobileNetV3_large_x1_0_infer --cpu_num_threads=10 --use_mkldnn=True
 # PPLCNetV2 MKLDNN
 echo "[Benchmark] Run PPLCNetV2 MKLDNN fp32"
-$PYTHON test_image_classification_infer.py --model_path=models/PPLCNetV2_base_QAT --cpu_num_threads=10 --use_mkldnn=True
+$PYTHON test_image_classification_infer.py --model_path=models/PPLCNetV2_base_infer --cpu_num_threads=10 --use_mkldnn=True
 # PPHGNet_tiny MKLDNN
 echo "[Benchmark] Run PPHGNet_tiny MKLDNN fp32"
-$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_QAT --cpu_num_threads=10 --use_mkldnn=True
+$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_infer --cpu_num_threads=10 --use_mkldnn=True
 # EfficientNetB0 MKLDNN
 echo "[Benchmark] Run EfficientNetB0 MKLDNN fp32"
-$PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_QAT --cpu_num_threads=10 --use_mkldnn=True
+$PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_infer --cpu_num_threads=10 --use_mkldnn=True
 
 # PP-HumanSeg-Lite MKLDNN fp32
 echo "[Benchmark] Run PP-HumanSeg-Lite MKLDNN fp32"
