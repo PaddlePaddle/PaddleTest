@@ -36,7 +36,7 @@ for exec_file in `ls`;do
         print_info $? ${example}_eval
     # PREDICT
     elif [[ ${exec_file} == "predict.py" ]] || [[ ${exec_file} =~ "run_predict" ]] ;then
-        python ${exec_file} --device ${devices} --init_checkpoint_dir $output_dir}   >${log_path}/${example}_predict >>${log_path}/${example}_predcit 2>&1
+        python ${exec_file} --device ${devices} --init_checkpoint_dir ${output_dir}   >${log_path}/${example}_predict >>${log_path}/${example}_predcit 2>&1
         print_info $? ${example}_predict
     # EXPORT MODEL
     elif [[ ${exec_file} == "export_model.py" ]] ;then
@@ -48,11 +48,11 @@ for exec_file in `ls`;do
         print_info $? ${example}_predict
     # CUSTOM
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "py" ]];then
-        python ${exec_file} >${log_path}/${example}_${exec_file} >>${log_path}/${example}_${exec_file} 2>&1
-        print_info $? ${example}_${exec_file}
+        python ${exec_file} >${log_path}/${example}_${exec_file%%.*} >>${log_path}/${example}_${exec_file%%.*} 2>&1
+        print_info $? ${example}_${exec_file%%.*}
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "sh" ]];then
-        bash ${exec_file}  >${log_path}/${example}_${exec_file} >>${log_path}/${example}_${exec_file} 2>&1
-        print_info $? ${example}_${exec_file}
+        bash ${exec_file}  >${log_path}/${example}_${exec_file%%.*} >>${log_path}/${example}_${exec_file%%.*} 2>&1
+        print_info $? ${example}_${exec_file%%.*}
     fi
 done
 }
