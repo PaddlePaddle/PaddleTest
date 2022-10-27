@@ -14,7 +14,7 @@ ppcls-configs-ImageNet-ResNeSt-ResNeSt50_fast_1s1x64d.yaml
 ppcls-configs-ImageNet-VisionTransformer-ViT_small_patch16_224.yaml
 ppcls-configs-ImageNet-ResNet-ResNet18.yaml
 ppcls-configs-ImageNet-DPN-DPN68.yaml
-ppcls-configs-ImageNet-VAN-VAN_tiny.yaml
+ppcls-configs-ImageNet-VAN-VAN_B0.yaml
 ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_afd.yaml
 ppcls-configs-ImageNet-Distillation-PPLCNet_x2_5_dml.yaml
 ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_dkd.yaml
