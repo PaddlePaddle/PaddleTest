@@ -5,7 +5,7 @@ export epoch=1
 export max_steps=2
 export save_steps=2
 export output_dir=./output/
-export export_output_dir=./infer_model/
+export export_dir=./infer_model/
 
 print_info(){
 if [ $1 -ne 0 ];then
@@ -40,11 +40,11 @@ for exec_file in `ls`;do
         print_info $? ${example}_predict
     # EXPORT MODEL
     elif [[ ${exec_file} == "export_model.py" ]] ;then
-        python ${exec_file} --device ${devices} --export_output_dir ${export_output_dir} >${log_path}/${example}_export_model >>${log_path}/${example}_export_model 2>&1
+        python ${exec_file} --device ${devices} --export_dir ${export_dir} >${log_path}/${example}_export_model >>${log_path}/${example}_export_model 2>&1
         print_info $? ${example}_export_model
     # INFER
     elif [[ ${exec_file} == "infer.py" ]] || [[ ${exec_file} =~ "run_infer" ]] ;then
-        python ${exec_file} --device ${devices} --infer_input_dir ${export_output_dir} >${log_path}/${example}_predict >>${log_path}/${example}_predcit 2>&1
+        python ${exec_file} --device ${devices} --infer_dir ${export_dir} >${log_path}/${example}_predict >>${log_path}/${example}_predcit 2>&1
         print_info $? ${example}_predict
     # CUSTOM
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "py" ]];then
