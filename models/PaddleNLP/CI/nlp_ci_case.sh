@@ -1036,7 +1036,7 @@ for key in $(echo ${!all_P0case_dic[*]});do
 done
 if [[ ${Testcase} == 'null' ]];then
     P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie-1.0 xlnet ofa  squad tinybert lexical_analysis seq2seq \
-    pretrained_models word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
+     word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
     nptag ernie-m clue taskflow)
 else
     P0case_list=${Testcase}
