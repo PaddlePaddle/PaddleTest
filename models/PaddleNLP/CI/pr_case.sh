@@ -569,17 +569,17 @@ python infer.py \
     --infer_output_file infer_output.txt  >${log_path}/seq2seq_depoly) >>${log_path}/seq2seq_deploy 2>&1
 print_info $? seq2seq_depoly
 }
-# 17 pretrained_models
-pretrained_models() {
-export CUDA_VISIBLE_DEVICES=${cudaid2}
-cd ${nlp_dir}/examples/text_classification/pretrained_models/
-time (python -m paddle.distributed.launch train.py --device gpu  --epochs 2 --save_dir ./checkpoints >${log_path}/pretrained_models_train) >>${log_path}/pretrained_models_train 2>&1
-print_info $? pretrained_models_train
-time (python export_model.py --params_path=./checkpoints/model_100/model_state.pdparams --output_path=./output >${log_path}/pretrained_models_export) >>${log_path}/pretrained_models_export 2>&1
-print_info $? pretrained_models_export
-time (python deploy/python/predict.py --model_dir=./output >${log_path}/pretrained_models_deploy) >>${log_path}/pretrained_models_deploy 2>&1
-print_info $? pretrained_models_deploy
-}
+# # 17 pretrained_models
+# pretrained_models() {
+# export CUDA_VISIBLE_DEVICES=${cudaid2}
+# cd ${nlp_dir}/examples/text_classification/pretrained_models/
+# time (python -m paddle.distributed.launch train.py --device gpu  --epochs 2 --save_dir ./checkpoints >${log_path}/pretrained_models_train) >>${log_path}/pretrained_models_train 2>&1
+# print_info $? pretrained_models_train
+# time (python export_model.py --params_path=./checkpoints/model_100/model_state.pdparams --output_path=./output >${log_path}/pretrained_models_export) >>${log_path}/pretrained_models_export 2>&1
+# print_info $? pretrained_models_export
+# time (python deploy/python/predict.py --model_dir=./output >${log_path}/pretrained_models_deploy) >>${log_path}/pretrained_models_deploy 2>&1
+# print_info $? pretrained_models_deploy
+# }
 # 18 word_embedding 5min
 word_embedding(){
 export CUDA_VISIBLE_DEVICES=${cudaid1}
