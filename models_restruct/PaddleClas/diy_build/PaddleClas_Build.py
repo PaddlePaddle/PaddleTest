@@ -104,11 +104,8 @@ class PaddleClas_Build(Model_Build):
         """
         if isinstance(data_json, dict):
             for key, val in data_json.items():
-                if key == "batch_size":
-                    # logger.info("###data_json[key]",data_json[key])
-                    # logger.info("###val",val)
-                    # input()
-                    data_json[key] = int(np.ceil(float(val) / 3))  # batch_size除以3向上取整，TODO 添加特殊符号标识，防止多次除以3
+                if key == "batch_size" and "@" not in str(val):
+                    data_json[key] = str(int(np.ceil(float(val) / 3))) + "  #@"
                 if isinstance(data_json[key], dict):
                     self.change_yaml_batch_size(data_json[key])
         return data_json
@@ -129,7 +126,7 @@ class PaddleClas_Build(Model_Build):
                 else:
                     content_new = self.change_yaml_batch_size(content)  # 写在with里面不能够全部生效
                     with open(os.path.join(self.REPO_PATH, line), "w") as f:
-                        yaml.dump(content_new, f)
+                        yaml.dump(content_new, f, sort_keys=False)
 
                 # 改变 GeneralRecognition 依赖的数据集
                 if "GeneralRecognition" in line:
