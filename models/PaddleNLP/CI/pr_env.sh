@@ -107,6 +107,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     python -m pip install --ignore-installed --upgrade pip
     python -m pip install -r requirements_ci.txt
     python -m pip install $2;
+    yum install tk -y
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
     python -c 'from visualdl import LogWriter'
     ####################################

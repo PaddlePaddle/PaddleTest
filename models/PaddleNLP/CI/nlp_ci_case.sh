@@ -89,7 +89,7 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/model_zoo/bert/
 wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert.tar.gz
 tar -xzvf bert.tar.gz
-cp -r /ssd1/paddlenlp/download/bert/* ./data/
+# cp -r /ssd1/paddlenlp/download/bert/* ./data/
 ## pretrain
 time (python -m paddle.distributed.launch run_pretrain.py \
     --model_type bert \
