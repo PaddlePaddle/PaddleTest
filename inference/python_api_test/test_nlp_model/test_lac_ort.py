@@ -55,7 +55,7 @@ def test_onnxruntime():
     test_suite = InferenceTest()
     test_suite.load_config(model_file="./lac/inference.pdmodel", params_file="./lac/inference.pdiparams")
     in1 = np.random.randint(0, 100, (1, 20)).astype(np.int64)
-    in2 = np.array([20])
+    in2 = np.array([20]).astype(np.int64)
     input_data_dict = {"token_ids": in1, "length": in2}
     output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
 
