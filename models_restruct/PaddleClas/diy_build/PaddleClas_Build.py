@@ -244,7 +244,8 @@ class PaddleClas_Build(Model_Build):
         os.environ["FLAGS_cudnn_deterministic"] = "True"
         logger.info("#### set FLAGS_cudnn_deterministic as {}".format(os.environ["FLAGS_cudnn_deterministic"]))
 
-        cmd_return = os.system("python -m pip install paddleclas")
+        # cmd_return = os.system("python -m pip install paddleclas")
+        cmd_return = os.system("python setup.py install")
         if cmd_return:
             logger.info("repo {} python -m pip install paddleclas failed".format(self.reponame))
             # return 1
