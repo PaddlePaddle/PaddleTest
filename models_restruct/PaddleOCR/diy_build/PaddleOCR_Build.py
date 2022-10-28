@@ -55,15 +55,23 @@ class PaddleOCR_Build(Model_Build):
 
     def build_dataset(self):
         """
-        make datalink        
+        make datalink
         """
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
-            os.system(
-                "ln -s /ssd2/ce_data/PaddleOCR/train_data train_data; \
-                 ln -s /ssd2/ce_data/PaddleOCR/pretrain_models pretrain_models"
-            )
+
+            sysstr = platform.system()
+            if sysstr == "Linux":
+                src_path = "/ssd2/ce_data/PaddleOCR"
+            elif sysstr == "Windows":
+                src_path = "F:\ce_data\PaddleOCR"
+            elif sysstr == "Darwin":
+                src_path = "/Users/paddle/PaddleTest/ce_data/PaddleOCR"
+
+            os.symlink(os.path.join(src_path, "train_data"), "train_data")
+            os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
+
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
                 if "rec" in filename:
