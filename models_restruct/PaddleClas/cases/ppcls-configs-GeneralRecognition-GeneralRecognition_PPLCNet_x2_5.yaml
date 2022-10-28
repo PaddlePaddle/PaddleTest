@@ -15,8 +15,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
       -
         name: single
         cmd : tools/train.py
@@ -30,8 +30,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
       -
         name: multi_static
         cmd : -m paddle.distributed.launch ppcls/static/train.py
@@ -45,8 +45,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
       -
         name: single_static
         cmd : ppcls/static/train.py
@@ -60,8 +60,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
       -
         name: multi_convergence
         cmd : -m paddle.distributed.launch tools/train.py
@@ -78,8 +78,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
       -
         name: pretrained
         cmd: -m paddle.distributed.launch tools/eval.py
@@ -89,8 +89,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
       -
         name: single_trained
         cmd:  tools/eval.py
@@ -100,8 +100,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
       -
         name: single_pretrained
         cmd:  tools/eval.py
@@ -111,8 +111,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
     infer: skipped
     export:
       -
@@ -182,8 +182,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
     infer: skipped
     export:
       -
@@ -233,8 +233,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
     infer: skipped
     export:
       -
@@ -290,8 +290,8 @@ case:
         result:
           ${kpi_value_eval}:
             base: 20
-            threshold: 0.01
-            evaluation: "-"
+            threshold: 0
+            evaluation: "="
     infer: skipped
     export:
       -
