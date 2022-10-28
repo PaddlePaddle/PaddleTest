@@ -55,14 +55,13 @@ class PaddleOCR_Build(Model_Build):
 
     def build_dataset(self):
         """
-        自定义下载数据集
+        make datalink        
         """
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
             os.system(
                 "ln -s /ssd2/ce_data/PaddleOCR/train_data train_data; \
-                 ln -s /ssd2/ce_data/PaddleOCR/train_data train_data; \
                  ln -s /ssd2/ce_data/PaddleOCR/pretrain_models pretrain_models"
             )
             for filename in self.test_model_list:
