@@ -89,8 +89,7 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/model_zoo/bert/
 wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert.tar.gz
 tar -xzvf bert.tar.gz
-cp -r /ssd1/paddlenlp/download/bert/* ./data/
-## pretrain
+# pretrain
 time (python -m paddle.distributed.launch run_pretrain.py \
     --model_type bert \
     --model_name_or_path bert-base-uncased \
@@ -183,7 +182,6 @@ export CUDA_VISIBLE_DEVICES=${cudaid2}
 export DATA_DIR=./BookCorpus/
 wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/BookCorpus.tar.gz
 tar -xzvf BookCorpus.tar.gz
-# cp -r /ssd1/paddlenlp/download/electra/BookCorpus/ ./
 time (python -u ./run_pretrain.py \
     --model_type electra \
     --model_name_or_path electra-small \
