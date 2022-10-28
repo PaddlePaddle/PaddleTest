@@ -85,23 +85,23 @@ def test_pow3():
     obj.run(res=res, x=x, y=y)
 
 
-@pytest.mark.api_base_pow_parameters
-def test_pow4():
-    """
-    test 1 dim x multiply 2 dim y
-    """
-    x = np.array([3.0])
-    y = np.array([[0.68100125, 0.02188216]])
-    res = np.power(x, y)
-    obj.run(res=res, x=x, y=y)
+# @pytest.mark.api_base_pow_parameters
+# def test_pow4():
+#     """
+#     test 1 dim x multiply 2 dim y
+#     """
+#     x = np.array([3.0])
+#     y = np.array([[0.68100125, 0.02188216]])
+#     res = np.power(x, y)
+#     obj.run(res=res, x=x, y=y)
 
 
-@pytest.mark.api_base_pow_parameters
-def test_pow5():
-    """
-    test 1 dim x multiply 1 dim y
-    """
-    x = np.array([3.0])
-    y = np.array([0.68100125, 0.02188216])
-    res = np.power(x, y)
-    obj.run(res=res, x=x, y=y)
+# @pytest.mark.api_base_pow_parameters
+# def test_pow5():
+#     """
+#     test 1 dim x multiply 1 dim y
+#     """
+#     x = np.array([3.0])
+#     y = np.array([0.68100125, 0.02188216])
+#     res = np.power(x, y)
+#     obj.run(res=res, x=x, y=y)
