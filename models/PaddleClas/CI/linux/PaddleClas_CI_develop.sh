@@ -263,6 +263,20 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 
         if [[ ${static_flag} =~ "on" ]];then
+            echo "fp16 or amp"
+            # python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
+            # --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
+            if [[ -f "nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl" ]] && \
+                [[ -f "nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl" ]] ;then
+                echo "already download nvidia_dali_cuda102 nvidia_dali_cuda110"
+            else
+                wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl --no-proxy
+                wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl --no-proxy
+            fi
+            python -m pip install nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
+            python -m pip install nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl
+            export FLAGS_cudnn_deterministic=False #amp单独考虑，不能固定随机量，否则报错如下
+
             #增加静态图验证 只跑一个不放在循环中
             python -m paddle.distributed.launch ppcls/static/train.py  \
                 -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O1_ultra.yaml \
