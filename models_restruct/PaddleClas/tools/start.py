@@ -42,6 +42,7 @@ class PaddleClas_Start(object):
             "slim": "ppcls-configs-slim-PPLCNet_x1_0_quantization.yaml",
             "DeepHash": "ppcls-configs-DeepHash-DCH.yaml",
             "GeneralRecognition": "ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5.yaml",
+            "GeneralRecognitionV2": "ppcls-configs-GeneralRecognitionV2-GeneralRecognitionV2_PPLCNetV2_base.yaml",
             "Cartoonface": "ppcls-configs-Cartoonface-ResNet50_icartoon.yaml",
             "Logo": "ppcls-configs-Logo-ResNet50_ReID.yaml",
             "Products": "ppcls-configs-Products-ResNet50_vd_Inshop.yaml",
@@ -147,9 +148,10 @@ class PaddleClas_Start(object):
                     assert "do not matched in {}".format(self.rd_yaml_path)
         else:
             self.eval_pretrained_params = self.eval_trained_params
-        self.eval_pretrained_params = self.eval_pretrained_params.replace("_Tanh", "").replace(
-            "_last_stage_stride1", ""
-        )  # 替换多余str
+        # 替换多余str
+        self.eval_pretrained_params = (
+            self.eval_pretrained_params.replace("_Tanh", "").replace("_last_stage_stride1", "").replace("_ShiTu", "")
+        )
         if self.eval_pretrained_params == "AttentionModel":
             self.eval_pretrained_params = "ResNet18"  # 处理特殊情况
 
@@ -253,6 +255,7 @@ class PaddleClas_Start(object):
                         or "-PPLCNetV2" in self.qa_yaml_name
                         or "-ResNet" in self.qa_yaml_name
                         or "-GeneralRecognition_PPLCNet" in self.qa_yaml_name
+                        or "-GeneralRecognitionV2_PPLCNetV2" in self.qa_yaml_name
                         or "-SwinTransformer" in self.qa_yaml_name
                         or "-VGG" in self.qa_yaml_name
                     ):
@@ -318,7 +321,8 @@ class PaddleClas_Start(object):
                                 self.predict_pretrain_params
                             )
                         )
-                elif self.model_type == "GeneralRecognition":  # 暂时用训好的模型 220815
+                # 暂时用训好的模型 220815
+                elif self.model_type == "GeneralRecognition" or self.model_type == "GeneralRecognitionV2":
                     self.download_infer_tar("picodet_PPLCNet_x2_5_mainbody_lite_v1.0_infer")
                     self.download_infer_tar("general_PPLCNet_x2_5_lite_v1.0_infer")
                     self.download_infer_tar("general_PPLCNetV2_base_pretrained_v1.0_infer")

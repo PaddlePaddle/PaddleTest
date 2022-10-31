@@ -156,7 +156,7 @@ class PaddleClas_Build(Model_Build):
             os.chdir(self.reponame)
             os.chdir("deploy")
             if (
-                os.path.exists("recognition_demo_data_en_v1.1")
+                os.path.exists("recognition_demo_data_v1.1")
                 and os.path.exists("drink_dataset_v1.0")
                 and os.path.exists("drink_dataset_v2.0")
             ):
@@ -277,7 +277,7 @@ class PaddleClas_Build(Model_Build):
 
         if self.value_in_modellist(value="face") and self.value_in_modellist(value="metric_learning"):
             logger.info("#### face and metric_learning install")
-            cmd_return = os.system(" python -m  pip install -U pip setuptools cython")
+            cmd_return = os.system("python -m  pip install -U pip setuptools cython")
             if cmd_return:
                 logger.info("repo {} python -m pip install setuptools failed".format(self.reponame))
                 # return 1
