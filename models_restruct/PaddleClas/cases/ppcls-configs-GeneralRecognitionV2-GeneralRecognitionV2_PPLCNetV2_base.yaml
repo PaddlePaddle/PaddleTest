@@ -1,6 +1,6 @@
 case:
   linux:
-    base: ./base/Logo_base.yaml
+    base: ./base/GeneralRecognitionV2_base.yaml
     train:
       -
         name: multi
@@ -8,8 +8,7 @@ case:
         params:
           - -o Global.epochs=5
           - -o Global.save_interval=5
-          - -o Global.eval_interval=5
-          - -o Global.seed=1234
+          - -o DataLoader.Train.sampler.batch_size=32
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -24,8 +23,7 @@ case:
         params:
           - -o Global.epochs=2
           - -o Global.save_interval=2
-          - -o Global.eval_interval=2
-          - -o Global.seed=1234
+          - -o DataLoader.Train.sampler.batch_size=32
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -40,8 +38,7 @@ case:
         params:
           - -o Global.epochs=5
           - -o Global.save_interval=5
-          - -o Global.eval_interval=5
-          - -o Global.seed=1234
+          - -o DataLoader.Train.sampler.batch_size=32
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -56,8 +53,7 @@ case:
         params:
           - -o Global.epochs=2
           - -o Global.save_interval=2
-          - -o Global.eval_interval=2
-          - -o Global.seed=1234
+          - -o DataLoader.Train.sampler.batch_size=32
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -69,27 +65,9 @@ case:
       -
         name: multi_convergence
         cmd: python -m paddle.distributed.launch tools/train.py
-        params:
-          - -o Global.epochs=delete
-          - -o Global.save_interval=delete
-          - -o Global.eval_interval=delete
-        result:
-          ${kpi_value_eval}:
-            base: 20
-            threshold: 0
-            evaluation: "="
       -
         name: single_convergence
         cmd: python tools/train.py
-        params:
-          - -o Global.epochs=delete
-          - -o Global.save_interval=delete
-          - -o Global.eval_interval=delete
-        result:
-          ${kpi_value_eval}:
-            base: 20
-            threshold: 0
-            evaluation: "="
     eval:
       -
         name: trained
@@ -156,7 +134,7 @@ case:
         name: trained
         cmd: python python/predict_system.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -168,7 +146,7 @@ case:
         name: pretrained
         cmd: python python/predict_system.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -178,7 +156,7 @@ case:
             evaluation: "="
 
   # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
-    # base: ./base/Logo_base.yaml
+    # base: ./base/GeneralRecognitionV2_base.yaml
   #   train:
   #     -
   #       name: cpu
@@ -188,7 +166,7 @@ case:
   #         exit_code: 0
 
   windows:
-    base: ./base/Logo_base.yaml
+    base: ./base/GeneralRecognitionV2_base.yaml
     train:
       -
         name: single
@@ -224,7 +202,7 @@ case:
         name: pretrained
         cmd: python python/predict_system.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -234,7 +212,7 @@ case:
             evaluation: "="
 
   windows_cpu:
-    base: ./base/Logo_base.yaml
+    base: ./base/GeneralRecognitionV2_base.yaml
     train:
       -
         name: single
@@ -280,7 +258,7 @@ case:
         name: pretrained
         cmd: python python/predict_system.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
           - -o Global.device=${set_cuda_flag}
@@ -291,7 +269,7 @@ case:
             evaluation: "="
 
   mac:
-    base: ./base/Logo_base.yaml
+    base: ./base/GeneralRecognitionV2_base.yaml
     train:
       -
         name: single
@@ -337,7 +315,7 @@ case:
         name: pretrained
         cmd: python python/predict_system.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
           - -o Global.output_dir=output/${qa_yaml_name}
           - -o Global.device=${set_cuda_flag}
@@ -346,7 +324,5 @@ case:
             base: "[443, 84, 808, 511]"
             threshold: 0
             evaluation: "="
-
-
 
 function: paddlelas_imagenet_parse

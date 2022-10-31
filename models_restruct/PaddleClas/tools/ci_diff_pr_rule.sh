@@ -29,12 +29,14 @@ find ppcls/configs/slim/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  
 find ppcls/configs/GeneralRecognition/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' \
     |grep -v 'Gallery2FC_PPLCNet_x2_5' >> models_list
     #Gallery2FC_PPLCNet_x2_5 格式不正确
+find ppcls/configs/GeneralRecognitionV2/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
 find ppcls/configs/DeepHash/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
 find ppcls/configs/PULC/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' |grep -wv 'search.yaml' \
     |grep -v 'Res2Net200_vd_26w_4s' |grep -v 'SwinTransformer_tiny_patch4_window7_224' >> models_list
     #search.yaml格式不正确
     # Res2Net200_vd_26w_4s、SwinTransformer_tiny_patch4_window7_224时间过长重要性低
-find ppcls/configs/metric_learning/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
+# find ppcls/configs/metric_learning/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
+#221031暂时去掉，数据太大总下载不下来
 find ppcls/configs/reid/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list
 # MAC执行后 会有// 区分linux只有/  要进行替换//
 #282个模型总量
