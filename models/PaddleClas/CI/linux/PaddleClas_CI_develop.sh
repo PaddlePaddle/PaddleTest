@@ -150,6 +150,20 @@ if [[ -d "PaddleSlim" ]];then
     echo "end install paddleslim"
 fi
 
+echo "fp16 or amp"
+# python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
+# --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
+if [[ -f "nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl" ]] && \
+    [[ -f "nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl" ]] ;then
+    echo "already download nvidia_dali_cuda102 nvidia_dali_cuda110"
+else
+    wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl --no-proxy
+    wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl --no-proxy
+fi
+python -m pip install nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
+python -m pip install nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl
+export FLAGS_cudnn_deterministic=False #amp单独考虑，不能固定随机量，否则报错如下
+
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \

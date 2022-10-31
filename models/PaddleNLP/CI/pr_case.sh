@@ -88,18 +88,19 @@ print_info $? glue_${TASK_NAME}_train
 bert() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/model_zoo/bert/
-cp -r /ssd1/paddlenlp/download/bert/* ./data/
-## pretrain
+wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert.tar.gz
+tar -xzvf bert.tar.gz
+# pretrain
 time (python -m paddle.distributed.launch run_pretrain.py \
     --model_type bert \
     --model_name_or_path bert-base-uncased \
     --max_predictions_per_seq 20 \
-    --batch_size 32  \
+    --batch_size 16  \
     --learning_rate 1e-4 \
     --weight_decay 1e-2 \
     --adam_epsilon 1e-6 \
     --warmup_steps 10000 \
-    --input_dir ./data/hdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en/training/ \
+    --input_dir bert/ \
     --output_dir pretrained_models/ \
     --logging_steps 1 \
     --save_steps 1 \
@@ -569,17 +570,17 @@ python infer.py \
     --infer_output_file infer_output.txt  >${log_path}/seq2seq_depoly) >>${log_path}/seq2seq_deploy 2>&1
 print_info $? seq2seq_depoly
 }
-# 17 pretrained_models
-pretrained_models() {
-export CUDA_VISIBLE_DEVICES=${cudaid2}
-cd ${nlp_dir}/examples/text_classification/pretrained_models/
-time (python -m paddle.distributed.launch train.py --device gpu  --epochs 2 --save_dir ./checkpoints >${log_path}/pretrained_models_train) >>${log_path}/pretrained_models_train 2>&1
-print_info $? pretrained_models_train
-time (python export_model.py --params_path=./checkpoints/model_100/model_state.pdparams --output_path=./output >${log_path}/pretrained_models_export) >>${log_path}/pretrained_models_export 2>&1
-print_info $? pretrained_models_export
-time (python deploy/python/predict.py --model_dir=./output >${log_path}/pretrained_models_deploy) >>${log_path}/pretrained_models_deploy 2>&1
-print_info $? pretrained_models_deploy
-}
+# # 17 pretrained_models
+# pretrained_models() {
+# export CUDA_VISIBLE_DEVICES=${cudaid2}
+# cd ${nlp_dir}/examples/text_classification/pretrained_models/
+# time (python -m paddle.distributed.launch train.py --device gpu  --epochs 2 --save_dir ./checkpoints >${log_path}/pretrained_models_train) >>${log_path}/pretrained_models_train 2>&1
+# print_info $? pretrained_models_train
+# time (python export_model.py --params_path=./checkpoints/model_100/model_state.pdparams --output_path=./output >${log_path}/pretrained_models_export) >>${log_path}/pretrained_models_export 2>&1
+# print_info $? pretrained_models_export
+# time (python deploy/python/predict.py --model_dir=./output >${log_path}/pretrained_models_deploy) >>${log_path}/pretrained_models_deploy 2>&1
+# print_info $? pretrained_models_deploy
+# }
 # 18 word_embedding 5min
 word_embedding(){
 export CUDA_VISIBLE_DEVICES=${cudaid1}
