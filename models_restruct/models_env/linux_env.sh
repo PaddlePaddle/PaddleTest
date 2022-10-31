@@ -91,6 +91,17 @@ fi
 
 if [[ "${docker_flag}" == "" ]]; then
     ####创建docker
+
+    echo "before set_cuda: $set_cuda"
+    set_cuda_back=${set_cuda};
+    array=(${set_cuda_back//,/ });
+    set_cuda=0;
+    for((i=1;i<${#array[@]};i++));
+    do
+    export set_cuda=${set_cuda},${i};
+    done
+    echo "after set_cuda: $set_cuda"
+
     set +x;
     docker_name="ce_${reponame}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
