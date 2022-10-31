@@ -1,0 +1,9 @@
+case:
+  linux:
+    base: ./base/ocr_det_base.yaml
+
+  windows:
+    base: ./base/ocr_det_base.yaml
+
+  mac:
+    base: ./base/ocr_det_base.yaml
