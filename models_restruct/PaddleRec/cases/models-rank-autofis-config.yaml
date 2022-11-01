@@ -1,15 +1,17 @@
 case:
   linux:
-    base: ./base/train_infer_with_gpu_base.yaml
     train:
       -
         name: dygraph
         path: models/rank/autofis/
         cmd: python trainer.py
+        params:
+          - -m config.yaml
       - name: dygraph
         path: models/rank/autofis/
         cmd: python trainer.py
         params:
+          - -m config.yaml
           - -o stage=1
 
     infer:
@@ -20,7 +22,6 @@ case:
           - -o stage=1
 
   mac:
-    base: ./base/train_infer_with_cpu_base.yaml
     train:
       -
         name: dygraph
@@ -43,7 +44,6 @@ case:
           - -o stage=1
 
   windows:
-    base: ./base/train_infer_with_gpu_base.yaml
     train:
       -
         name: dygraph
@@ -51,11 +51,11 @@ case:
         cmd: python trainer.py
         params:
           - -m config.yaml
-
       - name: dygraph
         path: models/rank/autofis/
         cmd: python trainer.py
         params:
+          - -m config.yaml
           - -o stage=1
 
     infer:
