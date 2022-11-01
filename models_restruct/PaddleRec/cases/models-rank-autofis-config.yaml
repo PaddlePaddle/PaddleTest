@@ -1,0 +1,60 @@
+case:
+  linux:
+    base: ./base/train_infer_with_gpu_base.yaml
+    train:
+      -
+        name: dygraph
+        path: models/rank/autofis/
+        cmd: python trainer.py
+      - name: dygraph
+        path: models/rank/autofis/
+        cmd: python trainer.py
+        params:
+          - -o stage=1
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+        params:
+          - -o stage=1
+
+  mac:
+    base: ./base/train_infer_with_cpu_base.yaml
+    train:
+      -
+        name: dygraph
+        path: models/rank/autofis/
+        cmd: python trainer.py
+      - name: dygraph
+        path: models/rank/autofis/
+        cmd: python trainer.py
+        params:
+          - -o stage=1
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+        params:
+          - -o stage=1
+
+  windows:
+    base: ./base/train_infer_with_gpu_base.yaml
+    train:
+      -
+        name: dygraph
+        path: models/rank/autofis/
+        cmd: python trainer.py
+      - name: dygraph
+        path: models/rank/autofis/
+        cmd: python trainer.py
+        params:
+          - -o stage=1
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+        params:
+          - -o stage=1
