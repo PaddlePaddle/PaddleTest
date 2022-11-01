@@ -111,7 +111,7 @@ if [[ "${docker_flag}" == "" ]]; then
     echo "end kill docker"
     }
     trap 'docker_del' SIGTERM
-    ## 使用修改之前的set_cuda_back  
+    ## 使用修改之前的set_cuda_back
     NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
         --name=${docker_name} --net=host \
         --shm-size=128G \
