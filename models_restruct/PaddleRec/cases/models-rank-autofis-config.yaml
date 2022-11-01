@@ -26,10 +26,13 @@ case:
         name: dygraph
         path: models/rank/autofis/
         cmd: python trainer.py
+        params:
+          - -m config.yaml
       - name: dygraph
         path: models/rank/autofis/
         cmd: python trainer.py
         params:
+          - -m config.yaml
           - -o stage=1
 
     infer:
@@ -46,6 +49,9 @@ case:
         name: dygraph
         path: models/rank/autofis/
         cmd: python trainer.py
+        params:
+          - -m config.yaml
+
       - name: dygraph
         path: models/rank/autofis/
         cmd: python trainer.py
