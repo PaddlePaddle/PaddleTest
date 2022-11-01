@@ -16,12 +16,12 @@ def save_log(exit_code, output, model, log_dir=""):
     """
     if exit_code == 0:
         logging.info("%s passed" % (model))
-        log_dir = os.getcwd() + "/log/" + os.path.join(model + ".success")
+        log_dir = os.getcwd() + "/log/" + os.path.join(model + "_success.log")
         with open(log_dir, "a") as flog:
             flog.write("%s" % (output))
     else:
         logging.info("%s failed" % (model))
-        log_dir = os.getcwd() + "/log/" + os.path.join(model + ".err")
+        log_dir = os.getcwd() + "/log/" + os.path.join(model + "_err.log")
         with open(log_dir, "a") as flog:
             flog.write("%s" % (output))
 
