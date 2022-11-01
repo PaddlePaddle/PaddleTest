@@ -9,6 +9,7 @@ ppcls-configs-slim-MobileNetV3_large_x1_0_prune.yaml
 ppcls-configs-slim-ResNet50_vehicle_reid_prune.yaml
 ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5_udml.yaml
 ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5_binary.yaml
+ppcls-configs-GeneralRecognitionV2-GeneralRecognitionV2_PPLCNetV2_base.yaml
 ppcls-configs-DeepHash-LCDSH.yaml
 ppcls-configs-PULC-language_classification-PPLCNet_x1_0_distillation.yaml
 ppcls-configs-PULC-language_classification-PPLCNet_x1_0_search.yaml
