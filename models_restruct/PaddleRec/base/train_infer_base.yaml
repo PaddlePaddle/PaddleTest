@@ -1,10 +1,10 @@
 train:
   params:
-    - -c ${rd_yaml_path}
+    - -m ${rd_yaml_path}
     - -o runner.use_gpu=True
 
 
 infer:
   params:
-    - -c ${rd_yaml_path}
+    - -m ${rd_yaml_path}
     - -o runner.use_gpu=True
