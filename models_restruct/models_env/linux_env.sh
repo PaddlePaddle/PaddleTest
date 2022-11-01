@@ -92,7 +92,7 @@ fi
 if [[ "${docker_flag}" == "" ]]; then
 
     echo "before set_cuda: $set_cuda"
-    set_cuda_back=${set_cuda};
+    export set_cuda_back=${set_cuda};
     array=(${set_cuda_back//,/ });
     set_cuda=0;
     for((i=1;i<${#array[@]};i++));
@@ -111,7 +111,7 @@ if [[ "${docker_flag}" == "" ]]; then
     echo "end kill docker"
     }
     trap 'docker_del' SIGTERM
-    NV_GPU=${set_cuda} nvidia-docker run -i   --rm \
+    NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
         --name=${docker_name} --net=host \
         --shm-size=128G \
         -v $(pwd):/workspace \
