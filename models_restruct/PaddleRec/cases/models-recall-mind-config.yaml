@@ -1,54 +1,87 @@
 case:
   linux:
-    base: ./base/train_infer_with_gpu_base.yaml
     train:
       -
         name: dygraph
-        cmd: python -u tools/trainer.py
+        path: models/recall/word2vec
+        cmd: python -u ../../../tools/trainer.py
+        params:
+          - -m config.yaml
       -
         name: static
-        cmd: python -u tools/static_trainer.py
+        path: models/recall/word2vec
+        cmd: python -u ../../../tools/static_trainer.py
+        params:
+          - -m config.yaml
 
     infer:
       -
         name: dygraph
-        cmd: python -u models/recall/word2vec/infer.py
+        path: models/recall/word2vec
+        cmd: python -u infer.py
+        params:
+          - -m config.yaml
       -
         name: static
-        cmd: python -u models/recall/word2vec/static_infer.py
+        path: models/recall/word2vec
+        cmd: python -u static_infer.py
+        params:
+          - -m config.yaml
 
   mac:
-    base: ./base/train_infer_with_cpu_base.yaml
     train:
       -
         name: dygraph
-        cmd: python -u tools/trainer.py
+        path: models/recall/word2vec
+        cmd: python -u ../../../tools/trainer.py
+        params:
+          - -m config.yaml
       -
         name: static
-        cmd: python -u tools/static_trainer.py
+        path: models/recall/word2vec
+        cmd: python -u ../../../tools/static_trainer.py
+        params:
+          - -m config.yaml
 
     infer:
       -
         name: dygraph
-        cmd: python -u models/recall/word2vec/infer.py
+        path: models/recall/word2vec
+        cmd: python -u infer.py
+        params:
+          - -m config.yaml
       -
         name: static
-        cmd: python -u models/recall/word2vec/static_infer.py
+        path: models/recall/word2vec
+        cmd: python -u static_infer.py
+        params:
+          - -m config.yaml
 
   windows:
-    base: ./base/train_infer_with_gpu_base.yaml
     train:
       -
         name: dygraph
-        cmd: python -u tools/trainer.py
+        path: models/recall/word2vec
+        cmd: python -u ../../../tools/trainer.py
+        params:
+          - -m config.yaml
       -
         name: static
-        cmd: python -u tools/static_trainer.py
+        path: models/recall/word2vec
+        cmd: python -u ../../../tools/static_trainer.py
+        params:
+          - -m config.yaml
 
     infer:
       -
         name: dygraph
-        cmd: python -u models/recall/word2vec/infer.py
+        path: models/recall/word2vec
+        cmd: python -u infer.py
+        params:
+          - -m config.yaml
       -
         name: static
-        cmd: python -u models/recall/word2vec/static_infer.py
+        path: models/recall/word2vec
+        cmd: python -u static_infer.py
+        params:
+          - -m config.yaml

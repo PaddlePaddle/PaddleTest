@@ -1,36 +1,51 @@
 case:
   linux:
-    base: ./base/train_infer_with_gpu_base.yaml
     train:
       -
         name: dygraph
-        cmd: python -u tools/trainer.py
+        path: models/recall/deepwalk/multi_class
+        cmd: python -u ../../../../tools/static_trainer.py
+        params:
+          - -m config.yaml
 
     infer:
       -
         name: dygraph
-        cmd: python -u tools/infer.py
+        path: models/recall/deepwalk/multi_class
+        cmd: ython -u ../../../../tools/static_infer.py
+        params:
+          - -m config.yaml
 
   mac:
-    base: ./base/train_infer_with_cpu_base.yaml
     train:
       -
         name: dygraph
-        cmd: python -u tools/trainer.py
+        path: models/recall/deepwalk/multi_class
+        cmd: python -u ../../../../tools/static_trainer.py
+        params:
+          - -m config.yaml
 
     infer:
       -
         name: dygraph
-        cmd: python -u tools/infer.py
+        path: models/recall/deepwalk/multi_class
+        cmd: ython -u ../../../../tools/static_infer.py
+        params:
+          - -m config.yaml
 
   windows:
-    base: ./base/train_infer_with_gpu_base.yaml
     train:
       -
         name: dygraph
-        cmd: python -u tools/trainer.py
+        path: models/recall/deepwalk/multi_class
+        cmd: python -u ../../../../tools/static_trainer.py
+        params:
+          - -m config.yaml
 
     infer:
       -
         name: dygraph
-        cmd: python -u tools/infer.py
+        path: models/recall/deepwalk/multi_class
+        cmd: python -u ../../../../tools/static_infer.py
+        params:
+          - -m config.yaml
