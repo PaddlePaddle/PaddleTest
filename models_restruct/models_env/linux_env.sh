@@ -91,7 +91,7 @@ fi
 
 if [[ "${docker_flag}" == "" ]]; then
 
-    echo "before set_cuda: $set_cuda" #在docker内更改set_cuda从0开始计数
+    echo "before set_cuda: $set_cuda" #在docker外更改set_cuda从0开始计数, 在cce或线下已在docker中不执行
     export set_cuda_back=${set_cuda};
     array=(${set_cuda_back//,/ });
     set_cuda=0;
