@@ -1,0 +1,51 @@
+case:
+  linux:
+    train:
+      -
+        name: dygraph
+        path: models/rank/deeprec
+        cmd: python -u trainer.py
+        params:
+          - -m config.yaml
+
+    infer:
+      -
+        name: dygraph
+        path: models/rank/deeprec
+        cmd: python -u infer.py
+        params:
+          - -m config.yaml
+
+  mac:
+    train:
+      -
+        name: dygraph
+        path: models/rank/deeprec
+        cmd: python -u trainer.py
+        params:
+          - -m config.yaml
+
+    infer:
+      -
+        name: dygraph
+        path: models/rank/deeprec
+        cmd: python -u infer.py
+        params:
+          - -m config.yaml
+
+  windows:
+    train:
+      -
+        name: dygraph
+        path: models/rank/deeprec
+        cmd: python -u trainer.py
+        params:
+          - -m config.yaml
+
+    infer:
+      -
+        name: dygraph
+        path: models/rank/deeprec
+        cmd: python -u infer.py
+        params:
+          - -m config.yaml

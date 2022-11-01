@@ -17,8 +17,10 @@ case:
     infer:
       -
         name: dygraph
-        cmd: python -u tools/infer.py
+        path: models/rank/autofis/
+        cmd: python -u ../../../tools/infer.py
         params:
+          - -m config.yaml
           - -o stage=1
 
   mac:
@@ -39,8 +41,10 @@ case:
     infer:
       -
         name: dygraph
-        cmd: python -u tools/infer.py
+        path: models/rank/autofis/
+        cmd: python -u ../../../tools/infer.py
         params:
+          - -m config.yaml
           - -o stage=1
 
   windows:
@@ -61,6 +65,8 @@ case:
     infer:
       -
         name: dygraph
-        cmd: python -u tools/infer.py
+        path: models/rank/autofis/
+        cmd: python -u ../../../tools/infer.py
         params:
+          - -m config.yaml
           - -o stage=1
