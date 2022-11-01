@@ -33,7 +33,7 @@ case:
         cmd: python -u tools/infer.py
       -
         name: static
-        cmd: python  -u tools/static_infer.py
+        cmd: python -u tools/static_infer.py
 
   windows:
     base: ./base/train_infer_with_gpu_base.yaml
@@ -52,4 +52,3 @@ case:
       -
         name: static
         cmd: python -u tools/static_infer.py
-
