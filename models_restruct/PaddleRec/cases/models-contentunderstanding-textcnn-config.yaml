@@ -1,63 +1,55 @@
 case:
   linux:
-    base: ./base/train_infer_base.yaml
+    base: ./base/train_infer_with_gpu_base.yaml
     train:
       -
         name: dygraph
-        cmd: -u tools/trainer.py
+        cmd: python -u tools/trainer.py
       -
         name: static
-        cmd: -u tools/static_trainer.py
+        cmd: python -u tools/static_trainer.py
 
     infer:
       -
         name: dygraph
-        cmd: -u tools/infer.py
+        cmd: python -u tools/infer.py
       -
         name: static
-        cmd: -u tools/static_infer.py
+        cmd: python -u tools/static_infer.py
 
   mac:
-    base: ./base/train_infer_base.yaml
+    base: ./base/train_infer_with_cpu_base.yaml
     train:
       -
         name: dygraph
-        cmd: -u tools/trainer.py
-        params:
-          - -o runner.use_gpu=False
+        cmd: python -u tools/trainer.py
       -
         name: static
-        cmd: -u tools/static_trainer.py
-        params:
-          - -o runner.use_gpu=False
+        cmd: python -u tools/static_trainer.py
 
     infer:
       -
         name: dygraph
-        cmd: -u tools/infer.py
-        params:
-          - -o runner.use_gpu=False
+        cmd: python -u tools/infer.py
       -
         name: static
-        cmd: -u tools/static_infer.py
-        params:
-          - -o runner.use_gpu=False
+        cmd: python  -u tools/static_infer.py
 
   windows:
-    base: ./base/train_infer_base.yaml
+    base: ./base/train_infer_with_gpu_base.yaml
     train:
       -
         name: dygraph
-        cmd: -u tools/trainer.py
+        cmd: python -u tools/trainer.py
       -
         name: static
-        cmd: -u tools/static_trainer.py
+        cmd: python -u tools/static_trainer.py
 
     infer:
       -
         name: dygraph
-        cmd: -u tools/infer.py
+        cmd: python -u tools/infer.py
       -
         name: static
-        cmd: -u tools/static_infer.py
+        cmd: python -u tools/static_infer.py
 
