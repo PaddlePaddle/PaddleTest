@@ -12,7 +12,7 @@ case:
       -
         name: dygraph
         path: models/recall/deepwalk/multi_class
-        cmd: ython -u ../../../../tools/static_infer.py
+        cmd: python -u ../../../../tools/static_infer.py
         params:
           - -m config.yaml
 
@@ -29,7 +29,7 @@ case:
       -
         name: dygraph
         path: models/recall/deepwalk/multi_class
-        cmd: ython -u ../../../../tools/static_infer.py
+        cmd: python -u ../../../../tools/static_infer.py
         params:
           - -m config.yaml
 
