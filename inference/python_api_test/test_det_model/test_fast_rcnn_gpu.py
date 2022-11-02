@@ -128,7 +128,7 @@ def test_gpu_mixed_precision_bz1():
                 src_model="./fast_rcnn/model.pdmodel",
                 src_params="./fast_rcnn/model.pdiparams",
                 dst_model="./fast_rcnn/model_mixed.pdmodel",
-                dst_params="./fast_rcnn/imodel_mixed.pdiparams",
+                dst_params="./fast_rcnn/model_mixed.pdiparams",
             )
         test_suite.load_config(
             model_file="./fast_rcnn/model_mixed.pdmodel", params_file="./fast_rcnn/model_mixed.pdiparams"
