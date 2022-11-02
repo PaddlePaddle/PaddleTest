@@ -13,5 +13,3 @@ python -m paddle.distributed.launch --log_dir=log_db_mv3 --gpus '0,1,2,3'  tools
 export CUDA_VISIBLE_DEVICES=4,5,6,7
 mkdir log_rec_mv3_none_bilstm_ctc
 python -m paddle.distributed.launch --log_dir=rec_mv3_none_bilstm_ctc --gpus '4,5,6,7'  tools/train.py -c configs/rec/rec_mv3_none_bilstm_ctc.yml> log_rec_mv3_none_bilstm_ctc/rec_mv3_none_bilstm_ctc.log 2>&1 &
-
-
