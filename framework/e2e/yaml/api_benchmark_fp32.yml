@@ -17643,4 +17643,4 @@ as_real:
   pytorch:
     api_name: "torch.view_as_real"
     mapping:
-      ins: {x: input}
+      ins: { x: input }
