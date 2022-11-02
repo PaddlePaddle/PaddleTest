@@ -9,7 +9,7 @@
 
 train:
   name: single
-  cmd :   tools/train.py
+  cmd: python tools/train.py
   params:
     - -c ${rd_yaml_path}
     - -o Global.epochs=1
@@ -22,7 +22,7 @@ train:
       evaluation: "="
 eval:
   name: trained
-  cmd:   tools/eval.py
+  cmd: python tools/eval.py
   params:
     - -c ${rd_yaml_path}
   result:
@@ -33,7 +33,7 @@ eval:
 infer: skipped
 export:
   name: trained
-  cmd: tools/export_model.py
+  cmd: python tools/export_model.py
   params:
     - -c ${rd_yaml_path}
     - -o Global.save_inference_dir=./inference/${qa_yaml_name}
@@ -45,9 +45,9 @@ export:
 predict:
   name: trained
   path: deploy
-  cmd: python/predict_cls.py
+  cmd: python python/predict_cls.py
   params:
-    - -c configs/inference_cls.yaml
+    - -c configs/PULC/${model_type_PULC}/inference_${model_type_PULC}.yaml
     - -o Global.inference_model_dir=../inference/${qa_yaml_name}
   result:
     exit_code:

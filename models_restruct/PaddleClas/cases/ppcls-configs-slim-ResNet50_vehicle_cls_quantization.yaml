@@ -1,6 +1,6 @@
 case:
   linux:
-    base: ./base/Logo_base.yaml
+    base: ./base/slim_base.yaml
     train:
       -
         name: multi
@@ -10,6 +10,8 @@ case:
           - -o Global.save_interval=5
           - -o Global.eval_interval=5
           - -o Global.seed=1234
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -26,6 +28,8 @@ case:
           - -o Global.save_interval=2
           - -o Global.eval_interval=2
           - -o Global.seed=1234
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -42,6 +46,8 @@ case:
           - -o Global.save_interval=5
           - -o Global.eval_interval=5
           - -o Global.seed=1234
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -58,6 +64,8 @@ case:
           - -o Global.save_interval=2
           - -o Global.eval_interval=2
           - -o Global.seed=1234
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
           - -o DataLoader.Train.loader.num_workers=0
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -95,6 +103,8 @@ case:
         name: trained
         cmd: python -m paddle.distributed.launch tools/eval.py
         params:
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -106,6 +116,8 @@ case:
         name: pretrained
         cmd: python -m paddle.distributed.launch tools/eval.py
         params:
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -117,6 +129,8 @@ case:
         name: single_trained
         cmd: python tools/eval.py
         params:
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -128,6 +142,8 @@ case:
         name: single_pretrained
         cmd: python tools/eval.py
         params:
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -154,10 +170,12 @@ case:
     predict:
       -
         name: trained
-        cmd: python python/predict_system.py
+        cmd: python python/predict_cls.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_cls.yaml
+            -o Global.infer_imgs="./images"
           - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.inference_model_dir=${predict_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
@@ -166,10 +184,12 @@ case:
             evaluation: "="
       -
         name: pretrained
-        cmd: python python/predict_system.py
+        cmd: python python/predict_cls.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_cls.yaml
+            -o Global.infer_imgs="./images"
           - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.inference_model_dir=${predict_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
@@ -178,7 +198,7 @@ case:
             evaluation: "="
 
   # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
-    # base: ./base/Logo_base.yaml
+    # base: ./base/slim_base.yaml
   #   train:
   #     -
   #       name: cpu
@@ -188,7 +208,7 @@ case:
   #         exit_code: 0
 
   windows:
-    base: ./base/Logo_base.yaml
+    base: ./base/slim_base.yaml
     train:
       -
         name: single
@@ -222,10 +242,12 @@ case:
         name: trained
       -
         name: pretrained
-        cmd: python python/predict_system.py
+        cmd: python python/predict_cls.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_cls.yaml
+            -o Global.infer_imgs="./images"
           - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.inference_model_dir=${predict_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           class_ids:
@@ -234,7 +256,7 @@ case:
             evaluation: "="
 
   windows_cpu:
-    base: ./base/Logo_base.yaml
+    base: ./base/slim_base.yaml
     train:
       -
         name: single
@@ -278,10 +300,12 @@ case:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
-        cmd: python python/predict_system.py
+        cmd: python python/predict_cls.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_cls.yaml
+            -o Global.infer_imgs="./images"
           - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.inference_model_dir=${predict_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
           - -o Global.device=${set_cuda_flag}
         result:
@@ -291,7 +315,7 @@ case:
             evaluation: "="
 
   mac:
-    base: ./base/Logo_base.yaml
+    base: ./base/slim_base.yaml
     train:
       -
         name: single
@@ -335,10 +359,12 @@ case:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
-        cmd: python python/predict_system.py
+        cmd: python python/predict_cls.py
         params:
-          - -c configs/inference_logo.yaml
+          - -c configs/inference_cls.yaml
+            -o Global.infer_imgs="./images"
           - -o Global.use_gpu=${set_cuda_flag}
+          - -o Global.inference_model_dir=${predict_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
           - -o Global.device=${set_cuda_flag}
         result:
@@ -346,7 +372,5 @@ case:
             base: "[443, 84, 808, 511]"
             threshold: 0
             evaluation: "="
-
-
 
 function: paddlelas_imagenet_parse
