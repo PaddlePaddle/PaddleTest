@@ -17,7 +17,7 @@ import pytest
 import pynvml
 import numpy as np
 import paddle.inference as paddle_infer
-from paddle.inference import PrecisionType, BackendType
+from paddle.inference import PrecisionType, PlaceType
 from paddle.inference import convert_to_mixed_precision
 
 from pynvml.smi import nvidia_smi
@@ -147,7 +147,7 @@ class InferenceTest(object):
             dst_model,
             dst_params,
             PrecisionType.Half,
-            BackendType.GPU,
+            PlaceType.GPU,
             True,
             black_list,
         )
