@@ -7,12 +7,14 @@ case:
         cmd: python trainer.py
         params:
           - -m config.yaml
+          - -o runner.use_gpu=True
       - name: dygraph
         path: models/rank/autofis/
         cmd: python trainer.py
         params:
           - -m config.yaml
           - -o stage=1
+          - -o runner.use_gpu=True
 
     infer:
       -
@@ -22,6 +24,7 @@ case:
         params:
           - -m config.yaml
           - -o stage=1
+          - -o runner.use_gpu=True
 
   mac:
     train:
@@ -55,12 +58,14 @@ case:
         cmd: python trainer.py
         params:
           - -m config.yaml
+          - -o runner.use_gpu=True
       - name: dygraph
         path: models/rank/autofis/
         cmd: python trainer.py
         params:
           - -m config.yaml
           - -o stage=1
+          - -o runner.use_gpu=True
 
     infer:
       -
@@ -70,3 +75,4 @@ case:
         params:
           - -m config.yaml
           - -o stage=1
+          - -o runner.use_gpu=True

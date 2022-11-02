@@ -43,6 +43,7 @@ case:
         cmd: python -u ../../../tools/trainer.py
         params:
           - -m config.yaml
+          - -o runner.use_gpu=True
 
     infer:
       -
@@ -51,3 +52,4 @@ case:
         cmd: python infer.py
         params:
           - -m config.yaml
+          - -o runner.use_gpu=True
