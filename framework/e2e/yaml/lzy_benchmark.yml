@@ -465,13 +465,14 @@ dist_0:
     mapping:
       ins: { x: input, y: other }
 
-Beta_0:
-  desc: "在概率论中，Beta 分布是指一组定义在 [0,1] 区间的连续概率分布"
-  paddle:
-    api_name: "paddle.distribution.Beta"
-    params:
-      alpha: 0.5
-      beta: 0.5
+#Beta_0:
+#  desc: "在概率论中，Beta 分布是指一组定义在 [0,1] 区间的连续概率分布"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.distribution.Beta"
+#    params:
+#      alpha: 0.5
+#      beta: 0.5
 #  pytorch:
 #    api_name: "torch.distributions.Beta"
 #    mapping:
@@ -1422,6 +1423,7 @@ matrix_power_0:
 
 matrix_rank_0:
   desc: "计算矩阵的秩"
+  enable_backward: false
   paddle:
     api_name: "paddle.linalg.matrix_rank"
     inputs:
@@ -1433,10 +1435,10 @@ matrix_rank_0:
         range: [ -1, 1]
     params:
       hermitian: False
-#  pytorch:
-#    api_name: "torch.linalg.matrix_rank"
-#    mapping:
-#      ins: { x: A, hermitian: hermitian }
+  pytorch:
+    api_name: "torch.linalg.matrix_rank"
+    mapping:
+      ins: { x: input, hermitian: hermitian }
 
 #multi_dot_0:
 #  desc: "Multi_dot 是一个计算多个矩阵乘法的算子"
@@ -1510,6 +1512,7 @@ svd_0:
 
 logcumsumexp_0:
   desc: "计算 x 的指数的前缀和的对数"
+  enable_backward: false
   paddle:
     api_name: "paddle.logcumsumexp"
     inputs:
@@ -1519,9 +1522,9 @@ logcumsumexp_0:
         dtype: "float32"
         shape: [1, 1, 1, 1]
         range: [ -1, 1]
+      axis: 0
   pytorch:
     api_name: "torch.logcumsumexp"
-    axis:
     mapping:
       ins: { x: input, axis: dim }
 
@@ -3153,10 +3156,10 @@ log_sigmoid_0:
         dtype: "float32"
         shape: [1, 1, 1, 1]
         range: [ -1, 1]
-#  pytorch:
-#    api_name: "torch.nn.functional.log_sigmoid"
-#    mapping:
-#      ins: { x: input }
+  pytorch:
+    api_name: "torch.nn.functional.logsigmoid"
+    mapping:
+      ins: { x: input }
 
 margin_ranking_loss_0:
   desc: "计算输入 input，other 和 标签 label 间的 margin rank loss 损失"
@@ -3385,10 +3388,10 @@ nll_loss_0:
     params:
       ignore_index: -100
       reduction: 'mean'
-#  pytorch:
-#    api_name: "torch.nn.functional.nll_loss"
-#    mapping:
-#      ins: { input: input, label: target, ignore_index: ignore_index, reduction: reduction }
+  pytorch:
+    api_name: "torch.nn.functional.nll_loss"
+    mapping:
+      ins: { input: input, label: target, ignore_index: ignore_index, reduction: reduction }
 
 one_hot_0:
   desc: "该OP将输入'x'中的每个id转换为一个one-hot向量，其长度为 num_classes"
@@ -3399,15 +3402,15 @@ one_hot_0:
       x:
         random: true
         type: "Tensor"
-        dtype: "int32"
+        dtype: "int64"
         shape: [1, 1, 1, 1]
         range: [ 0, 1]
     params:
       num_classes: 1
-#  pytorch:
-#    api_name: "torch.nn.functional.one_hot"
-#    mapping:
-#      ins: { x: input, num_classes: num_classes }
+  pytorch:
+    api_name: "torch.nn.functional.one_hot"
+    mapping:
+      ins: { x: input, num_classes: num_classes }
 
 pixel_shuffle_0:
   desc: "将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
@@ -4726,10 +4729,11 @@ renorm_0:
 
 searchsorted_0:
   desc: "根据给定的 values 在 sorted_sequence 的最后一个维度查找合适的索引"
+  enable_backward: false
   paddle:
     api_name: "paddle.searchsorted"
     inputs:
-      x:
+      sorted_sequence:
         random: False
         type: "Tensor"
         dtype: "float32"
@@ -4742,10 +4746,10 @@ searchsorted_0:
     params:
       out_int32: False
       right: False
-#  pytorch:
-#    api_name: "torch.searchsorted"
-#    mapping:
-#      ins: { sorted_sequence: input, values: input, out_int32: out_int32, right: right }
+  pytorch:
+    api_name: "torch.searchsorted"
+    mapping:
+      ins: { sorted_sequence: sorted_sequence, values: input, out_int32: out_int32, right: right }
 
 Sigmoid_0:
   desc: "Sigmoid激活函数"
