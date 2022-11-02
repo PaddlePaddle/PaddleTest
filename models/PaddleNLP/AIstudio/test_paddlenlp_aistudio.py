@@ -8,6 +8,7 @@ import os
 import sys
 import subprocess
 import logging
+import allure
 
 
 def save_log(exit_code, output, model, log_dir=""):
@@ -19,11 +20,13 @@ def save_log(exit_code, output, model, log_dir=""):
         log_dir = os.getcwd() + "/log/" + os.path.join(model + "_success.log")
         with open(log_dir, "a") as flog:
             flog.write("%s" % (output))
+            # allure.attach.file(log_dir, '执行日志', allure.attachment_type.TEXT)
     else:
         logging.info("%s failed" % (model))
         log_dir = os.getcwd() + "/log/" + os.path.join(model + "_err.log")
         with open(log_dir, "a") as flog:
             flog.write("%s" % (output))
+            # allure.attach.file(log_dir, '执行日志', allure.attachment_type.TEXT)
 
 
 def download_project_files():
@@ -55,9 +58,10 @@ def test_aistudio_case():
             os.system("cd %s && mkdir data " % (file_path))
         os.system("cd %s && jupyter nbconvert --to python %s.ipynb" % (file_path, exec_name))
         output = subprocess.getstatusoutput("cd %s && ipython %s.py" % (file_path, exec_name))
-        excode = output[0]
-        message = output[1]
-        save_log(excode, message, file_name)
+        # allure.dynamic.feature(file_name)
+        # allure.dynamic.description(
+        # "启动命令: ipython {exec_name}.py".format(exec_name))
+        save_log(output[0], output[1], file_name)
 
 
 if __name__ == "__main__":
