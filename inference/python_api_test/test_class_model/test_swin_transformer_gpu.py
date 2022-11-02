@@ -82,7 +82,7 @@ def test_gpu_more_bz():
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
 
@@ -121,7 +121,7 @@ def test_gpu_mixed_precision_bz1():
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
 
@@ -153,7 +153,7 @@ def test_jetson_gpu_more_bz():
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
 
