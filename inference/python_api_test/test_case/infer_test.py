@@ -17,6 +17,8 @@ import pytest
 import pynvml
 import numpy as np
 import paddle.inference as paddle_infer
+from paddle.inference import PrecisionType, BackendType
+from paddle.inference import convert_to_mixed_precision
 
 from pynvml.smi import nvidia_smi
 from .image_preprocess import read_images_path, get_images_npy, read_npy_path, preprocess, sig_fig_compare
@@ -125,6 +127,30 @@ class InferenceTest(object):
         for _, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
+
+    def convert_to_mixed_precision_model(self, src_model, src_params, dst_model, dst_params) -> None:
+        """
+        convert model to mixed precision
+        Args:
+            src_model(str): src_model
+            src_params(str): src_params
+            dst_model(str): dst_model
+            dst_params(str): dst_params
+        Returns:
+            None
+        """
+        black_list = set()
+
+        convert_to_mixed_precision(
+            src_model,
+            src_params,
+            dst_model,
+            dst_params,
+            PrecisionType.Half,
+            BackendType.GPU,
+            True,
+            black_list,
+        )
 
     def get_images_npy(
         self, file_path: str, images_size: int, center=True, model_type="class", with_true_data=True
