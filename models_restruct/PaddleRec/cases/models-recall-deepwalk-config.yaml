@@ -26,6 +26,7 @@ case:
         cmd: python -u ../../../../tools/static_trainer.py
         params:
           - -m config.yaml
+          - -o runner.use_gpu=False
 
     infer:
       -
@@ -34,6 +35,7 @@ case:
         cmd: python -u ../../../../tools/static_infer.py
         params:
           - -m config.yaml
+          - -o runner.use_gpu=False
 
   windows:
     train:
