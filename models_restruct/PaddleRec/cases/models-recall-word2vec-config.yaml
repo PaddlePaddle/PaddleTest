@@ -12,14 +12,10 @@ case:
     infer:
       -
         name: dygraph
-        cmd: python -u models/recall/mind/infer.py
-        params:
-          - -top_n 50
+        cmd: python -u models/recall/word2vec/infer.py
       -
         name: static
-        cmd: python -u models/recall/mind/static_infer.py
-        params:
-          - -top_n 50
+        cmd: python -u models/recall/word2vec/static_infer.py
 
   mac:
     base: ./base/train_infer_with_cpu_base.yaml
@@ -34,14 +30,10 @@ case:
     infer:
       -
         name: dygraph
-        cmd: python -u tools/infer.py
-        params:
-          - -top_n 50
+        cmd: python -u models/recall/word2vec/infer.py
       -
         name: static
-        cmd: python -u tools/static_infer.py
-        params:
-          - -top_n 50
+        cmd: python -u models/recall/word2vec/static_infer.py
 
   windows:
     base: ./base/train_infer_with_gpu_base.yaml
@@ -56,11 +48,7 @@ case:
     infer:
       -
         name: dygraph
-        cmd: python -u tools/infer.py
-        params:
-          - -top_n 50
+        cmd: python -u models/recall/word2vec/infer.py
       -
         name: static
-        cmd: python -u tools/static_infer.py
-        params:
-          - -top_n 50
+        cmd: python -u models/recall/word2vec/static_infer.py

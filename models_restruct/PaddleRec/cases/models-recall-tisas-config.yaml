@@ -9,7 +9,7 @@ case:
     infer:
       -
         name: dygraph
-        cmd: python -u models/recall/mhcn/infer.py
+        cmd: python -u models/recall/tisas/infer.py
 
   mac:
     base: ./base/train_infer_with_cpu_base.yaml
@@ -21,7 +21,7 @@ case:
     infer:
       -
         name: dygraph
-        cmd: python -u models/recall/mhcn/infer.py
+        cmd: python -u models/recall/tisas/infer.py
 
   windows:
     base: ./base/train_infer_with_gpu_base.yaml
@@ -33,4 +33,4 @@ case:
     infer:
       -
         name: dygraph
-        cmd: python -u models/recall/mhcn/infer.py
+        cmd: python -u models/recall/tisas/infer.py
