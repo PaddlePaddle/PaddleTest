@@ -69,19 +69,16 @@ def gen_allure_report():
                 while True:
                     retry_num += 1
                     if plat == "ubuntu":
-                        ret = os.system(
-                            "apt-get update;apt install -y openjdk-8-jdk >/dev/null")
+                        ret = os.system("apt-get update;apt install -y openjdk-8-jdk >/dev/null")
                     elif plat == "centos":
-                        ret = os.system(
-                            "yum install java-1.8.0-openjdk-devel.x86_64 -y >/dev/null")
+                        ret = os.system("yum install java-1.8.0-openjdk-devel.x86_64 -y >/dev/null")
                     if ret == 0 or retry_num > 3:
                         break
         # windows和mac xly均已安装java
         elif sysstr == "Darwin":
             allure_bin = "%s/allure-2.19.0/bin/allure" % (os.getcwd())
         elif sysstr == "Windows":
-            cmd = "set PATH=%s/allure-2.19.0/bin/allure;%%PATH%%" % (
-                os.getcwd())
+            cmd = "set PATH=%s/allure-2.19.0/bin/allure;%%PATH%%" % (os.getcwd())
             os.system(cmd)
             # allure_bin = "allure"
             allure_bin = "%s/allure-2.19.0/bin/allure" % (os.getcwd())
@@ -103,8 +100,7 @@ def gen_allure_report():
             if os.path.exists("result"):
                 make_tar("result", "result.tar")
                 shutil.move("result.tar", "report")
-            cmd = "curl -s {}/report/upload.sh | bash -s ./report {} report".format(
-                REPORT_SERVER, job_build_id)
+            cmd = "curl -s {}/report/upload.sh | bash -s ./report {} report".format(REPORT_SERVER, job_build_id)
             print("upload cmd is {}".format(cmd))
             ret = os.system(cmd)
         return ret

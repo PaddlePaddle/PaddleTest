@@ -13,11 +13,11 @@ import pytest
 import json
 
 
-def exit_check(exit_code, file_name,project_name):
+def exit_check(exit_code, file_name, project_name):
     """
     check exit_code
     """
-    assert exit_code == 0, "ProjectID: %s %s Failed!" % (file_name,project_name)
+    assert exit_code == 0, "ProjectID: %s %s Failed!" % (file_name, project_name)
 
 
 def save_log(exit_code, output, file_name, log_dir=""):
@@ -28,12 +28,12 @@ def save_log(exit_code, output, file_name, log_dir=""):
         log_dir = os.getcwd() + "/log/" + os.path.join(file_name + "_success.log")
         with open(log_dir, "a") as flog:
             flog.write("%s" % (output))
-            allure.attach.file(log_dir, '执行日志', allure.attachment_type.TEXT)
+            allure.attach.file(log_dir, "执行日志", allure.attachment_type.TEXT)
     else:
         log_dir = os.getcwd() + "/log/" + os.path.join(file_name + "_err.log")
         with open(log_dir, "a") as flog:
             flog.write("%s" % (output))
-            allure.attach.file(log_dir, '执行日志', allure.attachment_type.TEXT)
+            allure.attach.file(log_dir, "执行日志", allure.attachment_type.TEXT)
 
 
 def download_project_files():
@@ -46,7 +46,6 @@ def download_project_files():
         flog.write("%s" % (output[1]))
     assert output[0] == 0, "download failed !"
 
-    
 
 def get_project_list():
     """
@@ -61,13 +60,13 @@ def get_project_list():
     return project_list
 
 
-@pytest.mark.parametrize('file_name', get_project_list())
+@pytest.mark.parametrize("file_name", get_project_list())
 def test_aistudio_case(file_name):
     """
     EXEC AIstudio main.ipynb
     """
     file_path = os.getcwd() + "/aistudio_projects_files/" + file_name
-    project_name = json.load(open('project_info.json','r',encoding="utf-8"))[file_name]
+    project_name = json.load(open("project_info.json", "r", encoding="utf-8"))[file_name]
     os.system("cd {}".format(file_path))
     if os.path.exists(os.path.join(file_path + "/main.ipynb")):
         exec_name = "main"
@@ -81,8 +80,7 @@ def test_aistudio_case(file_name):
     allure.dynamic.parent_suite("PaddleNLP AIstudio")
     allure.dynamic.title("{}".format(file_name))
     allure.dynamic.feature(project_name)
-    allure.dynamic.description(
-    "启动命令: ipython {}.py".format(exec_name))
+    allure.dynamic.description("启动命令: ipython {}.py".format(exec_name))
 
     save_log(output[0], output[1], file_name)
-    exit_check(output[0], file_name,project_name)
+    exit_check(output[0], file_name, project_name)
