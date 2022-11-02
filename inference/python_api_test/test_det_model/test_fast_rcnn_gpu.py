@@ -103,7 +103,7 @@ def test_gpu_more_bz():
             im_shape_pool.append(im_shape)
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(model_file="./fast_rcnn/model.pdmodel", params_file="./fast_rcnn/model.pdiparams")
         test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=2e-5)
 
@@ -154,7 +154,7 @@ def test_gpu_mixed_precision_bz1():
             im_shape_pool.append(im_shape)
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(
             model_file="./fast_rcnn/model_mixed.pdmodel", params_file="./fast_rcnn/model_mixed.pdiparams"
         )
