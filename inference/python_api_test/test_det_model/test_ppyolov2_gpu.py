@@ -119,6 +119,7 @@ def test_gpu_more_bz():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
+@pytest.mark.skip(reason="检测框nms结果排序问题，暂时跳过")
 def test_gpu_mixed_precision_bz1():
     """
     compared gpu ppyolov2 more batch size 1 mixed_precision outputs with true val
