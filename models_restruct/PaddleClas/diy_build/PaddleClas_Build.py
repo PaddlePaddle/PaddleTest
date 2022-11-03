@@ -156,7 +156,7 @@ class PaddleClas_Build(Model_Build):
             os.chdir(self.reponame)
             os.chdir("deploy")
             if (
-                os.path.exists("recognition_demo_data_en_v1.1")
+                os.path.exists("recognition_demo_data_v1.1")
                 and os.path.exists("drink_dataset_v1.0")
                 and os.path.exists("drink_dataset_v2.0")
             ):
@@ -244,7 +244,12 @@ class PaddleClas_Build(Model_Build):
         os.environ["FLAGS_cudnn_deterministic"] = "True"
         logger.info("#### set FLAGS_cudnn_deterministic as {}".format(os.environ["FLAGS_cudnn_deterministic"]))
 
-        cmd_return = os.system("python -m pip install paddleclas")
+        path_now = os.getcwd()
+        os.chdir("PaddleClas")  # 执行setup要先切到路径下面
+        # cmd_return = os.system("python -m pip install paddleclas")
+        cmd_return = os.system("python setup.py install > paddleclas_install.log 2>&1 ")
+        os.chdir(path_now)
+
         if cmd_return:
             logger.info("repo {} python -m pip install paddleclas failed".format(self.reponame))
             # return 1
@@ -264,7 +269,7 @@ class PaddleClas_Build(Model_Build):
                 os.system("git checkout develop")
                 os.system("git pull")
                 os.system("python -m pip install -r requirements.txt")
-                cmd_return = os.system("python setup.py install")
+                cmd_return = os.system("python setup.py install > paddleslim_install.log 2>&1 ")
                 os.chdir(path_now)
             if cmd_return:
                 logger.info("repo {} python -m pip install paddleslim failed".format(self.reponame))
@@ -272,7 +277,7 @@ class PaddleClas_Build(Model_Build):
 
         if self.value_in_modellist(value="face") and self.value_in_modellist(value="metric_learning"):
             logger.info("#### face and metric_learning install")
-            cmd_return = os.system(" python -m  pip install -U pip setuptools cython")
+            cmd_return = os.system("python -m  pip install -U pip setuptools cython")
             if cmd_return:
                 logger.info("repo {} python -m pip install setuptools failed".format(self.reponame))
                 # return 1

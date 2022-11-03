@@ -67,4 +67,3 @@ ppcls-configs-PULC-person_exists-MobileNetV3_small_x0_35.yaml
 ppcls-configs-PULC-person_attribute-MobileNetV3_small_x0_35.yaml
 ppcls-configs-PULC-text_image_orientation-MobileNetV3_small_x0_35.yaml
 ppcls-configs-reid-strong_baseline-baseline.yaml
-ppcls-configs-metric_learning-adaface_ir18.yaml

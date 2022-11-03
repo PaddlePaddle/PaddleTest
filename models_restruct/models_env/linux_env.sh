@@ -90,6 +90,17 @@ else
 fi
 
 if [[ "${docker_flag}" == "" ]]; then
+
+    echo "before set_cuda: $set_cuda" #在docker外更改set_cuda从0开始计数, 在cce或线下已在docker中不执行
+    export set_cuda_back=${set_cuda};
+    array=(${set_cuda_back//,/ });
+    set_cuda=0;
+    for((i=1;i<${#array[@]};i++));
+    do
+    export set_cuda=${set_cuda},${i};
+    done
+    echo "after set_cuda: $set_cuda"
+
     ####创建docker
     set +x;
     docker_name="ce_${reponame}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
@@ -100,7 +111,8 @@ if [[ "${docker_flag}" == "" ]]; then
     echo "end kill docker"
     }
     trap 'docker_del' SIGTERM
-    NV_GPU=${set_cuda} nvidia-docker run -i   --rm \
+    ## 使用修改之前的set_cuda_back
+    NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
         --name=${docker_name} --net=host \
         --shm-size=128G \
         -v $(pwd):/workspace \
@@ -189,7 +201,7 @@ if [[ "${docker_flag}" == "" ]]; then
         python -c 'import sys; print(sys.version_info[:])';
         git --version;
         python -m pip install -r requirements.txt #预先安装依赖包
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
     " &
     wait $!
     exit $?
@@ -266,5 +278,5 @@ else
     python -c 'import sys; print(sys.version_info[:])';
     git --version;
     python -m pip install -r requirements.txt #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
 fi

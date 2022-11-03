@@ -4,7 +4,7 @@ case:
     train:
       -
         name: multi
-        cmd : -m paddle.distributed.launch tools/train.py
+        cmd: python -m paddle.distributed.launch tools/train.py
         params:
           - -o Global.epochs=5
           - -o Global.save_interval=5
@@ -19,7 +19,7 @@ case:
             evaluation: "="
       -
         name: single
-        cmd : tools/train.py
+        cmd: python tools/train.py
         params:
           - -o Global.epochs=2
           - -o Global.save_interval=2
@@ -34,7 +34,7 @@ case:
             evaluation: "="
       -
         name: multi_static
-        cmd : -m paddle.distributed.launch ppcls/static/train.py
+        cmd: python -m paddle.distributed.launch ppcls/static/train.py
         params:
           - -o Global.epochs=5
           - -o Global.save_interval=5
@@ -49,7 +49,7 @@ case:
             evaluation: "="
       -
         name: single_static
-        cmd : ppcls/static/train.py
+        cmd: python ppcls/static/train.py
         params:
           - -o Global.epochs=2
           - -o Global.save_interval=2
@@ -64,14 +64,14 @@ case:
             evaluation: "="
       -
         name: multi_convergence
-        cmd : -m paddle.distributed.launch tools/train.py
+        cmd: python -m paddle.distributed.launch tools/train.py
       -
         name: single_convergence
-        cmd : tools/train.py
+        cmd: python tools/train.py
     eval:
       -
         name: trained
-        cmd: -m paddle.distributed.launch tools/eval.py
+        cmd: python -m paddle.distributed.launch tools/eval.py
         params:
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -82,7 +82,7 @@ case:
             evaluation: "="
       -
         name: pretrained
-        cmd: -m paddle.distributed.launch tools/eval.py
+        cmd: python -m paddle.distributed.launch tools/eval.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -93,7 +93,7 @@ case:
             evaluation: "="
       -
         name: single_trained
-        cmd:  tools/eval.py
+        cmd: python tools/eval.py
         params:
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -104,7 +104,7 @@ case:
             evaluation: "="
       -
         name: single_pretrained
-        cmd:  tools/eval.py
+        cmd: python tools/eval.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -117,14 +117,14 @@ case:
     export:
       -
         name: trained
-        cmd: tools/export_model.py
+        cmd: python tools/export_model.py
         params:
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.save_inference_dir=${export_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
       -
         name: pretrained
-        cmd: tools/export_model.py
+        cmd: python tools/export_model.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${export_pretrained_model}
@@ -132,7 +132,7 @@ case:
     predict:
       -
         name: trained
-        cmd: python/predict_system.py
+        cmd: python python/predict_system.py
         params:
           - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
@@ -144,7 +144,7 @@ case:
             evaluation: "="
       -
         name: pretrained
-        cmd: python/predict_system.py
+        cmd: python python/predict_system.py
         params:
           - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
@@ -175,7 +175,7 @@ case:
         name: trained
       -
         name: pretrained
-        cmd:  tools/eval.py
+        cmd: python tools/eval.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -190,7 +190,7 @@ case:
         name: trained
       -
         name: pretrained
-        cmd: tools/export_model.py
+        cmd: python tools/export_model.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${export_pretrained_model}
@@ -200,7 +200,7 @@ case:
         name: trained
       -
         name: pretrained
-        cmd: python/predict_system.py
+        cmd: python python/predict_system.py
         params:
           - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
@@ -225,7 +225,7 @@ case:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
-        cmd:  tools/eval.py
+        cmd: python tools/eval.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -243,7 +243,7 @@ case:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
-        cmd: tools/export_model.py
+        cmd: python tools/export_model.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${export_pretrained_model}
@@ -256,7 +256,7 @@ case:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
-        cmd: python/predict_system.py
+        cmd: python python/predict_system.py
         params:
           - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}
@@ -282,7 +282,7 @@ case:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
-        cmd:  tools/eval.py
+        cmd: python tools/eval.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -300,7 +300,7 @@ case:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
-        cmd: tools/export_model.py
+        cmd: python tools/export_model.py
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${export_pretrained_model}
@@ -313,7 +313,7 @@ case:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
-        cmd: python/predict_system.py
+        cmd: python python/predict_system.py
         params:
           - -c configs/inference_general.yaml
           - -o Global.use_gpu=${set_cuda_flag}

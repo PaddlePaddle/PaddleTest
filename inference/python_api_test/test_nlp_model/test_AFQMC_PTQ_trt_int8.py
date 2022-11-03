@@ -44,6 +44,7 @@ def test_config():
 
 @pytest.mark.win
 @pytest.mark.server
+@pytest.mark.jetson
 @pytest.mark.trt_int8
 def test_trt_int8_bz1():
     """

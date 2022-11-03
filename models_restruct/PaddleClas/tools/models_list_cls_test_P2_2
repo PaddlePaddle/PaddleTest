@@ -15,7 +15,6 @@ ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x0_5.yaml
 ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x0_75.yaml
 ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x2_0.yaml
 ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x1_5.yaml
-ppcls-configs-ImageNet-RedNet-RedNet101.yaml
 ppcls-configs-ImageNet-RedNet-RedNet26.yaml
 ppcls-configs-ImageNet-RedNet-RedNet50.yaml
 ppcls-configs-ImageNet-HRNet-HRNet_W30_C.yaml

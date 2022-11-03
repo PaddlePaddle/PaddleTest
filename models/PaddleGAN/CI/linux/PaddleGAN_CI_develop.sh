@@ -292,7 +292,7 @@ ls output/$params_dir/ |head -n 2
 sleep 3
 if [[ ${model_flag} =~ "CE" ]]; then
     rm -rf output #清空多卡cache
-    if [[ ! ${line} =~ 'makeup' ]] || [[ ! ${line} =~ 'aotgan' ]]; then
+    if [[ ! ${line} =~ 'makeup' ]] && [[ ! ${line} =~ 'aotgan' ]]; then
         python tools/main.py --config-file $line \
             -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
             > $log_path/train/${model}_1card.log 2>&1

@@ -55,7 +55,7 @@ def test_gpu():
     test_suite = InferenceTest()
     test_suite.load_config(model_file="./lac/inference.pdmodel", params_file="./lac/inference.pdiparams")
     in1 = np.random.randint(0, 100, (1, 20)).astype(np.int64)
-    in2 = np.array([20])
+    in2 = np.array([20]).astype(np.int64)
     input_data_dict = {"token_ids": in1, "length": in2}
     output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
 
@@ -63,6 +63,39 @@ def test_gpu():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./lac/inference.pdmodel", params_file="./lac/inference.pdiparams")
+    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
+
+    del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.win
+@pytest.mark.server
+@pytest.mark.gpu
+@pytest.mark.skip(reason="混合精度推理结果为nan，待确认; release/2.4转换报错")
+def test_gpu_mixed_precision_bz1():
+    """
+    compared gpu lac mixed_precision outputs with true val
+    """
+    check_model_exist()
+
+    test_suite = InferenceTest()
+    if not os.path.exists("./lac/inference_mixed.pdmodel"):
+        test_suite.convert_to_mixed_precision_model(
+            src_model="./lac/inference.pdmodel",
+            src_params="./lac/inference.pdiparams",
+            dst_model="./lac/inference_mixed.pdmodel",
+            dst_params="./lac/inference_mixed.pdiparams",
+        )
+    test_suite.load_config(model_file="./lac/inference_mixed.pdmodel", params_file="./lac/inference_mixed.pdiparams")
+    in1 = np.random.randint(0, 100, (1, 20)).astype(np.int64)
+    in2 = np.array([20]).astype(np.int64)
+    input_data_dict = {"token_ids": in1, "length": in2}
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+
+    del test_suite  # destroy class to save memory
+
+    test_suite2 = InferenceTest()
+    test_suite2.load_config(model_file="./lac/inference_mixed.pdmodel", params_file="./lac/inference_mixed.pdiparams")
     test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
 
     del test_suite2  # destroy class to save memory
