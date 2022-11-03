@@ -1,5 +1,10 @@
+jupyter
+nbconvert
 paddlepaddle-gpu
 paddlenlp
 paddleocr
 paddle-pipelines==0.1.0
 rouge
+pytest
+wget
+json

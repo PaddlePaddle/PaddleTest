@@ -26,11 +26,11 @@ class PaddleClas_Collect(object):
         """
         self.repo_name = "PaddleClas"
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19795009/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19795007/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19795006/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19795005/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19795004/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861805/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861798/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861792/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861781/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861769/report/result.tar",
         }
         # self.report_linux_cuda102_py37_develop = {
         #     "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619465/report/result.tar"
@@ -44,6 +44,7 @@ class PaddleClas_Collect(object):
             "DeepHash": "ppcls-configs-DeepHash-DCH.yaml",
             "GeneralRecognition": "ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5.yaml",
             "Cartoonface": "ppcls-configs-Cartoonface-ResNet50_icartoon.yaml",
+            "GeneralRecognitionV2": "ppcls-configs-GeneralRecognitionV2-GeneralRecognitionV2_PPLCNetV2_base.yaml",
             "Logo": "ppcls-configs-Logo-ResNet50_ReID.yaml",
             "Products": "ppcls-configs-Products-ResNet50_vd_Inshop.yaml",
             "Vehicle": "ppcls-configs-Vehicle-ResNet50.yaml",
@@ -208,6 +209,19 @@ class PaddleClas_Collect(object):
                             content[case_value["model_name"]]["case"][case_value["system"]][
                                 case_value["tag"].split("_")[0]
                             ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
+                            if (
+                                "-HRNet" in case_value["model_name"]
+                                or "-LeViT" in case_value["model_name"]
+                                or "-SwinTransformer" in case_value["model_name"]
+                            ) and (
+                                case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"
+                            ):
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
                             # 这里进行替换时要考虑到全局变量如何替换
             # print('###content333', content)
             # print('###content333', type(content))
