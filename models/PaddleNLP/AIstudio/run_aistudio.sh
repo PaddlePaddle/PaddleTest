@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ###====install alluer====
 
-wget https://xly-devops.bj.bcebos.com/tools/allure-2.19.0.zip
+wget -q https://xly-devops.bj.bcebos.com/tools/allure-2.19.0.zip
 unzip allure-2.19.0.zip
 ln -s %{PWD}/allure-2.19.0/bin/allure  /usr/bin/allure
 
@@ -14,7 +14,9 @@ export JRE_HOME=$JAVA_HOME/jre
 export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
 export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 export PATH=/usr/bin/allure:$PATH
+which java
+which allure
 
-python -m pytest  -sv test_paddlenlp_aistudio.py::test_aistudio_case --alluredir=./result
+python -m pytest -sv test_paddlenlp_aistudio.py::test_aistudio_case --alluredir=./result
 
 python gen_allure_report.py
