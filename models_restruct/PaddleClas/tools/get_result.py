@@ -30,7 +30,7 @@ class PaddleClas_Collect(object):
             "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861798/report/result.tar",
             "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861792/report/result.tar",
             "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861781/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861769/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19894352/report/result.tar",
         }
         # self.report_linux_cuda102_py37_develop = {
         #     "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619465/report/result.tar"
