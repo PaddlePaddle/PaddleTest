@@ -25,6 +25,7 @@ class PaddleClas_Collect(object):
         初始化参数
         """
         self.repo_name = "PaddleClas"
+        #pytest结果下载地址
         self.report_linux_cuda102_py37_develop = {
             "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861805/report/result.tar",
             "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861798/report/result.tar",
