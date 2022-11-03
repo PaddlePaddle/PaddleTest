@@ -42,7 +42,6 @@ ppcls-configs-ImageNet-DLA-DLA60x_c.yaml
 ppcls-configs-ImageNet-DLA-DLA46x_c.yaml
 ppcls-configs-ImageNet-DLA-DLA60.yaml
 ppcls-configs-ImageNet-DLA-DLA102x.yaml
-ppcls-configs-ImageNet-RedNet-RedNet101.yaml
 ppcls-configs-ImageNet-RedNet-RedNet38.yaml
 ppcls-configs-ImageNet-RedNet-RedNet26.yaml
 ppcls-configs-ImageNet-RedNet-RedNet50.yaml
