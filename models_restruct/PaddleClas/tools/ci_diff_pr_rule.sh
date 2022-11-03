@@ -2,6 +2,7 @@
 find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \;| awk '{print $NF;}'| grep -v 'eval' \
     |grep -v 'ResNeXt101_32x48d_wsl' |grep -v 'ResNeSt101' |grep -v 'ConvNeXt' \
     |grep -v 'RedNet152' \
+    |grep -v 'RedNet101' \
     |grep -v 'PVT_V2_B4' \
     |grep -v 'DeiT_base_patch16_384' \
     |grep -v 'SwinTransformer_base_patch4_window12_384' \
