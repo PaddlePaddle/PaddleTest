@@ -47,10 +47,8 @@ def gen_allure_report():
         allure_bin = "allure"
     else:
         sysstr = platform.system()
-        bin_src = "https://xly-devops.bj.bcebos.com/tools/allure-2.19.0.zip"
-        bin_file = wget.download(bin_src)
-        zip_file = zipfile.ZipFile(bin_file, "a")
-        zip_file.extractall()
+        os.system('wget -q https://xly-devops.bj.bcebos.com/tools/allure-2.19.0.zip')
+        os.system('unzip allure-2.19.0.zip')
         allure_bin_f = "%s/allure-2.19.0/bin/allure" % (os.getcwd())
         st = os.stat(allure_bin_f)
         os.chmod(allure_bin_f, st.st_mode | stat.S_IEXEC)
