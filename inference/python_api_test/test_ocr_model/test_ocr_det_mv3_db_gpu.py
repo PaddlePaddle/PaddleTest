@@ -102,6 +102,7 @@ def test_gpu_more_bz():
 @pytest.mark.server
 @pytest.mark.gpu
 @pytest.mark.gpu_more
+@pytest.mark.skip(reason="混合精度推理结果 精度阈值待确认")
 def test_gpu_mixed_precision_bz1():
     """
     compared trt fp32 batch_size=1,2 ocr_det_mv3_db outputs with true val
