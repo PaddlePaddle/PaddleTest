@@ -19,4 +19,4 @@
 
 python -m pytest -sv test_paddlenlp_aistudio.py::test_aistudio_case --alluredir=./result
 
-python gen_allure_report.py
+python3.7 gen_allure_report.py
