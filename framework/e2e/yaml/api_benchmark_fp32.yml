@@ -15940,7 +15940,7 @@ stft_0:
     mapping:
       ins: { x: input, n_fft: n_fft }
 
-svd:
+svd_0:
   desc: "计算一个或一批矩阵的奇异值分解。"
   enable_backward: false
   paddle:
@@ -15959,7 +15959,7 @@ svd:
     mapping:
       ins: { x: input, full_matrices: compute_uv }
 
-symeig:
+symeig_0:
   desc: "计算厄米特矩阵或者实数对称矩阵的特征值和特征向量。"
   enable_backward: false
   paddle:
@@ -15978,7 +15978,7 @@ symeig:
     mapping:
       ins: { x: input }
 
-take_along_axis:
+take_along_axis_0:
   desc: "基于输入索引矩阵，沿着指定 axis 从 arr 矩阵里选取 1d 切片。"
   enable_backward: false
   paddle:
@@ -16003,7 +16003,7 @@ take_along_axis:
     mapping:
       ins: { arr: input, indices: indices, axis: dim }
 
-Tensor_acos:
+Tensor_acos_0:
   desc: "arccosine 函数。"
   paddle:
     api_name: "paddle.Tensor.acos"
@@ -16019,7 +16019,7 @@ Tensor_acos:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_acosh:
+Tensor_acosh_0:
   desc: "Arccosh 函数。"
   paddle:
     api_name: "paddle.Tensor.acosh"
@@ -16035,7 +16035,7 @@ Tensor_acosh:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_add_:
+#Tensor_add__0:
 #  desc: "逐元素相加算子，输入 x 与输入 y 逐元素相加，并将各个位置的输出元素保存到返回结果中。"
 #  paddle:
 #    api_name: "paddle.Tensor.add_"
@@ -16057,7 +16057,7 @@ Tensor_acosh:
 #    mapping:
 #      ins: { x: input, y: other }
 
-Tensor_addmm:
+Tensor_addmm_0:
   desc: "计算 x 和 y 的乘积，将结果乘以标量 alpha，再加上 input 与 beta 的乘积，得到输出。"
   paddle:
     api_name: "paddle.Tensor.addmm"
@@ -16088,7 +16088,7 @@ Tensor_addmm:
 #    mapping:
 #      ins: { input: input, x: mat1, y: mat2, beta: beta, alpha: alpha }
 
-Tensor_any:
+Tensor_any_0:
   desc: "对指定维度上的 Tensor 元素进行逻辑或运算，并输出相应的计算结果。"
   paddle:
     api_name: "paddle.Tensor.any"
@@ -16107,7 +16107,7 @@ Tensor_any:
 #    mapping:
 #      ins: { x: input, axis: dim, keepdim: keepdim }
 
-Tensor_arccos:
+Tensor_arccos_0:
   desc: "arccosine 函数。"
   paddle:
     api_name: "paddle.Tensor.acos"
@@ -16123,7 +16123,7 @@ Tensor_arccos:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_arccosh:
+Tensor_arccosh_0:
   desc: "Arccosh 函数。"
   paddle:
     api_name: "paddle.Tensor.acosh"
@@ -16139,7 +16139,7 @@ Tensor_arccosh:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_arcsin:
+Tensor_arcsin_0:
   desc: "arcsine 函数。"
   paddle:
     api_name: "paddle.Tensor.asin"
@@ -16155,7 +16155,7 @@ Tensor_arcsin:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_arcsinh:
+Tensor_arcsinh_0:
   desc: "Arcsinh 函数。"
   paddle:
     api_name: "paddle.Tensor.asinh"
@@ -16171,7 +16171,7 @@ Tensor_arcsinh:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_arctan:
+Tensor_arctan_0:
   desc: "arctangent 函数。"
   paddle:
     api_name: "paddle.Tensor.atan"
@@ -16187,7 +16187,7 @@ Tensor_arctan:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_arctanh:
+Tensor_arctanh_0:
   desc: "Arctanh 函数。"
   paddle:
     api_name: "paddle.Tensor.atanh"
@@ -16203,7 +16203,7 @@ Tensor_arctanh:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_asin:
+Tensor_asin_0:
   desc: "arcsine 函数。"
   paddle:
     api_name: "paddle.Tensor.asin"
@@ -16219,7 +16219,7 @@ Tensor_asin:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_asinh:
+Tensor_asinh_0:
   desc: "Arcsinh 函数。"
   paddle:
     api_name: "paddle.Tensor.asinh"
@@ -16235,7 +16235,7 @@ Tensor_asinh:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_atan:
+Tensor_atan_0:
   desc: "arctangent 函数。"
   paddle:
     api_name: "paddle.Tensor.atan"
@@ -16251,7 +16251,7 @@ Tensor_atan:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_atanh:
+Tensor_atanh_0:
   desc: "Arctanh 函数。"
   paddle:
     api_name: "paddle.Tensor.atanh"
@@ -16267,7 +16267,7 @@ Tensor_atanh:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_bitwise_and:
+Tensor_bitwise_and_0:
   desc: "对 Tensor x 和 y 逐元素进行 按位与 运算。"
   paddle:
     api_name: "paddle.Tensor.bitwise_and"
@@ -16285,13 +16285,13 @@ Tensor_bitwise_and:
         shape: [ 1, 1, 1, 1 ]
         range: [ -1, 1 ]
     params:
-      out: None
+      out:
 #  pytorch:
 #    api_name: "torch.Tensor.bitwise_and"
 #    mapping:
 #      ins: { x: input, y: other, out: out }
 
-Tensor_bitwise_not:
+Tensor_bitwise_not_0:
   desc: "对 Tensor x 逐元素进行 按位取反 运算。"
   paddle:
     api_name: "paddle.Tensor.bitwise_not"
@@ -16303,13 +16303,13 @@ Tensor_bitwise_not:
         shape: [1, 1, 1, 1]
         range: [ -1, 1]
     params:
-      out: None
+      out:
 #  pytorch:
 #    api_name: "torch.Tensor.bitwise_not"
 #    mapping:
 #      ins: { x: input, out: out }
 
-Tensor_bitwise_or:
+Tensor_bitwise_or_0:
   desc: "对 Tensor x 和 y 逐元素进行 按位或 运算。"
   paddle:
     api_name: "paddle.Tensor.bitwise_or"
@@ -16331,7 +16331,7 @@ Tensor_bitwise_or:
 #    mapping:
 #      ins: { x: input, y: other }
 
-Tensor_bitwise_xor:
+Tensor_bitwise_xor_0:
   desc: "对 Tensor x 和 y 逐元素进行 按位异或 运算。"
   paddle:
     api_name: "paddle.Tensor.bitwise_xor"
@@ -16353,7 +16353,7 @@ Tensor_bitwise_xor:
 #    mapping:
 #      ins: { x: input, y: other }
 
-#Tensor_ceil_:
+#Tensor_ceil__0:
 #  desc: "向上取整运算函数。"
 #  paddle:
 #    api_name: "paddle.Tensor.ceil_"
@@ -16369,7 +16369,7 @@ Tensor_bitwise_xor:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_cholesky:
+Tensor_cholesky_0:
   desc: "计算一个对称正定矩阵或一批对称正定矩阵的 Cholesky 分解"
   paddle:
     api_name: "paddle.Tensor.cholesky"
@@ -16387,7 +16387,7 @@ Tensor_cholesky:
 #    mapping:
 #      ins: { x: input, upper: upper }
 
-Tensor_cholesky_solve:
+Tensor_cholesky_solve_0:
   desc: "对 A @ X = B 的线性方程求解"
   paddle:
     api_name: "paddle.Tensor.cholesky_solve"
@@ -16411,7 +16411,7 @@ Tensor_cholesky_solve:
 #    mapping:
 #      ins: { x: input, y: input2, upper: upper }
 
-#Tensor_clamp_:
+#Tensor_clamp__0:
 #  desc: "将输入的所有元素进行剪裁，使得输出元素限制在[min, max]内"
 #  paddle:
 #    api_name: "paddle.Tensor.clip_"
@@ -16430,7 +16430,7 @@ Tensor_cholesky_solve:
 #    mapping:
 #      ins: { x: input, min: min, max: max }
 
-#Tensor_clip_:
+#Tensor_clip__0:
 #  desc: "将输入的所有元素进行剪裁，使得输出元素限制在[min, max]内"
 #  paddle:
 #    api_name: "paddle.Tensor.clip_"
@@ -16449,7 +16449,7 @@ Tensor_cholesky_solve:
 #    mapping:
 #      ins: { x: input, min: min, max: max }
 
-#Tensor_copy_:
+#Tensor_copy__0:
 #  desc: "对输入 Tensor x 进行拷贝，并返回一个新的 Tensor。"
 #  paddle:
 #    api_name: "paddle.Tensor.copy_"
@@ -16465,7 +16465,7 @@ Tensor_cholesky_solve:
 #    mapping:
 #      ins: { x: src }
 
-Tensor_corrcoef:
+Tensor_corrcoef_0:
   desc: "相关系数矩阵表示输入矩阵中每对变量的相关性。"
   paddle:
     api_name: "paddle.Tensor.corrcoef"
@@ -16483,7 +16483,7 @@ Tensor_corrcoef:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_deg2rad:
+Tensor_deg2rad_0:
   desc: "将元素从弧度的角度转换为度"
   paddle:
     api_name: "paddle.Tensor.deg2rad"
@@ -16499,7 +16499,7 @@ Tensor_deg2rad:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_diagonal:
+Tensor_diagonal_0:
   desc: "根据参数 offset、axis1、axis2，返回输入 Tensor 的局部视图。"
   paddle:
     api_name: "paddle.Tensor.diagonal"
@@ -16519,7 +16519,7 @@ Tensor_diagonal:
 #    mapping:
 #      ins: { x: input, offset: offset, axis1: dim1, axis2: dim2 }
 
-Tensor_digamma:
+Tensor_digamma_0:
   desc: "逐元素计算输入 Tensor 的 digamma 函数值"
   paddle:
     api_name: "paddle.Tensor.digamma"
@@ -16535,7 +16535,7 @@ Tensor_digamma:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_dist:
+Tensor_dist_0:
   desc: "计算 (x-y) 的 p 范数（p-norm）"
   paddle:
     api_name: "paddle.Tensor.dist"
@@ -16559,7 +16559,7 @@ Tensor_dist:
     mapping:
       ins: { x: input, y: other, p: p }
 
-Tensor_eig:
+Tensor_eig_0:
   desc: "计算一般方阵 x 的的特征值和特征向量。"
   enable_backward: false
   paddle:
@@ -16576,7 +16576,7 @@ Tensor_eig:
 #    mapping:
 #      ins: { x: A }
 
-Tensor_erf:
+Tensor_erf_0:
   desc: "逐元素计算 Erf 激活函数。"
   paddle:
     api_name: "paddle.Tensor.erf"
@@ -16592,7 +16592,7 @@ Tensor_erf:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_erfinv:
+Tensor_erfinv_0:
   desc: "计算输入矩阵 x 的逆误差函数。 "
   paddle:
     api_name: "paddle.Tensor.erfinv"
@@ -16608,7 +16608,7 @@ Tensor_erfinv:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_erfinv_:
+#Tensor_erfinv__0:
 #  desc: "计算输入矩阵 x 的逆误差函数。 "
 #  paddle:
 #    api_name: "paddle.Tensor.erfinv_"
@@ -16624,7 +16624,7 @@ Tensor_erfinv:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_exp_:
+#Tensor_exp__0:
 #  desc: "对输入，逐元素进行以自然数 e 为底指数运算。"
 #  paddle:
 #    api_name: "paddle.Tensor.exp_"
@@ -16640,7 +16640,7 @@ Tensor_erfinv:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_exponential_:
+#Tensor_exponential__0:
 #  desc: "通过 指数分布 随机数来填充该 Tensor。"
 #  paddle:
 #    api_name: "paddle.Tensor.exponential_"
@@ -16658,7 +16658,7 @@ Tensor_erfinv:
 #    mapping:
 #      ins: { x: input, lam: lambd }
 
-#Tensor_fill_diagonal_:
+#Tensor_fill_diagonal__0:
 #  desc: "以 value 值填充输入 Tensor x 的对角线元素值。"
 #  paddle:
 #    api_name: "paddle.Tensor.fill_diagonal_"
@@ -16678,7 +16678,7 @@ Tensor_erfinv:
 #    mapping:
 #      ins: { x: input, value: fill_value, wrap: wrap }
 
-#Tensor_floor_:
+#Tensor_floor__0:
 #  desc: "向下取整函数。"
 #  paddle:
 #    api_name: "paddle.Tensor.floor_"
@@ -16694,7 +16694,7 @@ Tensor_erfinv:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_floor_divide:
+Tensor_floor_divide_0:
   desc: "逐元素整除算子。"
   paddle:
     api_name: "paddle.Tensor.floor_divide"
@@ -16717,7 +16717,7 @@ Tensor_floor_divide:
 #    mapping:
 #      ins: { x: input, y: value }
 
-Tensor_fmax:
+Tensor_fmax_0:
   desc: "比较两个 Tensor 对应位置的元素，返回一个包含该元素最大值的新 Tensor。"
   paddle:
     api_name: "paddle.Tensor.fmax"
@@ -16740,7 +16740,7 @@ Tensor_fmax:
 #    mapping:
 #      ins: { x: input, y: other }
 
-Tensor_frac:
+Tensor_frac_0:
   desc: "得到输入 Tensor 的小数部分。"
   paddle:
     api_name: "paddle.Tensor.frac"
@@ -16756,7 +16756,7 @@ Tensor_frac:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_gcd:
+Tensor_gcd_0:
   desc: "计算两个输入的按元素绝对值的最大公约数"
   enable_backward: false
   paddle:
@@ -16780,7 +16780,7 @@ Tensor_gcd:
 #    mapping:
 #      ins: { x: input, y: other }
 
-Tensor_outer:
+Tensor_outer_0:
   desc: "计算两个 Tensor 的外积。"
   paddle:
     api_name: "paddle.Tensor.outer"
@@ -16803,7 +16803,7 @@ Tensor_outer:
 #    mapping:
 #      ins: { x: input, y: vec2 }
 
-Tensor_heaviside:
+Tensor_heaviside_0:
   desc: "为 x 中的每个元素计算由 y 中相对应元素决定的赫维赛德阶跃函数"
   paddle:
     api_name: "paddle.Tensor.heaviside"
@@ -16826,7 +16826,7 @@ Tensor_heaviside:
 #    mapping:
 #      ins: { x: input, y: values }
 
-Tensor_inverse:
+Tensor_inverse_0:
   desc: "计算方阵的逆。"
   paddle:
     api_name: "paddle.Tensor.inverse"
@@ -16842,7 +16842,7 @@ Tensor_inverse:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_kthvalue:
+Tensor_kthvalue_0:
   desc: "在指定的轴上查找第 k 小的元素和其对应所在的索引信息。"
   enable_backward: false
   paddle:
@@ -16862,7 +16862,7 @@ Tensor_kthvalue:
 #    mapping:
 #      ins: { x: input, k: k, axis: dim }
 
-Tensor_lcm:
+Tensor_lcm_0:
   desc: "计算两个输入的按元素绝对值的最小公倍数。"
   paddle:
     api_name: "paddle.Tensor.lcm"
@@ -16885,7 +16885,7 @@ Tensor_lcm:
 #    mapping:
 #      ins: { x: input, y: other }
 
-Tensor_less_equal:
+Tensor_less_equal_0:
   desc: "逐元素地返回 x<=y 的逻辑值"
   paddle:
     api_name: "paddle.Tensor.less_equal"
@@ -16908,7 +16908,7 @@ Tensor_less_equal:
 #    mapping:
 #      ins: { x: input, y: other }
 
-Tensor_lerp:
+Tensor_lerp_0:
   desc: "基于给定的 weight 计算 x 与 y 的线性插值"
   paddle:
     api_name: "paddle.Tensor.lerp"
@@ -16932,7 +16932,7 @@ Tensor_lerp:
 #    mapping:
 #      ins: { x: input, y: end, weight: weight }
 
-#Tensor_lerp_:
+#Tensor_lerp__0:
 #  desc: "基于给定的 weight 计算 x 与 y 的线性插值"
 #  paddle:
 #    api_name: "paddle.Tensor.lerp_"
@@ -16956,7 +16956,7 @@ Tensor_lerp:
 #    mapping:
 #      ins: { x: input, y: end, weight: weight }
 
-Tensor_lgamma:
+Tensor_lgamma_0:
   desc: "计算输入 x 的 gamma 函数的自然对数并返回。"
   paddle:
     api_name: "paddle.Tensor.lgamma"
@@ -16972,7 +16972,7 @@ Tensor_lgamma:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_logcumsumexp:
+Tensor_logcumsumexp_0:
   desc: "计算 x 的指数的前缀和的对数。"
   paddle:
     api_name: "paddle.Tensor.logcumsumexp"
@@ -16990,7 +16990,7 @@ Tensor_logcumsumexp:
 #    mapping:
 #      ins: { x: input, axis: dim }
 
-Tensor_logical_xor:
+Tensor_logical_xor_0:
   desc: "逐元素的对 X 和 Y 进行逻辑异或运算。"
   paddle:
     api_name: "paddle.Tensor.logical_xor"
@@ -17008,13 +17008,13 @@ Tensor_logical_xor:
         dtype: "float32"
         shape: [ 1, 1, 1, 1 ]
         range: [ -1, 1 ]
-      out: None
+      out:
 #  pytorch:
 #    api_name: "torch.Tensor.logical_xor"
 #    mapping:
 #      ins: { x: input, y: other, out: out }
 
-Tensor_logit:
+Tensor_logit_0:
   desc: "实现了 logit 层。"
   paddle:
     api_name: "paddle.Tensor.logit"
@@ -17032,7 +17032,7 @@ Tensor_logit:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_lstsq:
+Tensor_lstsq_0:
   desc: "求解线性方程组的最小二乘问题。"
   enable_backward: false
   paddle:
@@ -17055,7 +17055,7 @@ Tensor_lstsq:
 #    mapping:
 #      ins: { x: A, y: B, driver: driver }
 
-Tensor_lu:
+Tensor_lu_0:
   desc: "对输入的 N 维(N>=2)矩阵 x 进行 LU 分解。"
   enable_backward: false
   paddle:
@@ -17075,7 +17075,7 @@ Tensor_lu:
 #    mapping:
 #      ins: { x: A, pivot: pivot, get_infos: get_infos }
 
-Tensor_matrix_power:
+Tensor_matrix_power_0:
   desc: "计算一个或一批方阵的 n 次幂。"
   paddle:
     api_name: "paddle.Tensor.matrix_power"
@@ -17093,7 +17093,7 @@ Tensor_matrix_power:
 #    mapping:
 #      ins: { x: A, n: n }
 
-Tensor_mm:
+Tensor_mm_0:
   desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度, 但当任一输入维度大于3时, 两个输入的维度必须相等"
   paddle:
     api_name: "paddle.Tensor.mm"
@@ -17116,7 +17116,7 @@ Tensor_mm:
 #    mapping:
 #      ins: { input: input, mat2: mat2 }
 
-Tensor_mv:
+Tensor_mv_0:
   desc: "计算矩阵 x 和向量 vec 的乘积。"
   paddle:
     api_name: "paddle.Tensor.mv"
@@ -17137,7 +17137,7 @@ Tensor_mv:
 #    mapping:
 #      ins: {x: input, vec: vec }
 
-Tensor_nanquantile:
+Tensor_nanquantile_0:
   desc: "nanquantile计算"
   paddle:
     api_name: "paddle.Tensor.nanquantile"
@@ -17155,7 +17155,7 @@ Tensor_nanquantile:
     mapping:
       ins: { x: input, q: q }
 
-Tensor_slice:
+Tensor_slice_0:
   desc: "沿多个轴生成 input 的切片 0"
   paddle:
     api_name: "paddle.Tensor.slice"
@@ -17174,7 +17174,7 @@ Tensor_slice:
 #    mapping:
 #      ins: {x: input, axes: dim, starts: start, ends: length }
 
-Tensor_norm:
+Tensor_norm_0:
   desc: "计算一个或一批矩阵的正交三角分解，也称 QR 分解"
   paddle:
     api_name: "paddle.Tensor.norm"
@@ -17196,7 +17196,7 @@ Tensor_norm:
 #    mapping:
 #      ins: { x: A, p: ord, axis: dim, keepdim: keepdim }
 
-Tensor_qr:
+Tensor_qr_0:
   desc: "计算一个或一批矩阵的正交三角分解，也称 QR 分解"
   enable_backward: false
   paddle:
@@ -17217,7 +17217,7 @@ Tensor_qr:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_rad2deg:
+Tensor_rad2deg_0:
   desc: "将元素从弧度的角度转换为度"
   paddle:
     api_name: "paddle.Tensor.rad2deg"
@@ -17249,7 +17249,7 @@ Tensor_rad2deg:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_remainder:
+Tensor_remainder_0:
   desc: "逐元素取模算子。"
   paddle:
     api_name: "paddle.Tensor.remainder"
@@ -17272,7 +17272,7 @@ Tensor_remainder:
 #    mapping:
 #      ins: { x: input, y: other }
 
-Tensor_repeat_interleave:
+Tensor_repeat_interleave_0:
   desc: "沿着指定轴 axis 对输入 x 进行复制  0"
   paddle:
     api_name: "paddle.Tensor.repeat_interleave"
@@ -17290,7 +17290,7 @@ Tensor_repeat_interleave:
 #    mapping:
 #      ins: {x: input, repeats: repeats, axis: dim}
 
-#Tensor_round_:
+#Tensor_round__0:
 #  desc: "将输入中的数值四舍五入到最接近的整数数值"
 #  paddle:
 #    api_name: "paddle.Tensor.round_"
@@ -17306,7 +17306,7 @@ Tensor_repeat_interleave:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_rsqrt_:
+#Tensor_rsqrt__0:
 #  desc: "rsqrt激活函数"
 #  paddle:
 #    api_name: "paddle.Tensor.rsqrt_"
@@ -17322,7 +17322,7 @@ Tensor_repeat_interleave:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_sqrt_:
+#Tensor_sqrt__0:
 #  desc: "计算输入的算数平方根"
 #  paddle:
 #    api_name: "paddle.Tensor.sqrt_"
@@ -17338,7 +17338,7 @@ Tensor_repeat_interleave:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_squeeze_:
+#Tensor_squeeze__0:
 #  desc: "删除输入 Tensor 的 Shape 中尺寸为 1 的维度。"
 #  paddle:
 #    api_name: "paddle.Tensor.squeeze_"
@@ -17354,7 +17354,7 @@ Tensor_repeat_interleave:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_subtract_:
+#Tensor_subtract__0:
 #  desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中。"
 #  paddle:
 #    api_name: "paddle.Tensor.subtract_"
@@ -17377,7 +17377,7 @@ Tensor_repeat_interleave:
 #    mapping:
 #      ins: { x: input, y: other }
 
-Tensor_take_along_axis:
+Tensor_take_along_axis_0:
   desc: "基于输入索引矩阵，沿着指定 axis 从 arr 矩阵里选取 1d 切片。"
   paddle:
     api_name: "paddle.Tensor.take_along_axis"
@@ -17401,7 +17401,7 @@ Tensor_take_along_axis:
 #    mapping:
 #      ins: { arr: input, indices: indices, axis: dim }
 
-#Tensor_tanh_:
+#Tensor_tanh__0:
 #  desc: "tanh 激活函数"
 #  paddle:
 #    api_name: "paddle.Tensor.tanh_"
@@ -17417,7 +17417,7 @@ Tensor_take_along_axis:
 #    mapping:
 #      ins: { x: input }
 
-Tensor_trunc:
+Tensor_trunc_0:
   desc: "将输入 Tensor 的小数部分置0，返回置0后的 Tensor ，如果输入 Tensor 的数据类型为整数，则不做处理"
   paddle:
     api_name: "paddle.Tensor.trunc"
@@ -17433,7 +17433,7 @@ Tensor_trunc:
 #    mapping:
 #      ins: { input: input }
 
-Tensor_unbind:
+Tensor_unbind_0:
   desc: "将输入 Tensor 按照指定的维度分割成多个子 Tensor。"
   enable_backward: false
   paddle:
@@ -17452,7 +17452,7 @@ Tensor_unbind:
 #    mapping:
 #      ins: { input: input, axis: dim }
 
-Tensor_unique_consecutive:
+Tensor_unique_consecutive_0:
   desc: "将 Tensor 中连续重复的元素进行去重"
   paddle:
     api_name: "paddle.Tensor.unique_consecutive"
@@ -17472,7 +17472,7 @@ Tensor_unique_consecutive:
 #    mapping:
 #      ins: { x: input, return_inverse: return_inverse, return_counts: return_counts, axis: dim }
 
-#Tensor_unsqueeze_:
+#Tensor_unsqueeze__0:
 #  desc: "向输入 Tensor 的 Shape 中一个或多个位置（axis）插入尺寸为 1 的维度。"
 #  paddle:
 #    api_name: "paddle.Tensor.unsqueeze_"
@@ -17490,7 +17490,7 @@ Tensor_unique_consecutive:
 #    mapping:
 #      ins: { x: input, axis: dim }
 
-tensordot:
+tensordot_0:
   desc: "张量缩并运算，即沿着 axes 给定的多个轴对两个张量对应元素的乘积进行加和操作。"
   paddle:
     api_name: "paddle.tensordot"
@@ -17514,7 +17514,7 @@ tensordot:
     mapping:
       ins: { x: a, y: b, axes: dims }
 
-linalg_triangular_solve:
+linalg_triangular_solve_0:
   desc: "计算具有唯一解的线性方程组解，torch.triangular_solve替换为linalg.solve_triangular"
   paddle:
     api_name: "paddle.linalg.triangular_solve"
@@ -17540,7 +17540,7 @@ linalg_triangular_solve:
     mapping:
       ins: { x: input, y: B, upper: upper, transpose: left, unitriangular: unitriangular }
 
-tril_indices:
+tril_indices_0:
   desc: "返回行数和列数已知的二维矩阵中下三角矩阵元素的行列坐标"
   enable_backward: false
   paddle:
@@ -17554,7 +17554,7 @@ tril_indices:
     mapping:
       ins: { row: row, col: col, offset: offset }
 
-true_divide:
+true_divide_0:
   desc: "输入 x 与输入 y 逐元素相除，并将各个位置的输出元素保存到返回结果中"
   paddle:
     api_name: "paddle.divide"
@@ -17576,7 +17576,7 @@ true_divide:
     mapping:
       ins: { x: input, y: other }
 
-trunc_1:
+trunc_0:
   desc: "将输入 Tensor 的小数部分置0，返回置0后的 Tensor ，如果输入 Tensor 的数据类型为整数，则不做处理"
   paddle:
     api_name: "paddle.trunc"
@@ -17592,7 +17592,7 @@ trunc_1:
     mapping:
       ins: { input: input }
 
-unique_consecutive:
+unique_consecutive_0:
   desc: "将 Tensor 中连续重复的元素进行去重"
   enable_backward: false
   paddle:
@@ -17613,7 +17613,7 @@ unique_consecutive:
     mapping:
       ins: { x: input, return_inverse: return_inverse, return_counts: return_counts, axis: dim}
 
-as_complex:
+as_complex_0:
   desc: "将实数 Tensor 转为复数 Tensor"
   paddle:
     api_name: "paddle.as_complex"
@@ -17629,7 +17629,7 @@ as_complex:
     mapping:
       ins: {x: input}
 
-as_real:
+as_real_0:
   desc: "复数 Tensor 转为实数 Tensor"
   paddle:
     api_name: "paddle.as_real"
