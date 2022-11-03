@@ -137,7 +137,7 @@ def test_gpu_mixed_precision_bz1():
             params_file="./ocr_det_mv3_db/inference_mixed.pdiparams",
         )
 
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=2e-5)
+        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=3e-3)
 
         del test_suite2  # destroy class to save memory
 
