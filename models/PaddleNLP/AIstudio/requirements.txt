@@ -6,4 +6,5 @@ paddleocr
 paddle-pipelines==0.1.0
 rouge
 pytest
+allure-pytest
 simplejson
