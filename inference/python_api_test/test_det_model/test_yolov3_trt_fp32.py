@@ -86,7 +86,8 @@ def test_trtfp32_more_bz_multi_thread():
         for batch in range(1, batch_size * 2, 2):
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
-        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
+        # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
         test_suite.trt_bz1_multi_thread_test(
             input_data_dict, output_data_dict, repeat=1, delta=1e-4, precision="trt_fp32"
@@ -141,7 +142,8 @@ def test_trtfp32_more_bz():
         for batch in range(1, batch_size * 2, 2):
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
-        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
+        # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
         test_suite.trt_more_bz_test(
             input_data_dict, output_data_dict, repeat=1, max_batch_size=10, delta=1e-4, precision="trt_fp32"
@@ -195,7 +197,8 @@ def test_jetson_trt_fp32_more_bz():
         for batch in range(1, batch_size * 2, 2):
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
-        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
+        # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
         test_suite.trt_more_bz_test(
             input_data_dict, output_data_dict, repeat=1, max_batch_size=10, delta=1e-4, precision="trt_fp32"

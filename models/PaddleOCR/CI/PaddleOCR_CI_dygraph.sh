@@ -110,8 +110,8 @@ rm -rf models_list_all
 rm -rf models_list_det
 rm -rf models_list_rec
 
-find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'det_mv3_east' > models_list_det
-find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_resnet_stn_bilstm_att' > models_list_rec
+find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'det_mv3_east'| grep -v 'det_mv3_pse' > models_list_det
+find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_resnet_stn_bilstm_att' | grep -v 'rec_r32_gaspin_bilstm_att' > models_list_rec
 
 shuf models_list_det > models_list_all
 shuf models_list_rec >> models_list_all
@@ -140,7 +140,7 @@ if [[ ${1} =~ "pr" ]];then
 fi
 echo "######  diff models_list"
 cp models_list models_list_backup
-cat models_list_backup | sort | uniq | grep -v 'drrg_ctw' > models_list  #去重复
+cat models_list_backup | sort | uniq | grep -v 'drrg_ctw' | grep -v 'e2e_r50_vd_pg' | grep -v 'rec_resnet_rfl_att'> models_list  #去重复
 wc -l models_list
 cat models_list
 
@@ -520,7 +520,7 @@ quant_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -
 if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
    tar -xf ch_ppocr_mobile_v2.0_det_train.tar
-   python -m paddle.distributed.launch deploy/slim/prune/sensitivity_anal.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model="ch_ppocr_mobile_v2.0_det_train/best_accuracy" Global.save_model_dir=./output/prune_model/ Global.epoch_num=1 > $log_path/train/prune_ch_det_mv3_db_v2.0.log 2>&1
+   # python -m paddle.distributed.launch deploy/slim/prune/sensitivity_anal.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model="ch_ppocr_mobile_v2.0_det_train/best_accuracy" Global.save_model_dir=./output/prune_model/ Global.epoch_num=1 > $log_path/train/prune_ch_det_mv3_db_v2.0.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/prune_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
       echo -e "\033[33m training of prune successfully!\033[0m" | tee -a $log_path/result.log
    else
@@ -530,7 +530,7 @@ if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
    echo "======prune output directory======"
    ls ./output/prune_model/
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/sen.pickle
-   python deploy/slim/prune/export_prune_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./output/prune_model/latest Global.save_inference_dir=./prune/prune_inference_model > $log_path/export/prune_ch_det_mv3_db_v2.0.log 2>&1
+   # python deploy/slim/prune/export_prune_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./output/prune_model/latest Global.save_inference_dir=./prune/prune_inference_model > $log_path/export/prune_ch_det_mv3_db_v2.0.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/prune_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
       echo -e "\033[33m export_model of prune successfully!\033[0m" | tee -a $log_path/result.log
    else
@@ -542,14 +542,14 @@ fi
 if [[ ${quant_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
    tar -xf ch_ppocr_mobile_v2.0_det_train.tar
-   python deploy/slim/quantization/quant.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./ch_ppocr_mobile_v2.0_det_train/best_accuracy   Global.save_model_dir=./output/quant_model Global.epoch_num=1 > $log_path/train/quant_ch_det_mv3_db_v2.0.log 2>&1
+   # python deploy/slim/quantization/quant.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./ch_ppocr_mobile_v2.0_det_train/best_accuracy   Global.save_model_dir=./output/quant_model Global.epoch_num=1 > $log_path/train/quant_ch_det_mv3_db_v2.0.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/quant_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
       echo -e "\033[33m training of quant successfully!\033[0m" | tee -a $log_path/result.log
    else
       cat $log_path/train/quant_ch_det_mv3_db_v2.0.log
       echo -e "\033[31m training of quant failed!\033[0m" | tee -a $log_path/result.log
    fi
-   python deploy/slim/quantization/export_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.checkpoints=output/quant_model/latest Global.save_inference_dir=./output/quant_inference_model > $log_path/export/quant_ch_det_mv3_db_v2.0.log 2>&1
+   # python deploy/slim/quantization/export_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.checkpoints=output/quant_model/latest Global.save_inference_dir=./output/quant_inference_model > $log_path/export/quant_ch_det_mv3_db_v2.0.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/quant_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
       echo -e "\033[33m export_model of quant successfully!\033[0m" | tee -a $log_path/result.log
    else

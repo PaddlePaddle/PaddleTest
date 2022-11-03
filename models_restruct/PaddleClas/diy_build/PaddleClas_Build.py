@@ -247,7 +247,7 @@ class PaddleClas_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir("PaddleClas")  # 执行setup要先切到路径下面
         # cmd_return = os.system("python -m pip install paddleclas")
-        cmd_return = os.system("python setup.py install")
+        cmd_return = os.system("python setup.py install > paddleclas_install.log 2>&1 ")
         os.chdir(path_now)
 
         if cmd_return:
@@ -269,7 +269,7 @@ class PaddleClas_Build(Model_Build):
                 os.system("git checkout develop")
                 os.system("git pull")
                 os.system("python -m pip install -r requirements.txt")
-                cmd_return = os.system("python setup.py install")
+                cmd_return = os.system("python setup.py install > paddleslim_install.log 2>&1 ")
                 os.chdir(path_now)
             if cmd_return:
                 logger.info("repo {} python -m pip install paddleslim failed".format(self.reponame))
