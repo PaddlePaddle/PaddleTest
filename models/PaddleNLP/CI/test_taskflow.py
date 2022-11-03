@@ -171,3 +171,4 @@ if __name__ == "__main__":
     test_poetry()
     test_dialogue()
     test_uie()
+    test_summarizer()
