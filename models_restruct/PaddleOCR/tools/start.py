@@ -37,31 +37,26 @@ class PaddleOCR_Start(object):
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)  # 所有和yaml相关的变量与此拼接
         self.env_dict = {}
 
-
- 
-
     def prepare_config_params(self):
         """
         准备配置参数
         """
-        yaml_absolute_path=os.path.join(self.REPO_PATH, self.rd_yaml_path)
-        self.rd_config=yaml.load(open(yaml_absolute_path,'rb'), Loader=yaml.Loader)
-        algorithm=self.rd_config['Architecture']['algorithm']
+        yaml_absolute_path = os.path.join(self.REPO_PATH, self.rd_yaml_path)
+        self.rd_config = yaml.load(open(yaml_absolute_path, "rb"), Loader=yaml.Loader)
+        algorithm = self.rd_config["Architecture"]["algorithm"]
         self.env_dict["algorithm"] = algorithm
-         
-        if 'character_dict_path' in self.rd_config.keys():
-            rec_dict=self.rd_config['Global']['character_dict_path']
+
+        if "character_dict_path" in self.rd_config.keys():
+            rec_dict = self.rd_config["Global"]["character_dict_path"]
             if not rec_dict:
-                rec_dict='ppocr/utils/ic15_dict.txt'
+                rec_dict = "ppocr/utils/ic15_dict.txt"
             self.env_dict["rec_dict"] = rec_dict
 
-            image_shape_list=self.rd_config['Eval']['dataset']['transforms'][2]['RecResizeImg']['image_shape']
+            image_shape_list = self.rd_config["Eval"]["dataset"]["transforms"][2]["RecResizeImg"]["image_shape"]
             image_shape_list = [str(x) for x in image_shape_list]
-            image_shape=','.join((image_shape_list)) 
+            image_shape = ",".join((image_shape_list))
             self.env_dict["image_shape"] = image_shape
             print(image_shape)
-
-
 
     def build_prepare(self):
         """
