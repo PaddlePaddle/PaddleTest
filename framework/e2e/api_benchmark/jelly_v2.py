@@ -154,15 +154,26 @@ class Jelly_v2(object):
                 forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
                 self.forward_time.append(forward_time)
         elif self._layertypes(self.api) == "reload":
-            x = self.data["x"]
-            y = self.data["y"]
-            expression = self.reload.get(self.api).format("x", "y")
+            # 判断"reload" api中有一个输入还是两个输入
+            if "y" in self.data.keys():
+                x = self.data["x"]
+                y = self.data["y"]
+                expression = self.reload.get(self.api).format("x", "y")
+            else:
+                x = self.data["x"]
+                expression = self.reload.get(self.api).format("x")
 
             def func(x, y):
                 eval(expression)
 
+            def func_x(x):
+                eval(expression)
+
             for i in range(self.loops):
-                forward_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
+                if "y" in self.data.keys():
+                    forward_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
+                else:
+                    forward_time = timeit.timeit(lambda: func_x(x), number=self.base_times)
                 self.forward_time.append(forward_time)
         else:
             raise AttributeError
@@ -196,9 +207,13 @@ class Jelly_v2(object):
                 total_time = timeit.timeit(lambda: clas(self.data.values()), number=self.base_times)
                 self.total_time.append(total_time)
         elif self._layertypes(self.api) == "reload":
-            x = self.data["x"]
-            y = self.data["y"]
-            expression = self.reload.get(self.api).format("x", "y")
+            if "y" in self.data.keys():
+                x = self.data["x"]
+                y = self.data["y"]
+                expression = self.reload.get(self.api).format("x", "y")
+            else:
+                x = self.data["x"]
+                expression = self.reload.get(self.api).format("x")
             res = eval(expression)
             grad_tensor = paddle.ones(res.shape, res.dtype)
 
@@ -206,8 +221,15 @@ class Jelly_v2(object):
                 res = eval(expression)
                 res.backward(grad_tensor)
 
+            def func_x(x):
+                res = eval(expression)
+                res.backward(grad_tensor)
+
             for i in range(self.loops):
-                total_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
+                if "y" in self.data.keys():
+                    total_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
+                else:
+                    total_time = timeit.timeit(lambda: func_x(x), number=self.base_times)
                 self.total_time.append(total_time)
         else:
             raise AttributeError
