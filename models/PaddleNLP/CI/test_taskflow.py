@@ -150,6 +150,22 @@ def test_uie():
     ie("李治即位后，让身在感业寺的武则天续起头发，重新纳入后宫。")
 
 
+def test_summarizer():
+    """
+    test_summarizer
+    """
+    summarizer = Taskflow("text_summarization")
+    summarizer("2022年，中国房地产进入转型阵痛期，传统“高杠杆、快周转”的模式难以为继，万科甚至直接喊话，中国房地产进入“黑铁时代”")
+    summarizer(
+        [
+            "据悉，2022年教育部将围绕“巩固提高、深化落实、创新突破”三个关键词展开工作。要进一步强化学校教育主阵地作用，继续把落实“双减”作为学校工作的重中之重，\
+            重点从提高作业设计水平、提高课后服务水平、提高课堂教学水平、提高均衡发展水平四个方面持续巩固提高学校“双减”工作水平。",
+            "党参有降血脂，降血压的作用，可以彻底消除血液中的垃圾，从而对冠心病以及心血管疾病的患者都有一定的稳定预防工作作用，因此平时口服党参能远离三高的危害。\
+            另外党参除了益气养血，降低中枢神经作用，调整消化系统功能，健脾补肺的功能。",
+        ]
+    )
+
+
 if __name__ == "__main__":
     test_knowledge_mining()
     test_name_entity_recognition()
@@ -163,3 +179,4 @@ if __name__ == "__main__":
     test_poetry()
     test_dialogue()
     test_uie()
+    test_summarizer()

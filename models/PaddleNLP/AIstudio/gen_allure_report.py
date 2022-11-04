@@ -20,7 +20,6 @@ import subprocess
 import zipfile
 import stat
 import shutil
-import wget
 
 
 def make_tar(source_dir, output_filename):
