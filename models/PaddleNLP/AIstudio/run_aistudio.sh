@@ -1,22 +1,20 @@
 #!/usr/bin/env bash
-###====install alluer====
-
-# wget -q https://xly-devops.bj.bcebos.com/tools/allure-2.19.0.zip
-# unzip allure-2.19.0.zip
-# ln -s %{PWD}/allure-2.19.0/bin/allure  /usr/bin/allure
-
-# yum update -y > /dev/null
-# yum install curl -y
-# yum install -y nodejs > /dev/null
-# yum install -y java-1.8.0-openjdk-devel.x86_64 > /dev/null
-# export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
-# export JRE_HOME=$JAVA_HOME/jre
-# export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
-# export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
-# export PATH=/usr/bin/allure:$PATH
-# which java
-# which allure
-
+export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+export python_install_path=/opt/_internal/cpython-3.7.0/lib/python3.7/site-packages
+set +x
+export no_proxy=bcebos.com
+export http_proxy=${http_proxy}
+export https_proxy=${http_proxy}
+export CUDA_VISIBLE_DEVICES=${cudaid1}
+set -x
+python -m pip install --ignore-installed --upgrade pip
+python -m pip install  ${paddle_compile}
+python -m pip install  -r requirements.txt
+unset http_proxy
+unset https_proxy
+ls
+mkdir log
 python -m pytest -sv test_paddlenlp_aistudio.py::test_aistudio_case --alluredir=./result
 exit_code=$?
 python gen_allure_report.py
