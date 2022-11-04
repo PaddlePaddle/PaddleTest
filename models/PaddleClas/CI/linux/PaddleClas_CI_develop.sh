@@ -260,7 +260,7 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
                 wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl --no-proxy
             fi
             python -m pip install nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
-            python -m pip install nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl
+            # python -m pip install nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl
             export FLAGS_cudnn_deterministic=False #amp单独考虑，不能固定随机量，否则报错如下
 
             #增加静态图验证 只跑一个不放在循环中

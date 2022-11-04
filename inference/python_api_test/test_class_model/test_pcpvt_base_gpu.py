@@ -92,6 +92,46 @@ def test_gpu_more_bz():
         del test_suite2  # destroy class to save memory
 
 
+@pytest.mark.win
+@pytest.mark.server
+@pytest.mark.gpu
+def test_gpu_mixed_precision_bz1():
+    """
+    compared gpu batch_size=1 pcpvt_base mixed_precision outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./pcpvt_base"
+    images_size = 224
+    batch_size_pool = [1]
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        if not os.path.exists("./pcpvt_base/inference_mixed.pdmodel"):
+            test_suite.convert_to_mixed_precision_model(
+                src_model="./pcpvt_base/inference.pdmodel",
+                src_params="./pcpvt_base/inference.pdiparams",
+                dst_model="./pcpvt_base/inference_mixed.pdmodel",
+                dst_params="./pcpvt_base/inference_mixed.pdiparams",
+            )
+        test_suite.load_config(
+            model_file="./pcpvt_base/inference_mixed.pdmodel", params_file="./pcpvt_base/inference_mixed.pdiparams"
+        )
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        input_data_dict = {"x": fake_input}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+        del test_suite  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(
+            model_file="./pcpvt_base/inference_mixed.pdmodel", params_file="./pcpvt_base/inference_mixed.pdiparams"
+        )
+        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=2e-3)
+
+        del test_suite2  # destroy class to save memory
+
+
 @pytest.mark.jetson
 @pytest.mark.gpu
 def test_jetson_gpu_more_bz():
