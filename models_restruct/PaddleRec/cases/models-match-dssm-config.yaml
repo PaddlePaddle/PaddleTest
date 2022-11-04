@@ -45,7 +45,6 @@ case:
         name: static
         cmd: python -u tools/static_trainer.py
         
-
     infer:
       -
         name: dygraph
