@@ -15,6 +15,6 @@ export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
 export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 export PATH=/usr/bin/allure:$PATH
 
-python -m pytest  -sv test_aistudio.py::test_aistudio_case --alluredir=./result
+python -m pytest  -sv test_paddlenlp_aistudio.py::test_aistudio_case --alluredir=./result
 
 python gen_allure_report.py
