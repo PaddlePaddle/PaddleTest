@@ -9969,6 +9969,363 @@ reshape_2:
     mapping:
       ins: { x: input, shape: shape }
 
+__radd___0:
+  desc: "加法"
+  paddle:
+    api_name: "__radd__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__radd__"
+    mapping:
+      ins: { x: x, y: y }
+
+__radd___1:
+  desc: "加法"
+  paddle:
+    api_name: "__radd__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__radd__"
+    mapping:
+      ins: { x: x, y: y }
+
+__radd___2:
+  desc: "加法"
+  paddle:
+    api_name: "__radd__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__radd__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rdiv___0:
+  desc: "除法scalar/Tensor"
+  paddle:
+    api_name: "__rdiv__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rdiv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rdiv___1:
+  desc: "除法scalar/Tensor"
+  paddle:
+    api_name: "__rdiv__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rdiv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rdiv___2:
+  desc: "除法scalar/Tensor"
+  paddle:
+    api_name: "__rdiv__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rdiv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rmul___0:
+  desc: "乘法scalar*Tensor"
+  paddle:
+    api_name: "__rmul__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rmul__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rmul___1:
+  desc: "乘法scalar*Tensor"
+  paddle:
+    api_name: "__rmul__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rmul__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rmul___2:
+  desc: "乘法scalar*Tensor"
+  paddle:
+    api_name: "__rmul__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rmul__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rpow___0:
+  desc: "指数scalar**Tensor"
+  paddle:
+    api_name: "__rpow__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rpow__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rpow___1:
+  desc: "指数scalar**Tensor"
+  paddle:
+    api_name: "__rpow__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rpow__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rpow___2:
+  desc: "指数scalar**Tensor"
+  paddle:
+    api_name: "__rpow__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rpow__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rsub___0:
+  desc: "减法scalar - Tensor"
+  paddle:
+    api_name: "__rsub__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rsub__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rsub___1:
+  desc: "减法scalar - Tensor"
+  paddle:
+    api_name: "__rsub__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rsub__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rsub___2:
+  desc: "减法scalar - Tensor"
+  paddle:
+    api_name: "__rsub__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rsub__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rtruediv___0:
+  desc: "真除法scalar / Tensor"
+  paddle:
+    api_name: "__rtruediv__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rtruediv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rtruediv___1:
+  desc: "真除法scalar / Tensor"
+  paddle:
+    api_name: "__rtruediv__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rtruediv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__rtruediv___2:
+  desc: "真除法scalar / Tensor"
+  paddle:
+    api_name: "__rtruediv__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__rtruediv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__truediv___0:
+  desc: "除法Tensor / Tensor"
+  paddle:
+    api_name: "__truediv__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__truediv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__truediv___1:
+  desc: "除法Tensor / Tensor"
+  paddle:
+    api_name: "__truediv__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__truediv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__truediv___2:
+  desc: "除法Tensor / Tensor"
+  paddle:
+    api_name: "__truediv__"
+    inputs:
+      x: 1.0
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__truediv__"
+    mapping:
+      ins: { x: x, y: y }
+
 __add___0:
   desc: "加法"
   paddle:
@@ -9989,7 +10346,7 @@ __add___0:
   pytorch:
     api_name: "__add__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 normalize_0:
   desc: "使用 Lp 范数沿维度 axis 对 x 进行归一化"
@@ -10071,7 +10428,7 @@ __add___1:
   pytorch:
     api_name: "__add__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __add___2:
   desc: "加法"
@@ -10093,10 +10450,11 @@ __add___2:
   pytorch:
     api_name: "__add__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __and___0:
   desc: "&"
+  enable_backward: false
   paddle:
     api_name: "__and__"
     inputs:
@@ -10115,10 +10473,11 @@ __and___0:
   pytorch:
     api_name: "__and__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __and___1:
   desc: "&"
+  enable_backward: false
   paddle:
     api_name: "__and__"
     inputs:
@@ -10137,10 +10496,11 @@ __and___1:
   pytorch:
     api_name: "__and__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __and___2:
   desc: "&"
+  enable_backward: false
   paddle:
     api_name: "__and__"
     inputs:
@@ -10159,7 +10519,7 @@ __and___2:
   pytorch:
     api_name: "__and__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __div___0:
   desc: "/"
@@ -10181,7 +10541,7 @@ __div___0:
   pytorch:
     api_name: "__div__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __div___1:
   desc: "/"
@@ -10203,7 +10563,7 @@ __div___1:
   pytorch:
     api_name: "__div__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __div___2:
   desc: "/"
@@ -10225,11 +10585,12 @@ __div___2:
   pytorch:
     api_name: "__div__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 
 __eq___0:
   desc: "=="
+  enable_backward: false
   paddle:
     api_name: "__eq__"
     inputs:
@@ -10248,10 +10609,11 @@ __eq___0:
   pytorch:
     api_name: "__eq__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __eq___1:
   desc: "=="
+  enable_backward: false
   paddle:
     api_name: "__eq__"
     inputs:
@@ -10270,10 +10632,11 @@ __eq___1:
   pytorch:
     api_name: "__eq__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __eq___2:
   desc: "=="
+  enable_backward: false
   paddle:
     api_name: "__eq__"
     inputs:
@@ -10292,10 +10655,11 @@ __eq___2:
   pytorch:
     api_name: "__eq__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __floordiv___0:
   desc: "//"
+  enable_backward: false
   paddle:
     api_name: "__floordiv__"
     inputs:
@@ -10314,10 +10678,11 @@ __floordiv___0:
   pytorch:
     api_name: "__floordiv__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __floordiv___1:
   desc: "//"
+  enable_backward: false
   paddle:
     api_name: "__floordiv__"
     inputs:
@@ -10336,10 +10701,11 @@ __floordiv___1:
   pytorch:
     api_name: "__floordiv__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __floordiv___2:
   desc: "//"
+  enable_backward: false
   paddle:
     api_name: "__floordiv__"
     inputs:
@@ -10358,10 +10724,11 @@ __floordiv___2:
   pytorch:
     api_name: "__floordiv__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __ge___0:
   desc: ">="
+  enable_backward: false
   paddle:
     api_name: "__ge__"
     inputs:
@@ -10380,7 +10747,7 @@ __ge___0:
   pytorch:
     api_name: "__ge__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __ge___1:
   desc: ">="
@@ -10402,7 +10769,7 @@ __ge___1:
   pytorch:
     api_name: "__ge__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __ge___2:
   desc: ">="
@@ -10424,10 +10791,11 @@ __ge___2:
   pytorch:
     api_name: "__ge__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __gt___0:
   desc: ">"
+  enable_backward: false
   paddle:
     api_name: "__gt__"
     inputs:
@@ -10446,10 +10814,11 @@ __gt___0:
   pytorch:
     api_name: "__gt__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __gt___1:
   desc: ">"
+  enable_backward: false
   paddle:
     api_name: "__gt__"
     inputs:
@@ -10468,10 +10837,11 @@ __gt___1:
   pytorch:
     api_name: "__gt__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __gt___2:
   desc: ">"
+  enable_backward: false
   paddle:
     api_name: "__gt__"
     inputs:
@@ -10490,10 +10860,11 @@ __gt___2:
   pytorch:
     api_name: "__gt__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __lt___0:
   desc: "<"
+  enable_backward: false
   paddle:
     api_name: "__lt__"
     inputs:
@@ -10512,10 +10883,11 @@ __lt___0:
   pytorch:
     api_name: "__lt__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __lt___1:
   desc: "<"
+  enable_backward: false
   paddle:
     api_name: "__lt__"
     inputs:
@@ -10534,10 +10906,11 @@ __lt___1:
   pytorch:
     api_name: "__lt__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __lt___2:
   desc: "<"
+  enable_backward: false
   paddle:
     api_name: "__lt__"
     inputs:
@@ -10556,10 +10929,77 @@ __lt___2:
   pytorch:
     api_name: "__lt__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
+
+__matmul___0:
+  desc: "@"
+  paddle:
+    api_name: "__matmul__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1]
+        range: [ -1, 1 ]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__matmul__"
+    mapping:
+      ins: { x: x, y: y }
+
+__matmul___1:
+  desc: "@"
+  paddle:
+    api_name: "__matmul__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10]
+        range: [ -1, 1 ]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__matmul__"
+    mapping:
+      ins: { x: x, y: y }
+
+__matmul___2:
+  desc: "@"
+  paddle:
+    api_name: "__matmul__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10]
+        range: [ -1, 1 ]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__matmul__"
+    mapping:
+      ins: { x: x, y: y }
 
 __le___0:
   desc: "<="
+  enable_backward: false
   paddle:
     api_name: "__le__"
     inputs:
@@ -10578,10 +11018,11 @@ __le___0:
   pytorch:
     api_name: "__le__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __le___1:
   desc: "<="
+  enable_backward: false
   paddle:
     api_name: "__le__"
     inputs:
@@ -10600,10 +11041,11 @@ __le___1:
   pytorch:
     api_name: "__le__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __le___2:
   desc: "<="
+  enable_backward: false
   paddle:
     api_name: "__le__"
     inputs:
@@ -10622,10 +11064,11 @@ __le___2:
   pytorch:
     api_name: "__le__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __mod___0:
   desc: "%"
+  enable_backward: false
   paddle:
     api_name: "__mod__"
     inputs:
@@ -10644,10 +11087,11 @@ __mod___0:
   pytorch:
     api_name: "__mod__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __mod___1:
   desc: "%"
+  enable_backward: false
   paddle:
     api_name: "__mod__"
     inputs:
@@ -10666,10 +11110,11 @@ __mod___1:
   pytorch:
     api_name: "__mod__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __mod___2:
   desc: "%"
+  enable_backward: false
   paddle:
     api_name: "__mod__"
     inputs:
@@ -10688,7 +11133,7 @@ __mod___2:
   pytorch:
     api_name: "__mod__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __mul___0:
   desc: "*"
@@ -10710,7 +11155,7 @@ __mul___0:
   pytorch:
     api_name: "__mul__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __mul___1:
   desc: "*"
@@ -10732,7 +11177,7 @@ __mul___1:
   pytorch:
     api_name: "__mul__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __mul___2:
   desc: "*"
@@ -10754,11 +11199,11 @@ __mul___2:
   pytorch:
     api_name: "__mul__"
     mapping:
-      ins: { x: x, shape: y }
-
+      ins: { x: x, y: y }
 
 __ne___0:
   desc: "!="
+  enable_backward: false
   paddle:
     api_name: "__ne__"
     inputs:
@@ -10777,10 +11222,11 @@ __ne___0:
   pytorch:
     api_name: "__ne__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __ne___1:
   desc: "!="
+  enable_backward: false
   paddle:
     api_name: "__ne__"
     inputs:
@@ -10799,10 +11245,11 @@ __ne___1:
   pytorch:
     api_name: "__ne__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __ne___2:
   desc: "!="
+  enable_backward: false
   paddle:
     api_name: "__ne__"
     inputs:
@@ -10821,10 +11268,59 @@ __ne___2:
   pytorch:
     api_name: "__ne__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
+
+__neg___0:
+  desc: "取负"
+  paddle:
+    api_name: "__neg__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__neg__"
+    mapping:
+      ins: { x: x, }
+
+__neg___1:
+  desc: "取负"
+  paddle:
+    api_name: "__neg__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__neg__"
+    mapping:
+      ins: { x: x, }
+
+__neg___2:
+  desc: "取负"
+  paddle:
+    api_name: "__neg__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__neg__"
+    mapping:
+      ins: { x: x, }
 
 __or___0:
   desc: "|"
+  enable_backward: false
   paddle:
     api_name: "__or__"
     inputs:
@@ -10843,10 +11339,11 @@ __or___0:
   pytorch:
     api_name: "__or__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __or___1:
   desc: "|"
+  enable_backward: false
   paddle:
     api_name: "__or__"
     inputs:
@@ -10865,10 +11362,11 @@ __or___1:
   pytorch:
     api_name: "__or__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __or___2:
   desc: "|"
+  enable_backward: false
   paddle:
     api_name: "__or__"
     inputs:
@@ -10887,7 +11385,7 @@ __or___2:
   pytorch:
     api_name: "__or__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __pow___0:
   desc: "**"
@@ -10909,7 +11407,7 @@ __pow___0:
   pytorch:
     api_name: "__pow__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __pow___1:
   desc: "**"
@@ -10931,7 +11429,7 @@ __pow___1:
   pytorch:
     api_name: "__pow__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __pow___2:
   desc: "**"
@@ -10953,7 +11451,7 @@ __pow___2:
   pytorch:
     api_name: "__pow__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __sub___0:
   desc: "-"
@@ -10975,7 +11473,7 @@ __sub___0:
   pytorch:
     api_name: "__sub__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __sub___1:
   desc: "-"
@@ -10997,7 +11495,7 @@ __sub___1:
   pytorch:
     api_name: "__sub__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __sub___2:
   desc: "-"
@@ -11019,10 +11517,11 @@ __sub___2:
   pytorch:
     api_name: "__sub__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __xor___0:
   desc: "^"
+  enable_backward: false
   paddle:
     api_name: "__xor__"
     inputs:
@@ -11041,10 +11540,11 @@ __xor___0:
   pytorch:
     api_name: "__xor__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __xor___1:
   desc: "^"
+  enable_backward: false
   paddle:
     api_name: "__xor__"
     inputs:
@@ -11063,10 +11563,11 @@ __xor___1:
   pytorch:
     api_name: "__xor__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 __xor___2:
   desc: "^"
+  enable_backward: false
   paddle:
     api_name: "__xor__"
     inputs:
@@ -11085,7 +11586,7 @@ __xor___2:
   pytorch:
     api_name: "__xor__"
     mapping:
-      ins: { x: x, shape: y }
+      ins: { x: x, y: y }
 
 acos_0:
   desc: "arccosine函数"

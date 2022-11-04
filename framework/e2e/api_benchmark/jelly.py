@@ -273,7 +273,7 @@ class Jelly(object):
                 grad_tensor = torch.ones(res.shape, dtype=res.dtype)
 
             def clas(input_param):
-                """ lambda clas"""
+                """lambda clas"""
                 res = obj(*input_param)
                 res.backward(grad_tensor)
 
