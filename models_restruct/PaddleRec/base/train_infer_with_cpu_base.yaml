@@ -3,7 +3,6 @@ train:
     - -m ${rd_yaml_path}
     - -o runner.use_gpu=False
 
-
 infer:
   params:
     - -m ${rd_yaml_path}
