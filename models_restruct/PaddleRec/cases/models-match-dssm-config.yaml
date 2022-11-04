@@ -50,6 +50,7 @@ case:
       -
         name: dygraph
         cmd: python -u tools/infer.py
+        
       -
         name: static
         cmd: python -u tools/static_infer.py
