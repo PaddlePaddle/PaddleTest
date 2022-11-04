@@ -44,7 +44,6 @@ def download_project_files():
     output = subprocess.getstatusoutput("cd AIstudio_Download && python ./aistudio_client.py")
     with open(log_path + "download.log", "a") as flog:
         flog.write("%s" % (output[1]))
-    assert output[0] == 0, "download failed !"
 
 
 def get_project_list():
