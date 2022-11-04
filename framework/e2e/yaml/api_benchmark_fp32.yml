@@ -10280,7 +10280,12 @@ __truediv___0:
   paddle:
     api_name: "__truediv__"
     inputs:
-      x: 1.0
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
       y:
         random: true
         type: "Tensor"
@@ -10297,7 +10302,12 @@ __truediv___1:
   paddle:
     api_name: "__truediv__"
     inputs:
-      x: 1.0
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10 ]
+        range: [ -1, 1 ]
       y:
         random: true
         type: "Tensor"
@@ -10314,7 +10324,12 @@ __truediv___2:
   paddle:
     api_name: "__truediv__"
     inputs:
-      x: 1.0
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
       y:
         random: true
         type: "Tensor"
@@ -10326,25 +10341,54 @@ __truediv___2:
     mapping:
       ins: { x: x, y: y }
 
-__add___0:
-  desc: "加法"
+__truediv__scalar_0:
+  desc: "除法Tensor / scalar"
   paddle:
-    api_name: "__add__"
+    api_name: "__truediv__"
     inputs:
       x:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [ 1, 1, 1, 1]
+        shape: [ 1, 1, 1, 1 ]
         range: [ -1, 1 ]
-      y:
+      y: 1.0
+  pytorch:
+    api_name: "__truediv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__truediv__scalar_1:
+  desc: "除法Tensor / scalar"
+  paddle:
+    api_name: "__truediv__"
+    inputs:
+      x:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [ 1, 1, 1, 1 ]
+        shape: [ 10, 10, 10, 10 ]
         range: [ -1, 1 ]
+      y: 1.0
   pytorch:
-    api_name: "__add__"
+    api_name: "__truediv__"
+    mapping:
+      ins: { x: x, y: y }
+
+__truediv__scalar_2:
+  desc: "除法Tensor / scalar"
+  paddle:
+    api_name: "__truediv__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100 ]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__truediv__"
     mapping:
       ins: { x: x, y: y }
 
@@ -10408,8 +10452,30 @@ normalize_2:
     mapping:
       ins: { x: input, axis: dim, p: p, epsilon: eps }
 
+__add___0:
+  desc: "加法tensor + tensor"
+  paddle:
+    api_name: "__add__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1]
+        range: [ -1, 1 ]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__add__"
+    mapping:
+      ins: { x: x, y: y }
+
 __add___1:
-  desc: "加法"
+  desc: "加法tensor + tensor"
   paddle:
     api_name: "__add__"
     inputs:
@@ -10431,7 +10497,7 @@ __add___1:
       ins: { x: x, y: y }
 
 __add___2:
-  desc: "加法"
+  desc: "加法tensor + tensor"
   paddle:
     api_name: "__add__"
     inputs:
@@ -10447,6 +10513,57 @@ __add___2:
         dtype: "float32"
         shape: [10, 10, 100, 100]
         range: [ -1, 1 ]
+  pytorch:
+    api_name: "__add__"
+    mapping:
+      ins: { x: x, y: y }
+
+__add__scalar_0:
+  desc: "加法tensor + scalar"
+  paddle:
+    api_name: "__add__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__add__"
+    mapping:
+      ins: { x: x, y: y }
+
+__add__scalar_1:
+  desc: "加法tensor + scalar"
+  paddle:
+    api_name: "__add__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__add__"
+    mapping:
+      ins: { x: x, y: y }
+
+__add__scalar_2:
+  desc: "加法tensor + scalar"
+  paddle:
+    api_name: "__add__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100]
+        range: [ -1, 1 ]
+      y: 1.0
   pytorch:
     api_name: "__add__"
     mapping:
@@ -10522,7 +10639,7 @@ __and___2:
       ins: { x: x, y: y }
 
 __div___0:
-  desc: "/"
+  desc: "除法 tensor / tensor"
   paddle:
     api_name: "__div__"
     inputs:
@@ -10544,7 +10661,7 @@ __div___0:
       ins: { x: x, y: y }
 
 __div___1:
-  desc: "/"
+  desc: "除法 tensor / tensor"
   paddle:
     api_name: "__div__"
     inputs:
@@ -10566,7 +10683,7 @@ __div___1:
       ins: { x: x, y: y }
 
 __div___2:
-  desc: "/"
+  desc: "除法 tensor / tensor"
   paddle:
     api_name: "__div__"
     inputs:
@@ -10587,6 +10704,56 @@ __div___2:
     mapping:
       ins: { x: x, y: y }
 
+__div__scalar_0:
+  desc: "除法 tensor / scalar"
+  paddle:
+    api_name: "__div__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__div__"
+    mapping:
+      ins: { x: x, y: y }
+
+__div__scalar_1:
+  desc: "除法 tensor / scalar"
+  paddle:
+    api_name: "__div__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__div__"
+    mapping:
+      ins: { x: x, y: y }
+
+__div__scalar_2:
+  desc: "除法 tensor / scalar"
+  paddle:
+    api_name: "__div__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__div__"
+    mapping:
+      ins: { x: x, y: y }
 
 __eq___0:
   desc: "=="
@@ -11136,7 +11303,7 @@ __mod___2:
       ins: { x: x, y: y }
 
 __mul___0:
-  desc: "*"
+  desc: "乘法 tensor * tensor"
   paddle:
     api_name: "__mul__"
     inputs:
@@ -11158,7 +11325,7 @@ __mul___0:
       ins: { x: x, y: y }
 
 __mul___1:
-  desc: "*"
+  desc: "乘法 tensor * tensor"
   paddle:
     api_name: "__mul__"
     inputs:
@@ -11180,7 +11347,7 @@ __mul___1:
       ins: { x: x, y: y }
 
 __mul___2:
-  desc: "*"
+  desc: "乘法 tensor * tensor"
   paddle:
     api_name: "__mul__"
     inputs:
@@ -11196,6 +11363,57 @@ __mul___2:
         dtype: "float32"
         shape: [10, 10, 100, 100]
         range: [ -1, 1 ]
+  pytorch:
+    api_name: "__mul__"
+    mapping:
+      ins: { x: x, y: y }
+
+__mul__scalar_0:
+  desc: "乘法 tensor * scalar"
+  paddle:
+    api_name: "__mul__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__mul__"
+    mapping:
+      ins: { x: x, y: y }
+
+__mul__scalar_1:
+  desc: "乘法 tensor * scalar"
+  paddle:
+    api_name: "__mul__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__mul__"
+    mapping:
+      ins: { x: x, y: y }
+
+__mul__scalar_2:
+  desc: "乘法 tensor * scalar"
+  paddle:
+    api_name: "__mul__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100]
+        range: [ -1, 1 ]
+      y: 1.0
   pytorch:
     api_name: "__mul__"
     mapping:
@@ -11388,7 +11606,7 @@ __or___2:
       ins: { x: x, y: y }
 
 __pow___0:
-  desc: "**"
+  desc: "幂次 tensor ** tensor"
   paddle:
     api_name: "__pow__"
     inputs:
@@ -11410,7 +11628,7 @@ __pow___0:
       ins: { x: x, y: y }
 
 __pow___1:
-  desc: "**"
+  desc: "幂次 tensor ** tensor"
   paddle:
     api_name: "__pow__"
     inputs:
@@ -11432,7 +11650,7 @@ __pow___1:
       ins: { x: x, y: y }
 
 __pow___2:
-  desc: "**"
+  desc: "幂次 tensor ** tensor"
   paddle:
     api_name: "__pow__"
     inputs:
@@ -11453,8 +11671,59 @@ __pow___2:
     mapping:
       ins: { x: x, y: y }
 
+__pow__scalar_0:
+  desc: "幂次 tensor ** scalar"
+  paddle:
+    api_name: "__pow__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__pow__"
+    mapping:
+      ins: { x: x, y: y }
+
+__pow__scalar_1:
+  desc: "幂次 tensor ** scalar"
+  paddle:
+    api_name: "__pow__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__pow__"
+    mapping:
+      ins: { x: x, y: y }
+
+__pow__scalar_2:
+  desc: "幂次 tensor ** scalar"
+  paddle:
+    api_name: "__pow__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__pow__"
+    mapping:
+      ins: { x: x, y: y }
+
 __sub___0:
-  desc: "-"
+  desc: "减法 tensor - tensor"
   paddle:
     api_name: "__sub__"
     inputs:
@@ -11476,7 +11745,7 @@ __sub___0:
       ins: { x: x, y: y }
 
 __sub___1:
-  desc: "-"
+  desc: "减法 tensor - tensor"
   paddle:
     api_name: "__sub__"
     inputs:
@@ -11498,7 +11767,7 @@ __sub___1:
       ins: { x: x, y: y }
 
 __sub___2:
-  desc: "-"
+  desc: "减法 tensor - tensor"
   paddle:
     api_name: "__sub__"
     inputs:
@@ -11514,6 +11783,57 @@ __sub___2:
         dtype: "float32"
         shape: [10, 10, 100, 100]
         range: [ -1, 1 ]
+  pytorch:
+    api_name: "__sub__"
+    mapping:
+      ins: { x: x, y: y }
+
+__sub__scalar_0:
+  desc: "减法 tensor - scalar"
+  paddle:
+    api_name: "__sub__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__sub__"
+    mapping:
+      ins: { x: x, y: y }
+
+__sub__scalar_1:
+  desc: "减法 tensor - scalar"
+  paddle:
+    api_name: "__sub__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 10, 10]
+        range: [ -1, 1 ]
+      y: 1.0
+  pytorch:
+    api_name: "__sub__"
+    mapping:
+      ins: { x: x, y: y }
+
+__sub__scalar_2:
+  desc: "减法 tensor - scalar"
+  paddle:
+    api_name: "__sub__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 10, 10, 100, 100]
+        range: [ -1, 1 ]
+      y: 1.0
   pytorch:
     api_name: "__sub__"
     mapping:
