@@ -27,14 +27,19 @@ class PaddleClas_Collect(object):
         self.repo_name = "PaddleClas"
         # pytest结果下载地址
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861805/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861798/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861792/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19861781/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19894352/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909325/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909324/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909323/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909322/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909321/report/result.tar",
         }
+
         # self.report_linux_cuda102_py37_develop = {
         #     "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619465/report/result.tar"
+        # }
+
+        # self.report_linux_cuda102_py37_develop = {
+        #     "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909321/report/result.tar"
         # }
 
         self.report_linux_cuda102_py37_release = {}
@@ -151,11 +156,14 @@ class PaddleClas_Collect(object):
         其实可以在这一步把QA需要替换的全局变量给替换了,就不需要框架来做了,重组下qa的yaml
         kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
-        cmd = "wget https://xly-devops.bj.bcebos.com/PaddleTest/{}.tar.gz --no-proxy \
-            && tar xf {}.tar.gz".format(
-            self.repo_name, self.repo_name
-        )
-        os.system(cmd)  # 下载并解压PaddleClas
+        if os.path.exists(self.repo_name):
+            print("#### already download {}".format(self.repo_name))
+        else:
+            cmd = "wget https://xly-devops.bj.bcebos.com/PaddleTest/{}.tar.gz --no-proxy \
+                && tar xf {}.tar.gz".format(
+                self.repo_name, self.repo_name
+            )
+            os.system(cmd)  # 下载并解压PaddleClas
 
         self.get_result_yaml()  # 更新yaml
         for (key, value) in self.base_yaml_dict.items():
@@ -210,6 +218,8 @@ class PaddleClas_Collect(object):
                             content[case_value["model_name"]]["case"][case_value["system"]][
                                 case_value["tag"].split("_")[0]
                             ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
+                            # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer
+
                             if (
                                 "-HRNet" in case_value["model_name"]
                                 or "-LeViT" in case_value["model_name"]
@@ -223,6 +233,40 @@ class PaddleClas_Collect(object):
                                 content[case_value["model_name"]]["case"][case_value["system"]][
                                     case_value["tag"].split("_")[0]
                                 ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
+
+                            # 处理存在随机量导致每次infer_trained结果不一致的情况
+                            if (
+                                (
+                                    "-HRNet" in case_value["model_name"]
+                                    or "-LeViT" in case_value["model_name"]
+                                    or "-SwinTransformer" in case_value["model_name"]
+                                )
+                                and (
+                                    case_value["tag"].split("_")[0] == "infer"
+                                    or case_value["tag"].split("_")[0] == "predict"
+                                )
+                                and tag_value["name"] == "trained"
+                            ):
+                                try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
+                                    dict_tmp = content[case_value["model_name"]]["case"][case_value["system"]][
+                                        case_value["tag"].split("_")[0]
+                                    ][index]["result"]
+                                    dict_tmp.update({"exit_code": dict_tmp.pop("class_ids")})
+                                    content[case_value["model_name"]]["case"][case_value["system"]][
+                                        case_value["tag"].split("_")[0]
+                                    ][index]["result"] = dict_tmp
+
+                                    content[case_value["model_name"]]["case"][case_value["system"]][
+                                        case_value["tag"].split("_")[0]
+                                    ][index]["result"]["exit_code"]["base"] = 0
+                                    content[case_value["model_name"]]["case"][case_value["system"]][
+                                        case_value["tag"].split("_")[0]
+                                    ][index]["result"]["exit_code"]["threshold"] = 0
+                                    content[case_value["model_name"]]["case"][case_value["system"]][
+                                        case_value["tag"].split("_")[0]
+                                    ][index]["result"]["exit_code"]["evaluation"] = "="
+                                except:
+                                    print("###can not change class_ids to exit_code")
                             # 这里进行替换时要考虑到全局变量如何替换
             # print('###content333', content)
             # print('###content333', type(content))
@@ -249,6 +293,7 @@ def run():
 
     model = PaddleClas_Collect()
     model.update_kpi()
+    # print("暂时关闭清理！！！！")
     model.clean_report()
     return 0
 
