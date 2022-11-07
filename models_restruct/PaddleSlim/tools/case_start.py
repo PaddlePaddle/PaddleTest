@@ -15,6 +15,7 @@ class PaddleSlim_Start(object):
             content = yaml.load(f, Loader=yaml.FullLoader)
         content["TrainConfig"]["train_iter"] = 50
         content["TrainConfig"]["eval_iter"] = 10
+        content["Global"]["model_dir"] = './ppyoloe_crn_l_300e_coco'
         with open(os.path.join(self.REPO_PATH, yaml_path), "w") as f:
             yaml.dump(content, f)
         return 0
