@@ -1,6 +1,13 @@
+# !/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-Test PaddleNLP AIstudio
-case from https://aistudio.baidu.com/aistudio/personalcenter/thirdview/574995
+/***************************************************************************
+  *
+  * Copyright (c) 2022 Baidu.com, Inc. All Rights Reserved
+  * @brief Test PaddleNLP AIstudio
+  * case from https://aistudio.baidu.com/aistudio/personalcenter/thirdview/574995
+  **************************************************************************/
 """
 
 import io
