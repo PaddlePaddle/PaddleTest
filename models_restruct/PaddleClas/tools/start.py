@@ -234,17 +234,30 @@ class PaddleClas_Start(object):
         # 下载预训练模型
         step = self.step.split("+")  # 各个阶段按+分割
         for step_single in step:
-            if (
-                "eval" in step_single or "infer" in step_single or "export" in step_single
-            ) and "pretrained" in step_single:
+            if ("eval" in step_single or "infer" in step_single or "export" in step_single) and (
+                "pretrained" in step_single
+                or "PULC-language_classification" in self.qa_yaml_name
+                or "PULC-textline_orientation" in self.qa_yaml_name
+            ):
+
+                # 准备预训练评估路径模型
                 self.env_dict["eval_pretrained_model"] = self.eval_pretrained_params + "_pretrained"
+
+                # 添加额外的规则 注意要在上面if添加同样的规则
+                if (
+                    "PULC-language_classification" in self.qa_yaml_name
+                    or "PULC-textline_orientation" in self.qa_yaml_name
+                ):
+                    # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
+                    self.env_dict["eval_trained_model"] = self.env_dict["eval_pretrained_model"]
+
                 # 准备导出模型
                 self.env_dict["export_pretrained_model"] = self.predict_pretrain_params + "_infer"
 
                 if os.path.exists(self.eval_pretrained_params + "_pretrained.pdparams"):
                     logger.info("### already have {}_pretrained.pdparams".format(self.eval_pretrained_params))
                 else:
-                    if (
+                    if (  # 针对legend模型
                         "-ESNet" in self.qa_yaml_name
                         or "-HRNet" in self.qa_yaml_name
                         or "-InceptionV3" in self.qa_yaml_name
@@ -282,6 +295,7 @@ class PaddleClas_Start(object):
                         except:
                             logger.info("#### start download failed {} failed".format(value.replace(" ", "")))
 
+            # language_classification、textline_orientation这两个模型直接用预训练模型 eval predict阶段
             elif "predict" in step_single and (
                 "pretrained" in step_single
                 or "PULC-language_classification" in self.qa_yaml_name

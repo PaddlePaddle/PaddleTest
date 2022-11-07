@@ -27,11 +27,11 @@ class PaddleClas_Collect(object):
         self.repo_name = "PaddleClas"
         # pytest结果下载地址
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909325/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909324/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909323/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909322/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909321/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981088/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981085/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981082/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981077/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981069/report/result.tar",
         }
 
         # self.report_linux_cuda102_py37_develop = {
