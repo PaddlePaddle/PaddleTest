@@ -12,6 +12,6 @@ code_path=${nlp_dir}/examples/information_extraction/waybill_ie/
 
 cd $code_path
 
-python export_model.py --params_path $2_ckpt/model_80/model_state.pdparams --output_path=./$2_output
+python export_$2_model.py --params_path $2_ckpt/model_80/model_state.pdparams --output_path=./$2_output
 
-python deploy/python/predict.py --model_dir ./$2_output
+python deploy/python/predict_$2.py --model_dir ./$2_output
