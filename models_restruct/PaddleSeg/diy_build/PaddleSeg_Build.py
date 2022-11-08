@@ -412,8 +412,6 @@ class PaddleSeg_Build(Model_Build):
         wget -nv https://paddle-qa.bj.bcebos.com/PaddleServing/opencv3.tar.gz && tar -xvf opencv3.tar.gz && rm -rf opencv3.tar.gz
         export OPENCV_DIR=$PWD/opencv3
         # clone Serving
-        HTTP_PROXY=http://172.19.57.45:3128
-        HTTPS_PROXY=http://172.19.57.45:3128
        
         set http_proxy=${HTTP_PROXY}
         set https_proxy=${HTTPS_PROXY}
