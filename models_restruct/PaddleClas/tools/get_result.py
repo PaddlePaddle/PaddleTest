@@ -27,11 +27,11 @@ class PaddleClas_Collect(object):
         self.repo_name = "PaddleClas"
         # pytest结果下载地址
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981088/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981085/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981082/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981077/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19981069/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047501/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047502/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047500/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047499/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047498/report/result.tar",
         }
 
         # self.report_linux_cuda102_py37_develop = {
@@ -227,6 +227,7 @@ class PaddleClas_Collect(object):
                             ) and (
                                 case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"
                             ):
+                                print("### {} change threshold and evaluation ".format(case_value["model_name"]))
                                 content[case_value["model_name"]]["case"][case_value["system"]][
                                     case_value["tag"].split("_")[0]
                                 ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
@@ -248,6 +249,7 @@ class PaddleClas_Collect(object):
                                 and tag_value["name"] == "trained"
                             ):
                                 try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
+                                    print("### {} change class_ids to exit_code ".format(case_value["model_name"]))
                                     dict_tmp = content[case_value["model_name"]]["case"][case_value["system"]][
                                         case_value["tag"].split("_")[0]
                                     ][index]["result"]
@@ -273,7 +275,8 @@ class PaddleClas_Collect(object):
             # print("    ")
             # input()
         with open(os.path.join("report_linux_cuda102_py37_develop.yaml"), "w") as f:  # 会删除之前的，重新生成一份
-            yaml.dump(content, f, sort_keys=False)
+            yaml.dump(content, f) #每次位置是一致的
+            # yaml.dump(content, f, sort_keys=False)
 
 
 def run():
