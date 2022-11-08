@@ -467,8 +467,6 @@ class PaddleSeg_Build(Model_Build):
         os.system(cmd) 
 
 
-        
-
         os.chdir(path_now)
 
         if 1 == 0:
