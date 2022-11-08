@@ -275,7 +275,7 @@ class PaddleClas_Collect(object):
             # print("    ")
             # input()
         with open(os.path.join("report_linux_cuda102_py37_develop.yaml"), "w") as f:  # 会删除之前的，重新生成一份
-            yaml.dump(content, f) #每次位置是一致的
+            yaml.dump(content, f)  # 每次位置是一致的
             # yaml.dump(content, f, sort_keys=False)
 
 
