@@ -693,32 +693,32 @@ sed -i "s/max_iter: None/max_iter: 2/g" configs/transformer.base.yaml
 sed -i "s/batch_size: 4096/batch_size: 1000/g" configs/transformer.base.yaml
 
 python train.py --config ./configs/transformer.base.yaml \
-    --train_file ./WMT14.en-de.partial/train.tok.clean.bpe.en ./WMT14.en-de.partial/train.tok.clean.bpe.de \
-    --dev_file ./WMT14.en-de.partial/dev.tok.bpe.en ./WMT14.en-de.partial/dev.tok.bpe.de \
-    --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
+    --train_file ${PWD}/WMT14.en-de.partial/train.tok.clean.bpe.en ${PWD}/WMT14.en-de.partial/train.tok.clean.bpe.de \
+    --dev_file ${PWD}/WMT14.en-de.partial/dev.tok.bpe.en ${PWD}/WMT14.en-de.partial/dev.tok.bpe.de \
+    --vocab_file ${PWD}/WMT14.en-de.partial/vocab_all.bpe.33708 \
     --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"  >${log_path}/transformer_train) >>${log_path}/transformer_train 2>&1
 print_info $? transformer_train
 #predict
 time (
 sed -i 's#init_from_params: "./trained_models/step/"#init_from_params: "./trained_models/step_final/"#g' configs/transformer.base.yaml
-python predict.py --config ./configs/transformer.base.yaml  \
-    --test_file ./WMT14.en-de.partial/test.tok.bpe.en ./WMT14.en-de.partial/test.tok.bpe.de \
+python predict.py --config ${PWD}/configs/transformer.base.yaml  \
+    --test_file ${PWD}/WMT14.en-de.partial/test.tok.bpe.en ${PWD}/WMT14.en-de.partial/test.tok.bpe.de \
     --without_ft \
-    --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
+    --vocab_file ${PWD}/WMT14.en-de.partial/vocab_all.bpe.33708 \
     --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"  >${log_path}/transformer_predict) >>${log_path}/transformer_predict 2>&1
 print_info $? transformer_predict
 #export
 time (
 python export_model.py --config ./configs/transformer.base.yaml \
-    --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
+    --vocab_file ${PWD}/WMT14.en-de.partial/vocab_all.bpe.33708 \
     --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_export) >>${log_path}/transformer_export 2>&1
 print_info $? transformer_export
 #infer
 time (
 python ./deploy/python/inference.py --config ./configs/transformer.base.yaml \
     --profile \
-    --test_file ./WMT14.en-de.partial/test.tok.bpe.en ./WMT14.en-de.partial/test.tok.bpe.de  \
-    --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 \
+    --test_file ${PWD}/WMT14.en-de.partial/test.tok.bpe.en ${PWD}/WMT14.en-de.partial/test.tok.bpe.de  \
+    --vocab_file ${PWD}/WMT14.en-de.partial/vocab_all.bpe.33708 \
     --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_infer) >>${log_path}/transformer_infer 2>&1
 print_info $? transformer_infer
 # FT
