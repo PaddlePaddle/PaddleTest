@@ -1,0 +1,37 @@
+case:
+  linux:
+    base: ./base/amp_PP_LiteSeg.yaml
+    train:
+      -
+        name: single
+      -
+        name: multi
+        cmd: python -m paddle.distributed.launch --devices=2,3 tools/train.py
+        params:
+          - --save_dir=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/amp_train_gpus_0,1_autocast_null 
+    export:
+      -
+        name: single
+      -
+        name: multi
+        params:
+          - --model_path=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/amp_train_gpus_0,1_autocast_null/best_model/model.pdparams
+          - --save_dir=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/amp_train_gpus_0,1_autocast_null
+    predict:
+      -
+        name: single_gpu
+      -
+        name: single_cpu
+        params:
+          - --device=cpu
+      -
+        name: multi_gpu
+        params:
+          - --config=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/amp_train_gpus_0,1_autocast_null//deploy.yaml
+          - --save_dir=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/python_infer_cpu_usemkldnn_True_threads_6_precision_int8_batchsize_1_results
+      -
+        name: multi_cpu
+        params:
+          - --device=cpu
+          - --config=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/amp_train_gpus_0,1_autocast_null//deploy.yaml
+          - --save_dir=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/python_infer_cpu_usemkldnn_True_threads_6_precision_int8_batchsize_1_results
