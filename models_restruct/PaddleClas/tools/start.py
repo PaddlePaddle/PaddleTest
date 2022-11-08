@@ -238,6 +238,7 @@ class PaddleClas_Start(object):
                 "pretrained" in step_single
                 or "PULC-language_classification" in self.qa_yaml_name
                 or "PULC-textline_orientation" in self.qa_yaml_name
+                or "-ImageNet-VGG-VGG11" in self.qa_yaml_name
             ):
 
                 # 准备预训练评估路径模型
@@ -247,6 +248,7 @@ class PaddleClas_Start(object):
                 if (
                     "PULC-language_classification" in self.qa_yaml_name
                     or "PULC-textline_orientation" in self.qa_yaml_name
+                    or "-ImageNet-VGG-VGG11" in self.qa_yaml_name
                 ):
                     # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
                     self.env_dict["eval_trained_model"] = self.env_dict["eval_pretrained_model"]
@@ -300,6 +302,7 @@ class PaddleClas_Start(object):
                 "pretrained" in step_single
                 or "PULC-language_classification" in self.qa_yaml_name
                 or "PULC-textline_orientation" in self.qa_yaml_name
+                or "-ImageNet-VGG-VGG11" in self.qa_yaml_name
             ):
                 self.env_dict["predict_pretrained_model"] = os.path.join(
                     "../{}_infer".format(self.predict_pretrain_params)
@@ -308,6 +311,7 @@ class PaddleClas_Start(object):
                 if (
                     "PULC-language_classification" in self.qa_yaml_name
                     or "PULC-textline_orientation" in self.qa_yaml_name
+                    or "-ImageNet-VGG-VGG11" in self.qa_yaml_name
                 ):  # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
                     self.env_dict["predict_trained_model"] = self.env_dict["predict_pretrained_model"]
 
