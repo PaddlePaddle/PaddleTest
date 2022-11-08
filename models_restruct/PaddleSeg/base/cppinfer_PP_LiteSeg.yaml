@@ -1,0 +1,8 @@
+predict:
+    name: cpp
+    cmd: ./test_tipc/cpp/build/seg_system test_tipc/configs/pp_liteseg_stdc1/pp_liteseg_stdc1_model_linux_gpu_normal_normal_infer_cpp_linux_gpu_cpu.txt test_tipc/cpp/cityscapes_demo.png
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

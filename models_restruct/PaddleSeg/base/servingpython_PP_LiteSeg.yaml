@@ -1,0 +1,41 @@
+export:
+    name: serving_python
+    cmd: python -m paddle_serving_client.convert
+    params:
+      - --dirname=pp_liteseg_infer_model
+      - --model_filename=model.pdmodel
+      - --params_filename=model.pdiparams
+      - --serving_server=./test_tipc/serving_python/serving_server/
+      - --serving_client=./test_tipc/serving_python/serving_client/
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+train:
+    name: service
+    cmd: cd test_tipc/serving_python; nohup python ./web_service.py --config=config.yml  --input_name=x --output_name=argmax_0.tmp_0 --opt op.seg.local_service_conf.devices="0" &
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+predict:
+    name: client
+    cmd: cd test_tipc/serving_python; python ./pipeline_http_client.py
+    params:
+      - --img_path=../../cityscapes_small.png
+      - --input_name=x
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+infer:
+    name: kill_server
+    cmd: cd test_tipc/serving_python; python -m paddle_serving_server.serve stop
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

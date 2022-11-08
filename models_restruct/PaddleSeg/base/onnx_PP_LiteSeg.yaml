@@ -1,0 +1,26 @@
+export:
+    name: onnx
+    cmd: paddle2onnx
+    params:
+      - --model_dir=pp_liteseg_stdc1_fix_shape/
+      - --model_filename=model.pdmodel
+      - --params_filename=model.pdiparams
+      - --save_file=pp_liteseg_stdc1_fix_shape/model.onnx
+      - --opset_version=11
+      - --enable_onnx_checker=True
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+predict:
+    name: onnx
+    cmd: python deploy/python/infer_onnx.py
+    params:
+      - --img_path=test_tipc/cpp/cityscapes_demo.png
+      - --onnx_file=pp_liteseg_stdc1_fix_shape/model.onnx
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

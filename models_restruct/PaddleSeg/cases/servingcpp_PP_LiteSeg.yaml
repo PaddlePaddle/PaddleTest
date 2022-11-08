@@ -1,0 +1,3 @@
+case:
+  linux:
+    base: ./base/servingcpp_PP_LiteSeg.yaml

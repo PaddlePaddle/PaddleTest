@@ -1,0 +1,49 @@
+train:
+    name: single
+    cmd: python tools/train.py
+    params:
+      - --config test_tipc/configs/pp_liteseg_stdc1/pp_liteseg_stdc1_cityscapes_1024x512_160k.yml
+      - --precision fp16
+      - --amp_level O1
+      - --do_eval
+      - --save_interval 500
+      - --seed 100
+      - --save_dir=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/amp_train_gpus_0_autocast_null
+      - --iters=50
+      - --batch_size=2
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+export:
+    name: single
+    cmd: python tools/export.py
+    params:
+      - --config test_tipc/configs/pp_liteseg_stdc1/pp_liteseg_stdc1_cityscapes_1024x512_160k.yml
+      - --model_path=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/amp_train_gpus_0_autocast_null/best_model/model.pdparams
+      - --save_dir=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/amp_train_gpus_0_autocast_null
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+predict:
+    name: single_gpu
+    cmd: python deploy/python/infer.py
+    params:
+      - --save_dir ./test_tipc/output/pp_liteseg_stdc1/
+      - --device=gpu
+      - --enable_mkldnn=True
+      - --cpu_threads=6
+      - --config=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/amp_train_gpus_0_autocast_null//deploy.yaml
+      - --batch_size=1
+      - --image_path=test_tipc/data/cityscapes/cityscapes_val_5.list
+      - --precision=fp32
+      - --save_dir=./test_tipc/output/pp_liteseg_stdc1/lite_train_lite_infer/python_infer_cpu_usemkldnn_True_threads_6_precision_int8_batchsize_1_results
+      - --model_name=pp_liteseg_stdc1
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

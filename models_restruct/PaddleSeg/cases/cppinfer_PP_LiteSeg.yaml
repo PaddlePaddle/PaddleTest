@@ -1,0 +1,3 @@
+case:
+  linux:
+    base: ./base/cppinfer_PP_LiteSeg.yaml
