@@ -76,17 +76,16 @@ def test_aistudio_case(file_name):
     # 模拟aistudio 环境,解决绝对路径问题
     aistudio_path = '/home/aistudio/'
     os.system("cp -r %s %s && cd %s" % (file_path,aistudio_path,aistudio_path))
-    if os.path.exists(os.path.join(file_path + "/main.ipynb")):
+    if os.path.exists(os.path.join(aistudio_path + "/main.ipynb")):
         exec_name = "main"
     else:
         exec_name = file_name
-    if not os.path.exists(os.path.join(file_path + "/data")):
-        os.system("cd %s && mkdir data " % (file_path))
-    os.system("cd %s && jupyter nbconvert --to python %s.ipynb" % (file_path, exec_name))
-    output = subprocess.getstatusoutput("cd %s && ipython %s.py" % (file_path, exec_name))
+    if not os.path.exists(os.path.join(aistudio_path + "/data")):
+        os.system("cd %s && mkdir data " % (aistudio_path))
+    os.system("cd %s && jupyter nbconvert --to python %s.ipynb" % (aistudio_path, exec_name))
+    output = subprocess.getstatusoutput("cd %s && ipython %s.py" % (aistudio_path, exec_name))
 
     os.system("cd {}".format(work_path))
-    os.system("rm -rf {}".format(aistudio_path))
 
     # TODO: add download failure case
     # origin_project_list = project_info.keys()
@@ -105,3 +104,4 @@ def test_aistudio_case(file_name):
 
     save_log(output[0], output[1], file_name)
     exit_check(output[0], file_name,project_name)
+    os.system("rm -rf {}".format(aistudio_path))
