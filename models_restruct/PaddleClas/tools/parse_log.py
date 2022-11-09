@@ -22,6 +22,8 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
     for line in f.readlines():
         if kpi_name == "class_ids":
             if "class_ids" in line and ": [" in line:
+                # 增加对nan的处理
+                line = line.replace("nan", "'nan'")
                 if line.count("class_ids") > 1:  # 存在多个标签时
                     kpi_value_all.append(
                         ast.literal_eval(line.replace("[{", "{").replace("}]", "}").strip())[0]["class_ids"]
@@ -40,17 +42,23 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
             elif "class id(s)" in line and ": [" in line:
                 line = line[line.rfind("class id(s): ") : line.rfind(", score(s):")]
                 kpi_value_all.append(line[line.rfind("[") :])
+            elif "attributes" in line and ": [" in line:
+                line = line[line.rfind("'output': ") : line.rfind("}")]
+                kpi_value_all.append(line[line.rfind("[") :])
         else:
             if kpi_name + ":" in line:
                 regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi_name
-                r = re.findall(regexp, line)
                 # 如果解析不到符合格式到指标，默认值设置为-1
-                kpi_value = float(r[0].strip()) if len(r) > 0 else -1
-                kpi_value_all.append(kpi_value)
+                r = re.findall(regexp, line)
+                # kpi_value = float(r[0].strip()) if len(r) > 0 else -1
+                # kpi_value_all.append(kpi_value)
+                if len(re.findall(regexp, line)) > 0:  # 只要有值就行，部分模型可能因为学习率的问题导致后几轮的loss为nan, 不在保存-1
+                    kpi_value_all.append(float(r[0].strip()))
     f.close()
 
     logger.info("###kpi_value_all: {}".format(kpi_value_all))
-    if "-1" in kpi_value_all or kpi_value_all == []:
+    # if "-1" in kpi_value_all or kpi_value_all == []: #前几轮是正常后面loss出nan的情况暂时不考虑，后续变化能直接感知
+    if kpi_value_all == []:
         kpi_value = float(-1)
     else:
         if kpi_name == "class_ids":
@@ -61,11 +69,13 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
             kpi_value = float(np.average(np.array(kpi_value_all)))
     # check 逻辑
     logger.info("###kpi_value: {}".format(kpi_value))
+    # print("###kpi_value: {}".format(kpi_value))
     # logger.info("###kpi_value: {}".format(type(kpi_value)))
     return kpi_value
 
 
 if __name__ == "__main__":
+
     logger.info("###")
     log_content = "out_type"
     kpi_name = "class_ids"

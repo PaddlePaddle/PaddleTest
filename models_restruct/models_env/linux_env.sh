@@ -122,8 +122,8 @@ if [[ "${docker_flag}" == "" ]]; then
         /bin/bash -c "
 
         ldconfig;
-        #额外的变量, PORT_RANGE是出现IP_ANY:36986端口占用报错暂时屏蔽一些
-        export PORT_RANGE=60000:65536
+        #额外的变量, PORT_RANGE是出现IP_ANY:36986端口占用报错暂时屏蔽一些,221108新出现60636被占用
+        export PORT_RANGE=62000:65536
         export no_proxy=${no_proxy};
         export http_proxy=${http_proxy};
         export https_proxy=${http_proxy};
@@ -208,7 +208,7 @@ if [[ "${docker_flag}" == "" ]]; then
     exit $?
 else
     ldconfig;
-    export PORT_RANGE=60000:65536
+    export PORT_RANGE=62000:65536
     if [[ ${Python_env} == 'ln_way' ]];then
         # rm -rf /usr/bin/python2.7
         # rm -rf /usr/local/python2.7.15/bin/python
