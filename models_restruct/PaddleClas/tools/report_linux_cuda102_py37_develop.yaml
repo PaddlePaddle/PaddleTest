@@ -1,4 +1,4 @@
-ppcls-configs-Cartoonface-ResNet50_icartoon:
+ppcls:configs:Cartoonface:ResNet50_icartoon:
   case:
     linux:
       base: ./base/Cartoonface_base.yaml
@@ -154,7 +154,7 @@ ppcls-configs-Cartoonface-ResNet50_icartoon:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-DeepHash-DCH:
+ppcls:configs:DeepHash:DCH:
   case:
     linux:
       base: ./base/DeepHash_base.yaml
@@ -310,7 +310,7 @@ ppcls-configs-DeepHash-DCH:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-DeepHash-DSHSD:
+ppcls:configs:DeepHash:DSHSD:
   case:
     linux:
       base: ./base/DeepHash_base.yaml
@@ -466,7 +466,7 @@ ppcls-configs-DeepHash-DSHSD:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-DeepHash-LCDSH:
+ppcls:configs:DeepHash:LCDSH:
   case:
     linux:
       base: ./base/DeepHash_base.yaml
@@ -622,7 +622,7 @@ ppcls-configs-DeepHash-LCDSH:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5:
+ppcls:configs:GeneralRecognition:GeneralRecognition_PPLCNet_x2_5:
   case:
     linux:
       base: ./base/GeneralRecognition_base.yaml
@@ -768,7 +768,7 @@ ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5_binary:
+ppcls:configs:GeneralRecognition:GeneralRecognition_PPLCNet_x2_5_binary:
   case:
     linux:
       base: ./base/GeneralRecognition_base.yaml
@@ -914,7 +914,7 @@ ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5_binary:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5_dml:
+ppcls:configs:GeneralRecognition:GeneralRecognition_PPLCNet_x2_5_dml:
   case:
     linux:
       base: ./base/GeneralRecognition_base.yaml
@@ -1060,7 +1060,7 @@ ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5_dml:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5_udml:
+ppcls:configs:GeneralRecognition:GeneralRecognition_PPLCNet_x2_5_udml:
   case:
     linux:
       base: ./base/GeneralRecognition_base.yaml
@@ -1206,7 +1206,7 @@ ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5_udml:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-GeneralRecognitionV2-GeneralRecognitionV2_PPLCNetV2_base:
+ppcls:configs:GeneralRecognitionV2:GeneralRecognitionV2_PPLCNetV2_base:
   case:
     linux:
       base: ./base/GeneralRecognitionV2_base.yaml
@@ -1352,7 +1352,7 @@ ppcls-configs-GeneralRecognitionV2-GeneralRecognitionV2_PPLCNetV2_base:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-AlexNet-AlexNet:
+ppcls:configs:ImageNet:AlexNet:AlexNet:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -1541,7 +1541,7 @@ ppcls-configs-ImageNet-AlexNet-AlexNet:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-CSPNet-CSPDarkNet53:
+ppcls:configs:ImageNet:CSPNet:CSPDarkNet53:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -1730,7 +1730,7 @@ ppcls-configs-ImageNet-CSPNet-CSPDarkNet53:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_base_224:
+ppcls:configs:ImageNet:CSWinTransformer:CSWinTransformer_base_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -1919,7 +1919,7 @@ ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_base_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_base_384:
+ppcls:configs:ImageNet:CSWinTransformer:CSWinTransformer_base_384:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -2108,7 +2108,7 @@ ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_base_384:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_large_224:
+ppcls:configs:ImageNet:CSWinTransformer:CSWinTransformer_large_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -2297,7 +2297,7 @@ ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_large_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_large_384:
+ppcls:configs:ImageNet:CSWinTransformer:CSWinTransformer_large_384:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -2486,7 +2486,7 @@ ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_large_384:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_small_224:
+ppcls:configs:ImageNet:CSWinTransformer:CSWinTransformer_small_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -2675,7 +2675,7 @@ ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_small_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_tiny_224:
+ppcls:configs:ImageNet:CSWinTransformer:CSWinTransformer_tiny_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -2864,7 +2864,7 @@ ppcls-configs-ImageNet-CSWinTransformer-CSWinTransformer_tiny_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA102:
+ppcls:configs:ImageNet:DLA:DLA102:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -3053,7 +3053,7 @@ ppcls-configs-ImageNet-DLA-DLA102:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA102x:
+ppcls:configs:ImageNet:DLA:DLA102x:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -3242,7 +3242,7 @@ ppcls-configs-ImageNet-DLA-DLA102x:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA102x2:
+ppcls:configs:ImageNet:DLA:DLA102x2:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -3431,7 +3431,7 @@ ppcls-configs-ImageNet-DLA-DLA102x2:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA169:
+ppcls:configs:ImageNet:DLA:DLA169:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -3620,7 +3620,7 @@ ppcls-configs-ImageNet-DLA-DLA169:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA34:
+ppcls:configs:ImageNet:DLA:DLA34:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -3809,7 +3809,7 @@ ppcls-configs-ImageNet-DLA-DLA34:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA46_c:
+ppcls:configs:ImageNet:DLA:DLA46_c:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -3998,7 +3998,7 @@ ppcls-configs-ImageNet-DLA-DLA46_c:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA46x_c:
+ppcls:configs:ImageNet:DLA:DLA46x_c:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -4187,7 +4187,7 @@ ppcls-configs-ImageNet-DLA-DLA46x_c:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA60:
+ppcls:configs:ImageNet:DLA:DLA60:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -4376,7 +4376,7 @@ ppcls-configs-ImageNet-DLA-DLA60:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA60x:
+ppcls:configs:ImageNet:DLA:DLA60x:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -4565,7 +4565,7 @@ ppcls-configs-ImageNet-DLA-DLA60x:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DLA-DLA60x_c:
+ppcls:configs:ImageNet:DLA:DLA60x_c:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -4754,7 +4754,7 @@ ppcls-configs-ImageNet-DLA-DLA60x_c:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DPN-DPN107:
+ppcls:configs:ImageNet:DPN:DPN107:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -4943,7 +4943,7 @@ ppcls-configs-ImageNet-DPN-DPN107:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DPN-DPN131:
+ppcls:configs:ImageNet:DPN:DPN131:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -5132,7 +5132,7 @@ ppcls-configs-ImageNet-DPN-DPN131:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DPN-DPN68:
+ppcls:configs:ImageNet:DPN:DPN68:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -5321,7 +5321,7 @@ ppcls-configs-ImageNet-DPN-DPN68:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DPN-DPN92:
+ppcls:configs:ImageNet:DPN:DPN92:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -5510,7 +5510,7 @@ ppcls-configs-ImageNet-DPN-DPN92:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DPN-DPN98:
+ppcls:configs:ImageNet:DPN:DPN98:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -5699,7 +5699,7 @@ ppcls-configs-ImageNet-DPN-DPN98:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DarkNet-DarkNet53:
+ppcls:configs:ImageNet:DarkNet:DarkNet53:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -5888,7 +5888,7 @@ ppcls-configs-ImageNet-DarkNet-DarkNet53:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DataAugment-ResNet50_AutoAugment:
+ppcls:configs:ImageNet:DataAugment:ResNet50_AutoAugment:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -6077,7 +6077,7 @@ ppcls-configs-ImageNet-DataAugment-ResNet50_AutoAugment:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DataAugment-ResNet50_Baseline:
+ppcls:configs:ImageNet:DataAugment:ResNet50_Baseline:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -6266,7 +6266,7 @@ ppcls-configs-ImageNet-DataAugment-ResNet50_Baseline:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DataAugment-ResNet50_Cutmix:
+ppcls:configs:ImageNet:DataAugment:ResNet50_Cutmix:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -6455,7 +6455,7 @@ ppcls-configs-ImageNet-DataAugment-ResNet50_Cutmix:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DataAugment-ResNet50_Cutout:
+ppcls:configs:ImageNet:DataAugment:ResNet50_Cutout:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -6644,7 +6644,7 @@ ppcls-configs-ImageNet-DataAugment-ResNet50_Cutout:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DataAugment-ResNet50_GridMask:
+ppcls:configs:ImageNet:DataAugment:ResNet50_GridMask:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -6833,7 +6833,7 @@ ppcls-configs-ImageNet-DataAugment-ResNet50_GridMask:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DataAugment-ResNet50_HideAndSeek:
+ppcls:configs:ImageNet:DataAugment:ResNet50_HideAndSeek:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -7022,7 +7022,7 @@ ppcls-configs-ImageNet-DataAugment-ResNet50_HideAndSeek:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DataAugment-ResNet50_Mixup:
+ppcls:configs:ImageNet:DataAugment:ResNet50_Mixup:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -7211,7 +7211,7 @@ ppcls-configs-ImageNet-DataAugment-ResNet50_Mixup:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DataAugment-ResNet50_RandAugment:
+ppcls:configs:ImageNet:DataAugment:ResNet50_RandAugment:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -7400,7 +7400,7 @@ ppcls-configs-ImageNet-DataAugment-ResNet50_RandAugment:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DataAugment-ResNet50_RandomErasing:
+ppcls:configs:ImageNet:DataAugment:ResNet50_RandomErasing:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -7589,7 +7589,7 @@ ppcls-configs-ImageNet-DataAugment-ResNet50_RandomErasing:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DeiT-DeiT_small_distilled_patch16_224:
+ppcls:configs:ImageNet:DeiT:DeiT_small_distilled_patch16_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -7778,7 +7778,7 @@ ppcls-configs-ImageNet-DeiT-DeiT_small_distilled_patch16_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DeiT-DeiT_small_patch16_224:
+ppcls:configs:ImageNet:DeiT:DeiT_small_patch16_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -7967,7 +7967,7 @@ ppcls-configs-ImageNet-DeiT-DeiT_small_patch16_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DeiT-DeiT_tiny_distilled_patch16_224:
+ppcls:configs:ImageNet:DeiT:DeiT_tiny_distilled_patch16_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -8156,7 +8156,7 @@ ppcls-configs-ImageNet-DeiT-DeiT_tiny_distilled_patch16_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DeiT-DeiT_tiny_patch16_224:
+ppcls:configs:ImageNet:DeiT:DeiT_tiny_patch16_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -8345,7 +8345,7 @@ ppcls-configs-ImageNet-DeiT-DeiT_tiny_patch16_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DenseNet-DenseNet121:
+ppcls:configs:ImageNet:DenseNet:DenseNet121:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -8534,7 +8534,7 @@ ppcls-configs-ImageNet-DenseNet-DenseNet121:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DenseNet-DenseNet161:
+ppcls:configs:ImageNet:DenseNet:DenseNet161:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -8723,7 +8723,7 @@ ppcls-configs-ImageNet-DenseNet-DenseNet161:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DenseNet-DenseNet169:
+ppcls:configs:ImageNet:DenseNet:DenseNet169:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -8912,7 +8912,7 @@ ppcls-configs-ImageNet-DenseNet-DenseNet169:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DenseNet-DenseNet201:
+ppcls:configs:ImageNet:DenseNet:DenseNet201:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -9101,7 +9101,7 @@ ppcls-configs-ImageNet-DenseNet-DenseNet201:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-DenseNet-DenseNet264:
+ppcls:configs:ImageNet:DenseNet:DenseNet264:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -9290,7 +9290,7 @@ ppcls-configs-ImageNet-DenseNet-DenseNet264:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Distillation-PPLCNet_x2_5_dml:
+ppcls:configs:ImageNet:Distillation:PPLCNet_x2_5_dml:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -9479,7 +9479,7 @@ ppcls-configs-ImageNet-Distillation-PPLCNet_x2_5_dml:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Distillation-PPLCNet_x2_5_ssld:
+ppcls:configs:ImageNet:Distillation:PPLCNet_x2_5_ssld:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -9668,7 +9668,7 @@ ppcls-configs-ImageNet-Distillation-PPLCNet_x2_5_ssld:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Distillation-PPLCNet_x2_5_udml:
+ppcls:configs:ImageNet:Distillation:PPLCNet_x2_5_udml:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -9857,7 +9857,7 @@ ppcls-configs-ImageNet-Distillation-PPLCNet_x2_5_udml:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Distillation-mv3_large_x1_0_distill_mv3_small_x1_0:
+ppcls:configs:ImageNet:Distillation:mv3_large_x1_0_distill_mv3_small_x1_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -10046,7 +10046,7 @@ ppcls-configs-ImageNet-Distillation-mv3_large_x1_0_distill_mv3_small_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Distillation-res2net200_vd_distill_pphgnet_base:
+ppcls:configs:ImageNet:Distillation:res2net200_vd_distill_pphgnet_base:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -10235,7 +10235,7 @@ ppcls-configs-ImageNet-Distillation-res2net200_vd_distill_pphgnet_base:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_afd:
+ppcls:configs:ImageNet:Distillation:resnet34_distill_resnet18_afd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -10424,7 +10424,7 @@ ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_afd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_dist:
+ppcls:configs:ImageNet:Distillation:resnet34_distill_resnet18_dist:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -10613,7 +10613,7 @@ ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_dist:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_dkd:
+ppcls:configs:ImageNet:Distillation:resnet34_distill_resnet18_dkd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -10802,7 +10802,7 @@ ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_dkd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_mgd:
+ppcls:configs:ImageNet:Distillation:resnet34_distill_resnet18_mgd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -10991,7 +10991,7 @@ ppcls-configs-ImageNet-Distillation-resnet34_distill_resnet18_mgd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ESNet-ESNet_x0_25:
+ppcls:configs:ImageNet:ESNet:ESNet_x0_25:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -11180,7 +11180,7 @@ ppcls-configs-ImageNet-ESNet-ESNet_x0_25:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ESNet-ESNet_x0_5:
+ppcls:configs:ImageNet:ESNet:ESNet_x0_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -11369,7 +11369,7 @@ ppcls-configs-ImageNet-ESNet-ESNet_x0_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ESNet-ESNet_x0_75:
+ppcls:configs:ImageNet:ESNet:ESNet_x0_75:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -11558,7 +11558,7 @@ ppcls-configs-ImageNet-ESNet-ESNet_x0_75:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ESNet-ESNet_x1_0:
+ppcls:configs:ImageNet:ESNet:ESNet_x1_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -11747,7 +11747,7 @@ ppcls-configs-ImageNet-ESNet-ESNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-EfficientNet-EfficientNetB0:
+ppcls:configs:ImageNet:EfficientNet:EfficientNetB0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -11936,7 +11936,7 @@ ppcls-configs-ImageNet-EfficientNet-EfficientNetB0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-EfficientNet-EfficientNetB1:
+ppcls:configs:ImageNet:EfficientNet:EfficientNetB1:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -12125,7 +12125,7 @@ ppcls-configs-ImageNet-EfficientNet-EfficientNetB1:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-EfficientNet-EfficientNetB2:
+ppcls:configs:ImageNet:EfficientNet:EfficientNetB2:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -12314,7 +12314,7 @@ ppcls-configs-ImageNet-EfficientNet-EfficientNetB2:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-EfficientNet-EfficientNetB3:
+ppcls:configs:ImageNet:EfficientNet:EfficientNetB3:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -12503,7 +12503,7 @@ ppcls-configs-ImageNet-EfficientNet-EfficientNetB3:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-GhostNet-GhostNet_x0_5:
+ppcls:configs:ImageNet:GhostNet:GhostNet_x0_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -12692,7 +12692,7 @@ ppcls-configs-ImageNet-GhostNet-GhostNet_x0_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-GhostNet-GhostNet_x1_0:
+ppcls:configs:ImageNet:GhostNet:GhostNet_x1_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -12881,7 +12881,7 @@ ppcls-configs-ImageNet-GhostNet-GhostNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-GhostNet-GhostNet_x1_3:
+ppcls:configs:ImageNet:GhostNet:GhostNet_x1_3:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -13070,7 +13070,7 @@ ppcls-configs-ImageNet-GhostNet-GhostNet_x1_3:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HRNet-HRNet_W18_C:
+ppcls:configs:ImageNet:HRNet:HRNet_W18_C:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -13259,7 +13259,7 @@ ppcls-configs-ImageNet-HRNet-HRNet_W18_C:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HRNet-HRNet_W30_C:
+ppcls:configs:ImageNet:HRNet:HRNet_W30_C:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -13448,7 +13448,7 @@ ppcls-configs-ImageNet-HRNet-HRNet_W30_C:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HRNet-HRNet_W32_C:
+ppcls:configs:ImageNet:HRNet:HRNet_W32_C:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -13637,7 +13637,7 @@ ppcls-configs-ImageNet-HRNet-HRNet_W32_C:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HRNet-HRNet_W40_C:
+ppcls:configs:ImageNet:HRNet:HRNet_W40_C:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -13826,7 +13826,7 @@ ppcls-configs-ImageNet-HRNet-HRNet_W40_C:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HRNet-HRNet_W44_C:
+ppcls:configs:ImageNet:HRNet:HRNet_W44_C:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -14015,7 +14015,7 @@ ppcls-configs-ImageNet-HRNet-HRNet_W44_C:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HRNet-HRNet_W48_C:
+ppcls:configs:ImageNet:HRNet:HRNet_W48_C:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -14204,7 +14204,7 @@ ppcls-configs-ImageNet-HRNet-HRNet_W48_C:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HRNet-HRNet_W64_C:
+ppcls:configs:ImageNet:HRNet:HRNet_W64_C:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -14393,7 +14393,7 @@ ppcls-configs-ImageNet-HRNet-HRNet_W64_C:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HarDNet-HarDNet39_ds:
+ppcls:configs:ImageNet:HarDNet:HarDNet39_ds:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -14582,7 +14582,7 @@ ppcls-configs-ImageNet-HarDNet-HarDNet39_ds:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HarDNet-HarDNet68:
+ppcls:configs:ImageNet:HarDNet:HarDNet68:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -14771,7 +14771,7 @@ ppcls-configs-ImageNet-HarDNet-HarDNet68:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HarDNet-HarDNet68_ds:
+ppcls:configs:ImageNet:HarDNet:HarDNet68_ds:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -14960,7 +14960,7 @@ ppcls-configs-ImageNet-HarDNet-HarDNet68_ds:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-HarDNet-HarDNet85:
+ppcls:configs:ImageNet:HarDNet:HarDNet85:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -15149,7 +15149,7 @@ ppcls-configs-ImageNet-HarDNet-HarDNet85:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Inception-GoogLeNet:
+ppcls:configs:ImageNet:Inception:GoogLeNet:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -15338,7 +15338,7 @@ ppcls-configs-ImageNet-Inception-GoogLeNet:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Inception-InceptionV3:
+ppcls:configs:ImageNet:Inception:InceptionV3:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -15527,7 +15527,7 @@ ppcls-configs-ImageNet-Inception-InceptionV3:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Inception-InceptionV4:
+ppcls:configs:ImageNet:Inception:InceptionV4:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -15716,7 +15716,7 @@ ppcls-configs-ImageNet-Inception-InceptionV4:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-LeViT-LeViT_128:
+ppcls:configs:ImageNet:LeViT:LeViT_128:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -15905,7 +15905,7 @@ ppcls-configs-ImageNet-LeViT-LeViT_128:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-LeViT-LeViT_128S:
+ppcls:configs:ImageNet:LeViT:LeViT_128S:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -16094,7 +16094,7 @@ ppcls-configs-ImageNet-LeViT-LeViT_128S:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-LeViT-LeViT_192:
+ppcls:configs:ImageNet:LeViT:LeViT_192:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -16283,7 +16283,7 @@ ppcls-configs-ImageNet-LeViT-LeViT_192:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-LeViT-LeViT_256:
+ppcls:configs:ImageNet:LeViT:LeViT_256:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -16472,7 +16472,7 @@ ppcls-configs-ImageNet-LeViT-LeViT_256:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-LeViT-LeViT_384:
+ppcls:configs:ImageNet:LeViT:LeViT_384:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -16661,7 +16661,7 @@ ppcls-configs-ImageNet-LeViT-LeViT_384:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MixNet-MixNet_L:
+ppcls:configs:ImageNet:MixNet:MixNet_L:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -16850,7 +16850,7 @@ ppcls-configs-ImageNet-MixNet-MixNet_L:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MixNet-MixNet_M:
+ppcls:configs:ImageNet:MixNet:MixNet_M:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -17039,7 +17039,7 @@ ppcls-configs-ImageNet-MixNet-MixNet_M:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MixNet-MixNet_S:
+ppcls:configs:ImageNet:MixNet:MixNet_S:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -17228,7 +17228,7 @@ ppcls-configs-ImageNet-MixNet-MixNet_S:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV1-MobileNetV1:
+ppcls:configs:ImageNet:MobileNetV1:MobileNetV1:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -17417,7 +17417,7 @@ ppcls-configs-ImageNet-MobileNetV1-MobileNetV1:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV1-MobileNetV1_x0_25:
+ppcls:configs:ImageNet:MobileNetV1:MobileNetV1_x0_25:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -17606,7 +17606,7 @@ ppcls-configs-ImageNet-MobileNetV1-MobileNetV1_x0_25:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV1-MobileNetV1_x0_5:
+ppcls:configs:ImageNet:MobileNetV1:MobileNetV1_x0_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -17795,7 +17795,7 @@ ppcls-configs-ImageNet-MobileNetV1-MobileNetV1_x0_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV1-MobileNetV1_x0_75:
+ppcls:configs:ImageNet:MobileNetV1:MobileNetV1_x0_75:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -17984,7 +17984,7 @@ ppcls-configs-ImageNet-MobileNetV1-MobileNetV1_x0_75:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV2-MobileNetV2:
+ppcls:configs:ImageNet:MobileNetV2:MobileNetV2:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -18173,7 +18173,7 @@ ppcls-configs-ImageNet-MobileNetV2-MobileNetV2:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x0_25:
+ppcls:configs:ImageNet:MobileNetV2:MobileNetV2_x0_25:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -18362,7 +18362,7 @@ ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x0_25:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x0_5:
+ppcls:configs:ImageNet:MobileNetV2:MobileNetV2_x0_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -18551,7 +18551,7 @@ ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x0_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x0_75:
+ppcls:configs:ImageNet:MobileNetV2:MobileNetV2_x0_75:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -18740,7 +18740,7 @@ ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x0_75:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x1_5:
+ppcls:configs:ImageNet:MobileNetV2:MobileNetV2_x1_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -18929,7 +18929,7 @@ ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x1_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x2_0:
+ppcls:configs:ImageNet:MobileNetV2:MobileNetV2_x2_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -19118,7 +19118,7 @@ ppcls-configs-ImageNet-MobileNetV2-MobileNetV2_x2_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x0_35:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_large_x0_35:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -19307,7 +19307,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x0_5:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_large_x0_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -19496,7 +19496,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x0_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x0_75:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_large_x0_75:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -19685,7 +19685,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x0_75:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x1_0:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_large_x1_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -19874,7 +19874,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x1_25:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_large_x1_25:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -20063,7 +20063,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_large_x1_25:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x0_35:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_small_x0_35:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -20252,7 +20252,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x0_5:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_small_x0_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -20441,7 +20441,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x0_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x0_75:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_small_x0_75:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -20630,7 +20630,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x0_75:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x1_0:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_small_x1_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -20819,7 +20819,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x1_25:
+ppcls:configs:ImageNet:MobileNetV3:MobileNetV3_small_x1_25:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -21008,7 +21008,7 @@ ppcls-configs-ImageNet-MobileNetV3-MobileNetV3_small_x1_25:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileViT-MobileViT_S:
+ppcls:configs:ImageNet:MobileViT:MobileViT_S:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -21197,7 +21197,7 @@ ppcls-configs-ImageNet-MobileViT-MobileViT_S:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileViT-MobileViT_XS:
+ppcls:configs:ImageNet:MobileViT:MobileViT_XS:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -21386,7 +21386,7 @@ ppcls-configs-ImageNet-MobileViT-MobileViT_XS:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-MobileViT-MobileViT_XXS:
+ppcls:configs:ImageNet:MobileViT:MobileViT_XXS:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -21575,7 +21575,7 @@ ppcls-configs-ImageNet-MobileViT-MobileViT_XXS:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPHGNet-PPHGNet_base:
+ppcls:configs:ImageNet:PPHGNet:PPHGNet_base:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -21764,7 +21764,7 @@ ppcls-configs-ImageNet-PPHGNet-PPHGNet_base:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPHGNet-PPHGNet_small:
+ppcls:configs:ImageNet:PPHGNet:PPHGNet_small:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -21953,7 +21953,7 @@ ppcls-configs-ImageNet-PPHGNet-PPHGNet_small:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPHGNet-PPHGNet_tiny:
+ppcls:configs:ImageNet:PPHGNet:PPHGNet_tiny:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -22142,7 +22142,7 @@ ppcls-configs-ImageNet-PPHGNet-PPHGNet_tiny:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPLCNet-PPLCNet_x0_25:
+ppcls:configs:ImageNet:PPLCNet:PPLCNet_x0_25:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -22331,7 +22331,7 @@ ppcls-configs-ImageNet-PPLCNet-PPLCNet_x0_25:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPLCNet-PPLCNet_x0_35:
+ppcls:configs:ImageNet:PPLCNet:PPLCNet_x0_35:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -22520,7 +22520,7 @@ ppcls-configs-ImageNet-PPLCNet-PPLCNet_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPLCNet-PPLCNet_x0_5:
+ppcls:configs:ImageNet:PPLCNet:PPLCNet_x0_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -22709,7 +22709,7 @@ ppcls-configs-ImageNet-PPLCNet-PPLCNet_x0_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPLCNet-PPLCNet_x0_75:
+ppcls:configs:ImageNet:PPLCNet:PPLCNet_x0_75:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -22898,7 +22898,7 @@ ppcls-configs-ImageNet-PPLCNet-PPLCNet_x0_75:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPLCNet-PPLCNet_x1_0:
+ppcls:configs:ImageNet:PPLCNet:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -23087,7 +23087,7 @@ ppcls-configs-ImageNet-PPLCNet-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPLCNet-PPLCNet_x1_5:
+ppcls:configs:ImageNet:PPLCNet:PPLCNet_x1_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -23276,7 +23276,7 @@ ppcls-configs-ImageNet-PPLCNet-PPLCNet_x1_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPLCNet-PPLCNet_x2_0:
+ppcls:configs:ImageNet:PPLCNet:PPLCNet_x2_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -23465,7 +23465,7 @@ ppcls-configs-ImageNet-PPLCNet-PPLCNet_x2_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPLCNet-PPLCNet_x2_5:
+ppcls:configs:ImageNet:PPLCNet:PPLCNet_x2_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -23654,7 +23654,7 @@ ppcls-configs-ImageNet-PPLCNet-PPLCNet_x2_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PPLCNetV2-PPLCNetV2_base:
+ppcls:configs:ImageNet:PPLCNetV2:PPLCNetV2_base:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -23843,7 +23843,7 @@ ppcls-configs-ImageNet-PPLCNetV2-PPLCNetV2_base:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PVTV2-PVT_V2_B0:
+ppcls:configs:ImageNet:PVTV2:PVT_V2_B0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -24032,7 +24032,7 @@ ppcls-configs-ImageNet-PVTV2-PVT_V2_B0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PVTV2-PVT_V2_B1:
+ppcls:configs:ImageNet:PVTV2:PVT_V2_B1:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -24221,7 +24221,7 @@ ppcls-configs-ImageNet-PVTV2-PVT_V2_B1:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PVTV2-PVT_V2_B2:
+ppcls:configs:ImageNet:PVTV2:PVT_V2_B2:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -24410,7 +24410,7 @@ ppcls-configs-ImageNet-PVTV2-PVT_V2_B2:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PVTV2-PVT_V2_B2_Linear:
+ppcls:configs:ImageNet:PVTV2:PVT_V2_B2_Linear:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -24599,7 +24599,7 @@ ppcls-configs-ImageNet-PVTV2-PVT_V2_B2_Linear:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PVTV2-PVT_V2_B3:
+ppcls:configs:ImageNet:PVTV2:PVT_V2_B3:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -24788,7 +24788,7 @@ ppcls-configs-ImageNet-PVTV2-PVT_V2_B3:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-PeleeNet-PeleeNet:
+ppcls:configs:ImageNet:PeleeNet:PeleeNet:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -24977,7 +24977,7 @@ ppcls-configs-ImageNet-PeleeNet-PeleeNet:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ReXNet-ReXNet_1_0:
+ppcls:configs:ImageNet:ReXNet:ReXNet_1_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -25166,7 +25166,7 @@ ppcls-configs-ImageNet-ReXNet-ReXNet_1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ReXNet-ReXNet_1_3:
+ppcls:configs:ImageNet:ReXNet:ReXNet_1_3:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -25355,7 +25355,7 @@ ppcls-configs-ImageNet-ReXNet-ReXNet_1_3:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ReXNet-ReXNet_1_5:
+ppcls:configs:ImageNet:ReXNet:ReXNet_1_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -25544,7 +25544,7 @@ ppcls-configs-ImageNet-ReXNet-ReXNet_1_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ReXNet-ReXNet_2_0:
+ppcls:configs:ImageNet:ReXNet:ReXNet_2_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -25733,7 +25733,7 @@ ppcls-configs-ImageNet-ReXNet-ReXNet_2_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ReXNet-ReXNet_3_0:
+ppcls:configs:ImageNet:ReXNet:ReXNet_3_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -25922,7 +25922,7 @@ ppcls-configs-ImageNet-ReXNet-ReXNet_3_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-RedNet-RedNet26:
+ppcls:configs:ImageNet:RedNet:RedNet26:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -26111,7 +26111,7 @@ ppcls-configs-ImageNet-RedNet-RedNet26:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-RedNet-RedNet38:
+ppcls:configs:ImageNet:RedNet:RedNet38:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -26300,7 +26300,7 @@ ppcls-configs-ImageNet-RedNet-RedNet38:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-RedNet-RedNet50:
+ppcls:configs:ImageNet:RedNet:RedNet50:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -26489,7 +26489,7 @@ ppcls-configs-ImageNet-RedNet-RedNet50:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Res2Net-Res2Net101_vd_26w_4s:
+ppcls:configs:ImageNet:Res2Net:Res2Net101_vd_26w_4s:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -26678,7 +26678,7 @@ ppcls-configs-ImageNet-Res2Net-Res2Net101_vd_26w_4s:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Res2Net-Res2Net200_vd_26w_4s:
+ppcls:configs:ImageNet:Res2Net:Res2Net200_vd_26w_4s:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -26867,7 +26867,7 @@ ppcls-configs-ImageNet-Res2Net-Res2Net200_vd_26w_4s:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Res2Net-Res2Net50_14w_8s:
+ppcls:configs:ImageNet:Res2Net:Res2Net50_14w_8s:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -27056,7 +27056,7 @@ ppcls-configs-ImageNet-Res2Net-Res2Net50_14w_8s:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Res2Net-Res2Net50_26w_4s:
+ppcls:configs:ImageNet:Res2Net:Res2Net50_26w_4s:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -27245,7 +27245,7 @@ ppcls-configs-ImageNet-Res2Net-Res2Net50_26w_4s:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Res2Net-Res2Net50_vd_26w_4s:
+ppcls:configs:ImageNet:Res2Net:Res2Net50_vd_26w_4s:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -27434,7 +27434,7 @@ ppcls-configs-ImageNet-Res2Net-Res2Net50_vd_26w_4s:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeSt-ResNeSt50:
+ppcls:configs:ImageNet:ResNeSt:ResNeSt50:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -27623,7 +27623,7 @@ ppcls-configs-ImageNet-ResNeSt-ResNeSt50:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeSt-ResNeSt50_fast_1s1x64d:
+ppcls:configs:ImageNet:ResNeSt:ResNeSt50_fast_1s1x64d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -27812,7 +27812,7 @@ ppcls-configs-ImageNet-ResNeSt-ResNeSt50_fast_1s1x64d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt101_32x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt101_32x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -28001,7 +28001,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt101_32x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt101_64x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt101_64x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -28190,7 +28190,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt101_64x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt101_vd_32x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt101_vd_32x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -28379,7 +28379,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt101_vd_32x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt101_vd_64x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt101_vd_64x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -28568,7 +28568,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt101_vd_64x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt152_32x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt152_32x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -28757,7 +28757,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt152_32x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt152_64x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt152_64x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -28946,7 +28946,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt152_64x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt152_vd_32x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt152_vd_32x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -29135,7 +29135,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt152_vd_32x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt152_vd_64x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt152_vd_64x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -29324,7 +29324,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt152_vd_64x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt50_32x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt50_32x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -29513,7 +29513,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt50_32x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt50_64x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt50_64x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -29702,7 +29702,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt50_64x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt-ResNeXt50_vd_64x4d:
+ppcls:configs:ImageNet:ResNeXt:ResNeXt50_vd_64x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -29891,7 +29891,7 @@ ppcls-configs-ImageNet-ResNeXt-ResNeXt50_vd_64x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt101_wsl-ResNeXt101_32x16d_wsl:
+ppcls:configs:ImageNet:ResNeXt101_wsl:ResNeXt101_32x16d_wsl:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -30080,7 +30080,7 @@ ppcls-configs-ImageNet-ResNeXt101_wsl-ResNeXt101_32x16d_wsl:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNeXt101_wsl-ResNeXt101_32x8d_wsl:
+ppcls:configs:ImageNet:ResNeXt101_wsl:ResNeXt101_32x8d_wsl:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -30269,7 +30269,7 @@ ppcls-configs-ImageNet-ResNeXt101_wsl-ResNeXt101_32x8d_wsl:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet101:
+ppcls:configs:ImageNet:ResNet:ResNet101:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -30458,7 +30458,7 @@ ppcls-configs-ImageNet-ResNet-ResNet101:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet101_vd:
+ppcls:configs:ImageNet:ResNet:ResNet101_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -30647,7 +30647,7 @@ ppcls-configs-ImageNet-ResNet-ResNet101_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet152:
+ppcls:configs:ImageNet:ResNet:ResNet152:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -30836,7 +30836,7 @@ ppcls-configs-ImageNet-ResNet-ResNet152:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet152_vd:
+ppcls:configs:ImageNet:ResNet:ResNet152_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -31025,7 +31025,7 @@ ppcls-configs-ImageNet-ResNet-ResNet152_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet18:
+ppcls:configs:ImageNet:ResNet:ResNet18:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -31214,7 +31214,7 @@ ppcls-configs-ImageNet-ResNet-ResNet18:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet18_vd:
+ppcls:configs:ImageNet:ResNet:ResNet18_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -31403,7 +31403,7 @@ ppcls-configs-ImageNet-ResNet-ResNet18_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet200_vd:
+ppcls:configs:ImageNet:ResNet:ResNet200_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -31592,7 +31592,7 @@ ppcls-configs-ImageNet-ResNet-ResNet200_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet34:
+ppcls:configs:ImageNet:ResNet:ResNet34:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -31781,7 +31781,7 @@ ppcls-configs-ImageNet-ResNet-ResNet34:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet34_vd:
+ppcls:configs:ImageNet:ResNet:ResNet34_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -31970,7 +31970,7 @@ ppcls-configs-ImageNet-ResNet-ResNet34_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet50:
+ppcls:configs:ImageNet:ResNet:ResNet50:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -32159,7 +32159,7 @@ ppcls-configs-ImageNet-ResNet-ResNet50:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ResNet-ResNet50_vd:
+ppcls:configs:ImageNet:ResNet:ResNet50_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -32348,7 +32348,7 @@ ppcls-configs-ImageNet-ResNet-ResNet50_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SENet-SENet154_vd:
+ppcls:configs:ImageNet:SENet:SENet154_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -32537,7 +32537,7 @@ ppcls-configs-ImageNet-SENet-SENet154_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SENet-SE_ResNeXt101_32x4d:
+ppcls:configs:ImageNet:SENet:SE_ResNeXt101_32x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -32726,7 +32726,7 @@ ppcls-configs-ImageNet-SENet-SE_ResNeXt101_32x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SENet-SE_ResNeXt50_32x4d:
+ppcls:configs:ImageNet:SENet:SE_ResNeXt50_32x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -32915,7 +32915,7 @@ ppcls-configs-ImageNet-SENet-SE_ResNeXt50_32x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SENet-SE_ResNeXt50_vd_32x4d:
+ppcls:configs:ImageNet:SENet:SE_ResNeXt50_vd_32x4d:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -33104,7 +33104,7 @@ ppcls-configs-ImageNet-SENet-SE_ResNeXt50_vd_32x4d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SENet-SE_ResNet18_vd:
+ppcls:configs:ImageNet:SENet:SE_ResNet18_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -33293,7 +33293,7 @@ ppcls-configs-ImageNet-SENet-SE_ResNet18_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SENet-SE_ResNet34_vd:
+ppcls:configs:ImageNet:SENet:SE_ResNet34_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -33482,7 +33482,7 @@ ppcls-configs-ImageNet-SENet-SE_ResNet34_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SENet-SE_ResNet50_vd:
+ppcls:configs:ImageNet:SENet:SE_ResNet50_vd:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -33671,7 +33671,7 @@ ppcls-configs-ImageNet-SENet-SE_ResNet50_vd:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_swish:
+ppcls:configs:ImageNet:ShuffleNet:ShuffleNetV2_swish:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -33860,7 +33860,7 @@ ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_swish:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x0_25:
+ppcls:configs:ImageNet:ShuffleNet:ShuffleNetV2_x0_25:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -34049,7 +34049,7 @@ ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x0_25:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x0_33:
+ppcls:configs:ImageNet:ShuffleNet:ShuffleNetV2_x0_33:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -34238,7 +34238,7 @@ ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x0_33:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x0_5:
+ppcls:configs:ImageNet:ShuffleNet:ShuffleNetV2_x0_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -34427,7 +34427,7 @@ ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x0_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x1_0:
+ppcls:configs:ImageNet:ShuffleNet:ShuffleNetV2_x1_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -34616,7 +34616,7 @@ ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x1_5:
+ppcls:configs:ImageNet:ShuffleNet:ShuffleNetV2_x1_5:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -34805,7 +34805,7 @@ ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x1_5:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x2_0:
+ppcls:configs:ImageNet:ShuffleNet:ShuffleNetV2_x2_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -34994,7 +34994,7 @@ ppcls-configs-ImageNet-ShuffleNet-ShuffleNetV2_x2_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SqueezeNet-SqueezeNet1_0:
+ppcls:configs:ImageNet:SqueezeNet:SqueezeNet1_0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -35183,7 +35183,7 @@ ppcls-configs-ImageNet-SqueezeNet-SqueezeNet1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SqueezeNet-SqueezeNet1_1:
+ppcls:configs:ImageNet:SqueezeNet:SqueezeNet1_1:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -35372,7 +35372,7 @@ ppcls-configs-ImageNet-SqueezeNet-SqueezeNet1_1:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SwinTransformer-SwinTransformer_base_patch4_window7_224:
+ppcls:configs:ImageNet:SwinTransformer:SwinTransformer_base_patch4_window7_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -35561,7 +35561,7 @@ ppcls-configs-ImageNet-SwinTransformer-SwinTransformer_base_patch4_window7_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SwinTransformer-SwinTransformer_small_patch4_window7_224:
+ppcls:configs:ImageNet:SwinTransformer:SwinTransformer_small_patch4_window7_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -35750,7 +35750,7 @@ ppcls-configs-ImageNet-SwinTransformer-SwinTransformer_small_patch4_window7_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-SwinTransformer-SwinTransformer_tiny_patch4_window7_224:
+ppcls:configs:ImageNet:SwinTransformer:SwinTransformer_tiny_patch4_window7_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -35939,7 +35939,7 @@ ppcls-configs-ImageNet-SwinTransformer-SwinTransformer_tiny_patch4_window7_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-TNT-TNT_small:
+ppcls:configs:ImageNet:TNT:TNT_small:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -36128,7 +36128,7 @@ ppcls-configs-ImageNet-TNT-TNT_small:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Twins-alt_gvt_base:
+ppcls:configs:ImageNet:Twins:alt_gvt_base:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -36317,7 +36317,7 @@ ppcls-configs-ImageNet-Twins-alt_gvt_base:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Twins-alt_gvt_large:
+ppcls:configs:ImageNet:Twins:alt_gvt_large:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -36506,7 +36506,7 @@ ppcls-configs-ImageNet-Twins-alt_gvt_large:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Twins-alt_gvt_small:
+ppcls:configs:ImageNet:Twins:alt_gvt_small:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -36695,7 +36695,7 @@ ppcls-configs-ImageNet-Twins-alt_gvt_small:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Twins-pcpvt_base:
+ppcls:configs:ImageNet:Twins:pcpvt_base:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -36884,7 +36884,7 @@ ppcls-configs-ImageNet-Twins-pcpvt_base:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Twins-pcpvt_large:
+ppcls:configs:ImageNet:Twins:pcpvt_large:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -37073,7 +37073,7 @@ ppcls-configs-ImageNet-Twins-pcpvt_large:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Twins-pcpvt_small:
+ppcls:configs:ImageNet:Twins:pcpvt_small:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -37262,7 +37262,7 @@ ppcls-configs-ImageNet-Twins-pcpvt_small:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VAN-VAN_B0:
+ppcls:configs:ImageNet:VAN:VAN_B0:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -37451,7 +37451,7 @@ ppcls-configs-ImageNet-VAN-VAN_B0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VGG-VGG11:
+ppcls:configs:ImageNet:VGG:VGG11:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -37640,7 +37640,7 @@ ppcls-configs-ImageNet-VGG-VGG11:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VGG-VGG13:
+ppcls:configs:ImageNet:VGG:VGG13:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -37829,7 +37829,7 @@ ppcls-configs-ImageNet-VGG-VGG13:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VGG-VGG16:
+ppcls:configs:ImageNet:VGG:VGG16:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -38018,7 +38018,7 @@ ppcls-configs-ImageNet-VGG-VGG16:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VGG-VGG19:
+ppcls:configs:ImageNet:VGG:VGG19:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -38207,7 +38207,7 @@ ppcls-configs-ImageNet-VGG-VGG19:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VisionTransformer-ViT_base_patch16_224:
+ppcls:configs:ImageNet:VisionTransformer:ViT_base_patch16_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -38396,7 +38396,7 @@ ppcls-configs-ImageNet-VisionTransformer-ViT_base_patch16_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VisionTransformer-ViT_base_patch16_384:
+ppcls:configs:ImageNet:VisionTransformer:ViT_base_patch16_384:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -38585,7 +38585,7 @@ ppcls-configs-ImageNet-VisionTransformer-ViT_base_patch16_384:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VisionTransformer-ViT_base_patch32_384:
+ppcls:configs:ImageNet:VisionTransformer:ViT_base_patch32_384:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -38774,7 +38774,7 @@ ppcls-configs-ImageNet-VisionTransformer-ViT_base_patch32_384:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VisionTransformer-ViT_large_patch16_224:
+ppcls:configs:ImageNet:VisionTransformer:ViT_large_patch16_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -38963,7 +38963,7 @@ ppcls-configs-ImageNet-VisionTransformer-ViT_large_patch16_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VisionTransformer-ViT_large_patch32_384:
+ppcls:configs:ImageNet:VisionTransformer:ViT_large_patch32_384:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -39152,7 +39152,7 @@ ppcls-configs-ImageNet-VisionTransformer-ViT_large_patch32_384:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-VisionTransformer-ViT_small_patch16_224:
+ppcls:configs:ImageNet:VisionTransformer:ViT_small_patch16_224:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -39341,7 +39341,7 @@ ppcls-configs-ImageNet-VisionTransformer-ViT_small_patch16_224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Xception-Xception41:
+ppcls:configs:ImageNet:Xception:Xception41:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -39530,7 +39530,7 @@ ppcls-configs-ImageNet-Xception-Xception41:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Xception-Xception41_deeplab:
+ppcls:configs:ImageNet:Xception:Xception41_deeplab:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -39719,7 +39719,7 @@ ppcls-configs-ImageNet-Xception-Xception41_deeplab:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Xception-Xception65:
+ppcls:configs:ImageNet:Xception:Xception65:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -39908,7 +39908,7 @@ ppcls-configs-ImageNet-Xception-Xception65:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Xception-Xception65_deeplab:
+ppcls:configs:ImageNet:Xception:Xception65_deeplab:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -40097,7 +40097,7 @@ ppcls-configs-ImageNet-Xception-Xception65_deeplab:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-ImageNet-Xception-Xception71:
+ppcls:configs:ImageNet:Xception:Xception71:
   case:
     linux:
       base: ./base/ImageNet_base.yaml
@@ -40286,7 +40286,7 @@ ppcls-configs-ImageNet-Xception-Xception71:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-Logo-ResNet50_ReID:
+ppcls:configs:Logo:ResNet50_ReID:
   case:
     linux:
       base: ./base/Logo_base.yaml
@@ -40442,7 +40442,7 @@ ppcls-configs-Logo-ResNet50_ReID:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-car_exists-MobileNetV3_small_x0_35:
+ppcls:configs:PULC:car_exists:MobileNetV3_small_x0_35:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -40598,7 +40598,7 @@ ppcls-configs-PULC-car_exists-MobileNetV3_small_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-car_exists-PPLCNet_x1_0:
+ppcls:configs:PULC:car_exists:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -40754,7 +40754,7 @@ ppcls-configs-PULC-car_exists-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-car_exists-PPLCNet_x1_0_distillation:
+ppcls:configs:PULC:car_exists:PPLCNet_x1_0_distillation:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -40910,7 +40910,7 @@ ppcls-configs-PULC-car_exists-PPLCNet_x1_0_distillation:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-car_exists-PPLCNet_x1_0_search:
+ppcls:configs:PULC:car_exists:PPLCNet_x1_0_search:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -41066,7 +41066,7 @@ ppcls-configs-PULC-car_exists-PPLCNet_x1_0_search:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-language_classification-MobileNetV3_small_x0_35:
+ppcls:configs:PULC:language_classification:MobileNetV3_small_x0_35:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -41222,7 +41222,7 @@ ppcls-configs-PULC-language_classification-MobileNetV3_small_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-language_classification-PPLCNet_x1_0:
+ppcls:configs:PULC:language_classification:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -41378,7 +41378,7 @@ ppcls-configs-PULC-language_classification-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-language_classification-PPLCNet_x1_0_distillation:
+ppcls:configs:PULC:language_classification:PPLCNet_x1_0_distillation:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -41534,7 +41534,7 @@ ppcls-configs-PULC-language_classification-PPLCNet_x1_0_distillation:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-language_classification-PPLCNet_x1_0_search:
+ppcls:configs:PULC:language_classification:PPLCNet_x1_0_search:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -41690,7 +41690,7 @@ ppcls-configs-PULC-language_classification-PPLCNet_x1_0_search:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-person_attribute-MobileNetV3_small_x0_35:
+ppcls:configs:PULC:person_attribute:MobileNetV3_small_x0_35:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -41848,7 +41848,7 @@ ppcls-configs-PULC-person_attribute-MobileNetV3_small_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-person_attribute-PPLCNet_x1_0:
+ppcls:configs:PULC:person_attribute:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -42006,7 +42006,7 @@ ppcls-configs-PULC-person_attribute-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-person_attribute-PPLCNet_x1_0_Distillation:
+ppcls:configs:PULC:person_attribute:PPLCNet_x1_0_Distillation:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -42164,7 +42164,7 @@ ppcls-configs-PULC-person_attribute-PPLCNet_x1_0_Distillation:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-person_attribute-PPLCNet_x1_0_search:
+ppcls:configs:PULC:person_attribute:PPLCNet_x1_0_search:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -42322,7 +42322,7 @@ ppcls-configs-PULC-person_attribute-PPLCNet_x1_0_search:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-person_exists-MobileNetV3_small_x0_35:
+ppcls:configs:PULC:person_exists:MobileNetV3_small_x0_35:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -42478,7 +42478,7 @@ ppcls-configs-PULC-person_exists-MobileNetV3_small_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-person_exists-PPLCNet_x1_0:
+ppcls:configs:PULC:person_exists:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -42634,7 +42634,7 @@ ppcls-configs-PULC-person_exists-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-person_exists-PPLCNet_x1_0_distillation:
+ppcls:configs:PULC:person_exists:PPLCNet_x1_0_distillation:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -42790,7 +42790,7 @@ ppcls-configs-PULC-person_exists-PPLCNet_x1_0_distillation:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-person_exists-PPLCNet_x1_0_search:
+ppcls:configs:PULC:person_exists:PPLCNet_x1_0_search:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -42946,7 +42946,7 @@ ppcls-configs-PULC-person_exists-PPLCNet_x1_0_search:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-safety_helmet-MobileNetV3_small_x0_35:
+ppcls:configs:PULC:safety_helmet:MobileNetV3_small_x0_35:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -43102,7 +43102,7 @@ ppcls-configs-PULC-safety_helmet-MobileNetV3_small_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-safety_helmet-PPLCNet_x1_0:
+ppcls:configs:PULC:safety_helmet:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -43258,7 +43258,7 @@ ppcls-configs-PULC-safety_helmet-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-safety_helmet-PPLCNet_x1_0_distillation:
+ppcls:configs:PULC:safety_helmet:PPLCNet_x1_0_distillation:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -43414,7 +43414,7 @@ ppcls-configs-PULC-safety_helmet-PPLCNet_x1_0_distillation:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-safety_helmet-PPLCNet_x1_0_search:
+ppcls:configs:PULC:safety_helmet:PPLCNet_x1_0_search:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -43570,7 +43570,7 @@ ppcls-configs-PULC-safety_helmet-PPLCNet_x1_0_search:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-text_image_orientation-MobileNetV3_small_x0_35:
+ppcls:configs:PULC:text_image_orientation:MobileNetV3_small_x0_35:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -43726,7 +43726,7 @@ ppcls-configs-PULC-text_image_orientation-MobileNetV3_small_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-text_image_orientation-PPLCNet_x1_0:
+ppcls:configs:PULC:text_image_orientation:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -43882,7 +43882,7 @@ ppcls-configs-PULC-text_image_orientation-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-text_image_orientation-PPLCNet_x1_0_distillation:
+ppcls:configs:PULC:text_image_orientation:PPLCNet_x1_0_distillation:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -44038,7 +44038,7 @@ ppcls-configs-PULC-text_image_orientation-PPLCNet_x1_0_distillation:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-text_image_orientation-PPLCNet_x1_0_search:
+ppcls:configs:PULC:text_image_orientation:PPLCNet_x1_0_search:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -44194,7 +44194,7 @@ ppcls-configs-PULC-text_image_orientation-PPLCNet_x1_0_search:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-textline_orientation-MobileNetV3_small_x0_35:
+ppcls:configs:PULC:textline_orientation:MobileNetV3_small_x0_35:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -44350,7 +44350,7 @@ ppcls-configs-PULC-textline_orientation-MobileNetV3_small_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-textline_orientation-PPLCNet_x1_0:
+ppcls:configs:PULC:textline_orientation:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -44506,7 +44506,7 @@ ppcls-configs-PULC-textline_orientation-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-textline_orientation-PPLCNet_x1_0_224x224:
+ppcls:configs:PULC:textline_orientation:PPLCNet_x1_0_224x224:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -44662,7 +44662,7 @@ ppcls-configs-PULC-textline_orientation-PPLCNet_x1_0_224x224:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-textline_orientation-PPLCNet_x1_0_distillation:
+ppcls:configs:PULC:textline_orientation:PPLCNet_x1_0_distillation:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -44818,7 +44818,7 @@ ppcls-configs-PULC-textline_orientation-PPLCNet_x1_0_distillation:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-textline_orientation-PPLCNet_x1_0_search:
+ppcls:configs:PULC:textline_orientation:PPLCNet_x1_0_search:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -44974,7 +44974,7 @@ ppcls-configs-PULC-textline_orientation-PPLCNet_x1_0_search:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-traffic_sign-MobileNetV3_samll_x0_35:
+ppcls:configs:PULC:traffic_sign:MobileNetV3_samll_x0_35:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -45130,7 +45130,7 @@ ppcls-configs-PULC-traffic_sign-MobileNetV3_samll_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-traffic_sign-PPLCNet_x1_0:
+ppcls:configs:PULC:traffic_sign:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -45286,7 +45286,7 @@ ppcls-configs-PULC-traffic_sign-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-traffic_sign-PPLCNet_x1_0_distillation:
+ppcls:configs:PULC:traffic_sign:PPLCNet_x1_0_distillation:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -45442,7 +45442,7 @@ ppcls-configs-PULC-traffic_sign-PPLCNet_x1_0_distillation:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-traffic_sign-PPLCNet_x1_0_search:
+ppcls:configs:PULC:traffic_sign:PPLCNet_x1_0_search:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -45598,7 +45598,7 @@ ppcls-configs-PULC-traffic_sign-PPLCNet_x1_0_search:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-vehicle_attribute-MobileNetV3_small_x0_35:
+ppcls:configs:PULC:vehicle_attribute:MobileNetV3_small_x0_35:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -45754,7 +45754,7 @@ ppcls-configs-PULC-vehicle_attribute-MobileNetV3_small_x0_35:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-vehicle_attribute-PPLCNet_x1_0:
+ppcls:configs:PULC:vehicle_attribute:PPLCNet_x1_0:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -45910,7 +45910,7 @@ ppcls-configs-PULC-vehicle_attribute-PPLCNet_x1_0:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-vehicle_attribute-PPLCNet_x1_0_distillation:
+ppcls:configs:PULC:vehicle_attribute:PPLCNet_x1_0_distillation:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -46066,7 +46066,7 @@ ppcls-configs-PULC-vehicle_attribute-PPLCNet_x1_0_distillation:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-vehicle_attribute-PPLCNet_x1_0_search:
+ppcls:configs:PULC:vehicle_attribute:PPLCNet_x1_0_search:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -46222,7 +46222,7 @@ ppcls-configs-PULC-vehicle_attribute-PPLCNet_x1_0_search:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-PULC-vehicle_attribute-ResNet50:
+ppcls:configs:PULC:vehicle_attribute:ResNet50:
   case:
     linux:
       base: ./base/PULC_base.yaml
@@ -46378,7 +46378,7 @@ ppcls-configs-PULC-vehicle_attribute-ResNet50:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-Products-MV3_Large_1x_Aliproduct_DLBHC:
+ppcls:configs:Products:MV3_Large_1x_Aliproduct_DLBHC:
   case:
     linux:
       base: ./base/Products_base.yaml
@@ -46534,7 +46534,7 @@ ppcls-configs-Products-MV3_Large_1x_Aliproduct_DLBHC:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-Products-ResNet50_vd_Aliproduct:
+ppcls:configs:Products:ResNet50_vd_Aliproduct:
   case:
     linux:
       base: ./base/Products_base.yaml
@@ -46690,7 +46690,7 @@ ppcls-configs-Products-ResNet50_vd_Aliproduct:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-Products-ResNet50_vd_Inshop:
+ppcls:configs:Products:ResNet50_vd_Inshop:
   case:
     linux:
       base: ./base/Products_base.yaml
@@ -46846,7 +46846,7 @@ ppcls-configs-Products-ResNet50_vd_Inshop:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-Products-ResNet50_vd_SOP:
+ppcls:configs:Products:ResNet50_vd_SOP:
   case:
     linux:
       base: ./base/Products_base.yaml
@@ -47002,7 +47002,7 @@ ppcls-configs-Products-ResNet50_vd_SOP:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-Vehicle-PPLCNet_2.5x_ReID:
+ppcls:configs:Vehicle:PPLCNet_2.5x_ReID:
   case:
     linux:
       base: ./base/Vehicle_base.yaml
@@ -47158,7 +47158,7 @@ ppcls-configs-Vehicle-PPLCNet_2.5x_ReID:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-Vehicle-ResNet50:
+ppcls:configs:Vehicle:ResNet50:
   case:
     linux:
       base: ./base/Vehicle_base.yaml
@@ -47314,7 +47314,7 @@ ppcls-configs-Vehicle-ResNet50:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-Vehicle-ResNet50_ReID:
+ppcls:configs:Vehicle:ResNet50_ReID:
   case:
     linux:
       base: ./base/Vehicle_base.yaml
@@ -47470,7 +47470,7 @@ ppcls-configs-Vehicle-ResNet50_ReID:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-reid-strong_baseline-baseline:
+ppcls:configs:reid:strong_baseline:baseline:
   case:
     linux:
       base: ./base/reid_base.yaml
@@ -47593,7 +47593,7 @@ ppcls-configs-reid-strong_baseline-baseline:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-reid-strong_baseline-softmax_triplet:
+ppcls:configs:reid:strong_baseline:softmax_triplet:
   case:
     linux:
       base: ./base/reid_base.yaml
@@ -47716,7 +47716,7 @@ ppcls-configs-reid-strong_baseline-softmax_triplet:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-reid-strong_baseline-softmax_triplet_with_center:
+ppcls:configs:reid:strong_baseline:softmax_triplet_with_center:
   case:
     linux:
       base: ./base/reid_base.yaml
@@ -47839,7 +47839,7 @@ ppcls-configs-reid-strong_baseline-softmax_triplet_with_center:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-GeneralRecognition_PPLCNet_x2_5_quantization:
+ppcls:configs:slim:GeneralRecognition_PPLCNet_x2_5_quantization:
   case:
     linux:
       base: ./base/slim_base.yaml
@@ -47995,7 +47995,7 @@ ppcls-configs-slim-GeneralRecognition_PPLCNet_x2_5_quantization:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-MobileNetV3_large_x1_0_prune:
+ppcls:configs:slim:MobileNetV3_large_x1_0_prune:
   case:
     linux:
       base: ./base/slim_base.yaml
@@ -48151,7 +48151,7 @@ ppcls-configs-slim-MobileNetV3_large_x1_0_prune:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-MobileNetV3_large_x1_0_quantization:
+ppcls:configs:slim:MobileNetV3_large_x1_0_quantization:
   case:
     linux:
       base: ./base/slim_base.yaml
@@ -48307,7 +48307,7 @@ ppcls-configs-slim-MobileNetV3_large_x1_0_quantization:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-PPLCNet_x1_0_quantization:
+ppcls:configs:slim:PPLCNet_x1_0_quantization:
   case:
     linux:
       base: ./base/slim_base.yaml
@@ -48463,7 +48463,7 @@ ppcls-configs-slim-PPLCNet_x1_0_quantization:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-ResNet50_vd_prune:
+ppcls:configs:slim:ResNet50_vd_prune:
   case:
     linux:
       base: ./base/slim_base.yaml
@@ -48619,7 +48619,7 @@ ppcls-configs-slim-ResNet50_vd_prune:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-ResNet50_vd_quantization:
+ppcls:configs:slim:ResNet50_vd_quantization:
   case:
     linux:
       base: ./base/slim_base.yaml
@@ -48775,7 +48775,7 @@ ppcls-configs-slim-ResNet50_vd_quantization:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-ResNet50_vehicle_cls_prune:
+ppcls:configs:slim:ResNet50_vehicle_cls_prune:
   case:
     linux:
       base: ./base/slim_base.yaml
@@ -48931,7 +48931,7 @@ ppcls-configs-slim-ResNet50_vehicle_cls_prune:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-ResNet50_vehicle_cls_quantization:
+ppcls:configs:slim:ResNet50_vehicle_cls_quantization:
   case:
     linux:
       base: ./base/slim_base.yaml
@@ -49087,7 +49087,7 @@ ppcls-configs-slim-ResNet50_vehicle_cls_quantization:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-ResNet50_vehicle_reid_prune:
+ppcls:configs:slim:ResNet50_vehicle_reid_prune:
   case:
     linux:
       base: ./base/slim_base.yaml
@@ -49243,7 +49243,7 @@ ppcls-configs-slim-ResNet50_vehicle_reid_prune:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls-configs-slim-ResNet50_vehicle_reid_quantization:
+ppcls:configs:slim:ResNet50_vehicle_reid_quantization:
   case:
     linux:
       base: ./base/slim_base.yaml
