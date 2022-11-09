@@ -2,6 +2,10 @@ import os
 import yaml
 import wget
 import tarfile
+import zipfile
+import logging
+
+logger = logging.getLogger("paddleslim-log")
 
 class PaddleSlim_Case_Start(object):
     def __init__(self):
