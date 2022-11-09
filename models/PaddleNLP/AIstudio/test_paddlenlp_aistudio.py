@@ -15,32 +15,32 @@ import os
 import sys
 import subprocess
 import logging
-import json
 import allure
 import pytest
+import json
 
 
-def exit_check(exit_code, file_name, project_name):
+def exit_check(exit_code, file_name,project_name):
     """
     check exit_code
     """
-    assert exit_code == 0, "ProjectID: %s %s Failed!" % (file_name, project_name)
+    assert exit_code == 0, "ProjectID: %s %s Failed!" % (file_name,project_name)
 
 
-def save_log(exit_code, output, file_name, log_dir=""):
+def save_log(exit_code, output, file_name):
     """
     Save log for disply
     """
     if exit_code == 0:
-        log_dir = os.getcwd() + "/log/" + os.path.join(file_name + "_success.log")
-        with open(log_dir, "a") as flog:
+        log_file = os.getcwd() + "/log/" + os.path.join(file_name + "_success.log")
+        with open(log_file, "a") as flog:
             flog.write("%s" % (output))
-            allure.attach.file(log_dir, "执行日志", allure.attachment_type.TEXT)
+            allure.attach.file(log_file, '执行日志', allure.attachment_type.TEXT)
     else:
-        log_dir = os.getcwd() + "/log/" + os.path.join(file_name + "_err.log")
-        with open(log_dir, "a") as flog:
+        log_file = os.getcwd() + "/log/" + os.path.join(file_name + "_err.log")
+        with open(log_file, "a") as flog:
             flog.write("%s" % (output))
-            allure.attach.file(log_dir, "执行日志", allure.attachment_type.TEXT)
+            allure.attach.file(log_file, '执行日志', allure.attachment_type.TEXT)
 
 
 def download_project_files():
@@ -54,26 +54,28 @@ def download_project_files():
 
 
 def get_project_list():
-    """
-    get aistudio_projects_files
-    """
     download_project_files()
     project_list = []
-    path = os.listdir(os.getcwd() + "/aistudio_projects_files/")
+    path = os.listdir(os.getcwd() + "/AIstudio_Download/aistudio_projects_files/")
     for file in path:
         file_name = os.path.splitext(file)[0]
         project_list.append(file_name)
     return project_list
 
 
-@pytest.mark.parametrize("file_name", get_project_list())
+@pytest.mark.parametrize('file_name', get_project_list())
 def test_aistudio_case(file_name):
     """
     EXEC AIstudio main.ipynb
     """
-    file_path = os.getcwd() + "/aistudio_projects_files/" + file_name
-    project_name = json.load(open("project_info.json", "r", encoding="utf-8"))[file_name]
-    os.system("cd {}".format(file_path))
+    work_path = os.getcwd() 
+    file_path = work_path + "/AIstudio_Download/aistudio_projects_files/" + file_name
+    project_info= json.load(open('project_info.json','r',encoding="utf-8"))
+    project_name = project_info[file_name]
+
+    # 模拟aistudio 环境,解决绝对路径问题
+    aistudio_path = '/home/aistudio/'
+    os.system("cp -r %s %s && cd %s" % (file_path,aistudio_path,aistudio_path))
     if os.path.exists(os.path.join(file_path + "/main.ipynb")):
         exec_name = "main"
     else:
@@ -83,10 +85,23 @@ def test_aistudio_case(file_name):
     os.system("cd %s && jupyter nbconvert --to python %s.ipynb" % (file_path, exec_name))
     output = subprocess.getstatusoutput("cd %s && ipython %s.py" % (file_path, exec_name))
 
+    os.system("cd {}".format(work_path))
+    os.system("rm -rf {}".format(aistudio_path))
+
+    # TODO: add download failure case
+    # origin_project_list = project_info.keys()
+    # result_project_list = os.listdir(os.getcwd() + "/aistudio_projects_files/")
+    # failure_list = (set(origin_project_list) ^ set(result_project_list))
+
+    with open('results_project_info.txt',"a+",encoding='utf-8') as result:
+        result.write("{}\t{}\t{}".format(0, file_name, project_name) + "\r\n")
+
     allure.dynamic.parent_suite("PaddleNLP AIstudio")
     allure.dynamic.title("{}".format(file_name))
     allure.dynamic.feature(project_name)
-    allure.dynamic.description("启动命令: ipython {}.py".format(exec_name))
+    allure.dynamic.description(
+    "启动命令: ipython {}.py".format(exec_name))
+    allure.attach.file("{}.py".format(exec_name), '执行脚本', allure.attachment_type.TEXT)
 
     save_log(output[0], output[1], file_name)
-    exit_check(output[0], file_name, project_name)
+    exit_check(output[0], file_name,project_name)
