@@ -104,24 +104,41 @@ def run():
         content["Global"]["model_dir"] = current_path + "/RES-paddle2-PPLIteSegSTDC1"
         content["TrainConfig"]["epochs"] = 1
         content["TrainConfig"]["eval_iter"] = 50
-
+    elif paddleslim_start.qa_yaml_name == "example:full_quantization:image_classification:configs:mobilenetv3_large_qat_dis":
+        paddleslim_start.wget_and_tar("https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_infer.tar")
+        paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
+        content["Global"]["model_dir"] = current_path + "/MobileNetV3_large_x1_0_infer"
+        content["Global"]["data_dir"] = current_path + "/ILSVRC2012"
+        content["TrainConfig"]["epochs"] = 1
+        content["TrainConfig"]["eval_iter"] = 50
+    elif paddleslim_start.qa_yaml_name == " example:full_quantization:picodet:configs:picodet_npu_with_postprocess":
+        paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu.tar")
+        paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
+        content["Global"]["model_dir"] = current_path + "/picodet_s_416_coco_npu"
+        content["Global"]["data_dir"] = current_path + "/ILSVRC2012"
+        content["TrainConfig"]["train_iter"] = 80
+        content["TrainConfig"]["eval_iter"] = 10
     else:
         logger.info("### no exists {} ".format(paddleslim_start.qa_yaml_name))
 
     with open(os.path.join(paddleslim_start.REPO_PATH, paddleslim_start.rd_yaml_path), "w") as f:
         yaml.dump(content, f)
     
-    # example:auto_compression:detection:configs:ppyoloe_l_qat_dis 修改数据路径
+    # example/auto_compression:detection:configs:ppyoloe_l_qat_dis 修改数据路径
     ppyoloe_l_qat_dis_reader = paddleslim_start.REPO_PATH + "/example/auto_compression/detection/configs/yolo_reader.yml"
     paddleslim_start.update_yaml_config(ppyoloe_l_qat_dis_reader, "dataset_dir: dataset/coco/", "dataset_dir: " + current_path + '/coco')
 
-    # auto_compression：semantic_segmentation demo 修改数据路径
+    # auto_compression/semantic_segmentation demo 修改数据路径
     semantic_segmentation_reader = "example/auto_compression/semantic_segmentation/configs/dataset/cityscapes_1024x512_scale1.0.yml"
     with open(os.path.join(paddleslim_start.REPO_PATH, semantic_segmentation_reader), "r") as f_reader:
         content_reader = yaml.load(f_reader, Loader=yaml.FullLoader)
     content_reader["train_dataset"]["dataset_root"] = current_path + "/mini_cityscapes"
     with open(os.path.join(paddleslim_start.REPO_PATH, semantic_segmentation_reader), "w") as f_reader:
         yaml.dump(content_reader, f_reader)
+
+    # full_quantization/picodet demo 修改数据路径
+    full_quant_picodet_reader = paddleslim_start.REPO_PATH + "/example/full_quantization/picodet/configs/picodet_reader.yml"
+    paddleslim_start.update_yaml_config(ppyoloe_l_qat_dis_reader, "dataset_dir: dataset/coco/", "dataset_dir: " + current_path + '/coco')
 
 
 if __name__ == "__main__":

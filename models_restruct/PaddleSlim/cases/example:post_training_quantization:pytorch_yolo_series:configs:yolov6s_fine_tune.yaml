@@ -1,0 +1,45 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python fine_tune.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
+          - --recon_level=region-wise
+          - --save_dir=region_ptq_out
+          - --devices='gpu'
+
+      -
+        name: multi
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python fine_tune.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
+          - --recon_level=layer-wise
+          - --save_dir=layer_ptq_out
+          - --devices='gpu'
+
+
+  windows:
+    train:
+      -
+        name: single
+        path: example/full_quantization/image_classification/
+        cmd: python run.py
+        params:
+          - --config_path=./configs/picodet_npu_with_postprocess.yaml
+          - --save_dir='./full_quant_det_picodet_single_card/'
+          - --devices='gpu'
+
+  mac:
+    train:
+      -
+        name: single
+        path: example/full_quantization/image_classification/
+        cmd: python run.py
+        params:
+          - --config_path=./configs/picodet_npu_with_postprocess.yaml
+          - --save_dir='./full_quant_det_picodet_single_card/'
+          - --devices='cpu'

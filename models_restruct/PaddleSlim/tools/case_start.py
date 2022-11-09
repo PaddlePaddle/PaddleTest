@@ -27,9 +27,8 @@ def run(function_name):
     elif paddleslim_case_start.step == "eval" and paddleslim_case_start.qa_yaml_name == "example:auto_compression:nlp:configs:pp-minilm:auto:afqmc.yaml":
         content["Global"]["model_dir"] = "./save_afqmc_pp_minilm_pruned"
     
-    
     else:
-        logger.info("### {} no update required".format(paddleslim_case_start.rd_yaml_path))
+        logger.info("### {} no update required".format(paddleslim_case_starttou.rd_yaml_path))
 
 
 if __name__ == "__main__":

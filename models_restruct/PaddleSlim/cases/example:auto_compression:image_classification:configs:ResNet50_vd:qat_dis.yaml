@@ -11,7 +11,7 @@ case:
           - --devices='gpu'
 
       -
-        name: mulit
+        name: multi
         path: example/auto_compression/image_classification/
         cmd: python -m paddle.distributed.launch run.py
         params:
