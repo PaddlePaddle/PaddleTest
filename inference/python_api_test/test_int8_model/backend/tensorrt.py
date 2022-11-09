@@ -152,7 +152,7 @@ class TensorRTEngine(object):
                 network = builder.create_network(EXPLICIT_BATCH)
             parser = trt.OnnxParser(network, TRT_LOGGER)
             runtime = trt.Runtime(TRT_LOGGER)
-            config.max_workspace_size = 1 << 28
+            config.max_workspace_size = 1 << 30
 
             import onnx
 
