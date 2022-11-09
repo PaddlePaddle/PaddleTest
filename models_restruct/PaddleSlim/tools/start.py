@@ -66,10 +66,11 @@ def run():
         content["TrainConfig"]["eval_iter"] = 10
         content["Global"]["model_dir"] = current_path + "/ppyoloe_crn_l_300e_coco"
     elif paddleslim_start.qa_yaml_name == "example:auto_compression:pytorch_yolo_series:configs:yolov5s_qat_dis":
-        paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/detection/yolov5s_infer.tar")
+        paddleslim_start.wget_and_tar("https://paddle-slim-models.bj.bcebos.com/act/yolov5s.onnx")
         paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
         content["TrainConfig"]["train_iter"] = 20
         content["TrainConfig"]["eval_iter"] = 10
+        content["Global"]["model_dir"] = current_path + "/yolov5s.onnx"
         content["Global"]["coco_dataset_dir"] = current_path + "/coco"
     elif paddleslim_start.qa_yaml_name == "example:auto_compression:image_classification:configs:MobileNetV1:qat_dis":
         paddleslim_start.wget_and_tar("https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar")
