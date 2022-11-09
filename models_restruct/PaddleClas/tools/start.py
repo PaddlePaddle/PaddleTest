@@ -38,23 +38,23 @@ class PaddleClas_Start(object):
 
         self.env_dict = {}
         self.base_yaml_dict = {
-            "ImageNet": "ppcls-configs-ImageNet-ResNet-ResNet50.yaml",
-            "slim": "ppcls-configs-slim-PPLCNet_x1_0_quantization.yaml",
-            "DeepHash": "ppcls-configs-DeepHash-DCH.yaml",
-            "GeneralRecognition": "ppcls-configs-GeneralRecognition-GeneralRecognition_PPLCNet_x2_5.yaml",
-            "GeneralRecognitionV2": "ppcls-configs-GeneralRecognitionV2-GeneralRecognitionV2_PPLCNetV2_base.yaml",
-            "Cartoonface": "ppcls-configs-Cartoonface-ResNet50_icartoon.yaml",
-            "Logo": "ppcls-configs-Logo-ResNet50_ReID.yaml",
-            "Products": "ppcls-configs-Products-ResNet50_vd_Inshop.yaml",
-            "Vehicle": "ppcls-configs-Vehicle-ResNet50.yaml",
-            "PULC": "ppcls-configs-PULC-car_exists-PPLCNet_x1_0.yaml",
-            "reid": "ppcls-configs-reid-strong_baseline-baseline.yaml",
-            "metric_learning": "ppcls-configs-metric_learning-adaface_ir18",
+            "ImageNet": "ppcls:configs:ImageNet:ResNet:ResNet50.yaml",
+            "slim": "ppcls:configs:slim:PPLCNet_x1_0_quantization.yaml",
+            "DeepHash": "ppcls:configs:DeepHash:DCH.yaml",
+            "GeneralRecognition": "ppcls:configs:GeneralRecognition:GeneralRecognition_PPLCNet_x2_5.yaml",
+            "GeneralRecognitionV2": "ppcls:configs:GeneralRecognitionV2:GeneralRecognitionV2_PPLCNetV2_base.yaml",
+            "Cartoonface": "ppcls:configs:Cartoonface:ResNet50_icartoon.yaml",
+            "Logo": "ppcls:configs:Logo:ResNet50_ReID.yaml",
+            "Products": "ppcls:configs:Products:ResNet50_vd_Inshop.yaml",
+            "Vehicle": "ppcls:configs:Vehicle:ResNet50.yaml",
+            "PULC": "ppcls:configs:PULC:car_exists:PPLCNet_x1_0.yaml",
+            "reid": "ppcls:configs:reid:strong_baseline:baseline.yaml",
+            "metric_learning": "ppcls:configs:metric_learning:adaface_ir18",
         }
-        self.model_type = self.qa_yaml_name.split("-")[2]  # 固定格式为 ppcls-config-model_type
+        self.model_type = self.qa_yaml_name.split(":")[2]  # 固定格式为 ppcls:config:model_type
         self.env_dict["clas_model_type"] = self.model_type
-        if "-PULC-" in self.qa_yaml_name:
-            self.model_type_PULC = self.qa_yaml_name.split("-")[3]  # 固定格式为 ppcls-config-model_type-PULC_type
+        if ":PULC:" in self.qa_yaml_name:
+            self.model_type_PULC = self.qa_yaml_name.split(":")[3]  # 固定格式为 ppcls:config:model_type:PULC_type
             self.env_dict["model_type_PULC"] = self.model_type_PULC
 
     def download_data(self, value=None):
@@ -234,30 +234,45 @@ class PaddleClas_Start(object):
         # 下载预训练模型
         step = self.step.split("+")  # 各个阶段按+分割
         for step_single in step:
-            if (
-                "eval" in step_single or "infer" in step_single or "export" in step_single
-            ) and "pretrained" in step_single:
+            if ("eval" in step_single or "infer" in step_single or "export" in step_single) and (
+                "pretrained" in step_single
+                or "PULC:language_classification" in self.qa_yaml_name
+                or "PULC:textline_orientation" in self.qa_yaml_name
+                or ":ImageNet:VGG:VGG11" in self.qa_yaml_name
+            ):
+
+                # 准备预训练评估路径模型
                 self.env_dict["eval_pretrained_model"] = self.eval_pretrained_params + "_pretrained"
+
+                # 添加额外的规则 注意要在上面if添加同样的规则
+                if (
+                    "PULC:language_classification" in self.qa_yaml_name
+                    or "PULC:textline_orientation" in self.qa_yaml_name
+                    or ":ImageNet:VGG:VGG11" in self.qa_yaml_name
+                ):
+                    # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
+                    self.env_dict["eval_trained_model"] = self.env_dict["eval_pretrained_model"]
+
                 # 准备导出模型
                 self.env_dict["export_pretrained_model"] = self.predict_pretrain_params + "_infer"
 
                 if os.path.exists(self.eval_pretrained_params + "_pretrained.pdparams"):
                     logger.info("### already have {}_pretrained.pdparams".format(self.eval_pretrained_params))
                 else:
-                    if (
-                        "-ESNet" in self.qa_yaml_name
-                        or "-HRNet" in self.qa_yaml_name
-                        or "-InceptionV3" in self.qa_yaml_name
-                        or "-MobileNetV1" in self.qa_yaml_name
-                        or "-MobileNetV3" in self.qa_yaml_name
-                        or "-PPHGNet" in self.qa_yaml_name
-                        or "-PPLCNet" in self.qa_yaml_name
-                        or "-PPLCNetV2" in self.qa_yaml_name
-                        or "-ResNet" in self.qa_yaml_name
-                        or "-GeneralRecognition_PPLCNet" in self.qa_yaml_name
-                        or "-GeneralRecognitionV2_PPLCNetV2" in self.qa_yaml_name
-                        or "-SwinTransformer" in self.qa_yaml_name
-                        or "-VGG" in self.qa_yaml_name
+                    if (  # 针对legend模型
+                        ":ESNet" in self.qa_yaml_name
+                        or ":HRNet" in self.qa_yaml_name
+                        or ":InceptionV3" in self.qa_yaml_name
+                        or ":MobileNetV1" in self.qa_yaml_name
+                        or ":MobileNetV3" in self.qa_yaml_name
+                        or ":PPHGNet" in self.qa_yaml_name
+                        or ":PPLCNet" in self.qa_yaml_name
+                        or ":PPLCNetV2" in self.qa_yaml_name
+                        or ":ResNet" in self.qa_yaml_name
+                        or ":GeneralRecognition_PPLCNet" in self.qa_yaml_name
+                        or ":GeneralRecognitionV2_PPLCNetV2" in self.qa_yaml_name
+                        or ":SwinTransformer" in self.qa_yaml_name
+                        or ":VGG" in self.qa_yaml_name
                     ):
                         logger.info("#### use legendary_models pretrain model")
                         value = "https://paddle-imagenet-models-name.bj.bcebos.com/\
@@ -282,18 +297,21 @@ class PaddleClas_Start(object):
                         except:
                             logger.info("#### start download failed {} failed".format(value.replace(" ", "")))
 
+            # language_classification、textline_orientation这两个模型直接用预训练模型 eval predict阶段
             elif "predict" in step_single and (
                 "pretrained" in step_single
-                or "PULC-language_classification" in self.qa_yaml_name
-                or "PULC-textline_orientation" in self.qa_yaml_name
+                or "PULC:language_classification" in self.qa_yaml_name
+                or "PULC:textline_orientation" in self.qa_yaml_name
+                or ":ImageNet:VGG:VGG11" in self.qa_yaml_name
             ):
                 self.env_dict["predict_pretrained_model"] = os.path.join(
                     "../{}_infer".format(self.predict_pretrain_params)
                 )
                 # 添加额外的规则 注意要在上面if添加同样的规则
                 if (
-                    "PULC-language_classification" in self.qa_yaml_name
-                    or "PULC-textline_orientation" in self.qa_yaml_name
+                    "PULC:language_classification" in self.qa_yaml_name
+                    or "PULC:textline_orientation" in self.qa_yaml_name
+                    or ":ImageNet:VGG:VGG11" in self.qa_yaml_name
                 ):  # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
                     self.env_dict["predict_trained_model"] = self.env_dict["predict_pretrained_model"]
 

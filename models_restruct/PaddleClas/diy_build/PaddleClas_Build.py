@@ -40,16 +40,16 @@ class PaddleClas_Build(Model_Build):
         if str(self.models_list) != "None":
             for line in self.models_list.split(","):
                 if ".yaml" in line:
-                    self.clas_model_list.append(line.strip().replace("-", "/"))
+                    self.clas_model_list.append(line.strip().replace(":", "/"))
         elif str(self.models_file) != "None":  # 获取要执行的yaml文件列表
             for file_name in self.models_file.split(","):
                 for line in open(file_name):
                     if ".yaml" in line:
-                        self.clas_model_list.append(line.strip().replace("-", "/"))
+                        self.clas_model_list.append(line.strip().replace(":", "/"))
         else:
             for file_name in os.listdir("cases"):
                 if ".yaml" in file_name:
-                    self.clas_model_list.append(file_name.strip().replace("-", "/"))
+                    self.clas_model_list.append(file_name.strip().replace(":", "/"))
 
     def value_in_modellist(self, value=None):
         """
