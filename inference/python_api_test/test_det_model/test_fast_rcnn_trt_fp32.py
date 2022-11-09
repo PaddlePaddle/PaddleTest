@@ -46,6 +46,7 @@ def test_config():
 @pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.trt_fp32
+@pytest.mark.skip(reason="TRT7下会报错DLTP-57091，暂时跳过")
 def test_trt_fp32_more_bz():
     """
     compared mkldnn fast_rcnn batch size = [1] outputs with true val
