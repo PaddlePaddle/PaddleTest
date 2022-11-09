@@ -29,7 +29,7 @@ def run(function_name):
     
     
     else:
-        logger.info("### {} no update required".format(paddleslim_start.rd_yaml_path))
+        logger.info("### {} no update required".format(paddleslim_case_start.rd_yaml_path))
 
 
 if __name__ == "__main__":
