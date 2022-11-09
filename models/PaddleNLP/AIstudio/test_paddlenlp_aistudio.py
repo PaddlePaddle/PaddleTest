@@ -47,10 +47,12 @@ def download_project_files():
     """
     Auto download PaddleNLP AIstudio Project
     """
-    log_path = os.getcwd() + "/log/"
+    work_path = os.getcwd() 
+    log_path = work_path+ "/log/"
     output = subprocess.getstatusoutput("cd AIstudio_Download && python ./aistudio_client.py")
     with open(log_path + "download.log", "a") as flog:
         flog.write("%s" % (output[1]))
+    os.system("cd {}".format(work_path))
 
 
 def get_project_list():
