@@ -15,8 +15,6 @@ ppcls-configs-ImageNet-DLA-DLA60x_c.yaml
 ppcls-configs-ImageNet-DLA-DLA46x_c.yaml
 ppcls-configs-ImageNet-DLA-DLA60.yaml
 ppcls-configs-ImageNet-DLA-DLA102x.yaml
-ppcls-configs-ImageNet-VisionTransformer-ViT_large_patch16_224.yaml
-ppcls-configs-ImageNet-VisionTransformer-ViT_large_patch32_384.yaml
 ppcls-configs-ImageNet-VisionTransformer-ViT_base_patch16_384.yaml
 ppcls-configs-ImageNet-VisionTransformer-ViT_base_patch32_384.yaml
 ppcls-configs-ImageNet-VisionTransformer-ViT_base_patch16_224.yaml

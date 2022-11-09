@@ -69,7 +69,7 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
             kpi_value = float(np.average(np.array(kpi_value_all)))
     # check 逻辑
     logger.info("###kpi_value: {}".format(kpi_value))
-    print("###kpi_value: {}".format(kpi_value))
+    # print("###kpi_value: {}".format(kpi_value))
     # logger.info("###kpi_value: {}".format(type(kpi_value)))
     return kpi_value
 
