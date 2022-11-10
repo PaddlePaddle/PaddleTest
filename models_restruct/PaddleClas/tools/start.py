@@ -28,7 +28,7 @@ class PaddleClas_Start(object):
         """
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
-        logger.info("###self.qa_yaml_name: {}".format(self.qa_yaml_name))
+        logger.info("### self.qa_yaml_name: {}".format(self.qa_yaml_name))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
         self.step = os.environ["step"]
@@ -368,7 +368,7 @@ class PaddleClas_Start(object):
         """
         基于base yaml创造新的yaml
         """
-        logger.info("###self.mode {}".format(self.mode))
+        logger.info("### self.mode {}".format(self.mode))
         # 增加 function 和 precision 的选项，只有在precision时才进行复制,function时只用base验证
         # if self.mode == "function":
         #     if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is True:  # cases 是基于最原始的路径的
@@ -407,6 +407,7 @@ class PaddleClas_Start(object):
     def change_yaml_kpi(self, content, content_result):
         """
         递归修改变量值,直接全部整体替换,不管现在需要的是什么阶段
+        注意这里依赖 self.step 变量, 如果执行时不传入暂时获取不到, TODO:待框架优化
         """
         if isinstance(content, dict):
             for key, val in content.items():
@@ -415,7 +416,10 @@ class PaddleClas_Start(object):
                 elif isinstance(content[key], list):
                     for i, case_value in enumerate(content[key]):
                         for key1, val1 in case_value.items():
-                            if key1 == "result" and key + ":" in self.step:  # 结果和阶段同时满足
+                            if key1 == "result" and (
+                                key + ":" in self.step or key + "+" in self.step or "+" + key in self.step
+                            ):
+                                # 结果和阶段同时满足 否则就有可能把不执行的阶段的result替换到执行的顺序混乱
                                 content[key][i][key1] = content_result[key][i][key1]
         return content, content_result
 

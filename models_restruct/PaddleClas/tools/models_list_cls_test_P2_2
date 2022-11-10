@@ -39,7 +39,6 @@ ppcls:configs:ImageNet:DPN:DPN92.yaml
 ppcls:configs:ImageNet:DPN:DPN107.yaml
 ppcls:configs:ImageNet:DPN:DPN131.yaml
 ppcls:configs:ImageNet:PPHGNet:PPHGNet_base.yaml
-ppcls:configs:ImageNet:SwinTransformer:SwinTransformer_base_patch4_window7_224.yaml
 ppcls:configs:ImageNet:MobileNetV1:MobileNetV1_x0_75.yaml
 ppcls:configs:ImageNet:MobileNetV1:MobileNetV1_x0_5.yaml
 ppcls:configs:ImageNet:PPLCNet:PPLCNet_x2_0.yaml
