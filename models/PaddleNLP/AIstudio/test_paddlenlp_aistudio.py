@@ -54,6 +54,9 @@ def download_project_files():
 
 
 def get_project_list():
+    """
+    get project list
+    """
     download_project_files()
     project_list = []
     path = os.listdir(os.getcwd() + "/AIstudio_Download/aistudio_projects_files/")
