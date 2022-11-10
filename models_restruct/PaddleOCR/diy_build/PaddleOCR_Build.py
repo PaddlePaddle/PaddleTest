@@ -42,17 +42,17 @@ class PaddleOCR_Build(Model_Build):
         if str(self.models_list) != "None":
             for line in self.models_list.split(","):
                 if ".yaml" or ".yml" in line:
-                    self.test_model_list.append(line.strip().replace("-", "/"))
+                    self.test_model_list.append(line.strip().replace(":", "/"))
                     print("self.test_model_list:{}".format(self.test_model_list))
         elif str(self.models_file) != "None":  # 获取要执行的yaml文件列表
             for file_name in self.models_file.split(","):
                 for line in open(file_name):
                     if ".yaml" or ".yml" in line:
-                        self.test_model_list.append(line.strip().replace("-", "/"))
+                        self.test_model_list.append(line.strip().replace(":", "/"))
         else:
             for file_name in os.listdir("cases"):
                 if ".yaml" or ".yml" in file_name:
-                    self.test_model_list.append(file_name.strip().replace("-", "/"))
+                    self.test_model_list.append(file_name.strip().replace(":", "/"))
 
     def build_dataset(self):
         """
