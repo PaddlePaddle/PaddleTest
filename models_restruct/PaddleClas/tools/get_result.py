@@ -25,8 +25,9 @@ class PaddleClas_Collect(object):
         初始化参数
         """
         self.repo_name = "PaddleClas"
+        self.whl_branch = "release"
         # pytest结果下载地址
-        self.report_linux_cuda102_py37_develop = {
+        self.report_linux_cuda102_py37_release = {
             "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047501/report/result.tar",
             "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047502/report/result.tar",
             "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047500/report/result.tar",
@@ -34,29 +35,31 @@ class PaddleClas_Collect(object):
             "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047498/report/result.tar",
         }
 
-        # self.report_linux_cuda102_py37_develop = {
-        #     "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619465/report/result.tar"
-        # }
+        self.report_linux_cuda102_py37_develop = {
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047501/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20102020/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20102017/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047499/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047498/report/result.tar",
+        }
 
         # self.report_linux_cuda102_py37_develop = {
         #     "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909321/report/result.tar"
         # }
 
-        self.report_linux_cuda102_py37_release = {}
-
         self.base_yaml_dict = {
-            "ImageNet": "ppcls:configs:ImageNet:ResNet:ResNet50.yaml",
-            "slim": "ppcls:configs:slim:PPLCNet_x1_0_quantization.yaml",
-            "DeepHash": "ppcls:configs:DeepHash:DCH.yaml",
-            "GeneralRecognition": "ppcls:configs:GeneralRecognition:GeneralRecognition_PPLCNet_x2_5.yaml",
-            "Cartoonface": "ppcls:configs:Cartoonface:ResNet50_icartoon.yaml",
-            "GeneralRecognitionV2": "ppcls:configs:GeneralRecognitionV2:GeneralRecognitionV2_PPLCNetV2_base.yaml",
-            "Logo": "ppcls:configs:Logo:ResNet50_ReID.yaml",
-            "Products": "ppcls:configs:Products:ResNet50_vd_Inshop.yaml",
-            "Vehicle": "ppcls:configs:Vehicle:ResNet50.yaml",
-            "PULC": "ppcls:configs:PULC:car_exists:PPLCNet_x1_0.yaml",
-            "reid": "ppcls:configs:reid:strong_baseline:baseline.yaml",
-            "metric_learning": "ppcls:configs:metric_learning:adaface_ir18.yaml",
+            "ImageNet": "ppcls^configs^ImageNet^ResNet^ResNet50.yaml",
+            "slim": "ppcls^configs^slim^PPLCNet_x1_0_quantization.yaml",
+            "DeepHash": "ppcls^configs^DeepHash^DCH.yaml",
+            "GeneralRecognition": "ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5.yaml",
+            "Cartoonface": "ppcls^configs^Cartoonface^ResNet50_icartoon.yaml",
+            "GeneralRecognitionV2": "ppcls^configs^GeneralRecognitionV2^GeneralRecognitionV2_PPLCNetV2_base.yaml",
+            "Logo": "ppcls^configs^Logo^ResNet50_ReID.yaml",
+            "Products": "ppcls^configs^Products^ResNet50_vd_Inshop.yaml",
+            "Vehicle": "ppcls^configs^Vehicle^ResNet50.yaml",
+            "PULC": "ppcls^configs^PULC^car_exists^PPLCNet_x1_0.yaml",
+            "reid": "ppcls^configs^reid^strong_baseline^baseline.yaml",
+            "metric_learning": "ppcls^configs^metric_learning^adaface_ir18.yaml",
         }
 
     def download_data(self, priority="P0", value=None):
@@ -116,7 +119,13 @@ class PaddleClas_Collect(object):
         """
         self.report_path_list = list()
         self.case_info_list = list()
-        for (key, value) in self.report_linux_cuda102_py37_develop.items():
+        if self.whl_branch == "develop":
+            content = self.report_linux_cuda102_py37_develop
+            self.content_name = "report_linux_cuda102_py37_develop.yaml"
+        else:
+            content = self.report_linux_cuda102_py37_release
+            self.content_name = "report_linux_cuda102_py37_release.yaml"
+        for (key, value) in content.items():
             self.report_path = self.download_data(key, value)
             self.report_path_list.append(self.report_path)
             for case_detail in self.load_json():
@@ -178,14 +187,14 @@ class PaddleClas_Collect(object):
             # print("    ")
             # input()
             if case_value["model_name"] not in content.keys():
-                content[case_value["model_name"]] = eval(case_value["model_name"].split(":")[2])
+                content[case_value["model_name"]] = eval(case_value["model_name"].split("^")[2])
                 # print('###case_value222', content[case_value["model_name"]])
                 # print("    ")
                 content = self.pop_yaml_useless(content)
                 # print('###content', content)
                 # print('###content', type(content))
                 # print("    ")
-                with open(os.path.join("PaddleClas", case_value["model_name"].replace(":", "/") + ".yaml"), "r") as f:
+                with open(os.path.join("PaddleClas", case_value["model_name"].replace("^", "/") + ".yaml"), "r") as f:
                     content_rd_yaml = yaml.load(f, Loader=yaml.FullLoader)
                 if "ATTRMetric" in str(content_rd_yaml):
                     self.kpi_value_eval = "label_f1"
@@ -221,9 +230,9 @@ class PaddleClas_Collect(object):
                             # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer
 
                             if (
-                                ":HRNet" in case_value["model_name"]
-                                or ":LeViT" in case_value["model_name"]
-                                or ":SwinTransformer" in case_value["model_name"]
+                                "^HRNet" in case_value["model_name"]
+                                or "^LeViT" in case_value["model_name"]
+                                or "^SwinTransformer" in case_value["model_name"]
                             ) and (
                                 case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"
                             ):
@@ -238,9 +247,9 @@ class PaddleClas_Collect(object):
                             # 处理存在随机量导致每次infer_trained结果不一致的情况
                             if (
                                 (
-                                    ":HRNet" in case_value["model_name"]
-                                    or ":LeViT" in case_value["model_name"]
-                                    or ":SwinTransformer" in case_value["model_name"]
+                                    "^HRNet" in case_value["model_name"]
+                                    or "^LeViT" in case_value["model_name"]
+                                    or "^SwinTransformer" in case_value["model_name"]
                                 )
                                 and (
                                     case_value["tag"].split("_")[0] == "infer"
@@ -274,7 +283,7 @@ class PaddleClas_Collect(object):
             # print('###content333', type(content))
             # print("    ")
             # input()
-        with open(os.path.join("report_linux_cuda102_py37_develop.yaml"), "w") as f:  # 会删除之前的，重新生成一份
+        with open(os.path.join(self.content_name), "w") as f:  # 会删除之前的，重新生成一份
             yaml.dump(content, f)  # 每次位置是一致的
             # yaml.dump(content, f, sort_keys=False)
 
@@ -284,7 +293,7 @@ def run():
     执行入口
     """
     # kpi_value_eval="loss"
-    # with open(os.path.join("../cases", "ppcls:configs:ImageNet:ResNet:ResNet50.yaml"), "r") as f:
+    # with open(os.path.join("../cases", "ppcls^configs^ImageNet^ResNet^ResNet50.yaml"), "r") as f:
     #     content = yaml.load(f, Loader=yaml.FullLoader)
     # print('###content',type(content))
     # print('###content',content["case"]["linux"]["eval"])
