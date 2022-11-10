@@ -15,6 +15,7 @@ import numpy as np
 
 logger = logging.getLogger("ce")
 
+
 class PaddleClas_Case_Start(object):
     """
     自定义环境准备
