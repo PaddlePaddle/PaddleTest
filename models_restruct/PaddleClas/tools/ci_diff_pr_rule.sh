@@ -12,6 +12,7 @@ find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \;| awk '{print $NF;}
     |grep -v 'VisionTransformer-ViT_large_patch16_224' \
     |grep -v 'VisionTransformer-ViT_large_patch32_384' \
     |grep -v 'SwinTransformer_base_patch4_window12_384' \
+    |grep -v 'SwinTransformer_base_patch4_window7_224' \
     |grep -v 'SwinTransformer_large_patch4_window12_384' \
     |grep -v 'SwinTransformer_large_patch4_window7_224' \
     |grep -v 'EfficientNetB6' \
