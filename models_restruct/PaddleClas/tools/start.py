@@ -33,8 +33,6 @@ class PaddleClas_Start(object):
         self.system = os.environ["system"]
         self.step = os.environ["step"]
         self.paddle_whl = os.environ["paddle_whl"]
-        print("####@@@@@", os.environ.keys())
-        print("####@@@@@", os.environ["paddle_whl"])
         self.mode = os.environ["mode"]  # function or precision
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)  # 所有和yaml相关的变量与此拼接
 
