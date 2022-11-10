@@ -416,7 +416,10 @@ class PaddleClas_Start(object):
                 elif isinstance(content[key], list):
                     for i, case_value in enumerate(content[key]):
                         for key1, val1 in case_value.items():
-                            if key1 == "result" and key + ":" in self.step:  # 结果和阶段同时满足
+                            if key1 == "result" and (
+                                key + ":" in self.step or key + "+" in self.step or "+" + key in self.step
+                            ):
+                                # 结果和阶段同时满足 否则就有可能把不执行的阶段的result替换到执行的顺序混乱
                                 content[key][i][key1] = content_result[key][i][key1]
         return content, content_result
 
