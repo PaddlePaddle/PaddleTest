@@ -16,7 +16,7 @@ case:
         cmd: python -m paddle.distributed.launch run.py
         params:
           - --config_path=./configs/ppyoloe_l_qat_dis.yaml
-          - --save_dir='./single_output/'
+          - --save_dir='./multi_output/'
           - --devices='gpu'
     
   windows:

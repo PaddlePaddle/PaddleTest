@@ -10,6 +10,7 @@ case:
           - --recon_level=region-wise
           - --save_dir=region_ptq_out
           - --devices='gpu'
+          - --epochs=2
 
       -
         name: multi
@@ -20,7 +21,22 @@ case:
           - --recon_level=layer-wise
           - --save_dir=layer_ptq_out
           - --devices='gpu'
+          - --epochs=2
 
+    eval:
+      -
+        name: single
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python eval.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
+
+      -
+        name: mutli
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python eval.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
 
   windows:
     train:
