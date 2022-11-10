@@ -6,8 +6,8 @@ case:
         path: example/auto_compression/semantic_segmentation/
         cmd: python run.py
         params:
-          - --config_path='./configs/pp_liteseg/pp_liteseg_sparse.yaml'
-          - --save_dir='./save_pp_lite_seg_model_sparse_single_card'
+          - --config_path='./configs/pp_liteseg/pp_liteseg_qat.yaml'
+          - --save_dir='./save_pp_lite_seg_model_qat_single_card'
           - --devices='gpu'
 
       -
@@ -15,8 +15,8 @@ case:
         path: example/auto_compression/semantic_segmentation/
         cmd: python -m paddle.distributed.launch run.py
         params:
-          - --config_path='./configs/pp_liteseg/pp_liteseg_sparse.yaml'
-          - --save_dir='./save_pp_lite_seg_model_sparse_multi_card'
+          - --config_path='./configs/pp_liteseg/pp_liteseg_qat.yaml'
+          - --save_dir='./save_pp_lite_seg_model_qat_mulit_card'
           - --devices='gpu'
 
   windows:
@@ -26,8 +26,8 @@ case:
         path: example/auto_compression/semantic_segmentation/
         cmd: python run.py
         params:
-          - --config_path='./configs/pp_liteseg/pp_liteseg_sparse.yaml'
-          - --save_dir='./save_pp_lite_seg_model_sparse_single_card'
+          - --config_path='./configs/pp_liteseg/pp_liteseg_qat.yaml'
+          - --save_dir='./save_pp_lite_seg_model_qat_single_card'
           - --devices='gpu'
 
   mac:
@@ -37,6 +37,6 @@ case:
         path: example/auto_compression/semantic_segmentation/
         cmd: python run.py
         params:
-          - --config_path='./configs/pp_liteseg/pp_liteseg_sparse.yaml'
-          - --save_dir='./save_pp_lite_seg_model_sparse_single_card'
+          - --config_path='./configs/pp_liteseg/pp_liteseg_qat.yaml'
+          - --save_dir='./save_pp_lite_seg_model_qat_single_card'
           - --devices='cpu'

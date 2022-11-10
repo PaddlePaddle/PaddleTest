@@ -25,12 +25,6 @@ def run():
     currnet_step = paddleslim_case_start.case_step
     current_name = paddleslim_case_start.case_name
 
-    print("*******")
-    print(paddleslim_case_start.step)
-    print(currnet_step)
-    print(current_name)
-    print("*******")
-
     rd_yaml = os.path.join(paddleslim_case_start.REPO_PATH, paddleslim_case_start.rd_yaml_path)
     qa_yaml = paddleslim_case_start.qa_yaml_name
     with open(rd_yaml, "r") as f:
@@ -46,13 +40,11 @@ def run():
         else:
             content["model_dir"] = "layer_ptq_out"
 
-    
     else:
         logger.info("### {} no update required".format(rd_yaml))
 
     with open(rd_yaml, "w") as f:
         yaml.dump(content, f)
-
 
 if __name__ == "__main__":
     run()

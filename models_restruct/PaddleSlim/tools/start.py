@@ -112,7 +112,7 @@ def run():
         content["TrainConfig"]["eval_iter"] = 50
         paddleslim_start.update_yaml_config(rd_yaml, "HyperParameterOptimization:", "#HyperParameterOptimization:")
     elif qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_qat" or \
-            paddleslim_start.qa_yaml_name == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_sparse":
+            qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_sparse":
         paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/data/mini_cityscapes/mini_cityscapes.tar")
         paddleslim_start.wget_and_zip("https://paddleseg.bj.bcebos.com/tipc/easyedge/RES-paddle2-PPLIteSegSTDC1.zip")
         content["Global"]["model_dir"] = current_path + "/RES-paddle2-PPLIteSegSTDC1"
@@ -152,6 +152,7 @@ def run():
     with open(semantic_segmentation_reader, "r") as f_reader:
         content_reader = yaml.load(f_reader, Loader=yaml.FullLoader)
     content_reader["train_dataset"]["dataset_root"] = current_path + "/mini_cityscapes"
+    content_reader["val_dataset"]["dataset_root"] = current_path + "/mini_cityscapes"
     with open(semantic_segmentation_reader, "w") as f_reader:
         yaml.dump(content_reader, f_reader)
 
