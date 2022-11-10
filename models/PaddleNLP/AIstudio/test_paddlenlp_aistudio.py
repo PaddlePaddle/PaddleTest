@@ -47,12 +47,10 @@ def download_project_files():
     """
     Auto download PaddleNLP AIstudio Project
     """
-    work_path = os.getcwd() 
-    log_path = work_path+ "/log/"
+    log_path = os.getcwd() + "/log/"
     output = subprocess.getstatusoutput("cd AIstudio_Download && python ./aistudio_client.py")
     with open(log_path + "download.log", "a") as flog:
         flog.write("%s" % (output[1]))
-    os.system("cd {}".format(work_path))
 
 
 def get_project_list():
@@ -106,4 +104,4 @@ def test_aistudio_case(file_name):
 
     save_log(output[0], output[1], file_name)
     exit_check(output[0], file_name,project_name)
-    os.system("rm -rf {}".format(aistudio_path))
+    os.system("rm -rf {}/*".format(aistudio_path))
