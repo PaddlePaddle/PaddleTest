@@ -75,7 +75,7 @@ def test_aistudio_case(file_name):
 
     # 模拟aistudio 环境,解决绝对路径问题
     aistudio_path = '/home/aistudio/'
-    os.system("cp -r %s %s && cd %s" % (file_path,aistudio_path,aistudio_path))
+    os.system("cp -r %s/* %s && cd %s" % (file_path,aistudio_path,aistudio_path))
     if os.path.exists(os.path.join(aistudio_path + "/main.ipynb")):
         exec_name = "main"
     else:
