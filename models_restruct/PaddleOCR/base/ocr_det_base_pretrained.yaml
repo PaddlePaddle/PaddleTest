@@ -58,7 +58,7 @@ export:
   cmd: python tools/export_model.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest 
+    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.save_inference_dir=./models_inference/${qa_yaml_name}
 
 export:
@@ -79,9 +79,9 @@ predict:
   name: trained
   cmd: python tools/infer/predict_det.py
   params:
-    - --image_dir=doc/imgs_en/img_10.jpg 
-    - --det_algorithm=${algorithm} 
-    - --use_gpu=True 
+    - --image_dir=doc/imgs_en/img_10.jpg
+    - --det_algorithm=${algorithm}
+    - --use_gpu=True
     - --use_tensorrt=False
     - --enable_mkldnn=False
     - --det_model_dir=./models_inference/${qa_yaml_name}
