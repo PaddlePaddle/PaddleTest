@@ -100,7 +100,6 @@ def test_aistudio_case(file_name):
     allure.dynamic.feature(project_name)
     allure.dynamic.description(
     "启动命令: ipython {}.py".format(exec_name))
-    allure.attach.file("{}.py".format(exec_name), '执行脚本', allure.attachment_type.TEXT)
 
     save_log(output[0], output[1], file_name)
     exit_check(output[0], file_name,project_name)
