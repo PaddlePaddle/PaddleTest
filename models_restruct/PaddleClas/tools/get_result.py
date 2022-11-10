@@ -25,8 +25,9 @@ class PaddleClas_Collect(object):
         初始化参数
         """
         self.repo_name = "PaddleClas"
+        self.whl_branch = "release"
         # pytest结果下载地址
-        self.report_linux_cuda102_py37_develop = {
+        self.report_linux_cuda102_py37_release = {
             "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047501/report/result.tar",
             "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047502/report/result.tar",
             "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047500/report/result.tar",
@@ -34,15 +35,17 @@ class PaddleClas_Collect(object):
             "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047498/report/result.tar",
         }
 
-        # self.report_linux_cuda102_py37_develop = {
-        #     "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619465/report/result.tar"
-        # }
+        self.report_linux_cuda102_py37_develop = {
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047501/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20102020/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20102017/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047499/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047498/report/result.tar",
+        }
 
         # self.report_linux_cuda102_py37_develop = {
         #     "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909321/report/result.tar"
         # }
-
-        self.report_linux_cuda102_py37_release = {}
 
         self.base_yaml_dict = {
             "ImageNet": "ppcls^configs^ImageNet^ResNet^ResNet50.yaml",
@@ -116,7 +119,13 @@ class PaddleClas_Collect(object):
         """
         self.report_path_list = list()
         self.case_info_list = list()
-        for (key, value) in self.report_linux_cuda102_py37_develop.items():
+        if self.whl_branch == "develop":
+            content = self.report_linux_cuda102_py37_develop
+            self.content_name = "report_linux_cuda102_py37_develop.yaml"
+        else:
+            content = self.report_linux_cuda102_py37_release
+            self.content_name = "report_linux_cuda102_py37_release.yaml"
+        for (key, value) in content.items():
             self.report_path = self.download_data(key, value)
             self.report_path_list.append(self.report_path)
             for case_detail in self.load_json():
@@ -274,7 +283,7 @@ class PaddleClas_Collect(object):
             # print('###content333', type(content))
             # print("    ")
             # input()
-        with open(os.path.join("report_linux_cuda102_py37_develop.yaml"), "w") as f:  # 会删除之前的，重新生成一份
+        with open(os.path.join(self.content_name), "w") as f:  # 会删除之前的，重新生成一份
             yaml.dump(content, f)  # 每次位置是一致的
             # yaml.dump(content, f, sort_keys=False)
 

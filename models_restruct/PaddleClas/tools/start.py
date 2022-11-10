@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-执行case前：生成yaml，设置特殊参数，改变监控指标
+执行case前: 生成yaml, 设置特殊参数, 改变监控指标
 """
 import os
 import sys
@@ -14,7 +14,7 @@ import wget
 import numpy as np
 
 logger = logging.getLogger("ce")
-# TODO wget容易卡死，增加超时计时器 https://blog.csdn.net/weixin_42368421/article/details/101354628
+# TODO wget容易卡死, 增加超时计时器 https://blog.csdn.net/weixin_42368421/article/details/101354628
 
 
 class PaddleClas_Start(object):
@@ -33,6 +33,8 @@ class PaddleClas_Start(object):
         self.system = os.environ["system"]
         self.step = os.environ["step"]
         self.paddle_whl = os.environ["paddle_whl"]
+        print("####@@@@@", os.environ.keys())
+        print("####@@@@@", os.environ["paddle_whl"])
         self.mode = os.environ["mode"]  # function or precision
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)  # 所有和yaml相关的变量与此拼接
 
@@ -65,7 +67,7 @@ class PaddleClas_Start(object):
 
         tar_name = value.split("/")[-1]
         # if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
-        # 有end回收数据，只判断文件夹
+        # 有end回收数据, 只判断文件夹
         if os.path.exists(tar_name.replace(".tar", "")):
             logger.info("#### already download {}".format(tar_name))
         else:
@@ -90,8 +92,8 @@ class PaddleClas_Start(object):
             os.mkdir("models")
         os.chdir("models")
         # if os.path.exists(value) and os.path.exists(value.replace(".tar", "")):
-        # 有end回收数据，只判断文件夹
-        if os.path.exists(value):  # 这里判断tar是否存在，以便于替换掉export传出的
+        # 有end回收数据, 只判断文件夹
+        if os.path.exists(value):  # 这里判断tar是否存在, 以便于替换掉export传出的
             logger.info("####already download {}".format(value))
         else:
             if "general_PPLCNetV2" in value:
@@ -187,7 +189,7 @@ class PaddleClas_Start(object):
 
     def prepare_env(self):
         """
-        下载预训练模型，指定路径
+        下载预训练模型, 指定路径
         """
         self.get_params()  #  准备参数
         if self.model_type == "ImageNet":
@@ -369,7 +371,7 @@ class PaddleClas_Start(object):
         基于base yaml创造新的yaml
         """
         logger.info("### self.mode {}".format(self.mode))
-        # 增加 function 和 precision 的选项，只有在precision时才进行复制,function时只用base验证
+        # 增加 function 和 precision 的选项, 只有在precision时才进行复制,function时只用base验证
         # if self.mode == "function":
         #     if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is True:  # cases 是基于最原始的路径的
         #         os.remove(os.path.join("cases", self.qa_yaml_name))  # 删除已有的 precision 用 base
@@ -433,9 +435,14 @@ class PaddleClas_Start(object):
         kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
         # 读取上次执行的产出
-        # 通过whl包的地址，判断是release还是develop  report_linux_cuda102_py37_develop
-
-        with open(os.path.join("tools", "report_linux_cuda102_py37_develop.yaml"), "r") as f:
+        # 通过whl包的地址, 判断是release还是develop  report_linux_cuda102_py37_develop
+        if "Develop" in self.paddle_whl:
+            # logger.info(" paddle_whl use branch devleop : {}".format(self.paddle_whl))
+            content_result_name = "report_linux_cuda102_py37_develop.yaml"
+        else:
+            # logger.info(" paddle_whl use branch release or None : {}".format(self.paddle_whl))
+            content_result_name = "report_linux_cuda102_py37_release.yaml"
+        with open(os.path.join("tools", content_result_name), "r") as f:
             content_result = yaml.load(f, Loader=yaml.FullLoader)
 
         if self.qa_yaml_name in content_result.keys():  # 查询yaml中是否存在已获取的模型指标
