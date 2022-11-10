@@ -15,9 +15,9 @@ import os
 import sys
 import subprocess
 import logging
+import json
 import allure
 import pytest
-import json
 
 
 def exit_check(exit_code, file_name, project_name):
