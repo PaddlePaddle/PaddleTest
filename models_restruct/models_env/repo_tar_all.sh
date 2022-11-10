@@ -53,6 +53,7 @@ function tar_reponame(){
 
     # 及时删除防止空间打满
     if [[ -f ${file_tgz} ]];then
+        echo "remove tmp data : ${file_tgz}"
         rm -rf ${file_tgz}
     fi
 
@@ -80,6 +81,12 @@ do
         fi
         python bce-python-sdk-0.8.27/BosClient.py  ${file_tgz}  "xly-devops/PaddleTest/${repo_name}/"
         echo "upload ${file_tgz} done"
+
+        # 及时删除防止空间打满
+        if [[ -f ${file_tgz} ]];then
+            echo "remove tmp data : ${file_tgz}"
+            rm -rf ${file_tgz}
+        fi
 
         #打满足条件分支的包
         cd ${repo_name}
@@ -202,6 +209,7 @@ do
         cd ..
         # 及时删除防止空间打满
         if [[ -d ${repo_name} ]];then
+            echo "remove tmp data : ${repo_name}"
             rm -rf ${repo_name}
         fi
     else

@@ -110,7 +110,6 @@ ppcls:configs:ImageNet:PPHGNet:PPHGNet_tiny.yaml
 ppcls:configs:ImageNet:PPHGNet:PPHGNet_base.yaml
 ppcls:configs:ImageNet:PPHGNet:PPHGNet_small.yaml
 ppcls:configs:ImageNet:SwinTransformer:SwinTransformer_small_patch4_window7_224.yaml
-ppcls:configs:ImageNet:SwinTransformer:SwinTransformer_base_patch4_window7_224.yaml
 ppcls:configs:ImageNet:SwinTransformer:SwinTransformer_tiny_patch4_window7_224.yaml
 ppcls:configs:ImageNet:MobileNetV1:MobileNetV1_x0_25.yaml
 ppcls:configs:ImageNet:MobileNetV1:MobileNetV1_x0_75.yaml
