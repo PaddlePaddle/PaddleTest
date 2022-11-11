@@ -1,0 +1,26 @@
+export:
+    name: ptq
+    cmd: python deploy/slim/quant/ptq.py
+    params:
+      - --model_dir=pp_liteseg_infer_model
+      - --batch_num=1
+      - --batch_size=1
+      - --config=test_tipc/configs/pp_liteseg_stdc1/pp_liteseg_stdc1_cityscapes_1024x512_160k.yml
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+predict:
+    name: ptq_gpu
+    cmd: python deploy/python/infer.py
+    params:
+      - --device=gpu
+      - --config=quant_model/deploy.yaml
+      - --batch_size=1
+      - --image_path=test_tipc/cpp/cityscapes_demo.png
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

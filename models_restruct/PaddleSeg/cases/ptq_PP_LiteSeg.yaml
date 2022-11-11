@@ -1,0 +1,11 @@
+case:
+  linux:
+    base: ./base/ptq_PP_LiteSeg.yaml
+    predict:
+      -
+        name: ptq_gpu
+      -
+        name: ptq_cpu
+        cmd: python deploy/python/infer.py
+        params:
+          - --device=cpu

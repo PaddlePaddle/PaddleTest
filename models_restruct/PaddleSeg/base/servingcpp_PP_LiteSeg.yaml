@@ -1,0 +1,42 @@
+export:
+    name: serving_cpp
+    cmd: python -m paddle_serving_client.convert
+    params:
+      - --dirname=pp_liteseg_infer_model
+      - --model_filename=model.pdmodel
+      - --params_filename=model.pdiparams
+      - --serving_server=./test_tipc/serving_cpp/serving_server/
+      - --serving_client=./test_tipc/serving_cpp/serving_client/
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+train:
+    name: service
+    cmd: cd ./test_tipc/serving_cpp; python modify_serving_client_conf.py; nohup python -m paddle_serving_server.serve --model serving_server --op GeneralSegOp --port 9997 --gpu_id "0" &
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+predict:
+    name: client
+    cmd: cd ./test_tipc/serving_cpp; python serving_client.py
+    params:
+      - --output_name=argmax_0.tmp_0
+      - --input_name=x
+      - --img_path=../../cityscapes_small.png
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+infer:
+    name: kill_server
+    cmd: wget https://paddle-qa.bj.bcebos.com/home/serving_cpp.sh; bash serving_cpp.sh 9997
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
