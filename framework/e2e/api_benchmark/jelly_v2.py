@@ -131,8 +131,13 @@ class Jelly_v2(object):
         设置paddle 输入参数
         """
         for key, value in inputs.items():
-            self.data[key] = to_tensor(value)
-            self.data[key].stop_gradient = False
+            if isinstance(value, (np.generic, np.ndarray)):
+                self.data[key] = to_tensor(value)
+                self.data[key].stop_gradient = False
+            else:
+                self.data[key] = value
+            # self.data[key] = to_tensor(value)
+            # self.data[key].stop_gradient = False
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 self.param[key] = to_tensor(value)

@@ -137,10 +137,16 @@ class Jelly_v2_torch(object):
         """
         for key, value in inputs.items():
             if self.places == "cpu":
-                self.data[key] = torch.tensor(value)
+                if isinstance(value, (np.generic, np.ndarray)):
+                    self.data[key] = torch.tensor(value)
+                else:
+                    self.data[key] = value
             else:
-                self.data[key] = torch.tensor(value).to("cuda")
-            if self.enable_backward:
+                if isinstance(value, (np.generic, np.ndarray)):
+                    self.data[key] = torch.tensor(value).to("cuda")
+                else:
+                    self.data[key] = value
+            if self.enable_backward and isinstance(value, (np.generic, np.ndarray)):
                 self.data[key].requires_grad = True
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
@@ -171,7 +177,6 @@ class Jelly_v2_torch(object):
                 forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
                 self.forward_time.append(forward_time)
         elif self._layertypes(self.api) == "reload":
-            print(self.data)
             # 判断"reload" api中有一个输入还是两个输入
             if "y" in self.data.keys():
                 x = self.data["x"]
