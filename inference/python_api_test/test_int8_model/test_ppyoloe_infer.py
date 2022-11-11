@@ -447,7 +447,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-        }
+        },
     }
     print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()

@@ -209,7 +209,7 @@ class Predictor(object):
                 "value": round(time_avg * 1000, 1),
                 "unit": "ms",
                 "batch_size": args.batch_size,
-            }
+            },
         }
         print("[Benchmark][final result]{}".format(final_res))
         sys.stdout.flush()
