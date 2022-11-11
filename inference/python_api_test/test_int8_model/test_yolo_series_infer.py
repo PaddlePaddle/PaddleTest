@@ -135,6 +135,17 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
 
     map_res = coco_metric(anno_file, bboxes_list, bbox_nums_list, image_id_list)
     print("[Benchmark] COCO mAP: {}".format(map_res[0]))
+    final_res = {
+        "jingdu":{
+            "value": map_res[0],
+            "unit": "mAP",
+        },
+        "xingneng":{
+            "value": round(time_avg * 1000, 1),
+            "unit": "ms",
+        }
+    }
+    print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
 
 
