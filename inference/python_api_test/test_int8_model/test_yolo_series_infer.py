@@ -138,7 +138,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     print("[Benchmark] COCO mAP: {}".format(map_res[0]))
     final_res = {
         "model_info": {
-            "model_name": FLAGS.model_name, 
+            "model_name": FLAGS.model_name,
         },
         "jingdu": {
             "value": map_res[0],
