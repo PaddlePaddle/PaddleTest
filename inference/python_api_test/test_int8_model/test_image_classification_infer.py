@@ -49,6 +49,7 @@ def argsparser():
     parser.add_argument("--gpu_mem", type=int, default=8000, help="GPU memory")
     parser.add_argument("--ir_optim", type=bool, default=True)
     parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
+    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
 
 
@@ -201,6 +202,9 @@ class Predictor(object):
         )
         print("[Benchmark] Evaluation acc result: {}".format(result[0]))
         final_res = {
+            "model_info": {
+                "model_name": agrs.model_name,
+            },
             "jingdu": {
                 "value": result[0],
                 "unit": "acc",
