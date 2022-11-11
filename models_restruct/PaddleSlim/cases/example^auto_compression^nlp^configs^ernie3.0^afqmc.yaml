@@ -13,7 +13,7 @@ case:
       -
         name: single
         path: example/auto_compression/nlp/
-        cmd: python eval.py
+        cmd: python run.py
         params:
           - --config_path='./configs/ernie3.0/afqmc.yaml'
           - --eval True 
@@ -32,7 +32,7 @@ case:
       -
         name: single
         path: example/auto_compression/nlp/
-        cmd: python eval.py
+        cmd: python run.py
         params:
           - --config_path='./configs/ernie3.0/afqmc.yaml'
           - --eval True 
@@ -51,7 +51,7 @@ case:
       -
         name: single
         path: example/auto_compression/nlp/
-        cmd: python eval.py
+        cmd: python run.py
         params:
           - --config_path='./configs/ernie3.0/afqmc.yaml'
           - --eval True 

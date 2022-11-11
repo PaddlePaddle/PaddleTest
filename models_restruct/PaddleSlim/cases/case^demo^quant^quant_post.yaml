@@ -1,0 +1,62 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python quant_post.py
+        params:
+          - --model_path ../../pretrain/MobileNetV1_infer
+          - --save_path ./quant_model/hist_bc_onnx_format/MobileNetV1
+          - --algo hist
+          - --bias_correction True
+          - --is_full_quantize=True
+          - --onnx_format=True 
+      
+      -
+        name: multi
+        path: demo/quant/quant_post
+        cmd: python quant_post.py
+        params:
+          - --model_path ../../pretrain/MobileNetV1_infer
+          - --save_path ./quant_model/hist_bc_adaround/MobileNetV1
+          - --algo hist
+          - --bias_correction True
+          - --round_type=adaround 
+      
+    eval:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python eval.py
+        params:
+          - --model_path ./quant_model/hist_bc_onnx_format/MobileNetV1
+
+      -
+        name: multi
+        path: demo/quant/quant_post
+        cmd: python eval.py
+        params:
+          - --model_path ./quant_model/hist_bc_adaround/MobileNetV1
+
+  windows:
+    train:
+      -
+        name: single
+        path: example/auto_compression/nlp/
+        cmd: python run.py
+        params:
+          - --config_path='./configs/ernie3.0/afqmc.yaml'
+          - --save_dir='./save_afqmc_ERNIE_pruned'
+          - --use_gpu True
+
+  mac:
+    train:
+      -
+        name: single
+        path: example/auto_compression/nlp/
+        cmd: python run.py
+        params:
+          - --config_path='./configs/ernie3.0/afqmc.yaml'
+          - --save_dir='./save_afqmc_ERNIE_pruned'
+          - --use_gpu False

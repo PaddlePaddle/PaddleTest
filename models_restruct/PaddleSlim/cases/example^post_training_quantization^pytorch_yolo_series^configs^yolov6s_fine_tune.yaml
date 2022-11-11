@@ -32,7 +32,7 @@ case:
           - --config_path=./configs/yolov6s_fine_tune.yaml
 
       -
-        name: mutli
+        name: multi
         path: example/post_training_quantization/pytorch_yolo_series/
         cmd: python eval.py
         params:
