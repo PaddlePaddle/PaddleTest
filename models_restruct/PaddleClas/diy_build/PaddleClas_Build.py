@@ -117,7 +117,7 @@ class PaddleClas_Build(Model_Build):
         """
         if os.path.exists(self.reponame):
             for line in self.clas_model_list:
-                with open(os.path.join(self.REPO_PATH, line), "r") as f:
+                with open(os.path.join(self.REPO_PATH, line), "r", encoding="utf-8") as f:
                     content = yaml.load(f, Loader=yaml.FullLoader)
 
                 # 改变 batch_size
