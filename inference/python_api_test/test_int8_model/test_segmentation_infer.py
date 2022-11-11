@@ -232,7 +232,7 @@ def eval(args):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-            "batch_size": batch_size
+            "batch_size": batch_size,
         },
     }
     print("[Benchmark][final result]{}".format(final_res))
