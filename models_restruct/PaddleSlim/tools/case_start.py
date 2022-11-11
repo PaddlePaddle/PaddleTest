@@ -41,7 +41,7 @@ def run():
             content["model_dir"] = "layer_ptq_out"
 
     else:
-        logger.info("### {} no update required".format(rd_yaml))
+        logger.info("******* {} no update required".format(rd_yaml))
 
     with open(rd_yaml, "w") as f:
         yaml.dump(content, f)

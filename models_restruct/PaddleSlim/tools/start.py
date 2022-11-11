@@ -13,56 +13,58 @@ class PaddleSlim_Start(object):
         self.rd_yaml_path = os.environ["rd_yaml_path"]
         self.reponame = os.environ["reponame"]
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)
+        self.set_cuda = os.environ["set_cuda"]
     
     def wget_and_zip(self, wget_url):
         zip_name = wget_url.split("/")[-1]
         if os.path.exists(zip_name):
-            logger.info("*** {} already download ".format(zip_name))
+            logger.info("******* {} already download ".format(zip_name))
         else:
             try:
-                logger.info("*** {} start download and unzip ".format(zip_name))
+                logger.info("******* {} start download and unzip ".format(zip_name))
                 wget.download(wget_url)
                 fz = zipfile.ZipFile(zip_name, 'r')
                 for file in fz.namelist():
                     fz.extract(file, os.getcwd())
-                logger.info("*** {}  end download and unzip ".format(zip_name))
+                logger.info("******* {}  end download and unzip ".format(zip_name))
             except:
-                logger.info("*** {} start download or unzip failed".format(zip_name))
+                logger.info("******* {} start download or unzip failed".format(zip_name))
     
     def wget_and_tar(self, wget_url):
         tar_name = wget_url.split("/")[-1]
         if os.path.exists(tar_name):
-            logger.info("*** {} already download ".format(tar_name))
+            logger.info("******* {} already download ".format(tar_name))
         else:
             try:
-                logger.info("*** {} start download and tar -x ".format(tar_name))
+                logger.info("******* {} start download and tar -x ".format(tar_name))
                 wget.download(wget_url)
                 tf = tarfile.open(tar_name)
                 tf.extractall(os.getcwd())
-                logger.info("*** {} end download and tar -x ".format(tar_name))
+                logger.info("******* {} end download and tar -x ".format(tar_name))
             except:
-                logger.info("*** {} start download or  tar -x failed".format(tar_name))
+                logger.info("******* {} start download or  tar -x failed".format(tar_name))
 
     def wget_and_files(self,wget_url):
         file_name = wget_url.split("/")[-1]
         if os.path.exists(file_name):
-            logger.info("*** {} already download ".format(file_name))
+            logger.info("******* {} already download ".format(file_name))
         else:
             try:
-                logger.info("*** {} start download ".format(file_name))
+                logger.info("******* {} start download ".format(file_name))
                 wget.download(wget_url)
-                logger.info("*** {} end download  ".format(file_name))
+                logger.info("******* {} end download  ".format(file_name))
             except:
-                logger.info("*** {} start download failed".format(file_name))
+                logger.info("******* {} start download failed".format(file_name))
     
     def update_yaml_config(self, file_path, old_str, new_str):
+        logger.info("******* {} is updating".format(file_path))
         file_data = ""
         with open(file_path, "r", encoding="utf-8") as f:
             for line in f:
                 if old_str in line:
                     line = line.replace(old_str, new_str)
                 file_data += line
-        with open(file_path,"w",encoding="utf-8") as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(file_data)
 
 def run():
@@ -70,19 +72,21 @@ def run():
     current_path = os.getcwd()
     rd_yaml = os.path.join(paddleslim_start.REPO_PATH, paddleslim_start.rd_yaml_path)
     qa_yaml = paddleslim_start.qa_yaml_name
-    with open(rd_yaml, "r") as f:
+    os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_start.set_cuda
+    set_cuda_single_card = paddleslim_start.set_cuda.split(",")[0]
+    with open(rd_yaml, "r", encoding="utf-8") as f:
         content = yaml.load(f, Loader=yaml.FullLoader)
 
     if qa_yaml == "example^auto_compression^detection^configs^ppyoloe_l_qat_dis":
         paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco.tar")
         paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
-        content["TrainConfig"]["train_iter"] = 20
+        content["TrainConfig"]["train_iter"] = 50
         content["TrainConfig"]["eval_iter"] = 10
         content["Global"]["model_dir"] = current_path + "/ppyoloe_crn_l_300e_coco"
     elif qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis":
         paddleslim_start.wget_and_files("https://paddle-slim-models.bj.bcebos.com/act/yolov5s.onnx")
         paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
-        content["TrainConfig"]["train_iter"] = 20
+        content["TrainConfig"]["train_iter"] = 50
         content["TrainConfig"]["eval_iter"] = 10
         content["Global"]["model_dir"] = current_path + "/yolov5s.onnx"
         content["Global"]["coco_dataset_dir"] = current_path + "/coco"
@@ -91,21 +95,23 @@ def run():
         paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
         content["Global"]["data_dir"] = current_path + "/ILSVRC2012"
         content["Global"]["model_dir"] = current_path + "/MobileNetV1_infer"
-        content["TrainConfig"]["epochs"] = 1
+        content["TrainConfig"]["epochs"] = 2
         content["TrainConfig"]["eval_iter"] = 50
     elif qa_yaml == "example^auto_compression^image_classification^configs^ResNet50_vd^qat_dis":
         paddleslim_start.wget_and_tar("https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/ResNet50_vd_infer.tar")
         paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
         content["Global"]["data_dir"] = current_path + "/ILSVRC2012"
         content["Global"]["model_dir"] = current_path + "/ResNet50_vd_infer"
-        content["TrainConfig"]["epochs"] = 1
+        content["TrainConfig"]["epochs"] = 2
         content["TrainConfig"]["eval_iter"] = 50
     elif qa_yaml == "example^auto_compression^nlp^configs^ernie3.0^afqmc":
+        os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
         paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/act/NLP/ernie3.0-medium/fp32_models/AFQMC.tar")
         content["Global"]["model_dir"] = current_path + "/AFQMC"
         content["TrainConfig"]["epochs"] = 1
         content["TrainConfig"]["eval_iter"] = 50
     elif qa_yaml == "example^auto_compression^nlp^configs^pp-minilm^auto^afqmc":
+        os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
         paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/act/afqmc.tar")
         content["Global"]["model_dir"] = current_path + "/afqmc"
         content["TrainConfig"]["epochs"] = 1
@@ -116,14 +122,14 @@ def run():
         paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/data/mini_cityscapes/mini_cityscapes.tar")
         paddleslim_start.wget_and_zip("https://paddleseg.bj.bcebos.com/tipc/easyedge/RES-paddle2-PPLIteSegSTDC1.zip")
         content["Global"]["model_dir"] = current_path + "/RES-paddle2-PPLIteSegSTDC1"
-        content["TrainConfig"]["epochs"] = 1
+        content["TrainConfig"]["epochs"] = 2
         content["TrainConfig"]["eval_iter"] = 50
     elif qa_yaml == "example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis":
         paddleslim_start.wget_and_tar("https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_infer.tar")
         paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
         content["Global"]["model_dir"] = current_path + "/MobileNetV3_large_x1_0_infer"
         content["Global"]["data_dir"] = current_path + "/ILSVRC2012"
-        content["TrainConfig"]["epochs"] = 1
+        content["TrainConfig"]["epochs"] = 2
         content["TrainConfig"]["eval_iter"] = 50
     elif qa_yaml == "example^full_quantization^picodet^configs^picodet_npu_with_postprocess":
         paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu.tar")
@@ -135,12 +141,12 @@ def run():
     elif qa_yaml == "example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune":
         paddleslim_start.wget_and_files("https://paddle-slim-models.bj.bcebos.com/act/yolov6s.onnx")
         paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
-        content["model_dir"] = current_path + "/picodet_s_416_coco_npu"
-        content["dataset_dir"] = current_path + "/ILSVRC2012"
+        content["model_dir"] = current_path + "/yolov6s.onnx"
+        content["dataset_dir"] = current_path + "/coco"
     else:
         logger.info("### no exists {} ".format(qa_yaml))
 
-    with open(rd_yaml, "w") as f:
+    with open(rd_yaml, "w", encoding="utf-8") as f:
         yaml.dump(content, f)
     
     # example/auto_compression:detection:configs:ppyoloe_l_qat_dis 修改数据路径

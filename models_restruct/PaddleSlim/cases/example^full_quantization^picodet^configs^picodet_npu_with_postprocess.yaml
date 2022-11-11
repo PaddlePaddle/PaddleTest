@@ -3,7 +3,7 @@ case:
     train:
       -
         name: single
-        path: example/full_quantization/image_classification/
+        path: example/full_quantization/picodet/
         cmd: python run.py
         params:
           - --config_path=./configs/picodet_npu_with_postprocess.yaml
@@ -12,7 +12,7 @@ case:
 
       -
         name: multi
-        path: example/auto_compression/semantic_segmentation/
+        path: example/full_quantization/picodet/
         cmd: python -m paddle.distributed.launch run.py
         params:
           - --config_path=./configs/picodet_npu_with_postprocess.yaml
@@ -23,7 +23,7 @@ case:
     train:
       -
         name: single
-        path: example/full_quantization/image_classification/
+        path: example/full_quantization/picodet/
         cmd: python run.py
         params:
           - --config_path=./configs/picodet_npu_with_postprocess.yaml
@@ -34,7 +34,7 @@ case:
     train:
       -
         name: single
-        path: example/full_quantization/image_classification/
+        path: example/full_quantization/picodet/
         cmd: python run.py
         params:
           - --config_path=./configs/picodet_npu_with_postprocess.yaml

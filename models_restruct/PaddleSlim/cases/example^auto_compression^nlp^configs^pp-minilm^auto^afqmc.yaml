@@ -13,9 +13,10 @@ case:
       -
         name: single
         path: example/auto_compression/nlp/
-        cmd: python run.py
+        cmd: python eval.py
         params:
           - --config_path='./configs/pp-minilm/auto/afqmc.yaml'
+          - --eval True 
     
   windows:
     train:
@@ -31,9 +32,10 @@ case:
       -
         name: single
         path: example/auto_compression/nlp/
-        cmd: python run.py
+        cmd: python eval.py
         params:
           - --config_path='./configs/pp-minilm/auto/afqmc.yaml'
+          - --eval True 
 
   mac:
     train:
@@ -49,6 +51,7 @@ case:
       -
         name: single
         path: example/auto_compression/nlp/
-        cmd: python run.py
+        cmd: python eval.py
         params:
           - --config_path='./configs/pp-minilm/auto/afqmc.yaml'
+          - --eval True 

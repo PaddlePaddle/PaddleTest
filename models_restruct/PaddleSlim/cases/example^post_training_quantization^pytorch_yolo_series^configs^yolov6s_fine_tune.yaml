@@ -48,6 +48,7 @@ case:
           - --config_path=./configs/picodet_npu_with_postprocess.yaml
           - --save_dir='./full_quant_det_picodet_single_card/'
           - --devices='gpu'
+          - --epochs=2
 
   mac:
     train:
@@ -59,3 +60,4 @@ case:
           - --config_path=./configs/picodet_npu_with_postprocess.yaml
           - --save_dir='./full_quant_det_picodet_single_card/'
           - --devices='cpu'
+          - --epochs=2
