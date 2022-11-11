@@ -173,9 +173,9 @@ class Jelly_v2_torch(object):
                 for k, v in value_dict.items():
                     # 默认传入字典时，表示传入的是一个np.ndarray并转为tensor，否则传入的不为tensor。后续需优化code
                     if isinstance(v, dict):
-                        value_dict[k] = to_tensor(v["value"])
+                        self.method[key][k] = to_tensor(v["value"])
                     else:
-                        value_dict[k] = v
+                        self.method[key][k] = v
 
     def torch_forward(self):
         """
