@@ -440,11 +440,11 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     )
     print("[Benchmark] COCO mAP: {}".format(map_res["bbox"][0]))
     final_res = {
-        "jingdu":{
+        "jingdu": {
             "value": map_res["bbox"][0],
             "unit": "mAP",
         },
-        "xingneng":{
+        "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
         }

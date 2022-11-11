@@ -225,11 +225,11 @@ def eval(args):
     )
     print(infor)
     final_res = {
-        "jingdu":{
+        "jingdu": {
             "value": miou,
             "unit": "mIoU",
         },
-        "xingneng":{
+        "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
             "batch_size": batch_size

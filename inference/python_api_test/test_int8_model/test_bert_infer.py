@@ -271,11 +271,11 @@ class Predictor(object):
         res = metric.accumulate()
         print("[Benchmark]task name: %s, acc: %s. \n" % (args.task_name, res), end="")
         final_res = {
-            "jingdu":{
+            "jingdu": {
                 "value": res,
                 "unit": "acc",
             },
-            "xingneng":{
+            "xingneng": {
                 "value": round(predict_time * 1000 / i, 2),
                 "unit": "ms",
                 "batch_size": args.batch_size,

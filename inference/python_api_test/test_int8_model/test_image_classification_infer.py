@@ -201,11 +201,11 @@ class Predictor(object):
         )
         print("[Benchmark] Evaluation acc result: {}".format(result[0]))
         final_res = {
-            "jingdu":{
+            "jingdu": {
                 "value": result[0],
                 "unit": "acc",
             },
-            "xingneng":{
+            "xingneng": {
                 "value": round(time_avg * 1000, 1),
                 "unit": "ms",
                 "batch_size": args.batch_size,
