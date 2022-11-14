@@ -7,9 +7,12 @@ case:
         cmd: python train.py
         params:
           - --model="resnet34"
-          - --data "imagenet" --lr_strategy="cosine_decay"  --criterion="fpgm"
-          - --num_epochs 1 --pruned_ratio=0.25 --batch_size=128
-          - --model_path="./fpgm_resnet34_single_models"
+          - --data "imagenet" 
+          - --lr_strategy="cosine_decay"  
+          - --criterion="fpgm"
+          - --num_epochs 1 
+          - --pruned_ratio=0.25 
+          - --batch_size=128
           - --use_gpu True
       
       -
@@ -18,9 +21,12 @@ case:
         cmd: python -m paddle.distributed.launch train.py
         params:
           - --model="resnet34"
-          - --data "imagenet" --lr_strategy="cosine_decay"  --criterion="fpgm"
-          - --num_epochs 1 --pruned_ratio=0.25 --batch_size=128
-          - --model_path="./fpgm_resnet34_mutli_models"
+          - --data "imagenet" 
+          - --lr_strategy="cosine_decay"  
+          - --criterion="fpgm"
+          - --num_epochs 1 
+          - --pruned_ratio=0.25 
+          - --batch_size=128
           - --use_gpu True
 
   windows:
@@ -30,9 +36,12 @@ case:
         cmd: python train.py
         params:
           - --model="resnet34"
-          - --data "imagenet" --lr_strategy="cosine_decay"  --criterion="fpgm"
-          - --num_epochs 1 --pruned_ratio=0.25 --batch_size=128
-          - --model_path="./fpgm_resnet34_025_120_models"
+          - --data "imagenet" 
+          - --lr_strategy="cosine_decay"  
+          - --criterion="fpgm"
+          - --num_epochs 1 
+          - --pruned_ratio=0.25 
+          - --batch_size=128
           - --use_gpu True
 
   mac:
@@ -44,5 +53,9 @@ case:
         params:
           - --model="resnet34"
           - --data "imagenet" 
-          - --num_epochs 1
+          - --lr_strategy="cosine_decay"  
+          - --criterion="fpgm"
+          - --num_epochs 1 
+          - --pruned_ratio=0.25 
+          - --batch_size=128
           - --use_gpu False

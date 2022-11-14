@@ -24,7 +24,7 @@ case:
         params:
           - --model "MobileNetV2"
           - --data "imagenet" 
-          - --model_path="./output/fpgm_mobilenetv2_models"
+          - --model_path="./output/fpgm_mobilenetv2_models/0"
           - --use_gpu True
 
   windows:
