@@ -36,6 +36,7 @@ def get_runtime_info(log_file):
                 benchmark_res[model_name] = res_json
     return benchmark_res
 
+
 def get_base_info(mode):
     """
     从base文件中读取base数据
@@ -53,6 +54,7 @@ def get_base_info(mode):
     else:
         base_res = None
     return base_res
+
 
 def compare_diff(base_res, benchmark_res):
     """
@@ -103,6 +105,7 @@ def compare_diff(base_res, benchmark_res):
             compare_res[model]["xingneng"]["gsb"] = "g"
 
     return compare_res
+
 
 def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
     """
@@ -187,6 +190,7 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
         }
 
     return res
+
 
 def res2xls(res):
     """
@@ -314,11 +318,13 @@ def res2xls(res):
 
     wb.save("test.xlsx")
 
+
 def run(args):
     """
     统计结果并保存到excel文件
     """
-    pass
+    print("1")
+
 
 if __name__ == "__main__":
     log_file = sys.argv[1]
