@@ -224,6 +224,19 @@ def eval(args):
         total_samples, miou, acc, kappa, mdice
     )
     print(infor)
+    final_res = {
+        "model_name": args.model_name,
+        "jingdu": {
+            "value": miou,
+            "unit": "mIoU",
+        },
+        "xingneng": {
+            "value": round(time_avg * 1000, 1),
+            "unit": "ms",
+            "batch_size": batch_size,
+        },
+    }
+    print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
 
 
@@ -264,6 +277,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
+    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     args = parser.parse_args()
     if args.image_file:
         predict_image(args)

@@ -112,6 +112,7 @@ def parse_args():
     )
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
+    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     args = parser.parse_args()
     return args
 
@@ -283,7 +284,7 @@ class Predictor(object):
 
         sequences_num = i * args.batch_size
         print(
-            "[benchmark]task name: {}, batch size: {} Inference time per batch: {}ms, qps: {}.".format(
+            "[Benchmark]task name: {}, batch size: {} Inference time per batch: {}ms, qps: {}.".format(
                 args.task_name,
                 args.batch_size,
                 round(predict_time * 1000 / i, 2),
@@ -291,7 +292,20 @@ class Predictor(object):
             )
         )
         res = metric.accumulate()
-        print("[benchmark]task name: %s, acc: %s. \n" % (args.task_name, res), end="")
+        print("[Benchmark]task name: %s, acc: %s. \n" % (args.task_name, res), end="")
+        final_res = {
+            "model_name": args.model_name,
+            "jingdu": {
+                "value": res,
+                "unit": "acc",
+            },
+            "xingneng": {
+                "value": round(predict_time * 1000 / i, 2),
+                "unit": "ms",
+                "batch_size": args.batch_size,
+            },
+        }
+        print("[Benchmark][final result]{}".format(final_res))
         sys.stdout.flush()
 
 
