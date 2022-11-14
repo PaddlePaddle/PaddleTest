@@ -59,6 +59,7 @@ def argsparser():
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
+    parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
     return parser
 
 
@@ -135,6 +136,19 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
 
     map_res = coco_metric(anno_file, bboxes_list, bbox_nums_list, image_id_list)
     print("[Benchmark] COCO mAP: {}".format(map_res[0]))
+    final_res = {
+        "model_name": FLAGS.model_name,
+        "jingdu": {
+            "value": map_res[0],
+            "unit": "mAP",
+        },
+        "xingneng": {
+            "value": round(time_avg * 1000, 1),
+            "unit": "ms",
+            "batch_size": FLAGS.batch_size,
+        },
+    }
+    print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
 
 
