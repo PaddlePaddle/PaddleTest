@@ -18722,3 +18722,19 @@ Uniform_0:
 #    api_name: "torch.distributions.Uniform"
 #    mapping:
 #      ins: { alpha: concentration1, beta: concentration0 }
+
+RNNCellBase_0:
+  desc: "循环神经网络单元基类"
+  paddle:
+    api_name: "paddle.nn.RNNCellBase"
+    params:
+      dtype: 'float32'
+    method:
+      get_initial_states:
+        batch_ref:
+          value: [[[1.]]]
+        shape: [1]
+#  pytorch:
+#    api_name: "torch.nn.RNNCell"
+#    mapping:
+#      ins: { x: input }
