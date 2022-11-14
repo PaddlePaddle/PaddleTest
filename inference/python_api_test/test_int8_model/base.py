@@ -180,7 +180,7 @@ trt_fp16 = {
             "value": 48.9,
             "unit": "ms",
             "batch_size": 1,
-        }
+        },
     },
     "Deeplabv3-ResNet50": {
         "model_info": {
@@ -246,7 +246,7 @@ mkldnn_int8 = {
             "th": 0.05,
             "value": 42.5,
             "unit": "ms",
-            "batch_size": 1
+            "batch_size": 1,
         },
     },
     "PP-Liteseg": {
