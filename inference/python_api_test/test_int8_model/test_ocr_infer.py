@@ -278,6 +278,14 @@ if __name__ == "__main__":
         choices=["fp32", "fp16", "int8"],
         help="The precision of inference. It can be 'fp32', 'fp16' or 'int8'. Default is 'fp16'.",
     )
+    parser.add_argument(
+        "--deploy_backend",
+        type=str,
+        default="paddle_inference",
+        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+    )
+    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
+    parser.add_argument("--batch_size", type=int, default=1, help="Batch size of model input.")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--det_limit_side_len", type=float, default=960)
