@@ -37,10 +37,7 @@ nvidia-docker run -i --rm \
 export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
 export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
 
-
-# wget trt tool
-
-export LD_LIBRARY_PATH=${PWD}/TensorRT-8.4.0.6/lib/:${LD_LIBRARY_PATH}    
+export LD_LIBRARY_PATH=${PWD}/TensorRT-8.4.0.6/lib/:${LD_LIBRARY_PATH}
 
 pip install -r requirements.txt
 
