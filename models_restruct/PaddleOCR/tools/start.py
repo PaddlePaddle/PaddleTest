@@ -13,6 +13,7 @@ import tarfile
 import argparse
 import yaml
 import wget
+import platform
 import numpy as np
 
 logger = logging.getLogger("ce")
@@ -39,6 +40,7 @@ class PaddleOCR_Start(object):
         self.env_dict = {}
         self.model = os.path.splitext(os.path.basename(self.rd_yaml_path))[0]
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
+        
 
     def prepare_config_params(self):
         """
@@ -72,6 +74,12 @@ class PaddleOCR_Start(object):
                     else:
                         image_shape = "3,32,128"
             self.env_dict["image_shape"] = image_shape
+            # use_gpu
+            sysstr = platform.system()
+            if sysstr == "Darwin":
+                self.env_dict["use_gpu"]=False
+            else:
+                self.env_dict["use_gpu"]=True
 
     def prepare_pretrained_model(self):
         """
@@ -114,6 +122,8 @@ class PaddleOCR_Start(object):
                         "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
                         "    windows:" + os.linesep,
                         "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                        "    mac:" + os.linesep,
+                        "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                     )
                 )
             else:
@@ -123,6 +133,8 @@ class PaddleOCR_Start(object):
                         "    linux:" + os.linesep,
                         "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                         "    windows:" + os.linesep,
+                        "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                        "    mac:" + os.linesep,
                         "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                     )
                 )
