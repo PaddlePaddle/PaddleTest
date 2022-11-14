@@ -14,10 +14,10 @@ import base
 
 
 FONT = {
-        "g": "00ff00",
-        'b': "ff0000",
-        's': '000000',
-        }
+    "g": "00ff00",
+    "b": "ff0000",
+    "s": "000000",
+}
 
 
 def get_runtime_info(log_file):
@@ -34,6 +34,7 @@ def get_runtime_info(log_file):
                 res_json = eval(tmp)
                 model_name = res_json["model_info"]["model_name"]
                 benchmark_res[model_name] = res_json
+
     return benchmark_res 
 
 
@@ -53,6 +54,7 @@ def get_base_info(mode):
         base_res = base.mkldnn_fp32
     else:
         base_res = None
+
     return base_res
 
 
@@ -123,7 +125,7 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": trt_int8[model]["jingdu"]["diff"],
                     "gsb": trt_int8[model]["jingdu"]["gsb"],
                     "unit": trt_int8[model]["jingdu"]["unit"],
-                 },
+                },
                 "xingneng": {
                     "th": trt_int8[model]["xingneng"]["th"],
                     "base": trt_int8[model]["xingneng"]["base"],
@@ -131,7 +133,7 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": trt_int8[model]["xingneng"]["diff"],
                     "gsb": trt_int8[model]["xingneng"]["gsb"],
                     "unit": trt_int8[model]["xingneng"]["unit"],
-                 },
+                },
             },
             "trt_fp16": {
                 "jingdu": {
@@ -141,7 +143,7 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": trt_fp16[model]["jingdu"]["diff"],
                     "gsb": trt_fp16[model]["jingdu"]["gsb"],
                     "unit": trt_fp16[model]["jingdu"]["unit"],
-                 },
+                },
                 "xingneng": {
                     "th": trt_fp16[model]["xingneng"]["th"],
                     "base": trt_fp16[model]["xingneng"]["base"],
@@ -149,7 +151,7 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": trt_fp16[model]["xingneng"]["diff"],
                     "gsb": trt_fp16[model]["xingneng"]["gsb"],
                     "unit": trt_fp16[model]["xingneng"]["unit"],
-                 },
+                },
             },
             "mkldnn_int8": {
                 "jingdu": {
@@ -159,7 +161,7 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": mkldnn_int8[model]["jingdu"]["diff"],
                     "gsb": mkldnn_int8[model]["jingdu"]["gsb"],
                     "unit": mkldnn_int8[model]["jingdu"]["unit"],
-                 },
+                },
                 "xingneng": {
                     "th": mkldnn_int8[model]["xingneng"]["th"],
                     "base": mkldnn_int8[model]["xingneng"]["base"],
@@ -167,7 +169,7 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": mkldnn_int8[model]["xingneng"]["diff"],
                     "gsb": mkldnn_int8[model]["xingneng"]["gsb"],
                     "unit": mkldnn_int8[model]["xingneng"]["unit"],
-                 },
+                },
             },
             "mkldnn_fp32": {
                 "jingdu": {
@@ -177,7 +179,7 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": mkldnn_fp32[model]["jingdu"]["diff"],
                     "gsb": mkldnn_fp32[model]["jingdu"]["gsb"],
                     "unit": mkldnn_fp32[model]["jingdu"]["unit"],
-                 },
+                },
                 "xingneng": {
                     "th": mkldnn_fp32[model]["xingneng"]["th"],
                     "base": mkldnn_fp32[model]["xingneng"]["base"],
@@ -185,9 +187,10 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": mkldnn_fp32[model]["xingneng"]["diff"],
                     "gsb": mkldnn_fp32[model]["xingneng"]["gsb"],
                     "unit": mkldnn_fp32[model]["xingneng"]["unit"],
-                 },
+                },
             },
         }
+
     return res
         
 
@@ -223,7 +226,7 @@ def res2xls(res):
         sheet.cell(4, column_s + 2).value = "阈值"
         sheet.cell(4, column_s + 3).value = "diff"
         column_s += 4
- 
+
     # 数据
     row_s = 5
     for model, info in res.items():
@@ -333,4 +336,3 @@ if __name__ == "__main__":
     trt_int8 = compare_diff(base_res, benchmark_res)
     res = res_summary(trt_int8, trt_int8, trt_int8, trt_int8)
     res2xls(res)
-
