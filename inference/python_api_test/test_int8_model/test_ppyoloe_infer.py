@@ -51,6 +51,7 @@ def argsparser():
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--img_shape", type=int, default=640, help="input_size")
+    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
 
     return parser
 
@@ -439,6 +440,19 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         )
     )
     print("[Benchmark] COCO mAP: {}".format(map_res["bbox"][0]))
+    final_res = {
+        "model_name": FLAGS.model_name,
+        "jingdu": {
+            "value": map_res["bbox"][0],
+            "unit": "mAP",
+        },
+        "xingneng": {
+            "value": round(time_avg * 1000, 1),
+            "unit": "ms",
+            "batch_size": 1,
+        },
+    }
+    print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
 
 
