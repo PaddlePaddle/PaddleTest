@@ -922,7 +922,7 @@ ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5_dml:
       - name: trained
         result:
           recall1:
-            base: 0.0005
+            base: 1.0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -964,13 +964,13 @@ ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5_dml:
       - name: multi
         result:
           recall1:
-            base: 0.0005
+            base: 1.0
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.0005
+            base: 1.0
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -1068,7 +1068,7 @@ ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5_udml:
       - name: trained
         result:
           recall1:
-            base: 0.0005
+            base: 1.0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -1110,13 +1110,13 @@ ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5_udml:
       - name: multi
         result:
           recall1:
-            base: 0.0007
+            base: 1.0
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.0005
+            base: 1.0
             evaluation: '='
             threshold: 0
       - name: multi_static

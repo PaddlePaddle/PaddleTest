@@ -76,6 +76,7 @@ class Jelly_v2(object):
         self.compare_dict = None
         self.param = dict()
         self.data = dict()
+        self.method = dict()
         self.places = place
         self.card = card
         self._set_seed()
@@ -131,13 +132,32 @@ class Jelly_v2(object):
         设置paddle 输入参数
         """
         for key, value in inputs.items():
-            self.data[key] = to_tensor(value)
-            self.data[key].stop_gradient = False
+            if isinstance(value, (np.generic, np.ndarray)):
+                self.data[key] = to_tensor(value)
+                self.data[key].stop_gradient = False
+            else:
+                self.data[key] = value
+            # self.data[key] = to_tensor(value)
+            # self.data[key].stop_gradient = False
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 self.param[key] = to_tensor(value)
             else:
                 self.param[key] = value
+
+    def set_paddle_method(self, method: dict):
+        """
+        设置paddle调用方法method
+        """
+        if method is not None:
+            for key, value_dict in method.items():
+                self.method[key] = value_dict
+                for k, v in value_dict.items():
+                    # 默认传入字典时，表示传入的是一个np.ndarray并转为tensor，否则传入的不为tensor。后续需优化code
+                    if isinstance(v, dict):
+                        self.method[key][k] = to_tensor(v["value"])
+                    else:
+                        self.method[key][k] = v
 
     def paddle_forward(self):
         """
@@ -149,9 +169,18 @@ class Jelly_v2(object):
                 forward_time = timeit.timeit(lambda: self.api(**input_param), number=self.base_times)
                 self.forward_time.append(forward_time)
         elif self._layertypes(self.api) == "class":
+            # obj = self.api(**self.param)
+            # for i in range(self.loops):
+            #     forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
+            #     self.forward_time.append(forward_time)
             obj = self.api(**self.param)
             for i in range(self.loops):
-                forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
+                if self.method == dict():
+                    forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
+                else:
+                    obj_method = eval("obj" + "." + list(self.method.keys())[0])
+                    method_params_dict = self.method[list(self.method.keys())[0]]
+                    forward_time = timeit.timeit(lambda: obj_method(**method_params_dict), number=self.base_times)
                 self.forward_time.append(forward_time)
         elif self._layertypes(self.api) == "reload":
             # 判断"reload" api中有一个输入还是两个输入
@@ -195,8 +224,16 @@ class Jelly_v2(object):
                 total_time = timeit.timeit(lambda: func(input_param), number=self.base_times)
                 self.total_time.append(total_time)
         elif self._layertypes(self.api) == "class":
+            # obj = self.api(**self.param)
+            # res = obj(*self.data.values())
+            # grad_tensor = paddle.ones(res.shape, res.dtype)
             obj = self.api(**self.param)
-            res = obj(*self.data.values())
+            if self.method == dict():
+                res = obj(*self.data.values())
+            else:
+                obj_method = eval("obj" + "." + list(self.method.keys())[0])
+                method_params_dict = self.method[list(self.method.keys())[0]]
+                res = obj_method(method_params_dict)
             grad_tensor = paddle.ones(res.shape, res.dtype)
 
             def clas(input_param):
