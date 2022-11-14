@@ -249,7 +249,7 @@ class Jelly_v2_torch(object):
             else:
                 obj_method = eval("obj" + "." + list(self.method.keys())[0])
                 method_params_dict = self.method[list(self.method.keys())[0]]
-                res = obj_method(method_params_dict)
+                res = obj_method(**method_params_dict)
             # res = obj(*self.data.values())
             # init grad tensor
             if self.places == "gpu":
