@@ -76,9 +76,9 @@ class PaddleOCR_Start(object):
             # use_gpu
             sysstr = platform.system()
             if sysstr == "Darwin":
-                self.env_dict["use_gpu"] = 'False'
+                self.env_dict["use_gpu"] = "False"
             else:
-                self.env_dict["use_gpu"] = 'True'
+                self.env_dict["use_gpu"] = "True"
 
     def prepare_pretrained_model(self):
         """
