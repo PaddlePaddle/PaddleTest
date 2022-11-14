@@ -225,9 +225,7 @@ def eval(args):
     )
     print(infor)
     final_res = {
-        "model_info": {
-            "model_name": args.model_name,
-        },
+        "model_name": args.model_name,
         "jingdu": {
             "value": miou,
             "unit": "mIoU",

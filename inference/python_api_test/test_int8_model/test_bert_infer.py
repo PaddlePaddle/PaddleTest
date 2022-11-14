@@ -272,9 +272,7 @@ class Predictor(object):
         res = metric.accumulate()
         print("[Benchmark]task name: %s, acc: %s. \n" % (args.task_name, res), end="")
         final_res = {
-            "model_info": {
-                "model_name": args.model_name,
-            },
+            "model_name": args.model_name,
             "jingdu": {
                 "value": res[0],
                 "unit": "acc",
