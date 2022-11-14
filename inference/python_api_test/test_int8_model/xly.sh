@@ -24,6 +24,9 @@ nvidia-docker run -i --rm \
     --net=host \
     --shm-size=128G \
     -v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi ${CUDA_SO} ${DEVICES} \
+    -v /home/disk1/:/home/disk1/ \
+    -v $(pwd):/workspace \
+    -w /workspace \
     -e "LANG=en_US.UTF-8" \
     -e "PYTHONIOENCODING=utf-8" \
     -e "no_proxy=bcebos.com,goproxy.cn,baidu.com,bcebos.com" \
@@ -33,11 +36,11 @@ nvidia-docker run -i --rm \
 
 export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
 export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-export PYTHON_FLAGS="-DPYTHON_EXECUTABLE:FILEPATH=/opt/_internal/cpython-3.8.0/bin/python3.8 -DPYTHON_INCLUDE_DIR:PATH=/opt/_internal/cpython-3.8.0/include/python3.8 -DPYTHON_LIBRARIES:FILEPATH=/opt/_internal/cpython-3.8.0/lib/libpython3.so"
+
 
 # wget trt tool
 
-export LD_LIBRARY_PATH=${PWD}/TensorRT-8.4.0.6/targets/x86_64-linux-gnu/:${LD_LIBRARY_PATH}    
+export LD_LIBRARY_PATH=${PWD}/TensorRT-8.4.0.6/lib/:${LD_LIBRARY_PATH}    
 
 pip install -r requirements.txt
 
