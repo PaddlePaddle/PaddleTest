@@ -203,7 +203,7 @@ class Predictor(object):
         print("[Benchmark] Evaluation acc result: {}".format(result[0]))
         final_res = {
             "model_info": {
-                "model_name": agrs.model_name,
+                "model_name": args.model_name,
             },
             "jingdu": {
                 "value": result[0],
