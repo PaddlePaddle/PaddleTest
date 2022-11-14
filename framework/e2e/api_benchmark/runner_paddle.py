@@ -60,6 +60,7 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
                         enable_backward=bt.enable_backward(),
                     )
                     jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
+                    jelly.set_paddle_method(bt.get_paddle_method())
                     jelly.run_schedule()
             except Exception as e:
                 paddle.enable_static()
@@ -79,6 +80,7 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
                 enable_backward=bt.enable_backward(),
             )
             jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
+            jelly.set_paddle_method(bt.get_paddle_method())
             jelly.run_schedule()
 
 
@@ -96,6 +98,7 @@ def testing(yaml_path, case_name, framework, place=None, card=None):
             api=api, framework=framework, title=case_name, place=place, card=card, enable_backward=bt.enable_backward()
         )
         jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
+        jelly.set_paddle_method(bt.get_paddle_method())
         jelly.run()
 
 

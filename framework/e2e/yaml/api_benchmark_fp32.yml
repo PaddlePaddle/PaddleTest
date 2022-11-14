@@ -18465,3 +18465,260 @@ as_real_0:
     api_name: "torch.view_as_real"
     mapping:
       ins: { x: input }
+
+Beta_0:
+  desc: "在概率论中，Beta 分布是指一组定义在 [0,1] 区间的连续概率分布"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.Beta"
+    params:
+      alpha: 0.5
+      beta: 0.5
+    method:
+      sample:
+        shape: [1, 1, 1]
+#  pytorch:
+#    api_name: "torch.distributions.Beta"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+Categorical_0:
+  desc: "类别分布是一种离散概率分布，其随机变量可以取 K 个相互独立类别的其中一个"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.Categorical"
+    params:
+      logits: [0.1253, 0.5213]
+    method:
+      sample:
+        shape: [1, 1]
+#  pytorch:
+#    api_name: "torch.distributions.categorical.Categorical"
+#    mapping:
+#      ins: { logits: logits }
+
+Dirichlet_0:
+  desc: "狄利克雷分布（Dirichlet distribution）是一类在实数域以正单纯形（standard simplex）为支撑集的高维连续概率分布，是 Beta 分布在高维情形的推广"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.Dirichlet"
+    params:
+      concentration:
+        random: false
+        type: "Tensor"
+        dtype: "float32"
+        value: [1.]
+    method:
+      sample:
+        shape: [1]
+#  pytorch:
+#    api_name: "torch.distributions.Dirichlet"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+Multinomial_0:
+  desc: "Multinomial 表示实验次数为 total_count，概率为 probs 的多项分布"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.Multinomial"
+    params:
+      total_count: 1
+      probs:
+        random: false
+        type: "Tensor"
+        dtype: "float32"
+        value: [0.5]
+    method:
+      sample:
+        shape: [1]
+#  pytorch:
+#    api_name: "torch.distributions.Multinomial"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+Normal_0:
+  desc: "正态分布"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.Normal"
+    params:
+      loc: 0.
+      scale: 0.1
+    method:
+      sample:
+        shape: [1]
+#  pytorch:
+#    api_name: "torch.distributions.Normal"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+AbsTransform_0:
+  desc: "取绝对值变换 y=|x| "
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.AbsTransform"
+    params:
+    method:
+      forward:
+        x:
+          value: [1.]
+#  pytorch:
+#    api_name: "torch.distributions.AbsTransform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+AffineTransform_0:
+  desc: "仿射变换 y=loc+scale×x"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.AffineTransform"
+    params:
+      loc:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+      scale:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+    method:
+      forward:
+        x:
+          value: [1.]
+#  pytorch:
+#    api_name: "torch.distributions.AffineTransform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+ExpTransform_0:
+  desc: "指数变换 y=exp(x) "
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.ExpTransform"
+    params:
+    method:
+      forward:
+        x:
+          value: [1.]
+#  pytorch:
+#    api_name: "torch.distributions.ExpTransform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+PowerTransform_0:
+  desc: "幂变换  y=x^power "
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.PowerTransform"
+    params:
+      power:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -5, 5]
+    method:
+      forward:
+        x:
+          value: [1.]
+#  pytorch:
+#    api_name: "torch.distributions.PowerTransform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+ReshapeTransform_0:
+  desc: "将输入 Tensor 的事件形状 in_event_shape 改变为 out_event_shape "
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.ReshapeTransform"
+    params:
+      in_event_shape: [1]
+      out_event_shape: [1]
+    method:
+      forward:
+        x:
+          value: [1.]
+#  pytorch:
+#    api_name: "torch.distributions.ReshapeTransform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+SigmoidTransform_0:
+  desc: "Sigmoid 变换 "
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.SigmoidTransform"
+    params:
+    method:
+      forward:
+        x:
+          value: [1.]
+#  pytorch:
+#    api_name: "torch.distributions.SigmoidTransform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+SoftmaxTransform_0:
+  desc: "Softmax 变换，首先进行 y=exp(x) 变换，然后归一化 "
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.SoftmaxTransform"
+    params:
+    method:
+      forward:
+        x:
+          value: [1.]
+#  pytorch:
+#    api_name: "torch.distributions.SoftmaxTransform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+StickBreakingTransform_0:
+  desc: "将一个长度为 K 的向量通过 StackBreaking 构造过程变换为标准 K-单纯形 "
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.StickBreakingTransform"
+    params:
+    method:
+      forward:
+        x:
+          value: [1.]
+#  pytorch:
+#    api_name: "torch.distributions.StickBreakingTransform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+TanhTransform_0:
+  desc: "Tanh 变换 "
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.TanhTransform"
+    params:
+    method:
+      forward:
+        x:
+          value: [1.]
+#  pytorch:
+#    api_name: "torch.distributions.StickBreakingTransform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
+
+Uniform_0:
+  desc: "在概率论中，Beta 分布是指一组定义在 [0,1] 区间的连续概率分布"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.distribution.Uniform"
+    params:
+      low: -0.5
+      high: -0.5
+    method:
+      sample:
+        shape: [1, 1, 1]
+#  pytorch:
+#    api_name: "torch.distributions.Uniform"
+#    mapping:
+#      ins: { alpha: concentration1, beta: concentration0 }
