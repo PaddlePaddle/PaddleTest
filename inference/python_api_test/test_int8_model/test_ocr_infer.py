@@ -49,63 +49,6 @@ def load_config(file_path):
     return config
 
 
-def load_predictor(args):
-    """
-    load predictor func
-    """
-    model_file = os.path.join(args.model_path, args.model_filename)
-    params_file = os.path.join(args.model_path, args.params_filename)
-    if not os.path.exists(model_file):
-        raise ValueError("{} doesn't exist".format(model_file))
-    if not os.path.exists(params_file):
-        raise ValueError("{} doesn't exist".format(params_file))
-    pred_cfg = PredictConfig(model_file, params_file)
-    pred_cfg.enable_memory_optim()
-    pred_cfg.switch_ir_optim(True)
-
-    precision_map = {
-        "int8": PrecisionType.Int8,
-        "fp32": PrecisionType.Float32,
-        "fp16": PrecisionType.Half,
-    }
-
-    if args.device == "GPU":
-        pred_cfg.enable_use_gpu(100, 0)
-        if args.use_trt:
-            pred_cfg.enable_tensorrt_engine(
-                workspace_size=1 << 30,
-                precision_mode=precision_map[args.precision],
-                max_batch_size=args.max_batch_size,
-                min_subgraph_size=args.min_subgraph_size,
-                use_calib_mode=False,
-            )
-
-            # collect shape
-            trt_shape_f = os.path.join(args.model_path, f"trt_dynamic_shape.txt")
-
-            if not os.path.exists(trt_shape_f):
-                pred_cfg.collect_shape_range_info(trt_shape_f)
-                print(f"collect dynamic shape info into : {trt_shape_f}")
-            else:
-                print(f"dynamic shape info file( {trt_shape_f} ) already exists, not need to generate again.")
-
-            pred_cfg.enable_tuned_tensorrt_dynamic_shape(trt_shape_f, True)
-    else:
-        pred_cfg.disable_gpu()
-        pred_cfg.set_cpu_math_library_num_threads(args.cpu_threads)
-        if args.use_mkldnn:
-            pred_cfg.enable_mkldnn()
-            if args.precision == "int8":
-                pred_cfg.enable_mkldnn_int8({"conv2d", "depthwise_conv2d", "pool2d", "elementwise_mul"})
-    # pred_cfg.disable_glog_info()
-    pred_cfg.delete_pass("conv_transpose_eltwiseadd_bn_fuse_pass")
-    pred_cfg.delete_pass("matmul_transpose_reshape_fuse_pass")
-    pred_cfg.switch_use_feed_fetch_ops(False)
-
-    predictor = create_predictor(pred_cfg)
-    return predictor
-
-
 def get_output_tensors(args, predictor):
     """
     get output tensors func
@@ -185,23 +128,36 @@ def predict_image(args):
     for i in range(warmup):
         predictor.run()
 
-    start_time = time.time()
     for i in range(repeats):
+        start_time = time.time()
         predictor.run()
-        outputs = []
-        for output_tensor in output_tensors:
-            output = output_tensor.copy_to_cpu()
-            outputs.append(output)
-    total_time = time.time() - start_time
-    avg_time = float(total_time) / repeats
-    print(f"[Benchmark]Average inference time: \033[91m{round(avg_time*1000, 2)}ms\033[0m")
-    """
-    if args.model_type == 'det':
-        preds_map = {'maps': outputs[0]}
-        post_result = post_process_class(preds_map, shape_list)
-    elif args.model_type == 'rec':
-        post_result = post_process_class(outputs[0], shape_list)
-    """
+        end_time = time.time()
+        timed = end_time - start_time
+        time_min = min(time_min, timed)
+        time_max = max(time_max, timed)
+    predict_time += timed
+    monitor.stop()
+    avg_time = float(predict_time) / repeats
+    monitor_result = monitor.output()
+
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
+    time_avg = predict_time / sample_nums
+    print(
+        "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
+            round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
+        )
+    )
 
 
 extra_input_models = ["SRN", "NRTR", "SAR", "SEED", "SVTR", "VisionLAN", "RobustScanner"]
@@ -259,6 +215,46 @@ def eval(args):
         logger.info("{}:{}".format(k, v))
 
 
+def main():
+    """
+    main func
+    """
+    if FLAGS.deploy_backend == "paddle_inference":
+        predictor = PaddleInferenceEngine(
+            model_dir=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            batch_size=FLAGS.batch_size,
+            device=FLAGS.device,
+            min_subgraph_size=3,
+            use_dynamic_shape=FLAGS.use_dynamic_shape,
+            trt_min_shape=1,
+            trt_max_shape=1280,
+            trt_opt_shape=640,
+            cpu_threads=FLAGS.cpu_threads,
+        )
+    elif FLAGS.deploy_backend == "tensorrt":
+        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
+        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
+        predictor = TensorRTEngine(
+            onnx_model_file=FLAGS.model_path,
+            shape_info=None,
+            max_batch_size=FLAGS.batch_size,
+            precision=FLAGS.precision,
+            engine_file_path=engine_file,
+            calibration_cache_file=FLAGS.calibration_file,
+            verbose=False,
+        )
+
+    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
+
+    predict_image(predictor)
+
+    if rerun_flag:
+        print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_path", type=str, help="inference model filepath")
@@ -291,6 +287,6 @@ if __name__ == "__main__":
     parser.add_argument("--model_type", type=str, default="det")
     args = parser.parse_args()
     if args.image_file:
-        predict_image(args)
+        main()
     else:
         eval(args)
