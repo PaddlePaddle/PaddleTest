@@ -17,7 +17,7 @@ trt_int8 = {
             "value": 380.8,
             "unit": "ms",
             "batch_size": 1,
-        }
+        },
     },
     "PicoDet": {
         "model_info": {
@@ -33,7 +33,7 @@ trt_int8 = {
             "value": 26.9,
             "unit": "ms",
             "batch_size": 1,
-        }
+        },
     },
     "PP-HumanSeg-Lite": {
         "model_info": {
@@ -49,7 +49,7 @@ trt_int8 = {
             "value": 42.8,
             "unit": "ms",
             "batch_size": 1,
-        }
+        },
     },
     "PP-Liteseg": {
         "model_info": {
@@ -65,7 +65,7 @@ trt_int8 = {
             "value": 370.2,
             "unit": "ms",
             "batch_size": 1,
-        }
+        },
     },
     "HRNet": {
         "model_info": {
@@ -81,7 +81,7 @@ trt_int8 = {
             "value": 759.6,
             "unit": "ms",
             "batch_size": 1,
-        }
+        },
     },
     "UNet": {
         "model_info": {
@@ -97,7 +97,7 @@ trt_int8 = {
             "value": 2217.8,
             "unit": "ms",
             "batch_size": 1,
-        }
+        },
     },
     "Deeplabv3-ResNet50": {
         "model_info": {
@@ -113,6 +113,6 @@ trt_int8 = {
             "value": 3181.1,
             "unit": "ms",
             "batch_size": 1,
-        }
-    }
+        },
+    },
 }
