@@ -121,7 +121,9 @@ def run():
             content["Global"]["model_dir"] = current_path + "/afqmc"
             content["TrainConfig"]["epochs"] = 1
             content["TrainConfig"]["eval_iter"] = 50
-            paddleslim_start.update_yaml_config(rd_yaml, "HyperParameterOptimization:", "#HyperParameterOptimization:")
+            #HyperParameterOptimization 会导致训练时间过长，先删除该配置；
+            del content["HyperParameterOptimization"]
+            #paddleslim_start.update_yaml_config(rd_yaml, "HyperParameterOptimization:", "#HyperParameterOptimization:")
         elif qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_qat" or \
                 qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_sparse":
             paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/data/mini_cityscapes/mini_cityscapes.tar")
