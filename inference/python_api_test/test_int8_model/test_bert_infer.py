@@ -276,7 +276,7 @@ class Predictor(object):
                 "model_name": args.model_name,
             },
             "jingdu": {
-                "value": res,
+                "value": res[0],
                 "unit": "acc",
             },
             "xingneng": {
