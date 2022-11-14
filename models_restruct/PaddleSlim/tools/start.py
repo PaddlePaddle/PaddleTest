@@ -190,7 +190,7 @@ def run():
                 os.mkdir("pretrain")
             os.chdir("pretrain")
             print("pretrain_path:" + os.getcwd())
-            for model in ["MobileNetV1","MobileNetV3_large_x1_0_ssld","ResNet101_vd","ResNet34","ResNet50","ResNet50_vd"]:
+            for model in ["MobileNetV1","MobileNetV2","MobileNetV3_large_x1_0_ssld","ResNet101_vd","ResNet34","ResNet50","ResNet50_vd"]:
                 wget_url = "http://paddle-imagenet-models-name.bj.bcebos.com/" + model + "_pretrained.tar"
                 paddleslim_start.wget_and_tar(wget_url)
                 

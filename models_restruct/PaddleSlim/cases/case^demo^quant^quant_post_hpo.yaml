@@ -6,8 +6,8 @@ case:
         path: demo/quant/quant_post_hpo
         cmd: python quant_post_hpo.py
         params:
-          - --model_path=./inference_model/MobileNetV1_infer/
-          - --save_path=./inference_model/MobileNetV1_quant/ 
+          - --model_path=../pretrain/MobileNetV1_infer/
+          - --save_path=../pretrain/MobileNetV1_save/
           - --model_filename="inference.pdmodel"
           - --params_filename="inference.pdiparams"
           - --max_model_quant_count=1
@@ -19,8 +19,8 @@ case:
         path: demo/quant/quant_post_hpo
         cmd: python quant_post_hpo.py
         params:
-          - --model_path=./inference_model/MobileNetV1_infer/
-          - --save_path=./inference_model/MobileNetV1_quant/ 
+          - --model_path=../pretrain/MobileNetV1_infer/
+          - --save_path=../pretrain/MobileNetV1_save/ 
           - --model_filename="inference.pdmodel"
           - --params_filename="inference.pdiparams"
           - --max_model_quant_count=1
@@ -33,8 +33,8 @@ case:
         path: demo/quant/quant_post_hpo
         cmd: python quant_post_hpo.py
         params:
-          - --model_path=./inference_model/MobileNetV1_infer/
-          - --save_path=./inference_model/MobileNetV1_quant/ 
+          - --model_path=../pretrain/MobileNetV1_infer/
+          - --save_path=../pretrain/MobileNetV1_save/
           - --model_filename="inference.pdmodel"
           - --params_filename="inference.pdiparams"
           - --max_model_quant_count=1
