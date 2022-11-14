@@ -99,7 +99,7 @@ def preprocess(image_file, det_limit_side_len, det_limit_type):
     return data
 
 
-def predict_image(args):
+def predict_image(predictor, rerun_flag=False):
     """
     predict image func
     """
@@ -110,16 +110,7 @@ def predict_image(args):
     img = np.expand_dims(img, axis=0)
     shape_list = np.expand_dims(shape_list, axis=0)
 
-    # Step2: Prepare prdictor
-    predictor = load_predictor(args)
-
-    # Step3: Inference
-    input_names = predictor.get_input_names()
-    for name in input_names:
-        input_tensor = predictor.get_input_handle(name)
-    output_tensors = get_output_tensors(args, predictor)
-
-    input_tensor.copy_from_cpu(img)
+    predictor.prepare_data([img])
 
     warmup, repeats = 0, 1
     if args.benchmark:
@@ -128,6 +119,12 @@ def predict_image(args):
     for i in range(warmup):
         predictor.run()
 
+    if rerun_flag:
+        return
+
+    predict_time = 0.0
+    time_min = float("inf")
+    time_max = float("-inf")
     for i in range(repeats):
         start_time = time.time()
         predictor.run()
@@ -137,7 +134,7 @@ def predict_image(args):
         time_max = max(time_max, timed)
     predict_time += timed
     monitor.stop()
-    avg_time = float(predict_time) / repeats
+    time_avg = float(predict_time) / repeats
     monitor_result = monitor.output()
 
     cpu_mem = (
@@ -152,7 +149,6 @@ def predict_image(args):
     )
 
     print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
-    time_avg = predict_time / sample_nums
     print(
         "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
             round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
@@ -249,7 +245,7 @@ def main():
 
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
-    predict_image(predictor)
+    predict_image(predictor, rerun_flag)
 
     if rerun_flag:
         print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
