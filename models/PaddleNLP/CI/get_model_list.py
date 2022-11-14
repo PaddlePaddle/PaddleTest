@@ -1,4 +1,4 @@
-"""Get PaddleNLP develop model list """
+"""Get PaddleNLP develop model list && before merge pr """
 import io
 import re
 import os
