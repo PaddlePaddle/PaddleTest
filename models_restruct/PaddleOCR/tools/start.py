@@ -11,9 +11,9 @@ import shutil
 import logging
 import tarfile
 import argparse
+import platform
 import yaml
 import wget
-import platform
 import numpy as np
 
 logger = logging.getLogger("ce")
@@ -40,7 +40,6 @@ class PaddleOCR_Start(object):
         self.env_dict = {}
         self.model = os.path.splitext(os.path.basename(self.rd_yaml_path))[0]
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
-        
 
     def prepare_config_params(self):
         """
@@ -77,9 +76,9 @@ class PaddleOCR_Start(object):
             # use_gpu
             sysstr = platform.system()
             if sysstr == "Darwin":
-                self.env_dict["use_gpu"]=False
+                self.env_dict["use_gpu"] = False
             else:
-                self.env_dict["use_gpu"]=True
+                self.env_dict["use_gpu"] = True
 
     def prepare_pretrained_model(self):
         """

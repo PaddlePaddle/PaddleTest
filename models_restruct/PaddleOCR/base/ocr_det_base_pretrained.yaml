@@ -8,7 +8,7 @@ train:
     - Global.save_model_dir=output/${qa_yaml_name}
     - Train.loader.batch_size_per_card=2
     - Global.use_gpu=${use_gpu}
-  
+
   name: multi
   cmd : python -m paddle.distributed.launch tools/train.py
   params:
