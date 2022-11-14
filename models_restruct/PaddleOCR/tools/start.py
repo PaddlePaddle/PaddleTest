@@ -112,6 +112,8 @@ class PaddleOCR_Start(object):
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
                         "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                        "    windows:" + os.linesep,
+                        "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
                     )
                 )
             else:
@@ -119,6 +121,8 @@ class PaddleOCR_Start(object):
                     (
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
+                        "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                        "    windows:" + os.linesep,
                         "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                     )
                 )
