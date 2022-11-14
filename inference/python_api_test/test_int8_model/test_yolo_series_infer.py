@@ -90,6 +90,14 @@ def get_current_memory_mb():
     return round(cpu_mem, 4), round(gpu_mem, 4)
 
 
+def reader_wrapper(reader, input_field="image"):
+    def gen():
+        for data in reader:
+            yield np.array(data[input_field]).astype(np.float32)
+
+    return gen
+
+
 def eval(predictor, val_loader, anno_file, rerun_flag=False):
     """
     eval main func
@@ -161,6 +169,12 @@ def main():
     """
     main func
     """
+    dataset = COCOValDataset(
+        dataset_dir=FLAGS.dataset_dir, image_dir=FLAGS.val_image_dir, anno_path=FLAGS.val_anno_path
+    )
+    anno_file = dataset.ann_file
+    val_loader = paddle.io.DataLoader(dataset, batch_size=FLAGS.batch_size, drop_last=True)
+
     if FLAGS.deploy_backend == "paddle_inference":
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
@@ -183,6 +197,7 @@ def main():
             precision=FLAGS.precision,
             engine_file_path=engine_file,
             calibration_cache_file=FLAGS.calibration_file,
+            calibration_loader=reader_wrapper(val_loader),
             verbose=False,
         )
     else:
@@ -190,11 +205,6 @@ def main():
 
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
-    dataset = COCOValDataset(
-        dataset_dir=FLAGS.dataset_dir, image_dir=FLAGS.val_image_dir, anno_path=FLAGS.val_anno_path
-    )
-    anno_file = dataset.ann_file
-    val_loader = paddle.io.DataLoader(dataset, batch_size=FLAGS.batch_size, drop_last=True)
     eval(predictor, val_loader, anno_file, rerun_flag=rerun_flag)
 
     if rerun_flag:
