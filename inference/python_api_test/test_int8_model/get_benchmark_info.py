@@ -319,7 +319,6 @@ def res2xls(res):
     wb.save("test.xlsx")
 
 
-<<<<<<< HEAD
 def run():
     """
     统计结果并保存到excel文件
@@ -359,20 +358,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-=======
-def run(args):
-    """
-    统计结果并保存到excel文件
-    """
-    print("1")
-
-
-if __name__ == "__main__":
-    log_file = sys.argv[1]
-    mode = "trt_int8"
-    benchmark_res = get_runtime_info(log_file)
-    base_res = get_base_info(mode)
-    trt_int8 = compare_diff(base_res, benchmark_res)
-    res = res_summary(trt_int8, trt_int8, trt_int8, trt_int8)
-    res2xls(res)
->>>>>>> 5fab56347c06d13b660480ad39e9bba3992453fc
