@@ -598,7 +598,7 @@ print_info $? word_embedding_paddle_train
 ernie-ctm(){
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${nlp_dir}/examples/text_to_knowledge/ernie-ctm/
-wget -q https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/wordtag_dataset_v2.tar.gz && tar -zxvf wordtag_dataset_v2.tar.gz
+wget -q https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/wordtag_dataset_v2.tar.gz && tar -zxf wordtag_dataset_v2.tar.gz
 time (python -m paddle.distributed.launch  train.py \
     --max_seq_len 128 \
     --batch_size 8   \
@@ -916,7 +916,7 @@ print_info $? ernie-csc_deploy
 #30 nptag
 nptag() {
 cd ${nlp_dir}/examples/text_to_knowledge/nptag/
-wget https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/nptag_dataset.tar.gz && tar -zxvf nptag_dataset.tar.gz
+wget https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/nptag_dataset.tar.gz && tar -zxf nptag_dataset.tar.gz
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 python -m paddle.distributed.launch  train.py \
     --batch_size 64 \
