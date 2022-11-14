@@ -13,7 +13,7 @@ case:
           - --output_dir=./resnet50/output_ptq
       
       -
-        name: mutli
+        name: multi
         path: ce_tests/dygraph/quant
         cmd: python ./src/ptq.py
         params:

@@ -17,7 +17,7 @@ case:
           - --use_gpu True
 
       -
-        name: mutli
+        name: multi
         path: ce_tests/dygraph/quant
         cmd: python ./src/ptq.py
         params:

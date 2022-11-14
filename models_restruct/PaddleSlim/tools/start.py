@@ -14,6 +14,7 @@ class PaddleSlim_Start(object):
         self.reponame = os.environ["reponame"]
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)
         self.set_cuda = os.environ["set_cuda"]
+
     
     def wget_and_zip(self, wget_url):
         zip_name = wget_url.split("/")[-1]
@@ -87,7 +88,7 @@ def run():
             content["Global"]["model_dir"] = current_path + "/ppyoloe_crn_l_300e_coco"
             # example/auto_compression:detection:configs:ppyoloe_l_qat_dis 修改数据路径
             ppyoloe_l_qat_dis_reader = paddleslim_start.REPO_PATH + "/example/auto_compression/detection/configs/yolo_reader.yml"
-            paddleslim_start.update_yaml_config(ppyoloe_l_qat_dis_reader, "dataset_dir: dataset/coco/", "dataset_dir: " + current_path + '/coco')
+            paddleslim_start.update_yaml_config(ppyoloe_l_qat_dis_reader, "dataset/coco/", current_path + '/coco')
         elif qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis":
             paddleslim_start.wget_and_files("https://paddle-slim-models.bj.bcebos.com/act/yolov5s.onnx")
             paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
@@ -195,6 +196,11 @@ def run():
                 
             paddleslim_start.wget_and_tar("https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar")
             # 更新imagenet_reader.py 的ILSVRC2012 路径
+            os.chdir(demo_path+"dygraph/pruning")
+            if not os.path.exists("data"):
+                os.mkdir("data")
+            os.chdir("data")
+            paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
             update_count += 1
             os.chdir(current_path)
         

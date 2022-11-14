@@ -17,12 +17,15 @@ class PaddleSlim_Case_Start(object):
         # PaddleSlim: step = 'train:single,multi+eval:single,multi'
         self.case_step = os.environ["case_step"]
         self.case_name = os.environ["case_name"]
+        self.set_cuda = os.environ["set_cuda"]
 
 def run():
     paddleslim_case_start = PaddleSlim_Case_Start()
     current_path = os.getcwd()
     currnet_step = paddleslim_case_start.case_step
     current_name = paddleslim_case_start.case_name
+    os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_case_start.set_cuda
+    set_cuda_single_card = paddleslim_case_start.set_cuda.split(",")[0]
 
     rd_yaml = os.path.join(paddleslim_case_start.REPO_PATH, paddleslim_case_start.rd_yaml_path)
     qa_yaml = paddleslim_case_start.qa_yaml_name
@@ -39,6 +42,8 @@ def run():
                 content["model_dir"] = "region_ptq_out"
             else:
                 content["model_dir"] = "layer_ptq_out"
+        elif qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis" and current_name == "single":
+            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
 
         else:
             logger.info("******* {} no update required".format(rd_yaml))
