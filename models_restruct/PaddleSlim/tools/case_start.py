@@ -44,13 +44,13 @@ def run():
                 content["model_dir"] = "layer_ptq_out"
         elif qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis" and current_name == "single":
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
-        elif qa_yaml == "case^demo^quant^pact_quant_aware":
-            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
         else:
             logger.info("******* {} no update required".format(rd_yaml))
 
         with open(rd_yaml, "w") as f:
             yaml.dump(content, f)
+    elif qa_yaml == "case^demo^quant^pact_quant_aware":
+            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
     else:
         logger.info("******* yaml：{} no exists".format(rd_yaml))
 
