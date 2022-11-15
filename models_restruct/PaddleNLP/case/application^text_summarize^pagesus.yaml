@@ -14,7 +14,7 @@ case:
         name: multi_convergence
         cmd: python -m paddle.distributed.launch run_train.py
     eval: skipped
-    infer: 
+    infer:
       -
         name: trained
         cmd: python -m run_generate.py
@@ -23,7 +23,7 @@ case:
             base: 0
             threshold: 0
             evaluation: "="
-      
+
     export:
       -
         name: trained
@@ -43,7 +43,6 @@ case:
     train:
       -
         name: single
-        # TODO must abs path
         path: applications/text_summarization/pegasus
         cmd: python -m paddle.distributed.launch run_train.py
         result:
@@ -52,7 +51,7 @@ case:
             threshold: 0
             evaluation: "="
     eval: skipped
-    infer: 
+    infer:
       -
         name: trained
         cmd: python -m run_generate.py
@@ -60,7 +59,7 @@ case:
           exit_code:
             base: 0
             threshold: 0
-            evaluation: "="  
+            evaluation: "="
     export:
       -
         name: trained
@@ -91,7 +90,7 @@ case:
             threshold: 0
             evaluation: "="
     eval: skipped
-    infer: 
+    infer:
       -
         name: trained
         cmd: python -m run_generate.py
@@ -130,7 +129,7 @@ case:
             threshold: 0
             evaluation: "="
     eval: skipped
-    infer: 
+    infer:
       -
         name: trained
         cmd: python -m run_generate.py
