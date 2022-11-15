@@ -70,8 +70,8 @@ class PaddleOCR_Start(object):
                             image_shape = "2,32,320"
                         else:
                             image_shape = image_shape[0]
-                            if  len(image_shape)==2:
-                                image_shape='1,'+image_shape
+                            if len(image_shape) == 2:
+                                image_shape = "1," + image_shape
                         print(image_shape)
                         break
                     else:
