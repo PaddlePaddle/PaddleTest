@@ -9,13 +9,13 @@ echo "[Benchmark] Run PicoDet MKLDNN int8"
 $PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_quant --reader_config=configs/picodet_reader.yml --device=CPU --use_mkldnn=True --cpu_threads=10 --precision=int8 --model_name=PicoDet
 # YOLOv5s MKLDNN int8
 echo "[Benchmark] Run YOLOv5s MKLDNN int8"
-$PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_quant --device=CPU --use_mkldnn=True --cpu_threads=10 --arch=YOLOv5 --precision=int8 --model_name=YOLOv5s
+$PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_quant --device=CPU --use_mkldnn=True --cpu_threads=10 --precision=int8 --model_name=YOLOv5s
 # YOLOv6s MKLDNN int8
 echo "[Benchmark] Run YOLOv6s MKLDNN int8"
-$PYTHON test_yolo_series_infer.py --model_path=models/yolov6s_quant --device=CPU --use_mkldnn=True --cpu_threads=10 --arch=YOLOv6 --precision=int8 --model_name=YOLOv6s
+$PYTHON test_yolo_series_infer.py --model_path=models/yolov6s_quant --device=CPU --use_mkldnn=True --cpu_threads=10 --precision=int8 --model_name=YOLOv6s
 # YOLOv7 MKLDNN int8
 echo "[Benchmark] Run YOLOv7 MKLDNN int8"
-$PYTHON test_yolo_series_infer.py --model_path=models/yolov7_quant --device=CPU --use_mkldnn=True --cpu_threads=10 --arch=YOLOv7 --precision=int8 --model_name=YOLOv7
+$PYTHON test_yolo_series_infer.py --model_path=models/yolov7_quant --device=CPU --use_mkldnn=True --cpu_threads=10 --precision=int8 --model_name=YOLOv7
 
 # ResNet_vd MKLDNN int8
 echo "[Benchmark] Run ResNet_vd MKLDNN int8"

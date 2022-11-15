@@ -30,6 +30,7 @@ nvidia-docker run -i --rm \
     -e "LANG=en_US.UTF-8" \
     -e "PYTHONIOENCODING=utf-8" \
     -e "no_proxy=bcebos.com,goproxy.cn,baidu.com,bcebos.com" \
+    -e PADDLE_WHL=${PADDLE_WHL} \
     --net=host \
     ${DOCKER_IMAGE} \
      /bin/bash -c -x '
@@ -48,6 +49,12 @@ python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
 pip install -r requirements.txt
 
 pip install -U ${PADDLE_WHL}
+
+pip install nvidia-pyindex
+pip install nvidia-cublas-cu11
+pip install nvidia-tensorrt
+pip install pycuda
+pip install openpyxl
 
 bash run.sh
 

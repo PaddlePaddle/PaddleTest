@@ -32,7 +32,7 @@ def get_runtime_info(log_file):
             if "[Benchmark][final result]" in line:
                 tmp = line.strip("[Benchmark][final result]").strip()
                 res_json = eval(tmp)
-                model_name = res_json["model_info"]["model_name"]
+                model_name = res_json["model_name"]
                 benchmark_res[model_name] = res_json
     return benchmark_res
 
