@@ -59,7 +59,7 @@ class PaddleClas_Start(object):
 
     def download_data(self, value=None):
         """
-        下载数据集
+        下载推理所需要的数据
         """
         # 调用函数路径已切换至PaddleClas
 

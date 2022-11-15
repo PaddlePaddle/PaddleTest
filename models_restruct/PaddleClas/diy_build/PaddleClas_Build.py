@@ -211,7 +211,9 @@ class PaddleClas_Build(Model_Build):
                             self.reponame
                         )
                     )
-                elif "MV3_Large_1x_Aliproduct_DLBHC" in line and "Products" in line:
+                elif (
+                    "MV3_Large_1x_Aliproduct_DLBHC" in line or "ResNet50_vd_Aliproduct" in line
+                ) and "Products" in line:
                     image_name = self.get_image_name(value=line, label="image_root")
                     self.download_data(
                         value="https://paddle-qa.bj.bcebos.com\
@@ -245,7 +247,7 @@ class PaddleClas_Build(Model_Build):
         logger.info("#### set FLAGS_cudnn_deterministic as {}".format(os.environ["FLAGS_cudnn_deterministic"]))
 
         path_now = os.getcwd()
-        os.chdir("PaddleClas")  # 执行setup要先切到路径下面
+        os.chdir(self.reponame)  # 执行setup要先切到路径下面
         # cmd_return = os.system("python -m pip install paddleclas")
         cmd_return = os.system("python setup.py install > paddleclas_install.log 2>&1 ")
         os.chdir(path_now)

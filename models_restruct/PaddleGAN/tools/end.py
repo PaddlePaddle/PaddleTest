@@ -50,18 +50,6 @@ class PaddleClas_End(object):
                 shutil.rmtree("inference")
                 logger.info("#### clean data inference: {}".format("inference"))
 
-            if file_name == "output":
-                del_pdparams = glob.glob(r"output/*/*/*.pdparams")
-                del_pdopt = glob.glob(r"output/*/*/*.pdopt")
-                if del_pdparams != [] and del_pdopt != []:
-                    logger.info("#### clean data pdparams: {}".format("pdparams"))
-                    for del_name in del_pdparams:
-                        if "latest" not in del_name:  # 保留最后一个epoch是完整的，其它只保留结构参数
-                            os.remove(del_name)
-                    for del_name in del_pdopt:
-                        if "latest" not in del_name:
-                            os.remove(del_name)
-
             if file_name == "dataset":
                 del_dataset = glob.glob(r"dataset/*.tar")
                 if del_dataset != []:
