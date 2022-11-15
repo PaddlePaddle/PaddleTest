@@ -65,7 +65,6 @@ class PaddleClas_Case_Start(object):
 
         if self.values_dic != {}:
             os.environ[self.reponame] = json.dumps(self.values_dic)
-        values_str = os.environ.get(self.reponame, "")
         return ret
 
 
