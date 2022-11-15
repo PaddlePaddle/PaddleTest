@@ -100,10 +100,15 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
+    warmup = 20
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
 
         predictor.prepare_data([data_all["image"]])
+
+        for i in range(warmup):
+            predictor.run()
+            warmup = 0
 
         start_time = time.time()
         outs = predictor.run()
@@ -166,9 +171,6 @@ def main():
             device=FLAGS.device,
             min_subgraph_size=3,
             use_dynamic_shape=FLAGS.use_dynamic_shape,
-            trt_min_shape=1,
-            trt_max_shape=1280,
-            trt_opt_shape=640,
             cpu_threads=FLAGS.cpu_threads,
         )
     elif FLAGS.deploy_backend == "tensorrt":
@@ -183,6 +185,8 @@ def main():
             calibration_cache_file=FLAGS.calibration_file,
             verbose=False,
         )
+    else:
+        raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
 
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
