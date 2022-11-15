@@ -5,6 +5,8 @@ case^demo^distillation.yaml
 case^demo^dygraph^pruning^MobileNetV2.yaml
 case^demo^dygraph^pruning^Resnet34.yaml
 case^demo^dygraph^quant.yaml
+case^demo^dygraph^unstructured_pruning^ratio.yaml
+case^demo^dygraph^unstructured_pruning^threshold.yaml
 case^demo^prune^MobileNetV1.yaml
 case^demo^prune^MobileNetV2.yaml
 case^demo^prune^Resnet34.yaml
@@ -14,10 +16,8 @@ case^demo^quant^quant_aware.yaml
 case^demo^quant^quant_embedding.yaml
 case^demo^quant^quant_post_hpo.yaml
 case^demo^quant^quant_post.yaml
-demo^dygraph^unstructured_prunint^ratio.yaml
-demo^dygraph^unstructured_prunint^threshold.yaml
-demo^unstructured_prune^ratio.yaml
-demo^unstructured_prune^threshold.yaml
+case^demo^unstructured_prune^ratio.yaml
+case^demo^unstructured_prune^threshold.yaml
 example^auto_compression^detection^configs^ppyoloe_l_qat_dis.yaml
 example^auto_compression^image_classification^configs^MobileNetV1^qat_dis.yaml
 example^auto_compression^image_classification^configs^ResNet50_vd^qat_dis.yaml

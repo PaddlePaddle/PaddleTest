@@ -9,7 +9,7 @@ case:
           - --data imagenet 
           - --lr 0.05 
           - --pruning_mode ratio
-          - --ratio 0.55 \
+          - --ratio 0.55 
           - --batch_size 256 
           - --lr_strategy piecewise_decay 
           - --step_epochs 1 2 3 
