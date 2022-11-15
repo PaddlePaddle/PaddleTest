@@ -11,7 +11,6 @@ else
 fi
 }
 # case list
-# 1 waybill_ie (无可控参数，数据集外置)
 waybill_ie(){
 cd ${nlp_dir}/examples/information_extraction/waybill_ie/
 export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -27,11 +26,10 @@ print_info $? waybill_ie_ernie
 time (python run_ernie_crf.py >${log_path}/waybill_ie_ernie_crf) >>${log_path}/waybill_ie_ernie_crf 2>&1
 print_info $? waybill_ie_ernie_crf
 }
-# 2 msra_ner （不可控，内置）
+
 msra_ner(){
 cd ${nlp_dir}/examples/information_extraction/msra_ner/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
-## train
 time (python -m paddle.distributed.launch  ./train.py \
     --model_type bert  \
     --model_name_or_path bert-base-multilingual-uncased \
@@ -46,7 +44,6 @@ time (python -m paddle.distributed.launch  ./train.py \
     --output_dir ./tmp/msra_ner/ \
     --device gpu >${log_path}/msra_ner_train) >>${log_path}/msra_ner_train 2>&1
 print_info $? msra_ner_train
-## eval
 time (python -u ./eval.py \
     --model_name_or_path bert-base-multilingual-uncased \
     --max_seq_length 128 \
@@ -54,7 +51,6 @@ time (python -u ./eval.py \
     --device gpu \
     --init_checkpoint_path ./tmp/msra_ner/model_2.pdparams >${log_path}/msra_ner_eval) >>${log_path}/msra_ner_eval 2>&1
 print_info $? msra_ner_eval
-## predict
 time (python -u ./predict.py \
     --model_name_or_path bert-base-multilingual-uncased \
     --max_seq_length 128 \
@@ -63,7 +59,7 @@ time (python -u ./predict.py \
     --init_checkpoint_path ./tmp/msra_ner/model_2.pdparams >${log_path}/msra_ner_predict) >>${log_path}/msra_ner_predict 2>&1
 print_info $? msra_ner_predict
 }
-# 3 glue
+
 glue() {
 cd ${nlp_dir}/examples/benchmark/glue/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -83,7 +79,7 @@ time (python -u run_glue.py \
     --device gpu  >${log_path}/glue_${TASK_NAME}_train) >>${log_path}/glue_${TASK_NAME}_train 2>&1
 print_info $? glue_${TASK_NAME}_train
 }
-# 4 bert
+
 bert() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/model_zoo/bert/
@@ -135,7 +131,7 @@ time (python -u ./predict_glue.py \
     --max_seq_length 128 >${log_path}/bert_predict) >>${log_path}/bert_predict 2>&1
 print_info $? bert_predict
  }
-# 5 skep (max save 不可控 内置)
+
 skep () {
 cd ${nlp_dir}/examples/sentiment_analysis/skep/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -158,7 +154,7 @@ print_info $? skep_predict_aspect
 time (python predict_opinion.py --device 'gpu' --params_path ./opinion_checkpoints/model_100/model_state.pdparams >${log_path}/skep_predict_opinion) >>${log_path}/skep_predict_opinion 2>&1
 print_info $? skep_predict_opinion
 }
-# 6 bigbird
+
 bigbird(){
 cd ${nlp_dir}/examples/language_model/bigbird/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -175,7 +171,7 @@ time (python -m paddle.distributed.launch  --log_dir log  run_pretrain.py --mode
     --max_pred_length 75 >${log_path}/bigbird_pretrain) >>${log_path}/bigbird_pretrain 2>&1
     print_info $? bigbird_pretrain
 }
-# 7 electra
+
 electra(){
 cd ${nlp_dir}/model_zoo/electra/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -200,7 +196,7 @@ time (python -u ./run_pretrain.py \
     --device gpu >${log_path}/electra_pretrain) >>${log_path}/electra_pretrain 2>&1
 print_info $? electra_pretrain
 }
-# 8 gpt
+
 gpt(){
 #data process
 cd ${nlp_dir}/model_zoo/ernie-1.0/data_tools
@@ -285,7 +281,7 @@ print_info $? gpt_p_depoly
 # ./gpt -batch_size 1 -gpu_id 0 -model_dir ./infer_model -vocab_file ./infer_model/vocab.txt -start_token "<|endoftext|>" -end_token "<|endoftext|>"  >${log_path}/gpt_deploy_C_FT >>${log_path}/gpt_deploy_C_FT 2>&1
 # print_info $? gpt_deploy_C_FT
 }
-# 9 ernie-1.0
+
 ernie-1.0 (){
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/model_zoo/ernie-1.0/
@@ -323,7 +319,7 @@ time (python -u  -m paddle.distributed.launch  \
     --device "gpu" >${log_path}/ernie_pretrain) >>${log_path}/ernie_pretrain 2>&1
 print_info $? ernie_pretrain
 }
-# 10 xlnet
+
 xlnet(){
 cd ${nlp_dir}/examples/language_model/xlnet/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -340,7 +336,7 @@ time (python -m paddle.distributed.launch ./run_glue.py \
     --output_dir ./xlnet/ >${log_path}/xlnet_train) >>${log_path}/xlnet_train 2>&1
 print_info $? xlnet_train
 }
-# 11 ofa
+
 ofa(){
 cd ${nlp_dir}/examples/model_compression/ofa/
 cd ../../benchmark/glue/
@@ -379,7 +375,7 @@ time (python -m paddle.distributed.launch run_glue_ofa.py  \
           --width_mult_list 1.0 0.8333333333333334 0.6666666666666666 0.5 >${log_path}/ofa_slim) >>${log_path}/ofa_slim 2>&1
 print_info $? ofa_slim
 }
-# 12 albert
+
 albert (){
 cd ${nlp_dir}/examples/benchmark/glue/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -398,7 +394,7 @@ time (python -m paddle.distributed.launch  run_glue.py \
         --device gpu >${log_path}/albert_sst-2_train) >>${log_path}/albert_sst-2_train 2>&1
 print_info $? albert_sst-2_train
 }
-# 13 squad
+
 squad (){
 cd ${nlp_dir}/examples/machine_reading_comprehension/SQuAD/
 export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -434,7 +430,7 @@ time (python -u deploy/python/predict.py \
     --max_seq_length 384 >${log_path}/squad_predict) >>${log_path}/squad_predict 2>&1
 print_info $? squad_predict
 }
-# 14 tinybert
+
 tinybert() {
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${nlp_dir}/model_zoo/tinybert/
@@ -477,7 +473,7 @@ time (python task_distill.py \
     --device gpu >${log_path}/tinybert_predslim) >>${log_path}/tinybert_predslim 2>&1
 print_info $? tinybert_predslim
 }
-# 15 lexical_analysis
+
 lexical_analysis(){
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/examples/lexical_analysis/
@@ -511,7 +507,7 @@ time (python deploy/predict.py \
     --data_dir lexical_analysis_dataset_tiny >${log_path}/lexical_analysis_deploy) >>${log_path}/lexical_analysis_deploy 2>&1
 print_info $? lexical_analysis_deploy
 }
-# 16 seq2seq
+
 seq2seq() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/examples/machine_translation/seq2seq/
@@ -562,7 +558,7 @@ python infer.py \
     --infer_output_file infer_output.txt  >${log_path}/seq2seq_depoly) >>${log_path}/seq2seq_deploy 2>&1
 print_info $? seq2seq_depoly
 }
-# # 17 pretrained_models
+
 # pretrained_models() {
 # export CUDA_VISIBLE_DEVICES=${cudaid2}
 # cd ${nlp_dir}/examples/text_classification/pretrained_models/
@@ -573,7 +569,7 @@ print_info $? seq2seq_depoly
 # time (python deploy/python/predict.py --model_dir=./output >${log_path}/pretrained_models_deploy) >>${log_path}/pretrained_models_deploy 2>&1
 # print_info $? pretrained_models_deploy
 # }
-# 18 word_embedding 5min
+
 word_embedding(){
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${nlp_dir}/examples/word_embedding/
@@ -594,7 +590,7 @@ time (python train.py --device='gpu' \
                 --vdl_dir='./vdl_paddle_dir' >${log_path}/word_embedding_paddle_train) >>${log_path}/word_embedding_paddle_train 2>&1
 print_info $? word_embedding_paddle_train
 }
-# 19 ernie-ctm
+
 ernie-ctm(){
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${nlp_dir}/examples/text_to_knowledge/ernie-ctm/
@@ -616,7 +612,7 @@ time (python -m paddle.distributed.launch predict.py \
     --device "gpu"   >${log_path}/ernie-ctm_eval) >>${log_path}/ernie-ctm_eval 2>&1
 print_info $? ernie-ctm_eval
 }
-# 20 distilbert
+
 distilbert (){
 cd ${nlp_dir}/examples/model_compression/distill_lstm/
 mv ${nlp_dir}/examples/benchmark/glue/SST-2/* ./
@@ -649,7 +645,7 @@ time (
     --embedding_name w2v.google_news.target.word-word.dim300.en >${log_path}/distilbert_teacher_train) >>${log_path}/distilbert_teacher_train 2>&1
 print_info $? distilbert_teacher_train
 }
-# 21 stacl
+
 stacl() {
 cd ${nlp_dir}/examples/simultaneous_translation/stacl/
 cp -r /ssd1/paddlenlp/download/stacl/* ./
@@ -679,11 +675,10 @@ print_info $? stacl_wk-1
 # python predict.py --config ./config/transformer.yaml >${log_path}/stacl_predict) >>${log_path}/stacl_predict 2>&1
 # print_info $? stacl_predict
 }
-# 22 transformer
+
 transformer (){
 cd ${nlp_dir}/examples/machine_translation/transformer/
 wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/WMT14.en-de.partial.tar.gz
-# cp -r /ssd1/paddlenlp/download/transformer/WMT14.en-de.partial.tar.gz  ./
 tar -xzvf WMT14.en-de.partial.tar.gz
 time (
 sed -i "s/save_step: 10000/save_step: 1/g" configs/transformer.base.yaml
@@ -780,7 +775,7 @@ ${nlp_dir}/paddlenlp/ops/build_tr_cc/bin/./transformer_e2e -batch_size 8 -gpu_id
 -data_file ${PPNLP_HOME}/datasets/WMT14ende/WMT14.en-de/wmt14_ende_data_bpe/newstest2014.tok.bpe.33708.en  >${log_path}/transformer_deploy_C_FT >>${log_path}/transformer_deploy_C_FT 2>&1
 print_info $? transformer_deploy_C_FT
 }
-# 23 pet
+
 pet (){
 cd ${nlp_dir}/examples/few_shot/pet/
 export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -810,7 +805,7 @@ python -u -m paddle.distributed.launch  predict.py \
         --max_seq_length 512 >${log_path}/pet_chid_predict) >>${log_path}/pet_chid_predict 2>&1
 print_info $? pet_chid_predict
 }
-#24 simbert
+
 simbert(){
 cd ${nlp_dir}/examples/text_matching/simbert/
 cp -r /ssd1/paddlenlp/download/simbert/dev.tsv ./
@@ -818,7 +813,7 @@ time (
 python predict.py --input_file ./dev.tsv >${log_path}/simbert) >>${log_path}/simbert 2>&1
 print_info $? simbert
 }
-#25 ernie-doc
+
 ernie-doc(){
 cd ${nlp_dir}/model_zoo/ernie-doc/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
@@ -835,7 +830,7 @@ print_info $? ernie-doc_msar
 time (python run_mrc.py  --model_name_or_path ernie-doc-base-zh  --dataset dureader_robust  --batch_size 8 --learning_rate 2.75e-4 --epochs 1 --save_steps 10 --max_steps 2 --logging_steps 10 --device gpu >${log_path}/ernie-doc_dureader_robust) >>${log_path}/ernie-doc_dureader_robust 2>&1
 print_info $? ernie-doc_dureader_robust
 }
-#26 transformer-xl
+
 transformer-xl (){
 cd ${nlp_dir}/examples/language_model/transformer-xl/
 cp -r /ssd1/paddlenlp/download/transformer-xl/* ./
@@ -851,7 +846,7 @@ sed -i 's#init_from_params: "./trained_models/step_final/"#init_from_params: "./
 python eval.py --config ./configs/enwik8.yaml >${log_path}/transformer-xl_eval_enwik8) >>${log_path}/transformer-xl_eval_enwik8 2>&1
 print_info $? transformer-xl_eval_enwik8
 }
-#27 pointer_summarizer
+
 pointer_summarizer() {
 cd ${nlp_dir}/examples/text_summarization/pointer_summarizer/
 cp -r /ssd1/paddlenlp/download/pointer_summarizer/* ./
@@ -861,7 +856,7 @@ sed -i 's/if iter % 5000 == 0 or iter == 1000:/if iter % 5 == 0 :/g' train.py
 python train.py >${log_path}/pointer_summarizer_train) >>${log_path}/pointer_summarizer_train 2>&1
 print_info $? pointer_summarizer_train
 }
-#28 question_matching
+
 question_matching() {
 cd ${nlp_dir}/examples/text_matching/question_matching/
 cp -r /ssd1/paddlenlp/download/question_matching/* ./
@@ -892,7 +887,7 @@ python -u \
     --result_file 0.0_predict_public_result_test_A_re >${log_path}/question_matching_predict) >>${log_path}/question_matching_predict 2>&1
 print_info $? question_matching_predict
 }
-# 29 ernie-csc
+
 ernie-csc() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/examples/text_correction/ernie-csc
@@ -913,7 +908,7 @@ print_info $? ernie-csc_export
 python predict.py --model_file infer_model/static_graph_params.pdmodel --params_file infer_model/static_graph_params.pdiparams >${log_path}/ernie-csc_deploy >>${log_path}/ernie-csc_deploy 2>&1
 print_info $? ernie-csc_deploy
 }
-#30 nptag
+
 nptag() {
 cd ${nlp_dir}/examples/text_to_knowledge/nptag/
 wget https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/nptag_dataset.tar.gz && tar -zxf nptag_dataset.tar.gz
@@ -937,7 +932,7 @@ print_info $? nptag_export
 python deploy/python/predict.py --model_dir=./export >${log_path}/nptag_depoly >>${log_path}/nptag_deploy 2>&1
 print_info $? nptag_depoly
 }
-#31 ernie-m
+
 ernie-m() {
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/model_zoo/ernie-m
@@ -951,7 +946,7 @@ python -m paddle.distributed.launch  --log_dir output run_classifier.py  \
    --logging_steps 1  >${log_path}/ernie-m >>${log_path}/ernie-m 2>&1
 print_info $? ernie-m
 }
-#32 clue
+
 clue (){
 cd ${nlp_dir}/examples/benchmark/clue/classification
 python -u ./run_clue_classifier_trainer.py \
@@ -1014,7 +1009,7 @@ print_info $? clue-mrc
 export http_proxy=${http_proxy};
 export https_proxy=${http_proxy}
 }
-#32 taskflow
+
 taskflow (){
 cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1

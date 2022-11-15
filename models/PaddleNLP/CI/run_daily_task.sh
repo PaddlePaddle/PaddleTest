@@ -70,7 +70,7 @@ mkdir /workspace/logs
 export log_path=/workspace/logs
 ####################################
 # run p0case
-bash nlp_ci_case.sh ${cudaid1} ${cudaid2} ${Testcase}
+bash daily_case.sh ${cudaid1} ${cudaid2} ${Testcase}
 P0case_EXCODE=$? || true
 ####################################
 echo -e "\033[35m ---- result: \033[0m"

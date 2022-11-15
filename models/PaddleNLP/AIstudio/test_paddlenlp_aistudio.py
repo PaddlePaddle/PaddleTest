@@ -67,6 +67,7 @@ def get_project_list():
 
 
 @pytest.mark.parametrize("file_name", get_project_list())
+@pytest.mark.timeout(18000)
 def test_aistudio_case(file_name):
     """
     EXEC AIstudio main.ipynb
@@ -90,7 +91,7 @@ def test_aistudio_case(file_name):
 
     os.system("cd {}".format(work_path))
 
-    # TODO: add download failure case
+    # TODO: skpi download failure case
     # origin_project_list = project_info.keys()
     # result_project_list = os.listdir(os.getcwd() + "/aistudio_projects_files/")
     # failure_list = (set(origin_project_list) ^ set(result_project_list))

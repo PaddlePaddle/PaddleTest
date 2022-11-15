@@ -5,3 +5,4 @@ rouge
 pytest
 allure-pytest
 simplejson
+seaborn
