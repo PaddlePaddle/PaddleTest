@@ -38,24 +38,18 @@ class PaddleInferenceEngine(object):
         device="CPU",
         min_subgraph_size=3,
         use_dynamic_shape=False,
-        trt_min_shape=1,
-        trt_max_shape=1280,
-        trt_opt_shape=640,
         cpu_threads=1,
     ):
         """set AnalysisConfig, generate AnalysisPredictor
         Args:
-            model_dir (str): root path of __model__ and __params__
-            precision (str): mode of running(fp32/fp16/int8)
+            model_dir (str): root path of model.pdmodel and model.pdiparams.
+            precision (str): mode of running(fp32/fp16/int8).
             use_trt (bool): whether use TensorRT or not.
             use_mkldnn (bool): whether use MKLDNN or not in CPU.
             batch_size (int): Batch size of infer sample.
-            device (str): Choose the device you want to run, it can be: CPU/GPU, default is CPU
+            device (str): Choose the device you want to run, it can be: CPU/GPU, default is CPU.
             min_subgraph_size (int): min subgraph size in trt.
-            use_dynamic_shape (bool): use dynamic shape or not
-            trt_min_shape (int): min shape for dynamic shape in trt
-            trt_max_shape (int): max shape for dynamic shape in trt
-            trt_opt_shape (int): opt shape for dynamic shape in trt
+            use_dynamic_shape (bool): use dynamic shape or not.
             cpu_threads (int): num of thread when use CPU.
         """
         self.rerun_flag = False
@@ -76,9 +70,7 @@ class PaddleInferenceEngine(object):
             if use_mkldnn:
                 config.enable_mkldnn()
                 if precision == "int8":
-                    pred_cfg.enable_mkldnn_int8(
-                        {"conv2d", "depthwise_conv2d", "pool2d", "transpose2", "elementwise_mul"}
-                    )
+                    config.enable_mkldnn_int8({"conv2d", "depthwise_conv2d", "pool2d", "transpose2", "elementwise_mul"})
 
         precision_map = {
             "int8": Config.Precision.Int8,

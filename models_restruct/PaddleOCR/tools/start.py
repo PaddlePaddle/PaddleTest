@@ -11,6 +11,7 @@ import shutil
 import logging
 import tarfile
 import argparse
+import platform
 import yaml
 import wget
 import numpy as np
@@ -59,7 +60,9 @@ class PaddleOCR_Start(object):
                 lines = f.readlines()
                 for line in lines:
                     if "image_shape" in line:
-                        image_shape_list = line.strip("\n").split(":")[-1]
+                        # sar: image_shape: [3, 48, 48, 160] # h:48 w:[48,160]
+                        # image_shape_list = line.strip("\n").split(":")[-1]
+                        image_shape_list = line.strip("\n").split(":")[1].split("#")[0]
                         print(image_shape_list)
                         image_shape_list = image_shape_list.replace(" ", "")
                         image_shape = re.findall(r"\[(.*?)\]", image_shape_list)
@@ -67,11 +70,19 @@ class PaddleOCR_Start(object):
                             image_shape = "2,32,320"
                         else:
                             image_shape = image_shape[0]
+                            if len(image_shape) == 2:
+                                image_shape = "1," + image_shape
                         print(image_shape)
                         break
                     else:
                         image_shape = "3,32,128"
             self.env_dict["image_shape"] = image_shape
+        # use_gpu
+        sysstr = platform.system()
+        if sysstr == "Darwin":
+            self.env_dict["use_gpu"] = "False"
+        else:
+            self.env_dict["use_gpu"] = "True"
 
     def prepare_pretrained_model(self):
         """
@@ -112,6 +123,10 @@ class PaddleOCR_Start(object):
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
                         "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                        "    windows:" + os.linesep,
+                        "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                        "    mac:" + os.linesep,
+                        "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                     )
                 )
             else:
@@ -119,6 +134,10 @@ class PaddleOCR_Start(object):
                     (
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
+                        "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                        "    windows:" + os.linesep,
+                        "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                        "    mac:" + os.linesep,
                         "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                     )
                 )

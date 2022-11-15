@@ -21,179 +21,94 @@ import sys
 import cv2
 import numpy as np
 import paddle
-import paddleseg.transforms as T
 from paddleseg.cvlibs import Config as PaddleSegDataConfig
 from paddleseg.core.infer import reverse_transform
-from paddleseg.utils.visualize import get_pseudo_color_map
 from paddleseg.utils import metrics
-from paddle.inference import create_predictor, PrecisionType
-from paddle.inference import Config as PredictConfig
+
+from backend import PaddleInferenceEngine, TensorRTEngine
 
 
-def _transforms(dataset):
-    transforms = []
-    if dataset == "human":
-        transforms.append(T.PaddingByAspectRatio(aspect_ratio=1.77777778))
-        transforms.append(T.Resize(target_size=[398, 224]))
-        transforms.append(T.Normalize())
-    elif dataset == "cityscape":
-        transforms.append(T.Normalize())
-    return transforms
-
-
-def load_predictor(args):
+def argsparser():
     """
-    load predictor func
+    argsparser func
     """
-    rerun_flag = False
-    model_file = os.path.join(args.model_path, args.model_filename)
-    params_file = os.path.join(args.model_path, args.params_filename)
-    pred_cfg = PredictConfig(model_file, params_file)
-    pred_cfg.enable_memory_optim()
-    pred_cfg.switch_ir_optim(True)
-    if args.device == "GPU":
-        pred_cfg.enable_use_gpu(100, 0)
-    else:
-        pred_cfg.disable_gpu()
-        pred_cfg.set_cpu_math_library_num_threads(args.cpu_threads)
-        if args.use_mkldnn:
-            pred_cfg.enable_mkldnn()
-            if args.precision == "int8":
-                pred_cfg.enable_mkldnn_int8({"conv2d", "depthwise_conv2d", "pool2d", "elementwise_mul"})
-
-            if args.precision == "bf16":
-                pred_cfg.enable_mkldnn_bfloat16()
-
-    if args.use_trt:
-        if args.precision == "bf16":
-            print("trt does not support bf16, switching to fp16")
-            args.precision = "fp16"
-        # To collect the dynamic shapes of inputs for TensorRT engine
-        dynamic_shape_file = os.path.join(args.model_path, "dynamic_shape.txt")
-        if os.path.exists(dynamic_shape_file):
-            pred_cfg.enable_tuned_tensorrt_dynamic_shape(dynamic_shape_file, True)
-            print("trt set dynamic shape done!")
-            precision_map = {"fp16": PrecisionType.Half, "fp32": PrecisionType.Float32, "int8": PrecisionType.Int8}
-            pred_cfg.enable_tensorrt_engine(
-                workspace_size=1 << 30,
-                max_batch_size=1,
-                min_subgraph_size=4,
-                precision_mode=precision_map[args.precision],
-                use_static=True,
-                use_calib_mode=False,
-            )
-        else:
-            pred_cfg.disable_gpu()
-            pred_cfg.set_cpu_math_library_num_threads(10)
-            pred_cfg.collect_shape_range_info(dynamic_shape_file)
-            print("Start collect dynamic shape...")
-            rerun_flag = True
-
-    predictor = create_predictor(pred_cfg)
-    return predictor, rerun_flag
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model_path", type=str, help="inference model filepath")
+    parser.add_argument("--model_filename", type=str, default="model.pdmodel", help="model file name")
+    parser.add_argument("--params_filename", type=str, default="model.pdiparams", help="params file name")
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        default="human",
+        choices=["human", "cityscape"],
+        help="The type of given image which can be 'human' or 'cityscape'.",
+    )
+    parser.add_argument(
+        "--deploy_backend",
+        type=str,
+        default="paddle_inference",
+        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+    )
+    parser.add_argument("--dataset_config", type=str, default=None, help="path of dataset config.")
+    parser.add_argument("--benchmark", type=bool, default=False, help="Whether to run benchmark or not.")
+    parser.add_argument("--use_trt", type=bool, default=False, help="Whether to use tensorrt engine or not.")
+    parser.add_argument(
+        "--device",
+        type=str,
+        default="GPU",
+        choices=["CPU", "GPU"],
+        help="Choose the device you want to run, it can be: CPU/GPU, default is GPU",
+    )
+    parser.add_argument(
+        "--precision",
+        type=str,
+        default="fp32",
+        choices=["fp32", "fp16", "int8"],
+        help=("The precision of inference. It can be 'fp32', 'fp16' or 'int8'."),
+    )
+    parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
+    parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
+    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
+    return parser
 
 
-def predict_image(args):
-    """
-    predict image func
-    """
-    transforms = _transforms(args.dataset)
-    transform = T.Compose(transforms)
-
-    # Step1: Load image and preprocess
-    im = cv2.imread(args.image_file).astype("float32")
-    data, _ = transform(im)
-    data = np.array(data)[np.newaxis, :]
-
-    # Step2: Prepare prdictor
-    predictor, rerun_flag = load_predictor(args)
-
-    # Step3: Inference
-    input_names = predictor.get_input_names()
-    input_handle = predictor.get_input_handle(input_names[0])
-    output_names = predictor.get_output_names()
-    output_handle = predictor.get_output_handle(output_names[0])
-    input_handle.reshape(data.shape)
-    input_handle.copy_from_cpu(data)
-
-    warmup, repeats = 0, 1
-    if args.benchmark:
-        warmup, repeats = 20, 100
-
-    for i in range(warmup):
-        predictor.run()
-
-    start_time = time.time()
-    for i in range(repeats):
-        predictor.run()
-        results = output_handle.copy_to_cpu()
-        if rerun_flag:
-            print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
-            return
-    total_time = time.time() - start_time
-    avg_time = float(total_time) / repeats
-    print(f"[Benchmark]Average inference time: \033[91m{round(avg_time*1000, 2)}ms\033[0m")
-
-    # Step4: Post process
-    if args.dataset == "human":
-        results = reverse_transform(paddle.to_tensor(results), im.shape, transforms, mode="bilinear")
-        results = np.argmax(results, axis=1)
-    result = get_pseudo_color_map(results[0])
-
-    # Step5: Save result to file
-    if args.save_file is not None:
-        result.save(args.save_file)
-        print(f"Saved result to \033[91m{args.save_file}\033[0m")
-
-
-def eval(args):
+def eval(predictor, loader, eval_dataset, rerun_flag):
     """
     eval mIoU func
     """
-    # DataLoader need run on cpu
-    paddle.set_device("cpu")
-    data_cfg = PaddleSegDataConfig(args.dataset_config)
-    eval_dataset = data_cfg.val_dataset
-
-    batch_sampler = paddle.io.BatchSampler(eval_dataset, batch_size=1, shuffle=False, drop_last=False)
-    loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=0, return_list=True)
-
-    predictor, rerun_flag = load_predictor(args)
-
     intersect_area_all = 0
     pred_area_all = 0
     label_area_all = 0
-    input_names = predictor.get_input_names()
-    input_handle = predictor.get_input_handle(input_names[0])
-    output_names = predictor.get_output_names()
-    output_handle = predictor.get_output_handle(output_names[0])
-    total_samples = len(eval_dataset)
-    sample_nums = len(loader)
-    batch_size = int(total_samples / sample_nums)
+
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
-    print("Start evaluating (total_samples: {}, total_iters: {}).".format(total_samples, sample_nums))
+    warmup = 20
+    print("Start evaluating (total_samples: {}, total_iters: {}).".format(FLAGS.total_samples, FLAGS.sample_nums))
     for batch_id, data in enumerate(loader):
         image = np.array(data[0])
         label = np.array(data[1]).astype("int64")
         ori_shape = np.array(label).shape[-2:]
-        input_handle.reshape(image.shape)
-        input_handle.copy_from_cpu(image)
+
+        predictor.prepare_data([image])
+
+        for i in range(warmup):
+            predictor.run()
+            warmup = 0
+
         start_time = time.time()
-        predictor.run()
-        results = output_handle.copy_to_cpu()
+        outs = predictor.run()
         end_time = time.time()
+
         timed = end_time - start_time
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
         if rerun_flag:
-            print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
             return
 
         logit = reverse_transform(
-            paddle.to_tensor(results), ori_shape, eval_dataset.transforms.transforms, mode="bilinear"
+            paddle.to_tensor(outs[0]), ori_shape, eval_dataset.transforms.transforms, mode="bilinear"
         )
         pred = paddle.to_tensor(logit)
         if len(pred.shape) == 4:  # for humanseg model whose prediction is distribution but not class id
@@ -214,18 +129,18 @@ def eval(args):
     kappa = metrics.kappa(intersect_area_all, pred_area_all, label_area_all)
     _, mdice = metrics.dice(intersect_area_all, pred_area_all, label_area_all)
 
-    time_avg = predict_time / sample_nums
+    time_avg = predict_time / FLAGS.sample_nums
     print(
         "[Benchmark]Batch size: {}, Inference time(ms): min={}, max={}, avg={}".format(
-            batch_size, round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
+            FLAGS.batch_size, round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
         )
     )
     infor = "[Benchmark] #Images: {} mIoU: {:.4f} Acc: {:.4f} Kappa: {:.4f} Dice: {:.4f}".format(
-        total_samples, miou, acc, kappa, mdice
+        FLAGS.total_samples, miou, acc, kappa, mdice
     )
     print(infor)
     final_res = {
-        "model_name": args.model_name,
+        "model_name": FLAGS.model_name,
         "jingdu": {
             "value": miou,
             "unit": "mIoU",
@@ -233,53 +148,68 @@ def eval(args):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-            "batch_size": batch_size,
+            "batch_size": FLAGS.batch_size,
         },
     }
     print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
 
 
-if __name__ == "__main__":
+def main():
+    """
+    main func
+    """
+    data_cfg = PaddleSegDataConfig(FLAGS.dataset_config)
+    eval_dataset = data_cfg.val_dataset
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--model_path", type=str, help="inference model filepath")
-    parser.add_argument("--model_filename", type=str, default="model.pdmodel", help="model file name")
-    parser.add_argument("--params_filename", type=str, default="model.pdiparams", help="params file name")
-    parser.add_argument("--image_file", type=str, default=None, help="Image path to be processed.")
-    parser.add_argument("--save_file", type=str, default=None, help="The path to save the processed image.")
-    parser.add_argument(
-        "--dataset",
-        type=str,
-        default="human",
-        choices=["human", "cityscape"],
-        help="The type of given image which can be 'human' or 'cityscape'.",
-    )
-    parser.add_argument("--dataset_config", type=str, default=None, help="path of dataset config.")
-    parser.add_argument("--benchmark", type=bool, default=False, help="Whether to run benchmark or not.")
-    parser.add_argument("--use_trt", type=bool, default=False, help="Whether to use tensorrt engine or not.")
-    parser.add_argument(
-        "--device",
-        type=str,
-        default="GPU",
-        choices=["CPU", "GPU"],
-        help="Choose the device you want to run, it can be: CPU/GPU, default is GPU",
-    )
-    parser.add_argument(
-        "--precision",
-        type=str,
-        default="fp32",
-        choices=["fp32", "fp16", "int8", "bf16"],
-        help=(
-            "The precision of inference. It can be 'fp32', 'fp16' or 'int8'."
-            "'bf16' is available when using mkldnn. Default is 'fp16'."
-        ),
-    )
-    parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
-    parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
-    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
-    args = parser.parse_args()
-    if args.image_file:
-        predict_image(args)
+    batch_sampler = paddle.io.BatchSampler(eval_dataset, batch_size=1, shuffle=False, drop_last=False)
+    eval_loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=0, return_list=True)
+    FLAGS.total_samples = len(eval_dataset)
+    FLAGS.sample_nums = len(eval_loader)
+    FLAGS.batch_size = int(FLAGS.total_samples / FLAGS.sample_nums)
+
+    if FLAGS.deploy_backend == "paddle_inference":
+        predictor = PaddleInferenceEngine(
+            model_dir=FLAGS.model_path,
+            model_filename=FLAGS.model_filename,
+            params_filename=FLAGS.params_filename,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            batch_size=FLAGS.batch_size,
+            device=FLAGS.device,
+            min_subgraph_size=3,
+            use_dynamic_shape=True,
+            cpu_threads=FLAGS.cpu_threads,
+        )
+    elif FLAGS.deploy_backend == "tensorrt":
+        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
+        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
+        predictor = TensorRTEngine(
+            onnx_model_file=FLAGS.model_path,
+            shape_info=None,
+            max_batch_size=FLAGS.batch_size,
+            precision=FLAGS.precision,
+            engine_file_path=engine_file,
+            calibration_cache_file=FLAGS.calibration_file,
+            verbose=False,
+        )
     else:
-        eval(args)
+        raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
+
+    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
+
+    eval(predictor, eval_loader, eval_dataset, rerun_flag)
+
+    if rerun_flag:
+        print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
+
+
+if __name__ == "__main__":
+    parser = argsparser()
+    FLAGS = parser.parse_args()
+
+    # DataLoader need run on cpu
+    paddle.set_device("cpu")
+
+    main()
