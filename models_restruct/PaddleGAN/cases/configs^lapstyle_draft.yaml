@@ -11,3 +11,12 @@ case:
           cmd: python tools/main.py
           params:
             - --load ${eval_trained_model}
+
+    windows:
+      base: ./base/base.yaml
+
+    windows_cpu:
+      base: ./base/base.yaml
+
+    mac:
+      base: ./base/base.yaml

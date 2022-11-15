@@ -8,3 +8,16 @@ case:
         -
           name: single
           cmd: python tools/main.py
+      eval: skipped
+
+    windows:
+      base: ./base/base.yaml
+        eval: skipped
+
+    windows_cpu:
+      base: ./base/base.yaml
+        eval: skipped
+
+    mac:
+      base: ./base/base.yaml
+        eval: skipped
