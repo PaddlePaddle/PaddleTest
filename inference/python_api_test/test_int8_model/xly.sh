@@ -3,19 +3,13 @@
 set -ex
 
 DOCKER_NAME="test_infer_slim"
-DOCKER_IMAGE="paddlepaddle/paddle_manylinux_devel:cuda11.1-cudnn8.1-gcc82-trt7"
-PADDLE_WHL="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release_GpuAll_LinuxCentos_Gcc82_Cuda11.1_cudnn8.1.1_trt8406_Py38_Compile_H/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"
+# DOCKER_IMAGE="paddlepaddle/paddle_manylinux_devel:cuda11.1-cudnn8.1-gcc82-trt7"
+# PADDLE_WHL="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release_GpuAll_LinuxCentos_Gcc82_Cuda11.1_cudnn8.1.1_trt8406_Py38_Compile_H/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"
+DOCKER_IMAGE=${DOCKER_IMAGE:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.1-trt8.0-gcc8.2}
+PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl}
 
-# define version compare function
-function version_lt() { test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" != "$1"; }
-
-# check nvidia-docker version
-nv_docker_version=`nvidia-docker version | grep NVIDIA | cut -d" " -f3`
-if version_lt ${nv_docker_version} 2.0.0; then
-    echo -e "nv docker version ${nv_docker_version} is less than 2.0.0, should map CUDA_SO and DEVICES to docker"
-    export CUDA_SO="$(\ls /usr/lib64/libcuda* | xargs -I{} echo '-v {}:{}') $(\ls /usr/lib64/libnvidia* | xargs -I{} echo '-v {}:{}')"
-    export DEVICES=$(\ls -d /dev/nvidia* | xargs -I{} echo '--device {}:{}')
-fi
+export CUDA_SO="$(\ls /usr/lib64/libcuda* | xargs -I{} echo '-v {}:{}') $(\ls /usr/lib64/libnvidia* | xargs -I{} echo '-v {}:{}')"
+export DEVICES=$(\ls -d /dev/nvidia* | xargs -I{} echo '--device {}:{}')
 
 docker rm -f ${DOCKER_NAME} || echo "remove docker ""${DOCKER_NAME}"" failed"
 nvidia-docker run -i --rm \
@@ -29,6 +23,8 @@ nvidia-docker run -i --rm \
     -w /workspace \
     -e "LANG=en_US.UTF-8" \
     -e "PYTHONIOENCODING=utf-8" \
+    -e NVIDIA_VISIBLE_DEVICES=all \
+    -e CUDA_VISIBLE_DEVICES=0,1,2 \
     -e "no_proxy=bcebos.com,goproxy.cn,baidu.com,bcebos.com" \
     -e PADDLE_WHL=${PADDLE_WHL} \
     --net=host \
