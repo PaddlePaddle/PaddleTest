@@ -32,7 +32,7 @@ def get_runtime_info(log_file):
             if "[Benchmark][final result]" in line:
                 tmp = line.strip("[Benchmark][final result]").strip()
                 res_json = eval(tmp)
-                model_name = res_json["model_info"]["model_name"]
+                model_name = res_json["model_name"]
                 benchmark_res[model_name] = res_json
     return benchmark_res
 
@@ -109,7 +109,7 @@ def compare_diff(base_res, benchmark_res):
 
 def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
     """
-    汇总不同模型下的数据
+    汇总不同模式下的数据
     """
     res = {}
     models = trt_int8.keys()
@@ -319,18 +319,42 @@ def res2xls(res):
     wb.save("test.xlsx")
 
 
-def run(args):
+def run():
     """
     统计结果并保存到excel文件
     """
-    print("1")
-
-
-if __name__ == "__main__":
-    log_file = sys.argv[1]
+    # trt_int8
+    log_file = "eval_trt_int8_acc.log"
     mode = "trt_int8"
     benchmark_res = get_runtime_info(log_file)
     base_res = get_base_info(mode)
     trt_int8 = compare_diff(base_res, benchmark_res)
-    res = res_summary(trt_int8, trt_int8, trt_int8, trt_int8)
+
+    # trt_fp16
+    log_file = "eval_trt_fp16_acc.log"
+    mode = "trt_fp16"
+    benchmark_res = get_runtime_info(log_file)
+    base_res = get_base_info(mode)
+    trt_fp16 = compare_diff(base_res, benchmark_res)
+
+    # mkldnn_int8
+    log_file = "eval_mkldnn_int8_acc.log"
+    mode = "mkldnn_int8"
+    benchmark_res = get_runtime_info(log_file)
+    base_res = get_base_info(mode)
+    mkldnn_int8 = compare_diff(base_res, benchmark_res)
+
+    # mkldnn_fp32
+    log_file = "eval_mkldnn_fp32_acc.log"
+    mode = "mkldnn_fp32"
+    benchmark_res = get_runtime_info(log_file)
+    base_res = get_base_info(mode)
+    mkldnn_int8 = compare_diff(base_res, benchmark_res)
+
+    res = res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_int8)
+
     res2xls(res)
+
+
+if __name__ == "__main__":
+    run()
