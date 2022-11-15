@@ -24,7 +24,7 @@ nvidia-docker run -i --rm \
     -e "LANG=en_US.UTF-8" \
     -e "PYTHONIOENCODING=utf-8" \
     -e NVIDIA_VISIBLE_DEVICES=all \
-    -e CUDA_VISIBLE_DEVICES=0,1,2 \
+    -e CUDA_VISIBLE_DEVICES=0 \
     -e "no_proxy=bcebos.com,goproxy.cn,baidu.com,bcebos.com" \
     -e PADDLE_WHL=${PADDLE_WHL} \
     --net=host \
