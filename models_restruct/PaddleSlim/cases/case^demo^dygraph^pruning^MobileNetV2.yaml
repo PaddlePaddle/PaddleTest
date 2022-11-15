@@ -1,0 +1,73 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/pruning
+        cmd: python train.py
+        params:
+          - --model="mobilenet_v2"  
+          - --pruned_ratio=0.325 
+          - --lr=0.001 
+          - --data "imagenet" 
+          - --test_period=1 
+          - --step_epochs 30 60 80
+          - --num_epochs 1 
+          - --l2_decay=1e-4 
+          - --lr_strategy="piecewise_decay"
+          - --criterion="fpgm"
+          - --use_gpu True
+      
+      -
+        name: multi
+        path: demo/dygraph/pruning
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --model="mobilenet_v2"  
+          - --pruned_ratio=0.325 
+          - --lr=0.001 
+          - --data "imagenet" 
+          - --test_period=1 
+          - --step_epochs 30 60 80
+          - --num_epochs 1 
+          - --l2_decay=1e-4 
+          - --lr_strategy="piecewise_decay"
+          - --criterion="fpgm"
+          - --use_gpu True
+
+  windows:
+      -
+        name: single
+        path: demo/dygraph/pruning
+        cmd: python train.py
+        params:
+          - --model="mobilenet_v2"  
+          - --pruned_ratio=0.325 
+          - --lr=0.001 
+          - --data "imagenet" 
+          - --test_period=1 
+          - --step_epochs 30 60 80
+          - --num_epochs 1 
+          - --l2_decay=1e-4 
+          - --lr_strategy="piecewise_decay"
+          - --criterion="fpgm"
+          - --use_gpu True
+
+  mac:
+    train:
+      -
+        name: single
+        path: demo/dygraph/pruning
+        cmd: python train.py
+        params:
+          - --model="mobilenet_v2"  
+          - --pruned_ratio=0.325 
+          - --lr=0.001 
+          - --data "imagenet" 
+          - --test_period=1 
+          - --step_epochs 30 60 80
+          - --num_epochs 1 
+          - --l2_decay=1e-4 
+          - --lr_strategy="piecewise_decay"
+          - --criterion="fpgm"
+          - --use_gpu False

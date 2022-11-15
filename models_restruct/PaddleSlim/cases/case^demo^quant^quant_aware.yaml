@@ -1,0 +1,47 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_aware 
+        cmd: python train.py
+        params:
+          - --model MobileNet
+          - --pretrained_model ../../pretrain/MobileNetV1_pretrained
+          - --checkpoint_dir ./output/mobilenetv1
+          - --num_epochs 1
+          - --batch_size 16
+          - --use_gpu True
+      
+      -
+        name: multi
+        path: demo/quant/quant_aware 
+        cmd: python train.py
+        params:
+          - --model ResNet34
+          - --pretrained_model ../../pretrain/ResNet34_pretrained
+          - --checkpoint_dir ./output/ResNet34
+          - --num_epochs 1
+          - --use_gpu True
+
+  windows:
+    train:
+      -
+        name: single
+        path: example/auto_compression/nlp/
+        cmd: python run.py
+        params:
+          - --config_path='./configs/ernie3.0/afqmc.yaml'
+          - --save_dir='./save_afqmc_ERNIE_pruned'
+          - --use_gpu True
+
+  mac:
+    train:
+      -
+        name: single
+        path: example/auto_compression/nlp/
+        cmd: python run.py
+        params:
+          - --config_path='./configs/ernie3.0/afqmc.yaml'
+          - --save_dir='./save_afqmc_ERNIE_pruned'
+          - --use_gpu False
