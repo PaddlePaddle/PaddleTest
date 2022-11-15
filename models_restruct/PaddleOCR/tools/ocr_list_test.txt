@@ -7,7 +7,3 @@ configs^rec^rec_r31_sar.yml
 configs^rec^rec_r31_robustscanner.yml
 configs^rec^rec_mtb_nrtr.yml
 configs^rec^rec_efficientb3_fpn_pren.yml
-
- 
-  
-   
