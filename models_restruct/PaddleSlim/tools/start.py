@@ -14,11 +14,13 @@ class PaddleSlim_Start(object):
         self.reponame = os.environ["reponame"]
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)
         self.set_cuda = os.environ["set_cuda"]
+        self.update_count = os.environ["update_count"]
 
     
     def wget_and_zip(self, wget_url):
         zip_name = wget_url.split("/")[-1]
         if os.path.exists(zip_name):
+            #return 
             logger.info("******* {} already download ".format(zip_name))
         else:
             try:
@@ -34,6 +36,7 @@ class PaddleSlim_Start(object):
     def wget_and_tar(self, wget_url):
         tar_name = wget_url.split("/")[-1]
         if os.path.exists(tar_name):
+            #return
             logger.info("******* {} already download ".format(tar_name))
         else:
             try:
@@ -48,6 +51,7 @@ class PaddleSlim_Start(object):
     def wget_and_files(self,wget_url):
         file_name = wget_url.split("/")[-1]
         if os.path.exists(file_name):
+            #return
             logger.info("******* {} already download ".format(file_name))
         else:
             try:
@@ -75,6 +79,7 @@ def run():
     qa_yaml = paddleslim_start.qa_yaml_name
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_start.set_cuda
     set_cuda_single_card = paddleslim_start.set_cuda.split(",")[0]
+    update_count = paddleslim_start.update_count
     
     if qa_yaml.split("^")[0] != "case":
         with open(rd_yaml, "r", encoding="utf-8") as f:
@@ -170,7 +175,6 @@ def run():
             yaml.dump(content_reader, f_reader)
     
     else:
-        update_count = 0
         if update_count == 0:
             demo_path = paddleslim_start.REPO_PATH + "/demo"
             print("demo_path:" + demo_path)
@@ -201,7 +205,7 @@ def run():
                 os.mkdir("data")
             os.chdir("data")
             paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
-            update_count += 1
+            os.environ["update_count"] = 1
             os.chdir(current_path)
         
 
