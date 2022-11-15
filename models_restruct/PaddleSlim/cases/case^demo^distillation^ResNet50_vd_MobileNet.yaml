@@ -10,19 +10,6 @@ case:
           - --batch_size 64
           - --save_inference True
           - --use_gpu True
-
-      -
-        name: multi
-        path: demo/distillation
-        cmd: python distill.py
-        params:
-          - --num_epochs 1
-          - --batch_size 64
-          - --save_inference True
-          - --use_gpu True
-          - --model ResNet50
-          - --teacher_model ResNet101_vd
-          - --teacher_pretrained_model ../pretrain/ResNet101_vd_pretrained
     
   windows:
     train:

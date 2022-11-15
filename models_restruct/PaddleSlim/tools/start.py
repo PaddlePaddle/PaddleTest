@@ -125,8 +125,9 @@ def run():
             content["Global"]["model_dir"] = current_path + "/afqmc"
             content["TrainConfig"]["epochs"] = 1
             content["TrainConfig"]["eval_iter"] = 50
-            #HyperParameterOptimization 会导致训练时间过长，先删除该配置；
+            #HyperParameterOptimization、QuantPost 会导致训练时间过长，先删除该配置；
             del content["HyperParameterOptimization"]
+            del content["QuantPost"]
             #paddleslim_start.update_yaml_config(rd_yaml, "HyperParameterOptimization:", "#HyperParameterOptimization:")
         elif qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_qat" or \
                 qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_sparse":

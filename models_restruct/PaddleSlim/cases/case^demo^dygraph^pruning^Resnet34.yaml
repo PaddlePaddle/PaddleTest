@@ -7,12 +7,14 @@ case:
         cmd: python train.py
         params:
           - --model="resnet34"
-          - --data "imagenet" 
-          - --lr_strategy="cosine_decay"  
-          - --criterion="fpgm"
-          - --num_epochs 1 
-          - --pruned_ratio=0.25 
+          - --data="imagenet"
+          - --pruned_ratio=0.25
           - --batch_size=128
+          - --num_epochs=1
+          - --test_period=1
+          - --lr_strategy="cosine_decay"
+          - --criterion="fpgm"
+          - --model_path="./fpgm_resnet34_single_models"
           - --use_gpu True
       
       -
@@ -21,41 +23,12 @@ case:
         cmd: python -m paddle.distributed.launch train.py
         params:
           - --model="resnet34"
-          - --data "imagenet" 
-          - --lr_strategy="cosine_decay"  
-          - --criterion="fpgm"
-          - --num_epochs 1 
-          - --pruned_ratio=0.25 
+          - --data="imagenet"
+          - --pruned_ratio=0.25
           - --batch_size=128
+          - --num_epochs=1
+          - --test_period=1
+          - --lr_strategy="cosine_decay"
+          - --criterion="fpgm"
+          - --model_path="./fpgm_resnet34_multi_models"
           - --use_gpu True
-
-  windows:
-      -
-        name: single
-        path: demo/dygraph/pruning
-        cmd: python train.py
-        params:
-          - --model="resnet34"
-          - --data "imagenet" 
-          - --lr_strategy="cosine_decay"  
-          - --criterion="fpgm"
-          - --num_epochs 1 
-          - --pruned_ratio=0.25 
-          - --batch_size=128
-          - --use_gpu True
-
-  mac:
-    train:
-      -
-        name: single
-        path: demo/dygraph/pruning
-        cmd: python train.py
-        params:
-          - --model="resnet34"
-          - --data "imagenet" 
-          - --lr_strategy="cosine_decay"  
-          - --criterion="fpgm"
-          - --num_epochs 1 
-          - --pruned_ratio=0.25 
-          - --batch_size=128
-          - --use_gpu False
