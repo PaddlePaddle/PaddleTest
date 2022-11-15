@@ -15,7 +15,6 @@ configs^det^ch_PP-OCRv2^ch_PP-OCRv2_det_dml.yml
 configs^det^ch_PP-OCRv2^ch_PP-OCRv2_det_cml.yml
 configs^det^ch_PP-OCRv2^ch_PP-OCRv2_det_distill.yml
 configs^det^ch_PP-OCRv2^ch_PP-OCRv2_det_student.yml
-configs^det^det_r50_drrg_ctw.yml
 configs^det^det_r50_db++_icdar15.yml
 configs^det^det_r50_db++_td_tr.yml
 configs^det^det_mv3_pse.yml

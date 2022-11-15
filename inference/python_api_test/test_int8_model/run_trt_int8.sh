@@ -10,13 +10,13 @@ echo "[Benchmark] Run PicoDet trt int8"
 $PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_quant --reader_config=configs/picodet_reader.yml --use_trt=True --precision=int8 --model_name=PicoDet
 # YOLOv5s trt int8
 echo "[Benchmark] Run YOLOv5s trt int8"
-$PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_quant --use_trt=True --precision=int8 --arch=YOLOv5 --model_name=YOLOv5s
+$PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_quant --use_trt=True --precision=int8 --model_name=YOLOv5s
 # YOLOv6s trt int8
 echo "[Benchmark] Run YOLOv6s trt int8"
-$PYTHON test_yolo_series_infer.py --model_path=models/yolov6s_quant --use_trt=True --precision=int8 --arch=YOLOv6 --model_name=YOLOv6s
+$PYTHON test_yolo_series_infer.py --model_path=models/yolov6s_quant --use_trt=True --precision=int8 --model_name=YOLOv6s
 # YOLOv7 trt int8
 echo "[Benchmark] Run YOLOv7 trt int8"
-$PYTHON test_yolo_series_infer.py --model_path=models/yolov7_quant --use_trt=True --precision=int8 --arch=YOLOv7 --model_name=YOLOv7
+$PYTHON test_yolo_series_infer.py --model_path=models/yolov7_quant --use_trt=True --precision=int8 --model_name=YOLOv7
 
 # ResNet_vd trt int8
 echo "[Benchmark] Run ResNet_vd trt int8"
