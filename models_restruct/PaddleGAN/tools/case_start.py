@@ -32,7 +32,6 @@ class PaddleClas_Case_Start(object):
         self.case_name = os.environ["case_name"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         values_str = os.environ.get(self.reponame, "")
-        print("####values_str", values_str)
         try:
             self.values_dic = json.loads(values_str)
         except:

@@ -174,6 +174,9 @@ class PaddleGAN_Build(Model_Build):
                 if "pretrain_ckpt" in str(content):
                     content["model"]["pretrain_ckpt"] = "#@"
                     logger.info("#### change animeganv2 pretrain_ckpt")
+                if "max_eval_steps" in str(content):
+                    content["model"]["max_eval_steps"] = "100 #@"
+                    logger.info("#### change stylegan_v2_256_ffhq wav2lip max_eval_steps")
                 if "epochs" in content.keys():
                     content["total_iters"] = content.pop("epochs")
                     logger.info("#### change epochs to total_iters")
