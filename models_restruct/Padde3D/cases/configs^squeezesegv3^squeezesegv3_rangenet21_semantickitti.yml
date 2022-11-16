@@ -5,7 +5,7 @@ case:
           -
             name: pretrained
             params:
-              - --input_shape 64 1024 
+              - --input_shape 64 1024
         predict:
           -
             name: pretrained

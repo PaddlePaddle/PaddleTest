@@ -1,10 +1,10 @@
 train:
   name: multi
-  cmd:  python -m paddle.distributed.launch tools/train.py 
+  cmd:  python -m paddle.distributed.launch tools/train.py
   params:
     - --config ${rd_yaml_path}
     - --num_workers 2
-    - --log_interval 50 
+    - --log_interval 50
     - --save_interval 5000
   result:
     exit_code:
@@ -24,7 +24,7 @@ eval:
       base: 0
       threshold: 0
       evaluation: "="
-  
+
   name: pretrained_bs1
   cmd:  python tools/evaluate.py
   params:
@@ -42,7 +42,7 @@ infer: skipped
 
 export:
   name: pretrained
-  cmd: python tools/export.py 
+  cmd: python tools/export.py
   params:
     - --config ${rd_yaml_path}
     - --model ${model}/model.pdparams

@@ -37,7 +37,7 @@ class Paddle3D_Build(Model_Build):
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
         self.get_repo = args.get_repo
-        print('self.reponame:{}'.format(self.reponame))
+        print("self.reponame:{}".format(self.reponame))
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.test_model_list = []
@@ -71,9 +71,9 @@ class Paddle3D_Build(Model_Build):
                 src_path = "F:\\ce_data\\Paddle3D"
             elif sysstr == "Darwin":
                 src_path = "/Users/paddle/PaddleTest/ce_data/Paddle3D"
-            
-            if not os.path.exists('datasets'):
-               os.symlink(src_path, "datasets")
+
+            if not os.path.exists("datasets"):
+                os.symlink(src_path, "datasets")
             print("build dataset!")
 
             os.system("python -m pip install .")
@@ -81,13 +81,12 @@ class Paddle3D_Build(Model_Build):
 
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
-                cmd = 'sed -i "/iters/d;1i\iters: 200" %s'  % (filename)
+                cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
                 subprocess.getstatusoutput(cmd)
-                cmd = 'cat %s'  % (filename)
+                cmd = "cat %s" % (filename)
                 subprocess.getstatusoutput(cmd)
             print("change iters number!")
             os.chdir(path_now)
-             
 
     def build_env(self):
         """

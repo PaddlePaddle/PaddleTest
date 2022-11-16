@@ -8,4 +8,3 @@ case:
               - --image datasets/KITTI/training/image_2/000000.png
               - --model_file exported_model/${model}/inference.pdmodel
               - --params_file exported_model/${model}/inference.pdiparams
-           

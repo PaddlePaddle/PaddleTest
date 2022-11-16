@@ -13,7 +13,6 @@ import tarfile
 import argparse
 import yaml
 import wget
-import shutil
 import numpy as np
 
 logger = logging.getLogger("ce")
@@ -46,8 +45,8 @@ class Paddle3D_Start(object):
         准备配置参数
         """
         print("start prepare_config_params!")
-        self.env_dict['model'] = self.model
-        self.env_dict['category'] = self.category
+        self.env_dict["model"] = self.model
+        self.env_dict["category"] = self.category
 
     def prepare_pretrained_model(self):
         """
@@ -58,24 +57,40 @@ class Paddle3D_Start(object):
             path_now = os.getcwd()
             os.chdir(self.reponame)
             # delete output
-            if os.path.exists('output'):
-               shutil.rmtree('output')
+            if os.path.exists("output"):
+                shutil.rmtree("output")
             if not os.path.exists(self.model):
-               os.makedirs(self.model)
-               os.chdir(self.model)
-               if self.category=='smoke':
-                  print('https://paddle3d.bj.bcebos.com/models/{}/{}/model.pdparams'.format(self.category, self.model))
-                  wget.download('https://paddle3d.bj.bcebos.com/models/{}/{}/model.pdparams'.format(self.category, self.model)) 
-               elif  self.category=='pointpillars':
-                  print('https://bj.bcebos.com/paddle3d/models/pointpillar/{}/model.pdparams'.format(self.model))
-                  wget.download('https://bj.bcebos.com/paddle3d/models/pointpillar/{}/model.pdparams'.format(self.model))
-               elif self.model=='centerpoint_pillars_02voxel_nuscenes_10sweep':
-                  print('https://bj.bcebos.com/paddle3d/models/centerpoint/centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams')
-                  wget.download('https://bj.bcebos.com/paddle3d/models/centerpoint/centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams')
-               else:
-                  print('https://bj.bcebos.com/paddle3d/models/{}/{}/model.pdparams'.format(self.category, self.model))
-                  wget.download('https://bj.bcebos.com/paddle3d/models/{}/{}/model.pdparams'.format(self.category, self.model)) 
-               
+                os.makedirs(self.model)
+                os.chdir(self.model)
+                if self.category == "smoke":
+                    print(
+                        "https://paddle3d.bj.bcebos.com/models/{}/{}/model.pdparams".format(self.category, self.model)
+                    )
+                    wget.download(
+                        "https://paddle3d.bj.bcebos.com/models/{}/{}/model.pdparams".format(self.category, self.model)
+                    )
+                elif self.category == "pointpillars":
+                    print("https://bj.bcebos.com/paddle3d/models/pointpillar/{}/model.pdparams".format(self.model))
+                    wget.download(
+                        "https://bj.bcebos.com/paddle3d/models/pointpillar/{}/model.pdparams".format(self.model)
+                    )
+                elif self.model == "centerpoint_pillars_02voxel_nuscenes_10sweep":
+                    print(
+                        "https://bj.bcebos.com/paddle3d/models/centerpoint/ \
+                         centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
+                    )
+                    wget.download(
+                        "https://bj.bcebos.com/paddle3d/models/centerpoint/ \
+                         centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
+                    )
+                else:
+                    print(
+                        "https://bj.bcebos.com/paddle3d/models/{}/{}/model.pdparams".format(self.category, self.model)
+                    )
+                    wget.download(
+                        "https://bj.bcebos.com/paddle3d/models/{}/{}/model.pdparams".format(self.category, self.model)
+                    )
+
             os.chdir(path_now)
 
     def gengrate_test_case(self):
@@ -84,7 +99,7 @@ class Paddle3D_Start(object):
         """
         if not os.path.exists("cases"):
             os.makedirs("cases")
-        case_file=os.path.join("cases", self.qa_yaml_name) + ".yml"
+        case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
         if not os.path.exists(case_file):
             with open(case_file, "w") as f:
                 f.writelines(
@@ -103,7 +118,7 @@ class Paddle3D_Start(object):
         ret = 0
         ret = self.prepare_config_params()
         if ret:
-             logger.info("build prepare_config_params failed")
+            logger.info("build prepare_config_params failed")
         self.prepare_pretrained_model()
         self.gengrate_test_case()
         os.environ[self.reponame] = json.dumps(self.env_dict)
