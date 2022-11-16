@@ -1,3 +1,7 @@
+# encoding: utf-8
+"""
+case_start.py:
+"""
 import os
 import yaml
 import wget
@@ -7,7 +11,10 @@ import logging
 
 logger = logging.getLogger("paddleslim-log")
 
-class PaddleSlim_Case_Start(object):
+class PaddleSlimCaseStart(object):
+"""
+PaddleSlimCaseStart:
+"""
     def __init__(self):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
@@ -22,7 +29,7 @@ class PaddleSlim_Case_Start(object):
 
 
 def run():
-    paddleslim_case_start = PaddleSlim_Case_Start()
+    paddleslim_case_start = PaddleSlimCaseStart()
     currnet_step = paddleslim_case_start.case_step
     current_name = paddleslim_case_start.case_name
     system = paddleslim_case_start.system
@@ -54,7 +61,7 @@ def run():
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
         elif qa_yaml == "example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis" \
             and system == "windows":
-             content["Global"]["batch_size"] = 16
+            content["Global"]["batch_size"] = 16
         else:
             logger.info("******* {} no update required".format(rd_yaml))
 

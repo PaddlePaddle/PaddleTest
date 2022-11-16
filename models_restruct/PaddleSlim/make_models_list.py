@@ -1,3 +1,7 @@
+# encoding: utf-8
+"""
+生成model list文件
+"""
 import os
 import yaml
 

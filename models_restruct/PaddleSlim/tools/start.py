@@ -7,7 +7,10 @@ import logging
 
 logger = logging.getLogger("paddleslim-log")
 
-class PaddleSlim_Start(object):
+class PaddleSlimStart(object):
+"""
+PaddleSlimStart:
+"""
     def __init__(self):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
@@ -72,7 +75,7 @@ class PaddleSlim_Start(object):
             f.write(file_data)
 
 def run():
-    paddleslim_start = PaddleSlim_Start()
+    paddleslim_start = PaddleSlimStart()
     current_path = os.getcwd()
     rd_yaml = os.path.join(paddleslim_start.REPO_PATH, paddleslim_start.rd_yaml_path)
     qa_yaml = paddleslim_start.qa_yaml_name
