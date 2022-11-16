@@ -109,6 +109,11 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     python -m pip install $2;
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
     python -c 'from visualdl import LogWriter'
+    # # set paddleslim env 
+    # cd PaddleSlim 
+    # python -m pip install -r requirements.txt
+    # python setup.py install
+    # cd -
     ####################################
     # set paddlenlp env
     nlp1_build (){

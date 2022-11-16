@@ -26,19 +26,13 @@ esac
 python -c 'import sys; print(sys.version_info[:])'
 echo "python="$1
 ####################################
-# for paddle env
 set -x
-# python -m pip install --ignore-installed --upgrade pip
-# python -m pip install $2;
 python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
-####################################
-# mkdir /ssd1
-# cd /ssd1
-# mkdir paddlenlp
-# cd /workspace
-# export PPNLP_HOME=/ssd1/paddlenlp
-# export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
-# ln -s /home/data/cfs/models_ce/PaddleNLP/*  /ssd1/paddlenlp/
+# set paddleslim env 
+cd PaddleSlim 
+python -m pip install -r requirements.txt
+python setup.py install
+cd -
 ####################################
 # for paddlenlp env
 nlp1_build (){
