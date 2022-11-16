@@ -1057,6 +1057,7 @@ demo_act_nlp_pp_minilm(){
 	sed -i 's/epochs: 6/train_iter: 100/' ./configs/pp-minilm/auto/afqmc.yaml
 	sed -i 's/eval_iter: 1070/eval_iter: 100/' ./configs/pp-minilm/auto/afqmc.yaml
 	sed -i 's/HyperParameterOptimization:/#HyperParameterOptimization:/' ./configs/pp-minilm/auto/afqmc.yaml
+	sed -i 's/QuantPost:/#QuantPost:/' ./configs/pp-minilm/auto/afqmc.yaml
 
 	export CUDA_VISIBLE_DEVICES=${cudaid1}
 	python run.py --config_path='./configs/pp-minilm/auto/afqmc.yaml' --save_dir='./save_afqmc_pp_minilm_pruned' > ${log_path}/act_nlp_demo_pp_minilm_single_card 2>&1
