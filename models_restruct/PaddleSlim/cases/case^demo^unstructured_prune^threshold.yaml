@@ -36,7 +36,7 @@ case:
         path: demo/unstructured_prune
         cmd: python train.py
         params:
-          - --batch_size 256
+          - --batch_size 16
           - --pretrained_model "../pretrain/MobileNetV1_pretrained"
           - --lr 0.05
           - --pruning_mode "threshold"
@@ -57,7 +57,7 @@ case:
         path: demo/unstructured_prune
         cmd: python train.py
         params:
-          - --batch_size 256
+          - --batch_size 16
           - --pretrained_model ../pretrain/MobileNetV1_pretrained
           - --lr 0.05
           - --pruning_mode threshold

@@ -19,7 +19,7 @@ case:
         cmd: python distill.py
         params:
           - --num_epochs 1
-          - --batch_size 64
+          - --batch_size 32
           - --save_inference True
           - --use_gpu True
 

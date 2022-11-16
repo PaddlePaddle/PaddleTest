@@ -28,6 +28,7 @@ case:
           - --use_gpu True
 
   mac:
+    train:
       -
         name: single
         path: demo/quant/quant_aware
