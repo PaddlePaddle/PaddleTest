@@ -1,7 +1,6 @@
 case^demo^quant^pact_quant_aware^MobileNetV3_use_pact.yaml
 example^auto_compression^nlp^configs^ernie3.0^afqmc.yaml
 example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis.yaml
-case^demo^quant^quant_embedding.yaml
 example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune.yaml
 example^auto_compression^image_classification^configs^MobileNetV1^qat_dis.yaml
 case^demo^prune^MobileNetV2.yaml
