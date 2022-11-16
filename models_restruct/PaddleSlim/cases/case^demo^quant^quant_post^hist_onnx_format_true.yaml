@@ -12,7 +12,7 @@ case:
           - --bias_correction True
           - --is_full_quantize=True
           - --onnx_format=True
-      
+
     eval:
       -
         name: single
