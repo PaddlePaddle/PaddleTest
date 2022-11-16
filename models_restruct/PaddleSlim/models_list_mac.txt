@@ -13,3 +13,4 @@ case^demo^dygraph^pruning^mobilenet_v2.yaml
 case^demo^quant^quant_aware^MobileNet.yaml
 example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_qat.yaml
 case^demo^unstructured_prune^threshold.yaml
+case^demo^dygraph^unstructured_pruning^threshold.yaml
