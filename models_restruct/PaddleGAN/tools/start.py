@@ -149,8 +149,6 @@ class PaddleGAN_Start(object):
         下载预训练模型, 指定路径
         """
         self.get_params()  #  准备参数
-        print("###self.kpi_value_eval", self.kpi_value_eval)
-        input()
         self.env_dict["kpi_value_eval"] = self.kpi_value_eval
         return 0
 
