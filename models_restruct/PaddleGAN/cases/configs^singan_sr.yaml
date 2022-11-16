@@ -13,23 +13,16 @@ case:
       -
         name: single
         cmd: python tools/main.py
-        result:
-          ${kpi_value_eval}:
-            base: 99999999
-            threshold: 2
-            evaluation: "-"
-    eval:
-      -
-        name: trained
-        cmd: python tools/main.py
-        params:
-          - --load ${eval_trained_model}
+    eval: skipped
 
   windows:
     base: ./base/base.yaml
+      eval: skipped
 
   windows_cpu:
     base: ./base/base.yaml
+      eval: skipped
 
   mac:
     base: ./base/base.yaml
+      eval: skipped
