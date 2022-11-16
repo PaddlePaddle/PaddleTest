@@ -228,6 +228,8 @@ class Predictor(object):
                 config.collect_shape_range_info(dynamic_shape_file)
                 print("Start collect dynamic shape...")
                 cls.rerun_flag = True
+                if args.precision == "int8":
+                    cls.rerun_flag = False
 
         predictor = paddle.inference.create_predictor(config)
 
