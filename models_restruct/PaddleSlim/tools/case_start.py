@@ -12,9 +12,9 @@ import logging
 logger = logging.getLogger("paddleslim-log")
 
 class PaddleSlimCaseStart(object):
-"""
-PaddleSlimCaseStart:
-"""
+    """
+    PaddleSlimCaseStart:
+    """
     def __init__(self):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
