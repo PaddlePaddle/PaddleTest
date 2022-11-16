@@ -68,6 +68,7 @@ class Jelly_v2(object):
         self.result["yaml"] = self.log_file_name
         # set Reload API DICT
         self.reload = OPERATOR_RELOAD
+        self.api_str = api
         # trans "str api" to obj
         if api not in self.reload.keys():
             self.api = eval(api)
@@ -134,7 +135,10 @@ class Jelly_v2(object):
         for key, value in inputs.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 self.data[key] = to_tensor(value)
-                self.data[key].stop_gradient = False
+                if self.api_str.endswith("_"):
+                    self.data[key].stop_gradient = True
+                else:
+                    self.data[key].stop_gradient = False
             else:
                 self.data[key] = value
             # self.data[key] = to_tensor(value)
