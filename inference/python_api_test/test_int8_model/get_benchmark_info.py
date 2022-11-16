@@ -25,6 +25,8 @@ def get_runtime_info(log_file):
     获取本次执行结果
     """
     benchmark_res = {}
+    if not os.path.exists(log_file):
+        return benchmark_res
     with open(log_file) as fin:
         benchmark_lines = ""
         lines = fin.readlines()
