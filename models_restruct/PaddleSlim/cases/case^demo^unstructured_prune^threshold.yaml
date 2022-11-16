@@ -29,7 +29,6 @@ case:
           - --data="imagenet"
           - --use_gpu True
       
-
   windows:
     train:
       -
