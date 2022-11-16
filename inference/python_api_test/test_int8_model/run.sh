@@ -8,7 +8,7 @@ IFS=","
 
 for mode in $MODE
 do
-    echo ${mode}
+    echo "==========START ${mode}========="
 
     cp -r models.bak models
     if [[ ${mode} =~ "trt_int8" ]] || [[ ${mode} =~ "trt_fp16" ]]
