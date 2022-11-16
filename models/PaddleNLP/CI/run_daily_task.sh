@@ -28,8 +28,7 @@ echo "python="$1
 ####################################
 set -x
 python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
-# set paddleslim env 
-cd PaddleSlim 
+cd PaddleSlim
 python -m pip install -r requirements.txt
 python setup.py install
 cd -
