@@ -9,7 +9,7 @@ case:
           - --config_path=./configs/yolov6s_fine_tune.yaml
           - --recon_level=region-wise
           - --save_dir=region_ptq_out
-          - --devices='gpu'
+          - --devices="gpu"
           - --epochs=2
 
       -
@@ -20,7 +20,7 @@ case:
           - --config_path=./configs/yolov6s_fine_tune.yaml
           - --recon_level=layer-wise
           - --save_dir=layer_ptq_out
-          - --devices='gpu'
+          - --devices="gpu"
           - --epochs=2
 
     eval:
@@ -46,8 +46,8 @@ case:
         cmd: python run.py
         params:
           - --config_path=./configs/picodet_npu_with_postprocess.yaml
-          - --save_dir='./full_quant_det_picodet_single_card/'
-          - --devices='gpu'
+          - --save_dir="./full_quant_det_picodet_single_card/"
+          - --devices="gpu"
           - --epochs=2
 
   mac:
@@ -58,6 +58,6 @@ case:
         cmd: python run.py
         params:
           - --config_path=./configs/picodet_npu_with_postprocess.yaml
-          - --save_dir='./full_quant_det_picodet_single_card/'
-          - --devices='cpu'
+          - --save_dir="./full_quant_det_picodet_single_card/"
+          - --devices="cpu"
           - --epochs=2

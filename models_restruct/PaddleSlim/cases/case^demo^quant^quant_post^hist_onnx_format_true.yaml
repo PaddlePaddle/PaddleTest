@@ -28,9 +28,9 @@ case:
         path: demo/quant/quant_post
         cmd: python quant_post.py
         params:
-          - --model_path ../../pretrain/MobileNetV1_infer
-          - --save_path ./quant_model/hist_bc_onnx_format/MobileNetV1
-          - --algo hist
+          - --model_path "../../pretrain/MobileNetV1_infer"
+          - --save_path "./quant_model/hist_bc_onnx_format/MobileNetV1"
+          - --algo "hist"
           - --bias_correction True
           - --is_full_quantize=True
           - --onnx_format=True

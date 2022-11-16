@@ -6,8 +6,8 @@ case:
         path: example/auto_compression/nlp/
         cmd: python run.py
         params:
-          - --config_path='./configs/ernie3.0/afqmc.yaml'
-          - --save_dir='./save_afqmc_ERNIE_pruned'
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
+          - --save_dir="./save_afqmc_ERNIE_pruned"
 
     eval:
       -
@@ -15,7 +15,7 @@ case:
         path: example/auto_compression/nlp/
         cmd: python run.py
         params:
-          - --config_path='./configs/ernie3.0/afqmc.yaml'
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
           - --eval True
 
   windows:
@@ -25,8 +25,8 @@ case:
         path: example/auto_compression/nlp/
         cmd: python run.py
         params:
-          - --config_path='./configs/ernie3.0/afqmc.yaml'
-          - --save_dir='./save_afqmc_ERNIE_pruned'
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
+          - --save_dir="./save_afqmc_ERNIE_pruned"
 
     eval:
       -
@@ -34,7 +34,7 @@ case:
         path: example/auto_compression/nlp/
         cmd: python run.py
         params:
-          - --config_path='./configs/ernie3.0/afqmc.yaml'
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
           - --eval True
 
   mac:
@@ -44,8 +44,8 @@ case:
         path: example/auto_compression/nlp/
         cmd: python run.py
         params:
-          - --config_path='./configs/ernie3.0/afqmc.yaml'
-          - --save_dir='./save_afqmc_ERNIE_pruned'
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
+          - --save_dir="./save_afqmc_ERNIE_pruned"
 
     eval:
       -
@@ -53,5 +53,5 @@ case:
         path: example/auto_compression/nlp/
         cmd: python run.py
         params:
-          - --config_path='./configs/ernie3.0/afqmc.yaml'
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
           - --eval True

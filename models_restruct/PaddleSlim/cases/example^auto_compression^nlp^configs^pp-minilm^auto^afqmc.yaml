@@ -6,8 +6,8 @@ case:
         path: example/auto_compression/nlp/
         cmd: python run.py
         params:
-          - --config_path='./configs/pp-minilm/auto/afqmc.yaml'
-          - --save_dir='./save_afqmc_pp_minilm_pruned'
+          - --config_path="./configs/pp-minilm/auto/afqmc.yaml"
+          - --save_dir="./save_afqmc_pp_minilm_pruned"
 
     eval:
       -
@@ -15,5 +15,5 @@ case:
         path: example/auto_compression/nlp/
         cmd: python run.py
         params:
-          - --config_path='./configs/pp-minilm/auto/afqmc.yaml'
+          - --config_path="./configs/pp-minilm/auto/afqmc.yaml"
           - --eval True
