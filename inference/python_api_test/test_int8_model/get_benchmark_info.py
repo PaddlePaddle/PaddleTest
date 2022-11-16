@@ -25,6 +25,8 @@ def get_runtime_info(log_file):
     获取本次执行结果
     """
     benchmark_res = {}
+    if not os.path.exists(log_file):
+        return benchmark_res
     with open(log_file) as fin:
         benchmark_lines = ""
         lines = fin.readlines()
@@ -60,6 +62,7 @@ def compare_diff(base_res, benchmark_res):
     """
     计算本次结果与base的diff、gsb
     """
+    benchmark_keys = benchmark_res.keys()
     compare_res = {}
     for model, info in base_res.items():
         compare_res[model] = {
@@ -81,8 +84,6 @@ def compare_diff(base_res, benchmark_res):
             },
         }
 
-        benchmark_keys = benchmark_res.keys()
-
         if model not in benchmark_keys:
             continue
 
@@ -90,7 +91,7 @@ def compare_diff(base_res, benchmark_res):
         gap = compare_res[model]["jingdu"]["benchmark"] - compare_res[model]["jingdu"]["base"]
         diff = gap / compare_res[model]["jingdu"]["base"]
         compare_res[model]["jingdu"]["diff"] = diff
-        if gap <= 0:
+        if gap < 0:
             compare_res[model]["jingdu"]["gsb"] = "b"
         elif gap > 0:
             compare_res[model]["jingdu"]["gsb"] = "g"
@@ -349,7 +350,7 @@ def run():
     mode = "mkldnn_fp32"
     benchmark_res = get_runtime_info(log_file)
     base_res = get_base_info(mode)
-    mkldnn_int8 = compare_diff(base_res, benchmark_res)
+    mkldnn_fp32 = compare_diff(base_res, benchmark_res)
 
     res = res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_int8)
 

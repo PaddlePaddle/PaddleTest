@@ -298,8 +298,8 @@ sed -i "s/python-config/python3.7m-config/g" Makefile
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 cd ${nlp_dir}/model_zoo/ernie-1.0/
 mkdir data && cd data
-wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_ids.npy
-wget https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_idx.npz
+wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_ids.npy
+wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/ernie_wudao_0903_92M_idx.npz
 cd ../
 time (python -u  -m paddle.distributed.launch \
     --log_dir "./log" \
@@ -1052,5 +1052,6 @@ print_info $? textcnn_predict
 taskflow (){
 cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
+print_info $? taskflow
 }
 $1

@@ -1,15 +1,24 @@
 #! /bin/bash
 
 bash prepare.sh
+mv models models.bak
 
-bash run_trt_int8.sh > eval_trt_int8_acc.log.tmp 2>&1
-bash run_trt_int8.sh > eval_trt_int8_acc.log 2>&1
+OLD_IFS="${IFS}"
+IFS=","
 
-bash run_trt_fp16.sh > eval_trt_fp16_acc.log.tmp 2>&1
-bash run_trt_fp16.sh > eval_trt_fp16_acc.log 2>&1
+for mode in $MODE
+do
+    echo ${mode}
 
-bash run_mkldnn_int8.sh > eval_mkldnn_int8_acc.log 2>&1
+    cp -r models.bak models
+    if [[ ${mode} =~ "trt_int8" ]] || [[ ${mode} =~ "trt_fp16" ]]
+    then
+        bash run_${mode}.sh > eval_${mode}_acc.log.tmp 2>&1
+        bash run_${mode}.sh > eval_${mode}_acc.log 2>&1
+    fi
+    rm -rf models
+done
 
-bash run_mkldnn_fp32.sh > eval_mkldnn_fp32_acc.log 2>&1
+IFS="${OLD_IFS}"
 
 python get_benchmark_info.py

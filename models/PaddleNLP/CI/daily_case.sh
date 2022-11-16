@@ -1013,6 +1013,7 @@ export https_proxy=${http_proxy}
 taskflow (){
 cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
+print_info $? taskflow
 }
 ####################################
 export P0case_list=()
