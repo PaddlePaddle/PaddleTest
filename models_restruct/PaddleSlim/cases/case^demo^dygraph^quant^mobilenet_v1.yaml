@@ -22,7 +22,7 @@ case:
           - --model="mobilenet_v1"
           - --pretrained_model "../../pretrain/MobileNetV1_pretrained"
           - --num_epochs 1
-          - --batch_size 128
+          - --batch_size 16
           - --use_gpu True
 
   mac:

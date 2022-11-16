@@ -43,6 +43,7 @@ case:
           - --data "imagenet"
           - --pretrained_model ../pretrain/MobileNetV2_pretrained
           - --num_epochs 1
+          - --batch_size 16
           - --lr_strategy="piecewise_decay"
           - --criterion="geometry_median"
           - --model_path="./output/fpgm_mobilenetv2_models"
@@ -57,4 +58,5 @@ case:
           - --model "MobileNetV2"
           - --data "imagenet"
           - --model_path="./output/fpgm_mobilenetv2_models"
+          - --batch_size 16
           - --use_gpu True

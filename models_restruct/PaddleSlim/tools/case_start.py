@@ -18,12 +18,14 @@ class PaddleSlim_Case_Start(object):
         self.case_step = os.environ["case_step"]
         self.case_name = os.environ["case_name"]
         self.set_cuda = os.environ["set_cuda"]
+        self.system = os.environ["system"]
 
 
 def run():
     paddleslim_case_start = PaddleSlim_Case_Start()
     currnet_step = paddleslim_case_start.case_step
     current_name = paddleslim_case_start.case_name
+    system = paddleslim_case_start.system
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_case_start.set_cuda
     set_cuda_single_card = paddleslim_case_start.set_cuda.split(",")[0]
 
@@ -33,10 +35,14 @@ def run():
         with open(rd_yaml, "r") as f:
             content = yaml.load(f, Loader=yaml.FullLoader)
 
-        if currnet_step == "eval" and qa_yaml == "example^auto_compression^nlp^configs^ernie3.0^afqmc":
-            content["Global"]["model_dir"] = "./save_afqmc_ERNIE_pruned"
-        elif currnet_step == "eval" and qa_yaml == "example^auto_compression^nlp^configs^pp-minilm^auto^afqmc":
-            content["Global"]["model_dir"] = "./save_afqmc_pp_minilm_pruned"
+        if qa_yaml == "example^auto_compression^nlp^configs^ernie3.0^afqmc":
+            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
+            if currnet_step == "eval":
+                content["Global"]["model_dir"] = "./save_afqmc_ERNIE_pruned"
+        elif qa_yaml == "example^auto_compression^nlp^configs^pp-minilm^auto^afqmc":
+            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
+            if currnet_step == "eval":
+                content["Global"]["model_dir"] = "./save_afqmc_pp_minilm_pruned"
         elif currnet_step == "eval" \
             and qa_yaml == "example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune":
             if current_name == "single":
@@ -46,12 +52,16 @@ def run():
         elif qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis" \
             and current_name == "single":
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
+        elif qa_yaml == "example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis" \
+            and system == "windows":
+             content["Global"]["batch_size"] = 16
         else:
             logger.info("******* {} no update required".format(rd_yaml))
 
         with open(rd_yaml, "w") as f:
             yaml.dump(content, f)
-    elif qa_yaml == "case^demo^quant^pact_quant_aware":
+    elif qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact" or \
+        qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_false":
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
     else:
         logger.info("******* yaml：{} no exists".format(rd_yaml))
