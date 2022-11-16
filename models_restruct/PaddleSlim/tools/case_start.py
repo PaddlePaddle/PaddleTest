@@ -19,6 +19,7 @@ class PaddleSlim_Case_Start(object):
         self.case_name = os.environ["case_name"]
         self.set_cuda = os.environ["set_cuda"]
 
+
 def run():
     paddleslim_case_start = PaddleSlim_Case_Start()
     currnet_step = paddleslim_case_start.case_step
@@ -36,12 +37,14 @@ def run():
             content["Global"]["model_dir"] = "./save_afqmc_ERNIE_pruned"
         elif currnet_step == "eval" and qa_yaml == "example^auto_compression^nlp^configs^pp-minilm^auto^afqmc":
             content["Global"]["model_dir"] = "./save_afqmc_pp_minilm_pruned"
-        elif currnet_step == "eval" and qa_yaml == "example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune":
+        elif currnet_step == "eval" \
+            and qa_yaml == "example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune":
             if current_name == "single":
                 content["model_dir"] = "region_ptq_out"
             else:
                 content["model_dir"] = "layer_ptq_out"
-        elif qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis" and current_name == "single":
+        elif qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis" \
+            and current_name == "single":
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
         else:
             logger.info("******* {} no update required".format(rd_yaml))

@@ -8,7 +8,7 @@ case:
         params:
           - --model "MobileNetV2"
           - --pretrained_model ../pretrain/MobileNetV2_pretrained
-          - --data "imagenet" 
+          - --data "imagenet"
           - --pruned_ratio 0.325
           - --lr=0.001
           - --test_period=1
@@ -18,7 +18,7 @@ case:
           - --criterion="geometry_median"
           - --model_path="./output/fpgm_mobilenetv2_models"
           - --save_inference True
-          - --num_epochs=2 
+          - --num_epochs=2
           - --use_gpu True
     eval:
       -

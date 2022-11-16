@@ -30,7 +30,7 @@ case:
           - --start_index 0
           - --last_index 0
           - --emb_quant True
-    
+
   windows:
     train:
       -
@@ -47,7 +47,7 @@ case:
           - --print_batch 1000
           - --with_speed
           - --is_sparse
-    
+
     eval:
       -
         name: single

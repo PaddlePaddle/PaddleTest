@@ -61,11 +61,11 @@ case:
           - --pretrained_model ../pretrain/MobileNetV1_pretrained
           - --lr 0.05
           - --pruning_mode threshold
-          - --threshold 0.01 
-          - --data imagenet 
+          - --threshold 0.01
+          - --data imagenet
           - --lr_strategy piecewise_decay
           - --step_epochs 1 2 3
-          - --num_epochs 1 
+          - --num_epochs 1
           - --test_period 1
           - --model_period 1
           - --model_path st_unstructured_models

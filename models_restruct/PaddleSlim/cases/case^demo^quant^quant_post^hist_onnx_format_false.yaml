@@ -11,7 +11,7 @@ case:
           - --algo hist
           - --bias_correction True
           - --round_type=adaround
-      
+
     eval:
       -
         name: single

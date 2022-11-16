@@ -18,7 +18,7 @@ case:
           - --config_path='./configs/MobileNetV1/qat_dis.yaml'
           - --save_dir='./clas_demo_MobileNetV1_single_card'
           - --devices='gpu'
-    
+
   windows:
     train:
       -

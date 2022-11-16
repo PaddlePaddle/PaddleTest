@@ -16,7 +16,7 @@ case:
           - --step_epochs 2
           - --use_pact True
           - --use_gpu True
-      
+
     eval:
       -
         name: single

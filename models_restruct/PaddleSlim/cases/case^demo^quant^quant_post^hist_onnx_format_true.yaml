@@ -34,7 +34,7 @@ case:
           - --bias_correction True
           - --is_full_quantize=True
           - --onnx_format=True
-      
+
     eval:
       -
         name: single
@@ -57,7 +57,7 @@ case:
           - --is_full_quantize=True
           - --onnx_format=True
           - --use_gpu False
-      
+
     eval:
       -
         name: single
