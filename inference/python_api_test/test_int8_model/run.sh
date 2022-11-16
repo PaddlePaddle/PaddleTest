@@ -14,8 +14,8 @@ do
     if [[ ${mode} =~ "trt_int8" ]] || [[ ${mode} =~ "trt_fp16" ]]
     then
         bash run_${mode}.sh > eval_${mode}_acc.log.tmp 2>&1
-        bash run_${mode}.sh > eval_${mode}_acc.log 2>&1
     fi
+    bash run_${mode}.sh > eval_${mode}_acc.log 2>&1
     rm -rf models
 done
 
