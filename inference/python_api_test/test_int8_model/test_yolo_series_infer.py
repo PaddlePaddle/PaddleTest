@@ -91,6 +91,10 @@ def get_current_memory_mb():
 
 
 def reader_wrapper(reader, input_field="image"):
+    """
+    reader wrapper func
+    """
+
     def gen():
         for data in reader:
             yield np.array(data[input_field]).astype(np.float32)
