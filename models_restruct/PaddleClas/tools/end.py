@@ -25,8 +25,7 @@ class PaddleClas_End(object):
         """
         初试化
         """
-        # self.reponame = os.environ["reponame"]
-        self.reponame = "PaddleClas"
+        self.reponame = os.environ["reponame"]
 
     def remove_data(self):
         """

@@ -9,13 +9,13 @@ echo "[Benchmark] Run PicoDet MKLDNN fp32"
 $PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu --reader_config=configs/picodet_reader.yml --device=CPU --use_mkldnn=True --cpu_threads=10 --model_name=PicoDet
 # YOLOv5s MKLDNN
 echo "[Benchmark] Run YOLOv5s MKLDNN fp32"
-$PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_infer --device=CPU --use_mkldnn=True --cpu_threads=10 --arch=YOLOv5 --model_name=YOLOv5s
+$PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_infer --device=CPU --use_mkldnn=True --cpu_threads=10 --model_name=YOLOv5s
 # YOLOv6s MKLDNN
 echo "[Benchmark] Run YOLOv6s MKLDNN fp32"
-$PYTHON test_yolo_series_infer.py --model_path=models/yolov6s_infer --device=CPU --use_mkldnn=True --cpu_threads=10 --arch=YOLOv6 --model_name=YOLOv6s
+$PYTHON test_yolo_series_infer.py --model_path=models/yolov6s_infer --device=CPU --use_mkldnn=True --cpu_threads=10 --model_name=YOLOv6s
 # YOLOv7 MKLDNN
 echo "[Benchmark] Run YOLOv7 MKLDNN fp32"
-$PYTHON test_yolo_series_infer.py --model_path=models/yolov7_infer --device=CPU --use_mkldnn=True --cpu_threads=10 --arch=YOLOv7 --model_name=YOLOv7
+$PYTHON test_yolo_series_infer.py --model_path=models/yolov7_infer --device=CPU --use_mkldnn=True --cpu_threads=10 --model_name=YOLOv7
 
 # ResNet_vd MKLDNN
 echo "[Benchmark] Run ResNet_vd MKLDNN fp32"

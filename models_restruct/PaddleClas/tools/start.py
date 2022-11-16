@@ -59,7 +59,7 @@ class PaddleClas_Start(object):
 
     def download_data(self, value=None):
         """
-        下载数据集
+        下载推理所需要的数据
         """
         # 调用函数路径已切换至PaddleClas
 
@@ -120,7 +120,7 @@ class PaddleClas_Start(object):
         self.predict_pretrain_params = None
 
         # 获取训好模型的名称
-        with open(os.path.join(self.REPO_PATH, self.rd_yaml_path), "r") as f:
+        with open(os.path.join(self.REPO_PATH, self.rd_yaml_path), "r", encoding="utf-8") as f:
             content = yaml.load(f, Loader=yaml.FullLoader)
         self.eval_trained_params = content["Arch"]["name"]
         self.input_image_shape = list(content["Global"]["image_shape"])[1]  # 格式 [3, 384, 384]
@@ -177,7 +177,7 @@ class PaddleClas_Start(object):
         """
         根据输入尺寸改变预测时使用的参数
         """
-        with open(os.path.join(self.REPO_PATH, "deploy/configs/inference_cls.yaml"), "r") as f:
+        with open(os.path.join(self.REPO_PATH, "deploy/configs/inference_cls.yaml"), "r", encoding="utf-8") as f:
             content = yaml.load(f, Loader=yaml.FullLoader)
         content["PreProcess"]["transform_ops"][0]["ResizeImage"]["resize_short"] = self.input_image_shape
         content["PreProcess"]["transform_ops"][1]["CropImage"]["size"] = self.input_image_shape
@@ -440,12 +440,12 @@ class PaddleClas_Start(object):
         else:
             # logger.info(" paddle_whl use branch release or None : {}".format(self.paddle_whl))
             content_result_name = "report_linux_cuda102_py37_release.yaml"
-        with open(os.path.join("tools", content_result_name), "r") as f:
+        with open(os.path.join("tools", content_result_name), "r", encoding="utf-8") as f:
             content_result = yaml.load(f, Loader=yaml.FullLoader)
 
         if self.qa_yaml_name in content_result.keys():  # 查询yaml中是否存在已获取的模型指标
             logger.info("#### change {} value".format(self.qa_yaml_name))
-            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r") as f:
+            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r", encoding="utf-8") as f:
                 content = yaml.load(f, Loader=yaml.FullLoader)
 
             content = json.dumps(content)
