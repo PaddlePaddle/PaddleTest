@@ -21,7 +21,6 @@ class PaddleSlim_Case_Start(object):
 
 def run():
     paddleslim_case_start = PaddleSlim_Case_Start()
-    current_path = os.getcwd()
     currnet_step = paddleslim_case_start.case_step
     current_name = paddleslim_case_start.case_name
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_case_start.set_cuda

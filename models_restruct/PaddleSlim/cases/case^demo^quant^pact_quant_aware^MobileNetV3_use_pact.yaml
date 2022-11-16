@@ -26,7 +26,7 @@ case:
           - --model MobileNetV3_large_x1_0
           - --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained
           - --checkpoint_dir ./output/MobileNetV3_large_x1_0/0
-          - --checkpoint_epoch 0 
+          - --checkpoint_epoch 0
           - --num_epochs 1
           - --batch_size 64
           - --lr_strategy=piecewise_decay

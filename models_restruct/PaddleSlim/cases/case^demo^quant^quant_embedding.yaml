@@ -15,7 +15,7 @@ case:
           - --print_batch 1000
           - --with_speed
           - --is_sparse
-    
+
     eval:
       -
         name: single

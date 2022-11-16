@@ -25,4 +25,4 @@ case:
           - --tunning_epochs 54
           - --last_epoch -1
           - --prune_params_type conv1x1_only
-          - --pruning_strategy gmp    
+          - --pruning_strategy gmp

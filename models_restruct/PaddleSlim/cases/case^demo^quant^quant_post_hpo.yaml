@@ -20,7 +20,7 @@ case:
         cmd: python quant_post_hpo.py
         params:
           - --model_path=../../pretrain/MobileNetV1_infer/
-          - --save_path=../pretrain/MobileNetV1_save/ 
+          - --save_path=../pretrain/MobileNetV1_save/
           - --model_filename="inference.pdmodel"
           - --params_filename="inference.pdiparams"
           - --max_model_quant_count=1

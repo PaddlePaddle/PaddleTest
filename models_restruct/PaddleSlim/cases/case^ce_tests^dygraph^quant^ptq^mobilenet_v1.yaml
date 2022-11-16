@@ -11,4 +11,3 @@ case:
           - --quant_batch_num=10
           - --quant_batch_size=10
           - --output_dir=./mobilenet_v1/output_ptq
-          

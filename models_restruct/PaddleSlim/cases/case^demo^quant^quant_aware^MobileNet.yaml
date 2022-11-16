@@ -3,7 +3,7 @@ case:
     train:
       -
         name: single
-        path: demo/quant/quant_aware 
+        path: demo/quant/quant_aware
         cmd: python train.py
         params:
           - --model MobileNet
@@ -17,7 +17,7 @@ case:
     train:
       -
         name: single
-        path: demo/quant/quant_aware 
+        path: demo/quant/quant_aware
         cmd: python train.py
         params:
           - --model MobileNet
@@ -30,7 +30,7 @@ case:
   mac:
       -
         name: single
-        path: demo/quant/quant_aware 
+        path: demo/quant/quant_aware
         cmd: python train.py
         params:
           - --model MobileNet

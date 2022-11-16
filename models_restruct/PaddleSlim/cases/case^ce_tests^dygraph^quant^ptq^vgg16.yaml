@@ -10,4 +10,4 @@ case:
           - --data=../../../demo/data/ILSVRC2012
           - --quant_batch_num=10
           - --quant_batch_size=10
-          - --output_dir=./vgg16/output_ptq  
+          - --output_dir=./vgg16/output_ptq

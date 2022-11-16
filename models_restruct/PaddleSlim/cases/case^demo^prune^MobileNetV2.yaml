@@ -17,7 +17,7 @@ case:
           - --lr_strategy="piecewise_decay"
           - --criterion="geometry_median"
           - --model_path="./output/fpgm_mobilenetv2_models"
-          - --save_inference True 
+          - --save_inference True
           - --num_epochs=2 
           - --use_gpu True
     eval:
@@ -27,7 +27,7 @@ case:
         cmd: python eval.py
         params:
           - --model "MobileNetV2"
-          - --data "imagenet" 
+          - --data "imagenet"
           - --model_path="./output/fpgm_mobilenetv2_models/0"
           - --use_gpu True
 
@@ -40,13 +40,13 @@ case:
         params:
           - --model "MobileNetV2"
           - --pruned_ratio 0.325
-          - --data "imagenet" 
+          - --data "imagenet"
           - --pretrained_model ../pretrain/MobileNetV2_pretrained
           - --num_epochs 1
           - --lr_strategy="piecewise_decay"
           - --criterion="geometry_median"
           - --model_path="./output/fpgm_mobilenetv2_models"
-          - --save_inference True 
+          - --save_inference True
           - --use_gpu True
     eval:
       -
@@ -55,6 +55,6 @@ case:
         cmd: python eval.py
         params:
           - --model "MobileNetV2"
-          - --data "imagenet" 
+          - --data "imagenet"
           - --model_path="./output/fpgm_mobilenetv2_models"
           - --use_gpu True

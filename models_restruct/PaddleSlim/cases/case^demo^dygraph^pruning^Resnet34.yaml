@@ -16,7 +16,7 @@ case:
           - --criterion="fpgm"
           - --model_path="./fpgm_resnet34_single_models"
           - --use_gpu True
-      
+
       -
         name: multi
         path: demo/dygraph/pruning

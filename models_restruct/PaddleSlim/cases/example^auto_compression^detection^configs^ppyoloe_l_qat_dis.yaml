@@ -18,7 +18,7 @@ case:
           - --config_path=./configs/ppyoloe_l_qat_dis.yaml
           - --save_dir='./multi_output/'
           - --devices='gpu'
-    
+
   windows:
     train:
       -

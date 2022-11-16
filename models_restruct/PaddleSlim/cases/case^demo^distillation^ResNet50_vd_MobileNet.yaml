@@ -10,7 +10,7 @@ case:
           - --batch_size 64
           - --save_inference True
           - --use_gpu True
-    
+
   windows:
     train:
       -

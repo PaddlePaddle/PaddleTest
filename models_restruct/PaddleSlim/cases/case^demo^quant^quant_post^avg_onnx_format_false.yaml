@@ -10,7 +10,7 @@ case:
           - --save_path ./quant_model/avg_bc/MobileNetV1
           - --algo avg
           - --bias_correction True
-      
+
     eval:
       -
         name: single

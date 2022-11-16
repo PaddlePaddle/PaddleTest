@@ -3,7 +3,7 @@ case:
     train:
       -
         name: multi
-        path: demo/quant/quant_aware 
+        path: demo/quant/quant_aware
         cmd: python train.py
         params:
           - --model ResNet34

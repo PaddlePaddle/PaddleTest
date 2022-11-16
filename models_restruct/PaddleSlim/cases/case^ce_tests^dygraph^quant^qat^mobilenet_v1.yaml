@@ -14,4 +14,3 @@ case:
           - --lr=0.0001
           - --output_dir=./mobilenet_v1/output_qat
           - --enable_quant
-    

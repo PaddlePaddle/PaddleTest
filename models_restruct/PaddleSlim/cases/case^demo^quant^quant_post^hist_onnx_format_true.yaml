@@ -11,7 +11,7 @@ case:
           - --algo hist
           - --bias_correction True
           - --is_full_quantize=True
-          - --onnx_format=True 
+          - --onnx_format=True
       
     eval:
       -
@@ -33,7 +33,7 @@ case:
           - --algo hist
           - --bias_correction True
           - --is_full_quantize=True
-          - --onnx_format=True 
+          - --onnx_format=True
       
     eval:
       -
@@ -55,7 +55,7 @@ case:
           - --algo hist
           - --bias_correction True
           - --is_full_quantize=True
-          - --onnx_format=True 
+          - --onnx_format=True
           - --use_gpu False
       
     eval:

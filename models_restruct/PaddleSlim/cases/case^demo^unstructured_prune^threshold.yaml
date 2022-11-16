@@ -6,29 +6,29 @@ case:
         path: demo/unstructured_prune
         cmd: python train.py
         params:
-          - --batch_size 256 
-          - --pretrained_model ../pretrain/MobileNetV1_pretrained 
-          - --lr 0.05 
-          - --pruning_mode threshold 
-          - --threshold 0.01 
-          - --data imagenet 
-          - --lr_strategy piecewise_decay 
-          - --step_epochs 1 2 3 
-          - --num_epochs 1 
-          - --test_period 1 
-          - --model_period 1 
+          - --batch_size 256
+          - --pretrained_model ../pretrain/MobileNetV1_pretrained
+          - --lr 0.05
+          - --pruning_mode threshold
+          - --threshold 0.01
+          - --data imagenet
+          - --lr_strategy piecewise_decay
+          - --step_epochs 1 2 3
+          - --num_epochs 1
+          - --test_period 1
+          - --model_period 1
           - --model_path st_unstructured_models
           - --use_gpu True
     eval:
       -
         name: single
         path: demo/unstructured_prune
-        cmd: python evaluate.py 
+        cmd: python evaluate.py
         params:
           - --pruned_model=st_unstructured_models
           - --data="imagenet"
           - --use_gpu True
-      
+
   windows:
     train:
       -
@@ -36,17 +36,17 @@ case:
         path: demo/unstructured_prune
         cmd: python train.py
         params:
-          - --batch_size 256 
-          - --pretrained_model ../pretrain/MobileNetV1_pretrained 
-          - --lr 0.05 
-          - --pruning_mode threshold 
-          - --threshold 0.01 
-          - --data imagenet 
-          - --lr_strategy piecewise_decay 
-          - --step_epochs 1 2 3 
-          - --num_epochs 1 
-          - --test_period 1 
-          - --model_period 1 
+          - --batch_size 256
+          - --pretrained_model ../pretrain/MobileNetV1_pretrained
+          - --lr 0.05
+          - --pruning_mode threshold
+          - --threshold 0.01
+          - --data imagenet
+          - --lr_strategy piecewise_decay
+          - --step_epochs 1 2 3
+          - --num_epochs 1
+          - --test_period 1
+          - --model_period 1
           - --model_path st_unstructured_models
           - --use_gpu True
 
@@ -57,16 +57,16 @@ case:
         path: demo/unstructured_prune
         cmd: python train.py
         params:
-          - --batch_size 256 
-          - --pretrained_model ../pretrain/MobileNetV1_pretrained 
-          - --lr 0.05 
-          - --pruning_mode threshold 
+          - --batch_size 256
+          - --pretrained_model ../pretrain/MobileNetV1_pretrained
+          - --lr 0.05
+          - --pruning_mode threshold
           - --threshold 0.01 
           - --data imagenet 
-          - --lr_strategy piecewise_decay 
-          - --step_epochs 1 2 3 
+          - --lr_strategy piecewise_decay
+          - --step_epochs 1 2 3
           - --num_epochs 1 
-          - --test_period 1 
-          - --model_period 1 
+          - --test_period 1
+          - --model_period 1
           - --model_path st_unstructured_models
           - --use_gpu False
