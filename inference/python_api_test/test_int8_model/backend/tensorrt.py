@@ -68,7 +68,8 @@ class LoadCalibrator(trt.IInt8EntropyCalibrator2):
             # When we're out of batches, we return either [] or None.
             # This signals to TensorRT that there is no calibration data remaining.
             print(
-                "[Note] The calibration process is complete, the calibration file is being saved, please wait and do not kill the process."
+                "[Note] The calibration process is complete, the calibration file is being saved, "
+                "please wait and do not kill the process."
             )
             return None
 
