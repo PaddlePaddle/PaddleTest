@@ -65,11 +65,11 @@ class PaddleClas_Case_Start(object):
         # 读取上次执行的产出
         # 通过whl包的地址，判断是release还是develop  report_linux_cuda102_py37_develop
 
-        with open(os.path.join("tools", "report_linux_cuda102_py37_develop.yaml"), "r") as f:
+        with open(os.path.join("tools", "report_linux_cuda102_py37_develop.yaml"), "r", encoding="utf-8") as f:
             content_result = yaml.load(f, Loader=yaml.FullLoader)
 
         if self.qa_yaml_name in content_result.keys():  # 查询yaml中是否存在已获取的模型指标
-            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r") as f:
+            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r", encoding="utf-8") as f:
                 content = yaml.load(f, Loader=yaml.FullLoader)
 
             content = json.dumps(content)

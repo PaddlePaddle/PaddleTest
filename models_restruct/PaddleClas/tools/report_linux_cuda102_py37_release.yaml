@@ -13079,13 +13079,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W18_C:
         result:
           loss:
             base: 7.55846
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.700835
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -13133,13 +13133,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W18_C:
         result:
           loss:
             base: 6.9373716666666665
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.203006111111112
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -13268,13 +13268,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W30_C:
         result:
           loss:
             base: 8.0043775
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.7352775
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -13322,13 +13322,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W30_C:
         result:
           loss:
             base: 7.148499583333333
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.155901666666667
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -13457,13 +13457,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W32_C:
         result:
           loss:
             base: 7.867727499999999
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.6273075
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -13511,13 +13511,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W32_C:
         result:
           loss:
             base: 7.053836666666666
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 10.236670555555555
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -13646,13 +13646,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W40_C:
         result:
           loss:
             base: 7.955937500000001
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.63547
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -13700,13 +13700,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W40_C:
         result:
           loss:
             base: 6.981190416666666
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.151288333333334
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -13835,13 +13835,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W44_C:
         result:
           loss:
             base: 7.533195
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.7359849999999999
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -13889,13 +13889,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W44_C:
         result:
           loss:
             base: 6.997457083333333
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.197410555555556
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -14024,13 +14024,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W48_C:
         result:
           loss:
             base: 7.7864625
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.5981350000000001
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -14078,13 +14078,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W48_C:
         result:
           loss:
             base: 6.942532916666667
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.171677222222223
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -14213,13 +14213,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W64_C:
         result:
           loss:
             base: 7.5112125
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.6467974999999999
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -14267,13 +14267,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W64_C:
         result:
           loss:
             base: 6.9670983333333325
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.158142777777777
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -15725,13 +15725,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_128:
         result:
           loss:
             base: 8.51698
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 1.0390325
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -15779,13 +15779,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_128:
         result:
           loss:
             base: 7.288135416666667
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.635138333333334
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -15914,13 +15914,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_128S:
         result:
           loss:
             base: 8.23713
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 1.15709
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -15968,13 +15968,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_128S:
         result:
           loss:
             base: 7.183030416666665
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.976988333333334
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -16103,13 +16103,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_192:
         result:
           loss:
             base: 8.287105
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 1.0108549999999998
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -16157,13 +16157,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_192:
         result:
           loss:
             base: 7.247677499999999
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.954139444444444
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -16292,13 +16292,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_256:
         result:
           loss:
             base: 8.010765
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.914765
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -16346,13 +16346,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_256:
         result:
           loss:
             base: 7.454859166666666
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 8.176367777777777
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -16481,13 +16481,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_384:
         result:
           loss:
             base: 20.608997499999997
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.97554
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -16535,13 +16535,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_384:
         result:
           loss:
             base: 10.392052499999998
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 9.681698333333335
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -35381,13 +35381,13 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_base_patch4_window7_224:
         result:
           loss:
             base: 7.7407433333333335
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.6674266666666666
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -35435,13 +35435,13 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_base_patch4_window7_224:
         result:
           loss:
             base: 6.890644444444444
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.142384166666667
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -35570,13 +35570,13 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_small_patch4_window7_224:
         result:
           loss:
             base: 7.59255
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.6360333333333333
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -35624,13 +35624,13 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_small_patch4_window7_224:
         result:
           loss:
             base: 6.839637777777778
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.0093425
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
@@ -35759,13 +35759,13 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_tiny_patch4_window7_224:
         result:
           loss:
             base: 7.6676
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.7317300000000001
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single_trained
         result:
@@ -35813,13 +35813,13 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_tiny_patch4_window7_224:
         result:
           loss:
             base: 6.840032222222221
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
             base: 7.023320000000001
-            evaluation: '^'
+            evaluation: '-'
             threshold: 1
       - name: multi_static
         result:
