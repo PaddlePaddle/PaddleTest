@@ -27,7 +27,6 @@ models^rank^difm^config.yaml
 models^rank^din^config.yaml
 models^rank^dlrm^config.yaml
 models^rank^dmr^config.yaml
-models^rank^dnn^config_bigdata.yaml
 models^rank^dnn^config.yaml
 models^rank^dpin^config.yaml
 models^rank^dsin^config.yaml
