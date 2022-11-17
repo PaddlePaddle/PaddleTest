@@ -23,8 +23,13 @@ import numpy as np
 from PIL import Image
 
 import tensorrt as trt
-import pycuda.driver as cuda
-import pycuda.autoinit
+
+try:
+    import pycuda.driver as cuda
+    import pycuda.autoinit
+except ModuleNotFoundError as e:
+    print(e.msg)
+    print("CUDA might not be installed. TensorRT cannot be used.")
 
 EXPLICIT_BATCH = 1 << (int)(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH)
 EXPLICIT_PRECISION = 1 << (int)(trt.NetworkDefinitionCreationFlag.EXPLICIT_PRECISION)

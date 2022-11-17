@@ -4,3 +4,4 @@ paddlenlp>=2.3.0
 GPUtil
 psutil
 pynvml
+tensorrt
