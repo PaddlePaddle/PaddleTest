@@ -28,6 +28,9 @@ class PaddleSlimCaseStart(object):
 
 
 def run():
+    """
+    case_start.py run:
+    """
     paddleslim_case_start = PaddleSlimCaseStart()
     currnet_step = paddleslim_case_start.case_step
     current_name = paddleslim_case_start.case_name

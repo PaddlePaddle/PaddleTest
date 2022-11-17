@@ -92,6 +92,9 @@ class PaddleSlimStart(object):
 
 
 def run():
+    """
+    start.py run:
+    """
     paddleslim_start = PaddleSlimStart()
     current_path = os.getcwd()
     rd_yaml = os.path.join(paddleslim_start.REPO_PATH, paddleslim_start.rd_yaml_path)
