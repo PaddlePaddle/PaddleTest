@@ -118,6 +118,22 @@ trt_int8 = {
 }
 
 trt_fp16 = {
+    "PPYOLOE": {
+        "model_info": {
+            "model_name": "PPYOLOE",
+        },
+        "jingdu": {
+            "th": 0.05,
+            "value": 0.5135882081820193,
+            "unit": "mAP",
+        },
+        "xingneng": {
+            "th": 0.05,
+            "value": 380.8,
+            "unit": "ms",
+            "batch_size": 1,
+        },
+    },
     "PP-HumanSeg-Lite": {
         "model_info": {
             "model_name": "PP-HumanSeg-Lite",
