@@ -39,16 +39,16 @@ class PaddleSpeech_Start(object):
         self.env_dict = {}
         self.model = self.qa_yaml_name
 
-
     def prepare_cli_cmd(self):
-        # if 'paddlespeech_cli' in self.model:
+        """
+        prepare_cli_cmd
+        """
         print("start prepare cli cmd!!")
         speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
-        speech_map  = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
-        self.cli_cmd=speech_map[self.model]
-        self.env_dict["cli_cmd"]=self.cli_cmd
-      
-            
+        speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
+        self.cli_cmd = speech_map[self.model]
+        self.env_dict["cli_cmd"] = self.cli_cmd
+
     def prepare_config_params(self):
         """
         准备配置参数
@@ -56,10 +56,10 @@ class PaddleSpeech_Start(object):
         print("start prepare_config_params!")
         self.env_dict["model"] = self.model
         self.env_dict["model_path"] = self.model_path
-        self.env_dict["conf_path"]='conf/default.yaml'
-        self.env_dict["train_output_path"]='exp/default'
-        self.env_dict["ckpt_name"]=self.ckpt_name
-        self.env_dict["data_path"]=self.data_path
+        self.env_dict["conf_path"] = "conf/default.yaml"
+        self.env_dict["train_output_path"] = "exp/default"
+        self.env_dict["ckpt_name"] = self.ckpt_name
+        self.env_dict["data_path"] = self.data_path
 
     def prepare_data(self):
         """
@@ -67,10 +67,10 @@ class PaddleSpeech_Start(object):
         """
         print("start prepare data for every model!!")
         speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
-        speech_map  = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
-        self.data_path=speech_map[self.model]['data_path']
-        self.model_path=speech_map[self.model]['model_path']
-        self.ckpt_name=speech_map[self.model]['ckpt_name']
+        speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
+        self.data_path = speech_map[self.model]["data_path"]
+        self.model_path = speech_map[self.model]["model_path"]
+        self.ckpt_name = speech_map[self.model]["ckpt_name"]
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
@@ -79,14 +79,18 @@ class PaddleSpeech_Start(object):
             os.system('sed -i "s/max_epoch: 200/max_epoch: 1/g;s/batch_size: 64/batch_size: 32/g" ./conf/default.yaml')
             os.system('sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh')
             # voc
-            os.system('sed -i "s/train_max_steps: 400000/train_max_steps: 10/g;s/save_interval_steps: 5000/save_interval_steps: 10/g;s/eval_interval_steps: 1000/eval_interval_steps: 10/g"  ./conf/default.yaml')
+            os.system(
+                'sed -i "s/train_max_steps: 400000/train_max_steps: 10/g; \
+                 s/save_interval_steps: 5000/save_interval_steps: 10/g; \
+                 s/eval_interval_steps: 1000/eval_interval_steps: 10/g"  ./conf/default.yaml'
+            )
             os.system('sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh')
             # delete exp
             if os.path.exists("output"):
                 shutil.rmtree("exp")
-            if not os.path.exists("dump"): 
+            if not os.path.exists("dump"):
                 src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"
-                os.symlink(os.path.join(src_path, self.data_path, 'dump'), "dump")
+                os.symlink(os.path.join(src_path, self.data_path, "dump"), "dump")
             os.chdir(path_now)
 
     def gengrate_test_case_cli(self):
@@ -128,16 +132,16 @@ class PaddleSpeech_Start(object):
         执行准备过程
         """
         # 进入repo中
-        if 'paddlespeech_cli' in self.model:
-           self.prepare_cli_cmd()
-           self.gengrate_test_case_cli()
+        if "paddlespeech_cli" in self.model:
+            self.prepare_cli_cmd()
+            self.gengrate_test_case_cli()
         else:
-           logger.info("start prepare_data")
-           self.prepare_data()
-           logger.info("start prepare_config_params")
-           self.prepare_config_params()
-           logger.info("start gengrate_test_case")
-           self.gengrate_test_case()
+            logger.info("start prepare_data")
+            self.prepare_data()
+            logger.info("start prepare_config_params")
+            self.prepare_config_params()
+            logger.info("start gengrate_test_case")
+            self.gengrate_test_case()
         os.environ[self.reponame] = json.dumps(self.env_dict)
         for k, v in self.env_dict.items():
             os.environ[k] = v

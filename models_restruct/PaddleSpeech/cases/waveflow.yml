@@ -7,4 +7,3 @@ case:
          eval:
              name: synthesize
              cmd: ln -s /ssd2/ce_data/PaddleSpeech_t2s/mel_test/ ./; input_mel_path=mel_test; ckpt_name=step-10; sed -i "s/python3/python/g" ./local/synthesize.sh; ./local/synthesize.sh ${input_mel_path} ${train_output_path} ${ckpt_name}
-         

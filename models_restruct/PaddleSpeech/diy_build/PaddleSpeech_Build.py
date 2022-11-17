@@ -61,20 +61,23 @@ class PaddleSpeech_Build(Model_Build):
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
-            os.system('python -m pip install .')
+            os.system("python -m pip install .")
             os.chdir(path_now)
             print("build paddlespeech wheel!")
-     
+
     def build_cli_data(self):
+        """
+        build_cli_data
+        """
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
-            wget.download('https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav')
-            wget.download('https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav')
-            wget.download('https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav')
-            wget.download('https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav')
-            wget.download('https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav')
-            wget.download('https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav')
+            wget.download("https://paddlespeech.bj.bcebos.com/PaddleAudio/cat.wav")
+            wget.download("https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav")
+            wget.download("https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav")
+            wget.download("https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav")
+            wget.download("https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav")
+            wget.download("https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav")
             os.system('echo "demo1 85236145389.wav \n demo2 85236145389.wav" > vec.job')
             os.chdir(path_now)
 
