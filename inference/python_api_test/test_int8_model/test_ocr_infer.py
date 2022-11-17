@@ -25,13 +25,14 @@ from tqdm import tqdm
 import paddle
 from paddle.inference import create_predictor, PrecisionType
 from paddle.inference import Config as PredictConfig
+from backend import PaddleInferenceEngine, TensorRTEngine, Monitor
 
-import paddleocr
+import paddleocr as ppocr
 from ppocr.utils.utility import get_image_file_list, check_and_read
 from ppocr.data import create_operators, transform, build_dataloader
 from ppocr.postprocess import build_post_process
 from ppocr.utils.logging import get_logger
-from ppocr.metrics import build_metric
+# from ppocr.metrics import build_metric
 
 logger = get_logger(log_file=__name__)
 
@@ -122,6 +123,8 @@ def predict_image(predictor, rerun_flag=False):
     if rerun_flag:
         return
 
+    monitor = Monitor(0)
+    monitor.start()
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
@@ -132,9 +135,9 @@ def predict_image(predictor, rerun_flag=False):
         timed = end_time - start_time
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
-    predict_time += timed
+        predict_time += timed
     monitor.stop()
-    time_avg = float(predict_time) / repeats
+    time_avg = float(predict_time) / (1.0*repeats)
     monitor_result = monitor.output()
 
     cpu_mem = (
@@ -151,7 +154,7 @@ def predict_image(predictor, rerun_flag=False):
     print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
     print(
         "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
-            round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
+            round(time_min * 1000, 2), round(time_max * 1000, 2), round(time_avg * 1000, 2)
         )
     )
 
@@ -163,6 +166,7 @@ def eval(args):
     """
     eval func
     """
+    return
     # DataLoader need run on cpu
     config = load_config(args.dataset_config)
     devices = paddle.set_device("cpu")
@@ -211,38 +215,43 @@ def eval(args):
         logger.info("{}:{}".format(k, v))
 
 
-def main():
+def main(args):
     """
     main func
     """
-    if FLAGS.deploy_backend == "paddle_inference":
+    predictor = None
+    if args.deploy_backend == "paddle":
         predictor = PaddleInferenceEngine(
-            model_dir=FLAGS.model_path,
-            precision=FLAGS.precision,
-            use_trt=FLAGS.use_trt,
-            use_mkldnn=FLAGS.use_mkldnn,
-            batch_size=FLAGS.batch_size,
-            device=FLAGS.device,
+            model_dir=args.model_path,
+            model_filename=args.model_filename,
+            params_filename=args.params_filename,
+            precision=args.precision,
+            use_trt=args.use_trt,
+            use_mkldnn=args.use_mkldnn,
+            batch_size=args.batch_size,
+            device=args.device,
             min_subgraph_size=3,
-            use_dynamic_shape=FLAGS.use_dynamic_shape,
+            use_dynamic_shape=args.use_dynamic_shape,
             trt_min_shape=1,
             trt_max_shape=1280,
             trt_opt_shape=640,
-            cpu_threads=FLAGS.cpu_threads,
+            cpu_threads=args.cpu_threads,
         )
-    elif FLAGS.deploy_backend == "tensorrt":
-        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
-        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
+    elif args.deploy_backend == "tensorrt":
+        model_name = os.path.join(args.model_path, args.model_filename)
+        print(model_name)
+        engine_file = os.path.join(args.model_path, "{}_{}.trt".format(args.precision, args.batch_size))
         predictor = TensorRTEngine(
-            onnx_model_file=FLAGS.model_path,
+            onnx_model_file=model_name,
             shape_info=None,
-            max_batch_size=FLAGS.batch_size,
-            precision=FLAGS.precision,
+            max_batch_size=args.batch_size,
+            precision=args.precision,
             engine_file_path=engine_file,
-            calibration_cache_file=FLAGS.calibration_file,
+            calibration_cache_file=args.calibration_file,
             verbose=False,
         )
-
+    if predictor == None:
+        return
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
     predict_image(predictor, rerun_flag)
@@ -277,9 +286,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--deploy_backend",
         type=str,
-        default="paddle_inference",
-        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+        default="paddle",
+        choices=["paddle", "tensorrt"],
+        help="deploy backend, it can be: `paddle`, `tensorrt`, `onnxruntime`",
     )
+    parser.add_argument("--calibration_file", type=str, default="calibration.cache")
     parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
     parser.add_argument("--batch_size", type=int, default=1, help="Batch size of model input.")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
@@ -291,6 +302,6 @@ if __name__ == "__main__":
     parser.add_argument("--model_type", type=str, default="det")
     args = parser.parse_args()
     if args.image_file:
-        main()
+        main(args)
     else:
         eval(args)

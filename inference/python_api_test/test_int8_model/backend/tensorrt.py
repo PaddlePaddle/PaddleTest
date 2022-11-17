@@ -116,6 +116,7 @@ class TensorRTEngine(object):
             "fp16",
             "int8",
         ], "precision must be fp32, fp16 or int8, but your precision is: {}".format(precision)
+        calibration_cache = os.path.join(os.path.dirname(onnx_model_file),calibration_cache_file)
         if precision == "int8":
             assert os.path.exists(calibration_cache_file)
         use_int8 = precision == "int8"

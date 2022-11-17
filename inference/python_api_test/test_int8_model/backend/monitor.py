@@ -71,7 +71,6 @@ class Monitor(StatBase):
             item = {k: v for k, v in zip(StatBase.keys, self.stat_queue.get())}
             for k in StatBase.keys:
                 stat_result[k] = max(stat_result[k], item[k])
-        print(stat_result)
         self.result["result"] = stat_result
 
     def stat_func(self, queue, pid, gpu_id, interval=0.0):
