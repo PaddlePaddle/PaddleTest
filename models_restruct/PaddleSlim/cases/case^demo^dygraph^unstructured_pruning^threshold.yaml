@@ -37,4 +37,4 @@ case:
           - --test_period 1
           - --model_period 1
           - --model_path "dy_threshold_model"
-          - --use_gpu True
+          - --use_gpu False

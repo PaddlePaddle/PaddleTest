@@ -43,7 +43,7 @@ case:
       -
         name: single
         path: example/post_training_quantization/pytorch_yolo_series/
-        cmd: python run.py
+        cmd: python fine_tune.py
         params:
           - --config_path=./configs/yolov6s_fine_tune.yaml
           - --recon_level=layer-wise
@@ -55,7 +55,7 @@ case:
       -
         name: single
         path: example/post_training_quantization/pytorch_yolo_series/
-        cmd: python run.py
+        cmd: python fine_tune.py
         params:
           - --config_path=./configs/yolov6s_fine_tune.yaml
           - --recon_level=layer-wise
