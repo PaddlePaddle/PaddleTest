@@ -3,10 +3,6 @@
 start.py:
 """
 import os
-import yaml
-import wget
-import tarfile
-import zipfile
 import logging
 
 logger = logging.getLogger("paddlerec-log")
@@ -25,6 +21,9 @@ class PaddleRecStart(object):
 
 
 def run():
+    """
+    start.py run:
+    """
     paddlerec_start = PaddleRecStart()
     current_path = os.getcwd()
     qa_yaml = paddlerec_start.qa_yaml_name

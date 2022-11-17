@@ -1,3 +1,6 @@
+"""
+start.py run:
+"""
 import os
 import tarfile
 import zipfile
@@ -21,6 +24,9 @@ class PaddleSlimStart(object):
         self.set_cuda = os.environ["set_cuda"]
 
     def wget_and_zip(self, wget_url):
+        """
+        wget zip filed and uzip:
+        """
         zip_name = wget_url.split("/")[-1]
         if os.path.exists(zip_name):
             return
@@ -37,6 +43,9 @@ class PaddleSlimStart(object):
                 logger.info("******* {} start download or unzip failed".format(zip_name))
 
     def wget_and_tar(self, wget_url):
+        """
+        wget tar files and tar -xf:
+        """
         tar_name = wget_url.split("/")[-1]
         if os.path.exists(tar_name):
             return
@@ -52,6 +61,9 @@ class PaddleSlimStart(object):
                 logger.info("******* {} start download or  tar -x failed".format(tar_name))
 
     def wget_and_files(self, wget_url):
+        """
+        wget files:
+        """
         file_name = wget_url.split("/")[-1]
         if os.path.exists(file_name):
             return
@@ -65,6 +77,9 @@ class PaddleSlimStart(object):
                 logger.info("******* {} start download failed".format(file_name))
 
     def update_yaml_config(self, file_path, old_str, new_str):
+        """
+        update config yaml:
+        """
         logger.info("******* {} is updating".format(file_path))
         file_data = ""
         with open(file_path, "r", encoding="utf-8") as f:
@@ -141,7 +156,6 @@ def run():
             # HyperParameterOptimization、QuantPost 会导致训练时间过长，先删除该配置；
             del content["HyperParameterOptimization"]
             del content["QuantPost"]
-            # paddleslim_start.update_yaml_config(rd_yaml, "HyperParameterOptimization:", "#HyperParameterOptimization:")
         elif (
             qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_qat"
             or qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_sparse"
