@@ -32,7 +32,7 @@ from ppocr.utils.utility import get_image_file_list, check_and_read
 from ppocr.data import create_operators, transform, build_dataloader
 from ppocr.postprocess import build_post_process
 from ppocr.utils.logging import get_logger
-# from ppocr.metrics import build_metric
+from ppocr.metrics import build_metric
 
 logger = get_logger(log_file=__name__)
 
@@ -162,11 +162,10 @@ def predict_image(predictor, rerun_flag=False):
 extra_input_models = ["SRN", "NRTR", "SAR", "SEED", "SVTR", "VisionLAN", "RobustScanner"]
 
 
-def eval(args):
+def eval(args, predictor, rerun_flag=False):
     """
     eval func
     """
-    return
     # DataLoader need run on cpu
     config = load_config(args.dataset_config)
     devices = paddle.set_device("cpu")
@@ -176,24 +175,14 @@ def eval(args):
     model_type = config["Global"]["model_type"]
     extra_input = True if config["Global"]["algorithm"] in extra_input_models else False
 
-    predictor = load_predictor(args)
-    input_names = predictor.get_input_names()
-    for name in input_names:
-        input_tensor = predictor.get_input_handle(name)
-    output_tensors = get_output_tensors(args, predictor)
-
     with tqdm(
         total=len(val_loader), bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
     ) as t:
         for batch_id, batch in enumerate(val_loader):
             images = np.array(batch[0])
 
-            input_tensor.copy_from_cpu(images)
-            predictor.run()
-            outputs = []
-            for output_tensor in output_tensors:
-                output = output_tensor.copy_to_cpu()
-                outputs.append(output)
+            predictor.prepare_data([images])
+            outputs = predictor.run()
 
             batch_numpy = []
             for item in batch:
@@ -232,9 +221,6 @@ def main(args):
             device=args.device,
             min_subgraph_size=3,
             use_dynamic_shape=args.use_dynamic_shape,
-            trt_min_shape=1,
-            trt_max_shape=1280,
-            trt_opt_shape=640,
             cpu_threads=args.cpu_threads,
         )
     elif args.deploy_backend == "tensorrt":
@@ -254,7 +240,10 @@ def main(args):
         return
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
-    predict_image(predictor, rerun_flag)
+    if args.image_file:
+        predict_image(predictor, rerun_flag)
+    else:
+        eval(args, predictor, rerun_flag)
 
     if rerun_flag:
         print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
@@ -301,7 +290,4 @@ if __name__ == "__main__":
     parser.add_argument("--min_subgraph_size", type=int, default=15)
     parser.add_argument("--model_type", type=str, default="det")
     args = parser.parse_args()
-    if args.image_file:
-        main(args)
-    else:
-        eval(args)
+    main(args)
