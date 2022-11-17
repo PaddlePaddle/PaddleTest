@@ -3,7 +3,7 @@ rm -rf  models_list.txt
 fi
 
 for i in `ls cases | grep -v big `
-do 
+do
     echo ${i} >> models_list.txt
 done
 
@@ -12,6 +12,6 @@ if [ -f models_list_precision.txt ]; then
 fi
 
 for i in `ls cases | grep big`
-do 
+do
     echo ${i} >> models_list_precision.txt
 done

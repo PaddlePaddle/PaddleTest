@@ -11,10 +11,12 @@ import logging
 
 logger = logging.getLogger("paddleslim-log")
 
+
 class PaddleSlimCaseStart(object):
     """
     PaddleSlimCaseStart:
     """
+
     def __init__(self):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
@@ -50,28 +52,37 @@ def run():
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
             if currnet_step == "eval":
                 content["Global"]["model_dir"] = "./save_afqmc_pp_minilm_pruned"
-        elif currnet_step == "eval" \
-            and qa_yaml == "example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune":
+        elif (
+            currnet_step == "eval"
+            and qa_yaml == "example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune"
+        ):
             if current_name == "single":
                 content["model_dir"] = "region_ptq_out"
             else:
                 content["model_dir"] = "layer_ptq_out"
-        elif qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis" \
-            and current_name == "single":
+        elif (
+            qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis"
+            and current_name == "single"
+        ):
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
-        elif qa_yaml == "example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis" \
-            and system == "windows":
+        elif (
+            qa_yaml == "example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis"
+            and system == "windows"
+        ):
             content["Global"]["batch_size"] = 16
         else:
             logger.info("******* {} no update required".format(rd_yaml))
 
         with open(rd_yaml, "w") as f:
             yaml.dump(content, f)
-    elif qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact" or \
-        qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_false":
-            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
+    elif (
+        qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact"
+        or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_false"
+    ):
+        os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
     else:
         logger.info("******* yaml：{} no exists".format(rd_yaml))
+
 
 if __name__ == "__main__":
     run()
