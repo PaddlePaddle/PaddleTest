@@ -54,4 +54,3 @@ case:
         params:
           - --config_path="./configs/ernie3.0/afqmc.yaml"
           - --eval True
-
