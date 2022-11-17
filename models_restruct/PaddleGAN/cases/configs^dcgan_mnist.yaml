@@ -12,12 +12,12 @@ case:
 
   windows:
     base: ./base/base.yaml
-      eval: skipped
+    eval: skipped
 
   windows_cpu:
     base: ./base/base.yaml
-      eval: skipped
+    eval: skipped
 
   mac:
     base: ./base/base.yaml
-      eval: skipped
+    eval: skipped

@@ -15,8 +15,8 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
     """
     从log中解析出想要的kpi
     """
-    logger.info("###log_content: {}".format(log_content))
-    logger.info("###kpi_name: {}".format(kpi_name))
+    # logger.info("###log_content: {}".format(log_content))
+    # logger.info("###kpi_name: {}".format(kpi_name))
     kpi_value_all = []
     f = open(log_content, encoding="utf-8", errors="ignore")
     for line in f.readlines():
@@ -56,7 +56,7 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
                     kpi_value_all.append(float(r[0].strip()))
     f.close()
 
-    logger.info("###kpi_value_all: {}".format(kpi_value_all))
+    # logger.info("###kpi_value_all: {}".format(kpi_value_all))
     # if "-1" in kpi_value_all or kpi_value_all == []: #前几轮是正常后面loss出nan的情况暂时不考虑，后续变化能直接感知
     if kpi_value_all == []:
         kpi_value = float(-1)
