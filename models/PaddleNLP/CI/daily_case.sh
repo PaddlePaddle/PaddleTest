@@ -719,7 +719,8 @@ print_info $? transformer_infer
 # FT
 cd ${nlp_dir}/
 export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-wget -q https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+# wget -q https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+wget -q https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz
 tar -xzvf paddle_inference.tgz
 export CC=/usr/local/gcc-8.2/bin/gcc
 export CXX=/usr/local/gcc-8.2/bin/g++
@@ -895,7 +896,7 @@ cd ${nlp_dir}/examples/text_correction/ernie-csc
 python download.py --data_dir ./extra_train_ds/ --url https://github.com/wdimmy/Automatic-Corpus-Generation/raw/master/corpus/train.sgml
 #trans xml txt
 python change_sgml_to_txt.py -i extra_train_ds/train.sgml -o extra_train_ds/train.txt
-#2卡训练
+#训练
 python -m paddle.distributed.launch  train.py --batch_size 32 --logging_steps 100 --epochs 1 --learning_rate 5e-5 --model_name_or_path ernie-1.0 --output_dir ./checkpoints/ --extra_train_ds_dir ./extra_train_ds/  >${log_path}/ernie-csc_train >>${log_path}/ernie-csc_train 2>&1
 print_info $? ernie-csc_train
 #predict
