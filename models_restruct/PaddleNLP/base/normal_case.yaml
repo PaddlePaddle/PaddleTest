@@ -20,7 +20,7 @@ eval:
       base: 0
       threshold: 0
       evaluation: "="
-infer: 
+infer:
   name: trained
   params:
     - -- device=gpu
@@ -42,14 +42,10 @@ export:
 predict:
   name: trained
   params:
-    - -- device gpu 
+    - -- device gpu
     - -- init_checkpoint_dir ../infer_model/
   result:
     exit_code:
       base: 0
       threshold: 0
       evaluation: "="
-
-
-
-
