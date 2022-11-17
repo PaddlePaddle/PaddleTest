@@ -1,0 +1,42 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/prune
+        cmd: python train.py
+        params:
+          - --model "MobileNet"
+          - --pruned_ratio 0.31
+          - --data "imagenet"
+          - --pretrained_model ../pretrain/MobileNetV1_pretrained/
+          - --num_epochs 1
+          - --use_gpu True
+
+  windows:
+    train:
+      -
+        name: single
+        path: demo/prune
+        cmd: python train.py
+        params:
+          - --model "MobileNet"
+          - --pruned_ratio 0.31
+          - --data "imagenet"
+          - --pretrained_model "../pretrain/MobileNetV1_pretrained/""
+          - --num_epochs 1
+          - --use_gpu True
+
+  mac:
+    train:
+      -
+        name: single
+        path: demo/prune
+        cmd: python train.py
+        params:
+          - --model "MobileNet"
+          - --pruned_ratio 0.31
+          - --data "imagenet"
+          - --pretrained_model ../pretrain/MobileNetV1_pretrained/
+          - --num_epochs 1
+          - --use_gpu False
