@@ -1,3 +1,7 @@
+# encoding: utf-8
+"""
+start.py:
+"""
 import os
 import yaml
 import wget
