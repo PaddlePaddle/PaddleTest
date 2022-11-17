@@ -1,7 +1,16 @@
+#耗时太长eval暂时跳过
 case:
   linux:
     base: ./base/base.yaml
     train:
+      -
+        name: multi
+        cmd: python -m paddle.distributed.launch tools/main.py
+        result:
+          ${kpi_value_eval}:
+            base: 99999999
+            threshold: 2
+            evaluation: "-"
       -
         name: single
         cmd: python tools/main.py
@@ -14,12 +23,9 @@ case:
 
   windows:
     base: ./base/base.yaml
-    eval: skipped
 
   windows_cpu:
     base: ./base/base.yaml
-    eval: skipped
 
   mac:
     base: ./base/base.yaml
-    eval: skipped

@@ -77,15 +77,16 @@ class PaddleGAN_Start(object):
         """
         # 获取kpi 的标签
         if "singan_sr" in self.qa_yaml_name:
-            self.kpi_value_eval = "scale9/D_gradient_penalty"
+            self.kpi_value_eval = "D_gradient_penalty"
         elif "singan_universal" in self.qa_yaml_name or "singan_animation" in self.qa_yaml_name:
-            self.kpi_value_eval = "scale6/D_gradient_penalty"
+            self.kpi_value_eval = "D_gradient_penalty"
         elif "singan_finetune" in self.qa_yaml_name:
-            self.kpi_value_eval = "scale1/D_gradient_penalty"
+            self.kpi_value_eval = "D_gradient_penalty"
         elif (
             "firstorder_vox_mobile_256" in self.qa_yaml_name
             or "firstorder_vox_256" in self.qa_yaml_name
             or "firstorder_fashion" in self.qa_yaml_name
+            or "aotgan" in self.qa_yaml_name
         ):
             self.kpi_value_eval = "perceptual"
         elif (
@@ -101,6 +102,8 @@ class PaddleGAN_Start(object):
             or "esrgan_psnr_x4_div2k" in self.qa_yaml_name
             or "edvr_m_wo_tsa" in self.qa_yaml_name
             or "esrgan_psnr_x2_div2k" in self.qa_yaml_name
+            or "prenet" in self.qa_yaml_name
+            or "rcan_rssr_x4" in self.qa_yaml_name
         ):
             self.kpi_value_eval = "loss_pixel"
         elif (
