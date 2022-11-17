@@ -3,11 +3,8 @@
 case_start.py:
 """
 import os
-import yaml
-import wget
-import tarfile
-import zipfile
 import logging
+import yaml
 
 logger = logging.getLogger("paddleslim-log")
 

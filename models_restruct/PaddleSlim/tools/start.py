@@ -1,9 +1,9 @@
 import os
-import yaml
-import wget
 import tarfile
 import zipfile
 import logging
+import yaml
+import wget
 
 logger = logging.getLogger("paddleslim-log")
 
