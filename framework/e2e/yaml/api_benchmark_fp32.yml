@@ -1028,21 +1028,21 @@ isclose_2:
     mapping:
       ins: {x: input, y: other, rtol: rtol, atol: atol, equal_nan: equal_nan}
 
-#Tensor_uniform__0:
-#  desc: "均匀分布采样的随机数 0"
-#  enable_backward: false
-#  paddle:
-#    api_name: "paddle.Tensor.uniform_"
-#    inputs:
-#      x:
-#        random: true
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
-#    params:
-#      min: -1.0
-#      max: 1.0
-#      seed: 0
+Tensor_uniform__0:
+  desc: "均匀分布采样的随机数 0"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.uniform_"
+    inputs:
+      x:
+        random: true
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+    params:
+      min: -1.0
+      max: 1.0
+      seed: 0
 #  pytorch:
 #    api_name: "torch.Tensor.uniform_"
 #    mapping:
@@ -14682,24 +14682,24 @@ elu_0:
     mapping:
       ins: { x: input, alpha: alpha }
 
-#elu__0:
-#  desc: "elu_激活层"
-#  enable_backward: false
-#  paddle:
-#    api_name: "paddle.nn.functional.elu_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
-#    params:
-#      alpha: 1.0
-#  pytorch:
-#    api_name: "torch.nn.functional.elu_"
-#    mapping:
-#      ins: { x: input, alpha: alpha }
+elu__0:
+  desc: "elu_激活层"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.nn.functional.elu_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+    params:
+      alpha: 1.0
+  pytorch:
+    api_name: "torch.nn.functional.elu_"
+    mapping:
+      ins: { x: input, alpha: alpha }
 
 embedding_0:
   desc: "嵌入层(Embedding Layer)"
@@ -15384,21 +15384,22 @@ prelu_0:
     mapping:
       ins: { x: input, weight: weight }
 
-#relu__0:
-#  desc: "relu_激活函数, inplace策略"
-#  paddle:
-#    api_name: "paddle.nn.functional.relu_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
-#  pytorch:
-#    api_name: "torch.nn.functional.relu_"
-#    mapping:
-#      ins: { x: input }
+relu__0:
+  desc: "relu_激活函数, inplace策略"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.nn.functional.relu_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+  pytorch:
+    api_name: "torch.nn.functional.relu_"
+    mapping:
+      ins: { x: input }
 
 relu6_0:
   desc: "relu6激活函数"
@@ -16856,23 +16857,24 @@ Tensor_acosh_0:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_add__0:
-#  desc: "逐元素相加算子，输入 x 与输入 y 逐元素相加，并将各个位置的输出元素保存到返回结果中。"
-#  paddle:
-#    api_name: "paddle.Tensor.add_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
-#      y:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
+Tensor_add__0:
+  desc: "逐元素相加算子，输入 x 与输入 y 逐元素相加，并将各个位置的输出元素保存到返回结果中。"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.add_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
 #  pytorch:
 #    api_name: "torch.Tensor.add_"
 #    mapping:
@@ -17174,17 +17176,18 @@ Tensor_bitwise_xor_0:
 #    mapping:
 #      ins: { x: input, y: other }
 
-#Tensor_ceil__0:
-#  desc: "向上取整运算函数。"
-#  paddle:
-#    api_name: "paddle.Tensor.ceil_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
+Tensor_ceil__0:
+  desc: "向上取整运算函数。"
+  enable_backward: False
+  paddle:
+    api_name: "paddle.Tensor.ceil_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
 #  pytorch:
 #    api_name: "torch.Tensor.ceil_"
 #    mapping:
@@ -17232,39 +17235,41 @@ Tensor_cholesky_solve_0:
 #    mapping:
 #      ins: { x: input, y: input2, upper: upper }
 
-#Tensor_clamp__0:
-#  desc: "将输入的所有元素进行剪裁，使得输出元素限制在[min, max]内"
-#  paddle:
-#    api_name: "paddle.Tensor.clip_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
-#    params:
-#      min: -1.0
-#      max: 1.0
+Tensor_clamp__0:
+  desc: "将输入的所有元素进行剪裁，使得输出元素限制在[min, max]内"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.clip_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+    params:
+      min: -1.0
+      max: 1.0
 #  pytorch:
 #    api_name: "torch.Tensor.clamp_"
 #    mapping:
 #      ins: { x: input, min: min, max: max }
 
-#Tensor_clip__0:
-#  desc: "将输入的所有元素进行剪裁，使得输出元素限制在[min, max]内"
-#  paddle:
-#    api_name: "paddle.Tensor.clip_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
-#    params:
-#      min: -1.0
-#      max: 1.0
+Tensor_clip__0:
+  desc: "将输入的所有元素进行剪裁，使得输出元素限制在[min, max]内"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.clip_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+    params:
+      min: -1.0
+      max: 1.0
 #  pytorch:
 #    api_name: "torch.Tensor.clip_"
 #    mapping:
@@ -17272,6 +17277,7 @@ Tensor_cholesky_solve_0:
 
 #Tensor_copy__0:
 #  desc: "对输入 Tensor x 进行拷贝，并返回一个新的 Tensor。"
+#  enable_backward: false
 #  paddle:
 #    api_name: "paddle.Tensor.copy_"
 #    inputs:
@@ -17429,87 +17435,92 @@ Tensor_erfinv_0:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_erfinv__0:
-#  desc: "计算输入矩阵 x 的逆误差函数。 "
-#  paddle:
-#    api_name: "paddle.Tensor.erfinv_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
+Tensor_erfinv__0:
+  desc: "计算输入矩阵 x 的逆误差函数。 "
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.erfinv_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
 #  pytorch:
 #    api_name: "torch.Tensor.erfinv_"
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_exp__0:
-#  desc: "对输入，逐元素进行以自然数 e 为底指数运算。"
-#  paddle:
-#    api_name: "paddle.Tensor.exp_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
+Tensor_exp__0:
+  desc: "对输入，逐元素进行以自然数 e 为底指数运算。"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.exp_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
 #  pytorch:
 #    api_name: "torch.Tensor.exp_"
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_exponential__0:
-#  desc: "通过 指数分布 随机数来填充该 Tensor。"
-#  paddle:
-#    api_name: "paddle.Tensor.exponential_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
-#    params:
-#      lam: 2
+Tensor_exponential__0:
+  desc: "通过 指数分布 随机数来填充该 Tensor。"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.exponential_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+    params:
+      lam: 2
 #  pytorch:
 #    api_name: "torch.Tensor.exponential_"
 #    mapping:
 #      ins: { x: input, lam: lambd }
 
-#Tensor_fill_diagonal__0:
-#  desc: "以 value 值填充输入 Tensor x 的对角线元素值。"
-#  paddle:
-#    api_name: "paddle.Tensor.fill_diagonal_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
-#    params:
-#      value: 2
-#      offset: 0
-#      wrap: False
+Tensor_fill_diagonal__0:
+  desc: "以 value 值填充输入 Tensor x 的对角线元素值。"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.fill_diagonal_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+    params:
+      value: 2
+      offset: 0
+      wrap: False
 #  pytorch:
 #    api_name: "torch.Tensor.fill_diagonal_"
 #    mapping:
 #      ins: { x: input, value: fill_value, wrap: wrap }
 
-#Tensor_floor__0:
-#  desc: "向下取整函数。"
-#  paddle:
-#    api_name: "paddle.Tensor.floor_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
+Tensor_floor__0:
+  desc: "向下取整函数。"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.floor_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
 #  pytorch:
 #    api_name: "torch.Tensor.floor_"
 #    mapping:
@@ -17753,25 +17764,26 @@ Tensor_lerp_0:
 #    mapping:
 #      ins: { x: input, y: end, weight: weight }
 
-#Tensor_lerp__0:
-#  desc: "基于给定的 weight 计算 x 与 y 的线性插值"
-#  paddle:
-#    api_name: "paddle.Tensor.lerp_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -1, 1]
-#    params:
-#      y:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
-#      weight: 0.5
+Tensor_lerp__0:
+  desc: "基于给定的 weight 计算 x 与 y 的线性插值"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.lerp_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+    params:
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+      weight: 0.5
 #  pytorch:
 #    api_name: "torch.Tensor.lerp_"
 #    mapping:
@@ -18054,17 +18066,18 @@ Tensor_rad2deg_0:
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_reciprocal_:
-#  desc: "对输入 Tensor 取倒数"
-#  paddle:
-#    api_name: "paddle.Tensor.reciprocal_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
+Tensor_reciprocal__0:
+  desc: "对输入 Tensor 取倒数"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.reciprocal_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
 #  pytorch:
 #    api_name: "torch.Tensor.reciprocal_"
 #    mapping:
@@ -18111,88 +18124,93 @@ Tensor_repeat_interleave_0:
 #    mapping:
 #      ins: {x: input, repeats: repeats, axis: dim}
 
-#Tensor_round__0:
-#  desc: "将输入中的数值四舍五入到最接近的整数数值"
-#  paddle:
-#    api_name: "paddle.Tensor.round_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -10, 10]
+Tensor_round__0:
+  desc: "将输入中的数值四舍五入到最接近的整数数值"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.round_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -10, 10]
 #  pytorch:
 #    api_name: "torch.Tensor.round_"
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_rsqrt__0:
-#  desc: "rsqrt激活函数"
-#  paddle:
-#    api_name: "paddle.Tensor.rsqrt_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ 1, 2]
+Tensor_rsqrt__0:
+  desc: "rsqrt激活函数"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.rsqrt_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ 1, 2]
 #  pytorch:
 #    api_name: "torch.Tensor.rsqrt_"
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_sqrt__0:
-#  desc: "计算输入的算数平方根"
-#  paddle:
-#    api_name: "paddle.Tensor.sqrt_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1, 1]
-#        range: [ -2, 2]
+Tensor_sqrt__0:
+  desc: "计算输入的算数平方根"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.sqrt_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -2, 2]
 #  pytorch:
 #    api_name: "torch.Tensor.sqrt_"
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_squeeze__0:
-#  desc: "删除输入 Tensor 的 Shape 中尺寸为 1 的维度。"
-#  paddle:
-#    api_name: "paddle.Tensor.squeeze_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
+Tensor_squeeze__0:
+  desc: "删除输入 Tensor 的 Shape 中尺寸为 1 的维度。"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.squeeze_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
 #  pytorch:
 #    api_name: "torch.Tensor.squeeze_"
 #    mapping:
 #      ins: { x: input }
 
-#Tensor_subtract__0:
-#  desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中。"
-#  paddle:
-#    api_name: "paddle.Tensor.subtract_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
-#    params:
-#      y:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
+Tensor_subtract__0:
+  desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中。"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.subtract_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+    params:
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
 #  pytorch:
 #    api_name: "torch.Tensor.subtract_"
 #    mapping:
@@ -18222,17 +18240,18 @@ Tensor_take_along_axis_0:
 #    mapping:
 #      ins: { arr: input, indices: indices, axis: dim }
 
-#Tensor_tanh__0:
-#  desc: "tanh 激活函数"
-#  paddle:
-#    api_name: "paddle.Tensor.tanh_"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
+Tensor_tanh__0:
+  desc: "tanh 激活函数"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.tanh_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
 #  pytorch:
 #    api_name: "torch.Tensor.tanh_"
 #    mapping:
@@ -18295,17 +18314,18 @@ Tensor_unique_consecutive_0:
 
 #Tensor_unsqueeze__0:
 #  desc: "向输入 Tensor 的 Shape 中一个或多个位置（axis）插入尺寸为 1 的维度。"
+#  enable_backward: false
 #  paddle:
-#    api_name: "paddle.Tensor.unsqueeze_"
+#    api_name: "paddle.unsqueeze_"
 #    inputs:
 #      x:
 #        random: true
 #        type: "Tensor"
 #        dtype: "float32"
-#        shape: [ 1, 1, 1, 1 ]
+#        shape: [ 1, 1]
 #        range: [ -1, 1 ]
 #    params:
-#      axis: 2
+#      axis: 1
 #  pytorch:
 #    api_name: "torch.Tensor.unsqueeze_"
 #    mapping:
@@ -18722,3 +18742,19 @@ Uniform_0:
 #    api_name: "torch.distributions.Uniform"
 #    mapping:
 #      ins: { alpha: concentration1, beta: concentration0 }
+
+RNNCellBase_0:
+  desc: "循环神经网络单元基类"
+  paddle:
+    api_name: "paddle.nn.RNNCellBase"
+    params:
+      dtype: 'float32'
+    method:
+      get_initial_states:
+        batch_ref:
+          value: [[[1.]]]
+        shape: [1]
+#  pytorch:
+#    api_name: "torch.nn.RNNCell"
+#    mapping:
+#      ins: { x: input }

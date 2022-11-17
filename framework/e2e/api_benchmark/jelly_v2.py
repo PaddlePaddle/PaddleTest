@@ -68,6 +68,7 @@ class Jelly_v2(object):
         self.result["yaml"] = self.log_file_name
         # set Reload API DICT
         self.reload = OPERATOR_RELOAD
+        self.api_str = api
         # trans "str api" to obj
         if api not in self.reload.keys():
             self.api = eval(api)
@@ -134,7 +135,10 @@ class Jelly_v2(object):
         for key, value in inputs.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 self.data[key] = to_tensor(value)
-                self.data[key].stop_gradient = False
+                if self.api_str.endswith("_"):
+                    self.data[key].stop_gradient = True
+                else:
+                    self.data[key].stop_gradient = False
             else:
                 self.data[key] = value
             # self.data[key] = to_tensor(value)
@@ -233,15 +237,22 @@ class Jelly_v2(object):
             else:
                 obj_method = eval("obj" + "." + list(self.method.keys())[0])
                 method_params_dict = self.method[list(self.method.keys())[0]]
-                res = obj_method(method_params_dict)
+                res = obj_method(**method_params_dict)
             grad_tensor = paddle.ones(res.shape, res.dtype)
 
             def clas(input_param):
                 res = obj(*input_param)
                 res.backward(grad_tensor)
 
+            def clas_method(input_param):
+                res = obj_method(**input_param)
+                res.backward(grad_tensor)
+
             for i in range(self.loops):
-                total_time = timeit.timeit(lambda: clas(self.data.values()), number=self.base_times)
+                if self.method == dict():
+                    total_time = timeit.timeit(lambda: clas(self.data.values()), number=self.base_times)
+                else:
+                    total_time = timeit.timeit(lambda: clas_method(method_params_dict), number=self.base_times)
                 self.total_time.append(total_time)
         elif self._layertypes(self.api) == "reload":
             if "y" in self.data.keys():
