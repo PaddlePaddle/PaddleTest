@@ -67,7 +67,7 @@ class PaddleSpeech_Start(object):
         download_data
         """
 
-        tar_name = value.split("/")[-1]
+        zip_name = value.split("/")[-1]
         if os.path.exists(tar_name.replace(".tar", "")):
             logger.info("#### already download {}".format(tar_name))
         else:
@@ -76,7 +76,7 @@ class PaddleSpeech_Start(object):
                 logger.info("#### start download {}".format(tar_name))
                 wget.download(value.replace(" ", ""))
                 logger.info("#### end download {}".format(tar_name))
-                zf = zipfile.open(tar_name)
+                zf = zipfile.ZipFile(zip_name)
                 zf.extractall(os.getcwd())
             except:
                 logger.info("#### start download failed {} failed".format(value.replace(" ", "")))
@@ -147,16 +147,18 @@ class PaddleSpeech_Start(object):
             # delete exp
             if os.path.exists("exp"):
                 shutil.rmtree("exp")
+
             if not os.path.exists("dump") and (self.model != "waveflow"):
                 src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"
                 os.symlink(os.path.join(src_path, self.data_path, "dump"), "dump")
-                if self.model == "transformer_tts":
-                    self.download_data(
+            
+            if self.model == "transformer_tts":
+                self.download_data(
                         "https://paddlespeech.bj.bcebos.com/Parakeet/released_models/waveflow/ \
                          waveflow_ljspeech_ckpt_0.3.zip"
                     )
-                else:
-                    self.download_data(
+            else:
+                self.download_data(
                         "https://paddlespeech.bj.bcebos.com/Parakeet/released_models/pwgan/pwg_baker_ckpt_0.4.zip"
                     )
             os.chdir(path_now)
