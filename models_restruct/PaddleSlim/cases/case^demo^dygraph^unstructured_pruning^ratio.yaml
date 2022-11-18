@@ -1,0 +1,20 @@
+case:
+  linux:
+    train:
+      -
+        name: multi
+        path: demo/dygraph/unstructured_pruning
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --data imagenet
+          - --lr 0.05
+          - --pruning_mode ratio
+          - --ratio 0.55
+          - --batch_size 256
+          - --lr_strategy piecewise_decay
+          - --step_epochs 1 2 3
+          - --num_epochs 1
+          - --test_period 1
+          - --model_period 1
+          - --model_path dy_ratio_models
+          - --use_gpu True
