@@ -1,0 +1,13 @@
+train:
+  name: multi
+  path: ${model_path}
+  cmd: pwd; ./path.sh; source ${MAIN_ROOT}/utils/parse_options.sh; conf_path=conf/default.yaml; train_output_path=exp/default; ./local/train.sh ${conf_path} ${train_output_path}
+
+eval:
+  name: synthesize
+  path: ${model_path}
+  cmd:  head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl;ckpt_name=snapshot_iter_153.pdz;sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh; conf_path=conf/default.yaml; train_output_path=exp/default; ckpt_name=snapshot_iter_153.pdz;./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name}
+
+infer: skipped
+export: skipped
+predict: skipped

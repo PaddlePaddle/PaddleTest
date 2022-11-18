@@ -1,0 +1,9 @@
+case:
+    linux:
+        base: ./base/speech_base.yaml
+        train:
+            name: multi
+            cmd: source path.sh; source ${MAIN_ROOT}/utils/parse_options.sh; preprocess_path=preprocessed_ljspeech; train_output_path=output; rm -rf output; python ${BIN_DIR}/train.py --data=${preprocess_path} --output=${train_output_path} --ngpu=2 --opts data.batch_size 2 training.max_iteration 10 training.valid_interval 10 training.save_interval 10
+         eval:
+             name: synthesize
+             cmd: ln -s /ssd2/ce_data/PaddleSpeech_t2s/mel_test/ ./; input_mel_path=mel_test; ckpt_name=step-10; sed -i "s/python3/python/g" ./local/synthesize.sh; ./local/synthesize.sh ${input_mel_path} ${train_output_path} ${ckpt_name}
