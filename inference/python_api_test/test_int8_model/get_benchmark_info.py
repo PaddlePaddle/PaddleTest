@@ -9,6 +9,7 @@ import openpyxl
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
 from openpyxl.styles import Alignment
+import time
 
 import base
 
@@ -474,7 +475,8 @@ def res2xls(env, res, tongji):
     sheet_gsb.merge_cells("B1:D1")
     sheet_gsb.merge_cells("E1:G1")
 
-    wb.save("test.xlsx")
+    save_file = sys.argv[5]
+    wb.save("{}".format(save_file))
 
 
 def run():

@@ -21,4 +21,3 @@ done
 
 IFS="${OLD_IFS}"
 
-python get_benchmark_info.py
