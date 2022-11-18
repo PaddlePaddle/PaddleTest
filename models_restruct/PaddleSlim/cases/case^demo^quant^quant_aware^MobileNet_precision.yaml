@@ -1,0 +1,24 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_aware
+        cmd: python train.py
+        params:
+          - --model MobileNet
+          - --pretrained_model ../../pretrain/MobileNetV1_pretrained
+          - --checkpoint_dir ./output/mobilenetv1
+          - --num_epochs 30
+          - --batch_size 128
+          - --ce_test=True
+          - --use_gpu True
+        result:
+          acc_top1:
+            base: 0.695237398
+            threshold: 0.00000001
+            evaluation: "+"
+          acc_top5:
+            base: 0.9083533287
+            threshold:  0.00000001
+            evaluation: "+"

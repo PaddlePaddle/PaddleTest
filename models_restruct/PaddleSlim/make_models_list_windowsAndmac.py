@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-生成model list文件
+生成windows,mac的model list文件
 """
 import os
 import yaml
@@ -36,6 +36,3 @@ with open("models_list_windows.txt", "w", encoding="utf-8") as f:
 
 with open("models_list_mac.txt", "w", encoding="utf-8") as f:
     f.write(file_data_mac + "\n")
-
-with open("models_list_linux.txt", "w", encoding="utf-8") as f:
-    f.write(file_data_linux + "\n")
