@@ -14,7 +14,6 @@ import wget
 import numpy as np
 
 logger = logging.getLogger("ce")
-# TODO wget容易卡死, 增加超时计时器 https://blog.csdn.net/weixin_42368421/article/details/101354628
 
 
 class PaddleClas_Start(object):

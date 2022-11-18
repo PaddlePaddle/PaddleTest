@@ -15,7 +15,7 @@ import numpy as np
 
 
 # 为什么要单独预先作，是因为不能每次执行case时有从一个庞大的tar包中找需要的值，应该生成一个中间状态的yaml文件作为存储
-class PaddleClas_Collect(object):
+class PaddleGAN_Collect(object):
     """
     自定义环境准备
     """
@@ -24,23 +24,17 @@ class PaddleClas_Collect(object):
         """
         初始化参数
         """
-        self.repo_name = "PaddleClas"
-        self.whl_branch = "develop" # develop release
+        self.repo_name = "PaddleGAN"
+        self.whl_branch = "release" # develop release
         # pytest结果下载地址
         self.report_linux_cuda102_py37_release = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342792/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342793/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342799/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342787/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342805/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342790/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342803/report/result.tar",
         }
 
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346191/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346180/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346174/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346167/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346159/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342790/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342803/report/result.tar",
         }
 
         # self.report_linux_cuda102_py37_develop = {
@@ -48,25 +42,15 @@ class PaddleClas_Collect(object):
         # }
 
         self.base_yaml_dict = {
-            "ImageNet": "ppcls^configs^ImageNet^ResNet^ResNet50.yaml",
-            "slim": "ppcls^configs^slim^PPLCNet_x1_0_quantization.yaml",
-            "DeepHash": "ppcls^configs^DeepHash^DCH.yaml",
-            "GeneralRecognition": "ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5.yaml",
-            "Cartoonface": "ppcls^configs^Cartoonface^ResNet50_icartoon.yaml",
-            "GeneralRecognitionV2": "ppcls^configs^GeneralRecognitionV2^GeneralRecognitionV2_PPLCNetV2_base.yaml",
-            "Logo": "ppcls^configs^Logo^ResNet50_ReID.yaml",
-            "Products": "ppcls^configs^Products^ResNet50_vd_Inshop.yaml",
-            "Vehicle": "ppcls^configs^Vehicle^ResNet50.yaml",
-            "PULC": "ppcls^configs^PULC^car_exists^PPLCNet_x1_0.yaml",
-            "reid": "ppcls^configs^reid^strong_baseline^baseline.yaml",
-            "metric_learning": "ppcls^configs^metric_learning^adaface_ir18.yaml",
+            "base": "configs^edvr_m_wo_tsa.yaml",
+            "single_only": "configs^lapstyle_draft.yaml",
         }
 
     def download_data(self, priority="P0", value=None):
         """
         下载数据集
         """
-        # 调用函数路径已切换至PaddleClas
+        # 调用函数路径已切换至PaddleGAN
 
         tar_name = value.split("/")[-1]
         if os.path.exists(tar_name.replace(".tar", "_" + priority)):
@@ -110,7 +94,7 @@ class PaddleClas_Collect(object):
         """
         for name in self.report_path_list:
             shutil.rmtree(name)
-        os.remove(self.repo_name + ".tar.gz")
+        os.remove(self.repo_name + "-develop.tar.gz")
         shutil.rmtree(self.repo_name)
 
     def get_result_yaml(self):
@@ -172,13 +156,13 @@ class PaddleClas_Collect(object):
                 && tar xf {}-develop.tar.gz && mv {}-develop {}".format(
                 self.repo_name, self.repo_name, self.repo_name, self.repo_name, self.repo_name
             )
-            os.system(cmd)  # 下载并解压PaddleClas
+            os.system(cmd)  # 下载并解压PaddleGAN
 
         self.get_result_yaml()  # 更新yaml
         for (key, value) in self.base_yaml_dict.items():
             with open(os.path.join("../cases", value), "r") as f:
                 content = yaml.load(f, Loader=yaml.FullLoader)
-            globals()[key] = content
+            globals()[key] = content #这里在干吗？
         content = {}
         for i, case_value in enumerate(self.case_info_list):
             # print('###case_value111', case_value)
@@ -187,24 +171,106 @@ class PaddleClas_Collect(object):
             # print("    ")
             # input()
             if case_value["model_name"] not in content.keys():
-                content[case_value["model_name"]] = eval(case_value["model_name"].split("^")[2])
+                if (
+                    "lapstyle_draft" in case_value["model_name"]
+                    or "lapstyle_rev_first" in case_value["model_name"]
+                    or "lapstyle_rev_second" in case_value["model_name"]
+                    or "singan_finetune" in case_value["model_name"]
+                    or "singan_animation" in case_value["model_name"]
+                    or "singan_sr" in case_value["model_name"]
+                    or "singan_universal" in case_value["model_name"]
+                    or "prenet" in case_value["model_name"]
+                    or "firstorder_vox_mobile_256" in case_value["model_name"]
+                ):
+                    source_yaml_name = "single_only"
+                elif (
+                    "cond_dcgan_mnist" in case_value["model_name"]
+                    or "makeup" in case_value["model_name"]
+                    or "wgan_mnist" in case_value["model_name"]
+                    or "firstorder_vox_mobile_256" in case_value["model_name"]
+                ):
+                    continue
+                else:
+                    source_yaml_name = "base"
+                content[case_value["model_name"]] = eval(source_yaml_name)
                 # print('###case_value222', content[case_value["model_name"]])
                 # print("    ")
+                # input()
                 content = self.pop_yaml_useless(content)
                 # print('###content', content)
                 # print('###content', type(content))
                 # print("    ")
-                with open(os.path.join(self.repo_name, case_value["model_name"].replace("^", "/") + ".yaml"), "r") as f:
-                    content_rd_yaml = yaml.load(f, Loader=yaml.FullLoader)
-                if "ATTRMetric" in str(content_rd_yaml):
-                    self.kpi_value_eval = "label_f1"
-                elif "Recallk" in str(content_rd_yaml):
-                    self.kpi_value_eval = "recall1"
-                elif "TopkAcc" in str(content_rd_yaml):
+                
+                if "singan_sr" in case_value["model_name"]:
+                    self.kpi_value_eval = "D_gradient_penalty"
+                elif "singan_universal" in case_value["model_name"] or "singan_animation" in case_value["model_name"]:
+                    self.kpi_value_eval = "D_gradient_penalty"
+                elif "singan_finetune" in case_value["model_name"]:
+                    self.kpi_value_eval = "D_gradient_penalty"
+                elif (
+                    "firstorder_vox_mobile_256" in case_value["model_name"]
+                    or "firstorder_vox_256" in case_value["model_name"]
+                    or "firstorder_fashion" in case_value["model_name"]
+                    or "aotgan" in case_value["model_name"]
+                ):
+                    self.kpi_value_eval = "perceptual"
+                elif (
+                    "basicvsr_reds" in case_value["model_name"]
+                    or "basicvsr++_vimeo90k_BD" in case_value["model_name"]
+                    or "lesrcnn_psnr_x4_div2k" in case_value["model_name"]
+                    or "edvr_l_wo_tsa" in case_value["model_name"]
+                    or "basicvsr++_reds" in case_value["model_name"]
+                    or "pan_psnr_x4_div2k" in case_value["model_name"]
+                    or "iconvsr_reds" in case_value["model_name"]
+                    or "edvr_l_w_tsa" in case_value["model_name"]
+                    or "edvr_m_w_tsa" in case_value["model_name"]
+                    or "esrgan_psnr_x4_div2k" in case_value["model_name"]
+                    or "edvr_m_wo_tsa" in case_value["model_name"]
+                    or "esrgan_psnr_x2_div2k" in case_value["model_name"]
+                    or "prenet" in case_value["model_name"]
+                    or "rcan_rssr_x4" in case_value["model_name"]
+                ):
+                    self.kpi_value_eval = "loss_pixel"
+                elif (
+                    "msvsr_vimeo90k_BD" in case_value["model_name"]
+                    or "realsr_bicubic_noise_x4_df2k" in case_value["model_name"]
+                    or "realsr_kernel_noise_x4_dped" in case_value["model_name"]
+                    or "msvsr_reds" in case_value["model_name"]
+                    or "esrgan_x4_div2k" in case_value["model_name"]
+                ):
+                    self.kpi_value_eval = "loss_pix"
+                elif "drn_psnr_x4_div2k" in case_value["model_name"]:
+                    self.kpi_value_eval = "loss_dual"
+                elif "lapstyle_draft" in case_value["model_name"]:
+                    self.kpi_value_eval = "loss_c"
+                elif "mprnet_denoising" in case_value["model_name"] or "mprnet_deraining" in case_value["model_name"]:
                     self.kpi_value_eval = "loss"
+                elif "stylegan_v2_256_ffhq" in case_value["model_name"]:
+                    self.kpi_value_eval = "l_d"
+                elif "animeganv2_pretrain" in case_value["model_name"]:
+                    self.kpi_value_eval = "init_c_loss"
+                elif "cyclegan_cityscapes" in case_value["model_name"] or "cyclegan_horse2zebra" in case_value["model_name"]:
+                    self.kpi_value_eval = "G_idt_A_loss"
+                elif "photopen" in case_value["model_name"]:
+                    self.kpi_value_eval = "g_featloss"
+                elif "starganv2_celeba_hq" in case_value["model_name"] or "starganv2_afhq" in case_value["model_name"]:
+                    self.kpi_value_eval = "G/latent_adv"
+                elif "ugatit_selfie2anime_light" in case_value["model_name"] or "ugatit_photo2cartoon" in case_value["model_name"]:
+                    self.kpi_value_eval = "discriminator_loss"
+                elif "animeganv2" in case_value["model_name"]:
+                    self.kpi_value_eval = "d_loss"
+                elif (
+                    "pix2pix_facades" in case_value["model_name"]
+                    or "pix2pix_cityscapes_2gpus" in case_value["model_name"]
+                    or "lapstyle_rev_first" in case_value["model_name"]
+                    or "lapstyle_rev_second" in case_value["model_name"]
+                    or "pix2pix_cityscapes" in case_value["model_name"]
+                ):
+                    self.kpi_value_eval = "D_fake_loss"
                 else:
-                    print("### use default kpi_value_eval {}".format(content_rd_yaml["Metric"]))
+                    print("### use default kpi_value_eval loss")
                     self.kpi_value_eval = "loss"
+
                 content = json.dumps(content)
                 content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
                 content = json.loads(content)
@@ -227,58 +293,23 @@ class PaddleClas_Collect(object):
                             content[case_value["model_name"]]["case"][case_value["system"]][
                                 case_value["tag"].split("_")[0]
                             ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
-                            # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer
 
-                            if (
-                                "^HRNet" in case_value["model_name"]
-                                or "^LeViT" in case_value["model_name"]
-                                or "^SwinTransformer" in case_value["model_name"]
-                            ) and (
-                                case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"
-                            ):
-                                print("### {} change threshold and evaluation ".format(case_value["model_name"]))
-                                content[case_value["model_name"]]["case"][case_value["system"]][
-                                    case_value["tag"].split("_")[0]
-                                ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
-                                content[case_value["model_name"]]["case"][case_value["system"]][
-                                    case_value["tag"].split("_")[0]
-                                ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
+                            # # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer
+                            # if (
+                            #     "^HRNet" in case_value["model_name"]
+                            #     or "^LeViT" in case_value["model_name"]
+                            #     or "^SwinTransformer" in case_value["model_name"]
+                            # ) and (
+                            #     case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"
+                            # ):
+                            #     print("### {} change threshold and evaluation ".format(case_value["model_name"]))
+                            #     content[case_value["model_name"]]["case"][case_value["system"]][
+                            #         case_value["tag"].split("_")[0]
+                            #     ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
+                            #     content[case_value["model_name"]]["case"][case_value["system"]][
+                            #         case_value["tag"].split("_")[0]
+                            #     ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
 
-                            # 处理存在随机量导致每次infer_trained结果不一致的情况
-                            if (
-                                (
-                                    "^HRNet" in case_value["model_name"]
-                                    or "^LeViT" in case_value["model_name"]
-                                    or "^SwinTransformer" in case_value["model_name"]
-                                )
-                                and (
-                                    case_value["tag"].split("_")[0] == "infer"
-                                    or case_value["tag"].split("_")[0] == "predict"
-                                )
-                                and tag_value["name"] == "trained"
-                            ):
-                                try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
-                                    print("### {} change class_ids to exit_code ".format(case_value["model_name"]))
-                                    dict_tmp = content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]
-                                    dict_tmp.update({"exit_code": dict_tmp.pop("class_ids")})
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"] = dict_tmp
-
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["base"] = 0
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["threshold"] = 0
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["evaluation"] = "="
-                                except:
-                                    print("###can not change class_ids to exit_code")
-                            # 这里进行替换时要考虑到全局变量如何替换
             # print('###content333', content)
             # print('###content333', type(content))
             # print("    ")
@@ -303,7 +334,7 @@ def run():
     # print('###content',content["case"]["linux"]["eval"])
     # input()
 
-    model = PaddleClas_Collect()
+    model = PaddleGAN_Collect()
     model.update_kpi()
     # print("暂时关闭清理！！！！")
     model.clean_report()
