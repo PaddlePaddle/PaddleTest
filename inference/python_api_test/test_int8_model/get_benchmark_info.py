@@ -264,7 +264,7 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
         "mkldnn_fp32": gsb_mkldnn_fp32,
         "total": gsb_total,
     }
-    
+
     # 详细数据
     res = {}
     models = trt_int8.keys()
@@ -480,7 +480,7 @@ def res2xls(env, res, tongji):
     # 表头
     sheet_gsb.cell(1, 2).value = "精度"
     sheet_gsb.cell(1, 5).value = "性能"
-    
+
     sheet_gsb.cell(2, 2).value = "GSB"
     sheet_gsb.cell(2, 3).value = "下降数（占比）"
     sheet_gsb.cell(2, 4).value = "上升数（占比）"
