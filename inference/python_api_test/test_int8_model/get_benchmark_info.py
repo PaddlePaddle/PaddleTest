@@ -9,7 +9,6 @@ import openpyxl
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
 from openpyxl.styles import Alignment
-import time
 
 import base
 
