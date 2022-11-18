@@ -1,0 +1,10 @@
+new_tacotron2.yml
+speedyspeech.yml
+fastspeech2.yml
+transformertts.yml
+parallelwavegan.yml
+MultiBandMelGAN.yml
+StyleMelGAN.yml
+HiFiGAN.yml
+WaveRNN.yml
+waveflow.yml
