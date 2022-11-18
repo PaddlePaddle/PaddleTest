@@ -9,8 +9,9 @@ import re
 import json
 import shutil
 import logging
-import tarfile
+import zipfile
 import argparse
+import subprocess
 import yaml
 import wget
 import numpy as np
@@ -61,6 +62,26 @@ class PaddleSpeech_Start(object):
         self.env_dict["ckpt_name"] = self.ckpt_name
         self.env_dict["data_path"] = self.data_path
 
+    def download_data(self, value=None):
+        """
+        download_data
+        """
+
+        tar_name = value.split("/")[-1]
+        if os.path.exists(tar_name.replace(".tar", "")):
+            logger.info("#### already download {}".format(tar_name))
+        else:
+            logger.info("#### value: {}".format(value.replace(" ", "")))
+            try:
+                logger.info("#### start download {}".format(tar_name))
+                wget.download(value.replace(" ", ""))
+                logger.info("#### end download {}".format(tar_name))
+                zf = zipfile.open(tar_name)
+                zf.extractall(os.getcwd())
+            except:
+                logger.info("#### start download failed {} failed".format(value.replace(" ", "")))
+        return 0
+
     def prepare_data(self):
         """
         prepare_pretrained_model
@@ -71,27 +92,105 @@ class PaddleSpeech_Start(object):
         self.data_path = speech_map[self.model]["data_path"]
         self.model_path = speech_map[self.model]["model_path"]
         self.ckpt_name = speech_map[self.model]["ckpt_name"]
+        self.category = speech_map[self.model]["category"]
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
             os.chdir(self.model_path)
-            # am
-            os.system('sed -i "s/max_epoch: 200/max_epoch: 1/g;s/batch_size: 64/batch_size: 32/g" ./conf/default.yaml')
-            os.system('sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh')
-            # voc
-            os.system(
-                'sed -i "s/train_max_steps: 400000/train_max_steps: 10/g; \
-                 s/save_interval_steps: 5000/save_interval_steps: 10/g; \
-                 s/eval_interval_steps: 1000/eval_interval_steps: 10/g"  ./conf/default.yaml'
-            )
-            os.system('sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh')
+            if self.category == "am":
+                # am newTacotron2 speedyspeech
+                os.system(
+                    'sed -i "s/max_epoch: 200/max_epoch: 1/g;s/batch_size: 64/batch_size: 32/g" ./conf/default.yaml'
+                )
+                os.system('sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh')
+                # fastspeech2
+                os.system('sed -i "s/max_epoch: 1000/max_epoch: 1/g" ./conf/default.yaml')
+                # transformertts
+                os.system(
+                    'sed -i "s/max_epoch: 500/max_epoch: 1/g;s/batch_size: 16/batch_size: 4/g"  ./conf/default.yaml'
+                )
+            elif self.model != "waveflow":
+                # voc parallelwavegan
+                os.system(
+                    'sed -i "s/train_max_steps: 400000/train_max_steps: 10/g; \
+                     s/save_interval_steps: 5000/save_interval_steps: 10/g; \
+                     s/eval_interval_steps: 1000/eval_interval_steps: 10/g"  ./conf/default.yaml'
+                )
+                os.system('sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh')
+                # voc MultiBandMelGAN
+                os.system(
+                    'sed -i "s/train_max_steps: 1000000/train_max_steps: 10/g; \
+                     s/save_interval_steps: 5000/save_interval_steps: 10/g; \
+                     s/eval_interval_steps: 1000/eval_interval_steps: 10/g"  ./conf/default.yaml'
+                )
+                # voc StyleMelGAN
+                os.system(
+                    'sed -i "s/train_max_steps: 1500000/train_max_steps: 10/g; \
+                     s/save_interval_steps: 5000/save_interval_steps: 10/g; \
+                     s/eval_interval_steps: 1000/eval_interval_steps: 10/g; \
+                     s/batch_size: 32/batch_size: 16/g"  ./conf/default.yaml'
+                )
+                # HiFiGAN
+                os.system(
+                    'sed -i "s/train_max_steps: 2500000/train_max_steps: 10/g; \
+                     s/save_interval_steps: 5000/save_interval_steps: 10/g; \
+                     s/eval_interval_steps: 1000/eval_interval_steps: 10/g"  ./conf/default.yaml'
+                )
+                # waveRNN
+                os.system(
+                    'sed -i "s/train_max_steps: 400000/train_max_steps: 10/g; \
+                     s/save_interval_steps: 5000/save_interval_steps: 10/g; \
+                     s/eval_interval_steps: 1000/eval_interval_steps: 10/g; \
+                     s/batch_size: 64/batch_size: 32/g"  ./conf/default.yaml'
+                )
+
             # delete exp
-            if os.path.exists("output"):
+            if os.path.exists("exp"):
                 shutil.rmtree("exp")
-            if not os.path.exists("dump"):
+            if not os.path.exists("dump") and (self.model != "waveflow"):
                 src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"
                 os.symlink(os.path.join(src_path, self.data_path, "dump"), "dump")
+                if self.model == "transformer_tts":
+                    self.download_data(
+                        "https://paddlespeech.bj.bcebos.com/Parakeet/released_models/waveflow/ \
+                         waveflow_ljspeech_ckpt_0.3.zip"
+                    )
+                else:
+                    self.download_data(
+                        "https://paddlespeech.bj.bcebos.com/Parakeet/released_models/pwgan/pwg_baker_ckpt_0.4.zip"
+                    )
             os.chdir(path_now)
+
+    def gengrate_test_case(self):
+        """
+        gengrate_test_case
+        """
+        speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
+        speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
+        self.category = speech_map[self.model]["category"]
+        print("self.category:{}".format(self.category))
+        if not os.path.exists("cases"):
+            os.makedirs("cases")
+        case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
+        if not os.path.exists(case_file):
+            if self.category == "am":
+                with open(case_file, "w") as f:
+                    f.writelines(
+                        (
+                            "case:" + os.linesep,
+                            "    linux:" + os.linesep,
+                            "        base: ./base/speech_am_base.yaml" + os.linesep,
+                        )
+                    )
+            else:
+                with open(case_file, "w") as f:
+                    f.writelines(
+                        (
+                            "case:" + os.linesep,
+                            "    linux:" + os.linesep,
+                            "        base: ./base/speech_voc_base.yaml" + os.linesep,
+                        )
+                    )
 
     def gengrate_test_case_cli(self):
         """
@@ -107,23 +206,6 @@ class PaddleSpeech_Start(object):
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
                         "        base: ./base/speech_cli_base.yaml" + os.linesep,
-                    )
-                )
-
-    def gengrate_test_case(self):
-        """
-        gengrate_test_case
-        """
-        if not os.path.exists("cases"):
-            os.makedirs("cases")
-        case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
-        if not os.path.exists(case_file):
-            with open(case_file, "w") as f:
-                f.writelines(
-                    (
-                        "case:" + os.linesep,
-                        "    linux:" + os.linesep,
-                        "        base: ./base/speech_base.yaml" + os.linesep,
                     )
                 )
 
