@@ -17,10 +17,7 @@
 import sys
 import os
 import copy
-import random
-import glob
 import numpy as np
-from PIL import Image
 
 import tensorrt as trt
 import pycuda.driver as cuda
@@ -181,6 +178,9 @@ class TensorRTEngine:
     ):
         self.max_batch_size = 1 if max_batch_size is None else max_batch_size
         precision = precision.lower()
+        if precision == "bf16":
+            print("trt does not support bf16, switching to fp16")
+            precision = "fp16"
         assert precision in [
             "fp32",
             "fp16",
