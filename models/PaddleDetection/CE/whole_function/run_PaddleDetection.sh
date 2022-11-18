@@ -88,7 +88,6 @@ fi
 ln -s ${data_path}/data/AIchallenge dataset/AIchallenge
 if [ -d "/root/.cache/paddle/weights" ];then rm -rf /root/.cache/paddle/weights
 fi
-ln -s ${data_path}/data/ppdet_pretrained /root/.cache/paddle/weights
 
 #compile op
 cd ppdet/ext_op
