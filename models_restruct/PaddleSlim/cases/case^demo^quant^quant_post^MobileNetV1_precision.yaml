@@ -1,0 +1,24 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python quant_post.py
+        params:
+          - --model_path ../../pretrain/MobileNetV1_infer
+          - --save_path ./quant_model/MobileNetV1
+          - --ce_test True
+
+    eval:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python eval.py
+        params:
+          - --model_path ./quant_model/MobileNetV1
+        # result:
+        #   top1_acc/top5_acc:
+        #     base: [0.72285156 0.90800781]
+        #     threshold: 0
+        #     evaluation: "="

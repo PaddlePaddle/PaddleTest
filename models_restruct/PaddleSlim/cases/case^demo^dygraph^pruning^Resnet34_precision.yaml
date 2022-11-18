@@ -18,17 +18,17 @@ case:
           - --ce_test=True
         result:
           loss:
-            base: 1.2211
+            base: 12.2101
             threshold: 0
             evaluation: "="
-          acc_top1:
-            base: 0.734
-            threshold: 0
-            evaluation: "="
-          acc_top5:
-            base: 0.886
-            threshold: 0
-            evaluation: "="
+          # acc_top1:
+          #   base: 0.734
+          #   threshold: 0
+          #   evaluation: "="
+          # acc_top5:
+          #   base: 0.886
+          #   threshold: 0
+          #   evaluation: "="
 
       -
         name: multi
@@ -47,14 +47,14 @@ case:
           - --ce_test=True
         result:
           loss:
-            base: 3.3247
+            base: 10.8690
             threshold: 0
             evaluation: "="
-          acc_top1:
-            base: 0.216
-            threshold: 0
-            evaluation: "="
-          acc_top5:
-            base: 0.474
-            threshold: 0
-            evaluation: "="
+          # acc_top1:
+          #   base: 0.216
+          #   threshold: 0
+          #   evaluation: "="
+          # acc_top5:
+          #   base: 0.474
+          #   threshold: 0
+          #   evaluation: "="
