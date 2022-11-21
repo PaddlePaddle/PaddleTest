@@ -70,7 +70,8 @@ class PaddleOCR_Start(object):
                             image_shape = "2,32,320"
                         else:
                             image_shape = image_shape[0]
-                            if len(image_shape) == 2:
+                            print('len(image_shape).{}'.format(len(image_shape)))
+                            if len(image_shape.split(',')) == 2:
                                 image_shape = "1," + image_shape
                         print(image_shape)
                         break
@@ -116,9 +117,12 @@ class PaddleOCR_Start(object):
         pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
         if not os.path.exists("cases"):
             os.makedirs("cases")
-        with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
-            if self.model in pretrained_yaml[self.category].keys():
-                f.writelines(
+
+        case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
+        if not os.path.exists(case_file):
+            with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
+                if self.model in pretrained_yaml[self.category].keys():
+                    f.writelines(
                     (
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
@@ -129,8 +133,8 @@ class PaddleOCR_Start(object):
                         "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                     )
                 )
-            else:
-                f.writelines(
+                else:
+                    f.writelines(
                     (
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
