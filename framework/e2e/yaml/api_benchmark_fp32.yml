@@ -12999,19 +12999,20 @@ inv_0:
     mapping:
       ins: { x: input }
 
-#isistft_0:
-#  desc: "逆短时傅里叶变换"
-#  paddle:
-#    api_name: "paddle.signal.istft"
-#    inputs:
-#      x:
-#        random: false
-#        type: "Tensor"
-#        dtype: "complex64"
-#        value: [[0, 1, 2, 3], [4, 5, 6, 7]]
-#    params:
-#      n_fft: 2
-#      hop_length: 1
+istft_0:
+  desc: "逆短时傅里叶变换"
+  paddle:
+    api_name: "paddle.signal.istft"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "complex64"
+        shape: [1, 2, 4]
+        range: [-1, 1]
+    params:
+      n_fft: 2
+      hop_length: 1
 #      win_length: 2
 #      window:
 #        random: false
@@ -13022,8 +13023,10 @@ inv_0:
 #      normalized: False
 #      length: 2
 #      return_complex: False
-#  pytorch:
-#    api_name: "torch.istft"
+  pytorch:
+    api_name: "torch.istft"
+    mapping:
+      ins: { x: input, n_fft: n_fft, hop_length: hop_length }
 #    mapping:
 #      ins: { x: input, n_fft: n_fft, hop_length: hop_length, win_length: win_length, window: window,
 #             center: center, normalized: normalized, length: length, return_complex: return_complex }
@@ -18597,10 +18600,14 @@ AbsTransform_0:
       forward:
         x:
           value: [1.]
-#  pytorch:
-#    api_name: "torch.distributions.AbsTransform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.transforms.AbsTransform"
+    mapping:
+      ins: { }
+    method:
+      __call__:
+        x:
+          value: [1.]
 
 AffineTransform_0:
   desc: "仿射变换 y=loc+scale×x"
@@ -18624,10 +18631,14 @@ AffineTransform_0:
       forward:
         x:
           value: [1.]
-#  pytorch:
-#    api_name: "torch.distributions.AffineTransform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.transforms.AffineTransform"
+    mapping:
+      ins: { loc: loc, scale: scale }
+    method:
+      __call__:
+        x:
+          value: [1.0]
 
 ExpTransform_0:
   desc: "指数变换 y=exp(x) "
@@ -18639,10 +18650,14 @@ ExpTransform_0:
       forward:
         x:
           value: [1.]
-#  pytorch:
-#    api_name: "torch.distributions.ExpTransform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.transforms.ExpTransform"
+    mapping:
+      ins: {  }
+    method:
+      __call__:
+        x:
+          value: [1.]
 
 PowerTransform_0:
   desc: "幂变换  y=x^power "
@@ -18660,10 +18675,14 @@ PowerTransform_0:
       forward:
         x:
           value: [1.]
-#  pytorch:
-#    api_name: "torch.distributions.PowerTransform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.transforms.PowerTransform"
+    mapping:
+      ins: { power: exponent }
+    method:
+      __call__:
+        x:
+          value: [1.]
 
 ReshapeTransform_0:
   desc: "将输入 Tensor 的事件形状 in_event_shape 改变为 out_event_shape "
@@ -18677,10 +18696,14 @@ ReshapeTransform_0:
       forward:
         x:
           value: [1.]
-#  pytorch:
-#    api_name: "torch.distributions.ReshapeTransform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.transforms.ReshapeTransform"
+    mapping:
+      ins: { in_event_shape: in_shape, out_event_shape: out_shape }
+    method:
+      __call__:
+        x:
+          value: [1.]
 
 SigmoidTransform_0:
   desc: "Sigmoid 变换 "
@@ -18692,10 +18715,14 @@ SigmoidTransform_0:
       forward:
         x:
           value: [1.]
-#  pytorch:
-#    api_name: "torch.distributions.SigmoidTransform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.transforms.SigmoidTransform"
+    mapping:
+      ins: {  }
+    method:
+      __call__:
+        x:
+          value: [1.]
 
 SoftmaxTransform_0:
   desc: "Softmax 变换，首先进行 y=exp(x) 变换，然后归一化 "
@@ -18707,10 +18734,14 @@ SoftmaxTransform_0:
       forward:
         x:
           value: [1.]
-#  pytorch:
-#    api_name: "torch.distributions.SoftmaxTransform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.transforms.SoftmaxTransform"
+    mapping:
+      ins: {  }
+    method:
+      __call__:
+        x:
+          value: [1.]
 
 StickBreakingTransform_0:
   desc: "将一个长度为 K 的向量通过 StackBreaking 构造过程变换为标准 K-单纯形 "
@@ -18722,10 +18753,14 @@ StickBreakingTransform_0:
       forward:
         x:
           value: [1.]
-#  pytorch:
-#    api_name: "torch.distributions.StickBreakingTransform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.transforms.StickBreakingTransform"
+    mapping:
+      ins: {  }
+    method:
+      __call__:
+        x:
+          value: [1.]
 
 TanhTransform_0:
   desc: "Tanh 变换 "
@@ -18737,10 +18772,14 @@ TanhTransform_0:
       forward:
         x:
           value: [1.]
-#  pytorch:
-#    api_name: "torch.distributions.StickBreakingTransform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.transforms.StickBreakingTransform"
+    mapping:
+      ins: {  }
+    method:
+      __call__:
+        x:
+          value: [1.]
 
 Uniform_0:
   desc: "在概率论中，Beta 分布是指一组定义在 [0,1] 区间的连续概率分布"
