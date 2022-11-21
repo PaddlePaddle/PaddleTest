@@ -1,0 +1,6 @@
+configs^cascade_rcnn^cascade_mask_rcnn_r50_fpn_1x_coco.yml
+configs^cascade_rcnn^cascade_mask_rcnn_r50_vd_fpn_ssld_1x_coco.yml
+configs^cascade_rcnn^cascade_mask_rcnn_r50_vd_fpn_ssld_2x_coco.yml
+configs^cascade_rcnn^cascade_rcnn_r50_fpn_1x_coco.yml
+configs^cascade_rcnn^cascade_rcnn_r50_fpn_2x_coco.yml
+configs^cascade_rcnn^cascade_rcnn_r50_vd_fpn_ssld_1x_coco.yml
