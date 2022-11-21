@@ -79,7 +79,6 @@ def run():
         qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact"
         or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_false"
         or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_precision"
-
     ):
         os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
     else:

@@ -18,10 +18,10 @@ case:
           - --use_gpu True
         result:
           acc_top1:
-            base: 0.704102
-            threshold: 0
-            evaluation: "="
+            base: 0.718945
+            threshold: 0.00001
+            evaluation: "+"
           acc_top5:
-            base: 0.904492
-            threshold: 0
-            evaluation: "="
+            base: 0.918555
+            threshold: 0.00001
+            evaluation: "+"

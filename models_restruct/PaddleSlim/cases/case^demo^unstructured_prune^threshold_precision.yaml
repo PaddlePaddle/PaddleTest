@@ -29,7 +29,7 @@ case:
             base: 0.904492199
             threshold: 0
             evaluation: "+"
-      
+
       -
         name: multi
         path: demo/unstructured_prune
@@ -51,10 +51,10 @@ case:
           - --use_gpu True
         result:
           acc_top1:
-            base: 0.96875
+            base: 0.71035158634
             threshold: 0.00000001
             evaluation: "+"
           acc_top5:
-            base: 1.0
-            threshold: 0
+            base: 0.910937488079
+            threshold: 0.00000001
             evaluation: "+"

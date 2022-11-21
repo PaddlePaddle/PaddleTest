@@ -17,8 +17,12 @@ case:
         cmd: python eval.py
         params:
           - --model_path ./quant_model/MobileNetV1
-        # result:
-        #   top1_acc/top5_acc:
-        #     base: [0.72285156 0.90800781]
-        #     threshold: 0
-        #     evaluation: "="
+        result:
+          acc_top1:
+            base: 0.72285156
+            threshold: 0.00001
+            evaluation: "+"
+          acc_top5:
+            base: 0.90800781
+            threshold: 0.00001
+            evaluation: "+"

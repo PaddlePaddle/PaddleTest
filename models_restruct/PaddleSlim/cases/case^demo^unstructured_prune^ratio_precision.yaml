@@ -26,16 +26,16 @@ case:
           - --ce_test True
         result:
           acc_top1:
-            base: 0.504777073
+            base: 0.5134354829
             threshold: 0.00000001
             evaluation: "+"
           acc_top5:
-            base: 0.926154434
-            threshold: 0
+            base: 0.921377360820
+            threshold: 0.00000001
             evaluation: "+"
-        
+
       -
-        name: mutli
+        name: multi
         path: demo/unstructured_prune
         cmd: python -m paddle.distributed.launch train.py
         params:

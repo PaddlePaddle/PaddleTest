@@ -30,7 +30,7 @@ case:
           #   base: 0.886
           #   threshold: 0
           #   evaluation: "="
-      
+
       -
         name: multi
         path: demo/prune
@@ -50,7 +50,7 @@ case:
         result:
           loss:
             base: 0.31932157278
-            threshold: 0.000000001
+            threshold: 0.00000001
             evaluation: "-"
           # acc_top1:
           #   base: 0.216

@@ -22,7 +22,7 @@ case:
             evaluation: "="
 
       -
-        name: mutli
+        name: multi
         path: demo/dygraph/quant
         cmd: python train.py
         params:
