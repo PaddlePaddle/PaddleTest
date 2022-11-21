@@ -248,6 +248,7 @@ class PaddleClas_Start(object):
                     "PULC^language_classification" in self.qa_yaml_name
                     or "PULC^textline_orientation" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
+                    or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):
                     # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
                     self.env_dict["eval_trained_model"] = self.env_dict["eval_pretrained_model"]
@@ -312,6 +313,9 @@ class PaddleClas_Start(object):
                     or "PULC^textline_orientation" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):  # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
+                    # ImageNet^VGG^VGG11 用预训练模型
+                    # Distillation^mv3_large_x1_0_distill_mv3_small_x1_0 用预训练模型
+                    # Distillation^res2net200_vd_distill_pphgnet_base 无预训练模型，不进行精度校验
                     self.env_dict["predict_trained_model"] = self.env_dict["predict_pretrained_model"]
 
                 if (

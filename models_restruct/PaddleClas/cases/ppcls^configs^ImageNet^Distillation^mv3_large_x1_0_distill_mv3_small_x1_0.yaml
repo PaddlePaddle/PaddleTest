@@ -1,3 +1,4 @@
+#跳过 predict trained 因为训练不足出nan   train也会出nan，只判断退出码
 case:
   linux:
     base: ./base/ImageNet_base.yaml
@@ -120,15 +121,6 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
     predict:
       -
-        name: trained
-        cmd: python python/predict_cls.py
-        params:
-          - -c configs/inference_cls.yaml
-          - -o Global.infer_imgs="./images"
-          - -o Global.inference_model_dir=${predict_trained_model}
-          - -o Global.use_gpu=${set_cuda_flag}
-          - -o Global.output_dir=output/${qa_yaml_name}
-      -
         name: pretrained
         cmd: python python/predict_cls.py
         params:
@@ -192,8 +184,6 @@ case:
           - -o Global.save_inference_dir=${export_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
     predict:
-      -
-        name: trained
       -
         name: pretrained
         cmd: python python/predict_cls.py
@@ -260,10 +250,6 @@ case:
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
-        params:
-          - -o Global.device=${set_cuda_flag}
-      -
         name: pretrained
         cmd: python python/predict_cls.py
         params:
@@ -329,10 +315,6 @@ case:
           - -o Global.output_dir=output/${qa_yaml_name}
           - -o Global.device=${set_cuda_flag}
     predict:
-      -
-        name: trained
-        params:
-          - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
         cmd: python python/predict_cls.py

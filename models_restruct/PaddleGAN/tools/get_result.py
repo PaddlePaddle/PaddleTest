@@ -25,16 +25,16 @@ class PaddleGAN_Collect(object):
         初始化参数
         """
         self.repo_name = "PaddleGAN"
-        self.whl_branch = "release" # develop release
+        self.whl_branch = "release"  # develop release
         # pytest结果下载地址
         self.report_linux_cuda102_py37_release = {
             "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342790/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342803/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426590/report/result.tar",
         }
 
         self.report_linux_cuda102_py37_develop = {
             "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342790/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342803/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426590/report/result.tar",
         }
 
         # self.report_linux_cuda102_py37_develop = {
@@ -162,7 +162,7 @@ class PaddleGAN_Collect(object):
         for (key, value) in self.base_yaml_dict.items():
             with open(os.path.join("../cases", value), "r") as f:
                 content = yaml.load(f, Loader=yaml.FullLoader)
-            globals()[key] = content #这里在干吗？
+            globals()[key] = content  # 这里在干吗？
         content = {}
         for i, case_value in enumerate(self.case_info_list):
             # print('###case_value111', case_value)
@@ -200,7 +200,7 @@ class PaddleGAN_Collect(object):
                 # print('###content', content)
                 # print('###content', type(content))
                 # print("    ")
-                
+
                 if "singan_sr" in case_value["model_name"]:
                     self.kpi_value_eval = "D_gradient_penalty"
                 elif "singan_universal" in case_value["model_name"] or "singan_animation" in case_value["model_name"]:
@@ -249,13 +249,19 @@ class PaddleGAN_Collect(object):
                     self.kpi_value_eval = "l_d"
                 elif "animeganv2_pretrain" in case_value["model_name"]:
                     self.kpi_value_eval = "init_c_loss"
-                elif "cyclegan_cityscapes" in case_value["model_name"] or "cyclegan_horse2zebra" in case_value["model_name"]:
+                elif (
+                    "cyclegan_cityscapes" in case_value["model_name"]
+                    or "cyclegan_horse2zebra" in case_value["model_name"]
+                ):
                     self.kpi_value_eval = "G_idt_A_loss"
                 elif "photopen" in case_value["model_name"]:
                     self.kpi_value_eval = "g_featloss"
                 elif "starganv2_celeba_hq" in case_value["model_name"] or "starganv2_afhq" in case_value["model_name"]:
                     self.kpi_value_eval = "G/latent_adv"
-                elif "ugatit_selfie2anime_light" in case_value["model_name"] or "ugatit_photo2cartoon" in case_value["model_name"]:
+                elif (
+                    "ugatit_selfie2anime_light" in case_value["model_name"]
+                    or "ugatit_photo2cartoon" in case_value["model_name"]
+                ):
                     self.kpi_value_eval = "discriminator_loss"
                 elif "animeganv2" in case_value["model_name"]:
                     self.kpi_value_eval = "d_loss"
@@ -300,7 +306,8 @@ class PaddleGAN_Collect(object):
                             #     or "^LeViT" in case_value["model_name"]
                             #     or "^SwinTransformer" in case_value["model_name"]
                             # ) and (
-                            #     case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"
+                            #     case_value["tag"].split("_")[0] == \
+                            #       "train" or case_value["tag"].split("_")[0] == "eval"
                             # ):
                             #     print("### {} change threshold and evaluation ".format(case_value["model_name"]))
                             #     content[case_value["model_name"]]["case"][case_value["system"]][

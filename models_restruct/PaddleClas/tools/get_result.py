@@ -25,26 +25,26 @@ class PaddleClas_Collect(object):
         初始化参数
         """
         self.repo_name = "PaddleClas"
-        self.whl_branch = "develop" # develop release
+        self.whl_branch = "release"  # develop release
         # pytest结果下载地址
         self.report_linux_cuda102_py37_release = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342792/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342793/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342799/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342787/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342805/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426594/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426577/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426601/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426603/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426592/report/result.tar",
         }
 
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346191/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346180/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346174/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346167/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20346159/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404795/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404792/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404790/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404785/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404782/report/result.tar",
         }
 
         # self.report_linux_cuda102_py37_develop = {
-        #     "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909321/report/result.tar"
+        #     "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404792/report/result.tar",
         # }
 
         self.base_yaml_dict = {
@@ -110,7 +110,7 @@ class PaddleClas_Collect(object):
         """
         for name in self.report_path_list:
             shutil.rmtree(name)
-        os.remove(self.repo_name + ".tar.gz")
+        os.remove(self.repo_name + "-develop.tar.gz")
         shutil.rmtree(self.repo_name)
 
     def get_result_yaml(self):
@@ -215,6 +215,8 @@ class PaddleClas_Collect(object):
                 ):
                     if tag_value["name"] == case_value["tag"].split("_")[1]:
                         if case_value["kpi_value"] != -1.0:  # 异常值不保存
+                            print("####case_info_list   model_name: {}".format(case_value["model_name"]))
+                            print("####case_info_list   case tag is : {}".format(case_value["tag"]))
                             print("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
                             print("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
                             print(

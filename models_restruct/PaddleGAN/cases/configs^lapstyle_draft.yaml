@@ -8,7 +8,7 @@ case:
         result:
           ${kpi_value_eval}:
             base: 99999999
-            threshold: 2
+            threshold: 100
             evaluation: "-"
     eval:
       -

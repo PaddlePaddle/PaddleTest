@@ -8,15 +8,15 @@ configs^animeganv2:
       - name: multi
         result:
           d_loss:
-            base: 218.509
+            base: 295.632
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           d_loss:
-            base: 236.849
+            base: 234.524
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -33,15 +33,15 @@ configs^animeganv2_pretrain:
       - name: multi
         result:
           init_c_loss:
-            base: 367.598
+            base: 358.137
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           init_c_loss:
-            base: 417.608
+            base: 300.415
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -58,15 +58,15 @@ configs^aotgan:
       - name: multi
         result:
           perceptual:
-            base: 3.876
+            base: 3.581
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           perceptual:
-            base: 3.253
+            base: 4.87
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -83,15 +83,15 @@ configs^basicvsr++_reds:
       - name: multi
         result:
           loss_pixel:
-            base: 0.039
+            base: 0.043
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 0.058
+            base: 0.057
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -108,15 +108,15 @@ configs^basicvsr++_vimeo90k_BD:
       - name: multi
         result:
           loss_pixel:
-            base: 0.032
+            base: 0.03
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 0.02
+            base: 0.021
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -135,13 +135,13 @@ configs^basicvsr_reds:
           loss_pixel:
             base: 0.052
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
             base: 0.037
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -158,15 +158,15 @@ configs^cyclegan_cityscapes:
       - name: multi
         result:
           G_idt_A_loss:
-            base: 1.208
+            base: 0.913
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           G_idt_A_loss:
-            base: 1.021
+            base: 1.025
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -185,13 +185,13 @@ configs^cyclegan_horse2zebra:
           G_idt_A_loss:
             base: 2.266
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           G_idt_A_loss:
             base: 1.925
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -210,13 +210,13 @@ configs^dcgan_mnist:
           loss:
             base: 99999999
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss:
             base: 99999999
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -233,15 +233,15 @@ configs^drn_psnr_x4_div2k:
       - name: multi
         result:
           loss_dual:
-            base: 55.794
+            base: 106.473
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_dual:
-            base: 110.278
+            base: 194.794
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -258,15 +258,15 @@ configs^edvr_l_w_tsa:
       - name: multi
         result:
           loss_pixel:
-            base: 9314.891
+            base: 7744.412
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 8946.667
+            base: 9561.752
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -283,15 +283,15 @@ configs^edvr_l_wo_tsa:
       - name: multi
         result:
           loss_pixel:
-            base: 7810.088
+            base: 8257.375
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 9003.201
+            base: 9656.447
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -308,15 +308,15 @@ configs^edvr_m_w_tsa:
       - name: multi
         result:
           loss_pixel:
-            base: 6797.982
+            base: 9917.679
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 8960.127
+            base: 9908.521
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -335,13 +335,13 @@ configs^edvr_m_wo_tsa:
           loss_pixel:
             base: 12258.918
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
             base: 5604.984
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -358,15 +358,15 @@ configs^esrgan_psnr_x2_div2k:
       - name: multi
         result:
           loss_pixel:
-            base: 6.62
+            base: 14.479
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 22.225
+            base: 16.654
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -383,15 +383,15 @@ configs^esrgan_psnr_x4_div2k:
       - name: multi
         result:
           loss_pixel:
-            base: 7.727
+            base: 6.299
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 11.917
+            base: 18.774
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -408,15 +408,15 @@ configs^esrgan_x4_div2k:
       - name: multi
         result:
           loss_pix:
-            base: 0.078
+            base: 0.225
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pix:
-            base: 0.122
+            base: 0.27
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -435,13 +435,13 @@ configs^firstorder_fashion:
           perceptual:
             base: 194.711
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           perceptual:
             base: 157.309
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -458,15 +458,15 @@ configs^firstorder_vox_256:
       - name: multi
         result:
           perceptual:
-            base: 256.297
+            base: 278.547
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           perceptual:
-            base: 237.414
+            base: 155.302
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -483,9 +483,9 @@ configs^firstorder_vox_mobile_256:
       - name: single
         result:
           perceptual:
-            base: 260.767
+            base: 285.979
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -504,13 +504,13 @@ configs^gfpgan_ffhq1024:
           loss:
             base: 50000.0
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss:
             base: 50000.0
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -527,15 +527,15 @@ configs^gpen_256_ffhq:
       - name: multi
         result:
           loss:
-            base: 1.03
+            base: 0.517
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss:
-            base: 2.024
+            base: 1.547
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -552,15 +552,15 @@ configs^iconvsr_reds:
       - name: multi
         result:
           loss_pixel:
-            base: 0.042
+            base: 0.063
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 0.033
+            base: 0.04
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -577,15 +577,15 @@ configs^invdn_denoising:
       - name: multi
         result:
           loss:
-            base: 19957.746
+            base: 19340.562
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss:
-            base: 75502.68
+            base: 78413.734
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -602,9 +602,9 @@ configs^lapstyle_draft:
       - name: single
         result:
           loss_c:
-            base: 6.24
+            base: 6.499
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -621,9 +621,9 @@ configs^lapstyle_rev_first:
       - name: single
         result:
           D_fake_loss:
-            base: 0.704
+            base: 0.69
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -640,9 +640,9 @@ configs^lapstyle_rev_second:
       - name: single
         result:
           D_fake_loss:
-            base: 0.7
+            base: 0.625
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -659,15 +659,15 @@ configs^lesrcnn_psnr_x4_div2k:
       - name: multi
         result:
           loss_pixel:
-            base: 0.237
+            base: 0.214
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 0.224
+            base: 0.376
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -684,15 +684,15 @@ configs^mprnet_denoising:
       - name: multi
         result:
           loss:
-            base: 17385.184
+            base: 15385.165
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss:
-            base: 16652.592
+            base: 17646.873
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -709,15 +709,15 @@ configs^mprnet_deraining:
       - name: multi
         result:
           loss:
-            base: 44029.266
+            base: 45378.141
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss:
-            base: 41702.223
+            base: 34473.184
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -736,13 +736,13 @@ configs^msvsr_reds:
           loss_pix:
             base: 0.05
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pix:
             base: 0.041
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -759,15 +759,15 @@ configs^msvsr_vimeo90k_BD:
       - name: multi
         result:
           loss_pix:
-            base: 0.023
+            base: 0.037
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pix:
-            base: 0.023
+            base: 0.022
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -784,15 +784,15 @@ configs^nafnet_denoising:
       - name: multi
         result:
           loss:
-            base: 5.285
+            base: 5.159
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss:
-            base: 8.606
+            base: 4.085
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -809,15 +809,15 @@ configs^pan_psnr_x4_div2k:
       - name: multi
         result:
           loss_pixel:
-            base: 0.048
+            base: 0.031
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 0.023
+            base: 0.076
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -834,15 +834,15 @@ configs^photopen:
       - name: multi
         result:
           g_featloss:
-            base: 14.627
+            base: 14.471
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           g_featloss:
-            base: 15.684
+            base: 11.341
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -861,13 +861,13 @@ configs^pix2pix_cityscapes:
           D_fake_loss:
             base: 0.492
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           D_fake_loss:
             base: 0.489
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -884,15 +884,15 @@ configs^pix2pix_cityscapes_2gpus:
       - name: multi
         result:
           D_fake_loss:
-            base: 0.451
+            base: 0.499
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           D_fake_loss:
-            base: 0.84
+            base: 0.735
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -909,15 +909,15 @@ configs^pix2pix_facades:
       - name: multi
         result:
           D_fake_loss:
-            base: 0.585
+            base: 0.647
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           D_fake_loss:
-            base: 0.795
+            base: 0.765
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -936,7 +936,7 @@ configs^prenet:
           loss_pixel:
             base: 99999999
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -953,15 +953,15 @@ configs^rcan_rssr_x4:
       - name: multi
         result:
           loss_pixel:
-            base: 1004375296.0
+            base: 655176512.0
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pixel:
-            base: 615281984.0
+            base: 382107904.0
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -978,15 +978,15 @@ configs^realsr_bicubic_noise_x4_df2k:
       - name: multi
         result:
           loss_pix:
-            base: 0.14
+            base: 0.154
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pix:
-            base: 0.258
+            base: 0.164
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1003,15 +1003,15 @@ configs^realsr_kernel_noise_x4_dped:
       - name: multi
         result:
           loss_pix:
-            base: 0.041
+            base: 0.208
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss_pix:
-            base: 0.133
+            base: 0.23
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1028,9 +1028,9 @@ configs^singan_animation:
       - name: single
         result:
           D_gradient_penalty:
-            base: 0.022
+            base: 0.021
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1047,9 +1047,9 @@ configs^singan_finetune:
       - name: single
         result:
           D_gradient_penalty:
-            base: 0.078
+            base: 0.052
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1066,9 +1066,9 @@ configs^singan_sr:
       - name: single
         result:
           D_gradient_penalty:
-            base: 0.018
+            base: 0.082
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1085,9 +1085,9 @@ configs^singan_universal:
       - name: single
         result:
           D_gradient_penalty:
-            base: 0.022
+            base: 0.024
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1104,15 +1104,15 @@ configs^starganv2_afhq:
       - name: multi
         result:
           G/latent_adv:
-            base: 6.466
+            base: 5.757
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           G/latent_adv:
-            base: 2.688
+            base: 63.826
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1129,15 +1129,15 @@ configs^starganv2_celeba_hq:
       - name: multi
         result:
           G/latent_adv:
-            base: 4.07
+            base: 2.818
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           G/latent_adv:
-            base: 9.349
+            base: 6.746
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1156,13 +1156,13 @@ configs^stylegan_v2_256_ffhq:
           l_d:
             base: 0.092
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           l_d:
             base: 0.898
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1179,15 +1179,15 @@ configs^swinir_denoising:
       - name: multi
         result:
           loss:
-            base: 0.529
+            base: 0.602
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           loss:
-            base: 0.659
+            base: 1.059
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1204,15 +1204,15 @@ configs^ugatit_photo2cartoon:
       - name: multi
         result:
           discriminator_loss:
-            base: 2.1
+            base: 2.216
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           discriminator_loss:
-            base: 2.515
+            base: 2.761
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
@@ -1229,15 +1229,15 @@ configs^ugatit_selfie2anime_light:
       - name: multi
         result:
           discriminator_loss:
-            base: 5.322
+            base: 4.521
             evaluation: '-'
-            threshold: 2
+            threshold: 100
       - name: single
         result:
           discriminator_loss:
-            base: 4.437
+            base: 4.474
             evaluation: '-'
-            threshold: 2
+            threshold: 100
     mac:
       base: ./base/base.yaml
     windows:
