@@ -149,7 +149,7 @@ def eval(predictor, FLAGS):
     )
     print("[Benchmark] Evaluation acc result: {}".format(result[0]))
     final_res = {
-        "model_name": args.model_name,
+        "model_name": FLAGS.model_name,
         "jingdu": {
             "value": result[0],
             "unit": "acc",
@@ -157,7 +157,7 @@ def eval(predictor, FLAGS):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-            "batch_size": args.batch_size,
+            "batch_size": FLAGS.batch_size,
         },
     }
     print("[Benchmark][final result]{}".format(final_res))

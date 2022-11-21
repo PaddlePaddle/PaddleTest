@@ -241,7 +241,7 @@ class WrapperPredictor(object):
         res = metric.accumulate()
         print("[benchmark]task name: %s, acc: %s. \n" % (FLAGS.task_name, res), end="")
         final_res = {
-            "model_name": args.model_name,
+            "model_name": FLAGS.model_name,
             "jingdu": {
                 "value": res,
                 "unit": "acc",
@@ -249,7 +249,7 @@ class WrapperPredictor(object):
             "xingneng": {
                 "value": round(predict_time * 1000 / i, 2),
                 "unit": "ms",
-                "batch_size": args.batch_size,
+                "batch_size": FLAGS.batch_size,
             },
         }
         print("[Benchmark][final result]{}".format(final_res))
