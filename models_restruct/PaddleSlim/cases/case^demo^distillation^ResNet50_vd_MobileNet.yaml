@@ -1,0 +1,36 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/distillation
+        cmd: python distill.py
+        params:
+          - --num_epochs 1
+          - --batch_size 64
+          - --save_inference True
+          - --use_gpu True
+
+  windows:
+    train:
+      -
+        name: single
+        path: demo/distillation
+        cmd: python distill.py
+        params:
+          - --num_epochs 1
+          - --batch_size 32
+          - --save_inference True
+          - --use_gpu True
+
+  mac:
+    train:
+      -
+        name: single
+        path: demo/distillation
+        cmd: python distill.py
+        params:
+          - --num_epochs 1
+          - --batch_size 64
+          - --save_inference True
+          - --use_gpu False

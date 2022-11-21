@@ -44,12 +44,12 @@ case:
       -
         name: static
         cmd: python -u tools/static_trainer.py
-        
+
     infer:
       -
         name: dygraph
         cmd: python -u tools/infer.py
-        
+
       -
         name: static
         cmd: python -u tools/static_infer.py

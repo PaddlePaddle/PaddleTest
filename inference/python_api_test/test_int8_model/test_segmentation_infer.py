@@ -64,7 +64,7 @@ def argsparser():
         type=str,
         default="fp32",
         choices=["fp32", "fp16", "int8", "bf16"],
-        help=("The precision of inference. It can be 'fp32', 'fp16' or 'int8'. MKLDNN also supports bf16"),
+        help=("The precision of inference. It can be 'fp32', 'fp16', 'int8' or 'bf16'."),
     )
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
