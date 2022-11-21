@@ -85,7 +85,7 @@ class PaddleDetection_Build(Model_Build):
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mainbody.zip")
         os.system("unzip mainbody.zip")
         logger.info("***download data ended")
-        os.chdir(path_repo+'deploy/cpp')
+        os.chdir(path_repo+'/deploy/cpp')
         wget.download("https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz")
         os.system("tar xvf paddle_inference.tgz")
         os.system('sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh')
