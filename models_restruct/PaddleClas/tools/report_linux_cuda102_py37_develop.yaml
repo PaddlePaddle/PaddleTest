@@ -38027,14 +38027,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_224:
         result:
           loss:
             base: 7.917674999999999
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.5734125
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single_trained
         result:
           loss:
@@ -38053,8 +38053,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_224:
       infer:
       - name: trained
         result:
-          class_ids:
-            base: '[588, 503, 937, 9, 978]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38066,8 +38066,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_224:
       predict:
       - name: trained
         result:
-          class_ids:
-            base: '[588, 503, 937, 9, 978]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38081,14 +38081,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_224:
         result:
           loss:
             base: 8.085028333333334
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single
         result:
           loss:
             base: 13.73982611111111
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: multi_static
         result:
           loss:
@@ -38216,14 +38216,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_384:
         result:
           loss:
             base: 7.303565000000001
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.460105
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single_trained
         result:
           loss:
@@ -38242,8 +38242,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_384:
       infer:
       - name: trained
         result:
-          class_ids:
-            base: '[724, 759, 424, 998, 65]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38255,8 +38255,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_384:
       predict:
       - name: trained
         result:
-          class_ids:
-            base: '[724, 759, 424, 998, 65]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38270,14 +38270,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_384:
         result:
           loss:
             base: 8.46237125
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single
         result:
           loss:
             base: 33.71393166666666
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: multi_static
         result:
           loss:
@@ -38405,14 +38405,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch32_384:
         result:
           loss:
             base: 7.17376
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.6064475
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single_trained
         result:
           loss:
@@ -38431,8 +38431,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch32_384:
       infer:
       - name: trained
         result:
-          class_ids:
-            base: '[928, 46, 938, 932, 62]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38444,8 +38444,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch32_384:
       predict:
       - name: trained
         result:
-          class_ids:
-            base: '[928, 46, 938, 932, 62]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38459,14 +38459,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch32_384:
         result:
           loss:
             base: 7.776212083333333
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single
         result:
           loss:
             base: 8.870350555555557
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: multi_static
         result:
           loss:
@@ -38594,14 +38594,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_small_patch16_224:
         result:
           loss:
             base: 7.8335575
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: pretrained
         result:
           loss:
             base: 1.4461575
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single_trained
         result:
           loss:
@@ -38620,8 +38620,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_small_patch16_224:
       infer:
       - name: trained
         result:
-          class_ids:
-            base: '[503, 290, 363, 535, 367]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38633,8 +38633,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_small_patch16_224:
       predict:
       - name: trained
         result:
-          class_ids:
-            base: '[503, 290, 363, 535, 367]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38648,14 +38648,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_small_patch16_224:
         result:
           loss:
             base: 8.533311666666666
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single
         result:
           loss:
             base: 10.106097222222221
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: multi_static
         result:
           loss:

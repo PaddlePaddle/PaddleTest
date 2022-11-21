@@ -230,11 +230,12 @@ class PaddleClas_Collect(object):
                                 case_value["tag"].split("_")[0]
                             ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
 
-                        # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer
+                        # 单独处理固定不了随机量的 HRNet、 LeViT、 SwinTransformer、 VisionTransformer
                         if (
                             "^HRNet" in case_value["model_name"]
                             or "^LeViT" in case_value["model_name"]
                             or "^SwinTransformer" in case_value["model_name"]
+                            or "^VisionTransformer" in case_value["model_name"]
                         ) and (case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"):
                             print("### {} change threshold and evaluation ".format(case_value["model_name"]))
                             content[case_value["model_name"]]["case"][case_value["system"]][
@@ -257,6 +258,7 @@ class PaddleClas_Collect(object):
                                 "^HRNet" in case_value["model_name"]
                                 or "^LeViT" in case_value["model_name"]
                                 or "^SwinTransformer" in case_value["model_name"]
+                                or "^VisionTransformer" in case_value["model_name"]
                             )
                             and (
                                 case_value["tag"].split("_")[0] == "infer"
