@@ -426,7 +426,12 @@ class PaddleClas_Start(object):
                                 or key == self.step
                             ):
                                 # 结果和阶段同时满足 否则就有可能把不执行的阶段的result替换到执行的顺序混乱
-                                content[key][i][key1] = content_result[key][i][key1]
+                                try:  # 不一定成功，如果不成功输出出来看看
+                                    content[key][i][key1] = content_result[key][i][key1]
+                                except:
+                                    logger.info("#### can not update value")
+                                    logger.info("#### key1: {}".format(key1))
+                                    logger.info("#### content_result[key][i]: {}".format(content_result[key][i]))
         return content, content_result
 
     def update_kpi(self):

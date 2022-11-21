@@ -25,7 +25,7 @@ class PaddleClas_Collect(object):
         初始化参数
         """
         self.repo_name = "PaddleClas"
-        self.whl_branch = "release"  # develop release
+        self.whl_branch = "develop"  # develop release
         # pytest结果下载地址
         self.report_linux_cuda102_py37_release = {
             "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426594/report/result.tar",
@@ -229,58 +229,63 @@ class PaddleClas_Collect(object):
                             content[case_value["model_name"]]["case"][case_value["system"]][
                                 case_value["tag"].split("_")[0]
                             ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
-                            # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer
 
-                            if (
+                        # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer
+                        if (
+                            "^HRNet" in case_value["model_name"]
+                            or "^LeViT" in case_value["model_name"]
+                            or "^SwinTransformer" in case_value["model_name"]
+                        ) and (case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"):
+                            print("### {} change threshold and evaluation ".format(case_value["model_name"]))
+                            content[case_value["model_name"]]["case"][case_value["system"]][
+                                case_value["tag"].split("_")[0]
+                            ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
+                            content[case_value["model_name"]]["case"][case_value["system"]][
+                                case_value["tag"].split("_")[0]
+                            ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
+                            # 这里进行替换时要考虑到全局变量如何替换
+
+            # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer  predict阶段防止不替换
+            for index, tag_value in enumerate(
+                content[case_value["model_name"]]["case"][case_value["system"]][case_value["tag"].split("_")[0]]
+            ):
+                if tag_value["name"] == case_value["tag"].split("_")[1]:
+                    if case_value["kpi_value"] != -1.0:  # 异常值不保存
+                        # 处理存在随机量导致每次infer_trained结果不一致的情况
+                        if (
+                            (
                                 "^HRNet" in case_value["model_name"]
                                 or "^LeViT" in case_value["model_name"]
                                 or "^SwinTransformer" in case_value["model_name"]
-                            ) and (
-                                case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"
-                            ):
-                                print("### {} change threshold and evaluation ".format(case_value["model_name"]))
+                            )
+                            and (
+                                case_value["tag"].split("_")[0] == "infer"
+                                or case_value["tag"].split("_")[0] == "predict"
+                            )
+                            and tag_value["name"] == "trained"
+                        ):
+                            try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
+                                print("### {} change class_ids to exit_code ".format(case_value["model_name"]))
+                                dict_tmp = content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]
+                                dict_tmp.update({"exit_code": dict_tmp.pop("class_ids")})
                                 content[case_value["model_name"]]["case"][case_value["system"]][
                                     case_value["tag"].split("_")[0]
-                                ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
+                                ][index]["result"] = dict_tmp
+
                                 content[case_value["model_name"]]["case"][case_value["system"]][
                                     case_value["tag"].split("_")[0]
-                                ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
+                                ][index]["result"]["exit_code"]["base"] = 0
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]["exit_code"]["threshold"] = 0
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]["exit_code"]["evaluation"] = "="
+                            except:
+                                print("###can not change class_ids to exit_code")
 
-                            # 处理存在随机量导致每次infer_trained结果不一致的情况
-                            if (
-                                (
-                                    "^HRNet" in case_value["model_name"]
-                                    or "^LeViT" in case_value["model_name"]
-                                    or "^SwinTransformer" in case_value["model_name"]
-                                )
-                                and (
-                                    case_value["tag"].split("_")[0] == "infer"
-                                    or case_value["tag"].split("_")[0] == "predict"
-                                )
-                                and tag_value["name"] == "trained"
-                            ):
-                                try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
-                                    print("### {} change class_ids to exit_code ".format(case_value["model_name"]))
-                                    dict_tmp = content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]
-                                    dict_tmp.update({"exit_code": dict_tmp.pop("class_ids")})
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"] = dict_tmp
-
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["base"] = 0
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["threshold"] = 0
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["evaluation"] = "="
-                                except:
-                                    print("###can not change class_ids to exit_code")
-                            # 这里进行替换时要考虑到全局变量如何替换
             # print('###content333', content)
             # print('###content333', type(content))
             # print("    ")

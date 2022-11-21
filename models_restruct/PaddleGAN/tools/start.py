@@ -227,9 +227,14 @@ class PaddleGAN_Start(object):
                                 or key == self.step
                             ):
                                 # 结果和阶段同时满足 否则就有可能把不执行的阶段的result替换到执行的顺序混乱
-                                content[key][i][key1] = content_result[key][i][key1]
+                                try:  # 不一定成功，如果不成功输出出来看看
+                                    content[key][i][key1] = content_result[key][i][key1]
+                                except:
+                                    logger.info("#### can not update value")
+                                    logger.info("#### key1: {}".format(key1))
+                                    logger.info("#### content_result[key][i]: {}".format(content_result[key][i]))
         return content, content_result
-        
+
     def update_kpi(self):
         """
         根据之前的字典更新kpi监控指标, 原来的数据只起到确定格式, 没有实际用途
@@ -243,7 +248,7 @@ class PaddleGAN_Start(object):
         #     content_result_name = "report_linux_cuda102_py37_develop.yaml"
         # else:
         #     # logger.info(" paddle_whl use branch release or None : {}".format(self.paddle_whl))
-        content_result_name = "report_linux_cuda102_py37_release.yaml" #没有固定随机量，develop与release一致用阈值控制
+        content_result_name = "report_linux_cuda102_py37_release.yaml"  # 没有固定随机量，develop与release一致用阈值控制
 
         with open(os.path.join("tools", content_result_name), "r", encoding="utf-8") as f:
             content_result = yaml.load(f, Loader=yaml.FullLoader)
