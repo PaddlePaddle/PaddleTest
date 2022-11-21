@@ -1,0 +1,29 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/quant
+        cmd: python train.py
+        params:
+          - --lr=0.001
+          - --batch_size 128
+          - --use_pact=True
+          - --num_epochs=1
+          - --l2_decay=2e-5
+          - --ls_epsilon=0.1
+          - --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained
+          - --use_gpu True
+
+      -
+        name: multi
+        path: demo/dygraph/quant
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --lr=0.001
+          - --batch_size 128
+          - --use_pact=True
+          - --num_epochs=1
+          - --l2_decay=2e-5
+          - --ls_epsilon=0.1
+          - --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained
