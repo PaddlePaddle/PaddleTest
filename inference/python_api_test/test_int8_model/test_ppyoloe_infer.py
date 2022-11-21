@@ -26,6 +26,8 @@ from backend import PaddleInferenceEngine, TensorRTEngine
 from ppdet.core.workspace import load_config, create
 from ppdet.metrics import COCOMetric
 
+from utils.ppyoloe_post_process import PPYOLOEPostProcess
+
 
 def argsparser():
     """
@@ -53,6 +55,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--img_shape", type=int, default=640, help="input_size")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
+    parser.add_argument("--include_nms", type=bool, default=True, help="Whether include nms or not.")
 
     return parser
 
@@ -96,7 +99,10 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     warmup = 20
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
-        predictor.prepare_data([data_all["image"], data_all["scale_factor"]])
+        if not FLAGS.include_nms:
+            predictor.prepare_data([data_all["image"]])
+        else:
+            predictor.prepare_data([data_all["image"], data_all["scale_factor"]])
 
         for i in range(warmup):
             predictor.run()
@@ -115,7 +121,11 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         cpu_mem, gpu_mem = get_current_memory_mb()
         cpu_mems += cpu_mem
         gpu_mems += gpu_mem
-        res = {"bbox": outs[0], "bbox_num": outs[1]}
+        if not FLAGS.include_nms:
+            postprocess = PPYOLOEPostProcess(score_threshold=0.3, nms_threshold=0.6)
+            res = postprocess(outs[0], data_all["scale_factor"])
+        else:
+            res = {"bbox": outs[0], "bbox_num": outs[1]}
         metric.update(data_all, res)
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)

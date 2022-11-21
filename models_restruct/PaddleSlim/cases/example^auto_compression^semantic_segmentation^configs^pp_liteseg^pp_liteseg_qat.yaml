@@ -1,0 +1,42 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/auto_compression/semantic_segmentation/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/pp_liteseg/pp_liteseg_qat.yaml"
+          - --save_dir="./save_pp_lite_seg_model_qat_single_card"
+          - --devices="gpu"
+
+      -
+        name: multi
+        path: example/auto_compression/semantic_segmentation/
+        cmd: python -m paddle.distributed.launch run.py
+        params:
+          - --config_path="./configs/pp_liteseg/pp_liteseg_qat.yaml"
+          - --save_dir="./save_pp_lite_seg_model_qat_mulit_card"
+          - --devices="gpu"
+
+  windows:
+    train:
+      -
+        name: single
+        path: example/auto_compression/semantic_segmentation/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/pp_liteseg/pp_liteseg_qat.yaml"
+          - --save_dir="./save_pp_lite_seg_model_qat_single_card"
+          - --devices="gpu"
+
+  mac:
+    train:
+      -
+        name: single
+        path: example/auto_compression/semantic_segmentation/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/pp_liteseg/pp_liteseg_qat.yaml"
+          - --save_dir="./save_pp_lite_seg_model_qat_single_card"
+          - --devices="cpu"
