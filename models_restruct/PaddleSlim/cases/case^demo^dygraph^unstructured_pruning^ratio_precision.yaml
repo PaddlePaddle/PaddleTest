@@ -20,12 +20,12 @@ case:
           - --ce_test True
         result:
           acc_top1:
-            base: 0.6796875
-            threshold: 0.00000001
+            base: 0.633007824
+            threshold: 0.0000001
             evaluation: "+"
           acc_top5:
             base: 0.859375
-            threshold: 0
+            threshold: 0.0000001
             evaluation: "+"
 
       -
@@ -51,10 +51,10 @@ case:
           - --ce_test True
         result:
           acc_top1:
-            base: 0.875
-            threshold: 0.00000001
+            base: 0.4892578125
+            threshold: 0.0000001
             evaluation: "+"
           acc_top5:
-            base: 0.921875
-            threshold: 0
+            base: 0.751367211341
+            threshold: 0.0000001
             evaluation: "+"

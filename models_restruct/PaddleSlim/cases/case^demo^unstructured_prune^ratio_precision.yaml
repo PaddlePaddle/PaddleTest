@@ -63,6 +63,6 @@ case:
             threshold: 0.00000001
             evaluation: "+"
           acc_top5:
-            base: 0.984375
-            threshold: 0
+            base: 0.9197850227
+            threshold: 0.00000001
             evaluation: "+"

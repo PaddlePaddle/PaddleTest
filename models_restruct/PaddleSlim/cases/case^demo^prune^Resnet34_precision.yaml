@@ -19,8 +19,8 @@ case:
           - --use_gpu True
         result:
           loss:
-            base: 0.319321572
-            threshold: 0.000000001
+            base: 0.31932157278
+            threshold: 0.0000001
             evaluation: "-"
           # acc_top1:
           #   base: 0.734
