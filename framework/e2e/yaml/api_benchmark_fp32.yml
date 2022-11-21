@@ -12375,19 +12375,6 @@ dist_0:
     mapping:
       ins: { x: input, y: other }
 
-#Beta_0:
-#  desc: "在概率论中，Beta 分布是指一组定义在 [0,1] 区间的连续概率分布"
-#  enable_backward: false
-#  paddle:
-#    api_name: "paddle.distribution.Beta"
-#    params:
-#      alpha: 0.5
-#      beta: 0.5
-#  pytorch:
-#    api_name: "torch.distributions.Beta"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
-
 eig_0:
   desc: "计算一般方阵 x 的的特征值和特征向量"
   enable_backward: false
@@ -13012,24 +12999,34 @@ inv_0:
     mapping:
       ins: { x: input }
 
-#istft_0:
+#isistft_0:
 #  desc: "逆短时傅里叶变换"
 #  paddle:
 #    api_name: "paddle.signal.istft"
 #    inputs:
 #      x:
-#        random: true
+#        random: false
+#        type: "Tensor"
+#        dtype: "complex64"
+#        value: [[0, 1, 2, 3], [4, 5, 6, 7]]
+#    params:
+#      n_fft: 2
+#      hop_length: 1
+#      win_length: 2
+#      window:
+#        random: false
 #        type: "Tensor"
 #        dtype: "float32"
-#        shape: [2, 2]
-#        range: [ 0, 1]
-#    params:
-#      n_fft: 3
-#      hop_length: 0.25
+#        value: [1.0, 1.0]
+#      center: True
+#      normalized: False
+#      length: 2
+#      return_complex: False
 #  pytorch:
-#    api_name: "torch.linalg.inv"
+#    api_name: "torch.istft"
 #    mapping:
-#      ins: { x: input }
+#      ins: { x: input, n_fft: n_fft, hop_length: hop_length, win_length: win_length, window: window,
+#             center: center, normalized: normalized, length: length, return_complex: return_complex }
 
 kron_0:
   desc: "计算两个张量的克罗内克积, 结果是一个合成的张量, 由第二个张量经过第一个张量中的元素缩放 后的组块构成。"
@@ -13494,30 +13491,29 @@ logspace_0:
     mapping:
       ins: { start: start, stop: end, num: steps, base: base }
 
-#lu_unpack_0:
-#  desc: "对 paddle.linalg.lu 返回结果的 LU、pivot 进行展开得到原始的单独矩阵 L、U、P"
-#  paddle:
-#    api_name: "paddle.linalg.lu_unpack"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1]
-#        range: [ -1, 1]
-#      y:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1]
-#        range: [ -1, 1]
-#    params:
-#      unpack_ludata: True
-#      unpack_pivots: True
-#  pytorch:
-#    api_name: "torch.lu_unpack"
-#    mapping:
-#      ins: { x: LU_data, y: LU_pivots, unpack_ludata: unpack_data, unpack_pivots: unpack_pivots }
+lu_unpack_0:
+  desc: "对 paddle.linalg.lu 返回结果的 LU、pivot 进行展开得到原始的单独矩阵 L、U、P"
+  enable_backward: False
+  paddle:
+    api_name: "paddle.linalg.lu_unpack"
+    inputs:
+      x:
+        random: false
+        type: "Tensor"
+        dtype: "float32"
+        value: [[1., 3.], [3., 2.], [5., 6.]]
+      y:
+        random: false
+        type: "Tensor"
+        dtype: "int32"
+        value: [[3, 3]]
+    params:
+      unpack_ludata: True
+      unpack_pivots: True
+  pytorch:
+    api_name: "torch.lu_unpack"
+    mapping:
+      ins: { x: LU_data, y: LU_pivots, unpack_ludata: unpack_data, unpack_pivots: unpack_pivots }
 
 mv_0:
   desc: "计算矩阵 x 和向量 vec 的乘积"
@@ -18497,10 +18493,13 @@ Beta_0:
     method:
       sample:
         shape: [1, 1, 1]
-#  pytorch:
-#    api_name: "torch.distributions.Beta"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.Beta"
+    mapping:
+      ins: { alpha: concentration1, beta: concentration0 }
+    method:
+      sample:
+        sample_shape: [1, 1, 1]
 
 Categorical_0:
   desc: "类别分布是一种离散概率分布，其随机变量可以取 K 个相互独立类别的其中一个"
@@ -18508,14 +18507,21 @@ Categorical_0:
   paddle:
     api_name: "paddle.distribution.Categorical"
     params:
-      logits: [0.1253, 0.5213]
+      logits:
+        random: false
+        type: "Tensor"
+        dtype: "float32"
+        value: [0.1253, 0.5213]
     method:
       sample:
         shape: [1, 1]
-#  pytorch:
-#    api_name: "torch.distributions.categorical.Categorical"
-#    mapping:
-#      ins: { logits: logits }
+  pytorch:
+    api_name: "torch.distributions.categorical.Categorical"
+    mapping:
+      ins: { logits: logits }
+    method:
+      sample:
+        sample_shape: [1, 1]
 
 Dirichlet_0:
   desc: "狄利克雷分布（Dirichlet distribution）是一类在实数域以正单纯形（standard simplex）为支撑集的高维连续概率分布，是 Beta 分布在高维情形的推广"
@@ -18531,10 +18537,13 @@ Dirichlet_0:
     method:
       sample:
         shape: [1]
-#  pytorch:
-#    api_name: "torch.distributions.Dirichlet"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.dirichlet.Dirichlet"
+    mapping:
+      ins: { concentration: concentration }
+    method:
+      sample:
+        sample_shape: [1]
 
 Multinomial_0:
   desc: "Multinomial 表示实验次数为 total_count，概率为 probs 的多项分布"
@@ -18551,10 +18560,13 @@ Multinomial_0:
     method:
       sample:
         shape: [1]
-#  pytorch:
-#    api_name: "torch.distributions.Multinomial"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.multinomial.Multinomial"
+    mapping:
+      ins: { total_count: total_count, probs: probs }
+    method:
+      sample:
+        sample_shape: [1]
 
 Normal_0:
   desc: "正态分布"
@@ -18567,10 +18579,13 @@ Normal_0:
     method:
       sample:
         shape: [1]
-#  pytorch:
-#    api_name: "torch.distributions.Normal"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.normal.Normal"
+    mapping:
+      ins: { loc: loc, scale: scale }
+    method:
+      sample:
+        sample_shape: [1]
 
 AbsTransform_0:
   desc: "取绝对值变换 y=|x| "
@@ -18734,14 +18749,17 @@ Uniform_0:
     api_name: "paddle.distribution.Uniform"
     params:
       low: -0.5
-      high: -0.5
+      high: 0.5
     method:
       sample:
         shape: [1, 1, 1]
-#  pytorch:
-#    api_name: "torch.distributions.Uniform"
-#    mapping:
-#      ins: { alpha: concentration1, beta: concentration0 }
+  pytorch:
+    api_name: "torch.distributions.Uniform"
+    mapping:
+      ins: { low: low, high: high }
+    method:
+      sample:
+        sample_shape: [1, 1, 1]
 
 RNNCellBase_0:
   desc: "循环神经网络单元基类"
@@ -18758,3 +18776,50 @@ RNNCellBase_0:
 #    api_name: "torch.nn.RNNCell"
 #    mapping:
 #      ins: { x: input }
+
+SimpleRNN_0:
+  desc: "循环神经网络单元基类"
+  enable_backward: False
+  paddle:
+    api_name: "paddle.nn.SimpleRNN"
+    inputs:
+      inputs:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 3 ]
+        range: [ -1, 1 ]
+    params:
+      input_size: 3
+      hidden_size: 3
+      num_layers: 1
+      activation: "tanh"
+      dropout: 0.0
+      direction: "bidirectional"
+      time_major: False
+  pytorch:
+    api_name: "torch.nn.RNN"
+    mapping:
+      ins: { inputs: input, input_size: input_size, hidden_size: hidden_size, num_layers: num_layers,
+             activation: nonlinearity, dropout: dropout}
+
+SimpleRNNCell_0:
+  desc: "循环神经网络单元基类"
+  enable_backward: False
+  paddle:
+    api_name: "paddle.nn.SimpleRNNCell"
+    inputs:
+      inputs:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 3 ]
+        range: [ -1, 1 ]
+    params:
+      input_size: 3
+      hidden_size: 3
+      activation: "tanh"
+  pytorch:
+    api_name: "torch.nn.RNNCell"
+    mapping:
+      ins: { inputs: input, input_size: input_size, hidden_size: hidden_size, activation: nonlinearity }
