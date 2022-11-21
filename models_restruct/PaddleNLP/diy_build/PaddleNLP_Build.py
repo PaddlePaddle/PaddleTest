@@ -50,7 +50,7 @@ class PaddleNLP_Build(Model_Build):
             for file_name in os.listdir("cases"):
                 if ".yaml" in file_name:
                     self.clas_model_list.append(file_name.strip().replace(":", "/"))
-                    
+
     def build_paddlenlp(self):
         """
         安装依赖包
