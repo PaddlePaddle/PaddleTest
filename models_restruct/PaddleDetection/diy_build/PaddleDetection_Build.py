@@ -69,7 +69,7 @@ class PaddleDetection_Build(Model_Build):
         os.system("python ppdet/ext_op/setup.py install")
         if os.path.exists("/root/.cache/paddle/weights"):
             os.system("rm -rf /root/.cache/paddle/weights")
-        os.system("ln -s {}/data/ppdet_pretrained /root/.cache/paddle/weights").format('/ssd2/ce_data/PaddleDetection')
+        os.system("ln -s {}/data/ppdet_pretrained /root/.cache/paddle/weights".format('/ssd2/ce_data/PaddleDetection'))
         os.chdir("dataset")
         if os.path.exists("coco"):
             os.system("rm -rf coco")
