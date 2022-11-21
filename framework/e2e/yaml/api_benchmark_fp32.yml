@@ -2225,23 +2225,24 @@ Conv3D_2:
     mapping:
       ins: {x: input, in_channels: in_channels, out_channels: out_channels, kernel_size: kernel_size, stride: stride, padding: padding, dilation: dilation, groups: groups, padding_mode: padding_mode}
 
-#nanmedian_0:
-#  desc: "忽略nan返回Tensor中位数 0"
-#  paddle:
-#    api_name: "paddle.nanmedian"
-#    inputs:
-#      x:
-#        random: true
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 1, 1 ]
-#        range: [ -1, 1 ]
-#    params:
-#      axis: -1
-#      keepdim: False
-#  pytorch:
-#    api_name: "torch.nanmedian"
-#    mapping:
-#      ins: {x: input, axis: dim, keepdim: keepdim}
+nanmedian_0:
+  desc: "忽略nan返回Tensor中位数 0"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.nanmedian"
+    inputs:
+      x:
+        random: true
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+    params:
+      axis: -1
+      keepdim: False
+  pytorch:
+    api_name: "torch.nanmedian"
+    mapping:
+      ins: {x: input, axis: dim, keepdim: keepdim}
 
 PReLU_0:
   desc: "PReLU激活层 0"
@@ -11971,22 +11972,6 @@ addmm_0:
     mapping:
       ins: { input: input, x: mat1, y: mat2, alpha: alpha, beta: beta }
 
-angle_0:
-  desc: "逐元素计算复数的相位角"
-  paddle:
-    api_name: "paddle.angle"
-    inputs:
-      x:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1, 1, 1]
-        range: [ -5, 5]
-  pytorch:
-    api_name: "torch.angle"
-    mapping:
-      ins: { x: input }
-
 asin_0:
   desc: "arcsin函数"
   paddle:
@@ -12189,23 +12174,6 @@ broadcast_shape_0:
 #    mapping:
 #      ins: { x_shape: shapes, y_shape: shapes }
 
-broadcast_to_0:
-  desc: "根据 shape 指定的形状广播 x ，广播后， x 的形状和 shape 指定的形状一致"
-  paddle:
-    api_name: "paddle.broadcast_to"
-    inputs:
-      x:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1, 1, 1]
-        range: [ -1, 1]
-    params:
-      shape: [1, 1, 1, 1, 1]
-  pytorch:
-    api_name: "torch.broadcast_to"
-    mapping:
-      ins: { x: input, shape: size }
 
 cholesky_0:
   desc: "计算一个对称正定矩阵或一批对称正定矩阵的 Cholesky 分解"
