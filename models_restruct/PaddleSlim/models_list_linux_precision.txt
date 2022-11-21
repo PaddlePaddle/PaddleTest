@@ -1,3 +1,4 @@
+case^demo^dygraph^post_quant^mobilenet_v3_precision.yaml
 case^demo^dygraph^pruning^Resnet34_precision.yaml
 case^demo^dygraph^quant^mobilenet_v1_precision.yaml
 case^demo^dygraph^quant^mobilenet_v3_precision.yaml

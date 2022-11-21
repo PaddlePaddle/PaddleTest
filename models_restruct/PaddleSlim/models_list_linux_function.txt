@@ -9,6 +9,7 @@ case^ce_tests^dygraph^quant^qat^vgg16.yaml
 case^demo^distillation^MobileNetV2_MobileNetV2_x0_25.yaml
 case^demo^distillation^ResNet101_vd_Resnet50.yaml
 case^demo^distillation^ResNet50_vd_MobileNet.yaml
+case^demo^dygraph^post_quant^mobilenet_v3.yaml
 case^demo^dygraph^pruning^mobilenet_v1.yaml
 case^demo^dygraph^pruning^mobilenet_v2.yaml
 case^demo^dygraph^pruning^Resnet34.yaml
