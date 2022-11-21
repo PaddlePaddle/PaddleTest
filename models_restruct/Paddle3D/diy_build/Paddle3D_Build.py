@@ -85,7 +85,7 @@ class Paddle3D_Build(Model_Build):
                 subprocess.getstatusoutput(cmd)
                 cmd = "cat %s" % (filename)
                 subprocess.getstatusoutput(cmd)
-                cmd='sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
+                cmd = 'sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
                 subprocess.getstatusoutput(cmd)
             print("change iters number and data/kitti!!")
             os.chdir(path_now)
