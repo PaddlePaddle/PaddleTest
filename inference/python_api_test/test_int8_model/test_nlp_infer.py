@@ -300,6 +300,8 @@ def main(FLAGS):
 
 
 if __name__ == "__main__":
+    # If the device is not set to cpu, the nv-trt will report an error when executing
+    paddle.set_device("cpu")
     parser = argsparser()
     FLAGS = parser.parse_args()
     main(FLAGS)
