@@ -30,17 +30,51 @@ EXPLICIT_PRECISION = 1 << (int)(trt.NetworkDefinitionCreationFlag.EXPLICIT_PRECI
 class LoadCalibrator(trt.IInt8EntropyCalibrator2):
     """
     Load calibration.cache
+    Args:
+    calibration_files(List[str]): List of image filenames to use for INT8 Calibration
+    cache_file(str): Name of file to read/write calibration cache from/to.
+    batch_size(int): Number of images to pass through in one batch during calibration
+    input_shape(Tuple[int]): Tuple of integers defining the shape of input to the model (Default: (3, 224, 224))
     """
 
-    def __init__(self, cache_file="calibration.cache"):
+    def __init__(self, calibration_loader=None, cache_file="calibration.cache", max_calib_size=32):
         super().__init__()
+        self.calibration_loader = calibration_loader
         self.cache_file = cache_file
+        self.max_calib_size = max_calib_size
+        self.batch = next(self.calibration_loader())
+        self.batch_size = self.batch.shape[0]
+        self.device_input = cuda.mem_alloc(self.batch.nbytes)
+        self.batch_id = 0
+
+    def get_batch(self, names):
+        """
+        calibration data loader
+        """
+        try:
+            # Assume self.batches is a generator that provides batch data.
+            batch = next(self.calibration_loader())
+            print("Calibration images pre-processed: {:}/{:}".format(self.batch_id, self.max_calib_size))
+            self.batch_id += 1
+            assert self.batch_id <= self.max_calib_size
+
+            # Assume that self.device_input is a device buffer allocated by the constructor.
+            cuda.memcpy_htod(self.device_input, batch)
+            return [int(self.device_input)]
+        except StopIteration:
+            # When we're out of batches, we return either [] or None.
+            # This signals to TensorRT that there is no calibration data remaining.
+            print(
+                "[Note] The calibration process is complete, the calibration file is being saved, "
+                "please wait and do not kill the process."
+            )
+            return None
 
     def get_batch_size(self):
         """
         get batch size
         """
-        return 1
+        return self.batch_size
 
     def read_calibration_cache(self):
         """
@@ -51,6 +85,37 @@ class LoadCalibrator(trt.IInt8EntropyCalibrator2):
             with open(self.cache_file, "rb") as f:
                 print("Using calibration cache to save time: {:}".format(self.cache_file))
                 return f.read()
+
+    def write_calibration_cache(self, cache):
+        """
+        write calibration cache file
+        """
+        with open(self.cache_file, "wb") as f:
+            print("Caching calibration data for future use: {:}".format(self.cache_file))
+            f.write(cache)
+
+
+def get_int8_calibrator(calib_cache, calibration_loader, max_calib_size):
+    """
+    The instance of get int8 calibration file.
+    """
+    # Use calibration cache if it exists
+    if calib_cache and os.path.exists(calib_cache):
+        print("==> Skipping calibration files, using calibration cache: {:}".format(calib_cache))
+    # Use calibration files from validation dataset if no cache exists
+    else:
+        print("Not exist calibration cache file, and it will run calibration.")
+        if not calib_cache:
+            calib_cache = "calibration.cache"
+        if not calibration_loader:
+            raise ValueError(
+                "ERROR: calibration dataloader requested, but no `calibration_loader` or calibration files provided."
+            )
+
+    int8_calibrator = LoadCalibrator(
+        calibration_loader=calibration_loader, cache_file=calib_cache, max_calib_size=max_calib_size
+    )
+    return int8_calibrator
 
 
 def remove_initializer_from_input(ori_model):
@@ -94,7 +159,7 @@ class HostDeviceMem(object):
         return self.__str__()
 
 
-class TensorRTEngine(object):
+class TensorRTEngine:
     """
     TensorRT instance
     """
@@ -107,17 +172,20 @@ class TensorRTEngine(object):
         precision="fp32",
         engine_file_path=None,
         calibration_cache_file="calibration.cache",
+        max_calibration_size=32,
+        calibration_loader=None,
         verbose=False,
     ):
         self.max_batch_size = 1 if max_batch_size is None else max_batch_size
         precision = precision.lower()
+        if precision == "bf16":
+            print("trt does not support bf16, switching to fp16")
+            precision = "fp16"
         assert precision in [
             "fp32",
             "fp16",
             "int8",
         ], "precision must be fp32, fp16 or int8, but your precision is: {}".format(precision)
-        if precision == "int8":
-            assert os.path.exists(calibration_cache_file)
         use_int8 = precision == "int8"
         use_fp16 = precision == "fp16"
         TRT_LOGGER = trt.Logger()
@@ -141,7 +209,11 @@ class TensorRTEngine(object):
             if use_int8 and builder.platform_has_fast_int8:
                 print("[TRT Backend] Use INT8.")
                 network = builder.create_network(EXPLICIT_BATCH | EXPLICIT_PRECISION)
-                config.int8_calibrator = LoadCalibrator(calibration_cache_file)
+
+                config.int8_calibrator = get_int8_calibrator(
+                    calibration_cache_file, calibration_loader, max_calibration_size
+                )
+
                 config.set_flag(trt.BuilderFlag.INT8)
             elif use_fp16 and builder.platform_has_fast_fp16:
                 print("[TRT Backend] Use FP16.")

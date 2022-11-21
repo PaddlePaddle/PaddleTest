@@ -26,7 +26,7 @@ import pkg_resources as pkg
 import paddle
 from backend import PaddleInferenceEngine, TensorRTEngine
 from utils.dataset import COCOValDataset
-from utils.post_process import YOLOPostProcess, coco_metric
+from utils.yolo_series_post_process.py import YOLOPostProcess, coco_metric
 
 
 def argsparser():
@@ -59,6 +59,7 @@ def argsparser():
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
+    parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
     return parser
 
 
@@ -89,6 +90,18 @@ def get_current_memory_mb():
     return round(cpu_mem, 4), round(gpu_mem, 4)
 
 
+def reader_wrapper(reader, input_field="image"):
+    """
+    reader wrapper func
+    """
+
+    def gen():
+        for data in reader:
+            yield np.array(data[input_field]).astype(np.float32)
+
+    return gen
+
+
 def eval(predictor, val_loader, anno_file, rerun_flag=False):
     """
     eval main func
@@ -99,10 +112,15 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
+    warmup = 20
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
 
         predictor.prepare_data([data_all["image"]])
+
+        for i in range(warmup):
+            predictor.run()
+            warmup = 0
 
         start_time = time.time()
         outs = predictor.run()
@@ -135,6 +153,19 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
 
     map_res = coco_metric(anno_file, bboxes_list, bbox_nums_list, image_id_list)
     print("[Benchmark] COCO mAP: {}".format(map_res[0]))
+    final_res = {
+        "model_name": FLAGS.model_name,
+        "jingdu": {
+            "value": map_res[0],
+            "unit": "mAP",
+        },
+        "xingneng": {
+            "value": round(time_avg * 1000, 1),
+            "unit": "ms",
+            "batch_size": FLAGS.batch_size,
+        },
+    }
+    print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
 
 
@@ -142,6 +173,12 @@ def main():
     """
     main func
     """
+    dataset = COCOValDataset(
+        dataset_dir=FLAGS.dataset_dir, image_dir=FLAGS.val_image_dir, anno_path=FLAGS.val_anno_path
+    )
+    anno_file = dataset.ann_file
+    val_loader = paddle.io.DataLoader(dataset, batch_size=FLAGS.batch_size, drop_last=True)
+
     if FLAGS.deploy_backend == "paddle_inference":
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
@@ -152,9 +189,6 @@ def main():
             device=FLAGS.device,
             min_subgraph_size=3,
             use_dynamic_shape=FLAGS.use_dynamic_shape,
-            trt_min_shape=1,
-            trt_max_shape=1280,
-            trt_opt_shape=640,
             cpu_threads=FLAGS.cpu_threads,
         )
     elif FLAGS.deploy_backend == "tensorrt":
@@ -167,16 +201,14 @@ def main():
             precision=FLAGS.precision,
             engine_file_path=engine_file,
             calibration_cache_file=FLAGS.calibration_file,
+            calibration_loader=reader_wrapper(val_loader),
             verbose=False,
         )
+    else:
+        raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
 
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
-    dataset = COCOValDataset(
-        dataset_dir=FLAGS.dataset_dir, image_dir=FLAGS.val_image_dir, anno_path=FLAGS.val_anno_path
-    )
-    anno_file = dataset.ann_file
-    val_loader = paddle.io.DataLoader(dataset, batch_size=FLAGS.batch_size, drop_last=True)
     eval(predictor, val_loader, anno_file, rerun_flag=rerun_flag)
 
     if rerun_flag:

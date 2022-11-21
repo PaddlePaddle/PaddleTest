@@ -129,8 +129,8 @@ def argsparser():
          help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
     )
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
+    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
-
 
 def _convert_example(
     example,
@@ -211,7 +211,7 @@ class WrapperPredictor(object):
 
         sequences_num = i * FLAGS.batch_size
         print(
-            "[benchmark]task name: {}, batch size: {} Inference time per batch: {}ms, qps: {}.".format(
+            "[Benchmark]task name: {}, batch size: {} Inference time per batch: {}ms, qps: {}.".format(
                 FLAGS.task_name,
                 FLAGS.batch_size,
                 round(predict_time * 1000 / i, 2),
@@ -219,7 +219,20 @@ class WrapperPredictor(object):
             )
         )
         res = metric.accumulate()
-        print("[benchmark]task name: %s, acc: %s. \n" % (FLAGS.task_name, res), end="")
+        print("[Benchmark]task name: %s, acc: %s. \n" % (FLAGS.task_name, res), end="")
+        final_res = {
+            "model_name": args.model_name,
+            "jingdu": {
+                "value": res[0],
+                "unit": "acc",
+            },
+            "xingneng": {
+                "value": round(predict_time * 1000 / i, 2),
+                "unit": "ms",
+                "batch_size": args.batch_size,
+            },
+        }
+        print("[Benchmark][final result]{}".format(final_res))
         sys.stdout.flush()
 
 

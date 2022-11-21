@@ -23,4 +23,3 @@ coverage
 h5py
 pytest
 parameterized
-paddleslim==2.4rc0

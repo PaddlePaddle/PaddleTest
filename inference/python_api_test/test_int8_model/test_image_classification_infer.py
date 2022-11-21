@@ -63,6 +63,7 @@ def argsparser():
          help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
     )
     parser.add_argument("--input_name", type=str, default="x", help="input name of image classification model, this is only used by nv-trt")
+    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
 
 
@@ -147,6 +148,19 @@ def eval(predictor, FLAGS):
         )
     )
     print("[Benchmark] Evaluation acc result: {}".format(result[0]))
+    final_res = {
+        "model_name": args.model_name,
+        "jingdu": {
+            "value": result[0],
+            "unit": "acc",
+        },
+        "xingneng": {
+            "value": round(time_avg * 1000, 1),
+            "unit": "ms",
+            "batch_size": args.batch_size,
+        },
+    }
+    print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
 
 def main(FLAGS):

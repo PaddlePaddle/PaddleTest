@@ -120,8 +120,8 @@ def argsparser():
          help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
     )
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
+    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
-
 
 def _convert_example(example, dataset, tokenizer, label_list, max_seq_length=512):
     assert dataset in ["glue", "clue"], "This demo only supports for dataset glue or clue"
@@ -240,6 +240,19 @@ class WrapperPredictor(object):
         )
         res = metric.accumulate()
         print("[benchmark]task name: %s, acc: %s. \n" % (FLAGS.task_name, res), end="")
+        final_res = {
+            "model_name": args.model_name,
+            "jingdu": {
+                "value": res,
+                "unit": "acc",
+            },
+            "xingneng": {
+                "value": round(predict_time * 1000 / i, 2),
+                "unit": "ms",
+                "batch_size": args.batch_size,
+            },
+        }
+        print("[Benchmark][final result]{}".format(final_res))
         sys.stdout.flush()
 
 

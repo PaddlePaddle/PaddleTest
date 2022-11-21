@@ -1,0 +1,51 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/prune
+        cmd: python train.py
+        params:
+          - --model "MobileNetV2"
+          - --pretrained_model "../pretrain/MobileNetV2_pretrained"
+          - --data "imagenet"
+          - --pruned_ratio 0.325
+          - --lr=0.001
+          - --test_period=1
+          - --step_epochs 30 60 80
+          - --l2_decay=1e-4
+          - --lr_strategy="piecewise_decay"
+          - --criterion="geometry_median"
+          - --model_path="./output/fpgm_mobilenetv2_models"
+          - --save_inference True
+          - --num_epochs=2
+          - --use_gpu True
+    eval:
+      -
+        name: single
+        path: demo/prune
+        cmd: python eval.py
+        params:
+          - --model "MobileNetV2"
+          - --data "imagenet"
+          - --model_path="./output/fpgm_mobilenetv2_models/0"
+          - --use_gpu True
+
+  windows:
+    train:
+      -
+        name: single
+        path: demo/prune
+        cmd: python train.py
+        params:
+          - --model "MobileNetV2"
+          - --pruned_ratio 0.325
+          - --data "imagenet"
+          - --pretrained_model ../pretrain/MobileNetV2_pretrained
+          - --num_epochs 1
+          - --batch_size 16
+          - --lr_strategy="piecewise_decay"
+          - --criterion="geometry_median"
+          - --model_path="./output/fpgm_mobilenetv2_models"
+          - --save_inference True
+          - --use_gpu True
