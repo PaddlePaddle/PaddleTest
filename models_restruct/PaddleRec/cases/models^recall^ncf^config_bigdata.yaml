@@ -8,7 +8,7 @@ case:
         result:
           loss:
             base: 0.19248858
-            threshold: 0.0003
+            threshold: 0.03
             evaluation: "-"
     infer:
       -
@@ -16,6 +16,6 @@ case:
         cmd: python -u tools/infer.py
         result:
           prediction:
-            base: 0.18883368
-            threshold: 0.0003
+            base: 0.04126965
+            threshold: 0.03
             evaluation: "+"

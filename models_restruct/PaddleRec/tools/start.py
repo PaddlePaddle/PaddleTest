@@ -34,9 +34,9 @@ def run():
         os.chdir("senti_clas")
     elif qa_yaml == "models^match^dssm^config_bigdata":
         os.chdir("BQ_dssm")
-    elif qa_yaml == "models^rank^dnn^config_bigdata":
+    elif qa_yaml == "models^rank^dnn^config_bigdata" or qa_yaml == "models^rank^wide_deep^config_bigdata":
         os.chdir("criteo")
-    elif qa_yaml == "models^multitask^mmoe^config_bigdata" or qa_yaml == "models^rank^wide_deep^config_bigdata":
+    elif qa_yaml == "models^multitask^mmoe^config_bigdata":
         os.chdir("census")
     elif qa_yaml == "models^recall^ncf^config_bigdata":
         os.chdir("movielens_pinterest_NCF")
