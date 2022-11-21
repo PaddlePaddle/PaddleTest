@@ -68,14 +68,14 @@ class PaddleSpeech_Start(object):
         """
 
         zip_name = value.split("/")[-1]
-        if os.path.exists(tar_name.replace(".tar", "")):
-            logger.info("#### already download {}".format(tar_name))
+        if os.path.exists(zip_name.replace(".tar", "")):
+            logger.info("#### already download {}".format(zip_name))
         else:
             logger.info("#### value: {}".format(value.replace(" ", "")))
             try:
-                logger.info("#### start download {}".format(tar_name))
+                logger.info("#### start download {}".format(zip_name))
                 wget.download(value.replace(" ", ""))
-                logger.info("#### end download {}".format(tar_name))
+                logger.info("#### end download {}".format(zip_name))
                 zf = zipfile.ZipFile(zip_name)
                 zf.extractall(os.getcwd())
             except:
