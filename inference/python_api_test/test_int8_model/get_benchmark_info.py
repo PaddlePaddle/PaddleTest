@@ -393,10 +393,10 @@ def res2xls(env, res, tongji, mode, metric, save_file):
         sheet_detail.cell(row_s, column_s).value = model
         for m in mode_list:
             for k in metric_list:
-                sheet_detail.cell(row_s, column_s + 1).value = info[m][k]["base"] 
-                sheet_detail.cell(row_s, column_s + 2).value = info[m][k]["benchmark"] 
-                sheet_detail.cell(row_s, column_s + 3).value = info[m][k]["th"] 
-                sheet_detail.cell(row_s, column_s + 4).value = info[m][k]["diff"] 
+                sheet_detail.cell(row_s, column_s + 1).value = info[m][k]["base"]
+                sheet_detail.cell(row_s, column_s + 2).value = info[m][k]["benchmark"]
+                sheet_detail.cell(row_s, column_s + 3).value = info[m][k]["th"]
+                sheet_detail.cell(row_s, column_s + 4).value = info[m][k]["diff"]
                 _color = info[m][k]["gsb"]
                 _font = Font(color=FONT[_color])
                 sheet_detail.cell(row_s, column_s + 4).font = _font
@@ -440,7 +440,6 @@ def res2xls(env, res, tongji, mode, metric, save_file):
         column_s += 3
 
     # 数据
-    #mode_list.append("total")
     column_s = 1
     row_s = 3
     for m in mode_list:
