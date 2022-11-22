@@ -39,4 +39,4 @@ rm -rf model_int8_model.trt
 # BERT Base nv-trt int8
 echo "[Benchmark] Run NV-TRT BERT Base trt int8"
 $PYTHON  test_bert_infer.py --model_path=models/x2paddle_cola_new_calib/model.onnx --precision=int8 --batch_size=1 --deploy_backend=tensorrt  --calibration_file=./models/x2paddle_cola_new_calib/calibration.cache --model_name=BERT_Base
-rm -rf model_int8_model.trt 
+rm -rf model_int8_model.trt
