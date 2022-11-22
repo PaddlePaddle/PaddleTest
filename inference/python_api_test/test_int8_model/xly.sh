@@ -79,5 +79,4 @@ python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simpl
 python upload.py --bucket_name paddle-qa --object_key inference_benchmark/paddle/slim/${SAVE_FILE} --upload_file_name ${UPLOAD_FILE_PATH}
 
 cat "https://paddle-qa.bj.bcebos.com/inference_benchmark/paddle/slim/${SAVE_FILE}" >benchmark_res_url.txt
-
 '
