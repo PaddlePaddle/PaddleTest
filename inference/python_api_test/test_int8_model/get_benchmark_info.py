@@ -10,7 +10,10 @@ from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
 from openpyxl.styles import Alignment
 
-import base
+import base_mkldnn_fp32
+import base_mkldnn_int8
+import base_trt_fp16
+import base_trt_int8
 
 
 FONT = {
@@ -46,13 +49,13 @@ def get_base_info(mode):
     mode: trt_int8 trt_fp16 mkldnn_int8 mkldnn_fp32
     """
     if mode == "trt_int8":
-        base_res = base.trt_int8
+        base_res = base_trt_int8.trt_int8
     elif mode == "trt_fp16":
-        base_res = base.trt_fp16
+        base_res = base_trt_fp16.trt_fp16
     elif mode == "mkldnn_int8":
-        base_res = base.mkldnn_int8
+        base_res = base_mkldnn_int8.mkldnn_int8
     elif mode == "mkldnn_fp32":
-        base_res = base.mkldnn_fp32
+        base_res = base_mkldnn_fp32.mkldnn_fp32
     else:
         base_res = None
     return base_res
