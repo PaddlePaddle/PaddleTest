@@ -1,3 +1,6 @@
+"""
+start before model running
+"""
 import os
 import sys
 import json
@@ -14,6 +17,9 @@ class PaddleDetection_Start(object):
     """
 
     def __init__(self):
+        """
+        init
+        """
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
         logger.info("###self.qa_yaml_name: {}".format(self.qa_yaml_name))
