@@ -10,6 +10,7 @@ PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release
 PADDLE_BRANCH=${PADDLE_BRANCH:-release/2.4}
 DEVICE=${DEVICE:-T4}
 MODE=${MODE:-trt_int8,trt_fp16,mkldnn_int8,mkldnn_fp32}
+METRIC=${METRIC:-jingdu,xingneng}
 
 export CUDA_SO="$(\ls -d /usr/lib64/libcuda* | xargs -I{} echo '-v {}:{}') $(\ls -d /usr/lib64/libnvidia* | xargs -I{} echo '-v {}:{}')"
 export DEVICES=$(\ls -d /dev/nvidia* | xargs -I{} echo '--device {}:{}')
@@ -38,6 +39,7 @@ nvidia-docker run -i --rm \
      /bin/bash -c -x '
 
 export MODE=${MODE}
+export METRIC=${METRIC}
 
 export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
 export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
@@ -67,13 +69,15 @@ PADDLE_COMMIT=`python -c 'import paddle; print(paddle.version.commit)'`
 DT=`date "+%Y-%m-%d"`
 SAVE_FILE=${DT}_${PADDLE_BRANCH}_${PADDLE_COMMIT}.xlsx
 
-python get_benchmark_info.py ${DOCKER_IMAGE} ${PADDLE_BRANCH} ${PADDLE_COMMIT} ${DEVICE} ${SAVE_FILE}
+python get_benchmark_info.py ${DOCKER_IMAGE} ${PADDLE_BRANCH} ${PADDLE_COMMIT} ${DEVICE} ${MODE} ${METRIC} ${SAVE_FILE}
 
 UPLOAD_FILE_PATH=`pwd`/${SAVE_FILE}
 
-# pipeline 工具需提前下载到改路径中
+# pipeline 工具需提前下载到该路径中
 cd pipeline
 python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple --trusted-host mirror.baidu.com;
 python upload.py --bucket_name paddle-qa --object_key inference_benchmark/paddle/slim/${SAVE_FILE} --upload_file_name ${UPLOAD_FILE_PATH}
+
+cat "https://paddle-qa.bj.bcebos.com/inference_benchmark/paddle/slim/${SAVE_FILE}" >benchmark_res_url.txt
 
 '
