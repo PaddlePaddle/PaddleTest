@@ -1,59 +1,62 @@
-new_tacotron2:
-    catogory: am
+tacotron2:
+    category: am
     data_path: new_tacotron2
     model_path: examples/csmsc/tts0
     ckpt_name: snapshot_iter_153.pdz
 
 speedyspeech:
-    catogory: am
+    category: am
     data_path: speedyspeech
     model_path: examples/csmsc/tts2
-    ckpt_name: snapshot_iter_76.pdz
+    ckpt_name: snapshot_iter_153.pdz
 
 fastspeech2:
-    catogory: am
+    category: am
     data_path: fastspeech2
     model_path: examples/csmsc/tts3
-    ckpt_name: snapshot_iter_76.pdz
+    ckpt_name: snapshot_iter_153.pdz
 
-transformertts:
-    catogory: am
+transformer_tts:
+    category: am
     data_path: transformer_tts
     model_path: examples/ljspeech/tts1
     ckpt_name: snapshot_iter_1612.pdz
 
-parallelwavegan:
-    catogory: voc
-    model_path: pwg
-    model_path: "examples/csmsc/voc1"
-    ckpt_name: "snapshot_iter_10.pdz"
+parallelwave_gan:
+    category: voc
+    data_path: pwg
+    model_path: examples/csmsc/voc1
+    ckpt_name: snapshot_iter_10.pdz
 
-MultiBandMelGAN:
-    catogory: voc
+multi_band_melgan:
+    category: voc
     data_path: pwg
     model_path: examples/csmsc/voc3
     ckpt_name: snapshot_iter_10.pdz
 
-StyleMelGAN:
-    catogory: voc
+style_melgan:
+    category: voc
     data_path: pwg
     model_path: examples/csmsc/voc4
     ckpt_name: snapshot_iter_10.pdz
 
-HiFiGAN:
+hifigan:
+    category: voc
     data_path: pwg
     model_path: examples/csmsc/voc5
     ckpt_name: snapshot_iter_10.pdz
 
-WaveRNN:
+wavernn:
+    category: voc
     data_path: pwg
     model_path: examples/csmsc/voc6
     ckpt_name: snapshot_iter_10.pdz
 
 waveflow:
-    data_path: pwg
+    category: voc
+    data_path: preprocessed_ljspeech
     model_path: examples/ljspeech/voc0
-    data_path: pwg
+    ckpt_name: step-10
 
 
 cli:
