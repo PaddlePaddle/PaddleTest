@@ -28,7 +28,7 @@ class PaddleDetection_Start(object):
         logger.info("###self.model_name: {}".format(self.model))
         self.env_dict["model"] = self.model
         os.environ["model"] = self.model
-        
+ 
     def prepare_gpu_env(self):
         """
         根据操作系统获取用gpu还是cpu

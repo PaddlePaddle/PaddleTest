@@ -32,7 +32,7 @@ infer:
       exit_code:
         base: 0
         threshold: 0
-        evaluation: "=" 
+        evaluation: "="
 export:
   name: pretrained
   cmd: python tools/export_model.py

@@ -20,6 +20,7 @@ class PaddleDetection_Build(Model_Build):
     """
     自定义环境准备
     """
+
     def __init__(self, args):
         """
         初始化变量
@@ -126,7 +127,7 @@ if __name__ == "__main__":
         parser.add_argument("--reponame", help="输入repo", type=str, default=None)
         args = parser.parse_args()
         return args
-    print("******test***")
+
 
     args = parse_args()
     print("args:{}".format(args))
