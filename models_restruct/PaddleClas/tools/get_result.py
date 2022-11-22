@@ -25,26 +25,26 @@ class PaddleClas_Collect(object):
         初始化参数
         """
         self.repo_name = "PaddleClas"
-        self.whl_branch = "release"
+        self.whl_branch = "develop"  # develop release
         # pytest结果下载地址
         self.report_linux_cuda102_py37_release = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047501/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047502/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047500/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047499/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047498/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426594/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426577/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426601/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426603/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426592/report/result.tar",
         }
 
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047501/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20102020/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20102017/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047499/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047498/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404795/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404792/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404790/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404785/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404782/report/result.tar",
         }
 
         # self.report_linux_cuda102_py37_develop = {
-        #     "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909321/report/result.tar"
+        #     "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404792/report/result.tar",
         # }
 
         self.base_yaml_dict = {
@@ -110,7 +110,7 @@ class PaddleClas_Collect(object):
         """
         for name in self.report_path_list:
             shutil.rmtree(name)
-        os.remove(self.repo_name + ".tar.gz")
+        os.remove(self.repo_name + "-develop.tar.gz")
         shutil.rmtree(self.repo_name)
 
     def get_result_yaml(self):
@@ -168,9 +168,9 @@ class PaddleClas_Collect(object):
         if os.path.exists(self.repo_name):
             print("#### already download {}".format(self.repo_name))
         else:
-            cmd = "wget https://xly-devops.bj.bcebos.com/PaddleTest/{}.tar.gz --no-proxy \
-                && tar xf {}.tar.gz".format(
-                self.repo_name, self.repo_name
+            cmd = "wget https://xly-devops.bj.bcebos.com/PaddleTest/{}/{}-develop.tar.gz --no-proxy \
+                && tar xf {}-develop.tar.gz && mv {}-develop {}".format(
+                self.repo_name, self.repo_name, self.repo_name, self.repo_name, self.repo_name
             )
             os.system(cmd)  # 下载并解压PaddleClas
 
@@ -194,7 +194,7 @@ class PaddleClas_Collect(object):
                 # print('###content', content)
                 # print('###content', type(content))
                 # print("    ")
-                with open(os.path.join("PaddleClas", case_value["model_name"].replace("^", "/") + ".yaml"), "r") as f:
+                with open(os.path.join(self.repo_name, case_value["model_name"].replace("^", "/") + ".yaml"), "r") as f:
                     content_rd_yaml = yaml.load(f, Loader=yaml.FullLoader)
                 if "ATTRMetric" in str(content_rd_yaml):
                     self.kpi_value_eval = "label_f1"
@@ -215,6 +215,8 @@ class PaddleClas_Collect(object):
                 ):
                     if tag_value["name"] == case_value["tag"].split("_")[1]:
                         if case_value["kpi_value"] != -1.0:  # 异常值不保存
+                            print("####case_info_list   model_name: {}".format(case_value["model_name"]))
+                            print("####case_info_list   case tag is : {}".format(case_value["tag"]))
                             print("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
                             print("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
                             print(
@@ -227,58 +229,65 @@ class PaddleClas_Collect(object):
                             content[case_value["model_name"]]["case"][case_value["system"]][
                                 case_value["tag"].split("_")[0]
                             ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
-                            # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer
 
-                            if (
+                        # 单独处理固定不了随机量的 HRNet、 LeViT、 SwinTransformer、 VisionTransformer
+                        if (
+                            "^HRNet" in case_value["model_name"]
+                            or "^LeViT" in case_value["model_name"]
+                            or "^SwinTransformer" in case_value["model_name"]
+                            or "^VisionTransformer" in case_value["model_name"]
+                        ) and (case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"):
+                            print("### {} change threshold and evaluation ".format(case_value["model_name"]))
+                            content[case_value["model_name"]]["case"][case_value["system"]][
+                                case_value["tag"].split("_")[0]
+                            ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
+                            content[case_value["model_name"]]["case"][case_value["system"]][
+                                case_value["tag"].split("_")[0]
+                            ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
+                            # 这里进行替换时要考虑到全局变量如何替换
+
+            # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer  predict阶段防止不替换
+            for index, tag_value in enumerate(
+                content[case_value["model_name"]]["case"][case_value["system"]][case_value["tag"].split("_")[0]]
+            ):
+                if tag_value["name"] == case_value["tag"].split("_")[1]:
+                    if case_value["kpi_value"] != -1.0:  # 异常值不保存
+                        # 处理存在随机量导致每次infer_trained结果不一致的情况
+                        if (
+                            (
                                 "^HRNet" in case_value["model_name"]
                                 or "^LeViT" in case_value["model_name"]
                                 or "^SwinTransformer" in case_value["model_name"]
-                            ) and (
-                                case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"
-                            ):
-                                print("### {} change threshold and evaluation ".format(case_value["model_name"]))
+                                or "^VisionTransformer" in case_value["model_name"]
+                            )
+                            and (
+                                case_value["tag"].split("_")[0] == "infer"
+                                or case_value["tag"].split("_")[0] == "predict"
+                            )
+                            and tag_value["name"] == "trained"
+                        ):
+                            try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
+                                print("### {} change class_ids to exit_code ".format(case_value["model_name"]))
+                                dict_tmp = content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]
+                                dict_tmp.update({"exit_code": dict_tmp.pop("class_ids")})
                                 content[case_value["model_name"]]["case"][case_value["system"]][
                                     case_value["tag"].split("_")[0]
-                                ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
+                                ][index]["result"] = dict_tmp
+
                                 content[case_value["model_name"]]["case"][case_value["system"]][
                                     case_value["tag"].split("_")[0]
-                                ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
+                                ][index]["result"]["exit_code"]["base"] = 0
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]["exit_code"]["threshold"] = 0
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]["exit_code"]["evaluation"] = "="
+                            except:
+                                print("###can not change class_ids to exit_code")
 
-                            # 处理存在随机量导致每次infer_trained结果不一致的情况
-                            if (
-                                (
-                                    "^HRNet" in case_value["model_name"]
-                                    or "^LeViT" in case_value["model_name"]
-                                    or "^SwinTransformer" in case_value["model_name"]
-                                )
-                                and (
-                                    case_value["tag"].split("_")[0] == "infer"
-                                    or case_value["tag"].split("_")[0] == "predict"
-                                )
-                                and tag_value["name"] == "trained"
-                            ):
-                                try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
-                                    print("### {} change class_ids to exit_code ".format(case_value["model_name"]))
-                                    dict_tmp = content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]
-                                    dict_tmp.update({"exit_code": dict_tmp.pop("class_ids")})
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"] = dict_tmp
-
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["base"] = 0
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["threshold"] = 0
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["evaluation"] = "="
-                                except:
-                                    print("###can not change class_ids to exit_code")
-                            # 这里进行替换时要考虑到全局变量如何替换
             # print('###content333', content)
             # print('###content333', type(content))
             # print("    ")
