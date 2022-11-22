@@ -346,10 +346,13 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
     return res, tongji
 
 
-def res2xls(env, res, tongji):
+def res2xls(env, res, tongji, mode, metric, save_file):
     """
     将结果保存为excel文件
     """
+    mode_list = mode.split(",")
+    metric_list = metric.split(",")
+
     wb = openpyxl.Workbook()
 
     # table1: 详细数据
@@ -359,22 +362,24 @@ def res2xls(env, res, tongji):
     # 表头
     sheet_detail.cell(1, 2).value = env
 
-    sheet_detail.cell(2, 2).value = "trt_int8"
-    sheet_detail.cell(2, 10).value = "trt_fp16"
-    sheet_detail.cell(2, 18).value = "mkldnn_int8"
-    sheet_detail.cell(2, 26).value = "mkldnn_fp32"
-
-    sheet_detail.cell(3, 2).value = "精度"
-    sheet_detail.cell(3, 6).value = "性能"
-    sheet_detail.cell(3, 10).value = "精度"
-    sheet_detail.cell(3, 14).value = "性能"
-    sheet_detail.cell(3, 18).value = "精度"
-    sheet_detail.cell(3, 22).value = "性能"
-    sheet_detail.cell(3, 26).value = "精度"
-    sheet_detail.cell(3, 30).value = "性能"
-
+    n = len(metric_list) * 4
+    row_s = 2
     column_s = 2
-    for i in range(8):
+    for m in mode_list:
+        sheet_detail.cell(row_s, column_s).value = m
+        column_s += n
+
+    row_s = 3
+    column_s = 2
+    for m in mode_list:
+        for k in metric_list:
+            sheet_detail.cell(row_s, column_s).value = k
+            column_s += 4
+
+    row_s = 4
+    column_s = 2
+    n = len(mode_list) * len(metric_list)
+    for i in range(n):
         sheet_detail.cell(4, column_s).value = "base值"
         sheet_detail.cell(4, column_s + 1).value = "实际值"
         sheet_detail.cell(4, column_s + 2).value = "阈值"
@@ -386,78 +391,20 @@ def res2xls(env, res, tongji):
     for model, info in res.items():
         column_s = 1
         sheet_detail.cell(row_s, column_s).value = model
-        # trt_int8
-        sheet_detail.cell(row_s, column_s + 1).value = info["trt_int8"]["jingdu"]["base"]
-        sheet_detail.cell(row_s, column_s + 2).value = info["trt_int8"]["jingdu"]["benchmark"]
-        sheet_detail.cell(row_s, column_s + 3).value = info["trt_int8"]["jingdu"]["th"]
-        sheet_detail.cell(row_s, column_s + 4).value = info["trt_int8"]["jingdu"]["diff"]
-        _color = info["trt_int8"]["jingdu"]["gsb"]
-        _font = Font(color=FONT[_color])
-        sheet_detail.cell(row_s, column_s + 4).font = _font
-        column_s += 4
-        sheet_detail.cell(row_s, column_s + 1).value = info["trt_int8"]["xingneng"]["base"]
-        sheet_detail.cell(row_s, column_s + 2).value = info["trt_int8"]["xingneng"]["benchmark"]
-        sheet_detail.cell(row_s, column_s + 3).value = info["trt_int8"]["xingneng"]["th"]
-        sheet_detail.cell(row_s, column_s + 4).value = info["trt_int8"]["xingneng"]["diff"]
-        _color = info["trt_int8"]["xingneng"]["gsb"]
-        _font = Font(color=FONT[_color])
-        sheet_detail.cell(row_s, column_s + 4).font = _font
-        column_s += 4
-        # trt_fp16
-        sheet_detail.cell(row_s, column_s + 1).value = info["trt_fp16"]["jingdu"]["base"]
-        sheet_detail.cell(row_s, column_s + 2).value = info["trt_fp16"]["jingdu"]["benchmark"]
-        sheet_detail.cell(row_s, column_s + 3).value = info["trt_fp16"]["jingdu"]["th"]
-        sheet_detail.cell(row_s, column_s + 4).value = info["trt_fp16"]["jingdu"]["diff"]
-        _color = info["trt_fp16"]["jingdu"]["gsb"]
-        _font = Font(color=FONT[_color])
-        sheet_detail.cell(row_s, column_s + 4).font = _font
-        column_s += 4
-        sheet_detail.cell(row_s, column_s + 1).value = info["trt_fp16"]["xingneng"]["base"]
-        sheet_detail.cell(row_s, column_s + 2).value = info["trt_fp16"]["xingneng"]["benchmark"]
-        sheet_detail.cell(row_s, column_s + 3).value = info["trt_fp16"]["xingneng"]["th"]
-        sheet_detail.cell(row_s, column_s + 4).value = info["trt_fp16"]["xingneng"]["diff"]
-        _color = info["trt_fp16"]["xingneng"]["gsb"]
-        _font = Font(color=FONT[_color])
-        sheet_detail.cell(row_s, column_s + 4).font = _font
-        column_s += 4
-        # mkldnn_int8
-        sheet_detail.cell(row_s, column_s + 1).value = info["mkldnn_int8"]["jingdu"]["base"]
-        sheet_detail.cell(row_s, column_s + 2).value = info["mkldnn_int8"]["jingdu"]["benchmark"]
-        sheet_detail.cell(row_s, column_s + 3).value = info["mkldnn_int8"]["jingdu"]["th"]
-        sheet_detail.cell(row_s, column_s + 4).value = info["mkldnn_int8"]["jingdu"]["diff"]
-        _color = info["mkldnn_int8"]["jingdu"]["gsb"]
-        _font = Font(color=FONT[_color])
-        sheet_detail.cell(row_s, column_s + 4).font = _font
-        column_s += 4
-        sheet_detail.cell(row_s, column_s + 1).value = info["mkldnn_int8"]["xingneng"]["base"]
-        sheet_detail.cell(row_s, column_s + 2).value = info["mkldnn_int8"]["xingneng"]["benchmark"]
-        sheet_detail.cell(row_s, column_s + 3).value = info["mkldnn_int8"]["xingneng"]["th"]
-        sheet_detail.cell(row_s, column_s + 4).value = info["mkldnn_int8"]["xingneng"]["diff"]
-        _color = info["mkldnn_int8"]["xingneng"]["gsb"]
-        _font = Font(color=FONT[_color])
-        sheet_detail.cell(row_s, column_s + 4).font = _font
-        column_s += 4
-        # mkldnn_fp32
-        sheet_detail.cell(row_s, column_s + 1).value = info["mkldnn_fp32"]["jingdu"]["base"]
-        sheet_detail.cell(row_s, column_s + 2).value = info["mkldnn_fp32"]["jingdu"]["benchmark"]
-        sheet_detail.cell(row_s, column_s + 3).value = info["mkldnn_fp32"]["jingdu"]["th"]
-        sheet_detail.cell(row_s, column_s + 4).value = info["mkldnn_fp32"]["jingdu"]["diff"]
-        _color = info["mkldnn_fp32"]["jingdu"]["gsb"]
-        _font = Font(color=FONT[_color])
-        sheet_detail.cell(row_s, column_s + 4).font = _font
-        column_s += 4
-        sheet_detail.cell(row_s, column_s + 1).value = info["mkldnn_fp32"]["xingneng"]["base"]
-        sheet_detail.cell(row_s, column_s + 2).value = info["mkldnn_fp32"]["xingneng"]["benchmark"]
-        sheet_detail.cell(row_s, column_s + 3).value = info["mkldnn_fp32"]["xingneng"]["th"]
-        sheet_detail.cell(row_s, column_s + 4).value = info["mkldnn_fp32"]["xingneng"]["diff"]
-        _color = info["mkldnn_fp32"]["xingneng"]["gsb"]
-        _font = Font(color=FONT[_color])
-        sheet_detail.cell(row_s, column_s + 4).font = _font
-        column_s += 4
-
+        for m in mode_list:
+            for k in metric_list:
+                sheet_detail.cell(row_s, column_s + 1).value = info[m][k]["base"] 
+                sheet_detail.cell(row_s, column_s + 2).value = info[m][k]["benchmark"] 
+                sheet_detail.cell(row_s, column_s + 3).value = info[m][k]["th"] 
+                sheet_detail.cell(row_s, column_s + 4).value = info[m][k]["diff"] 
+                _color = info[m][k]["gsb"]
+                _font = Font(color=FONT[_color])
+                sheet_detail.cell(row_s, column_s + 4).font = _font
+                column_s += 4
         row_s += 1
 
-    # 并表头单元格
+    # 合并表头单元格
+    """
     sheet_detail.merge_cells("B1:Z1")
     sheet_detail.merge_cells("B2:I2")
     sheet_detail.merge_cells("B3:E3")
@@ -471,39 +418,39 @@ def res2xls(env, res, tongji):
     sheet_detail.merge_cells("Z2:AG2")
     sheet_detail.merge_cells("Z3:AC3")
     sheet_detail.merge_cells("AD3:AG3")
+    """
 
     # table2: gsb统计数据
     sheet_gsb = wb.create_sheet(index=1, title="gsb")
     sheet_gsb = wb["gsb"]
 
     # 表头
-    sheet_gsb.cell(1, 2).value = "精度"
-    sheet_gsb.cell(1, 5).value = "性能"
+    column_s = 2
+    row_s = 1
+    for k in metric_list:
+        sheet_gsb.cell(row_s, column_s).value = k
+        column_s += 3
 
-    sheet_gsb.cell(2, 2).value = "GSB"
-    sheet_gsb.cell(2, 3).value = "下降数（占比）"
-    sheet_gsb.cell(2, 4).value = "上升数（占比）"
-    sheet_gsb.cell(2, 5).value = "GSB"
-    sheet_gsb.cell(2, 6).value = "下降数（占比）"
-    sheet_gsb.cell(2, 7).value = "上升数（占比）"
-
-    sheet_gsb.cell(3, 1).value = "trt_int8"
-    sheet_gsb.cell(4, 1).value = "trt_fp16"
-    sheet_gsb.cell(5, 1).value = "mkldnn_int8"
-    sheet_gsb.cell(6, 1).value = "mkldnn_fp32"
-    sheet_gsb.cell(7, 1).value = "total"
+    column_s = 2
+    row_s = 2
+    for k in metric_list:
+        sheet_gsb.cell(row_s, column_s).value = "GSB"
+        sheet_gsb.cell(row_s, column_s + 1).value = "下降数（占比）"
+        sheet_gsb.cell(row_s, column_s + 2).value = "上升数（占比）"
+        column_s += 3
 
     # 数据
+    #mode_list.append("total")
     column_s = 1
     row_s = 3
-    for mode, info in tongji.items():
-        sheet_gsb.cell(row_s, column_s).value = mode
-        sheet_gsb.cell(row_s, column_s + 1).value = info["jingdu"]["gsb"]
-        sheet_gsb.cell(row_s, column_s + 2).value = "{}({})".format(info["jingdu"]["b"], info["jingdu"]["b_ratio"])
-        sheet_gsb.cell(row_s, column_s + 3).value = "{}({})".format(info["jingdu"]["g"], info["jingdu"]["g_ratio"])
-        sheet_gsb.cell(row_s, column_s + 4).value = info["xingneng"]["gsb"]
-        sheet_gsb.cell(row_s, column_s + 5).value = "{}({})".format(info["xingneng"]["b"], info["xingneng"]["b_ratio"])
-        sheet_gsb.cell(row_s, column_s + 6).value = "{}({})".format(info["xingneng"]["g"], info["xingneng"]["g_ratio"])
+    for m in mode_list:
+        info = tongji[m]
+        sheet_gsb.cell(row_s, column_s).value = m
+        for k in metric_list:
+            sheet_gsb.cell(row_s, column_s + 1).value = info[k]["gsb"]
+            sheet_gsb.cell(row_s, column_s + 2).value = "{}({})".format(info[k]["b"], info[k]["b_ratio"])
+            sheet_gsb.cell(row_s, column_s + 3).value = "{}({})".format(info[k]["g"], info[k]["g_ratio"])
+            column_s += 3
         column_s = 1
         row_s += 1
 
@@ -511,7 +458,6 @@ def res2xls(env, res, tongji):
     sheet_gsb.merge_cells("B1:D1")
     sheet_gsb.merge_cells("E1:G1")
 
-    save_file = sys.argv[5]
     wb.save("{}".format(save_file))
 
 
@@ -519,6 +465,14 @@ def run():
     """
     统计结果并保存到excel文件
     """
+    docker = sys.argv[1]
+    paddle_branch = sys.argv[2]
+    paddle_commit = sys.argv[3]
+    device = sys.argv[4]
+    modes = sys.argv[5]
+    metrics = sys.argv[6]
+    save_file = sys.argv[7]
+
     # trt_int8
     log_file = "eval_trt_int8_acc.log"
     mode = "trt_int8"
@@ -549,21 +503,21 @@ def run():
 
     res, tongji = res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_int8)
 
-    env = "环境\n"
+    env = "环境: "
     env += "docker: "
-    env += sys.argv[1]
-    env += "\n"
+    env += docker
+    env += "  "
     env += "paddle_branch: "
-    env += sys.argv[2]
-    env += "\n"
+    env += paddle_branch
+    env += "  "
     env += "paddle_commit: "
-    env += sys.argv[3]
-    env += "\n"
+    env += paddle_commit
+    env += "  "
     env += "device: "
-    env += sys.argv[4]
-    env += "\n"
+    env += device
+    env += "  "
 
-    res2xls(env, res, tongji)
+    res2xls(env, res, tongji, modes, metrics, save_file)
 
 
 if __name__ == "__main__":
