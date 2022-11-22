@@ -763,7 +763,7 @@ trt_fp16 = {
     },
 }
 
-trt8_int8 = {
+trt_int8 = {
     "PPYOLOE": {
         "model_name": "PPYOLOE",
         "jingdu": {
