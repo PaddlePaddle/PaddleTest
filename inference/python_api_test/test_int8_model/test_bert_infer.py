@@ -16,6 +16,7 @@
 
 import argparse
 import os
+
 import time
 import sys
 from functools import partial
@@ -123,14 +124,15 @@ def argsparser():
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument(
-         "--deploy_backend",
-         type=str,
-         default="paddle_inference",
-         help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+        "--deploy_backend",
+        type=str,
+        default="paddle_inference",
+        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
     )
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
+
 
 def _convert_example(
     example,
@@ -265,9 +267,9 @@ def main(FLAGS):
         predictor = TensorRTEngine(
             onnx_model_file=FLAGS.model_path,
             shape_info={
-            "x0"   : [[1, 128], [1, 128], [1, 128]],
-            "x1"   : [[1, 128], [1, 128], [1, 128]],
-            "x2"   : [[1, 128], [1, 128], [1, 128]]
+                "x0": [[1, 128], [1, 128], [1, 128]],
+                "x1": [[1, 128], [1, 128], [1, 128]],
+                "x2": [[1, 128], [1, 128], [1, 128]],
             },
             max_batch_size=FLAGS.batch_size,
             precision=FLAGS.precision,
@@ -299,6 +301,7 @@ def main(FLAGS):
         Stack(dtype="int64" if dev_ds.label_list else "float32"),  # label
     ): fn(samples)
     WrapperPredictor(predictor).eval(dev_ds, batchify_fn, FLAGS)
+
 
 if __name__ == "__main__":
     # If the device is not set to cpu, the nv-trt will report an error when executing

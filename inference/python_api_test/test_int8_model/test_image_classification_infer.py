@@ -22,6 +22,7 @@ import numpy as np
 import cv2
 import yaml
 
+
 import paddle
 from backend import PaddleInferenceEngine, TensorRTEngine
 from paddle.io import DataLoader
@@ -57,12 +58,17 @@ def argsparser():
     parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument(
-         "--deploy_backend",
-         type=str,
-         default="paddle_inference",
-         help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+        "--deploy_backend",
+        type=str,
+        default="paddle_inference",
+        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
     )
-    parser.add_argument("--input_name", type=str, default="x", help="input name of image classification model, this is only used by nv-trt")
+    parser.add_argument(
+        "--input_name",
+        type=str,
+        default="x",
+        help="input name of image classification model, this is only used by nv-trt",
+    )
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
 
@@ -74,6 +80,7 @@ def eval_reader(data_dir, batch_size, crop_size, resize_size):
     val_reader = ImageNetDataset(mode="val", data_dir=data_dir, crop_size=crop_size, resize_size=resize_size)
     val_loader = DataLoader(val_reader, batch_size=batch_size, shuffle=False, drop_last=False, num_workers=0)
     return val_loader
+
 
 def eval(predictor, FLAGS):
     """
@@ -124,8 +131,8 @@ def eval(predictor, FLAGS):
             print("Eval iter:", batch_id)
             sys.stdout.flush()
         rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
-        if (rerun_flag):
-            return 
+        if rerun_flag:
+            return
 
     result = np.mean(np.array(results), axis=0)
     fp_message = FLAGS.precision
@@ -163,6 +170,7 @@ def eval(predictor, FLAGS):
     print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
 
+
 def main(FLAGS):
     """
     main func
@@ -189,9 +197,7 @@ def main(FLAGS):
         print(engine_file)
         predictor = TensorRTEngine(
             onnx_model_file=FLAGS.model_path,
-            shape_info={
-            FLAGS.input_name : [[1,3,224,224], [1,3,224,224], [1,3,224,224]]
-            },
+            shape_info={FLAGS.input_name: [[1, 3, 224, 224], [1, 3, 224, 224], [1, 3, 224, 224]]},
             max_batch_size=FLAGS.batch_size,
             precision=FLAGS.precision,
             engine_file_path=engine_file,
@@ -203,6 +209,7 @@ def main(FLAGS):
     if rerun_flag:
         print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
         return
+
 
 if __name__ == "__main__":
     parser = argsparser()

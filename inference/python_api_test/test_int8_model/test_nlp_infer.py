@@ -20,6 +20,7 @@ import time
 import sys
 from functools import partial
 import distutils.util
+
 import numpy as np
 
 import paddle
@@ -46,6 +47,7 @@ METRIC_CLASSES = {
     "cluewsc2020": Accuracy,
     "csl": Accuracy,
 }
+
 
 def argsparser():
     """
@@ -114,14 +116,15 @@ def argsparser():
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument(
-         "--deploy_backend",
-         type=str,
-         default="paddle_inference",
-         help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+        "--deploy_backend",
+        type=str,
+        default="paddle_inference",
+        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
     )
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
+
 
 def _convert_example(example, dataset, tokenizer, label_list, max_seq_length=512):
     assert dataset in ["glue", "clue"], "This demo only supports for dataset glue or clue"
@@ -198,7 +201,9 @@ class WrapperPredictor(object):
     def _convert_predict_batch(self, FLAGS, data, tokenizer, batchify_fn, label_list):
         examples = []
         for example in data:
-            example = _convert_example(example, FLAGS.dataset, tokenizer, label_list, max_seq_length=FLAGS.max_seq_length)
+            example = _convert_example(
+                example, FLAGS.dataset, tokenizer, label_list, max_seq_length=FLAGS.max_seq_length
+            )
             examples.append(example)
 
         return examples
@@ -288,8 +293,8 @@ def main(FLAGS):
         predictor = TensorRTEngine(
             onnx_model_file=FLAGS.model_path,
             shape_info={
-            "input_ids"   : [[28, 37], [32, 51], [32, 128]],
-            "token_type_ids"   : [[28, 37], [32, 51], [32, 128]]
+                "input_ids": [[28, 37], [32, 51], [32, 128]],
+                "token_type_ids": [[28, 37], [32, 51], [32, 128]],
             },
             max_batch_size=FLAGS.batch_size,
             precision=FLAGS.precision,
@@ -305,7 +310,7 @@ def main(FLAGS):
         Pad(axis=0, pad_val=tokenizer.pad_token_id),  # segment
         Stack(dtype="int64" if dev_ds.label_list else "float32"),  # label
     ): fn(samples)
-    
+
     WrapperPredictor(predictor).eval(dev_ds, tokenizer, batchify_fn, FLAGS)
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
     if rerun_flag:
