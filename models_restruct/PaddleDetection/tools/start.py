@@ -24,7 +24,7 @@ class PaddleDetection_Start(object):
         self.mode = os.environ["mode"]  # function or precision
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)
         self.env_dict = {}
-        self.model = self.qa_yaml_name.split("^")[2]
+        self.model = self.qa_yaml_name.split("^")[-1]
         logger.info("###self.model_name: {}".format(self.model))
         self.env_dict["model"] = self.model
         os.environ["model"] = self.model

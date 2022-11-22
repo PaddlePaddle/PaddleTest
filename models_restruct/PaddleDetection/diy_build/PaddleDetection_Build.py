@@ -84,6 +84,8 @@ class PaddleDetection_Build(Model_Build):
         os.system("unzip visdrone.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mainbody.zip")
         os.system("unzip mainbody.zip")
+        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/pascalvoc.zip")
+        os.system("unzip pascalvoc.zip")
         logger.info("***download data ended")
         os.chdir(path_repo+'/deploy/cpp')
         wget.download("https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz")
