@@ -128,7 +128,6 @@ if __name__ == "__main__":
         args = parser.parse_args()
         return args
 
-
     args = parse_args()
     print("args:{}".format(args))
     # logger.info('###args {}'.format(args.models_file))
