@@ -91,7 +91,8 @@ class PaddleDetection_Build(Model_Build):
         logger.info("***download data ended")
         os.chdir(path_repo + "/deploy/cpp")
         wget.download(
-            "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
+            "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos"\
+            "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
         )
         os.system("tar xvf paddle_inference.tgz")
         os.system('sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh')
@@ -131,5 +132,5 @@ if __name__ == "__main__":
     args = parse_args()
     print("args:{}".format(args))
     # logger.info('###args {}'.format(args.models_file))
-    model = PaddleDetectioin_Build(args)
+    model = PaddleDetection_Build(args)
     model.build_paddledetection()
