@@ -46,6 +46,9 @@ class PaddleDetection_Start(object):
         return 0
 
     def build_prepare(self):
+        """
+        build prepare
+        """
         ret = 0
         ret = self.prepare_gpu_env()
         if ret:
