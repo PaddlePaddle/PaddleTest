@@ -1,8 +1,8 @@
 """
-test
+trt_fp16 base values
 """
 
-mkldnn_fp32 = {
+trt_fp16 = {
     "PPYOLOE": {
         "model_name": "PPYOLOE",
         "jingdu": {

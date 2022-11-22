@@ -1,5 +1,5 @@
 """
-test
+mkldnn_fp32 base values
 """
 
 mkldnn_fp32 = {
