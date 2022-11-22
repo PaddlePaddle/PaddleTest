@@ -59,7 +59,7 @@ case:
           - --ce_test True
         result:
           acc_top1:
-            base: 0.875
+            base: 0.471536636352
             threshold: 0.00000001
             evaluation: "+"
           acc_top5:
