@@ -1,7 +1,8 @@
-#encoding: utf-8
+# encoding: utf-8
 """
 自定义环境准备
 """
+
 import os
 import sys
 import logging
@@ -62,14 +63,14 @@ class PaddleDetection_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir(self.reponame)
         path_repo = os.getcwd()
-        #avoid hang in yolox
+        # avoid hang in yolox
         cmd = 'sed -i "s|norm_type: sync_bn|norm_type: bn|g" configs/yolox/_base_/yolox_cspdarknet.yml'
         os.system(cmd)
-        #compile op
+        # compile op
         os.system("python ppdet/ext_op/setup.py install")
         if os.path.exists("/root/.cache/paddle/weights"):
             os.system("rm -rf /root/.cache/paddle/weights")
-        os.system("ln -s {}/data/ppdet_pretrained /root/.cache/paddle/weights".format('/ssd2/ce_data/PaddleDetection'))
+        os.system("ln -s {}/data/ppdet_pretrained /root/.cache/paddle/weights".format("/ssd2/ce_data/PaddleDetection"))
         os.chdir("dataset")
         if os.path.exists("coco"):
             os.system("rm -rf coco")
@@ -87,14 +88,16 @@ class PaddleDetection_Build(Model_Build):
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/pascalvoc.zip")
         os.system("unzip pascalvoc.zip")
         logger.info("***download data ended")
-        os.chdir(path_repo+'/deploy/cpp')
-        wget.download("https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz")
+        os.chdir(path_repo + "/deploy/cpp")
+        wget.download(
+            "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
+        )
         os.system("tar xvf paddle_inference.tgz")
         os.system('sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh')
         os.system('sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh')
         os.system('sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh')
         os.system('sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh')
-        os.system('sh scripts/build.sh')
+        os.system("sh scripts/build.sh")
         os.chdir(path_now)
         return 0
 
@@ -110,6 +113,7 @@ class PaddleDetection_Build(Model_Build):
             return ret
         return ret
 
+
 if __name__ == "__main__":
 
     def parse_args():
@@ -122,10 +126,10 @@ if __name__ == "__main__":
         parser.add_argument("--reponame", help="输入repo", type=str, default=None)
         args = parser.parse_args()
         return args
-    print('******test***')
+    print("******test***")
 
     args = parse_args()
-    print('args:{}'.format(args))
+    print("args:{}".format(args))
     # logger.info('###args {}'.format(args.models_file))
     model = PaddleDetectioin_Build(args)
     model.build_paddledetection()

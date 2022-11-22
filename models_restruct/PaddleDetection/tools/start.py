@@ -29,8 +29,6 @@ class PaddleDetection_Start(object):
         self.env_dict["model"] = self.model
         os.environ["model"] = self.model
         
-
-
     def prepare_gpu_env(self):
         """
         根据操作系统获取用gpu还是cpu
@@ -46,7 +44,7 @@ class PaddleDetection_Start(object):
         ret = self.prepare_gpu_env()
         if ret:
             logger.info("build prepare_gpu_env failed")
-            return ret   
+            return ret
 
 
 def run():
@@ -56,6 +54,7 @@ def run():
     model = PaddleDetection_Start()
     model.build_prepare()
     return 0
+
 
 if __name__ == "__main__":
     run()

@@ -4,13 +4,13 @@ case:
     train:
       -
         name: multi
-        cmd : python -m paddle.distributed.launch tools/train.py 
-        params: 
+        cmd : python -m paddle.distributed.launch tools/train.py
+        params:
           - TrainReader.batch_size=1
       -
         name: single
         cmd : python tools/train.py
-        params: 
+        params:
           - TrainReader.batch_size=1
     eval:
       -
@@ -30,7 +30,7 @@ case:
         cmd: python deploy/python/infer.py
       -
         name: cpp
-        cmd: ./deploy/cpp/build/main 
-      
+        cmd: ./deploy/cpp/build/main
+
 
 function: paddlelas_imagenet_parse
