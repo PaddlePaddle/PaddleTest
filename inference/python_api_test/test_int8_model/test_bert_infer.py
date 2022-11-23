@@ -205,10 +205,7 @@ class WrapperPredictor(object):
             end_time = time.time()
             predict_time += end_time - start_time
             label = data[-1]
-            output_copy = output[0].copy()
-            a = paddle.to_tensor(output_copy, place=paddle.CPUPlace())
-            b = paddle.to_tensor(np.array(label).flatten(), place=paddle.CPUPlace())
-            correct = metric.compute(a, b)
+            correct = metric.compute(paddle.to_tensor(output[0]), paddle.to_tensor(np.array(label).flatten()))
             metric.update(correct)
 
         sequences_num = i * FLAGS.batch_size
