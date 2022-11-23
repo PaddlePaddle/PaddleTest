@@ -32,7 +32,7 @@ paddle2onnx --model_dir=models/Deeplabv3_ResNet50_fp32 --model_filename=model --
 
 # ================================ INT8 ======================================
 # PPYOLOE-l
-paddle2onnx --model_dir=models/ppyoloe_crn_l_300e_coco_quant/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/ppyoloe_crn_l_300e_coco_quant/ --deploy_backend='tensorrt' --save_calibration_file=models/ppyoloe_crn_l_300e_coco_quant/calibration.cache
+paddle2onnx --model_dir=models/ppyoloe_crn_l_300e_coco_quant/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/ppyoloe_crn_l_300e_coco_quant/ppyoloe_crn_l_300e_coco_quant.onnx --deploy_backend='tensorrt' --save_calibration_file=models/ppyoloe_crn_l_300e_coco_quant/calibration.cache
 # PicoDet
 paddle2onnx --model_dir=models/picodet_s_416_coco_npu_quant/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/picodet_s_416_coco_npu_quant/picodet_s_416_coco_npu_quant.onnx --deploy_backend='tensorrt' --save_calibration_file=models/picodet_s_416_coco_npu_quant/calibration.cache
 # YOLOv5s
@@ -49,7 +49,7 @@ python utils/paddle_infer_shape.py --model_dir=models/pp_liteseg_qat/ --model_fi
 paddle2onnx --model_dir=models/pp_liteseg_int8/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/pp_liteseg_int8/pp_liteseg_int8.onnx --deploy_backend='tensorrt' --save_calibration_file=models/pp_liteseg_int8/calibration.cache
 # HRNet
 python utils/paddle_infer_shape.py --model_dir=models/hrnet_qat/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_dir=models/hrnet_int8 --input_shape_dict="{'x':[1, 3, 1024, 2048]}"
-paddle2onnx --model_dir=models/hrnet_int8 --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/hrnet_int8/hrnet_fp32.onnx --deploy_backend='tensorrt' --save_calibration_file=models/hrnet_int8/calibration.cache
+paddle2onnx --model_dir=models/hrnet_int8 --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/hrnet_int8/hrnet_int8.onnx --deploy_backend='tensorrt' --save_calibration_file=models/hrnet_int8/calibration.cache
 # UNet
 python utils/paddle_infer_shape.py --model_dir=models/unet_qat/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_dir=models/unet_int8 --input_shape_dict="{'x':[1, 3, 1024, 2048]}"
 paddle2onnx --model_dir=models/unet_int8 --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/unet_int8/unet_int8.onnx --deploy_backend='tensorrt' --save_calibration_file=models/unet_int8/calibration.cache
