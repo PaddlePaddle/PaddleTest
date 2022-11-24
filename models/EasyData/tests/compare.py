@@ -16,3 +16,4 @@ def compare(result, str, standard):
 
 if __name__ == '__main__':
     obj = compare("test_PPDC1.log", "ClasOutput INFO", "PPDC1_standard.txt")
+    
