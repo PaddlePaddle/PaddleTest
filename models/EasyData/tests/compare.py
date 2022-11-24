@@ -1,4 +1,3 @@
-
 def compare(result, str, standard):
     result_value = ""
     standard_value = ""
@@ -14,5 +13,5 @@ def compare(result, str, standard):
     assert result_value == standard_value
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     obj = compare("test_PPDC1.log", "ClasOutput INFO", "PPDC1_standard.txt")
