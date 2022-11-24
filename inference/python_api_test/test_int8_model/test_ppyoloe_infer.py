@@ -56,6 +56,7 @@ def argsparser():
     parser.add_argument("--img_shape", type=int, default=640, help="input_size")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     parser.add_argument("--include_nms", type=bool, default=True, help="Whether include nms or not.")
+    parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
 
     return parser
 
