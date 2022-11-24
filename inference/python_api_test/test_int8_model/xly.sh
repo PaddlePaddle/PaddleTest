@@ -34,6 +34,7 @@ nvidia-docker run -i --rm \
     -e DOCKER_IMAGE=${DOCKER_IMAGE} \
     -e DEVICE=${DEVICE} \
     -e MODE=${MODE} \
+    -e METRIC=${METRIC} \
     --net=host \
     ${DOCKER_IMAGE} \
      /bin/bash -c -x '
@@ -67,7 +68,7 @@ bash run.sh
 
 PADDLE_COMMIT=`python -c 'import paddle; print(paddle.version.commit)'`
 DT=`date "+%Y-%m-%d"`
-SAVE_FILE=${DT}_${PADDLE_BRANCH}_${PADDLE_COMMIT}.xlsx
+SAVE_FILE=${DT}_${PADDLE_BRANCH/\//-}_${PADDLE_COMMIT}.xlsx
 
 python get_benchmark_info.py ${DOCKER_IMAGE} ${PADDLE_BRANCH} ${PADDLE_COMMIT} ${DEVICE} ${MODE} ${METRIC} ${SAVE_FILE}
 
@@ -77,6 +78,7 @@ UPLOAD_FILE_PATH=`pwd`/${SAVE_FILE}
 cd pipeline
 python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple --trusted-host mirror.baidu.com;
 python upload.py --bucket_name paddle-qa --object_key inference_benchmark/paddle/slim/${SAVE_FILE} --upload_file_name ${UPLOAD_FILE_PATH}
+cd -
 
-cat "https://paddle-qa.bj.bcebos.com/inference_benchmark/paddle/slim/${SAVE_FILE}" >benchmark_res_url.txt
+cp ${SAVE_FILE} benchmark_res.xlsx
 '
