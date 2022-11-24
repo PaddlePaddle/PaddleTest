@@ -19,8 +19,8 @@ function before_hook() {
 
     # install requirements
     cd ${fleetx_path}
-    export http_proxy=http://172.19.57.45:3128
-    export https_proxy=http://172.19.57.45:3128
+    export http_proxy=${proxy}
+    export https_proxy=${proxy}
     export no_proxy=bcebos.com
     python -m pip install -r requirements.txt --force-reinstall
 
