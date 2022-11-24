@@ -162,13 +162,13 @@ ppcls^configs^DeepHash^DCH:
       - name: trained
         result:
           recall1:
-            base: 0.2
+            base: 0.646
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           recall1:
-            base: 0.5806
+            base: 0.476
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -191,7 +191,7 @@ ppcls^configs^DeepHash^DCH:
       - name: trained
         result:
           class_ids:
-            base: '[47, 28, 23, 26, 6]'
+            base: '[39, 23, 26, 1, 28]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -204,13 +204,13 @@ ppcls^configs^DeepHash^DCH:
       - name: multi
         result:
           recall1:
-            base: 0.2
+            base: 0.646
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.1
+            base: 0.325
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -318,13 +318,13 @@ ppcls^configs^DeepHash^DSHSD:
       - name: trained
         result:
           recall1:
-            base: 0.2
+            base: 0.725
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           recall1:
-            base: 0.5806
+            base: 0.476
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -347,7 +347,7 @@ ppcls^configs^DeepHash^DSHSD:
       - name: trained
         result:
           class_ids:
-            base: '[47, 12, 19, 24, 25]'
+            base: '[31, 28, 25, 20, 35]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -360,13 +360,13 @@ ppcls^configs^DeepHash^DSHSD:
       - name: multi
         result:
           recall1:
-            base: 0.2
+            base: 0.725
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.1
+            base: 0.352
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -474,13 +474,13 @@ ppcls^configs^DeepHash^LCDSH:
       - name: trained
         result:
           recall1:
-            base: 0.22
+            base: 0.711
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           recall1:
-            base: 0.5806
+            base: 0.476
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -503,7 +503,7 @@ ppcls^configs^DeepHash^LCDSH:
       - name: trained
         result:
           class_ids:
-            base: '[26, 3, 46, 2, 36]'
+            base: '[28, 23, 39, 31, 25]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -516,13 +516,13 @@ ppcls^configs^DeepHash^LCDSH:
       - name: multi
         result:
           recall1:
-            base: 0.22
+            base: 0.711
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.1489
+            base: 0.357
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -599,6 +599,152 @@ ppcls^configs^DeepHash^LCDSH:
       - name: single
     windows_cpu:
       base: ./base/DeepHash_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          recall1:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer: skipped
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+  function: paddlelas_imagenet_parse
+ppcls^configs^GeneralRecognitionV2^GeneralRecognitionV2_PPLCNetV2_base:
+  case:
+    linux:
+      base: ./base/GeneralRecognitionV2_base.yaml
+      eval:
+      - name: trained
+        result:
+          recall1:
+            base: 1.0
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          recall1:
+            base: 1.0
+            evaluation: '='
+            threshold: 0
+      - name: single_trained
+        result:
+          recall1:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_pretrained
+        result:
+          recall1:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer: skipped
+      predict:
+      - name: trained
+        result:
+          class_ids:
+            base: '[437, 71, 660, 728]'
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[437, 71, 660, 728]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: multi
+        result:
+          recall1:
+            base: 1.0
+            evaluation: '='
+            threshold: 0
+      - name: single
+        result:
+          recall1:
+            base: 1.0
+            evaluation: '='
+            threshold: 0
+      - name: multi_static
+        result:
+          recall1:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_static
+        result:
+          recall1:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: multi_convergence
+      - name: single_convergence
+    mac:
+      base: ./base/GeneralRecognitionV2_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          recall1:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer: skipped
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+    windows:
+      base: ./base/GeneralRecognitionV2_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          recall1:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer: skipped
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+    windows_cpu:
+      base: ./base/GeneralRecognitionV2_base.yaml
       eval:
       - name: trained
       - name: pretrained
@@ -1183,152 +1329,6 @@ ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5_udml:
       - name: single
     windows_cpu:
       base: ./base/GeneralRecognition_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          recall1:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer: skipped
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-  function: paddlelas_imagenet_parse
-ppcls^configs^GeneralRecognitionV2^GeneralRecognitionV2_PPLCNetV2_base:
-  case:
-    linux:
-      base: ./base/GeneralRecognitionV2_base.yaml
-      eval:
-      - name: trained
-        result:
-          recall1:
-            base: 1.0
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          recall1:
-            base: 1.0
-            evaluation: '='
-            threshold: 0
-      - name: single_trained
-        result:
-          recall1:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_pretrained
-        result:
-          recall1:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer: skipped
-      predict:
-      - name: trained
-        result:
-          class_ids:
-            base: '[437, 71, 660, 728]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[437, 71, 660, 728]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: multi
-        result:
-          recall1:
-            base: 1.0
-            evaluation: '='
-            threshold: 0
-      - name: single
-        result:
-          recall1:
-            base: 1.0
-            evaluation: '='
-            threshold: 0
-      - name: multi_static
-        result:
-          recall1:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_static
-        result:
-          recall1:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: multi_convergence
-      - name: single_convergence
-    mac:
-      base: ./base/GeneralRecognitionV2_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          recall1:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer: skipped
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows:
-      base: ./base/GeneralRecognitionV2_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          recall1:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer: skipped
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows_cpu:
-      base: ./base/GeneralRecognitionV2_base.yaml
       eval:
       - name: trained
       - name: pretrained
@@ -6274,7 +6274,7 @@ ppcls^configs^ImageNet^DataAugment^ResNet50_Cutmix:
       - name: trained
         result:
           loss:
-            base: 6.9074775
+            base: 6.978585000000001
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -6302,7 +6302,7 @@ ppcls^configs^ImageNet^DataAugment^ResNet50_Cutmix:
       - name: trained
         result:
           class_ids:
-            base: '[72, 910, 317, 424, 538]'
+            base: '[928, 698, 140, 292, 444]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -6315,7 +6315,7 @@ ppcls^configs^ImageNet^DataAugment^ResNet50_Cutmix:
       - name: trained
         result:
           class_ids:
-            base: '[296, 915, 943, 665, 137]'
+            base: '[928, 698, 140, 292, 444]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -6328,13 +6328,13 @@ ppcls^configs^ImageNet^DataAugment^ResNet50_Cutmix:
       - name: multi
         result:
           loss:
-            base: 6.926040416666667
+            base: 7.792931666666667
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 6.931474444444444
+            base: 9.613177777777778
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -7030,7 +7030,7 @@ ppcls^configs^ImageNet^DataAugment^ResNet50_Mixup:
       - name: trained
         result:
           loss:
-            base: 6.910155
+            base: 8.8021525
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -7058,7 +7058,7 @@ ppcls^configs^ImageNet^DataAugment^ResNet50_Mixup:
       - name: trained
         result:
           class_ids:
-            base: '[482, 317, 193, 157, 286]'
+            base: '[998, 938, 617, 211, 140]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -7071,7 +7071,7 @@ ppcls^configs^ImageNet^DataAugment^ResNet50_Mixup:
       - name: trained
         result:
           class_ids:
-            base: '[196, 368, 387, 365, 835]'
+            base: '[617, 938, 998, 140, 211]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -7084,13 +7084,13 @@ ppcls^configs^ImageNet^DataAugment^ResNet50_Mixup:
       - name: multi
         result:
           loss:
-            base: 6.931039166666667
+            base: 8.220309583333334
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 6.942645
+            base: 9.209682777777779
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -9865,13 +9865,13 @@ ppcls^configs^ImageNet^Distillation^mv3_large_x1_0_distill_mv3_small_x1_0:
       - name: trained
         result:
           loss:
-            base: 4074.215933333333
+            base: 20
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 6.90775
+            base: 20
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -9893,7 +9893,7 @@ ppcls^configs^ImageNet^Distillation^mv3_large_x1_0_distill_mv3_small_x1_0:
       - name: trained
         result:
           class_ids:
-            base: '[438, 999, 326, 339, 338]'
+            base: '[22, 22, 22, 22, 22]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -9903,12 +9903,6 @@ ppcls^configs^ImageNet^Distillation^mv3_large_x1_0_distill_mv3_small_x1_0:
             evaluation: '='
             threshold: 0
       predict:
-      - name: trained
-        result:
-          class_ids:
-            base: '[438, 999, 326, 339, 338]'
-            evaluation: '='
-            threshold: 0
       - name: pretrained
         result:
           class_ids:
@@ -9919,13 +9913,13 @@ ppcls^configs^ImageNet^Distillation^mv3_large_x1_0_distill_mv3_small_x1_0:
       - name: multi
         result:
           loss:
-            base: 986.7132746153845
+            base: 20
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 7003.073278000001
+            base: 20
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -10054,7 +10048,7 @@ ppcls^configs^ImageNet^Distillation^res2net200_vd_distill_pphgnet_base:
       - name: trained
         result:
           loss:
-            base: 13.4534
+            base: 616018598064.6613
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -10082,7 +10076,7 @@ ppcls^configs^ImageNet^Distillation^res2net200_vd_distill_pphgnet_base:
       - name: trained
         result:
           class_ids:
-            base: '[759, 673, 497, 575, 627]'
+            base: '[600, 999, 328, 340, 339]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -10095,7 +10089,7 @@ ppcls^configs^ImageNet^Distillation^res2net200_vd_distill_pphgnet_base:
       - name: trained
         result:
           class_ids:
-            base: '[248, 687, 575, 245, 802]'
+            base: '[11, 11, 11, 11]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -10108,13 +10102,13 @@ ppcls^configs^ImageNet^Distillation^res2net200_vd_distill_pphgnet_base:
       - name: multi
         result:
           loss:
-            base: 7.975213888888888
+            base: 46044119814.87326
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 11.699874166666666
+            base: 1000949.15971
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -13078,7 +13072,7 @@ ppcls^configs^ImageNet^HRNet^HRNet_W18_C:
       - name: trained
         result:
           loss:
-            base: 7.55846
+            base: 7.956614999999999
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -13132,13 +13126,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W18_C:
       - name: multi
         result:
           loss:
-            base: 6.9373716666666665
+            base: 6.995867083333333
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 7.203006111111112
+            base: 7.163402777777778
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -13267,7 +13261,7 @@ ppcls^configs^ImageNet^HRNet^HRNet_W30_C:
       - name: trained
         result:
           loss:
-            base: 8.0043775
+            base: 7.8038050000000005
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -13321,13 +13315,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W30_C:
       - name: multi
         result:
           loss:
-            base: 7.148499583333333
+            base: 7.1036150000000005
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 7.155901666666667
+            base: 7.206944444444444
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -13456,7 +13450,7 @@ ppcls^configs^ImageNet^HRNet^HRNet_W32_C:
       - name: trained
         result:
           loss:
-            base: 7.867727499999999
+            base: 8.4220675
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -13510,13 +13504,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W32_C:
       - name: multi
         result:
           loss:
-            base: 7.053836666666666
+            base: 7.048368333333333
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 10.236670555555555
+            base: 7.166187777777777
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -13645,7 +13639,7 @@ ppcls^configs^ImageNet^HRNet^HRNet_W40_C:
       - name: trained
         result:
           loss:
-            base: 7.955937500000001
+            base: 7.6590050000000005
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -13699,13 +13693,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W40_C:
       - name: multi
         result:
           loss:
-            base: 6.981190416666666
+            base: 6.9354000000000005
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 7.151288333333334
+            base: 7.133153888888889
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -13834,7 +13828,7 @@ ppcls^configs^ImageNet^HRNet^HRNet_W44_C:
       - name: trained
         result:
           loss:
-            base: 7.533195
+            base: 7.6805224999999995
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -13888,13 +13882,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W44_C:
       - name: multi
         result:
           loss:
-            base: 6.997457083333333
+            base: 6.901760833333333
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 7.197410555555556
+            base: 7.284725555555555
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -14023,7 +14017,7 @@ ppcls^configs^ImageNet^HRNet^HRNet_W48_C:
       - name: trained
         result:
           loss:
-            base: 7.7864625
+            base: 8.2048725
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -14077,13 +14071,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W48_C:
       - name: multi
         result:
           loss:
-            base: 6.942532916666667
+            base: 7.100630416666667
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 7.171677222222223
+            base: 7.451903333333334
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -14212,7 +14206,7 @@ ppcls^configs^ImageNet^HRNet^HRNet_W64_C:
       - name: trained
         result:
           loss:
-            base: 7.5112125
+            base: 7.663032500000001
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -14266,13 +14260,13 @@ ppcls^configs^ImageNet^HRNet^HRNet_W64_C:
       - name: multi
         result:
           loss:
-            base: 6.9670983333333325
+            base: 6.946594583333333
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 7.158142777777777
+            base: 7.704208333333333
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -15724,7 +15718,7 @@ ppcls^configs^ImageNet^LeViT^LeViT_128:
       - name: trained
         result:
           loss:
-            base: 8.51698
+            base: 8.2351025
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -15778,13 +15772,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_128:
       - name: multi
         result:
           loss:
-            base: 7.288135416666667
+            base: 7.145265833333333
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 7.635138333333334
+            base: 8.372987777777778
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -15913,7 +15907,7 @@ ppcls^configs^ImageNet^LeViT^LeViT_128S:
       - name: trained
         result:
           loss:
-            base: 8.23713
+            base: 7.9246575
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -15967,13 +15961,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_128S:
       - name: multi
         result:
           loss:
-            base: 7.183030416666665
+            base: 7.170437916666667
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 7.976988333333334
+            base: 7.591568333333334
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -16102,7 +16096,7 @@ ppcls^configs^ImageNet^LeViT^LeViT_192:
       - name: trained
         result:
           loss:
-            base: 8.287105
+            base: 8.154165
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -16156,13 +16150,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_192:
       - name: multi
         result:
           loss:
-            base: 7.247677499999999
+            base: 7.103918333333333
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 7.954139444444444
+            base: 8.00779
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -16291,7 +16285,7 @@ ppcls^configs^ImageNet^LeViT^LeViT_256:
       - name: trained
         result:
           loss:
-            base: 8.010765
+            base: 7.89405
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -16345,13 +16339,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_256:
       - name: multi
         result:
           loss:
-            base: 7.454859166666666
+            base: 7.42218875
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 8.176367777777777
+            base: 7.894636666666666
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -16480,7 +16474,7 @@ ppcls^configs^ImageNet^LeViT^LeViT_384:
       - name: trained
         result:
           loss:
-            base: 20.608997499999997
+            base: 20.6610525
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -16534,13 +16528,13 @@ ppcls^configs^ImageNet^LeViT^LeViT_384:
       - name: multi
         result:
           loss:
-            base: 10.392052499999998
+            base: 10.400056249999999
             evaluation: '-'
             threshold: 1
       - name: single
         result:
           loss:
-            base: 9.681698333333335
+            base: 9.680979999999998
             evaluation: '-'
             threshold: 1
       - name: multi_static
@@ -22142,6 +22136,195 @@ ppcls^configs^ImageNet^PPHGNet^PPHGNet_tiny:
       train:
       - name: single
   function: paddlelas_imagenet_parse
+ppcls^configs^ImageNet^PPLCNetV2^PPLCNetV2_base:
+  case:
+    linux:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+        result:
+          loss:
+            base: 7.03115
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          loss:
+            base: 0.77847
+            evaluation: '='
+            threshold: 0
+      - name: single_trained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+        result:
+          class_ids:
+            base: '[113, 6, 579, 369, 379]'
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 83]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+        result:
+          class_ids:
+            base: '[113, 6, 259, 275, 724]'
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[773, 504, 855, 967, 968]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 6.945247916666666
+            evaluation: '='
+            threshold: 0
+      - name: single
+        result:
+          loss:
+            base: 7.314310555555555
+            evaluation: '='
+            threshold: 0
+      - name: multi_static
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_static
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: multi_convergence
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_convergence
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+    mac:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 476]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+    windows:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 476]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+    windows_cpu:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 476]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+  function: paddlelas_imagenet_parse
 ppcls^configs^ImageNet^PPLCNet^PPLCNet_x0_25:
   case:
     linux:
@@ -23534,195 +23717,6 @@ ppcls^configs^ImageNet^PPLCNet^PPLCNet_x2_5:
         result:
           loss:
             base: 39.556483
-            evaluation: '='
-            threshold: 0
-      - name: multi_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: multi_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-    mac:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows_cpu:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-  function: paddlelas_imagenet_parse
-ppcls^configs^ImageNet^PPLCNetV2^PPLCNetV2_base:
-  case:
-    linux:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-        result:
-          loss:
-            base: 7.03115
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          loss:
-            base: 0.77847
-            evaluation: '='
-            threshold: 0
-      - name: single_trained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-        result:
-          class_ids:
-            base: '[113, 6, 579, 369, 379]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 83]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-        result:
-          class_ids:
-            base: '[113, 6, 259, 275, 724]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[773, 504, 855, 967, 968]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: multi
-        result:
-          loss:
-            base: 6.945247916666666
-            evaluation: '='
-            threshold: 0
-      - name: single
-        result:
-          loss:
-            base: 7.314310555555555
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -27812,6 +27806,384 @@ ppcls^configs^ImageNet^ResNeSt^ResNeSt50_fast_1s1x64d:
       train:
       - name: single
   function: paddlelas_imagenet_parse
+ppcls^configs^ImageNet^ResNeXt101_wsl^ResNeXt101_32x16d_wsl:
+  case:
+    linux:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+        result:
+          loss:
+            base: 7.771637500000001
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          loss:
+            base: 0.7049225
+            evaluation: '='
+            threshold: 0
+      - name: single_trained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+        result:
+          class_ids:
+            base: '[607, 402, 651, 328, 496]'
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 23]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+        result:
+          class_ids:
+            base: '[617, 140, 998, 724, 369]'
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[473, 696, 692, 737, 868]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 8.258906666666666
+            evaluation: '='
+            threshold: 0
+      - name: single
+        result:
+          loss:
+            base: 10.988644444444445
+            evaluation: '='
+            threshold: 0
+      - name: multi_static
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_static
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: multi_convergence
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_convergence
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+    mac:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 476]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+    windows:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 476]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+    windows_cpu:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 476]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+  function: paddlelas_imagenet_parse
+ppcls^configs^ImageNet^ResNeXt101_wsl^ResNeXt101_32x8d_wsl:
+  case:
+    linux:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+        result:
+          loss:
+            base: 7.4909875
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          loss:
+            base: 0.9012724999999999
+            evaluation: '='
+            threshold: 0
+      - name: single_trained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+        result:
+          class_ids:
+            base: '[706, 673, 549, 606, 960]'
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 85, 82]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+        result:
+          class_ids:
+            base: '[938, 140, 998, 292, 62]'
+            evaluation: '='
+            threshold: 0
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[504, 968, 773, 737, 692]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 7.703059583333334
+            evaluation: '='
+            threshold: 0
+      - name: single
+        result:
+          loss:
+            base: 8.467686666666667
+            evaluation: '='
+            threshold: 0
+      - name: multi_static
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_static
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: multi_convergence
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      - name: single_convergence
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+    mac:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 476]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+    windows:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 476]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+    windows_cpu:
+      base: ./base/ImageNet_base.yaml
+      eval:
+      - name: trained
+      - name: pretrained
+        result:
+          loss:
+            base: 20
+            evaluation: '='
+            threshold: 0
+      export:
+      - name: trained
+      - name: pretrained
+      infer:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[8, 7, 86, 82, 476]'
+            evaluation: '='
+            threshold: 0
+      predict:
+      - name: trained
+      - name: pretrained
+        result:
+          class_ids:
+            base: '[443, 84, 808, 511]'
+            evaluation: '='
+            threshold: 0
+      train:
+      - name: single
+  function: paddlelas_imagenet_parse
 ppcls^configs^ImageNet^ResNeXt^ResNeXt101_32x4d:
   case:
     linux:
@@ -29771,384 +30143,6 @@ ppcls^configs^ImageNet^ResNeXt^ResNeXt50_vd_64x4d:
         result:
           loss:
             base: 8.380138888888888
-            evaluation: '='
-            threshold: 0
-      - name: multi_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: multi_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-    mac:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows_cpu:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-  function: paddlelas_imagenet_parse
-ppcls^configs^ImageNet^ResNeXt101_wsl^ResNeXt101_32x16d_wsl:
-  case:
-    linux:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-        result:
-          loss:
-            base: 7.771637500000001
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          loss:
-            base: 0.7049225
-            evaluation: '='
-            threshold: 0
-      - name: single_trained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-        result:
-          class_ids:
-            base: '[607, 402, 651, 328, 496]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 23]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-        result:
-          class_ids:
-            base: '[617, 140, 998, 724, 369]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[473, 696, 692, 737, 868]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: multi
-        result:
-          loss:
-            base: 8.258906666666666
-            evaluation: '='
-            threshold: 0
-      - name: single
-        result:
-          loss:
-            base: 10.988644444444445
-            evaluation: '='
-            threshold: 0
-      - name: multi_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: multi_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-    mac:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows_cpu:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-  function: paddlelas_imagenet_parse
-ppcls^configs^ImageNet^ResNeXt101_wsl^ResNeXt101_32x8d_wsl:
-  case:
-    linux:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-        result:
-          loss:
-            base: 7.4909875
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          loss:
-            base: 0.9012724999999999
-            evaluation: '='
-            threshold: 0
-      - name: single_trained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-        result:
-          class_ids:
-            base: '[706, 673, 549, 606, 960]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 85, 82]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-        result:
-          class_ids:
-            base: '[938, 140, 998, 292, 62]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[504, 968, 773, 737, 692]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: multi
-        result:
-          loss:
-            base: 7.703059583333334
-            evaluation: '='
-            threshold: 0
-      - name: single
-        result:
-          loss:
-            base: 8.467686666666667
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -35372,195 +35366,6 @@ ppcls^configs^ImageNet^SqueezeNet^SqueezeNet1_1:
       train:
       - name: single
   function: paddlelas_imagenet_parse
-ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_base_patch4_window7_224:
-  case:
-    linux:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-        result:
-          loss:
-            base: 7.7407433333333335
-            evaluation: '-'
-            threshold: 1
-      - name: pretrained
-        result:
-          loss:
-            base: 0.6674266666666666
-            evaluation: '-'
-            threshold: 1
-      - name: single_trained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-        result:
-          exit_code:
-            base: 0
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 83]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-        result:
-          exit_code:
-            base: 0
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[968, 696, 969, 504, 710]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: multi
-        result:
-          loss:
-            base: 6.890644444444444
-            evaluation: '-'
-            threshold: 1
-      - name: single
-        result:
-          loss:
-            base: 7.142384166666667
-            evaluation: '-'
-            threshold: 1
-      - name: multi_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: multi_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-    mac:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows_cpu:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-  function: paddlelas_imagenet_parse
 ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_small_patch4_window7_224:
   case:
     linux:
@@ -35569,7 +35374,7 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_small_patch4_window7_224:
       - name: trained
         result:
           loss:
-            base: 7.59255
+            base: 7.592276666666667
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -35623,7 +35428,7 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_small_patch4_window7_224:
       - name: multi
         result:
           loss:
-            base: 6.839637777777778
+            base: 6.839593333333332
             evaluation: '-'
             threshold: 1
       - name: single
@@ -35758,7 +35563,7 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_tiny_patch4_window7_224:
       - name: trained
         result:
           loss:
-            base: 7.6676
+            base: 7.667596666666667
             evaluation: '-'
             threshold: 1
       - name: pretrained
@@ -35812,7 +35617,7 @@ ppcls^configs^ImageNet^SwinTransformer^SwinTransformer_tiny_patch4_window7_224:
       - name: multi
         result:
           loss:
-            base: 6.840032222222221
+            base: 6.840031666666666
             evaluation: '-'
             threshold: 1
       - name: single
@@ -38216,14 +38021,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_224:
         result:
           loss:
             base: 7.917674999999999
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.5734125
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single_trained
         result:
           loss:
@@ -38242,8 +38047,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_224:
       infer:
       - name: trained
         result:
-          class_ids:
-            base: '[588, 503, 937, 9, 978]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38255,8 +38060,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_224:
       predict:
       - name: trained
         result:
-          class_ids:
-            base: '[588, 503, 937, 9, 978]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38270,14 +38075,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_224:
         result:
           loss:
             base: 8.085028333333334
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single
         result:
           loss:
             base: 13.73982611111111
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: multi_static
         result:
           loss:
@@ -38405,14 +38210,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_384:
         result:
           loss:
             base: 7.303565000000001
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.460105
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single_trained
         result:
           loss:
@@ -38431,8 +38236,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_384:
       infer:
       - name: trained
         result:
-          class_ids:
-            base: '[724, 759, 424, 998, 65]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38444,8 +38249,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_384:
       predict:
       - name: trained
         result:
-          class_ids:
-            base: '[724, 759, 424, 998, 65]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38459,14 +38264,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch16_384:
         result:
           loss:
             base: 8.46237125
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single
         result:
           loss:
             base: 33.71393166666666
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: multi_static
         result:
           loss:
@@ -38594,14 +38399,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch32_384:
         result:
           loss:
             base: 7.17376
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: pretrained
         result:
           loss:
             base: 0.6064475
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single_trained
         result:
           loss:
@@ -38620,8 +38425,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch32_384:
       infer:
       - name: trained
         result:
-          class_ids:
-            base: '[928, 46, 938, 932, 62]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38633,8 +38438,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch32_384:
       predict:
       - name: trained
         result:
-          class_ids:
-            base: '[928, 46, 938, 932, 62]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -38648,392 +38453,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_base_patch32_384:
         result:
           loss:
             base: 7.776212083333333
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single
         result:
           loss:
             base: 8.870350555555557
-            evaluation: '='
-            threshold: 0
-      - name: multi_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: multi_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-    mac:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows_cpu:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-  function: paddlelas_imagenet_parse
-ppcls^configs^ImageNet^VisionTransformer^ViT_large_patch16_224:
-  case:
-    linux:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-        result:
-          loss:
-            base: 7.597765
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          loss:
-            base: 0.5357625
-            evaluation: '='
-            threshold: 0
-      - name: single_trained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-        result:
-          class_ids:
-            base: '[113, 98, 379, 606, 839]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 86, 7, 82, 80]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-        result:
-          class_ids:
-            base: '[113, 98, 379, 606, 839]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[737, 455, 440, 886, 966]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: multi
-        result:
-          loss:
-            base: 9.93307375
-            evaluation: '='
-            threshold: 0
-      - name: single
-        result:
-          loss:
-            base: 13.400826666666665
-            evaluation: '='
-            threshold: 0
-      - name: multi_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_static
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: multi_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_convergence
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-    mac:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-    windows_cpu:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-      - name: pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 7, 86, 82, 476]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[443, 84, 808, 511]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: single
-  function: paddlelas_imagenet_parse
-ppcls^configs^ImageNet^VisionTransformer^ViT_large_patch32_384:
-  case:
-    linux:
-      base: ./base/ImageNet_base.yaml
-      eval:
-      - name: trained
-        result:
-          loss:
-            base: 7.45178
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          loss:
-            base: 0.737455
-            evaluation: '='
-            threshold: 0
-      - name: single_trained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      - name: single_pretrained
-        result:
-          loss:
-            base: 20
-            evaluation: '='
-            threshold: 0
-      export:
-      - name: trained
-      - name: pretrained
-      infer:
-      - name: trained
-        result:
-          class_ids:
-            base: '[588, 617, 503, 66, 367]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[8, 86, 7, 82, 83]'
-            evaluation: '='
-            threshold: 0
-      predict:
-      - name: trained
-        result:
-          class_ids:
-            base: '[588, 617, 503, 66, 367]'
-            evaluation: '='
-            threshold: 0
-      - name: pretrained
-        result:
-          class_ids:
-            base: '[737, 504, 886, 968, 967]'
-            evaluation: '='
-            threshold: 0
-      train:
-      - name: multi
-        result:
-          loss:
-            base: 9.842862499999999
-            evaluation: '='
-            threshold: 0
-      - name: single
-        result:
-          loss:
-            base: 12.526570555555557
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: multi_static
         result:
           loss:
@@ -39161,14 +38588,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_small_patch16_224:
         result:
           loss:
             base: 7.8335575
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: pretrained
         result:
           loss:
             base: 1.4461575
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single_trained
         result:
           loss:
@@ -39187,8 +38614,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_small_patch16_224:
       infer:
       - name: trained
         result:
-          class_ids:
-            base: '[503, 290, 363, 535, 367]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -39200,8 +38627,8 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_small_patch16_224:
       predict:
       - name: trained
         result:
-          class_ids:
-            base: '[503, 290, 363, 535, 367]'
+          exit_code:
+            base: 0
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -39215,14 +38642,14 @@ ppcls^configs^ImageNet^VisionTransformer^ViT_small_patch16_224:
         result:
           loss:
             base: 8.533311666666666
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: single
         result:
           loss:
             base: 10.106097222222221
-            evaluation: '='
-            threshold: 0
+            evaluation: '-'
+            threshold: 1
       - name: multi_static
         result:
           loss:
@@ -41698,13 +41125,13 @@ ppcls^configs^PULC^person_attribute^MobileNetV3_small_x0_35:
       - name: trained
         result:
           label_f1:
-            base: 0.51004
+            base: 0.17096
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           label_f1:
-            base: 0.1724
+            base: 0.15876
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -41727,8 +41154,8 @@ ppcls^configs^PULC^person_attribute^MobileNetV3_small_x0_35:
       - name: trained
         result:
           class_ids:
-            base: '[1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-              0, 0, 1, 0, 0]'
+            base: '[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+              0, 0, 0, 0, 0]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -41742,13 +41169,13 @@ ppcls^configs^PULC^person_attribute^MobileNetV3_small_x0_35:
       - name: multi
         result:
           label_f1:
-            base: 0.50948
+            base: 0.17399
             evaluation: '='
             threshold: 0
       - name: single
         result:
           label_f1:
-            base: 0.49686
+            base: 0.18551
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -41856,13 +41283,13 @@ ppcls^configs^PULC^person_attribute^PPLCNet_x1_0:
       - name: trained
         result:
           label_f1:
-            base: 0.57543
+            base: 0.16553
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           label_f1:
-            base: 0.17008
+            base: 0.16789
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -41885,8 +41312,8 @@ ppcls^configs^PULC^person_attribute^PPLCNet_x1_0:
       - name: trained
         result:
           class_ids:
-            base: '[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-              0, 0, 0, 1, 0]'
+            base: '[0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+              0, 1, 0, 0, 0]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -41900,13 +41327,13 @@ ppcls^configs^PULC^person_attribute^PPLCNet_x1_0:
       - name: multi
         result:
           label_f1:
-            base: 0.57445
+            base: 0.16274
             evaluation: '='
             threshold: 0
       - name: single
         result:
           label_f1:
-            base: 0.52025
+            base: 0.18498
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -42014,13 +41441,13 @@ ppcls^configs^PULC^person_attribute^PPLCNet_x1_0_Distillation:
       - name: trained
         result:
           label_f1:
-            base: 0.55442
+            base: 0.13563
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           label_f1:
-            base: 0.1908
+            base: 0.19269
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -42043,8 +41470,8 @@ ppcls^configs^PULC^person_attribute^PPLCNet_x1_0_Distillation:
       - name: trained
         result:
           class_ids:
-            base: '[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-              0, 0, 0, 0, 1]'
+            base: '[0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+              0, 0, 0, 1, 0]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -42058,13 +41485,13 @@ ppcls^configs^PULC^person_attribute^PPLCNet_x1_0_Distillation:
       - name: multi
         result:
           label_f1:
-            base: 0.55442
+            base: 0.13563
             evaluation: '='
             threshold: 0
       - name: single
         result:
           label_f1:
-            base: 0.56276
+            base: 0.16993
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -42172,13 +41599,13 @@ ppcls^configs^PULC^person_attribute^PPLCNet_x1_0_search:
       - name: trained
         result:
           label_f1:
-            base: 0.58822
+            base: 0.15055
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           label_f1:
-            base: 0.17008
+            base: 0.16789
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -42201,8 +41628,8 @@ ppcls^configs^PULC^person_attribute^PPLCNet_x1_0_search:
       - name: trained
         result:
           class_ids:
-            base: '[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-              0, 0, 1, 0, 0]'
+            base: '[0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+              0, 1, 0, 0, 1]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -42216,13 +41643,13 @@ ppcls^configs^PULC^person_attribute^PPLCNet_x1_0_search:
       - name: multi
         result:
           label_f1:
-            base: 0.58906
+            base: 0.1511
             evaluation: '='
             threshold: 0
       - name: single
         result:
           label_f1:
-            base: 0.5717
+            base: 0.16514
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -42954,13 +42381,13 @@ ppcls^configs^PULC^safety_helmet^MobileNetV3_small_x0_35:
       - name: trained
         result:
           loss:
-            base: 0.25985962962962966
+            base: 0.29502
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 0.6742537037037037
+            base: 0.64519
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -42996,13 +42423,13 @@ ppcls^configs^PULC^safety_helmet^MobileNetV3_small_x0_35:
       - name: multi
         result:
           loss:
-            base: 0.29313506329113925
+            base: 0.5127608333333334
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 0.26632233766233765
+            base: 0.5178225000000001
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -43110,13 +42537,13 @@ ppcls^configs^PULC^safety_helmet^PPLCNet_x1_0:
       - name: trained
         result:
           loss:
-            base: 0.0565137037037037
+            base: 0.483425
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 0.7334214814814815
+            base: 0.7145999999999999
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -43152,13 +42579,13 @@ ppcls^configs^PULC^safety_helmet^PPLCNet_x1_0:
       - name: multi
         result:
           loss:
-            base: 0.2825816229712859
+            base: 0.4799541176470588
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 0.28642347200500473
+            base: 0.47590545454545463
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -43266,13 +42693,13 @@ ppcls^configs^PULC^safety_helmet^PPLCNet_x1_0_distillation:
       - name: trained
         result:
           loss:
-            base: 0.01711185185185185
+            base: 0.23686000000000001
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 0.6786462962962962
+            base: 0.6926749999999999
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -43308,13 +42735,13 @@ ppcls^configs^PULC^safety_helmet^PPLCNet_x1_0_distillation:
       - name: multi
         result:
           loss:
-            base: 0.29474852059925094
+            base: 0.779824705882353
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 0.3078408476696904
+            base: 0.8277918181818182
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -43422,13 +42849,13 @@ ppcls^configs^PULC^safety_helmet^PPLCNet_x1_0_search:
       - name: trained
         result:
           loss:
-            base: 0.12062740740740742
+            base: 0.79921
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 0.7334214814814815
+            base: 0.7145999999999999
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -43464,13 +42891,13 @@ ppcls^configs^PULC^safety_helmet^PPLCNet_x1_0_search:
       - name: multi
         result:
           loss:
-            base: 0.26575271535580525
+            base: 0.5907747058823529
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 0.2731498123240538
+            base: 0.6030427272727273
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -43578,13 +43005,13 @@ ppcls^configs^PULC^text_image_orientation^MobileNetV3_small_x0_35:
       - name: trained
         result:
           loss:
-            base: 0.942470909090909
+            base: 7.847945637850454e+33
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 1.5210127272727272
+            base: 1.58626
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -43607,7 +43034,7 @@ ppcls^configs^PULC^text_image_orientation^MobileNetV3_small_x0_35:
       - name: trained
         result:
           class_ids:
-            base: '[0, 2]'
+            base: '[3, 2]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -43620,13 +43047,13 @@ ppcls^configs^PULC^text_image_orientation^MobileNetV3_small_x0_35:
       - name: multi
         result:
           loss:
-            base: 1.136107043478261
+            base: 8.055032
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 1.1764721333333334
+            base: 29737578.510459
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -43734,13 +43161,13 @@ ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0:
       - name: trained
         result:
           loss:
-            base: 0.637689090909091
+            base: 2793865.25
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 1.5570209090909088
+            base: 1.52965
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -43763,7 +43190,7 @@ ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0:
       - name: trained
         result:
           class_ids:
-            base: '[0, 3]'
+            base: '[2, 3]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -43776,13 +43203,13 @@ ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0:
       - name: multi
         result:
           loss:
-            base: 0.8803814285714285
+            base: 563262.2386500001
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 0.9131256326530612
+            base: 8445437.705620833
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -43890,13 +43317,13 @@ ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0_distillation:
       - name: trained
         result:
           loss:
-            base: 1.543554545454545
+            base: 1.48148
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 1.8030836363636362
+            base: 1.72919
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -43919,7 +43346,7 @@ ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0_distillation:
       - name: trained
         result:
           class_ids:
-            base: '[2, 0]'
+            base: '[0, 1]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -43932,13 +43359,13 @@ ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0_distillation:
       - name: multi
         result:
           loss:
-            base: 0.14075883561643834
+            base: 0.3987541666666667
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 0.1300705
+            base: 0.9584
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -44046,13 +43473,13 @@ ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0_search:
       - name: trained
         result:
           loss:
-            base: 0.3682881818181818
+            base: 1.68283
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 1.5570209090909088
+            base: 1.52965
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -44075,7 +43502,7 @@ ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0_search:
       - name: trained
         result:
           class_ids:
-            base: '[0, 3]'
+            base: '[0, 2]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -44088,13 +43515,13 @@ ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0_search:
       - name: multi
         result:
           loss:
-            base: 0.9152138260869565
+            base: 1.338992
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 0.8812351555555556
+            base: 1.190189
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -45606,13 +45033,13 @@ ppcls^configs^PULC^vehicle_attribute^MobileNetV3_small_x0_35:
       - name: trained
         result:
           label_f1:
-            base: 0.01739
+            base: 0.01183
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           label_f1:
-            base: 0.10036
+            base: 0.05562
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -45635,7 +45062,7 @@ ppcls^configs^PULC^vehicle_attribute^MobileNetV3_small_x0_35:
       - name: trained
         result:
           class_ids:
-            base: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]'
+            base: '[0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -45648,13 +45075,13 @@ ppcls^configs^PULC^vehicle_attribute^MobileNetV3_small_x0_35:
       - name: multi
         result:
           label_f1:
-            base: 0.02742
+            base: 0.01261
             evaluation: '='
             threshold: 0
       - name: single
         result:
           label_f1:
-            base: 0.01738
+            base: 0.13154
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -45762,13 +45189,13 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0:
       - name: trained
         result:
           label_f1:
-            base: 0.01738
+            base: 0.0325
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           label_f1:
-            base: 0.12176
+            base: 0.10306
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -45791,7 +45218,7 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0:
       - name: trained
         result:
           class_ids:
-            base: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]'
+            base: '[0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -45804,13 +45231,13 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0:
       - name: multi
         result:
           label_f1:
-            base: 0.01738
+            base: 0.03037
             evaluation: '='
             threshold: 0
       - name: single
         result:
           label_f1:
-            base: 0.01738
+            base: 0.04368
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -45918,13 +45345,13 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0_distillation:
       - name: trained
         result:
           label_f1:
-            base: 0.01738
+            base: 0.00591
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           label_f1:
-            base: 0.1519
+            base: 0.13487
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -45947,7 +45374,7 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0_distillation:
       - name: trained
         result:
           class_ids:
-            base: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]'
+            base: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -45960,13 +45387,13 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0_distillation:
       - name: multi
         result:
           label_f1:
-            base: 0.01738
+            base: 0.00547
             evaluation: '='
             threshold: 0
       - name: single
         result:
           label_f1:
-            base: 0.01738
+            base: 0.06836
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -46074,13 +45501,13 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0_search:
       - name: trained
         result:
           label_f1:
-            base: 0.01738
+            base: 0.03853
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           label_f1:
-            base: 0.12176
+            base: 0.10306
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -46103,7 +45530,7 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0_search:
       - name: trained
         result:
           class_ids:
-            base: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]'
+            base: '[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -46116,13 +45543,13 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0_search:
       - name: multi
         result:
           label_f1:
-            base: 0.01738
+            base: 0.0414
             evaluation: '='
             threshold: 0
       - name: single
         result:
           label_f1:
-            base: 0.04679
+            base: 0.12151
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -46230,13 +45657,13 @@ ppcls^configs^PULC^vehicle_attribute^ResNet50:
       - name: trained
         result:
           label_f1:
-            base: 0.01738
+            base: 0.12663
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           label_f1:
-            base: 0.02557
+            base: 0.00844
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -46259,7 +45686,7 @@ ppcls^configs^PULC^vehicle_attribute^ResNet50:
       - name: trained
         result:
           class_ids:
-            base: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]'
+            base: '[0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -46272,13 +45699,13 @@ ppcls^configs^PULC^vehicle_attribute^ResNet50:
       - name: multi
         result:
           label_f1:
-            base: 0.01738
+            base: 0.12324
             evaluation: '='
             threshold: 0
       - name: single
         result:
           label_f1:
-            base: 0.01738
+            base: 0.09078
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -46542,13 +45969,13 @@ ppcls^configs^Products^ResNet50_vd_Aliproduct:
       - name: trained
         result:
           loss:
-            base: 10.875386347826087
+            base: 12.258950975609755
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           loss:
-            base: 10.822190347826087
+            base: 10.824858292682926
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -46584,13 +46011,13 @@ ppcls^configs^Products^ResNet50_vd_Aliproduct:
       - name: multi
         result:
           loss:
-            base: 10.076835695652173
+            base: 11.259157878787878
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 13.028103129548764
+            base: 11.004433333333333
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -46854,13 +46281,13 @@ ppcls^configs^Products^ResNet50_vd_SOP:
       - name: trained
         result:
           recall1:
-            base: 0.77915
+            base: 0.45752
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           recall1:
-            base: 0.17464
+            base: 0.08236
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -46896,13 +46323,13 @@ ppcls^configs^Products^ResNet50_vd_SOP:
       - name: multi
         result:
           recall1:
-            base: 0.77915
+            base: 0.45752
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.7763
+            base: 0.43719
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -47010,13 +46437,13 @@ ppcls^configs^Vehicle^PPLCNet_2.5x_ReID:
       - name: trained
         result:
           recall1:
-            base: 0.02133
+            base: 0.19767
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           recall1:
-            base: 0.11533
+            base: 0.23256
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -47052,13 +46479,13 @@ ppcls^configs^Vehicle^PPLCNet_2.5x_ReID:
       - name: multi
         result:
           recall1:
-            base: 0.02133
+            base: 0.19767
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.02867
+            base: 0.18605
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -47322,13 +46749,13 @@ ppcls^configs^Vehicle^ResNet50_ReID:
       - name: trained
         result:
           recall1:
-            base: 0.00267
+            base: 0.10465
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           recall1:
-            base: 0.10533
+            base: 0.23256
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -47364,13 +46791,13 @@ ppcls^configs^Vehicle^ResNet50_ReID:
       - name: multi
         result:
           recall1:
-            base: 0.00267
+            base: 0.10465
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.00433
+            base: 0.09302
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -49095,13 +48522,13 @@ ppcls^configs^slim^ResNet50_vehicle_reid_prune:
       - name: trained
         result:
           recall1:
-            base: 0.01667
+            base: 0.03488
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           recall1:
-            base: 0.03767
+            base: 0.10465
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -49124,7 +48551,7 @@ ppcls^configs^slim^ResNet50_vehicle_reid_prune:
       - name: trained
         result:
           class_ids:
-            base: '[463, 153, 510, 255, 217]'
+            base: '[97, 181, 15, 463, 4]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -49137,13 +48564,13 @@ ppcls^configs^slim^ResNet50_vehicle_reid_prune:
       - name: multi
         result:
           recall1:
-            base: 0.01667
+            base: 0.03488
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.017
+            base: 0.05814
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -49251,13 +48678,13 @@ ppcls^configs^slim^ResNet50_vehicle_reid_quantization:
       - name: trained
         result:
           recall1:
-            base: 0.121
+            base: 0.19767
             evaluation: '='
             threshold: 0
       - name: pretrained
         result:
           recall1:
-            base: 0.00033
+            base: 0.01163
             evaluation: '='
             threshold: 0
       - name: single_trained
@@ -49280,7 +48707,7 @@ ppcls^configs^slim^ResNet50_vehicle_reid_quantization:
       - name: trained
         result:
           class_ids:
-            base: '[14, 137, 241, 300, 477]'
+            base: '[392, 189, 176, 501, 477]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -49293,13 +48720,13 @@ ppcls^configs^slim^ResNet50_vehicle_reid_quantization:
       - name: multi
         result:
           recall1:
-            base: 0.121
+            base: 0.19767
             evaluation: '='
             threshold: 0
       - name: single
         result:
           recall1:
-            base: 0.11233
+            base: 0.19767
             evaluation: '='
             threshold: 0
       - name: multi_static

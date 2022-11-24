@@ -173,7 +173,7 @@ class Jelly_v2_torch(object):
                 for k, v in value_dict.items():
                     # 默认传入字典时，表示传入的是一个np.ndarray并转为tensor，否则传入的不为tensor。后续需优化code
                     if isinstance(v, dict):
-                        self.method[key][k] = to_tensor(v["value"])
+                        self.method[key][k] = torch.tensor(v["value"])
                     else:
                         self.method[key][k] = v
 
