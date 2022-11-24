@@ -11,11 +11,11 @@ def compare(result, str, standard):
     with open(standard, "r", encoding="utf-8") as f:
         for line in f:
             standard_value += line
-    assert result_value==standard_value
+    assert result_value == standard_value
 
-    
+
 if __name__ == '__main__':
-    obj = compare("test_PPDC1.log","ClasOutput INFO","PPDC1_standard.txt")
+    obj = compare("test_PPDC1.log", "ClasOutput INFO", "PPDC1_standard.txt")ß
 
 
 
