@@ -35,7 +35,7 @@ if [ $? -ne 0 ];
 fi
 
 cp ./tests/test_PPDC.py ./
-python3.7  test_PPDC.py
+python$1  test_PPDC.py
 if [ $? -ne 0 ];
   then
     bug=`expr ${bug} + 1`;
@@ -69,7 +69,7 @@ if [ $? -ne 0 ];
 fi
 
 cp ./tests/test_PPDA.py ./
-python3.7 test_PPDA.py
+python$1 test_PPDA.py
 if [ $? -ne 0 ];
   then
     bug=`expr ${bug} + 1`;
