@@ -37,10 +37,10 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
                 P0case_list[${#P0case_list[*]}]=${dir3}
             else
-                P0case_list[${#P0case_list[*]}]=tests
-                # P0case_list[${#P0case_list[*]}]=bert
-                # P0case_list[${#P0case_list[*]}]=gpt
-                # P0case_list[${#P0case_list[*]}]=transformer
+                # P0case_list[${#P0case_list[*]}]=tests
+                P0case_list[${#P0case_list[*]}]=bert
+                P0case_list[${#P0case_list[*]}]=gpt
+                P0case_list[${#P0case_list[*]}]=transformer
             fi
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
