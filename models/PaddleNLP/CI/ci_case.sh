@@ -1065,7 +1065,7 @@ print_info $? taskflow
 # print_info $? tests taskflow_unittest
 # cd ${nlp_dir}/tests/transformers/
 # for apicase in `ls`;do
-#     if [[ ${apicase##*.} == "py" ]];then   
+#     if [[ ${apicase##*.} == "py" ]];then
 #             continue
 #     else
 #         pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
