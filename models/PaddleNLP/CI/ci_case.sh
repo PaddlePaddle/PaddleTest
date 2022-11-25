@@ -1059,18 +1059,18 @@ cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
 print_info $? taskflow
 }
-tests (){
-cd ${nlp_dir}/tests
-pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/taskflow_unittest.log 2>&1
-print_info $? tests taskflow_unittest
-cd ${nlp_dir}/tests/transformers/
-for apicase in `ls`;do
-    if [[ ${apicase##*.} == "py" ]];then   
-            continue
-    else
-        pytest ${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
-        print_info $? tests ${apicase}_unittest
-    fi
-done
-}
+# tests (){
+# cd ${nlp_dir}/
+# pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/taskflow_unittest.log 2>&1
+# print_info $? tests taskflow_unittest
+# cd ${nlp_dir}/tests/transformers/
+# for apicase in `ls`;do
+#     if [[ ${apicase##*.} == "py" ]];then   
+#             continue
+#     else
+#         pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
+#         print_info $? tests ${apicase}_unittest
+#     fi
+# done
+# }
 $1
