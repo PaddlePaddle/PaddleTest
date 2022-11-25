@@ -20,8 +20,13 @@ import copy
 import numpy as np
 
 import tensorrt as trt
-import pycuda.driver as cuda
-import pycuda.autoinit
+
+try:
+    import pycuda.driver as cuda
+    import pycuda.autoinit
+except ModuleNotFoundError as e:
+    print(e.msg)
+    print("CUDA might not be installed. TensorRT cannot be used.")
 
 EXPLICIT_BATCH = 1 << (int)(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH)
 EXPLICIT_PRECISION = 1 << (int)(trt.NetworkDefinitionCreationFlag.EXPLICIT_PRECISION)
@@ -42,15 +47,19 @@ class LoadCalibrator(trt.IInt8EntropyCalibrator2):
         self.calibration_loader = calibration_loader
         self.cache_file = cache_file
         self.max_calib_size = max_calib_size
-        self.batch = next(self.calibration_loader())
-        self.batch_size = self.batch.shape[0]
-        self.device_input = cuda.mem_alloc(self.batch.nbytes)
+        if calibration_loader:
+            self.batch = next(self.calibration_loader())
+            self.batch_size = self.batch.shape[0]
+            self.device_input = cuda.mem_alloc(self.batch.nbytes)
+        else:
+            self.batch_size = 1
         self.batch_id = 0
 
     def get_batch(self, names):
         """
         calibration data loader
         """
+        assert self.calibration_loader, "calibration_loader is None, Please set correct calibration_loader."
         try:
             # Assume self.batches is a generator that provides batch data.
             batch = next(self.calibration_loader())
