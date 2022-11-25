@@ -61,12 +61,15 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             Normal_dic[${dir2}]="${dir1}/${dir2}/"
         fi
     elif [[ ${dir1} =~ "tests" ]];then #新增单测
+
         if [[ ${dir3##*.} == "py" ]];then
-            continue
+            if [[ ${dir2} =~ "taskflow" ]] ;then
+                APIcase_list[${#APIcase_list[*]}]=${dir2}
+            else
+                continue
+            fi
         elif [[ ${dir2} =~ "transformers" ]] ;then
             APIcase_list[${#APIcase_list[*]}]=${dir3}
-        elif [[ ${dir2} =~ "taskflow" ]] ;then
-            APIcase_list[${#APIcase_list[*]}]=${dir2}
         fi
     else
         continue
