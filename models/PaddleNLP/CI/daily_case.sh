@@ -51,7 +51,7 @@ time (python -u ./eval.py \
     --device gpu \
     --init_checkpoint_path ./tmp/msra_ner/model_2.pdparams >${log_path}/msra_ner_eval) >>${log_path}/msra_ner_eval 2>&1
 print_info $? msra_ner_eval
-time (python -cd lu ./predict.py \
+time (python -u ./predict.py \
     --model_name_or_path bert-base-multilingual-uncased \
     --max_seq_length 128 \
     --batch_size 16 \
