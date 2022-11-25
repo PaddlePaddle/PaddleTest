@@ -8,7 +8,7 @@ declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["SQuAD"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
-  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5)
+  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5 ["tests"]=20)
 for line in `cat model_list.txt`;do
     all_example_dict[${#all_example_dict[*]}]=$line
 done
@@ -37,9 +37,10 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
                 P0case_list[${#P0case_list[*]}]=${dir3}
             else
-                P0case_list[${#P0case_list[*]}]=bert
-                P0case_list[${#P0case_list[*]}]=gpt
-                P0case_list[${#P0case_list[*]}]=transformer
+                P0case_list[${#P0case_list[*]}]=tests
+                # P0case_list[${#P0case_list[*]}]=bert
+                # P0case_list[${#P0case_list[*]}]=gpt
+                # P0case_list[${#P0case_list[*]}]=transformer
             fi
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
@@ -64,6 +65,8 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             continue
         elif [[ ${dir2} =~ "transformers" ]] ;then
             APIcase_list[${#APIcase_list[*]}]=${dir3}
+        elif [[ ${dir2} =~ "taskflow" ]] ;then
+            APIcase_list[${#APIcase_list[*]}]=${dir2}
         fi
     else
         continue
@@ -180,8 +183,12 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     echo -e "\033[35m =======CI Check Unittest========= \033[0m"
     echo -e "\033[35m ---- unittest length: ${#APIcase_list[*]}, unittest cases: ${APIcase_list[*]} \033[0m"
     for apicase in ${APIcase_list[*]};do
-        pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
-        # sh run_coverage.sh paddlenlp.transformers.${apicase} >unittest_logs/${apicase}_coverage.log 2>&1
+        if [[ ${apicase} =~ "taskflow" ]] ; then
+            pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
+        else 
+            pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
+            # sh run_coverage.sh paddlenlp.transformers.${apicase} >unittest_logs/${apicase}_coverage.log 2>&1
+        fi
         UT_EXCODE=$? || true
         if [ $UT_EXCODE -ne 0 ] ; then
             mv ${nlp_dir}/unittest_logs/${apicase}_unittest.log ${nlp_dir}/unittest_logs/${apicase}_unittest_FAIL.log

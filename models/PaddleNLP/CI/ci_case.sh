@@ -2,15 +2,20 @@
 
 print_info(){
 if [ $1 -ne 0 ];then
-    mv ${log_path}/$2 ${log_path}/$2_FAIL.log
-    echo -e "\033[31m ${log_path}/$2_FAIL \033[0m"
-    cat ${log_path}/$2_FAIL.log
+    if [[ $2 =~ 'tests' ]];then
+        mv ${nlp_dir}/unittest_logs/$3.log ${nlp_dir}/unittest_logs/$3_FAIL.log
+        echo -e "\033[31m ${nlp_dir}/unittest_logs/$3_FAIL \033[0m"
+        cat ${nlp_dir}/unittest_logs/$3_FAIL
+    else
+        mv ${log_path}/$2 ${log_path}/$2_FAIL.log
+        echo -e "\033[31m ${log_path}/$2_FAIL \033[0m"
+        cat ${log_path}/$2_FAIL.log
+    if
 else
     # mv ${log_path}/$2 ${log_path}/$2_SUCCESS.log
     echo -e "\033[32m ${log_path}/$2_SUCCESS \033[0m"
 fi
 }
-
 # case list
 # 1 waybill_ie (无可控参数，数据集外置)
 waybill_ie(){
@@ -1053,5 +1058,19 @@ taskflow (){
 cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
 print_info $? taskflow
+}
+tests (){
+cd ${nlp_dir}/tests
+pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/taskflow_unittest.log 2>&1
+print_info $? tests taskflow_unittest
+cd ${nlp_dir}/tests/transformers/
+for apicase in `ls`;do
+    if [[ ${apicase##*.} == "py" ]];then   
+            continue
+    else
+        pytest ${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
+        print_info $? tests ${apicase}_unittest
+    fi
+done
 }
 $1
