@@ -1,51 +1,31 @@
 train:
   name: multi
   params:
-    - -- max_steps=2
-    - -- save_steps=2
-    - -- device=gpu
-    - -- output_dir ./output/
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+    - --max_steps 2
+    - --save_steps 2
+    - --device gpu
+    - --output_dir ./output/
+  name: single
+  params:
+    - --max_steps 2
+    - --save_steps 2
+    - --device gpu
+    - --output_dir ./output/
 eval:
   name: trained
   params:
-    - -- device=gpu
-    - -- init_checkpoint_dir ./output/
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+    - --device gpu
+    - --init_checkpoint_dir ./output/
 infer:
   name: trained
   params:
-    - -- device=gpu
-    - -- init_checkpoint_dir ./output/
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+    - --device gpu
+    - --init_checkpoint_dir ./output/
 export:
   name: trained
   params:
-    - -- export_output_dir ./infer_model/
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+    - --export_output_dir ./infer_model/
 predict:
   name: trained
   params:
-    - -- device gpu
-    - -- init_checkpoint_dir ../infer_model/
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+    - --device gpu

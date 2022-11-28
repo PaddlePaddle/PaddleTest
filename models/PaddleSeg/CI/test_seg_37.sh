@@ -246,7 +246,6 @@ elif [[ -n `echo ${model} | grep camvid` ]] && [[ ! -f seg_dynamic_pretrain/${mo
 fi
 if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
     echo "${model} doesn't upload bos !!!"
-    seg_model_sign=True
 else
     TRAIN_MUlTI_DYNAMIC
     TRAIN_SINGLE_DYNAMIC

@@ -6,24 +6,11 @@ case:
         name: multi
         path: applications/text_summarization/pegasus
         cmd: python -m paddle.distributed.launch run_train.py
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
-        name: multi_convergence
-        cmd: python -m paddle.distributed.launch run_train.py
     eval: skipped
     infer:
       -
         name: trained
         cmd: python -m run_generate.py
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
-
     export:
       -
         name: trained
@@ -33,11 +20,6 @@ case:
         name: trained
         path: /deploy/paddle_inference/
         cmd: python inference_pegasus.py
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
   windows:
     base: ./base/normal_case.yaml
     train:
@@ -69,11 +51,6 @@ case:
         name: trained
         path: /deploy/paddle_inference/
         cmd: python inference_pegasus.py
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
 
   windows_cpu:
     base: ./base/normal_base.yaml
@@ -83,22 +60,12 @@ case:
         path: applications/text_summarization/pegasus
         cmd: python -m paddle.distributed.launch run_train.py
         params:
-          - -- device=cpu
-        result:
-          exit_code:
-            base: 20
-            threshold: 0
-            evaluation: "="
+          - -- device cpu
     eval: skipped
     infer:
       -
         name: trained
         cmd: python -m run_generate.py
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
     export:
       -
         name: trained
@@ -108,11 +75,6 @@ case:
         name: trained
         path: /deploy/paddle_inference/
         cmd: python inference_pegasus.py
-        result:
-          class_ids:
-            base: "[11, 11, 11, 11]"
-            threshold: 0
-            evaluation: "="
 
   mac:
     base: ./base/normal_base.yaml
@@ -123,21 +85,11 @@ case:
         cmd: python -m paddle.distributed.launch run_train.py
         params:
           - -- device=cpu
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
     eval: skipped
     infer:
       -
         name: trained
         cmd: python -m run_generate.py
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
     export:
       -
         name: trained
@@ -147,8 +99,3 @@ case:
         name: trained
         path: applications/text_summarization/pegasus/deploy/paddle_inference/
         cmd: python inference_pegasus.py
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
