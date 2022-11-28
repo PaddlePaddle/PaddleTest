@@ -1,3 +1,7 @@
+"""
+send mail
+"""
+
 # coding=utf-8
 import os
 import sys
@@ -11,6 +15,9 @@ import mail_conf
 
 
 def mail(sender_addr, receiver_addr, subject, content, proxy):
+    """
+    send mail
+    """
     msg = MIMEText(content, "html", "UTF-8")
     msg["From"] = sender_addr
     msg["To"] = receiver_addr
