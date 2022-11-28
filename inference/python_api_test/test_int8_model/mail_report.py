@@ -1,8 +1,6 @@
 # coding=utf-8
 import os
 import sys
-import yaml
-import requests
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
