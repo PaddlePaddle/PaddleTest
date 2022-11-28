@@ -70,8 +70,10 @@ class PaddleOCR_Build(Model_Build):
             elif sysstr == "Darwin":
                 src_path = "/Users/paddle/PaddleTest/ce_data/PaddleOCR"
 
-            os.symlink(os.path.join(src_path, "train_data"), "train_data")
-            os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
+            if not os.path.exists("train_data"):
+                os.symlink(os.path.join(src_path, "train_data"), "train_data")
+            if not os.path.exists("pretrain_models"):
+                os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
 
             # configs/rec/rec_resnet_stn_bilstm_att.yml
             os.system("python -m pip install fasttext")

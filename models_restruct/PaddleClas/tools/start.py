@@ -14,7 +14,6 @@ import wget
 import numpy as np
 
 logger = logging.getLogger("ce")
-# TODO wget容易卡死, 增加超时计时器 https://blog.csdn.net/weixin_42368421/article/details/101354628
 
 
 class PaddleClas_Start(object):
@@ -249,6 +248,7 @@ class PaddleClas_Start(object):
                     "PULC^language_classification" in self.qa_yaml_name
                     or "PULC^textline_orientation" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
+                    or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):
                     # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
                     self.env_dict["eval_trained_model"] = self.env_dict["eval_pretrained_model"]
@@ -313,6 +313,9 @@ class PaddleClas_Start(object):
                     or "PULC^textline_orientation" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):  # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
+                    # ImageNet^VGG^VGG11 用预训练模型
+                    # Distillation^mv3_large_x1_0_distill_mv3_small_x1_0 用预训练模型
+                    # Distillation^res2net200_vd_distill_pphgnet_base 无预训练模型，不进行精度校验
                     self.env_dict["predict_trained_model"] = self.env_dict["predict_pretrained_model"]
 
                 if (
@@ -423,7 +426,12 @@ class PaddleClas_Start(object):
                                 or key == self.step
                             ):
                                 # 结果和阶段同时满足 否则就有可能把不执行的阶段的result替换到执行的顺序混乱
-                                content[key][i][key1] = content_result[key][i][key1]
+                                try:  # 不一定成功，如果不成功输出出来看看
+                                    content[key][i][key1] = content_result[key][i][key1]
+                                except:
+                                    logger.info("#### can not update value")
+                                    logger.info("#### key1: {}".format(key1))
+                                    logger.info("#### content_result[key][i]: {}".format(content_result[key][i]))
         return content, content_result
 
     def update_kpi(self):

@@ -204,8 +204,11 @@ sed -i "s/python3/python/g" Makefile
 sed -i "s/python-config/python3.7m-config/g" Makefile
 #pretrain
 cd ${nlp_dir}/model_zoo/gpt/
-cp -r /ssd1/paddlenlp/download/gpt/* ./
-export CUDA_VISIBLE_DEVICES=${cudaid2}
+mkdir pre_data
+cd ./pre_data
+wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy
+wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz
+cd ../
 time (python -m paddle.distributed.launch run_pretrain.py \
     --model_type gpt \
     --model_name_or_path gpt2-en \
