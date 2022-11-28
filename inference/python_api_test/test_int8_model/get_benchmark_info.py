@@ -526,8 +526,6 @@ def run():
 
     # send mail
     task_dt = datetime.date.today()
-    #oneday=datetime.timedelta(days=1)
-    #task_dt = task_dt - oneday
     env = {
         "docker": docker,
         "paddle_branch": paddle_branch,
@@ -535,6 +533,7 @@ def run():
         "device": device,
     }
     mail_report.report_day(task_dt, env, tongji, res, mode_list, metric_list)
+
 
 if __name__ == "__main__":
     run()
