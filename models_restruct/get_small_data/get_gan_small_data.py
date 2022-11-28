@@ -68,7 +68,7 @@ class PaddleGAN_small_data(object):
 
 
 if __name__ == "__main__":
-    data_org = "/ssd3/liuquanxiang/big_data/PaddleGAN/RainH"
-    data_target = "/ssd3/liuquanxiang/small_data/PaddleGAN/RainH"
+    data_org = "big_data/PaddleGAN/RainH"
+    data_target = "small_data/PaddleGAN/RainH"
     PaddleGAN = PaddleGAN_small_data(data_org, data_target, num=20)
     PaddleGAN.run()

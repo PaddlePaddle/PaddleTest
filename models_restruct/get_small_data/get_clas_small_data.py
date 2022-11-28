@@ -209,7 +209,7 @@ if __name__ == "__main__":
     extra_path = ""
     split_flag = " "
 
-    data_org = "/ssd3/liuquanxiang/big_data/PaddleClas/SOP"
-    data_target = "/ssd3/liuquanxiang/small_data_new_clas/PaddleClas/SOP"
+    data_org = "big_data/PaddleClas/SOP"
+    data_target = "small_data_new_clas/PaddleClas/SOP"
     PaddleClas = PaddleClas_small_data(data_org, data_target, num, direct_copy, extra_path, max_file, split_flag)
     PaddleClas.run()
