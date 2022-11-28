@@ -13,7 +13,7 @@ import mail_conf
 
 
 def mail(sender_addr, receiver_addr, subject, content, proxy):
-    msg =  MIMEText(content, "html", "UTF-8")
+    msg = MIMEText(content, "html", "UTF-8")
     msg["From"] = sender_addr
     msg["To"] = receiver_addr
     msg["Subject"] = Header(subject, "UTF-8")
