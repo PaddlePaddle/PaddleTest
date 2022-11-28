@@ -125,7 +125,7 @@ def get_model_list():
     # save model list for CI pr_env.sh
     with io.open("./model_list.txt", "w", encoding="utf-8") as list:
         for all_model in all_examples_dict:
-            list.write("{}\n".format(all_model))
+            list.write(u'{}\n'.format(all_model))
         list.close()
     return all_examples_dict
 
