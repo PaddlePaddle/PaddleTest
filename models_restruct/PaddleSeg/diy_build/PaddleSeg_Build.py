@@ -67,6 +67,8 @@ class PaddleSeg_Build(Model_Build):
         if os.path.exists("seg_dynamic_pretrain"):
             os.system("rm -rf seg_dynamic_pretrain")
         os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
+        cmd = 'sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'
+        os.system(cmd)
         os.system("mkdir data")
         os.chdir("data")
         if os.path.exists("cityscapes"):
