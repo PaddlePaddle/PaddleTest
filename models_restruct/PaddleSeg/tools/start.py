@@ -11,7 +11,7 @@ import wget
 logger = logging.getLogger("ce")
 
 
-class PaddleDetection_Start(object):
+class PaddleSeg_Start(object):
     """
     自定义环境准备
     """
@@ -60,7 +60,7 @@ def run():
     """
     执行入口
     """
-    model = PaddleDetection_Start()
+    model = PaddleSeg_Start()
     model.build_prepare()
     return 0
 
