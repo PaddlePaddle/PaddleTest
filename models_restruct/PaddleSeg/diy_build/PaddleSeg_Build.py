@@ -97,7 +97,7 @@ class PaddleSeg_Build(Model_Build):
         #os.system('sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh')
         #os.system('sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh')
         #os.system("sh scripts/build.sh")
-        #os.chdir(path_now)
+        os.chdir(path_now)
         return 0
 
     def build_env(self):
