@@ -64,7 +64,7 @@ class PaddleDetection_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir(self.reponame)
         path_repo = os.getcwd()
-        #get video
+        # get video
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/test_demo.mp4")
         # avoid hang in yolox
         cmd = 'sed -i "s|norm_type: sync_bn|norm_type: bn|g" configs/yolox/_base_/yolox_cspdarknet.yml'
@@ -107,7 +107,7 @@ class PaddleDetection_Build(Model_Build):
         os.system("unzip voc.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/aic_coco_train_cocoformat.json")
         logger.info("***download data ended")
-        #compile cpp
+        # compile cpp
         os.chdir(path_repo + "/deploy/cpp")
         wget.download(
             "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos"

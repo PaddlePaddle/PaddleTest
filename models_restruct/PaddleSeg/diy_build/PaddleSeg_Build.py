@@ -88,17 +88,6 @@ class PaddleSeg_Build(Model_Build):
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/mini_supervisely.zip")
         os.system("unzip mini_supervisely.zip")
         logger.info("***download data ended")
-        #os.chdir(path_repo + "/deploy/cpp")
-        #wget.download(
-        #    "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos"
-        #    "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
-        #)
-        #os.system("tar xvf paddle_inference.tgz")
-        #os.system('sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh')
-        #os.system('sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh')
-        #os.system('sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh')
-        #os.system('sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh')
-        #os.system("sh scripts/build.sh")
         os.chdir(path_now)
         return 0
 
