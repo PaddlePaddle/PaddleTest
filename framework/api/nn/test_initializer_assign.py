@@ -59,9 +59,7 @@ def test_initializer_assign_base():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=paddle.nn.initializer.Assign(
-            randtool("float", 0, 1, [2, 3, 3, 3])
-        ),
+        weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 3, 3, 3])),
         bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
 
@@ -174,9 +172,7 @@ def test_initializer_assign2():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=paddle.nn.initializer.Assign(
-            randtool("float", 0, 1, [2, 3, 3, 3])
-        ),
+        weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 3, 3, 3])),
         bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
 
@@ -194,9 +190,7 @@ def test_initializer_assign3():
     kernel_size = [3, 3]
     stride = 2
     padding = 0
-    res = np.array(
-        [[[[8.935533]], [[9.181023]]], [[[9.6884365]], [[9.933927]]]]
-    )
+    res = np.array([[[[8.935533]], [[9.181023]]], [[[9.6884365]], [[9.933927]]]])
     obj.run(
         res=res,
         data=x,
@@ -205,9 +199,7 @@ def test_initializer_assign3():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=paddle.nn.initializer.Assign(
-            randtool("float", 0, 1, [1, 3, 3, 3])
-        ),
+        weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [1, 3, 3, 3])),
         bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
 
@@ -234,9 +226,7 @@ def test_initializer_assign3_1():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=paddle.nn.initializer.Assign(
-            randtool("float", 0, 1, [2, 3, 3, 3])
-        ),
+        weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 3, 3, 3])),
         bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
 
@@ -248,6 +238,7 @@ def test_initializer_assign4():
     paddle.nn.initializer.Assign(np.ndarray)
     """
     np.random.seed(obj.seed)
+    paddle.disable_static()
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
     out_channels = 1
@@ -293,6 +284,7 @@ def test_initializer_assign4():
             ],
         ]
     )
+    obj.static = False
     obj.run(
         res=res,
         data=x,
@@ -301,11 +293,10 @@ def test_initializer_assign4():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=paddle.nn.initializer.Assign(
-            randtool("float", 0, 1, [1, 3, 3, 3])
-        ),
+        weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [1, 3, 3, 3])),
         bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
+    obj.static = True
 
 
 @pytest.mark.api_initializer_assign_parameters
@@ -343,11 +334,7 @@ def test_initializer_assign5():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=paddle.nn.initializer.Assign(
-            paddle.to_tensor(randtool("float", 0, 1, [1, 3, 3, 3]))
-        ),
-        bias_attr=paddle.nn.initializer.Assign(
-            paddle.to_tensor(randtool("float", 0, 1, [2]))
-        ),
+        weight_attr=paddle.nn.initializer.Assign(paddle.to_tensor(randtool("float", 0, 1, [1, 3, 3, 3]))),
+        bias_attr=paddle.nn.initializer.Assign(paddle.to_tensor(randtool("float", 0, 1, [2]))),
     )
     obj.static = True
