@@ -73,8 +73,8 @@ class PaddleDetection_Build(Model_Build):
         cmd_voc = 'sed -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'
         os.system(cmd_voc)
         cmd_iter1 = (
-            'sed -i "/for step_id, data in enumerate(self.loader):/i\\            max_step_id =1" '
-            'ppdet/engine/trainer.py'
+            'sed -i "/for step_id, data in enumerate(self.loader):/i\\            max_step_id'
+             '=1" ppdet/engine/trainer.py'
         )
         cmd_iter2 = (
             'sed -i "/for step_id, data in enumerate(self.loader):/a\\                if step_id == '
@@ -84,8 +84,8 @@ class PaddleDetection_Build(Model_Build):
         os.system(cmd_iter2)
         cmd_mot1 = 'sed -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'
         cmd_mot2 = (
-            'sed -i "/for step_id, data in enumerate(dataloader):/i\\        max_step_id=1" '
-            'ppdet/engine/tracker.py'
+            'sed -i "/for step_id, data in enumerate(dataloader):/i\\        '
+            'max_step_id=1" ppdet/engine/tracker.py'
         )
         cmd_mot3 = (
             'sed -i "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
