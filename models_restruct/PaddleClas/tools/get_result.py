@@ -28,19 +28,19 @@ class PaddleClas_Collect(object):
         self.whl_branch = "develop"  # develop release
         # pytest结果下载地址
         self.report_linux_cuda102_py37_release = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426594/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426577/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426601/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426603/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426592/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567127/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567142/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567143/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567148/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567128/report/result.tar",
         }
 
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404795/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404792/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404790/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404785/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404782/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536419/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536416/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536411/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536406/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536403/report/result.tar",
         }
 
         # self.report_linux_cuda102_py37_develop = {

@@ -113,7 +113,7 @@ class CUSTOMMNIST(paddle.nn.Layer):
         x = custom_ops.custom_relu(x)
         x = self._simple_img_conv_pool_2(x)
         x = custom_ops.custom_relu(x)
-        x = paddle.fluid.layers.reshape(x, shape=[-1, self.pool_2_shape])
+        x = paddle.reshape(x, shape=[-1, self.pool_2_shape])
         x = self._fc(x)
         x = paddle.nn.functional.softmax(x)
         if label is not None:

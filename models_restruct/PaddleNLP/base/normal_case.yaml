@@ -5,12 +5,6 @@ train:
     - --save_steps 2
     - --device gpu
     - --output_dir ./output/
-  name: single
-  params:
-    - --max_steps 2
-    - --save_steps 2
-    - --device gpu
-    - --output_dir ./output/
 eval:
   name: trained
   params:

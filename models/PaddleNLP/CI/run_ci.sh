@@ -141,11 +141,11 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     set +x
     ####################################
     # set logs env
-    export nlp_dir=/workspace
-    mkdir /workspace/model_logs
-    mkdir /workspace/unittest_logs
-    mkdir /workspace/coverage_logs
-    export log_path=/workspace/model_logs
+    export nlp_dir=/workspace/PaddleNLP
+    mkdir /workspace/PaddleNLP/model_logs
+    mkdir /workspace/PaddleNLP/unittest_logs
+    mkdir /workspace/PaddleNLP/coverage_logs
+    export log_path=/workspace/PaddleNLP/model_logs
     ####################################
     # run changed models case
     echo -e "\033[35m =======CI Check P0case========= \033[0m"
