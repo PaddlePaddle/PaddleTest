@@ -61,7 +61,6 @@ class PaddleSeg_Build(Model_Build):
         os.system("pip install zip --ignore-installed")
         path_now = os.getcwd()
         os.chdir(self.reponame)
-        path_repo = os.getcwd()
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/demo.tar")
         os.system("tar xvf demo.tar")
         if os.path.exists("seg_dynamic_pretrain"):
