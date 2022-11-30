@@ -175,6 +175,12 @@ def eval(args, predictor, rerun_flag=False):
     model_type = config["Global"]["model_type"]
     extra_input = True if config["Global"]["algorithm"] in extra_input_models else False
 
+    monitor = Monitor(0)
+    monitor.start()
+    predict_time = 0.0
+    time_min = float("inf")
+    time_max = float("-inf")
+
     with tqdm(
         total=len(val_loader), bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
     ) as t:
@@ -182,7 +188,17 @@ def eval(args, predictor, rerun_flag=False):
             images = np.array(batch[0])
 
             predictor.prepare_data([images])
+            start_time = time.time()
             outputs = predictor.run()
+            end_time = time.time()
+            timed = end_time - start_time
+            time_min = min(time_min, timed)
+            time_max = max(time_max, timed)
+            predict_time += timed            
+
+            if rerun_flag:
+                monitor.stop()
+                return
 
             batch_numpy = []
             for item in batch:
@@ -198,11 +214,32 @@ def eval(args, predictor, rerun_flag=False):
 
             t.update()
 
+    monitor.stop()
+    time_avg = float(predict_time) / (1.0*repeats)
+    monitor_result = monitor.output()
+
     metric = eval_class.get_metric()
     logger.info("metric eval ***************")
     for k, v in metric.items():
         logger.info("{}:{}".format(k, v))
 
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
+    print(
+        "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
+            round(time_min * 1000, 2), round(time_max * 1000, 2), round(time_avg * 1000, 2)
+        )
+    )
 
 def main(args):
     """
