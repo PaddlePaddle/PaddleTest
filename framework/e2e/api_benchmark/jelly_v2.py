@@ -133,16 +133,31 @@ class Jelly_v2(object):
         设置paddle 输入参数
         """
         for key, value in inputs.items():
-            if isinstance(value, (np.generic, np.ndarray)):
-                self.data[key] = to_tensor(value)
-                if self.api_str.endswith("_"):
-                    self.data[key].stop_gradient = True
-                else:
-                    self.data[key].stop_gradient = False
+            # 只针对输入为list[Tensor, Tensor]
+            if isinstance(value, list):
+                self.data[key] = []
+                for i, v in enumerate(value):
+                    if isinstance(v, (np.generic, np.ndarray)):
+                        self.data[key].append(to_tensor(v))
+                        if self.api_str.endswith("_"):
+                            self.data[key][i].stop_gradient = True
+                        else:
+                            self.data[key][i].stop_gradient = False
+                    else:
+                        self.data[key].append(v)
+                # print('set_paddle_param self.data[key] is: ', self.data[key])
             else:
-                self.data[key] = value
-            # self.data[key] = to_tensor(value)
-            # self.data[key].stop_gradient = False
+                if isinstance(value, (np.generic, np.ndarray)):
+                    self.data[key] = to_tensor(value)
+                    if self.api_str.endswith("_"):
+                        self.data[key].stop_gradient = True
+                    else:
+                        self.data[key].stop_gradient = False
+                else:
+                    self.data[key] = value
+                # self.data[key] = to_tensor(value)
+                # self.data[key].stop_gradient = False
+                # print('set_paddle_param self.data[key] is: ', self.data[key])
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 self.param[key] = to_tensor(value)
@@ -167,6 +182,8 @@ class Jelly_v2(object):
         """
         主体测试逻辑
         """
+        # print("self.data is: ", self.data)
+        # print("self.param is: ", self.param)
         if self._layertypes(self.api) == "func":
             input_param = dict(self.data, **self.param)
             for i in range(self.loops):

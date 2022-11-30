@@ -1,6 +1,6 @@
 case:
   linux:
-    base: ./base/normal_base.yml
+    base: ./base/mot_base.yml
     train:
       -
         name: multi
@@ -15,11 +15,11 @@ case:
     eval:
       -
         name: pretrained
-        cmd: python tools/eval.py
+        cmd: python tools/eval_mot.py
     infer:
       -
         name: pretrained
-        cmd: python tools/infer.py
+        cmd: python tools/infer_mot.py
     export:
       -
         name: pretrained
@@ -27,7 +27,7 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/python/infer.py
+        cmd: python deploy/pptracking/python/mot_jde_infer.py
       -
         name: cpp
         cmd: ./deploy/cpp/build/main
