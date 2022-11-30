@@ -236,7 +236,7 @@ def main(args):
             calibration_cache_file=args.calibration_file,
             verbose=False,
         )
-    if predictor == None:
+    if predictor is None:
         return
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
