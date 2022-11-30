@@ -1,21 +1,8 @@
 case:
   linux:
     base: ./base/normal_base.yml
-    train:
-      -
-        name: multi
-        cmd : python -m paddle.distributed.launch tools/train.py
-        params:
-          - TrainReader.batch_size=1
-      -
-        name: single
-        cmd : python tools/train.py
-        params:
-          - TrainReader.batch_size=1
-    eval:
-      -
-        name: pretrained
-        cmd: python tools/eval.py
+    train: skipped
+    eval: skipped
     infer:
       -
         name: pretrained

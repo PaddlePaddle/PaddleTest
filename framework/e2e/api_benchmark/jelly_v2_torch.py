@@ -137,18 +137,34 @@ class Jelly_v2_torch(object):
         设置torch 输入参数
         """
         for key, value in inputs.items():
-            if self.places == "cpu":
-                if isinstance(value, (np.generic, np.ndarray)):
-                    self.data[key] = torch.tensor(value)
-                else:
-                    self.data[key] = value
+            if isinstance(value, list):
+                self.data[key] = []
+                for i, v in enumerate(value):
+                    if self.places == "cpu":
+                        if isinstance(v, (np.generic, np.ndarray)):
+                            self.data[key].append(torch.tensor(v))
+                        else:
+                            self.data[key].append(v)
+                    else:
+                        if isinstance(v, (np.generic, np.ndarray)):
+                            self.data[key].append(torch.tensor(v).to("cuda"))
+                        else:
+                            self.data[key].append(v)
+                    if self.enable_backward and isinstance(v, (np.generic, np.ndarray)):
+                        self.data[key][i].requires_grad = True
             else:
-                if isinstance(value, (np.generic, np.ndarray)):
-                    self.data[key] = torch.tensor(value).to("cuda")
+                if self.places == "cpu":
+                    if isinstance(value, (np.generic, np.ndarray)):
+                        self.data[key] = torch.tensor(value)
+                    else:
+                        self.data[key] = value
                 else:
-                    self.data[key] = value
-            if self.enable_backward and isinstance(value, (np.generic, np.ndarray)):
-                self.data[key].requires_grad = True
+                    if isinstance(value, (np.generic, np.ndarray)):
+                        self.data[key] = torch.tensor(value).to("cuda")
+                    else:
+                        self.data[key] = value
+                if self.enable_backward and isinstance(value, (np.generic, np.ndarray)):
+                    self.data[key].requires_grad = True
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 if self.places == "cpu":
