@@ -4,7 +4,6 @@
 """
 test T
 """
-from paddle.fluid.layers.nn import shape
 from apibase import compare
 import paddle
 import pytest
