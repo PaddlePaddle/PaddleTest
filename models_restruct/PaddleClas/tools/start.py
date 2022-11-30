@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-执行case前：生成yaml，设置特殊参数，改变监控指标
+执行case前: 生成yaml, 设置特殊参数, 改变监控指标
 """
 import os
 import sys
@@ -14,7 +14,6 @@ import wget
 import numpy as np
 
 logger = logging.getLogger("ce")
-# TODO wget容易卡死，增加超时计时器 https://blog.csdn.net/weixin_42368421/article/details/101354628
 
 
 class PaddleClas_Start(object):
@@ -28,7 +27,7 @@ class PaddleClas_Start(object):
         """
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
-        logger.info("###self.qa_yaml_name: {}".format(self.qa_yaml_name))
+        logger.info("### self.qa_yaml_name: {}".format(self.qa_yaml_name))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
         self.step = os.environ["step"]
@@ -38,34 +37,34 @@ class PaddleClas_Start(object):
 
         self.env_dict = {}
         self.base_yaml_dict = {
-            "ImageNet": "ppcls:configs:ImageNet:ResNet:ResNet50.yaml",
-            "slim": "ppcls:configs:slim:PPLCNet_x1_0_quantization.yaml",
-            "DeepHash": "ppcls:configs:DeepHash:DCH.yaml",
-            "GeneralRecognition": "ppcls:configs:GeneralRecognition:GeneralRecognition_PPLCNet_x2_5.yaml",
-            "GeneralRecognitionV2": "ppcls:configs:GeneralRecognitionV2:GeneralRecognitionV2_PPLCNetV2_base.yaml",
-            "Cartoonface": "ppcls:configs:Cartoonface:ResNet50_icartoon.yaml",
-            "Logo": "ppcls:configs:Logo:ResNet50_ReID.yaml",
-            "Products": "ppcls:configs:Products:ResNet50_vd_Inshop.yaml",
-            "Vehicle": "ppcls:configs:Vehicle:ResNet50.yaml",
-            "PULC": "ppcls:configs:PULC:car_exists:PPLCNet_x1_0.yaml",
-            "reid": "ppcls:configs:reid:strong_baseline:baseline.yaml",
-            "metric_learning": "ppcls:configs:metric_learning:adaface_ir18",
+            "ImageNet": "ppcls^configs^ImageNet^ResNet^ResNet50.yaml",
+            "slim": "ppcls^configs^slim^PPLCNet_x1_0_quantization.yaml",
+            "DeepHash": "ppcls^configs^DeepHash^DCH.yaml",
+            "GeneralRecognition": "ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5.yaml",
+            "GeneralRecognitionV2": "ppcls^configs^GeneralRecognitionV2^GeneralRecognitionV2_PPLCNetV2_base.yaml",
+            "Cartoonface": "ppcls^configs^Cartoonface^ResNet50_icartoon.yaml",
+            "Logo": "ppcls^configs^Logo^ResNet50_ReID.yaml",
+            "Products": "ppcls^configs^Products^ResNet50_vd_Inshop.yaml",
+            "Vehicle": "ppcls^configs^Vehicle^ResNet50.yaml",
+            "PULC": "ppcls^configs^PULC^car_exists^PPLCNet_x1_0.yaml",
+            "reid": "ppcls^configs^reid^strong_baseline^baseline.yaml",
+            "metric_learning": "ppcls^configs^metric_learning^adaface_ir18",
         }
-        self.model_type = self.qa_yaml_name.split(":")[2]  # 固定格式为 ppcls:config:model_type
+        self.model_type = self.qa_yaml_name.split("^")[2]  # 固定格式为 ppcls^config^model_type
         self.env_dict["clas_model_type"] = self.model_type
-        if ":PULC:" in self.qa_yaml_name:
-            self.model_type_PULC = self.qa_yaml_name.split(":")[3]  # 固定格式为 ppcls:config:model_type:PULC_type
+        if "^PULC^" in self.qa_yaml_name:
+            self.model_type_PULC = self.qa_yaml_name.split("^")[3]  # 固定格式为 ppcls^config^model_type^PULC_type
             self.env_dict["model_type_PULC"] = self.model_type_PULC
 
     def download_data(self, value=None):
         """
-        下载数据集
+        下载推理所需要的数据
         """
         # 调用函数路径已切换至PaddleClas
 
         tar_name = value.split("/")[-1]
         # if os.path.exists(tar_name) and os.path.exists(tar_name.replace(".tar", "")):
-        # 有end回收数据，只判断文件夹
+        # 有end回收数据, 只判断文件夹
         if os.path.exists(tar_name.replace(".tar", "")):
             logger.info("#### already download {}".format(tar_name))
         else:
@@ -90,8 +89,8 @@ class PaddleClas_Start(object):
             os.mkdir("models")
         os.chdir("models")
         # if os.path.exists(value) and os.path.exists(value.replace(".tar", "")):
-        # 有end回收数据，只判断文件夹
-        if os.path.exists(value):  # 这里判断tar是否存在，以便于替换掉export传出的
+        # 有end回收数据, 只判断文件夹
+        if os.path.exists(value):  # 这里判断tar是否存在, 以便于替换掉export传出的
             logger.info("####already download {}".format(value))
         else:
             if "general_PPLCNetV2" in value:
@@ -120,7 +119,7 @@ class PaddleClas_Start(object):
         self.predict_pretrain_params = None
 
         # 获取训好模型的名称
-        with open(os.path.join(self.REPO_PATH, self.rd_yaml_path), "r") as f:
+        with open(os.path.join(self.REPO_PATH, self.rd_yaml_path), "r", encoding="utf-8") as f:
             content = yaml.load(f, Loader=yaml.FullLoader)
         self.eval_trained_params = content["Arch"]["name"]
         self.input_image_shape = list(content["Global"]["image_shape"])[1]  # 格式 [3, 384, 384]
@@ -177,7 +176,7 @@ class PaddleClas_Start(object):
         """
         根据输入尺寸改变预测时使用的参数
         """
-        with open(os.path.join(self.REPO_PATH, "deploy/configs/inference_cls.yaml"), "r") as f:
+        with open(os.path.join(self.REPO_PATH, "deploy/configs/inference_cls.yaml"), "r", encoding="utf-8") as f:
             content = yaml.load(f, Loader=yaml.FullLoader)
         content["PreProcess"]["transform_ops"][0]["ResizeImage"]["resize_short"] = self.input_image_shape
         content["PreProcess"]["transform_ops"][1]["CropImage"]["size"] = self.input_image_shape
@@ -187,7 +186,7 @@ class PaddleClas_Start(object):
 
     def prepare_env(self):
         """
-        下载预训练模型，指定路径
+        下载预训练模型, 指定路径
         """
         self.get_params()  #  准备参数
         if self.model_type == "ImageNet":
@@ -236,9 +235,9 @@ class PaddleClas_Start(object):
         for step_single in step:
             if ("eval" in step_single or "infer" in step_single or "export" in step_single) and (
                 "pretrained" in step_single
-                or "PULC:language_classification" in self.qa_yaml_name
-                or "PULC:textline_orientation" in self.qa_yaml_name
-                or ":ImageNet:VGG:VGG11" in self.qa_yaml_name
+                or "PULC^language_classification" in self.qa_yaml_name
+                or "PULC^textline_orientation" in self.qa_yaml_name
+                or "ImageNet^VGG^VGG11" in self.qa_yaml_name
             ):
 
                 # 准备预训练评估路径模型
@@ -246,9 +245,10 @@ class PaddleClas_Start(object):
 
                 # 添加额外的规则 注意要在上面if添加同样的规则
                 if (
-                    "PULC:language_classification" in self.qa_yaml_name
-                    or "PULC:textline_orientation" in self.qa_yaml_name
-                    or ":ImageNet:VGG:VGG11" in self.qa_yaml_name
+                    "PULC^language_classification" in self.qa_yaml_name
+                    or "PULC^textline_orientation" in self.qa_yaml_name
+                    or "ImageNet^VGG^VGG11" in self.qa_yaml_name
+                    or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):
                     # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
                     self.env_dict["eval_trained_model"] = self.env_dict["eval_pretrained_model"]
@@ -260,19 +260,19 @@ class PaddleClas_Start(object):
                     logger.info("### already have {}_pretrained.pdparams".format(self.eval_pretrained_params))
                 else:
                     if (  # 针对legend模型
-                        ":ESNet" in self.qa_yaml_name
-                        or ":HRNet" in self.qa_yaml_name
-                        or ":InceptionV3" in self.qa_yaml_name
-                        or ":MobileNetV1" in self.qa_yaml_name
-                        or ":MobileNetV3" in self.qa_yaml_name
-                        or ":PPHGNet" in self.qa_yaml_name
-                        or ":PPLCNet" in self.qa_yaml_name
-                        or ":PPLCNetV2" in self.qa_yaml_name
-                        or ":ResNet" in self.qa_yaml_name
-                        or ":GeneralRecognition_PPLCNet" in self.qa_yaml_name
-                        or ":GeneralRecognitionV2_PPLCNetV2" in self.qa_yaml_name
-                        or ":SwinTransformer" in self.qa_yaml_name
-                        or ":VGG" in self.qa_yaml_name
+                        "^ESNet" in self.qa_yaml_name
+                        or "^HRNet" in self.qa_yaml_name
+                        or "^InceptionV3" in self.qa_yaml_name
+                        or "^MobileNetV1" in self.qa_yaml_name
+                        or "^MobileNetV3" in self.qa_yaml_name
+                        or "^PPHGNet" in self.qa_yaml_name
+                        or "^PPLCNet" in self.qa_yaml_name
+                        or "^PPLCNetV2" in self.qa_yaml_name
+                        or "^ResNet" in self.qa_yaml_name
+                        or "^GeneralRecognition_PPLCNet" in self.qa_yaml_name
+                        or "^GeneralRecognitionV2_PPLCNetV2" in self.qa_yaml_name
+                        or "^SwinTransformer" in self.qa_yaml_name
+                        or "^VGG" in self.qa_yaml_name
                     ):
                         logger.info("#### use legendary_models pretrain model")
                         value = "https://paddle-imagenet-models-name.bj.bcebos.com/\
@@ -300,19 +300,22 @@ class PaddleClas_Start(object):
             # language_classification、textline_orientation这两个模型直接用预训练模型 eval predict阶段
             elif "predict" in step_single and (
                 "pretrained" in step_single
-                or "PULC:language_classification" in self.qa_yaml_name
-                or "PULC:textline_orientation" in self.qa_yaml_name
-                or ":ImageNet:VGG:VGG11" in self.qa_yaml_name
+                or "PULC^language_classification" in self.qa_yaml_name
+                or "PULC^textline_orientation" in self.qa_yaml_name
+                or "ImageNet^VGG^VGG11" in self.qa_yaml_name
             ):
                 self.env_dict["predict_pretrained_model"] = os.path.join(
                     "../{}_infer".format(self.predict_pretrain_params)
                 )
                 # 添加额外的规则 注意要在上面if添加同样的规则
                 if (
-                    "PULC:language_classification" in self.qa_yaml_name
-                    or "PULC:textline_orientation" in self.qa_yaml_name
-                    or ":ImageNet:VGG:VGG11" in self.qa_yaml_name
+                    "PULC^language_classification" in self.qa_yaml_name
+                    or "PULC^textline_orientation" in self.qa_yaml_name
+                    or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):  # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
+                    # ImageNet^VGG^VGG11 用预训练模型
+                    # Distillation^mv3_large_x1_0_distill_mv3_small_x1_0 用预训练模型
+                    # Distillation^res2net200_vd_distill_pphgnet_base 无预训练模型，不进行精度校验
                     self.env_dict["predict_trained_model"] = self.env_dict["predict_pretrained_model"]
 
                 if (
@@ -368,8 +371,8 @@ class PaddleClas_Start(object):
         """
         基于base yaml创造新的yaml
         """
-        logger.info("###self.mode {}".format(self.mode))
-        # 增加 function 和 precision 的选项，只有在precision时才进行复制,function时只用base验证
+        logger.info("### self.mode {}".format(self.mode))
+        # 增加 function 和 precision 的选项, 只有在precision时才进行复制,function时只用base验证
         # if self.mode == "function":
         #     if os.path.exists(os.path.join("cases", self.qa_yaml_name)) is True:  # cases 是基于最原始的路径的
         #         os.remove(os.path.join("cases", self.qa_yaml_name))  # 删除已有的 precision 用 base
@@ -407,6 +410,7 @@ class PaddleClas_Start(object):
     def change_yaml_kpi(self, content, content_result):
         """
         递归修改变量值,直接全部整体替换,不管现在需要的是什么阶段
+        注意这里依赖 self.step 变量, 如果执行时不传入暂时获取不到, TODO:待框架优化
         """
         if isinstance(content, dict):
             for key, val in content.items():
@@ -415,8 +419,19 @@ class PaddleClas_Start(object):
                 elif isinstance(content[key], list):
                     for i, case_value in enumerate(content[key]):
                         for key1, val1 in case_value.items():
-                            if key1 == "result" and key + ":" in self.step:  # 结果和阶段同时满足
-                                content[key][i][key1] = content_result[key][i][key1]
+                            if key1 == "result" and (
+                                key + ":" in self.step
+                                or key + "+" in self.step
+                                or "+" + key in self.step
+                                or key == self.step
+                            ):
+                                # 结果和阶段同时满足 否则就有可能把不执行的阶段的result替换到执行的顺序混乱
+                                try:  # 不一定成功，如果不成功输出出来看看
+                                    content[key][i][key1] = content_result[key][i][key1]
+                                except:
+                                    logger.info("#### can not update value")
+                                    logger.info("#### key1: {}".format(key1))
+                                    logger.info("#### content_result[key][i]: {}".format(content_result[key][i]))
         return content, content_result
 
     def update_kpi(self):
@@ -426,13 +441,19 @@ class PaddleClas_Start(object):
         kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
         # 读取上次执行的产出
-        # 通过whl包的地址，判断是release还是develop  report_linux_cuda102_py37_develop
-
-        with open(os.path.join("tools", "report_linux_cuda102_py37_develop.yaml"), "r") as f:
+        # 通过whl包的地址, 判断是release还是develop  report_linux_cuda102_py37_develop
+        if "Develop" in self.paddle_whl:
+            # logger.info(" paddle_whl use branch devleop : {}".format(self.paddle_whl))
+            content_result_name = "report_linux_cuda102_py37_develop.yaml"
+        else:
+            # logger.info(" paddle_whl use branch release or None : {}".format(self.paddle_whl))
+            content_result_name = "report_linux_cuda102_py37_release.yaml"
+        with open(os.path.join("tools", content_result_name), "r", encoding="utf-8") as f:
             content_result = yaml.load(f, Loader=yaml.FullLoader)
 
         if self.qa_yaml_name in content_result.keys():  # 查询yaml中是否存在已获取的模型指标
-            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r") as f:
+            logger.info("#### change {} value".format(self.qa_yaml_name))
+            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r", encoding="utf-8") as f:
                 content = yaml.load(f, Loader=yaml.FullLoader)
 
             content = json.dumps(content)

@@ -1,0 +1,16 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: ce_tests/dygraph/quant
+        cmd: python ./src/qat.py
+        params:
+          - --arch=resnet50
+          - --data=../../../demo/data/ILSVRC2012
+          - --epoch=1
+          - --batch_size=32
+          - --num_workers=3
+          - --lr=0.0001
+          - --output_dir=./resnet50/output_qat
+          - --enable_quant

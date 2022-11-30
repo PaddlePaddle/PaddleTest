@@ -22,5 +22,4 @@ def test_humanseg_lite_predict():
     res = human_seg.segment(images=[im], visualization=True)
     print(res[0]["data"])
     human_seg.video_segment("doc_video.mp4")
-    human_seg.save_inference_model("humanseg_lite_model_save")
     os.system("hub uninstall humanseg_lite")

@@ -25,38 +25,41 @@ class PaddleClas_Collect(object):
         初始化参数
         """
         self.repo_name = "PaddleClas"
+        self.whl_branch = "develop"  # develop release
         # pytest结果下载地址
+        self.report_linux_cuda102_py37_release = {
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567127/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567142/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567143/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567148/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567128/report/result.tar",
+        }
+
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047501/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047502/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047500/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047499/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20047498/report/result.tar",
+            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536419/report/result.tar",
+            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536416/report/result.tar",
+            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536411/report/result.tar",
+            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536406/report/result.tar",
+            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536403/report/result.tar",
         }
 
         # self.report_linux_cuda102_py37_develop = {
-        #     "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19619465/report/result.tar"
+        #     "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404792/report/result.tar",
         # }
-
-        # self.report_linux_cuda102_py37_develop = {
-        #     "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909321/report/result.tar"
-        # }
-
-        self.report_linux_cuda102_py37_release = {}
 
         self.base_yaml_dict = {
-            "ImageNet": "ppcls:configs:ImageNet:ResNet:ResNet50.yaml",
-            "slim": "ppcls:configs:slim:PPLCNet_x1_0_quantization.yaml",
-            "DeepHash": "ppcls:configs:DeepHash:DCH.yaml",
-            "GeneralRecognition": "ppcls:configs:GeneralRecognition:GeneralRecognition_PPLCNet_x2_5.yaml",
-            "Cartoonface": "ppcls:configs:Cartoonface:ResNet50_icartoon.yaml",
-            "GeneralRecognitionV2": "ppcls:configs:GeneralRecognitionV2:GeneralRecognitionV2_PPLCNetV2_base.yaml",
-            "Logo": "ppcls:configs:Logo:ResNet50_ReID.yaml",
-            "Products": "ppcls:configs:Products:ResNet50_vd_Inshop.yaml",
-            "Vehicle": "ppcls:configs:Vehicle:ResNet50.yaml",
-            "PULC": "ppcls:configs:PULC:car_exists:PPLCNet_x1_0.yaml",
-            "reid": "ppcls:configs:reid:strong_baseline:baseline.yaml",
-            "metric_learning": "ppcls:configs:metric_learning:adaface_ir18.yaml",
+            "ImageNet": "ppcls^configs^ImageNet^ResNet^ResNet50.yaml",
+            "slim": "ppcls^configs^slim^PPLCNet_x1_0_quantization.yaml",
+            "DeepHash": "ppcls^configs^DeepHash^DCH.yaml",
+            "GeneralRecognition": "ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5.yaml",
+            "Cartoonface": "ppcls^configs^Cartoonface^ResNet50_icartoon.yaml",
+            "GeneralRecognitionV2": "ppcls^configs^GeneralRecognitionV2^GeneralRecognitionV2_PPLCNetV2_base.yaml",
+            "Logo": "ppcls^configs^Logo^ResNet50_ReID.yaml",
+            "Products": "ppcls^configs^Products^ResNet50_vd_Inshop.yaml",
+            "Vehicle": "ppcls^configs^Vehicle^ResNet50.yaml",
+            "PULC": "ppcls^configs^PULC^car_exists^PPLCNet_x1_0.yaml",
+            "reid": "ppcls^configs^reid^strong_baseline^baseline.yaml",
+            "metric_learning": "ppcls^configs^metric_learning^adaface_ir18.yaml",
         }
 
     def download_data(self, priority="P0", value=None):
@@ -107,7 +110,7 @@ class PaddleClas_Collect(object):
         """
         for name in self.report_path_list:
             shutil.rmtree(name)
-        os.remove(self.repo_name + ".tar.gz")
+        os.remove(self.repo_name + "-develop.tar.gz")
         shutil.rmtree(self.repo_name)
 
     def get_result_yaml(self):
@@ -116,7 +119,13 @@ class PaddleClas_Collect(object):
         """
         self.report_path_list = list()
         self.case_info_list = list()
-        for (key, value) in self.report_linux_cuda102_py37_develop.items():
+        if self.whl_branch == "develop":
+            content = self.report_linux_cuda102_py37_develop
+            self.content_name = "report_linux_cuda102_py37_develop.yaml"
+        else:
+            content = self.report_linux_cuda102_py37_release
+            self.content_name = "report_linux_cuda102_py37_release.yaml"
+        for (key, value) in content.items():
             self.report_path = self.download_data(key, value)
             self.report_path_list.append(self.report_path)
             for case_detail in self.load_json():
@@ -159,9 +168,9 @@ class PaddleClas_Collect(object):
         if os.path.exists(self.repo_name):
             print("#### already download {}".format(self.repo_name))
         else:
-            cmd = "wget https://xly-devops.bj.bcebos.com/PaddleTest/{}.tar.gz --no-proxy \
-                && tar xf {}.tar.gz".format(
-                self.repo_name, self.repo_name
+            cmd = "wget https://xly-devops.bj.bcebos.com/PaddleTest/{}/{}-develop.tar.gz --no-proxy \
+                && tar xf {}-develop.tar.gz && mv {}-develop {}".format(
+                self.repo_name, self.repo_name, self.repo_name, self.repo_name, self.repo_name
             )
             os.system(cmd)  # 下载并解压PaddleClas
 
@@ -178,14 +187,14 @@ class PaddleClas_Collect(object):
             # print("    ")
             # input()
             if case_value["model_name"] not in content.keys():
-                content[case_value["model_name"]] = eval(case_value["model_name"].split(":")[2])
+                content[case_value["model_name"]] = eval(case_value["model_name"].split("^")[2])
                 # print('###case_value222', content[case_value["model_name"]])
                 # print("    ")
                 content = self.pop_yaml_useless(content)
                 # print('###content', content)
                 # print('###content', type(content))
                 # print("    ")
-                with open(os.path.join("PaddleClas", case_value["model_name"].replace(":", "/") + ".yaml"), "r") as f:
+                with open(os.path.join(self.repo_name, case_value["model_name"].replace("^", "/") + ".yaml"), "r") as f:
                     content_rd_yaml = yaml.load(f, Loader=yaml.FullLoader)
                 if "ATTRMetric" in str(content_rd_yaml):
                     self.kpi_value_eval = "label_f1"
@@ -206,6 +215,8 @@ class PaddleClas_Collect(object):
                 ):
                     if tag_value["name"] == case_value["tag"].split("_")[1]:
                         if case_value["kpi_value"] != -1.0:  # 异常值不保存
+                            print("####case_info_list   model_name: {}".format(case_value["model_name"]))
+                            print("####case_info_list   case tag is : {}".format(case_value["tag"]))
                             print("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
                             print("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
                             print(
@@ -218,63 +229,70 @@ class PaddleClas_Collect(object):
                             content[case_value["model_name"]]["case"][case_value["system"]][
                                 case_value["tag"].split("_")[0]
                             ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
-                            # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer
 
-                            if (
-                                ":HRNet" in case_value["model_name"]
-                                or ":LeViT" in case_value["model_name"]
-                                or ":SwinTransformer" in case_value["model_name"]
-                            ) and (
-                                case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"
-                            ):
-                                print("### {} change threshold and evaluation ".format(case_value["model_name"]))
-                                content[case_value["model_name"]]["case"][case_value["system"]][
-                                    case_value["tag"].split("_")[0]
-                                ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
-                                content[case_value["model_name"]]["case"][case_value["system"]][
-                                    case_value["tag"].split("_")[0]
-                                ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
-
-                            # 处理存在随机量导致每次infer_trained结果不一致的情况
-                            if (
-                                (
-                                    ":HRNet" in case_value["model_name"]
-                                    or ":LeViT" in case_value["model_name"]
-                                    or ":SwinTransformer" in case_value["model_name"]
-                                )
-                                and (
-                                    case_value["tag"].split("_")[0] == "infer"
-                                    or case_value["tag"].split("_")[0] == "predict"
-                                )
-                                and tag_value["name"] == "trained"
-                            ):
-                                try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
-                                    print("### {} change class_ids to exit_code ".format(case_value["model_name"]))
-                                    dict_tmp = content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]
-                                    dict_tmp.update({"exit_code": dict_tmp.pop("class_ids")})
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"] = dict_tmp
-
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["base"] = 0
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["threshold"] = 0
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"]["exit_code"]["evaluation"] = "="
-                                except:
-                                    print("###can not change class_ids to exit_code")
+                        # 单独处理固定不了随机量的 HRNet、 LeViT、 SwinTransformer、 VisionTransformer
+                        if (
+                            "^HRNet" in case_value["model_name"]
+                            or "^LeViT" in case_value["model_name"]
+                            or "^SwinTransformer" in case_value["model_name"]
+                            or "^VisionTransformer" in case_value["model_name"]
+                        ) and (case_value["tag"].split("_")[0] == "train" or case_value["tag"].split("_")[0] == "eval"):
+                            print("### {} change threshold and evaluation ".format(case_value["model_name"]))
+                            content[case_value["model_name"]]["case"][case_value["system"]][
+                                case_value["tag"].split("_")[0]
+                            ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
+                            content[case_value["model_name"]]["case"][case_value["system"]][
+                                case_value["tag"].split("_")[0]
+                            ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
                             # 这里进行替换时要考虑到全局变量如何替换
+
+            # 单独处理固定不了随机量的HRNet、LeViT、SwinTransformer  predict阶段防止不替换
+            for index, tag_value in enumerate(
+                content[case_value["model_name"]]["case"][case_value["system"]][case_value["tag"].split("_")[0]]
+            ):
+                if tag_value["name"] == case_value["tag"].split("_")[1]:
+                    if case_value["kpi_value"] != -1.0:  # 异常值不保存
+                        # 处理存在随机量导致每次infer_trained结果不一致的情况
+                        if (
+                            (
+                                "^HRNet" in case_value["model_name"]
+                                or "^LeViT" in case_value["model_name"]
+                                or "^SwinTransformer" in case_value["model_name"]
+                                or "^VisionTransformer" in case_value["model_name"]
+                            )
+                            and (
+                                case_value["tag"].split("_")[0] == "infer"
+                                or case_value["tag"].split("_")[0] == "predict"
+                            )
+                            and tag_value["name"] == "trained"
+                        ):
+                            try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
+                                print("### {} change class_ids to exit_code ".format(case_value["model_name"]))
+                                dict_tmp = content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]
+                                dict_tmp.update({"exit_code": dict_tmp.pop("class_ids")})
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"] = dict_tmp
+
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]["exit_code"]["base"] = 0
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]["exit_code"]["threshold"] = 0
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"]["exit_code"]["evaluation"] = "="
+                            except:
+                                print("###can not change class_ids to exit_code")
+
             # print('###content333', content)
             # print('###content333', type(content))
             # print("    ")
             # input()
-        with open(os.path.join("report_linux_cuda102_py37_develop.yaml"), "w") as f:  # 会删除之前的，重新生成一份
+        with open(os.path.join(self.content_name), "w") as f:  # 会删除之前的，重新生成一份
             yaml.dump(content, f)  # 每次位置是一致的
             # yaml.dump(content, f, sort_keys=False)
 
@@ -284,7 +302,7 @@ def run():
     执行入口
     """
     # kpi_value_eval="loss"
-    # with open(os.path.join("../cases", "ppcls:configs:ImageNet:ResNet:ResNet50.yaml"), "r") as f:
+    # with open(os.path.join("../cases", "ppcls^configs^ImageNet^ResNet^ResNet50.yaml"), "r") as f:
     #     content = yaml.load(f, Loader=yaml.FullLoader)
     # print('###content',type(content))
     # print('###content',content["case"]["linux"]["eval"])

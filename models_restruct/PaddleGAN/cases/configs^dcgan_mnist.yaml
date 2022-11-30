@@ -1,0 +1,23 @@
+case:
+  linux:
+    base: ./base/base.yaml
+    train:
+      -
+        name: multi
+        cmd: python -m paddle.distributed.launch tools/main.py
+      -
+        name: single
+        cmd: python tools/main.py
+    eval: skipped
+
+  windows:
+    base: ./base/base.yaml
+    eval: skipped
+
+  windows_cpu:
+    base: ./base/base.yaml
+    eval: skipped
+
+  mac:
+    base: ./base/base.yaml
+    eval: skipped

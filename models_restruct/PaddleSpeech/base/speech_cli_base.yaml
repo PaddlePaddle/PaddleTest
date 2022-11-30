@@ -1,0 +1,6 @@
+train: skipped
+eval: skipped
+export: skipped
+predict:
+  name: cli
+  cmd: ${cli_cmd}

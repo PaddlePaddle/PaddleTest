@@ -1,0 +1,14 @@
+case:
+    linux:
+        base: ./base/3d_base_pretrained.yaml
+        predict:
+          -
+            name: pretrained
+            params:
+              - --model_file exported_model/${model}/${category}.pdmodel
+              - --params_file exported_model/${model}/${category}.pdiparams
+              - --lidar_file datasets/KITTI/training/velodyne/000000.bin
+              - --point_cloud_range 0 -19.84 -2.5 47.36 19.84 0.5
+              - --voxel_size .16 .16 3
+              - --max_points_in_voxel 100
+              - --max_voxel_num 12000

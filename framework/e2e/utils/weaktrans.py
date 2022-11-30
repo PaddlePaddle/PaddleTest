@@ -102,6 +102,16 @@ class WeakTrans(object):
         self.logger.get_log().info("Case的params设置：{}".format(params))
         return params
 
+    def get_method(self, framework):
+        """
+        get method
+        """
+        # 获取参数输入
+        method_info = self.case[framework].get("method", None)
+        # method = self._generate_params(method_info)
+        self.logger.get_log().info("Case的api调用的方法method设置：{}".format(method_info))
+        return method_info
+
     def get_func(self, framework):
         """
         get api or net

@@ -5,11 +5,13 @@
 
 import os
 import sys
+import re
 import json
 import shutil
 import logging
 import tarfile
 import argparse
+import platform
 import yaml
 import wget
 import numpy as np
@@ -36,27 +38,113 @@ class PaddleOCR_Start(object):
         self.mode = os.environ["mode"]  # function or precision
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)  # 所有和yaml相关的变量与此拼接
         self.env_dict = {}
+        self.model = os.path.splitext(os.path.basename(self.rd_yaml_path))[0]
+        self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
 
     def prepare_config_params(self):
         """
         准备配置参数
         """
+        print("start prepare_config_params!")
         yaml_absolute_path = os.path.join(self.REPO_PATH, self.rd_yaml_path)
         self.rd_config = yaml.load(open(yaml_absolute_path, "rb"), Loader=yaml.Loader)
         algorithm = self.rd_config["Architecture"]["algorithm"]
         self.env_dict["algorithm"] = algorithm
-
-        if "character_dict_path" in self.rd_config.keys():
+        # os.environ['algorithm'] = algorithm
+        if "character_dict_path" in self.rd_config["Global"].keys():
             rec_dict = self.rd_config["Global"]["character_dict_path"]
             if not rec_dict:
                 rec_dict = "ppocr/utils/ic15_dict.txt"
             self.env_dict["rec_dict"] = rec_dict
-
-            image_shape_list = self.rd_config["Eval"]["dataset"]["transforms"][2]["RecResizeImg"]["image_shape"]
-            image_shape_list = [str(x) for x in image_shape_list]
-            image_shape = ",".join((image_shape_list))
+            with open(yaml_absolute_path) as f:
+                lines = f.readlines()
+                for line in lines:
+                    if "image_shape" in line:
+                        # sar: image_shape: [3, 48, 48, 160] # h:48 w:[48,160]
+                        # image_shape_list = line.strip("\n").split(":")[-1]
+                        image_shape_list = line.strip("\n").split(":")[1].split("#")[0]
+                        print(image_shape_list)
+                        image_shape_list = image_shape_list.replace(" ", "")
+                        image_shape = re.findall(r"\[(.*?)\]", image_shape_list)
+                        if not image_shape:
+                            image_shape = "2,32,320"
+                        else:
+                            image_shape = image_shape[0]
+                            print("len(image_shape).{}".format(len(image_shape)))
+                            if len(image_shape.split(",")) == 2:
+                                image_shape = "1," + image_shape
+                        print(image_shape)
+                        break
+                    else:
+                        image_shape = "3,32,128"
             self.env_dict["image_shape"] = image_shape
-            print(image_shape)
+        # use_gpu
+        sysstr = platform.system()
+        if sysstr == "Darwin":
+            self.env_dict["use_gpu"] = "False"
+        else:
+            self.env_dict["use_gpu"] = "True"
+
+    def prepare_pretrained_model(self):
+        """
+        prepare_pretrained_model
+        """
+        path_now = os.getcwd()
+        pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
+        pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
+        if self.model in pretrained_yaml[self.category].keys():
+            print("{} exist in pretrained_yaml!".format(self.model))
+            print(pretrained_yaml[self.category][self.model])
+            pretrained_model_link = pretrained_yaml[self.category][self.model]
+            os.chdir("PaddleOCR")
+            tar_name = pretrained_model_link.split("/")[-1]
+            if not os.path.exists(tar_name):
+                wget.download(pretrained_model_link)
+                tf = tarfile.open(tar_name)
+                tf.extractall(os.getcwd())
+                os.rename(os.path.splitext(tar_name)[0], self.model)
+            os.chdir(path_now)
+            self.env_dict["model"] = self.model
+        else:
+            print("{} not exist in pretrained_yaml!".format(self.model))
+
+    def gengrate_test_case(self):
+        """
+        gengrate_test_case
+        """
+        print(os.path.join("cases", self.qa_yaml_name))
+        pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
+        pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
+        if not os.path.exists("cases"):
+            os.makedirs("cases")
+
+        case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
+        if not os.path.exists(case_file):
+            with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
+                if self.model in pretrained_yaml[self.category].keys():
+                    f.writelines(
+                        (
+                            "case:" + os.linesep,
+                            "    linux:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                            "    windows:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                            "    mac:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                        )
+                    )
+                else:
+                    f.writelines(
+                        (
+                            "case:" + os.linesep,
+                            "    linux:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                            "    windows:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                            "    mac:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                        )
+                    )
 
     def build_prepare(self):
         """
@@ -67,8 +155,11 @@ class PaddleOCR_Start(object):
         ret = self.prepare_config_params()
         if ret:
             logger.info("build prepare_config_params failed")
-
+        self.prepare_pretrained_model()
+        self.gengrate_test_case()
         os.environ[self.reponame] = json.dumps(self.env_dict)
+        for k, v in self.env_dict.items():
+            os.environ[k] = v
         return ret
 
 
