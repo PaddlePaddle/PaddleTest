@@ -123,7 +123,7 @@ def test_gpu_mixed_precision_bz1():
         test_suite2.load_config(
             model_file="./resnet50/inference_mixed.pdmodel", params_file="./resnet50/inference_mixed.pdiparams"
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=2e-3)
+        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=2e-2)
 
         del test_suite2  # destroy class to save memory
 
