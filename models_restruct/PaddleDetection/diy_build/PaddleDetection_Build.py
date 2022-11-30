@@ -77,7 +77,9 @@ class PaddleDetection_Build(Model_Build):
         os.system(cmd_iter1)
         os.system(cmd_iter2)
         cmd_mot1 = 'sed -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'
-        cmd_mot2 = 'sed -i "/for step_id, data in enumerate(dataloader):/i\        max_step_id=1" ppdet/engine/tracker.py'
+        cmd_mot2 = (
+            'sed -i "/for step_id, data in enumerate(dataloader):/i\        max_step_id=1" ppdet/engine/tracker.py'
+        )
         cmd_mot3 = 'sed -i "/for step_id, data in enumerate(dataloader):/a\            if step_id == max_step_id: break" ppdet/engine/tracker.py'
         os.system(cmd_mot1)
         os.system(cmd_mot2)
