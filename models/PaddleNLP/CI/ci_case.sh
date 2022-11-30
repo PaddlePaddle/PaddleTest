@@ -698,14 +698,15 @@ transformer (){
 cd ${nlp_dir}/examples/machine_translation/transformer/
 cp -r /ssd1/paddlenlp/download/transformer/WMT14.en-de.partial.tar.gz  ./
 tar -zxf WMT14.en-de.partial.tar.gz
+export CUDA_VISIBLE_DEVICES=${cudaid2}
 time (
 sed -i "s/save_step: 10000/save_step: 1/g" configs/transformer.base.yaml
 sed -i "s/print_step: 100/print_step: 1/g" configs/transformer.base.yaml
 sed -i "s/epoch: 30/epoch: 1/g" configs/transformer.base.yaml
 sed -i "s/max_iter: None/max_iter: 2/g" configs/transformer.base.yaml
-sed -i "s/batch_size: 4096/batch_size: 1000/g" configs/transformer.base.yaml
+sed -i "s/batch_size: 4096/batch_size: 100/g" configs/transformer.base.yaml
 
-python train.py --config ./configs/transformer.base.yaml \
+python -m paddle.distributed.launch train.py --config ./configs/transformer.base.yaml \
     --train_file ${PWD}/WMT14.en-de.partial/train.tok.clean.bpe.en ${PWD}/WMT14.en-de.partial/train.tok.clean.bpe.de \
     --dev_file ${PWD}/WMT14.en-de.partial/dev.tok.bpe.en ${PWD}/WMT14.en-de.partial/dev.tok.bpe.de \
     --vocab_file ${PWD}/WMT14.en-de.partial/vocab_all.bpe.33708 \

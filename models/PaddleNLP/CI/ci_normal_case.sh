@@ -5,7 +5,7 @@ export epoch=1
 export max_steps=2
 export save_steps=2
 export output_dir=./output/
-export export_dir=./infer_model/
+export export_output_dir=./infer_model/
 
 print_info(){
 if [ $1 -ne 0 ];then
