@@ -4185,37 +4185,6 @@ GELU_2:
     mapping:
       ins: {x: input, approximate: approximate}
 
-#LSTMCell_0:
-#  desc: "门控循环单元网络 0"
-#  paddle:
-#    api_name: "paddle.nn.LSTMCell"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 10]
-#        range: [ -1, 1]
-#      prev_h:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 10]
-#        range: [ -1, 1]
-#      prev_c:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 10]
-#        range: [ -1, 1]
-#    params:
-#      input_size: 10
-#      hidden_size: 10
-#  pytorch:
-#    api_name: "torch.nn.LSTMCell"
-#    mapping:
-#      ins: {inputs: input, initial_states: h_0, input_size: input_size, hidden_size: hidden_size}
-
 fmin_0:
   desc: "比较两个Tensor对应位置的元素，返回一个包含该元素最小值的新Tensor 0"
   paddle:
@@ -18310,6 +18279,61 @@ Tensor_tanh__0:
 #    mapping:
 #      ins: { x: input, axis: dim }
 
+Tensor_zero__0:
+  desc: "以 0 值填充 Tensor x 中所有数据。对 x 的原地 Inplace 修改"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.zero_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+#  pytorch:
+#    api_name: "torch.Tensor.zero_"
+#    mapping:
+#      ins: { x: input }
+
+Tensor_fill__0:
+  desc: "以 value 值填充 Tensor x 中所有数据。对 x 的原地 Inplace 修改"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.fill_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+    params:
+      value: 1.
+#  pytorch:
+#    api_name: "torch.Tensor.fill_"
+#    mapping:
+#      ins: { x: input }
+
+#Tensor_copy__0:
+#  desc: "copy操作。对 x 的原地 Inplace 修改"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.Tensor.copy_"
+#    inputs:
+#      x:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [ 1, 1, 1, 1 ]
+#        range: [ -1, 1 ]
+#    params:
+#      blocking: false
+##  pytorch:
+##    api_name: "torch.Tensor.copy_"
+##    mapping:
+##      ins: { x: input }
+
 tensordot_0:
   desc: "张量缩并运算，即沿着 axes 给定的多个轴对两个张量对应元素的乘积进行加和操作。"
   paddle:
@@ -18842,3 +18866,121 @@ SimpleRNNCell_0:
     api_name: "torch.nn.RNNCell"
     mapping:
       ins: { inputs: input, input_size: input_size, hidden_size: hidden_size, activation: nonlinearity }
+
+LSTM_0:
+  desc: "LSTM长短期记忆网络"
+  enable_backward: False
+  paddle:
+    api_name: "paddle.nn.LSTM"
+    inputs:
+      inputs:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 1, 1, 3 ]
+        range: [ -1, 1 ]
+    params:
+      input_size: 3
+      hidden_size: 12
+      num_layers: 1
+      direction: "forward"
+      dropout: 0
+      time_major: False
+  pytorch:
+    api_name: "torch.nn.LSTM"
+    mapping:
+      ins: { inputs: input, input_size: input_size, hidden_size: hidden_size, num_layers: num_layers,
+             dropout: dropout }
+
+LSTMCell_0:
+  desc: "LSTM单元基类"
+  enable_backward: False
+  paddle:
+    api_name: "paddle.nn.LSTMCell"
+    inputs:
+      inputs:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 3 ]
+        range: [ -1, 1 ]
+    params:
+      input_size: 3
+      hidden_size: 12
+  pytorch:
+    api_name: "torch.nn.LSTMCell"
+    mapping:
+      ins: { inputs: input, input_size: input_size, hidden_size: hidden_size }
+
+stack_0:
+  desc: "沿 axis 轴对输入 x 进行堆叠操作"
+  paddle:
+    api_name: "paddle.stack"
+    inputs:
+      x:
+        -
+          random: true
+          type: "Tensor"
+          dtype: "float32"
+          shape: [ 1, 1 ]
+          range: [ -1, 1 ]
+        -
+          random: true
+          type: "Tensor"
+          dtype: "float32"
+          shape: [ 1, 1 ]
+          range: [ -1, 1 ]
+    params:
+      axis: 0
+  pytorch:
+    api_name: "torch.stack"
+    mapping:
+      ins: { x: tensors, axis: dim }
+
+concat_0:
+  desc: "对输入沿参数 axis 轴进行联结，返回一个新的 Tensor"
+  paddle:
+    api_name: "paddle.concat"
+    inputs:
+      x:
+        -
+          random: true
+          type: "Tensor"
+          dtype: "float32"
+          shape: [ 1, 1 ]
+          range: [ -1, 1 ]
+        -
+          random: true
+          type: "Tensor"
+          dtype: "float32"
+          shape: [ 1, 1 ]
+          range: [ -1, 1 ]
+    params:
+      axis: 0
+  pytorch:
+    api_name: "torch.concat"
+    mapping:
+      ins: { x: tensors, axis: dim }
+
+multi_dot_0:
+  desc: "Multi_dot 是一个计算多个矩阵乘法的算子"
+  paddle:
+    api_name: "paddle.linalg.multi_dot"
+    inputs:
+      x:
+        -
+          random: true
+          type: "Tensor"
+          dtype: "float32"
+          shape: [ 1, 1 ]
+          range: [ -1, 1 ]
+        -
+          random: true
+          type: "Tensor"
+          dtype: "float32"
+          shape: [ 1, 1 ]
+          range: [ -1, 1 ]
+  pytorch:
+    api_name: "torch.linalg.multi_dot"
+    mapping:
+      ins: { x: tensors }
