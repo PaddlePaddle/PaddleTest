@@ -161,7 +161,7 @@ def predict_image(predictor, rerun_flag=False):
 
 extra_input_models = ["SRN", "NRTR", "SAR", "SEED", "SVTR", "VisionLAN", "RobustScanner"]
 
-
+# eval is not correct
 def eval(args, predictor, rerun_flag=False):
     """
     eval func
@@ -209,7 +209,7 @@ def main(args):
     main func
     """
     predictor = None
-    if args.deploy_backend == "paddle":
+    if args.deploy_backend == "paddle_inference":
         predictor = PaddleInferenceEngine(
             model_dir=args.model_path,
             model_filename=args.model_filename,
@@ -275,8 +275,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--deploy_backend",
         type=str,
-        default="paddle",
-        choices=["paddle", "tensorrt"],
+        default="paddle_inference",
+        choices=["paddle_inference", "tensorrt"],
         help="deploy backend, it can be: `paddle`, `tensorrt`, `onnxruntime`",
     )
     parser.add_argument("--calibration_file", type=str, default="calibration.cache")

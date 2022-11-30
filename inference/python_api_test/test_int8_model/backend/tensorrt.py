@@ -187,7 +187,6 @@ class TensorRTEngine:
             "int8",
         ], "precision must be fp32, fp16 or int8, but your precision is: {}".format(precision)
 
-        calibration_cache = os.path.join(os.path.dirname(onnx_model_file),calibration_cache_file)
         use_int8 = precision == "int8"
         use_fp16 = precision == "fp16"
         TRT_LOGGER = trt.Logger()
@@ -213,7 +212,7 @@ class TensorRTEngine:
                 network = builder.create_network(EXPLICIT_BATCH | EXPLICIT_PRECISION)
 
                 config.int8_calibrator = get_int8_calibrator(
-                    calibration_cache, calibration_loader, max_calibration_size
+                    calibration_cache_file, calibration_loader, max_calibration_size
                 )
 
                 config.set_flag(trt.BuilderFlag.INT8)
