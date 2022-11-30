@@ -99,6 +99,16 @@ def preprocess(image_file, det_limit_side_len, det_limit_type):
     data = transform(data, create_operators(pre_process_list))
     return data
 
+def reader_wrapper(reader, input_field="image"):
+    """
+    reader wrapper func
+    """
+
+    def gen():
+        for data in reader:
+            yield np.array(data[0]).astype(np.float32)
+
+    return gen
 
 def predict_image(predictor, rerun_flag=False):
     """
@@ -182,7 +192,8 @@ def eval(args, predictor, rerun_flag=False):
     time_max = float("-inf")
 
     with tqdm(
-        total=len(val_loader), bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
+        # total=len(val_loader), bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
+        total=1, bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
     ) as t:
         for batch_id, batch in enumerate(val_loader):
             images = np.array(batch[0])
@@ -218,11 +229,6 @@ def eval(args, predictor, rerun_flag=False):
     time_avg = float(predict_time) / (1.0*repeats)
     monitor_result = monitor.output()
 
-    metric = eval_class.get_metric()
-    logger.info("metric eval ***************")
-    for k, v in metric.items():
-        logger.info("{}:{}".format(k, v))
-
     cpu_mem = (
         monitor_result["result"]["cpu_memory.used"]
         if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
@@ -241,10 +247,20 @@ def eval(args, predictor, rerun_flag=False):
         )
     )
 
+    metric = eval_class.get_metric()
+    logger.info("metric eval ***************")
+    for k, v in metric.items():
+        logger.info("{}:{}".format(k, v))
+
 def main(args):
     """
     main func
     """
+    # DataLoader need run on cpu
+    config = load_config(args.dataset_config)
+    devices = paddle.set_device("cpu")
+    val_loader = build_dataloader(config, "Eval", devices, logger)
+
     predictor = None
     if args.deploy_backend == "paddle_inference":
         predictor = PaddleInferenceEngine(
@@ -263,14 +279,17 @@ def main(args):
     elif args.deploy_backend == "tensorrt":
         model_name = os.path.join(args.model_path, args.model_filename)
         print(model_name)
-        engine_file = os.path.join(args.model_path, "{}_{}.trt".format(args.precision, args.batch_size))
+        engine_file = "{}_{}.trt".format(args.precision, args.batch_size)
         predictor = TensorRTEngine(
             onnx_model_file=model_name,
-            shape_info=None,
+            shape_info={
+                "x":[[1, 3, 100, 100],[1, 3, 600, 600],[1, 3, 1200, 1200]],
+            },
             max_batch_size=args.batch_size,
             precision=args.precision,
             engine_file_path=engine_file,
             calibration_cache_file=args.calibration_file,
+            calibration_loader=reader_wrapper(val_loader),
             verbose=False,
         )
     if predictor is None:

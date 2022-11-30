@@ -24,7 +24,7 @@ try:
     import psutil
     import GPUtil
 except Exception as e:
-    sys.stderr.write("Cannot import tensorrt, maybe it's not installed.\n")
+    sys.stderr.write("Cannot import pynvml, psutil, GPUtil, maybe it's not installed.\n")
 
 
 class StatBase(object):
