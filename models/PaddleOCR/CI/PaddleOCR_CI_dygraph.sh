@@ -183,7 +183,7 @@ if [ ${category} == "rec" ];then
   fi
 else
 python -m paddle.distributed.launch  tools/train.py -c $line  -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir="output/"${model}  > $log_path/train/$model.log 2>&1
-if [[ $? -eq 0 ]] && && [ -f "output/"${model}"/latest.pdparams" ];then
+if [[ $? -eq 0 ]] && [ -f "output/"${model}"/latest.pdparams" ];then
    echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
    cat  $log_path/train/$model.log
