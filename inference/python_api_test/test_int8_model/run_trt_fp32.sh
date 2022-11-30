@@ -34,19 +34,19 @@ $PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_infe
 echo "[Benchmark] Run EfficientNetB0 trt fp32"
 $PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_infer --use_trt=True --use_gpu=True --model_name=EfficientNetB0
 
-# PP-HumanSeg-Lite MKLDNN fp32
+# PP-HumanSeg-Lite trt fp32
 echo "[Benchmark] Run PP-HumanSeg-Lite trt fp32"
 $PYTHON test_segmentation_infer.py --model_path=models/ppseg_lite_portrait_398x224_with_softmax --dataset='human' --dataset_config=configs/humanseg_dataset.yaml --use_trt=True --precision=fp32 --model_name=PP-HumanSeg-Lite
-# PP-Liteseg MKLDNN fp32
+# PP-Liteseg trt fp32
 echo "[Benchmark] Run PP-Liteseg trt fp32"
 $PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-PPLIteSegSTDC1 --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --use_trt=True --precision=fp32 --model_name=PP-Liteseg
-# HRNet MKLDNN fp32
+# HRNet trt fp32
 echo "[Benchmark] Run HRNet trt fp32"
 $PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-HRNetW18-Seg --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --use_trt=True --precision=fp32 --model_name=HRNet
-# UNet MKLDNN fp32
+# UNet trt fp32
 echo "[Benchmark] Run UNet trt fp32"
 $PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-UNet --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --use_trt=True --precision=fp32 --model_name=UNet
-# Deeplabv3-ResNet50 MKLDNN fp32
+# Deeplabv3-ResNet50 trt fp32
 echo "[Benchmark] Run Deeplabv3-ResNet50 trt fp32"
 $PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-Deeplabv3-ResNet50 --model_filename=model --params_filename=params --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --use_trt=True --precision=fp32 --model_name=Deeplabv3-ResNet50
 

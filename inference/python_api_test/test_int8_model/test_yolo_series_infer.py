@@ -26,7 +26,7 @@ import pkg_resources as pkg
 import paddle
 from backend import PaddleInferenceEngine, TensorRTEngine
 from utils.dataset import COCOValDataset
-from utils.post_process import YOLOPostProcess, coco_metric
+from utils.yolo_series_post_process import YOLOPostProcess, coco_metric
 
 
 def argsparser():

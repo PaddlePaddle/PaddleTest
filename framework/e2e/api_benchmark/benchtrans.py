@@ -18,6 +18,7 @@ class BenchTrans(WeakTrans):
         self.paddle_inputs = None
         self.paddle_param = None
         self.paddle_method = None
+        self.torch_method = None
 
     def _check_exists_torch(self):
         """
@@ -108,5 +109,6 @@ class BenchTrans(WeakTrans):
         """
         获取paddle调用方法method
         """
-        torch_method = self.get_method(Framework.TORCH)
+        if self.paddle_method is None:
+            torch_method = self.get_method(Framework.TORCH)
         return torch_method

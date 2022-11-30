@@ -1,0 +1,15 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/distillation
+        cmd: python distill.py
+        params:
+          - --num_epochs 1
+          - --batch_size 64
+          - --save_inference True
+          - --use_gpu True
+          - --model MobileNetV2_x0_25
+          - --teacher_model MobileNetV2
+          - --teacher_pretrained_model ../pretrain/MobileNetV2_pretrained

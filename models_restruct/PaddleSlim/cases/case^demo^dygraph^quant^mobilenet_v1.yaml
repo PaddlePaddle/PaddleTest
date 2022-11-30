@@ -1,0 +1,39 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/quant
+        cmd: python train.py
+        params:
+          - --model="mobilenet_v1"
+          - --pretrained_model "../../pretrain/MobileNetV1_pretrained"
+          - --num_epochs 1
+          - --batch_size 128
+          - --use_gpu True
+
+  windows:
+    train:
+      -
+        name: single
+        path: demo/dygraph/quant
+        cmd: python train.py
+        params:
+          - --model="mobilenet_v1"
+          - --pretrained_model "../../pretrain/MobileNetV1_pretrained"
+          - --num_epochs 1
+          - --batch_size 16
+          - --use_gpu True
+
+  mac:
+    train:
+      -
+        name: single
+        path: demo/dygraph/quant
+        cmd: python train.py
+        params:
+          - --model="mobilenet_v1"
+          - --pretrained_model "../../pretrain/MobileNetV1_pretrained"
+          - --num_epochs 1
+          - --batch_size 128
+          - --use_gpu False

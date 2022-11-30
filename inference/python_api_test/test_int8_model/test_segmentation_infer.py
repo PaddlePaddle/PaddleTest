@@ -63,11 +63,12 @@ def argsparser():
         "--precision",
         type=str,
         default="fp32",
-        choices=["fp32", "fp16", "int8"],
-        help=("The precision of inference. It can be 'fp32', 'fp16' or 'int8'."),
+        choices=["fp32", "fp16", "int8", "bf16"],
+        help=("The precision of inference. It can be 'fp32', 'fp16', 'int8' or 'bf16'."),
     )
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
+    parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
 
