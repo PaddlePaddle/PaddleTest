@@ -8,7 +8,7 @@ declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["SQuAD"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
-  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5)
+  ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5 ["tests"]=5)
 for line in `cat model_list.txt`;do
     all_example_dict[${#all_example_dict[*]}]=$line
 done
@@ -20,7 +20,9 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     dir3=${arr_file_name[2]}
     dir4=${arr_file_name[3]}
     echo "file_name:"${file_name}, "dir1:"${dir1}, "dir2:"${dir2},"dir3:"${dir3},".xx:" ${file_name##*.}
-    if [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
+    if [ ! -f ${file_name} ];then # 针对删除文件的pr
+        continue
+    elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
@@ -37,10 +39,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
                 P0case_list[${#P0case_list[*]}]=${dir3}
             else
-                # P0case_list[${#P0case_list[*]}]=tests
-                P0case_list[${#P0case_list[*]}]=bert
-                P0case_list[${#P0case_list[*]}]=gpt
-                P0case_list[${#P0case_list[*]}]=transformer
+                P0case_list[${#P0case_list[*]}]=tests
             fi
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
