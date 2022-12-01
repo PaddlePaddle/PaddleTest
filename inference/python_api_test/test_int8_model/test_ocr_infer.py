@@ -99,6 +99,7 @@ def preprocess(image_file, det_limit_side_len, det_limit_type):
     data = transform(data, create_operators(pre_process_list))
     return data
 
+
 def reader_wrapper(reader, input_field="image"):
     """
     reader wrapper func
@@ -109,6 +110,7 @@ def reader_wrapper(reader, input_field="image"):
             yield np.array(data[0]).astype(np.float32)
 
     return gen
+
 
 def predict_image(predictor, rerun_flag=False):
     """
@@ -147,7 +149,7 @@ def predict_image(predictor, rerun_flag=False):
         time_max = max(time_max, timed)
         predict_time += timed
     monitor.stop()
-    time_avg = float(predict_time) / (1.0*repeats)
+    time_avg = float(predict_time) / (1.0 * repeats)
     monitor_result = monitor.output()
 
     cpu_mem = (
@@ -193,7 +195,9 @@ def eval(args, predictor, rerun_flag=False):
 
     with tqdm(
         # total=len(val_loader), bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
-        total=1, bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
+        total=1,
+        bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}",
+        ncols=80,
     ) as t:
         for batch_id, batch in enumerate(val_loader):
             images = np.array(batch[0])
@@ -205,7 +209,7 @@ def eval(args, predictor, rerun_flag=False):
             timed = end_time - start_time
             time_min = min(time_min, timed)
             time_max = max(time_max, timed)
-            predict_time += timed            
+            predict_time += timed
 
             if rerun_flag:
                 monitor.stop()
@@ -226,7 +230,7 @@ def eval(args, predictor, rerun_flag=False):
             t.update()
 
     monitor.stop()
-    time_avg = float(predict_time) / (1.0*repeats)
+    time_avg = float(predict_time) / (1.0 * repeats)
     monitor_result = monitor.output()
 
     cpu_mem = (
@@ -251,6 +255,7 @@ def eval(args, predictor, rerun_flag=False):
     logger.info("metric eval ***************")
     for k, v in metric.items():
         logger.info("{}:{}".format(k, v))
+
 
 def main(args):
     """
@@ -283,7 +288,7 @@ def main(args):
         predictor = TensorRTEngine(
             onnx_model_file=model_name,
             shape_info={
-                "x":[[1, 3, 100, 100],[1, 3, 600, 600],[1, 3, 1200, 1200]],
+                "x": [[1, 3, 100, 100], [1, 3, 600, 600], [1, 3, 1200, 1200]],
             },
             max_batch_size=args.batch_size,
             precision=args.precision,
