@@ -162,7 +162,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     for apicase in ${APIcase_list[*]};do
         if [[ ${apicase} =~ "taskflow" ]] ; then
             pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
-        if [[ ${apicase} =~ "transformers" ]] ; then
+        elif [[ ${apicase} =~ "transformers" ]] ; then
             bash ci_uinttest_cash.sh transformers
         else
             pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
