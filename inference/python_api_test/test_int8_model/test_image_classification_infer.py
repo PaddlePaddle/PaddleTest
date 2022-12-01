@@ -50,6 +50,7 @@ def argsparser():
     parser.add_argument("--ir_optim", type=bool, default=True)
     parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
+    parser.add_argument("--full_data", action="store_true", default=False, help="Whether use full data to eval.")
     return parser
 
 
@@ -149,15 +150,23 @@ class Predictor(object):
         time_min = float("inf")
         time_max = float("-inf")
         sample_nums = len(val_loader)
+        warmup = 20
+        repeats = 1 if FLAGS.full_data else 20
         for batch_id, (image, label) in enumerate(val_loader):
             image = np.array(image)
-
             input_tensor.copy_from_cpu(image)
+
+            for i in range(warmup):
+                self.paddle_predictor.run()
+                warmup = 0
+
             start_time = time.time()
-            self.paddle_predictor.run()
+            for j in range(repeats):
+                self.paddle_predictor.run()
             batch_output = output_tensor.copy_to_cpu()
             end_time = time.time()
-            timed = end_time - start_time
+
+            timed = (end_time - start_time) / repeats
             time_min = min(time_min, timed)
             time_max = max(time_max, timed)
             predict_time += timed
@@ -180,6 +189,9 @@ class Predictor(object):
             if batch_id % 100 == 0:
                 print("Eval iter:", batch_id)
                 sys.stdout.flush()
+
+            if not FLAGS.full_data and batch_id > 20:
+                break
 
         result = np.mean(np.array(results), axis=0)
         fp_message = "FP16" if args.use_fp16 else "FP32"

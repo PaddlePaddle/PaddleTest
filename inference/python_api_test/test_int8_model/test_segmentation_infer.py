@@ -70,6 +70,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
+    parser.add_argument("--full_data", action="store_true", default=False, help="Whether use full data to eval.")
     return parser
 
 
@@ -85,6 +86,7 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     time_min = float("inf")
     time_max = float("-inf")
     warmup = 20
+    repeats = 1 if FLAGS.full_data else 20
     print("Start evaluating (total_samples: {}, total_iters: {}).".format(FLAGS.total_samples, FLAGS.sample_nums))
     for batch_id, data in enumerate(loader):
         image = np.array(data[0])
@@ -98,10 +100,11 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
             warmup = 0
 
         start_time = time.time()
-        outs = predictor.run()
+        for j in range(repeats):
+            outs = predictor.run()
         end_time = time.time()
 
-        timed = end_time - start_time
+        timed = (end_time - start_time) / repeats
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
@@ -124,6 +127,9 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
             sys.stdout.flush()
+
+        if not FLAGS.full_data and batch_id > 20:
+            break
 
     _, miou = metrics.mean_iou(intersect_area_all, pred_area_all, label_area_all)
     _, acc = metrics.accuracy(intersect_area_all, pred_area_all)

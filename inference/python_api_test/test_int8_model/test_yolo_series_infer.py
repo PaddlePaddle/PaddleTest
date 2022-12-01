@@ -60,6 +60,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
+    parser.add_argument("--full_data", action="store_true", default=False, help="Whether use full data to eval.")
     return parser
 
 
@@ -113,6 +114,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     time_min = float("inf")
     time_max = float("-inf")
     warmup = 20
+    repeats = 1 if FLAGS.full_data else 20
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
 
@@ -123,10 +125,11 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
             warmup = 0
 
         start_time = time.time()
-        outs = predictor.run()
+        for j in range(repeats):
+            outs = predictor.run()
         end_time = time.time()
 
-        timed = end_time - start_time
+        timed = (end_time - start_time) / repeats
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
@@ -219,6 +222,10 @@ if __name__ == "__main__":
     paddle.enable_static()
     parser = argsparser()
     FLAGS = parser.parse_args()
+
+    if not FLAGS.full_data:
+        # set small dataset
+        FLAGS.dataset_dir = "dataset/coco"
 
     # DataLoader need run on cpu
     paddle.set_device("cpu")
