@@ -4,6 +4,7 @@
 """
 test T
 """
+
 from apibase import compare
 import paddle
 import pytest
