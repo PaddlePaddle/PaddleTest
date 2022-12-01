@@ -91,4 +91,3 @@ cd -
 cd models/x2paddle_cola_new_calib
 paddle2onnx --model_dir ./  --model_filename model.pdmodel --params_filename model.pdiparams --save_file model.onnx  --deploy_backend tensorrt
 cd -
-
