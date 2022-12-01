@@ -16,9 +16,9 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         continue
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
         if [[ ${dir2} =~ "transformers" ]];then
-            APIcase_list[${#P0case_list[*]}]="transformers"
+            APIcase_list[${#APIcase_list[*]}]="transformers"
         elif [[ ${dir2} =~ "taskflow" ]];then
-            APIcase_list[${#P0case_list[*]}]="taskflow"
+            APIcase_list[${#APIcase_list[*]}}]="taskflow"
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
         if [[ ${dir3##*.} == "py" ]];then
