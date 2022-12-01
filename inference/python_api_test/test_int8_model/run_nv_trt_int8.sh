@@ -2,7 +2,6 @@ export CUDA_VISIBLE_DEVICES=0
 export FLAGS_call_stack_level=2
 PYTHON="python"
 
-
 # PPYOLOE trt int8
 echo "[Benchmark] Run PPYOLOE trt int8"
 $PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_crn_l_300e_coco_quant/ppyoloe_crn_l_300e_coco_quant.onnx --reader_config=configs/ppyoloe_reader.yml --deploy_backend=tensorrt --precision=int8 --model_name=PPYOLOE --calibration_file=models/ppyoloe_crn_l_300e_coco_quant/calibration.cache
@@ -20,6 +19,7 @@ echo "[Benchmark] Run YOLOv7 trt int8"
 $PYTHON test_yolo_series_infer.py --model_path=models/yolov7_quant/yolov7_quant.onnx --deploy_backend=tensorrt --precision=int8 --model_name=YOLOv7 --calibration_file=models/yolov7_quant/calibration.cache
 
 # ResNet_vd trt int8
+rm -rf model_int8_model.trt
 echo "[Benchmark] Run ResNet_vd trt int8"
 $PYTHON test_image_classification_infer.py --model_path=models/ResNet50_vd_QAT/model.onnx --deploy_backend=tensorrt --input_name=inputs --precision=int8 --calibration_file=models/ResNet50_vd_QAT/calibration.cache --model_name=ResNet_vd
 rm -rf model_int8_model.trt
@@ -57,6 +57,7 @@ echo "[Benchmark] Run Deeplabv3-ResNet50 trt int8"
 $PYTHON test_segmentation_infer.py --model_path=models/deeplabv3_int8/deeplabv3_int8.onnx --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --deploy_backend=tensorrt --precision=int8 --model_name=Deeplabv3-ResNet50 --calibration_file=models/deeplabv3_int8/calibration.cache
 
 # ERNIE 3.0-Medium nv-trt int8
+rm -rf model_int8_model.trt
 echo "[Benchmark] Run NV-TRT ERNIE 3.0-Medium trt int8"
 $PYTHON  test_nlp_infer.py --model_path=models/save_ernie3_afqmc_new_cablib/model.onnx --deploy_backend=tensorrt  --task_name='afqmc' --precision=int8 --calibration_file=models/save_ernie3_afqmc_new_cablib/calibration.cache --model_name=ERNIE_3.0-Medium
 rm -rf model_int8_model.trt

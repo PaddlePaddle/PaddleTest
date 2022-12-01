@@ -58,6 +58,7 @@ class PaddleInferenceEngine(object):
                 "Predict by TensorRT mode: {}, expect device=='GPU', but device == {}".format(precision, device)
             )
         config = Config(os.path.join(model_dir, model_filename), os.path.join(model_dir, params_filename))
+        config.switch_ir_debug()
         if device == "GPU":
             # initial GPU memory(M), device ID
             config.enable_use_gpu(200, 0)

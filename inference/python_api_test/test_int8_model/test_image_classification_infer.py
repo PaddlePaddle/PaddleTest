@@ -69,6 +69,12 @@ def argsparser():
         default="x",
         help="input name of image classification model, this is only used by nv-trt",
     )
+    parser.add_argument(
+        "--full_data",
+        type=bool,
+        default=True,
+        help="whether val on full data, if not we will only val on 2000 samples",
+    )
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
 
@@ -80,6 +86,18 @@ def eval_reader(data_dir, batch_size, crop_size, resize_size):
     val_reader = ImageNetDataset(mode="val", data_dir=data_dir, crop_size=crop_size, resize_size=resize_size)
     val_loader = DataLoader(val_reader, batch_size=batch_size, shuffle=False, drop_last=False, num_workers=0)
     return val_loader
+
+
+def reader_wrapper(reader, input_field="inputs"):
+    """
+    reader wrapper func
+    """
+
+    def gen():
+        for batch_id, (image, label) in enumerate(reader):
+            yield np.array(image).astype(np.float32)
+
+    return gen
 
 
 def eval(predictor, FLAGS):
@@ -99,6 +117,8 @@ def eval(predictor, FLAGS):
     time_min = float("inf")
     time_max = float("-inf")
     sample_nums = len(val_loader)
+    if not FLAGS.full_data:
+        sample_nums = 2000
     for batch_id, (image, label) in enumerate(val_loader):
         image = np.array(image)
         # classfication model usually having only one input
@@ -127,6 +147,8 @@ def eval(predictor, FLAGS):
                 acc_num += 1
         top_5 = float(acc_num) / len(label)
         results.append([top_1, top_5])
+        if batch_id >= sample_nums:
+            break
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
             sys.stdout.flush()
@@ -202,6 +224,14 @@ def main(FLAGS):
             precision=FLAGS.precision,
             engine_file_path=engine_file,
             calibration_cache_file=FLAGS.calibration_file,
+            calibration_loader=reader_wrapper(
+                eval_reader(
+                    FLAGS.data_path,
+                    batch_size=FLAGS.batch_size,
+                    crop_size=FLAGS.img_size,
+                    resize_size=FLAGS.resize_size,
+                )
+            ),
             verbose=False,
         )
     eval(predictor, FLAGS)
