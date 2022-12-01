@@ -77,8 +77,8 @@ cd -
 # models/EfficientNetB0_QAT/
 cd models/EfficientNetB0_QAT/
 paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  --deploy_backend tensorrt
-## nlp
 cd -
+## nlp
 # models/save_ernie3_afqmc_new_cablib
 cd models/save_ernie3_afqmc_new_cablib
 paddle2onnx --model_dir ./  --model_filename infer.pdmodel --params_filename infer.pdiparams --save_file model.onnx  --deploy_backend tensorrt
