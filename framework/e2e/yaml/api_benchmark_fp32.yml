@@ -257,7 +257,7 @@ all_0:
     inputs:
       x:
         random: true
-        dtype: "float32"
+        dtype: "bool"
         shape: [ 1, 1, 1, 1]
         range: [ -1, 1 ]
     params:
@@ -3998,10 +3998,10 @@ ReplicationPad1d_0:
       x:
         random: true
         dtype: "float32"
-        shape: [ 1, 1, 1, 1 ]
+        shape: [ 1, 1, 1]
         range: [ -1, 1 ]
     params:
-      padding: [1, 0, 1, 1]
+      padding: [1, 1]
       mode: 'replicate'
   pytorch:
     api_name: "torch.nn.ReplicationPad1d"
@@ -4855,8 +4855,8 @@ GroupNorm_0:
         shape: [1, 1, 1, 1]
         range: [ -1, 1]
     params:
-      num_groups: 2
-      num_channels: 2
+      num_groups: 1
+      num_channels: 1
   pytorch:
     api_name: "torch.nn.GroupNorm"
     mapping:
@@ -5124,6 +5124,7 @@ bmm_2:
 
 unbind_0:
   desc: "将输入Tensor按照指定的维度分割成多个子Tensor"
+  enable_backward: False
   paddle:
     api_name: "paddle.unbind"
     inputs:
@@ -9694,13 +9695,13 @@ where_0:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [1, 1, 1, 1]
+        shape: [1, 1, 1]
         range: [ -1, 1]
       y:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [1, 1, 1, 1]
+        shape: [1, 1, 1]
         range: [ -1, 1]
     params:
       condition:
@@ -13080,44 +13081,6 @@ cond_0:
     api_name: "torch.linalg.cond"
     mapping:
       ins: { x: input, p: p }
-
-cross_0:
-  desc: "计算张量 x 和 y 在 axis 维度上的向量积（叉积）"
-  paddle:
-    api_name: "paddle.cross"
-    inputs:
-      x:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [3, 3]
-        range: [ -1, 1]
-      y:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [3, 3]
-        range: [ -1, 1]
-  pytorch:
-    api_name: "torch.cross"
-    mapping:
-      ins: { x: input, y: other }
-
-diagonal_0:
-  desc: "如果输入是 2D Tensor，则返回对角线元素. 如果输入的维度大于 2D，则返回由对角线元素组成的数组"
-  paddle:
-    api_name: "paddle.diagonal"
-    inputs:
-      x:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1, 1, 1]
-        range: [ -1, 1]
-  pytorch:
-    api_name: "torch.diagonal"
-    mapping:
-      ins: { x: input }
 
 eigh_0:
   desc: "计算厄米特矩阵或者实数对称矩阵的特征值和特征向量"
