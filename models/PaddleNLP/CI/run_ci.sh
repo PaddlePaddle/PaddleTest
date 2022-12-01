@@ -12,7 +12,9 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     dir3=${arr_file_name[2]}
     dir4=${arr_file_name[3]}
     echo "file_name:"${file_name}, "dir1:"${dir1}, "dir2:"${dir2},"dir3:"${dir3},".xx:" ${file_name##*.}
-    if [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
+    if [ ! -f file_name ];then #针对删掉文件
+        continue
+    elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
         if [[ ${dir2} =~ "transformers" ]];then
@@ -22,23 +24,24 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
         if [[ ${dir3##*.} == "py" ]];then
-            Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/"
+            # Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/"
+            Normal_list[${dir2}]="${dir1}/${dir2}/"
         else
-            Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
+            Normal_list[${dir3}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${dir3##*.} == "py" ]];then
-            Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/"
+            Normal_list[${dir2}]="${dir1}/${dir2}/"
         else
-            Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
+            Normal_list[${dir3}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "application" ]];then # 模型升级
         if [[ ${dir3##*.} == "py" ]];then
-            Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/"
+            Normal_list[${dir2}}]="${dir1}/${dir2}/"
         # elif [[ ${dir4##*.} == "py" ]];then
         #     Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
         else
-            Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
+            Normal_list[${dir3}}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "tests" ]];then #新增单测
         if [[ ${dir2} =~ "transformers" ]] ;then
