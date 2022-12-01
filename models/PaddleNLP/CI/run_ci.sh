@@ -23,13 +23,13 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
         if [[ ${dir3##*.} == "py" ]]
             Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/"
-        else 
+        else
             Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${dir3##*.} == "py" ]]
             Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/"
-        else 
+        else
             Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "application" ]];then # 模型升级
@@ -37,7 +37,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/"
         # elif [[ ${dir4##*.} == "py" ]]
         #     Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
-        else 
+        else
             Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "tests" ]];then #新增单测
