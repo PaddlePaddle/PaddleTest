@@ -21,7 +21,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             APIcase_list[${#P0case_list[*]}]="taskflow"
         fi
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
-        if [[ ${dir3##*.} == "py" ]]
+        if [[ ${dir3##*.} == "py" ]];then
             Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/"
         else
             Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
