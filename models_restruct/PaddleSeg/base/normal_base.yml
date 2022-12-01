@@ -30,7 +30,7 @@ infer:
     params:
       - --config ${rd_yaml_path}
       - --model_path seg_dynamic_pretrain/${model}/model.pdparams
-      - --image_path demo/leverkusen_000029_000019_leftImg8bit.png
+      - --image_path demo/${image}
       - --save_dir output/${model}/result
     result:
       exit_code:
@@ -54,7 +54,7 @@ predict:
   cmd: python deploy/python/infer.py
   params:
     - --config ./inference_model/${model}/deploy.yaml
-    - --image_path ./demo/leverkusen_000029_000019_leftImg8bit.png
+    - --image_path ./demo/${image}
     - --save_dir ./python_infer_output/${model}/
   result:
     exit_code:
