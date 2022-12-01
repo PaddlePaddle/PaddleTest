@@ -56,3 +56,39 @@ paddle2onnx --model_dir=models/unet_int8 --model_filename=model.pdmodel --params
 # Deeplabv3-ResNet50
 python utils/paddle_infer_shape.py --model_dir=models/deeplabv3_qat/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_dir=models/deeplabv3_int8 --input_shape_dict="{'x':[1, 3, 1024, 2048]}"
 paddle2onnx --model_dir=models/deeplabv3_int8 --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/deeplabv3_int8/deeplabv3_int8.onnx --deploy_backend='tensorrt' --save_calibration_file=models/deeplabv3_int8/calibration.cache
+
+## classification
+# models/ResNet50_vd_QAT
+cd models/ResNet50_vd_QAT/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+cd -
+# models/MobileNetV3_large_x1_0_QAT/
+cd models/MobileNetV3_large_x1_0_QAT/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+cd -
+# models/PPLCNetV2_base_QAT/
+cd models/PPLCNetV2_base_QAT/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+cd -
+# models/PPHGNet_tiny_QAT/
+cd models/PPHGNet_tiny_QAT/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+cd -
+# models/EfficientNetB0_QAT/
+cd models/EfficientNetB0_QAT/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+## nlp
+cd -
+# models/save_ernie3_afqmc_new_cablib
+cd models/save_ernie3_afqmc_new_cablib
+paddle2onnx --model_dir ./  --model_filename infer.pdmodel --params_filename infer.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+cd -
+# models/save_ppminilm_afqmc_new_calib
+cd models/save_ppminilm_afqmc_new_calib
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+cd -
+# models/x2paddle_cola_new_calib
+cd models/x2paddle_cola_new_calib
+paddle2onnx --model_dir ./  --model_filename model.pdmodel --params_filename model.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+cd -
+
