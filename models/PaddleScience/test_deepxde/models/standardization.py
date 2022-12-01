@@ -18,7 +18,7 @@ def alter(file,old_str,new_str):
     file_data = ""
     with open(file, "r", encoding="utf-8") as f:
         for line in f:
-            if old_str in line:
+            if old_str in line and new_str not in line:
                 line = line.replace(old_str,new_str)
             file_data += line
     with open(file,"w",encoding="utf-8") as f:
@@ -40,6 +40,7 @@ def add_seed(file,old_str,new_str):
     with open(file,"w",encoding="utf-8") as f:
         f.write(file_data)
 
+
 args = parse_args()
 yamldir = YamlLoader(args.file)
 case_num, py = yamldir.get_case(0)
@@ -47,6 +48,7 @@ filedir = py
 #alter(filedir, "tf", "paddle")
 #alter("../../deepxde/deepxde/backend/paddle/tensor.py", "2.3.0", "0.0.0")
 alter(filedir, "model.train(", "model.train(display_every=1,")
+alter(filedir, "model.train(", "losshistory, train_state = model.train(")
 alter(filedir, "display_every=1000", "display_every=1")
 add_seed(filedir, "import deepxde", "import paddle\n")
 add_seed(filedir, "import paddle", "paddle.seed(1)\n")
