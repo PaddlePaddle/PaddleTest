@@ -61,15 +61,12 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             Normal_dic[${dir2}]="${dir1}/${dir2}/"
         fi
     elif [[ ${dir1} =~ "tests" ]];then #新增单测
-
-        if [[ ${dir3##*.} == "py" ]];then
-            if [[ ${dir2} =~ "taskflow" ]] ;then
-                APIcase_list[${#APIcase_list[*]}]=${dir2}
-            else
+        if [[ ${dir2} =~ "transformers" ]] ;then
+            if [[ ${dir3##*.} == "py" ]];then
                 continue
+            else
+                APIcase_list[${#APIcase_list[*]}]=${dir3}
             fi
-        elif [[ ${dir2} =~ "transformers" ]] ;then
-            APIcase_list[${#APIcase_list[*]}]=${dir3}
         elif [[ ${dir2} =~ "taskflow" ]] ;then
             APIcase_list[${#APIcase_list[*]}]=${dir2}
         fi
@@ -144,11 +141,11 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     set +x
     ####################################
     # set logs env
-    export nlp_dir=/workspace
-    mkdir /workspace/model_logs
-    mkdir /workspace/unittest_logs
-    mkdir /workspace/coverage_logs
-    export log_path=/workspace/model_logs
+    export nlp_dir=/workspace/PaddleNLP
+    mkdir /workspace/PaddleNLP/model_logs
+    mkdir /workspace/PaddleNLP/unittest_logs
+    mkdir /workspace/PaddleNLP/coverage_logs
+    export log_path=/workspace/PaddleNLP/model_logs
     ####################################
     # run changed models case
     echo -e "\033[35m =======CI Check P0case========= \033[0m"

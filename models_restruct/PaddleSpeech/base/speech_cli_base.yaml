@@ -1,5 +1,6 @@
 train: skipped
 eval: skipped
+infer: skipped
 export: skipped
 predict:
   name: cli
