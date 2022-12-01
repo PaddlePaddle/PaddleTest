@@ -1,4 +1,4 @@
-""" 
+"""
 RUN PaddleNLP CI Case
 """
 
