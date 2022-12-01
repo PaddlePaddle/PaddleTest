@@ -44,9 +44,9 @@ class PaddleSeg_Start(object):
         else:
             self.env_dict["set_cuda_flag"] = "gpu"  # 根据操作系统判断
         if "voc12" in self.model:
-            os.environ["image"] = "demo/2007_000033.jpg"
+            os.environ["image"] = "2007_000033.jpg"
         else:
-            os.environ["image"] = "demo/leverkusen_000029_000019_leftImg8bit.png"      
+            os.environ["image"] = "leverkusen_000029_000019_leftImg8bit.png"      
         return 0
 
     def build_prepare(self):
