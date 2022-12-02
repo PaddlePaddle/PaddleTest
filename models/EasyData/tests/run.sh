@@ -42,27 +42,27 @@ if [ $? -ne 0 ];
 fi
 
 echo "============================================================"
-echo "PP-DataAug test start！！！"
+echo "DataAug test start！！！"
 echo "============================================================"
-easydata --model ppdataaug --ori_data_dir demo/clas_data/ --label_file demo/clas_data/train_list.txt --gen_mode img2img
+easydata --model dataaug --ori_data_dir demo/clas_data/ --label_file demo/clas_data/train_list.txt --gen_mode img2img
 if [ $? -ne 0 ];
   then
     bug=`expr ${bug} + 1`;
 fi
 
-easydata --model ppdataaug --ori_data_dir demo/ocr_data/ --label_file demo/ocr_data/train_list.txt --gen_mode img2img --model_type ocr_rec
+easydata --model dataaug --ori_data_dir demo/ocr_data/ --label_file demo/ocr_data/train_list.txt --gen_mode img2img --model_type ocr_rec
 if [ $? -ne 0 ];
   then
     bug=`expr ${bug} + 1`;
 fi
 
-easydata --model ppdataaug --bg_img_dir demo/ocr_rec/bg --corpus_file demo/ocr_rec/corpus.txt --gen_mode text2img --model_type ocr_rec
+easydata --model dataaug --bg_img_dir demo/ocr_rec/bg --corpus_file demo/ocr_rec/corpus.txt --gen_mode text2img --model_type ocr_rec
 if [ $? -ne 0 ];
   then
     bug=`expr ${bug} + 1`;
 fi
 
-easydata --model ppdataaug --ori_data_dir demo/shitu_data --label_file demo/shitu_data/train_list.txt --gen_mode img2img --use_big_model False
+easydata --model dataaug --ori_data_dir demo/shitu_data --label_file demo/shitu_data/train_list.txt --gen_mode img2img --use_big_model False
 if [ $? -ne 0 ];
   then
     bug=`expr ${bug} + 1`;
