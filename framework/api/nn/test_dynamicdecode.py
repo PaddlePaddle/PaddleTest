@@ -13,9 +13,6 @@ import numpy as np
 from paddle.nn import BeamSearchDecoder, dynamic_decode
 from paddle.nn import GRUCell, Linear, Embedding, LSTMCell
 from paddle.nn import TransformerDecoderLayer, TransformerDecoder
-import paddle.fluid as fluid
-import paddle.fluid.layers as layers
-from paddle.fluid.layers import GreedyEmbeddingHelper, SampleEmbeddingHelper
 
 np.random.seed(2)
 random.seed(2)
@@ -197,62 +194,6 @@ class ModelGRUCell8(paddle.nn.Layer):
             max_step_num=10,
         )
         return outputs[2]
-
-
-class ModelGRUCell9(paddle.nn.Layer):
-    """
-    GRUCell model5  greedy
-    """
-
-    def __init__(self):
-        """
-        initialize
-        """
-        super(ModelGRUCell9, self).__init__()
-        self.trg_embeder = Embedding(100, 8)
-        self.output_layer = Linear(8, 8)
-        start_token = fluid.layers.fill_constant(shape=[2], dtype="int64", value=0)
-        self.helper = GreedyEmbeddingHelper(self.trg_embeder, start_tokens=start_token, end_token=1)
-        self.decoder_cell = GRUCell(input_size=8, hidden_size=8)
-        self.decoder = layers.BasicDecoder(self.decoder_cell, self.helper, output_fn=self.output_layer)
-
-    def forward(self):
-        """
-        forward
-        """
-        encoder_output = paddle.ones((2, 4, 8), dtype=paddle.get_default_dtype())
-        outputs = dynamic_decode(
-            decoder=self.decoder, inits=self.decoder_cell.get_initial_states(encoder_output), max_step_num=5
-        )
-        return outputs[0][0]
-
-
-class ModelGRUCell10(paddle.nn.Layer):
-    """
-    GRUCell model6 sampling
-    """
-
-    def __init__(self):
-        """
-        initialize
-        """
-        super(ModelGRUCell10, self).__init__()
-        self.trg_embeder = Embedding(100, 8)
-        self.output_layer = Linear(8, 8)
-        start_token = fluid.layers.fill_constant(shape=[2], dtype="int64", value=0)
-        self.helper = SampleEmbeddingHelper(self.trg_embeder, start_tokens=start_token, end_token=1, seed=2)
-        self.decoder_cell = GRUCell(input_size=8, hidden_size=8)
-        self.decoder = layers.BasicDecoder(self.decoder_cell, self.helper, output_fn=self.output_layer)
-
-    def forward(self):
-        """
-        forward
-        """
-        encoder_output = paddle.ones((2, 4, 8), dtype=paddle.get_default_dtype())
-        outputs = dynamic_decode(
-            decoder=self.decoder, inits=self.decoder_cell.get_initial_states(encoder_output), max_step_num=5
-        )
-        return outputs[0][0]
 
 
 class ModelLSTMCell1(paddle.nn.Layer):
