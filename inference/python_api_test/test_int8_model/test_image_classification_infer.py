@@ -70,10 +70,10 @@ def argsparser():
         help="input name of image classification model, this is only used by nv-trt",
     )
     parser.add_argument(
-        "--full_data",
-        type=bool,
-        default=True,
-        help="whether val on full data, if not we will only val on 2000 samples",
+        "--small_data",
+        action="store_true",
+        default=False,
+        help="whether val on full data, if not we will only val on 1000 samples",
     )
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
@@ -118,8 +118,8 @@ def eval(predictor, FLAGS):
     time_max = float("-inf")
     warmup = 20
     sample_nums = len(val_loader)
-    if not FLAGS.full_data:
-        sample_nums = 2000
+    if FLAGS.small_data:
+        sample_nums = 1000
     for batch_id, (image, label) in enumerate(val_loader):
         image = np.array(image)
         # classfication model usually having only one input

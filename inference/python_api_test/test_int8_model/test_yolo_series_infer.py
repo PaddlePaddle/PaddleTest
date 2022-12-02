@@ -60,7 +60,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
-    parser.add_argument("--full_data", type=bool, default=True, help="Whether use full data to eval.")
+    parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
 
 
@@ -109,12 +109,12 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     """
     bboxes_list, bbox_nums_list, image_id_list = [], [], []
     cpu_mems, gpu_mems = 0, 0
-    sample_nums = len(val_loader) if FLAGS.full_data else 20
+    sample_nums = len(val_loader)
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
     warmup = 20
-    repeats = 1 if FLAGS.full_data else 20
+    repeats = 20 if FLAGS.small_data else 1
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
 
@@ -223,7 +223,7 @@ if __name__ == "__main__":
     parser = argsparser()
     FLAGS = parser.parse_args()
 
-    if not FLAGS.full_data:
+    if FLAGS.small_data:
         # set small dataset
         FLAGS.dataset_dir = "dataset/coco"
 
