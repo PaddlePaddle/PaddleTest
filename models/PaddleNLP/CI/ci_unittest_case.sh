@@ -8,12 +8,13 @@ else
 fi
 }
 transformers(){
-# RUN all transformers unitests
+echo ' RUN all transformers unittest'
 cd ${nlp_dir}/tests/transformers/
 for apicase in `ls`;do
     if [[ ${apicase##*.} == "py" ]];then
             continue
     else
+        cd ${nlp_dir}
         pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
         print_info $? ${apicase}_unittest
     fi
