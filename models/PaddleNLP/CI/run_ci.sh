@@ -156,7 +156,7 @@ if [[ ${#Normal_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     EXCODE=0
     if [ "${FF}" -gt "0" ];then
         EXAMPLES_EXCODE=1
-        EXCODE=2
+        EXCODE=1
     else
         EXAMPLES_EXCODE=0
     fi
@@ -190,7 +190,7 @@ if [[ ${#Normal_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     UF=`ls *FAIL*|wc -l`
     if [ "${UF}" -gt "0" ];then
         UT_EXCODE=1
-        EXCODE=3
+        EXCODE=1
     else
         UT_EXCODE=0
     fi
@@ -216,5 +216,5 @@ else
     echo -e "\033[32m Changed files no in ci case, Skips \033[0m"
     EXCODE=0
 fi
-echo "EXCODE:" $EXCODE
+echo "run_ci EXCODE:" $EXCODE
 exit $EXCODE
