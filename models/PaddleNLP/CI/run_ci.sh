@@ -14,7 +14,9 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     echo "file_name:"${file_name}, "dir1:"${dir1}, "dir2:"${dir2},"dir3:"${dir3},".xx:" ${file_name##*.}
     if [ ! -f ${file_name} ];then #针对pr删掉文件
         continue
-    elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
+    # elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]] || [[ ${file_name##*.} == "txt" ]];then
+    #     continue
+    elif [[ ! ${file_name##*.} = "py" ]] && [[ ! ${file_name##*.} == ".sh" ]];then
         continue
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
         if [[ ${dir2} =~ "transformers" ]];then
