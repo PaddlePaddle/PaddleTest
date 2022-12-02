@@ -24,7 +24,7 @@ from tqdm import tqdm
 import pkg_resources as pkg
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
 from utils.dataset import COCOValDataset
 from utils.yolo_series_post_process import YOLOPostProcess, coco_metric
 
@@ -206,6 +206,14 @@ def main():
             calibration_cache_file=FLAGS.calibration_file,
             calibration_loader=reader_wrapper(val_loader),
             verbose=False,
+        )
+    elif FLAGS.deploy_backend == "onnxruntime":
+        predictor = ONNXRuntimeEngine(
+            onnx_model_file=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            device=FLAGS.device,
         )
     else:
         raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
