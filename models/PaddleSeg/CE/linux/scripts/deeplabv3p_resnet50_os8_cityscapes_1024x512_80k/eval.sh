@@ -22,7 +22,7 @@ fi
 }
 
 eval_model_single(){
-    python val.py \
+    python tools/val.py \
        --config configs/deeplabv3p/deeplabv3p_resnet50_os8_cityscapes_1024x512_80k.yml \
        --model_path https://bj.bcebos.com/paddleseg/dygraph/cityscapes/deeplabv3p_resnet50_os8_cityscapes_1024x512_80k/model.pdparams >../log/${model}/${model}_eval_single.log
     if [ $? -ne 0 ];then
@@ -33,7 +33,7 @@ eval_model_single(){
 }
 
 eval_model_multi(){
-    python -m paddle.distributed.launch val.py \
+    python -m paddle.distributed.launch tools/val.py \
        --config configs/deeplabv3p/deeplabv3p_resnet50_os8_cityscapes_1024x512_80k.yml \
        --model_path https://bj.bcebos.com/paddleseg/dygraph/cityscapes/deeplabv3p_resnet50_os8_cityscapes_1024x512_80k/model.pdparams >../log/${model}/${model}_eval_multi.log
     if [ $? -ne 0 ];then

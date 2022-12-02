@@ -61,6 +61,8 @@ class PaddleDetection_Build(Model_Build):
         os.system("pip install -r requirements.txt --ignore-installed")
         os.system("pip install cython_bbox --ignore-installed")
         os.system("pip install zip --ignore-installed")
+        os.system("apt-get update")
+        os.system("apt-get install ffmpeg -y")
         path_now = os.getcwd()
         os.chdir(self.reponame)
         path_repo = os.getcwd()
