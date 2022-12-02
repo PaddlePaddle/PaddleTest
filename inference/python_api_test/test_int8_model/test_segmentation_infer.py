@@ -25,7 +25,7 @@ from paddleseg.cvlibs import Config as PaddleSegDataConfig
 from paddleseg.core.infer import reverse_transform
 from paddleseg.utils import metrics
 
-from backend import PaddleInferenceEngine, TensorRTEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
 
 
 def argsparser():
@@ -194,6 +194,14 @@ def main():
             engine_file_path=engine_file,
             calibration_cache_file=FLAGS.calibration_file,
             verbose=False,
+        )
+    elif FLAGS.deploy_backend == "onnxruntime":
+        predictor = ONNXRuntimeEngine(
+            onnx_model_file=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            device=FLAGS.device,
         )
     else:
         raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
