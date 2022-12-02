@@ -196,9 +196,12 @@ def main():
 
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
-    dataset = reader_cfg["EvalDataset"]
+    if FLAGS.small_data:
+        dataset = reader_cfg["TestDataset"]
+    else:
+        dataset = reader_cfg["EvalDataset"]
     global val_loader
-    val_loader = create("EvalReader")(reader_cfg["EvalDataset"], reader_cfg["worker_num"], return_list=True)
+    val_loader = create("EvalReader")(dataset, reader_cfg["worker_num"], return_list=True)
     clsid2catid = {v: k for k, v in dataset.catid2clsid.items()}
     anno_file = dataset.get_anno()
     metric = COCOMetric(anno_file=anno_file, clsid2catid=clsid2catid, IouType="bbox")
@@ -212,10 +215,6 @@ if __name__ == "__main__":
     paddle.enable_static()
     parser = argsparser()
     FLAGS = parser.parse_args()
-
-    if FLAGS.small_data:
-        # set small dataset
-        FLAGS.dataset_dir = "dataset/coco"
 
     # DataLoader need run on cpu
     paddle.set_device("cpu")
