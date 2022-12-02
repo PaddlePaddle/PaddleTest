@@ -167,7 +167,7 @@ if [[ ${#Normal_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
         if [[ ${apicase} =~ "taskflow" ]] ; then
             pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
         elif [[ ${apicase} =~ "transformers" ]] ; then
-            bash ci_uinttest_cash.sh transformers
+            bash ci_unittest_case.sh transformers
         else
             pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
             # sh run_coverage.sh paddlenlp.transformers.${apicase} >unittest_logs/${apicase}_coverage.log 2>&1
