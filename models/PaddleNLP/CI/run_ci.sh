@@ -63,7 +63,7 @@ echo -e "\033[35m ---- Git diff case length: ${#Normal_list[*]}, cases: ${Normal
 # Normal_list=($(awk -v RS=' ' '!a[$1]++' <<< ${Normal_list[*]}))
 APIcase_list=($(awk -v RS=' ' '!a[$1]++' <<< ${APIcase_list[*]}))
 ####################################
-if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
+if [[ ${#Normal_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     ####################################
     # set python env
     case $1 in
