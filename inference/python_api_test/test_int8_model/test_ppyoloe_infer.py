@@ -57,7 +57,7 @@ def argsparser():
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     parser.add_argument("--include_nms", type=bool, default=True, help="Whether include nms or not.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
-    parser.add_argument("--full_data", action="store_true", default=False, help="Whether use full data to eval.")
+    parser.add_argument("--full_data", type=bool, default=True, help="Whether use full data to eval.")
     return parser
 
 
@@ -96,7 +96,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
-    sample_nums = len(val_loader)
+    sample_nums = len(val_loader) if FLAGS.full_data else 20
     warmup = 20
     repeats = 1 if FLAGS.full_data else 20
     for batch_id, data in enumerate(val_loader):

@@ -20,19 +20,19 @@ $PYTHON test_yolo_series_infer.py --model_path=models/yolov7_infer --use_trt=Tru
 
 # ResNet_vd trt fp16
 echo "[Benchmark] Run ResNet_vd trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/ResNet50_vd_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=ResNet_vd
+$PYTHON test_image_classification_infer.py --model_path=models/ResNet50_vd_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=ResNet_vd
 # MobileNetV3_large trt fp16
 echo "[Benchmark] Run MobileNetV3_large trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/MobileNetV3_large_x1_0_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=MobileNetV3_large
+$PYTHON test_image_classification_infer.py --model_path=models/MobileNetV3_large_x1_0_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=MobileNetV3_large
 # PPLCNetV2 trt fp16
 echo "[Benchmark] Run PPLCNetV2 trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/PPLCNetV2_base_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=PPLCNetV2
+$PYTHON test_image_classification_infer.py --model_path=models/PPLCNetV2_base_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=PPLCNetV2
 # PPHGNet_tiny trt fp16
 echo "[Benchmark] Run PPHGNet_tiny trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=PPHGNet_tiny
+$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=PPHGNet_tiny
 # EfficientNetB0 trt fp16
 echo "[Benchmark] Run EfficientNetB0 trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=EfficientNetB0
+$PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=EfficientNetB0
 
 # PP-HumanSeg-Lite trt fp16
 echo "[Benchmark] Run PP-HumanSeg-Lite trt fp16"

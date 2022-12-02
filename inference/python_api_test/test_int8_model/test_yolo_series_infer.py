@@ -60,7 +60,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
-    parser.add_argument("--full_data", action="store_true", default=False, help="Whether use full data to eval.")
+    parser.add_argument("--full_data", type=bool, default=True, help="Whether use full data to eval.")
     return parser
 
 
@@ -109,7 +109,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     """
     bboxes_list, bbox_nums_list, image_id_list = [], [], []
     cpu_mems, gpu_mems = 0, 0
-    sample_nums = len(val_loader)
+    sample_nums = len(val_loader) if FLAGS.full_data else 20
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")

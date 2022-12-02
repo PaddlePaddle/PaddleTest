@@ -70,7 +70,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
-    parser.add_argument("--full_data", action="store_true", default=False, help="Whether use full data to eval.")
+    parser.add_argument("--full_data", type=bool, default=True, help="Whether use full data to eval.")
     return parser
 
 
@@ -172,7 +172,7 @@ def main():
     batch_sampler = paddle.io.BatchSampler(eval_dataset, batch_size=1, shuffle=False, drop_last=False)
     eval_loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=0, return_list=True)
     FLAGS.total_samples = len(eval_dataset)
-    FLAGS.sample_nums = len(eval_loader)
+    FLAGS.sample_nums = len(eval_loader) if FLAGS.full_data else 20
     FLAGS.batch_size = int(FLAGS.total_samples / FLAGS.sample_nums)
 
     if FLAGS.deploy_backend == "paddle_inference":
