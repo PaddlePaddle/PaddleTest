@@ -131,32 +131,32 @@ if [[ ${#Normal_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     mkdir /workspace/PaddleNLP/coverage_logs
     export log_path=/workspace/PaddleNLP/model_logs
     ####################################
-    # run changed models case
-    echo -e "\033[35m =======CI Check case========= \033[0m"
-    echo -e "\033[35m ---- Git diff case length: ${#Normal_list[*]}, cases: ${Normal_list[*]} \033[0m"
+    # run changed models examples
+    echo -e "\033[35m =======CI Check examples========= \033[0m"
+    echo -e "\033[35m ---- Git diff examples length: ${#Normal_list[*]}, examples: ${Normal_list[*]} \033[0m"
     set +e
-    echo -e "\033[35m ---- start run case  \033[0m"
+    echo -e "\033[35m ---- start run examples  \033[0m"
     normal_case_num=1
     for normal_case in ${Normal_list[*]};do
-        echo -e "\033[35m ---- running case $normal_case_num/${#Normal_list[*]}: ${normal_case} \033[0m"
+        echo -e "\033[35m ---- running examples $normal_case_num/${#Normal_list[*]}: ${normal_case} \033[0m"
         python ci_normal_case.py ${normal_case}
         let normal_case_num++
     done
-    echo -e "\033[35m ---- end run case  \033[0m"
+    echo -e "\033[35m ---- end run examples  \033[0m"
     cd ${nlp_dir}/model_logs
     FF=`ls *FAIL*|wc -l`
     EXCODE=0
     if [ "${FF}" -gt "0" ];then
-        P0case_EXCODE=1
+        EXAMPLES_EXCODE=1
         EXCODE=2
     else
-        P0case_EXCODE=0
+        EXAMPLES_EXCODE=0
     fi
-    if [ $P0case_EXCODE -ne 0 ] ; then
-        echo -e "\033[31m ---- case Failed number: ${FF} \033[0m"
+    if [ $EXAMPLES_EXCODE -ne 0 ] ; then
+        echo -e "\033[31m ---- examples failed number: ${FF} \033[0m"
         ls *_FAIL*
     else
-        echo -e "\033[32m ---- case Success \033[0m"
+        echo -e "\033[32m ---- examples success \033[0m"
     fi
     ####################################
     # run unittest
@@ -168,6 +168,7 @@ if [[ ${#Normal_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
             pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
         elif [[ ${apicase} =~ "transformers" ]] ; then
             bash ci_unittest_case.sh transformers
+            break
         else
             pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
             # sh run_coverage.sh paddlenlp.transformers.${apicase} >unittest_logs/${apicase}_coverage.log 2>&1
@@ -207,4 +208,5 @@ else
     echo -e "\033[32m Changed files no in ci case, Skips \033[0m"
     EXCODE=0
 fi
+echo "EXCODE:" $EXCODE
 exit $EXCODE
