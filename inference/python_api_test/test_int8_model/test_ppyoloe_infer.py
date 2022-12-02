@@ -57,7 +57,7 @@ def argsparser():
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     parser.add_argument("--include_nms", type=bool, default=True, help="Whether include nms or not.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
-
+    parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
 
 
@@ -98,6 +98,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     time_max = float("-inf")
     sample_nums = len(val_loader)
     warmup = 20
+    repeats = 20 if FLAGS.small_data else 1
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
         if not FLAGS.include_nms:
@@ -110,10 +111,11 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
             warmup = 0
 
         start_time = time.time()
-        outs = predictor.run()
+        for j in range(repeats):
+            outs = predictor.run()
         end_time = time.time()
 
-        timed = end_time - start_time
+        timed = (end_time - start_time) / repeats
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
@@ -194,9 +196,12 @@ def main():
 
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
-    dataset = reader_cfg["EvalDataset"]
+    if FLAGS.small_data:
+        dataset = reader_cfg["TestDataset"]
+    else:
+        dataset = reader_cfg["EvalDataset"]
     global val_loader
-    val_loader = create("EvalReader")(reader_cfg["EvalDataset"], reader_cfg["worker_num"], return_list=True)
+    val_loader = create("EvalReader")(dataset, reader_cfg["worker_num"], return_list=True)
     clsid2catid = {v: k for k, v in dataset.catid2clsid.items()}
     anno_file = dataset.get_anno()
     metric = COCOMetric(anno_file=anno_file, clsid2catid=clsid2catid, IouType="bbox")
