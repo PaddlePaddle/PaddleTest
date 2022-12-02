@@ -180,7 +180,8 @@ class WeakTrans(object):
         Tensor （向量）
         """
         # if isinstance(list(value.values())[0], list):
-        if isinstance(value, list):
+        # print("value is : ", value)
+        if isinstance(value, list) and isinstance(value[0], dict):
             data = []
             for v in value:
                 # 参数可靠性校验
