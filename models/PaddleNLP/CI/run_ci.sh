@@ -28,18 +28,24 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         if [[ ${dir3##*.} == "py" ]];then
             # Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/"
             Normal_list[${dir2}]="${dir1}/${dir2}/"
+        elif [[ ${dir3} =~ "deploy" ]];then
+            continue
         else
             Normal_list[${dir3}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${dir3##*.} == "py" ]];then
             Normal_list[${dir2}]="${dir1}/${dir2}/"
+        elif [[ ${dir3} =~ "deploy" ]];then
+            continue
         else
             Normal_list[${dir3}]="${dir1}/${dir2}/${dir3}"
         fi
     elif [[ ${dir1} =~ "application" ]];then # 模型升级
         if [[ ${dir3##*.} == "py" ]];then
             Normal_list[${dir2}}]="${dir1}/${dir2}/"
+        elif [[ ${dir3} =~ "deploy" ]];then
+            continue
         # elif [[ ${dir4##*.} == "py" ]];then
         #     Normal_list[${#Normal_list[*]}]="${dir1}/${dir2}/${dir3}"
         else
