@@ -6,7 +6,7 @@ EvalDataset:
   !COCODataSet
     image_dir: val2017
     anno_path: annotations/instances_val2017.json
-    dataset_dir: dataset/coco/
+    dataset_dir: dataset/coco_val2017/
 
 TestDataset:
   !COCODataSet

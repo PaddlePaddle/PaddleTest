@@ -55,7 +55,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--img_shape", type=int, default=640, help="input_size")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
-    parser.add_argument("--exclude_nms", type=bool, default=True, help="Whether include nms or not.")
+    parser.add_argument("--exclude_nms", action="store_true", default=False, help="Whether exclude nms or not.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
