@@ -1,6 +1,6 @@
 train:
   name: single
-  cmd : python train.py
+  cmd : python tools/train.py
   params:
     - --config ${rd_yaml_path}
     - --iters 10
@@ -15,7 +15,7 @@ train:
       evaluation: "="
 eval:
   name: pretrained
-  cmd:  python -m paddle.distributed.launch val.py
+  cmd:  python -m paddle.distributed.launch tools/val.py
   params:
     - --config ${rd_yaml_path}
     - --model_path seg_dynamic_pretrain/${model}/model.pdparams
@@ -26,11 +26,11 @@ eval:
       evaluation: "="
 infer:
     name: pretrained
-    cmd:  python predict.py
+    cmd:  python tools/predict.py
     params:
       - --config ${rd_yaml_path}
       - --model_path seg_dynamic_pretrain/${model}/model.pdparams
-      - --image_path demo/leverkusen_000029_000019_leftImg8bit.png
+      - --image_path demo/${image}
       - --save_dir output/${model}/result
     result:
       exit_code:
@@ -39,7 +39,7 @@ infer:
         evaluation: "="
 export:
   name: pretrained
-  cmd: python export.py
+  cmd: python tools/export.py
   params:
     - --config ${rd_yaml_path}
     - --model_path seg_dynamic_pretrain/${model}/model.pdparams
@@ -54,7 +54,7 @@ predict:
   cmd: python deploy/python/infer.py
   params:
     - --config ./inference_model/${model}/deploy.yaml
-    - --image_path ./demo/leverkusen_000029_000019_leftImg8bit.png
+    - --image_path ./demo/${image}
     - --save_dir ./python_infer_output/${model}/
   result:
     exit_code:
