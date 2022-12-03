@@ -22,10 +22,22 @@ rm -rf portrait14k_val.tar
 mkdir models
 
 # ====== download INT8 quant inference model ======
-# PPYOLOE
+# PPYOLOE with nms
 wget https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco_quant.tar
 tar -xf ppyoloe_crn_l_300e_coco_quant.tar -C ./models
 rm -rf ppyoloe_crn_l_300e_coco_quant.tar
+# PPYOLOE+ without nms
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_plus_crn_s_80e_coco_no_nms_quant.tar
+tar -xf ppyoloe_plus_crn_s_80e_coco_no_nms_quant.tar -C ./models
+rm -rf ppyoloe_plus_crn_s_80e_coco_no_nms_quant.tar
+# PicoDet with nms
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu_quant.tar
+tar -xf picodet_s_416_coco_npu_quant.tar -C ./models
+rm -rf picodet_s_416_coco_npu_quant.tar
+# PicoDet without postprocess
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu_no_postprocess_quant.tar
+tar -xf picodet_s_416_coco_npu_no_postprocess_quant.tar -C ./models
+rm -rf picodet_s_416_coco_npu_no_postprocess_quant.tar
 # YOLOv5s
 wget https://bj.bcebos.com/v1/paddle-slim-models/act/yolov5s_quant.tar
 tar -xf yolov5s_quant.tar -C ./models
@@ -38,10 +50,6 @@ rm -rf yolov6s_quant.tar
 wget https://bj.bcebos.com/v1/paddle-slim-models/act/yolov7_quant.tar
 tar -xf yolov7_quant.tar -C ./models
 rm -rf yolov7_quant.tar
-# PicoDet
-wget https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu_quant.tar
-tar -xf picodet_s_416_coco_npu_quant.tar -C ./models
-rm -rf picodet_s_416_coco_npu_quant.tar
 # Resnet50_vd
 wget https://paddle-slim-models.bj.bcebos.com/act/ResNet50_vd_QAT.tar
 tar -xf ResNet50_vd_QAT.tar -C ./models
@@ -96,10 +104,22 @@ tar -xf x2paddle_cola_new_calib.tar -C ./models
 rm -rf x2paddle_cola_new_calib.tar
 
 # ====== download FP32 inference model ======
-# PPYOLOE
+# PPYOLOE with nms
 wget https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco.tar
 tar -xf ppyoloe_crn_l_300e_coco.tar -C ./models
 rm -rf ppyoloe_crn_l_300e_coco.tar
+# PPYOLOE+ without nms
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_plus_crn_s_80e_coco_no_nms.tar
+tar -xf ppyoloe_plus_crn_s_80e_coco_no_nms.tar -C ./models
+rm -rf ppyoloe_plus_crn_s_80e_coco_no_nms.tar
+# PicoDet with nms
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu.tar
+tar -xf picodet_s_416_coco_npu.tar -C ./models
+rm -rf picodet_s_416_coco_npu.tar
+# PicoDet without postprocess
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu_no_postprocess.tar
+tar -xf picodet_s_416_coco_npu_no_postprocess.tar -C ./models
+rm -rf picodet_s_416_coco_npu_no_postprocess.tar
 # YOLOv5s
 wget https://bj.bcebos.com/v1/paddle-slim-models/act/yolov5s_infer.tar
 tar -xf yolov5s_infer.tar -C ./models
@@ -112,10 +132,6 @@ rm -rf yolov6s_infer.tar
 wget https://bj.bcebos.com/v1/paddle-slim-models/act/yolov7_infer.tar
 tar -xf yolov7_infer.tar -C ./models
 rm -rf yolov7_infer.tar
-# PicoDet
-wget https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu.tar
-tar -xf picodet_s_416_coco_npu.tar -C ./models
-rm -rf picodet_s_416_coco_npu.tar
 # Resnet50_vd
 wget https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/ResNet50_vd_infer.tar
 tar -xf ResNet50_vd_infer.tar -C ./models
