@@ -72,7 +72,7 @@ def get_mode_info(case_path):
                     model_info["deploy_path"] = "deploy/python"
                     model_info["infer_exec_file"] = file
 
-    print(model_info)
+    print("EXMAPLES_INFO", model_info)
     return model_info
 
 
@@ -84,10 +84,12 @@ def save_log(exit_code, output, case_name, file_name):
     # root_path = '/ssd1/paddlenlp/zhangjunjun/PaddleNLP'
     if exit_code == 0:
         log_file = root_path + "/model_logs/" + os.path.join(case_name + "_" + file_name + "_SUCCESS.log")
+        print("{} SUCCESS".format(file_name))
         with open(log_file, "a") as flog:
             flog.write("%s" % (output))
     else:
         log_file = root_path + "/model_logs/" + os.path.join(case_name + "_" + file_name + "_FAIL.log")
+        print("{} FAILd".format(file_name))
         with open(log_file, "a") as flog:
             flog.write("%s" % (output))
 
@@ -125,26 +127,26 @@ def run_normal_case(case_path):
         eval_output = subprocess.getstatusoutput("python %s --init_checkpoint_dir ./output/" % (eval_exec_file))
         save_log(eval_output[0], eval_output[1], case_name, eval_exec_file.split(".")[0])
     else:
-        print("evalation skipped !")
+        print("evalation Skipped")
     if predict_exec_file:
         predict_output = subprocess.getstatusoutput("python %s --init_checkpoint_dir ./output/" % (predict_exec_file))
         save_log(predict_output[0], predict_output[1], case_name, predict_exec_file.split(".")[0])
     else:
-        print("predict skipped !")
+        print("predict Skipped")
     if export_exec_file:
         export_output = subprocess.getstatusoutput(
             "python %s --export_output_dir ./inference_model/" % (export_exec_file)
         )
         save_log(export_output[0], export_output[1], case_name, export_exec_file.split(".")[0])
     else:
-        print("export model skipped !")
+        print("export model Skipped")
     if infer_exec_file:
         infer_output = subprocess.getstatusoutput(
             "cd %s && python %s --inference_model_dir ../../inference_model/" % (depoly_path, infer_exec_file)
         )
         save_log(infer_output[0], infer_output[1], case_name, infer_exec_file.split(".")[0])
     else:
-        print("python inference skipped !")
+        print("python inference Skipped")
 
 
 if __name__ == "__main__":
