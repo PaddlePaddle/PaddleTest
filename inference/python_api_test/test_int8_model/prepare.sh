@@ -6,6 +6,10 @@ mkdir dataset
 wget https://bj.bcebos.com/v1/paddle-slim-models/data/coco_val2017.tar
 tar -xf coco_val2017.tar -C ./dataset
 rm -rf coco_val2017.tar
+# download small coco val dataset
+wget https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip
+unzip -q coco.zip -d ./dataset
+rm -rf coco.zip
 # download imagenet val dataset
 wget https://bj.bcebos.com/v1/paddle-slim-models/data/ILSVRC2012_val.tar
 tar -xf ILSVRC2012_val.tar -C ./dataset
