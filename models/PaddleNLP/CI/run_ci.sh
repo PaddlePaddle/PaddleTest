@@ -68,7 +68,6 @@ done
 }
 get_diff_TO_P0case
 echo -e "\033[35m ---- Git diff case length: ${#Normal_list[*]}, cases: ${Normal_list[*]} \033[0m"
-# Normal_list=($(awk -v RS=' ' '!a[$1]++' <<< ${Normal_list[*]}))
 APIcase_list=($(awk -v RS=' ' '!a[$1]++' <<< ${APIcase_list[*]}))
 ####################################
 if [[ ${#Normal_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
