@@ -28,7 +28,7 @@ fi
 
 #train
 train_model_multi(){
-    python -m paddle.distributed.launch train.py \
+    python -m paddle.distributed.launch tools/train.py \
        --config configs/bisenet/bisenet_cityscapes_1024x1024_160k.yml \
        --save_interval 1000 \
        --iters 1000 \
@@ -40,7 +40,7 @@ train_model_multi(){
     print_info $? multi
 }
 train_model_single(){
-    python train.py \
+    python tools/train.py \
        --config configs/bisenet/bisenet_cityscapes_1024x1024_160k.yml \
        --save_interval 1000 \
        --iters 1000 \
