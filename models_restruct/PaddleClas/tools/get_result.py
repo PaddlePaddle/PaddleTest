@@ -305,7 +305,6 @@ def run():
         "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567148/report/result.tar",
         "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567128/report/result.tar",
     }
-
     report_linux_cuda102_py37_develop = {
         "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905007/report/result.tar",
         "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905006/report/result.tar",
@@ -313,6 +312,9 @@ def run():
         "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905004/report/result.tar",
         "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905003/report/result.tar",
     }
+    print("###report_linux_cuda102_py37_release", report_linux_cuda102_py37_release)
+    print("###report_linux_cuda102_py37_develop", report_linux_cuda102_py37_develop)
+    # 顺便print下, 不然precommit会报 is assigned to but never used, 下面eval时其实是用了的
 
     for name in update_name:
         for branch in whl_branch:
