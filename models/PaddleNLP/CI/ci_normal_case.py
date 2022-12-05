@@ -118,7 +118,7 @@ def run_normal_case(case_path):
     if model_info["train_exec_file"]:
         for train_file in model_info["train_exec_file"]:
             train_output = subprocess.getstatusoutput(
-                "python -m paddle.distributed.launch %s --devices gpu --max_steps 2 \
+                "python -m paddle.distributed.launch %s --device gpu --max_steps 2 \
                 --save_steps 2 --output_dir ./output/"
                 % (train_file)
             )
