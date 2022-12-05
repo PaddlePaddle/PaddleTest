@@ -40,4 +40,3 @@ Allure package should be downloaded from external storage. Repository content do
 1. Update package version `$ npm version 2.13.0`
 1. Download Allure-commandline package: `./fetch-sources`
 1. Pubslish result to NPM: `npm publish`
-
