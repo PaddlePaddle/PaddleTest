@@ -11,6 +11,7 @@ root_path=$cur_path/../../
 
 cd $cur_path/../../PaddleSeg
 pip install -r requirements.txt
+pip install -v -e .
 # 准备数据
 if [ -d "$cur_path/../../PaddleSeg/data" ];then
 rm -rf $cur_path/../../PaddleSeg/data

@@ -1,7 +1,6 @@
 metric: COCO
 num_classes: 80
 
-
 # Datset configuration
 EvalDataset:
   !COCODataSet
@@ -16,15 +15,12 @@ TestDataset:
     dataset_dir: dataset/coco
 
 worker_num: 0
-eval_height: &eval_height 416
-eval_width: &eval_width 416
-eval_size: &eval_size [*eval_height, *eval_width]
 
+# preprocess reader in test
 EvalReader:
   sample_transforms:
-  - Decode: {}
-  - Resize: {interp: 2, target_size: *eval_size, keep_ratio: False}
-  - NormalizeImage: {mean: [0, 0, 0], std: [1, 1, 1], is_scale: True}
-  - Permute: {}
+    - Decode: {}
+    - Resize: {target_size: [640, 640], keep_ratio: False, interp: 2}
+    - NormalizeImage: {mean: [0., 0., 0.], std: [1., 1., 1.], norm_type: none}
+    - Permute: {}
   batch_size: 1
-  shuffle: false

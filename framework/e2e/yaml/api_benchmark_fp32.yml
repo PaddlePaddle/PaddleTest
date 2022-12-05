@@ -11938,6 +11938,57 @@ __xor___2:
     mapping:
       ins: { x: x, y: y }
 
+__getitem___0:
+  desc: "其调用形式为：Tensor[Index]"
+  paddle:
+    api_name: "__getitem__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [ 2, 2 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__getitem__"
+    mapping:
+      ins: { x: x }
+
+#__setitem___0:
+#  desc: "调用形式为 Tensor[Index] = Value"
+#  enable_backward: false
+#  paddle:
+#    api_name: "__setitem__"
+#    inputs:
+#      x:
+#        random: true
+#        type: "Tensor"
+#        dtype: "float32"
+#        shape: [ 2, 2 ]
+#        range: [ -1, 1 ]
+#      y: 1.
+#  pytorch:
+#    api_name: "__setitem__"
+#    mapping:
+#      ins: { x: x, y: y }
+
+__invert___0:
+  desc: "对tensor取非"
+  enable_backward: False
+  paddle:
+    api_name: "__invert__"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "bool"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+  pytorch:
+    api_name: "__invert__"
+    mapping:
+      ins: { x: x }
+
 acos_0:
   desc: "arccosine函数"
   paddle:

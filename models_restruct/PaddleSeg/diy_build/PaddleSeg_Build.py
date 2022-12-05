@@ -58,6 +58,7 @@ class PaddleSeg_Build(Model_Build):
         """
         os.system("python -m pip install --upgrade pip --ignore-installed")
         os.system("pip install -r requirements.txt --ignore-installed")
+        os.system("pip install -v -e .")
         os.system("pip install zip --ignore-installed")
         path_now = os.getcwd()
         os.chdir(self.reponame)

@@ -35,14 +35,18 @@ class PaddleSeg_Start(object):
         self.env_dict["model"] = self.model
         os.environ["model"] = self.model
 
-    def prepare_gpu_env(self):
+    def prepare_env(self):
         """
-        根据操作系统获取用gpu还是cpu
+        环境变量设置
         """
         if "cpu" in self.system or "mac" in self.system:
             self.env_dict["set_cuda_flag"] = "cpu"  # 根据操作系统判断
         else:
             self.env_dict["set_cuda_flag"] = "gpu"  # 根据操作系统判断
+        if "voc12" in self.model:
+            os.environ["image"] = "2007_000033.jpg"
+        else:
+            os.environ["image"] = "leverkusen_000029_000019_leftImg8bit.png"
         return 0
 
     def build_prepare(self):
@@ -50,7 +54,7 @@ class PaddleSeg_Start(object):
         build prepare
         """
         ret = 0
-        ret = self.prepare_gpu_env()
+        ret = self.prepare_env()
         if ret:
             logger.info("build prepare_gpu_env failed")
             return ret

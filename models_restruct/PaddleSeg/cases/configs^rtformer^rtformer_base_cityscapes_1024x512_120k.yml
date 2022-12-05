@@ -4,22 +4,24 @@ case:
     train:
       -
         name: multi
-        cmd : python -m paddle.distributed.launch train.py
+        cmd : python -m paddle.distributed.launch tools/train.py
       -
         name: single
-        cmd : python train.py
+        cmd : python tools/train.py
     eval:
       -
         name: pretrained
-        cmd: python -m paddle.distributed.launch val.py
+        cmd: python -m paddle.distributed.launch tools/val.py
     infer:
       -
         name: pretrained
-        cmd: python predict.py
+        cmd: python tools/predict.py
     export:
       -
         name: pretrained
-        cmd: python export.py
+        cmd: python tools/export.py
+        params:
+          - --input_shape 1 3 1024 2048
     predict:
       -
         name: python
