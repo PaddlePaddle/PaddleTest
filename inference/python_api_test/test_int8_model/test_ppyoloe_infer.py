@@ -56,7 +56,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--img_shape", type=int, default=640, help="input_size")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
-    parser.add_argument("--include_nms", type=bool, default=True, help="Whether include nms or not.")
+    parser.add_argument("--exclude_nms", action="store_true", default=False, help="Whether exclude nms or not.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
@@ -102,7 +102,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     repeats = 20 if FLAGS.small_data else 1
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
-        if not FLAGS.include_nms:
+        if FLAGS.exclude_nms:
             predictor.prepare_data([data_all["image"]])
         else:
             predictor.prepare_data([data_all["image"], data_all["scale_factor"]])
@@ -125,7 +125,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         cpu_mem, gpu_mem = get_current_memory_mb()
         cpu_mems += cpu_mem
         gpu_mems += gpu_mem
-        if not FLAGS.include_nms:
+        if FLAGS.exclude_nms:
             postprocess = PPYOLOEPostProcess(score_threshold=0.3, nms_threshold=0.6)
             res = postprocess(outs[0], data_all["scale_factor"])
         else:
