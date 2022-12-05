@@ -37,8 +37,6 @@ fi
 mkdir log_err
 if [ -d "output" ];then rm -rf output
 fi
-#install paddleseg
-pip install -v -e .
 #cpp infer compile
 cd deploy/cpp
 wget https://github.com/opencv/opencv/archive/3.4.7.tar.gz
@@ -122,6 +120,8 @@ print_result(){
 
 # run dynamic models
 pip install -r requirements.txt --ignore-installed
+#install paddleseg
+pip install -v -e .
 log_dir=.
 model_type_path=
 dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
