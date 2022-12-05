@@ -33,4 +33,7 @@ OPERATOR_RELOAD = {
     "__rsub__": "{} - {}",
     "__rtruediv__": "{} / {}",
     "__matmul__": "{} @ {}",
+    "__getitem__": "{}[0, 1]",
+    # "__setitem__": "{}[0, 1]={}",
+    "__invert__": "~{}",
 }
