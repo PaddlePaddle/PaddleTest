@@ -27,6 +27,7 @@ from ppdet.core.workspace import load_config, create
 from ppdet.metrics import COCOMetric
 
 from utils.ppyoloe_post_process import PPYOLOEPostProcess
+from utils.picodet_post_process import PicoDetPostProcess
 
 
 def argsparser():
