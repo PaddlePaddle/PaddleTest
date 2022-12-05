@@ -22,6 +22,7 @@ from paddle.inference import create_predictor
 
 paddle.disable_signal_handler()
 
+
 class PaddleInferenceEngine(object):
     """
     Paddle Inference instance

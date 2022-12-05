@@ -179,7 +179,25 @@ class WeakTrans(object):
         Dictionary（字典）
         Tensor （向量）
         """
-        data = None
+        # if isinstance(list(value.values())[0], list):
+        # print("value is : ", value)
+        if isinstance(value, list) and isinstance(value[0], dict):
+            data = []
+            for v in value:
+                # 参数可靠性校验
+                self._param_check(key, v)
+                if v.get("random", False):
+                    # 若开启random即进行自动数据生成,默认关闭
+                    data_range = v.get("range", [-1, 1])
+                    assert isinstance(data_range, list) and len(data_range) == 2
+                    data.append(self._randtool(v.get("dtype", "float"), data_range[0], data_range[1], v.get("shape")))
+                    print("list data out is: ", data)
+                    # elif
+                else:
+                    data.append(np.array(v.get("value")).astype(v.get("dtype")))
+            return data
+
+        # data = None
         if isinstance(value, dict):
             # 参数可靠性校验
             self._param_check(key, value)

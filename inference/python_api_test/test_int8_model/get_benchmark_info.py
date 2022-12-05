@@ -5,6 +5,7 @@ get benchmark info from log
 import os
 import sys
 import json
+import datetime
 import openpyxl
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
@@ -14,6 +15,7 @@ import base_mkldnn_fp32
 import base_mkldnn_int8
 import base_trt_fp16
 import base_trt_int8
+import mail_report
 
 
 FONT = {
@@ -349,12 +351,10 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
     return res, tongji
 
 
-def res2xls(env, res, tongji, mode, metric, save_file):
+def res2xls(env, res, tongji, mode_list, metric_list, save_file):
     """
     将结果保存为excel文件
     """
-    mode_list = mode.split(",")
-    metric_list = metric.split(",")
 
     wb = openpyxl.Workbook()
 
@@ -519,7 +519,20 @@ def run():
     env += device
     env += "  "
 
-    res2xls(env, res, tongji, modes, metrics, save_file)
+    mode_list = modes.split(",")
+    metric_list = metrics.split(",")
+
+    res2xls(env, res, tongji, mode_list, metric_list, save_file)
+
+    # send mail
+    task_dt = datetime.date.today()
+    env = {
+        "docker": docker,
+        "paddle_branch": paddle_branch,
+        "paddle_commit": paddle_commit,
+        "device": device,
+    }
+    mail_report.report_day(task_dt, env, tongji, res, mode_list, metric_list)
 
 
 if __name__ == "__main__":

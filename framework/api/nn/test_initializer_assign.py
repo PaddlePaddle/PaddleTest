@@ -40,10 +40,17 @@ def test_initializer_assign_base():
     padding = 0
     res = np.array(
         [
-            [[[9.148826, 7.149759], [9.689443, 7.829164]], [[6.4570565, 4.66857], [5.920138, 6.5285373]]],
-            [[[9.529301, 8.021168], [10.5367985, 9.277258]], [[6.9496613, 6.710565], [6.379459, 6.5709414]]],
+            [
+                [[9.148826, 7.6043386], [9.538667, 8.41972]],
+                [[5.923057, 4.366275], [5.420381, 5.990474]],
+            ],
+            [
+                [[9.90173, 8.549506], [11.014879, 9.594643]],
+                [[6.388487, 6.04265], [6.0694923, 6.03674]],
+            ],
         ]
     )
+
     obj.base(
         res=res,
         data=x,
@@ -53,7 +60,7 @@ def test_initializer_assign_base():
         stride=stride,
         padding=padding,
         weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 3, 3, 3])),
-        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 2, 2, 2])),
+        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
 
 
@@ -72,12 +79,36 @@ def test_initializer_assign1():
     res = np.array(
         [
             [
-                [[3.1488285, 2.6045718, 2.3618672], [2.6637244, 3.482614, 3.0660949], [2.5792058, 4.469435, 4.402805]],
-                [[3.2415571, 2.680398, 2.9264152], [2.3942952, 2.8963027, 2.9391894], [3.094975, 3.7346702, 4.365359]],
+                [
+                    [
+                        3.231795,
+                        2.486073,
+                        2.282403,
+                    ],
+                    [2.7349014, 2.943695, 3.2125316],
+                    [
+                        2.891021,
+                        3.84766,
+                        4.053831,
+                    ],
+                ],
+                [
+                    [3.1089513, 2.0693536, 2.8869987],
+                    [2.6687198, 2.8988774, 3.1295364],
+                    [2.4657903, 3.2080243, 4.2252774],
+                ],
             ],
             [
-                [[2.760744, 3.0655136, 4.0605125], [4.4684505, 3.0955038, 3.5872626], [3.9559507, 3.5853045, 4.094687]],
-                [[2.5239108, 2.7466004, 3.6652846], [4.426062, 3.3372722, 3.472499], [3.782108, 3.5966544, 2.999978]],
+                [
+                    [2.6912615, 2.9456987, 3.6711123],
+                    [4.552159, 2.8042006, 3.7762904],
+                    [4.0862513, 3.8355634, 3.4726915],
+                ],
+                [
+                    [2.8221548, 2.5010462, 3.2962692],
+                    [3.8097546, 2.869685, 3.2989302],
+                    [3.8046136, 3.5966544, 3.27493],
+                ],
             ],
         ]
     )
@@ -94,32 +125,7 @@ def test_initializer_assign1():
         ],
     ]
 
-    b_init = [
-        [
-            [
-                [0.24851013, 0.44997542, 0.4109408],
-                [0.26029969, 0.87039569, 0.18503993],
-                [0.01966143, 0.95325203, 0.6804508],
-            ],
-            [
-                [0.48658813, 0.96502682, 0.39339874],
-                [0.07955757, 0.35140742, 0.16363516],
-                [0.98316682, 0.88062818, 0.49406347],
-            ],
-        ],
-        [
-            [
-                [0.40095924, 0.45129146, 0.72087685],
-                [0.24776828, 0.62277995, 0.14244882],
-                [0.20117628, 0.08121773, 0.95347229],
-            ],
-            [
-                [0.05573827, 0.59953648, 0.72299763],
-                [0.97028972, 0.82156946, 0.52755107],
-                [0.33147673, 0.3539822, 0.0790303],
-            ],
-        ],
-    ]
+    b_init = [0.33147673, 0.3539822]
     obj.run(
         res=res,
         data=x,
@@ -148,8 +154,14 @@ def test_initializer_assign2():
     padding = 0
     res = np.array(
         [
-            [[[9.148826, 7.149759], [9.689443, 7.829164]], [[6.4570565, 4.66857], [5.920138, 6.5285373]]],
-            [[[9.529301, 8.021168], [10.5367985, 9.277258]], [[6.9496613, 6.710565], [6.379459, 6.5709414]]],
+            [
+                [[9.148826, 7.6043386], [9.538667, 8.41972]],
+                [[5.923057, 4.366275], [5.420381, 5.990474]],
+            ],
+            [
+                [[9.90173, 8.549506], [11.014879, 9.594643]],
+                [[6.388487, 6.04265], [6.0694923, 6.03674]],
+            ],
         ]
     )
     obj.run(
@@ -161,7 +173,7 @@ def test_initializer_assign2():
         stride=stride,
         padding=padding,
         weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 3, 3, 3])),
-        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 2, 2, 2])),
+        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
 
 
@@ -178,7 +190,7 @@ def test_initializer_assign3():
     kernel_size = [3, 3]
     stride = 2
     padding = 0
-    res = np.array([[[[8.935533]]], [[[9.933927]]]])
+    res = np.array([[[[8.935533]], [[9.181023]]], [[[9.6884365]], [[9.933927]]]])
     obj.run(
         res=res,
         data=x,
@@ -188,7 +200,7 @@ def test_initializer_assign3():
         stride=stride,
         padding=padding,
         weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [1, 3, 3, 3])),
-        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 1, 1, 1])),
+        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
 
 
@@ -205,7 +217,7 @@ def test_initializer_assign3_1():
     kernel_size = [3, 3]
     stride = 2
     padding = 0
-    res = np.array([[[[9.148826]], [[5.923057]]], [[[10.0525055]], [[6.252511]]]])
+    res = np.array([[[[9.148826]], [[5.923057]]], [[[9.90173]], [[6.3884873]]]])
     obj.run(
         res=res,
         data=x,
@@ -215,7 +227,7 @@ def test_initializer_assign3_1():
         stride=stride,
         padding=padding,
         weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 3, 3, 3])),
-        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 2, 1, 1])),
+        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
 
 
@@ -226,13 +238,53 @@ def test_initializer_assign4():
     paddle.nn.initializer.Assign(np.ndarray)
     """
     np.random.seed(obj.seed)
+    paddle.disable_static()
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
     out_channels = 1
     kernel_size = [3, 3]
     stride = 2
     padding = 1
-    res = np.array([[[[4.0355253, 5.3355255], [5.370474, 8.398205]]], [[[3.683806, 4.7267237], [6.8025727, 9.638547]]]])
+    res = np.array(
+        [
+            [
+                [
+                    [4.0355253, 5.0900354],
+                    [
+                        4.9440603,
+                        8.206427,
+                    ],
+                ],
+                [
+                    [4.2810154, 5.3355255],
+                    [
+                        5.1895504,
+                        8.451917,
+                    ],
+                ],
+            ],
+            [
+                [
+                    [
+                        3.761713,
+                        5.114859,
+                    ],
+                    [
+                        6.6824675,
+                        9.38135,
+                    ],
+                ],
+                [
+                    [
+                        4.007203,
+                        5.360349,
+                    ],
+                    [6.9279575, 9.62684],
+                ],
+            ],
+        ]
+    )
+    obj.static = False
     obj.run(
         res=res,
         data=x,
@@ -242,8 +294,9 @@ def test_initializer_assign4():
         stride=stride,
         padding=padding,
         weight_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [1, 3, 3, 3])),
-        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2, 1, 2, 2])),
+        bias_attr=paddle.nn.initializer.Assign(randtool("float", 0, 1, [2])),
     )
+    obj.static = True
 
 
 @pytest.mark.api_initializer_assign_parameters
@@ -260,7 +313,18 @@ def test_initializer_assign5():
     kernel_size = [3, 3]
     stride = 2
     padding = 1
-    res = np.array([[[[4.0355253, 5.3355255], [5.370474, 8.398205]]], [[[3.683806, 4.7267237], [6.8025727, 9.638547]]]])
+    res = np.array(
+        [
+            [
+                [[4.0355253, 5.0900354], [4.9440603, 8.206427]],
+                [[4.2810154, 5.3355255], [5.1895504, 8.451917]],
+            ],
+            [
+                [[3.761713, 5.114859], [6.6824675, 9.38135]],
+                [[4.007203, 5.360349], [6.9279575, 9.62684]],
+            ],
+        ]
+    )
     obj.static = False
     obj.run(
         res=res,
@@ -271,6 +335,6 @@ def test_initializer_assign5():
         stride=stride,
         padding=padding,
         weight_attr=paddle.nn.initializer.Assign(paddle.to_tensor(randtool("float", 0, 1, [1, 3, 3, 3]))),
-        bias_attr=paddle.nn.initializer.Assign(paddle.to_tensor(randtool("float", 0, 1, [2, 1, 2, 2]))),
+        bias_attr=paddle.nn.initializer.Assign(paddle.to_tensor(randtool("float", 0, 1, [2]))),
     )
     obj.static = True

@@ -66,7 +66,7 @@ pip install openpyxl
 
 bash run.sh
 
-PADDLE_COMMIT=`python -c 'import paddle; print(paddle.version.commit)'`
+PADDLE_COMMIT=`python -c "import paddle; print(paddle.version.commit)"`
 DT=`date "+%Y-%m-%d"`
 SAVE_FILE=${DT}_${PADDLE_BRANCH/\//-}_${PADDLE_COMMIT}.xlsx
 

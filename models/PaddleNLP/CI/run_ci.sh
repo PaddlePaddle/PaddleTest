@@ -37,6 +37,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             elif [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
                 P0case_list[${#P0case_list[*]}]=${dir3}
             else
+                # P0case_list[${#P0case_list[*]}]=tests
                 P0case_list[${#P0case_list[*]}]=bert
                 P0case_list[${#P0case_list[*]}]=gpt
                 P0case_list[${#P0case_list[*]}]=transformer
@@ -60,10 +61,14 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             Normal_dic[${dir2}]="${dir1}/${dir2}/"
         fi
     elif [[ ${dir1} =~ "tests" ]];then #新增单测
-        if [[ ${dir3##*.} == "py" ]];then
-            continue
-        elif [[ ${dir2} =~ "transformers" ]] ;then
-            APIcase_list[${#APIcase_list[*]}]=${dir3}
+        if [[ ${dir2} =~ "transformers" ]] ;then
+            if [[ ${dir3##*.} == "py" ]];then
+                continue
+            else
+                APIcase_list[${#APIcase_list[*]}]=${dir3}
+            fi
+        elif [[ ${dir2} =~ "taskflow" ]] ;then
+            APIcase_list[${#APIcase_list[*]}]=${dir2}
         fi
     else
         continue
@@ -136,11 +141,11 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     set +x
     ####################################
     # set logs env
-    export nlp_dir=/workspace
-    mkdir /workspace/model_logs
-    mkdir /workspace/unittest_logs
-    mkdir /workspace/coverage_logs
-    export log_path=/workspace/model_logs
+    export nlp_dir=/workspace/PaddleNLP
+    mkdir /workspace/PaddleNLP/model_logs
+    mkdir /workspace/PaddleNLP/unittest_logs
+    mkdir /workspace/PaddleNLP/coverage_logs
+    export log_path=/workspace/PaddleNLP/model_logs
     ####################################
     # run changed models case
     echo -e "\033[35m =======CI Check P0case========= \033[0m"
@@ -180,8 +185,12 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     echo -e "\033[35m =======CI Check Unittest========= \033[0m"
     echo -e "\033[35m ---- unittest length: ${#APIcase_list[*]}, unittest cases: ${APIcase_list[*]} \033[0m"
     for apicase in ${APIcase_list[*]};do
-        pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
-        # sh run_coverage.sh paddlenlp.transformers.${apicase} >unittest_logs/${apicase}_coverage.log 2>&1
+        if [[ ${apicase} =~ "taskflow" ]] ; then
+            pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
+        else
+            pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
+            # sh run_coverage.sh paddlenlp.transformers.${apicase} >unittest_logs/${apicase}_coverage.log 2>&1
+        fi
         UT_EXCODE=$? || true
         if [ $UT_EXCODE -ne 0 ] ; then
             mv ${nlp_dir}/unittest_logs/${apicase}_unittest.log ${nlp_dir}/unittest_logs/${apicase}_unittest_FAIL.log
