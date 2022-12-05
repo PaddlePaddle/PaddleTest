@@ -21,6 +21,6 @@ EvalReader:
   sample_transforms:
     - Decode: {}
     - Resize: {target_size: [640, 640], keep_ratio: False, interp: 2}
-    - NormalizeImage: {mean: [0.485, 0.456, 0.406], std: [0.229, 0.224, 0.225], is_scale: True}
+    - NormalizeImage: {mean: [0., 0., 0.], std: [1., 1., 1.], norm_type: none}
     - Permute: {}
   batch_size: 1
