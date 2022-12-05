@@ -105,8 +105,6 @@ if [[ ${#Normal_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     python -m pip install $2;
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
     python -c 'from visualdl import LogWriter'
-    yum install cmake -y
-    cmake --version
     # paddleslim env
     # cd PaddleSlim
     # python -m pip install -r requirements.txt
@@ -130,6 +128,8 @@ if [[ ${#Normal_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     }
     $3
     export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
+    yum install cmake -y
+    cmake --version
     pip list
     set +x
     ####################################
