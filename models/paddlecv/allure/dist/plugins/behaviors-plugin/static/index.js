@@ -75,10 +75,10 @@ allure.api.addTranslation('br', {
         behaviors: {
             name: 'Comportamentos'
         }
-    }, 
+    },
     widget: {
         behaviors: {
-            name: 'Funcionalidades por história', 
+            name: 'Funcionalidades por história',
             showAll: 'Mostrar tudo'
         }
     }

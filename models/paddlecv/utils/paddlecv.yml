@@ -1,5 +1,5 @@
 PP-HGNet:
-   yml: configs/single_op/PP-HGNet.yml 
+   yml: configs/single_op/PP-HGNet.yml
    input: demo/ILSVRC2012_val_00020010.jpeg
    output_json: output/clas_output.json
    output_vis:  output/ILSVRC2012_val_00020010.jpeg
@@ -36,7 +36,7 @@ PP-YOLOE:
 
 
 PP-YOLOE+:
-   yml: configs/single_op/PP-YOLOE+.yml 
+   yml: configs/single_op/PP-YOLOE+.yml
    input: demo/000000014439.jpg
    output_json: output/det_output.json
    output_vis:  output/000000014439.jpg
