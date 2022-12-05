@@ -48,7 +48,7 @@ function tar_reponame(){
         set -x
         tar xf ${tar_name}
     fi
-    python ${python_name}  ${file_tgz}  "xly-devops/PaddleTest/${repo_name}/"
+    python3 ${python_name}  ${file_tgz}  "xly-devops/PaddleTest/${repo_name}/"
     echo "upload ${file_tgz} done"
 
     # 及时删除防止空间打满
@@ -79,7 +79,7 @@ do
             set -x
             tar xf ${tar_name}
         fi
-        python ${python_name}  ${file_tgz}  "xly-devops/PaddleTest/${repo_name}/"
+        python3 ${python_name}  ${file_tgz}  "xly-devops/PaddleTest/${repo_name}/"
         echo "upload ${file_tgz} done"
 
         # 及时删除防止空间打满
