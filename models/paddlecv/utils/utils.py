@@ -1,11 +1,16 @@
+# encoding: utf-8
+"""
+paddlecv utils
+"""
+
 import subprocess
 import os
-import yaml
 import os.path
-import allure
-import paddle
 import shutil
 import logging
+import yaml
+import allure
+import paddle
 
 __all__ = ['exit_check_fucntion', 'allure_step']
 
