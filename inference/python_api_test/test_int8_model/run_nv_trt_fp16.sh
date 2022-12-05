@@ -2,12 +2,12 @@ export CUDA_VISIBLE_DEVICES=0
 export FLAGS_call_stack_level=2
 PYTHON="python"
 
-# PPYOLOE trt fp16
-echo "[Benchmark] Run PPYOLOE trt fp16"
-$PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_crn_l_300e_coco/ppyoloe_crn_l_300e_coco.onnx --reader_config=configs/ppyoloe_reader.yml --deploy_backend=tensorrt --precision=fp16 --model_name=PPYOLOE
+# PPYOLOE+ trt fp16
+echo "[Benchmark] Run PPYOLOE+ trt fp16"
+$PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_plus_crn_s_80e_coco_no_nms/ppyoloe_plus_crn_s_80e_coco_no_nms.onnx --reader_config=configs/ppyoloe_plus_reader.yml --deploy_backend=tensorrt --precision=fp16 --model_name=PPYOLOE_PLUS --exclude_nms
 # PicoDet trt fp16
 echo "[Benchmark] Run PicoDet trt fp16"
-$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu/picodet_s_416_coco_npu.onnx --reader_config=configs/picodet_reader.yml --deploy_backend=tensorrt --precision=fp16 --model_name=PicoDet
+$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_no_postprocess/picodet_s_416_coco_npu_no_postprocess.onnx --reader_config=configs/picodet_reader.yml --deploy_backend=tensorrt --precision=fp16 --model_name=PicoDet --img_shape=416 --exclude_nms
 # YOLOv5s trt fp16
 echo "[Benchmark] Run YOLOv5s trt fp16"
 $PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_infer/yolov5s.onnx --deploy_backend=tensorrt --precision=fp16 --model_name=YOLOv5s

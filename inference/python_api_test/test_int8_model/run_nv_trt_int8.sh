@@ -2,12 +2,12 @@ export CUDA_VISIBLE_DEVICES=0
 export FLAGS_call_stack_level=2
 PYTHON="python"
 
-# PPYOLOE trt int8
-echo "[Benchmark] Run PPYOLOE trt int8"
-$PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_crn_l_300e_coco_quant/ppyoloe_crn_l_300e_coco_quant.onnx --reader_config=configs/ppyoloe_reader.yml --deploy_backend=tensorrt --precision=int8 --model_name=PPYOLOE --calibration_file=models/ppyoloe_crn_l_300e_coco_quant/calibration.cache
+# PPYOLOE+ trt int8
+echo "[Benchmark] Run PPYOLOE+ trt int8"
+$PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_plus_crn_s_80e_coco_no_nms_quant/ppyoloe_plus_crn_s_80e_coco_no_nms_quant.onnx --reader_config=configs/ppyoloe_plus_reader.yml --deploy_backend=tensorrt --precision=int8 --model_name=PPYOLOE_PLUS --calibration_file=models/ppyoloe_plus_crn_s_80e_coco_no_nms_quant/calibration.cache --exclude_nms
 # PicoDet trt int8
 echo "[Benchmark] Run PicoDet trt int8"
-$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_quant/picodet_s_416_coco_npu_quant.onnx --reader_config=configs/picodet_reader.yml --deploy_backend=tensorrt --precision=int8 --model_name=PicoDet --calibration_file=models/picodet_s_416_coco_npu_quant/calibration.cache
+$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_quant/picodet_s_416_coco_npu_quant.onnx --reader_config=configs/picodet_reader.yml --deploy_backend=tensorrt --precision=int8 --model_name=PicoDet --calibration_file=models/picodet_s_416_coco_npu_quant/calibration.cache --img_shape=416 --exclude_nms
 # YOLOv5s trt int8
 echo "[Benchmark] Run YOLOv5s trt int8"
 $PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_quant/yolov5s_quant.onnx --deploy_backend=tensorrt --precision=int8 --model_name=YOLOv5s --calibration_file=models/yolov5s_quant/calibration.cache

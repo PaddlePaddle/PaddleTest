@@ -125,8 +125,11 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         cpu_mem, gpu_mem = get_current_memory_mb()
         cpu_mems += cpu_mem
         gpu_mems += gpu_mem
-        if FLAGS.exclude_nms:
-            postprocess = PPYOLOEPostProcess(score_threshold=0.3, nms_threshold=0.6)
+        if FLAGS.exclude_nms and "PPYOLOE" in FLAGS.model_name:
+            postprocess = PPYOLOEPostProcess(score_threshold=0.01, nms_threshold=0.6)
+            res = postprocess(outs[0], data_all["scale_factor"])
+        elif FLAGS.exclude_nms and "PicoDet" in FLAGS.model_name:
+            postprocess = PicoDetPostProcess(score_threshold=0.01, nms_threshold=0.6)
             res = postprocess(outs[0], data_all["scale_factor"])
         else:
             res = {"bbox": outs[0], "bbox_num": outs[1]}
@@ -185,10 +188,12 @@ def main():
         engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
         predictor = TensorRTEngine(
             onnx_model_file=FLAGS.model_path,
-            shape_info=None,
             max_batch_size=FLAGS.batch_size,
             precision=FLAGS.precision,
             engine_file_path=engine_file,
+            shape_info={
+                "image": [[1, 3, 1, 1], [1, 3, FLAGS.img_shape, FLAGS.img_shape], [1, 3, 1280, 1280]],
+            },
             calibration_cache_file=FLAGS.calibration_file,
             verbose=False,
         )
