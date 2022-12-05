@@ -186,18 +186,17 @@ def eval(args, predictor, rerun_flag=False):
     eval_class = build_metric(config["Metric"])
     model_type = config["Global"]["model_type"]
     extra_input = True if config["Global"]["algorithm"] in extra_input_models else False
+    repeats = len(val_loader)
 
     monitor = Monitor(0)
-    monitor.start()
+    if not rerun_flag:
+        monitor.start()
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
 
     with tqdm(
-        # total=len(val_loader), bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
-        total=1,
-        bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}",
-        ncols=80,
+        total=len(val_loader), bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
     ) as t:
         for batch_id, batch in enumerate(val_loader):
             images = np.array(batch[0])
@@ -212,7 +211,6 @@ def eval(args, predictor, rerun_flag=False):
             predict_time += timed
 
             if rerun_flag:
-                monitor.stop()
                 return
 
             batch_numpy = []
@@ -228,8 +226,9 @@ def eval(args, predictor, rerun_flag=False):
                 eval_class(post_result, batch_numpy)
 
             t.update()
-
+    print("main pid:", os.getpid())
     monitor.stop()
+    print("finish")
     time_avg = float(predict_time) / (1.0 * repeats)
     monitor_result = monitor.output()
 
@@ -261,10 +260,18 @@ def main(args):
     """
     main func
     """
-    # DataLoader need run on cpu
-    config = load_config(args.dataset_config)
-    devices = paddle.set_device("cpu")
-    val_loader = build_dataloader(config, "Eval", devices, logger)
+
+    val_loader = None
+    if args.image_file:
+        data = preprocess(args.image_file, args.det_limit_side_len, args.det_limit_type)
+        img, shape_list = data
+        img = np.expand_dims(img, axis=0)
+        val_loader = [[img]]
+    else:
+        # DataLoader need run on cpu
+        config = load_config(args.dataset_config)
+        devices = paddle.set_device("cpu")
+        val_loader = build_dataloader(config, "Eval", devices, logger)
 
     predictor = None
     if args.deploy_backend == "paddle_inference":
@@ -288,7 +295,7 @@ def main(args):
         predictor = TensorRTEngine(
             onnx_model_file=model_name,
             shape_info={
-                "x": [[1, 3, 100, 100], [1, 3, 600, 600], [1, 3, 1200, 1200]],
+                "x": [[1, 3, 100, 100], [1, 3, 800, 800], [1, 3, 1600, 1600]],
             },
             max_batch_size=args.batch_size,
             precision=args.precision,
