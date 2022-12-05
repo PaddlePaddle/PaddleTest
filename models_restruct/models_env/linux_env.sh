@@ -132,45 +132,41 @@ if [[ "${docker_flag}" == "" ]]; then
         export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID;
 
         if [[ ${Python_env} == 'ln_way' ]];then
-            # rm -rf /usr/bin/python2.7
-            # rm -rf /usr/local/python2.7.15/bin/python
-            # rm -rf /usr/local/bin/python
-            # export PATH=/usr/local/bin/python:${PATH}
+            #无法使用环境变量PATH 无法使用which命令
+            mv /usr/bin/python /usr/bin/python_back
+            mv /usr/local/bin/pip  /usr/local/bin/pip_back
+            mv /usr/local/python2.7.15/bin/pip /usr/local/python2.7.15/bin/pip_back
+            mv /usr/local/python2.7.15/bin/python  /usr/local/python2.7.15/bin/python_back
             case ${Python_version} in
             36)
-            # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
-            mkdir run_env_py36;
-            ln -s $(which python3.6) run_env_py36/python;
-            ln -s $(which pip3.6) run_env_py36/pip;
-            export PATH=$(pwd)/run_env_py36:${PATH};
+            ln -s /usr/bin/python3.6 /usr/bin/python
+            ln -s /usr/local/bin/pip3.6 /usr/local/bin/pip
+            ln -s /usr/local/bin/python3.6 /usr/local/python2.7.15/bin/python
+            ln -s /usr/local/bin/pip3.6 /usr/local/python2.7.15/bin/pip
             ;;
             37)
-            # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
-            mkdir run_env_py37;
-            ln -s $(which python3.7) run_env_py37/python;
-            ln -s $(which pip3.7) run_env_py37/pip;
-            export PATH=$(pwd)/run_env_py37:${PATH};
+            ln -s /usr/bin/python3.7 /usr/bin/python
+            ln -s /usr/local/bin/pip3.7 /usr/local/bin/pip
+            ln -s /usr/local/bin/python3.7 /usr/local/python2.7.15/bin/python
+            ln -s /usr/local/bin/pip3.7 /usr/local/python2.7.15/bin/pip
             ;;
             38)
-            # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
-            mkdir run_env_py38;
-            ln -s $(which python3.8) run_env_py38/python;
-            ln -s $(which pip3.8) run_env_py38/pip;
-            export PATH=$(pwd)/run_env_py38:${PATH};
+            ln -s /usr/bin/python3.8 /usr/bin/python
+            ln -s /usr/local/bin/pip3.8 /usr/local/bin/pip
+            ln -s /usr/local/bin/python3.8 /usr/local/python2.7.15/bin/python
+            ln -s /usr/local/bin/pip3.8 /usr/local/python2.7.15/bin/pip
             ;;
             39)
-            # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
-            mkdir run_env_py39;
-            ln -s $(which python3.9) run_env_py39/python;
-            ln -s $(which pip3.9) run_env_py39/pip;
-            export PATH=$(pwd)/run_env_py39:${PATH};
+            ln -s /usr/bin/python3.9 /usr/bin/python
+            ln -s /usr/local/bin/pip3.9 /usr/local/bin/pip
+            ln -s /usr/local/bin/python3.9 /usr/local/python2.7.15/bin/python
+            ln -s /usr/local/bin/pip3.9 /usr/local/python2.7.15/bin/pip
             ;;
             310)
-            # ln -s /usr/local/bin/python3.10 /usr/local/bin/python
-            mkdir run_env_py310;
-            ln -s $(which python3.10) run_env_py310/python;
-            ln -s $(which pip3.10) run_env_py310/pip;
-            export PATH=$(pwd)/run_env_py310:${PATH};
+            ln -s /usr/bin/python3.10 /usr/bin/python
+            ln -s /usr/local/bin/pip3.10 /usr/local/bin/pip
+            ln -s /usr/local/bin/python3.10 /usr/local/python2.7.15/bin/python
+            ln -s /usr/local/bin/pip3.10 /usr/local/python2.7.15/bin/pip
             ;;
             esac
         else
@@ -210,45 +206,41 @@ else
     ldconfig;
     export PORT_RANGE=62000:65536
     if [[ ${Python_env} == 'ln_way' ]];then
-        # rm -rf /usr/bin/python2.7
-        # rm -rf /usr/local/python2.7.15/bin/python
-        # rm -rf /usr/local/bin/python
-        # export PATH=/usr/local/bin/python:${PATH}
+        #无法使用环境变量PATH 无法使用which命令
+        mv /usr/bin/python /usr/bin/python_back
+        mv /usr/local/bin/pip  /usr/local/bin/pip_back
+        mv /usr/local/python2.7.15/bin/pip /usr/local/python2.7.15/bin/pip_back
+        mv /usr/local/python2.7.15/bin/python  /usr/local/python2.7.15/bin/python_back
         case ${Python_version} in
         36)
-        # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
-        mkdir run_env_py36;
-        ln -s $(which python3.6) run_env_py36/python;
-        ln -s $(which pip3.6) run_env_py36/pip;
-        export PATH=$(pwd)/run_env_py36:${PATH};
+        ln -s /usr/bin/python3.6 /usr/bin/python
+        ln -s /usr/local/bin/pip3.6 /usr/local/bin/pip
+        ln -s /usr/local/bin/python3.6 /usr/local/python2.7.15/bin/python
+        ln -s /usr/local/bin/pip3.6 /usr/local/python2.7.15/bin/pip
         ;;
         37)
-        # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
-        mkdir run_env_py37;
-        ln -s $(which python3.7) run_env_py37/python;
-        ln -s $(which pip3.7) run_env_py37/pip;
-        export PATH=$(pwd)/run_env_py37:${PATH};
+        ln -s /usr/bin/python3.7 /usr/bin/python
+        ln -s /usr/local/bin/pip3.7 /usr/local/bin/pip
+        ln -s /usr/local/bin/python3.7 /usr/local/python2.7.15/bin/python
+        ln -s /usr/local/bin/pip3.7 /usr/local/python2.7.15/bin/pip
         ;;
         38)
-        # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
-        mkdir run_env_py38;
-        ln -s $(which python3.8) run_env_py38/python;
-        ln -s $(which pip3.8) run_env_py38/pip;
-        export PATH=$(pwd)/run_env_py38:${PATH};
+        ln -s /usr/bin/python3.8 /usr/bin/python
+        ln -s /usr/local/bin/pip3.8 /usr/local/bin/pip
+        ln -s /usr/local/bin/python3.8 /usr/local/python2.7.15/bin/python
+        ln -s /usr/local/bin/pip3.8 /usr/local/python2.7.15/bin/pip
         ;;
         39)
-        # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
-        mkdir run_env_py39;
-        ln -s $(which python3.9) run_env_py39/python;
-        ln -s $(which pip3.9) run_env_py39/pip;
-        export PATH=$(pwd)/run_env_py39:${PATH};
+        ln -s /usr/bin/python3.9 /usr/bin/python
+        ln -s /usr/local/bin/pip3.9 /usr/local/bin/pip
+        ln -s /usr/local/bin/python3.9 /usr/local/python2.7.15/bin/python
+        ln -s /usr/local/bin/pip3.9 /usr/local/python2.7.15/bin/pip
         ;;
         310)
-        # ln -s /usr/local/bin/python3.10 /usr/local/bin/python
-        mkdir run_env_py310;
-        ln -s $(which python3.10) run_env_py310/python;
-        ln -s $(which pip3.10) run_env_py310/pip;
-        export PATH=$(pwd)/run_env_py310:${PATH};
+        ln -s /usr/bin/python3.10 /usr/bin/python
+        ln -s /usr/local/bin/pip3.10 /usr/local/bin/pip
+        ln -s /usr/local/bin/python3.10 /usr/local/python2.7.15/bin/python
+        ln -s /usr/local/bin/pip3.10 /usr/local/python2.7.15/bin/pip
         ;;
         esac
     else
