@@ -1,7 +1,0 @@
-#!/usr/bin/env node
-
-var allure = require('../');
-
-allure(process.argv.slice(2)).on('close', function(code) {
-    process.exit(code);
-});
