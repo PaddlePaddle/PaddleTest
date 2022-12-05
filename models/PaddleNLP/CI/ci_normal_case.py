@@ -127,8 +127,7 @@ def run_normal_case(case_path):
         log_file = "/workspace/PaddleNLP/model_logs/" + os.path.join(case_name + "_FAIL.log")
         print("{} FAIL . no train files ! ".format(case_name))
         with open(log_file, "a") as flog:
-            flog.write("%s" % (output))
-
+            flog.write("no train files")
 
     if eval_exec_file:
         eval_output = subprocess.getstatusoutput("python %s --init_checkpoint_dir ./output/" % (eval_exec_file))
