@@ -1,0 +1,9 @@
+.side-nav__brand {
+  background: url('paddle.jpeg') no-repeat left center !important;
+  margin-left: 10px;
+  height: 90px;	
+  background-size: contain !important;
+}
+.side-nav__brand-text{
+	display: none;
+}
