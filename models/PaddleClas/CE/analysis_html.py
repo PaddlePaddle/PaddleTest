@@ -11,14 +11,14 @@ lie_index = 5
 b = []
 
 url_all = [
-    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19417018/result/reportUrl.html",
-    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19416955/result/reportUrl.html",
+    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20894918/result/reportUrl.html",
+    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20894889/result/reportUrl.html",
 ]  # release
 with open("clas_release", "w", encoding="utf-8") as f:
 
     # url_all = [
-    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19416950/result/reportUrl.html",
-    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19418504/result/reportUrl.html",
+    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20894904/result/reportUrl.html",
+    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20896482/result/reportUrl.html",
     # ]  # develop
     # with open("clas_develop", "w", encoding="utf-8") as f:
 
