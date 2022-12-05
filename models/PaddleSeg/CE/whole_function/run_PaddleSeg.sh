@@ -15,8 +15,6 @@ fi
 mkdir log_err
 if [ -d "output" ];then rm -rf output
 fi
-#install paddleseg
-pip install -v -e .
 #cpp infer compile
 if [ "${task_type}" == 'release' ];then
 cd deploy/cpp
@@ -108,6 +106,8 @@ print_result(){
 
 # run dynamic models
 pip install -r requirements.txt
+#install paddleseg
+pip install -v -e .
 log_dir=.
 model_type_path=
 if [ "${task_type}" == 'develop_d1' ];then
