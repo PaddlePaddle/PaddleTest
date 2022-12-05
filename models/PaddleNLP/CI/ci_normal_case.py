@@ -89,7 +89,7 @@ def save_log(exit_code, output, case_name, file_name):
             flog.write("%s" % (output))
     else:
         log_file = root_path + "/model_logs/" + os.path.join(case_name + "_" + file_name + "_FAIL.log")
-        print("{} FAILd".format(file_name))
+        print("{} FAIL".format(file_name))
         with open(log_file, "a") as flog:
             flog.write("%s" % (output))
 
@@ -115,31 +115,38 @@ def run_normal_case(case_path):
         prepare_output = subprocess.getstatusoutput("python %s " % (prepare_exec_file))
         save_log(prepare_output[0], prepare_output[1], case_name, prepare_exec_file.split(".")[0])
 
-    for train_file in model_info["train_exec_file"]:
-        train_output = subprocess.getstatusoutput(
-            "python -m paddle.distributed.launch %s --device gpu --max_steps 2 \
-            --save_steps 2 --output_dir ./output/"
-            % (train_file)
-        )
-        save_log(train_output[0], train_output[1], case_name, train_file.split(".")[0])
+    if model_info["train_exec_file"]:
+        for train_file in model_info["train_exec_file"]:
+            train_output = subprocess.getstatusoutput(
+                "python -m paddle.distributed.launch %s --devices gpu --max_steps 2 \
+                --save_steps 2 --output_dir ./output/"
+                % (train_file)
+            )
+            save_log(train_output[0], train_output[1], case_name, train_file.split(".")[0])
+    else:
+        log_file = "/workspace/PaddleNLP/model_logs/" + os.path.join(case_name + "_FAIL.log")
+        print("{} FAIL . no train files ! ".format(case_name))
+        with open(log_file, "a") as flog:
+            flog.write("%s" % (output))
+
 
     if eval_exec_file:
         eval_output = subprocess.getstatusoutput("python %s --init_checkpoint_dir ./output/" % (eval_exec_file))
         save_log(eval_output[0], eval_output[1], case_name, eval_exec_file.split(".")[0])
     else:
-        print("evalation Skipped")
+        print("Evalation Skipped")
     if predict_exec_file:
         predict_output = subprocess.getstatusoutput("python %s --init_checkpoint_dir ./output/" % (predict_exec_file))
         save_log(predict_output[0], predict_output[1], case_name, predict_exec_file.split(".")[0])
     else:
-        print("predict Skipped")
+        print("Predict Skipped")
     if export_exec_file:
         export_output = subprocess.getstatusoutput(
             "python %s --export_output_dir ./inference_model/" % (export_exec_file)
         )
         save_log(export_output[0], export_output[1], case_name, export_exec_file.split(".")[0])
     else:
-        print("export model Skipped")
+        print("Export model Skipped")
     if infer_exec_file:
         infer_output = subprocess.getstatusoutput(
             "cd %s && python %s --inference_model_dir ../../inference_model/" % (depoly_path, infer_exec_file)
