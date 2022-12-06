@@ -65,6 +65,12 @@ cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
+##如果预先模型库下载直接mv, 方便二分是checkout 到某个commit进行二分
+if [[ -d "../../${reponame}" ]];then  #前面cd 了 2次所以使用 ../../
+    mv ../../${reponame} .
+    echo "因为 ${reponame} 在根目录存在 使用预先clone或wget的 ${reponame}"
+fi
+
 ####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称  ##TODO:暂时先考虑两张卡，后续优化
 if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认制定方式即可，SET_MULTI_CUDA参数只是在启动时使用
     tc_name=`(echo $PWD|awk -F '/' '{print $4}')`
@@ -117,6 +123,9 @@ if [[ "${docker_flag}" == "" ]]; then
         --shm-size=128G \
         -v $(pwd):/workspace \
         -v /ssd2:/ssd2 \
+        -e AK=${AK} \
+        -e SK=${SK} \
+        -e bce_whl_url=${bce_whl_url} \
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c "
@@ -205,6 +214,9 @@ if [[ "${docker_flag}" == "" ]]; then
 else
     ldconfig;
     export PORT_RANGE=62000:65536
+    export AK=${AK} #使用bos_new上传需要
+    export SK=${SK}
+    export bce_whl_url=${bce_whl_url}
     if [[ ${Python_env} == 'ln_way' ]];then
         #无法使用环境变量PATH 无法使用which命令
         mv /usr/bin/python /usr/bin/python_back
