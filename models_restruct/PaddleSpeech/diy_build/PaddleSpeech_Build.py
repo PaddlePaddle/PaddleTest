@@ -61,6 +61,7 @@ class PaddleSpeech_Build(Model_Build):
         sysstr = platform.system()
         if sysstr == "Linux":
             version = platform.linux_distribution()
+            print("linux_distributio:{}".format(version))
             if version == "debian":
                 os.system("apt-get update")
                 os.system("apt-get install -y libsndfile1")
@@ -69,6 +70,7 @@ class PaddleSpeech_Build(Model_Build):
                 os.system("yum install -y libsndfile")
             else:
                 print("linux_distributio:{}".format(version))
+        
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
