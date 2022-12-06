@@ -16,6 +16,7 @@ import base_mkldnn_int8
 import base_trt_fp16
 import base_trt_int8
 import mail_report
+import write_db
 
 
 FONT = {
@@ -463,75 +464,219 @@ def res2xls(env, res, tongji, mode_list, metric_list, save_file):
     wb.save("{}".format(save_file))
 
 
+def res2db(env, trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
+    """
+    转化为db需要的数据格式，部分字段取值待定
+    """
+    res = []
+    for model, info in trt_int8.items(): 
+        item = {
+            "task_dt": env["task_dt"],
+            "model_name": model,
+            "batch_size": info["xingneng"]["batch_size"],
+            "fp_mode": "int8",
+            "use_trt": True,
+            "use_mkldnn": False,
+            "jingdu": info["jingdu"]["value"],
+            "jingdu_unit": info["jingdu"]["unit"],
+            "ips": info["xingneng"]["value"],
+            "ips_unit": info["xingneng"]["unit"],
+            "cpu_men": -9999,
+            "gpu_men": -9999,
+            "frame": env["frame"],
+            "frame_branch": env["frame_branch"],
+            "frame_commit": env["frame_commit"],
+            "frame_version": env["frame_version"],
+            "docker_image": env["docker_image"],
+            "python_version": env["python_version"],
+            "cuda_version": env["cuda_version"],
+            "cudnn_version": env["cudnn_version"],
+            "trt_version": env["trt_version"],
+            "device_type": env["device_type"]["gpu"],
+            "thread_num": 1,
+        }
+        res.append(item)
+    for model, info in trt_fp16.items(): 
+        item = {
+            "task_dt": env["task_dt"],
+            "model_name": model,
+            "batch_size": info["xingneng"]["batch_size"],
+            "fp_mode": "fp16",
+            "use_trt": True,
+            "use_mkldnn": False,
+            "jingdu": info["jingdu"]["value"],
+            "jingdu_unit": info["jingdu"]["unit"],
+            "ips": info["xingneng"]["value"],
+            "ips_unit": info["xingneng"]["unit"],
+            "cpu_men": -9999,
+            "gpu_men": -9999,
+            "frame": env["frame"],
+            "frame_branch": env["frame_branch"],
+            "frame_commit": env["frame_commit"],
+            "frame_version": env["frame_version"],
+            "docker_image": env["docker_image"],
+            "python_version": env["python_version"],
+            "cuda_version": env["cuda_version"],
+            "cudnn_version": env["cudnn_version"],
+            "trt_version": env["trt_version"],
+            "device_type": env["device_type"]["gpu"],
+            "thread_num": 1,
+        }
+        res.append(item)
+    for model, info in mkldnn_int8.items(): 
+        item = {
+            "task_dt": env["task_dt"],
+            "model_name": model,
+            "batch_size": info["xingneng"]["batch_size"],
+            "fp_mode": "int8",
+            "use_trt": False,
+            "use_mkldnn": True,
+            "jingdu": info["jingdu"]["value"],
+            "jingdu_unit": info["jingdu"]["unit"],
+            "ips": info["xingneng"]["value"],
+            "ips_unit": info["xingneng"]["unit"],
+            "cpu_men": -9999,
+            "gpu_men": -9999,
+            "frame": env["frame"],
+            "frame_branch": env["frame_branch"],
+            "frame_commit": env["frame_commit"],
+            "frame_version": env["frame_version"],
+            "docker_image": env["docker_image"],
+            "python_version": env["python_version"],
+            "cuda_version": env["cuda_version"],
+            "cudnn_version": env["cudnn_version"],
+            "trt_version": env["trt_version"],
+            "device_type": env["device_type"]["gpu"],
+            "thread_num": 1,
+        }
+        res.append(item)
+    for model, info in mkldnn_fp32.items(): 
+        item = {
+            "task_dt": env["task_dt"],
+            "model_name": model,
+            "batch_size": info["xingneng"]["batch_size"],
+            "fp_mode": "fp32",
+            "use_trt": False,
+            "use_mkldnn": True,
+            "jingdu": info["jingdu"]["value"],
+            "jingdu_unit": info["jingdu"]["unit"],
+            "ips": info["xingneng"]["value"],
+            "ips_unit": info["xingneng"]["unit"],
+            "cpu_men": -9999,
+            "gpu_men": -9999,
+            "frame": env["frame"],
+            "frame_branch": env["frame_branch"],
+            "frame_commit": env["frame_commit"],
+            "frame_version": env["frame_version"],
+            "docker_image": env["docker_image"],
+            "python_version": env["python_version"],
+            "cuda_version": env["cuda_version"],
+            "cudnn_version": env["cudnn_version"],
+            "trt_version": env["trt_version"],
+            "device_type": env["device_type"]["gpu"],
+            "thread_num": 1,
+        }
+        res.append(item)
+    return res
+
+
 def run():
     """
     统计结果并保存到excel文件
     """
-    docker = sys.argv[1]
-    paddle_branch = sys.argv[2]
-    paddle_commit = sys.argv[3]
-    device = sys.argv[4]
-    modes = sys.argv[5]
-    metrics = sys.argv[6]
-    save_file = sys.argv[7]
+    task_dt = datetime.date.today()
+
+    frame = sys.argv[1]
+    frame_branch = sys.argv[2]
+    frame_commit = sys.argv[3]
+    frame_version = sys.argv[4]
+    docker_image = sys.argv[5]
+    python_version = sys.argv[6]
+    cuda_version = sys.argv[7]
+    cudnn_version = sys.argv[8]
+    trt_version = sys.argv[9]
+    gpu = sys.argv[10]
+    cpu = sys.argv[11]
+    modes = sys.argv[12]
+    metrics = sys.argv[13]
+    save_file = sys.argv[14]
+
+    env = {
+        "task_dt": task_dt,
+        "frame": frame,
+        "frame_branch": frame_branch,
+        "frame_commit": frame_commit,
+        "frame_version": frame_version,
+        "docker_image": docker_image,
+        "python_version": python_version,
+        "cuda_version": cuda_version,
+        "cudnn_version": cudnn_version,
+        "trt_version": trt_version,
+        "device_type": {
+             "gpu": gpu,
+             "cpu": cpu,
+         },
+    }
 
     # trt_int8
     log_file = "eval_trt_int8_acc.log"
     mode = "trt_int8"
-    benchmark_res = get_runtime_info(log_file)
+    benchmark_res_trt_int8 = get_runtime_info(log_file)
     base_res = get_base_info(mode)
-    trt_int8 = compare_diff(base_res, benchmark_res)
+    trt_int8 = compare_diff(base_res, benchmark_res_trt_int8)
 
     # trt_fp16
     log_file = "eval_trt_fp16_acc.log"
     mode = "trt_fp16"
-    benchmark_res = get_runtime_info(log_file)
+    benchmark_res_trt_fp16 = get_runtime_info(log_file)
     base_res = get_base_info(mode)
-    trt_fp16 = compare_diff(base_res, benchmark_res)
+    trt_fp16 = compare_diff(base_res, benchmark_res_trt_fp16)
 
     # mkldnn_int8
     log_file = "eval_mkldnn_int8_acc.log"
     mode = "mkldnn_int8"
-    benchmark_res = get_runtime_info(log_file)
+    benchmark_res_mkldnn_int8 = get_runtime_info(log_file)
     base_res = get_base_info(mode)
-    mkldnn_int8 = compare_diff(base_res, benchmark_res)
+    mkldnn_int8 = compare_diff(base_res, benchmark_res_mkldnn_int8)
 
     # mkldnn_fp32
     log_file = "eval_mkldnn_fp32_acc.log"
     mode = "mkldnn_fp32"
-    benchmark_res = get_runtime_info(log_file)
+    benchmark_res_mkldnn_fp32 = get_runtime_info(log_file)
     base_res = get_base_info(mode)
-    mkldnn_fp32 = compare_diff(base_res, benchmark_res)
+    mkldnn_fp32 = compare_diff(base_res, benchmark_res_mkldnn_fp32)
 
-    res, tongji = res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_int8)
+    res, tongji = res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32)
 
-    env = "环境: "
-    env += "docker: "
-    env += docker
-    env += "  "
-    env += "paddle_branch: "
-    env += paddle_branch
-    env += "  "
-    env += "paddle_commit: "
-    env += paddle_commit
-    env += "  "
-    env += "device: "
-    env += device
-    env += "  "
+    env_str = "环境: "
+    env_str += "docker: "
+    env_str += docker_image
+    env_str += "  "
+    env_str += "frame: "
+    env_str += "  "
+    env_str += "frame_branch: "
+    env_str += frame_branch
+    env_str += "  "
+    env_str += "frame_commit: "
+    env_str += frame_commit
+    env_str += "  "
+    env_str += "device: "
+    env_str += gpu
+    env_str += "  "
+    env_str += cpu
+    env_str += "  "
 
     mode_list = modes.split(",")
     metric_list = metrics.split(",")
 
-    res2xls(env, res, tongji, mode_list, metric_list, save_file)
+    # save result to xlsx
+    res2xls(env_str, res, tongji, mode_list, metric_list, save_file)
+
+    # save result to db
+    db_res = res2db(env, benchmark_res_trt_int8, benchmark_res_trt_fp16, benchmark_res_mkldnn_int8, benchmark_res_mkldnn_fp32)
+    write_db.write(db_res)
 
     # send mail
-    task_dt = datetime.date.today()
-    env = {
-        "docker": docker,
-        "paddle_branch": paddle_branch,
-        "paddle_commit": paddle_commit,
-        "device": device,
-    }
     mail_report.report_day(task_dt, env, tongji, res, mode_list, metric_list)
 
 
