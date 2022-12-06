@@ -791,33 +791,16 @@ print_info $? transformer_infer
 }
 # 23 pet
 pet (){
-cd ${nlp_dir}/examples/few_shot/pet/
-export CUDA_VISIBLE_DEVICES=${cudaid1}
-#chid_train
-time (
-python  -u -m paddle.distributed.launch  \
-    pet.py \
-    --task_name "chid" \
-    --device gpu \
-    --pattern_id 0 \
-    --save_dir ./chid \
-    --index 0 \
-    --batch_size 8 \
-    --learning_rate 5E-5 \
-    --epochs 1 \
-    --max_seq_length 512 \
-    --language_model "ernie-1.0"  >${log_path}/pet_chid_train) >>${log_path}/pet_chid_train 2>&1
-print_info $? pet_chid_train
-#chid_predict
-time (
-python -u -m paddle.distributed.launch  predict.py \
-        --task_name "chid" \
-        --device gpu \
-        --init_from_ckpt "./chid/model_6/model_state.pdparams" \
-        --output_dir "./chid/output" \
-        --batch_size 32 \
-        --max_seq_length 512 >${log_path}/pet_chid_predict) >>${log_path}/pet_chid_predict 2>&1
-print_info $? pet_chid_predict
+path ="examples/few_shot/pet/"
+python ci_normal_case.py path
+}
+efl(){
+path ="examples/few_shot/efl/"
+python ci_normal_case.py path
+}
+p-tuning(){
+path ="examples/few_shot/p-tuning/"
+python ci_normal_case.py path
 }
 #24 simbert
 simbert(){
@@ -1059,18 +1042,17 @@ cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
 print_info $? taskflow
 }
-# tests (){
-# cd ${nlp_dir}/
-# pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/taskflow_unittest.log 2>&1
-# print_info $? tests taskflow_unittest
-# cd ${nlp_dir}/tests/transformers/
-# for apicase in `ls`;do
-#     if [[ ${apicase##*.} == "py" ]];then
-#             continue
-#     else
-#         pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
-#         print_info $? tests ${apicase}_unittest
-#     fi
-# done
-# }
+transformers(){
+echo ' RUN all transformers unittest'
+cd ${nlp_dir}/tests/transformers/
+for apicase in `ls`;do
+    if [[ ${apicase##*.} == "py" ]];then
+            continue
+    else
+        cd ${nlp_dir}
+        pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
+        print_info $? tests ${apicase}_unittest
+    fi
+done
+}
 $1
