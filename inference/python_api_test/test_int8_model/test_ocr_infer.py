@@ -255,11 +255,11 @@ def eval(args):
             for item in batch:
                 batch_numpy.append(np.array(item))
 
-            if args.model_type == "det":
+            if model_type == "det":
                 preds_map = {"maps": outputs[0]}
                 post_result = post_process_class(preds_map, batch_numpy[1])
                 eval_class(post_result, batch_numpy)
-            elif args.model_type == "rec":
+            elif model_type == "rec":
                 post_result = post_process_class(outputs[0], batch_numpy[1])
                 eval_class(post_result, batch_numpy)
 
