@@ -159,4 +159,3 @@ if __name__ == "__main__":
     # path ="applications/text_summarization/pegasus"
     path = sys.argv[1]
     run_normal_case(path)
-    
