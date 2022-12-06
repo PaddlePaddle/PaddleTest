@@ -53,7 +53,8 @@ def write(res):
                          frame, frame_branch, frame_commit, frame_version, \
                          docker_image, python_version, cuda_version, cudnn_version, trt_version, \
                          device_type, thread_num, jingdu, jingdu_unit) \
-                        values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                        values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, \
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     val = []
     for item in res:
         val.append(
