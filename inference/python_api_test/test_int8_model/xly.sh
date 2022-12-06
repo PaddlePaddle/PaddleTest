@@ -72,7 +72,6 @@ PADDLE_COMMIT=`python -c "import paddle; print(paddle.version.commit)"`
 DT=`date "+%Y-%m-%d"`
 SAVE_FILE=${DT}_${FRAME}_${FRAME_BRANCH/\//-}_${PADDLE_COMMIT}.xlsx
 
-python get_benchmark_info.py ${DOCKER_IMAGE} ${FRAME_BRANCH} ${PADDLE_COMMIT} ${DEVICE} ${MODE} ${METRIC} ${SAVE_FILE}
 
 PYTHON_VERSION=${PYTHON_VERSION:-3.8}
 CUDA_VERSION=${CUDA_VERSION:-11.2}
@@ -83,7 +82,6 @@ CPU="-"
 
 python get_benchmark_info.py ${FRAME} ${FRAME_BRANCH} ${PADDLE_COMMIT} ${FRAME_VERSION} ${DOCKER_IMAGE} ${PYTHON_VERSION} ${CUDA_VERSION} ${CUDNN_VERSION} ${TRT_VERSION} ${GPU} ${CPU} ${MODE} ${METRIC} ${SAVE_FILE}
 
-python get_benchmark_info.py paddle develop a123 2.4.0 docker:image 3.8 11.2 8.2 8.0 T4 - trt_int8,trt_fp16,mkldnn_int8,mkldnn_fp32 jingdu,xingneng 123.xlsx
 
 UPLOAD_FILE_PATH=`pwd`/${SAVE_FILE}
 
