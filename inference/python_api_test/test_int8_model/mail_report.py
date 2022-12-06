@@ -60,7 +60,12 @@ def create_table_day(task_dt, env, gsb, detail, mode_list, metric_list):
         device: gpu {} ; cpu {}
         <br>
     """.format(
-        env["docker_image"], env["frame"], env["frame_branch"], env["frame_commit"], env["device_type"]["gpu"], env["device_type"]["cpu"]
+        env["docker_image"],
+        env["frame"],
+        env["frame_branch"],
+        env["frame_commit"],
+        env["device_type"]["gpu"],
+        env["device_type"]["cpu"],
     )
 
     # table1 gsb

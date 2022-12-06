@@ -65,6 +65,7 @@ pip install nvidia-cublas-cu11
 pip install nvidia-tensorrt
 pip install pycuda
 pip install openpyxl
+pip install pymysql
 
 bash run.sh
 

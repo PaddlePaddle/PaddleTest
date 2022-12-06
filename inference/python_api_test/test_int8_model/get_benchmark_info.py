@@ -469,7 +469,7 @@ def res2db(env, trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
     转化为db需要的数据格式，部分字段取值待定
     """
     res = []
-    for model, info in trt_int8.items(): 
+    for model, info in trt_int8.items():
         item = {
             "task_dt": env["task_dt"],
             "model_name": model,
@@ -496,7 +496,7 @@ def res2db(env, trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
             "thread_num": 1,
         }
         res.append(item)
-    for model, info in trt_fp16.items(): 
+    for model, info in trt_fp16.items():
         item = {
             "task_dt": env["task_dt"],
             "model_name": model,
@@ -523,7 +523,7 @@ def res2db(env, trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
             "thread_num": 1,
         }
         res.append(item)
-    for model, info in mkldnn_int8.items(): 
+    for model, info in mkldnn_int8.items():
         item = {
             "task_dt": env["task_dt"],
             "model_name": model,
@@ -550,7 +550,7 @@ def res2db(env, trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
             "thread_num": 1,
         }
         res.append(item)
-    for model, info in mkldnn_fp32.items(): 
+    for model, info in mkldnn_fp32.items():
         item = {
             "task_dt": env["task_dt"],
             "model_name": model,
@@ -613,9 +613,9 @@ def run():
         "cudnn_version": cudnn_version,
         "trt_version": trt_version,
         "device_type": {
-             "gpu": gpu,
-             "cpu": cpu,
-         },
+            "gpu": gpu,
+            "cpu": cpu,
+        },
     }
 
     # trt_int8
@@ -673,7 +673,9 @@ def run():
     res2xls(env_str, res, tongji, mode_list, metric_list, save_file)
 
     # save result to db
-    db_res = res2db(env, benchmark_res_trt_int8, benchmark_res_trt_fp16, benchmark_res_mkldnn_int8, benchmark_res_mkldnn_fp32)
+    db_res = res2db(
+        env, benchmark_res_trt_int8, benchmark_res_trt_fp16, benchmark_res_mkldnn_int8, benchmark_res_mkldnn_fp32
+    )
     write_db.write(db_res)
 
     # send mail

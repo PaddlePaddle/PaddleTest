@@ -1,18 +1,12 @@
 """
 write to db
 """
-#coding=utf-8
+# coding=utf-8
 
-import sys
-import pymysql
-import yaml
-import copy
-import subprocess
 import os
-import requests
-import json
-import re
-import time
+import sys
+import yaml
+import pymysql
 
 
 db_info = {
@@ -26,6 +20,7 @@ db_info = {
 
 def get_db_info():
     """
+    get db info
     """
     with open("db_info.yaml", "r") as fin:
         file_date = yaml.load(fin.read(), Loader=yaml.Loader)
@@ -38,13 +33,16 @@ def get_db_info():
 
 def write(res):
     """
+    write to db
     """
     get_db_info()
-    db = pymysql.connect(host=db_info["host"],
-                         port=db_info["port"],
-                         user=db_info["user"],
-                         password=db_info["password"],
-                         database=db_info["database"])
+    db = pymysql.connect(
+        host=db_info["host"],
+        port=db_info["port"],
+        user=db_info["user"],
+        password=db_info["password"],
+        database=db_info["database"],
+    )
     cursor = db.cursor()
 
     # cases
@@ -58,12 +56,33 @@ def write(res):
                         values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     val = []
     for item in res:
-        val.append((item["task_dt"],
-                   item["model_name"], item["batch_size"], item["fp_mode"], item["use_trt"], item["use_mkldnn"],
-                   item["ips"], item["ips_unit"], item["cpu_men"], item["gpu_men"],
-                   item["frame"], item["frame_branch"], item["frame_commit"], item["frame_version"],
-                   item["docker_image"], item["python_version"], item["cuda_version"], item["cudnn_version"], item["trt_version"],
-                   item["device_type"], item["thread_num"], item["jingdu"], item["jingdu_unit"]))
+        val.append(
+            (
+                item["task_dt"],
+                item["model_name"],
+                item["batch_size"],
+                item["fp_mode"],
+                item["use_trt"],
+                item["use_mkldnn"],
+                item["ips"],
+                item["ips_unit"],
+                item["cpu_men"],
+                item["gpu_men"],
+                item["frame"],
+                item["frame_branch"],
+                item["frame_commit"],
+                item["frame_version"],
+                item["docker_image"],
+                item["python_version"],
+                item["cuda_version"],
+                item["cudnn_version"],
+                item["trt_version"],
+                item["device_type"],
+                item["thread_num"],
+                item["jingdu"],
+                item["jingdu_unit"],
+            )
+        )
     cursor.executemany(sql_str, val)
     db.commit()
     db.close()
