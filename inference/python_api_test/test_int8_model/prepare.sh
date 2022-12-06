@@ -200,7 +200,7 @@ tar -xf test_set_det.tar
 # download inference model
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar
 tar -xvf ch_PP-OCRv3_det_infer.tar # fp32
-wget https://bj.bcebos.com/v1/paddle-slim-models/act/PPOCRV3_det_QAT.tar
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/OCR/PPOCRV3_det_QAT.tar
 tar -xvf PPOCRV3_det_QAT.tar # int8
 
 git clone -b release/2.6 https://github.com/PaddlePaddle/PaddleOCR.git
