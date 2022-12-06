@@ -22,7 +22,7 @@ import cv2
 import numpy as np
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
 from ppdet.core.workspace import load_config, create
 from ppdet.metrics import COCOMetric
 
@@ -55,9 +55,9 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--img_shape", type=int, default=640, help="input_size")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
-    parser.add_argument("--include_nms", type=bool, default=True, help="Whether include nms or not.")
+    parser.add_argument("--exclude_nms", action="store_true", default=False, help="Whether exclude nms or not.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
-
+    parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
 
 
@@ -98,9 +98,10 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     time_max = float("-inf")
     sample_nums = len(val_loader)
     warmup = 20
+    repeats = 20 if FLAGS.small_data else 1
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
-        if not FLAGS.include_nms:
+        if FLAGS.exclude_nms:
             predictor.prepare_data([data_all["image"]])
         else:
             predictor.prepare_data([data_all["image"], data_all["scale_factor"]])
@@ -110,10 +111,11 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
             warmup = 0
 
         start_time = time.time()
-        outs = predictor.run()
+        for j in range(repeats):
+            outs = predictor.run()
         end_time = time.time()
 
-        timed = end_time - start_time
+        timed = (end_time - start_time) / repeats
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
@@ -122,7 +124,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         cpu_mem, gpu_mem = get_current_memory_mb()
         cpu_mems += cpu_mem
         gpu_mems += gpu_mem
-        if not FLAGS.include_nms:
+        if FLAGS.exclude_nms:
             postprocess = PPYOLOEPostProcess(score_threshold=0.3, nms_threshold=0.6)
             res = postprocess(outs[0], data_all["scale_factor"])
         else:
@@ -189,14 +191,25 @@ def main():
             calibration_cache_file=FLAGS.calibration_file,
             verbose=False,
         )
+    elif FLAGS.deploy_backend == "onnxruntime":
+        predictor = ONNXRuntimeEngine(
+            onnx_model_file=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            device=FLAGS.device,
+        )
     else:
         raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
 
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
-    dataset = reader_cfg["EvalDataset"]
+    if FLAGS.small_data:
+        dataset = reader_cfg["TestDataset"]
+    else:
+        dataset = reader_cfg["EvalDataset"]
     global val_loader
-    val_loader = create("EvalReader")(reader_cfg["EvalDataset"], reader_cfg["worker_num"], return_list=True)
+    val_loader = create("EvalReader")(dataset, reader_cfg["worker_num"], return_list=True)
     clsid2catid = {v: k for k, v in dataset.catid2clsid.items()}
     anno_file = dataset.get_anno()
     metric = COCOMetric(anno_file=anno_file, clsid2catid=clsid2catid, IouType="bbox")

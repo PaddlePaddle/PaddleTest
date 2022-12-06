@@ -23,7 +23,7 @@ def test_multiplex():
     x2 = paddle.to_tensor(x2)
     index = np.array([[1], [0]]).astype(np.int32)
     index = paddle.to_tensor(index)
-    out = paddle.fluid.layers.multiplex(inputs=[x1, x2], index=index)
+    out = paddle.multiplex(inputs=[x1, x2], index=index)
     res = paddle.to_tensor(
         np.array(
             [[-17.0, -16.0, -15.0, -14.0], [5.0, 6.0, 7.0, 8.0], [9.0, 10.0, 11.0, 12.0], [13.0, 14.0, 15.0, 16.0]]
@@ -45,7 +45,7 @@ def test_multiplex1():
     x2 = paddle.to_tensor(x2)
     index = np.array([[1], [0], [1], [1]]).astype(np.int32)
     index = paddle.to_tensor(index)
-    out = paddle.fluid.layers.multiplex(inputs=[x1, x2], index=index)
+    out = paddle.multiplex(inputs=[x1, x2], index=index)
     res = paddle.to_tensor(
         np.array(
             [[-17.0, -16.0, -15.0, -14.0], [5.0, 6.0, 7.0, 8.0], [-9.0, -8.0, -7.0, -6.0], [-5.0, -4.0, -3.0, -2.0]]
@@ -67,7 +67,7 @@ def test_multiplex2():
     x2 = paddle.to_tensor(x2)
     index = np.array([[1], [0], [1], [1], [0], [0]]).astype(np.int32)
     index = paddle.to_tensor(index)
-    out = paddle.fluid.layers.multiplex(inputs=[x1, x2], index=index)
+    out = paddle.multiplex(inputs=[x1, x2], index=index)
     res = paddle.to_tensor(
         np.array(
             [[-17.0, -16.0, -15.0, -14.0], [5.0, 6.0, 7.0, 8.0], [-9.0, -8.0, -7.0, -6.0], [-5.0, -4.0, -3.0, -2.0]]
@@ -91,7 +91,7 @@ def test_multiplex3():
     x3 = paddle.to_tensor(x3)
     index = np.array([[1], [2], [0]]).astype(np.int32)
     index = paddle.to_tensor(index)
-    out = paddle.fluid.layers.multiplex(inputs=[x1, x2, x3], index=index)
+    out = paddle.multiplex(inputs=[x1, x2, x3], index=index)
     res = paddle.to_tensor(np.array([[-7.0, -6.0, -5.0], [14.0, 15.0, 16.0]]).astype(np.float32))
     npt.assert_array_equal(out.numpy(), res.numpy())
 
@@ -111,6 +111,6 @@ def test_multiplex4():
     x3 = paddle.to_tensor(x3)
     index = np.array([[1], [2], [0]]).astype(np.int32)
     index = paddle.to_tensor(index)
-    out = paddle.fluid.layers.multiplex(inputs=[x1, x2, x3], index=index)
+    out = paddle.multiplex(inputs=[x1, x2, x3], index=index)
     res = paddle.to_tensor(np.array([[-10.0, -9.0, -8.0], [14.0, 15.0, 16.0], [7.0, 8.0, 9.0]]).astype(np.float32))
     npt.assert_array_equal(out.numpy(), res.numpy())
