@@ -49,16 +49,23 @@ def create_table_day(task_dt, env, gsb, detail, mode_list, metric_list):
 
     # env
     content += """
-        docker:{}
+        docker_image:{}
         <br>
-        paddle_branch:{}
+        frame:{}
         <br>
-        paddle_commit:{}
+        frame_branch:{}
         <br>
-        device:{}
+        frame_commit:{}
+        <br>
+        device: gpu {} ; cpu {}
         <br>
     """.format(
-        env["docker"], env["paddle_branch"], env["paddle_commit"], env["device"]
+        env["docker_image"],
+        env["frame"],
+        env["frame_branch"],
+        env["frame_commit"],
+        env["device_type"]["gpu"],
+        env["device_type"]["cpu"],
     )
 
     # table1 gsb
