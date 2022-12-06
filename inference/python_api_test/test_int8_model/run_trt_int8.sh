@@ -7,10 +7,13 @@ echo "[Benchmark] Run PPYOLOE trt int8"
 $PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_crn_l_300e_coco_quant --reader_config=configs/ppyoloe_reader.yml --use_trt=True --precision=int8 --model_name=PPYOLOE
 # PPYOLOE+ trt int8
 echo "[Benchmark] Run PPYOLOE+ trt int8"
-$PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_plus_crn_s_80e_coco_no_nms_quant --reader_config=configs/ppyoloe_reader.yml --use_trt=True --precision=int8 --model_name=PPYOLOE_PLUS --exclude_nms
+$PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_plus_crn_s_80e_coco_no_nms_quant --reader_config=configs/ppyoloe_plus_reader.yml --use_trt=True --precision=int8 --model_name=PPYOLOE_PLUS --exclude_nms
 # PicoDet trt int8
-echo "[Benchmark] Run PicoDet trt int8"
-$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_quant --reader_config=configs/picodet_reader.yml --use_trt=True --precision=int8 --model_name=PicoDet
+### echo "[Benchmark] Run PicoDet trt int8"
+### $PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_quant --reader_config=configs/picodet_reader.yml --use_trt=True --precision=int8 --model_name=PicoDet
+# PicoDet no nms trt int8
+echo "[Benchmark] Run PicoDet no nms trt int8"
+$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_no_postprocess_quant --reader_config=configs/picodet_reader.yml --use_trt=True --precision=int8 --model_name=PicoDet --exclude_nms
 # YOLOv5s trt int8
 echo "[Benchmark] Run YOLOv5s trt int8"
 $PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_quant --use_trt=True --precision=int8 --model_name=YOLOv5s

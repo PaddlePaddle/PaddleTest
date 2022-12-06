@@ -27,6 +27,7 @@ from ppdet.core.workspace import load_config, create
 from ppdet.metrics import COCOMetric
 
 from utils.ppyoloe_post_process import PPYOLOEPostProcess
+from utils.picodet_post_process import PicoDetPostProcess
 
 
 def argsparser():
@@ -124,9 +125,28 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         cpu_mem, gpu_mem = get_current_memory_mb()
         cpu_mems += cpu_mem
         gpu_mems += gpu_mem
-        if FLAGS.exclude_nms:
-            postprocess = PPYOLOEPostProcess(score_threshold=0.3, nms_threshold=0.6)
+        if FLAGS.exclude_nms and "PPYOLOE" in FLAGS.model_name:
+            postprocess = PPYOLOEPostProcess(score_threshold=0.01, nms_threshold=0.6)
             res = postprocess(outs[0], data_all["scale_factor"])
+        elif FLAGS.exclude_nms and "PicoDet" in FLAGS.model_name:
+            np_score_list, np_boxes_list = [], []
+            batch_size = data_all["image"].shape[0]
+            for i, out in enumerate(outs):
+                np_out = np.array(out)
+                if i < 4:
+                    num_classes = np_out.shape[-1]
+                    np_score_list.append(np_out.reshape(batch_size, -1, num_classes))
+                else:
+                    box_reg_shape = np_out.shape[-1]
+                    np_boxes_list.append(np_out.reshape(batch_size, -1, box_reg_shape))
+            postprocess = PicoDetPostProcess(
+                data_all["image"].shape[2:],
+                data_all["im_shape"],
+                data_all["scale_factor"],
+                score_threshold=0.01,
+                nms_threshold=0.6,
+            )
+            res = postprocess(np_score_list, np_boxes_list)
         else:
             res = {"bbox": outs[0], "bbox_num": outs[1]}
         metric.update(data_all, res)
@@ -184,10 +204,12 @@ def main():
         engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
         predictor = TensorRTEngine(
             onnx_model_file=FLAGS.model_path,
-            shape_info=None,
             max_batch_size=FLAGS.batch_size,
             precision=FLAGS.precision,
             engine_file_path=engine_file,
+            shape_info={
+                "image": [[1, 3, 1, 1], [1, 3, FLAGS.img_shape, FLAGS.img_shape], [1, 3, 1280, 1280]],
+            },
             calibration_cache_file=FLAGS.calibration_file,
             verbose=False,
         )
