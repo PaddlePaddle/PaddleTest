@@ -781,15 +781,15 @@ print_info $? transformer_infer
 }
 # 23 pet
 pet (){
-path="examples/few_shot/pet/"
+path="examples/few_shot/pet"
 python ci_normal_case.py ${path}
 }
 efl(){
-path="examples/few_shot/efl/"
+path="examples/few_shot/efl"
 python ci_normal_case.py ${path}
 }
 p-tuning(){
-path="examples/few_shot/p-tuning/"
+path="examples/few_shot/p-tuning"
 python ci_normal_case.py ${path}
 }
 #24 simbert
