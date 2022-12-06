@@ -129,8 +129,24 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
             postprocess = PPYOLOEPostProcess(score_threshold=0.01, nms_threshold=0.6)
             res = postprocess(outs[0], data_all["scale_factor"])
         elif FLAGS.exclude_nms and "PicoDet" in FLAGS.model_name:
-            postprocess = PicoDetPostProcess(score_threshold=0.01, nms_threshold=0.6)
-            res = postprocess(outs[0], data_all["scale_factor"])
+            np_score_list, np_boxes_list = [], []
+            batch_size = data_all["image"].shape[0]
+            for i, out in enumerate(outs):
+                np_out = np.array(out)
+                if i < 4:
+                    num_classes = np_out.shape[-1]
+                    np_score_list.append(np_out.reshape(batch_size, -1, num_classes))
+                else:
+                    box_reg_shape = np_out.shape[-1]
+                    np_boxes_list.append(np_out.reshape(batch_size, -1, box_reg_shape))
+            postprocess = PicoDetPostProcess(
+                data_all["image"].shape[2:],
+                data_all["im_shape"],
+                data_all["scale_factor"],
+                score_threshold=0.01,
+                nms_threshold=0.6,
+            )
+            res = postprocess(np_score_list, np_boxes_list)
         else:
             res = {"bbox": outs[0], "bbox_num": outs[1]}
         metric.update(data_all, res)
