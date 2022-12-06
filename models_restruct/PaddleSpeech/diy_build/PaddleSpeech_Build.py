@@ -58,6 +58,17 @@ class PaddleSpeech_Build(Model_Build):
         """
         build paddlespeech wheel
         """
+        sysstr = platform.system()
+        if sysstr == "Linux":
+            version = platform.linux_distribution()
+            if version == "debian":
+                os.system("apt-get update")
+                os.system("apt-get install -y libsndfile1")
+            elif version == "CentOS Linux":
+                os.system("yum update")
+                os.system("yum install -y libsndfile")
+            else:
+                print("linux_distributio:{}".format(version))
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
