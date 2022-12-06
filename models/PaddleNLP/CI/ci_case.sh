@@ -12,7 +12,7 @@ if [ $1 -ne 0 ];then
         cat ${log_path}/$2_FAIL.log
     fi
 elif [[ $2 =~ 'tests' ]];then
-    echo -e "\033[32m ${log_path}/$2_$3_SUCCESS \033[0m"
+    echo -e "\033[32m ${log_path}/$3_SUCCESS \033[0m"
 else
     echo -e "\033[32m ${log_path}/$2_SUCCESS \033[0m"
 fi
@@ -781,15 +781,15 @@ print_info $? transformer_infer
 }
 # 23 pet
 pet (){
-path ="examples/few_shot/pet/"
+path="examples/few_shot/pet/"
 python ci_normal_case.py ${path}
 }
 efl(){
-path ="examples/few_shot/efl/"
+path="examples/few_shot/efl/"
 python ci_normal_case.py ${path}
 }
 p-tuning(){
-path ="examples/few_shot/p-tuning/"
+path="examples/few_shot/p-tuning/"
 python ci_normal_case.py ${path}
 }
 #24 simbert
