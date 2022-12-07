@@ -709,7 +709,7 @@ print_info $? transformer_predict
 time (
 python export_model.py --config ./configs/transformer.base.yaml \
     --vocab_file ${PWD}/WMT14.en-de.partial/vocab_all.bpe.33708 \
-    --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_export) >>${log_path}/transformer_export 2>&1
+    --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_export) >>${log_path}/transformer_export 2>&1
 print_info $? transformer_export
 #infer
 time (
