@@ -83,22 +83,12 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
     ;;
     37)
-    # export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
-    # export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-    rm -rf /usr/local/bin/python
-    rm -rf /usr/local/bin/pip
-    ln -s $(which python3.7) /usr/local/bin/python
-    ln -s $(which pip3.7) /usr/local/bin/pip
-    export PATH=/usr/local/bin/:${PATH}
+    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+    export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
     ;;
     38)
-    # export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
-    # export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-    rm -rf /usr/local/bin/python
-    rm -rf /usr/local/bin/pip
-    ln -s $(which python3.8) /usr/local/bin/python
-    ln -s $(which pip3.8) /usr/local/bin/pip
-    export PATH=/usr/local/bin/:${PATH}
+    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+    export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
     ;;
     esac
     python -c 'import sys; print(sys.version_info[:])'
