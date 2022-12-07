@@ -122,8 +122,8 @@ if [[ "${docker_flag}" == "" ]]; then
         -e bce_whl_url=${bce_whl_url} \
         -e PORT_RANGE="62000:65536s" \
         -e no_proxy=${no_proxy} \
-        -e http_proxy==${http_proxy} \
-        -e https_proxy==${https_proxy} \
+        -e http_proxy=${http_proxy} \
+        -e https_proxy=${https_proxy} \
         -e AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID} \
         -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
         -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
@@ -146,7 +146,8 @@ if [[ "${docker_flag}" == "" ]]; then
         /bin/bash -c '
 
         ldconfig;
-        if [[ ${Python_env} == "ln_way" ]];then
+        if [[ `lsb_release -a` =~ "Ubuntu" ]];then
+            echo "ubuntu"
             case ${Python_version} in
             36)
             mkdir run_env_py36;
@@ -180,6 +181,7 @@ if [[ "${docker_flag}" == "" ]]; then
             ;;
             esac
         else
+            echo "centos"
             case ${Python_version} in
             36)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -219,7 +221,8 @@ else
     export AK=${AK} #使用bos_new上传需要
     export SK=${SK}
     export bce_whl_url=${bce_whl_url}
-    if [[ ${Python_env} == "ln_way" ]];then
+    if [[ `lsb_release -a` =~ "Ubuntu" ]];then
+        echo "ubuntu"
         case ${Python_version} in
         36)
         mkdir run_env_py36;
@@ -253,6 +256,7 @@ else
         ;;
         esac
     else
+        echo "centos"
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
