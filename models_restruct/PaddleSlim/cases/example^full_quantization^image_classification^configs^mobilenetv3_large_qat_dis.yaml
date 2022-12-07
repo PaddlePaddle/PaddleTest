@@ -12,7 +12,7 @@ case:
 
       -
         name: multi
-        path: example/auto_compression/semantic_segmentation/
+        path: example/full_quantization/image_classification/
         cmd: python -m paddle.distributed.launch run.py
         params:
           - --config_path="./configs/mobilenetv3_large_qat_dis.yaml"
