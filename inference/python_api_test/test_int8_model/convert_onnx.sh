@@ -1,10 +1,10 @@
 python -m pip install paddle2onnx==1.0.3
 
 # ================================ FP32 ======================================
-# PPYOLOE-l
-paddle2onnx --model_dir=models/ppyoloe_crn_l_300e_coco/ --save_file=models/ppyoloe_crn_l_300e_coco/ppyoloe_crn_l_300e_coco.onnx --model_filename=model.pdmodel --params_filename=model.pdiparams
-# PicoDet
-paddle2onnx --model_dir=models/picodet_s_416_coco_npu/ --save_file=models/picodet_s_416_coco_npu/picodet_s_416_coco_npu.onnx --model_filename=model.pdmodel --params_filename=model.pdiparams
+# PPYOLOE+ no nms
+paddle2onnx --model_dir=models/ppyoloe_plus_crn_s_80e_coco_no_nms/ --save_file=models/ppyoloe_plus_crn_s_80e_coco_no_nms/ppyoloe_plus_crn_s_80e_coco_no_nms.onnx --model_filename=model.pdmodel --params_filename=model.pdiparams
+# PicoDet no nms
+paddle2onnx --model_dir=models/picodet_s_416_coco_npu_no_postprocess/ --save_file=models/picodet_s_416_coco_npu_no_postprocess/picodet_s_416_coco_npu_no_postprocess.onnx --model_filename=model.pdmodel --params_filename=model.pdiparams
 # YOLOv5s
 wget https://paddle-slim-models.bj.bcebos.com/act/yolov5s.onnx
 mv yolov5s.onnx models/yolov5s_infer
@@ -31,10 +31,10 @@ python utils/paddle_infer_shape.py --model_dir=models/RES-paddle2-Deeplabv3-ResN
 paddle2onnx --model_dir=models/Deeplabv3_ResNet50_fp32 --model_filename=model --params_filename=params --save_file=models/Deeplabv3_ResNet50_fp32/Deeplabv3_ResNet50_fp32.onnx
 
 # ================================ INT8 ======================================
-# PPYOLOE-l
-paddle2onnx --model_dir=models/ppyoloe_crn_l_300e_coco_quant/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/ppyoloe_crn_l_300e_coco_quant/ppyoloe_crn_l_300e_coco_quant.onnx --deploy_backend='tensorrt' --save_calibration_file=models/ppyoloe_crn_l_300e_coco_quant/calibration.cache
-# PicoDet
-paddle2onnx --model_dir=models/picodet_s_416_coco_npu_quant/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/picodet_s_416_coco_npu_quant/picodet_s_416_coco_npu_quant.onnx --deploy_backend='tensorrt' --save_calibration_file=models/picodet_s_416_coco_npu_quant/calibration.cache
+# PPYOLOE+ no nms
+paddle2onnx --model_dir=models/ppyoloe_plus_crn_s_80e_coco_no_nms_quant/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/ppyoloe_plus_crn_s_80e_coco_no_nms_quant/ppyoloe_plus_crn_s_80e_coco_no_nms_quant.onnx --deploy_backend='tensorrt' --save_calibration_file=models/ppyoloe_plus_crn_s_80e_coco_no_nms_quant/calibration.cache
+# PicoDet no nms
+paddle2onnx --model_dir=models/picodet_s_416_coco_npu_no_postprocess_quant/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/picodet_s_416_coco_npu_no_postprocess_quant/picodet_s_416_coco_npu_no_postprocess_quant.onnx --deploy_backend='tensorrt' --save_calibration_file=models/picodet_s_416_coco_npu_no_postprocess_quant/calibration.cache
 # YOLOv5s
 paddle2onnx --model_dir=models/yolov5s_quant/ --model_filename=model.pdmodel --params_filename=model.pdiparams --save_file=models/yolov5s_quant/yolov5s_quant.onnx --deploy_backend='tensorrt' --save_calibration_file=models/yolov5s_quant/calibration.cache
 # YOLOv6s
