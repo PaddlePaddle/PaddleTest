@@ -27,7 +27,6 @@ export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID   #效率云依赖参数
 export docker_flag=${docker_flag:-} # 如果北京集群cce环境为False，自己的开发机不用设置
 export http_proxy=${http_proxy:-}   # 代理在效率云全局变量设置
 export no_proxy=${no_proxy:-}
-export Python_env=${Python_env:-path_way}   # manylinux使用 path_way  paddle:latest使用 ln_way
 export Python_version=${Python_version:-37} # 指定ython版本
 export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
 #指定docker版本
@@ -128,7 +127,6 @@ if [[ "${docker_flag}" == "" ]]; then
         -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
         -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
         -e Python_version=${Python_version} \
-        -e Python_env=${Python_env} \
         -e models_list=${models_list} \
         -e system=${system} \
         -e step=${step} \
@@ -146,7 +144,31 @@ if [[ "${docker_flag}" == "" ]]; then
         /bin/bash -c '
 
         ldconfig;
-        if [[ `lsb_release -a` =~ "Ubuntu" ]];then
+        if [[ `yum --help` =~ "yum" ]];then
+            echo "centos"
+            case ${Python_version} in
+            36)
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
+            export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
+            ;;
+            37)
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+            export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+            ;;
+            38)
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+            export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
+            ;;
+            39)
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
+            export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
+            ;;
+            310)
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
+            export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+            ;;
+            esac
+        else
             echo "ubuntu"
             case ${Python_version} in
             36)
@@ -180,30 +202,6 @@ if [[ "${docker_flag}" == "" ]]; then
             export PATH=$(pwd)/run_env_py310:${PATH};
             ;;
             esac
-        else
-            echo "centos"
-            case ${Python_version} in
-            36)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
-            ;;
-            37)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-            ;;
-            38)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-            ;;
-            39)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
-            ;;
-            310)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
-            ;;
-            esac
         fi
 
         nvidia-smi;
@@ -221,7 +219,31 @@ else
     export AK=${AK} #使用bos_new上传需要
     export SK=${SK}
     export bce_whl_url=${bce_whl_url}
-    if [[ `lsb_release -a` =~ "Ubuntu" ]];then
+    if [[ `yum --help` =~ "yum" ]];then
+        echo "centos"
+        case ${Python_version} in
+        36)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
+        ;;
+        37)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+        ;;
+        38)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
+        ;;
+        39)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
+        ;;
+        310)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+        ;;
+        esac
+    else
         echo "ubuntu"
         case ${Python_version} in
         36)
@@ -253,30 +275,6 @@ else
         ln -s $(which python3.10) run_env_py310/python;
         ln -s $(which pip3.10) run_env_py310/pip;
         export PATH=$(pwd)/run_env_py310:${PATH};
-        ;;
-        esac
-    else
-        echo "centos"
-        case ${Python_version} in
-        36)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
-        ;;
-        37)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-        ;;
-        38)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-        ;;
-        39)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
-        ;;
-        310)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
         ;;
         esac
     fi
