@@ -20,33 +20,20 @@ class PaddleClas_Collect(object):
     自定义环境准备
     """
 
-    def __init__(self):
+    def __init__(self, update_name, whl_branch, update_url):
         """
         初始化参数
         """
         self.repo_name = "PaddleClas"
-        self.whl_branch = "develop"  # develop release
-        # pytest结果下载地址
-        self.report_linux_cuda102_py37_release = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567127/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567142/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567143/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567148/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567128/report/result.tar",
-        }
-
-        self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536419/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536416/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536411/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536406/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20536403/report/result.tar",
-        }
-
-        # self.report_linux_cuda102_py37_develop = {
-        #     "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404792/report/result.tar",
-        # }
-
+        self.whl_branch = whl_branch
+        self.update_name = update_name
+        self.update_url = update_url
+        self.save_name = update_name + "_" + whl_branch + ".yaml"
+        # print('###self.whl_branch', self.whl_branch)
+        # print('###self.update_name', self.update_name)
+        # print('###self.update_url', self.update_url)
+        # print('###self.save_name', self.save_name)
+        # input()
         self.base_yaml_dict = {
             "ImageNet": "ppcls^configs^ImageNet^ResNet^ResNet50.yaml",
             "slim": "ppcls^configs^slim^PPLCNet_x1_0_quantization.yaml",
@@ -119,12 +106,8 @@ class PaddleClas_Collect(object):
         """
         self.report_path_list = list()
         self.case_info_list = list()
-        if self.whl_branch == "develop":
-            content = self.report_linux_cuda102_py37_develop
-            self.content_name = "report_linux_cuda102_py37_develop.yaml"
-        else:
-            content = self.report_linux_cuda102_py37_release
-            self.content_name = "report_linux_cuda102_py37_release.yaml"
+        content = self.update_url
+        self.content_name = self.save_name
         for (key, value) in content.items():
             self.report_path = self.download_data(key, value)
             self.report_path_list.append(self.report_path)
@@ -312,10 +295,38 @@ def run():
     # print('###content',content["case"]["linux"]["eval"])
     # input()
 
-    model = PaddleClas_Collect()
-    model.update_kpi()
-    # print("暂时关闭清理！！！！")
-    model.clean_report()
+    whl_branch = ["develop", "release"]  # develop release
+    update_name = ["report_linux_cuda102_py37"]
+
+    report_linux_cuda102_py37_release = {
+        "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20904837/report/result.tar",
+        "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20904836/report/result.tar",
+        "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20904835/report/result.tar",
+        "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567148/report/result.tar",
+        "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567128/report/result.tar",
+    }
+    report_linux_cuda102_py37_develop = {
+        "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905007/report/result.tar",
+        "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905006/report/result.tar",
+        "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905005/report/result.tar",
+        "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905004/report/result.tar",
+        "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905003/report/result.tar",
+    }
+    print("###report_linux_cuda102_py37_release", report_linux_cuda102_py37_release)
+    print("###report_linux_cuda102_py37_develop", report_linux_cuda102_py37_develop)
+    # 顺便print下, 不然precommit会报 is assigned to but never used, 下面eval时其实是用了的
+
+    for name in update_name:
+        for branch in whl_branch:
+            try:
+                eval(name + "_" + branch)
+            except:
+                print("#### {} not exsit".format(name + "_" + branch))
+                break
+            model = PaddleClas_Collect(name, branch, eval(name + "_" + branch))
+            model.update_kpi()
+            # print("暂时关闭清理！！！！")
+            model.clean_report()
     return 0
 
 

@@ -42,13 +42,13 @@ function tar_reponame(){
     file_tgz=${repo_name}-${line}.tar.gz
     mv ${repo_name}-${line} ${repo_name}
 
-    if [[ ! -f "bce-python-sdk-0.8.27/BosClient.py" ]];then
+    if [[ ! -f ${python_name} ]];then
         set +x
         wget -q --no-proxy ${bce_whl_url} --no-check-certificate
         set -x
-        tar xf bce_whl.tar.gz
+        tar xf ${tar_name}
     fi
-    python bce-python-sdk-0.8.27/BosClient.py  ${file_tgz}  "xly-devops/PaddleTest/${repo_name}/"
+    python3 ${python_name}  ${file_tgz}  "xly-devops/PaddleTest/${repo_name}/"
     echo "upload ${file_tgz} done"
 
     # 及时删除防止空间打满
@@ -73,13 +73,13 @@ do
         tar -zcf ${repo_name}.tar.gz ${repo_name}
         file_tgz=${repo_name}.tar.gz
 
-        if [[ ! -f "bce-python-sdk-0.8.27/BosClient.py" ]];then
+        if [[ ! -f ${python_name} ]];then
             set +x
             wget -q --no-proxy ${bce_whl_url} --no-check-certificate
             set -x
-            tar xf bce_whl.tar.gz
+            tar xf ${tar_name}
         fi
-        python bce-python-sdk-0.8.27/BosClient.py  ${file_tgz}  "xly-devops/PaddleTest/${repo_name}/"
+        python3 ${python_name}  ${file_tgz}  "xly-devops/PaddleTest/${repo_name}/"
         echo "upload ${file_tgz} done"
 
         # 及时删除防止空间打满
