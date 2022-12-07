@@ -41,14 +41,8 @@ wget -q ${CE_Link} #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export
-if  [[ ! -n "${http_proxy}" ]] ;then
-    echo unset http_proxy
-    export http_proxy=${http_proxy}
-    export https_proxy=${http_proxy}
-else
-    export http_proxy=${http_proxy}
-    export https_proxy=${http_proxy}
-fi
+export http_proxy=${http_proxy}
+export https_proxy=${http_proxy}
 export no_proxy=${no_proxy}
 set -x;
 ####之前下载过了直接mv
