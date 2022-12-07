@@ -71,9 +71,9 @@ if [[ -d "../../${reponame}" ]];then  #前面cd 了 2次所以使用 ../../
     echo "因为 ${reponame} 在根目录存在 使用预先clone或wget的 ${reponame}"
 fi
 
-####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称  ##TODO:暂时先考虑两张卡，后续优化
+####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称
 if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认制定方式即可，SET_MULTI_CUDA参数只是在启动时使用
-    tc_name=`(echo $PWD|awk -F '/' '{print $4}')`
+    tc_name=`(echo $PWD|awk -F 'xly/' '{print $2}'|awk -F '/' '{print $1}')`
     echo "teamcity path:" $tc_name
     if [ $tc_name == "release_02" ];then
         echo release_02
@@ -126,56 +126,63 @@ if [[ "${docker_flag}" == "" ]]; then
         -e AK=${AK} \
         -e SK=${SK} \
         -e bce_whl_url=${bce_whl_url} \
+        -e PORT_RANGE="62000:65536s" \
+        -e no_proxy=${no_proxy} \
+        -e http_proxy==${http_proxy} \
+        -e https_proxy==${https_proxy} \
+        -e AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID} \
+        -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
+        -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
+        -e Python_version=${Python_version} \
+        -e Python_env=${Python_env} \
+        -e models_list=${models_list} \
+        -e system=${system} \
+        -e step=${step} \
+        -e reponame=${reponame} \
+        -e mode=${mode} \
+        -e use_build=${use_build} \
+        -e branch=${branch} \
+        -e get_repo=${get_repo} \
+        -e paddle_whl=${paddle_whl} \
+        -e dataset_org=${dataset_org} \
+        -e dataset_target=${dataset_target} \
+        -e set_cuda=${set_cuda} \
         -w /workspace \
         ${Image_version}  \
-        /bin/bash -c "
+        /bin/bash -c '
 
         ldconfig;
-        #额外的变量, PORT_RANGE是出现IP_ANY:36986端口占用报错暂时屏蔽一些,221108新出现60636被占用
-        export PORT_RANGE=62000:65536
-        export no_proxy=${no_proxy};
-        export http_proxy=${http_proxy};
-        export https_proxy=${http_proxy};
-        export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID;
-        export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID;
-        export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID;
-
-        if [[ ${Python_env} == 'ln_way' ]];then
-            #无法使用环境变量PATH 无法使用which命令
-            mv /usr/bin/python /usr/bin/python_back
-            mv /usr/local/bin/pip  /usr/local/bin/pip_back
-            mv /usr/local/python2.7.15/bin/pip /usr/local/python2.7.15/bin/pip_back
-            mv /usr/local/python2.7.15/bin/python  /usr/local/python2.7.15/bin/python_back
+        if [[ ${Python_env} == "ln_way" ]];then
             case ${Python_version} in
             36)
-            ln -s /usr/bin/python3.6 /usr/bin/python
-            ln -s /usr/local/bin/pip3.6 /usr/local/bin/pip
-            ln -s /usr/local/bin/python3.6 /usr/local/python2.7.15/bin/python
-            ln -s /usr/local/bin/pip3.6 /usr/local/python2.7.15/bin/pip
+            mkdir run_env_py36;
+            ln -s $(which python3.6) run_env_py36/python;
+            ln -s $(which pip3.6) run_env_py36/pip;
+            export PATH=$(pwd)/run_env_py36:${PATH};
             ;;
             37)
-            ln -s /usr/bin/python3.7 /usr/bin/python
-            ln -s /usr/local/bin/pip3.7 /usr/local/bin/pip
-            ln -s /usr/local/bin/python3.7 /usr/local/python2.7.15/bin/python
-            ln -s /usr/local/bin/pip3.7 /usr/local/python2.7.15/bin/pip
+            mkdir run_env_py37;
+            ln -s $(which python3.7) run_env_py37/python;
+            ln -s $(which pip3.7) run_env_py37/pip;
+            export PATH=$(pwd)/run_env_py37:${PATH};
             ;;
             38)
-            ln -s /usr/bin/python3.8 /usr/bin/python
-            ln -s /usr/local/bin/pip3.8 /usr/local/bin/pip
-            ln -s /usr/local/bin/python3.8 /usr/local/python2.7.15/bin/python
-            ln -s /usr/local/bin/pip3.8 /usr/local/python2.7.15/bin/pip
+            mkdir run_env_py38;
+            ln -s $(which python3.8) run_env_py38/python;
+            ln -s $(which pip3.8) run_env_py38/pip;
+            export PATH=$(pwd)/run_env_py38:${PATH};
             ;;
             39)
-            ln -s /usr/bin/python3.9 /usr/bin/python
-            ln -s /usr/local/bin/pip3.9 /usr/local/bin/pip
-            ln -s /usr/local/bin/python3.9 /usr/local/python2.7.15/bin/python
-            ln -s /usr/local/bin/pip3.9 /usr/local/python2.7.15/bin/pip
+            mkdir run_env_py39;
+            ln -s $(which python3.9) run_env_py39/python;
+            ln -s $(which pip3.9) run_env_py39/pip;
+            export PATH=$(pwd)/run_env_py39:${PATH};
             ;;
             310)
-            ln -s /usr/bin/python3.10 /usr/bin/python
-            ln -s /usr/local/bin/pip3.10 /usr/local/bin/pip
-            ln -s /usr/local/bin/python3.10 /usr/local/python2.7.15/bin/python
-            ln -s /usr/local/bin/pip3.10 /usr/local/python2.7.15/bin/pip
+            mkdir run_env_py310;
+            ln -s $(which python3.10) run_env_py310/python;
+            ln -s $(which pip3.10) run_env_py310/pip;
+            export PATH=$(pwd)/run_env_py310:${PATH};
             ;;
             esac
         else
@@ -204,55 +211,51 @@ if [[ "${docker_flag}" == "" ]]; then
         fi
 
         nvidia-smi;
-        python -c 'import sys; print(sys.version_info[:])';
+        python -c "import sys; print(sys.version_info[:])";
         git --version;
         python -m pip install -r requirements.txt #预先安装依赖包
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
-    " &
+    ' &
     wait $!
     exit $?
 else
     ldconfig;
+    #额外的变量, PORT_RANGE是出现IP_ANY:36986端口占用报错暂时屏蔽一些,221108新出现60636被占用
     export PORT_RANGE=62000:65536
     export AK=${AK} #使用bos_new上传需要
     export SK=${SK}
     export bce_whl_url=${bce_whl_url}
-    if [[ ${Python_env} == 'ln_way' ]];then
-        #无法使用环境变量PATH 无法使用which命令
-        mv /usr/bin/python /usr/bin/python_back
-        mv /usr/local/bin/pip  /usr/local/bin/pip_back
-        mv /usr/local/python2.7.15/bin/pip /usr/local/python2.7.15/bin/pip_back
-        mv /usr/local/python2.7.15/bin/python  /usr/local/python2.7.15/bin/python_back
+    if [[ ${Python_env} == "ln_way" ]];then
         case ${Python_version} in
         36)
-        ln -s /usr/bin/python3.6 /usr/bin/python
-        ln -s /usr/local/bin/pip3.6 /usr/local/bin/pip
-        ln -s /usr/local/bin/python3.6 /usr/local/python2.7.15/bin/python
-        ln -s /usr/local/bin/pip3.6 /usr/local/python2.7.15/bin/pip
+        mkdir run_env_py36;
+        ln -s $(which python3.6) run_env_py36/python;
+        ln -s $(which pip3.6) run_env_py36/pip;
+        export PATH=$(pwd)/run_env_py36:${PATH};
         ;;
         37)
-        ln -s /usr/bin/python3.7 /usr/bin/python
-        ln -s /usr/local/bin/pip3.7 /usr/local/bin/pip
-        ln -s /usr/local/bin/python3.7 /usr/local/python2.7.15/bin/python
-        ln -s /usr/local/bin/pip3.7 /usr/local/python2.7.15/bin/pip
+        mkdir run_env_py37;
+        ln -s $(which python3.7) run_env_py37/python;
+        ln -s $(which pip3.7) run_env_py37/pip;
+        export PATH=$(pwd)/run_env_py37:${PATH};
         ;;
         38)
-        ln -s /usr/bin/python3.8 /usr/bin/python
-        ln -s /usr/local/bin/pip3.8 /usr/local/bin/pip
-        ln -s /usr/local/bin/python3.8 /usr/local/python2.7.15/bin/python
-        ln -s /usr/local/bin/pip3.8 /usr/local/python2.7.15/bin/pip
+        mkdir run_env_py38;
+        ln -s $(which python3.8) run_env_py38/python;
+        ln -s $(which pip3.8) run_env_py38/pip;
+        export PATH=$(pwd)/run_env_py38:${PATH};
         ;;
         39)
-        ln -s /usr/bin/python3.9 /usr/bin/python
-        ln -s /usr/local/bin/pip3.9 /usr/local/bin/pip
-        ln -s /usr/local/bin/python3.9 /usr/local/python2.7.15/bin/python
-        ln -s /usr/local/bin/pip3.9 /usr/local/python2.7.15/bin/pip
+        mkdir run_env_py39;
+        ln -s $(which python3.9) run_env_py39/python;
+        ln -s $(which pip3.9) run_env_py39/pip;
+        export PATH=$(pwd)/run_env_py39:${PATH};
         ;;
         310)
-        ln -s /usr/bin/python3.10 /usr/bin/python
-        ln -s /usr/local/bin/pip3.10 /usr/local/bin/pip
-        ln -s /usr/local/bin/python3.10 /usr/local/python2.7.15/bin/python
-        ln -s /usr/local/bin/pip3.10 /usr/local/python2.7.15/bin/pip
+        mkdir run_env_py310;
+        ln -s $(which python3.10) run_env_py310/python;
+        ln -s $(which pip3.10) run_env_py310/pip;
+        export PATH=$(pwd)/run_env_py310:${PATH};
         ;;
         esac
     else
@@ -281,7 +284,7 @@ else
     fi
 
     nvidia-smi;
-    python -c 'import sys; print(sys.version_info[:])';
+    python -c "import sys; print(sys.version_info[:])";
     git --version;
     python -m pip install -r requirements.txt #预先安装依赖包
     python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}

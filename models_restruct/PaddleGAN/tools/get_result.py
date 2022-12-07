@@ -28,17 +28,17 @@ class PaddleGAN_Collect(object):
         self.whl_branch = "release"  # develop release
         # pytest结果下载地址
         self.report_linux_cuda102_py37_release = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342790/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426590/report/result.tar",
+            "P0": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20342790/report/result.tar",
+            "P1": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20426590/report/result.tar",
         }
 
         self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20342790/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426590/report/result.tar",
+            "P0": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20342790/report/result.tar",
+            "P1": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20426590/report/result.tar",
         }
 
         # self.report_linux_cuda102_py37_develop = {
-        #     "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/19909321/report/result.tar"
+        #     "P2_2": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/19909321/report/result.tar"
         # }
 
         self.base_yaml_dict = {
