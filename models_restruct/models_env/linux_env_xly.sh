@@ -14,7 +14,7 @@ cd ce;
 export reponame="`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $1}')`"
 
 #模型列表文件 , 固定路径及格式为 tools/reponame_优先级_list   优先级P2有多个用P21、P22  中间不用"-"划分, 防止按 "-" split 混淆
-export models_list="tools/${reponame}_`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $5}')`_list"
+export models_file="tools/${reponame}_`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $5}')`_list"
 
 #指定case操作系统
 if [[ ${AGILE_PIPELINE_NAME} =~ "Linux" ]];then
@@ -35,27 +35,27 @@ export Python_version="`(echo ${AGILE_PIPELINE_NAME}|awk -F 'Python' '{print $2}
 #指定docker镜像
 if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
-        export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2" 
+        export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"
     else
-        export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev" 
+        export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
-        export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.1-trt8.0-gcc8.2" 
+        export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.1-trt8.0-gcc8.2"
     else
-        export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.2-cudnn8.2-gcc82" 
+        export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.2-cudnn8.2-gcc82"
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
-        export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4.0-trt8.4.0.6-gcc82" 
+        export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4.0-trt8.4.0.6-gcc82"
     else
-        export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6.2-cudnn8.4.0-gcc82" 
+        export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6.2-cudnn8.4.0-gcc82"
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
-        export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2" 
+        export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"
     else
-        export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2" 
+        export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2"
     fi
 else
     export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"
