@@ -116,6 +116,9 @@ unzip -P ${CE_pass} ${CE_version_name}.zip
 export http_proxy=${http_proxy}
 export https_proxy=${http_proxy}
 export no_proxy=${no_proxy}
+export AK=${AK} #使用bos_new上传需要
+export SK=${SK}
+export bce_whl_url=${bce_whl_url}
 set -x;
 
 #输出参数验证
@@ -302,9 +305,6 @@ else
     ldconfig;
     #额外的变量, PORT_RANGE是出现IP_ANY:36986端口占用报错暂时屏蔽一些,221108新出现60636被占用
     export PORT_RANGE=62000:65536
-    export AK=${AK} #使用bos_new上传需要
-    export SK=${SK}
-    export bce_whl_url=${bce_whl_url}
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
         case ${Python_version} in
