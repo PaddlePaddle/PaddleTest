@@ -1,17 +1,130 @@
 #!/usr/bin/env bash
+#param:
+#docker imagename= registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7
+#paddle= develop_0.0.0
+#paddlenlp= nlp1_install\nlp2_build
+#python= 37
 ####################################
-# get diff case
+export python=$1
+export paddle=$2
+export nlp_dir=/workspace/PaddleNLP
+mkdir /workspace/PaddleNLP/logs
+mkdir /workspace/PaddleNLP/model_logs
+mkdir /workspace/PaddleNLP/unittest_logs
+mkdir /workspace/PaddleNLP/coverage_logs
+mkdir /workspace/PaddleNLP/upload
+export log_path=/workspace/PaddleNLP/model_logs
 export P0case_list=()
 export APIcase_list=()
 declare -A Normal_dic
 declare -A all_P0case_dic
+declare -A Build_list
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2 ["albert"]=2   ["SQuAD"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["word_embedding"]=5 \
   ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["efl"]=5 ["p-tuning"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
   ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["taskflow"]=5 ["clue"]=5 ["textcnn"]=5 ["transformers"]=20)
+####################################
+# set python env
+case ${python} in
+27)
+export LD_LIBRARY_PATH=/opt/_internal/cpython-2.7.15-ucs2/lib/:${LD_LIBRARY_PATH}
+export PATH=/opt/_internal/cpython-2.7.15-ucs2/bin/:${PATH}
+;;
+35)
+export LD_LIBRARY_PATH=/opt/_internal/cpython-3.5.1/lib/:${LD_LIBRARY_PATH}
+export PATH=/opt/_internal/cpython-3.5.1/bin/:${PATH}
+;;
+36)
+export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
+export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
+;;
+37)
+export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+;;
+38)
+export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
+;;
+esac
+python -c 'import sys; print(sys.version_info[:])'
+echo "python="${python}
+####################################
+# Insatll paddlepaddle-gpu
+install_paddle(){
+    echo -e "\033[35m ---- build and install paddlepaddle-gpu  \033[0m"
+    python -m pip install --ignore-installed --upgrade pip
+    python -m pip install -r requirements_ci.txt
+    python -m pip install ${paddle};
+    python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
+    python -c 'from visualdl import LogWriter'
+}
+####################################
+# Install paddlenlp func
+nlp_build (){
+    cd $1
+    echo -e "\033[35m ---- build and install paddlenlp  \033[0m"
+    rm -rf build/
+    rm -rf paddlenlp.egg-info/
+    rm -rf ppdiffusers.egg-info/
+    rm -rf paddle_pipelines.egg-info/
+    rm -rf dist/
+
+    python -m pip install  -r requirements.txt
+    python setup.py bdist_wheel
+    python -m pip install --ignore-installed  dist/p****.whl
+}
+####################################
+# upload paddlenlp  whl
+upload(){
+install_paddle
+if [[ $1=~ "paddlenlp" ]];then
+    # build develop paddlenlp
+    build_dev_path=${nlp_dir}/PaddleNLP_dev
+    nlp_build ${build_dev_path}
+    nlp_version=$(python -c "from paddlenlp import __version__; print(__version__)")
+    mv $build_dev_path/dist/p****.whl ${nlp_dir}/upload/paddlenlp-${nlp_version}.latest-py3-none-any.whl
+    # build pr paddlenlp
+    build_pr_path=${nlp_dir}/PaddleNLP
+    nlp_build ${build_pr_path}
+    cd $build_pr_path/dist
+    mv $build_pr_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-${nlp_version}.{${GIT_PR_ID}}-py3-none-any.whl
+    
+elif [[ $1=~ "pipelines" ]];then
+    build_dev_path=${nlp_dir}/PaddleNLP_dev/$1
+    nlp_build ${build_dev_path}
+    pipe_version=$(python -c "from pipelines import __version__; print(__version__)")
+    mv $build_dev_path/dist/p****.whl ${PPNLP_HOME}/upload/pipelines-{pipe_version}.latest-py3-none-any.whl
+elif [[ $1=~ "ppdiffusers" ]];then
+    build_dev_path=${nlp_dir}/PaddleNLP_dev/$1
+    nlp_build ${build_dev_path}
+    pipe_version=$(python -c "from pipelines import __version__; print(__version__)")
+    mv $build_dev_path/dist/pa****.whl ${PPNLP_HOME}/upload/ppdiffusers-{ppdi_version}.latest-py3-none-any.whl
+fi
+cd ${PPNLP_HOME}
+python upload.py ${PPNLP_HOME}/upload
+rm -rf upload/*
+}
+####################################
+# PaddleNLP repo already clone!
+# upload paddlenlp-latest-py3-none-any.whl
+cp -r PaddleNLP/ PaddleNLP_dev
+cd ${nlp_dir}
+mv ../PaddleTest/models/PaddleNLP/CI/* ./
+python get_model_list.py
+git fetch origin pull/${GIT_PR_ID}/head
+git checkout -b origin_pr FETCH_HEAD
+git remote add upstream https://github.com/PaddlePaddle/PaddleNLP.git
+git fetch upstream
+git checkout -b test_pr upstream/develop
+git merge --no-edit origin_pr
+git log --pretty=oneline -10
+####################################
+# get diff case
 for line in `cat model_list.txt`;do
     all_example_dict[${#all_example_dict[*]}]=$line
 done
+
 get_diff_TO_P0case(){
 for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     arr_file_name=(${file_name//// })
@@ -30,6 +143,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         elif [[ ${dir2} =~ "transformers" ]];then
             P0case_list[${#P0case_list[*]}]=transformers
         fi
+        Build_list[${dir1}]=${dir1} #影响编包
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
             P0case_list[${#P0case_list[*]}]=${dir3}
@@ -57,9 +171,21 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         elif [[ ${dir2} =~ "taskflow" ]] ;then
             APIcase_list[${#APIcase_list[*]}]=${dir2}
         fi
+    elif [[ ${dir1} =~ "fast_tokenizer" ]] || [[ ${dir1} =~ "faster_generation" ]] then; #影响编包
+        Build_list[${dir1}]=paddlenlp #影响编包
+    elif [[ ${dir1} =~ "pipelines" ]];then #影响编包
+        Build_list[${dir1}]=${dir1}
+
+    elif [[ ${dir1} =~ "ppdiffusers" ]];then #影响编包
+        Build_list[${dir1}]=${dir1}
+
     else
         continue
     fi
+done
+
+for build_pkg in ${Build_list[*]};do
+    upload ${build_pkg}
 done
 }
 get_diff_TO_P0case
@@ -67,75 +193,15 @@ P0case_list=($(awk -v RS=' ' '!a[$1]++' <<< ${P0case_list[*]}))
 APIcase_list=($(awk -v RS=' ' '!a[$1]++' <<< ${APIcase_list[*]}))
 ####################################
 if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
-    ####################################
-    # set python env
-    case $1 in
-    27)
-    export LD_LIBRARY_PATH=/opt/_internal/cpython-2.7.15-ucs2/lib/:${LD_LIBRARY_PATH}
-    export PATH=/opt/_internal/cpython-2.7.15-ucs2/bin/:${PATH}
-    ;;
-    35)
-    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.5.1/lib/:${LD_LIBRARY_PATH}
-    export PATH=/opt/_internal/cpython-3.5.1/bin/:${PATH}
-    ;;
-    36)
-    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
-    export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
-    ;;
-    37)
-    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
-    export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-    ;;
-    38)
-    export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
-    export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-    ;;
-    esac
-    python -c 'import sys; print(sys.version_info[:])'
-    echo "python="$1
-    cmake --version
-    ####################################
-    # set paddle env
-    set -x
-    python -m pip install --ignore-installed --upgrade pip
-    python -m pip install -r requirements_ci.txt
-    python -m pip install $2;
-    python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
-    python -c 'from visualdl import LogWriter'
-    # paddleslim env
-    # cd PaddleSlim
-    # python -m pip install -r requirements.txt
-    # python setup.py install
-    # cd -
-    ####################################
-    # set paddlenlp env
-    nlp1_build (){
-        echo -e "\033[35m ---- only install paddlenlp \033[0m"
+    # Install paddlenlp
+    cd ${nlp_dir} 
+    if [ ! -f 'dist/p****.whl' ];then
+        install_paddle
         python -m pip install -U paddlenlp
-    }
-    nlp2_build (){
-        echo -e "\033[35m ---- build and install paddlenlp  \033[0m"
-        rm -rf build/
-        rm -rf paddlenlp.egg-info/
-        rm -rf dist/
-
-        python -m pip install --ignore-installed -r requirements.txt
-        python setup.py bdist_wheel
-        python -m pip install --ignore-installed  dist/paddlenlp****.whl
-    }
-    $3
-    export NLTK_DATA=/ssd1/paddlenlp/nltk_data/
+    else
+        python -m pip install --ignore-installed  dist/p****.whl
+    fi
     pip list
-    set +x
-    ####################################
-    # set logs env
-    export nlp_dir=/workspace/PaddleNLP
-    mkdir /workspace/PaddleNLP/model_logs
-    mkdir /workspace/PaddleNLP/unittest_logs
-    mkdir /workspace/PaddleNLP/coverage_logs
-    export log_path=/workspace/PaddleNLP/model_logs
-    ####################################
-    # run changed models case
     echo -e "\033[35m =======CI Check P0case========= \033[0m"
     echo -e "\033[35m ---- P0case_list length: ${#P0case_list[*]}, cases: ${P0case_list[*]} \033[0m"
     set +e
