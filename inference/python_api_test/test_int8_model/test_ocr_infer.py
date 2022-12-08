@@ -276,8 +276,11 @@ def main(args):
 
     val_loader = None
     if args.image_file:
-        data = preprocess(args.image_file, args.det_limit_side_len, args.det_limit_type)
-        img, shape_list = data
+        if args.model_type == "det":
+            data = preprocess_det(args.image_file, args.det_limit_side_len, args.det_limit_type)
+            img, shape_list = data
+        else:
+            img = resize_norm_img_svtr(args.image_file)
         img = np.expand_dims(img, axis=0)
         val_loader = [[img]]
     else:
