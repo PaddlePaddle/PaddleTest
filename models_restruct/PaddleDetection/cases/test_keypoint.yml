@@ -1,6 +1,6 @@
 case:
   linux:
-    base: ./base/normal_base.yml
+    base: ./base/keypoint_base.yml
     train:
       -
         name: multi
@@ -27,12 +27,12 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/python/infer.py
+        cmd: python deploy/python/keypoint_infer.py
       -
         name: cpp
         cmd: ./deploy/cpp/build/main
   windows:
-    base: ./base/normal_base.yml
+    base: ./base/keypoint_base.yml
     train:
       -
         name: single
@@ -54,7 +54,7 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/python/infer.py
+        cmd: python deploy/python/keypoint_infer.py
 
 
 function: paddlelas_imagenet_parse
