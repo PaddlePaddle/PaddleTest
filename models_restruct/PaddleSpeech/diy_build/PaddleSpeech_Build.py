@@ -58,6 +58,14 @@ class PaddleSpeech_Build(Model_Build):
         """
         build paddlespeech wheel
         """
+        if os.path.exists("/etc/lsb-release"):
+            os.system("apt-get update")
+            os.system("apt-get install -y libsndfile1")
+
+        if os.path.exists("/etc/redhat-release"):
+            os.system("yum update")
+            os.system("yum install -y libsndfile")
+
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)

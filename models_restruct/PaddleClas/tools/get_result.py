@@ -299,18 +299,18 @@ def run():
     update_name = ["report_linux_cuda102_py37"]
 
     report_linux_cuda102_py37_release = {
-        "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20904837/report/result.tar",
-        "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20904836/report/result.tar",
-        "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20904835/report/result.tar",
-        "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567148/report/result.tar",
-        "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20567128/report/result.tar",
+        "P0": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20904837/report/result.tar",
+        "P1": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20904836/report/result.tar",
+        "P2": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20904835/report/result.tar",
+        "P2_1": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20567148/report/result.tar",
+        "P2_2": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20567128/report/result.tar",
     }
     report_linux_cuda102_py37_develop = {
-        "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905007/report/result.tar",
-        "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905006/report/result.tar",
-        "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905005/report/result.tar",
-        "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905004/report/result.tar",
-        "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20905003/report/result.tar",
+        "P0": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20905007/report/result.tar",
+        "P1": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20905006/report/result.tar",
+        "P2": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20905005/report/result.tar",
+        "P2_1": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20905004/report/result.tar",
+        "P2_2": "hhttps://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/20905003/report/result.tar",
     }
     print("###report_linux_cuda102_py37_release", report_linux_cuda102_py37_release)
     print("###report_linux_cuda102_py37_develop", report_linux_cuda102_py37_develop)
