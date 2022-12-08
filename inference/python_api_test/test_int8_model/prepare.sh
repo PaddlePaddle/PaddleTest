@@ -198,10 +198,15 @@ wget https://bj.bcebos.com/v1/paddle-slim-models/data/ocr/test.jpg
 tar -xf test_set_det.tar
 
 # download inference model
+# fp32
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar
-tar -xvf ch_PP-OCRv3_det_infer.tar # fp32
+tar -xf ch_PP-OCRv3_det_infer.tar -C ./models
+rm -rf ch_PP-OCRv3_det_infer.tar
+
+# int8
 wget https://bj.bcebos.com/v1/paddle-slim-models/act/OCR/PPOCRV3_det_QAT.tar
-tar -xvf PPOCRV3_det_QAT.tar # int8
+tar -xf PPOCRV3_det_QAT.tar -C ./models
+rm -rf PPOCRV3_det_QAT.tar
 
 git clone -b release/2.6 https://github.com/PaddlePaddle/PaddleOCR.git
 
@@ -212,5 +217,5 @@ tar -xf test_set_rec.tar
 
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.tar
 tar -xvf ch_PP-OCRv3_rec_infer.tar # fp32
-wget https://bj.bcebos.com/v1/paddle-slim-models/act/ocr/PPOCRV3_rec_QAT.tar
+wget https://bj.bcebos.com/v1/paddle-slim-models/act/OCR/PPOCRV3_rec_QAT.tar
 tar -xvf PPOCRV3_rec_QAT.tar # int8

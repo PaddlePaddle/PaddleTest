@@ -12322,7 +12322,7 @@ ppcls^configs^ImageNet^EfficientNet^EfficientNetB3:
       - name: trained
         result:
           loss:
-            base: 20
+            base: 258764.68521666666
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -12350,7 +12350,7 @@ ppcls^configs^ImageNet^EfficientNet^EfficientNetB3:
       - name: trained
         result:
           class_ids:
-            base: '[22, 22, 22, 22, 22]'
+            base: '[759, 999, 327, 340, 339]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -12363,7 +12363,7 @@ ppcls^configs^ImageNet^EfficientNet^EfficientNetB3:
       - name: trained
         result:
           class_ids:
-            base: '[11, 11, 11, 11]'
+            base: '[759, 999, 327, 340, 339]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -12376,13 +12376,13 @@ ppcls^configs^ImageNet^EfficientNet^EfficientNetB3:
       - name: multi
         result:
           loss:
-            base: 20
+            base: 43437.87736333333
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 6.9935
+            base: 855004405.6180075
             evaluation: '='
             threshold: 0
       - name: multi_static
@@ -36703,7 +36703,7 @@ ppcls^configs^ImageNet^Twins^pcpvt_large:
       - name: trained
         result:
           loss:
-            base: 20
+            base: 7.618053333333333
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -36731,7 +36731,7 @@ ppcls^configs^ImageNet^Twins^pcpvt_large:
       - name: trained
         result:
           class_ids:
-            base: '[22, 22, 22, 22, 22]'
+            base: '[637, 62, 965, 932, 928]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -36744,7 +36744,7 @@ ppcls^configs^ImageNet^Twins^pcpvt_large:
       - name: trained
         result:
           class_ids:
-            base: '[11, 11, 11, 11]'
+            base: '[637, 62, 965, 66, 932]'
             evaluation: '='
             threshold: 0
       - name: pretrained
@@ -36757,13 +36757,13 @@ ppcls^configs^ImageNet^Twins^pcpvt_large:
       - name: multi
         result:
           loss:
-            base: 20
+            base: 6.832598333333332
             evaluation: '='
             threshold: 0
       - name: single
         result:
           loss:
-            base: 20
+            base: 6.950426666666665
             evaluation: '='
             threshold: 0
       - name: multi_static

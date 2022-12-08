@@ -76,12 +76,12 @@ class Paddle3D_Start(object):
                     )
                 elif self.model == "centerpoint_pillars_02voxel_nuscenes_10sweep":
                     print(
-                        "https://bj.bcebos.com/paddle3d/models/centerpoint/ \
-                         centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
+                        "https://bj.bcebos.com/paddle3d/models/centerpoint/\
+centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
                     )
                     wget.download(
-                        "https://bj.bcebos.com/paddle3d/models/centerpoint/ \
-                         centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
+                        "https://bj.bcebos.com/paddle3d/models/centerpoint/\
+centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
                     )
                 else:
                     print(

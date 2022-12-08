@@ -25,6 +25,7 @@ from tqdm import tqdm
 import paddle
 from paddle.inference import create_predictor, PrecisionType
 from paddle.inference import Config as PredictConfig
+from backend import PaddleInferenceEngine, TensorRTEngine, Monitor
 
 from ppocr.data import create_operators, transform, build_dataloader
 from ppocr.postprocess import build_post_process
@@ -45,63 +46,6 @@ def load_config(file_path):
     assert ext in [".yml", ".yaml"], "only support yaml files for now"
     config = yaml.load(open(file_path, "rb"), Loader=yaml.Loader)
     return config
-
-
-def load_predictor(args):
-    """
-    load predictor func
-    """
-    model_file = os.path.join(args.model_path, args.model_filename)
-    params_file = os.path.join(args.model_path, args.params_filename)
-    if not os.path.exists(model_file):
-        raise ValueError("{} doesn't exist".format(model_file))
-    if not os.path.exists(params_file):
-        raise ValueError("{} doesn't exist".format(params_file))
-    pred_cfg = PredictConfig(model_file, params_file)
-    pred_cfg.enable_memory_optim()
-    pred_cfg.switch_ir_optim(True)
-
-    precision_map = {
-        "int8": PrecisionType.Int8,
-        "fp32": PrecisionType.Float32,
-        "fp16": PrecisionType.Half,
-    }
-
-    if args.device == "GPU":
-        pred_cfg.enable_use_gpu(100, 0)
-        if args.use_trt:
-            pred_cfg.enable_tensorrt_engine(
-                workspace_size=1 << 30,
-                precision_mode=precision_map[args.precision],
-                max_batch_size=args.max_batch_size,
-                min_subgraph_size=args.min_subgraph_size,
-                use_calib_mode=False,
-            )
-
-            # collect shape
-            trt_shape_f = os.path.join(args.model_path, f"trt_dynamic_shape.txt")
-
-            if not os.path.exists(trt_shape_f):
-                pred_cfg.collect_shape_range_info(trt_shape_f)
-                print(f"collect dynamic shape info into : {trt_shape_f}")
-            else:
-                print(f"dynamic shape info file( {trt_shape_f} ) already exists, not need to generate again.")
-
-            pred_cfg.enable_tuned_tensorrt_dynamic_shape(trt_shape_f, True)
-    else:
-        pred_cfg.disable_gpu()
-        pred_cfg.set_cpu_math_library_num_threads(args.cpu_threads)
-        if args.use_mkldnn:
-            pred_cfg.enable_mkldnn()
-            if args.precision == "int8":
-                pred_cfg.enable_mkldnn_int8({"conv2d", "depthwise_conv2d", "pool2d", "elementwise_mul"})
-    # pred_cfg.disable_glog_info()
-    pred_cfg.delete_pass("conv_transpose_eltwiseadd_bn_fuse_pass")
-    pred_cfg.delete_pass("matmul_transpose_reshape_fuse_pass")
-    pred_cfg.switch_use_feed_fetch_ops(False)
-
-    predictor = create_predictor(pred_cfg)
-    return predictor
 
 
 def get_output_tensors(args, predictor):
@@ -168,7 +112,19 @@ def resize_norm_img_svtr(image_file, image_shape=[3, 48, 320]):
     return resized_image
 
 
-def predict_image(args):
+def reader_wrapper(reader, input_field="image"):
+    """
+    reader wrapper func
+    """
+
+    def gen():
+        for data in reader:
+            yield np.array(data[0]).astype(np.float32)
+
+    return gen
+
+
+def predict_image(predictor, rerun_flag=False):
     """
     predict image func
     """
@@ -183,16 +139,7 @@ def predict_image(args):
         img = resize_norm_img_svtr(args.image_file)
         img = np.expand_dims(img, axis=0)
 
-    # Step2: Prepare prdictor
-    predictor = load_predictor(args)
-
-    # Step3: Inference
-    input_names = predictor.get_input_names()
-    for name in input_names:
-        input_tensor = predictor.get_input_handle(name)
-    output_tensors = get_output_tensors(args, predictor)
-
-    input_tensor.copy_from_cpu(img)
+    predictor.prepare_data([img])
 
     warmup, repeats = 0, 1
     if args.benchmark:
@@ -201,26 +148,47 @@ def predict_image(args):
     for i in range(warmup):
         predictor.run()
 
-    start_time = time.time()
+    if rerun_flag:
+        return
+
+    monitor = Monitor(0)
+    monitor.start()
+    predict_time = 0.0
+    time_min = float("inf")
+    time_max = float("-inf")
     for i in range(repeats):
+        start_time = time.time()
         predictor.run()
-        outputs = []
-        for output_tensor in output_tensors:
-            output = output_tensor.copy_to_cpu()
-            outputs.append(output)
-    total_time = time.time() - start_time
-    avg_time = float(total_time) / repeats
-    print(f"[Benchmark]Average inference time: \033[91m{round(avg_time*1000, 2)}ms\033[0m")
-    """
-    if args.model_type == 'det':
-        preds_map = {'maps': outputs[0]}
-        post_result = post_process_class(preds_map, shape_list)
-    elif args.model_type == 'rec':
-        post_result = post_process_class(outputs[0], shape_list)
-    """
+        end_time = time.time()
+        timed = end_time - start_time
+        time_min = min(time_min, timed)
+        time_max = max(time_max, timed)
+        predict_time += timed
+    monitor.stop()
+    time_avg = float(predict_time) / (1.0 * repeats)
+    monitor_result = monitor.output()
+
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
+    print(
+        "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
+            round(time_min * 1000, 2), round(time_max * 1000, 2), round(time_avg * 1000, 2)
+        )
+    )
 
 
-def eval(args):
+# eval is not correct
+def eval(args, predictor, rerun_flag=False):
     """
     eval func
     """
@@ -231,12 +199,14 @@ def eval(args):
     post_process_class = build_post_process(config["PostProcess"])
     eval_class = build_metric(config["Metric"])
     model_type = config["Global"]["model_type"]
+    repeats = len(val_loader)
 
-    predictor = load_predictor(args)
-    input_names = predictor.get_input_names()
-    for name in input_names:
-        input_tensor = predictor.get_input_handle(name)
-    output_tensors = get_output_tensors(args, predictor)
+    monitor = Monitor(0)
+    if not rerun_flag:
+        monitor.start()
+    predict_time = 0.0
+    time_min = float("inf")
+    time_max = float("-inf")
 
     with tqdm(
         total=len(val_loader), bar_format="Evaluation stage, Run batch:|{bar}| {n_fmt}/{total_fmt}", ncols=80
@@ -244,12 +214,17 @@ def eval(args):
         for batch_id, batch in enumerate(val_loader):
             images = np.array(batch[0])
 
-            input_tensor.copy_from_cpu(images)
-            predictor.run()
-            outputs = []
-            for output_tensor in output_tensors:
-                output = output_tensor.copy_to_cpu()
-                outputs.append(output)
+            predictor.prepare_data([images])
+            start_time = time.time()
+            outputs = predictor.run()
+            end_time = time.time()
+            timed = end_time - start_time
+            time_min = min(time_min, timed)
+            time_max = max(time_max, timed)
+            predict_time += timed
+
+            if rerun_flag:
+                return
 
             batch_numpy = []
             for item in batch:
@@ -264,11 +239,95 @@ def eval(args):
                 eval_class(post_result, batch_numpy)
 
             t.update()
+    print("main pid:", os.getpid())
+    monitor.stop()
+    print("finish")
+    time_avg = float(predict_time) / (1.0 * repeats)
+    monitor_result = monitor.output()
+
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
+    print(
+        "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
+            round(time_min * 1000, 2), round(time_max * 1000, 2), round(time_avg * 1000, 2)
+        )
+    )
 
     metric = eval_class.get_metric()
     logger.info("metric eval ***************")
     for k, v in metric.items():
         logger.info("{}:{}".format(k, v))
+
+
+def main(args):
+    """
+    main func
+    """
+
+    val_loader = None
+    if args.image_file:
+        data = preprocess(args.image_file, args.det_limit_side_len, args.det_limit_type)
+        img, shape_list = data
+        img = np.expand_dims(img, axis=0)
+        val_loader = [[img]]
+    else:
+        # DataLoader need run on cpu
+        config = load_config(args.dataset_config)
+        devices = paddle.set_device("cpu")
+        val_loader = build_dataloader(config, "Eval", devices, logger)
+
+    predictor = None
+    if args.deploy_backend == "paddle_inference":
+        predictor = PaddleInferenceEngine(
+            model_dir=args.model_path,
+            model_filename=args.model_filename,
+            params_filename=args.params_filename,
+            precision=args.precision,
+            use_trt=args.use_trt,
+            use_mkldnn=args.use_mkldnn,
+            batch_size=args.batch_size,
+            device=args.device,
+            min_subgraph_size=3,
+            use_dynamic_shape=args.use_dynamic_shape,
+            cpu_threads=args.cpu_threads,
+        )
+    elif args.deploy_backend == "tensorrt":
+        model_name = os.path.join(args.model_path, args.model_filename)
+        print(model_name)
+        engine_file = "{}_{}.trt".format(args.precision, args.batch_size)
+        predictor = TensorRTEngine(
+            onnx_model_file=model_name,
+            shape_info={
+                "x": [[1, 3, 100, 100], [1, 3, 800, 800], [1, 3, 1600, 1600]],
+            },
+            max_batch_size=args.batch_size,
+            precision=args.precision,
+            engine_file_path=engine_file,
+            calibration_cache_file=args.calibration_file,
+            calibration_loader=reader_wrapper(val_loader),
+            verbose=False,
+        )
+    if predictor is None:
+        return
+    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
+
+    if args.image_file:
+        predict_image(predictor, rerun_flag)
+    else:
+        eval(args, predictor, rerun_flag)
+
+    if rerun_flag:
+        print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
 
 
 if __name__ == "__main__":
@@ -294,6 +353,16 @@ if __name__ == "__main__":
         choices=["fp32", "fp16", "int8"],
         help="The precision of inference. It can be 'fp32', 'fp16' or 'int8'. Default is 'fp16'.",
     )
+    parser.add_argument(
+        "--deploy_backend",
+        type=str,
+        default="paddle_inference",
+        choices=["paddle_inference", "tensorrt"],
+        help="deploy backend, it can be: `paddle`, `tensorrt`, `onnxruntime`",
+    )
+    parser.add_argument("--calibration_file", type=str, default="calibration.cache")
+    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
+    parser.add_argument("--batch_size", type=int, default=1, help="Batch size of model input.")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--det_limit_side_len", type=float, default=960)
@@ -302,7 +371,4 @@ if __name__ == "__main__":
     parser.add_argument("--min_subgraph_size", type=int, default=15)
     parser.add_argument("--model_type", type=str, default="det")
     args = parser.parse_args()
-    if args.image_file:
-        predict_image(args)
-    else:
-        eval(args)
+    main(args)
