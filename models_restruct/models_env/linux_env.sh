@@ -146,6 +146,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c '
+
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
