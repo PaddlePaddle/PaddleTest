@@ -149,7 +149,7 @@ cd ./${CE_version_name}/
 
 ##如果预先模型库下载直接mv, 方便二分是checkout 到某个commit进行二分
 if [[ -d "../../${reponame}" ]];then  #前面cd 了 2次所以使用 ../../
-    mv ../../${reponame} .
+    cp -r ../../${reponame} .
     echo "因为 ${reponame} 在根目录存在 使用预先clone或wget的 ${reponame}"
 fi
 
@@ -217,6 +217,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
         -e Python_version=${Python_version} \
         -e models_list=${models_list} \
+        -e models_file=${models_file} \
         -e system=${system} \
         -e step=${step} \
         -e reponame=${reponame} \
