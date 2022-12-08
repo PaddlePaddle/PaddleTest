@@ -48,6 +48,12 @@ class YamlLoader(object):
                        time.get("time_step"))
         else:
             return 1
+    
+    def get_loss_standrad(self, n):
+        """
+        get loss standrad
+        """
+        return self.yml[n].get("loss_standrad")
 
     def _get_label(self, n):
         label = self.yml[n].get("label")
@@ -137,6 +143,15 @@ class CompareSolution(object):
         else:
             compare(self.standard, self.solution)
 
+    def accur_verify_new(self, static=False):
+        """accuracy verify"""
+        if isinstance(self.standard, np.lib.npyio.NpzFile):
+            standard = self._convert_standard(static)
+            solution = self._convert_solution(self.solution)
+            compare_new(standard, solution)
+        else:
+            compare_new(self.standard, self.solution)
+
     def converge_verify(self, static=False, npoints=10):
         """converge verify"""
         if isinstance(self.standard, np.lib.npyio.NpzFile):
@@ -167,6 +182,35 @@ class CompareSolution(object):
 
 
 def compare(res, expect, delta=1e-6, rtol=1e-5, mode="close"):
+    """
+    比较函数
+    :param paddle: paddle结果
+    :param torch: torch结果
+    :param delta: 误差值
+    :return:
+    """
+    if isinstance(res, np.ndarray):
+        assert res.shape == expect.shape
+        if mode == "close":
+            assert np.allclose(
+                res, expect, atol=delta, rtol=rtol, equal_nan=True)
+        elif mode == "equal":
+            res = res.astype(expect.dtype)
+            assert np.array_equal(res, expect, equal_nan=True)
+    elif isinstance(res, (list, tuple)):
+        for i, j in enumerate(res):
+            compare(j, expect[i], delta, rtol, mode=mode)
+    elif isinstance(res, (int, float, complex, bool)):
+        if mode == "close":
+            assert np.allclose(
+                res, expect, atol=delta, rtol=rtol, equal_nan=True)
+        elif mode == "equal":
+            assert np.array_equal(res, expect, equal_nan=True)
+    else:
+        assert TypeError
+
+
+def compare_new(res, expect, delta=1e-3, rtol=1e-3, mode="close"):
     """
     比较函数
     :param paddle: paddle结果

@@ -56,7 +56,11 @@ class RunCases(object):
         cs = CompareSolution("metric.npy", solution_metric)
         cs.converge_verify()
         cs = CompareSolution("loss.npy", solution_loss)
-        cs.accur_verify()
+        loss_standrad = self.obj.get_loss_standrad(case_num)
+        if loss_standrad :
+            cs.accur_verify_new()
+        else:
+            cs.accur_verify()
 
 if __name__ == '__main__':
     file = "../standard_data/ce_week_standard/laplace2d.yaml"
