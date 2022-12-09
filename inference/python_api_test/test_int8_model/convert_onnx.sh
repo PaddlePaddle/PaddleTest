@@ -54,13 +54,13 @@ cd -
 cd models/AFQMC
 paddle2onnx --model_dir ./  --model_filename infer.pdmodel --params_filename infer.pdiparams --save_file model.onnx
 cd -
-# models/save_ppminilm_afqmc_new_calib
-cd models/save_ppminilm_afqmc_new_calib
-paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+# models/afqmc
+cd models/afqmc
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  
 cd -
-# models/x2paddle_cola_new_calib
-cd models/x2paddle_cola_new_calib
-paddle2onnx --model_dir ./  --model_filename model.pdmodel --params_filename model.pdiparams --save_file model.onnx  --deploy_backend tensorrt
+# models/x2paddle_cola
+cd models/x2paddle_cola
+paddle2onnx --model_dir ./  --model_filename model.pdmodel --params_filename model.pdiparams --save_file model.onnx
 cd -
 
 
