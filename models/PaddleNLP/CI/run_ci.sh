@@ -98,7 +98,7 @@ elif [[ $1=~ "pipelines" ]];then
 elif [[ $1=~ "ppdiffusers" ]];then
     build_dev_path=${nlp_dir}/PaddleNLP_dev/$1
     nlp_build ${build_dev_path}
-    pipe_version=$(python -c "from pipelines import __version__; print(__version__)")
+    pipe_version=$(python -c "from ppdiffusers import __version__; print(__version__)")
     mv $build_dev_path/dist/pa****.whl ${PPNLP_HOME}/upload/ppdiffusers-{ppdi_version}.latest-py3-none-any.whl
 fi
 cd ${PPNLP_HOME}
