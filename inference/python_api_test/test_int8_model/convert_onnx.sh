@@ -56,7 +56,7 @@ paddle2onnx --model_dir ./  --model_filename infer.pdmodel --params_filename inf
 cd -
 # models/afqmc
 cd models/afqmc
-paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx  
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx
 cd -
 # models/x2paddle_cola
 cd models/x2paddle_cola
