@@ -57,3 +57,15 @@ $PYTHON test_segmentation_infer.py --model_path=models/unet_fp32/unet_fp32.onnx 
 # Deeplabv3-ResNet50 trt fp16
 echo "[Benchmark] Run Deeplabv3-ResNet50 trt fp16"
 $PYTHON test_segmentation_infer.py --model_path=models/Deeplabv3_ResNet50_fp32/Deeplabv3_ResNet50_fp32.onnx --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --deploy_backend=tensorrt --precision=fp16 --model_name=Deeplabv3-ResNet50
+
+
+# nlp
+# models/AFQMC
+rm -rf model_fp16_model.trt
+$PYTHON test_nlp_infer.py --model_path=models/AFQMC/model.onnx  --deploy_backend=tensorrt --task_name='afqmc' --precision=fp16 --model_name=ERNIE_3.0-Medium
+# models/afqmc
+$PYTHON test_nlp_infer.py --model_path=models/afqmc/model.onnx --deploy_backend=tensorrt  --task_name='afqmc' --precision=fp16 --model_name=PP-MiniLM
+rm -rf model_fp16_model.trt
+# models/x2paddle_cola
+$PYTHON test_bert_infer.py --model_path=models/x2paddle_cola/model.onnx--deploy_backend=tensorrt --precision=fp16 --batch_size=1 --model_name=BERT_Base
+rm -rf model_fp16_model.trt
