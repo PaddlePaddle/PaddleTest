@@ -16,9 +16,9 @@ Metric:
 Eval:
   dataset:
     name: SimpleDataSet
-    data_dir: ./test_set
+    data_dir: ./test_set_det
     label_file_list:
-      - ./test_label.txt
+      - ./test_list_det.txt
     transforms:
     - DecodeImage:
         img_mode: BGR

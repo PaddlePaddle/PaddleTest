@@ -7,6 +7,9 @@ case:
         cmd : python -m paddle.distributed.launch tools/train.py
         params:
           - TrainReader.batch_size=1
+          - TrainDataset.image_dir='train2017'
+          - TrainDataset.anno_path='annotations/person_keypoints_train2017.json'
+          - TrainDataset.dataset_dir='dataset/coco'
       -
         name: single
         cmd : python tools/train.py

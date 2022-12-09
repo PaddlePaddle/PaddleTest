@@ -89,6 +89,9 @@ ln -s ${file_path}/data/mainbody dataset/mainbody
 if [ -d "dataset/visdrone" ];then rm -rf dataset/visdrone
 fi
 ln -s ${file_path}/data/visdrone dataset/visdrone
+if [ -d "dataset/SKU110K_fixed" ];then rm -rf dataset/SKU110K_fixed
+fi
+ln -s ${file_path}/data/SKU110K_fixed dataset/SKU110K_fixed
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
