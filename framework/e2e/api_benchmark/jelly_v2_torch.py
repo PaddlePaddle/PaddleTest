@@ -150,7 +150,7 @@ class Jelly_v2_torch(object):
                             self.data[key].append(torch.tensor(v).to("cuda"))
                         else:
                             self.data[key].append(v)
-                    if self.enable_backward and isinstance(v, (np.generic, np.ndarray)):
+                    if isinstance(v, (np.generic, np.ndarray)):
                         self.data[key][i].requires_grad = True
             else:
                 if self.places == "cpu":
@@ -163,7 +163,7 @@ class Jelly_v2_torch(object):
                         self.data[key] = torch.tensor(value).to("cuda")
                     else:
                         self.data[key] = value
-                if self.enable_backward and isinstance(value, (np.generic, np.ndarray)):
+                if isinstance(value, (np.generic, np.ndarray)):
                     self.data[key].requires_grad = True
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
