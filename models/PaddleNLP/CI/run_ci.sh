@@ -78,7 +78,7 @@ nlp_build (){
 # upload paddlenlp  whl
 upload(){
 install_paddle
-if [[ $1=~ "paddlenlp" ]];then
+if [ $1=~ "paddlenlp" ];then
     # build develop paddlenlp
     build_dev_path=${nlp_dir}/PaddleNLP_dev
     nlp_build ${build_dev_path}
@@ -90,12 +90,12 @@ if [[ $1=~ "paddlenlp" ]];then
     cd $build_pr_path/dist
     mv $build_pr_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-${nlp_version}.{${GIT_PR_ID}}-py3-none-any.whl
     
-elif [[ $1=~ "pipelines" ]];then
+elif [ $1=~ "pipelines" ];then
     build_dev_path=${nlp_dir}/PaddleNLP_dev/$1
     nlp_build ${build_dev_path}
     pipe_version=$(python -c "from pipelines import __version__; print(__version__)")
     mv $build_dev_path/dist/p****.whl ${PPNLP_HOME}/upload/pipelines-{pipe_version}.latest-py3-none-any.whl
-elif [[ $1=~ "ppdiffusers" ]];then
+elif [ $1=~ "ppdiffusers" ];then
     build_dev_path=${nlp_dir}/PaddleNLP_dev/$1
     nlp_build ${build_dev_path}
     pipe_version=$(python -c "from ppdiffusers import __version__; print(__version__)")
