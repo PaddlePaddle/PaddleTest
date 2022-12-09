@@ -102,7 +102,7 @@ elif [[ $1=~ "ppdiffusers" ]];then
     mv $build_dev_path/dist/pa****.whl ${PPNLP_HOME}/upload/ppdiffusers-{ppdi_version}.latest-py3-none-any.whl
 fi
 cd ${PPNLP_HOME}
-python upload.py ${PPNLP_HOME}/upload
+python upload.py ${PPNLP_HOME}/upload 'paddlenlp/wheels'
 rm -rf upload/*
 }
 ####################################
