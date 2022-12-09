@@ -67,5 +67,5 @@ $PYTHON test_nlp_infer.py --model_path=models/AFQMC/model.onnx  --deploy_backend
 $PYTHON test_nlp_infer.py --model_path=models/afqmc/model.onnx --deploy_backend=tensorrt  --task_name='afqmc' --precision=fp16 --model_name=PP-MiniLM
 rm -rf model_fp16_model.trt
 # models/x2paddle_cola
-$PYTHON test_bert_infer.py --model_path=models/x2paddle_cola/model.onnx--deploy_backend=tensorrt --precision=fp16 --batch_size=1 --model_name=BERT_Base
+$PYTHON test_bert_infer.py --model_path=models/x2paddle_cola/model.onnx --deploy_backend=tensorrt --precision=fp16 --batch_size=1 --model_name=BERT_Base
 rm -rf model_fp16_model.trt
