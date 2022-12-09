@@ -167,6 +167,14 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
             "unit": "ms",
             "batch_size": FLAGS.batch_size,
         },
+        "cpu_mem": {
+            "value": cpu_mems / sample_nums,
+            "unit": "MB",
+        },
+        "gpu_mem": {
+            "value": gpu_mems / sample_nums,
+            "unit": "MB",
+        },
     }
     print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
