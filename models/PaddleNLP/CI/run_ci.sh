@@ -107,7 +107,7 @@ upload (){
 for line in `cat model_list.txt`;do
     all_example_dict[${#all_example_dict[*]}]=$line
 done
-
+cd ${nlp_dir}
 get_diff_TO_P0case(){
 for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     arr_file_name=(${file_name//// })
