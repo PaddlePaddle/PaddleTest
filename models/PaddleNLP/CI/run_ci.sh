@@ -93,6 +93,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     esac
     python -c 'import sys; print(sys.version_info[:])'
     echo "python="$1
+    cmake --version
     ####################################
     # set paddle env
     set -x
