@@ -107,19 +107,6 @@ rm -rf upload/*
 }
 ####################################
 # PaddleNLP repo already clone!
-# upload paddlenlp-latest-py3-none-any.whl
-cp -r PaddleNLP/ PaddleNLP_dev
-cd ${nlp_dir}
-mv ../PaddleTest/models/PaddleNLP/CI/* ./
-python get_model_list.py
-git fetch origin pull/${GIT_PR_ID}/head
-git checkout -b origin_pr FETCH_HEAD
-git remote add upstream https://github.com/PaddlePaddle/PaddleNLP.git
-git fetch upstream
-git checkout -b test_pr upstream/develop
-git merge --no-edit origin_pr
-git log --pretty=oneline -10
-####################################
 # get diff case
 for line in `cat model_list.txt`;do
     all_example_dict[${#all_example_dict[*]}]=$line

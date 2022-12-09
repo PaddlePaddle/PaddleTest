@@ -779,36 +779,6 @@ ${nlp_dir}/paddlenlp/ops/build_tr_cc/bin/./transformer_e2e -batch_size 8 -gpu_id
 print_info $? transformer_deploy_C_FT
 }
 
-pet (){
-cd ${nlp_dir}/examples/few_shot/pet/
-export CUDA_VISIBLE_DEVICES=${cudaid1}
-#chid_train
-time (
-python  -u -m paddle.distributed.launch  \
-    pet.py \
-    --task_name "chid" \
-    --device gpu \
-    --pattern_id 0 \
-    --save_dir ./chid \
-    --index 0 \
-    --batch_size 8 \
-    --learning_rate 5E-5 \
-    --epochs 1 \
-    --max_seq_length 512 \
-    --language_model "ernie-1.0"  >${log_path}/pet_chid_train) >>${log_path}/pet_chid_train 2>&1
-print_info $? pet_chid_train
-#chid_predict
-time (
-python -u -m paddle.distributed.launch  predict.py \
-        --task_name "chid" \
-        --device gpu \
-        --init_from_ckpt "./chid/model_6/model_state.pdparams" \
-        --output_dir "./chid/output" \
-        --batch_size 32 \
-        --max_seq_length 512 >${log_path}/pet_chid_predict) >>${log_path}/pet_chid_predict 2>&1
-print_info $? pet_chid_predict
-}
-
 simbert(){
 cd ${nlp_dir}/examples/text_matching/simbert/
 cp -r /ssd1/paddlenlp/download/simbert/dev.tsv ./
@@ -1033,7 +1003,7 @@ for key in $(echo ${!all_P0case_dic[*]});do
 done
 if [[ ${Testcase} == 'null' ]];then
     P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie-1.0 xlnet ofa  squad tinybert lexical_analysis seq2seq \
-     word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
+     word_embedding ernie-ctm distilbert stacl transformer simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
     nptag ernie-m clue taskflow)
 else
     P0case_list=${Testcase}
