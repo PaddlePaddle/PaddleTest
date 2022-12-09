@@ -159,7 +159,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             APIcase_list[${#APIcase_list[*]}]=${dir2}
         fi
     elif [[ ${dir1} =~ "fast_tokenizer" ]] || [[ ${dir1} =~ "faster_generation" ]] then; #影响编包
-        Build_list[${dir1}]=paddlenlp #影响编包
+        Build_list[${dir1}]="paddlenlp" #影响编包
     elif [[ ${dir1} =~ "pipelines" ]];then #影响编包
         Build_list[${dir1}]=${dir1}
 
