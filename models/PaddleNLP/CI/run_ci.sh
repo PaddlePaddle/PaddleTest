@@ -87,7 +87,7 @@ upload (){
         build_pr_path=${nlp_dir}
         nlp_build ${build_pr_path}
         cd $build_pr_path/dist
-        mv $build_pr_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-{${GIT_PR_ID}}-py3-none-any.whl
+        mv $build_pr_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-${GIT_PR_ID}-py3-none-any.whl
     elif [ $1 == "pipelines" ];then
         echo -e "\033[35m ---- build latest pipelines  \033[0m"
         build_dev_path=/workspace/PaddleNLP_dev/$1
