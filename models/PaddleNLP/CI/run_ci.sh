@@ -116,7 +116,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     dir3=${arr_file_name[2]}
     dir4=${arr_file_name[3]}
     echo "file_name:"${file_name}, "dir1:"${dir1}, "dir2:"${dir2},"dir3:"${dir3},".xx:" ${file_name##*.}
-    if [ ! -f ${file_name} ];then #针对pr删掉文件
+    if [ ! -f ${file_name} ];then # 针对pr删掉文件
         continue
     elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
@@ -126,7 +126,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         elif [[ ${dir2} =~ "transformers" ]];then
             P0case_list[${#P0case_list[*]}]=transformers
         fi
-        Build_list[${dir1}]="paddlenlp"#影响编包
+        Build_list[${dir1}]="paddlenlp" # 影响编包
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
             P0case_list[${#P0case_list[*]}]=${dir3}
@@ -140,11 +140,11 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
             P0case_list[${#P0case_list[*]}]=${dir2}
-        elif [[ !(${all_example_dict[*]} =~ ${dir2}) ]];then #新增规范模型
+        elif [[ !(${all_example_dict[*]} =~ ${dir2}) ]];then #新 增规范模型
             P0case_list[${#P0case_list[*]}]=${dir2}
             Normal_dic[${dir2}]="${dir1}/${dir2}/"
         fi
-    elif [[ ${dir1} =~ "tests" ]];then #新增单测
+    elif [[ ${dir1} =~ "tests" ]];then # 新增单测
         if [[ ${dir2} =~ "transformers" ]] ;then
             if [[ ${dir3##*.} == "py" ]];then
                 continue
@@ -155,10 +155,10 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             APIcase_list[${#APIcase_list[*]}]=${dir2}
         fi
     elif [[ ${dir1} =~ "fast_tokenizer" ]] || [[ ${dir1} =~ "faster_generation" ]] ;then #影响编包
-        Build_list[${dir1}]="paddlenlp" #影响编包
-    elif [[ ${dir1} =~ "pipelines" ]];then #影响编包
+        Build_list[${dir1}]="paddlenlp" # 影响编包
+    elif [[ ${dir1} =~ "pipelines" ]];then # 影响编包
         Build_list[${dir1}]=${dir1}
-    elif [[ ${dir1} =~ "ppdiffusers" ]];then #影响编包
+    elif [[ ${dir1} =~ "ppdiffusers" ]];then # 影响编包
         Build_list[${dir1}]=${dir1}
     else
         continue
