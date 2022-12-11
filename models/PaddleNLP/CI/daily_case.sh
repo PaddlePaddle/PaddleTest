@@ -1028,7 +1028,7 @@ cd ${nlp_dir}/
 cp -r /ssd1/paddlenlp/bos/* ./
 tar -zcvf logs.tar logs/
 mkdir upload && mv logs.tar upload
-python upload.py upload 'paddle-qa'
+python upload.py upload 'paddle-qa/paddlenlp'
 cd logs
 FF=`ls *_FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
