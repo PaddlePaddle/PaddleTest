@@ -173,7 +173,7 @@ APIcase_list=($(awk -v RS=' ' '!a[$1]++' <<< ${APIcase_list[*]}))
 if [[ ${#Build_list[*]} -ne 0 ]];then
     echo -e "\033[32m start build ${Build_list[*]} whl \033[0m"
     install_paddle
-    python -m pip install -U paddlenlp
+    python -m pip install --force-reinstall paddlenlp
     for build_pkg in ${Build_list[*]};do
         upload ${build_pkg}
     done
