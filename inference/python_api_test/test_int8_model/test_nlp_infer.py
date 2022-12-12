@@ -30,7 +30,7 @@ from paddlenlp.transformers import AutoModelForTokenClassification, AutoTokenize
 from paddlenlp.datasets import load_dataset
 from paddlenlp.data import Stack, Tuple, Pad
 from paddlenlp.metrics import Mcc, PearsonAndSpearman
-from backend import PaddleInferenceEngine, TensorRTEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
 
 METRIC_CLASSES = {
     "cola": Mcc,
@@ -302,7 +302,17 @@ def main(FLAGS):
             calibration_cache_file=FLAGS.calibration_file,
             verbose=False,
         )
-
+    elif FLAGS.deploy_backend == "onnxruntime":
+        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
+        token_dir = os.path.dirname(FLAGS.model_path)
+        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
+        predictor = ONNXRuntimeEngine(
+            onnx_model_file=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            device=FLAGS.device,
+        )
     dev_ds = load_dataset("clue", task_name, splits="dev")
     tokenizer = AutoTokenizer.from_pretrained(token_dir)
     batchify_fn = lambda samples, fn=Tuple(

@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-
+import os
 import numpy as np
 import onnxruntime as ort
 
@@ -64,6 +64,9 @@ class ONNXRuntimeEngine(object):
                             "trt_min_subgraph_size": min_subgraph_size,
                             "trt_fp16_enable": True if precision == "fp16" else False,
                             "trt_int8_enable": True if precision == "int8" else False,
+                            # below two files are used for ort-trt int8!
+                            "trt_int8_calibration_table_name": os.path.dirname(onnx_model_file) + "/calibration.cache",
+                            "trt_int8_use_native_calibration_table": True,
                         },
                     ),
                     (

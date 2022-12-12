@@ -24,7 +24,7 @@ import yaml
 
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
 from paddle.io import DataLoader
 from utils.imagenet_reader import ImageNetDataset
 
@@ -239,6 +239,17 @@ def main(FLAGS):
                 )
             ),
             verbose=False,
+        )
+    elif FLAGS.deploy_backend == "onnxruntime":
+        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
+        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
+        print(engine_file)
+        predictor = ONNXRuntimeEngine(
+            onnx_model_file=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            device=FLAGS.device,
         )
     eval(predictor, FLAGS)
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
