@@ -68,6 +68,6 @@ with open(filedir, "a") as f:
 #add_seed(filedir, "model.train(", "result = np.sum(losshistory.loss_train, axis=1)\n")
 #add_seed(filedir, "result = np.sum(losshistory.loss_train, axis=1)", "result = result[:200]\n")
 #add_seed(filedir, "result = result[:200]", "np.save('loss.npy',result)\n")
-#add_seed(filedir, "np.save('loss.npy',result)", "np.save('metric.npy',losshistory.metrics_test[-1])\n")
+#add_seed(filedir, "np.save('loss.npy',result)", "np.save('metric.npy',model.train_state.best_metric)\n")
 
 print("Successfully replaced the backend as paddle!")
