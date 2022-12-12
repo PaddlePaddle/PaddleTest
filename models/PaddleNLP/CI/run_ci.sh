@@ -189,7 +189,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     cd ${nlp_dir}
     if [ ! -f './dist/p****.whl' ];then
         install_paddle
-        python -m pip install -U paddlenlp
+        python -m pip install --upgrade --force --ignore-installed paddlenlp
     else
         python -m pip --force-reinstall  dist/p****.whl
     fi

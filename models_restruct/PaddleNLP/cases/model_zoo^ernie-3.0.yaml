@@ -1,0 +1,84 @@
+case:
+  linux:
+    train:
+      -
+        name: seq_cls
+        path: model_zoo/ernie-3.0/
+        cmd: python run_seq_cls.py
+        params:
+          - --task_name tnews \
+          - --model_name_or_path ernie-3.0-medium-zh \
+          - --do_train \
+          - --max_steps 2 \
+          - --save_steps 2
+        result:
+          loss:
+            base: 2.797840
+            threshold: 0.01
+            evaluation: "="
+       -
+        name: token_cls
+        path: model_zoo/ernie-3.0/
+        cmd: python run_token_cls.py 
+        params:
+          - --task_name msra_ner  \
+          -  --model_name_or_path ernie-3.0-medium-zh \
+          -  --do_train \
+          - --num_train_epochs 3 \
+          - --learning_rate 0.00005 \
+          - --save_steps 100 \
+          - --batch_size 32 \
+          - --max_seq_length 128 \
+          - --max_steps 2 \
+          -  --save_steps 2
+        result:
+          loss:
+            base: 0.498312
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: qa
+        path: model_zoo/ernie-3.0/
+        cmd: python run_qa.py
+        params:
+          - --model_name_or_path ernie-3.0-medium-zh \
+          - --do_train \
+          - --learning_rate 0.00003 \
+          - --num_train_epochs 8 \
+          - --batch_size 24 \
+          - --max_seq_length 512 \
+          - --max_steps 5 
+        result:
+          loss:
+            base: 3.095137
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: compress_seq_cls
+        path: model_zoo/ernie-3.0/
+        cmd: python -m paddle.distributed.launch run_classifier.py
+        params:
+          - --task_type cross-lingual-transfer
+          - --model_name_or_path ernie-m-base
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: compress_qa
+        path: model_zoo/ernie-3.0/
+        cmd: python -m paddle.distributed.launch run_classifier.py
+        params:
+          - --task_type cross-lingual-transfer
+          - --model_name_or_path ernie-m-base
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
