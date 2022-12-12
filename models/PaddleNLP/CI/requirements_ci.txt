@@ -22,9 +22,3 @@ yacs
 coverage
 h5py
 pytest
-parameterized
-<<<<<<< HEAD
-cma
-=======
-cma
->>>>>>> c220ad03... fix cma test=model
