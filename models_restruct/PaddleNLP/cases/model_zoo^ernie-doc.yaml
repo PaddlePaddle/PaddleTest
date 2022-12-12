@@ -52,7 +52,7 @@ case:
           - --output_dir c3 
         result:
           loss:
-            base: 0.995620
+            base: 1.456469
             threshold: 0.01
             evaluation: "="
      -

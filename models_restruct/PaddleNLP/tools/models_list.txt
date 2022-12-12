@@ -1,2 +1,2 @@
 model_zoo^ernie-m.yaml
-model_zoo^ernie-3.0.yaml
+model_zoo^ernie-health-cblue.yaml

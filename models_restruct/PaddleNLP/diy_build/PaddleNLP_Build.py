@@ -57,7 +57,7 @@ class PaddleNLP_Build(Model_Build):
         安装依赖包
         """
         path_now = os.getcwd()
-        os.system("python -m pip install paddleslim -y")
+        os.system("python -m pip install -r requirements_nlp.txt")
         os.system("python -m pip install nltk")
         nltk.download('punkt')
         os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
