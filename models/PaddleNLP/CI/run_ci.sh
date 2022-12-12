@@ -180,13 +180,13 @@ if [[ ${#Build_list[*]} -ne 0 ]];then
     cd ${PPNLP_HOME}
     python upload.py ${PPNLP_HOME}/upload 'paddlenlp/wheels'
     rm -rf upload/*
-else 
+else
    echo -e "\033[32m Don't need build whl  \033[0m"
 fi
 ###################################
 if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     # Install paddlenlp
-    cd ${nlp_dir} 
+    cd ${nlp_dir}
     if [ ! -f './dist/p****.whl' ];then
         install_paddle
         python -m pip install -U paddlenlp
