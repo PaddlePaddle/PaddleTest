@@ -52,7 +52,7 @@ echo "python="${python}
 ####################################
 # Insatll paddlepaddle-gpu
 install_paddle(){
-    echo -e "\033[35m ---- build and install paddlepaddle-gpu  \033[0m"
+    echo -e "\033[35m ---- Install paddlepaddle-gpu  \033[0m"
     python -m pip install --ignore-installed --upgrade pip
     python -m pip install -r requirements_ci.txt
     python -m pip install ${paddle};
@@ -79,24 +79,24 @@ upload (){
     mkdir ${PPNLP_HOME}/upload
     if [ $1 == "paddlenlp" ];then
         echo -e "\033[35m ---- build latest paddlenlp  \033[0m"
-        build_dev_path=${nlp_dir}/PaddleNLP_dev
+        build_dev_path=/workspace/PaddleNLP_dev
         nlp_build ${build_dev_path}
         nlp_version=$(python -c "from paddlenlp import __version__; print(__version__)")
         mv $build_dev_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-latest-py3-none-any.whl
         echo -e "\033[35m ---- build ${GIT_PR_ID} paddlenlp  \033[0m"
-        build_pr_path=${nlp_dir}/PaddleNLP
+        build_pr_path=${nlp_dir}
         nlp_build ${build_pr_path}
         cd $build_pr_path/dist
-        mv $build_pr_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-{${GIT_PR_ID}}-py3-none-any.whl
+        mv $build_pr_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-${GIT_PR_ID}-py3-none-any.whl
     elif [ $1 == "pipelines" ];then
         echo -e "\033[35m ---- build latest pipelines  \033[0m"
-        build_dev_path=${nlp_dir}/PaddleNLP_dev/$1
+        build_dev_path=/workspace/PaddleNLP_dev/$1
         nlp_build ${build_dev_path}
         pipe_version=$(python -c "from pipelines import __version__; print(__version__)")
         mv $build_dev_path/dist/p****.whl ${PPNLP_HOME}/upload/pipelines-latest-py3-none-any.whl
     elif [ $1 == "ppdiffusers" ];then
         echo -e "\033[35m ---- build latest ppdiffusers  \033[0m"
-        build_dev_path=${nlp_dir}/PaddleNLP_dev/$1
+        build_dev_path=/workspace/PaddleNLP_dev/$1
         nlp_build ${build_dev_path}
         pipe_version=$(python -c "from ppdiffusers import __version__; print(__version__)")
         mv $build_dev_path/dist/pa****.whl ${PPNLP_HOME}/upload/ppdiffusers-latest-py3-none-any.whl
@@ -116,7 +116,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     dir3=${arr_file_name[2]}
     dir4=${arr_file_name[3]}
     echo "file_name:"${file_name}, "dir1:"${dir1}, "dir2:"${dir2},"dir3:"${dir3},".xx:" ${file_name##*.}
-    if [ ! -f ${file_name} ];then #针对pr删掉文件
+    if [ ! -f ${file_name} ];then # 针对pr删掉文件
         continue
     elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
@@ -126,7 +126,7 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         elif [[ ${dir2} =~ "transformers" ]];then
             P0case_list[${#P0case_list[*]}]=transformers
         fi
-        Build_list[${dir1}]="paddlenlp"#影响编包
+        Build_list[${dir1}]="paddlenlp" # 影响编包
     elif [[ ${dir1} =~ "examples" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir3} ]];then
             P0case_list[${#P0case_list[*]}]=${dir3}
@@ -140,11 +140,11 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     elif [[ ${dir1} =~ "model_zoo" ]];then # 模型升级
         if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
             P0case_list[${#P0case_list[*]}]=${dir2}
-        elif [[ !(${all_example_dict[*]} =~ ${dir2}) ]];then #新增规范模型
+        elif [[ !(${all_example_dict[*]} =~ ${dir2}) ]];then #新 增规范模型
             P0case_list[${#P0case_list[*]}]=${dir2}
             Normal_dic[${dir2}]="${dir1}/${dir2}/"
         fi
-    elif [[ ${dir1} =~ "tests" ]];then #新增单测
+    elif [[ ${dir1} =~ "tests" ]];then # 新增单测
         if [[ ${dir2} =~ "transformers" ]] ;then
             if [[ ${dir3##*.} == "py" ]];then
                 continue
@@ -155,10 +155,10 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             APIcase_list[${#APIcase_list[*]}]=${dir2}
         fi
     elif [[ ${dir1} =~ "fast_tokenizer" ]] || [[ ${dir1} =~ "faster_generation" ]] ;then #影响编包
-        Build_list[${dir1}]="paddlenlp" #影响编包
-    elif [[ ${dir1} =~ "pipelines" ]];then #影响编包
+        Build_list[${dir1}]="paddlenlp" # 影响编包
+    elif [[ ${dir1} =~ "pipelines" ]];then # 影响编包
         Build_list[${dir1}]=${dir1}
-    elif [[ ${dir1} =~ "ppdiffusers" ]];then #影响编包
+    elif [[ ${dir1} =~ "ppdiffusers" ]];then # 影响编包
         Build_list[${dir1}]=${dir1}
     else
         continue
