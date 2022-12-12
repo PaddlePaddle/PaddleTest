@@ -187,7 +187,7 @@ def test_summarizer():
 
 
 def test_uiex():
-    """ UIE-X"""
+    """ test UIE-X """
     path = "./cases/"
     if not os.path.exists(path):
         os.mkdir(path)
