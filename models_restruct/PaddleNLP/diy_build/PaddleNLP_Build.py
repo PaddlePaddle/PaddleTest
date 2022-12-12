@@ -10,6 +10,7 @@ import argparse
 import numpy as np
 import yaml
 import wget
+import nltk
 from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
@@ -57,6 +58,8 @@ class PaddleNLP_Build(Model_Build):
         """
         path_now = os.getcwd()
         os.system("python -m pip install paddleslim -y")
+        os.system("python -m pip install nltk")
+        nltk.download('punkt')
         os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
         cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")
         os.chdir(path_now)
