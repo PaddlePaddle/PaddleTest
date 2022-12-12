@@ -87,7 +87,7 @@ def test_trt_fp32_more_bz():
             min_subgraph_size=40,
             precision="trt_fp32",
             max_batch_size=batch_size,
-            dynamic=True
+            dynamic=True,
         )
 
         del test_suite2  # destroy class to save memory
@@ -125,7 +125,6 @@ def test_jetson_trt_fp32_more_bz():
 
         del test_suite_c  # destroy class to save memory
 
-
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
@@ -139,7 +138,7 @@ def test_jetson_trt_fp32_more_bz():
             min_subgraph_size=10,
             precision="trt_fp32",
             max_batch_size=batch_size,
-            dynamic=True
+            dynamic=True,
         )
 
         del test_suite2  # destroy class to save memory
