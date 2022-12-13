@@ -50,7 +50,7 @@ for exec_file in `ls`;do
         print_info $? ${example}_predict
     # CUSTOM
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "py" ]];then
-        python ${exec_file} >${log_path}/${example}_${exec_file%%.*} >>${log_path}/${example}_${exec_file%%.*} 2>&1
+        python --save_steps ${save_steps} --max_steps ${max_steps}  ${exec_file} >${log_path}/${example}_${exec_file%%.*} >>${log_path}/${example}_${exec_file%%.*} 2>&1
         print_info $? ${example}_${exec_file%%.*}
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "sh" ]];then
         bash ${exec_file}  >${log_path}/${example}_${exec_file%%.*} >>${log_path}/${example}_${exec_file%%.*} 2>&1
