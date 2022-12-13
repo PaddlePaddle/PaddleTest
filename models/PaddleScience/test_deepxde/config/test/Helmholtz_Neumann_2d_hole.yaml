@@ -1,5 +1,0 @@
-- test: 0
-  Dir: '../../deepxde/examples/pinn_forward/Helmholtz_Neumann_2d_hole.py'
-  Post-processing:
-    solution_metric_dir: "../standard_data/Helmholtz_Neumann_2d_hole_metric.npy"
-    solution_loss_dir: "../standard_data/Helmholtz_Neumann_2d_hole_loss.npy"

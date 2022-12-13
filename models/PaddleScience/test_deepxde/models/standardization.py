@@ -63,7 +63,7 @@ add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")
 with open(filedir, "a") as f:
     f.write( "result = model.loss_list[:200]\n"
              "np.save('loss.npy',result)\n"
-             "np.save('metric.npy',losshistory.metrics_test[-1])\n"
+             "np.save('metric.npy',model.train_state.best_metrics)\n"
              )
 #add_seed(filedir, "model.train(", "result = np.sum(losshistory.loss_train, axis=1)\n")
 #add_seed(filedir, "result = np.sum(losshistory.loss_train, axis=1)", "result = result[:200]\n")
