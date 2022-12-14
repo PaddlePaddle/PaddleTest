@@ -88,6 +88,7 @@ def test_trt_fp32_more_bz():
             precision="trt_fp32",
             max_batch_size=batch_size,
             dynamic=True,
+            shape_range_file="./swin_transformer/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory
@@ -139,6 +140,7 @@ def test_jetson_trt_fp32_more_bz():
             precision="trt_fp32",
             max_batch_size=batch_size,
             dynamic=True,
+            shape_range_file="./swin_transformer/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory
