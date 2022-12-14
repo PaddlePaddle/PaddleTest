@@ -24,3 +24,4 @@ pytest
 parameterized
 scikit-learn
 cma
+paddleocr
