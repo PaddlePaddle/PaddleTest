@@ -56,10 +56,34 @@ case:
       -
         name: compress_seq_cls
         path: model_zoo/ernie-3.0/
-        cmd: python -m paddle.distributed.launch run_classifier.py
+        cmd: python compress_seq_cls.py 
         params:
-          - --task_type cross-lingual-transfer
-          - --model_name_or_path ernie-m-base
+          -  --dataset "clue tnews"
+          -  --model_name_or_path ./best_clue_model
+          -  --output_dir ./ 
+          -  --max_steps 2
+          -  --save_steps 2
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: compress_token_cls
+        path: model_zoo/ernie-3.0/
+        cmd: python compress_token_cls.py
+        params:
+          - --dataset "msra_ner"
+          - --model_name_or_path ./best_msra_ner_model
+          - --output_dir ./
+          -  --max_seq_length 128
+          -  --per_device_train_batch_size 32
+          -  --per_device_eval_batch_size 32
+          -  --learning_rate 0.00005
+          -  --remove_unused_columns False
+          -  --num_train_epochs 3
+          -  --max_steps 2
+          -  --save_steps 2
         result:
           loss:
             base: 0.995620
@@ -68,10 +92,19 @@ case:
       -
         name: compress_qa
         path: model_zoo/ernie-3.0/
-        cmd: python -m paddle.distributed.launch run_classifier.py
+        cmd: python compress_qa.py
         params:
-          - --task_type cross-lingual-transfer
-          - --model_name_or_path ernie-m-base
+          - --dataset "clue cmrc2018"
+          - --model_name_or_path ./best_cmrc_model
+          - --output_dir ./
+          - --max_answer_length 50
+          - --max_seq_length 512
+          - --learning_rate 0.00003
+          - --num_train_epochs 8
+          - --per_device_train_batch_size 24
+          - --per_device_eval_batch_size 24
+          - --max_steps 2
+          - --save_steps 2
         result:
           loss:
             base: 0.995620
