@@ -69,6 +69,7 @@ class Jelly_v2_torch(object):
         self.result["yaml"] = self.log_file_name
         # set Reload API DICT
         self.reload = OPERATOR_RELOAD
+        self.api_str = api
         # trans "str api" to obj
         if api not in self.reload.keys():
             self.api = eval(api)
@@ -151,7 +152,19 @@ class Jelly_v2_torch(object):
                         else:
                             self.data[key].append(v)
                     if isinstance(v, (np.generic, np.ndarray)):
-                        self.data[key][i].requires_grad = True
+                        # self.logger.info("v.dtype is : {}".format(v.dtype))
+                        if (
+                            self.api_str.endswith("_")
+                            or (v.dtype == np.int32)
+                            or (v.dtype == np.int64)
+                            or (v.dtype == bool)
+                        ):
+                            self.data[key][i].requires_grad = False
+                        else:
+                            self.data[key][i].requires_grad = True
+                        # self.logger.info(
+                        #     "self.data[key][i].requires_grad is : {}".format(self.data[key][i].requires_grad)
+                        # )
             else:
                 if self.places == "cpu":
                     if isinstance(value, (np.generic, np.ndarray)):
@@ -164,7 +177,17 @@ class Jelly_v2_torch(object):
                     else:
                         self.data[key] = value
                 if isinstance(value, (np.generic, np.ndarray)):
-                    self.data[key].requires_grad = True
+                    # self.logger.info("value.dtype is : {}".format(value.dtype))
+                    if (
+                        self.api_str.endswith("_")
+                        or (value.dtype == np.int32)
+                        or (value.dtype == np.int64)
+                        or (value.dtype == bool)
+                    ):
+                        self.data[key].requires_grad = False
+                    else:
+                        self.data[key].requires_grad = True
+                    # self.logger.info("self.data[key].requires_grad is : {}".format(self.data[key].requires_grad))
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 if self.places == "cpu":
