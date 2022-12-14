@@ -16,7 +16,7 @@ case:
             base: 2.797840
             threshold: 0.01
             evaluation: "="
-       -
+      -
         name: token_cls
         path: model_zoo/ernie-3.0/
         cmd: python run_token_cls.py 

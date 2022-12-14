@@ -59,7 +59,7 @@ case:
             base: 1.456469
             threshold: 0.01
             evaluation: "="
-     -
+      -
         name: semantic_matching
         path: model_zoo/ernie-doc/
         cmd: python -m paddle.distributed.launch run_semantic_matching.py 
@@ -79,7 +79,7 @@ case:
             threshold: 0.01
             evaluation: "="
 
-     -
+      -
         name: sequence_labeling
         path: model_zoo/ernie-doc/
         cmd: python -m paddle.distributed.launch run_sequence_labeling.py
@@ -96,7 +96,7 @@ case:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
-     -
+      -
         name: dureader_robust 
         path: model_zoo/ernie-doc/
         cmd: python run_mrc.py  
