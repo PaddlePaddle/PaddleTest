@@ -56,6 +56,8 @@ case:
             base: 2282887.188
             threshold: 1
             evaluation: "=" 
+    eval: skipped
+    infer: skipped
     export: 
       -
         name: classification
@@ -81,6 +83,8 @@ case:
             - --train_dataset CMeEE 
             - --params_path=./spo/model_2/ 
             - --output_path=./export
+    predict: skipped
+  
       
           
     
