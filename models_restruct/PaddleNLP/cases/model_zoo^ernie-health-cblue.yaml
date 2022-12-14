@@ -75,7 +75,7 @@ case:
           - --train_dataset CMeIE 
           - --params_path=./ner/model_2/ 
           - --output_path=./export
-    -
+      -
         name: spo
         path: model_zoo/ernie-health/cblue
         cmd: python export_model.py

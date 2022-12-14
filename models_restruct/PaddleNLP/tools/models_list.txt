@@ -3,3 +3,5 @@ model_zoo^ernie-health-cblue.yaml
 model_zoo^ernie-3.0.yaml
 model_zoo^ernie-doc.yaml
 model_zoo^tinybert.yaml
+application^information_extraction^text.yaml
+application^information_extraction^document.yaml
