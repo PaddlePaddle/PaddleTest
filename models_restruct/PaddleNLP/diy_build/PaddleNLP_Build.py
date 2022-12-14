@@ -57,6 +57,7 @@ class PaddleNLP_Build(Model_Build):
         安装依赖包
         """
         path_now = os.getcwd()
+        logger.info("workpath:{}".format(path_now))
         os.system("python -m pip install -r requirements_nlp.txt")
         os.system("python -m pip install nltk")
         nltk.download('punkt')
