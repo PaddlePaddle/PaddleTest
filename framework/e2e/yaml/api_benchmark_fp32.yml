@@ -7149,10 +7149,10 @@ expand_as_1:
         dtype: "float32"
         shape: [1, 10, 10, 10, 10]
         range: [ -1, 1]
-  pytorch:
-    api_name: "torch.Tensor.expand_as"
-    mapping:
-      ins: { x: input, y: other }
+#  pytorch:
+#    api_name: "torch.Tensor.expand_as"
+#    mapping:
+#      ins: { x: input, y: other }
 
 expand_as_2:
   desc: "根据 y 的形状扩展 x ，扩展后， x 的形状和 y 的形状相同"
@@ -7171,10 +7171,10 @@ expand_as_2:
         dtype: "float32"
         shape: [1, 10, 10, 100, 100]
         range: [ -1, 1]
-  pytorch:
-    api_name: "torch.Tensor.expand_as"
-    mapping:
-      ins: { x: input, y: other }
+#  pytorch:
+#    api_name: "torch.Tensor.expand_as"
+#    mapping:
+#      ins: { x: input, y: other }
 
 isfinite_0:
   desc: "返回输入 Tensor 的每一个值是否为有限值（既非 +/-INF 也非 +/-NaN ）"
@@ -8929,7 +8929,7 @@ expand_0:
     params:
       shape: [1, 1, 1, 1, 1]
 #  pytorch:
-#    api_name: "torch.expand"
+#    api_name: "torch.Tensor.expand"
 #    mapping:
 #      ins: { x: input, shape: size }
 
@@ -8946,10 +8946,10 @@ expand_1:
         range: [ -1, 1]
     params:
       shape: [1, 10, 10, 10, 10]
-  pytorch:
-    api_name: "torch.Tensor.expand"
-    mapping:
-      ins: { x: input, shape: size }
+#  pytorch:
+#    api_name: "torch.Tensor.expand"
+#    mapping:
+#      ins: { x: input, shape: size }
 
 expand_2:
   desc: "根据 shape 指定的形状扩展 x ，扩展后， x 的形状和 shape 指定的形状一致"
@@ -8964,10 +8964,10 @@ expand_2:
         range: [ -1, 1]
     params:
       shape: [1, 10, 10, 100, 100]
-  pytorch:
-    api_name: "torch.Tensor.expand"
-    mapping:
-      ins: { x: input, shape: size }
+#  pytorch:
+#    api_name: "torch.Tensor.expand"
+#    mapping:
+#      ins: { x: input, shape: size }
 
 min_0:
   desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
@@ -13743,7 +13743,7 @@ ChannelShuffle_0:
     mapping:
       ins: { data: input, groups: groups }
 
-Pad1D_1:
+Pad1D_0:
   desc: "1维pad填充"
   paddle:
     api_name: "paddle.nn.Pad1D"
@@ -15823,25 +15823,6 @@ KLDivLoss_0:
     api_name: "torch.nn.KLDivLoss"
     mapping:
       ins: { input: input, label: target, reduction: reduction }
-
-Linear_0:
-  desc: "线性变换层"
-  paddle:
-    api_name: "paddle.nn.Linear"
-    inputs:
-      data:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-    params:
-      in_features: 1
-      out_features: 1
-  pytorch:
-    api_name: "torch.nn.Linear"
-    mapping:
-      ins: { data: input, in_features: in_features, out_features: out_features }
 
 LogSigmoid_0:
   desc: "LogSigmoid激活层"
