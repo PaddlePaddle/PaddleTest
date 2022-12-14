@@ -6,8 +6,8 @@ rm -rf ce && mkdir ce;
 cd ce;
 
 ######################## 定义变量 ########################
-#AGILE_PIPELINE_NAME格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop      (默认使用ubuntu和用户保持一致)
-#AGILE_PIPELINE_NAME格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop-Centos  (额外ubuntu和编包保持一致)
+#AGILE_PIPELINE_NAME格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop      (默认使用 Ubuntu 和用户保持一致)
+#AGILE_PIPELINE_NAME格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop-Centos  (额外 Centos 和编包保持一致)
 #其它内容或者可能不一致的不要随意加 "-", 下面是按照 "-" split 按序号填入的
 
 #repo的名称
@@ -320,6 +320,7 @@ if [[ "${docker_flag}" == "" ]]; then
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
+        python -m pip install -U pip #升级pip
         python -m pip install -r requirements.txt #预先安装依赖包
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
     ' &
@@ -392,6 +393,7 @@ else
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
     git --version;
+    python -m pip install -U pip #升级pip
     python -m pip install -r requirements.txt #预先安装依赖包
     python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
 fi

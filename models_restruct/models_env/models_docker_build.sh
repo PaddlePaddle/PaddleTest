@@ -15,7 +15,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4.0-trt8.4.0.6-gcc82"
     else
-    
+
         Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6.2-cudnn8.4.0-gcc82"
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
@@ -28,5 +28,7 @@ else
     Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"
 fi
 
+echo "Image_version: ${Image_version}"
 touch models_docker
 echo "FROM ${Image_version}"> ./models_docker
+md5sum models_docker |cut -d' ' -f1|xargs echo md5=
