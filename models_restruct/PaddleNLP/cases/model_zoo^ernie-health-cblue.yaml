@@ -61,28 +61,28 @@ case:
     export: 
       -
         name: classification
-          path: model_zoo/ernie-health/cblue
-          cmd: python export_model.py
-          params:
-            - --train_dataset CHIP-CDN-2C 
-            - --params_path=./cls/model_2/ 
-            - --output_path=./export
+        path: model_zoo/ernie-health/cblue
+        cmd: python export_model.py
+        params:
+          - --train_dataset CHIP-CDN-2C 
+          - --params_path=./cls/model_2/ 
+          - --output_path=./export
       -
         name: ner
-          path: model_zoo/ernie-health/cblue
-          cmd: python export_model.py
-          params:
-            - --train_dataset CMeIE 
-            - --params_path=./ner/model_2/ 
-            - --output_path=./export
-      -
+        path: model_zoo/ernie-health/cblue
+        cmd: python export_model.py
+        params:
+          - --train_dataset CMeIE 
+          - --params_path=./ner/model_2/ 
+          - --output_path=./export
+    -
         name: spo
-          path: model_zoo/ernie-health/cblue
-          cmd: python export_model.py
-          params:
-            - --train_dataset CMeEE 
-            - --params_path=./spo/model_2/ 
-            - --output_path=./export
+        path: model_zoo/ernie-health/cblue
+        cmd: python export_model.py
+        params:
+          - --train_dataset CMeEE 
+          - --params_path=./spo/model_2/ 
+          - --output_path=./export
     predict: skipped
   
       
