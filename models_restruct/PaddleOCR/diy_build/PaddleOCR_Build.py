@@ -64,7 +64,7 @@ class PaddleOCR_Build(Model_Build):
 
             sysstr = platform.system()
             if sysstr == "Linux":
-                src_path = "/ssd2/ce_data/PaddleOCR"
+                src_path = "/ssd1/ce_data/PaddleOCR"
             elif sysstr == "Windows":
                 src_path = "F:\\ce_data\\PaddleOCR"
             elif sysstr == "Darwin":
@@ -74,10 +74,14 @@ class PaddleOCR_Build(Model_Build):
                 os.symlink(os.path.join(src_path, "train_data"), "train_data")
             if not os.path.exists("pretrain_models"):
                 os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
+            if not os.path.exists("train_data/ctw1500"):
+                self.download_data('https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/ctw1500.tar', 'train_data') 
 
             # configs/rec/rec_resnet_stn_bilstm_att.yml
             os.system("python -m pip install fasttext")
-
+            if not os.path.exists("cc.en.300.bin"):
+                self.download_data('https://paddle-qa.bj.bcebos.com/PaddleOCR/pretrain_models/cc.en.300.bin.tar', os.getcwd())
+            
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
                 if "rec" in filename:
@@ -85,6 +89,19 @@ class PaddleOCR_Build(Model_Build):
                     subprocess.getstatusoutput(cmd)
             os.chdir(path_now)
             print("build dataset!")
+
+
+    def download_data(self, data_link, destination):
+        """
+        下载数据集
+        """
+        tar_name = data_link.split("/")[-1]
+        logger.info("start download {}".format(tar_name))
+        wget.download(data_link, destination)
+        logger.info("start tar extract {}".format(tar_name))
+        tf = tarfile.open(os.path.join(destination, tar_name))
+        tf.extractall(destination)
+        os.remove(os.path.join(destination, tar_name))
 
     def build_env(self):
         """
