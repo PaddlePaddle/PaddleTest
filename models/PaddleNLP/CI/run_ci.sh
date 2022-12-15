@@ -194,7 +194,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
         python -m pip install --upgrade --force --ignore-installed paddlenlp
     else 
         echo "instal_nlp_latest"
-        python -m pip --force-reinstall  dist/p****.whl
+        python -m pip install  dist/p****.whl
     fi
     pip list
     echo -e "\033[35m =======CI Check P0case========= \033[0m"
