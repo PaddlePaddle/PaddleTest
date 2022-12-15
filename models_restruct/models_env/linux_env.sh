@@ -21,9 +21,11 @@ export dataset_target=${dataset_target:-None}   #如需软链数据基于reponam
 export set_cuda=${set_cuda:-} #预先不设置   #设置显卡号，流水线不用设置，后面有通过release_01后缀判断
 
 #额外的变量
-export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID   #效率云依赖参数
-export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID #效率云依赖参数
-export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID   #效率云依赖参数
+export AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID}   #效率云依赖参数
+export AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} #效率云依赖参数
+export AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID}   #效率云依赖参数
+export AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME}   #效率云依赖参数
+
 export docker_flag=${docker_flag:-} # 如果北京集群cce环境为False，自己的开发机不用设置
 export http_proxy=${http_proxy:-}   # 代理在效率云全局变量设置
 export no_proxy=${no_proxy:-}
@@ -105,7 +107,7 @@ if [[ "${docker_flag}" == "" ]]; then
 
     ####创建docker
     set +x;
-    docker_name="ce_${reponame}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
+    docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
     echo "begin kill docker"
@@ -129,6 +131,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID} \
         -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
         -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
+        -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
         -e Python_version=${Python_version} \
         -e models_list=${models_list} \
         -e models_file=${models_file} \
