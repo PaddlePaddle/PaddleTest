@@ -29,6 +29,41 @@ paddle2onnx --model_dir=models/unet_fp32 --model_filename=model --params_filenam
 # Deeplabv3-ResNet50
 python utils/paddle_infer_shape.py --model_dir=models/RES-paddle2-Deeplabv3-ResNet50/ --model_filename=model --params_filename=params --save_dir=models/Deeplabv3_ResNet50_fp32 --input_shape_dict="{'x':[1, 3, 1024, 2048]}"
 paddle2onnx --model_dir=models/Deeplabv3_ResNet50_fp32 --model_filename=model --params_filename=params --save_file=models/Deeplabv3_ResNet50_fp32/Deeplabv3_ResNet50_fp32.onnx
+# models/ResNet50_vd_infer/
+cd models/ResNet50_vd_infer/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx
+cd -
+# models/MobileNetV3_large_x1_0_infer/
+cd models/MobileNetV3_large_x1_0_infer/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx
+cd -
+# models/PPHGNet_tiny_infer/
+cd models/PPHGNet_tiny_infer/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx
+cd -
+# models/PPLCNetV2_base_infer/
+cd models/PPLCNetV2_base_infer/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx
+cd -
+# models/EfficientNetB0_infer/
+cd models/EfficientNetB0_infer/
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx
+cd -
+## nlp
+# models/AFQMC
+cd models/AFQMC
+paddle2onnx --model_dir ./  --model_filename infer.pdmodel --params_filename infer.pdiparams --save_file model.onnx
+cd -
+# models/afqmc
+cd models/afqmc
+paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file model.onnx
+cd -
+# models/x2paddle_cola
+cd models/x2paddle_cola
+paddle2onnx --model_dir ./  --model_filename model.pdmodel --params_filename model.pdiparams --save_file model.onnx
+cd -
+
+
 
 # ================================ INT8 ======================================
 # PPYOLOE+ no nms

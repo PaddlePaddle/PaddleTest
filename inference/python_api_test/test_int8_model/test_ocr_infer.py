@@ -27,8 +27,6 @@ from paddle.inference import create_predictor, PrecisionType
 from paddle.inference import Config as PredictConfig
 from backend import PaddleInferenceEngine, TensorRTEngine, Monitor
 
-import paddleocr as ppocr
-from ppocr.utils.utility import get_image_file_list, check_and_read
 from ppocr.data import create_operators, transform, build_dataloader
 from ppocr.postprocess import build_post_process
 from ppocr.utils.logging import get_logger
@@ -71,7 +69,7 @@ def get_output_tensors(args, predictor):
     return output_tensors
 
 
-def preprocess(image_file, det_limit_side_len, det_limit_type):
+def preprocess_det(image_file, det_limit_side_len, det_limit_type):
     """
     preprocess func
     """
@@ -100,6 +98,20 @@ def preprocess(image_file, det_limit_side_len, det_limit_type):
     return data
 
 
+def resize_norm_img_svtr(image_file, image_shape=[3, 48, 320]):
+    """
+    preprocess func
+    """
+    img = cv2.imread(image_file).astype("float32")
+    imgC, imgH, imgW = image_shape
+    resized_image = cv2.resize(img, (imgW, imgH), interpolation=cv2.INTER_LINEAR)
+    resized_image = resized_image.astype("float32")
+    resized_image = resized_image.transpose((2, 0, 1)) / 255
+    resized_image -= 0.5
+    resized_image /= 0.5
+    return resized_image
+
+
 def reader_wrapper(reader, input_field="image"):
     """
     reader wrapper func
@@ -118,10 +130,14 @@ def predict_image(predictor, rerun_flag=False):
     """
 
     # step1: load image and preprocess
-    data = preprocess(args.image_file, args.det_limit_side_len, args.det_limit_type)
-    img, shape_list = data
-    img = np.expand_dims(img, axis=0)
-    shape_list = np.expand_dims(shape_list, axis=0)
+    if args.model_type == "det":
+        data = preprocess_det(args.image_file, args.det_limit_side_len, args.det_limit_type)
+        img, shape_list = data
+        img = np.expand_dims(img, axis=0)
+        shape_list = np.expand_dims(shape_list, axis=0)
+    else:
+        img = resize_norm_img_svtr(args.image_file)
+        img = np.expand_dims(img, axis=0)
 
     predictor.prepare_data([img])
 
@@ -171,8 +187,6 @@ def predict_image(predictor, rerun_flag=False):
     )
 
 
-extra_input_models = ["SRN", "NRTR", "SAR", "SEED", "SVTR", "VisionLAN", "RobustScanner"]
-
 # eval is not correct
 def eval(args, predictor, rerun_flag=False):
     """
@@ -185,7 +199,6 @@ def eval(args, predictor, rerun_flag=False):
     post_process_class = build_post_process(config["PostProcess"])
     eval_class = build_metric(config["Metric"])
     model_type = config["Global"]["model_type"]
-    extra_input = True if config["Global"]["algorithm"] in extra_input_models else False
     repeats = len(val_loader)
 
     monitor = Monitor(0)
@@ -217,11 +230,11 @@ def eval(args, predictor, rerun_flag=False):
             for item in batch:
                 batch_numpy.append(np.array(item))
 
-            if args.model_type == "det":
+            if model_type == "det":
                 preds_map = {"maps": outputs[0]}
                 post_result = post_process_class(preds_map, batch_numpy[1])
                 eval_class(post_result, batch_numpy)
-            elif args.model_type == "rec":
+            elif model_type == "rec":
                 post_result = post_process_class(outputs[0], batch_numpy[1])
                 eval_class(post_result, batch_numpy)
 
@@ -263,8 +276,11 @@ def main(args):
 
     val_loader = None
     if args.image_file:
-        data = preprocess(args.image_file, args.det_limit_side_len, args.det_limit_type)
-        img, shape_list = data
+        if args.model_type == "det":
+            data = preprocess_det(args.image_file, args.det_limit_side_len, args.det_limit_type)
+            img, shape_list = data
+        else:
+            img = resize_norm_img_svtr(args.image_file)
         img = np.expand_dims(img, axis=0)
         val_loader = [[img]]
     else:
