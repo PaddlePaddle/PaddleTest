@@ -3,11 +3,9 @@ case:
     train:
       -
         name: classifier
-        path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch run_classifier.py 
+        path: model_zoo/ernie-doc
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir hyp run_classifier.py 
         params:
-          - --gpus '0,1'
-          - --log_dir hyp
           - --epochs 15 
           - --layerwise_decay 0.7 
           - --learning_rate 5e-5 
@@ -23,11 +21,9 @@ case:
             evaluation: "="
       -
         name: mrc
-        path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch run_mrc.py 
+        path: model_zoo/ernie-doc
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir cmrc2018 run_mrc.py 
         params:
-          - --gpus '0,1'
-          - --log_dir cmrc2018
           - --batch_size 4 
           - --layerwise_decay 0.8 
           - --dropout 0.2 
@@ -45,10 +41,8 @@ case:
       -
         name: mcq
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch run_mcq.py
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir c3 run_mcq.py
         params:
-          - --gpus '0,1'
-          - --log_dir c3  
           - --learning_rate 6.5e-5 
           - --epochs 1 
           - --save_steps 2 
@@ -62,10 +56,8 @@ case:
       -
         name: semantic_matching
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch run_semantic_matching.py 
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir cail run_semantic_matching.py 
         params:
-          - --gpus '0,1'
-          - --log_dir cail
           - --epochs 1 
           - --layerwise_decay 0.8 
           - --learning_rate 1.25e-5 
@@ -78,14 +70,11 @@ case:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
-
       -
         name: sequence_labeling
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch run_sequence_labeling.py
+        cmd: python -m paddle.distributed.launch --gpus '0,1'--log_dir msra run_sequence_labeling.py
         params:
-          - --gpus '0,1'
-          - --log_dir msra
           - --learning_rate 3e-5 
           - --epochs 1 
           - --save_steps 2 
@@ -99,9 +88,8 @@ case:
       -
         name: dureader_robust 
         path: model_zoo/ernie-doc/
-        cmd: python run_mrc.py  
+        cmd: python -m paddle.distributed.launch --gpus "0,1" --log_dir dureader_robust run_mrc.py 
         params:
-          - --gpus '0,1'
           - --model_name_or_path ernie-doc-base-zh  
           - --dataset dureader_robust  
           - --batch_size 8 
@@ -116,7 +104,6 @@ case:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
-      
     eval: skipped
     infer: skipped
     export: skipped
