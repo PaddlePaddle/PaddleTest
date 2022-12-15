@@ -686,8 +686,8 @@ print_info $? stacl_predict
 # 22 transformer
 transformer (){
 cd ${nlp_dir}/examples/machine_translation/transformer/
-cp -r /ssd1/paddlenlp/download/transformer/WMT14.en-de.partial.tar.gz  ./
-tar -zxf WMT14.en-de.partial.tar.gz
+wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/WMT14.en-de.partial.tar.gz
+tar -xzvf WMT14.en-de.partial.tar.gz
 time (
 sed -i "s/save_step: 10000/save_step: 1/g" configs/transformer.base.yaml
 sed -i "s/print_step: 100/print_step: 1/g" configs/transformer.base.yaml

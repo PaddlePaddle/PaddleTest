@@ -3,28 +3,28 @@ case:
     train:
       -
         name: prepare
-        path: model_zoo/bert
+        path: model_zoo/bert/static
         cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert.tar.gz && tar -xzvf bert.tar.gz 
       -
         name: pretrain
-        path: model_zoo/bert
+        path: model_zoo/bert/static
         cmd: python -m paddle.distributed.launch --gpus "0,1" run_pretrain.py
         params:
-          - --model_type bert
-          - --model_name_or_path bert-base-uncased 
-          - --max_predictions_per_seq 20 
-          - --batch_size 16  
-          - --learning_rate 1e-4 
-          - --weight_decay 1e-2 
-          - --adam_epsilon 1e-6 
-          - --warmup_steps 10000 
-          - --input_dir bert/ 
-          - --output_dir pretrained_models/ 
-          - --logging_steps 1 
-          - --save_steps 1 
-          - --max_steps 1 
-          - --device gpu 
-          - --use_amp False
+          - --model_type bert \
+          - --model_name_or_path bert-base-uncased \
+          - --max_predictions_per_seq 20 \
+          - --batch_size 32   \
+          - --learning_rate 1e-4 \
+          - --weight_decay 1e-2 \
+          - --adam_epsilon 1e-6 \
+          - --warmup_steps 10000 \
+          - --input_dir ./bert/ \
+          - --output_dir pretrained_models/ \
+          - --logging_steps 1 \
+          - --save_steps 2 \
+          - --max_steps 2 \
+          - --device gpu \
+          - --use_amp True 
         result:
           loss:
             base: 6.28685
@@ -32,7 +32,7 @@ case:
             evaluation: "="
       -
         name: fintune
-        path: model_zoo/bert
+        path: model_zoo/bert/static
         cmd: python -m paddle.distributed.launch --gpus "0,1" run_glue.py
         params:
           - --model_type bert
@@ -53,43 +53,16 @@ case:
             base: 1.456469
             threshold: 0.01
             evaluation: "="
-      -
-        name: static
-        path: model_zoo/bert
-        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir cail run_semantic_matching.py 
-        params:
-          - --epochs 1 
-          - --layerwise_decay 0.8 
-          - --learning_rate 1.25e-5 
-          - --batch_size 4  
-          - --save_steps 2
-          - --max_steps 2 
-          - --output_dir cail 
-        result:
-          loss:
-            base: 0.995620
-            threshold: 0.01
-            evaluation: "="
     eval: skipped
     infer: skipped
-    export: 
-      -
-        name: export
-        path: model_zoo/bert
-        cmd:  python -u ./export_model.py
-        params:
-          - --epochs 1 
-          - --model_type bert
-          - --model_path bert-base-uncased
-          - --output_path ./infer_model/model
     predict: 
       -
         name: predict
-        path: model_zoo/bert
+        path: model_zoo/bert/static
         cmd: python -u ./predict_glue.py
         params:
           - --task_name SST2
           - --model_type bert
-          - --model_path ./infer_model/model
+          - --model_path ./tmp/model_2/infer_model
           - --batch_size 32 
           - --max_seq_length 128
