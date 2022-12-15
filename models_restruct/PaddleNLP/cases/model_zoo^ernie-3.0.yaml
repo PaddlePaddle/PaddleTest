@@ -6,10 +6,10 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_seq_cls.py
         params:
-          - --task_name tnews \
-          - --model_name_or_path ernie-3.0-medium-zh \
-          - --do_train \
-          - --max_steps 2 \
+          - --task_name tnews
+          - --model_name_or_path ernie-3.0-medium-zh
+          - --do_train
+          - --max_steps 2
           - --save_steps 2
         result:
           loss:
@@ -21,15 +21,15 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_token_cls.py 
         params:
-          - --task_name msra_ner  \
-          -  --model_name_or_path ernie-3.0-medium-zh \
-          -  --do_train \
-          - --num_train_epochs 3 \
-          - --learning_rate 0.00005 \
-          - --save_steps 100 \
-          - --batch_size 32 \
-          - --max_seq_length 128 \
-          - --max_steps 2 \
+          - --task_name msra_ner
+          -  --model_name_or_path ernie-3.0-medium-zh
+          -  --do_train
+          - --num_train_epochs 3
+          - --learning_rate 0.00005
+          - --save_steps 100
+          - --batch_size 32
+          - --max_seq_length 128
+          - --max_steps 2
           -  --save_steps 2
         result:
           loss:
@@ -41,12 +41,12 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_qa.py
         params:
-          - --model_name_or_path ernie-3.0-medium-zh \
-          - --do_train \
-          - --learning_rate 0.00003 \
-          - --num_train_epochs 8 \
-          - --batch_size 24 \
-          - --max_seq_length 512 \
+          - --model_name_or_path ernie-3.0-medium-zh
+          - --do_train
+          - --learning_rate 0.00003
+          - --num_train_epochs 8
+          - --batch_size 24
+          - --max_seq_length 512
           - --max_steps 5 
         result:
           loss:
