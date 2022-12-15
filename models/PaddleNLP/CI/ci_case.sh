@@ -11,8 +11,9 @@ if [ $1 -ne 0 ];then
         echo -e "\033[31m ${log_path}/$2_FAIL \033[0m"
         cat ${log_path}/$2_FAIL.log
     fi
+elif [[ $2 =~ 'tests' ]];then
+    echo -e "\033[32m ${log_path}/$3_SUCCESS \033[0m"
 else
-    # mv ${log_path}/$2 ${log_path}/$2_SUCCESS.log
     echo -e "\033[32m ${log_path}/$2_SUCCESS \033[0m"
 fi
 }
@@ -575,17 +576,6 @@ python infer.py \
     --infer_output_file infer_output.txt  >${log_path}/seq2seq_depoly) >>${log_path}/seq2seq_deploy 2>&1
 print_info $? seq2seq_depoly
 }
-# # 17 pretrained_models
-# pretrained_models() {
-# export CUDA_VISIBLE_DEVICES=${cudaid2}
-# cd ${nlp_dir}/examples/text_classification/pretrained_models/
-# time (python -m paddle.distributed.launch train.py --device gpu  --epochs 2 --save_dir ./checkpoints >${log_path}/pretrained_models_train) >>${log_path}/pretrained_models_train 2>&1
-# print_info $? pretrained_models_train
-# time (python export_model.py --params_path=./checkpoints/model_100/model_state.pdparams --output_path=./output >${log_path}/pretrained_models_export) >>${log_path}/pretrained_models_export 2>&1
-# print_info $? pretrained_models_export
-# time (python deploy/python/predict.py --model_dir=./output >${log_path}/pretrained_models_deploy) >>${log_path}/pretrained_models_deploy 2>&1
-# print_info $? pretrained_models_deploy
-# }
 # 18 word_embedding 5min
 word_embedding(){
 export CUDA_VISIBLE_DEVICES=${cudaid1}
@@ -735,6 +725,10 @@ python ./deploy/python/inference.py --config ./configs/transformer.base.yaml \
     --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_infer) >>${log_path}/transformer_infer 2>&1
 print_info $? transformer_infer
 # # FT
+# cd ${nlp_dir}/
+# export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
+# wget -q https://paddle-inference-lib.bj.bcebos.com/2.4.0/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+# tar -zxf paddle_inference.tgz
 # export CC=/usr/local/gcc-8.2/bin/gcc
 # export CXX=/usr/local/gcc-8.2/bin/g++
 # cd ${nlp_dir}/paddlenlp/ops
@@ -748,13 +742,13 @@ print_info $? transformer_infer
 # #C++ op
 # mkdir build_tr_cc
 # cd build_tr_cc/
-# cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON
+# cmake .. -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/transformer_e2e.cc -DON_INFER=ON -DWITH_MKL=ON -DWITH_ONNXRUNTIME=ON
 # make -j >${log_path}/transformer_C_FT >>${log_path}/transformer_C_FT 2>&1
 # print_info $? transformer_C_FT
 # #deploy python
 # cd ${nlp_dir}/examples/machine_translation/transformer/faster_transformer/
 # sed -i "s#./trained_models/step_final/#./base_trained_models/step_final/#g" ../configs/transformer.base.yaml
-# wget https://paddlenlp.bj.bcebos.com/models/transformers/transformer/transformer-base-wmt_ende_bpe.tar.gz
+# wget -q https://paddlenlp.bj.bcebos.com/models/transformers/transformer/transformer-base-wmt_ende_bpe.tar.gz
 # tar -zxf transformer-base-wmt_ende_bpe.tar.gz
 # export FLAGS_fraction_of_gpu_memory_to_use=0.1
 # cp -rf ${nlp_dir}/paddlenlp/ops/build_tr_so/third-party/build/fastertransformer/bin/decoding_gemm ./
@@ -791,33 +785,16 @@ print_info $? transformer_infer
 }
 # 23 pet
 pet (){
-cd ${nlp_dir}/examples/few_shot/pet/
-export CUDA_VISIBLE_DEVICES=${cudaid1}
-#chid_train
-time (
-python  -u -m paddle.distributed.launch  \
-    pet.py \
-    --task_name "chid" \
-    --device gpu \
-    --pattern_id 0 \
-    --save_dir ./chid \
-    --index 0 \
-    --batch_size 8 \
-    --learning_rate 5E-5 \
-    --epochs 1 \
-    --max_seq_length 512 \
-    --language_model "ernie-1.0"  >${log_path}/pet_chid_train) >>${log_path}/pet_chid_train 2>&1
-print_info $? pet_chid_train
-#chid_predict
-time (
-python -u -m paddle.distributed.launch  predict.py \
-        --task_name "chid" \
-        --device gpu \
-        --init_from_ckpt "./chid/model_6/model_state.pdparams" \
-        --output_dir "./chid/output" \
-        --batch_size 32 \
-        --max_seq_length 512 >${log_path}/pet_chid_predict) >>${log_path}/pet_chid_predict 2>&1
-print_info $? pet_chid_predict
+path="examples/few_shot/pet"
+python ci_normal_case.py ${path}
+}
+efl(){
+path="examples/few_shot/efl"
+python ci_normal_case.py ${path}
+}
+p-tuning(){
+path="examples/few_shot/p-tuning"
+python ci_normal_case.py ${path}
 }
 #24 simbert
 simbert(){
@@ -1059,18 +1036,17 @@ cd ${nlp_dir}
 python test_taskflow.py >${log_path}/taskflow >>${log_path}/taskflow 2>&1
 print_info $? taskflow
 }
-# tests (){
-# cd ${nlp_dir}/
-# pytest tests/taskflow/test_*.py >${nlp_dir}/unittest_logs/taskflow_unittest.log 2>&1
-# print_info $? tests taskflow_unittest
-# cd ${nlp_dir}/tests/transformers/
-# for apicase in `ls`;do
-#     if [[ ${apicase##*.} == "py" ]];then
-#             continue
-#     else
-#         pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
-#         print_info $? tests ${apicase}_unittest
-#     fi
-# done
-# }
+transformers(){
+echo ' RUN all transformers unittest'
+cd ${nlp_dir}/tests/transformers/
+for apicase in `ls`;do
+    if [[ ${apicase##*.} == "py" ]];then
+            continue
+    else
+        cd ${nlp_dir}
+        pytest tests/transformers/${apicase}/test_*.py  >${nlp_dir}/unittest_logs/${apicase}_unittest.log 2>&1
+        print_info $? tests ${apicase}_unittest
+    fi
+done
+}
 $1

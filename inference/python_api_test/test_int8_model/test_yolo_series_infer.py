@@ -24,7 +24,7 @@ from tqdm import tqdm
 import pkg_resources as pkg
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
 from utils.dataset import COCOValDataset
 from utils.yolo_series_post_process import YOLOPostProcess, coco_metric
 
@@ -60,6 +60,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
+    parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
 
 
@@ -113,6 +114,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     time_min = float("inf")
     time_max = float("-inf")
     warmup = 20
+    repeats = 20 if FLAGS.small_data else 1
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
 
@@ -123,10 +125,11 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
             warmup = 0
 
         start_time = time.time()
-        outs = predictor.run()
+        for j in range(repeats):
+            outs = predictor.run()
         end_time = time.time()
 
-        timed = end_time - start_time
+        timed = (end_time - start_time) / repeats
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
@@ -163,6 +166,14 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
             "batch_size": FLAGS.batch_size,
+        },
+        "cpu_mem": {
+            "value": cpu_mems / sample_nums,
+            "unit": "MB",
+        },
+        "gpu_mem": {
+            "value": gpu_mems / sample_nums,
+            "unit": "MB",
         },
     }
     print("[Benchmark][final result]{}".format(final_res))
@@ -204,6 +215,14 @@ def main():
             calibration_loader=reader_wrapper(val_loader),
             verbose=False,
         )
+    elif FLAGS.deploy_backend == "onnxruntime":
+        predictor = ONNXRuntimeEngine(
+            onnx_model_file=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            device=FLAGS.device,
+        )
     else:
         raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
 
@@ -219,6 +238,10 @@ if __name__ == "__main__":
     paddle.enable_static()
     parser = argsparser()
     FLAGS = parser.parse_args()
+
+    if FLAGS.small_data:
+        # set small dataset
+        FLAGS.dataset_dir = "dataset/coco"
 
     # DataLoader need run on cpu
     paddle.set_device("cpu")

@@ -1,0 +1,139 @@
+PP-HGNet:
+   yml: configs/single_op/PP-HGNet.yml
+   input: demo/ILSVRC2012_val_00020010.jpeg
+   output_json: output/clas_output.json
+   output_vis:  output/ILSVRC2012_val_00020010.jpeg
+
+PP-LCNet:
+   yml: configs/single_op/PP-LCNet.yml
+   input: demo/ILSVRC2012_val_00020010.jpeg
+   output_json: output/clas_output.json
+   output_vis:  output/ILSVRC2012_val_00020010.jpeg
+
+PP-LCNetV2:
+   yml: configs/single_op/PP-LCNetV2.yml
+   input: demo/ILSVRC2012_val_00020010.jpeg
+   output_json: output/clas_output.json
+   output_vis:  output/ILSVRC2012_val_00020010.jpeg
+
+PP-YOLO:
+   yml: configs/single_op/PP-YOLO.yml
+   input: demo/000000014439.jpg
+   output_json: output/det_output.json
+   output_vis:  output/000000014439.jpg
+
+PP-YOLOv2:
+   yml: configs/single_op/PP-YOLOv2.yml
+   input: demo/000000014439.jpg
+   output_json: output/det_output.json
+   output_vis:  output/000000014439.jpg
+
+PP-YOLOE:
+   yml: configs/single_op/PP-YOLOE.yml
+   input: demo/000000014439.jpg
+   output_json: output/det_output.json
+   output_vis:  output/000000014439.jpg
+
+
+PP-YOLOE+:
+   yml: configs/single_op/PP-YOLOE+.yml
+   input: demo/000000014439.jpg
+   output_json: output/det_output.json
+   output_vis:  output/000000014439.jpg
+
+PP-PicoDet:
+   yml: configs/single_op/PP-PicoDet.yml
+   input: demo/000000014439.jpg
+   output_json: output/det_output.json
+   output_vis:  output/000000014439.jpg
+
+PP-HumanSegV2:
+   yml: configs/single_op/PP-HumanSegV2.yml
+   input: demo/pp_humansegv2_demo.jpg
+   output_json: output/humanseg_output.json
+   output_vis: output/pp_humansegv2_demo.png
+
+PP-LiteSeg:
+   yml: configs/single_op/PP-LiteSeg.yml
+   input: demo/segmentation_cityscapes_img.png
+   output_json: output/seg_output.json
+   output_vis: output/segmentation_cityscapes_img.png
+
+PP-MattingV1:
+   yml: configs/single_op/PP-MattingV1.yml
+   input: demo/pp_humansegv2_demo.jpg
+   output_json: output/matting_output.json
+   output_vis: output/pp_humansegv2_demo.png
+
+PP-OCRv2:
+   yml: configs/system/PP-OCRv2.yml
+   input: demo/00056221.jpg
+   output_json: output/00056221.jpg
+   output_vis: output/output.json
+
+PP-OCRv3:
+   yml: configs/system/PP-OCRv3.yml
+   input: demo/00056221.jpg
+   output_json: output/00056221.jpg
+   output_vis: output/output.json
+
+
+PP-Structure:
+   yml: configs/system/PP-Structure.yml
+   input: demo/pp_structure_demo.png
+   output_json: output/pp_structure_demo.jpg
+   output_vis: output/output.json
+
+PP-Human:
+   yml: configs/system/PP-Human.yml
+   input: demo/000000014439.jpg
+   output_json: output/det_output.json
+   output_vis:  output/000000014439.jpg
+
+PP-ShiTu:
+   yml: configs/system/PP-ShiTu.yml
+   input: demo/drink_dataset_v2.0_test_100.jpeg
+   output_json: output/clas_output.json
+   output_vis:  output/ILSVRC2012_val_00020010.jpeg
+
+PP-ShiTuV2:
+   yml: configs/system/PP-ShiTuV2.yml
+   input: demo/drink_dataset_v2.0_test_100.jpeg
+   output_json: output/clas_output.json
+   output_vis:  output/ILSVRC2012_val_00020010.jpeg
+
+PP-Structure-layout-table:
+   yml: configs/system/PP-Structure-layout-table.yml
+   input: demo/pp_structure_demo.png
+   output_json: output/pp_structure_demo.jpg
+   output_vis: output/output.json
+
+PP-Structure-re:
+   yml: configs/system/PP-Structure-re.yml
+   input: demo/kie_demo.jpg
+   output_json: output/kie_demo.jpg
+   output_vis: output/output.json
+
+PP-Structure-ser:
+   yml: configs/system/PP-Structure-ser.yml
+   input: demo/kie_demo.jpg
+   output_json: output/kie_demo.jpg
+   output_vis: output/output.json
+
+PP-Structure-table:
+   yml: configs/system/PP-Structure-table.yml
+   input: demo/table.jpg
+   output_json: output/table.jpg
+   output_vis: output/output.json
+
+PP-TinyPose:
+   yml: configs/system/PP-TinyPose.yml
+   input: demo/hrnet_demo.jpg
+   output_json: output/hrnet_demo.jpg
+   output_vis: output/kpt_output.json
+
+PP-Vehicle:
+   yml: configs/system/PP-Vehicle.yml
+   input: demo/000000014439.jpg
+   output_json: output/000000014439/-1.txt
+   output_vis:  output/000000014439.jpg

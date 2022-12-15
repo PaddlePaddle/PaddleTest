@@ -20,6 +20,7 @@ import time
 import sys
 from functools import partial
 import distutils.util
+
 import numpy as np
 
 import paddle
@@ -29,6 +30,7 @@ from paddlenlp.transformers import AutoModelForTokenClassification, AutoTokenize
 from paddlenlp.datasets import load_dataset
 from paddlenlp.data import Stack, Tuple, Pad
 from paddlenlp.metrics import Mcc, PearsonAndSpearman
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
 
 METRIC_CLASSES = {
     "cola": Mcc,
@@ -47,9 +49,9 @@ METRIC_CLASSES = {
 }
 
 
-def parse_args():
+def argsparser():
     """
-    parse_args func
+    argsparser func
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -72,12 +74,6 @@ def parse_args():
         default="clue",
         type=str,
         help="The dataset of model.",
-    )
-    parser.add_argument(
-        "--device",
-        default="gpu",
-        choices=["gpu", "cpu"],
-        help="Device selected for inference.",
     )
     parser.add_argument(
         "--batch_size",
@@ -110,11 +106,24 @@ def parse_args():
         choices=["fp32", "fp16", "int8"],
         help="The precision of inference. It can be 'fp32', 'fp16' or 'int8'. Default is 'fp16'.",
     )
+    parser.add_argument(
+        "--device",
+        type=str,
+        default="GPU",
+        help="Choose the device you want to run, it can be: CPU/GPU/XPU, default is GPU",
+    )
+    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
+    parser.add_argument(
+        "--deploy_backend",
+        type=str,
+        default="paddle_inference",
+        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+    )
+    parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
-    args = parser.parse_args()
-    return args
+    return parser
 
 
 def _convert_example(example, dataset, tokenizer, label_list, max_seq_length=512):
@@ -173,109 +182,50 @@ def _convert_example(example, dataset, tokenizer, label_list, max_seq_length=512
         return example["input_ids"], example["token_type_ids"], label
 
 
-class Predictor(object):
+class WrapperPredictor(object):
     """
     Inference Predictor class
     """
 
-    def __init__(self, predictor, input_handles, output_handles):
+    def __init__(self, predictor):
         self.predictor = predictor
-        self.input_handles = input_handles
-        self.output_handles = output_handles
-
-    @classmethod
-    def create_predictor(cls, args):
-        """
-        create_predictor func
-        """
-        cls.rerun_flag = False
-        config = paddle.inference.Config(
-            os.path.join(args.model_path, args.model_filename), os.path.join(args.model_path, args.params_filename)
-        )
-        if args.device == "gpu":
-            # set GPU configs accordingly
-            config.enable_use_gpu(100, 0)
-            cls.device = paddle.set_device("gpu")
-        else:
-            config.disable_gpu()
-            config.set_cpu_math_library_num_threads(args.cpu_threads)
-            config.switch_ir_optim()
-            if args.use_mkldnn:
-                config.enable_mkldnn()
-                if args.precision == "int8":
-                    config.enable_mkldnn_int8()
-
-        precision_map = {
-            "int8": inference.PrecisionType.Int8,
-            "fp32": inference.PrecisionType.Float32,
-            "fp16": inference.PrecisionType.Half,
-        }
-        if args.precision in precision_map.keys() and args.use_trt:
-            config.enable_tensorrt_engine(
-                workspace_size=1 << 30,
-                max_batch_size=args.batch_size,
-                min_subgraph_size=5,
-                precision_mode=precision_map[args.precision],
-                use_static=True,
-                use_calib_mode=False,
-            )
-
-            dynamic_shape_file = os.path.join(args.model_path, "dynamic_shape.txt")
-            if os.path.exists(dynamic_shape_file):
-                config.enable_tuned_tensorrt_dynamic_shape(dynamic_shape_file, True)
-                print("trt set dynamic shape done!")
-            else:
-                config.collect_shape_range_info(dynamic_shape_file)
-                print("Start collect dynamic shape...")
-                cls.rerun_flag = True
-                if (args.use_trt is True) and (args.precision == "int8"):
-                    cls.rerun_flag = False
-
-        predictor = paddle.inference.create_predictor(config)
-
-        input_handles = [predictor.get_input_handle(name) for name in predictor.get_input_names()]
-        output_handles = [predictor.get_output_handle(name) for name in predictor.get_output_names()]
-
-        return cls(predictor, input_handles, output_handles)
 
     def predict_batch(self, data):
         """
         predict from batch func
         """
-        for input_field, input_handle in zip(data, self.input_handles):
-            input_handle.copy_from_cpu(input_field)
-        self.predictor.run()
-        output = [output_handle.copy_to_cpu() for output_handle in self.output_handles]
+        self.predictor.prepare_data(data)
+        output = self.predictor.run()
         return output
 
-    def _convert_predict_batch(self, args, data, tokenizer, batchify_fn, label_list):
+    def _convert_predict_batch(self, FLAGS, data, tokenizer, batchify_fn, label_list):
         examples = []
         for example in data:
-            example = _convert_example(example, args.dataset, tokenizer, label_list, max_seq_length=args.max_seq_length)
+            example = _convert_example(
+                example, FLAGS.dataset, tokenizer, label_list, max_seq_length=FLAGS.max_seq_length
+            )
             examples.append(example)
 
         return examples
 
-    def predict(self, dataset, tokenizer, batchify_fn, args):
+    def eval(self, dataset, tokenizer, batchify_fn, FLAGS):
         """
         predict func
         """
-        batches = [dataset[idx : idx + args.batch_size] for idx in range(0, len(dataset), args.batch_size)]
+        batches = [dataset[idx : idx + FLAGS.batch_size] for idx in range(0, len(dataset), FLAGS.batch_size)]
 
         for i, batch in enumerate(batches):
-            examples = self._convert_predict_batch(args, batch, tokenizer, batchify_fn, dataset.label_list)
+            examples = self._convert_predict_batch(FLAGS, batch, tokenizer, batchify_fn, dataset.label_list)
             input_ids, segment_ids, label = batchify_fn(examples)
             output = self.predict_batch([input_ids, segment_ids])
-            if i > args.perf_warmup_steps:
+            if i > FLAGS.perf_warmup_steps:
                 break
-            if self.rerun_flag:
-                return
 
-        metric = METRIC_CLASSES[args.task_name]()
+        metric = METRIC_CLASSES[FLAGS.task_name]()
         metric.reset()
         predict_time = 0.0
         for i, batch in enumerate(batches):
-            examples = self._convert_predict_batch(args, batch, tokenizer, batchify_fn, dataset.label_list)
+            examples = self._convert_predict_batch(FLAGS, batch, tokenizer, batchify_fn, dataset.label_list)
             input_ids, segment_ids, label = batchify_fn(examples)
             start_time = time.time()
             output = self.predict_batch([input_ids, segment_ids])
@@ -284,19 +234,19 @@ class Predictor(object):
             correct = metric.compute(paddle.to_tensor(output), paddle.to_tensor(np.array(label).flatten()))
             metric.update(correct)
 
-        sequences_num = i * args.batch_size
+        sequences_num = i * FLAGS.batch_size
         print(
-            "[Benchmark]task name: {}, batch size: {} Inference time per batch: {}ms, qps: {}.".format(
-                args.task_name,
-                args.batch_size,
+            "[benchmark]task name: {}, batch size: {} Inference time per batch: {}ms, qps: {}.".format(
+                FLAGS.task_name,
+                FLAGS.batch_size,
                 round(predict_time * 1000 / i, 2),
                 round(sequences_num / predict_time, 2),
             )
         )
         res = metric.accumulate()
-        print("[Benchmark]task name: %s, acc: %s. \n" % (args.task_name, res), end="")
+        print("[benchmark]task name: %s, acc: %s. \n" % (FLAGS.task_name, res), end="")
         final_res = {
-            "model_name": args.model_name,
+            "model_name": FLAGS.model_name,
             "jingdu": {
                 "value": res,
                 "unit": "acc",
@@ -304,38 +254,82 @@ class Predictor(object):
             "xingneng": {
                 "value": round(predict_time * 1000 / i, 2),
                 "unit": "ms",
-                "batch_size": args.batch_size,
+                "batch_size": FLAGS.batch_size,
             },
         }
         print("[Benchmark][final result]{}".format(final_res))
         sys.stdout.flush()
 
 
-def main():
+def main(FLAGS):
     """
     main func
     """
     paddle.seed(42)
-    args = parse_args()
-    args.task_name = args.task_name.lower()
-    if args.use_mkldnn:
+    task_name = FLAGS.task_name.lower()
+    if FLAGS.use_mkldnn:
         paddle.set_device("cpu")
-
-    predictor = Predictor.create_predictor(args)
-
-    dev_ds = load_dataset("clue", args.task_name, splits="dev")
-    tokenizer = AutoTokenizer.from_pretrained(args.model_path)
+    token_dir = FLAGS.model_path
+    predictor = None
+    if FLAGS.deploy_backend == "paddle_inference":
+        predictor = PaddleInferenceEngine(
+            model_dir=FLAGS.model_path,
+            model_filename=FLAGS.model_filename,
+            params_filename=FLAGS.params_filename,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            batch_size=FLAGS.batch_size,
+            device=FLAGS.device,
+            min_subgraph_size=3,
+            use_dynamic_shape=FLAGS.use_dynamic_shape,
+            cpu_threads=FLAGS.cpu_threads,
+        )
+    elif FLAGS.deploy_backend == "tensorrt":
+        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
+        token_dir = os.path.dirname(FLAGS.model_path)
+        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
+        print(engine_file)
+        predictor = TensorRTEngine(
+            onnx_model_file=FLAGS.model_path,
+            shape_info={
+                "input_ids": [[28, 37], [32, 51], [32, 128]],
+                "token_type_ids": [[28, 37], [32, 51], [32, 128]],
+            },
+            max_batch_size=FLAGS.batch_size,
+            precision=FLAGS.precision,
+            engine_file_path=engine_file,
+            calibration_cache_file=FLAGS.calibration_file,
+            verbose=False,
+        )
+    elif FLAGS.deploy_backend == "onnxruntime":
+        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
+        token_dir = os.path.dirname(FLAGS.model_path)
+        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
+        predictor = ONNXRuntimeEngine(
+            onnx_model_file=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            device=FLAGS.device,
+        )
+    dev_ds = load_dataset("clue", task_name, splits="dev")
+    tokenizer = AutoTokenizer.from_pretrained(token_dir)
     batchify_fn = lambda samples, fn=Tuple(
         Pad(axis=0, pad_val=tokenizer.pad_token_id),  # input
         Pad(axis=0, pad_val=tokenizer.pad_token_id),  # segment
         Stack(dtype="int64" if dev_ds.label_list else "float32"),  # label
     ): fn(samples)
 
-    outputs = predictor.predict(dev_ds, tokenizer, batchify_fn, args)
-    if predictor.rerun_flag:
+    WrapperPredictor(predictor).eval(dev_ds, tokenizer, batchify_fn, FLAGS)
+    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
+    if rerun_flag:
         print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
 
 
 if __name__ == "__main__":
+    # If the device is not set to cpu, the nv-trt will report an error when executing
     paddle.set_device("cpu")
-    main()
+    parser = argsparser()
+    FLAGS = parser.parse_args()
+    main(FLAGS)

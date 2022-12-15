@@ -237,6 +237,7 @@ class PaddleClas_Start(object):
                 "pretrained" in step_single
                 or "PULC^language_classification" in self.qa_yaml_name
                 or "PULC^textline_orientation" in self.qa_yaml_name
+                or "PULC^text_image_orientation" in self.qa_yaml_name
                 or "ImageNet^VGG^VGG11" in self.qa_yaml_name
             ):
 
@@ -247,6 +248,7 @@ class PaddleClas_Start(object):
                 if (
                     "PULC^language_classification" in self.qa_yaml_name
                     or "PULC^textline_orientation" in self.qa_yaml_name
+                    or "PULC^text_image_orientation" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):
@@ -302,6 +304,7 @@ class PaddleClas_Start(object):
                 "pretrained" in step_single
                 or "PULC^language_classification" in self.qa_yaml_name
                 or "PULC^textline_orientation" in self.qa_yaml_name
+                or "PULC^text_image_orientation" in self.qa_yaml_name
                 or "ImageNet^VGG^VGG11" in self.qa_yaml_name
             ):
                 self.env_dict["predict_pretrained_model"] = os.path.join(
@@ -311,6 +314,7 @@ class PaddleClas_Start(object):
                 if (
                     "PULC^language_classification" in self.qa_yaml_name
                     or "PULC^textline_orientation" in self.qa_yaml_name
+                    or "PULC^text_image_orientation" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):  # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
                     # ImageNet^VGG^VGG11 用预训练模型

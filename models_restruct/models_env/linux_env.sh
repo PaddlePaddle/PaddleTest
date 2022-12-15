@@ -21,13 +21,14 @@ export dataset_target=${dataset_target:-None}   #如需软链数据基于reponam
 export set_cuda=${set_cuda:-} #预先不设置   #设置显卡号，流水线不用设置，后面有通过release_01后缀判断
 
 #额外的变量
-export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID   #效率云依赖参数
-export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID #效率云依赖参数
-export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID   #效率云依赖参数
+export AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID}   #效率云依赖参数
+export AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} #效率云依赖参数
+export AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID}   #效率云依赖参数
+export AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME}   #效率云依赖参数
+
 export docker_flag=${docker_flag:-} # 如果北京集群cce环境为False，自己的开发机不用设置
 export http_proxy=${http_proxy:-}   # 代理在效率云全局变量设置
 export no_proxy=${no_proxy:-}
-export Python_env=${Python_env:-path_way}   # manylinux使用 path_way  paddle:latest使用 ln_way
 export Python_version=${Python_version:-37} # 指定ython版本
 export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
 #指定docker版本
@@ -41,15 +42,12 @@ wget -q ${CE_Link} #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export
-if  [[ ! -n "${http_proxy}" ]] ;then
-    echo unset http_proxy
-    export http_proxy=${http_proxy}
-    export https_proxy=${http_proxy}
-else
-    export http_proxy=${http_proxy}
-    export https_proxy=${http_proxy}
-fi
+export http_proxy=${http_proxy}
+export https_proxy=${http_proxy}
 export no_proxy=${no_proxy}
+export AK=${AK} #使用bos_new上传需要
+export SK=${SK}
+export bce_whl_url=${bce_whl_url}
 set -x;
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -65,9 +63,15 @@ cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
-####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称  ##TODO:暂时先考虑两张卡，后续优化
+##如果预先模型库下载直接mv, 方便二分是checkout 到某个commit进行二分
+if [[ -d "../../${reponame}" ]];then  #前面cd 了 2次所以使用 ../../
+    cp -r ../../${reponame} .
+    echo "因为 ${reponame} 在根目录存在 使用预先clone或wget的 ${reponame}"
+fi
+
+####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称
 if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认制定方式即可，SET_MULTI_CUDA参数只是在启动时使用
-    tc_name=`(echo $PWD|awk -F '/' '{print $4}')`
+    tc_name=`(echo $PWD|awk -F 'xly/' '{print $2}'|awk -F '/' '{print $1}')`
     echo "teamcity path:" $tc_name
     if [ $tc_name == "release_02" ];then
         echo release_02
@@ -103,7 +107,7 @@ if [[ "${docker_flag}" == "" ]]; then
 
     ####创建docker
     set +x;
-    docker_name="ce_${reponame}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
+    docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
     echo "begin kill docker"
@@ -117,63 +121,38 @@ if [[ "${docker_flag}" == "" ]]; then
         --shm-size=128G \
         -v $(pwd):/workspace \
         -v /ssd2:/ssd2 \
+        -e AK=${AK} \
+        -e SK=${SK} \
+        -e bce_whl_url=${bce_whl_url} \
+        -e PORT_RANGE="62000:65536" \
+        -e no_proxy=${no_proxy} \
+        -e http_proxy=${http_proxy} \
+        -e https_proxy=${https_proxy} \
+        -e AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID} \
+        -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
+        -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
+        -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
+        -e Python_version=${Python_version} \
+        -e models_list=${models_list} \
+        -e models_file=${models_file} \
+        -e system=${system} \
+        -e step=${step} \
+        -e reponame=${reponame} \
+        -e mode=${mode} \
+        -e use_build=${use_build} \
+        -e branch=${branch} \
+        -e get_repo=${get_repo} \
+        -e paddle_whl=${paddle_whl} \
+        -e dataset_org=${dataset_org} \
+        -e dataset_target=${dataset_target} \
+        -e set_cuda=${set_cuda} \
         -w /workspace \
         ${Image_version}  \
-        /bin/bash -c "
+        /bin/bash -c '
 
         ldconfig;
-        #额外的变量, PORT_RANGE是出现IP_ANY:36986端口占用报错暂时屏蔽一些,221108新出现60636被占用
-        export PORT_RANGE=62000:65536
-        export no_proxy=${no_proxy};
-        export http_proxy=${http_proxy};
-        export https_proxy=${http_proxy};
-        export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID;
-        export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID;
-        export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID;
-
-        if [[ ${Python_env} == 'ln_way' ]];then
-            # rm -rf /usr/bin/python2.7
-            # rm -rf /usr/local/python2.7.15/bin/python
-            # rm -rf /usr/local/bin/python
-            # export PATH=/usr/local/bin/python:${PATH}
-            case ${Python_version} in
-            36)
-            # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
-            mkdir run_env_py36;
-            ln -s $(which python3.6) run_env_py36/python;
-            ln -s $(which pip3.6) run_env_py36/pip;
-            export PATH=$(pwd)/run_env_py36:${PATH};
-            ;;
-            37)
-            # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
-            mkdir run_env_py37;
-            ln -s $(which python3.7) run_env_py37/python;
-            ln -s $(which pip3.7) run_env_py37/pip;
-            export PATH=$(pwd)/run_env_py37:${PATH};
-            ;;
-            38)
-            # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
-            mkdir run_env_py38;
-            ln -s $(which python3.8) run_env_py38/python;
-            ln -s $(which pip3.8) run_env_py38/pip;
-            export PATH=$(pwd)/run_env_py38:${PATH};
-            ;;
-            39)
-            # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
-            mkdir run_env_py39;
-            ln -s $(which python3.9) run_env_py39/python;
-            ln -s $(which pip3.9) run_env_py39/pip;
-            export PATH=$(pwd)/run_env_py39:${PATH};
-            ;;
-            310)
-            # ln -s /usr/local/bin/python3.10 /usr/local/bin/python
-            mkdir run_env_py310;
-            ln -s $(which python3.10) run_env_py310/python;
-            ln -s $(which pip3.10) run_env_py310/pip;
-            export PATH=$(pwd)/run_env_py310:${PATH};
-            ;;
-            esac
-        else
+        if [[ `yum --help` =~ "yum" ]];then
+            echo "centos"
             case ${Python_version} in
             36)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -196,62 +175,56 @@ if [[ "${docker_flag}" == "" ]]; then
             export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
             ;;
             esac
+        else
+            echo "ubuntu"
+            case ${Python_version} in
+            36)
+            mkdir run_env_py36;
+            ln -s $(which python3.6) run_env_py36/python;
+            ln -s $(which pip3.6) run_env_py36/pip;
+            export PATH=$(pwd)/run_env_py36:${PATH};
+            ;;
+            37)
+            mkdir run_env_py37;
+            ln -s $(which python3.7) run_env_py37/python;
+            ln -s $(which pip3.7) run_env_py37/pip;
+            export PATH=$(pwd)/run_env_py37:${PATH};
+            ;;
+            38)
+            mkdir run_env_py38;
+            ln -s $(which python3.8) run_env_py38/python;
+            ln -s $(which pip3.8) run_env_py38/pip;
+            export PATH=$(pwd)/run_env_py38:${PATH};
+            ;;
+            39)
+            mkdir run_env_py39;
+            ln -s $(which python3.9) run_env_py39/python;
+            ln -s $(which pip3.9) run_env_py39/pip;
+            export PATH=$(pwd)/run_env_py39:${PATH};
+            ;;
+            310)
+            mkdir run_env_py310;
+            ln -s $(which python3.10) run_env_py310/python;
+            ln -s $(which pip3.10) run_env_py310/pip;
+            export PATH=$(pwd)/run_env_py310:${PATH};
+            ;;
+            esac
         fi
-
         nvidia-smi;
-        python -c 'import sys; print(sys.version_info[:])';
+        python -c "import sys; print(sys.version_info[:])";
         git --version;
+        python -m pip install -U pip #升级pip
         python -m pip install -r requirements.txt #预先安装依赖包
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
-    " &
+    ' &
     wait $!
     exit $?
 else
     ldconfig;
+    #额外的变量, PORT_RANGE是出现IP_ANY:36986端口占用报错暂时屏蔽一些,221108新出现60636被占用
     export PORT_RANGE=62000:65536
-    if [[ ${Python_env} == 'ln_way' ]];then
-        # rm -rf /usr/bin/python2.7
-        # rm -rf /usr/local/python2.7.15/bin/python
-        # rm -rf /usr/local/bin/python
-        # export PATH=/usr/local/bin/python:${PATH}
-        case ${Python_version} in
-        36)
-        # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
-        mkdir run_env_py36;
-        ln -s $(which python3.6) run_env_py36/python;
-        ln -s $(which pip3.6) run_env_py36/pip;
-        export PATH=$(pwd)/run_env_py36:${PATH};
-        ;;
-        37)
-        # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
-        mkdir run_env_py37;
-        ln -s $(which python3.7) run_env_py37/python;
-        ln -s $(which pip3.7) run_env_py37/pip;
-        export PATH=$(pwd)/run_env_py37:${PATH};
-        ;;
-        38)
-        # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
-        mkdir run_env_py38;
-        ln -s $(which python3.8) run_env_py38/python;
-        ln -s $(which pip3.8) run_env_py38/pip;
-        export PATH=$(pwd)/run_env_py38:${PATH};
-        ;;
-        39)
-        # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
-        mkdir run_env_py39;
-        ln -s $(which python3.9) run_env_py39/python;
-        ln -s $(which pip3.9) run_env_py39/pip;
-        export PATH=$(pwd)/run_env_py39:${PATH};
-        ;;
-        310)
-        # ln -s /usr/local/bin/python3.10 /usr/local/bin/python
-        mkdir run_env_py310;
-        ln -s $(which python3.10) run_env_py310/python;
-        ln -s $(which pip3.10) run_env_py310/pip;
-        export PATH=$(pwd)/run_env_py310:${PATH};
-        ;;
-        esac
-    else
+    if [[ `yum --help` =~ "yum" ]];then
+        echo "centos"
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -274,11 +247,46 @@ else
         export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
         ;;
         esac
+    else
+        echo "ubuntu"
+        case ${Python_version} in
+        36)
+        mkdir run_env_py36;
+        ln -s $(which python3.6) run_env_py36/python;
+        ln -s $(which pip3.6) run_env_py36/pip;
+        export PATH=$(pwd)/run_env_py36:${PATH};
+        ;;
+        37)
+        mkdir run_env_py37;
+        ln -s $(which python3.7) run_env_py37/python;
+        ln -s $(which pip3.7) run_env_py37/pip;
+        export PATH=$(pwd)/run_env_py37:${PATH};
+        ;;
+        38)
+        mkdir run_env_py38;
+        ln -s $(which python3.8) run_env_py38/python;
+        ln -s $(which pip3.8) run_env_py38/pip;
+        export PATH=$(pwd)/run_env_py38:${PATH};
+        ;;
+        39)
+        mkdir run_env_py39;
+        ln -s $(which python3.9) run_env_py39/python;
+        ln -s $(which pip3.9) run_env_py39/pip;
+        export PATH=$(pwd)/run_env_py39:${PATH};
+        ;;
+        310)
+        mkdir run_env_py310;
+        ln -s $(which python3.10) run_env_py310/python;
+        ln -s $(which pip3.10) run_env_py310/pip;
+        export PATH=$(pwd)/run_env_py310:${PATH};
+        ;;
+        esac
     fi
 
     nvidia-smi;
-    python -c 'import sys; print(sys.version_info[:])';
+    python -c "import sys; print(sys.version_info[:])";
     git --version;
+    python -m pip install -U pip #升级pip
     python -m pip install -r requirements.txt #预先安装依赖包
     python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
 fi

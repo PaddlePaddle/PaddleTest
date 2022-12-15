@@ -1,12 +1,15 @@
 case:
   linux:
-    base: ./base/normal_base.yml
+    base: ./base/keypoint_base.yml
     train:
       -
         name: multi
         cmd : python -m paddle.distributed.launch tools/train.py
         params:
           - TrainReader.batch_size=1
+          - TrainDataset.image_dir='train2017'
+          - TrainDataset.anno_path='annotations/person_keypoints_train2017.json'
+          - TrainDataset.dataset_dir='dataset/coco'
       -
         name: single
         cmd : python tools/train.py
@@ -27,7 +30,7 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/python/infer.py
+        cmd: python deploy/python/keypoint_infer.py
       -
         name: cpp
         cmd: ./deploy/cpp/build/main

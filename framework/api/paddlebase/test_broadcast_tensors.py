@@ -6,9 +6,6 @@ test broadcast_tensors
 """
 import math
 
-from paddle.fluid.data import data
-from paddle.fluid.layers.nn import pad
-
 from apibase import APIBase
 from apibase import randtool
 
