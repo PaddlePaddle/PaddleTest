@@ -64,7 +64,7 @@ class PaddleOCR_Build(Model_Build):
 
             sysstr = platform.system()
             if sysstr == "Linux":
-                src_path = "/ssd1/ce_data/PaddleOCR"
+                src_path = "/ssd2/ce_data/PaddleOCR"
             elif sysstr == "Windows":
                 src_path = "F:\\ce_data\\PaddleOCR"
             elif sysstr == "Darwin":
