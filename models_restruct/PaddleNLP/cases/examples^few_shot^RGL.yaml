@@ -5,6 +5,11 @@ case:
         name: prepare
         path: examples/few_shot/RGL
         cmd: wget https://paddlenlp.bj.bcebos.com/datasets/k-shot-glue/rgl-k-shot.zip && unzip rgl-k-shot.zip
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
       -
         name: multi
         path: examples/few_shot/RGL
@@ -22,6 +27,11 @@ case:
           - --learning_rate 1e-5 
           - --template "{'text':'text_a'} It was {'mask'}." 
           - --verbalizer "{'0':'terrible','1':'great'}"
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
     eval: skipped
     infer: skipped
     export: skipped

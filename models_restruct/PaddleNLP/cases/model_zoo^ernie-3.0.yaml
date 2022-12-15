@@ -110,7 +110,6 @@ case:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
-
     eval: skipped
     infer: skipped
     export: skipped

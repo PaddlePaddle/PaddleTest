@@ -67,6 +67,11 @@ case:
           - --train_dataset CHIP-CDN-2C 
           - --params_path ./cls/model_2/ 
           - --output_path ./export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
       -
         name: ner
         path: model_zoo/ernie-health/cblue
@@ -75,6 +80,11 @@ case:
           - --train_dataset CMeIE 
           - --params_path ./ner/model_2/ 
           - --output_path ./export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
       -
         name: spo
         path: model_zoo/ernie-health/cblue
@@ -83,6 +93,11 @@ case:
           - --train_dataset CMeEE 
           - --params_path ./spo/model_2/ 
           - --output_path ./export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
     predict: skipped
   
       
