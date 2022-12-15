@@ -133,12 +133,12 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
             batch_size = data_all["image"].shape[0]
             for i, out in enumerate(outs):
                 np_out = np.array(out)
-                if i < 4:
-                    num_classes = np_out.shape[-1]
-                    np_score_list.append(np_out.reshape(batch_size, -1, num_classes))
-                else:
+                if np_out.shape[-1] == 32:
                     box_reg_shape = np_out.shape[-1]
                     np_boxes_list.append(np_out.reshape(batch_size, -1, box_reg_shape))
+                else:
+                    num_classes = np_out.shape[-1]
+                    np_score_list.append(np_out.reshape(batch_size, -1, num_classes))
             postprocess = PicoDetPostProcess(
                 data_all["image"].shape[2:],
                 data_all["im_shape"],
@@ -216,7 +216,11 @@ def main():
             precision=FLAGS.precision,
             engine_file_path=engine_file,
             shape_info={
-                "image": [[1, 3, 1, 1], [1, 3, FLAGS.img_shape, FLAGS.img_shape], [1, 3, 1280, 1280]],
+                "image": [
+                    [1, 3, FLAGS.img_shape, FLAGS.img_shape],
+                    [1, 3, FLAGS.img_shape, FLAGS.img_shape],
+                    [1, 3, FLAGS.img_shape, FLAGS.img_shape],
+                ],
             },
             calibration_cache_file=FLAGS.calibration_file,
             verbose=False,
