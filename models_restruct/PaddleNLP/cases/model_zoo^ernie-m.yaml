@@ -14,19 +14,6 @@ case:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
-      -
-        name: single
-        path: model_zoo/ernie-m/
-        cmd: python run_classifier.py
-        params:
-          - --task_type cross-lingual-transfer
-          - --model_name_or_path ernie-m-base
-        result:
-          acc:
-            base: 0.333932
-            threshold: 0.001
-            evaluation: "="
-
     eval: skipped
     infer: skipped
     export: skipped
