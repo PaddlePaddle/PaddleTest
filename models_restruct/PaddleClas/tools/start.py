@@ -25,6 +25,8 @@ class PaddleClas_Start(object):
         """
         初始化变量
         """
+        self.xly_job_name = os.environ["AGILE_PIPELINE_NAME"]
+        logger.info("### self.xly_job_name: {}".format(self.xly_job_name))
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
         logger.info("### self.qa_yaml_name: {}".format(self.qa_yaml_name))
@@ -444,30 +446,28 @@ class PaddleClas_Start(object):
         其实可以在这一步把QA需要替换的全局变量给替换了,就不需要框架来做了,重组下qa的yaml
         kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
-        # 读取上次执行的产出
-        # 通过whl包的地址, 判断是release还是develop  report_linux_cuda102_py37_develop
-        if "Develop" in self.paddle_whl:
-            # logger.info(" paddle_whl use branch devleop : {}".format(self.paddle_whl))
-            content_result_name = "report_linux_cuda102_py37_develop.yaml"
-        else:
-            # logger.info(" paddle_whl use branch release or None : {}".format(self.paddle_whl))
-            content_result_name = "report_linux_cuda102_py37_release.yaml"
-        with open(os.path.join("tools", content_result_name), "r", encoding="utf-8") as f:
-            content_result = yaml.load(f, Loader=yaml.FullLoader)
+        try:
+            if os.path.exists(self.xly_job_name + ".yaml") is False:
+                wget.download(self.xly_job_name + ".yaml")
 
-        if self.qa_yaml_name in content_result.keys():  # 查询yaml中是否存在已获取的模型指标
-            logger.info("#### change {} value".format(self.qa_yaml_name))
-            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r", encoding="utf-8") as f:
-                content = yaml.load(f, Loader=yaml.FullLoader)
+            with open(os.path.join("tools", self.xly_job_name + ".yaml"), "r", encoding="utf-8") as f:
+                content_result = yaml.load(f, Loader=yaml.FullLoader)
 
-            content = json.dumps(content)
-            content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
-            content = json.loads(content)
+            if self.qa_yaml_name in content_result.keys():  # 查询yaml中是否存在已获取的模型指标
+                logger.info("#### change {} value".format(self.qa_yaml_name))
+                with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r", encoding="utf-8") as f:
+                    content = yaml.load(f, Loader=yaml.FullLoader)
 
-            content, content_result = self.change_yaml_kpi(content, content_result[self.qa_yaml_name])
+                content = json.dumps(content)
+                content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
+                content = json.loads(content)
 
-            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
-                yaml.dump(content, f, sort_keys=False)
+                content, content_result = self.change_yaml_kpi(content, content_result[self.qa_yaml_name])
+
+                with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
+                    yaml.dump(content, f, sort_keys=False)
+        except:
+            logger.info("do not update yaml value !!!")
 
     def build_prepare(self):
         """
