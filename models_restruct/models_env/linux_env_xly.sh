@@ -6,8 +6,8 @@ rm -rf ce && mkdir ce;
 cd ce;
 
 ######################## 定义变量 ########################
-#AGILE_PIPELINE_NAME格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop      (默认使用ubuntu和用户保持一致)
-#AGILE_PIPELINE_NAME格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop-Centos  (额外ubuntu和编包保持一致)
+#AGILE_PIPELINE_NAME格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop      (默认使用 Ubuntu 和用户保持一致)
+#AGILE_PIPELINE_NAME格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop-Centos  (额外 Centos 和编包保持一致)
 #其它内容或者可能不一致的不要随意加 "-", 下面是按照 "-" split 按序号填入的
 
 #repo的名称
@@ -123,6 +123,7 @@ export http_proxy=${http_proxy:-}   # 代理在效率云全局变量设置
 export AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID}   #效率云依赖参数
 export AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} #效率云依赖参数
 export AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID}   #效率云依赖参数
+export AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME}   #效率云依赖参数
 
 #### 根据PaddleTest & 框架名称决定的参数
 export CE_version_name=${CE_version_name:-TestFrameWork}    #与测试框架的名称一致
@@ -214,7 +215,7 @@ if [[ "${docker_flag}" == "" ]]; then
 
     ####创建docker
     set +x;
-    docker_name="ce_${reponame}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
+    docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
     echo "begin kill docker"
@@ -238,6 +239,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID} \
         -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
         -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
+        -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
         -e Python_version=${Python_version} \
         -e models_list=${models_list} \
         -e models_file=${models_file} \
@@ -320,6 +322,7 @@ if [[ "${docker_flag}" == "" ]]; then
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
+        python -m pip install -U pip #升级pip
         python -m pip install -r requirements.txt #预先安装依赖包
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
     ' &
@@ -392,6 +395,7 @@ else
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
     git --version;
+    python -m pip install -U pip #升级pip
     python -m pip install -r requirements.txt #预先安装依赖包
     python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
 fi
