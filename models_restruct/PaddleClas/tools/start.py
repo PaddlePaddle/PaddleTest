@@ -448,7 +448,7 @@ class PaddleClas_Start(object):
         """
         try:
             if os.path.exists(self.xly_job_name + ".yaml") is False:
-                wget.download(self.xly_job_name + ".yaml")
+                wget.download("https://paddle-qa.bj.bcebos.com/PaddleMT/PaddleClas/" + self.xly_job_name + ".yaml")
 
             with open(os.path.join("tools", self.xly_job_name + ".yaml"), "r", encoding="utf-8") as f:
                 content_result = yaml.load(f, Loader=yaml.FullLoader)
