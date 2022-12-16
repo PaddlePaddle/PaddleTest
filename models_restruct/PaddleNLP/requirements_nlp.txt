@@ -4,3 +4,5 @@ visualdl
 paddleslim
 pybind11 
 tool_helpers
+editdistance
+paddleocr

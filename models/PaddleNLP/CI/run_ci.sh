@@ -178,6 +178,10 @@ if [[ ${#Build_list[*]} -ne 0 ]];then
     for build_pkg in ${Build_list[*]};do
         upload ${build_pkg}
     done
+    echo -e "\033[32m make PaddleNLP.tar.gz  \033[0m"
+    cd /workspace
+    tar -zcvf PaddleNLP.tar.gz PaddleNLP/
+    mv PaddleNLP.tar.gz ${PPNLP_HOME}/upload
     cd ${PPNLP_HOME}
     python upload.py ${PPNLP_HOME}/upload 'paddlenlp/wheels'
     rm -rf upload/*

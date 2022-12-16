@@ -1,0 +1,130 @@
+case:
+  linux:
+    train:
+      -
+        name: classification
+        path: model_zoo/ernie-layout
+        cmd: python -m paddle.distributed.launch train_classification.py
+        params:
+          - --dataset CHIP-CDN-2C 
+          - --batch_size 256 
+          - --max_seq_length 32 
+          - --learning_rate 3e-5 
+          - --epochs 16 
+          - --save_steps 2 
+          - --max_steps 2 
+          - --logging_steps 1 
+          - --save_dir cls
+        result:
+          loss:
+            base: 0.6557
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: ner
+        path: model_zoo/ernie-layout
+        cmd: python -m paddle.distributed.launch train_ner.py
+        params:
+          - --batch_size 32 
+          - --max_seq_length 128 
+          - --learning_rate 6e-5 
+          - --epochs 12 
+          - --save_steps 2 
+          - --max_steps 2 
+          - --logging_steps 1 
+          - --save_dir ner
+        result:
+          loss:
+            base: 1.942795
+            threshold: 0.01
+            evaluation: "=" 
+      -
+        name: spo
+        path: model_zoo/ernie-layout
+        cmd: python -m paddle.distributed.launch train_spo.py 
+        params:
+          - --batch_size 12 
+          - --max_seq_length 300 
+          - --learning_rate 6e-5 
+          - --epochs 12  
+          - --save_steps 2 
+          - --max_steps 2 
+          - --logging_steps 1 
+          - --save_dir spo
+        result:
+          loss:
+            base: 2282887.188
+            threshold: 1
+            evaluation: "=" 
+    eval: skipped
+    infer: skipped
+    export: 
+      -
+        name: classification
+        path: model_zoo/ernie-layout
+        cmd: python export_model.py
+        params:
+          - --task_type cls 
+          - --model_path ./ernie-layoutx-base-uncased/models/rvl_cdip_sampled/ 
+          - --output_path ./cls_export
+      -
+        name: mrc
+        path: model_zoo/ernie-layout
+        cmd: python export_model.py
+        params:
+          - --task_type mrc 
+          - --model_path ./ernie-layoutx-base-uncased/models/docvqa_zh/ 
+          - --output_path ./mrc_export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: ner
+        path: model_zoo/ernie-layout
+        cmd: python export_model.py
+        params:
+          - --task_type ner 
+          - --model_path ./ernie-layoutx-base-uncased/models/funsd/ 
+          - --output_path ./ner_export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    predict: 
+      -
+        name: prepare
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/document_intelligence/images.zip && unzip images.zip
+      -
+        name: classification
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: python infer.py
+        params:
+          - --model_path_prefix ../../cls_export/inference
+          - --lang "en"
+          - --task_type cls
+          - --batch_size 8
+      -
+        name: ner
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: python infer.py
+        params:
+          - --model_path_prefix ../../ner_export/inference
+          - --task_type ner 
+          - --lang "en" 
+          - --batch_size 8
+      -
+        name: mrc
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: python infer.py
+        params:
+          - --model_path_prefix ../../mrc_export/inference
+          - --task_type mrc 
+          - --lang "ch"
+          - --batch_size 8
+      
+          
+    
