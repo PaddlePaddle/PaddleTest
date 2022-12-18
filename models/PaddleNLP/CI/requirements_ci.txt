@@ -23,3 +23,5 @@ coverage
 h5py
 pytest
 parameterized
+sklearn
+cma
