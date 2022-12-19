@@ -22,7 +22,7 @@ import cv2
 import numpy as np
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
 from ppdet.core.workspace import load_config, create
 from ppdet.metrics import COCOMetric
 
@@ -93,13 +93,15 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     """
     eval main func
     """
-    cpu_mems, gpu_mems = 0, 0
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
     sample_nums = len(val_loader)
     warmup = 20
     repeats = 20 if FLAGS.small_data else 1
+    monitor = Monitor(0)
+    if not rerun_flag:
+        monitor.start()
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
         if FLAGS.exclude_nms:
@@ -122,9 +124,6 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         predict_time += timed
         if rerun_flag:
             return
-        cpu_mem, gpu_mem = get_current_memory_mb()
-        cpu_mems += cpu_mem
-        gpu_mems += gpu_mem
         if FLAGS.exclude_nms and "PPYOLOE" in FLAGS.model_name:
             postprocess = PPYOLOEPostProcess(score_threshold=0.01, nms_threshold=0.6)
             res = postprocess(outs[0], data_all["scale_factor"])
@@ -157,8 +156,21 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     metric.log()
     map_res = metric.get_results()
     metric.reset()
+    monitor.stop()
+    monitor_result = monitor.output()
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
     time_avg = predict_time / sample_nums
-    print("[Benchmark]Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / sample_nums, gpu_mems / sample_nums))
     print(
         "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
             round(time_min * 1000, 2), round(time_max * 1000, 1), round(time_avg * 1000, 1)
