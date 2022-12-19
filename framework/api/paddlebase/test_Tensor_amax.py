@@ -32,7 +32,7 @@ def cal_api(x, dtype="float32", axis=None, keepdim=False):
     dynamic_grad = None
     xp = paddle.to_tensor(x, stop_gradient=False, dtype=dtype)
     dynamic_res = paddle.Tensor.amax(xp, axis=axis, keepdim=keepdim)
-    if calcu_grad":
+    if calcu_grad:
         dynamic_res.backward()
         dynamic_grad = xp.grad.numpy()
 
