@@ -14,7 +14,8 @@ unset http_proxy
 unset https_proxy
 set -xe
 
-export repo_name_all='PaddleClas PaddleGAN PaddleOCR Paddle3D PaddleSpeech PaddleRec PaddleSlim PaddleDetection PaddleSeg PaddleNLP'
+export repo_name_all='Paddle PaddleClas PaddleGAN PaddleOCR Paddle3D PaddleSpeech PaddleRec PaddleSlim PaddleDetection PaddleSeg PaddleNLP'
+# Paddle  需要包含 PaddlePaddle  release 字段，需要打包 develop release/2.3 release/2.4
 # PaddleClas  需要包含 develop  release 字段，需要打包 develop release/2.3 release/2.4 release/2.5
 # PaddleGAN  需要包含 develop  release 字段，需要打包 develop release/2.1
 # PaddleOCR: dygraph、release/2.6;
