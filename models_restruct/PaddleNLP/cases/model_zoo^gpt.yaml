@@ -8,11 +8,11 @@ case:
       -
         name: prepare
         path: model_zoo/gpt/
-        cmd: mkdir pre_data && cd ./pre_data && wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy &&wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz && cd ../
+        cmd: mkdir pre_data && cd ./pre_data && wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy && wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz && cd ../
       -
         name: pretrain
         path: model_zoo/gpt
-        cmd: python -m paddle.distributed.launch run_pretrain.py \
+        cmd: python -m paddle.distributed.launch run_pretrain.py
         params:
           - --model_type gpt
           - --model_name_or_path gpt2-en
