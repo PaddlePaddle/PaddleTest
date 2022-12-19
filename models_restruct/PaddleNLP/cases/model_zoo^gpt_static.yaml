@@ -4,7 +4,7 @@ case:
       -
         name: pretrain
         path: model_zoo/gpt
-        cmd: python -m paddle.distributed.launch --gpus '0,1' run_pretrain.py \
+        cmd: python -m paddle.distributed.launch --gpus '0,1' run_pretrain.py
         params:
           - --model_type gpt
           - --model_name_or_path gpt2-en
