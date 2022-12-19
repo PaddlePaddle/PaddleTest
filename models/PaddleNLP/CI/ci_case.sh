@@ -187,7 +187,7 @@ electra(){
 cd ${nlp_dir}/model_zoo/electra/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export DATA_DIR=./BookCorpus/
-cp -r /ssd1/paddlenlp/download/electra/BookCorpus/ ./
+wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/BookCorpus.tar.gz && tar -xzvf BookCorpus.tar.gz
 time (python -u ./run_pretrain.py \
     --model_type electra \
     --model_name_or_path electra-small \
