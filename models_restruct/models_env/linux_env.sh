@@ -124,7 +124,7 @@ export http_proxy=${http_proxy:-}   # 代理在效率云全局变量设置
 export AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID}   #效率云依赖参数
 export AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} #效率云依赖参数
 export AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID}   #效率云依赖参数
-export AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME}   #效率云依赖参数
+export AGILE_WORKSPACE=${AGILE_WORKSPACE}   #效率云依赖参数
 
 #### 根据PaddleTest & 框架名称决定的参数
 export CE_version_name=${CE_version_name:-TestFrameWork}    #与测试框架的名称一致
@@ -242,6 +242,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
         -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
         -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
+        -e AGILE_WORKSPACE=${AGILE_WORKSPACE} \
         -e Python_version=${Python_version} \
         -e models_list=${models_list} \
         -e models_file=${models_file} \
