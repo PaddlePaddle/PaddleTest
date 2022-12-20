@@ -90,6 +90,10 @@ case:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
+       -
+        name: donwload_cmrc_pretrained_model
+        path: model_zoo/ernie-3.0/
+        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/best_cmrc_model.tar.gz && tar -xzvf best_cmrc_model.tar.gz
       -
         name: compress_qa
         path: model_zoo/ernie-3.0/
