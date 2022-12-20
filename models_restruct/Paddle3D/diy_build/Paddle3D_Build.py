@@ -78,16 +78,16 @@ class Paddle3D_Build(Model_Build):
 
             os.system("python -m pip install .")
             print("build wheel!")
-           
-            # petr
-            if not os.path.exits('data'):
-                os.makedirs('data')
-                os.symlink('/ssd2/ce_data/Paddle3D/nuscenes_petr', 'data/nuscenes')
-                os.makedirs('/workspace/datset/nuScenes/', exist_ok=True)
-                os.symlink('/ssd2/ce_data/Paddle3D/nuscenes_petr', '/workspace/datset/nuScenes/nuscenes')
 
-                os.symlink('/ssd2/ce_data/Paddle3D/kitti','data/kitti')
-            
+            # petr
+            if not os.path.exits("data"):
+                os.makedirs("data")
+                os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petr", "data/nuscenes")
+                os.makedirs("/workspace/datset/nuScenes/", exist_ok=True)
+                os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petr", "/workspace/datset/nuScenes/nuscenes")
+
+                os.symlink("/ssd2/ce_data/Paddle3D/kitti", "data/kitti")
+
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
                 cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
