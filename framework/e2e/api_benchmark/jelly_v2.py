@@ -138,26 +138,36 @@ class Jelly_v2(object):
                 self.data[key] = []
                 for i, v in enumerate(value):
                     if isinstance(v, (np.generic, np.ndarray)):
+                        # self.logger.info("v.dtype is : {}".format(v.dtype))
                         self.data[key].append(to_tensor(v))
-                        if self.api_str.endswith("_"):
+                        if (
+                            self.api_str.endswith("_")
+                            or (v.dtype == np.int32)
+                            or (v.dtype == np.int64)
+                            or (v.dtype == bool)
+                        ):
                             self.data[key][i].stop_gradient = True
                         else:
                             self.data[key][i].stop_gradient = False
                     else:
                         self.data[key].append(v)
-                # print('set_paddle_param self.data[key] is: ', self.data[key])
+                    # self.logger.info("self.data[key].stop_gradient is : {}".format(self.data[key][i].stop_gradient))
             else:
                 if isinstance(value, (np.generic, np.ndarray)):
+                    # self.logger.info("value.dtype is : {}".format(value.dtype))
                     self.data[key] = to_tensor(value)
-                    if self.api_str.endswith("_"):
+                    if (
+                        self.api_str.endswith("_")
+                        or (value.dtype == np.int32)
+                        or (value.dtype == np.int64)
+                        or (value.dtype == bool)
+                    ):
                         self.data[key].stop_gradient = True
                     else:
                         self.data[key].stop_gradient = False
                 else:
                     self.data[key] = value
-                # self.data[key] = to_tensor(value)
-                # self.data[key].stop_gradient = False
-                # print('set_paddle_param self.data[key] is: ', self.data[key])
+                # self.logger.info("self.data[key].stop_gradient is : {}".format(self.data[key].stop_gradient))
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 self.param[key] = to_tensor(value)
