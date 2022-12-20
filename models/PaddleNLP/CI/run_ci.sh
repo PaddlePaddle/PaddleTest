@@ -180,6 +180,7 @@ if [[ ${#Build_list[*]} -ne 0 ]];then
     done
     echo -e "\033[32m make PaddleNLP.tar.gz  \033[0m"
     cd /workspace
+    rm -rf PaddleNLP_dev/build/*
     tar -zcvf PaddleNLP.tar.gz PaddleNLP_dev/
     mv PaddleNLP.tar.gz ${PPNLP_HOME}/upload
     cd ${PPNLP_HOME}
