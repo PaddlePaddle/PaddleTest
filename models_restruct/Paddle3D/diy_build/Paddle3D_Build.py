@@ -80,7 +80,7 @@ class Paddle3D_Build(Model_Build):
             print("build wheel!")
 
             # petr
-            if not os.path.exits("data"):
+            if not os.path.exists("data"):
                 os.makedirs("data")
                 os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petr", "data/nuscenes")
                 os.makedirs("/workspace/datset/nuScenes/", exist_ok=True)
