@@ -15,6 +15,8 @@ import base_mkldnn_fp32
 import base_mkldnn_int8
 import base_trt_fp16
 import base_trt_int8
+import base_nv_trt_fp16
+import base_nv_trt_int8
 import mail_report
 import write_db
 
@@ -55,6 +57,10 @@ def get_base_info(mode):
         base_res = base_trt_int8.trt_int8
     elif mode == "trt_fp16":
         base_res = base_trt_fp16.trt_fp16
+    eif mode == "nv_trt_int8":
+        base_res = base_nv_trt_int8.nv_trt_int8
+    elif mode == "nv_trt_fp16":
+        base_res = base_nv_trt_fp16.nv_trt_fp16
     elif mode == "mkldnn_int8":
         base_res = base_mkldnn_int8.mkldnn_int8
     elif mode == "mkldnn_fp32":
