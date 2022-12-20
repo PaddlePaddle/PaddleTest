@@ -161,7 +161,7 @@ def select_compute(db_res, gsb, main_clas):
             if frame == "paddle":
                 continue
             item = "{}-{}".format(metric, frame)
-            gsb[main_clas]["table_title"].append(item) 
+            gsb[main_clas]["table_title"].append(item)
     # value
     for mode in gsb[main_clas]["value"].keys():
         for precision in gsb[main_clas]["value"][mode].keys():
