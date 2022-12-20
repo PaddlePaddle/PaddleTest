@@ -64,108 +64,49 @@ def get_base_info(mode):
     return base_res
 
 
-def compare_diff(base_res, benchmark_res):
+def compare_diff(base_res, benchmark_res, metric_list):
     """
     计算本次结果与base的diff、gsb
     """
     benchmark_keys = benchmark_res.keys()
     compare_res = {}
     for model, info in base_res.items():
-        compare_res[model] = {
-            "jingdu": {
-                "th": info["jingdu"]["th"],
-                "base": info["jingdu"]["value"],
+        compare_res[model] = {}
+        for item in metric_list:
+            compare_res[model][item] = {
+                "th": info[item]["th"],
+                "base": info[item]["value"],
                 "benchmark": -1,
                 "diff": -1,
                 "gsb": "o",
-                "unit": info["jingdu"]["unit"],
-            },
-            "xingneng": {
-                "th": info["xingneng"]["th"],
-                "base": info["xingneng"]["value"],
-                "benchmark": -1,
-                "diff": -1,
-                "gsb": "o",
-                "unit": info["xingneng"]["unit"],
-            },
-            "cpu_mem": {
-                "th": info["cpu_mem"]["th"],
-                "base": info["cpu_mem"]["value"],
-                "benchmark": -1,
-                "diff": -1,
-                "gsb": "o",
-                "unit": info["cpu_mem"]["unit"],
-            },
-            "gpu_mem": {
-                "th": info["gpu_mem"]["th"],
-                "base": info["gpu_mem"]["value"],
-                "benchmark": -1,
-                "diff": -1,
-                "gsb": "o",
-                "unit": info["gpu_mem"]["unit"],
-            },
-        }
+                "unit": info[item]["unit"],
+            }
 
         if model not in benchmark_keys:
             continue
 
-        for item in ["jingdu", "xingneng", "cpu_mem", "gpu_mem"]:
+        for item in metric_list:
             compare_res[model][item]["benchmark"] = benchmark_res[model][item]["value"]
             gap = compare_res[model][item]["benchmark"] - compare_res[model][item]["base"]
             diff = gap / compare_res[model][item]["base"]
             compare_res[model][item]["diff"] = diff
-            if diff == 0:
+            if diff >= -0.05 and diff <= 0.05:
                 compare_res[model][item]["gsb"] = "s"
-            elif diff < 0:
+            elif diff < -0.05:
                 compare_res[model][item]["gsb"] = "b"
-            elif diff > 0:
+            elif diff > 0.05:
                 compare_res[model][item]["gsb"] = "g"
 
     return compare_res
 
 
-def gsb(compare_res):
+def gsb(compare_res, metric_list):
     """
     统计compare_res的gsb
     """
-    gsb = {
-        "jingdu": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-        "xingneng": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-        "cpu_mem": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-        "gpu_mem": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-    }
+    gsb = {}
+    for item in metric_list:
+        gsb.setdefault(item, {"gsb": "", "g": 0, "s": 0, "b": 0, "total": 0, "b_ratio": 0, "g_ratio": 0,})
     for model, info in compare_res.items():
         for item in ["jingdu", "xingneng", "cpu_mem", "gpu_mem"]:
             if info[item]["gsb"] == "g":
@@ -183,81 +124,28 @@ def gsb(compare_res):
     return gsb
 
 
-def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
+def res_summary(diff_res, mode_list, metric_list):
     """
     汇总不同模式下的数据
     """
     tongji = {}
     res = {}
 
+    gsb_total = {}
+    for item in metric_list:
+        gsb_total.setdefault(item, {"gsb": "", "g": 0, "s": 0, "b": 0, "total": 0, "b_ratio": 0, "g_ratio": 0,})
+
     # 统计数据
-    gsb_trt_int8 = gsb(trt_int8)
-    gsb_trt_fp16 = gsb(trt_fp16)
-    gsb_mkldnn_int8 = gsb(mkldnn_int8)
-    gsb_mkldnn_fp32 = gsb(mkldnn_fp32)
-    gsb_total = {
-        "jingdu": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-        "xingneng": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-        "cpu_mem": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-        "gpu_mem": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-    }
-    for item in ["jingdu", "xingneng", "cpu_mem", "gpu_mem"]:
-        gsb_total[item]["g"] = (
-            gsb_trt_int8[item]["g"]
-            + gsb_trt_fp16[item]["g"]
-            + gsb_mkldnn_int8[item]["g"]
-            + gsb_mkldnn_fp32[item]["g"]
-        )
-        gsb_total[item]["s"] = (
-            gsb_trt_int8[item]["s"]
-            + gsb_trt_fp16[item]["s"]
-            + gsb_mkldnn_int8[item]["s"]
-            + gsb_mkldnn_fp32[item]["s"]
-        )
-        gsb_total[item]["b"] = (
-            gsb_trt_int8[item]["b"]
-            + gsb_trt_fp16[item]["b"]
-            + gsb_mkldnn_int8[item]["b"]
-            + gsb_mkldnn_fp32[item]["b"]
-        )
-        gsb_total[item]["total"] = (
-            gsb_trt_int8[item]["total"]
-            + gsb_trt_fp16[item]["total"]
-            + gsb_mkldnn_int8[item]["total"]
-            + gsb_mkldnn_fp32[item]["total"]
-        )
+    for mode in mode_list:
+        _gsb = gsb(diff_res[mode], metric_list)
+        tongji.setdefault(mode, _gsb)
+
+    for item in metric_list:
+        for mode in mode_list:
+            gsb_total[item]["g"] += tongji[mode][item]["g"]
+            gsb_total[item]["s"] += tongji[mode][item]["s"]
+            gsb_total[item]["b"] += tongji[mode][item]["b"]
+            gsb_total[item]["total"] += tongji[mode][item]["total"]
         gsb_total[item]["gsb"] = "{}:{}:{}".format(
             gsb_total[item]["g"], gsb_total[item]["s"], gsb_total[item]["b"]
         )
@@ -265,156 +153,23 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
             gsb_total[item]["b_ratio"] = gsb_total[item]["b"] / gsb_total[item]["total"]
             gsb_total[item]["g_ratio"] = gsb_total[item]["g"] / gsb_total[item]["total"]
 
-    tongji = {
-        "trt_int8": gsb_trt_int8,
-        "trt_fp16": gsb_trt_fp16,
-        "mkldnn_int8": gsb_mkldnn_int8,
-        "mkldnn_fp32": gsb_mkldnn_fp32,
-        "total": gsb_total,
-    }
+    tongji.setdefault("total", gsb_total)
 
     # 详细数据
-    res = {}
-    models = trt_int8.keys()
+    models = diff_res["trt_int8"].keys()
     for model in models:
-        res[model] = {
-            "trt_int8": {
-                "jingdu": {
-                    "th": trt_int8[model]["jingdu"]["th"],
-                    "base": trt_int8[model]["jingdu"]["base"],
-                    "benchmark": trt_int8[model]["jingdu"]["benchmark"],
-                    "diff": trt_int8[model]["jingdu"]["diff"],
-                    "gsb": trt_int8[model]["jingdu"]["gsb"],
-                    "unit": trt_int8[model]["jingdu"]["unit"],
-                },
-                "xingneng": {
-                    "th": trt_int8[model]["xingneng"]["th"],
-                    "base": trt_int8[model]["xingneng"]["base"],
-                    "benchmark": trt_int8[model]["xingneng"]["benchmark"],
-                    "diff": trt_int8[model]["xingneng"]["diff"],
-                    "gsb": trt_int8[model]["xingneng"]["gsb"],
-                    "unit": trt_int8[model]["xingneng"]["unit"],
-                },
-                "cpu_mem": {
-                    "th": trt_int8[model]["cpu_mem"]["th"],
-                    "base": trt_int8[model]["cpu_mem"]["base"],
-                    "benchmark": trt_int8[model]["cpu_mem"]["benchmark"],
-                    "diff": trt_int8[model]["cpu_mem"]["diff"],
-                    "gsb": trt_int8[model]["cpu_mem"]["gsb"],
-                    "unit": trt_int8[model]["cpu_mem"]["unit"],
-                },
-                "gpu_mem": {
-                    "th": trt_int8[model]["gpu_mem"]["th"],
-                    "base": trt_int8[model]["gpu_mem"]["base"],
-                    "benchmark": trt_int8[model]["gpu_mem"]["benchmark"],
-                    "diff": trt_int8[model]["gpu_mem"]["diff"],
-                    "gsb": trt_int8[model]["gpu_mem"]["gsb"],
-                    "unit": trt_int8[model]["gpu_mem"]["unit"],
-                },
-            },
-            "trt_fp16": {
-                "jingdu": {
-                    "th": trt_fp16[model]["jingdu"]["th"],
-                    "base": trt_fp16[model]["jingdu"]["base"],
-                    "benchmark": trt_fp16[model]["jingdu"]["benchmark"],
-                    "diff": trt_fp16[model]["jingdu"]["diff"],
-                    "gsb": trt_fp16[model]["jingdu"]["gsb"],
-                    "unit": trt_fp16[model]["jingdu"]["unit"],
-                },
-                "xingneng": {
-                    "th": trt_fp16[model]["xingneng"]["th"],
-                    "base": trt_fp16[model]["xingneng"]["base"],
-                    "benchmark": trt_fp16[model]["xingneng"]["benchmark"],
-                    "diff": trt_fp16[model]["xingneng"]["diff"],
-                    "gsb": trt_fp16[model]["xingneng"]["gsb"],
-                    "unit": trt_fp16[model]["xingneng"]["unit"],
-                },
-                "cpu_mem": {
-                    "th": trt_fp16[model]["cpu_mem"]["th"],
-                    "base": trt_fp16[model]["cpu_mem"]["base"],
-                    "benchmark": trt_fp16[model]["cpu_mem"]["benchmark"],
-                    "diff": trt_fp16[model]["cpu_mem"]["diff"],
-                    "gsb": trt_fp16[model]["cpu_mem"]["gsb"],
-                    "unit": trt_fp16[model]["cpu_mem"]["unit"],
-                },
-                "gpu_mem": {
-                    "th": trt_fp16[model]["gpu_mem"]["th"],
-                    "base": trt_fp16[model]["gpu_mem"]["base"],
-                    "benchmark": trt_fp16[model]["gpu_mem"]["benchmark"],
-                    "diff": trt_fp16[model]["gpu_mem"]["diff"],
-                    "gsb": trt_fp16[model]["gpu_mem"]["gsb"],
-                    "unit": trt_fp16[model]["gpu_mem"]["unit"],
-                },
-            },
-            "mkldnn_int8": {
-                "jingdu": {
-                    "th": mkldnn_int8[model]["jingdu"]["th"],
-                    "base": mkldnn_int8[model]["jingdu"]["base"],
-                    "benchmark": mkldnn_int8[model]["jingdu"]["benchmark"],
-                    "diff": mkldnn_int8[model]["jingdu"]["diff"],
-                    "gsb": mkldnn_int8[model]["jingdu"]["gsb"],
-                    "unit": mkldnn_int8[model]["jingdu"]["unit"],
-                },
-                "xingneng": {
-                    "th": mkldnn_int8[model]["xingneng"]["th"],
-                    "base": mkldnn_int8[model]["xingneng"]["base"],
-                    "benchmark": mkldnn_int8[model]["xingneng"]["benchmark"],
-                    "diff": mkldnn_int8[model]["xingneng"]["diff"],
-                    "gsb": mkldnn_int8[model]["xingneng"]["gsb"],
-                    "unit": mkldnn_int8[model]["xingneng"]["unit"],
-                },
-                "cpu_mem": {
-                    "th": mkldnn_int8[model]["cpu_mem"]["th"],
-                    "base": mkldnn_int8[model]["cpu_mem"]["base"],
-                    "benchmark": mkldnn_int8[model]["cpu_mem"]["benchmark"],
-                    "diff": mkldnn_int8[model]["cpu_mem"]["diff"],
-                    "gsb": mkldnn_int8[model]["cpu_mem"]["gsb"],
-                    "unit": mkldnn_int8[model]["cpu_mem"]["unit"],
-                },
-                "gpu_mem": {
-                    "th": mkldnn_int8[model]["gpu_mem"]["th"],
-                    "base": mkldnn_int8[model]["gpu_mem"]["base"],
-                    "benchmark": mkldnn_int8[model]["gpu_mem"]["benchmark"],
-                    "diff": mkldnn_int8[model]["gpu_mem"]["diff"],
-                    "gsb": mkldnn_int8[model]["gpu_mem"]["gsb"],
-                    "unit": mkldnn_int8[model]["gpu_mem"]["unit"],
-                },
-            },
-            "mkldnn_fp32": {
-                "jingdu": {
-                    "th": mkldnn_fp32[model]["jingdu"]["th"],
-                    "base": mkldnn_fp32[model]["jingdu"]["base"],
-                    "benchmark": mkldnn_fp32[model]["jingdu"]["benchmark"],
-                    "diff": mkldnn_fp32[model]["jingdu"]["diff"],
-                    "gsb": mkldnn_fp32[model]["jingdu"]["gsb"],
-                    "unit": mkldnn_fp32[model]["jingdu"]["unit"],
-                },
-                "xingneng": {
-                    "th": mkldnn_fp32[model]["xingneng"]["th"],
-                    "base": mkldnn_fp32[model]["xingneng"]["base"],
-                    "benchmark": mkldnn_fp32[model]["xingneng"]["benchmark"],
-                    "diff": mkldnn_fp32[model]["xingneng"]["diff"],
-                    "gsb": mkldnn_fp32[model]["xingneng"]["gsb"],
-                    "unit": mkldnn_fp32[model]["xingneng"]["unit"],
-                },
-                "cpu_mem": {
-                    "th": mkldnn_fp32[model]["cpu_mem"]["th"],
-                    "base": mkldnn_fp32[model]["cpu_mem"]["base"],
-                    "benchmark": mkldnn_fp32[model]["cpu_mem"]["benchmark"],
-                    "diff": mkldnn_fp32[model]["cpu_mem"]["diff"],
-                    "gsb": mkldnn_fp32[model]["cpu_mem"]["gsb"],
-                    "unit": mkldnn_fp32[model]["cpu_mem"]["unit"],
-                },
-                "gpu_mem": {
-                    "th": mkldnn_fp32[model]["gpu_mem"]["th"],
-                    "base": mkldnn_fp32[model]["gpu_mem"]["base"],
-                    "benchmark": mkldnn_fp32[model]["gpu_mem"]["benchmark"],
-                    "diff": mkldnn_fp32[model]["gpu_mem"]["diff"],
-                    "gsb": mkldnn_fp32[model]["gpu_mem"]["gsb"],
-                    "unit": mkldnn_fp32[model]["gpu_mem"]["unit"],
-                },
-            },
-        }
+        res[model] = {}
+        for mode in mode_list:
+            res[model][mode] = {}
+            for item in metric_list:
+                res[model][mode][item] = {
+                    "th": diff_res[mode][model][item]["th"],
+                    "base": diff_res[mode][model][item]["base"],
+                    "benchmark": diff_res[mode][model][item]["benchmark"],
+                    "diff": diff_res[mode][model][item]["diff"],
+                    "gsb": diff_res[mode][model][item]["gsb"],
+                    "unit": diff_res[mode][model][item]["unit"],
+                }
 
     return res, tongji
 
@@ -531,119 +286,39 @@ def res2xls(env, res, tongji, mode_list, metric_list, save_file):
     wb.save("{}".format(save_file))
 
 
-def res2db(env, trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
+def res2db(env, benchmark_res, mode_list, metric_list)
     """
     转化为db需要的数据格式，部分字段取值待定
     """
     res = []
-    for model, info in trt_int8.items():
-        item = {
-            "task_dt": env["task_dt"],
-            "model_name": model,
-            "batch_size": info["batch_size"],
-            "fp_mode": "int8",
-            "use_trt": True,
-            "use_mkldnn": False,
-            "jingdu": info["jingdu"]["value"],
-            "jingdu_unit": info["jingdu"]["unit"],
-            "ips": info["xingneng"]["value"],
-            "ips_unit": info["xingneng"]["unit"],
-            "cpu_mem": info["cpu_mem"]["value"],
-            "gpu_mem": info["gpu_mem"]["value"],
-            "frame": env["frame"],
-            "frame_branch": env["frame_branch"],
-            "frame_commit": env["frame_commit"],
-            "frame_version": env["frame_version"],
-            "docker_image": env["docker_image"],
-            "python_version": env["python_version"],
-            "cuda_version": env["cuda_version"],
-            "cudnn_version": env["cudnn_version"],
-            "trt_version": env["trt_version"],
-            "device_type": env["device_type"]["gpu"],
-            "thread_num": 1,
-        }
-        res.append(item)
-    for model, info in trt_fp16.items():
-        item = {
-            "task_dt": env["task_dt"],
-            "model_name": model,
-            "batch_size": info["batch_size"],
-            "fp_mode": "fp16",
-            "use_trt": True,
-            "use_mkldnn": False,
-            "jingdu": info["jingdu"]["value"],
-            "jingdu_unit": info["jingdu"]["unit"],
-            "ips": info["xingneng"]["value"],
-            "ips_unit": info["xingneng"]["unit"],
-            "cpu_mem": info["cpu_mem"]["value"],
-            "gpu_mem": info["gpu_mem"]["value"],
-            "frame": env["frame"],
-            "frame_branch": env["frame_branch"],
-            "frame_commit": env["frame_commit"],
-            "frame_version": env["frame_version"],
-            "docker_image": env["docker_image"],
-            "python_version": env["python_version"],
-            "cuda_version": env["cuda_version"],
-            "cudnn_version": env["cudnn_version"],
-            "trt_version": env["trt_version"],
-            "device_type": env["device_type"]["gpu"],
-            "thread_num": 1,
-        }
-        res.append(item)
-    for model, info in mkldnn_int8.items():
-        item = {
-            "task_dt": env["task_dt"],
-            "model_name": model,
-            "batch_size": info["batch_size"],
-            "fp_mode": "int8",
-            "use_trt": False,
-            "use_mkldnn": True,
-            "jingdu": info["jingdu"]["value"],
-            "jingdu_unit": info["jingdu"]["unit"],
-            "ips": info["xingneng"]["value"],
-            "ips_unit": info["xingneng"]["unit"],
-            "cpu_mem": info["cpu_mem"]["value"],
-            "gpu_mem": info["gpu_mem"]["value"],
-            "frame": env["frame"],
-            "frame_branch": env["frame_branch"],
-            "frame_commit": env["frame_commit"],
-            "frame_version": env["frame_version"],
-            "docker_image": env["docker_image"],
-            "python_version": env["python_version"],
-            "cuda_version": env["cuda_version"],
-            "cudnn_version": env["cudnn_version"],
-            "trt_version": env["trt_version"],
-            "device_type": env["device_type"]["gpu"],
-            "thread_num": 1,
-        }
-        res.append(item)
-    for model, info in mkldnn_fp32.items():
-        item = {
-            "task_dt": env["task_dt"],
-            "model_name": model,
-            "batch_size": info["batch_size"],
-            "fp_mode": "fp32",
-            "use_trt": False,
-            "use_mkldnn": True,
-            "jingdu": info["jingdu"]["value"],
-            "jingdu_unit": info["jingdu"]["unit"],
-            "ips": info["xingneng"]["value"],
-            "ips_unit": info["xingneng"]["unit"],
-            "cpu_mem": info["cpu_mem"]["value"],
-            "gpu_mem": info["gpu_mem"]["value"],
-            "frame": env["frame"],
-            "frame_branch": env["frame_branch"],
-            "frame_commit": env["frame_commit"],
-            "frame_version": env["frame_version"],
-            "docker_image": env["docker_image"],
-            "python_version": env["python_version"],
-            "cuda_version": env["cuda_version"],
-            "cudnn_version": env["cudnn_version"],
-            "trt_version": env["trt_version"],
-            "device_type": env["device_type"]["gpu"],
-            "thread_num": 1,
-        }
-        res.append(item)
+    for mode in mode_list:
+        for model, info in benchmark_res[mode].items():
+            item = {
+                "task_dt": env["task_dt"],
+                "model_name": model,
+                "batch_size": info["batch_size"],
+                "fp_mode": "int8",
+                "use_trt": True,
+                "use_mkldnn": False,
+                "jingdu": info["jingdu"]["value"],
+                "jingdu_unit": info["jingdu"]["unit"],
+                "ips": info["xingneng"]["value"],
+                "ips_unit": info["xingneng"]["unit"],
+                "cpu_mem": info["cpu_mem"]["value"],
+                "gpu_mem": info["gpu_mem"]["value"],
+                "frame": env["frame"],
+                "frame_branch": env["frame_branch"],
+                "frame_commit": env["frame_commit"],
+                "frame_version": env["frame_version"],
+                "docker_image": env["docker_image"],
+                "python_version": env["python_version"],
+                "cuda_version": env["cuda_version"],
+                "cudnn_version": env["cudnn_version"],
+                "trt_version": env["trt_version"],
+                "device_type": env["device_type"]["gpu"],
+                "thread_num": 1,
+            }
+            res.append(item)
     return res
 
 
@@ -668,6 +343,9 @@ def run():
     metrics = sys.argv[13]
     save_file = sys.argv[14]
 
+    mode_list = modes.split(",")
+    metric_list = metrics.split(",")
+
     env = {
         "task_dt": task_dt,
         "frame": frame,
@@ -685,35 +363,17 @@ def run():
         },
     }
 
-    # trt_int8
-    log_file = "eval_trt_int8_acc.log"
-    mode = "trt_int8"
-    benchmark_res_trt_int8 = get_runtime_info(log_file)
-    base_res = get_base_info(mode)
-    trt_int8 = compare_diff(base_res, benchmark_res_trt_int8)
+    benchmark_res = {}
+    diff_res = {}
+    for mode in mode_list:
+        log_file = "eval_{}_acc.log".format(mode)
+        _current = get_runtime_info(log_file)
+        _base = get_base_info(mode)
+        _diff = compare_diff(_base, _current, metric_list)
+        benchmark_res.setdefault(mode, _current)
+        diff_res.setdefault(mode, _diff)
 
-    # trt_fp16
-    log_file = "eval_trt_fp16_acc.log"
-    mode = "trt_fp16"
-    benchmark_res_trt_fp16 = get_runtime_info(log_file)
-    base_res = get_base_info(mode)
-    trt_fp16 = compare_diff(base_res, benchmark_res_trt_fp16)
-
-    # mkldnn_int8
-    log_file = "eval_mkldnn_int8_acc.log"
-    mode = "mkldnn_int8"
-    benchmark_res_mkldnn_int8 = get_runtime_info(log_file)
-    base_res = get_base_info(mode)
-    mkldnn_int8 = compare_diff(base_res, benchmark_res_mkldnn_int8)
-
-    # mkldnn_fp32
-    log_file = "eval_mkldnn_fp32_acc.log"
-    mode = "mkldnn_fp32"
-    benchmark_res_mkldnn_fp32 = get_runtime_info(log_file)
-    base_res = get_base_info(mode)
-    mkldnn_fp32 = compare_diff(base_res, benchmark_res_mkldnn_fp32)
-
-    res, tongji = res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32)
+    res, tongji = res_summary(diff_res, mode_list, metric_list)
 
     env_str = "环境: "
     env_str += "docker: "
@@ -733,15 +393,12 @@ def run():
     env_str += cpu
     env_str += "  "
 
-    mode_list = modes.split(",")
-    metric_list = metrics.split(",")
-
     # save result to xlsx
     res2xls(env_str, res, tongji, mode_list, metric_list, save_file)
 
     # save result to db
     db_res = res2db(
-        env, benchmark_res_trt_int8, benchmark_res_trt_fp16, benchmark_res_mkldnn_int8, benchmark_res_mkldnn_fp32
+        env, benchmark_res, mode_list, metric_list
     )
     write_db.write(db_res)
 

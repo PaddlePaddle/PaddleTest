@@ -91,32 +91,15 @@ def create_table_day(task_dt, env, gsb, detail, mode_list, metric_list):
     content += "</tr>"
     # line data
     for mode, info in gsb.items():
-        gsb_jingdu = info["jingdu"]["gsb"]
-        b_jingdu = "{} ({})".format(info["jingdu"]["b"], round(info["jingdu"]["b_ratio"], 3))
-        g_jingdu = "{} ({})".format(info["jingdu"]["g"], round(info["jingdu"]["g_ratio"], 3))
-        gsb_xingneng = info["xingneng"]["gsb"]
-        b_xingneng = "{} ({})".format(info["xingneng"]["b"], round(info["xingneng"]["b_ratio"], 3))
-        g_xingneng = "{} ({})".format(info["xingneng"]["g"], round(info["xingneng"]["g_ratio"], 3))
-        gsb_cpu_mem = info["cpu_mem"]["gsb"]
-        b_cpu_mem = "{} ({})".format(info["cpu_mem"]["b"], round(info["cpu_mem"]["b_ratio"], 3))
-        g_cpu_mem = "{} ({})".format(info["cpu_mem"]["g"], round(info["cpu_mem"]["g_ratio"], 3))
-        gsb_gpu_mem = info["gpu_mem"]["gsb"]
-        b_gpu_mem = "{} ({})".format(info["gpu_mem"]["b"], round(info["gpu_mem"]["b_ratio"], 3))
-        g_gpu_mem = "{} ({})".format(info["gpu_mem"]["g"], round(info["gpu_mem"]["g_ratio"], 3))
         content += "<tr>"
         content += "<td>{}</tr>".format(mode)
-        content += "<td>{}</tr>".format(gsb_jingdu)
-        content += "<td>{}</tr>".format(b_jingdu)
-        content += "<td>{}</tr>".format(g_jingdu)
-        content += "<td>{}</tr>".format(gsb_xingneng)
-        content += "<td>{}</tr>".format(b_xingneng)
-        content += "<td>{}</tr>".format(g_xingneng)
-        content += "<td>{}</tr>".format(gsb_cpu_mem)
-        content += "<td>{}</tr>".format(b_cpu_mem)
-        content += "<td>{}</tr>".format(g_cpu_mem)
-        content += "<td>{}</tr>".format(gsb_gpu_mem)
-        content += "<td>{}</tr>".format(b_gpu_mem)
-        content += "<td>{}</tr>".format(g_gpu_mem)
+        for item in metric_list:
+            _gsb = info[item]["gsb"]
+            _b = "{} ({})".format(info[item]["b"], round(info[item]["b_ratio"], 3))
+            _g = "{} ({})".format(info[item]["g"], round(info[item]["g_ratio"], 3))
+            content += "<td>{}</tr>".format(_gsb)
+            content += "<td>{}</tr>".format(_b)
+            content += "<td>{}</tr>".format(_g)
         content += "</tr>"
     content += """
         </table>
