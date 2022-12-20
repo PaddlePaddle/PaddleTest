@@ -33,7 +33,7 @@ case:
       -
         name: fintune
         path: model_zoo/bert/static
-        cmd: python -m paddle.distributed.launch --gpus "0,1" run_glue.py
+        cmd: python -m paddle.distributed.launch --gpus "0" run_glue.py
         params:
           - --model_type bert
           - --model_name_or_path bert-base-uncased 
@@ -43,11 +43,10 @@ case:
           - --learning_rate 2e-5
           - --num_train_epochs 3
           - --logging_steps 1
-          - --save_steps 1
-          - --max_steps 1
+          - --save_steps 2
+          - --max_steps 2
           - --output_dir ./tmp/
           - --device gpu
-          - --use_amp False
         result:
           loss:
             base: 1.456469
@@ -55,6 +54,7 @@ case:
             evaluation: "="
     eval: skipped
     infer: skipped
+    export: skipped
     predict: 
       -
         name: predict
