@@ -65,7 +65,7 @@ def test_paddlecv_cpu_predict(model_name, run_mode):
 
 @allure.story("paddlecv_wheel_predict")
 @pytest.mark.parametrize("model_name", get_model_list("utils/models_list/paddlecv_list_wheel.txt"))
-def test_paddlecv_wheel_predict(model_name):
+def u_test_paddlecv_wheel_predict(model_name):
     """
     test_paddlecv_wheel_predic
     """
