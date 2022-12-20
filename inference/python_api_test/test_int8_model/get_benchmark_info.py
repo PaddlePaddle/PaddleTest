@@ -112,7 +112,18 @@ def gsb(compare_res, metric_list):
     """
     gsb = {}
     for item in metric_list:
-        gsb.setdefault(item, {"gsb": "", "g": 0, "s": 0, "b": 0, "total": 0, "b_ratio": 0, "g_ratio": 0,})
+        gsb.setdefault(
+            item,
+            {
+                "gsb": "",
+                 "g": 0,
+                 "s": 0,
+                 "b": 0,
+                 "total": 0,
+                 "b_ratio": 0,
+                 "g_ratio": 0,
+            }
+        )
     for model, info in compare_res.items():
         for item in metric_list:
             if info[item]["gsb"] == "g":
@@ -139,7 +150,18 @@ def res_summary(diff_res, mode_list, metric_list):
 
     gsb_total = {}
     for item in metric_list:
-        gsb_total.setdefault(item, {"gsb": "", "g": 0, "s": 0, "b": 0, "total": 0, "b_ratio": 0, "g_ratio": 0,})
+        gsb_total.setdefault(
+            item,
+            {
+                "gsb": "",
+                 "g": 0,
+                 "s": 0,
+                 "b": 0,
+                 "total": 0,
+                 "b_ratio": 0,
+                 "g_ratio": 0,
+            }
+        )
 
     # 统计数据
     for mode in mode_list:
@@ -152,9 +174,7 @@ def res_summary(diff_res, mode_list, metric_list):
             gsb_total[item]["s"] += tongji[mode][item]["s"]
             gsb_total[item]["b"] += tongji[mode][item]["b"]
             gsb_total[item]["total"] += tongji[mode][item]["total"]
-        gsb_total[item]["gsb"] = "{}:{}:{}".format(
-            gsb_total[item]["g"], gsb_total[item]["s"], gsb_total[item]["b"]
-        )
+        gsb_total[item]["gsb"] = "{}:{}:{}".format(gsb_total[item]["g"], gsb_total[item]["s"], gsb_total[item]["b"])
         if gsb_total[item]["total"] > 0:
             gsb_total[item]["b_ratio"] = gsb_total[item]["b"] / gsb_total[item]["total"]
             gsb_total[item]["g_ratio"] = gsb_total[item]["g"] / gsb_total[item]["total"]
@@ -403,9 +423,7 @@ def run():
     res2xls(env_str, res, tongji, mode_list, metric_list, save_file)
 
     # save result to db
-    db_res = res2db(
-        env, benchmark_res, mode_list, metric_list
-    )
+    db_res = res2db(env, benchmark_res, mode_list, metric_list)
     write_db.write(db_res)
 
     # send mail
