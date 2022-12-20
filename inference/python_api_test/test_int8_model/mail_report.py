@@ -97,6 +97,12 @@ def create_table_day(task_dt, env, gsb, detail, mode_list, metric_list):
         gsb_xingneng = info["xingneng"]["gsb"]
         b_xingneng = "{} ({})".format(info["xingneng"]["b"], round(info["xingneng"]["b_ratio"], 3))
         g_xingneng = "{} ({})".format(info["xingneng"]["g"], round(info["xingneng"]["g_ratio"], 3))
+        gsb_cpu_mem = info["cpu_mem"]["gsb"]
+        b_cpu_mem = "{} ({})".format(info["cpu_mem"]["b"], round(info["cpu_mem"]["b_ratio"], 3))
+        g_cpu_mem = "{} ({})".format(info["cpu_mem"]["g"], round(info["cpu_mem"]["g_ratio"], 3))
+        gsb_gpu_mem = info["gpu_mem"]["gsb"]
+        b_gpu_mem = "{} ({})".format(info["gpu_mem"]["b"], round(info["gpu_mem"]["b_ratio"], 3))
+        g_gpu_mem = "{} ({})".format(info["gpu_mem"]["g"], round(info["gpu_mem"]["g_ratio"], 3))
         content += "<tr>"
         content += "<td>{}</tr>".format(mode)
         content += "<td>{}</tr>".format(gsb_jingdu)
@@ -105,6 +111,12 @@ def create_table_day(task_dt, env, gsb, detail, mode_list, metric_list):
         content += "<td>{}</tr>".format(gsb_xingneng)
         content += "<td>{}</tr>".format(b_xingneng)
         content += "<td>{}</tr>".format(g_xingneng)
+        content += "<td>{}</tr>".format(gsb_cpu_mem)
+        content += "<td>{}</tr>".format(b_cpu_mem)
+        content += "<td>{}</tr>".format(g_cpu_mem)
+        content += "<td>{}</tr>".format(gsb_gpu_mem)
+        content += "<td>{}</tr>".format(b_gpu_mem)
+        content += "<td>{}</tr>".format(g_gpu_mem)
         content += "</tr>"
     content += """
         </table>

@@ -88,32 +88,38 @@ def compare_diff(base_res, benchmark_res):
                 "gsb": "o",
                 "unit": info["xingneng"]["unit"],
             },
+            "cpu_mem": {
+                "th": info["cpu_mem"]["th"],
+                "base": info["cpu_mem"]["value"],
+                "benchmark": -1,
+                "diff": -1,
+                "gsb": "o",
+                "unit": info["cpu_mem"]["unit"],
+            },
+            "gpu_mem": {
+                "th": info["gpu_mem"]["th"],
+                "base": info["gpu_mem"]["value"],
+                "benchmark": -1,
+                "diff": -1,
+                "gsb": "o",
+                "unit": info["gpu_mem"]["unit"],
+            },
         }
 
         if model not in benchmark_keys:
             continue
 
-        compare_res[model]["jingdu"]["benchmark"] = benchmark_res[model]["jingdu"]["value"]
-        gap = compare_res[model]["jingdu"]["benchmark"] - compare_res[model]["jingdu"]["base"]
-        diff = gap / compare_res[model]["jingdu"]["base"]
-        compare_res[model]["jingdu"]["diff"] = diff
-        if diff == 0:
-            compare_res[model]["jingdu"]["gsb"] = "s"
-        elif diff < 0:
-            compare_res[model]["jingdu"]["gsb"] = "b"
-        elif diff > 0:
-            compare_res[model]["jingdu"]["gsb"] = "g"
-
-        compare_res[model]["xingneng"]["benchmark"] = benchmark_res[model]["xingneng"]["value"]
-        gap = compare_res[model]["xingneng"]["benchmark"] - compare_res[model]["xingneng"]["base"]
-        diff = gap / compare_res[model]["xingneng"]["base"]
-        compare_res[model]["xingneng"]["diff"] = diff
-        if diff == 0:
-            compare_res[model]["xingneng"]["gsb"] = "s"
-        elif diff < 0:
-            compare_res[model]["xingneng"]["gsb"] = "b"
-        elif diff > 0:
-            compare_res[model]["xingneng"]["gsb"] = "g"
+        for item in ["jingdu", "xingneng", "cpu_mem", "gpu_mem"]:
+            compare_res[model][item]["benchmark"] = benchmark_res[model][item]["value"]
+            gap = compare_res[model][item]["benchmark"] - compare_res[model][item]["base"]
+            diff = gap / compare_res[model][item]["base"]
+            compare_res[model][item]["diff"] = diff
+            if diff == 0:
+                compare_res[model][item]["gsb"] = "s"
+            elif diff < 0:
+                compare_res[model][item]["gsb"] = "b"
+            elif diff > 0:
+                compare_res[model][item]["gsb"] = "g"
 
     return compare_res
 
@@ -141,31 +147,39 @@ def gsb(compare_res):
             "b_ratio": 0,
             "g_ratio": 0,
         },
+        "cpu_mem": {
+            "gsb": "",
+            "g": 0,
+            "s": 0,
+            "b": 0,
+            "total": 0,
+            "b_ratio": 0,
+            "g_ratio": 0,
+        },
+        "gpu_mem": {
+            "gsb": "",
+            "g": 0,
+            "s": 0,
+            "b": 0,
+            "total": 0,
+            "b_ratio": 0,
+            "g_ratio": 0,
+        },
     }
     for model, info in compare_res.items():
-        if info["jingdu"]["gsb"] == "g":
-            gsb["jingdu"]["g"] += 1
-        elif info["jingdu"]["gsb"] == "s":
-            gsb["jingdu"]["s"] += 1
-        elif info["jingdu"]["gsb"] == "b":
-            gsb["jingdu"]["b"] += 1
-        gsb["jingdu"]["gsb"] = "{}:{}:{}".format(gsb["jingdu"]["g"], gsb["jingdu"]["s"], gsb["jingdu"]["b"])
-        gsb["jingdu"]["total"] = gsb["jingdu"]["g"] + gsb["jingdu"]["s"] + gsb["jingdu"]["b"]
-        if gsb["jingdu"]["total"] > 0:
-            gsb["jingdu"]["b_ratio"] = gsb["jingdu"]["b"] / gsb["jingdu"]["total"]
-            gsb["jingdu"]["g_ratio"] = gsb["jingdu"]["g"] / gsb["jingdu"]["total"]
+        for item in ["jingdu", "xingneng", "cpu_mem", "gpu_mem"]:
+            if info[item]["gsb"] == "g":
+                gsb[item]["g"] += 1
+            elif info[item]["gsb"] == "s":
+                gsb[item]["s"] += 1
+            elif info[item]["gsb"] == "b":
+                gsb[item]["b"] += 1
+            gsb[item]["gsb"] = "{}:{}:{}".format(gsb[item]["g"], gsb[item]["s"], gsb[item]["b"])
+            gsb[item]["total"] = gsb[item]["g"] + gsb[item]["s"] + gsb[item]["b"]
+            if gsb[item]["total"] > 0:
+                gsb[item]["b_ratio"] = gsb[item]["b"] / gsb[item]["total"]
+                gsb[item]["g_ratio"] = gsb[item]["g"] / gsb[item]["total"]
 
-        if info["xingneng"]["gsb"] == "g":
-            gsb["xingneng"]["g"] += 1
-        elif info["xingneng"]["gsb"] == "s":
-            gsb["xingneng"]["s"] += 1
-        elif info["xingneng"]["gsb"] == "b":
-            gsb["xingneng"]["b"] += 1
-        gsb["xingneng"]["gsb"] = "{}:{}:{}".format(gsb["xingneng"]["g"], gsb["xingneng"]["s"], gsb["xingneng"]["b"])
-        gsb["xingneng"]["total"] = gsb["xingneng"]["g"] + gsb["xingneng"]["s"] + gsb["xingneng"]["b"]
-        if gsb["xingneng"]["total"] > 0:
-            gsb["xingneng"]["b_ratio"] = gsb["xingneng"]["b"] / gsb["xingneng"]["total"]
-            gsb["xingneng"]["g_ratio"] = gsb["xingneng"]["g"] / gsb["xingneng"]["total"]
     return gsb
 
 
@@ -200,67 +214,56 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
             "b_ratio": 0,
             "g_ratio": 0,
         },
+        "cpu_mem": {
+            "gsb": "",
+            "g": 0,
+            "s": 0,
+            "b": 0,
+            "total": 0,
+            "b_ratio": 0,
+            "g_ratio": 0,
+        },
+        "gpu_mem": {
+            "gsb": "",
+            "g": 0,
+            "s": 0,
+            "b": 0,
+            "total": 0,
+            "b_ratio": 0,
+            "g_ratio": 0,
+        },
     }
-    gsb_total["jingdu"]["g"] = (
-        gsb_trt_int8["jingdu"]["g"]
-        + gsb_trt_fp16["jingdu"]["g"]
-        + gsb_mkldnn_int8["jingdu"]["g"]
-        + gsb_mkldnn_fp32["jingdu"]["g"]
-    )
-    gsb_total["jingdu"]["s"] = (
-        gsb_trt_int8["jingdu"]["s"]
-        + gsb_trt_fp16["jingdu"]["s"]
-        + gsb_mkldnn_int8["jingdu"]["s"]
-        + gsb_mkldnn_fp32["jingdu"]["s"]
-    )
-    gsb_total["jingdu"]["b"] = (
-        gsb_trt_int8["jingdu"]["b"]
-        + gsb_trt_fp16["jingdu"]["b"]
-        + gsb_mkldnn_int8["jingdu"]["b"]
-        + gsb_mkldnn_fp32["jingdu"]["b"]
-    )
-    gsb_total["jingdu"]["total"] = (
-        gsb_trt_int8["jingdu"]["total"]
-        + gsb_trt_fp16["jingdu"]["total"]
-        + gsb_mkldnn_int8["jingdu"]["total"]
-        + gsb_mkldnn_fp32["jingdu"]["total"]
-    )
-    gsb_total["jingdu"]["gsb"] = "{}:{}:{}".format(
-        gsb_total["jingdu"]["g"], gsb_total["jingdu"]["s"], gsb_total["jingdu"]["b"]
-    )
-    if gsb_total["jingdu"]["total"] > 0:
-        gsb_total["jingdu"]["b_ratio"] = gsb_total["jingdu"]["b"] / gsb_total["jingdu"]["total"]
-        gsb_total["jingdu"]["g_ratio"] = gsb_total["jingdu"]["g"] / gsb_total["jingdu"]["total"]
-    gsb_total["xingneng"]["g"] = (
-        gsb_trt_int8["xingneng"]["g"]
-        + gsb_trt_fp16["xingneng"]["g"]
-        + gsb_mkldnn_int8["xingneng"]["g"]
-        + gsb_mkldnn_fp32["xingneng"]["g"]
-    )
-    gsb_total["xingneng"]["s"] = (
-        gsb_trt_int8["xingneng"]["s"]
-        + gsb_trt_fp16["xingneng"]["s"]
-        + gsb_mkldnn_int8["xingneng"]["s"]
-        + gsb_mkldnn_fp32["xingneng"]["s"]
-    )
-    gsb_total["xingneng"]["b"] = (
-        gsb_trt_int8["xingneng"]["b"]
-        + gsb_trt_fp16["xingneng"]["b"]
-        + gsb_mkldnn_int8["xingneng"]["b"]
-        + gsb_mkldnn_fp32["xingneng"]["b"]
-    )
-    gsb_total["xingneng"]["total"] = (
-        gsb_trt_int8["xingneng"]["total"]
-        + gsb_trt_fp16["xingneng"]["total"]
-        + gsb_mkldnn_int8["xingneng"]["total"]
-        + gsb_mkldnn_fp32["xingneng"]["total"]
-    )
-    gsb_total["xingneng"]["gsb"] = "{}:{}:{}".format(
-        gsb_total["xingneng"]["g"], gsb_total["xingneng"]["s"], gsb_total["xingneng"]["b"]
-    )
-    if gsb_total["xingneng"]["total"] > 0:
-        gsb_total["xingneng"]["b_ratio"] = gsb_total["xingneng"]["b"] / gsb_total["xingneng"]["total"]
-        gsb_total["xingneng"]["g_ratio"] = gsb_total["xingneng"]["g"] / gsb_total["xingneng"]["total"]
+    for item in ["jingdu", "xingneng", "cpu_mem", "gpu_mem"]:
+        gsb_total[item]["g"] = (
+            gsb_trt_int8[item]["g"]
+            + gsb_trt_fp16[item]["g"]
+            + gsb_mkldnn_int8[item]["g"]
+            + gsb_mkldnn_fp32[item]["g"]
+        )
+        gsb_total[item]["s"] = (
+            gsb_trt_int8[item]["s"]
+            + gsb_trt_fp16[item]["s"]
+            + gsb_mkldnn_int8[item]["s"]
+            + gsb_mkldnn_fp32[item]["s"]
+        )
+        gsb_total[item]["b"] = (
+            gsb_trt_int8[item]["b"]
+            + gsb_trt_fp16[item]["b"]
+            + gsb_mkldnn_int8[item]["b"]
+            + gsb_mkldnn_fp32[item]["b"]
+        )
+        gsb_total[item]["total"] = (
+            gsb_trt_int8[item]["total"]
+            + gsb_trt_fp16[item]["total"]
+            + gsb_mkldnn_int8[item]["total"]
+            + gsb_mkldnn_fp32[item]["total"]
+        )
+        gsb_total[item]["gsb"] = "{}:{}:{}".format(
+            gsb_total[item]["g"], gsb_total[item]["s"], gsb_total[item]["b"]
+        )
+        if gsb_total[item]["total"] > 0:
+            gsb_total[item]["b_ratio"] = gsb_total[item]["b"] / gsb_total[item]["total"]
+            gsb_total[item]["g_ratio"] = gsb_total[item]["g"] / gsb_total[item]["total"]
 
     tongji = {
         "trt_int8": gsb_trt_int8,
@@ -292,6 +295,22 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "gsb": trt_int8[model]["xingneng"]["gsb"],
                     "unit": trt_int8[model]["xingneng"]["unit"],
                 },
+                "cpu_mem": {
+                    "th": trt_int8[model]["cpu_mem"]["th"],
+                    "base": trt_int8[model]["cpu_mem"]["base"],
+                    "benchmark": trt_int8[model]["cpu_mem"]["benchmark"],
+                    "diff": trt_int8[model]["cpu_mem"]["diff"],
+                    "gsb": trt_int8[model]["cpu_mem"]["gsb"],
+                    "unit": trt_int8[model]["cpu_mem"]["unit"],
+                },
+                "gpu_mem": {
+                    "th": trt_int8[model]["gpu_mem"]["th"],
+                    "base": trt_int8[model]["gpu_mem"]["base"],
+                    "benchmark": trt_int8[model]["gpu_mem"]["benchmark"],
+                    "diff": trt_int8[model]["gpu_mem"]["diff"],
+                    "gsb": trt_int8[model]["gpu_mem"]["gsb"],
+                    "unit": trt_int8[model]["gpu_mem"]["unit"],
+                },
             },
             "trt_fp16": {
                 "jingdu": {
@@ -309,6 +328,22 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": trt_fp16[model]["xingneng"]["diff"],
                     "gsb": trt_fp16[model]["xingneng"]["gsb"],
                     "unit": trt_fp16[model]["xingneng"]["unit"],
+                },
+                "cpu_mem": {
+                    "th": trt_fp16[model]["cpu_mem"]["th"],
+                    "base": trt_fp16[model]["cpu_mem"]["base"],
+                    "benchmark": trt_fp16[model]["cpu_mem"]["benchmark"],
+                    "diff": trt_fp16[model]["cpu_mem"]["diff"],
+                    "gsb": trt_fp16[model]["cpu_mem"]["gsb"],
+                    "unit": trt_fp16[model]["cpu_mem"]["unit"],
+                },
+                "gpu_mem": {
+                    "th": trt_fp16[model]["gpu_mem"]["th"],
+                    "base": trt_fp16[model]["gpu_mem"]["base"],
+                    "benchmark": trt_fp16[model]["gpu_mem"]["benchmark"],
+                    "diff": trt_fp16[model]["gpu_mem"]["diff"],
+                    "gsb": trt_fp16[model]["gpu_mem"]["gsb"],
+                    "unit": trt_fp16[model]["gpu_mem"]["unit"],
                 },
             },
             "mkldnn_int8": {
@@ -328,6 +363,22 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "gsb": mkldnn_int8[model]["xingneng"]["gsb"],
                     "unit": mkldnn_int8[model]["xingneng"]["unit"],
                 },
+                "cpu_mem": {
+                    "th": mkldnn_int8[model]["cpu_mem"]["th"],
+                    "base": mkldnn_int8[model]["cpu_mem"]["base"],
+                    "benchmark": mkldnn_int8[model]["cpu_mem"]["benchmark"],
+                    "diff": mkldnn_int8[model]["cpu_mem"]["diff"],
+                    "gsb": mkldnn_int8[model]["cpu_mem"]["gsb"],
+                    "unit": mkldnn_int8[model]["cpu_mem"]["unit"],
+                },
+                "gpu_mem": {
+                    "th": mkldnn_int8[model]["gpu_mem"]["th"],
+                    "base": mkldnn_int8[model]["gpu_mem"]["base"],
+                    "benchmark": mkldnn_int8[model]["gpu_mem"]["benchmark"],
+                    "diff": mkldnn_int8[model]["gpu_mem"]["diff"],
+                    "gsb": mkldnn_int8[model]["gpu_mem"]["gsb"],
+                    "unit": mkldnn_int8[model]["gpu_mem"]["unit"],
+                },
             },
             "mkldnn_fp32": {
                 "jingdu": {
@@ -345,6 +396,22 @@ def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
                     "diff": mkldnn_fp32[model]["xingneng"]["diff"],
                     "gsb": mkldnn_fp32[model]["xingneng"]["gsb"],
                     "unit": mkldnn_fp32[model]["xingneng"]["unit"],
+                },
+                "cpu_mem": {
+                    "th": mkldnn_fp32[model]["cpu_mem"]["th"],
+                    "base": mkldnn_fp32[model]["cpu_mem"]["base"],
+                    "benchmark": mkldnn_fp32[model]["cpu_mem"]["benchmark"],
+                    "diff": mkldnn_fp32[model]["cpu_mem"]["diff"],
+                    "gsb": mkldnn_fp32[model]["cpu_mem"]["gsb"],
+                    "unit": mkldnn_fp32[model]["cpu_mem"]["unit"],
+                },
+                "gpu_mem": {
+                    "th": mkldnn_fp32[model]["gpu_mem"]["th"],
+                    "base": mkldnn_fp32[model]["gpu_mem"]["base"],
+                    "benchmark": mkldnn_fp32[model]["gpu_mem"]["benchmark"],
+                    "diff": mkldnn_fp32[model]["gpu_mem"]["diff"],
+                    "gsb": mkldnn_fp32[model]["gpu_mem"]["gsb"],
+                    "unit": mkldnn_fp32[model]["gpu_mem"]["unit"],
                 },
             },
         }
