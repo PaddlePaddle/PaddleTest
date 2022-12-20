@@ -96,3 +96,5 @@ class TestPaddleCVPredict:
 
         else:
             # exit_check_fucntion(0, res, self.output_vis, self.output_json, self.input)
+            print(res)
+            pass
