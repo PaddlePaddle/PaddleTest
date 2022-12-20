@@ -25,7 +25,7 @@ from paddleseg.cvlibs import Config as PaddleSegDataConfig
 from paddleseg.core.infer import reverse_transform
 from paddleseg.utils import metrics
 
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
 
 
 def argsparser():
@@ -87,6 +87,10 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     time_max = float("-inf")
     warmup = 20
     print("Start evaluating (total_samples: {}, total_iters: {}).".format(FLAGS.total_samples, FLAGS.sample_nums))
+
+    monitor = Monitor(0)
+    monitor.start()
+
     for batch_id, data in enumerate(loader):
         image = np.array(data[0])
         label = np.array(data[1]).astype("int64")
@@ -128,6 +132,23 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
 
         if FLAGS.small_data and batch_id > FLAGS.sample_nums:
             break
+
+    monitor.stop()
+    monitor_result = monitor.output()
+    print(monitor_result)
+
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
 
     _, miou = metrics.mean_iou(intersect_area_all, pred_area_all, label_area_all)
     _, acc = metrics.accuracy(intersect_area_all, pred_area_all)
