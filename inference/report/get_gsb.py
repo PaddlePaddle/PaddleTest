@@ -90,7 +90,6 @@ def get_gsb(task_dt):
     res_slim = cursor.fetchall()
     select_compute(res_slim, gsb, "slim")
 
-
     db.commit()
     cursor.close()
     db.close()
@@ -158,7 +157,6 @@ def select_compute(db_res, gsb, main_clas):
                 frames = gsb[main_clas]["value"][mode][precision][bs].keys()
                 if "paddle" not in frames:
                     continue
-                #print("1111111")
                 metrics = gsb[main_clas]["value"][mode][precision][bs]["paddle"].keys()
                 for metric in metrics:
                     models = gsb[main_clas]["value"][mode][precision][bs]["paddle"][metric]["value"].keys()
@@ -170,7 +168,6 @@ def select_compute(db_res, gsb, main_clas):
                         for model in models:
                             if model not in gsb[main_clas]["value"][mode][precision][bs][frame][metric]["value"].keys():
                                 continue
-                            #print("22222222222")
                             v_paddle = gsb[main_clas]["value"][mode][precision][bs]["paddle"][metric]["value"][model]
                             v_frame = gsb[main_clas]["value"][mode][precision][bs][frame][metric]["value"][model]
                             if (v_frame <= 0) or (v_paddle <= 0):
@@ -185,8 +182,6 @@ def select_compute(db_res, gsb, main_clas):
                         if (g > 0) or (s > 0) or (b > 0):
                             _gsb = "{}:{}:{}".format(g, s, b)
                             gsb[main_clas]["value"][mode][precision][bs][frame][metric].setdefault("gsb", _gsb)
-    #import json
-    #print(json.dumps(gsb, indent=4)) 
 
 
 if __name__ == "__main__":
