@@ -57,7 +57,7 @@ def get_base_info(mode):
         base_res = base_trt_int8.trt_int8
     elif mode == "trt_fp16":
         base_res = base_trt_fp16.trt_fp16
-    eif mode == "nv_trt_int8":
+    elif mode == "nv_trt_int8":
         base_res = base_nv_trt_int8.nv_trt_int8
     elif mode == "nv_trt_fp16":
         base_res = base_nv_trt_fp16.nv_trt_fp16
@@ -114,7 +114,7 @@ def gsb(compare_res, metric_list):
     for item in metric_list:
         gsb.setdefault(item, {"gsb": "", "g": 0, "s": 0, "b": 0, "total": 0, "b_ratio": 0, "g_ratio": 0,})
     for model, info in compare_res.items():
-        for item in ["jingdu", "xingneng", "cpu_mem", "gpu_mem"]:
+        for item in metric_list:
             if info[item]["gsb"] == "g":
                 gsb[item]["g"] += 1
             elif info[item]["gsb"] == "s":
@@ -292,7 +292,7 @@ def res2xls(env, res, tongji, mode_list, metric_list, save_file):
     wb.save("{}".format(save_file))
 
 
-def res2db(env, benchmark_res, mode_list, metric_list)
+def res2db(env, benchmark_res, mode_list, metric_list):
     """
     转化为db需要的数据格式，部分字段取值待定
     """
