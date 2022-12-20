@@ -56,6 +56,10 @@ export:
 predict:
   name: pretrained
   cmd: python deploy/${category}/python/infer.py
+  params:
+    - --model_file exported_model/${model}/${category}.pdmodel
+    - --params_file exported_model/${model}/${category}.pdiparams
+    
   result:
     exit_code:
       base: 0
