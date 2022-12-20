@@ -24,7 +24,7 @@ import yaml
 
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
 from paddle.io import DataLoader
 from utils.imagenet_reader import ImageNetDataset
 
@@ -120,6 +120,8 @@ def eval(predictor, FLAGS):
     sample_nums = len(val_loader)
     if FLAGS.small_data:
         sample_nums = 1000
+    monitor = Monitor(0)
+    monitor.start()
     for batch_id, (image, label) in enumerate(val_loader):
         image = np.array(image)
         # classfication model usually having only one input
@@ -161,6 +163,23 @@ def eval(predictor, FLAGS):
         rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
         if rerun_flag:
             return
+
+    monitor.stop()
+    monitor_result = monitor.output()
+    print(monitor_result)
+
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
 
     result = np.mean(np.array(results), axis=0)
     fp_message = FLAGS.precision

@@ -30,7 +30,7 @@ from paddlenlp.transformers import AutoModelForTokenClassification, AutoTokenize
 from paddlenlp.datasets import load_dataset
 from paddlenlp.data import Stack, Tuple, Pad
 from paddlenlp.metrics import Mcc, PearsonAndSpearman
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
 
 METRIC_CLASSES = {
     "cola": Mcc,
@@ -224,6 +224,8 @@ class WrapperPredictor(object):
         metric = METRIC_CLASSES[FLAGS.task_name]()
         metric.reset()
         predict_time = 0.0
+        monitor = Monitor(0)
+        monitor.start()
         for i, batch in enumerate(batches):
             examples = self._convert_predict_batch(FLAGS, batch, tokenizer, batchify_fn, dataset.label_list)
             input_ids, segment_ids, label = batchify_fn(examples)
@@ -233,6 +235,23 @@ class WrapperPredictor(object):
             predict_time += end_time - start_time
             correct = metric.compute(paddle.to_tensor(output), paddle.to_tensor(np.array(label).flatten()))
             metric.update(correct)
+
+        monitor.stop()
+        monitor_result = monitor.output()
+        print(monitor_result)
+
+        cpu_mem = (
+            monitor_result["result"]["cpu_memory.used"]
+            if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+            else 0
+        )
+        gpu_mem = (
+            monitor_result["result"]["gpu_memory.used"]
+            if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+            else 0
+        )
+
+        print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
 
         sequences_num = i * FLAGS.batch_size
         print(
