@@ -1,5 +1,6 @@
 echo "========InfoSafeCheck start========"
 set +e
+set -x
 export REPO_ROOT=$PWD
 exit_code=0
 unset http_proxy && unset https_proxy
@@ -33,7 +34,7 @@ for file_name in $(git diff --name-only pr_${AGILE_PULL_ID} ${AGILE_COMPILE_BRAN
         fi
     fi
 done
-set -x
+
 if [ $commit_files == 'off' ];then
     echo "code format error"
     git diff 2>&1
