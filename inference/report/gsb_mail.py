@@ -52,18 +52,24 @@ def create_gsb_table(gsb):
         content += """
             <hr>
             <h2>{}</h2>
-        """
+        """.format(item)
 
         if len(gsb[item]["value"]) < 1:
+            continue
+        if len(gsb[item]["frame"]) == 1 and gsb[item]["frame"][0] == "paddle":
             continue
         content += """
             环境信息：<br>{}<br><br>
             <table border="1" align=center>
-        """.format(item, gsb[item]["env"])
+        """.format(
+            gsb[item]["env"]
+        )
 
         content += """<tr>"""
         for table_title in gsb[item]["table_title"]:
-            content += """<td>{}</td>""".format(table_title)
+            content += """<td>{}</td>""".format(
+                table_title
+            )
         content += """</tr>"""
         for mode in gsb[item]["value"].keys():
             for precision in gsb[item]["value"][mode].keys():
@@ -73,18 +79,24 @@ def create_gsb_table(gsb):
                         <td>{}</td>
                         <td>{}</td>
                         <td>{}</td>
-                    """.format(mode, precision, bs)
-                    for frame in gsb[item]["frame"]:
-                        for metric in gsb[item]["metric"]:
+                    """.format(
+                        mode, precision, bs
+                    )
+                    for metric in gsb[item]["metric"]:
+                        for frame in gsb[item]["frame"]:
+                            if frame == "paddle":
+                                continue 
                             gsb_value = "-"
-                            try: 
+                            try:
                                 if "gsb" in gsb[item]["value"][mode][precision][bs][frame][metric].keys():
                                     gsb_value = gsb[item]["value"][mode][precision][bs][frame][metric]["gsb"]
                             except:
                                 pass
                             content += """
                                 <td>{}</td>
-                            """.format(gsb_value)
+                            """.format(
+                                gsb_value
+                            )
                     content += """</tr>""" 
         content += """
             </table>
@@ -108,4 +120,6 @@ def report_mail(gsb):
 if __name__ == "__main__":
     task_dt = sys.argv[1]
     gsb = get_gsb.get_gsb(task_dt)
+    #import json
+    #print(json.dumps(gsb,indent=4))
     report_mail(gsb)

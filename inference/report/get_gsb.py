@@ -38,7 +38,7 @@ def get_gsb(task_dt):
     """
     task_dt_today = datetime.date.today()
     task_dt_today = datetime.datetime.strptime(task_dt, "%Y-%m-%d")
-    oneday=datetime.timedelta(days=1)
+    oneday = datetime.timedelta(days=1)
     task_dt_last = task_dt_today + oneday
     print(task_dt_today, task_dt_last)
     gsb = {
@@ -49,21 +49,21 @@ def get_gsb(task_dt):
             "metric": [],
             "frame": [],
             "value": {},
-         },
+        },
         "cpu": {
             "env": "",
             "table_title": [],
             "metric": [],
             "frame": [],
             "value": {},
-         },
+        },
         "slim": {
             "env": "",
             "table_title": [],
             "metric": [],
             "frame": [],
             "value": {},
-         },
+        },
     }
 
     get_db_info()
@@ -77,15 +77,24 @@ def get_gsb(task_dt):
     )
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
-    sql_str = "select * from InferResult where device_type not like '%CPU%' and task_dt >= '{}' and task_dt < '{}'".format(task_dt_today, task_dt_last)
+    sql_str = "select * from InferResult where device_type not like '%CPU%' and task_dt >= '{}' and task_dt < '{}'".format(
+        task_dt_today,
+        task_dt_last
+    )
     cursor.execute(sql_str)
     res_infer = cursor.fetchall()
     select_compute(res_infer, gsb, "gpu")
-    sql_str = "select * from InferResult where device_type like '%CPU%' and task_dt >= '{}' and task_dt < '{}'".format(task_dt_today, task_dt_last)
+    sql_str = "select * from InferResult where device_type like '%CPU%' and task_dt >= '{}' and task_dt < '{}'".format(
+        task_dt_today,
+        task_dt_last
+    )
     cursor.execute(sql_str)
     res_infer = cursor.fetchall()
     select_compute(res_infer, gsb, "cpu")
-    sql_str = "select * from SlimResult where task_dt >= '{}' and task_dt < '{}'".format(task_dt_today, task_dt_last)
+    sql_str = "select * from SlimResult where task_dt >= '{}' and task_dt < '{}'".format(
+       task_dt_today,
+       task_dt_last
+    )
     cursor.execute(sql_str)
     res_slim = cursor.fetchall()
     select_compute(res_slim, gsb, "slim")
@@ -132,7 +141,9 @@ def select_compute(db_res, gsb, main_clas):
         if bs not in gsb[main_clas]["value"][mode][precision].keys():
             gsb[main_clas]["value"][mode][precision].setdefault(bs, {})
         if frame not in gsb[main_clas]["value"][mode][precision][bs].keys():
-            gsb[main_clas]["value"][mode][precision][bs].setdefault(frame, {"ips": {"value": {}}, "cpu_mem": {"value": {}}, "gpu_mem": {"value": {}}})
+            gsb[main_clas]["value"][mode][precision][bs].setdefault(
+                frame, {"ips": {"value": {}}, "cpu_mem": {"value": {}}, "gpu_mem": {"value": {}}}
+            )
         if model_name not in gsb[main_clas]["value"][mode][precision][bs][frame]["ips"]["value"].keys():
             gsb[main_clas]["value"][mode][precision][bs][frame]["ips"]["value"][model_name] = ips
         if model_name not in gsb[main_clas]["value"][mode][precision][bs][frame]["cpu_mem"]["value"].keys():
@@ -141,13 +152,19 @@ def select_compute(db_res, gsb, main_clas):
             gsb[main_clas]["value"][mode][precision][bs][frame]["gpu_mem"]["value"][model_name] = gpu_mem
 
     # env
-    gsb[main_clas]["env"] = "device_type:{}<br>docker_image:{}<br>paddle_commit:{}".format(device_type, docker_image, paddle_commit)
+    gsb[main_clas]["env"] = "device_type:{}<br>docker_image:{}<br>paddle_commit:{}".format(
+        device_type,
+        docker_image,
+        paddle_commit
+    )
     # metric
     gsb[main_clas]["metric"] = ["ips", "cpu_mem", "gpu_mem"]
     # table_title
     gsb[main_clas]["table_title"] = ["模式", "precision", "batch_size"]
     for metric in gsb[main_clas]["metric"]:
         for frame in gsb[main_clas]["frame"]:
+            if frame == "paddle":
+                continue
             item = "{}-{}".format(metric, frame)
             gsb[main_clas]["table_title"].append(item)
     
@@ -161,6 +178,8 @@ def select_compute(db_res, gsb, main_clas):
                 for metric in metrics:
                     models = gsb[main_clas]["value"][mode][precision][bs]["paddle"][metric]["value"].keys()
                     for frame in frames:
+                        if frame == "paddle":
+                            continue
                         _gsb = ""
                         g = 0
                         s = 0
@@ -181,7 +200,9 @@ def select_compute(db_res, gsb, main_clas):
                                 s += 1
                         if (g > 0) or (s > 0) or (b > 0):
                             _gsb = "{}:{}:{}".format(g, s, b)
-                            gsb[main_clas]["value"][mode][precision][bs][frame][metric].setdefault("gsb", _gsb)
+                            gsb[main_clas]["value"][mode][precision][bs][frame][metric].setdefault(
+                                "gsb", _gsb
+                            )
 
 
 if __name__ == "__main__":
