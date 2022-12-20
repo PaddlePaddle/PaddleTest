@@ -52,12 +52,15 @@ def create_gsb_table(gsb):
         content += """
             <hr>
             <h2>{}</h2>
+        """
+
+        if len(gsb[item]["value"]) < 1:
+            continue
+        content += """
             环境信息：<br>{}<br><br>
             <table border="1" align=center>
         """.format(item, gsb[item]["env"])
 
-        if len(gsb[item]["value"]) < 1:
-            continue
         content += """<tr>"""
         for table_title in gsb[item]["table_title"]:
             content += """<td>{}</td>""".format(table_title)
