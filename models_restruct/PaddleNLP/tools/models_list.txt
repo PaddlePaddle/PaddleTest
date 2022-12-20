@@ -20,3 +20,4 @@ model_zoo^electra.yaml
 model_zoo^uie.yaml
 application^information_extraction^text.yaml
 application^information_extraction^document.yaml
+application^text_summarize^pagesus.yaml

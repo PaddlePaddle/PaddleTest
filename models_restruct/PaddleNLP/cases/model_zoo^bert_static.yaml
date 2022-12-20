@@ -4,7 +4,7 @@ case:
       -
         name: prepare
         path: model_zoo/bert/static
-        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert.tar.gz && tar -xzvf bert.tar.gz 
+        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert_static.tar.gz && tar -xzvf bert_static.tar.gz 
       -
         name: pretrain
         path: model_zoo/bert/static
@@ -18,7 +18,7 @@ case:
           - --weight_decay 1e-2
           - --adam_epsilon 1e-6
           - --warmup_steps 10000
-          - --input_dir ./bert/
+          - --input_dir ./bert_static/
           - --output_dir pretrained_models/
           - --logging_steps 1
           - --save_steps 2

@@ -49,4 +49,4 @@ case:
         cmd: python inference.py
         params:
           - --model_type gpt 
-          - --model_path ./infer_model/model
+          - --model_path ../../infer_model/model

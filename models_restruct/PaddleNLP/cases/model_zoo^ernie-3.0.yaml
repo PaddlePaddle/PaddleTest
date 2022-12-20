@@ -30,7 +30,7 @@ case:
           - --batch_size 32
           - --max_seq_length 128
           - --max_steps 2
-          -  --save_steps 2
+          - --save_steps 2
         result:
           loss:
             base: 0.498312
@@ -47,7 +47,8 @@ case:
           - --num_train_epochs 8
           - --batch_size 24
           - --max_seq_length 512
-          - --max_steps 150 
+          - --max_steps 2
+          - --save_steps 2
         result:
           loss:
             base: 0.563974
@@ -76,14 +77,14 @@ case:
           - --dataset "msra_ner"
           - --model_name_or_path ./best_msra_ner_model
           - --output_dir ./
-          -  --max_seq_length 128
-          -  --per_device_train_batch_size 32
-          -  --per_device_eval_batch_size 32
-          -  --learning_rate 0.00005
-          -  --remove_unused_columns False
-          -  --num_train_epochs 3
-          -  --max_steps 2
-          -  --save_steps 2
+          - --max_seq_length 128
+          - --per_device_train_batch_size 32
+          - --per_device_eval_batch_size 32
+          - --learning_rate 0.00005
+          - --remove_unused_columns False
+          - --num_train_epochs 3
+          - --max_steps 2
+          - --save_steps 2
         result:
           loss:
             base: 0.995620

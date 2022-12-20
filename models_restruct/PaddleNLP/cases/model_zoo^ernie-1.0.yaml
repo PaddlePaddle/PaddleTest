@@ -8,7 +8,7 @@ case:
       -
         name: pretrain
         path: model_zoo/ernie-1.0/
-        cmd: python -m paddle.distributed.launch --gpus "0,1" --log_dir ./log run_pretrain.py \
+        cmd: python -m paddle.distributed.launch --gpus "0,1" --log_dir ./log run_pretrain.py
         params:
           - --model_type "ernie"
           - --model_name_or_path "ernie-3.0-base-zh"
