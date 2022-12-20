@@ -52,7 +52,9 @@ def create_gsb_table(gsb):
         content += """
             <hr>
             <h2>{}</h2>
-        """.format(item)
+        """.format(
+            item
+        )
 
         if len(gsb[item]["value"]) < 1:
             continue
@@ -67,9 +69,7 @@ def create_gsb_table(gsb):
 
         content += """<tr>"""
         for table_title in gsb[item]["table_title"]:
-            content += """<td>{}</td>""".format(
-                table_title
-            )
+            content += """<td>{}</td>""".format(table_title)
         content += """</tr>"""
         for mode in gsb[item]["value"].keys():
             for precision in gsb[item]["value"][mode].keys():
@@ -85,7 +85,7 @@ def create_gsb_table(gsb):
                     for metric in gsb[item]["metric"]:
                         for frame in gsb[item]["frame"]:
                             if frame == "paddle":
-                                continue 
+                                continue
                             gsb_value = "-"
                             try:
                                 if "gsb" in gsb[item]["value"][mode][precision][bs][frame][metric].keys():
@@ -97,7 +97,7 @@ def create_gsb_table(gsb):
                             """.format(
                                 gsb_value
                             )
-                    content += """</tr>""" 
+                    content += """</tr>"""
         content += """
             </table>
             <br><br>
@@ -120,6 +120,4 @@ def report_mail(gsb):
 if __name__ == "__main__":
     task_dt = sys.argv[1]
     gsb = get_gsb.get_gsb(task_dt)
-    #import json
-    #print(json.dumps(gsb,indent=4))
     report_mail(gsb)

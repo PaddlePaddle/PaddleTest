@@ -77,24 +77,21 @@ def get_gsb(task_dt):
     )
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
-    sql_str = "select * from InferResult where device_type not like '%CPU%' and task_dt >= '{}' and task_dt < '{}'".format(
-        task_dt_today,
-        task_dt_last
+    sql_str = (
+        "select * from InferResult where device_type not like '%CPU%' and task_dt >= '{}' and task_dt < '{}'".format(
+            task_dt_today, task_dt_last
+        )
     )
     cursor.execute(sql_str)
     res_infer = cursor.fetchall()
     select_compute(res_infer, gsb, "gpu")
     sql_str = "select * from InferResult where device_type like '%CPU%' and task_dt >= '{}' and task_dt < '{}'".format(
-        task_dt_today,
-        task_dt_last
+        task_dt_today, task_dt_last
     )
     cursor.execute(sql_str)
     res_infer = cursor.fetchall()
     select_compute(res_infer, gsb, "cpu")
-    sql_str = "select * from SlimResult where task_dt >= '{}' and task_dt < '{}'".format(
-       task_dt_today,
-       task_dt_last
-    )
+    sql_str = "select * from SlimResult where task_dt >= '{}' and task_dt < '{}'".format(task_dt_today, task_dt_last)
     cursor.execute(sql_str)
     res_slim = cursor.fetchall()
     select_compute(res_slim, gsb, "slim")
@@ -153,9 +150,7 @@ def select_compute(db_res, gsb, main_clas):
 
     # env
     gsb[main_clas]["env"] = "device_type:{}<br>docker_image:{}<br>paddle_commit:{}".format(
-        device_type,
-        docker_image,
-        paddle_commit
+        device_type, docker_image, paddle_commit
     )
     # metric
     gsb[main_clas]["metric"] = ["ips", "cpu_mem", "gpu_mem"]
@@ -166,8 +161,8 @@ def select_compute(db_res, gsb, main_clas):
             if frame == "paddle":
                 continue
             item = "{}-{}".format(metric, frame)
-            gsb[main_clas]["table_title"].append(item)
-    
+            gsb[main_clas]["table_title"].append(item) 
+    # value
     for mode in gsb[main_clas]["value"].keys():
         for precision in gsb[main_clas]["value"][mode].keys():
             for bs in gsb[main_clas]["value"][mode][precision].keys():
@@ -200,9 +195,7 @@ def select_compute(db_res, gsb, main_clas):
                                 s += 1
                         if (g > 0) or (s > 0) or (b > 0):
                             _gsb = "{}:{}:{}".format(g, s, b)
-                            gsb[main_clas]["value"][mode][precision][bs][frame][metric].setdefault(
-                                "gsb", _gsb
-                            )
+                            gsb[main_clas]["value"][mode][precision][bs][frame][metric].setdefault("gsb", _gsb)
 
 
 if __name__ == "__main__":
