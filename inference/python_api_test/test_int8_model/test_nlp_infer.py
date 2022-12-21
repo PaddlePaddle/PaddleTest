@@ -266,6 +266,7 @@ class WrapperPredictor(object):
         print("[benchmark]task name: %s, acc: %s. \n" % (FLAGS.task_name, res), end="")
         final_res = {
             "model_name": FLAGS.model_name,
+            "batch_size": FLAGS.batch_size,
             "jingdu": {
                 "value": res,
                 "unit": "acc",
@@ -273,7 +274,14 @@ class WrapperPredictor(object):
             "xingneng": {
                 "value": round(predict_time * 1000 / i, 2),
                 "unit": "ms",
-                "batch_size": FLAGS.batch_size,
+            },
+            "gpu_mem": {
+                "value": gpu_mem,
+                "unit": "MB",
+            },
+            "cpu_mem": {
+                "value": cpu_mem,
+                "unit": "MB",
             },
         }
         print("[Benchmark][final result]{}".format(final_res))
