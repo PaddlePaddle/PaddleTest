@@ -191,7 +191,6 @@ class WeakTrans(object):
                     data_range = v.get("range", [-1, 1])
                     assert isinstance(data_range, list) and len(data_range) == 2
                     data.append(self._randtool(v.get("dtype", "float"), data_range[0], data_range[1], v.get("shape")))
-                    print("list data out is: ", data)
                     # elif
                 else:
                     data.append(np.array(v.get("value")).astype(v.get("dtype")))

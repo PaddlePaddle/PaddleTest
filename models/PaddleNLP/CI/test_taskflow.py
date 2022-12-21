@@ -149,6 +149,7 @@ def test_uie():
     ie.set_schema(schema_bre)
     ie("李治即位后，让身在感业寺的武则天续起头发，重新纳入后宫。")
 
+<<<<<<< HEAD
     schema = {'竞赛名称': ['主办方', '承办方', '已举办次数']}
     ie.set_schema(schema)
     ie('2022语言与智能技术竞赛由中国中文信息学会和中国计算机学会联合主办，百度公司、中国中文信息学会评测工作委员会和中国计算机学会自然语言处理专委会承办，已连续举办4届，成为全球最热门的中文NLP赛事之一。')
@@ -168,6 +169,28 @@ def test_uie():
     schema = 'Sentiment classification [negative, positive]'
     ie_en.set_schema(schema)
     ie_en('I am sorry but this is the worst film I have ever seen in my life.')
+=======
+    schema = {"竞赛名称": ["主办方", "承办方", "已举办次数"]}
+    ie.set_schema(schema)
+    ie("2022语言与智能技术竞赛由中国中文信息学会和中国计算机学会联合主办，百度公司、中国中文信息学会评测工作委员会和中国计算机学会自然语言处理专委会承办，已连续举办4届，成为全球最热门的中文NLP赛事之一。")
+
+    schema = ["Person", "Organization"]
+    ie_en = Taskflow("information_extraction", schema=schema, model="uie-base-en")
+    ie_en("In 1997, Steve was excited to become the CEO of Apple.")
+
+    schema = [{"Person": ["Company", "Position"]}]
+    ie_en.set_schema(schema)
+    ie_en("In 1997, Steve was excited to become the CEO of Apple.")
+
+    schema = [{"Aspect": ["Opinion", "Sentiment classification [negative, positive]"]}]
+    ie_en.set_schema(schema)
+    ie_en("The teacher is very nice.")
+
+    schema = "Sentiment classification [negative, positive]"
+    ie_en.set_schema(schema)
+    ie_en("I am sorry but this is the worst film I have ever seen in my life.")
+
+>>>>>>> 0a39b389f2f8233b2484740a19bf54327fa74d0d
 
 def test_summarizer():
     """
@@ -186,6 +209,7 @@ def test_summarizer():
 
 
 def test_uiex():
+<<<<<<< HEAD
     """ UIE-X"""
     path = "./cases/"
     if not os.path.exists(path):
@@ -229,3 +253,69 @@ if __name__ == "__main__":
     # test_uie()
     test_uiex()
     # test_summarizer()
+=======
+    """UIE-X"""
+    path = "./cases/"
+    if not os.path.exists(path):
+        os.mkdir(path)
+    os.system(
+        "cd %s && wget %s"
+        % (
+            path,
+            "https://user-images.githubusercontent.com/40840292/203457596-8dbc9241-833d-4b0e-9291-f134a790d0e1.jpeg",
+        )
+    )
+    os.system(
+        "cd %s && wget %s"
+        % (
+            path,
+            "https://user-images.githubusercontent.com/40840292/203457719-84a70241-607e-4bb1-ab4c-3d9beee9e254.jpeg",
+        )
+    )
+    os.system(
+        "cd %s && wget %s"
+        % (
+            path,
+            "https://user-images.githubusercontent.com/40840292/203457817-76fe638a-3277-4619-9066-d1dffd52c5d4.jpg ",
+        )
+    )
+    ie = Taskflow(
+        "information_extraction",
+        schema="",
+        schema_lang="ch",
+        ocr_lang="ch",
+        batch_size=16,
+        model="uie-x-base",
+        layout_analysis=False,
+        position_prob=0.5,
+        precision="fp32",
+        use_fast=False,
+    )
+    schema = ["姓名", "性别", "学校"]
+    ie({"doc": "./cases/203457596-8dbc9241-833d-4b0e-9291-f134a790d0e1.jpeg"})
+
+    schema = ["收发货人", "进口口岸", "进口日期", "申报日期", "提运单号"]
+    ie.set_schema(schema)
+    print(ie({"doc": "./cases/203457719-84a70241-607e-4bb1-ab4c-3d9beee9e254.jpeg"}))
+
+    schema = {"项目名": "单价"}
+    ie.set_schema(schema)
+    print(ie({"doc": "./cases/203457817-76fe638a-3277-4619-9066-d1dffd52c5d4.jpg"}))
+
+
+if __name__ == "__main__":
+    test_knowledge_mining()
+    test_name_entity_recognition()
+    test_word_segmetation()
+    test_pos_tagging()
+    test_corrector()
+    test_dependency_parsing()
+    test_sentiment_analysis()
+    test_text_similarity()
+    test_question_answering()
+    test_poetry()
+    test_dialogue()
+    test_uie()
+    test_uiex()
+    test_summarizer()
+>>>>>>> 0a39b389f2f8233b2484740a19bf54327fa74d0d
