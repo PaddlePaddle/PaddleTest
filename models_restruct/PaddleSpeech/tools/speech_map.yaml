@@ -94,9 +94,9 @@ paddlespeech_cli_31: paddlespeech tts --am fastspeech2_mix --voc pwgan_csmsc --l
 paddlespeech_cli_32: paddlespeech tts --am fastspeech2_mix --voc hifigan_csmsc --lang mix --input 我们的声学模型使用了 Fast Speech Two, 声码器使用了 Parallel Wave GAN and Hifi GAN. --spk_id 175 --output mix_spk175.wav
 paddlespeech_cli_33: paddlespeech st --input ./en.wav
 paddlespeech_cli_34: paddlespeech vector --task spk --input 85236145389.wav
-paddlespeech_cli_35: echo 1 欢迎光临。n2 谢谢惠顾。 | paddlespeech tts
+paddlespeech_cli_35: echo '1 欢迎光临。\n2 谢谢惠顾。' | paddlespeech tts
 paddlespeech_cli_36: paddlespeech vector --task spk --input vec.job
-paddlespeech_cli_37: echo demo3 85236145389.wav n demo4 85236145389.wav | paddlespeech vector --task spk
+paddlespeech_cli_37: echo 'demo3 85236145389.wav \n demo4 85236145389.wav' | paddlespeech vector --task spk
 paddlespeech_cli_38: paddlespeech asr --input ./zh.wav | paddlespeech text --task punc
 paddlespeech_cli_39: paddlespeech tts --input 你好，欢迎使用百度飞桨深度学习框架！ --output default.wav --use_onnx True
 paddlespeech_cli_40: paddlespeech tts --am speedyspeech_csmsc --input 你好，欢迎使用百度飞桨深度学习框架！ --output ss.wav --use_onnx True
