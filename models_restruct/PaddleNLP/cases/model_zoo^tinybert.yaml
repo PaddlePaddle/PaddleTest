@@ -9,14 +9,14 @@ case:
           - --model_type bert
           - --model_name_or_path bert-base-uncased
           - --task_name SST-2
-          - --max_seq_length 128 
+          - --max_seq_length 128
           - --batch_size 128
-          - --learning_rate 3e-5 
-          - --max_steps 2 
+          - --learning_rate 3e-5
+          - --max_steps 2
           - --logging_steps 1
-          - --save_steps 2 
+          - --save_steps 2
           - --output_dir ../../../model_zoo/tinybert/SST-2/
-          - --device gpu 
+          - --device gpu
         result:
           loss:
             base: 0.7093085
@@ -32,7 +32,7 @@ case:
           - --task_name SST-2
           - --intermediate_distill
           - --max_seq_length 64
-          - --batch_size 32 
+          - --batch_size 32
           - --T 1
           - --teacher_model_type bert
           -  --teacher_path ./SST-2/sst-2_ft_model_2.pdparams
@@ -57,7 +57,7 @@ case:
           - --student_model_name_or_path ./mid/SST-2/intermediate_distill_model_final.pdparams
           - --task_name SST-2
           - --max_seq_length 64
-          - --batch_size 32 
+          - --batch_size 32
           - --T 1
           - --teacher_model_type bert
           -  --teacher_path ./SST-2/sst-2_ft_model_2.pdparams

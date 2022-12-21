@@ -4,26 +4,26 @@ case:
       -
         name: prepare
         path: model_zoo/bert
-        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert.tar.gz && tar -xzvf bert.tar.gz 
+        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert.tar.gz && tar -xzvf bert.tar.gz
       -
         name: pretrain
         path: model_zoo/bert
         cmd: python -m paddle.distributed.launch --gpus "0,1" run_pretrain.py
         params:
           - --model_type bert
-          - --model_name_or_path bert-base-uncased 
-          - --max_predictions_per_seq 20 
-          - --batch_size 16  
-          - --learning_rate 1e-4 
-          - --weight_decay 1e-2 
-          - --adam_epsilon 1e-6 
-          - --warmup_steps 10000 
-          - --input_dir bert/ 
-          - --output_dir pretrained_models/ 
-          - --logging_steps 1 
-          - --save_steps 1 
-          - --max_steps 1 
-          - --device gpu 
+          - --model_name_or_path bert-base-uncased
+          - --max_predictions_per_seq 20
+          - --batch_size 16
+          - --learning_rate 1e-4
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --input_dir bert/
+          - --output_dir pretrained_models/
+          - --logging_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --device gpu
           - --use_amp False
         result:
           loss:
@@ -36,10 +36,10 @@ case:
         cmd: python -m paddle.distributed.launch --gpus "0,1" run_glue.py
         params:
           - --model_type bert
-          - --model_name_or_path bert-base-uncased 
-          - --task_name SST2 
-          - --max_seq_length 128 
-          - --batch_size 32  
+          - --model_name_or_path bert-base-uncased
+          - --task_name SST2
+          - --max_seq_length 128
+          - --batch_size 32
           - --learning_rate 2e-5
           - --num_train_epochs 3
           - --logging_steps 1
@@ -55,7 +55,7 @@ case:
             evaluation: "="
     eval: skipped
     infer: skipped
-    export: 
+    export:
       -
         name: export
         path: model_zoo/bert
@@ -64,7 +64,7 @@ case:
           - --model_type bert
           - --model_path bert-base-uncased
           - --output_path ./infer_model/model
-    predict: 
+    predict:
       -
         name: predict
         path: model_zoo/bert
@@ -73,7 +73,7 @@ case:
           - --task_name SST2
           - --model_type bert
           - --model_path ./infer_model/model
-          - --batch_size 32 
+          - --batch_size 32
           - --max_seq_length 128
       -
         name: predict_sample_data_SST2
@@ -83,5 +83,5 @@ case:
           - --task_name SST2
           - --model_type bert
           - --model_path ./infer_model/model
-          - --deveice gppu 
+          - --deveice gppu
           - --max_seq_length 128

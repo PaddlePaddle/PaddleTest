@@ -4,16 +4,16 @@ case:
       -
         name: classifier
         path: model_zoo/ernie-doc
-        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir hyp run_classifier.py 
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir hyp run_classifier.py
         params:
-          - --epochs 15 
-          - --layerwise_decay 0.7 
-          - --learning_rate 5e-5 
-          - --batch_size 4 
-          - --save_steps 2 
-          - --max_steps 2  
-          - --dataset hyp 
-          - --output_dir hyp 
+          - --epochs 15
+          - --layerwise_decay 0.7
+          - --learning_rate 5e-5
+          - --batch_size 4
+          - --save_steps 2
+          - --max_steps 2
+          - --dataset hyp
+          - --output_dir hyp
         result:
           loss:
             base: 0.755012
@@ -22,16 +22,16 @@ case:
       -
         name: mrc
         path: model_zoo/ernie-doc
-        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir cmrc2018 run_mrc.py 
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir cmrc2018 run_mrc.py
         params:
-          - --batch_size 4 
-          - --layerwise_decay 0.8 
-          - --dropout 0.2 
-          - --learning_rate 4.375e-5 
-          - --epochs 1 
-          - --save_steps 2 
+          - --batch_size 4
+          - --layerwise_decay 0.8
+          - --dropout 0.2
+          - --learning_rate 4.375e-5
+          - --epochs 1
+          - --save_steps 2
           - --max_steps 2
-          - --dataset cmrc2018 
+          - --dataset cmrc2018
           - --output_dir cmrc2018
         result:
           loss:
@@ -43,11 +43,11 @@ case:
         path: model_zoo/ernie-doc/
         cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir c3 run_mcq.py
         params:
-          - --learning_rate 6.5e-5 
-          - --epochs 1 
-          - --save_steps 2 
-          - --max_steps 2 
-          - --output_dir c3 
+          - --learning_rate 6.5e-5
+          - --epochs 1
+          - --save_steps 2
+          - --max_steps 2
+          - --output_dir c3
         result:
           loss:
             base: 1.456469
@@ -56,15 +56,15 @@ case:
       -
         name: semantic_matching
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir cail run_semantic_matching.py 
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir cail run_semantic_matching.py
         params:
-          - --epochs 1 
-          - --layerwise_decay 0.8 
-          - --learning_rate 1.25e-5 
-          - --batch_size 4  
+          - --epochs 1
+          - --layerwise_decay 0.8
+          - --learning_rate 1.25e-5
+          - --batch_size 4
           - --save_steps 2
-          - --max_steps 2 
-          - --output_dir cail 
+          - --max_steps 2
+          - --output_dir cail
         result:
           loss:
             base: 0.995620
@@ -75,30 +75,30 @@ case:
         path: model_zoo/ernie-doc/
         cmd: python -m paddle.distributed.launch --gpus '0,1'--log_dir msra run_sequence_labeling.py
         params:
-          - --learning_rate 3e-5 
-          - --epochs 1 
-          - --save_steps 2 
-          - --max_steps 2  
-          - --output_dir msra 
+          - --learning_rate 3e-5
+          - --epochs 1
+          - --save_steps 2
+          - --max_steps 2
+          - --output_dir msra
         result:
           loss:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
       -
-        name: dureader_robust 
+        name: dureader_robust
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch --gpus "0,1" --log_dir dureader_robust run_mrc.py 
+        cmd: python -m paddle.distributed.launch --gpus "0,1" --log_dir dureader_robust run_mrc.py
         params:
-          - --model_name_or_path ernie-doc-base-zh  
-          - --dataset dureader_robust  
-          - --batch_size 8 
-          - --learning_rate 2.75e-4 
-          - --epochs 1 
-          - --save_steps 2 
-          - --max_steps 2 
-          - --logging_steps 1 
-          - --device gpu 
+          - --model_name_or_path ernie-doc-base-zh
+          - --dataset dureader_robust
+          - --batch_size 8
+          - --learning_rate 2.75e-4
+          - --epochs 1
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
+          - --device gpu
         result:
           loss:
             base: 0.995620

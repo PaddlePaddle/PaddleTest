@@ -25,7 +25,7 @@ case:
           - --decay_steps 320000
           - --warmup_rate 0.01
           - --micro_batch_size 2
-          - --device gpu 
+          - --device gpu
         result:
           loss:
             base: 1.456469
@@ -33,7 +33,7 @@ case:
             evaluation: "="
     eval: skipped
     infer: skipped
-    export: 
+    export:
       -
         name: export
         path: model_zoo/gpt
@@ -41,12 +41,12 @@ case:
         params:
           - --model_type=gpt
           - --model_path=gpt2-medium-en
-          - --output_path=./infer_model/model 
-    predict: 
+          - --output_path=./infer_model/model
+    predict:
       -
         name: predict
         path: model_zoo/gpt/deploy/python/
         cmd: python inference.py
         params:
-          - --model_type gpt 
+          - --model_type gpt
           - --model_path ../../infer_model/model

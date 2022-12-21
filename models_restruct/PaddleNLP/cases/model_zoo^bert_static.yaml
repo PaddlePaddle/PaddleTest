@@ -4,7 +4,7 @@ case:
       -
         name: prepare
         path: model_zoo/bert/static
-        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert_static.tar.gz && tar -xzvf bert_static.tar.gz 
+        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/bert_static.tar.gz && tar -xzvf bert_static.tar.gz
       -
         name: pretrain
         path: model_zoo/bert/static
@@ -24,7 +24,7 @@ case:
           - --save_steps 2
           - --max_steps 2
           - --device gpu
-          - --use_amp True 
+          - --use_amp True
         result:
           loss:
             base: 6.28685
@@ -36,10 +36,10 @@ case:
         cmd: python -m paddle.distributed.launch --gpus "0" run_glue.py
         params:
           - --model_type bert
-          - --model_name_or_path bert-base-uncased 
-          - --task_name SST-2 
-          - --max_seq_length 128 
-          - --batch_size 32  
+          - --model_name_or_path bert-base-uncased
+          - --task_name SST-2
+          - --max_seq_length 128
+          - --batch_size 32
           - --learning_rate 2e-5
           - --num_train_epochs 3
           - --logging_steps 1
@@ -55,7 +55,7 @@ case:
     eval: skipped
     infer: skipped
     export: skipped
-    predict: 
+    predict:
       -
         name: predict
         path: model_zoo/bert/static
@@ -64,5 +64,5 @@ case:
           - --task_name SST-2
           - --model_type bert
           - --model_path ./tmp/model_2/infer_model
-          - --batch_size 32 
+          - --batch_size 32
           - --max_seq_length 128

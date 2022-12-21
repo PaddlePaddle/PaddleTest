@@ -18,7 +18,7 @@ case:
           - --decay_steps 320000
           - --warmup_rate 0.01
           - --micro_batch_size 2
-          - --device gpu 
+          - --device gpu
         result:
           loss:
             base: 1.456469

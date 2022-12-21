@@ -6,14 +6,14 @@ case:
         path: model_zoo/ernie-layout
         cmd: python -m paddle.distributed.launch train_classification.py
         params:
-          - --dataset CHIP-CDN-2C 
-          - --batch_size 256 
-          - --max_seq_length 32 
-          - --learning_rate 3e-5 
-          - --epochs 16 
-          - --save_steps 2 
-          - --max_steps 2 
-          - --logging_steps 1 
+          - --dataset CHIP-CDN-2C
+          - --batch_size 256
+          - --max_seq_length 32
+          - --learning_rate 3e-5
+          - --epochs 16
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
           - --save_dir cls
         result:
           loss:
@@ -25,55 +25,55 @@ case:
         path: model_zoo/ernie-layout
         cmd: python -m paddle.distributed.launch train_ner.py
         params:
-          - --batch_size 32 
-          - --max_seq_length 128 
-          - --learning_rate 6e-5 
-          - --epochs 12 
-          - --save_steps 2 
-          - --max_steps 2 
-          - --logging_steps 1 
+          - --batch_size 32
+          - --max_seq_length 128
+          - --learning_rate 6e-5
+          - --epochs 12
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
           - --save_dir ner
         result:
           loss:
             base: 1.942795
             threshold: 0.01
-            evaluation: "=" 
+            evaluation: "="
       -
         name: spo
         path: model_zoo/ernie-layout
-        cmd: python -m paddle.distributed.launch train_spo.py 
+        cmd: python -m paddle.distributed.launch train_spo.py
         params:
-          - --batch_size 12 
-          - --max_seq_length 300 
-          - --learning_rate 6e-5 
-          - --epochs 12  
-          - --save_steps 2 
-          - --max_steps 2 
-          - --logging_steps 1 
+          - --batch_size 12
+          - --max_seq_length 300
+          - --learning_rate 6e-5
+          - --epochs 12
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
           - --save_dir spo
         result:
           loss:
             base: 2282887.188
             threshold: 1
-            evaluation: "=" 
+            evaluation: "="
     eval: skipped
     infer: skipped
-    export: 
+    export:
       -
         name: classification
         path: model_zoo/ernie-layout
         cmd: python export_model.py
         params:
-          - --task_type cls 
-          - --model_path ./ernie-layoutx-base-uncased/models/rvl_cdip_sampled/ 
+          - --task_type cls
+          - --model_path ./ernie-layoutx-base-uncased/models/rvl_cdip_sampled/
           - --output_path ./cls_export
       -
         name: mrc
         path: model_zoo/ernie-layout
         cmd: python export_model.py
         params:
-          - --task_type mrc 
-          - --model_path ./ernie-layoutx-base-uncased/models/docvqa_zh/ 
+          - --task_type mrc
+          - --model_path ./ernie-layoutx-base-uncased/models/docvqa_zh/
           - --output_path ./mrc_export
         result:
           exit_code:
@@ -85,15 +85,15 @@ case:
         path: model_zoo/ernie-layout
         cmd: python export_model.py
         params:
-          - --task_type ner 
-          - --model_path ./ernie-layoutx-base-uncased/models/funsd/ 
+          - --task_type ner
+          - --model_path ./ernie-layoutx-base-uncased/models/funsd/
           - --output_path ./ner_export
         result:
           exit_code:
             base: 0
             threshold: 0
             evaluation: "="
-    predict: 
+    predict:
       -
         name: prepare
         path: model_zoo/ernie-layout/deploy/python
@@ -113,8 +113,8 @@ case:
         cmd: python infer.py
         params:
           - --model_path_prefix ../../ner_export/inference
-          - --task_type ner 
-          - --lang "en" 
+          - --task_type ner
+          - --lang "en"
           - --batch_size 8
       -
         name: mrc
@@ -122,9 +122,6 @@ case:
         cmd: python infer.py
         params:
           - --model_path_prefix ../../mrc_export/inference
-          - --task_type mrc 
+          - --task_type mrc
           - --lang "ch"
           - --batch_size 8
-      
-          
-    
