@@ -197,7 +197,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
         install_paddle
         echo "install_nlp_develop"
         python -m pip install --upgrade --force --ignore-installed paddlenlp
-    else 
+    else
         echo "instal_nlp_latest"
         python -m pip install  dist/p****.whl
     fi
