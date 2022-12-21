@@ -1,0 +1,9 @@
+nltk
+xlrd==1.2.0
+visualdl
+paddleslim
+pybind11 
+tool_helpers
+editdistance
+paddleocr
+h5py

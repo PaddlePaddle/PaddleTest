@@ -69,7 +69,7 @@ class PaddleSpeech_Build(Model_Build):
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
-            os.system("python -m pip install .")
+            os.system("python -m pip install . --ignore-installed")
             os.chdir(path_now)
             print("build paddlespeech wheel!")
 

@@ -1,0 +1,30 @@
+case:
+  linux:
+    train:
+      -
+        name: pretrain
+        path: model_zoo/gpt
+        cmd: python -m paddle.distributed.launch --gpus '0,1' run_pretrain.py
+        params:
+          - --model_type gpt
+          - --model_name_or_path gpt2-en
+          - --input_dir "./pre_data"
+          - --output_dir "output"
+          - --weight_decay 0.01
+          - --grad_clip 1.0
+          - --max_steps 2
+          - --save_steps 2
+          - --dp_degree 8
+          - --decay_steps 320000
+          - --warmup_rate 0.01
+          - --micro_batch_size 2
+          - --device gpu 
+        result:
+          loss:
+            base: 1.456469
+            threshold: 0.01
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -30,7 +30,7 @@ for exec_file in `ls`;do
         print_info $? ${example}_prepare
     # TRAIN
     elif [[ ${exec_file} == "train.py" ]] || [[ ${exec_file} =~ "run_train" ]] ;then
-        python -m paddle.distributed.launch ${exec_file} --device ${devices} --max_steps ${max_steps} --save_steps ${save_steps} --output_dir ${output_dir} >${log_path}/${example}_train>>${log_path}/${example}_train 2>&1
+        python -m paddle.distributed.launch ${exec_file} --device ${device} --max_steps ${max_steps} --save_steps ${save_steps} --output_dir ${output_dir} >${log_path}/${example}_train>>${log_path}/${example}_train 2>&1
         print_info $? ${example}_train
     # EVAL
     elif [[ ${exec_file} == "eval.py" ]] || [[ ${exec_file} =~ "run_eval" ]] ;then
@@ -50,7 +50,7 @@ for exec_file in `ls`;do
         print_info $? ${example}_predict
     # CUSTOM
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "py" ]];then
-        python ${exec_file} >${log_path}/${example}_${exec_file%%.*} >>${log_path}/${example}_${exec_file%%.*} 2>&1
+        python --save_steps ${save_steps} --max_steps ${max_steps}  ${exec_file} >${log_path}/${example}_${exec_file%%.*} >>${log_path}/${example}_${exec_file%%.*} 2>&1
         print_info $? ${example}_${exec_file%%.*}
     elif [[ ${exec_file} =~ "run_" ]] && [[ ${exec_file##*.} == "sh" ]];then
         bash ${exec_file}  >${log_path}/${example}_${exec_file%%.*} >>${log_path}/${example}_${exec_file%%.*} 2>&1
