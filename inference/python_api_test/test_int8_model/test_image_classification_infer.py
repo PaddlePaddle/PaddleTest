@@ -204,6 +204,7 @@ def eval(predictor, FLAGS):
     print("[Benchmark] Evaluation acc result: {}".format(result[0]))
     final_res = {
         "model_name": FLAGS.model_name,
+        "batch_size": FLAGS.batch_size,
         "jingdu": {
             "value": result[0],
             "unit": "acc",
@@ -211,7 +212,14 @@ def eval(predictor, FLAGS):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-            "batch_size": FLAGS.batch_size,
+        },
+        "gpu_mem": {
+            "value": gpu_mem,
+            "unit": "MB",
+        },
+        "cpu_mem": {
+            "value": cpu_mem,
+            "unit": "MB",
         },
     }
     print("[Benchmark][final result]{}".format(final_res))

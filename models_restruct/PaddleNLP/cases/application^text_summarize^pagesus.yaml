@@ -3,14 +3,18 @@ case:
     base: ./base/normal_case.yaml
     train:
       -
-        name: multi
+        name: prepare
         path: applications/text_summarization/pegasus
-        cmd: python -m paddle.distributed.launch run_train.py
+        cmd: python run_prepare.py
+      -
+        name: train
+        path: applications/text_summarization/pegasus
+        cmd: python -m paddle.distributed.launch --gpus '0,1' train.py
     eval: skipped
     infer:
       -
         name: trained
-        cmd: python -m run_generate.py
+        cmd: python -m predict.py
     export:
       -
         name: trained
@@ -20,6 +24,7 @@ case:
         name: trained
         path: /deploy/paddle_inference/
         cmd: python inference_pegasus.py
+
   windows:
     base: ./base/normal_case.yaml
     train:

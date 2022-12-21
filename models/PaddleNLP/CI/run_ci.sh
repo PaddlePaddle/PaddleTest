@@ -82,24 +82,26 @@ upload (){
         build_dev_path=/workspace/PaddleNLP_dev
         nlp_build ${build_dev_path}
         nlp_version=$(python -c "from paddlenlp import __version__; print(__version__)")
-        mv $build_dev_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-latest-py3-none-any.whl
+        cp $build_dev_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-latest-py3-none-any.whl
         echo -e "\033[35m ---- build ${GIT_PR_ID} paddlenlp  \033[0m"
         build_pr_path=${nlp_dir}
         nlp_build ${build_pr_path}
         cd $build_pr_path/dist
-        mv $build_pr_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-${GIT_PR_ID}-py3-none-any.whl
+        cp $build_pr_path/dist/p****.whl ${PPNLP_HOME}/upload/paddlenlp-${GIT_PR_ID}-py3-none-any.whl
     elif [ $1 == "pipelines" ];then
         echo -e "\033[35m ---- build latest pipelines  \033[0m"
+        python -m pip install --force-reinstall paddlenlp
         build_dev_path=/workspace/PaddleNLP_dev/$1
         nlp_build ${build_dev_path}
         pipe_version=$(python -c "from pipelines import __version__; print(__version__)")
-        mv $build_dev_path/dist/p****.whl ${PPNLP_HOME}/upload/pipelines-latest-py3-none-any.whl
+        cp $build_dev_path/dist/p****.whl ${PPNLP_HOME}/upload/pipelines-latest-py3-none-any.whl
     elif [ $1 == "ppdiffusers" ];then
         echo -e "\033[35m ---- build latest ppdiffusers  \033[0m"
+        python -m pip install --force-reinstall paddlenlp
         build_dev_path=/workspace/PaddleNLP_dev/$1
         nlp_build ${build_dev_path}
         pipe_version=$(python -c "from ppdiffusers import __version__; print(__version__)")
-        mv $build_dev_path/dist/pa****.whl ${PPNLP_HOME}/upload/ppdiffusers-latest-py3-none-any.whl
+        cp $build_dev_path/dist/pa****.whl ${PPNLP_HOME}/upload/ppdiffusers-latest-py3-none-any.whl
     fi
 }
 ####################################
@@ -173,10 +175,14 @@ APIcase_list=($(awk -v RS=' ' '!a[$1]++' <<< ${APIcase_list[*]}))
 if [[ ${#Build_list[*]} -ne 0 ]];then
     echo -e "\033[32m start build ${Build_list[*]} whl \033[0m"
     install_paddle
-    python -m pip install -U paddlenlp
     for build_pkg in ${Build_list[*]};do
         upload ${build_pkg}
     done
+    echo -e "\033[32m make PaddleNLP.tar.gz  \033[0m"
+    cd /workspace
+    rm -rf PaddleNLP_dev/build/*
+    tar -zcvf PaddleNLP.tar.gz PaddleNLP_dev/
+    mv PaddleNLP.tar.gz ${PPNLP_HOME}/upload
     cd ${PPNLP_HOME}
     python upload.py ${PPNLP_HOME}/upload 'paddlenlp/wheels'
     rm -rf upload/*
@@ -187,11 +193,13 @@ fi
 if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     # Install paddlenlp
     cd ${nlp_dir}
-    if [ ! -f './dist/p****.whl' ];then
+    if [ ! -f ./dist/p****.whl ];then
         install_paddle
-        python -m pip install -U paddlenlp
+        echo "install_nlp_develop"
+        python -m pip install --upgrade --force --ignore-installed paddlenlp
     else
-        python -m pip --force-reinstall  dist/p****.whl
+        echo "instal_nlp_latest"
+        python -m pip install  dist/p****.whl
     fi
     pip list
     echo -e "\033[35m =======CI Check P0case========= \033[0m"
@@ -269,7 +277,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     # fi
     ####################################
 else
-    echo -e "\033[32m Changed files no in ci case, Skips \033[0m"
+    echo -e "\033[32m Changed Not CI case, Skips \033[0m"
     EXCODE=0
 fi
 exit $EXCODE
