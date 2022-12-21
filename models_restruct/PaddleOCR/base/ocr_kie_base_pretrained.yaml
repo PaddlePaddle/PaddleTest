@@ -73,7 +73,7 @@ export:
   cmd:  python tools/export_model.py
   params:
     - -c ${rd_yaml_path}
-    - -o Architecture.Backbone.checkpoints=./${model}/best_accuracy 
+    - -o Architecture.Backbone.checkpoints=./${model}/best_accuracy
     - Global.save_inference_dir=./models_inference/${model}
     - Global.use_gpu=${use_gpu}
 
