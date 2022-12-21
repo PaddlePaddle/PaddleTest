@@ -116,12 +116,12 @@ def gsb(compare_res, metric_list):
             item,
             {
                 "gsb": "",
-                 "g": 0,
-                 "s": 0,
-                 "b": 0,
-                 "total": 0,
-                 "b_ratio": 0,
-                 "g_ratio": 0,
+                "g": 0,
+                "s": 0,
+                "b": 0,
+                "total": 0,
+                "b_ratio": 0,
+                "g_ratio": 0,
             }
         )
     for model, info in compare_res.items():
@@ -154,12 +154,12 @@ def res_summary(diff_res, mode_list, metric_list):
             item,
             {
                 "gsb": "",
-                 "g": 0,
-                 "s": 0,
-                 "b": 0,
-                 "total": 0,
-                 "b_ratio": 0,
-                 "g_ratio": 0,
+                "g": 0,
+                "s": 0,
+                "b": 0,
+                "total": 0,
+                "b_ratio": 0,
+                "g_ratio": 0,
             }
         )
 
