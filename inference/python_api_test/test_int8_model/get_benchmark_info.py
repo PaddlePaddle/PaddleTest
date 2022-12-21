@@ -182,7 +182,7 @@ def res_summary(diff_res, mode_list, metric_list):
     tongji.setdefault("total", gsb_total)
 
     # 详细数据
-    m = diff_res.keys()[0]
+    m = list(diff_res.keys())[0]
     models = diff_res[m].keys()
     for model in models:
         res[model] = {}
