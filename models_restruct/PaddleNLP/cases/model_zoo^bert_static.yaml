@@ -55,10 +55,10 @@ case:
     eval: skipped
     infer: skipped
     export:
-      - 
+      -
         name: export
         path: model_zoo/bert/static
-        cmd: python -u ./export_model.py 
+        cmd: python -u ./export_model.py
         params:
           - --model_type bert
           - --model_path bert-base-uncased
