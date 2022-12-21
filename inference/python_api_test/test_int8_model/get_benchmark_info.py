@@ -122,7 +122,7 @@ def gsb(compare_res, metric_list):
                 "total": 0,
                 "b_ratio": 0,
                 "g_ratio": 0,
-            }
+            },
         )
     for model, info in compare_res.items():
         for item in metric_list:
@@ -160,7 +160,7 @@ def res_summary(diff_res, mode_list, metric_list):
                 "total": 0,
                 "b_ratio": 0,
                 "g_ratio": 0,
-            }
+            },
         )
 
     # 统计数据
