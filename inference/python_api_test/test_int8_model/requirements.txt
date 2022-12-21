@@ -7,5 +7,4 @@ onnx
 GPUtil
 psutil
 pynvml
-tensorrt
 opencv-python

@@ -79,15 +79,24 @@ class Paddle3D_Build(Model_Build):
             os.system("python -m pip install .")
             print("build wheel!")
 
+            # petr
+            if not os.path.exits("data"):
+                os.makedirs("data")
+                os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petr", "data/nuscenes")
+                os.makedirs("/workspace/datset/nuScenes/", exist_ok=True)
+                os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petr", "/workspace/datset/nuScenes/nuscenes")
+
+                os.symlink("/ssd2/ce_data/Paddle3D/kitti", "data/kitti")
+
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
                 cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
                 subprocess.getstatusoutput(cmd)
-                cmd = "cat %s" % (filename)
-                subprocess.getstatusoutput(cmd)
-                cmd = 'sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
-                subprocess.getstatusoutput(cmd)
-            print("change iters number and data/kitti!!")
+                # cmd = "cat %s" % (filename)
+                # subprocess.getstatusoutput(cmd)
+                # cmd = 'sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
+                # subprocess.getstatusoutput(cmd)
+            print("change iters number!")
             os.chdir(path_now)
 
     def build_env(self):
