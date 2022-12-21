@@ -20,7 +20,6 @@ import time
 import sys
 import os
 import signal
-import cpuinfo
 
 try:
     import pynvml
@@ -119,7 +118,6 @@ class Monitor(StatBase):
             item = {k: v for k, v in zip(StatBase.cpu_keys, self.cpu_stat_q.get())}
             for k in StatBase.cpu_keys:
                 cpu_result[k] = max(cpu_result[k], item[k])
-        cpu_result["name"] = cpuinfo.get_cpu_info()["brand_raw"]
         self.result["result"]["cpu_memory.used"] = cpu_result["memory.used"]
 
     def output(self):
