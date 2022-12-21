@@ -2,8 +2,7 @@
 set -e
 
 export fleetx_path=/paddle/PaddleFleetX
-export cp_path=/home/FleetX_CI
-export log_path=/paddle/log
+export log_path=/paddle/log_fleetx
 
 fleet_gpu_model_list=( \
     gpt_save_ckpt \
@@ -24,6 +23,7 @@ fleet_gpu_model_list=( \
     )
     # gpt_auto_pass_o1_stage1 \
     # gpt_auto_pass_o3_stage1 \
+
 
 function gpt_save_ckpt() {
     cd ${fleetx_path}
