@@ -24,7 +24,7 @@ function requirements() {
     sed -i "s/paddlenlp>=2.4.3/paddlenlp==2.4.5/g" ./PaddleFleetX/requirements.txt
     # git clone --depth=1 -b develop https://github.com/PaddlePaddle/PaddleNLP.git
     # cd PaddleNLP
-    # python -m pip install -r requirements.txt --force-reinstall 
+    # python -m pip install -r requirements.txt --force-reinstall
     # python setup.py install
     # cd -
     # unset http_proxy && unset https_proxy

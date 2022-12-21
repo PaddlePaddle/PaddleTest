@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 # Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ function _set_params(){
     keyword="speed:"                 # (必选)解析日志，筛选出性能数据所在行的关键字
     convergence_key="loss:"        # (可选)解析日志，筛选出收敛数据所在行的关键字 如：convergence_key="loss:"
     max_iter=${11:-1000}                      # （可选）需保证模型执行时间在5分钟内，需要修改代码提前中断的直接提PR 合入套件；或使用max_epoch参数
-    num_train_epochs=${12:-1}  
+    num_train_epochs=${12:-1}
     num_workers=0                  # (可选)
     base_batch_size=$global_batch_size
     sharding_degree=${13:-"1"}      # (可选)
