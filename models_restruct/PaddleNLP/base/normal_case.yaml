@@ -18,8 +18,8 @@ infer:
 export:
   name: trained
   params:
-    - --export_output_dir ./infer_model/
+    - --export_output_dir ./inference_model/
 predict:
   name: trained
   params:
-    - --device gpu
+    - --inference_model_dir ../../inference_model/
