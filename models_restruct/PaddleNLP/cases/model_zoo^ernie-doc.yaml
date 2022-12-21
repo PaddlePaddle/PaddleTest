@@ -4,7 +4,7 @@ case:
       -
         name: classifier
         path: model_zoo/ernie-doc
-        cmd: python -m paddle.distributed.launch --gpus '0' --log_dir hyp run_classifier.py
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir hyp run_classifier.py
         params:
           - --epochs 15
           - --layerwise_decay 0.7
@@ -22,7 +22,7 @@ case:
       -
         name: mrc
         path: model_zoo/ernie-doc
-        cmd: python -m paddle.distributed.launch --gpus '0' --log_dir cmrc2018 run_mrc.py
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir cmrc2018 run_mrc.py
         params:
           - --batch_size 2
           - --layerwise_decay 0.8
@@ -41,7 +41,7 @@ case:
       -
         name: mcq
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch --gpus '0' --log_dir c3 run_mcq.py
+        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir c3 run_mcq.py
         params:
           - --learning_rate 6.5e-5
           - --epochs 1

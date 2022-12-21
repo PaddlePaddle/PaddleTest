@@ -6,14 +6,14 @@ case:
         path: model_zoo/ernie-gen
         cmd: wget --no-check-certificate https://bj.bcebos.com/paddlenlp/datasets/poetry.tar.gz && tar xvf poetry.tar.gz
       -
-        name: multi
+        name: pretrain
         path: model_zoo/ernie-gen
         cmd: python -m paddle.distributed.launch --gpus "0,1" train.py
         params:
           - --model_name_or_path ernie-1.0
           - --max_encode_len 24
           - --max_decode_len 72
-          - --batch_size 4
+          - --batch_size 2
           - --learning_rate 2e-5
           - --num_epochs 12
           - --max_steps 2
