@@ -8424,7 +8424,7 @@ SpectralNorm_0:
         range: [ -1, 1]
     params:
       weight_shape: [2, 4]
-      dim: 0
+      axis: 0
       power_iters: 1
 
 SpectralNorm_1:
@@ -8440,7 +8440,7 @@ SpectralNorm_1:
         range: [ -1, 1]
     params:
       weight_shape: [2, 4, 5]
-      dim: 0
+      axis: 0
       power_iters: 1
 
 SpectralNorm_2:
@@ -8456,7 +8456,7 @@ SpectralNorm_2:
         range: [ -1, 1]
     params:
       weight_shape: [2, 4, 5, 6]
-      dim: 0
+      axis: 0
       power_iters: 1
 
 SpectralNorm_3:
@@ -8472,7 +8472,7 @@ SpectralNorm_3:
         range: [ -1, 1]
     params:
       weight_shape: [4, 3, 5, 6]
-      dim: 0
+      axis: 0
       power_iters: 1
 
 SpectralNorm_4:
@@ -8488,7 +8488,7 @@ SpectralNorm_4:
         range: [ -1, 1]
     params:
       weight_shape: [4, 3, 2, 5, 6]
-      dim: 0
+      axis: 0
       power_iters: 1
 
 SpectralNorm_5:
@@ -8504,7 +8504,7 @@ SpectralNorm_5:
         range: [ -1, 1]
     params:
       weight_shape: [4, 3, 2, 5, 6]
-      dim: 1
+      axis: 1
       power_iters: 1
 
 SpectralNorm_6:
@@ -8520,7 +8520,7 @@ SpectralNorm_6:
         range: [ -1, 1]
     params:
       weight_shape: [4, 3, 5]
-      dim: 1
+      axis: 1
       power_iters: 10
 
 SpectralNorm_7:
@@ -8536,7 +8536,7 @@ SpectralNorm_7:
         range: [ -1, 1]
     params:
       weight_shape: [4, 3, 5]
-      dim: 1
+      axis: 1
       power_iters: 10
       dtype: "float32"
 
@@ -8554,7 +8554,7 @@ SpectralNorm_7:
 #        range: [ -1, 1]
 #    params:
 #      weight_shape: [4, 3, 5]
-#      dim: 1
+#      axis: 1
 #      power_iters: 10
 #      dtype: "float64"
 
@@ -8571,7 +8571,7 @@ SpectralNorm_9:
         range: [ -1, 1]
     params:
       weight_shape: [2, 3, 8, 8]
-      dim: 1
+      axis: 1
       power_iters: 1
       eps: 0.000000000001
       dtype: "float32"
