@@ -4,12 +4,12 @@ case:
       -
         name: classifier
         path: model_zoo/ernie-doc
-        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir hyp run_classifier.py
+        cmd: python -m paddle.distributed.launch --gpus '0' --log_dir hyp run_classifier.py
         params:
           - --epochs 15
           - --layerwise_decay 0.7
           - --learning_rate 5e-5
-          - --batch_size 4
+          - --batch_size 2
           - --save_steps 2
           - --max_steps 2
           - --dataset hyp
@@ -22,9 +22,9 @@ case:
       -
         name: mrc
         path: model_zoo/ernie-doc
-        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir cmrc2018 run_mrc.py
+        cmd: python -m paddle.distributed.launch --gpus '0' --log_dir cmrc2018 run_mrc.py
         params:
-          - --batch_size 4
+          - --batch_size 2
           - --layerwise_decay 0.8
           - --dropout 0.2
           - --learning_rate 4.375e-5
@@ -41,7 +41,7 @@ case:
       -
         name: mcq
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir c3 run_mcq.py
+        cmd: python -m paddle.distributed.launch --gpus '0' --log_dir c3 run_mcq.py
         params:
           - --learning_rate 6.5e-5
           - --epochs 1
@@ -61,7 +61,7 @@ case:
           - --epochs 1
           - --layerwise_decay 0.8
           - --learning_rate 1.25e-5
-          - --batch_size 4
+          - --batch_size 2
           - --save_steps 2
           - --max_steps 2
           - --output_dir cail
@@ -73,7 +73,7 @@ case:
       -
         name: sequence_labeling
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch --gpus '0,1'--log_dir msra run_sequence_labeling.py
+        cmd: python -m paddle.distributed.launch --gpus '0' --log_dir msra run_sequence_labeling.py
         params:
           - --learning_rate 3e-5
           - --epochs 1
@@ -88,11 +88,11 @@ case:
       -
         name: dureader_robust
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch --gpus "0,1" --log_dir dureader_robust run_mrc.py
+        cmd: python -m paddle.distributed.launch --gpus "0" --log_dir dureader_robust run_mrc.py
         params:
           - --model_name_or_path ernie-doc-base-zh
           - --dataset dureader_robust
-          - --batch_size 8
+          - --batch_size 4
           - --learning_rate 2.75e-4
           - --epochs 1
           - --save_steps 2
