@@ -55,7 +55,6 @@ case:
           - --fp16
           - --fp16_opt_level "O1"
           - --do_train
-          - --disable_tqdm
           - --save_total_limit 10
         result:
           loss:
