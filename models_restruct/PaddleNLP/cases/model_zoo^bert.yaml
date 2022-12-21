@@ -80,6 +80,8 @@ case:
         path: model_zoo/bert
         cmd: python -u ./predict_glue.py
         params:
+          - --task_name SST2
+          - --model_type bert
           - --model_path ./infer_model/model
           - --deveice gppu 
           - --max_seq_length 128

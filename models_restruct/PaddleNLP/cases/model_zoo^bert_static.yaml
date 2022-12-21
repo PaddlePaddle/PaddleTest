@@ -37,7 +37,7 @@ case:
         params:
           - --model_type bert
           - --model_name_or_path bert-base-uncased 
-          - --task_name SST2 
+          - --task_name SST-2 
           - --max_seq_length 128 
           - --batch_size 32  
           - --learning_rate 2e-5
@@ -61,7 +61,7 @@ case:
         path: model_zoo/bert/static
         cmd: python -u ./predict_glue.py
         params:
-          - --task_name SST2
+          - --task_name SST-2
           - --model_type bert
           - --model_path ./tmp/model_2/infer_model
           - --batch_size 32 
