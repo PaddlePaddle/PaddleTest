@@ -24,7 +24,7 @@ from tqdm import tqdm
 import pkg_resources as pkg
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
 from utils.dataset import COCOValDataset
 from utils.yolo_series_post_process import YOLOPostProcess, coco_metric
 
@@ -115,6 +115,9 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     time_max = float("-inf")
     warmup = 20
     repeats = 20 if FLAGS.small_data else 1
+    monitor = Monitor(0)
+    if not rerun_flag:
+        monitor.start()
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
 
@@ -140,13 +143,23 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
         bboxes_list.append(res["bbox"])
         bbox_nums_list.append(res["bbox_num"])
         image_id_list.append(np.array(data_all["im_id"]))
-        cpu_mem, gpu_mem = get_current_memory_mb()
-        cpu_mems += cpu_mem
-        gpu_mems += gpu_mem
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
             sys.stdout.flush()
-    print("[Benchmark]Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / sample_nums, gpu_mems / sample_nums))
+    monitor.stop()
+    monitor_result = monitor.output()
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
     time_avg = predict_time / sample_nums
     print(
         "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
