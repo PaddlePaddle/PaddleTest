@@ -196,13 +196,13 @@ def eval(args, predictor, rerun_flag=False):
     config = load_config(args.dataset_config)
     devices = paddle.set_device("cpu")
     val_loader = build_dataloader(config, "Eval", devices, logger)
-    post_process_class = build_post_process(config["PostProcess"])
+    post_process_class = build_post_process(config["PostProcess"], config["Global"])
     eval_class = build_metric(config["Metric"])
     model_type = config["Global"]["model_type"]
     repeats = len(val_loader)
 
     monitor = Monitor(0)
-    if not rerun_flag:
+    if not rerun_flag and args.benchmark:
         monitor.start()
     predict_time = 0.0
     time_min = float("inf")
@@ -240,7 +240,8 @@ def eval(args, predictor, rerun_flag=False):
 
             t.update()
     print("main pid:", os.getpid())
-    monitor.stop()
+    if args.benchmark:
+        monitor.stop()
     print("finish")
     time_avg = float(predict_time) / (1.0 * repeats)
     monitor_result = monitor.output()
