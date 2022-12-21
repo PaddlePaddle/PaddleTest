@@ -5,7 +5,5 @@ case:
           -
             name: pretrained
             params:
-              - --model_file exported_model/${model}/${category}.pdmodel
-              - --params_file exported_model/${model}/${category}.pdiparams
               - --lidar_file datasets/KITTI/training/velodyne/000000.bin
               - --num_point_dim 4

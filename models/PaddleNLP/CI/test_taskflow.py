@@ -222,7 +222,7 @@ def test_uiex():
         layout_analysis=False,
         position_prob=0.5,
         precision="fp32",
-        use_fast=False,
+        use_fast=True,
     )
     schema = ["姓名", "性别", "学校"]
     ie({"doc": "./cases/203457596-8dbc9241-833d-4b0e-9291-f134a790d0e1.jpeg"})
