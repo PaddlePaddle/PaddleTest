@@ -7149,10 +7149,10 @@ expand_as_1:
         dtype: "float32"
         shape: [1, 10, 10, 10, 10]
         range: [ -1, 1]
-  pytorch:
-    api_name: "torch.Tensor.expand_as"
-    mapping:
-      ins: { x: input, y: other }
+#  pytorch:
+#    api_name: "torch.Tensor.expand_as"
+#    mapping:
+#      ins: { x: input, y: other }
 
 expand_as_2:
   desc: "根据 y 的形状扩展 x ，扩展后， x 的形状和 y 的形状相同"
@@ -7171,10 +7171,10 @@ expand_as_2:
         dtype: "float32"
         shape: [1, 10, 10, 100, 100]
         range: [ -1, 1]
-  pytorch:
-    api_name: "torch.Tensor.expand_as"
-    mapping:
-      ins: { x: input, y: other }
+#  pytorch:
+#    api_name: "torch.Tensor.expand_as"
+#    mapping:
+#      ins: { x: input, y: other }
 
 isfinite_0:
   desc: "返回输入 Tensor 的每一个值是否为有限值（既非 +/-INF 也非 +/-NaN ）"
@@ -8929,7 +8929,7 @@ expand_0:
     params:
       shape: [1, 1, 1, 1, 1]
 #  pytorch:
-#    api_name: "torch.expand"
+#    api_name: "torch.Tensor.expand"
 #    mapping:
 #      ins: { x: input, shape: size }
 
@@ -8946,10 +8946,10 @@ expand_1:
         range: [ -1, 1]
     params:
       shape: [1, 10, 10, 10, 10]
-  pytorch:
-    api_name: "torch.Tensor.expand"
-    mapping:
-      ins: { x: input, shape: size }
+#  pytorch:
+#    api_name: "torch.Tensor.expand"
+#    mapping:
+#      ins: { x: input, shape: size }
 
 expand_2:
   desc: "根据 shape 指定的形状扩展 x ，扩展后， x 的形状和 shape 指定的形状一致"
@@ -8964,10 +8964,10 @@ expand_2:
         range: [ -1, 1]
     params:
       shape: [1, 10, 10, 100, 100]
-  pytorch:
-    api_name: "torch.Tensor.expand"
-    mapping:
-      ins: { x: input, shape: size }
+#  pytorch:
+#    api_name: "torch.Tensor.expand"
+#    mapping:
+#      ins: { x: input, shape: size }
 
 min_0:
   desc: "对指定维度上的Tensor元素求最小值运算，并输出相应的计算结果"
@@ -9895,6 +9895,7 @@ reshape_2:
 
 __radd___0:
   desc: "加法"
+  enable_backward: False
   paddle:
     api_name: "__radd__"
     inputs:
@@ -9912,6 +9913,7 @@ __radd___0:
 
 __radd___1:
   desc: "加法"
+  enable_backward: False
   paddle:
     api_name: "__radd__"
     inputs:
@@ -9929,6 +9931,7 @@ __radd___1:
 
 __radd___2:
   desc: "加法"
+  enable_backward: False
   paddle:
     api_name: "__radd__"
     inputs:
@@ -9946,6 +9949,7 @@ __radd___2:
 
 __rdiv___0:
   desc: "除法scalar/Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rdiv__"
     inputs:
@@ -9963,6 +9967,7 @@ __rdiv___0:
 
 __rdiv___1:
   desc: "除法scalar/Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rdiv__"
     inputs:
@@ -9980,6 +9985,7 @@ __rdiv___1:
 
 __rdiv___2:
   desc: "除法scalar/Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rdiv__"
     inputs:
@@ -9997,6 +10003,7 @@ __rdiv___2:
 
 __rmul___0:
   desc: "乘法scalar*Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rmul__"
     inputs:
@@ -10014,6 +10021,7 @@ __rmul___0:
 
 __rmul___1:
   desc: "乘法scalar*Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rmul__"
     inputs:
@@ -10031,6 +10039,7 @@ __rmul___1:
 
 __rmul___2:
   desc: "乘法scalar*Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rmul__"
     inputs:
@@ -10048,6 +10057,7 @@ __rmul___2:
 
 __rpow___0:
   desc: "指数scalar**Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rpow__"
     inputs:
@@ -10065,6 +10075,7 @@ __rpow___0:
 
 __rpow___1:
   desc: "指数scalar**Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rpow__"
     inputs:
@@ -10082,6 +10093,7 @@ __rpow___1:
 
 __rpow___2:
   desc: "指数scalar**Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rpow__"
     inputs:
@@ -10099,6 +10111,7 @@ __rpow___2:
 
 __rsub___0:
   desc: "减法scalar - Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rsub__"
     inputs:
@@ -10116,6 +10129,7 @@ __rsub___0:
 
 __rsub___1:
   desc: "减法scalar - Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rsub__"
     inputs:
@@ -10133,6 +10147,7 @@ __rsub___1:
 
 __rsub___2:
   desc: "减法scalar - Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rsub__"
     inputs:
@@ -10150,6 +10165,7 @@ __rsub___2:
 
 __rtruediv___0:
   desc: "真除法scalar / Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rtruediv__"
     inputs:
@@ -10167,6 +10183,7 @@ __rtruediv___0:
 
 __rtruediv___1:
   desc: "真除法scalar / Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rtruediv__"
     inputs:
@@ -10184,6 +10201,7 @@ __rtruediv___1:
 
 __rtruediv___2:
   desc: "真除法scalar / Tensor"
+  enable_backward: False
   paddle:
     api_name: "__rtruediv__"
     inputs:
@@ -10201,6 +10219,7 @@ __rtruediv___2:
 
 __truediv___0:
   desc: "除法Tensor / Tensor"
+  enable_backward: False
   paddle:
     api_name: "__truediv__"
     inputs:
@@ -10223,6 +10242,7 @@ __truediv___0:
 
 __truediv___1:
   desc: "除法Tensor / Tensor"
+  enable_backward: False
   paddle:
     api_name: "__truediv__"
     inputs:
@@ -10245,6 +10265,7 @@ __truediv___1:
 
 __truediv___2:
   desc: "除法Tensor / Tensor"
+  enable_backward: False
   paddle:
     api_name: "__truediv__"
     inputs:
@@ -10267,6 +10288,7 @@ __truediv___2:
 
 __truediv__scalar_0:
   desc: "除法Tensor / scalar"
+  enable_backward: False
   paddle:
     api_name: "__truediv__"
     inputs:
@@ -10284,6 +10306,7 @@ __truediv__scalar_0:
 
 __truediv__scalar_1:
   desc: "除法Tensor / scalar"
+  enable_backward: False
   paddle:
     api_name: "__truediv__"
     inputs:
@@ -10301,6 +10324,7 @@ __truediv__scalar_1:
 
 __truediv__scalar_2:
   desc: "除法Tensor / scalar"
+  enable_backward: False
   paddle:
     api_name: "__truediv__"
     inputs:
@@ -10378,6 +10402,7 @@ normalize_2:
 
 __add___0:
   desc: "加法tensor + tensor"
+  enable_backward: False
   paddle:
     api_name: "__add__"
     inputs:
@@ -10400,6 +10425,7 @@ __add___0:
 
 __add___1:
   desc: "加法tensor + tensor"
+  enable_backward: False
   paddle:
     api_name: "__add__"
     inputs:
@@ -10422,6 +10448,7 @@ __add___1:
 
 __add___2:
   desc: "加法tensor + tensor"
+  enable_backward: False
   paddle:
     api_name: "__add__"
     inputs:
@@ -10444,6 +10471,7 @@ __add___2:
 
 __add__scalar_0:
   desc: "加法tensor + scalar"
+  enable_backward: False
   paddle:
     api_name: "__add__"
     inputs:
@@ -10461,6 +10489,7 @@ __add__scalar_0:
 
 __add__scalar_1:
   desc: "加法tensor + scalar"
+  enable_backward: False
   paddle:
     api_name: "__add__"
     inputs:
@@ -10478,6 +10507,7 @@ __add__scalar_1:
 
 __add__scalar_2:
   desc: "加法tensor + scalar"
+  enable_backward: False
   paddle:
     api_name: "__add__"
     inputs:
@@ -10564,6 +10594,7 @@ __and___2:
 
 __div___0:
   desc: "除法 tensor / tensor"
+  enable_backward: False
   paddle:
     api_name: "__div__"
     inputs:
@@ -10586,6 +10617,7 @@ __div___0:
 
 __div___1:
   desc: "除法 tensor / tensor"
+  enable_backward: False
   paddle:
     api_name: "__div__"
     inputs:
@@ -10608,6 +10640,7 @@ __div___1:
 
 __div___2:
   desc: "除法 tensor / tensor"
+  enable_backward: False
   paddle:
     api_name: "__div__"
     inputs:
@@ -10630,6 +10663,7 @@ __div___2:
 
 __div__scalar_0:
   desc: "除法 tensor / scalar"
+  enable_backward: False
   paddle:
     api_name: "__div__"
     inputs:
@@ -10647,6 +10681,7 @@ __div__scalar_0:
 
 __div__scalar_1:
   desc: "除法 tensor / scalar"
+  enable_backward: False
   paddle:
     api_name: "__div__"
     inputs:
@@ -10664,6 +10699,7 @@ __div__scalar_1:
 
 __div__scalar_2:
   desc: "除法 tensor / scalar"
+  enable_backward: False
   paddle:
     api_name: "__div__"
     inputs:
@@ -11024,6 +11060,7 @@ __lt___2:
 
 __matmul___0:
   desc: "@"
+  enable_backward: False
   paddle:
     api_name: "__matmul__"
     inputs:
@@ -11046,6 +11083,7 @@ __matmul___0:
 
 __matmul___1:
   desc: "@"
+  enable_backward: False
   paddle:
     api_name: "__matmul__"
     inputs:
@@ -11068,6 +11106,7 @@ __matmul___1:
 
 __matmul___2:
   desc: "@"
+  enable_backward: False
   paddle:
     api_name: "__matmul__"
     inputs:
@@ -11228,6 +11267,7 @@ __mod___2:
 
 __mul___0:
   desc: "乘法 tensor * tensor"
+  enable_backward: False
   paddle:
     api_name: "__mul__"
     inputs:
@@ -11250,6 +11290,7 @@ __mul___0:
 
 __mul___1:
   desc: "乘法 tensor * tensor"
+  enable_backward: False
   paddle:
     api_name: "__mul__"
     inputs:
@@ -11272,6 +11313,7 @@ __mul___1:
 
 __mul___2:
   desc: "乘法 tensor * tensor"
+  enable_backward: False
   paddle:
     api_name: "__mul__"
     inputs:
@@ -11294,6 +11336,7 @@ __mul___2:
 
 __mul__scalar_0:
   desc: "乘法 tensor * scalar"
+  enable_backward: False
   paddle:
     api_name: "__mul__"
     inputs:
@@ -11311,6 +11354,7 @@ __mul__scalar_0:
 
 __mul__scalar_1:
   desc: "乘法 tensor * scalar"
+  enable_backward: False
   paddle:
     api_name: "__mul__"
     inputs:
@@ -11328,6 +11372,7 @@ __mul__scalar_1:
 
 __mul__scalar_2:
   desc: "乘法 tensor * scalar"
+  enable_backward: False
   paddle:
     api_name: "__mul__"
     inputs:
@@ -11414,6 +11459,7 @@ __ne___2:
 
 __neg___0:
   desc: "取负"
+  enable_backward: False
   paddle:
     api_name: "__neg__"
     inputs:
@@ -11430,6 +11476,7 @@ __neg___0:
 
 __neg___1:
   desc: "取负"
+  enable_backward: False
   paddle:
     api_name: "__neg__"
     inputs:
@@ -11446,6 +11493,7 @@ __neg___1:
 
 __neg___2:
   desc: "取负"
+  enable_backward: False
   paddle:
     api_name: "__neg__"
     inputs:
@@ -11531,6 +11579,7 @@ __or___2:
 
 __pow___0:
   desc: "幂次 tensor ** tensor"
+  enable_backward: False
   paddle:
     api_name: "__pow__"
     inputs:
@@ -11553,6 +11602,7 @@ __pow___0:
 
 __pow___1:
   desc: "幂次 tensor ** tensor"
+  enable_backward: False
   paddle:
     api_name: "__pow__"
     inputs:
@@ -11575,6 +11625,7 @@ __pow___1:
 
 __pow___2:
   desc: "幂次 tensor ** tensor"
+  enable_backward: False
   paddle:
     api_name: "__pow__"
     inputs:
@@ -11597,6 +11648,7 @@ __pow___2:
 
 __pow__scalar_0:
   desc: "幂次 tensor ** scalar"
+  enable_backward: False
   paddle:
     api_name: "__pow__"
     inputs:
@@ -11614,6 +11666,7 @@ __pow__scalar_0:
 
 __pow__scalar_1:
   desc: "幂次 tensor ** scalar"
+  enable_backward: False
   paddle:
     api_name: "__pow__"
     inputs:
@@ -11631,6 +11684,7 @@ __pow__scalar_1:
 
 __pow__scalar_2:
   desc: "幂次 tensor ** scalar"
+  enable_backward: False
   paddle:
     api_name: "__pow__"
     inputs:
@@ -11648,6 +11702,7 @@ __pow__scalar_2:
 
 __sub___0:
   desc: "减法 tensor - tensor"
+  enable_backward: False
   paddle:
     api_name: "__sub__"
     inputs:
@@ -11670,6 +11725,7 @@ __sub___0:
 
 __sub___1:
   desc: "减法 tensor - tensor"
+  enable_backward: False
   paddle:
     api_name: "__sub__"
     inputs:
@@ -11692,6 +11748,7 @@ __sub___1:
 
 __sub___2:
   desc: "减法 tensor - tensor"
+  enable_backward: False
   paddle:
     api_name: "__sub__"
     inputs:
@@ -11714,6 +11771,7 @@ __sub___2:
 
 __sub__scalar_0:
   desc: "减法 tensor - scalar"
+  enable_backward: False
   paddle:
     api_name: "__sub__"
     inputs:
@@ -11731,6 +11789,7 @@ __sub__scalar_0:
 
 __sub__scalar_1:
   desc: "减法 tensor - scalar"
+  enable_backward: False
   paddle:
     api_name: "__sub__"
     inputs:
@@ -11748,6 +11807,7 @@ __sub__scalar_1:
 
 __sub__scalar_2:
   desc: "减法 tensor - scalar"
+  enable_backward: False
   paddle:
     api_name: "__sub__"
     inputs:
@@ -11834,6 +11894,7 @@ __xor___2:
 
 __getitem___0:
   desc: "其调用形式为：Tensor[Index]"
+  enable_backward: False
   paddle:
     api_name: "__getitem__"
     inputs:
@@ -13682,7 +13743,7 @@ ChannelShuffle_0:
     mapping:
       ins: { data: input, groups: groups }
 
-Pad1D_1:
+Pad1D_0:
   desc: "1维pad填充"
   paddle:
     api_name: "paddle.nn.Pad1D"
@@ -15762,25 +15823,6 @@ KLDivLoss_0:
     api_name: "torch.nn.KLDivLoss"
     mapping:
       ins: { input: input, label: target, reduction: reduction }
-
-Linear_0:
-  desc: "线性变换层"
-  paddle:
-    api_name: "paddle.nn.Linear"
-    inputs:
-      data:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-    params:
-      in_features: 1
-      out_features: 1
-  pytorch:
-    api_name: "torch.nn.Linear"
-    mapping:
-      ins: { data: input, in_features: in_features, out_features: out_features }
 
 LogSigmoid_0:
   desc: "LogSigmoid激活层"

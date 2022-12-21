@@ -5,36 +5,134 @@ pwd;
 rm -rf ce && mkdir ce;
 cd ce;
 
-#### 预设默认参数
+######################## 定义变量 ########################
+# AGILE_PIPELINE_NAME 格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop      (默认使用 Ubuntu 和用户保持一致)
+# AGILE_PIPELINE_NAME 格式类似: PaddleClas-Linux-Cuda102-Python37-P0-Develop-Centos  (额外 Centos 和编包保持一致)
+#其它内容或者可能不一致的不要随意加 "-", 下面是按照 "-" split 按序号填入的
+
+#repo的名称
+export reponame=${reponame:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $1}')`"}
+
+#模型列表文件 , 固定路径及格式为 tools/reponame_优先级_list   优先级P2有多个用P21、P22  中间不用"-"划分, 防止按 "-" split 混淆
+export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $5}')`_list"}
 export models_list=${models_list:-None} #模型列表
-export models_file=${models_file:-None} #模型列表文件   #预先不设置，二选一
-export system=${system:-linux}  # linux windows windows_cpu mac 与yaml case下字段保持一致
-export step=${step:-train}  #阶段 demo:train:multi,single+eval:trained,pretrained
-export reponame=${reponame:-PaddleClas} #repo的名称
+
+#指定case操作系统
+if [[ ${AGILE_PIPELINE_NAME} =~ "Linux" ]];then
+    export system=${system:-"linux"}   # linux windows windows_cpu mac 与yaml case下字段保持一致
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Winodws" ]];then
+    export system=${system:-"windows"}
+elif [[ ${AGILE_PIPELINE_NAME} =~ "WindowsCPU" ]];then
+    export system=${system:-"windows_cpu"}
+elif [[ ${AGILE_PIPELINE_NAME} =~ "MAC" ]];then
+    export system=${system:-"mac"}
+else
+    export system=${system:-"linux"}
+fi
+
+#指定python版本
+export Python_version=${Python_version:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F 'Python' '{print $2}'|awk -F '-' '{print $1}')`"}
+
+#指定docker镜像
+if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"}
+    else
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.1-trt8.0-gcc8.2"}
+    else
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.2-cudnn8.2-gcc82"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4.0-trt8.4.0.6-gcc82"}
+    else
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6.2-cudnn8.4.0-gcc82"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
+    else
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
+    fi
+else
+    export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"}
+fi
+
+#约定覆盖的几条流水线
+#指定whl包, 暂时用night develop的包
+if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python36" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp36-cp36m-linux_x86_64.whl"}
+    else
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp36-cp36m-linux_x86_64.whl"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python37" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
+    else
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python38" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.2-cudnn8-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
+    else
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.2-cudnn8-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.6-cudnn8.4.0-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-linux_x86_64.whl"}
+    else
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.6-cudnn8.4.0-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-linux_x86_64.whl"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.7-cudnn8.4.1-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
+    else
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.7-cudnn8.4.1-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
+    fi
+else
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl"}
+    else
+        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl"}
+    fi
+fi
+
+
+#### 可能要改的参数
+export step=${step:-train}  #阶段 demo:train:multi,single+eval:trained,pretrained, 所有流水线都要自己改
 export branch=${branch:-develop}    # repo的分支，大部分为develop，如果有master dygraph等注意设置!!
 export mode=${mode:-function}   #function只验证功能是否正常  precision验证功能&小数据集精度
+export docker_flag=${docker_flag:-} # 如果北京集群cce环境为False，自己的开发机&release机器不用设置
+
+#### 建议不改的参数
 export use_build=${use_build:-yes}  #流水线默认为yes，是否在main中执行环境部署
 export get_repo=${get_repo:-wget} #现支持10个库，需要的话可以加，wget快很多
-export paddle_whl=${paddle_whl:-None}   #paddlewhl包地址，为None则认为已安装不用安装
-export dataset_org=${dataset_org:-None}     #如需软链数据基于根目录的原始地址 demo: /ssd2/ce_data
-export dataset_target=${dataset_target:-None}   #如需软链数据基于reponame的目标地址 demo: data/flower102
 export set_cuda=${set_cuda:-} #预先不设置   #设置显卡号，流水线不用设置，后面有通过release_01后缀判断
 
-#额外的变量
-export AGILE_PIPELINE_CONF_ID=$AGILE_PIPELINE_CONF_ID   #效率云依赖参数
-export AGILE_PIPELINE_BUILD_ID=$AGILE_PIPELINE_BUILD_ID #效率云依赖参数
-export AGILE_JOB_BUILD_ID=$AGILE_JOB_BUILD_ID   #效率云依赖参数
-export docker_flag=${docker_flag:-} # 如果北京集群cce环境为False，自己的开发机不用设置
-export http_proxy=${http_proxy:-}   # 代理在效率云全局变量设置
-export no_proxy=${no_proxy:-}
-export Python_version=${Python_version:-37} # 指定ython版本
-export Image_version=${Image_version:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7}
-#指定docker版本
+#### 数据软链使用
+export dataset_org=${dataset_org:-None}     #如需软链数据基于根目录的原始地址 demo: /ssd2/ce_data
+export dataset_target=${dataset_target:-None}   #如需软链数据基于reponame的目标地址 demo: data/flower102
 
-# 预设一些可能会修改的变量
+#### 全局设置的参数
+export no_proxy=${no_proxy:-}
+export http_proxy=${http_proxy:-}   # 代理在效率云全局变量设置
+export AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID}   #效率云依赖参数
+export AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} #效率云依赖参数
+export AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID}   #效率云依赖参数
+export AGILE_WORKSPACE=${AGILE_WORKSPACE}   #效率云依赖参数
+
+#### 根据PaddleTest & 框架名称决定的参数
 export CE_version_name=${CE_version_name:-TestFrameWork}    #与测试框架的名称一致
 export models_name=${models_name:-models_restruct}  #后面复制使用，和模型库的父路径目录一致（后续改为models）
 
+
+
+######################## 开始执行 ########################
 ####    测试框架下载    #####
 wget -q ${CE_Link} #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
@@ -47,6 +145,20 @@ export AK=${AK} #使用bos_new上传需要
 export SK=${SK}
 export bce_whl_url=${bce_whl_url}
 set -x;
+
+#输出参数验证
+echo "@@@reponame: ${reponame}"
+echo "@@@models_list: ${models_list}"
+echo "@@@models_file: ${models_file}"
+echo "@@@system: ${system}"
+echo "@@@Python_version: ${Python_version}"
+echo "@@@Image_version: ${Image_version}"
+echo "@@@paddle_whl: ${paddle_whl}"
+echo "@@@step: ${step}"
+echo "@@@branch: ${branch}"
+echo "@@@mode: ${mode}"
+echo "@@@docker_flag: ${docker_flag}"
+
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
     mv ../task .  #如果预先下载直接mv
@@ -105,7 +217,7 @@ if [[ "${docker_flag}" == "" ]]; then
 
     ####创建docker
     set +x;
-    docker_name="ce_${reponame}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
+    docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
     echo "begin kill docker"
@@ -129,6 +241,8 @@ if [[ "${docker_flag}" == "" ]]; then
         -e AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID} \
         -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
         -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
+        -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
+        -e AGILE_WORKSPACE=${AGILE_WORKSPACE} \
         -e Python_version=${Python_version} \
         -e models_list=${models_list} \
         -e models_file=${models_file} \
@@ -207,9 +321,11 @@ if [[ "${docker_flag}" == "" ]]; then
             ;;
             esac
         fi
+
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
+        python -m pip install -U pip #升级pip
         python -m pip install -r requirements.txt #预先安装依赖包
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
     ' &
@@ -282,6 +398,7 @@ else
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
     git --version;
+    python -m pip install -U pip #升级pip
     python -m pip install -r requirements.txt #预先安装依赖包
     python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
 fi

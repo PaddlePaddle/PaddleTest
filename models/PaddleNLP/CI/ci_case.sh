@@ -187,7 +187,7 @@ electra(){
 cd ${nlp_dir}/model_zoo/electra/
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 export DATA_DIR=./BookCorpus/
-cp -r /ssd1/paddlenlp/download/electra/BookCorpus/ ./
+wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/BookCorpus.tar.gz && tar -xzvf BookCorpus.tar.gz
 time (python -u ./run_pretrain.py \
     --model_type electra \
     --model_name_or_path electra-small \
@@ -686,8 +686,8 @@ print_info $? stacl_predict
 # 22 transformer
 transformer (){
 cd ${nlp_dir}/examples/machine_translation/transformer/
-cp -r /ssd1/paddlenlp/download/transformer/WMT14.en-de.partial.tar.gz  ./
-tar -zxf WMT14.en-de.partial.tar.gz
+wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/WMT14.en-de.partial.tar.gz
+tar -xzvf WMT14.en-de.partial.tar.gz
 time (
 sed -i "s/save_step: 10000/save_step: 1/g" configs/transformer.base.yaml
 sed -i "s/print_step: 100/print_step: 1/g" configs/transformer.base.yaml
