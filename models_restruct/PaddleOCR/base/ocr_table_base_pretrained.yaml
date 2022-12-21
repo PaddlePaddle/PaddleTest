@@ -12,7 +12,7 @@ train:
     - Global.print_batch_step=1
     - Train.loader.batch_size_per_card=2
     - Train.dataset.data_dir=train_data/table/pubtabnet/val
-    - Train.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl] 
+    - Train.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]
     - Eval.dataset.data_dir=train_data/table/pubtabnet/val
     - Eval.loader.batch_size_per_card=10
     - Eval.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]
@@ -36,7 +36,7 @@ eval:
     - -c ${rd_yaml_path}
     - -o Global.pretrained_model=${model}/best_accuracy
     - Eval.dataset.data_dir=train_data/table/pubtabnet/val
-    - Eval.loader.batch_size_per_card=10 
+    - Eval.loader.batch_size_per_card=10
     - Eval.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]
 
   result:

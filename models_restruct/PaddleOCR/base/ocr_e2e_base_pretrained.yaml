@@ -89,7 +89,7 @@ export:
       evaluation: "="
 predict:
   name: trained
-  cmd:  python tools/infer/predict_e2e.py 
+  cmd:  python tools/infer/predict_e2e.py
   params:
     - --image_dir="./doc/imgs_en/img623.jpg"
     - --e2e_model_dir="./models_inference/"${qa_yaml_name}
