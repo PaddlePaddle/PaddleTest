@@ -55,6 +55,17 @@ wget https://paddle-qa.bj.bcebos.com/tools/TensorRT-8.4.0.6.tgz
 tar -zxf TensorRT-8.4.0.6.tgz
 export LD_LIBRARY_PATH=${PWD}/TensorRT-8.4.0.6/lib/:${LD_LIBRARY_PATH}
 
+PADDLE_COMMIT=`python -c "import paddle; print(paddle.version.commit)"`
+DT=`date "+%Y-%m-%d"`
+SAVE_FILE=${DT}_${FRAME}_${FRAME_BRANCH/\//-}_${PADDLE_COMMIT}.xlsx
+
+PYTHON_VERSION=${PYTHON_VERSION:-3.8}
+CUDA_VERSION=${CUDA_VERSION:-11.2}
+CUDNN_VERSION=${CUDNN_VERSION:-8.2}
+TRT_VERSION=${TRT_VERSION:-8}
+GPU=${DEVICE}
+CPU="-"
+
 
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
@@ -84,18 +95,6 @@ pip install pymysql
 pip install bce-python-sdk
 
 bash run.sh
-
-PADDLE_COMMIT=`python -c "import paddle; print(paddle.version.commit)"`
-DT=`date "+%Y-%m-%d"`
-SAVE_FILE=${DT}_${FRAME}_${FRAME_BRANCH/\//-}_${PADDLE_COMMIT}.xlsx
-
-
-PYTHON_VERSION=${PYTHON_VERSION:-3.8}
-CUDA_VERSION=${CUDA_VERSION:-11.2}
-CUDNN_VERSION=${CUDNN_VERSION:-8.2}
-TRT_VERSION=${TRT_VERSION:-8}
-GPU=${DEVICE}
-CPU="-"
 
 python get_benchmark_info.py ${FRAME} ${FRAME_BRANCH} ${PADDLE_COMMIT} ${FRAME_VERSION} ${DOCKER_IMAGE} ${PYTHON_VERSION} ${CUDA_VERSION} ${CUDNN_VERSION} ${TRT_VERSION} ${GPU} ${CPU} ${MODE} ${METRIC} ${SAVE_FILE}
 
