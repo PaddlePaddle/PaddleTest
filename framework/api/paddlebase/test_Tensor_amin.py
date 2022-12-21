@@ -27,11 +27,13 @@ def cal_api(x, dtype="float32", axis=None, keepdim=False):
     """
     calculate api
     """
+    calcu_grad = dtype == "float32" or dtype == "float64"
+
     x = x.astype(dtype)
     dynamic_grad = None
     xp = paddle.to_tensor(x, stop_gradient=False, dtype=dtype)
     dynamic_res = paddle.Tensor.amin(xp, axis=axis, keepdim=keepdim)
-    if dtype == "float32" or dtype == "float64":
+    if calcu_grad:
         dynamic_res.backward()
         dynamic_grad = xp.grad.numpy()
 
@@ -40,20 +42,21 @@ def cal_api(x, dtype="float32", axis=None, keepdim=False):
     with paddle.utils.unique_name.guard():
         with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
             data0 = paddle.static.data(name="s0", shape=x.shape, dtype=dtype)
+            data0.stop_gradient = not calcu_grad
             feed = {"s0": x}
             out = paddle.Tensor.amin(data0, axis=axis, keepdim=keepdim)
-            if dtype == "float32" or dtype == "float64":
+            if calcu_grad:
                 data0.stop_gradient = False
                 grad = paddle.static.gradients(out, data0)
             exe = paddle.static.Executor()
             exe.run(startup_program)
-            if dtype == "float32" or dtype == "float64":
+            if calcu_grad:
                 static_res = exe.run(main_program, feed=feed, fetch_list=[out] + grad)
             else:
                 static_res = exe.run(main_program, feed=feed, fetch_list=[out])
     paddle.disable_static()
     assert np.allclose(dynamic_res.numpy(), static_res[0])
-    if dtype == "float32" or dtype == "float64":
+    if calcu_grad:
         assert np.allclose(dynamic_grad, static_res[1])
     return dynamic_res.numpy(), dynamic_grad
 
