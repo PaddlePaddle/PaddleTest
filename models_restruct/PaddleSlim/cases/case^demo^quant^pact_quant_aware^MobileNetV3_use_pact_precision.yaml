@@ -1,0 +1,27 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/quant/pact_quant_aware
+        cmd: python train.py
+        params:
+          - --model MobileNetV3_large_x1_0
+          - --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained
+          - --step_epochs 10
+          - --num_epochs 20
+          - --batch_size 64
+          - --l2_decay 1e-5
+          - --lr 0.0001
+          - --use_pact True
+          - --ce_test=True
+          - --use_gpu True
+        result:
+          acc_top1:
+            base: 0.718945
+            threshold: 0.00001
+            evaluation: "+"
+          acc_top5:
+            base: 0.904492
+            threshold: 0.00001
+            evaluation: "+"
