@@ -157,7 +157,6 @@ class PaddleSpeech_Start(object):
                     "https://paddlespeech.bj.bcebos.com/Parakeet/released_models/waveflow/\
 waveflow_ljspeech_ckpt_0.3.zip"
                 )
-                os.system('unzip waveflow_ljspeech_ckpt_0.3.zip')
             else:
                 self.download_data(
                     "https://paddlespeech.bj.bcebos.com/Parakeet/released_models/pwgan/pwg_baker_ckpt_0.4.zip"
