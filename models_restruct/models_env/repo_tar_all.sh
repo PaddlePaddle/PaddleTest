@@ -106,7 +106,7 @@ do
             && [[ ${repo_name} == "Paddle" ]]; then
             tar_reponame
         # PaddleClas
-        if ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
             && [[ ! $line =~ "HEAD" ]] \
             && [[ ! $line =~ "release/2.0" ]] \
             && [[ ! $line =~ "release/2.0-beta" ]] \

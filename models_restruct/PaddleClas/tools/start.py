@@ -446,7 +446,6 @@ class PaddleClas_Start(object):
         """
         try:
             self.xly_job_name = os.environ["AGILE_PIPELINE_NAME"]
-            print("#### self.xly_job_name", self.xly_job_name)
             if os.path.exists(self.xly_job_name + ".yaml") is False:
                 wget.download("https://paddle-qa.bj.bcebos.com/PaddleMT/PaddleClas/" + self.xly_job_name + ".yaml")
 
