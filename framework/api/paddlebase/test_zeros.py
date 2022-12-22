@@ -122,10 +122,10 @@ def test_zeros6():
 @pytest.mark.api_base_zeros_parameters
 def test_zeros7():
     """
-    shape_type=list,dtype=np.bool
+    shape_type=list,dtype=np.bool_
     """
     shape = [1, 5, 2, 3]
-    dtype = np.bool
+    dtype = np.bool_
     res = np.zeros(shape, dtype=dtype)
     obj.run(res=res, shape=shape, dtype=dtype)
 

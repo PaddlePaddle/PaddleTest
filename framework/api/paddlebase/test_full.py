@@ -19,7 +19,7 @@ class TestFull(APIBase):
         """
         implement
         """
-        self.types = [np.bool, np.float16, np.float32, np.float64, np.int32, np.int64]
+        self.types = [np.bool_, np.float16, np.float32, np.float64, np.int32, np.int64]
         # self.debug = True
         # self.static = True
         # enable check grad
@@ -49,7 +49,7 @@ def test_full1():
     shape = [3, 2]
     fill_value = True
     res = np.full(shape, fill_value)
-    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool)
+    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool_)
 
 
 @pytest.mark.api_base_full_parameters
@@ -60,7 +60,7 @@ def test_full2():
     shape = [3, 2]
     fill_value = False
     res = np.full(shape, fill_value)
-    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool)
+    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool_)
 
 
 @pytest.mark.api_base_full_parameters
@@ -149,7 +149,7 @@ def test_full10():
     shape = (3, 2)
     fill_value = True
     res = np.full(shape, fill_value)
-    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool)
+    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool_)
 
 
 @pytest.mark.api_base_full_parameters
@@ -160,7 +160,7 @@ def test_full11():
     shape = (3, 2)
     fill_value = False
     res = np.full(shape, fill_value)
-    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool)
+    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool_)
 
 
 @pytest.mark.api_base_full_parameters
@@ -249,7 +249,7 @@ def test_full19():
     shape = np.array([3, 2])
     fill_value = True
     res = np.full(shape, fill_value)
-    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool)
+    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool_)
 
 
 @pytest.mark.api_base_full_parameters
@@ -260,7 +260,7 @@ def test_full20():
     shape = np.array([3, 2])
     fill_value = False
     res = np.full(shape, fill_value)
-    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool)
+    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool_)
 
 
 @pytest.mark.api_base_full_parameters
@@ -349,7 +349,7 @@ def test_full28():
     shape = [3, 2]
     fill_value = True
     res = np.full(shape, fill_value)
-    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool)
+    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool_)
 
 
 @pytest.mark.api_base_full_parameters
@@ -360,7 +360,7 @@ def test_full29():
     shape = [3, 2]
     fill_value = False
     res = np.full(shape, fill_value)
-    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool)
+    obj.run(res=res, shape=shape, fill_value=fill_value, dtype=np.bool_)
 
 
 # def test_full30():

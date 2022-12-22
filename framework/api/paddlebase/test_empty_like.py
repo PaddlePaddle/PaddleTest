@@ -18,11 +18,11 @@ if fluid.is_compiled_with_cuda() is True:
     places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
 else:
     places = [fluid.CPUPlace()]
-types_list = [np.bool, np.float16, np.float32, np.float64, np.int32, np.int64]
-types_list_cpu = [np.bool, np.float32, np.float64, np.int32, np.int64]
+types_list = [np.bool_, np.float16, np.float32, np.float64, np.int32, np.int64]
+types_list_cpu = [np.bool_, np.float32, np.float64, np.int32, np.int64]
 dtypes = [
     None,
-    np.bool,
+    np.bool_,
     np.float16,
     np.float32,
     np.float64,

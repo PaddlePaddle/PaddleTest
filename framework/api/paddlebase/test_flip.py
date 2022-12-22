@@ -55,10 +55,10 @@ def test_flip():
 @pytest.mark.api_base_flip_vartype
 def test_flip1():
     """
-    types=np.bool
+    types=np.bool_
     """
-    obj.types = [np.bool]
-    x = randtool("int", -10, 10, [3, 3, 3]).astype(np.bool)
+    obj.types = [np.bool_]
+    x = randtool("int", -10, 10, [3, 3, 3]).astype(np.bool_)
     axis = [0]
     res = np.flip(x, axis=axis)
     obj.run(res=res, x=x, axis=axis)

@@ -122,10 +122,10 @@ def test_ones6():
 @pytest.mark.api_base_ones_parameters
 def test_ones7():
     """
-    shape_type=list,dtype=np.bool
+    shape_type=list,dtype=np.bool_
     """
     shape = [1, 5, 2, 3]
-    dtype = np.bool
+    dtype = np.bool_
     res = np.ones(shape, dtype=dtype)
     obj.run(res=res, shape=shape, dtype=dtype)
 

@@ -102,7 +102,7 @@ def test_to_tensor4():
     tensor.dtype is bool
     """
     a = np.random.random((2, 2, 1, 2, 1, 1, 2, 3, 5)) * 2 - 1
-    a_bool = a.astype(np.bool)
+    a_bool = a.astype(np.bool_)
     exp = a_bool.sum(2)
     for d in devices:
         paddle.set_device(d)
