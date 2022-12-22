@@ -18,6 +18,8 @@ import os
 import sys
 import subprocess
 import json
+import pytest
+
 
 def exit_check(exit_code, file_name,):
     """
@@ -83,6 +85,8 @@ def test_run_pretrain():
 
 def test_run_eval():
     file_name = 'run_eval'
+    get_data_cmd='wget https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip && unzip wikitext-103-v1.zip'
+    os.system(get_data_cmd)
     cmd="""python run_eval.py --model_name gpt2-en \
     --eval_path ./wikitext-103/wiki.valid.tokens \
     --overlapping_eval 32 \
