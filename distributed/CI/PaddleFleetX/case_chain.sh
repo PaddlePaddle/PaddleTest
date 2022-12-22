@@ -2,8 +2,8 @@
 set -e
 
 export fleetx_path=/paddle/PaddleFleetX
-export cp_path=/home/FleetX_CI
-export log_path=/paddle/log
+export data_path=/fleetx_data
+export log_path=/paddle/log_fleetx
 
 fleet_gpu_model_list=( \
     gpt_preprocess_data \
@@ -15,7 +15,7 @@ fleet_gpu_model_list=( \
     gpt_175B_DP1_MP4_PP2 \
     gpt_175B_DP1_MP4_PP2_sp \
     gpt_175B_DP1_MP8_PP1 \
-    gpt_175B_DP1_MP4_PP2_sp \
+    gpt_175B_DP1_MP8_PP1_sp \
     gpt_175B_DP1_MP1_PP8 \
     gpt_345M_mp8_qat \
     gpt_generation_345M_single \
@@ -26,9 +26,13 @@ fleet_gpu_model_list=( \
     ernie_base_3D \
     ernie_dp2 \
     vit_cifar10_finetune \
-    vit_qat \
     vit_inference \
+    vit_qat \
+    imagen_text2im_397M_64x64_single \
+    imagen_text2im_397M_64x64_bs2048 \
+    imagen_super_resolution_512_single \
     )
+
 
 function gpt_preprocess_data() {
     cd ${fleetx_path}
@@ -48,7 +52,6 @@ function gpt_preprocess_data() {
     check_result $FUNCNAME
 }
 
-
 function gpt_345M_single() {
     cd ${fleetx_path}
     rm -rf log
@@ -58,7 +61,6 @@ function gpt_345M_single() {
         -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10
     check_result $FUNCNAME
 }
-
 
 function gpt_1.3B_dp() {
     cd ${fleetx_path}
@@ -85,7 +87,6 @@ function gpt_6.7B_stage2_dp2_sharding4() {
     check_result $FUNCNAME
 }
 
-
 function gpt_6.7B_stage3_dp2_sharding4() {
     cd ${fleetx_path}
     rm -rf log
@@ -99,7 +100,6 @@ function gpt_6.7B_stage3_dp2_sharding4() {
         -o Engine.logging_freq=5
     check_result $FUNCNAME
 }
-
 
 function gpt_6.7B_stage2_sharding8() {
     cd ${fleetx_path}
@@ -124,7 +124,8 @@ function gpt_175B_DP1_MP4_PP2() {
         -o Engine.max_steps=10 -o Engine.eval_freq=10 \
         -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Global.local_batch_size=16 -o Global.micro_batch_size=2 \
-        -o Distributed.mp_degree=4 -o Distributed.pp_degree=2
+        -o Distributed.mp_degree=4 -o Distributed.pp_degree=2 \
+        -o Model.sequence_parallel=False
     check_result $FUNCNAME
 }
 
@@ -150,7 +151,8 @@ function gpt_175B_DP1_MP8_PP1() {
         -o Engine.max_steps=10 -o Engine.eval_freq=10 \
         -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Global.local_batch_size=16 -o Global.micro_batch_size=2 \
-        -o Distributed.mp_degree=8 -o Distributed.pp_degree=1
+        -o Distributed.mp_degree=8 -o Distributed.pp_degree=1 \
+        -o Model.sequence_parallel=False
     check_result $FUNCNAME
 }
 
@@ -178,7 +180,8 @@ function gpt_175B_DP1_MP1_PP8() {
         -o Global.local_batch_size=16 -o Global.micro_batch_size=1 \
         -o Distributed.mp_degree=1 -o Distributed.pp_degree=8 \
         -o Model.virtual_pp_degree=2 -o Distributed.pp_recompute_interval=2 \
-        -o Model.fused_linear=True -o Model.use_recompute=True
+        -o Model.fused_linear=True -o Model.use_recompute=True \
+        -o Model.sequence_parallel=False
     check_result $FUNCNAME
 }
 
@@ -198,9 +201,8 @@ function gpt_generation_345M_single() {
     rm -rf log
     python tasks/gpt/generation.py \
         -c ppfleetx/configs/nlp/gpt/generation_gpt_345M_single_card.yaml \
-        -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/ > log
+        -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
     check_result $FUNCNAME
-    cat log
     # check_generation_txt $FUNCNAME ./log
 }
 
@@ -222,10 +224,8 @@ function gpt_inference_345M_single() {
         -c ppfleetx/configs/nlp/gpt/inference_gpt_345M_single_card.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
     python tasks/gpt/inference.py \
-        -c ppfleetx/configs/nlp/gpt/inference_gpt_345M_single_card.yaml \
-        > log
+        -c ppfleetx/configs/nlp/gpt/inference_gpt_345M_single_card.yaml
     check_result $FUNCNAME
-    cat log
     # check_generation_txt $FUNCNAME ./log
 }
 
@@ -291,11 +291,12 @@ function vit_cifar10_finetune() {
         -c  ppfleetx/configs/vis/vit/ViT_tiny_patch16_224_ci_cifar10_1n8c_dp_fp16o2.yaml
     check_result $FUNCNAME
     loss=`tail log/workerlog.0 | grep 19/24 | cut -d " " -f14 `
-    check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
     top1=`tail log/workerlog.0 | grep top1 |cut -d " " -f14 `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 0.217249 ${top1%?} ${FUNCNAME}_top1
+        check_diff 3.744921875 ${loss%?} ${FUNCNAME}_loss
+        check_diff 0.217261 ${top1%?} ${FUNCNAME}_top1
     else
+        check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
         check_diff 0.216943 ${top1%?} ${FUNCNAME}_top1
     fi
 }
@@ -304,7 +305,7 @@ function vit_qat() {
     cd ${fleetx_path}
     rm -rf log
     python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py \
-        -c ppfleetx/configs/vis/vit/ViT_base_patch16_384_ft_cifar10_1n8c_dp_fp16o2.yaml \
+        -c ppfleetx/configs/vis/vit/ViT_base_patch16_384_ft_qat_cifar10_1n8c_dp_fp16o2.yaml \
         -o Engine.run_mode='step' \
         -o Engine.num_train_epochs=1 \
         -o Engine.max_steps=100 \
@@ -324,15 +325,60 @@ function vit_qat() {
 
 function vit_inference() {
     cd ${fleetx_path}
-    cp -r /home/FleetX_CI/TensorRT-8.2.3.0 ./
+    cp -r ${data_path}/TensorRT-8.2.3.0 ./
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${fleetx_path}/TensorRT-8.2.3.0/lib
     rm -rf log
     python tools/export.py \
         -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/
-    python projects/vit/inference_vit.py -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml
+    if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
+        python projects/vit/inference.py -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml
+    else
+        python projects/vit/inference_vit.py -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml
+    fi
     check_result $FUNCNAME
 }
+
+function imagen_text2im_397M_64x64_single() {
+    cd ${fleetx_path}
+    rm -rf log
+    python tools/train.py \
+        -c ppfleetx/configs/multimodal/imagen/imagen_397M_text2im_64x64.yaml \
+        -o Data.Train.loader.num_workers=8 \
+        -o Engine.max_steps=100
+    check_result $FUNCNAME
+}
+
+function imagen_text2im_397M_64x64_bs2048() {
+    cd ${fleetx_path}
+    rm -rf log
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py \
+        -c ppfleetx/configs/multimodal/imagen/imagen_397M_text2im_64x64.yaml \
+        -o Distributed.dp_degree=8 \
+        -o Data.Train.loader.num_workers=8 \
+        -o Engine.max_steps=100
+    check_result $FUNCNAME
+}
+
+function imagen_super_resolution_512_single() {
+    cd ${fleetx_path}
+    rm -rf log
+    python tools/train.py \
+        -c ppfleetx/configs/multimodal/imagen/imagen_super_resolution_512.yaml \
+        -o Data.Train.loader.num_workers=8 \
+        -o Engine.max_steps=100
+    check_result $FUNCNAME
+}
+
+# function imagen_super_resolution_1024_single() {
+#     cd ${fleetx_path}
+#     rm -rf log
+#     python tools/train.py \
+#         -c ppfleetx/configs/multimodal/imagen/imagen_super_resolution_1024.yaml \
+#         -o Data.Train.loader.num_workers=0 \
+#         -o Engine.max_steps=100
+#     check_result $FUNCNAME
+# }
 
 function check_generation_txt() {
     if [[ -e ./generation_base.txt ]]; then

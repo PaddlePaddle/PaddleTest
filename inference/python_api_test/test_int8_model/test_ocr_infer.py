@@ -185,6 +185,28 @@ def predict_image(predictor, rerun_flag=False):
             round(time_min * 1000, 2), round(time_max * 1000, 2), round(time_avg * 1000, 2)
         )
     )
+    final_res = {
+        "model_name": args.model_name,
+        "batch_size": args.batch_size,
+        "jingdu": {
+            "value": 0,
+            "unit": "",
+        },
+        "xingneng": {
+            "value": round(time_avg * 1000, 2),
+            "unit": "ms",
+        },
+        "cpu_mem": {
+            "value": cpu_mem,
+            "unit": "MB",
+        },
+        "gpu_mem": {
+            "value": gpu_mem,
+            "unit": "MB",
+        },
+    }
+    print("[Benchmark][final result]{}".format(final_res))
+    sys.stdout.flush()
 
 
 # eval is not correct
@@ -268,6 +290,29 @@ def eval(args, predictor, rerun_flag=False):
     logger.info("metric eval ***************")
     for k, v in metric.items():
         logger.info("{}:{}".format(k, v))
+
+    final_res = {
+        "model_name": args.model_name,
+        "batch_size": args.batch_size,
+        "jingdu": {
+            "value": 0,
+            "unit": "",
+        },
+        "xingneng": {
+            "value": round(time_avg * 1000, 2),
+            "unit": "ms",
+        },
+        "cpu_mem": {
+            "value": cpu_mem,
+            "unit": "MB",
+        },
+        "gpu_mem": {
+            "value": gpu_mem,
+            "unit": "MB",
+        },
+    }
+    print("[Benchmark][final result]{}".format(final_res))
+    sys.stdout.flush()
 
 
 def main(args):
@@ -374,5 +419,6 @@ if __name__ == "__main__":
     parser.add_argument("--max_batch_size", type=int, default=10)
     parser.add_argument("--min_subgraph_size", type=int, default=15)
     parser.add_argument("--model_type", type=str, default="det")
+    parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
     args = parser.parse_args()
     main(args)

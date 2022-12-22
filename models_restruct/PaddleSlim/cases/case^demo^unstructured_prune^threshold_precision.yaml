@@ -1,0 +1,60 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/unstructured_prune
+        cmd: python train.py
+        params:
+          - --batch_size 256
+          - --pretrained_model ../pretrain/MobileNetV1_pretrained
+          - --lr 0.05
+          - --pruning_mode threshold
+          - --threshold 0.01
+          - --data imagenet
+          - --lr_strategy piecewise_decay
+          - --step_epochs 1 2 3
+          - --num_epochs 10
+          - --test_period 1
+          - --model_period 1
+          - --model_path st_unstructured_models
+          - --ce_test True
+          - --use_gpu True
+        result:
+          acc_top1:
+            base: 0.69765627
+            threshold: 0.00000001
+            evaluation: "+"
+          acc_top5:
+            base: 0.904492199
+            threshold: 0
+            evaluation: "+"
+
+      -
+        name: multi
+        path: demo/unstructured_prune
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --batch_size 256
+          - --pretrained_model ../pretrain/MobileNetV1_pretrained
+          - --lr 0.05
+          - --pruning_mode threshold
+          - --threshold 0.01
+          - --data imagenet
+          - --lr_strategy piecewise_decay
+          - --step_epochs 1 2 3
+          - --num_epochs 20
+          - --test_period 1
+          - --model_period 1
+          - --model_path st_unstructured_models
+          - --ce_test True
+          - --use_gpu True
+        result:
+          acc_top1:
+            base: 0.71035158634
+            threshold: 0.00000001
+            evaluation: "+"
+          acc_top5:
+            base: 0.910937488079
+            threshold: 0.00000001
+            evaluation: "+"

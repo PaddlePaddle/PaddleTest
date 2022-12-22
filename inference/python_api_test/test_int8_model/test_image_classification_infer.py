@@ -24,7 +24,7 @@ import yaml
 
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
 from paddle.io import DataLoader
 from utils.imagenet_reader import ImageNetDataset
 
@@ -120,6 +120,8 @@ def eval(predictor, FLAGS):
     sample_nums = len(val_loader)
     if FLAGS.small_data:
         sample_nums = 1000
+    monitor = Monitor(0)
+    monitor.start()
     for batch_id, (image, label) in enumerate(val_loader):
         image = np.array(image)
         # classfication model usually having only one input
@@ -162,6 +164,23 @@ def eval(predictor, FLAGS):
         if rerun_flag:
             return
 
+    monitor.stop()
+    monitor_result = monitor.output()
+    print(monitor_result)
+
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
+
     result = np.mean(np.array(results), axis=0)
     fp_message = FLAGS.precision
     print_msg = "Paddle-Inference-GPU"
@@ -185,6 +204,7 @@ def eval(predictor, FLAGS):
     print("[Benchmark] Evaluation acc result: {}".format(result[0]))
     final_res = {
         "model_name": FLAGS.model_name,
+        "batch_size": FLAGS.batch_size,
         "jingdu": {
             "value": result[0],
             "unit": "acc",
@@ -192,7 +212,14 @@ def eval(predictor, FLAGS):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-            "batch_size": FLAGS.batch_size,
+        },
+        "gpu_mem": {
+            "value": gpu_mem,
+            "unit": "MB",
+        },
+        "cpu_mem": {
+            "value": cpu_mem,
+            "unit": "MB",
         },
     }
     print("[Benchmark][final result]{}".format(final_res))

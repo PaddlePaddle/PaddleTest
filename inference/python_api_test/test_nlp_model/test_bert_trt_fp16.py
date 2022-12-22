@@ -72,7 +72,7 @@ def test_trt_fp16_bz1():
         params_file="./bert/inference.pdiparams",
     )
     test_suite1.trt_more_bz_test(
-        input_data_dict, output_data_dict, delta=1e-5, max_batch_size=1, precision="trt_fp16", dynamic=True, tuned=True
+        input_data_dict, output_data_dict, delta=1e-3, max_batch_size=1, precision="trt_fp16", dynamic=True, tuned=True
     )
     del test_suite1  # destroy class to save memory
 
@@ -82,7 +82,7 @@ def test_trt_fp16_bz1():
         params_file="./bert/inference.pdiparams",
     )
     test_suite2.trt_more_bz_test(
-        input_data_dict, output_data_dict, delta=1e-5, max_batch_size=1, precision="trt_fp16", dynamic=True
+        input_data_dict, output_data_dict, delta=1e-3, max_batch_size=1, precision="trt_fp16", dynamic=True
     )
     del test_suite2  # destroy class to save memory
 

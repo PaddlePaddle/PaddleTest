@@ -17,6 +17,6 @@ case:
         cmd: python -u tools/infer.py
         result:
           query_doc_sim:
-            base: 0.444444
+            base: 0.9819532
             threshold: 0.0003
-            evaluation: "-"
+            evaluation: "+"

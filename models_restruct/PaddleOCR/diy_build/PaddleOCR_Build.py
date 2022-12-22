@@ -4,6 +4,7 @@
 """
 import os
 import sys
+import time
 import logging
 import tarfile
 import argparse
@@ -66,7 +67,7 @@ class PaddleOCR_Build(Model_Build):
             if sysstr == "Linux":
                 src_path = "/ssd2/ce_data/PaddleOCR"
             elif sysstr == "Windows":
-                src_path = "F:\\ce_data\\PaddleOCR"
+                src_path = "F:\\PaddleOCR"
             elif sysstr == "Darwin":
                 src_path = "/Users/paddle/PaddleTest/ce_data/PaddleOCR"
 
@@ -75,16 +76,41 @@ class PaddleOCR_Build(Model_Build):
             if not os.path.exists("pretrain_models"):
                 os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
 
-            # configs/rec/rec_resnet_stn_bilstm_att.yml
-            os.system("python -m pip install fasttext")
+            # dataset
+            if not os.path.exists("train_data/ctw1500"):
+                self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/ctw1500.tar", "train_data")
 
-            for filename in self.test_model_list:
-                print("filename:{}".format(filename))
-                if "rec" in filename:
-                    cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
-                    subprocess.getstatusoutput(cmd)
+            if not os.path.exists("train_data/icdar2015"):
+                self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/icdar2015.tar", "train_data")
+            if not os.path.exists("train_data/data_lmdb_release"):
+                self.download_data(
+                    "https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/data_lmdb_release.tar", "train_data"
+                )
+            # configs/rec/rec_resnet_stn_bilstm_att.yml
+            # os.system("python -m pip install fasttext")
+            # if not os.path.exists("cc.en.300.bin"):
+            #    self.download_data(
+            #        "https://paddle-qa.bj.bcebos.com/PaddleOCR/pretrain_models/cc.en.300.bin.tar", os.getcwd()
+            #    )
+
+            # kie requirements
+            os.system("python -m pip install ppstructure/kie/requirements.txt")
+
             os.chdir(path_now)
             print("build dataset!")
+
+    def download_data(self, data_link, destination):
+        """
+        下载数据集
+        """
+        tar_name = data_link.split("/")[-1]
+        logger.info("start download {}".format(tar_name))
+        wget.download(data_link, destination)
+        logger.info("start tar extract {}".format(tar_name))
+        tf = tarfile.open(os.path.join(destination, tar_name))
+        tf.extractall(destination)
+        time.sleep(10)
+        os.remove(os.path.join(destination, tar_name))
 
     def build_env(self):
         """
