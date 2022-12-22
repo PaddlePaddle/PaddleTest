@@ -74,8 +74,8 @@ paddlespeech_cli_11: paddlespeech asr --model deepspeech2online_aishell --input 
 paddlespeech_cli_12: paddlespeech asr --model deepspeech2offline_librispeech --lang en --input ./en.wav
 paddlespeech_cli_13: paddlespeech asr --model conformer_online_wenetspeech --num_decoding_left_chunks 3 --input ./zh.wav
 paddlespeech_cli_14: paddlespeech asr --lang zh --model conformer_u2pp_online_wenetspeech --input zh.wav
-paddlespeech_cli_15: paddlespeech tts --input '你好，欢迎使用百度飞桨深度学习框架！'
-paddlespeech_cli_16: paddlespeech tts --am speedyspeech_csmsc --input '你好，欢迎使用百度飞桨深度学习框架'
+paddlespeech_cli_15: paddlespeech tts --input '你好，欢迎使用百度飞桨深度学习框架!'
+paddlespeech_cli_16: paddlespeech tts --am speedyspeech_csmsc --input '你好，欢迎使用百度飞桨深度学习框架!'
 paddlespeech_cli_17: paddlespeech tts --voc mb_melgan_csmsc --input '你好，欢迎使用百度飞桨深度学习框架!'
 paddlespeech_cli_18: paddlespeech tts --voc style_melgan_csmsc --input '你好，欢迎使用百度飞桨深度学习框架！'
 paddlespeech_cli_19: paddlespeech tts --voc pwgan_csmsc --input '你好，欢迎使用百度飞桨深度学习框架！'
