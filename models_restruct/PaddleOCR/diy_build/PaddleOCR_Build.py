@@ -75,15 +75,17 @@ class PaddleOCR_Build(Model_Build):
                 os.symlink(os.path.join(src_path, "train_data"), "train_data")
             if not os.path.exists("pretrain_models"):
                 os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
-            
+
             # dataset
             if not os.path.exists("train_data/ctw1500"):
                 self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/ctw1500.tar", "train_data")
-            
+
             if not os.path.exists("train_data/icdar2015"):
                 self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/icdar2015.tar", "train_data")
             if not os.path.exists("train_data/data_lmdb_release"):
-                self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/data_lmdb_release.tar", "train_data")
+                self.download_data(
+                    "https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/data_lmdb_release.tar", "train_data"
+                )
             # configs/rec/rec_resnet_stn_bilstm_att.yml
             # os.system("python -m pip install fasttext")
             # if not os.path.exists("cc.en.300.bin"):
