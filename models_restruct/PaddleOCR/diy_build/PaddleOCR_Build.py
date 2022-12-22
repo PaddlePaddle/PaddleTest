@@ -101,7 +101,7 @@ class PaddleOCR_Build(Model_Build):
         logger.info("start tar extract {}".format(tar_name))
         tf = tarfile.open(os.path.join(destination, tar_name))
         tf.extractall(destination)
-        time.sleep(1)
+        time.sleep(10)
         os.remove(os.path.join(destination, tar_name))
 
     def build_env(self):
