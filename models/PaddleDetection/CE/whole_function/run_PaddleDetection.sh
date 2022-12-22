@@ -112,6 +112,8 @@ sed -i '/for step_id, data in enumerate(self.loader):/a\                if step_
 sed -i '/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/i\        max_step_id=1' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/a\            if step_id == max_step_id: break' ppdet/engine/tracker.py
+#change weights dir
+#sed -i "s#~/.cache/paddle/weights#${data_path}/data/ppdet_pretrained#g" ppdet/utils/download.py
 
 if [ "${task_type}" == 'develop_d1' ];then
 find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner |  grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep -v mask_rcnn | grep -v detector | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v deploy | grep -v layout | grep -v application | awk '{print $NF}' | tee config_list

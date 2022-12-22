@@ -1,0 +1,106 @@
+case:
+  linux:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: prepare
+        path: applications/text_summarization/pegasus
+        cmd: python run_prepare.py
+      -
+        name: train
+        path: applications/text_summarization/pegasus
+        cmd: python -m paddle.distributed.launch --gpus '0,1' train.py
+    eval: skipped
+    infer:
+      -
+        name: trained
+        cmd: python -m predict.py
+    export:
+      -
+        name: trained
+        cmd: python export_model.py
+    predict:
+      -
+        name: trained
+        path: /deploy/paddle_inference/
+        cmd: python inference_pegasus.py
+
+  windows:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: single
+        path: applications/text_summarization/pegasus
+        cmd: python -m paddle.distributed.launch run_train.py
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval: skipped
+    infer:
+      -
+        name: trained
+        cmd: python -m run_generate.py
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    export:
+      -
+        name: trained
+        cmd: python export_model.py
+    predict:
+      -
+        name: trained
+        path: /deploy/paddle_inference/
+        cmd: python inference_pegasus.py
+
+  windows_cpu:
+    base: ./base/normal_base.yaml
+    train:
+      -
+        name: single
+        path: applications/text_summarization/pegasus
+        cmd: python -m paddle.distributed.launch run_train.py
+        params:
+          - -- device cpu
+    eval: skipped
+    infer:
+      -
+        name: trained
+        cmd: python -m run_generate.py
+    export:
+      -
+        name: trained
+        cmd: python export_model.py
+    predict:
+      -
+        name: trained
+        path: /deploy/paddle_inference/
+        cmd: python inference_pegasus.py
+
+  mac:
+    base: ./base/normal_base.yaml
+    train:
+      -
+        name: single
+        path: applications/text_summarization/pegasus
+        cmd: python -m paddle.distributed.launch run_train.py
+        params:
+          - -- device=cpu
+    eval: skipped
+    infer:
+      -
+        name: trained
+        cmd: python -m run_generate.py
+    export:
+      -
+        name: trained
+        cmd: python export_model.py
+    predict:
+      -
+        name: trained
+        path: applications/text_summarization/pegasus/deploy/paddle_inference/
+        cmd: python inference_pegasus.py

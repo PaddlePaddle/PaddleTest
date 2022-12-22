@@ -1,0 +1,23 @@
+case:
+  linux:
+    base: ./base/normal_base.yml
+    train: skipped
+    eval: skipped
+    infer:
+      -
+        name: pretrained
+        cmd: python tools/infer.py
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export_model.py
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/infer.py
+      -
+        name: cpp
+        cmd: ./deploy/cpp/build/main
+
+
+function: paddlelas_imagenet_parse

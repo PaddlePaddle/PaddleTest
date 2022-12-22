@@ -14,7 +14,6 @@ import wget
 import numpy as np
 
 logger = logging.getLogger("ce")
-# TODO wget容易卡死, 增加超时计时器 https://blog.csdn.net/weixin_42368421/article/details/101354628
 
 
 class PaddleClas_Start(object):
@@ -28,7 +27,7 @@ class PaddleClas_Start(object):
         """
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
-        logger.info("### self.qa_yaml_name: {}".format(self.qa_yaml_name))
+        logger.info("#### self.qa_yaml_name: {}".format(self.qa_yaml_name))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
         self.step = os.environ["step"]
@@ -238,6 +237,7 @@ class PaddleClas_Start(object):
                 "pretrained" in step_single
                 or "PULC^language_classification" in self.qa_yaml_name
                 or "PULC^textline_orientation" in self.qa_yaml_name
+                or "PULC^text_image_orientation" in self.qa_yaml_name
                 or "ImageNet^VGG^VGG11" in self.qa_yaml_name
             ):
 
@@ -248,6 +248,8 @@ class PaddleClas_Start(object):
                 if (
                     "PULC^language_classification" in self.qa_yaml_name
                     or "PULC^textline_orientation" in self.qa_yaml_name
+                    or "PULC^text_image_orientation" in self.qa_yaml_name
+                    or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):
                     # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
@@ -302,6 +304,7 @@ class PaddleClas_Start(object):
                 "pretrained" in step_single
                 or "PULC^language_classification" in self.qa_yaml_name
                 or "PULC^textline_orientation" in self.qa_yaml_name
+                or "PULC^text_image_orientation" in self.qa_yaml_name
                 or "ImageNet^VGG^VGG11" in self.qa_yaml_name
             ):
                 self.env_dict["predict_pretrained_model"] = os.path.join(
@@ -311,8 +314,12 @@ class PaddleClas_Start(object):
                 if (
                     "PULC^language_classification" in self.qa_yaml_name
                     or "PULC^textline_orientation" in self.qa_yaml_name
+                    or "PULC^text_image_orientation" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):  # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
+                    # ImageNet^VGG^VGG11 用预训练模型
+                    # Distillation^mv3_large_x1_0_distill_mv3_small_x1_0 用预训练模型
+                    # Distillation^res2net200_vd_distill_pphgnet_base 无预训练模型，不进行精度校验
                     self.env_dict["predict_trained_model"] = self.env_dict["predict_pretrained_model"]
 
                 if (
@@ -423,7 +430,12 @@ class PaddleClas_Start(object):
                                 or key == self.step
                             ):
                                 # 结果和阶段同时满足 否则就有可能把不执行的阶段的result替换到执行的顺序混乱
-                                content[key][i][key1] = content_result[key][i][key1]
+                                try:  # 不一定成功，如果不成功输出出来看看
+                                    content[key][i][key1] = content_result[key][i][key1]
+                                except:
+                                    logger.info("#### can not update value")
+                                    logger.info("#### key1: {}".format(key1))
+                                    logger.info("#### content_result[key][i]: {}".format(content_result[key][i]))
         return content, content_result
 
     def update_kpi(self):
@@ -432,30 +444,29 @@ class PaddleClas_Start(object):
         其实可以在这一步把QA需要替换的全局变量给替换了,就不需要框架来做了,重组下qa的yaml
         kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
-        # 读取上次执行的产出
-        # 通过whl包的地址, 判断是release还是develop  report_linux_cuda102_py37_develop
-        if "Develop" in self.paddle_whl:
-            # logger.info(" paddle_whl use branch devleop : {}".format(self.paddle_whl))
-            content_result_name = "report_linux_cuda102_py37_develop.yaml"
-        else:
-            # logger.info(" paddle_whl use branch release or None : {}".format(self.paddle_whl))
-            content_result_name = "report_linux_cuda102_py37_release.yaml"
-        with open(os.path.join("tools", content_result_name), "r", encoding="utf-8") as f:
-            content_result = yaml.load(f, Loader=yaml.FullLoader)
+        try:
+            self.xly_job_name = os.environ["AGILE_PIPELINE_NAME"]
+            if os.path.exists(self.xly_job_name + ".yaml") is False:
+                wget.download("https://paddle-qa.bj.bcebos.com/PaddleMT/PaddleClas/" + self.xly_job_name + ".yaml")
 
-        if self.qa_yaml_name in content_result.keys():  # 查询yaml中是否存在已获取的模型指标
-            logger.info("#### change {} value".format(self.qa_yaml_name))
-            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r", encoding="utf-8") as f:
-                content = yaml.load(f, Loader=yaml.FullLoader)
+            with open(self.xly_job_name + ".yaml", "r", encoding="utf-8") as f:
+                content_result = yaml.load(f, Loader=yaml.FullLoader)
 
-            content = json.dumps(content)
-            content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
-            content = json.loads(content)
+            if self.qa_yaml_name in content_result.keys():  # 查询yaml中是否存在已获取的模型指标
+                logger.info("#### change {} value".format(self.qa_yaml_name))
+                with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r", encoding="utf-8") as f:
+                    content = yaml.load(f, Loader=yaml.FullLoader)
 
-            content, content_result = self.change_yaml_kpi(content, content_result[self.qa_yaml_name])
+                content = json.dumps(content)
+                content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
+                content = json.loads(content)
 
-            with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
-                yaml.dump(content, f, sort_keys=False)
+                content, content_result = self.change_yaml_kpi(content, content_result[self.qa_yaml_name])
+
+                with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
+                    yaml.dump(content, f, sort_keys=False)
+        except:
+            logger.info("do not update yaml value !!!")
 
     def build_prepare(self):
         """

@@ -204,8 +204,11 @@ sed -i "s/python3/python/g" Makefile
 sed -i "s/python-config/python3.7m-config/g" Makefile
 #pretrain
 cd ${nlp_dir}/model_zoo/gpt/
-cp -r /ssd1/paddlenlp/download/gpt/* ./
-export CUDA_VISIBLE_DEVICES=${cudaid2}
+mkdir pre_data
+cd ./pre_data
+wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy
+wget -q https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz
+cd ../
 time (python -m paddle.distributed.launch run_pretrain.py \
     --model_type gpt \
     --model_name_or_path gpt2-en \
@@ -706,7 +709,7 @@ print_info $? transformer_predict
 time (
 python export_model.py --config ./configs/transformer.base.yaml \
     --vocab_file ${PWD}/WMT14.en-de.partial/vocab_all.bpe.33708 \
-    --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_export) >>${log_path}/transformer_export 2>&1
+    --bos_token "<s>" --eos_token "<e>" >${log_path}/transformer_export) >>${log_path}/transformer_export 2>&1
 print_info $? transformer_export
 #infer
 time (
@@ -719,7 +722,7 @@ print_info $? transformer_infer
 # FT
 cd ${nlp_dir}/
 export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-wget -q https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+wget -q https://paddle-inference-lib.bj.bcebos.com/2.4.0/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
 tar -xzvf paddle_inference.tgz
 export CC=/usr/local/gcc-8.2/bin/gcc
 export CXX=/usr/local/gcc-8.2/bin/g++
@@ -774,36 +777,6 @@ python export_model.py  \
 ${nlp_dir}/paddlenlp/ops/build_tr_cc/bin/./transformer_e2e -batch_size 8 -gpu_id 0 -model_dir ./infer_model/ -vocab_file ${PPNLP_HOME}/datasets/WMT14ende/WMT14.en-de/wmt14_ende_data_bpe/vocab_all.bpe.33708 \
 -data_file ${PPNLP_HOME}/datasets/WMT14ende/WMT14.en-de/wmt14_ende_data_bpe/newstest2014.tok.bpe.33708.en  >${log_path}/transformer_deploy_C_FT >>${log_path}/transformer_deploy_C_FT 2>&1
 print_info $? transformer_deploy_C_FT
-}
-
-pet (){
-cd ${nlp_dir}/examples/few_shot/pet/
-export CUDA_VISIBLE_DEVICES=${cudaid1}
-#chid_train
-time (
-python  -u -m paddle.distributed.launch  \
-    pet.py \
-    --task_name "chid" \
-    --device gpu \
-    --pattern_id 0 \
-    --save_dir ./chid \
-    --index 0 \
-    --batch_size 8 \
-    --learning_rate 5E-5 \
-    --epochs 1 \
-    --max_seq_length 512 \
-    --language_model "ernie-1.0"  >${log_path}/pet_chid_train) >>${log_path}/pet_chid_train 2>&1
-print_info $? pet_chid_train
-#chid_predict
-time (
-python -u -m paddle.distributed.launch  predict.py \
-        --task_name "chid" \
-        --device gpu \
-        --init_from_ckpt "./chid/model_6/model_state.pdparams" \
-        --output_dir "./chid/output" \
-        --batch_size 32 \
-        --max_seq_length 512 >${log_path}/pet_chid_predict) >>${log_path}/pet_chid_predict 2>&1
-print_info $? pet_chid_predict
 }
 
 simbert(){
@@ -895,7 +868,7 @@ cd ${nlp_dir}/examples/text_correction/ernie-csc
 python download.py --data_dir ./extra_train_ds/ --url https://github.com/wdimmy/Automatic-Corpus-Generation/raw/master/corpus/train.sgml
 #trans xml txt
 python change_sgml_to_txt.py -i extra_train_ds/train.sgml -o extra_train_ds/train.txt
-#2卡训练
+#训练
 python -m paddle.distributed.launch  train.py --batch_size 32 --logging_steps 100 --epochs 1 --learning_rate 5e-5 --model_name_or_path ernie-1.0 --output_dir ./checkpoints/ --extra_train_ds_dir ./extra_train_ds/  >${log_path}/ernie-csc_train >>${log_path}/ernie-csc_train 2>&1
 print_info $? ernie-csc_train
 #predict
@@ -1022,7 +995,7 @@ export all_P0case_time=0
 declare -A all_P0case_dic
 all_P0case_dic=(["waybill_ie"]=3 ["msra_ner"]=15 ["glue"]=2 ["bert"]=2 ["skep"]=10 ["bigbird"]=2 ["electra"]=2  ["gpt"]=2 ["ernie-1.0"]=2 ["xlnet"]=2 \
  ["ofa"]=2   ["squad"]=20 ["tinybert"]=5 ["lexical_analysis"]=5 ["seq2seq"]=5 ["word_embedding"]=5 \
-  ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["pet"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
+  ["ernie-ctm"]=5 ["distilbert"]=5  ["stacl"]=5 ["transformer"]=5 ["simbert"]=5 ["ernie-doc"]=20 ["transformer-xl"]=5 \
   ["pointer_summarizer"]=5 ["question_matching"]=5 ["ernie-csc"]=5 ["nptag"]=5 ["ernie-m"]=5 ["clue"]=5 ["taskflow"]=5)
 get_diff_TO_P0case(){
 for key in $(echo ${!all_P0case_dic[*]});do
@@ -1030,7 +1003,7 @@ for key in $(echo ${!all_P0case_dic[*]});do
 done
 if [[ ${Testcase} == 'null' ]];then
     P0case_list=(waybill_ie msra_ner glue bert skep bigbird electra gpt ernie-1.0 xlnet ofa  squad tinybert lexical_analysis seq2seq \
-     word_embedding ernie-ctm distilbert stacl transformer pet simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
+     word_embedding ernie-ctm distilbert stacl transformer simbert ernie-doc transformer-xl pointer_summarizer question_matching ernie-csc \
     nptag ernie-m clue taskflow)
 else
     P0case_list=${Testcase}
@@ -1055,7 +1028,7 @@ cd ${nlp_dir}/
 cp -r /ssd1/paddlenlp/bos/* ./
 tar -zcvf logs.tar logs/
 mkdir upload && mv logs.tar upload
-python upload.py upload
+python upload.py upload 'paddle-qa/paddlenlp'
 cd logs
 FF=`ls *_FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then

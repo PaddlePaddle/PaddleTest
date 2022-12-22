@@ -256,9 +256,12 @@ def run():
             paddleslim_start.wget_and_tar(
                 "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar"
             )
+<<<<<<< HEAD
             paddleslim_start.wget_and_files(
                 "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/MobileNetV3_large_x1_0_pretrained.pdparams"
             )
+=======
+>>>>>>> 212f7ade4e0a5d169c2f958d3346af7d81a424a9
             # 更新imagenet_reader.py 的ILSVRC2012 路径
             os.chdir(demo_path + "/dygraph/pruning")
             if not os.path.exists("data"):

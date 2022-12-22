@@ -106,6 +106,8 @@ print_result(){
 
 # run dynamic models
 pip install -r requirements.txt
+#install paddleseg
+pip install -v -e .
 log_dir=.
 model_type_path=
 if [ "${task_type}" == 'develop_d1' ];then
@@ -126,7 +128,7 @@ TRAIN_MUlTI_DYNAMIC(){
     if [[ ${model} =~ 'segformer' || ${model} =~ 'encnet' ]];then
         echo -e "${model} does not test multi_train！"
     else
-        python -m paddle.distributed.launch train.py \
+        python -m paddle.distributed.launch tools/train.py \
            --config ${config} \
            --save_interval 100 \
            --iters 10 \
@@ -142,7 +144,7 @@ TRAIN_SINGLE_DYNAMIC(){
     if [[ ${model} =~ 'segformer' || ${model} =~ 'pfpn' || ${model} =~ 'encnet' ]];then
         echo -e "${model} does not test single_train！"
     else
-        python train.py \
+        python tools/train.py \
            --config ${config} \
            --save_interval 100 \
            --iters 10 \
@@ -158,7 +160,7 @@ TRAIN_SINGLE_DYNAMIC_BS1(){
     if [[ ${model} =~ 'segformer' || ${model} =~ 'encnet' ]];then
         echo -e "${model} does not test single_dynamic_bs1_train！"
     else
-        python train.py \
+        python tools/train.py \
            --config ${config} \
            --save_interval 100 \
            --iters 10 \
@@ -171,14 +173,14 @@ TRAIN_SINGLE_DYNAMIC_BS1(){
 EVAL_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
     mode=eval_dynamic
-    python -m paddle.distributed.launch val.py \
+    python -m paddle.distributed.launch tools/val.py \
        --config ${config} \
        --model_path seg_dynamic_pretrain/${model}/model.pdparams >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 PREDICT_DYNAMIC(){
     mode=predict_dynamic
-    python predict.py \
+    python tools/predict.py \
        --config ${config} \
        --model_path seg_dynamic_pretrain/${model}/model.pdparams \
        --image_path demo/${predict_pic} \
@@ -189,7 +191,7 @@ EXPORT_DYNAMIC(){
     mode=export_dynamic
     if [[ ${model} =~ 'rtformer' || ${model} =~ 'dmnet' ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
-        python export.py \
+        python tools/export.py \
            --config ${config} \
            --model_path seg_dynamic_pretrain/${model}/model.pdparams \
            --save_dir ./inference_model/${model} \
@@ -197,7 +199,7 @@ EXPORT_DYNAMIC(){
         print_result
     elif [[ -z `echo ${skip_export_model} | grep -w ${model}` ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
-        python export.py \
+        python tools/export.py \
            --config ${config} \
            --model_path seg_dynamic_pretrain/${model}/model.pdparams \
            --save_dir ./inference_model/${model} >${log_dir}/log/${model}/${model}_${mode}.log 2>&1

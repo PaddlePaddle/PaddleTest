@@ -25,7 +25,7 @@ fi
 }
 #train
 train_model_multi(){
-    python -m paddle.distributed.launch train.py \
+    python -m paddle.distributed.launch tools/train.py \
        --config configs/sfnet/sfnet_resnet18_os8_cityscapes_1024x1024_80k.yml \
        --save_interval 100 \
        --iters 100 \
@@ -37,7 +37,7 @@ train_model_multi(){
     print_info $? multi
 }
 train_model_single(){
-    python train.py \
+    python tools/train.py \
        --config configs/sfnet/sfnet_resnet18_os8_cityscapes_1024x1024_80k.yml \
        --save_interval 100 \
        --iters 100 \

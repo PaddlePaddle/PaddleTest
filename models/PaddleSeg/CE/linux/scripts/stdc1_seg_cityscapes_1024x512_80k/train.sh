@@ -24,7 +24,7 @@ fi
 }
 #train
 train_model_multi(){
-    python -m paddle.distributed.launch train.py \
+    python -m paddle.distributed.launch tools/train.py \
        --config configs/stdcseg/stdc1_seg_cityscapes_1024x512_80k.yml \
        --save_interval 100 \
        --iters 100 \
@@ -36,7 +36,7 @@ train_model_multi(){
     print_info $? multi
 }
 train_model_single(){
-    python train.py \
+    python tools/train.py \
        --config configs/stdcseg/stdc1_seg_cityscapes_1024x512_80k.yml \
        --save_interval 100 \
        --iters 100 \

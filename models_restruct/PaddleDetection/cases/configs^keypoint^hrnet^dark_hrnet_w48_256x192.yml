@@ -1,0 +1,20 @@
+case:
+  linux:
+    base: ./base/keypoint_base.yml
+    train:
+      -
+        name: multi
+        cmd : python -m paddle.distributed.launch tools/train.py
+        params:
+          - TrainReader.batch_size=1
+      -
+        name: single
+        cmd : python tools/train.py
+        params:
+          - TrainReader.batch_size=1
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse

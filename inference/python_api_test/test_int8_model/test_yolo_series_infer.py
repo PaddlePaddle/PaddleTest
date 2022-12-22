@@ -24,9 +24,9 @@ from tqdm import tqdm
 import pkg_resources as pkg
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
 from utils.dataset import COCOValDataset
-from utils.post_process import YOLOPostProcess, coco_metric
+from utils.yolo_series_post_process import YOLOPostProcess, coco_metric
 
 
 def argsparser():
@@ -60,6 +60,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
+    parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
 
 
@@ -90,6 +91,18 @@ def get_current_memory_mb():
     return round(cpu_mem, 4), round(gpu_mem, 4)
 
 
+def reader_wrapper(reader, input_field="image"):
+    """
+    reader wrapper func
+    """
+
+    def gen():
+        for data in reader:
+            yield np.array(data[input_field]).astype(np.float32)
+
+    return gen
+
+
 def eval(predictor, val_loader, anno_file, rerun_flag=False):
     """
     eval main func
@@ -101,6 +114,10 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     time_min = float("inf")
     time_max = float("-inf")
     warmup = 20
+    repeats = 20 if FLAGS.small_data else 1
+    monitor = Monitor(0)
+    if not rerun_flag:
+        monitor.start()
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
 
@@ -111,10 +128,11 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
             warmup = 0
 
         start_time = time.time()
-        outs = predictor.run()
+        for j in range(repeats):
+            outs = predictor.run()
         end_time = time.time()
 
-        timed = end_time - start_time
+        timed = (end_time - start_time) / repeats
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
@@ -125,13 +143,23 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
         bboxes_list.append(res["bbox"])
         bbox_nums_list.append(res["bbox_num"])
         image_id_list.append(np.array(data_all["im_id"]))
-        cpu_mem, gpu_mem = get_current_memory_mb()
-        cpu_mems += cpu_mem
-        gpu_mems += gpu_mem
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
             sys.stdout.flush()
-    print("[Benchmark]Avg cpu_mem:{} MB, avg gpu_mem: {} MB".format(cpu_mems / sample_nums, gpu_mems / sample_nums))
+    monitor.stop()
+    monitor_result = monitor.output()
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
     time_avg = predict_time / sample_nums
     print(
         "[Benchmark]Inference time(ms): min={}, max={}, avg={}".format(
@@ -143,6 +171,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     print("[Benchmark] COCO mAP: {}".format(map_res[0]))
     final_res = {
         "model_name": FLAGS.model_name,
+        "batch_size": FLAGS.batch_size,
         "jingdu": {
             "value": map_res[0],
             "unit": "mAP",
@@ -150,7 +179,14 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-            "batch_size": FLAGS.batch_size,
+        },
+        "cpu_mem": {
+            "value": cpu_mem,
+            "unit": "MB",
+        },
+        "gpu_mem": {
+            "value": gpu_mem,
+            "unit": "MB",
         },
     }
     print("[Benchmark][final result]{}".format(final_res))
@@ -161,6 +197,12 @@ def main():
     """
     main func
     """
+    dataset = COCOValDataset(
+        dataset_dir=FLAGS.dataset_dir, image_dir=FLAGS.val_image_dir, anno_path=FLAGS.val_anno_path
+    )
+    anno_file = dataset.ann_file
+    val_loader = paddle.io.DataLoader(dataset, batch_size=FLAGS.batch_size, drop_last=True)
+
     if FLAGS.deploy_backend == "paddle_inference":
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
@@ -183,18 +225,22 @@ def main():
             precision=FLAGS.precision,
             engine_file_path=engine_file,
             calibration_cache_file=FLAGS.calibration_file,
+            calibration_loader=reader_wrapper(val_loader),
             verbose=False,
+        )
+    elif FLAGS.deploy_backend == "onnxruntime":
+        predictor = ONNXRuntimeEngine(
+            onnx_model_file=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            device=FLAGS.device,
         )
     else:
         raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
 
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
 
-    dataset = COCOValDataset(
-        dataset_dir=FLAGS.dataset_dir, image_dir=FLAGS.val_image_dir, anno_path=FLAGS.val_anno_path
-    )
-    anno_file = dataset.ann_file
-    val_loader = paddle.io.DataLoader(dataset, batch_size=FLAGS.batch_size, drop_last=True)
     eval(predictor, val_loader, anno_file, rerun_flag=rerun_flag)
 
     if rerun_flag:
@@ -205,6 +251,10 @@ if __name__ == "__main__":
     paddle.enable_static()
     parser = argsparser()
     FLAGS = parser.parse_args()
+
+    if FLAGS.small_data:
+        # set small dataset
+        FLAGS.dataset_dir = "dataset/coco"
 
     # DataLoader need run on cpu
     paddle.set_device("cpu")

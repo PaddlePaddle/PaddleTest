@@ -65,6 +65,7 @@ dir
 rem 查看python版本
 python  --version
 git --version
+python -m pip install -U pip
 python -m pip install -r requirements.txt
 rem 预先安装依赖包
 python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target%

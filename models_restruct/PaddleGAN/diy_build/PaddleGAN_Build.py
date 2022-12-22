@@ -172,7 +172,7 @@ class PaddleGAN_Build(Model_Build):
 
                 # 改变特殊字符
                 if "pretrain_ckpt" in str(content):
-                    content["model"]["pretrain_ckpt"] = "#@"
+                    content["model"]["pretrain_ckpt"] = None
                     logger.info("#### change animeganv2 pretrain_ckpt")
                 if "max_eval_steps" in str(content):
                     content["model"]["max_eval_steps"] = "100 #@"

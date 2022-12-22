@@ -1,0 +1,34 @@
+case:
+  linux:
+    base: ./base/normal_base.yml
+    train:
+      -
+        name: multi
+        cmd : python -m paddle.distributed.launch tools/train.py
+      -
+        name: single
+        cmd : python tools/train.py
+    eval:
+      -
+        name: pretrained
+        cmd: python -m paddle.distributed.launch tools/val.py
+    infer:
+      -
+        name: pretrained
+        cmd: python tools/predict.py
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export.py
+        params:
+          - --input_shape 1 3 1024 2048
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/infer.py
+      -
+        name: cpp
+        cmd: ./deploy/cpp/build/test_seg
+
+
+function: paddlelas_imagenet_parse

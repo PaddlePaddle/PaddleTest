@@ -39,6 +39,7 @@ print_result(){
 
 # run dynamic models
 python -m pip install -r requirements.txt
+python -m pip install -v -e .
 log_dir=.
 model_type_path=
 sed -i '' "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
@@ -46,7 +47,7 @@ skip_export_model='gscnn_resnet50_os8_cityscapes_1024x512_80k'
 # dynamic fun
 TRAIN_SINGLE_DYNAMIC(){
     mode=train_single_dynamic
-    python train.py \
+    python tools/train.py \
        --config ${config} \
        --save_interval 100 \
        --iters 10 \
@@ -55,14 +56,14 @@ TRAIN_SINGLE_DYNAMIC(){
 }
 EVAL_DYNAMIC(){
     mode=eval_dynamic
-    python  val.py \
+    python  tools/val.py \
        --config ${config} \
        --model_path seg_dynamic_pretrain/${model}/model.pdparams >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 PREDICT_DYNAMIC(){
     mode=predict_dynamic
-    python predict.py \
+    python tools/predict.py \
        --config ${config} \
        --model_path seg_dynamic_pretrain/${model}/model.pdparams \
        --image_path demo/${predict_pic} \
@@ -72,7 +73,7 @@ PREDICT_DYNAMIC(){
 EXPORT_DYNAMIC(){
     mode=export_dynamic
     if [[ -z `echo ${skip_export_model} | grep -w ${model}` ]];then
-        python export.py \
+        python tools/export.py \
            --config ${config} \
            --model_path seg_dynamic_pretrain/${model}/model.pdparams \
            --save_dir ./inference_model/${model} >${log_dir}/log/${model}/${model}_${mode}.log 2>&1

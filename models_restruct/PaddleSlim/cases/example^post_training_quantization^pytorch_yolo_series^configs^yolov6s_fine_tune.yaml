@@ -61,4 +61,7 @@ case:
           - --recon_level=layer-wise
           - --save_dir=layer_ptq_out
           - --epochs=2
+<<<<<<< HEAD
           - --devices="cpu"
+=======
+>>>>>>> 212f7ade4e0a5d169c2f958d3346af7d81a424a9

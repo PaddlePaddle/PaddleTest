@@ -69,6 +69,7 @@ class Jelly_v2_torch(object):
         self.result["yaml"] = self.log_file_name
         # set Reload API DICT
         self.reload = OPERATOR_RELOAD
+        self.api_str = api
         # trans "str api" to obj
         if api not in self.reload.keys():
             self.api = eval(api)
@@ -137,18 +138,56 @@ class Jelly_v2_torch(object):
         设置torch 输入参数
         """
         for key, value in inputs.items():
-            if self.places == "cpu":
-                if isinstance(value, (np.generic, np.ndarray)):
-                    self.data[key] = torch.tensor(value)
-                else:
-                    self.data[key] = value
+            if isinstance(value, list):
+                self.data[key] = []
+                for i, v in enumerate(value):
+                    if self.places == "cpu":
+                        if isinstance(v, (np.generic, np.ndarray)):
+                            self.data[key].append(torch.tensor(v))
+                        else:
+                            self.data[key].append(v)
+                    else:
+                        if isinstance(v, (np.generic, np.ndarray)):
+                            self.data[key].append(torch.tensor(v).to("cuda"))
+                        else:
+                            self.data[key].append(v)
+                    if isinstance(v, (np.generic, np.ndarray)):
+                        # self.logger.info("v.dtype is : {}".format(v.dtype))
+                        if (
+                            self.api_str.endswith("_")
+                            or (v.dtype == np.int32)
+                            or (v.dtype == np.int64)
+                            or (v.dtype == bool)
+                        ):
+                            self.data[key][i].requires_grad = False
+                        else:
+                            self.data[key][i].requires_grad = True
+                        # self.logger.info(
+                        #     "self.data[key][i].requires_grad is : {}".format(self.data[key][i].requires_grad)
+                        # )
             else:
-                if isinstance(value, (np.generic, np.ndarray)):
-                    self.data[key] = torch.tensor(value).to("cuda")
+                if self.places == "cpu":
+                    if isinstance(value, (np.generic, np.ndarray)):
+                        self.data[key] = torch.tensor(value)
+                    else:
+                        self.data[key] = value
                 else:
-                    self.data[key] = value
-            if self.enable_backward and isinstance(value, (np.generic, np.ndarray)):
-                self.data[key].requires_grad = True
+                    if isinstance(value, (np.generic, np.ndarray)):
+                        self.data[key] = torch.tensor(value).to("cuda")
+                    else:
+                        self.data[key] = value
+                if isinstance(value, (np.generic, np.ndarray)):
+                    # self.logger.info("value.dtype is : {}".format(value.dtype))
+                    if (
+                        self.api_str.endswith("_")
+                        or (value.dtype == np.int32)
+                        or (value.dtype == np.int64)
+                        or (value.dtype == bool)
+                    ):
+                        self.data[key].requires_grad = False
+                    else:
+                        self.data[key].requires_grad = True
+                    # self.logger.info("self.data[key].requires_grad is : {}".format(self.data[key].requires_grad))
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
                 if self.places == "cpu":
@@ -173,7 +212,7 @@ class Jelly_v2_torch(object):
                 for k, v in value_dict.items():
                     # 默认传入字典时，表示传入的是一个np.ndarray并转为tensor，否则传入的不为tensor。后续需优化code
                     if isinstance(v, dict):
-                        self.method[key][k] = to_tensor(v["value"])
+                        self.method[key][k] = torch.tensor(v["value"])
                     else:
                         self.method[key][k] = v
 

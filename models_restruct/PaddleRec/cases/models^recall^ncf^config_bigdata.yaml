@@ -7,8 +7,13 @@ case:
         cmd: python -u tools/trainer.py
         result:
           loss:
+<<<<<<< HEAD
             base: 0.19248858
             threshold: 0.03
+=======
+            base: 0.31668967
+            threshold: 0.0003
+>>>>>>> 212f7ade4e0a5d169c2f958d3346af7d81a424a9
             evaluation: "-"
     infer:
       -
@@ -16,6 +21,11 @@ case:
         cmd: python -u tools/infer.py
         result:
           prediction:
+<<<<<<< HEAD
             base: 0.04126965
             threshold: 0.03
+=======
+            base: 0.44444
+            threshold: 0.0003
+>>>>>>> 212f7ade4e0a5d169c2f958d3346af7d81a424a9
             evaluation: "+"
