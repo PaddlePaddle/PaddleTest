@@ -79,7 +79,7 @@ export:
   params:
     - -c ${rd_yaml_path}
     - -o Global.pretrained_model=${model}/best_accuracy
-    - Global.save_inference_dir=./models_inference/${qa_yaml_name}
+    - Global.save_inference_dir=./models_inference/${model}
 
   result:
     exit_code:

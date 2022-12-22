@@ -4,6 +4,7 @@
 """
 import os
 import sys
+import time
 import logging
 import tarfile
 import argparse
@@ -84,11 +85,9 @@ class PaddleOCR_Build(Model_Build):
                     "https://paddle-qa.bj.bcebos.com/PaddleOCR/pretrain_models/cc.en.300.bin.tar", os.getcwd()
                 )
 
-            for filename in self.test_model_list:
-                print("filename:{}".format(filename))
-                if "rec" in filename:
-                    cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
-                    subprocess.getstatusoutput(cmd)
+            # kie requirements
+            os.system("python -m pip install ppstructure/kie/requirements.txt")
+
             os.chdir(path_now)
             print("build dataset!")
 
@@ -102,6 +101,7 @@ class PaddleOCR_Build(Model_Build):
         logger.info("start tar extract {}".format(tar_name))
         tf = tarfile.open(os.path.join(destination, tar_name))
         tf.extractall(destination)
+        time.sleep(1)
         os.remove(os.path.join(destination, tar_name))
 
     def build_env(self):
