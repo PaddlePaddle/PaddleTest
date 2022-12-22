@@ -17,10 +17,6 @@ case:
         cmd: python -u tools/infer.py
         result:
           auc:
-<<<<<<< HEAD
-            base: 0.796894
-=======
             base: 0.798677
->>>>>>> 212f7ade4e0a5d169c2f958d3346af7d81a424a9
             threshold: 0.0003
             evaluation: "+"

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 if [ -f models_list_function.txt ]; then
 rm -rf  models_list_function.txt
 fi
@@ -26,22 +25,4 @@ fi
 for i in `ls cases | grep big | grep -E 'mmoe|dnn'`
 do
     echo ${i} >> models_list_precision_02.txt
-=======
-if [ -f models_list.txt ]; then
-rm -rf  models_list.txt
-fi
-
-for i in `ls cases | grep -v big `
-do
-    echo ${i} >> models_list.txt
-done
-
-if [ -f models_list_precision.txt ]; then
-    rm -rf  models_list_precision.txt
-fi
-
-for i in `ls cases | grep big`
-do
-    echo ${i} >> models_list_precision.txt
->>>>>>> 212f7ade4e0a5d169c2f958d3346af7d81a424a9
 done

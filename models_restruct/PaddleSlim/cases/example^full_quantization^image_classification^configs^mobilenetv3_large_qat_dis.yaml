@@ -12,7 +12,7 @@ case:
 
       -
         name: multi
-<<<<<<< HEAD
+
         path: example/full_quantization/image_classification/
 =======
         path: example/auto_compression/semantic_segmentation/

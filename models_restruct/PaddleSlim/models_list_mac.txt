@@ -1,8 +1,5 @@
 case^demo^quant^pact_quant_aware^MobileNetV3_use_pact.yaml
-<<<<<<< HEAD
 case^demo^dygraph^post_quant^mobilenet_v3.yaml
-=======
->>>>>>> 212f7ade4e0a5d169c2f958d3346af7d81a424a9
 example^auto_compression^nlp^configs^ernie3.0^afqmc.yaml
 example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis.yaml
 example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune.yaml

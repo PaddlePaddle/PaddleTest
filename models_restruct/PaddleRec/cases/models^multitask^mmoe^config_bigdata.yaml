@@ -20,10 +20,3 @@ case:
             base: 0.991536
             threshold: 0.0003
             evaluation: "+"
-<<<<<<< HEAD
-          auc_income:
-            base: 0.810712
-            threshold: 0.0003
-            evaluation: "+"
-=======
->>>>>>> 212f7ade4e0a5d169c2f958d3346af7d81a424a9
