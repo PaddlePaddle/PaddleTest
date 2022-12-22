@@ -17,7 +17,7 @@ def test_Identity_base():
     """
     base
     """
-    dtype = [np.bool_8, np.int8, np.int16, np.int32, np.int64, np.float32, np.float16, np.float64]
+    dtype = [np.bool8, np.int8, np.int16, np.int32, np.int64, np.float32, np.float16, np.float64]
     for i in dtype:
         x = randtool("float", -5, 5, [6, 6]).astype(i)
         res = x
@@ -31,7 +31,7 @@ def test_Identity_base1():
     """
     unused params
     """
-    dtype = [np.bool_8, np.int8, np.int16, np.int32, np.int64, np.float32, np.float16, np.float64]
+    dtype = [np.bool8, np.int8, np.int16, np.int32, np.int64, np.float32, np.float16, np.float64]
     for i in dtype:
         x = randtool("float", -5, 5, [6, 6]).astype(i)
         res = x
