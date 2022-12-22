@@ -45,7 +45,7 @@ echo "[Benchmark] Run PP-HumanSeg-Lite trt int8"
 $PYTHON test_segmentation_infer.py --model_path=models/pp_humanseg_int8/pp_humanseg_int8.onnx --dataset='human' --dataset_config=configs/humanseg_dataset.yaml --deploy_backend=tensorrt --precision=int8 --model_name=PP-HumanSeg-Lite --calibration_file=models/pp_humanseg_int8/calibration.cache
 # PP-Liteseg trt int8
 echo "[Benchmark] Run PP-Liteseg trt int8"
-$PYTHON test_segmentation_infer.py --model_path=models/pp_liteseg_int8/pp_liteseg_int8.onnx --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --deploy_backend=tensorrt --precision=int8 --model_name=ppliteseg --calibration_file=models/pp_liteseg_int8/calibration.cache
+$PYTHON test_segmentation_infer.py --model_path=models/pp_liteseg_int8/pp_liteseg_int8.onnx --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --deploy_backend=tensorrt --precision=int8 --model_name=PP-Liteseg --calibration_file=models/pp_liteseg_int8/calibration.cache
 # HRNet trt int8
 echo "[Benchmark] Run HRNet trt int8"
 $PYTHON test_segmentation_infer.py --model_path=models/hrnet_int8/hrnet_int8.onnx --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --deploy_backend=tensorrt --precision=int8 --model_name=HRNet --calibration_file=models/hrnet_int8/calibration.cache

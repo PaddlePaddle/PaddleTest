@@ -21,10 +21,18 @@ from tools import delete
 
 SKIP_DICT = {"Windows": [], "Darwin": [], "Linux": []}
 INDEX_DICT = {}
-SPECIAL = True  # speacial for emergency
+SPECIAL = False  # speacial for emergency
 
 
-def schedule(yaml_path, framework, case_name=None, place=None, card=None):
+def schedule(
+    yaml_path,
+    framework,
+    case_name=None,
+    place=None,
+    card=None,
+    test_index=None,
+    enable_backward=True,
+):
     """
     例行任务，调试任务二次运行调用。 一定入库，存在数据库操作
     """
@@ -40,9 +48,25 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
             if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
                 logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
                 continue
+            if test_index == "case_0":
+                if not case_name.endswith("_0"):
+                    logger.get_log().warning("skip case -->{}<--".format(case_name))
+                    continue
+            if test_index == "case_1":
+                if not case_name.endswith("_1"):
+                    logger.get_log().warning("skip case -->{}<--".format(case_name))
+                    continue
+            if test_index == "case_2":
+                if not case_name.endswith("_2"):
+                    logger.get_log().warning("skip case -->{}<--".format(case_name))
+                    continue
             case_info = yaml_loader.get_case_info(case_name)
             try:
                 bt = BenchTrans(case_info)
+                if enable_backward == "False":
+                    enable_backward_trigger = False
+                else:
+                    enable_backward_trigger = bt.enable_backward()
                 if framework == "torch":
                     if not bt.check_torch:
                         logger.get_log().info("{} 缺少Torch配置, Skip...".format(case_name))
@@ -55,7 +79,7 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
                         place=place,
                         card=card,
                         default_dtype="float32",
-                        enable_backward=bt.enable_backward(),
+                        enable_backward=enable_backward_trigger,
                     )
                     jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
                     jelly.set_torch_method(bt.get_torch_method())
@@ -67,20 +91,24 @@ def schedule(yaml_path, framework, case_name=None, place=None, card=None):
         bt = BenchTrans(case_info)
         if framework == "torch":
             api = bt.get_torch_api()
+            if enable_backward == "False":
+                enable_backward_trigger = False
+            else:
+                enable_backward_trigger = bt.enable_backward()
             jelly = Jelly_v2_torch(
                 api=api,
                 framework=framework,
                 title=case_name,
                 place=place,
                 card=card,
-                enable_backward=bt.enable_backward(),
+                enable_backward=enable_backward_trigger,
             )
             jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
             jelly.set_torch_method(bt.get_torch_method())
             jelly.run_schedule()
 
 
-def testing(yaml_path, case_name, framework, place=None, card=None):
+def testing(yaml_path, case_name, framework, place=None, card=None, enable_backward=True):
     """
     testing mode 本地调试用
     """
@@ -90,8 +118,17 @@ def testing(yaml_path, case_name, framework, place=None, card=None):
     bt = BenchTrans(case_info)
     if framework == "torch":
         api = bt.get_torch_api()
+        if enable_backward == "False":
+            enable_backward_trigger = False
+        else:
+            enable_backward_trigger = bt.enable_backward()
         jelly = Jelly_v2_torch(
-            api=api, framework=framework, title=case_name, place=place, card=card, enable_backward=bt.enable_backward()
+            api=api,
+            framework=framework,
+            title=case_name,
+            place=place,
+            card=card,
+            enable_backward=enable_backward_trigger,
         )
         jelly.set_torch_param(bt.get_torch_inputs(), bt.get_torch_param())
         jelly.set_torch_method(bt.get_torch_method())
@@ -115,6 +152,8 @@ if __name__ == "__main__":
     parser.add_argument("--cudnn", type=str, default=None, help="cudnn version like v7.6.5 etc.")
     parser.add_argument("--card", type=str, default=None, help="card number , default is 0")
     parser.add_argument("--comment", type=str, default=None, help="your comment")
+    parser.add_argument("--test_index", type=str, default=None, help="[case_0] or [case_1] or [case_2]")
+    parser.add_argument("--enable_backward", type=str, default="True", help="if True, enable backward test")
     args = parser.parse_args()
 
     # 验证参数组合正确性
@@ -135,28 +174,50 @@ if __name__ == "__main__":
                 card=args.card,
                 comment=args.comment,
             )
-            schedule(yaml_path=args.yaml, framework=args.framework, place=args.place, card=args.card)
+            schedule(
+                yaml_path=args.yaml,
+                framework=args.framework,
+                place=args.place,
+                card=args.card,
+                test_index=args.test_index,
+                enable_backward=args.enable_backward,
+            )
             db.save()
         except Exception as e:
             logger.get_log().error(e)
             db.error()
     elif args.mode == "testing":
-        testing(args.yaml, args.case, framework=args.framework, place=args.place, card=args.card)
+        testing(
+            args.yaml,
+            args.case,
+            framework=args.framework,
+            place=args.place,
+            card=args.card,
+            enable_backward=args.enable_backward,
+        )
     elif args.mode == "rerun":
         db = DB()
         try:
-            db.init_mission(
+            # db.init_mission(
+            #     framework=args.framework,
+            #     mode=args.mode,
+            #     place=args.place,
+            #     cuda=args.cuda,
+            #     cudnn=args.cudnn,
+            #     card=args.card,
+            # )
+            schedule(
+                args.yaml,
                 framework=args.framework,
-                mode=args.mode,
+                case_name=args.case,
                 place=args.place,
-                cuda=args.cuda,
-                cudnn=args.cudnn,
                 card=args.card,
+                test_index=args.test_index,
+                enable_backward=args.enable_backward,
             )
-            schedule(args.yaml, framework=args.framework, case_name=args.case, place=args.place, card=args.card)
-            db.save()
+            # db.save()
         except Exception as e:
             logger.get_log().error(e)
-            db.error()
+            # db.error()
     else:
         raise AttributeError
