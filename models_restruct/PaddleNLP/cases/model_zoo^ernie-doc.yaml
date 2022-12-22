@@ -28,7 +28,6 @@ case:
           - --layerwise_decay 0.8
           - --dropout 0.2
           - --learning_rate 4.375e-5
-          - --epochs 1
           - --save_steps 2
           - --max_steps 2
           - --dataset cmrc2018
@@ -88,17 +87,14 @@ case:
       -
         name: dureader_robust
         path: model_zoo/ernie-doc/
-        cmd: python -m paddle.distributed.launch --gpus "0" --log_dir dureader_robust run_mrc.py
+        cmd: python -m paddle.distributed.launch --gpus "0,1" --log_dir dureader_robust run_mrc.py
         params:
           - --model_name_or_path ernie-doc-base-zh
           - --dataset dureader_robust
           - --batch_size 4
-          - --learning_rate 2.75e-4
-          - --epochs 1
           - --save_steps 2
           - --max_steps 2
           - --logging_steps 1
-          - --device gpu
         result:
           loss:
             base: 0.995620

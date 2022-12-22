@@ -12,18 +12,12 @@ case:
         params:
           - --model_type bert
           - --model_name_or_path bert-base-uncased
-          - --max_predictions_per_seq 20
           - --batch_size 32
-          - --learning_rate 1e-4
-          - --weight_decay 1e-2
-          - --adam_epsilon 1e-6
-          - --warmup_steps 10000
           - --input_dir ./bert_static/
           - --output_dir pretrained_models/
           - --logging_steps 1
           - --save_steps 2
           - --max_steps 2
-          - --device gpu
           - --use_amp True
         result:
           loss:
@@ -38,15 +32,11 @@ case:
           - --model_type bert
           - --model_name_or_path bert-base-uncased
           - --task_name SST-2
-          - --max_seq_length 128
           - --batch_size 32
-          - --learning_rate 2e-5
-          - --num_train_epochs 3
           - --logging_steps 1
           - --save_steps 2
           - --max_steps 2
           - --output_dir ./tmp/
-          - --device gpu
         result:
           loss:
             base: 1.456469
