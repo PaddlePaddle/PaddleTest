@@ -4,7 +4,7 @@ case:
       -
         name: prepare
         path: model_zoo/ernie-1.0/
-        cmd: mkdir data_static && cd data_static && wget https://bj.bcebos.com/paddlenlp/models/transformers/data_tools/wudao_200g_sample_ernie-3.0-base-zh_ids.npy && wget https://bj.bcebos.com/paddlenlp/models/transformers/data_tools/wudao_200g_sample_ernie-3.0-base-zh_idx.npz && cd -
+        cmd: mkdir data_static && cd data_static && wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/wudao_200g_sample_ernie-1.0-base-zh_ids.npy && wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/wudao_200g_sample_ernie-1.0-base-zh_idx.npz && cd -
       -
         name: static
         path: model_zoo/ernie-1.0/
