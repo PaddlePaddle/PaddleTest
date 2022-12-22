@@ -114,7 +114,7 @@ def schedule(
 
 def testing(yaml_path, case_name, framework, place=None, card=None, enable_backward=True):
     """
-    testing mode 本地调试用方法
+    testing mode 本地调试用
     """
     yaml_file = yaml_path
     yaml_loader = YamlLoader(yaml_file)
