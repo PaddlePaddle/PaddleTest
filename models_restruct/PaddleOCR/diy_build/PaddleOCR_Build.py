@@ -84,6 +84,9 @@ class PaddleOCR_Build(Model_Build):
                     "https://paddle-qa.bj.bcebos.com/PaddleOCR/pretrain_models/cc.en.300.bin.tar", os.getcwd()
                 )
 
+            # kie requirements
+            os.system('python -m pip install ppstructure/kie/requirements.txt')
+            
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
                 if "rec" in filename:
