@@ -3,8 +3,7 @@ train:
   cmd : python tools/train.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.use_gpu=True
-    - Global.epoch_num=1
+    - -o Global.epoch_num=1
     - Global.save_epoch_step=1
     - Global.eval_batch_step=200
     - Global.print_batch_step=10
@@ -12,13 +11,13 @@ train:
     - Train.loader.batch_size_per_card=10
     - Global.print_batch_step=1
     - Global.use_gpu=${use_gpu}
+    - Train.dataset.data_dir=./train_data/data_lmdb_release/validation/
 
   name: multi
   cmd : python -m paddle.distributed.launch tools/train.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.use_gpu=True
-    - Global.epoch_num=1
+    - -o Global.epoch_num=1
     - Global.save_epoch_step=1
     - Global.eval_batch_step=200
     - Global.print_batch_step=10
@@ -26,6 +25,7 @@ train:
     - Train.loader.batch_size_per_card=10
     - Global.print_batch_step=1
     - Global.use_gpu=${use_gpu}
+    - Train.dataset.data_dir=./train_data/data_lmdb_release/validation/
   result:
     exit_code:
       base: 0
