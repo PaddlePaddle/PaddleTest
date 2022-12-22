@@ -54,15 +54,7 @@ case:
             evaluation: "="
     eval: skipped
     infer: skipped
-    export:
-      -
-        name: export
-        path: model_zoo/bert/static
-        cmd: python -u ./export_model.py
-        params:
-          - --model_type bert
-          - --model_path bert-base-uncased
-          - --output_path ./infer_model/model
+    export: skipped
     predict:
       -
         name: predict
