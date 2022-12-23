@@ -3,7 +3,6 @@ speedyspeech.yml
 fastspeech2.yml
 transformer_tts.yml
 parallelwave_gan.yml
-multi_band_melgan.yml
 style_melgan.yml
 hifigan.yml
 wavernn.yml
@@ -62,3 +61,7 @@ paddlespeech_cli_51.yml
 paddlespeech_cli_52.yml
 paddlespeech_cli_53.yml
 paddlespeech_cli_54.yml
+paddlespeech_cli_55.yml
+paddlespeech_cli_56.yml
+paddlespeech_cli_57.yml
+paddlespeech_cli_58.yml

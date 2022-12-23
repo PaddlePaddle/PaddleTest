@@ -30,7 +30,6 @@ paddlespeech_cli_29.yml
 paddlespeech_cli_30.yml
 paddlespeech_cli_31.yml
 paddlespeech_cli_32.yml
-paddlespeech_cli_33.yml
 paddlespeech_cli_34.yml
 paddlespeech_cli_35.yml
 paddlespeech_cli_36.yml

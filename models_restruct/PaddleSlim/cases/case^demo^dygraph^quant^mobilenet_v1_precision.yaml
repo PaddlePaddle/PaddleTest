@@ -1,0 +1,42 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/quant
+        cmd: python train.py
+        params:
+          - --model="mobilenet_v1"
+          - --pretrained_model "../../pretrain/MobileNetV1_pretrained"
+          - --num_epochs 30
+          - --ce_test=True
+          - --use_gpu True
+        result:
+          acc_top1:
+            base: 0.699294
+            threshold: 0
+            evaluation: "="
+          acc_top5:
+            base: 0.895282
+            threshold: 0
+            evaluation: "="
+
+      -
+        name: multi
+        path: demo/dygraph/quant
+        cmd: python train.py
+        params:
+          - --model="mobilenet_v1"
+          - --pretrained_model "../../pretrain/MobileNetV1_pretrained"
+          - --num_epochs 30
+          - --ce_test=True
+          - --use_gpu True
+        result:
+          acc_top1:
+            base: 0.699294
+            threshold: 0.000001
+            evaluation: "+"
+          acc_top5:
+            base: 0.895282
+            threshold: 0.000001
+            evaluation: "+"
