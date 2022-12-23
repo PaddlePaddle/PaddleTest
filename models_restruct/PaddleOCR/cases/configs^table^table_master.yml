@@ -4,11 +4,11 @@ case:
         predict:
           -
             name: pretrained
-            cmd:  python ppstructure/table/predict_structure.py 
+            cmd:  python ppstructure/table/predict_structure.py
             params:
               - --table_model_dir="./models_inference/"table_master
               - --table_algorithm=TableMaster
-              - --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt 
+              - --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt
               - --table_max_len=480
               - --image_dir=ppstructure/docs/table/table.jpg
 
