@@ -105,6 +105,15 @@ class PaddleOCR_Build(Model_Build):
             # kie requirements
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
 
+            for filename in self.test_model_list:
+                print("filename:{}".format(filename))
+                if "rec" in filename:
+                    if sysstr == "Darwin":
+                         cmd = "sed -i '' 's!data_lmdb_release/training!data_lmdb_release/validation!g' %s" filename
+                    else:
+                         cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
+                    
+                    subprocess.getstatusoutput(cmd)
             os.chdir(path_now)
             print("build dataset!")
 

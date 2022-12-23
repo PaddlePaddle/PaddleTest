@@ -11,7 +11,6 @@ train:
     - Train.loader.batch_size_per_card=10
     - Global.print_batch_step=1
     - Global.use_gpu=${use_gpu}
-    - Train.dataset.data_dir=./train_data/data_lmdb_release/validation/
 
   name: multi
   cmd : python -m paddle.distributed.launch tools/train.py
@@ -25,7 +24,7 @@ train:
     - Train.loader.batch_size_per_card=10
     - Global.print_batch_step=1
     - Global.use_gpu=${use_gpu}
-    - Train.dataset.data_dir=./train_data/data_lmdb_release/validation/
+    
   result:
     exit_code:
       base: 0
