@@ -123,7 +123,11 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
-        if [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
+        if [[ ${dir2} =~ "VERSION" ]];then # 针对发版mini test
+            P0case_list[${#P0case_list[*]}]=transformer
+            # P0case_list[${#P0case_list[*]}]=bert
+            # P0case_list[${#P0case_list[*]}]=gpt
+        elif [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
             P0case_list[${#P0case_list[*]}]=${dir2}
         elif [[ ${dir2} =~ "transformers" ]];then
             P0case_list[${#P0case_list[*]}]=transformers
