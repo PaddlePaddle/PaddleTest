@@ -122,6 +122,10 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
         continue
     elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
+    elif [[ ${dir1} =~ "scripts" ]];then # API 升级
+        if [[ ${dir2} =~ "should_deploy" ]];then # 针对发版mini test
+            P0case_list[${#P0case_list[*]}]=transformer
+        fi
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
         if [[ ${dir2} =~ "VERSION" ]];then # 针对发版mini test
             P0case_list[${#P0case_list[*]}]=transformer
