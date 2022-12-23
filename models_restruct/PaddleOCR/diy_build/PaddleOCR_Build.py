@@ -103,7 +103,7 @@ class PaddleOCR_Build(Model_Build):
             #    )
 
             # kie requirements
-            os.system("python -m pip install ppstructure/kie/requirements.txt")
+            os.system("python -m pip install -r ppstructure/kie/requirements.txt")
 
             os.chdir(path_now)
             print("build dataset!")
