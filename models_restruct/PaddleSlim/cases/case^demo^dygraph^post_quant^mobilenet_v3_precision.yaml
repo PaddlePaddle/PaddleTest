@@ -1,0 +1,34 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/post_quant
+        cmd: python ptq.py
+        params:
+          - --data=../../data/ILSVRC2012/
+          - --model=mobilenet_v3
+          - --pretrain_weight=../../pretrain/MobileNetV3_large_x1_0_pretrained.pdparams
+          - --quant_batch_num=10
+          - --quant_batch_size=32
+          - --output_dir="output_ptq"
+          - --ce_test True
+
+    eval:
+      -
+        name: single
+        path: demo/dygraph/post_quant
+        cmd:  python eval.py
+        params:
+          - --data=../../data/ILSVRC2012/
+          - --model_path=output_ptq/mobilenet_v3/int8_infer/
+          - --use_gpu=True
+        result:
+          test_acc1:
+            base: 0.7150
+            threshold: 0.00001
+            evaluation: "+"
+          test_acc5:
+            base: 0.9100
+            threshold: 0.00001
+            evaluation: "+"

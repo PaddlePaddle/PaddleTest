@@ -12,7 +12,7 @@ FRAME_BRANCH=${FRAME_BRANCH:-release/2.4}
 FRAME_VERSION=${FRAME_VERSION:-0.0.0}
 DEVICE=${DEVICE:-T4}
 MODE=${MODE:-trt_int8,trt_fp16,mkldnn_int8,mkldnn_fp32}
-METRIC=${METRIC:-jingdu,xingneng}
+METRIC=${METRIC:-jingdu,xingneng,cpu_mem,gpu_mem}
 
 export CUDA_SO="$(\ls -d /usr/lib64/libcuda* | xargs -I{} echo '-v {}:{}') $(\ls -d /usr/lib64/libnvidia* | xargs -I{} echo '-v {}:{}')"
 export DEVICES=$(\ls -d /dev/nvidia* | xargs -I{} echo '--device {}:{}')
@@ -26,12 +26,15 @@ nvidia-docker run -i --rm \
     -v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi ${CUDA_SO} ${DEVICES} \
     -v $(pwd):/workspace \
     -w /workspace \
+    -e "AK=${AK}" -e "SK=${SK}" \
     -e "LANG=en_US.UTF-8" \
     -e "PYTHONIOENCODING=utf-8" \
     -e NVIDIA_VISIBLE_DEVICES=all \
     -e CUDA_VISIBLE_DEVICES=0 \
     -e "no_proxy=bcebos.com,goproxy.cn,baidu.com,bcebos.com" \
     -e PADDLE_WHL=${PADDLE_WHL} \
+    -e FRAME=${FRAME} \
+    -e FRAME_VERSION=${FRAME_VERSION} \
     -e FRAME_BRANCH=${FRAME_BRANCH} \
     -e DOCKER_IMAGE=${DOCKER_IMAGE} \
     -e DEVICE=${DEVICE} \
@@ -52,27 +55,9 @@ wget https://paddle-qa.bj.bcebos.com/tools/TensorRT-8.4.0.6.tgz
 tar -zxf TensorRT-8.4.0.6.tgz
 export LD_LIBRARY_PATH=${PWD}/TensorRT-8.4.0.6/lib/:${LD_LIBRARY_PATH}
 
-
-python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
-
-pip install -r requirements.txt
-
-pip install -U ${PADDLE_WHL}
-
-pip install nvidia-pyindex
-pip install nvidia-cublas-cu11
-pip install nvidia-tensorrt
-pip install pycuda
-pip install openpyxl
-pip install pymysql
-
-bash run.sh
-
 PADDLE_COMMIT=`python -c "import paddle; print(paddle.version.commit)"`
 DT=`date "+%Y-%m-%d"`
 SAVE_FILE=${DT}_${FRAME}_${FRAME_BRANCH/\//-}_${PADDLE_COMMIT}.xlsx
-
 
 PYTHON_VERSION=${PYTHON_VERSION:-3.8}
 CUDA_VERSION=${CUDA_VERSION:-11.2}
@@ -80,6 +65,36 @@ CUDNN_VERSION=${CUDNN_VERSION:-8.2}
 TRT_VERSION=${TRT_VERSION:-8}
 GPU=${DEVICE}
 CPU="-"
+
+
+python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
+
+pip install -r requirements.txt
+
+pip install paddledet\>=2.4.0
+pip install paddleseg==2.5.0
+pip install paddlenlp\>=2.3.0
+pip install opencv-python
+pip install pycuda
+pip install onnx
+pip install GPUtil
+pip install psutil
+pip install pynvml
+pip install py-cpuinfo
+
+pip install onnxruntime
+
+pip install -U ${PADDLE_WHL}
+
+pip install nvidia-pyindex
+pip install nvidia-cublas-cu11
+pip install nvidia-tensorrt
+pip install openpyxl
+pip install pymysql
+pip install bce-python-sdk
+
+bash run.sh
 
 python get_benchmark_info.py ${FRAME} ${FRAME_BRANCH} ${PADDLE_COMMIT} ${FRAME_VERSION} ${DOCKER_IMAGE} ${PYTHON_VERSION} ${CUDA_VERSION} ${CUDNN_VERSION} ${TRT_VERSION} ${GPU} ${CPU} ${MODE} ${METRIC} ${SAVE_FILE}
 

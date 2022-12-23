@@ -1,0 +1,73 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/post_quant
+        cmd: python ptq.py
+        params:
+          - --data=../../data/ILSVRC2012/
+          - --model=mobilenet_v3
+          - --pretrain_weight=../../pretrain/MobileNetV3_large_x1_0_pretrained.pdparams
+          - --quant_batch_num=10
+          - --quant_batch_size=32
+          - --output_dir="output_ptq"
+          - --ce_test True
+
+    eval:
+      -
+        name: single
+        path: demo/dygraph/post_quant
+        cmd:  python eval.py
+        params:
+          - --data=../../data/ILSVRC2012/
+          - --model_path=output_ptq/mobilenet_v3/int8_infer/
+          - --use_gpu=True
+
+  windows:
+    train:
+      -
+        name: single
+        path: demo/dygraph/post_quant
+        cmd: python ptq.py
+        params:
+          - --data="../../data/ILSVRC2012/"
+          - --model="mobilenet_v3"
+          - --pretrain_weight="../../pretrain/MobileNetV3_large_x1_0_pretrained.pdparams"
+          - --quant_batch_num=10
+          - --quant_batch_size=32
+          - --output_dir="output_ptq"
+
+    eval:
+      -
+        name: single
+        path: demo/dygraph/post_quant
+        cmd:  python eval.py
+        params:
+          - --data="../../data/ILSVRC2012/"
+          - --model_path="output_ptq/mobilenet_v3/int8_infer/"
+          - --use_gpu=True
+
+  mac:
+    train:
+      -
+        name: single
+        path: demo/dygraph/post_quant
+        cmd: python ptq.py
+        params:
+          - --data="../../data/ILSVRC2012/"
+          - --model="mobilenet_v3"
+          - --pretrain_weight="../../pretrain/MobileNetV3_large_x1_0_pretrained.pdparams"
+          - --quant_batch_num=10
+          - --quant_batch_size=32
+          - --output_dir="output_ptq"
+
+    eval:
+      -
+        name: single
+        path: demo/dygraph/post_quant
+        cmd:  python eval.py
+        params:
+          - --data="../../data/ILSVRC2012/"
+          - --model_path="output_ptq/mobilenet_v3/int8_infer/"
+          - --use_gpu=False

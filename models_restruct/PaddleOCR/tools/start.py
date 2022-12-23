@@ -78,6 +78,12 @@ class PaddleOCR_Start(object):
                     else:
                         image_shape = "3,32,128"
             self.env_dict["image_shape"] = image_shape
+        # kie
+        if self.category == "kie":
+            if "ser" in self.model:
+                self.env_dict["kie_token"] = "kie_token_ser"
+            else:
+                self.env_dict["kie_token"] = "kie_token_ser_re"
         # use_gpu
         sysstr = platform.system()
         if sysstr == "Darwin":
