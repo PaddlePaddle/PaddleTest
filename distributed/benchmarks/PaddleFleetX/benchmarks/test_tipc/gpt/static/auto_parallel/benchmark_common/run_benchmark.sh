@@ -34,7 +34,7 @@ function _set_params(){
     convergence_key="loss:"        # (可选)解析日志，筛选出收敛数据所在行的关键字 如：convergence_key="loss:"
     sharding_degree=${10:-"1"}      # (可选)
     sharding_stage=${11:-"1"}       # (可选)sharding case
-    hidden_size=${12:-"5120"}       # (可选) 模型大小
+    num_layers=${12:-"32"}       # (可选) 模型层数
     num_workers=${13:-0}                 # (可选)
     max_iter=${14:-100}                      # （可选）需保证模型执行时间在5分钟内，需要修改代码提前中断的直接提PR 合入套件；或使用max_epoch参数
     base_batch_size=$global_batch_size
@@ -76,7 +76,6 @@ function _train(){
     fi
 
     local_batch_size=`expr ${global_batch_size} / ${dp_degree}`
-    sharding_degree=${dp_degree}
     train_cmd="-o Model.hidden_dropout_prob=0 \
                -o Model.attention_probs_dropout_prob=0 \
                -o Model.use_recompute=True \
@@ -113,9 +112,9 @@ function _train(){
             ${train_cmd}"
         workerlog_id=0
         ;;
-    DP1-MP8-PP1|DP16-MP1-PP1) echo "run run_mode: ${run_mode}"
+    DP1-MP8-PP1) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
-            tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml -o Model.hidden_size=${hidden_size} \
+            tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml -o Model.hidden_size=5120 \
             ${train_cmd}"
         workerlog_id=0
         ;;
@@ -145,6 +144,12 @@ function _train(){
             ${train_cmd}"
         workerlog_id_1=6
         workerlog_id_2=7
+        ;;
+    DP16-MP1-PP1) echo "run run_mode: ${run_mode}"
+        train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
+            tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml -o Model.num_layers=${num_layers} \
+            ${train_cmd}"
+        workerlog_id=0
         ;;
     *) echo "choose run_mode "; exit 1;
     esac
@@ -185,14 +190,14 @@ export PYTHONPATH=$(dirname "$PWD"):$PYTHONPATH
 # 避免预分配的的显存影响实际值观测
 export FLAGS_fraction_of_gpu_memory_to_use=0.1
 # 旧执行器
-export FLAGS_USE_STANDALONE_EXECUTOR=0
-export FLAGS_CONVERT_GRAPH_TO_PROGRAM=0
-export GLOG_v=0
-# 新执行器
-# export FLAGS_USE_STANDALONE_EXECUTOR=1
-# export FLAGS_CONVERT_GRAPH_TO_PROGRAM=1
+# export FLAGS_USE_STANDALONE_EXECUTOR=0
+# export FLAGS_CONVERT_GRAPH_TO_PROGRAM=0
 # export GLOG_v=0
-# export FLAGS_new_executor_sequential_run=1
+# 新执行器
+export FLAGS_USE_STANDALONE_EXECUTOR=1
+export FLAGS_CONVERT_GRAPH_TO_PROGRAM=1
+export GLOG_v=0
+export FLAGS_new_executor_sequential_run=1
 
 # bug begin_norm_axis
 # sed -i '755,763d' /usr/local/lib/python3.7/dist-packages/paddle/distributed/auto_parallel/engine.py

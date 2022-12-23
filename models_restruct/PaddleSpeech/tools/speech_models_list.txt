@@ -3,7 +3,6 @@ speedyspeech.yml
 fastspeech2.yml
 transformer_tts.yml
 parallelwave_gan.yml
-multi_band_melgan.yml
 style_melgan.yml
 hifigan.yml
 wavernn.yml
