@@ -102,7 +102,8 @@ class PaddleDetection_Build(Model_Build):
             os.system("rm -rf /root/.cache/paddle/weights")
         os.system("ln -s {}/data/ppdet_pretrained /root/.cache/paddle/weights".format("/ssd2/ce_data/PaddleDetection"))
         #windows
-        os.system("set sed='C:\Program Files\Git\usr\bin\sed.exe'")
+        os.environ["sed"] = "C:\Program Files\Git\usr\bin\sed.exe"
+        #os.system("set sed='C:\Program Files\Git\usr\bin\sed.exe'")
         cmd_voc = '%sed% -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'
         os.system(cmd_voc)
         cmd_iter1 = (
