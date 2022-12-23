@@ -208,6 +208,10 @@ waveflow_ljspeech_ckpt_0.3.zip"
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
                         "        base: ./base/speech_cli_base.yaml" + os.linesep,
+                        "    mac:" + os.linesep,
+                        "        base: ./base/speech_cli_base.yaml" + os.linesep,
+                        "    windows:" + os.linesep,
+                        "        base: ./base/speech_cli_base.yaml" + os.linesep,
                     )
                 )
 
