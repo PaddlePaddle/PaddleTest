@@ -109,10 +109,10 @@ class PaddleOCR_Build(Model_Build):
                 print("filename:{}".format(filename))
                 if "rec" in filename:
                     if sysstr == "Darwin":
-                         cmd = "sed -i '' 's!data_lmdb_release/training!data_lmdb_release/validation!g' %s" filename
+                        cmd = "sed -i '' 's!data_lmdb_release/training!data_lmdb_release/validation!g' %s" % filename
                     else:
-                         cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
-                    
+                        cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
+
                     subprocess.getstatusoutput(cmd)
             os.chdir(path_now)
             print("build dataset!")
