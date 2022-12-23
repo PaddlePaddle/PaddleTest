@@ -31,7 +31,7 @@ def exit_check(
 
 
 def save_log(exit_code, output, file_name):
-    """ save log"""
+    """save log"""
     if not os.path.exists("test_log"):
         os.mkdir("test_log")
     if exit_code == 0:
