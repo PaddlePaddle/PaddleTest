@@ -59,6 +59,10 @@ class Paddle3D_Start(object):
             # delete output
             if os.path.exists("output"):
                 shutil.rmtree("output")
+            # delete /root/.paddle3d/pretrained/deeplabv3_resnet101
+            if os.path.exists("/root/.paddle3d"):
+                shutil.rmtree("/root/.paddle3d")
+
             if not os.path.exists(self.model):
                 os.makedirs(self.model)
                 os.chdir(self.model)
