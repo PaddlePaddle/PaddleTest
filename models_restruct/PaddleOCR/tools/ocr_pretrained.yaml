@@ -28,3 +28,26 @@ rec:
    rec_r32_gaspin_bilstm_att: https://paddleocr.bj.bcebos.com/contribution/rec_r32_gaspin_bilstm_att.tar
    rec_r31_robustscanner: https://paddleocr.bj.bcebos.com/contribution/rec_r31_robustscanner.tar
    rec_resnet_rfl_att: https://paddleocr.bj.bcebos.com/contribution/rec_resnet_rfl_att_train.tar
+
+sr:
+   sr_telescope: https://paddleocr.bj.bcebos.com/contribution/sr_telescope_train.tar
+   sr_tsrn_transformer_strock: https://paddleocr.bj.bcebos.com/sr_tsrn_transformer_strock_train.tar
+
+kie:
+   ser_layoutxlm_xfund_zh: https://paddleocr.bj.bcebos.com/pplayout/ser_LayoutXLM_xfun_zh.tar
+   re_layoutxlm_xfund_zh: https://paddleocr.bj.bcebos.com/pplayout/re_LayoutXLM_xfun_zh.tar
+   ser_vi_layoutxlm_xfund_zh: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar
+   ser_vi_layoutxlm_xfund_zh_udml: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar
+   re_vi_layoutxlm_xfund_zh: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar
+   re_vi_layoutxlm_xfund_zh_udml: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar
+
+table:
+   table_master: https://paddleocr.bj.bcebos.com/ppstructure/models/tablemaster/table_structure_tablemaster_train.tar
+   table: https://paddleocr.bj.bcebos.com/dygraph_v2.1/table/en_ppocr_mobile_v2.0_table_structure_train.tar
+   SLANet: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_train.tar
+   SLANet_ch: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/ch_ppstructure_mobile_v2.0_SLANet_train.tar
+
+cls:
+   cls:
+e2e:
+   e2e_r50_vd_pg: https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar

@@ -185,6 +185,7 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     print(infor)
     final_res = {
         "model_name": FLAGS.model_name,
+        "batch_size": FLAGS.batch_size,
         "jingdu": {
             "value": miou,
             "unit": "mIoU",
@@ -192,7 +193,14 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-            "batch_size": FLAGS.batch_size,
+        },
+        "cpu_mem": {
+            "value": cpu_mem,
+            "unit": "MB",
+        },
+        "gpu_mem": {
+            "value": gpu_mem,
+            "unit": "MB",
         },
     }
     print("[Benchmark][final result]{}".format(final_res))

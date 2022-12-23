@@ -171,6 +171,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     print("[Benchmark] COCO mAP: {}".format(map_res[0]))
     final_res = {
         "model_name": FLAGS.model_name,
+        "batch_size": FLAGS.batch_size,
         "jingdu": {
             "value": map_res[0],
             "unit": "mAP",
@@ -178,14 +179,13 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-            "batch_size": FLAGS.batch_size,
         },
         "cpu_mem": {
-            "value": cpu_mems / sample_nums,
+            "value": cpu_mem,
             "unit": "MB",
         },
         "gpu_mem": {
-            "value": gpu_mems / sample_nums,
+            "value": gpu_mem,
             "unit": "MB",
         },
     }

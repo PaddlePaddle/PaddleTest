@@ -1,0 +1,1 @@
+configs^rec^rec_resnet_stn_bilstm_att.yml

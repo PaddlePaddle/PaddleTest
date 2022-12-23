@@ -17,33 +17,21 @@ function requirements() {
     echo "=============================paddle commit============================="
     python -c "import paddle;print(paddle.__git_commit__)"
 
-    echo " ---------- PaddleFleetX paddlenlp---------- "
-    cd /paddle
-    export https_proxy=${proxy}
-    export http_proxy=${proxy}
-    sed -i "s/paddlenlp>=2.4.3/paddlenlp==2.4.5/g" ./PaddleFleetX/requirements.txt
-    # git clone --depth=1 -b develop https://github.com/PaddlePaddle/PaddleNLP.git
-    # cd PaddleNLP
-    # python -m pip install -r requirements.txt --force-reinstall 
-    # python setup.py install
-    # cd -
-    # unset http_proxy && unset https_proxy
-
-    if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        cd /paddle
-        echo " ---------- PaddleFleetX develop Slim---------- "
-        export https_proxy=${proxy}
-        export http_proxy=${proxy}
-        sed -i "s/paddleslim/#paddleslim/g" ./PaddleFleetX/requirements.txt
-        git clone --depth=1 -b develop https://github.com/PaddlePaddle/PaddleSlim.git
-        rm -rf /usr/local/lib/python3.7/dist-packages/paddleslim*
-        python -m pip uninstall paddleslim -y
-        cd PaddleSlim
-        python -m pip install -r requirements.txt --force-reinstall
-        python setup.py install
-        cd -
-        unset http_proxy && unset https_proxy
-    fi
+    # if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
+    #     cd /paddle
+    #     echo " ---------- PaddleFleetX develop Slim---------- "
+    #     export https_proxy=${proxy}
+    #     export http_proxy=${proxy}
+    #     sed -i "s/git+https/#git+https/g" ./PaddleFleetX/requirements.txt
+    #     git clone --depth=1 -b develop https://github.com/PaddlePaddle/PaddleSlim.git
+    #     rm -rf /usr/local/lib/python3.7/dist-packages/paddleslim*
+    #     python -m pip uninstall paddleslim -y
+    #     cd PaddleSlim
+    #     python -m pip install -r requirements.txt --force-reinstall
+    #     python setup.py install
+    #     cd -
+    #     unset http_proxy && unset https_proxy
+    # fi
 
     # install requirements
     cd ${fleetx_path}
@@ -100,10 +88,11 @@ function download() {
         echo "dataset/ernie downloaded"
     else
         # download dataset/ernie
-        unset https_proxy && unset http_proxy
         mkdir -p ${data_path}/dataset/ernie;
-        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids.npy http://10.255.129.12:8811/cluecorpussmall_14g_1207_ids.npy
-        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_idx.npz http://10.255.129.12:8811/cluecorpussmall_14g_1207_idx.npz
+        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids_part0 https://paddlefleetx.bj.bcebos.com/model/nlp/ernie/cluecorpussmall_14g_1207_ids_part0
+        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids_part1 https://paddlefleetx.bj.bcebos.com/model/nlp/ernie/cluecorpussmall_14g_1207_ids_part1
+        cat ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids_part* &> ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids.npy
+        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_idx.npz https://paddlefleetx.bj.bcebos.com/model/nlp/ernie/cluecorpussmall_14g_1207_idx.npz
     fi
     cp -r ${data_path}/dataset ${fleetx_path}/
 

@@ -25,11 +25,9 @@ class PaddleClas_Start(object):
         """
         初始化变量
         """
-        self.xly_job_name = os.environ["AGILE_PIPELINE_NAME"]
-        logger.info("### self.xly_job_name: {}".format(self.xly_job_name))
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
-        logger.info("### self.qa_yaml_name: {}".format(self.qa_yaml_name))
+        logger.info("#### self.qa_yaml_name: {}".format(self.qa_yaml_name))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
         self.step = os.environ["step"]
@@ -447,6 +445,7 @@ class PaddleClas_Start(object):
         kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
         try:
+            self.xly_job_name = os.environ["AGILE_PIPELINE_NAME"]
             if os.path.exists(self.xly_job_name + ".yaml") is False:
                 wget.download("https://paddle-qa.bj.bcebos.com/PaddleMT/PaddleClas/" + self.xly_job_name + ".yaml")
 
