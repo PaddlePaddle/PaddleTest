@@ -31,7 +31,7 @@ def exit_check(
 
 
 def save_log(exit_code, output, file_name):
-    """ """
+    """ save log"""
     if not os.path.exists("test_log"):
         os.mkdir("test_log")
     if exit_code == 0:
@@ -44,8 +44,8 @@ def save_log(exit_code, output, file_name):
             flog.write("%s" % (output))
 
 
-def test_requirements():
-    """"""
+def test_prepare():
+    """install requirements & download data"""
     file_name = "requirements"
     if os.path.exists("requirements.txt"):
         cmd = "pip install -r requirements.txt"
@@ -53,9 +53,6 @@ def test_requirements():
         save_log(output[0], output[1], file_name)
         exit_check(output[0], file_name)
 
-
-def test_prepare_data_files():
-    """"""
     file_name = "prepare_data_files"
     if not os.path.exists("pre_data"):
         os.mkdir("pre_data")
@@ -68,7 +65,7 @@ def test_prepare_data_files():
 
 
 def test_run_pretrain():
-    """"""
+    """pretrain"""
     file_name = "run_pretrain"
     cmd = """python -m paddle.distributed.launch run_pretrain.py \
     --model_type gpt \
@@ -89,7 +86,7 @@ def test_run_pretrain():
 
 
 def test_run_eval():
-    """"""
+    """evaluation"""
     file_name = "run_eval"
     get_data_cmd = (
         "wget https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip && unzip wikitext-103-v1.zip"
@@ -108,7 +105,7 @@ def test_run_eval():
 
 
 def test_export_model():
-    """"""
+    """export model"""
     file_name = "export_model"
     cmd = """python export_model.py --model_type=gpt-cn \
     --model_path=gpt-cpm-large-cn \
@@ -119,8 +116,8 @@ def test_export_model():
     exit_check(output[0], file_name)
 
 
-def test_inference():
-    """"""
+def test_infer():
+    """inference"""
     file_name = "inference"
     cmd = """python deploy/python/inference.py --model_type gpt-cn \
     --model_path ./infer_model/model"""
