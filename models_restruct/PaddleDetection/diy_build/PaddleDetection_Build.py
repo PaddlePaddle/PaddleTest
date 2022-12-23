@@ -101,6 +101,32 @@ class PaddleDetection_Build(Model_Build):
         if os.path.exists("/root/.cache/paddle/weights"):
             os.system("rm -rf /root/.cache/paddle/weights")
         os.system("ln -s {}/data/ppdet_pretrained /root/.cache/paddle/weights".format("/ssd2/ce_data/PaddleDetection"))
+        #windows
+        os.system("set sed='C:\Program Files\Git\usr\bin\sed.exe'")
+        cmd_voc = '%sed% -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'
+        os.system(cmd_voc)
+        cmd_iter1 = (
+            '%sed% -i "/for step_id, data in enumerate(self.loader):/i\\            max_step_id'
+            '=1" ppdet/engine/trainer.py'
+        )
+        cmd_iter2 = (
+            '%sed% -i "/for step_id, data in enumerate(self.loader):/a\\                if step_id == '
+            'max_step_id: break" ppdet/engine/trainer.py'
+        )
+        os.system(cmd_iter1)
+        os.system(cmd_iter2)
+        cmd_mot1 = '%sed% -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'
+        cmd_mot2 = (
+            '%sed% -i "/for step_id, data in enumerate(dataloader):/i\\        max_step_id=1" ppdet/engine/tracker.py'
+        )
+        cmd_mot3 = (
+            '%sed% -i "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
+            'max_step_id: break" ppdet/engine/tracker.py'
+        )
+        os.system(cmd_mot1)
+        os.system(cmd_mot2)
+        os.system(cmd_mot3)
+        os.system('%sed% -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection/det_pretrained#g" ppdet/utils/download.py')
         os.chdir("dataset")
         if os.path.exists("coco"):
             os.system("rm -rf coco")
@@ -109,6 +135,8 @@ class PaddleDetection_Build(Model_Build):
         os.system("unzip coco.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota.zip")
         os.system("unzip dota.zip")
+        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota_ms.zip")
+        os.system("unzip dota_ms.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mot.zip")
         os.system("unzip mot.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/visdrone.zip")
