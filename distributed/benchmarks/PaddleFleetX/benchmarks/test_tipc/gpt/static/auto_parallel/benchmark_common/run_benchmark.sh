@@ -114,7 +114,7 @@ function _train(){
         ;;
     DP1-MP8-PP1) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
-            tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml -o Model.hidden_size=5210 \
+            tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml -o Model.hidden_size=5120 \
             ${train_cmd}"
         workerlog_id=0
         ;;
