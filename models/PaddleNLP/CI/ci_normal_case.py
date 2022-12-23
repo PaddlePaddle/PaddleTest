@@ -2,6 +2,7 @@
 RUN PaddleNLP CI Case
 """
 
+from genericpath import isfile
 import io
 import re
 import os
@@ -46,6 +47,9 @@ def get_mode_info(case_path):
                         model_info["prepare_exec_file"] = file
 
                     elif re.compile("train.py").findall(file):
+                        model_info["train_exec_file"].append(file)
+                        
+                    elif re.compile("finetune").findall(file):
                         model_info["train_exec_file"].append(file)
 
                     elif re.compile("eval.py").findall(file):
@@ -158,4 +162,8 @@ def run_normal_case(case_path):
 if __name__ == "__main__":
     # path ="applications/text_summarization/pegasus"
     path = sys.argv[1]
-    run_normal_case(path)
+    if os.path.isdir(path):
+        run_normal_case(path)
+    else:
+        print('not model file path, skepped ')
+

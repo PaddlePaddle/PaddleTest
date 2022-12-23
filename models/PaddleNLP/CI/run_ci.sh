@@ -210,7 +210,8 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     for p0case in ${P0case_list[*]};do
         echo -e "\033[35m ---- running P0case $case_num/${#P0case_list[*]}: ${p0case} \033[0m"
         if [[ ${!Normal_dic[*]} =~ ${p0case} ]];then
-            bash ci_normal_case.sh ${Normal_dic[${p0case}]} ${p0case}
+            # bash ci_normal_case.sh ${Normal_dic[${p0case}]} ${p0case}
+            python ci_normal_case.py ${Normal_dic[${p0case}]}
             let case_num++
         else
             bash ci_case.sh ${p0case}
