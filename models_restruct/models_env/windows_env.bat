@@ -90,7 +90,7 @@ if %errorlevel% equ 0 (
             if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
         )  else  (
             rem Release
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
         )
     )
 )
@@ -100,10 +100,10 @@ if %errorlevel% equ 0 (
     if %errorlevel% equ 0 (
         echo %AGILE_PIPELINE_NAME% | findstr "Develop" >nul
         if %errorlevel% equ 0 (
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/gpu-cuda11.6-cudnn8-mkl-vs2019-avx/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
+            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
         )  else  (
             rem Release
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/gpu-cuda11.6-cudnn8-mkl-vs2019-avx/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
+            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
         )
     )
 )
@@ -113,14 +113,14 @@ if %errorlevel% equ 0 (
     if %errorlevel% equ 0 (
         echo %AGILE_PIPELINE_NAME% | findstr "Develop" >nul
         if %errorlevel% equ 0 (
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/gpu-cuda11.2-cudnn7-mkl-vs2017-avx/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
+            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
         )  else  (
             rem Release
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/gpu-cuda11.2-cudnn7-mkl-vs2017-avx/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
+            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
         )
     )
 )
-rem 如果非流水线设置默认python
+rem 如果非流水线设置默认 paddle_whl
 if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
 
 rem 预设默认参数
@@ -131,10 +131,8 @@ if not defined branch set branch=develop
 if not defined get_repo set get_repo=wget
 if not defined dataset_org set dataset_org=None
 if not defined dataset_target set dataset_target=None
-if not defined set_cuda set set_cuda=
 
 rem 额外的变量
-if not defined docker_flag set docker_flag=
 if not defined http_proxy set http_proxy=
 if not defined no_proxy set no_proxy=
 
