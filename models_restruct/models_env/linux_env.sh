@@ -220,9 +220,9 @@ if [[ "${docker_flag}" == "" ]]; then
     docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
-    echo "begin kill docker"
-    docker rm -f ${docker_name}
-    echo "end kill docker"
+        echo "begin kill docker"
+        docker rm -f ${docker_name}
+        echo "end kill docker"
     }
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
