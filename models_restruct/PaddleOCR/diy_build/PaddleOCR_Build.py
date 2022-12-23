@@ -72,8 +72,8 @@ class PaddleOCR_Build(Model_Build):
                 src_path = "/Users/paddle/PaddleTest/ce_data/PaddleOCR"
 
             # dataset link
-            train_data_path = os.path.join(src_path, "train_data")
-            pretrain_models_path = os.path.join(src_path, "pretrain_models")
+            # train_data_path = os.path.join(src_path, "train_data")
+            # pretrain_models_path = os.path.join(src_path, "pretrain_models")
 
             # if not os.path.exists(train_data_path):
             #    os.makedirs(train_data_path)
