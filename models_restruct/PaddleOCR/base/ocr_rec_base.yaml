@@ -24,7 +24,7 @@ train:
     - Train.loader.batch_size_per_card=10
     - Global.print_batch_step=1
     - Global.use_gpu=${use_gpu}
-    
+
   result:
     exit_code:
       base: 0
