@@ -20,7 +20,7 @@ else:
     places = [fluid.CPUPlace()]
 dtypes = [
     None,
-    np.bool_,
+    # np.bool_,
     np.float16,
     np.float32,
     np.float64,

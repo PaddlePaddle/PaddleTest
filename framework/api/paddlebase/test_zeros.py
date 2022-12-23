@@ -125,7 +125,8 @@ def test_zeros7():
     shape_type=list,dtype=np.bool_
     """
     shape = [1, 5, 2, 3]
-    dtype = np.bool_
+    # dtype = np.bool_
+    dtype = bool
     res = np.zeros(shape, dtype=dtype)
     obj.run(res=res, shape=shape, dtype=dtype)
 
