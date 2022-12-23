@@ -63,9 +63,9 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]];then
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/2.1.2/macos/macos-cpu-openblas/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-Mac-Arm-Py310-Compile/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/2.1.2/macos/macos-cpu-openblas/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-Mac-Arm-Py310-Compile/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
     fi
 fi
 #### 预设默认参数
@@ -98,6 +98,17 @@ else
 fi
 export no_proxy=${no_proxy}
 set -x;
+
+#输出参数验证
+echo "@@@reponame: ${reponame}"
+echo "@@@models_list: ${models_list}"
+echo "@@@models_file: ${models_file}"
+echo "@@@system: ${system}"
+echo "@@@Python_version: ${Python_version}"
+echo "@@@paddle_whl: ${paddle_whl}"
+echo "@@@step: ${step}"
+echo "@@@branch: ${branch}"
+echo "@@@mode: ${mode}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
