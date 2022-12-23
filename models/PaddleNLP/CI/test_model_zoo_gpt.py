@@ -48,7 +48,7 @@ def test_requirements():
     """"""
     file_name = "requirements"
     if os.path.exists("requirements.txt"):
-        cmd = f"pip install -r requirements.txt"
+        cmd = "pip install -r requirements.txt"
         output = subprocess.getstatusoutput(cmd)
         save_log(output[0], output[1], file_name)
         exit_check(output[0], file_name)
