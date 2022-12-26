@@ -1,8 +1,6 @@
 """
 RUN PaddleNLP CI Case
 """
-
-from genericpath import isfile
 import io
 import re
 import os
