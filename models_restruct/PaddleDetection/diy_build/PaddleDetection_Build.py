@@ -12,6 +12,7 @@ import numpy as np
 import yaml
 import wget
 import subprocess
+import platform
 from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
