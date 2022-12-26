@@ -57,7 +57,7 @@ export LD_LIBRARY_PATH=${PWD}/TensorRT-8.4.0.6/lib/:${LD_LIBRARY_PATH}
 
 PADDLE_COMMIT=`python -c "import paddle; print(paddle.version.commit)"`
 DT=`date "+%Y-%m-%d"`
-SAVE_FILE=${DT}_${FRAME}_${FRAME_BRANCH/\//-}_${PADDLE_COMMIT}.xlsx
+SAVE_FILE=${DT}_${FRAME}_${FRAME_BRANCH/\//-}_${PADDLE_COMMIT}_${DEVICE}.xlsx
 
 PYTHON_VERSION=${PYTHON_VERSION:-3.8}
 CUDA_VERSION=${CUDA_VERSION:-11.2}
@@ -96,7 +96,7 @@ pip install bce-python-sdk
 
 bash run.sh
 
-python get_benchmark_info.py ${FRAME} ${FRAME_BRANCH} ${PADDLE_COMMIT} ${FRAME_VERSION} ${DOCKER_IMAGE} ${PYTHON_VERSION} ${CUDA_VERSION} ${CUDNN_VERSION} ${TRT_VERSION} ${GPU} ${CPU} ${MODE} ${METRIC} ${SAVE_FILE}
+python get_benchmark_info.py ${FRAME} ${FRAME_BRANCH} ${PADDLE_COMMIT} ${FRAME_VERSION} ${DOCKER_IMAGE} ${PYTHON_VERSION} ${CUDA_VERSION} ${CUDNN_VERSION} ${TRT_VERSION} ${DEVICE} ${MODE} ${METRIC} ${SAVE_FILE}
 
 
 UPLOAD_FILE_PATH=`pwd`/${SAVE_FILE}
