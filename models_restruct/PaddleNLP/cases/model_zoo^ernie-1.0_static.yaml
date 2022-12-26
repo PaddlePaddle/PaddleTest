@@ -8,7 +8,7 @@ case:
       -
         name: static
         path: model_zoo/ernie-1.0/
-        cmd: python -u  -m paddle.distributed.launch --gpus '0,1' --log_dir "./log"  run_pretrain_static.py
+        cmd: python -u  -m paddle.distributed.launch --log_dir "./log"  run_pretrain_static.py
         params:
           - --model_type "ernie"
           - --model_name_or_path "ernie-1.0"

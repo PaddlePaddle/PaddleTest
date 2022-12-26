@@ -8,7 +8,7 @@ case:
       -
         name: pretrain
         path: model_zoo/bert
-        cmd: python -m paddle.distributed.launch --gpus "0,1" run_pretrain.py
+        cmd: python -m paddle.distributed.launch  run_pretrain.py
         params:
           - --model_type bert
           - --model_name_or_path bert-base-uncased
@@ -28,7 +28,7 @@ case:
       -
         name: fintune_glue
         path: model_zoo/bert
-        cmd: python -m paddle.distributed.launch --gpus "0,1" run_glue.py
+        cmd: python -m paddle.distributed.launch run_glue.py
         params:
           - --model_type bert
           - --model_name_or_path bert-base-uncased

@@ -13,7 +13,7 @@ case:
       -
         name: pretrain
         path: model_zoo/electra
-        cmd: python -m paddle.distributed.launch --gpus "0,1" ./run_pretrain.py
+        cmd: python -m paddle.distributed.launch  ./run_pretrain.py
         params:
           - --model_type electra
           - --model_name_or_path electra-small
