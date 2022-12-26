@@ -79,10 +79,16 @@ class PaddleDetection_Build(Model_Build):
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/test_demo.mp4")
         # avoid hang in yolox
         cmd = '{} -i "s|norm_type: sync_bn|norm_type: bn|g" configs/yolox/_base_/yolox_cspdarknet.yml'.format(os.getenv("sed"))
-        subprocess.run(cmd)
+        if platform.system() == "Windows":
+            subprocess.run(cmd)
+        else:
+            subprocess.run(cmd, shell=True)
         # use small data
         cmd_voc = '{} -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'.format(os.getenv("sed"))
-        subprocess.run(cmd_voc)
+        if platform.system() == "Windows":
+            subprocess.run(cmd_voc)
+        else:
+            subprocess.run(cmd_voc, shell=True)
         cmd_iter1 = (
             '{} -i "/for step_id, data in enumerate(self.loader):/i\\            max_step_id'
             '=1" ppdet/engine/trainer.py'.format(os.getenv("sed"))
@@ -91,8 +97,12 @@ class PaddleDetection_Build(Model_Build):
             '{} -i "/for step_id, data in enumerate(self.loader):/a\\                if step_id == '
             'max_step_id: break" ppdet/engine/trainer.py'.format(os.getenv("sed"))
         )
-        subprocess.run(cmd_iter1)
-        subprocess.run(cmd_iter2)
+        if platform.system() == "Windows":
+            subprocess.run(cmd_iter1)
+            subprocess.run(cmd_iter2)
+        else:
+            subprocess.run(cmd_iter1, shell=True)
+            subprocess.run(cmd_iter2, shell=True)
         cmd_mot1 = '{} -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         cmd_mot2 = (
             '{} -i "/for step_id, data in enumerate(dataloader):/i\\        max_step_id=1" ppdet/engine/tracker.py'.format(os.getenv("sed"))
@@ -101,9 +111,14 @@ class PaddleDetection_Build(Model_Build):
             '{} -i "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
             'max_step_id: break" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         )
-        subprocess.run(cmd_mot1)
-        subprocess.run(cmd_mot2)
-        subprocess.run(cmd_mot3)
+        if platform.system() == "Windows":
+            subprocess.run(cmd_mot1)
+            subprocess.run(cmd_mot2)
+            subprocess.run(cmd_mot3)
+        else:
+            subprocess.run(cmd_mot1, shell=True)
+            subprocess.run(cmd_mot2, shell=True)
+            subprocess.run(cmd_mot3, shell=True)
         # compile op
         os.system("python ppdet/ext_op/setup.py install")
         if os.path.exists("/root/.cache/paddle/weights"):
