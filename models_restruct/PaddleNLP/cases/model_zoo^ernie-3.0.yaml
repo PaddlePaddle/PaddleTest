@@ -6,12 +6,12 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_seq_cls.py
         params:
-          - --model_name_or_path ernie-3.0-medium-zh  
-          - --dataset afqmc --output_dir ./best_models 
-          - --export_model_dir best_models/ 
-          - --do_train 
-          - --do_eval 
-          - --do_export 
+          - --model_name_or_path ernie-3.0-medium-zh
+          - --dataset afqmc --output_dir ./best_models
+          - --export_model_dir best_models/
+          - --do_train
+          - --do_eval
+          - --do_export
           - --config=configs/default.yml
         result:
           loss:
@@ -23,13 +23,13 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_token_cls.py
         params:
-          - --model_name_or_path ernie-3.0-medium-zh 
-          - --dataset msra_ner 
-          - --output_dir ./best_models 
-          - --export_model_dir best_models/ 
-          - --do_train 
-          - --do_eval 
-          - --do_export 
+          - --model_name_or_path ernie-3.0-medium-zh
+          - --dataset msra_ner
+          - --output_dir ./best_models
+          - --export_model_dir best_models/
+          - --do_train
+          - --do_eval
+          - --do_export
           - --config=configs/default.yml
         result:
           loss:
@@ -41,9 +41,9 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_qa.py
         params:
-          - --model_name_or_path best_models/cmrc2018/ 
-          - --dataset cmrc2018  
-          - --output_dir ./best_models --do_predict 
+          - --model_name_or_path best_models/cmrc2018/
+          - --dataset cmrc2018
+          - --output_dir ./best_models --do_predict
           - --config=configs/default.yml
         result:
           loss:
@@ -55,9 +55,9 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python compress_seq_cls.py
         params:
-          - --model_name_or_path best_models/afqmc/  
-          - --dataset afqmc 
-          - --output_dir ./best_models/afqmc 
+          - --model_name_or_path best_models/afqmc/
+          - --dataset afqmc
+          - --output_dir ./best_models/afqmc
           - --config=configs/default.yml
         result:
           loss:
@@ -69,9 +69,9 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python compress_token_cls.py
         params:
-          - --model_name_or_path best_models/msra_ner/  
-          - --dataset msra_ner 
-          - --output_dir ./best_models/msra_ner 
+          - --model_name_or_path best_models/msra_ner/
+          - --dataset msra_ner
+          - --output_dir ./best_models/msra_ner
           - --config=configs/default.yml
         result:
           loss:
@@ -87,25 +87,25 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python compress_qa.py
         params:
-          - --model_name_or_path best_models/cmrc2018/ 
-          - --dataset cmrc2018  
-          - --output_dir ./best_models/cmrc2018 
+          - --model_name_or_path best_models/cmrc2018/
+          - --dataset cmrc2018
+          - --output_dir ./best_models/cmrc2018
           - --config=configs/default.yml
         result:
           loss:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
-    eval: 
+    eval:
       -
         name: seq_cls
             path: model_zoo/ernie-3.0/
             cmd: python run_seq_cls.py
             params:
-              - --model_name_or_path best_models/afqmc/  
-              - --dataset afqmc 
-              - --output_dir ./best_models 
-              - --do_predict 
+              - --model_name_or_path best_models/afqmc/
+              - --dataset afqmc
+              - --output_dir ./best_models
+              - --do_predict
               - --config=configs/default.yml
             result:
               loss:
@@ -117,10 +117,10 @@ case:
             path: model_zoo/ernie-3.0/
             cmd: python run_token_cls.py
             params:
-              - --model_name_or_path best_models/msra_ner/  
-              - --dataset msra_ner 
-              - --output_dir ./best_models 
-              - --do_predict 
+              - --model_name_or_path best_models/msra_ner/
+              - --dataset msra_ner
+              - --output_dir ./best_models
+              - --do_predict
               - --config=configs/default.yml
             result:
               loss:
@@ -132,9 +132,9 @@ case:
             path: model_zoo/ernie-3.0/
             cmd: python run_qa.py
             params:
-              - --model_name_or_path best_models/cmrc2018/ 
-              - --dataset cmrc2018  
-              - --output_dir ./best_models --do_predict 
+              - --model_name_or_path best_models/cmrc2018/
+              - --dataset cmrc2018
+              - --output_dir ./best_models --do_predict
               - --config=configs/default.yml
             result:
               loss:
