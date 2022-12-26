@@ -48,7 +48,7 @@ def get_mode_info(case_path):
 
                     elif re.compile("train.py").findall(file):
                         model_info["train_exec_file"].append(file)
-                        
+
                     elif re.compile("finetune").findall(file):
                         model_info["train_exec_file"].append(file)
 
@@ -165,5 +165,4 @@ if __name__ == "__main__":
     if os.path.isdir(path):
         run_normal_case(path)
     else:
-        print('not model file path, skepped ')
-
+        print("not model file path, skepped ")
