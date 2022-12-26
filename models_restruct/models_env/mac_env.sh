@@ -26,7 +26,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Windows" ]];then
     export system=${system:-"windows"}
 elif [[ ${AGILE_PIPELINE_NAME} =~ "WindowsCPU" ]];then
     export system=${system:-"windows_cpu"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "MAC" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Mac" ]] ;then
     export system=${system:-"mac"}
 else
     if [[ ${system} ]];then
