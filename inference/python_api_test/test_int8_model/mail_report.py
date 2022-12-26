@@ -81,7 +81,7 @@ def create_table_day(task_dt, env, gsb, detail, mode_list, metric_list, jingping
     """
     create subject and content of mail
     """
-    subject = "[预测-量化Benchmark]{}执行结果".format(task_dt)
+    subject = "[预测-量化Benchmark][{}]{}执行结果".format(env["device"], task_dt)
 
     content = """
         <html>
@@ -100,8 +100,6 @@ def create_table_day(task_dt, env, gsb, detail, mode_list, metric_list, jingping
         <br>
         frame_commit:{}
         <br>
-        device: gpu {} ; cpu {}
-        <br>
         阈值:{}
         <br>
     """.format(
@@ -109,8 +107,6 @@ def create_table_day(task_dt, env, gsb, detail, mode_list, metric_list, jingping
         env["frame"],
         env["frame_branch"],
         env["frame_commit"],
-        env["device_type"]["gpu"],
-        env["device_type"]["cpu"],
         env["threshold"],
     )
 
