@@ -1,15 +1,15 @@
 
 rem do not uset chinese note  beacause of linux tar problem
 
-set pwd_org=%cd%
-echo "org path is %pwd_org%"
-if not defined AGILE_PIPELINE_NAME set AGILE_PIPELINE_NAME="test"
-if exist D:\PaddleMT\%AGILE_PIPELINE_NAME% ( rmdir D:\PaddleMT\%AGILE_PIPELINE_NAME% /S /Q)
-md D:\PaddleMT\%AGILE_PIPELINE_NAME%
-cd D:\PaddleMT\%AGILE_PIPELINE_NAME%
-d:
-echo "change path to D:\PaddleMT\%AGILE_PIPELINE_NAME%"
-chdir
+@REM set pwd_org=%cd%
+@REM echo "org path is %pwd_org%"
+@REM if not defined AGILE_PIPELINE_NAME set AGILE_PIPELINE_NAME="test"
+@REM if exist D:\PaddleMT\%AGILE_PIPELINE_NAME% ( rmdir D:\PaddleMT\%AGILE_PIPELINE_NAME% /S /Q)
+@REM md D:\PaddleMT\%AGILE_PIPELINE_NAME%
+@REM cd D:\PaddleMT\%AGILE_PIPELINE_NAME%
+@REM d:
+@REM echo "change path to D:\PaddleMT\%AGILE_PIPELINE_NAME%, so do not run same xly task in the same time"
+@REM chdir
 
 @ echo off
 rmdir ce  /S /Q
@@ -181,9 +181,11 @@ echo "@@@branch: %branch%"
 echo "@@@mode: %mode%"
 
 rem if already download PaddleTest direct mv
-if exist "%pwd_org%/task" (
-    echo "download org task"
-    move %pwd_org%/task .
+@REM if exist "%pwd_org%/task" (
+if exist "../task" (
+    echo "move org task"
+    move ../task .
+    @REM move %pwd_org%/task .
 ) else (
     echo "download PaddleTest.tar.gz"
     wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy
@@ -192,8 +194,10 @@ if exist "%pwd_org%/task" (
 )
 
 rem if already download reponame direct mv
-if exist "%pwd_org%/%reponame%" (
-    echo D| echo A| XCOPY "%pwd_org%/%reponame%" %reponame%
+@REM if exist "%pwd_org%/%reponame%" (
+if exist "../../%reponame%" (
+    @REM echo D| echo A| XCOPY "%pwd_org%/%reponame%" %reponame%
+    echo D| echo A| XCOPY "../../%reponame%" %reponame%
     echo "because %reponame% already download direct use %reponame%"
 )
 
