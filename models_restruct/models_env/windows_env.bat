@@ -1,6 +1,8 @@
 
 rem do not uset chinese note  beacause of linux tar problem
-set PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;%PATH%
+
+rem set path
+set "PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;%PATH%"
 
 rem cuda_version
 echo %AGILE_PIPELINE_NAME% | findstr "Cuda102" >nul
