@@ -407,7 +407,7 @@ def run():
         "cuda_version": cuda_version,
         "cudnn_version": cudnn_version,
         "trt_version": trt_version,
-        "device": device
+        "device": device,
         "threshold": 0.05,
     }
 
