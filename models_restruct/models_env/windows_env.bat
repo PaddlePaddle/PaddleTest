@@ -1,15 +1,42 @@
 
 rem do not uset chinese note  beacause of linux tar problem
+set PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;%PATH%
 
-@REM set pwd_org=%cd%
-@REM echo "org path is %pwd_org%"
-@REM if not defined AGILE_PIPELINE_NAME set AGILE_PIPELINE_NAME="test"
-@REM if exist D:\PaddleMT\%AGILE_PIPELINE_NAME% ( rmdir D:\PaddleMT\%AGILE_PIPELINE_NAME% /S /Q)
-@REM md D:\PaddleMT\%AGILE_PIPELINE_NAME%
-@REM cd D:\PaddleMT\%AGILE_PIPELINE_NAME%
-@REM d:
-@REM echo "change path to D:\PaddleMT\%AGILE_PIPELINE_NAME%, so do not run same xly task in the same time"
-@REM chdir
+rem cuda_version
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda102" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=10.2
+)
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda112" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=11.2
+)
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda116" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=11.6
+)
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda117" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=11.7
+)
+rem not xly use default cuda_version
+if not defined cuda_version set cuda_version=11.7
+set "PATH=C:\Program Files\NVIDIA Corporation\NVSMI;%PATH%"
+set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\libnvvp;%PATH%"
+set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\bin;%PATH%"
+set "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v%cuda_version%"
+rem nvcc -V
+
+rem change path
+set pwd_org=%cd%
+echo "org path is %pwd_org%"
+if not defined AGILE_PIPELINE_NAME set AGILE_PIPELINE_NAME="test"
+if exist D:\PaddleMT\%AGILE_PIPELINE_NAME% ( rmdir D:\PaddleMT\%AGILE_PIPELINE_NAME% /S /Q)
+md D:\PaddleMT\%AGILE_PIPELINE_NAME%
+cd D:\PaddleMT\%AGILE_PIPELINE_NAME%
+d:
+echo "change path to D:\PaddleMT\%AGILE_PIPELINE_NAME%, so do not run same xly task in the same time"
+chdir
 
 @ echo off
 rmdir ce  /S /Q
@@ -17,10 +44,9 @@ rem set root
 md ce
 cd ce
 
-rem AGILE_PIPELINE_NAME    must set as:   PaddleClas-Windows-Cuda116-Python310-P0-Develop
+rem AGILE_PIPELINE_NAME    must set as:   PaddleClas-Windows-Cuda117-Python310-P0-Develop
 rem do not use "-",   split as  "-"  so please set value in order
 
-set PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;%PATH%
 
 rem reponame
 if not defined reponame for /f "tokens=1 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set reponame=%%a
@@ -65,31 +91,6 @@ echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
     CALL D:\Windows_env\%reponame%_py310\Scripts\activate.bat
 )
-
-rem cuda_version
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda102" >nul
-if %errorlevel% equ 0 (
-    set cuda_version=10.2
-)
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda112" >nul
-if %errorlevel% equ 0 (
-    set cuda_version=11.2
-)
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda116" >nul
-if %errorlevel% equ 0 (
-    set cuda_version=11.6
-)
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda117" >nul
-if %errorlevel% equ 0 (
-    set cuda_version=11.7
-)
-rem not xly use default cuda_version
-if not defined cuda_version set cuda_version=11.7
-set "PATH=C:\Program Files\NVIDIA Corporation\NVSMI;%PATH%"
-set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\libnvvp;%PATH%"
-set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\bin;%PATH%"
-set "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v%cuda_version%"
-rem nvcc -V
 
 rem paddle_whl
 echo %AGILE_PIPELINE_NAME% | findstr "Cuda117" >nul
@@ -181,11 +182,9 @@ echo "@@@branch: %branch%"
 echo "@@@mode: %mode%"
 
 rem if already download PaddleTest direct mv
-@REM if exist "%pwd_org%/task" (
-if exist "../task" (
+if exist "%pwd_org%/task" (
     echo "move org task"
-    move ../task .
-    @REM move %pwd_org%/task .
+    move %pwd_org%/task .
 ) else (
     echo "download PaddleTest.tar.gz"
     wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy
@@ -194,10 +193,8 @@ if exist "../task" (
 )
 
 rem if already download reponame direct mv
-@REM if exist "%pwd_org%/%reponame%" (
-if exist "../../%reponame%" (
-    @REM echo D| echo A| XCOPY "%pwd_org%/%reponame%" %reponame%
-    echo D| echo A| XCOPY "../../%reponame%" %reponame%
+if exist "%pwd_org%/%reponame%" (
+    echo D| echo A| XCOPY "%pwd_org%/%reponame%" %reponame%
     echo "because %reponame% already download direct use %reponame%"
 )
 

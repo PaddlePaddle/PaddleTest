@@ -40,32 +40,38 @@ fi
 
 #指定python版本
 export Python_version=${Python_version:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F 'Python' '{print $2}'|awk -F '-' '{print $1}')`"}
-if [[ ${Python_version} =~ "36" ]];then
-    pyenv activate ${reponame}_36
-elif [[ ${Python_version} =~ "37" ]];then
-    pyenv activate ${reponame}_37
-elif [[ ${Python_version} =~ "38" ]];then
-    pyenv activate ${reponame}_38
-elif [[ ${Python_version} =~ "39" ]];then
-    pyenv activate ${reponame}_39
+if [[ ${Python_version} =~ "39" ]];then
+    pyenv activate ${reponame}_py39
 elif [[ ${Python_version} =~ "310" ]];then
-    pyenv activate ${reponame}_310
+    pyenv activate ${reponame}_py310
 else
-    pyenv activate ${reponame}_310
+    pyenv activate ${reponame}_py310
     echo "default set python verison is python3.10"
 fi
 
-if [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]];then
+if [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/2.1.2/macos/macos-cpu-openblas/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/2.1.2/macos/macos-cpu-openblas/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
     fi
-elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac-M1/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-Mac-Arm-Py310-Compile/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-Mac-M1/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac-M1/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
+    else
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-Mac-M1/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac-M1/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
+    else
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-Mac-M1/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
     fi
 fi
 #### 预设默认参数
