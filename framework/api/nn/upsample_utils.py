@@ -77,7 +77,7 @@ def linear_interpolation_using_numpy(x, size, scale_factor=None, align_corners=T
         #      out_h = static_cast<int>(in_h * scale_h);
         #      out_w = static_cast<int>(in_w * scale_w);
         # so it's possible to have numerical instability to make the test fail
-        out_w = np.int(np.around(in_w * scale_w))
+        out_w = np.int_(np.around(in_w * scale_w))
     out = np.zeros((batch_size, channel, out_w))
 
     ratio_w = 0.0
@@ -140,8 +140,8 @@ def bilinear_interpolation_using_numpy(
         #      out_h = static_cast<int>(in_h * scale_h);
         #      out_w = static_cast<int>(in_w * scale_w);
         # so it's possible to have numerical instability to make the test fail
-        out_h = np.int(np.around(in_h * scale_h))
-        out_w = np.int(np.around(in_w * scale_w))
+        out_h = np.int_(np.around(in_h * scale_h))
+        out_w = np.int_(np.around(in_w * scale_w))
 
     ratio_h = ratio_w = 0.0
     if out_h > 1:
@@ -227,9 +227,9 @@ def trilinear_interpolation_using_numpy(
         #      out_h = static_cast<int>(in_h * scale_h);
         #      out_w = static_cast<int>(in_w * scale_w);
         # so it's possible to have numerical instability to make the test fail
-        out_d = np.int(np.around(in_d * scale_d))
-        out_h = np.int(np.around(in_h * scale_h))
-        out_w = np.int(np.around(in_w * scale_w))
+        out_d = np.int_(np.around(in_d * scale_d))
+        out_h = np.int_(np.around(in_h * scale_h))
+        out_w = np.int_(np.around(in_w * scale_w))
 
     ratio_d = ratio_h = ratio_w = 0.0
     if out_d > 1:
@@ -342,8 +342,8 @@ def nearest_neighbor_interpolation_using_numpy(x, size, scale_factor=None, align
         #      out_h = static_cast<int>(in_h * scale_h);
         #      out_w = static_cast<int>(in_w * scale_w);
         # so it's possible to have numerical instability to make the test fail
-        out_h = np.int(np.around(in_h * scale_h))
-        out_w = np.int(np.around(in_w * scale_w))
+        out_h = np.int_(np.around(in_h * scale_h))
+        out_w = np.int_(np.around(in_w * scale_w))
 
     ratio_h = ratio_w = 0.0
     if out_h > 1:
@@ -437,8 +437,8 @@ def bicubic_interpolation_using_numpy(x, size, scale_factor=None, align_corners=
         #      out_h = static_cast<int>(in_h * scale_h);
         #      out_w = static_cast<int>(in_w * scale_w);
         # so it's possible to have numerical instability to make the test fail
-        out_h = np.int(np.around(in_h * scale_h))
-        out_w = np.int(np.around(in_w * scale_w))
+        out_h = np.int_(np.around(in_h * scale_h))
+        out_w = np.int_(np.around(in_w * scale_w))
 
     ratio_h = ratio_w = 0.0
     if out_h > 1:
