@@ -11,10 +11,10 @@ rem #其它内容或者可能不一致的不要随意加 "-", 下面是按照 "-
 set PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;%PATH%
 
 rem repo的名称
-if not defined reponame for /f "tokens=1 delims=-" %a in ("%AGILE_PIPELINE_NAME%") do set reponame=%a
+if not defined reponame for /f "tokens=1 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set reponame=%%a
 
 rem #模型列表文件 , 固定路径及格式为 tools/reponame_优先级_list   优先级P2有多个用P21、P22  中间不用"-"划分, 防止按 "-" split 混淆
-if not defined models_file for /f "tokens=5 delims=-" %a in ("%AGILE_PIPELINE_NAME%") do set models_file="tools/%reponame%_%a_list"
+if not defined models_file for /f "tokens=5 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set models_file="tools/%reponame%_%%a_list"
 if not defined models_list set models_list=None
 
 rem #指定case操作系统
@@ -30,7 +30,7 @@ if %errorlevel% equ 0 (
 if not defined system set system=windows
 
 rem #指定python版本
-if not defined Python_version for /f "tokens=4 delims=-" %a in ("%AGILE_PIPELINE_NAME%") do set Python_version=%a
+if not defined Python_version for /f "tokens=4 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set Python_version=%%a
 rem 如果非流水线设置默认python
 if not defined Python_version set Python_version=310
 echo %Python_version% | findstr "36" >nul
