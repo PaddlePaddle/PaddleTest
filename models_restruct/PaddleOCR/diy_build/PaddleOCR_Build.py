@@ -72,13 +72,13 @@ class PaddleOCR_Build(Model_Build):
                 src_path = "/Users/paddle/PaddleTest/ce_data/PaddleOCR"
 
             # dataset link
-            train_data_path = os.path.join(src_path, "train_data")
-            pretrain_models_path = os.path.join(src_path, "pretrain_models")
+            # train_data_path = os.path.join(src_path, "train_data")
+            # pretrain_models_path = os.path.join(src_path, "pretrain_models")
 
-            if not os.path.exists(train_data_path):
-                os.makedirs(train_data_path)
-            if not os.path.exists(pretrain_models_path):
-                os.makedirs(pretrain_models_path)
+            # if not os.path.exists(train_data_path):
+            #    os.makedirs(train_data_path)
+            # if not os.path.exists(pretrain_models_path):
+            #    os.makedirs(pretrain_models_path)
 
             if not os.path.exists("train_data"):
                 os.symlink(os.path.join(src_path, "train_data"), "train_data")
@@ -105,6 +105,15 @@ class PaddleOCR_Build(Model_Build):
             # kie requirements
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
 
+            for filename in self.test_model_list:
+                print("filename:{}".format(filename))
+                if "rec" in filename:
+                    if sysstr == "Darwin":
+                        cmd = "sed -i '' 's!data_lmdb_release/training!data_lmdb_release/validation!g' %s" % filename
+                    else:
+                        cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
+
+                    subprocess.getstatusoutput(cmd)
             os.chdir(path_now)
             print("build dataset!")
 
