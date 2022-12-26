@@ -6,11 +6,13 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_seq_cls.py
         params:
-          - --task_name tnews
           - --model_name_or_path ernie-3.0-medium-zh
+          - --dataset afqmc --output_dir ./best_models
+          - --export_model_dir best_models/
           - --do_train
-          - --max_steps 2
-          - --save_steps 2
+          - --do_eval
+          - --do_export
+          - --config=configs/default.yml
         result:
           loss:
             base: 2.797840
@@ -21,16 +23,14 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_token_cls.py
         params:
-          - --task_name msra_ner
-          -  --model_name_or_path ernie-3.0-medium-zh
-          -  --do_train
-          - --num_train_epochs 3
-          - --learning_rate 0.00005
-          - --save_steps 100
-          - --batch_size 32
-          - --max_seq_length 128
-          - --max_steps 2
-          - --save_steps 2
+          - --model_name_or_path ernie-3.0-medium-zh
+          - --dataset msra_ner
+          - --output_dir ./best_models
+          - --export_model_dir best_models/
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --config=configs/default.yml
         result:
           loss:
             base: 0.498312
@@ -41,14 +41,10 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_qa.py
         params:
-          - --model_name_or_path ernie-3.0-medium-zh
-          - --do_train
-          - --learning_rate 0.00003
-          - --num_train_epochs 8
-          - --batch_size 24
-          - --max_seq_length 512
-          - --max_steps 2
-          - --save_steps 2
+          - --model_name_or_path best_models/cmrc2018/
+          - --dataset cmrc2018
+          - --output_dir ./best_models --do_predict
+          - --config=configs/default.yml
         result:
           loss:
             base: 0.563974
@@ -59,11 +55,10 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python compress_seq_cls.py
         params:
-          -  --dataset "clue tnews"
-          -  --model_name_or_path ./best_clue_model
-          -  --output_dir ./
-          -  --max_steps 2
-          -  --save_steps 2
+          - --model_name_or_path best_models/afqmc/
+          - --dataset afqmc
+          - --output_dir ./best_models/afqmc
+          - --config=configs/default.yml
         result:
           loss:
             base: 0.995620
@@ -74,23 +69,16 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python compress_token_cls.py
         params:
-          - --dataset "msra_ner"
-          - --model_name_or_path ./best_msra_ner_model
-          - --output_dir ./
-          - --max_seq_length 128
-          - --per_device_train_batch_size 32
-          - --per_device_eval_batch_size 32
-          - --learning_rate 0.00005
-          - --remove_unused_columns False
-          - --num_train_epochs 3
-          - --max_steps 2
-          - --save_steps 2
+          - --model_name_or_path best_models/msra_ner/
+          - --dataset msra_ner
+          - --output_dir ./best_models/msra_ner
+          - --config=configs/default.yml
         result:
           loss:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
-       -
+      -
         name: donwload_cmrc_pretrained_model
         path: model_zoo/ernie-3.0/
         cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/best_cmrc_model.tar.gz && tar -xzvf best_cmrc_model.tar.gz
@@ -99,23 +87,60 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python compress_qa.py
         params:
-          - --dataset "clue cmrc2018"
-          - --model_name_or_path ./best_cmrc_model
-          - --output_dir ./
-          - --max_answer_length 50
-          - --max_seq_length 512
-          - --learning_rate 0.00003
-          - --num_train_epochs 8
-          - --per_device_train_batch_size 24
-          - --per_device_eval_batch_size 24
-          - --max_steps 2
-          - --save_steps 2
+          - --model_name_or_path best_models/cmrc2018/
+          - --dataset cmrc2018
+          - --output_dir ./best_models/cmrc2018
+          - --config=configs/default.yml
         result:
           loss:
             base: 0.995620
             threshold: 0.01
             evaluation: "="
-    eval: skipped
+    eval:
+      -
+        name: seq_cls
+            path: model_zoo/ernie-3.0/
+            cmd: python run_seq_cls.py
+            params:
+              - --model_name_or_path best_models/afqmc/
+              - --dataset afqmc
+              - --output_dir ./best_models
+              - --do_predict
+              - --config=configs/default.yml
+            result:
+              loss:
+                base: 2.797840
+                threshold: 0.01
+                evaluation: "="
+          -
+            name: token_cls
+            path: model_zoo/ernie-3.0/
+            cmd: python run_token_cls.py
+            params:
+              - --model_name_or_path best_models/msra_ner/
+              - --dataset msra_ner
+              - --output_dir ./best_models
+              - --do_predict
+              - --config=configs/default.yml
+            result:
+              loss:
+                base: 0.498312
+                threshold: 0.01
+                evaluation: "="
+          -
+            name: qa
+            path: model_zoo/ernie-3.0/
+            cmd: python run_qa.py
+            params:
+              - --model_name_or_path best_models/cmrc2018/
+              - --dataset cmrc2018
+              - --output_dir ./best_models --do_predict
+              - --config=configs/default.yml
+            result:
+              loss:
+                base: 0.563974
+                threshold: 0.1
+                evaluation: "="
     infer: skipped
     export: skipped
     predict: skipped
