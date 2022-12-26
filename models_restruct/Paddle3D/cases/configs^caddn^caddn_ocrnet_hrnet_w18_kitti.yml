@@ -5,4 +5,4 @@ case:
           -
             name: pretrained
             params:
-              - --image datasets/KITTI/training/image_2/000000.png
+              - --img_path datasets/KITTI/training/image_2/000000.png
