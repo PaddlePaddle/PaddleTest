@@ -127,8 +127,8 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
             P0case_list[${#P0case_list[*]}]=transformer
         fi
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
-        if [[ ${dir2} =~ "VERSION" ]];then # 针对发版mini test
-            P0case_list[${#P0case_list[*]}]=transformer
+        if [[ ${dir2} =~ "__init__" ]];then # 针对发版mini test
+            P0case_list[${#P0case_list[*]}]=bert
             # P0case_list[${#P0case_list[*]}]=bert
             # P0case_list[${#P0case_list[*]}]=gpt
         elif [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
