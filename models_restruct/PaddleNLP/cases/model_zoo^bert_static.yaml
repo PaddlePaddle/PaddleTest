@@ -53,6 +53,6 @@ case:
         params:
           - --task_name SST-2
           - --model_type bert
-          - --model_path ./tmp/model_2/infer_model
+          - --model_path ./tmp/model_2/model
           - --batch_size 32
           - --max_seq_length 128
