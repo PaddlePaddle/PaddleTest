@@ -71,7 +71,8 @@ class PaddleDetection_Build(Model_Build):
         #set sed
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
-            os.system('{} -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection/det_pretrained#g" ppdet/utils/download.py').format(os.getenv("sed"))
+            cmd_weight = '{} -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection/det_pretrained#g" ppdet/utils/download.py'.format(os.getenv("sed"))
+            subprocess.run(cmd_weight)
         else:
             os.environ["sed"] = "sed"
         # get video
@@ -88,8 +89,8 @@ class PaddleDetection_Build(Model_Build):
         )
         cmd_iter2 = (
             '{} -i "/for step_id, data in enumerate(self.loader):/a\\                if step_id == '
-            'max_step_id: break" ppdet/engine/trainer.py'
-        ).format(os.getenv("sed"))
+            'max_step_id: break" ppdet/engine/trainer.py'.format(os.getenv("sed"))
+        )
         subprocess.run(cmd_iter1)
         subprocess.run(cmd_iter2)
         cmd_mot1 = '{} -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'.format(os.getenv("sed"))
@@ -98,8 +99,8 @@ class PaddleDetection_Build(Model_Build):
         )
         cmd_mot3 = (
             '{} -i "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
-            'max_step_id: break" ppdet/engine/tracker.py'
-        ).format(os.getenv("sed"))
+            'max_step_id: break" ppdet/engine/tracker.py'.format(os.getenv("sed"))
+        )
         subprocess.run(cmd_mot1)
         subprocess.run(cmd_mot2)
         subprocess.run(cmd_mot3)
