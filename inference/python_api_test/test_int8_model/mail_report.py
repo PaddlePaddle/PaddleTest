@@ -42,7 +42,9 @@ def add_table_gsb(jingping, gsb, metric_list):
         <br><br>
         <table border="1" align=center>
         <caption bgcolor="#989898">与{}比的GSB</caption>
-    """.format(jingping)
+    """.format(
+        jingping
+    )
     # line1
     D_gsb = 3
     content += "<tr><td></td>"
