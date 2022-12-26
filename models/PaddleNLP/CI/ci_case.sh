@@ -983,8 +983,6 @@ python -u run_clue_classifier.py  \
 print_info $? clue-class
 cd ${nlp_dir}/examples/benchmark/clue/mrc
 export CUDA_VISIBLE_DEVICES=${cudaid1}
-unset http_proxy
-unset https_proxy
 python -m paddle.distributed.launch run_cmrc2018.py \
     --model_name_or_path ernie-3.0-base-zh \
     --batch_size 16 \
@@ -999,9 +997,6 @@ python -m paddle.distributed.launch run_cmrc2018.py \
     --max_steps 1 \
     --output_dir ./tmp >${log_path}/clue-mrc >>${log_path}/clue-mrc 2>&1
 print_info $? clue-mrc
-export http_proxy=${http_proxy};
-export https_proxy=${http_proxy}
-}
 #32 textcnn
 textcnn(){
 cd ${nlp_dir}/examples/sentiment_analysis/textcnn
