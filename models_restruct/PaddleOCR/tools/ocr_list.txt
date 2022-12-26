@@ -53,7 +53,6 @@ configs^rec^ch_PP-OCRv2^ch_PP-OCRv2_rec_enhanced_ctc_loss.yml
 configs^rec^ch_PP-OCRv2^ch_PP-OCRv2_rec.yml
 configs^rec^ch_PP-OCRv2^ch_PP-OCRv2_rec_distillation.yml
 configs^rec^rec_r34_vd_tps_bilstm_att.yml
-configs^rec^rec_d28_can.yml
 configs^rec^PP-OCRv3^en_PP-OCRv3_rec.yml
 configs^rec^PP-OCRv3^multi_language^korean_PP-OCRv3_rec.yml
 configs^rec^PP-OCRv3^multi_language^arabic_PP-OCRv3_rec.yml
