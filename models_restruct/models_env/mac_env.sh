@@ -63,7 +63,7 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]];then
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-Mac-Arm-Py310-Compile/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac-M1/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-Mac-Arm-Py310-Compile/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_11_0_arm64.whl"}
     fi

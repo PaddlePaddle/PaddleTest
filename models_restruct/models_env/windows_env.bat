@@ -1,6 +1,8 @@
 
 rem do not uset chinese note  beacause of linux tar problem
 
+set pwd_org=%cd%
+echo "org path is %pwd_org%"
 if not defined AGILE_PIPELINE_NAME set AGILE_PIPELINE_NAME="test"
 if exist D:\PaddleMT\%AGILE_PIPELINE_NAME% ( rmdir D:\PaddleMT\%AGILE_PIPELINE_NAME% /S /Q)
 md D:\PaddleMT\%AGILE_PIPELINE_NAME%
@@ -177,20 +179,21 @@ echo "@@@paddle_whl: %paddle_whl%"
 echo "@@@step: %step%"
 echo "@@@branch: %branch%"
 echo "@@@mode: %mode%"
-echo "@@@docker_flag: %docker_flag%"
 
 rem if already download PaddleTest direct mv
-if exist "../task" (
-    move ../task .
+if exist "%pwd_org%/task" (
+    echo "download org task"
+    move %pwd_org%/task .
 ) else (
+    echo "download PaddleTest.tar.gz"
     wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy
     tar xf PaddleTest.tar.gz
     move PaddleTest task
 )
 
 rem if already download reponame direct mv
-if exist "../../%reponame%" (
-    echo D| echo A| XCOPY "../../%reponame%" %reponame%
+if exist "%pwd_org%/%reponame%" (
+    echo D| echo A| XCOPY "%pwd_org%/%reponame%" %reponame%
     echo "because %reponame% already download direct use %reponame%"
 )
 
