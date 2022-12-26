@@ -268,7 +268,6 @@ def res2xls(env, res, tongji, mode_list, metric_list, jingping_list, save_file):
                     else:
                         w += 1
                         w += 1
-                #column_s += D
         row_s += 1
 
     # 合并表头单元格
