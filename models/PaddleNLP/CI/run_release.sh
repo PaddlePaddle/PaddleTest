@@ -2,14 +2,18 @@
 # set python env
 
 ####################################
+# ${PWD}=PaddleNLP/
+# for logs env
+export nlp_dir=${PWD}
+mkdir ${nlp_dir}/logs
+mkdir ${nlp_dir}/model_logs
+mkdir ${nlp_dir}/unittest_logs
+export log_path=${nlp_dir}/logs
+####################################
 # for paddlenlp env
 python -c 'import sys; print(sys.version_info[:])'
 set -x
 python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
-cd PaddleSlim
-python -m pip install -r requirements.txt
-python setup.py install
-cd -
 nlp1_build (){
     echo -e "\033[35m ---- only install paddlenlp \033[0m"
     python -m pip install -U paddlenlp
@@ -28,14 +32,6 @@ nlp2_build
 python -c 'from visualdl import LogWriter'
 pip list
 set +x
-####################################
-# for logs env
-export nlp_dir=/workspace
-if [ -d "/workspace/logs" ];then
-    rm -rf /workspace/logs;
-fi
-mkdir /workspace/logs
-export log_path=/workspace/logs
 ####################################
 # run p0case
 export P0case_list=()
@@ -64,10 +60,12 @@ get_diff_TO_P0case
     done
     echo -e "\033[35m ---- end run P0case  \033[0m"
 cd ${nlp_dir}/
-cp -r /ssd1/paddlenlp/bos/* ./
-tar -zcvf logs.tar logs/
-mkdir upload && mv logs.tar upload
-python upload.py upload 'paddle-qa/paddlenlp'
+# cp -r /ssd1/paddlenlp/bos/* ./
+# tar -zcvf logs.tar logs/
+# mkdir upload && mv logs.tar upload
+# python upload.py upload 'paddle-qa/paddlenlp'
+# TODO
+# how to display log
 cd logs
 FF=`ls *_FAIL*|wc -l`
 if [ "${FF}" -gt "0" ];then
@@ -75,7 +73,6 @@ if [ "${FF}" -gt "0" ];then
 else
     P0case_EXCODE=0
 fi
-# bash daily_case.sh ${cudaid1} ${cudaid2} ${Testcase}
 ####################################
 echo -e "\033[35m ---- result: \033[0m"
 echo -e "\033[35m ---- P0case_EXCODE: $P0case_EXCODE \033[0m"
