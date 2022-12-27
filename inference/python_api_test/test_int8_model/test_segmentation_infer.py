@@ -86,13 +86,15 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     time_min = float("inf")
     time_max = float("-inf")
     warmup = 20
-    monitor = Monitor(0)
+
+    use_gpu = True
+    if FLAGS.device == "CPU":
+        use_gpu = False
+    monitor = Monitor(0, use_gpu)
+
     if not rerun_flag:
         monitor.start()
     print("Start evaluating (total_samples: {}, total_iters: {}).".format(FLAGS.total_samples, FLAGS.sample_nums))
-
-    monitor = Monitor(0)
-    monitor.start()
 
     for batch_id, data in enumerate(loader):
         image = np.array(data[0])
