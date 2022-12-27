@@ -72,8 +72,9 @@ class PaddleDetection_Build(Model_Build):
         # set sed
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
-            cmd_weight = '{} -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection/det_pretrained#g" ppdet/utils/download.py'.format(
-                os.getenv("sed")
+            cmd_weight = (
+                '{} -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection'
+                '/det_pretrained#g" ppdet/utils/download.py'.format(os.getenv("sed"))
             )
             subprocess.run(cmd_weight)
         else:
@@ -109,8 +110,9 @@ class PaddleDetection_Build(Model_Build):
             subprocess.run(cmd_iter1, shell=True)
             subprocess.run(cmd_iter2, shell=True)
         cmd_mot1 = '{} -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'.format(os.getenv("sed"))
-        cmd_mot2 = '{} -i "/for step_id, data in enumerate(dataloader):/i\\        max_step_id=1" ppdet/engine/tracker.py'.format(
-            os.getenv("sed")
+        cmd_mot2 = (
+            '{} -i "/for step_id, data in enumerate(dataloader):/i\\        '
+            'max_step_id=1" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         )
         cmd_mot3 = (
             '{} -i "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
