@@ -9,7 +9,6 @@ model_zoo^gpt_static.yaml
 model_zoo^ernie-1.0_static.yaml
 model_zoo^ernie-1.0.yaml
 model_zoo^ernie-doc.yaml
-model_zoo^ernie-3.0.yaml
 model_zoo^ernie-gen.yaml
 model_zoo^ernie-health.yaml
 model_zoo^ernie-health_cblue.yaml

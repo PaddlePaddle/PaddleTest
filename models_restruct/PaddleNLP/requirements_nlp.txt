@@ -5,7 +5,6 @@ paddleslim
 pybind11
 tool_helpers
 editdistance
-paddleocr
 h5py
 lac
 regex
