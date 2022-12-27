@@ -3,6 +3,7 @@ examples^few_shot^p-tuning.yaml
 examples^few_shot^pet.yaml
 examples^few_shot^RGL.yaml
 model_zoo^bert_static.yaml
+model_zoo^gpt.yaml
 model_zoo^gpt_static.yaml
 model_zoo^ernie-1.0_static.yaml
 model_zoo^ernie-1.0.yaml
