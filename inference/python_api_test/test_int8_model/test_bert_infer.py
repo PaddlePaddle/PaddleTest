@@ -197,7 +197,11 @@ class WrapperPredictor(object):
         metric.reset()
         predict_time = 0.0
 
-        monitor = Monitor(0)
+        use_gpu = True
+        if FLAGS.device == "CPU":
+            use_gpu = False
+        monitor = Monitor(0, use_gpu)
+
         monitor.start()
         for i, data in enumerate(data_loader):
             data = [ele.numpy() if isinstance(ele, paddle.Tensor) else ele for ele in data]
