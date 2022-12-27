@@ -7,9 +7,6 @@ case:
         cmd : python -m paddle.distributed.launch tools/train.py
         params:
           - TrainReader.batch_size=1
-          - TrainDataset.image_dir='train2017'
-          - TrainDataset.anno_path='annotations/person_keypoints_train2017.json'
-          - TrainDataset.dataset_dir='dataset/coco'
       -
         name: single
         cmd : python tools/train.py
@@ -34,6 +31,30 @@ case:
       -
         name: cpp
         cmd: ./deploy/cpp/build/main
+  windows:
+    base: ./base/keypoint_base.yml
+    train:
+      -
+        name: single
+        cmd : python tools/train.py
+        params:
+          - TrainReader.batch_size=1
+    eval:
+      -
+        name: pretrained
+        cmd: python tools/eval.py
+    infer:
+      -
+        name: pretrained
+        cmd: python tools/infer.py
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export_model.py
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/keypoint_infer.py
 
 
 function: paddlelas_imagenet_parse

@@ -34,8 +34,8 @@ def test_tensor_bitwise_and1():
     bitwise_and
     input.type=bool
     """
-    x = np.arange(-1, 2 * 3 * 3 * 3 * 4 * 1 * 5 * 2 - 1).reshape(2, 3, 3, 3, 4, 1, 5, 2).astype(np.bool)
-    y = np.ones((2, 3, 3, 3, 4, 1, 5, 2)).astype(np.bool)
+    x = np.arange(-1, 2 * 3 * 3 * 3 * 4 * 1 * 5 * 2 - 1).reshape(2, 3, 3, 3, 4, 1, 5, 2).astype(np.bool_)
+    y = np.ones((2, 3, 3, 3, 4, 1, 5, 2)).astype(np.bool_)
     exp = np.bitwise_and(x, y)
     res = paddle.bitwise_and(paddle.to_tensor(x), paddle.to_tensor(y))
     compare(exp, res.numpy())

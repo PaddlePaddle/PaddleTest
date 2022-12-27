@@ -39,7 +39,7 @@ export:
   params:
     - -c ${rd_yaml_path}
     - --output_dir=inference_model
-    - -o weights=https://paddledet.bj.bcebos.com/models/${model}.pdparams
+    - -o weights=https://paddledet.bj.bcebos.com/models/mot/${model}.pdparams
   result:
     exit_code:
       base: 0

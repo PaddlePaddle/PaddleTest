@@ -278,7 +278,13 @@ class FiniteDifferenceUtils(object):
             v = [paddle.ones_like(x) for x in xs]
         jacocian = paddle.incubate.autograd.Jacobian(func, xs)
         jac = jacocian[:]
-        v1 = np.array([v_el.numpy().reshape(-1) for v_el in v])
+        shape_list = []
+        for v_el in v:
+            shape_list.append(v_el.numpy().shape)
+        if shape_list.count(shape_list[0]) == len(shape_list):
+            v1 = np.array([v_el.numpy().reshape(-1) for v_el in v])
+        else:
+            v1 = np.array([v_el.numpy().reshape(-1) for v_el in v], dtype=object)
         v2 = paddle.reshape(paddle.to_tensor(np.concatenate(v1)), (-1, 1))
         jvp = paddle.matmul(jac, v2).reshape((-1,))
         return jvp

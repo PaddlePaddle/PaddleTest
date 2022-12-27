@@ -17,7 +17,7 @@ case:
       -
         name: fintune
         path: application/information_extraction/document
-        cmd: python -u -m paddle.distributed.launch --gpus "0,1" finetune.py
+        cmd: python -u -m paddle.distributed.launch  finetune.py
         params:
           - --device gpu
           - --max_steps 25

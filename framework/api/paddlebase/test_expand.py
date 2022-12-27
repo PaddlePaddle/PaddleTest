@@ -74,9 +74,9 @@ def test_expand2():
 # test shape = list
 # def test_expand3():
 #     """
-#     shape = [1],x_type=np.bool,todo:fix RC
+#     shape = [1],x_type=np.bool_,todo:fix RC
 #     """
-#     x = np.array([False, True]).astype(np.bool)
+#     x = np.array([False, True]).astype(np.bool_)
 #     shape = [1, 2]
 #     res = np.array([[False, True]])
 #     obj.run(res=res, x=x, shape=shape)

@@ -224,7 +224,10 @@ class WrapperPredictor(object):
         metric = METRIC_CLASSES[FLAGS.task_name]()
         metric.reset()
         predict_time = 0.0
-        monitor = Monitor(0)
+        use_gpu = True
+        if FLAGS.device == "CPU":
+            use_gpu = False
+        monitor = Monitor(0, use_gpu)
         monitor.start()
         for i, batch in enumerate(batches):
             examples = self._convert_predict_batch(FLAGS, batch, tokenizer, batchify_fn, dataset.label_list)
