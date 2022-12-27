@@ -53,7 +53,7 @@ case:
         params:
           - --model_type=gpt
           - --model_path=gpt2-medium-en
-          - --output_path=./infer_model/model
+          - --output_path=./deploy/python/infer_model/model
     predict:
       -
         name: predict
