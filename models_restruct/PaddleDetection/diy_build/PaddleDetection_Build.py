@@ -69,17 +69,21 @@ class PaddleDetection_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir(self.reponame)
         path_repo = os.getcwd()
-        #set sed
+        # set sed
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
-            cmd_weight = '{} -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection/det_pretrained#g" ppdet/utils/download.py'.format(os.getenv("sed"))
+            cmd_weight = '{} -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection/det_pretrained#g" ppdet/utils/download.py'.format(
+                os.getenv("sed")
+            )
             subprocess.run(cmd_weight)
         else:
             os.environ["sed"] = "sed"
         # get video
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/test_demo.mp4")
         # avoid hang in yolox
-        cmd = '{} -i "s|norm_type: sync_bn|norm_type: bn|g" configs/yolox/_base_/yolox_cspdarknet.yml'.format(os.getenv("sed"))
+        cmd = '{} -i "s|norm_type: sync_bn|norm_type: bn|g" configs/yolox/_base_/yolox_cspdarknet.yml'.format(
+            os.getenv("sed")
+        )
         if platform.system() == "Windows":
             subprocess.run(cmd)
         else:
@@ -105,8 +109,8 @@ class PaddleDetection_Build(Model_Build):
             subprocess.run(cmd_iter1, shell=True)
             subprocess.run(cmd_iter2, shell=True)
         cmd_mot1 = '{} -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'.format(os.getenv("sed"))
-        cmd_mot2 = (
-            '{} -i "/for step_id, data in enumerate(dataloader):/i\\        max_step_id=1" ppdet/engine/tracker.py'.format(os.getenv("sed"))
+        cmd_mot2 = '{} -i "/for step_id, data in enumerate(dataloader):/i\\        max_step_id=1" ppdet/engine/tracker.py'.format(
+            os.getenv("sed")
         )
         cmd_mot3 = (
             '{} -i "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
@@ -125,7 +129,7 @@ class PaddleDetection_Build(Model_Build):
         if os.path.exists("/root/.cache/paddle/weights"):
             os.system("rm -rf /root/.cache/paddle/weights")
         os.system("ln -s {}/data/ppdet_pretrained /root/.cache/paddle/weights".format("/ssd2/ce_data/PaddleDetection"))
-        #dataset
+        # dataset
         os.chdir("dataset")
         if os.path.exists("coco"):
             os.system("rm -rf coco")
