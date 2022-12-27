@@ -171,7 +171,6 @@ def eval(predictor, FLAGS):
 
     monitor.stop()
     monitor_result = monitor.output()
-    print(monitor_result)
 
     cpu_mem = (
         monitor_result["result"]["cpu_memory.used"]
