@@ -200,8 +200,8 @@ export GLOG_v=0
 export FLAGS_new_executor_sequential_run=1
 
 # bug begin_norm_axis for paddle_746a4ddb3f783072d1a401717499e0b4bd637a02
-sed -i '758,766d' /usr/local/lib/python3.7/dist-packages/paddle/distributed/auto_parallel/engine.py
-sed -i  "/self._place = _get_device()/i\        auto_utils.initialize_pg_in_full_mode(all_process_groups, cur_rank)"  /usr/local/lib/python3.7/dist-packages/paddle/distributed/auto_parallel/engine.py
+# sed -i '758,766d' /usr/local/lib/python3.7/dist-packages/paddle/distributed/auto_parallel/engine.py
+# sed -i  "/self._place = _get_device()/i\        auto_utils.initialize_pg_in_full_mode(all_process_groups, cur_rank)"  /usr/local/lib/python3.7/dist-packages/paddle/distributed/auto_parallel/engine.py
 source ${BENCHMARK_ROOT}/scripts/run_model.sh   # 在该脚本中会对符合benchmark规范的log使用analysis.py 脚本进行性能数据解析;如果不联调只想要产出训练log可以注掉本行,提交时需打开
 _set_params $@
 #_train       # 如果只产出训练log,不解析,可取消注释
