@@ -20,13 +20,13 @@ export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAM
 export models_list=${models_list:-None} #模型列表
 
 #指定case操作系统
-if [[ ${AGILE_PIPELINE_NAME} =~ "Linux" ]];then
+if [[ ${AGILE_PIPELINE_NAME} =~ "-Linux-" ]];then
     export system=${system:-"linux"}   # linux windows windows_cpu mac 与yaml case下字段保持一致
-elif [[ ${AGILE_PIPELINE_NAME} =~ "Windows" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Windows-" ]];then
     export system=${system:-"windows"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "WindowsCPU" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-WindowsCPU-" ]];then
     export system=${system:-"windows_cpu"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "Mac" ]] ;then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Mac-" ]] ;then
     export system=${system:-"mac"}
 else
     if [[ ${system} ]];then
@@ -53,7 +53,7 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Py
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/2.1.2/macos/macos-cpu-openblas/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/2.1.2/macos/macos-cpu-openblas/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-Mac/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
