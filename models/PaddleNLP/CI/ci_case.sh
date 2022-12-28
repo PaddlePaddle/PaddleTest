@@ -997,6 +997,7 @@ python -m paddle.distributed.launch run_cmrc2018.py \
     --max_steps 1 \
     --output_dir ./tmp >${log_path}/clue-mrc >>${log_path}/clue-mrc 2>&1
 print_info $? clue-mrc
+}
 #32 textcnn
 textcnn(){
 cd ${nlp_dir}/examples/sentiment_analysis/textcnn
