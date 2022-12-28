@@ -18,13 +18,13 @@ export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAM
 export models_list=${models_list:-None} #模型列表
 
 #指定case操作系统
-if [[ ${AGILE_PIPELINE_NAME} =~ "Linux" ]];then
+if [[ ${AGILE_PIPELINE_NAME} =~ "-Linux-" ]];then
     export system=${system:-"linux"}   # linux windows windows_cpu mac 与yaml case下字段保持一致
-elif [[ ${AGILE_PIPELINE_NAME} =~ "Windows" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Windows-" ]];then
     export system=${system:-"windows"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "WindowsCPU" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-WindowsCPU-" ]];then
     export system=${system:-"windows_cpu"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "MAC" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Mac-" ]];then
     export system=${system:-"mac"}
 else
     if [[ ${system} ]];then
