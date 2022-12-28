@@ -20,7 +20,7 @@ class TestOnesLike(APIBase):
         """
         implement
         """
-        self.types = [np.int32, np.int64, np.float32, np.float64, np.bool, np.float16]
+        self.types = [np.int32, np.int64, np.float32, np.float64, np.bool_, np.float16]
         # self.debug = True
         # self.static = True
         # enable check grad
