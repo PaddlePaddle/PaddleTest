@@ -1,6 +1,9 @@
 import argparse
 from configtrans import YamlLoader
 
+
+flag_LBFGS= False
+
 def parse_args():
     """
     parse args
@@ -37,6 +40,9 @@ def add_seed(file,old_str,new_str):
     with open(file, "r", encoding="utf-8") as f:
         for line in f:
             if old_str in line:
+                if old_str == "L-BFGS":
+                    global flag_LBFGS
+                    flag_LBFGS = True
                 line += new_str
                 #line += "paddle.seed(1)\n"
                 #line += "np.random.seed(1)\n" 
@@ -59,12 +65,21 @@ add_seed(filedir, "import deepxde", "import paddle\n")
 #add_seed(filedir, "import paddle", "paddle.seed(1)\n")
 add_seed(filedir, "import deepxde", "import numpy as np\n")
 add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")
-#add_seed(filedir, "import numpy as np", "np.random.seed(1)\n")
-with open(filedir, "a") as f:
-    f.write( "result = model.loss_list[:200]\n"
-             "np.save('loss.npy',result)\n"
-             "np.save('metric.npy',model.train_state.best_metrics)\n"
-             )
+add_seed(filedir, "L-BFGS", "result = model.loss_list[:200]\n")
+add_seed(filedir, "result = model.loss_list[:200]", "np.save('loss.npy',result)\n")
+if flag_LBFGS == False:
+    with open(filedir, "a") as f:
+        f.write( "\n"
+                 "result = model.loss_list[:200]\n"
+                 "np.save('loss.npy',result)\n"
+                 "np.save('metric.npy',model.train_state.best_metrics)\n"
+                 )
+else:
+    with open(filedir, "a") as f:
+        f.write( "\n"
+                 "np.save('metric.npy',model.train_state.best_metrics)\n"
+                 )
+
 #add_seed(filedir, "model.train(", "result = np.sum(losshistory.loss_train, axis=1)\n")
 #add_seed(filedir, "result = np.sum(losshistory.loss_train, axis=1)", "result = result[:200]\n")
 #add_seed(filedir, "result = result[:200]", "np.save('loss.npy',result)\n")

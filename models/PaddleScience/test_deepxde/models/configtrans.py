@@ -244,7 +244,7 @@ def compare_CE(res, expect, npoints, delta=1e-6, rtol=1e-5, mode="close"):
         assert res.shape == expect.shape
         if mode == "close":
             print(np.array(res - expect))
-            assert (np.array(res - expect) <= 1e-2).all()
+            assert (np.absolute(np.array(res - expect)) <= 1e-2).all()
         elif mode == "equal":
             res = res.astype(expect.dtype)
             assert np.array_equal(res, expect, equal_nan=True)
