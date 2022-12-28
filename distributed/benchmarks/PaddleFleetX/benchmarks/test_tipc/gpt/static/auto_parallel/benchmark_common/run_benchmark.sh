@@ -190,14 +190,14 @@ export PYTHONPATH=$(dirname "$PWD"):$PYTHONPATH
 # 避免预分配的的显存影响实际值观测
 export FLAGS_fraction_of_gpu_memory_to_use=0.1
 # 旧执行器
-export FLAGS_USE_STANDALONE_EXECUTOR=0
-export FLAGS_CONVERT_GRAPH_TO_PROGRAM=0
-export GLOG_v=0
-# 新执行器
-# export FLAGS_USE_STANDALONE_EXECUTOR=1
-# export FLAGS_CONVERT_GRAPH_TO_PROGRAM=1
+# export FLAGS_USE_STANDALONE_EXECUTOR=0
+# export FLAGS_CONVERT_GRAPH_TO_PROGRAM=0
 # export GLOG_v=0
-# export FLAGS_new_executor_sequential_run=1
+# 新执行器
+export FLAGS_USE_STANDALONE_EXECUTOR=1
+export FLAGS_CONVERT_GRAPH_TO_PROGRAM=1
+export GLOG_v=0
+export FLAGS_new_executor_sequential_run=1
 
 # bug begin_norm_axis for paddle_746a4ddb3f783072d1a401717499e0b4bd637a02
 sed -i '758,766d' /usr/local/lib/python3.7/dist-packages/paddle/distributed/auto_parallel/engine.py
