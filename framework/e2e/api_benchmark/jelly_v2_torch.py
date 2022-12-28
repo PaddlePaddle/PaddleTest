@@ -49,9 +49,9 @@ class Jelly_v2_torch(object):
         torch.set_default_dtype(TORCH_DTYPE[default_dtype])
 
         # 循环次数
-        self.loops = 50
+        self.loops = 1
         # timeit 基础运行时间
-        self.base_times = 1000
+        self.base_times = 1
         # 设置logger
         self.logger = logger.get_log()
 
@@ -275,8 +275,32 @@ class Jelly_v2_torch(object):
                 grad_tensor = torch.ones(res.shape, dtype=res.dtype)
 
             def func(input_param):
-                res = self.api(**input_param)
-                res.backward(grad_tensor)
+                # res = self.api(**input_param)
+                # res.backward(grad_tensor)
+                from torch.profiler import profile, ProfilerActivity
+
+                # with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                #     res = self.api(**input_param)
+                # file = open('torch_api2kernels_forward.txt', mode = 'a')
+                # line = self.api_str + "++" + str(len(prof.key_averages())) + "++"
+                # for k in prof.key_averages():
+                #     line = line + k.key + ","
+                # file.write(line)
+                # file.write("\n")
+                # file.close()
+
+                with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                    res.backward(grad_tensor)
+                file = open("torch_api2kernels_all.txt", mode="a")
+                kernels = set()
+                for k in prof.key_averages():
+                    if k.key.count("aten::") > 0 or k.key.count("Backward") > 0 or k.key.count("backward") > 0:
+                        kernels.add(k.key)
+                line = "++" + str(len(kernels)) + "++"
+                for k in kernels:
+                    line = line + k + ","
+                file.write(line)
+                file.close()
 
             for i in range(self.loops):
                 total_time = timeit.timeit(lambda: func(input_param), number=self.base_times)
@@ -298,12 +322,62 @@ class Jelly_v2_torch(object):
 
             def clas(input_param):
                 """lambda clas"""
-                res = obj(*input_param)
-                res.backward(grad_tensor)
+                # res = obj(*input_param)
+                # res.backward(grad_tensor)
+
+                from torch.profiler import profile, ProfilerActivity
+
+                # with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                #     res = obj(*input_param)
+                # file = open('torch_api2kernels_forward.txt', mode = 'a')
+                # line = self.api_str + "++" + str(len(prof.key_averages())) + "++"
+                # for k in prof.key_averages():
+                #     line = line + k.key + ","
+                # file.write(line)
+                # file.write("\n")
+                # file.close()
+
+                with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                    res.backward(grad_tensor)
+                file = open("torch_api2kernels_all.txt", mode="a")
+                kernels = set()
+                for k in prof.key_averages():
+                    if k.key.count("aten::") > 0 or k.key.count("Backward") > 0 or k.key.count("backward") > 0:
+                        kernels.add(k.key)
+                line = "++" + str(len(kernels)) + "++"
+                for k in kernels:
+                    line = line + k + ","
+                file.write(line)
+                file.close()
 
             def clas_method(input_param):
-                res = obj_method(**input_param)
-                res.backward(grad_tensor)
+                # res = obj_method(**input_param)
+                # res.backward(grad_tensor)
+
+                from torch.profiler import profile, ProfilerActivity
+
+                # with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                #     res = obj_method(**input_param)
+                # file = open('torch_api2kernels_forward.txt', mode = 'a')
+                # line = self.api_str + "++" + str(len(prof.key_averages())) + "++"
+                # for k in prof.key_averages():
+                #     line = line + k.key + ","
+                # file.write(line)
+                # file.write("\n")
+                # file.close()
+
+                with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                    res.backward(grad_tensor)
+                file = open("torch_api2kernels_all.txt", mode="a")
+                kernels = set()
+                for k in prof.key_averages():
+                    if k.key.count("aten::") > 0 or k.key.count("Backward") > 0 or k.key.count("backward") > 0:
+                        kernels.add(k.key)
+                line = "++" + str(len(kernels)) + "++"
+                for k in kernels:
+                    line = line + k + ","
+                file.write(line)
+                file.close()
 
             for i in range(self.loops):
                 if self.method == dict():
@@ -327,12 +401,62 @@ class Jelly_v2_torch(object):
                 grad_tensor = torch.ones(res.shape, dtype=res.dtype)
 
             def func(x, y):
-                res = eval(expression)
-                res.backward(grad_tensor)
+                # res = eval(expression)
+                # res.backward(grad_tensor)
+
+                from torch.profiler import profile, ProfilerActivity
+
+                # with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                #     res = eval(expression)
+                # file = open('torch_api2kernels_forward.txt', mode = 'a')
+                # line = self.api_str + "++" + str(len(prof.key_averages())) + "++"
+                # for k in prof.key_averages():
+                #     line = line + k.key + ","
+                # file.write(line)
+                # file.write("\n")
+                # file.close()
+
+                with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                    res.backward(grad_tensor)
+                file = open("torch_api2kernels_all.txt", mode="a")
+                kernels = set()
+                for k in prof.key_averages():
+                    if k.key.count("aten::") > 0 or k.key.count("Backward") > 0 or k.key.count("backward") > 0:
+                        kernels.add(k.key)
+                line = "++" + str(len(kernels)) + "++"
+                for k in kernels:
+                    line = line + k + ","
+                file.write(line)
+                file.close()
 
             def func_x(x):
-                res = eval(expression)
-                res.backward(grad_tensor)
+                # res = eval(expression)
+                # res.backward(grad_tensor)
+
+                from torch.profiler import profile, ProfilerActivity
+
+                # with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                #     res = eval(expression)
+                # file = open('torch_api2kernels_forward.txt', mode = 'a')
+                # line = self.api_str + "++" + str(len(prof.key_averages())) + "++"
+                # for k in prof.key_averages():
+                #     line = line + k.key + ","
+                # file.write(line)
+                # file.write("\n")
+                # file.close()
+
+                with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                    res.backward(grad_tensor)
+                file = open("torch_api2kernels_all.txt", mode="a")
+                kernels = set()
+                for k in prof.key_averages():
+                    if k.key.count("aten::") > 0 or k.key.count("Backward") > 0 or k.key.count("backward") > 0:
+                        kernels.add(k.key)
+                line = "++" + str(len(kernels)) + "++"
+                for k in kernels:
+                    line = line + k + ","
+                file.write(line)
+                file.close()
 
             for i in range(self.loops):
                 if "y" in self.data.keys():
@@ -348,7 +472,16 @@ class Jelly_v2_torch(object):
         主执行函数，本地调试用
         """
         # 前反向时间
-        self._run_forward()
+        from torch.profiler import profile, ProfilerActivity
+
+        with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+            self._run_forward()
+        file = open("torch_api2kernels.txt", mode="a")
+        line = self.api_str + "++" + len(prof.key_averages()) + "++"
+        for k in prof.key_averages():
+            line = k.key + ","
+        file.write(line)
+        file.close()
         if self.enable_backward:
             self._run_total()
         # 数据处理
@@ -361,7 +494,25 @@ class Jelly_v2_torch(object):
         例行执行，会写文件
         """
         # 前反向时间
-        self._run_forward()
+        # self._run_forward()
+        # print("wanghuan _run_forward ", self.api_str)
+        from torch.profiler import profile, ProfilerActivity
+
+        with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+            self._run_forward()
+        file = open("torch_api2kernels_all.txt", mode="a")
+        file.write("\n")
+        kernels = set()
+        for k in prof.key_averages():
+            if k.key.count("aten::") > 0 or k.key.count("Backward") > 0 or k.key.count("backward") > 0:
+                kernels.add(k.key)
+        line = self.api_str + "++" + str(len(kernels)) + "++"
+        for k in kernels:
+            line = line + k + ","
+        file.write(line)
+        file.close()
+        # print("wanghuan write file ", self.api_str)
+
         if self.enable_backward:
             self._run_total()
         # 数据处理

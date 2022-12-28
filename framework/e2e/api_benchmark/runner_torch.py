@@ -15,7 +15,8 @@ from utils.yaml_loader import YamlLoader
 from utils.logger import logger
 from benchtrans import BenchTrans
 from jelly_v2_torch import Jelly_v2_torch
-from db import DB
+
+# from db import DB
 from tools import delete
 
 
@@ -41,6 +42,7 @@ def schedule(
     if case_name is None:
         cases_name = yaml_loader.get_all_case_name()
         for case_name in cases_name:
+            # print("wanghuan all ", case_name)
             # Skip cases
             if case_name in SKIP_DICT[platform.system()]:
                 logger.get_log().warning("skip case -->{}<--".format(case_name))
@@ -60,6 +62,7 @@ def schedule(
                 if not case_name.endswith("_2"):
                     logger.get_log().warning("skip case -->{}<--".format(case_name))
                     continue
+            # print("wanghuan run ", case_name)
             case_info = yaml_loader.get_case_info(case_name)
             try:
                 bt = BenchTrans(case_info)
@@ -163,17 +166,17 @@ if __name__ == "__main__":
 
     if args.mode == "schedule":
         delete("./log")
-        db = DB()
+        # db = DB()
         try:
-            db.init_mission(
-                framework=args.framework,
-                mode=args.mode,
-                place=args.place,
-                cuda=args.cuda,
-                cudnn=args.cudnn,
-                card=args.card,
-                comment=args.comment,
-            )
+            # db.init_mission(
+            #     framework=args.framework,
+            #     mode=args.mode,
+            #     place=args.place,
+            #     cuda=args.cuda,
+            #     cudnn=args.cudnn,
+            #     card=args.card,
+            #     comment=args.comment,
+            # )
             schedule(
                 yaml_path=args.yaml,
                 framework=args.framework,
@@ -182,10 +185,10 @@ if __name__ == "__main__":
                 test_index=args.test_index,
                 enable_backward=args.enable_backward,
             )
-            db.save()
+            # db.save()
         except Exception as e:
             logger.get_log().error(e)
-            db.error()
+            # db.error()
     elif args.mode == "testing":
         testing(
             args.yaml,
@@ -196,7 +199,7 @@ if __name__ == "__main__":
             enable_backward=args.enable_backward,
         )
     elif args.mode == "rerun":
-        db = DB()
+        # db = DB()
         try:
             # db.init_mission(
             #     framework=args.framework,
