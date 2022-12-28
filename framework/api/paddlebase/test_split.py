@@ -185,7 +185,7 @@ class TestSplit2(APIBase):
         implement
         """
         # test x input type bool
-        self.types = [np.bool]
+        self.types = [np.bool_]
         self.enable_backward = False
         # Cannot support static_graph of split api in this frame
         self.static = False

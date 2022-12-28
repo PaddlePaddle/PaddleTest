@@ -59,6 +59,10 @@ class Paddle3D_Start(object):
             # delete output
             if os.path.exists("output"):
                 shutil.rmtree("output")
+            # delete /root/.paddle3d/pretrained/deeplabv3_resnet101
+            if os.path.exists("/root/.paddle3d"):
+                shutil.rmtree("/root/.paddle3d")
+
             if not os.path.exists(self.model):
                 os.makedirs(self.model)
                 os.chdir(self.model)
@@ -76,12 +80,12 @@ class Paddle3D_Start(object):
                     )
                 elif self.model == "centerpoint_pillars_02voxel_nuscenes_10sweep":
                     print(
-                        "https://bj.bcebos.com/paddle3d/models/centerpoint/ \
-                         centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
+                        "https://bj.bcebos.com/paddle3d/models/centerpoint/\
+centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
                     )
                     wget.download(
-                        "https://bj.bcebos.com/paddle3d/models/centerpoint/ \
-                         centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
+                        "https://bj.bcebos.com/paddle3d/models/centerpoint/\
+centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
                     )
                 else:
                     print(

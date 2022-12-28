@@ -154,8 +154,8 @@ class PaddleSpeech_Start(object):
 
             if self.model == "transformer_tts":
                 self.download_data(
-                    "https://paddlespeech.bj.bcebos.com/Parakeet/released_models/waveflow/ \
-                         waveflow_ljspeech_ckpt_0.3.zip"
+                    "https://paddlespeech.bj.bcebos.com/Parakeet/released_models/waveflow/\
+waveflow_ljspeech_ckpt_0.3.zip"
                 )
             else:
                 self.download_data(
@@ -207,6 +207,10 @@ class PaddleSpeech_Start(object):
                     (
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
+                        "        base: ./base/speech_cli_base.yaml" + os.linesep,
+                        "    mac:" + os.linesep,
+                        "        base: ./base/speech_cli_base.yaml" + os.linesep,
+                        "    windows:" + os.linesep,
                         "        base: ./base/speech_cli_base.yaml" + os.linesep,
                     )
                 )

@@ -5,6 +5,7 @@ get benchmark info from log
 import os
 import sys
 import json
+import datetime
 import openpyxl
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill
@@ -14,6 +15,10 @@ import base_mkldnn_fp32
 import base_mkldnn_int8
 import base_trt_fp16
 import base_trt_int8
+import base_nv_trt_fp16
+import base_nv_trt_int8
+import mail_report
+import write_db
 
 
 FONT = {
@@ -52,6 +57,10 @@ def get_base_info(mode):
         base_res = base_trt_int8.trt_int8
     elif mode == "trt_fp16":
         base_res = base_trt_fp16.trt_fp16
+    elif mode == "nv_trt_int8":
+        base_res = base_nv_trt_int8.nv_trt_int8
+    elif mode == "nv_trt_fp16":
+        base_res = base_nv_trt_fp16.nv_trt_fp16
     elif mode == "mkldnn_int8":
         base_res = base_mkldnn_int8.mkldnn_int8
     elif mode == "mkldnn_fp32":
@@ -61,300 +70,143 @@ def get_base_info(mode):
     return base_res
 
 
-def compare_diff(base_res, benchmark_res):
+def compare_diff(base_res, benchmark_res, metric_list):
     """
     计算本次结果与base的diff、gsb
     """
     benchmark_keys = benchmark_res.keys()
     compare_res = {}
     for model, info in base_res.items():
-        compare_res[model] = {
-            "jingdu": {
-                "th": info["jingdu"]["th"],
-                "base": info["jingdu"]["value"],
+        compare_res[model] = {}
+        for item in metric_list:
+            compare_res[model][item] = {
+                "th": info[item]["th"],
+                "base": info[item]["value"],
                 "benchmark": -1,
                 "diff": -1,
                 "gsb": "o",
-                "unit": info["jingdu"]["unit"],
-            },
-            "xingneng": {
-                "th": info["xingneng"]["th"],
-                "base": info["xingneng"]["value"],
-                "benchmark": -1,
-                "diff": -1,
-                "gsb": "o",
-                "unit": info["xingneng"]["unit"],
-            },
-        }
+                "unit": info[item]["unit"],
+            }
 
         if model not in benchmark_keys:
             continue
 
-        compare_res[model]["jingdu"]["benchmark"] = benchmark_res[model]["jingdu"]["value"]
-        gap = compare_res[model]["jingdu"]["benchmark"] - compare_res[model]["jingdu"]["base"]
-        diff = gap / compare_res[model]["jingdu"]["base"]
-        compare_res[model]["jingdu"]["diff"] = diff
-        if diff == 0:
-            compare_res[model]["jingdu"]["gsb"] = "s"
-        elif diff < 0:
-            compare_res[model]["jingdu"]["gsb"] = "b"
-        elif diff > 0:
-            compare_res[model]["jingdu"]["gsb"] = "g"
-
-        compare_res[model]["xingneng"]["benchmark"] = benchmark_res[model]["xingneng"]["value"]
-        gap = compare_res[model]["xingneng"]["benchmark"] - compare_res[model]["xingneng"]["base"]
-        diff = gap / compare_res[model]["xingneng"]["base"]
-        compare_res[model]["xingneng"]["diff"] = diff
-        if diff == 0:
-            compare_res[model]["xingneng"]["gsb"] = "s"
-        elif diff < 0:
-            compare_res[model]["xingneng"]["gsb"] = "b"
-        elif diff > 0:
-            compare_res[model]["xingneng"]["gsb"] = "g"
+        for item in metric_list:
+            compare_res[model][item]["benchmark"] = benchmark_res[model][item]["value"]
+            gap = compare_res[model][item]["benchmark"] - compare_res[model][item]["base"]
+            diff = gap / compare_res[model][item]["base"]
+            compare_res[model][item]["diff"] = diff
+            if diff >= -0.05 and diff <= 0.05:
+                compare_res[model][item]["gsb"] = "s"
+            elif diff < -0.05:
+                compare_res[model][item]["gsb"] = "b"
+            elif diff > 0.05:
+                compare_res[model][item]["gsb"] = "g"
 
     return compare_res
 
 
-def gsb(compare_res):
+def gsb(compare_res, metric_list):
     """
     统计compare_res的gsb
     """
-    gsb = {
-        "jingdu": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-        "xingneng": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-    }
+    gsb = {}
+    for item in metric_list:
+        gsb.setdefault(
+            item,
+            {
+                "gsb": "",
+                "g": 0,
+                "s": 0,
+                "b": 0,
+                "total": 0,
+                "b_ratio": 0,
+                "g_ratio": 0,
+            },
+        )
     for model, info in compare_res.items():
-        if info["jingdu"]["gsb"] == "g":
-            gsb["jingdu"]["g"] += 1
-        elif info["jingdu"]["gsb"] == "s":
-            gsb["jingdu"]["s"] += 1
-        elif info["jingdu"]["gsb"] == "b":
-            gsb["jingdu"]["b"] += 1
-        gsb["jingdu"]["gsb"] = "{}:{}:{}".format(gsb["jingdu"]["g"], gsb["jingdu"]["s"], gsb["jingdu"]["b"])
-        gsb["jingdu"]["total"] = gsb["jingdu"]["g"] + gsb["jingdu"]["s"] + gsb["jingdu"]["b"]
-        if gsb["jingdu"]["total"] > 0:
-            gsb["jingdu"]["b_ratio"] = gsb["jingdu"]["b"] / gsb["jingdu"]["total"]
-            gsb["jingdu"]["g_ratio"] = gsb["jingdu"]["g"] / gsb["jingdu"]["total"]
+        for item in metric_list:
+            if info[item]["gsb"] == "g":
+                gsb[item]["g"] += 1
+            elif info[item]["gsb"] == "s":
+                gsb[item]["s"] += 1
+            elif info[item]["gsb"] == "b":
+                gsb[item]["b"] += 1
+            gsb[item]["gsb"] = "{}:{}:{}".format(gsb[item]["g"], gsb[item]["s"], gsb[item]["b"])
+            gsb[item]["total"] = gsb[item]["g"] + gsb[item]["s"] + gsb[item]["b"]
+            if gsb[item]["total"] > 0:
+                gsb[item]["b_ratio"] = gsb[item]["b"] / gsb[item]["total"]
+                gsb[item]["g_ratio"] = gsb[item]["g"] / gsb[item]["total"]
 
-        if info["xingneng"]["gsb"] == "g":
-            gsb["xingneng"]["g"] += 1
-        elif info["xingneng"]["gsb"] == "s":
-            gsb["xingneng"]["s"] += 1
-        elif info["xingneng"]["gsb"] == "b":
-            gsb["xingneng"]["b"] += 1
-        gsb["xingneng"]["gsb"] = "{}:{}:{}".format(gsb["xingneng"]["g"], gsb["xingneng"]["s"], gsb["xingneng"]["b"])
-        gsb["xingneng"]["total"] = gsb["xingneng"]["g"] + gsb["xingneng"]["s"] + gsb["xingneng"]["b"]
-        if gsb["xingneng"]["total"] > 0:
-            gsb["xingneng"]["b_ratio"] = gsb["xingneng"]["b"] / gsb["xingneng"]["total"]
-            gsb["xingneng"]["g_ratio"] = gsb["xingneng"]["g"] / gsb["xingneng"]["total"]
     return gsb
 
 
-def res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_fp32):
+def res_summary(diff_res, mode_list, metric_list):
     """
     汇总不同模式下的数据
     """
     tongji = {}
     res = {}
 
-    # 统计数据
-    gsb_trt_int8 = gsb(trt_int8)
-    gsb_trt_fp16 = gsb(trt_fp16)
-    gsb_mkldnn_int8 = gsb(mkldnn_int8)
-    gsb_mkldnn_fp32 = gsb(mkldnn_fp32)
-    gsb_total = {
-        "jingdu": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-        "xingneng": {
-            "gsb": "",
-            "g": 0,
-            "s": 0,
-            "b": 0,
-            "total": 0,
-            "b_ratio": 0,
-            "g_ratio": 0,
-        },
-    }
-    gsb_total["jingdu"]["g"] = (
-        gsb_trt_int8["jingdu"]["g"]
-        + gsb_trt_fp16["jingdu"]["g"]
-        + gsb_mkldnn_int8["jingdu"]["g"]
-        + gsb_mkldnn_fp32["jingdu"]["g"]
-    )
-    gsb_total["jingdu"]["s"] = (
-        gsb_trt_int8["jingdu"]["s"]
-        + gsb_trt_fp16["jingdu"]["s"]
-        + gsb_mkldnn_int8["jingdu"]["s"]
-        + gsb_mkldnn_fp32["jingdu"]["s"]
-    )
-    gsb_total["jingdu"]["b"] = (
-        gsb_trt_int8["jingdu"]["b"]
-        + gsb_trt_fp16["jingdu"]["b"]
-        + gsb_mkldnn_int8["jingdu"]["b"]
-        + gsb_mkldnn_fp32["jingdu"]["b"]
-    )
-    gsb_total["jingdu"]["total"] = (
-        gsb_trt_int8["jingdu"]["total"]
-        + gsb_trt_fp16["jingdu"]["total"]
-        + gsb_mkldnn_int8["jingdu"]["total"]
-        + gsb_mkldnn_fp32["jingdu"]["total"]
-    )
-    gsb_total["jingdu"]["gsb"] = "{}:{}:{}".format(
-        gsb_total["jingdu"]["g"], gsb_total["jingdu"]["s"], gsb_total["jingdu"]["b"]
-    )
-    if gsb_total["jingdu"]["total"] > 0:
-        gsb_total["jingdu"]["b_ratio"] = gsb_total["jingdu"]["b"] / gsb_total["jingdu"]["total"]
-        gsb_total["jingdu"]["g_ratio"] = gsb_total["jingdu"]["g"] / gsb_total["jingdu"]["total"]
-    gsb_total["xingneng"]["g"] = (
-        gsb_trt_int8["xingneng"]["g"]
-        + gsb_trt_fp16["xingneng"]["g"]
-        + gsb_mkldnn_int8["xingneng"]["g"]
-        + gsb_mkldnn_fp32["xingneng"]["g"]
-    )
-    gsb_total["xingneng"]["s"] = (
-        gsb_trt_int8["xingneng"]["s"]
-        + gsb_trt_fp16["xingneng"]["s"]
-        + gsb_mkldnn_int8["xingneng"]["s"]
-        + gsb_mkldnn_fp32["xingneng"]["s"]
-    )
-    gsb_total["xingneng"]["b"] = (
-        gsb_trt_int8["xingneng"]["b"]
-        + gsb_trt_fp16["xingneng"]["b"]
-        + gsb_mkldnn_int8["xingneng"]["b"]
-        + gsb_mkldnn_fp32["xingneng"]["b"]
-    )
-    gsb_total["xingneng"]["total"] = (
-        gsb_trt_int8["xingneng"]["total"]
-        + gsb_trt_fp16["xingneng"]["total"]
-        + gsb_mkldnn_int8["xingneng"]["total"]
-        + gsb_mkldnn_fp32["xingneng"]["total"]
-    )
-    gsb_total["xingneng"]["gsb"] = "{}:{}:{}".format(
-        gsb_total["xingneng"]["g"], gsb_total["xingneng"]["s"], gsb_total["xingneng"]["b"]
-    )
-    if gsb_total["xingneng"]["total"] > 0:
-        gsb_total["xingneng"]["b_ratio"] = gsb_total["xingneng"]["b"] / gsb_total["xingneng"]["total"]
-        gsb_total["xingneng"]["g_ratio"] = gsb_total["xingneng"]["g"] / gsb_total["xingneng"]["total"]
+    gsb_total = {}
+    for item in metric_list:
+        gsb_total.setdefault(
+            item,
+            {
+                "gsb": "",
+                "g": 0,
+                "s": 0,
+                "b": 0,
+                "total": 0,
+                "b_ratio": 0,
+                "g_ratio": 0,
+            },
+        )
 
-    tongji = {
-        "trt_int8": gsb_trt_int8,
-        "trt_fp16": gsb_trt_fp16,
-        "mkldnn_int8": gsb_mkldnn_int8,
-        "mkldnn_fp32": gsb_mkldnn_fp32,
-        "total": gsb_total,
-    }
+    # 统计数据
+    for mode in mode_list:
+        _gsb = gsb(diff_res[mode], metric_list)
+        tongji.setdefault(mode, _gsb)
+
+    for item in metric_list:
+        for mode in mode_list:
+            gsb_total[item]["g"] += tongji[mode][item]["g"]
+            gsb_total[item]["s"] += tongji[mode][item]["s"]
+            gsb_total[item]["b"] += tongji[mode][item]["b"]
+            gsb_total[item]["total"] += tongji[mode][item]["total"]
+        gsb_total[item]["gsb"] = "{}:{}:{}".format(gsb_total[item]["g"], gsb_total[item]["s"], gsb_total[item]["b"])
+        if gsb_total[item]["total"] > 0:
+            gsb_total[item]["b_ratio"] = gsb_total[item]["b"] / gsb_total[item]["total"]
+            gsb_total[item]["g_ratio"] = gsb_total[item]["g"] / gsb_total[item]["total"]
+
+    tongji.setdefault("total", gsb_total)
 
     # 详细数据
-    res = {}
-    models = trt_int8.keys()
+    m = list(diff_res.keys())
+    if len(m) < 1:
+        return res, tongji
+    models = diff_res[m[0]].keys()
     for model in models:
-        res[model] = {
-            "trt_int8": {
-                "jingdu": {
-                    "th": trt_int8[model]["jingdu"]["th"],
-                    "base": trt_int8[model]["jingdu"]["base"],
-                    "benchmark": trt_int8[model]["jingdu"]["benchmark"],
-                    "diff": trt_int8[model]["jingdu"]["diff"],
-                    "gsb": trt_int8[model]["jingdu"]["gsb"],
-                    "unit": trt_int8[model]["jingdu"]["unit"],
-                },
-                "xingneng": {
-                    "th": trt_int8[model]["xingneng"]["th"],
-                    "base": trt_int8[model]["xingneng"]["base"],
-                    "benchmark": trt_int8[model]["xingneng"]["benchmark"],
-                    "diff": trt_int8[model]["xingneng"]["diff"],
-                    "gsb": trt_int8[model]["xingneng"]["gsb"],
-                    "unit": trt_int8[model]["xingneng"]["unit"],
-                },
-            },
-            "trt_fp16": {
-                "jingdu": {
-                    "th": trt_fp16[model]["jingdu"]["th"],
-                    "base": trt_fp16[model]["jingdu"]["base"],
-                    "benchmark": trt_fp16[model]["jingdu"]["benchmark"],
-                    "diff": trt_fp16[model]["jingdu"]["diff"],
-                    "gsb": trt_fp16[model]["jingdu"]["gsb"],
-                    "unit": trt_fp16[model]["jingdu"]["unit"],
-                },
-                "xingneng": {
-                    "th": trt_fp16[model]["xingneng"]["th"],
-                    "base": trt_fp16[model]["xingneng"]["base"],
-                    "benchmark": trt_fp16[model]["xingneng"]["benchmark"],
-                    "diff": trt_fp16[model]["xingneng"]["diff"],
-                    "gsb": trt_fp16[model]["xingneng"]["gsb"],
-                    "unit": trt_fp16[model]["xingneng"]["unit"],
-                },
-            },
-            "mkldnn_int8": {
-                "jingdu": {
-                    "th": mkldnn_int8[model]["jingdu"]["th"],
-                    "base": mkldnn_int8[model]["jingdu"]["base"],
-                    "benchmark": mkldnn_int8[model]["jingdu"]["benchmark"],
-                    "diff": mkldnn_int8[model]["jingdu"]["diff"],
-                    "gsb": mkldnn_int8[model]["jingdu"]["gsb"],
-                    "unit": mkldnn_int8[model]["jingdu"]["unit"],
-                },
-                "xingneng": {
-                    "th": mkldnn_int8[model]["xingneng"]["th"],
-                    "base": mkldnn_int8[model]["xingneng"]["base"],
-                    "benchmark": mkldnn_int8[model]["xingneng"]["benchmark"],
-                    "diff": mkldnn_int8[model]["xingneng"]["diff"],
-                    "gsb": mkldnn_int8[model]["xingneng"]["gsb"],
-                    "unit": mkldnn_int8[model]["xingneng"]["unit"],
-                },
-            },
-            "mkldnn_fp32": {
-                "jingdu": {
-                    "th": mkldnn_fp32[model]["jingdu"]["th"],
-                    "base": mkldnn_fp32[model]["jingdu"]["base"],
-                    "benchmark": mkldnn_fp32[model]["jingdu"]["benchmark"],
-                    "diff": mkldnn_fp32[model]["jingdu"]["diff"],
-                    "gsb": mkldnn_fp32[model]["jingdu"]["gsb"],
-                    "unit": mkldnn_fp32[model]["jingdu"]["unit"],
-                },
-                "xingneng": {
-                    "th": mkldnn_fp32[model]["xingneng"]["th"],
-                    "base": mkldnn_fp32[model]["xingneng"]["base"],
-                    "benchmark": mkldnn_fp32[model]["xingneng"]["benchmark"],
-                    "diff": mkldnn_fp32[model]["xingneng"]["diff"],
-                    "gsb": mkldnn_fp32[model]["xingneng"]["gsb"],
-                    "unit": mkldnn_fp32[model]["xingneng"]["unit"],
-                },
-            },
-        }
+        res[model] = {}
+        for mode in mode_list:
+            res[model][mode] = {}
+            for item in metric_list:
+                res[model][mode][item] = {
+                    "th": diff_res[mode][model][item]["th"],
+                    "base": diff_res[mode][model][item]["base"],
+                    "benchmark": diff_res[mode][model][item]["benchmark"],
+                    "diff": diff_res[mode][model][item]["diff"],
+                    "gsb": diff_res[mode][model][item]["gsb"],
+                    "unit": diff_res[mode][model][item]["unit"],
+                }
 
     return res, tongji
 
 
-def res2xls(env, res, tongji, mode, metric, save_file):
+def res2xls(env, res, tongji, mode_list, metric_list, jingping_list, save_file):
     """
     将结果保存为excel文件
     """
-    mode_list = mode.split(",")
-    metric_list = metric.split(",")
 
     wb = openpyxl.Workbook()
 
@@ -365,7 +217,8 @@ def res2xls(env, res, tongji, mode, metric, save_file):
     # 表头
     sheet_detail.cell(1, 2).value = env
 
-    n = len(metric_list) * 4
+    D = 1 + 2 * len(jingping_list)
+    n = len(metric_list) * D
     row_s = 2
     column_s = 2
     for m in mode_list:
@@ -377,33 +230,44 @@ def res2xls(env, res, tongji, mode, metric, save_file):
     for m in mode_list:
         for k in metric_list:
             sheet_detail.cell(row_s, column_s).value = k
-            column_s += 4
+            column_s += D
 
     row_s = 4
     column_s = 2
     n = len(mode_list) * len(metric_list)
     for i in range(n):
-        sheet_detail.cell(4, column_s).value = "base值"
-        sheet_detail.cell(4, column_s + 1).value = "实际值"
-        sheet_detail.cell(4, column_s + 2).value = "阈值"
-        sheet_detail.cell(4, column_s + 3).value = "diff"
-        column_s += 4
+        w = 0
+        sheet_detail.cell(4, column_s + w).value = "实际值"
+        for jingping in jingping_list:
+            w += 1
+            sheet_detail.cell(4, column_s + w).value = "{}值".format(jingping)
+            w += 1
+            sheet_detail.cell(4, column_s + w).value = "diff-{}".format(jingping)
+        column_s += D
 
     # 数据
     row_s = 5
-    for model, info in res.items():
+    models = list(res["base"].keys())
+    for model in models:
         column_s = 1
+        w = 0
         sheet_detail.cell(row_s, column_s).value = model
         for m in mode_list:
             for k in metric_list:
-                sheet_detail.cell(row_s, column_s + 1).value = info[m][k]["base"]
-                sheet_detail.cell(row_s, column_s + 2).value = info[m][k]["benchmark"]
-                sheet_detail.cell(row_s, column_s + 3).value = info[m][k]["th"]
-                sheet_detail.cell(row_s, column_s + 4).value = info[m][k]["diff"]
-                _color = info[m][k]["gsb"]
-                _font = Font(color=FONT[_color])
-                sheet_detail.cell(row_s, column_s + 4).font = _font
-                column_s += 4
+                w += 1
+                sheet_detail.cell(row_s, column_s + w).value = res["base"][model][m][k]["benchmark"]
+                for jingping in jingping_list:
+                    if (model in res[jingping].keys()) and (m in res[jingping][model].keys()):
+                        w += 1
+                        sheet_detail.cell(row_s, column_s + w).value = res[jingping][model][m][k]["base"]
+                        w += 1
+                        sheet_detail.cell(row_s, column_s + w).value = res[jingping][model][m][k]["diff"]
+                        _color = res[jingping][model][m][k]["gsb"]
+                        _font = Font(color=FONT[_color])
+                        sheet_detail.cell(row_s, column_s + w).font = _font
+                    else:
+                        w += 1
+                        w += 1
         row_s += 1
 
     # 合并表头单元格
@@ -424,8 +288,19 @@ def res2xls(env, res, tongji, mode, metric, save_file):
     """
 
     # table2: gsb统计数据
-    sheet_gsb = wb.create_sheet(index=1, title="gsb")
-    sheet_gsb = wb["gsb"]
+    for jingping in jingping_list:
+        add_table_gsb(wb, jingping, tongji[jingping], metric_list, mode_list)
+
+    wb.save("{}".format(save_file))
+
+
+def add_table_gsb(wb, jingping, tongji, metric_list, mode_list):
+    """
+    gsb
+    """
+    title = "gsb-{}".format(jingping)
+    sheet_gsb = wb.create_sheet(index=1, title=title)
+    sheet_gsb = wb[title]
 
     # 表头
     column_s = 2
@@ -460,66 +335,139 @@ def res2xls(env, res, tongji, mode, metric, save_file):
     sheet_gsb.merge_cells("B1:D1")
     sheet_gsb.merge_cells("E1:G1")
 
-    wb.save("{}".format(save_file))
+
+def res2db(env, benchmark_res, mode_list, metric_list):
+    """
+    转化为db需要的数据格式，部分字段取值待定
+    """
+    res = []
+    for mode in mode_list:
+        for model, info in benchmark_res[mode].items():
+            item = {
+                "task_dt": env["task_dt"],
+                "model_name": model,
+                "batch_size": info["batch_size"],
+                "fp_mode": "int8",
+                "use_trt": True,
+                "use_mkldnn": False,
+                "jingdu": info["jingdu"]["value"],
+                "jingdu_unit": info["jingdu"]["unit"],
+                "ips": info["xingneng"]["value"],
+                "ips_unit": info["xingneng"]["unit"],
+                "cpu_mem": info["cpu_mem"]["value"],
+                "gpu_mem": info["gpu_mem"]["value"],
+                "frame": env["frame"],
+                "frame_branch": env["frame_branch"],
+                "frame_commit": env["frame_commit"],
+                "frame_version": env["frame_version"],
+                "docker_image": env["docker_image"],
+                "python_version": env["python_version"],
+                "cuda_version": env["cuda_version"],
+                "cudnn_version": env["cudnn_version"],
+                "trt_version": env["trt_version"],
+                "device": env["device"],
+                "thread_num": 1,
+            }
+            res.append(item)
+    return res
 
 
 def run():
     """
     统计结果并保存到excel文件
     """
-    docker = sys.argv[1]
-    paddle_branch = sys.argv[2]
-    paddle_commit = sys.argv[3]
-    device = sys.argv[4]
-    modes = sys.argv[5]
-    metrics = sys.argv[6]
-    save_file = sys.argv[7]
+    task_dt = datetime.date.today()
 
-    # trt_int8
-    log_file = "eval_trt_int8_acc.log"
-    mode = "trt_int8"
-    benchmark_res = get_runtime_info(log_file)
-    base_res = get_base_info(mode)
-    trt_int8 = compare_diff(base_res, benchmark_res)
+    frame = sys.argv[1]
+    frame_branch = sys.argv[2]
+    frame_commit = sys.argv[3]
+    frame_version = sys.argv[4]
+    docker_image = sys.argv[5]
+    python_version = sys.argv[6]
+    cuda_version = sys.argv[7]
+    cudnn_version = sys.argv[8]
+    trt_version = sys.argv[9]
+    device = sys.argv[10]
+    modes = sys.argv[11]
+    metrics = sys.argv[12]
+    save_file = sys.argv[13]
 
-    # trt_fp16
-    log_file = "eval_trt_fp16_acc.log"
-    mode = "trt_fp16"
-    benchmark_res = get_runtime_info(log_file)
-    base_res = get_base_info(mode)
-    trt_fp16 = compare_diff(base_res, benchmark_res)
+    mode_list = modes.split(",")
+    metric_list = metrics.split(",")
 
-    # mkldnn_int8
-    log_file = "eval_mkldnn_int8_acc.log"
-    mode = "mkldnn_int8"
-    benchmark_res = get_runtime_info(log_file)
-    base_res = get_base_info(mode)
-    mkldnn_int8 = compare_diff(base_res, benchmark_res)
+    env = {
+        "task_dt": task_dt,
+        "frame": frame,
+        "frame_branch": frame_branch,
+        "frame_commit": frame_commit,
+        "frame_version": frame_version,
+        "docker_image": docker_image,
+        "python_version": python_version,
+        "cuda_version": cuda_version,
+        "cudnn_version": cudnn_version,
+        "trt_version": trt_version,
+        "device": device,
+        "threshold": 0.05,
+    }
 
-    # mkldnn_fp32
-    log_file = "eval_mkldnn_fp32_acc.log"
-    mode = "mkldnn_fp32"
-    benchmark_res = get_runtime_info(log_file)
-    base_res = get_base_info(mode)
-    mkldnn_fp32 = compare_diff(base_res, benchmark_res)
+    benchmark_res = {}
+    diff_res = {}
+    diff_res_nv = {}
+    for mode in mode_list:
+        log_file = "eval_{}_acc.log".format(mode)
+        _current = get_runtime_info(log_file)
+        benchmark_res.setdefault(mode, _current)
+        _base = get_base_info(mode)
+        _diff = compare_diff(_base, _current, metric_list)
+        diff_res.setdefault(mode, _diff)
+        if mode in ["trt_int8", "trt_fp16"]:
+            _base_nv = get_base_info("nv_" + mode)
+            _diff_nv = compare_diff(_base_nv, _current, metric_list)
+            diff_res_nv.setdefault(mode, _diff_nv)
 
-    res, tongji = res_summary(trt_int8, trt_fp16, mkldnn_int8, mkldnn_int8)
+    res_base, tongji_base = res_summary(diff_res, mode_list, metric_list)
+    res_nv, tongji_nv = res_summary(diff_res_nv, list(diff_res_nv.keys()), metric_list)
+    res = {
+        "base": res_base,
+        "NV-TRT": res_nv,
+    }
+    tongji = {
+        "base": tongji_base,
+        "NV-TRT": tongji_nv,
+    }
+    jingping_list = ["base"]
+    if "trt_int8" in mode_list:
+        jingping_list.append("NV-TRT")
 
-    env = "环境: "
-    env += "docker: "
-    env += docker
-    env += "  "
-    env += "paddle_branch: "
-    env += paddle_branch
-    env += "  "
-    env += "paddle_commit: "
-    env += paddle_commit
-    env += "  "
-    env += "device: "
-    env += device
-    env += "  "
+    env_str = "环境: "
+    env_str += "docker: "
+    env_str += docker_image
+    env_str += "  "
+    env_str += "frame: "
+    env_str += "  "
+    env_str += "frame_branch: "
+    env_str += frame_branch
+    env_str += "  "
+    env_str += "frame_commit: "
+    env_str += frame_commit
+    env_str += "  "
+    env_str += "device: "
+    env_str += gpu
+    env_str += "  "
+    env_str += cpu
+    env_str += "  "
+    env_str += "阈值: 0.05"
+    env_str += "  "
 
-    res2xls(env, res, tongji, modes, metrics, save_file)
+    # save result to xlsx
+    res2xls(env_str, res, tongji, mode_list, metric_list, jingping_list, save_file)
+
+    # save result to db
+    db_res = res2db(env, benchmark_res, mode_list, metric_list)
+    write_db.write(db_res)
+
+    # send mail
+    mail_report.report_day(task_dt, env, tongji, res, mode_list, metric_list, jingping_list)
 
 
 if __name__ == "__main__":

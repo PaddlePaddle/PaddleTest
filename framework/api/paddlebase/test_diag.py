@@ -324,10 +324,10 @@ def test_diag25():
     obj.exception(mode="c", x=x, offset=offset, etype="InvalidArgumentError")
 
 
-@pytest.mark.api_base_diag_exception
-def test_diag26():
-    """
-    x=1-D,x = np.zeros([]),c++error,static ValueError
-    """
-    x = np.zeros([])
-    obj.exception(mode="c", x=x, etype="InvalidArgumentError")
+# @pytest.mark.api_base_diag_exception
+# def test_diag26():
+#     """
+#     x=1-D,x = np.zeros([]),c++error,static ValueError
+#     """
+#     x = np.zeros([])
+#     obj.exception(mode="c", x=x, etype="InvalidArgumentError")

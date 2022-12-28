@@ -26,6 +26,7 @@ class PaddleDetection_Start(object):
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
         self.step = os.environ["step"]
+        logger.info("###self.step: {}".format(self.step))
         self.paddle_whl = os.environ["paddle_whl"]
         self.mode = os.environ["mode"]  # function or precision
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)
@@ -54,6 +55,8 @@ class PaddleDetection_Start(object):
         if ret:
             logger.info("build prepare_gpu_env failed")
             return ret
+        os.environ[self.reponame] = json.dumps(self.env_dict)
+        return ret
 
 
 def run():

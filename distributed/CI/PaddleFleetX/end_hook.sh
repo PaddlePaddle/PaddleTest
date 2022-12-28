@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export log_path=/paddle/log
+export log_path=/paddle/log_fleetx
 
 function end_hook() {
     num=`cat $log_path/result.log | grep "failed" | wc -l`

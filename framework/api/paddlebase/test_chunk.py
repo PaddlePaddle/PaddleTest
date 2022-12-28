@@ -75,7 +75,7 @@ class TestChunk1(APIBase):
         """
         implement
         """
-        self.types = [np.bool]
+        self.types = [np.bool_]
         self.enable_backward = False
         # static_graph of chunk api is not supported in this frame
         self.static = False
