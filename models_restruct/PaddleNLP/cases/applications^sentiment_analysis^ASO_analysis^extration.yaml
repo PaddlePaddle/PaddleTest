@@ -10,16 +10,16 @@ case:
           - --dev_path "../data/ext_data/dev.txt"
           - --label_path "../data/ext_data/label.dict"
           - --num_epochs 1
-          - --batch_size 16 
-          - --max_seq_len 256 
-          - --learning_rate 5e-5 
-          - --weight_decay 0.01 
-          - --max_grad_norm 1.0 
-          - --warmup_proportion 0.1 
-          - --log_steps 1 
-          - --eval_steps 250 
-          - --seed 1000 
-          - --device "gpu" 
+          - --batch_size 16
+          - --max_seq_len 256
+          - --learning_rate 5e-5
+          - --weight_decay 0.01
+          - --max_grad_norm 1.0
+          - --warmup_proportion 0.1
+          - --log_steps 1
+          - --eval_steps 250
+          - --seed 1000
+          - --device "gpu"
           - --checkpoints "../checkpoints/ext_checkpoints/"
     eval:
       -

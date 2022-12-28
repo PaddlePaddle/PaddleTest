@@ -6,8 +6,8 @@ case:
         path: applications/sentiment_analysis/ASO_analysis/pp_minilm
         cmd: python train.py
         params:
-          - --base_model_name "ppminilm-6l-768h" 
-          - --train_path "../data/cls_data/train.txt" 
+          - --base_model_name "ppminilm-6l-768h"
+          - --train_path "../data/cls_data/train.txt"
           - --dev_path "../data/cls_data/dev.txt"
           - --label_path "../data/cls_data/label.dict"
           - --num_epochs 1
@@ -28,13 +28,13 @@ case:
         path: applications/sentiment_analysis/ASO_analysis/pp_minilm
         cmd: bash run_evaluate.sh
     infer: skipped
-    export: 
+    export:
       -
         name: eval
         path: applications/sentiment_analysis/ASO_analysis/
         cmd: sh run_export_model.sh pp_minilm
 
-    predict: 
+    predict:
       -
         name: predict
         path: applications/sentiment_analysis/ASO_analysis/pp_minilm

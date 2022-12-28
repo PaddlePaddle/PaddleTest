@@ -12,7 +12,7 @@ case:
       -
         name: checkpoints_prepare_cls
         path: applications/sentiment_analysis/ASO_analysis/checkpoints
-        cmd: mkdir cls_checkpoints && cd cls_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_cls.pdparams && mv best_cls.pdparams best.pdparams 
+        cmd: mkdir cls_checkpoints && cd cls_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_cls.pdparams && mv best_cls.pdparams best.pdparams
     eval:
       -
         name: eval
@@ -30,7 +30,7 @@ case:
           - --cls_max_seq_len 256
     infer: skipped
     export:
-      - 
+      -
         name: extraction
         path: applications/sentiment_analysis/ASO_analysis/
         cmd: sh run_export_model.sh extraction
