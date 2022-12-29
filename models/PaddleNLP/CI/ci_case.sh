@@ -1045,4 +1045,27 @@ for apicase in `ls`;do
     fi
 done
 }
+faster_generation(){
+cd ${nlp_dir}/fast_generation/samples/
+
+python codegen_sample.py >${log_path}/fast_generation_codegen >>${log_path}/fast_generation_codegen 2>&1
+print_info $? fast_generation_codegen
+
+python gpt_sample.py >${log_path}/fast_generation_gpt >>${log_path}/fast_generation_gpt 2>&1
+print_info $? fast_generation_gpt
+
+python mbart_sample.py >${log_path}/fast_generation_mbart >>${log_path}/fast_generation_mbart 2>&1
+print_info $? fast_generation_mbart
+
+python plato_sample.py >${log_path}/fast_generation_plato >>${log_path}/fast_generation_plato 2>&1
+print_info $? fast_generation_plato
+
+python t5_sample.py --use_faster >${log_path}/fast_generation_t5 >>${log_path}/fast_generation_t5 2>&1
+print_info $? fast_generation_t5
+
+cd ${nlp_dir}/paddlenlp/ops/fast_transformer/sample/
+python bart_decoding_sample.py >${log_path}/fast_generation_bart >>${log_path}/fast_generation_bart 2>&1
+print_info $? fast_generation_bart
+
+}
 $1
