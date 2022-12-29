@@ -258,7 +258,7 @@ export CXX=/usr/local/gcc-8.2/bin/g++
 #python
 mkdir build_gpt_so
 cd build_gpt_so/
-cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ONcd
+cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ON
 make -j >${log_path}/GPT_python_FT >>${log_path}/gpt_python_FT 2>&1
 print_info $? gpt_python_FT
 cd ../
