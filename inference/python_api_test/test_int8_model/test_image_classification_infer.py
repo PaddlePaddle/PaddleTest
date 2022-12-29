@@ -120,7 +120,12 @@ def eval(predictor, FLAGS):
     sample_nums = len(val_loader)
     if FLAGS.small_data:
         sample_nums = 1000
-    monitor = Monitor(0)
+
+    use_gpu = True
+    if FLAGS.device == "CPU":
+        use_gpu = False
+    monitor = Monitor(0, use_gpu)
+
     monitor.start()
     for batch_id, (image, label) in enumerate(val_loader):
         image = np.array(image)
@@ -166,7 +171,6 @@ def eval(predictor, FLAGS):
 
     monitor.stop()
     monitor_result = monitor.output()
-    print(monitor_result)
 
     cpu_mem = (
         monitor_result["result"]["cpu_memory.used"]

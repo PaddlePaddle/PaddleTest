@@ -215,14 +215,55 @@ waveflow_ljspeech_ckpt_0.3.zip"
                     )
                 )
 
+    def gengrate_test_case_asr(self):
+        """
+        gengrate_test_case
+        """
+        print("start prepare data for asr model")
+        speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
+        speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
+        self.model_path = speech_map[self.model]["model_path"]
+
+        self.env_dict["model"] = self.model
+        self.env_dict["model_path"] = speech_map[self.model]["model_path"]
+        self.env_dict["conf_path"] = speech_map[self.model]["model_yml"]
+
+        if os.path.exists(self.reponame):
+            path_now = os.getcwd()
+            os.chdir(self.reponame)
+            os.chdir(self.model_path)
+            os.system("sed -i 's/python3/python/g'  `grep -rl python3  ./local/*`")
+            os.chdir(path_now)
+
+        if not os.path.exists("cases"):
+            os.makedirs("cases")
+        case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
+        if not os.path.exists(case_file):
+            with open(case_file, "w") as f:
+                f.writelines(
+                    (
+                        "case:" + os.linesep,
+                        "    linux:" + os.linesep,
+                        "        base: ./base/speech_asr_base.yaml" + os.linesep,
+                    )
+                )
+
     def build_prepare(self):
         """
         执行准备过程
         """
         # 进入repo中
+        speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
+        speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
+        self.category = speech_map[self.model]["category"]
+
         if "paddlespeech_cli" in self.model:
             self.prepare_cli_cmd()
             self.gengrate_test_case_cli()
+
+        elif self.category == "asr":
+            logger.info("start gengrate_asr_test_case")
+            self.gengrate_test_case_asr()
         else:
             logger.info("start prepare_data")
             self.prepare_data()

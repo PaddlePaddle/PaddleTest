@@ -9,7 +9,7 @@ train:
     - Global.eval_batch_step=200
     - Global.print_batch_step=10
     - Global.save_model_dir=output/${qa_yaml_name}
-    - Train.loader.batch_size_per_card=10
+    - Train.loader.batch_size_per_card=4
     - Global.print_batch_step=1
   result:
     exit_code:
@@ -101,11 +101,11 @@ predict:
   cmd:  python ppstructure/kie/predict_${kie_token}.py
   params:
     - --kie_algorithm=LayoutXLM
-    - --ser_model_dir="./models_inference/"${model}
+    - --ser_model_dir=./models_inference/${model}
     - --image_dir=./ppstructure/docs/kie/input/zh_val_42.jpg
     - --ser_dict_path=./train_data/XFUND/class_list_xfun.txt
     - --vis_font_path=./doc/fonts/simfang.ttf
-    - --ocr_order_method="tb-yx"
+    - --ocr_order_method=tb-yx
     - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
