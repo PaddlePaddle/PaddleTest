@@ -94,7 +94,7 @@ def compare_diff(base_res, benchmark_res, metric_list):
         for item in metric_list:
             compare_res[model][item]["benchmark"] = benchmark_res[model][item]["value"]
             if compare_res[model][item]["base"] <= 0:
-                 continue
+                continue
             gap = compare_res[model][item]["benchmark"] - compare_res[model][item]["base"]
             diff = gap / compare_res[model][item]["base"]
             compare_res[model][item]["diff"] = diff

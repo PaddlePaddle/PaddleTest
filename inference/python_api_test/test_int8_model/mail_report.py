@@ -13,12 +13,7 @@ import time
 
 import mail_conf
 
-MTRICE_CHINESE = {
-    "jingdu": "精度",
-    "xingneng": "时延",
-    "cpu_mem": "内存",
-    "gpu_mem": "显存"
-}
+MTRICE_CHINESE = {"jingdu": "精度", "xingneng": "时延", "cpu_mem": "内存", "gpu_mem": "显存"}
 
 def mail(sender_addr, receiver_addr, subject, content, proxy):
     """
