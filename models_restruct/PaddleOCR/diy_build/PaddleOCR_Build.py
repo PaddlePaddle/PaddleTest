@@ -68,6 +68,8 @@ class PaddleOCR_Build(Model_Build):
                 src_path = "/ssd2/ce_data/PaddleOCR"
             elif sysstr == "Windows":
                 src_path = "F:\\PaddleOCR"
+                os.system("mklink /d PaddleOCR F:\\PaddleOCR\train_data")
+                os.system("mklink /d PaddleOCR F:\\PaddleOCR\pretrain_models")
             elif sysstr == "Darwin":
                 src_path = "/Users/paddle/PaddleTest/ce_data/PaddleOCR"
 
