@@ -41,9 +41,12 @@ def add_seed(file,old_str,new_str):
         for line in f:
             if old_str in line:
                 if old_str == "L-BFGS":
-                    global flag_LBFGS
-                    flag_LBFGS = True
-                line += new_str
+                    if "    " not in line:
+                        global flag_LBFGS
+                        flag_LBFGS = True
+                        line += new_str
+                else:
+                    line += new_str
                 #line += "paddle.seed(1)\n"
                 #line += "np.random.seed(1)\n" 
             file_data += line
