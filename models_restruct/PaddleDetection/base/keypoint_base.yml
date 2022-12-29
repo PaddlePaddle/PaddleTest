@@ -14,7 +14,7 @@ eval:
   cmd:  python tools/eval.py
   params:
     - -c ${rd_yaml_path}
-    - -o weights=https://paddledet.bj.bcebos.com/models/${model}.pdparams
+    - -o weights=https://paddledet.bj.bcebos.com/models/keypoint/${model}.pdparams
   result:
     exit_code:
       base: 0
@@ -27,7 +27,7 @@ infer:
       - -c ${rd_yaml_path}
       - --infer_img=demo/000000570688.jpg
       - --output_dir=infer_output/${model}/
-      - -o weights=https://paddledet.bj.bcebos.com/models/${model}.pdparams
+      - -o weights=https://paddledet.bj.bcebos.com/models/keypoint/${model}.pdparams
     result:
       exit_code:
         base: 0
@@ -39,7 +39,7 @@ export:
   params:
     - -c ${rd_yaml_path}
     - --output_dir=inference_model
-    - -o weights=https://paddledet.bj.bcebos.com/models/${model}.pdparams
+    - -o weights=https://paddledet.bj.bcebos.com/models/keypoint/${model}.pdparams
   result:
     exit_code:
       base: 0

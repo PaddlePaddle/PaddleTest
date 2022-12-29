@@ -18,16 +18,22 @@ export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAM
 export models_list=${models_list:-None} #模型列表
 
 #指定case操作系统
-if [[ ${AGILE_PIPELINE_NAME} =~ "Linux" ]];then
+if [[ ${AGILE_PIPELINE_NAME} =~ "-Linux-" ]];then
     export system=${system:-"linux"}   # linux windows windows_cpu mac 与yaml case下字段保持一致
-elif [[ ${AGILE_PIPELINE_NAME} =~ "Winodws" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Windows-" ]];then
     export system=${system:-"windows"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "WindowsCPU" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-WindowsCPU-" ]];then
     export system=${system:-"windows_cpu"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "MAC" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Mac-" ]];then
     export system=${system:-"mac"}
 else
-    export system=${system:-"linux"}
+    if [[ ${system} ]];then
+        system=${system}
+        ## 防止环境不匹配，不设置默认的 system
+        # export system=${system:-"linux"}
+    else
+        echo "do not set system   or   AGILE_PIPELINE_NAME set inappropriate"
+    fi
 fi
 
 #指定python版本
@@ -59,7 +65,13 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
         export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
     fi
 else
-    export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"}
+    if [[ ${Image_version} ]];then
+        Image_version=${Image_version}
+        ## 防止环境不匹配，不设置默认的 Image_version
+        # export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"}
+    else
+        echo "do not set Image_version   or   AGILE_PIPELINE_NAME set inappropriate"
+    fi
 fi
 
 #约定覆盖的几条流水线
@@ -78,27 +90,33 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python38" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.2-cudnn8-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-TagBuild-Training-Linux-Gpu-Cuda11.2-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.2-cudnn8-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-TagBuild-Training-Linux-Gpu-Cuda11.2-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.6-cudnn8.4.0-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-TagBuild-Training-Linux-Gpu-Cuda11.6-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-linux_x86_64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.6-cudnn8.4.0-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-TagBuild-Training-Linux-Gpu-Cuda11.6-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-linux_x86_64.whl"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.7-cudnn8.4.1-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda11.7-cudnn8.4.1-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
     fi
 else
-    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl"}
+    if [[ ${paddle_whl} ]];then
+        paddle_whl=${paddle_whl}
+        ## 防止环境不匹配，不设置默认的paddle_whl
+        # if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        #     export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl"}
+        # else
+        #     export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl"}
+        # fi
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl"}
+        echo "do not set paddle_whl   or   AGILE_PIPELINE_NAME set inappropriate"
     fi
 fi
 

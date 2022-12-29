@@ -271,7 +271,7 @@ python -m pip install six
 python -m pip install paddle2onnx
 
 rm -rf main_test.sh && rm -rf models_txt
-cp -r ${file_path}/scripts/Seg2ONNX/. .
+cp -r Seg2ONNX/. .
 bash main_test.sh -p python -b develop -g True -t seg
 onnx_sign=$?
 
