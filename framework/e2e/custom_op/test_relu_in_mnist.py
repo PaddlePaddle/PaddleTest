@@ -49,7 +49,7 @@ def mnist():
 
             cost, acc = mnist(img, label)
 
-            loss = paddle.fluid.layers.cross_entropy(cost, label)
+            loss = paddle.nn.functional.cross_entropy(cost, label)
             avg_loss = paddle.mean(loss)
 
             avg_loss.backward()
@@ -98,7 +98,7 @@ def custom_mnist():
 
             cost, acc = mnist(img, label)
 
-            loss = paddle.fluid.layers.cross_entropy(cost, label)
+            loss = paddle.nn.functional.cross_entropy(cost, label)
             avg_loss = paddle.mean(loss)
 
             avg_loss.backward()

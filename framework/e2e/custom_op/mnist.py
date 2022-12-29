@@ -48,14 +48,12 @@ class SimpleImgConvPool(paddle.nn.Layer):
         )
         self._act = act
 
-        self._pool2d = paddle.fluid.dygraph.nn.Pool2D(
-            pool_size=pool_size,
-            pool_type=pool_type,
-            pool_stride=pool_stride,
-            pool_padding=pool_padding,
-            global_pooling=global_pooling,
-            use_cudnn=use_cudnn,
+        self._pool2d = paddle.nn.MaxPool2D(
+            kernel_size=pool_size,
+            stride=pool_stride,
+            padding=pool_padding,
         )
+
 
     def forward(self, inputs):
         """
@@ -103,7 +101,7 @@ class MNIST(paddle.nn.Layer):
         """
         x = self._simple_img_conv_pool_1(inputs)
         x = self._simple_img_conv_pool_2(x)
-        x = paddle.fluid.layers.reshape(x, shape=[-1, self.pool_2_shape])
+        x = paddle.reshape(x, shape=[-1, self.pool_2_shape])
         x = self._fc(x)
         x = paddle.nn.functional.softmax(x)
         if label is not None:

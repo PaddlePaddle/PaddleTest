@@ -20,33 +20,22 @@ class PaddleClas_Collect(object):
     自定义环境准备
     """
 
-    def __init__(self):
+    def __init__(self, update_name, update_url):
         """
         初始化参数
         """
         self.repo_name = "PaddleClas"
-        self.whl_branch = "develop"  # develop release
-        # pytest结果下载地址
-        self.report_linux_cuda102_py37_release = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426594/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426577/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426601/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426603/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20426592/report/result.tar",
-        }
-
-        self.report_linux_cuda102_py37_develop = {
-            "P0": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404795/report/result.tar",
-            "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404792/report/result.tar",
-            "P2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404790/report/result.tar",
-            "P2_1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404785/report/result.tar",
-            "P2_2": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404782/report/result.tar",
-        }
-
-        # self.report_linux_cuda102_py37_develop = {
-        #     "P1": "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20404792/report/result.tar",
-        # }
-
+        self.update_name = update_name
+        print(" ")
+        print(" ")
+        print(" ")
+        print("####update_name {}".format(self.update_name))
+        self.update_url = update_url
+        self.save_name = update_name + ".yaml"
+        # print('###self.update_name', self.update_name)
+        # print('###self.update_url', self.update_url)
+        # print('###self.save_name', self.save_name)
+        # input()
         self.base_yaml_dict = {
             "ImageNet": "ppcls^configs^ImageNet^ResNet^ResNet50.yaml",
             "slim": "ppcls^configs^slim^PPLCNet_x1_0_quantization.yaml",
@@ -62,14 +51,15 @@ class PaddleClas_Collect(object):
             "metric_learning": "ppcls^configs^metric_learning^adaface_ir18.yaml",
         }
 
-    def download_data(self, priority="P0", value=None):
+    def download_data(self, value=None):
         """
         下载数据集
         """
         # 调用函数路径已切换至PaddleClas
 
         tar_name = value.split("/")[-1]
-        if os.path.exists(tar_name.replace(".tar", "_" + priority)):
+        # print('####tar_name', tar_name)
+        if os.path.exists(tar_name.replace(".tar", "")):
             print("#### already download {}".format(tar_name))
         else:
             print("#### value: {}".format(value.replace(" ", "")))
@@ -84,12 +74,12 @@ class PaddleClas_Collect(object):
             try:
                 print("#### start download {}".format(tar_name))
                 cmd = "wget {} --no-proxy && tar xf {}".format(value.replace(" ", ""), tar_name)
+                # cmd = "wget {} --no-proxy && unzip {} > /dev/null 2>&1".format(value.replace(" ", ""), tar_name)
                 os.system(cmd)
             except:
                 print("#### start download failed {} failed".format(value.replace(" ", "")))
-            os.rename(tar_name.replace(".tar", ""), tar_name.replace(".tar", "_" + priority))
             os.remove(tar_name)  # 删除下载的tar包防止重名
-        return tar_name.replace(".tar", "_" + priority)
+        return tar_name.replace(".tar", "")
 
     def load_json(self):
         """
@@ -108,31 +98,25 @@ class PaddleClas_Collect(object):
         """
         清理中间保存的数据
         """
-        for name in self.report_path_list:
-            shutil.rmtree(name)
-        os.remove(self.repo_name + "-develop.tar.gz")
-        shutil.rmtree(self.repo_name)
+        if self.update_url != "None" and os.path.exists(self.report_path):
+            shutil.rmtree(self.report_path)
+        if os.path.exists(self.repo_name + "-develop.tar.gz"):
+            os.remove(self.repo_name + "-develop.tar.gz")
+        if os.path.exists(self.repo_name):
+            shutil.rmtree(self.repo_name)
 
     def get_result_yaml(self):
         """
         获取yaml结果
         """
-        self.report_path_list = list()
         self.case_info_list = list()
-        if self.whl_branch == "develop":
-            content = self.report_linux_cuda102_py37_develop
-            self.content_name = "report_linux_cuda102_py37_develop.yaml"
-        else:
-            content = self.report_linux_cuda102_py37_release
-            self.content_name = "report_linux_cuda102_py37_release.yaml"
-        for (key, value) in content.items():
-            self.report_path = self.download_data(key, value)
-            self.report_path_list.append(self.report_path)
-            for case_detail in self.load_json():
-                labels = case_detail.get("labels")
-                for label in labels:
-                    if label.get("name") == "case_info":
-                        self.case_info_list.extend(json.loads(label.get("value")))
+        # 如果是字典也可以在这里重新支持
+        self.report_path = self.download_data(self.update_url)
+        for case_detail in self.load_json():
+            labels = case_detail.get("labels")
+            for label in labels:
+                if label.get("name") == "case_info":
+                    self.case_info_list.extend(json.loads(label.get("value")))
 
     def pop_yaml_useless(self, data_json):
         """
@@ -165,6 +149,9 @@ class PaddleClas_Collect(object):
         其实可以在这一步把QA需要替换的全局变量给替换了,就不需要框架来做了,重组下qa的yaml
         kpi_name 与框架强相关, 要随框架更新, 目前是支持了单个value替换结果
         """
+        if self.update_url == "None":  # 判空
+            return 0
+
         if os.path.exists(self.repo_name):
             print("#### already download {}".format(self.repo_name))
         else:
@@ -215,17 +202,17 @@ class PaddleClas_Collect(object):
                 ):
                     if tag_value["name"] == case_value["tag"].split("_")[1]:
                         if case_value["kpi_value"] != -1.0:  # 异常值不保存
-                            print("####case_info_list   model_name: {}".format(case_value["model_name"]))
-                            print("####case_info_list   case tag is : {}".format(case_value["tag"]))
-                            print("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
-                            print("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
-                            print(
-                                "####case_info_list   change: {}".format(
-                                    content[case_value["model_name"]]["case"][case_value["system"]][
-                                        case_value["tag"].split("_")[0]
-                                    ][index]["result"][case_value["kpi_name"]]["base"]
-                                )
-                            )
+                            # print("####case_info_list   model_name: {}".format(case_value["model_name"]))
+                            # print("####case_info_list   case tag is : {}".format(case_value["tag"]))
+                            # print("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
+                            # print("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
+                            # print(
+                            #     "####case_info_list   change: {}".format(
+                            #         content[case_value["model_name"]]["case"][case_value["system"]][
+                            #             case_value["tag"].split("_")[0]
+                            #         ][index]["result"][case_value["kpi_name"]]["base"]
+                            #     )
+                            # )
                             content[case_value["model_name"]]["case"][case_value["system"]][
                                 case_value["tag"].split("_")[0]
                             ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
@@ -240,7 +227,7 @@ class PaddleClas_Collect(object):
                             print("### {} change threshold and evaluation ".format(case_value["model_name"]))
                             content[case_value["model_name"]]["case"][case_value["system"]][
                                 case_value["tag"].split("_")[0]
-                            ][index]["result"][case_value["kpi_name"]]["threshold"] = 1
+                            ][index]["result"][case_value["kpi_name"]]["threshold"] = 99
                             content[case_value["model_name"]]["case"][case_value["system"]][
                                 case_value["tag"].split("_")[0]
                             ][index]["result"][case_value["kpi_name"]]["evaluation"] = "-"
@@ -292,9 +279,32 @@ class PaddleClas_Collect(object):
             # print('###content333', type(content))
             # print("    ")
             # input()
-        with open(os.path.join(self.content_name), "w") as f:  # 会删除之前的，重新生成一份
+        with open(self.save_name, "w") as f:  # 会删除之前的，重新生成一份
             yaml.dump(content, f)  # 每次位置是一致的
             # yaml.dump(content, f, sort_keys=False)
+
+        if os.path.exists(self.save_name):
+            bce_whl_url = os.getenv("bce_whl_url")
+            tar_name = "bos_new.tar.gz"
+            python_name = "BosClient.py"
+            if os.path.exists(tar_name) is False:
+                wget.download(bce_whl_url)
+            tf = tarfile.open(tar_name)
+            tf.extractall(os.getcwd())
+            os.system("python -m pip install bce-python-sdk")
+            exit_code = os.system("python {} {} paddle-qa/PaddleMT/PaddleClas/".format(python_name, self.save_name))
+            os.remove(self.save_name)
+            if os.path.exists(python_name):
+                os.remove(tar_name)
+                os.remove(python_name)
+                os.remove("bos_sample_conf.py")
+                os.remove("sample.log")
+                os.remove("sts_sample_conf.py")
+                os.remove("StsClient.py")
+                shutil.rmtree("__pycache__")
+            print("### upload {} and exit_code is  {}".format(self.save_name, exit_code))
+        else:
+            print("### 未生成 {} ".format(self.save_name))
 
 
 def run():
@@ -311,11 +321,41 @@ def run():
     # content = json.loads(content)
     # print('###content',content["case"]["linux"]["eval"])
     # input()
+    # update_name = {
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Develop": "21186528/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P22-Develop": "21186488/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "21186472/result.tar",
+    # }
 
-    model = PaddleClas_Collect()
-    model.update_kpi()
-    # print("暂时关闭清理！！！！")
-    model.clean_report()
+    update_name = {
+        "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "21234596/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "21230017/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P2-Develop": "21229991/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P21-Develop": "21230053/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P22-Develop": "21230021/result.tar",
+        "PaddleClas-Linux-Cuda112-Python38-P0-Develop": "21234581/result.tar",
+        "PaddleClas-Linux-Cuda116-Python39-P0-Develop": "21230033/result.tar",
+        "PaddleClas-Linux-Cuda117-Python310-P0-Develop": "21230081/result.tar",
+        "PaddleClas-Linux-Cuda116-Python39-P0-Develop-Centos": "21235847/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P0-Release": "21230002/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P2-Release": "21230072/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P1-Release": "21230047/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P21-Release": "21230070/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P22-Release": "21230024/result.tar",
+        "PaddleClas-Linux-Cuda112-Python38-P0-Release": "21234582/result.tar",
+        "PaddleClas-Linux-Cuda116-Python39-P0-Release": "21230042/result.tar",
+        "PaddleClas-Linux-Cuda117-Python310-P0-Release": "21230026/result.tar",
+        "PaddleClas-Linux-Cuda116-Python39-P0-Release-Centos": "21235753/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P9-Release": "21238383/result.tar",
+    }
+
+    for (key, value) in update_name.items():
+        if value != "None":
+            value = "https://paddle-qa.bj.bcebos.com/PaddleMT/allure_result/" + value
+        model = PaddleClas_Collect(key, value)
+        model.update_kpi()
+        # print("暂时关闭清理！！！！")
+        model.clean_report()
     return 0
 
 

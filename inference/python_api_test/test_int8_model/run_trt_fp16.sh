@@ -5,9 +5,15 @@ PYTHON="python"
 # PPYOLOE trt fp16
 echo "[Benchmark] Run PPYOLOE trt fp16"
 $PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_crn_l_300e_coco --reader_config=configs/ppyoloe_reader.yml --use_trt=True --precision=fp16 --model_name=PPYOLOE
+# PPYOLOE+ trt fp16
+echo "[Benchmark] Run PPYOLOE+ trt fp16"
+$PYTHON test_ppyoloe_infer.py --model_path=models/ppyoloe_plus_crn_s_80e_coco_no_nms --reader_config=configs/ppyoloe_plus_reader.yml --use_trt=True --precision=fp16 --model_name=PPYOLOE_PLUS --exclude_nms
 # PicoDet trt fp16
-echo "[Benchmark] Run PicoDet trt fp16"
-$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu --reader_config=configs/picodet_reader.yml --use_trt=True --precision=fp16 --model_name=PicoDet
+### echo "[Benchmark] Run PicoDet trt fp16"
+### $PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu --reader_config=configs/picodet_reader.yml --use_trt=True --precision=fp16 --model_name=PicoDet
+# PicoDet no nms trt fp16
+echo "[Benchmark] Run PicoDet no nms trt fp16"
+$PYTHON test_ppyoloe_infer.py --model_path=models/picodet_s_416_coco_npu_no_postprocess --reader_config=configs/picodet_reader.yml --use_trt=True --precision=fp16 --model_name=PicoDet --exclude_nms
 # YOLOv5s trt fp16
 echo "[Benchmark] Run YOLOv5s trt fp16"
 $PYTHON test_yolo_series_infer.py --model_path=models/yolov5s_infer --use_trt=True --precision=fp16 --model_name=YOLOv5s
@@ -20,19 +26,19 @@ $PYTHON test_yolo_series_infer.py --model_path=models/yolov7_infer --use_trt=Tru
 
 # ResNet_vd trt fp16
 echo "[Benchmark] Run ResNet_vd trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/ResNet50_vd_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=ResNet_vd
+$PYTHON test_image_classification_infer.py --model_path=models/ResNet50_vd_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=ResNet_vd
 # MobileNetV3_large trt fp16
 echo "[Benchmark] Run MobileNetV3_large trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/MobileNetV3_large_x1_0_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=MobileNetV3_large
+$PYTHON test_image_classification_infer.py --model_path=models/MobileNetV3_large_x1_0_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=MobileNetV3_large
 # PPLCNetV2 trt fp16
 echo "[Benchmark] Run PPLCNetV2 trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/PPLCNetV2_base_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=PPLCNetV2
+$PYTHON test_image_classification_infer.py --model_path=models/PPLCNetV2_base_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=PPLCNetV2
 # PPHGNet_tiny trt fp16
 echo "[Benchmark] Run PPHGNet_tiny trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=PPHGNet_tiny
+$PYTHON test_image_classification_infer.py --model_path=models/PPHGNet_tiny_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=PPHGNet_tiny
 # EfficientNetB0 trt fp16
 echo "[Benchmark] Run EfficientNetB0 trt fp16"
-$PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_infer --use_trt=True --use_fp16=True --use_gpu=True --model_name=EfficientNetB0
+$PYTHON test_image_classification_infer.py --model_path=models/EfficientNetB0_infer --use_trt=True --precision=fp16 --use_gpu=True --model_name=EfficientNetB0
 
 # PP-HumanSeg-Lite trt fp16
 echo "[Benchmark] Run PP-HumanSeg-Lite trt fp16"

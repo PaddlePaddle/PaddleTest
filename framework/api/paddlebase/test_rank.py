@@ -20,7 +20,7 @@ class TestRank(APIBase):
         """
         implement
         """
-        self.types = [np.bool, np.int32, np.int64, np.float32, np.float64]
+        self.types = [np.bool_, np.int32, np.int64, np.float32, np.float64]
         # self.debug = True
         # self.static = True
         # enable check grad

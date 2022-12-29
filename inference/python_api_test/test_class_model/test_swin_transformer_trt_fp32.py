@@ -66,12 +66,19 @@ def test_trt_fp32_more_bz():
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
+        # collect shape for trt
+        test_suite_c = InferenceTest()
+        test_suite_c.load_config(
+            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        )
+        test_suite_c.collect_shape_info(model_path=file_path, input_data_dict=input_data_dict, device="gpu")
+
+        del test_suite_c  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
         )
-        # TODO:DLTP-58929修复后去掉delete pass
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -80,7 +87,8 @@ def test_trt_fp32_more_bz():
             min_subgraph_size=40,
             precision="trt_fp32",
             max_batch_size=batch_size,
-            delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
+            dynamic=True,
+            shape_range_file="./swin_transformer/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory
@@ -109,11 +117,20 @@ def test_jetson_trt_fp32_more_bz():
 
         del test_suite  # destroy class to save memory
 
+        # collect shape for trt
+        test_suite_c = InferenceTest()
+        test_suite_c.load_config(
+            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        )
+        test_suite_c.collect_shape_info(model_path=file_path, input_data_dict=input_data_dict, device="gpu")
+
+        del test_suite_c  # destroy class to save memory
+
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
         )
-        # TODO:DLTP-58929修复后去掉delete pass
+
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -122,7 +139,8 @@ def test_jetson_trt_fp32_more_bz():
             min_subgraph_size=10,
             precision="trt_fp32",
             max_batch_size=batch_size,
-            delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
+            dynamic=True,
+            shape_range_file="./swin_transformer/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory

@@ -9,3 +9,4 @@ configs^squeezesegv3^squeezesegv3_rangenet53_semantickitti.yml
 configs^caddn^caddn_deeplabv3p_resnet101_os8_kitti.yml
 configs^caddn^caddn_ocrnet_hrnet_w18_kitti.yml
 configs^centerpoint^centerpoint_voxels_0075voxel_nuscenes_10sweep.yml
+configs^petr^petr_vovnet_gridmask_p4_800x320_amp.yml

@@ -260,9 +260,11 @@ class PaddleClas_Build(Model_Build):
             logger.info("#### slim install")
             if os.path.exists("PaddleSlim") is False:
                 try:
-                    wget.download("https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim.tar.gz")
-                    tf = tarfile.open("PaddleSlim.tar.gz")
+                    wget.download("https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim/PaddleSlim-develop.tar.gz")
+                    tf = tarfile.open("PaddleSlim-develop.tar.gz")
                     tf.extractall(os.getcwd())
+                    if os.path.exists("PaddleSlim-develop"):
+                        os.rename("PaddleSlim-develop", "PaddleSlim")
                 except:
                     logger.info("#### prepare download failed {} failed".format("PaddleSlim.tar.gz"))
             if os.path.exists("PaddleSlim"):

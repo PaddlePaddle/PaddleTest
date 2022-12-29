@@ -70,7 +70,7 @@ class PaddleOCR_Start(object):
                             image_shape = "2,32,320"
                         else:
                             image_shape = image_shape[0]
-                            print("len(image_shape).{}".format(len(image_shape)))
+                            print("len(image_shape)={}".format(len(image_shape.split(","))))
                             if len(image_shape.split(",")) == 2:
                                 image_shape = "1," + image_shape
                         print(image_shape)
@@ -78,6 +78,12 @@ class PaddleOCR_Start(object):
                     else:
                         image_shape = "3,32,128"
             self.env_dict["image_shape"] = image_shape
+        # kie
+        if self.category == "kie":
+            if "ser" in self.model:
+                self.env_dict["kie_token"] = "kie_token_ser"
+            else:
+                self.env_dict["kie_token"] = "kie_token_ser_re"
         # use_gpu
         sysstr = platform.system()
         if sysstr == "Darwin":

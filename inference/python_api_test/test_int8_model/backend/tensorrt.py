@@ -195,6 +195,7 @@ class TensorRTEngine:
             "fp16",
             "int8",
         ], "precision must be fp32, fp16 or int8, but your precision is: {}".format(precision)
+
         use_int8 = precision == "int8"
         use_fp16 = precision == "fp16"
         TRT_LOGGER = trt.Logger()

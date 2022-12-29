@@ -20,7 +20,7 @@ class TestLogicalNot(APIBase):
         """
         implement
         """
-        self.types = [np.bool]
+        self.types = [np.bool_]
         # self.debug = True
         # self.static = True
         # enable check grad
@@ -45,7 +45,7 @@ def test_logical_not_broadcast_1():
     """
     logical_not_broadcast_1
     """
-    x_data = np.arange(1, 7).reshape((1, 2, 1, 3)).astype(np.bool)
+    x_data = np.arange(1, 7).reshape((1, 2, 1, 3)).astype(np.bool_)
     res = np.logical_not(x_data)
     obj.run(res=res, x=x_data)
 
@@ -55,6 +55,6 @@ def test_logical_not_broadcast_2():
     """
     logical_not_broadcast_2
     """
-    x_data = np.arange(1, 3).reshape((1, 2)).astype(np.bool)
+    x_data = np.arange(1, 3).reshape((1, 2)).astype(np.bool_)
     res = np.logical_not(x_data)
     obj.run(res=res, x=x_data)

@@ -120,6 +120,8 @@ print_result(){
 
 # run dynamic models
 pip install -r requirements.txt --ignore-installed
+#install paddleseg
+pip install -v -e .
 log_dir=.
 model_type_path=
 dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
@@ -137,7 +139,7 @@ TRAIN_MUlTI_DYNAMIC(){
     if [[ ${model} =~ 'segformer' ]];then
         echo -e "${model} does not test multi_train！"
     else
-        python -m paddle.distributed.launch train.py \
+        python -m paddle.distributed.launch tools/train.py \
            --config ${config} \
            --save_interval 100 \
            --iters 10 \
@@ -151,7 +153,7 @@ TRAIN_SINGLE_DYNAMIC(){
     if [[ ${model} =~ 'segformer' ]];then
         echo -e "${model} does not test single_train！"
     else
-        python train.py \
+        python tools/train.py \
            --config ${config} \
            --save_interval 100 \
            --iters 10 \
@@ -162,14 +164,14 @@ TRAIN_SINGLE_DYNAMIC(){
 EVAL_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
     mode=eval_dynamic
-    python -m paddle.distributed.launch val.py \
+    python -m paddle.distributed.launch tools/val.py \
        --config ${config} \
        --model_path seg_dynamic_pretrain/${model}/model.pdparams >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 PREDICT_DYNAMIC(){
     mode=predict_dynamic
-    python predict.py \
+    python tools/predict.py \
        --config ${config} \
        --model_path seg_dynamic_pretrain/${model}/model.pdparams \
        --image_path demo/${predict_pic} \
@@ -180,7 +182,7 @@ EXPORT_DYNAMIC(){
     mode=export_dynamic
     if [[ ${model} =~ 'rtformer' || ${model} =~ 'dmnet' ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
-        python export.py \
+        python tools/export.py \
            --config ${config} \
            --model_path seg_dynamic_pretrain/${model}/model.pdparams \
            --save_dir ./inference_model/${model} \
@@ -188,7 +190,7 @@ EXPORT_DYNAMIC(){
         print_result
     elif [[ -z `echo ${skip_export_model} | grep -w ${model}` ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
-        python export.py \
+        python tools/export.py \
            --config ${config} \
            --model_path seg_dynamic_pretrain/${model}/model.pdparams \
            --save_dir ./inference_model/${model} >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
@@ -246,7 +248,6 @@ elif [[ -n `echo ${model} | grep camvid` ]] && [[ ! -f seg_dynamic_pretrain/${mo
 fi
 if [ ! -s seg_dynamic_pretrain/${model}/model.pdparams ];then
     echo "${model} doesn't upload bos !!!"
-    seg_model_sign=True
 else
     TRAIN_MUlTI_DYNAMIC
     TRAIN_SINGLE_DYNAMIC
@@ -270,7 +271,7 @@ python -m pip install six
 python -m pip install paddle2onnx
 
 rm -rf main_test.sh && rm -rf models_txt
-cp -r ${file_path}/scripts/Seg2ONNX/. .
+cp -r Seg2ONNX/. .
 bash main_test.sh -p python -b develop -g True -t seg
 onnx_sign=$?
 

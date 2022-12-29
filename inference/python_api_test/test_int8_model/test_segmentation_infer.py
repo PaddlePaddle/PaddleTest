@@ -25,7 +25,7 @@ from paddleseg.cvlibs import Config as PaddleSegDataConfig
 from paddleseg.core.infer import reverse_transform
 from paddleseg.utils import metrics
 
-from backend import PaddleInferenceEngine, TensorRTEngine
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
 
 
 def argsparser():
@@ -70,6 +70,7 @@ def argsparser():
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
+    parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
 
 
@@ -85,7 +86,16 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     time_min = float("inf")
     time_max = float("-inf")
     warmup = 20
+
+    use_gpu = True
+    if FLAGS.device == "CPU":
+        use_gpu = False
+    monitor = Monitor(0, use_gpu)
+
+    if not rerun_flag:
+        monitor.start()
     print("Start evaluating (total_samples: {}, total_iters: {}).".format(FLAGS.total_samples, FLAGS.sample_nums))
+
     for batch_id, data in enumerate(loader):
         image = np.array(data[0])
         label = np.array(data[1]).astype("int64")
@@ -125,11 +135,46 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
             print("Eval iter:", batch_id)
             sys.stdout.flush()
 
+        if FLAGS.small_data and batch_id > FLAGS.sample_nums:
+            break
+
+    monitor.stop()
+    monitor_result = monitor.output()
+    print(monitor_result)
+
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
+
     _, miou = metrics.mean_iou(intersect_area_all, pred_area_all, label_area_all)
     _, acc = metrics.accuracy(intersect_area_all, pred_area_all)
     kappa = metrics.kappa(intersect_area_all, pred_area_all, label_area_all)
     _, mdice = metrics.dice(intersect_area_all, pred_area_all, label_area_all)
 
+    monitor.stop()
+    monitor_result = monitor.output()
+
+    cpu_mem = (
+        monitor_result["result"]["cpu_memory.used"]
+        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+    gpu_mem = (
+        monitor_result["result"]["gpu_memory.used"]
+        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
+        else 0
+    )
+
+    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
     time_avg = predict_time / FLAGS.sample_nums
     print(
         "[Benchmark]Batch size: {}, Inference time(ms): min={}, max={}, avg={}".format(
@@ -142,6 +187,7 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     print(infor)
     final_res = {
         "model_name": FLAGS.model_name,
+        "batch_size": FLAGS.batch_size,
         "jingdu": {
             "value": miou,
             "unit": "mIoU",
@@ -149,7 +195,14 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
         "xingneng": {
             "value": round(time_avg * 1000, 1),
             "unit": "ms",
-            "batch_size": FLAGS.batch_size,
+        },
+        "cpu_mem": {
+            "value": cpu_mem,
+            "unit": "MB",
+        },
+        "gpu_mem": {
+            "value": gpu_mem,
+            "unit": "MB",
         },
     }
     print("[Benchmark][final result]{}".format(final_res))
@@ -165,8 +218,8 @@ def main():
 
     batch_sampler = paddle.io.BatchSampler(eval_dataset, batch_size=1, shuffle=False, drop_last=False)
     eval_loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=0, return_list=True)
-    FLAGS.total_samples = len(eval_dataset)
-    FLAGS.sample_nums = len(eval_loader)
+    FLAGS.total_samples = len(eval_dataset) if not FLAGS.small_data else 100
+    FLAGS.sample_nums = len(eval_loader) if not FLAGS.small_data else 100
     FLAGS.batch_size = int(FLAGS.total_samples / FLAGS.sample_nums)
 
     if FLAGS.deploy_backend == "paddle_inference":
@@ -194,6 +247,14 @@ def main():
             engine_file_path=engine_file,
             calibration_cache_file=FLAGS.calibration_file,
             verbose=False,
+        )
+    elif FLAGS.deploy_backend == "onnxruntime":
+        predictor = ONNXRuntimeEngine(
+            onnx_model_file=FLAGS.model_path,
+            precision=FLAGS.precision,
+            use_trt=FLAGS.use_trt,
+            use_mkldnn=FLAGS.use_mkldnn,
+            device=FLAGS.device,
         )
     else:
         raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
