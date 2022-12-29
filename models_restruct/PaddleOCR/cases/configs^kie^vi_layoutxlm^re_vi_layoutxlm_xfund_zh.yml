@@ -11,7 +11,7 @@ case:
         predict:
           -
             name: pretrained
-            cmd:  python ppstructure/kie/predict_kie_token_ser_re.py 
+            cmd:  python ppstructure/kie/predict_kie_token_ser_re.py
             params:
               - --re_model_dir=./models_inference/${model}
               - --ser_model_dir=./models_inference/ser_vi_layoutxlm_xfund_zh
