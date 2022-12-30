@@ -69,7 +69,7 @@ class PaddleOCR_Build(Model_Build):
             elif sysstr == "Windows":
                 src_path = "F:\\PaddleOCR"
                 os.system("mklink /d train_data F:\\PaddleOCR\\train_data")
-                os.system("mklink /d pretrain_models PaddleOCR F:\\PaddleOCR\\pretrain_models")
+                os.system("mklink /d pretrain_models F:\\PaddleOCR\\pretrain_models")
             elif sysstr == "Darwin":
                 src_path = "/Users/paddle/PaddleTest/ce_data/PaddleOCR"
 
@@ -81,22 +81,24 @@ class PaddleOCR_Build(Model_Build):
             #    os.makedirs(train_data_path)
             # if not os.path.exists(pretrain_models_path):
             #    os.makedirs(pretrain_models_path)
+            if sysstr != "Windows":
+                if not os.path.exists("train_data"):
+                    os.symlink(os.path.join(src_path, "train_data"), "train_data")
+                if not os.path.exists("pretrain_models"):
+                    os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
 
-            if not os.path.exists("train_data"):
-                os.symlink(os.path.join(src_path, "train_data"), "train_data")
-            if not os.path.exists("pretrain_models"):
-                os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
+                # dataset
+                if not os.path.exists("train_data/ctw1500"):
+                    self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/ctw1500.tar", "train_data")
 
-            # dataset
-            if not os.path.exists("train_data/ctw1500"):
-                self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/ctw1500.tar", "train_data")
-
-            if not os.path.exists("train_data/icdar2015"):
-                self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/icdar2015.tar", "train_data")
-            if not os.path.exists("train_data/data_lmdb_release"):
-                self.download_data(
-                    "https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/data_lmdb_release.tar", "train_data"
-                )
+                if not os.path.exists("train_data/icdar2015"):
+                    self.download_data(
+                        "https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/icdar2015.tar", "train_data"
+                    )
+                if not os.path.exists("train_data/data_lmdb_release"):
+                    self.download_data(
+                        "https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/data_lmdb_release.tar", "train_data"
+                    )
             # configs/rec/rec_resnet_stn_bilstm_att.yml
             # os.system("python -m pip install fasttext")
             # if not os.path.exists("cc.en.300.bin"):
