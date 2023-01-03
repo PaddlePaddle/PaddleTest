@@ -47,7 +47,7 @@ function download() {
     if [[ -e ${data_path}/ckpt/PaddleFleetX_GPT_345M_220826 ]]; then
         echo "ckpt/PaddleFleetX_GPT_345M_220826 downloaded"
     else
-        # download ckpt
+        # download ckpt for gpt
         mkdir -p ${data_path}/ckpt
         wget -O ${data_path}/ckpt/GPT_345M.tar.gz \
             https://paddlefleetx.bj.bcebos.com/model/nlp/gpt/GPT_345M.tar.gz
@@ -58,7 +58,7 @@ function download() {
     if [[ -e ${data_path}/ckpt/model.pdparams ]]; then
         echo "ckpt/imagenet2012-ViT-B_16-224.pdparams downloaded"
     else
-        # download ckpt
+        # download ckpt for vit
         mkdir -p ${data_path}/ckpt
         wget -O ${data_path}/ckpt/model.pdparams \
             https://paddlefleetx.bj.bcebos.com/model/vision/vit/imagenet2012-ViT-B_16-224.pdparams
@@ -69,7 +69,7 @@ function download() {
     if [[ -e ${data_path}/data ]]; then
         echo "data downloaded"
     else
-        # download data
+        # download data for gpt
         mkdir ${data_path}/data;
         wget -O ${data_path}/data/gpt_en_dataset_300m_ids.npy https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy;
         wget -O ${data_path}/data/gpt_en_dataset_300m_idx.npz https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz;
@@ -100,12 +100,32 @@ function download() {
     if [[ -e ${data_path}/cc12m_base64 ]]; then
         echo "cc12m_base64 downloaded"
     else
-        # download cc12m_base64
+        # download cc12m_base64 for imagen
         wget -O ${data_path}/cc12m_base64.tar https://fleetx.bj.bcebos.com/datasets/cc12m_base64.tar
         tar xf ${data_path}/cc12m_base64.tar -C ${data_path}/
         rm -rf ${data_path}/cc12m_base64.tar
     fi
     ln -s ${data_path}/cc12m_base64 ${fleetx_path}/cc12m_base64
+
+    rm -rf wikitext-103
+    if [[ -e ${data_path}/wikitext-103 ]]; then
+        echo "wikitext-103 downloaded"
+    else
+        # download wikitext-103 for gpt eval
+        wget -O ${data_path}/wikitext-103-v1.zip https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip
+        unzip -q ${data_path}/wikitext-103-v1.zip
+        rm -rf ${data_path}/wikitext-103-v1.zip
+    fi
+    ln -s ${data_path}/wikitext-103 ${fleetx_path}/wikitext-103
+
+    rm -rf lambada_test.jsonl
+    if [[ -e ${data_path}/lambada_test.jsonl ]]; then
+        echo "lambada_test.jsonl downloaded"
+    else
+        # download lambada_test.jsonl for gpt eval
+        wget -O ${data_path}/lambada_test.jsonl https://raw.githubusercontent.com/cybertronai/bflm/master/lambada_test.jsonl
+    fi
+    cp ${data_path}/lambada_test.jsonl ${fleetx_path}/
 }
 
 

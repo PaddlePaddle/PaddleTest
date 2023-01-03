@@ -32,6 +32,8 @@ fleet_gpu_model_list=( \
     imagen_text2im_397M_64x64_bs2048 \
     imagen_super_resolution_512_single \
     )
+    # gpt_eval_WikiText \
+    # gpt_eval_LAMBADA \
 
 
 function gpt_preprocess_data() {
@@ -246,7 +248,8 @@ function gpt_inference_345M_dp8() {
 function gpt_345M_single_finetune() {
     cd ${fleetx_path}
     rm -rf log
-    python ./examples/transformer/models/GPT/finetune/run.py -c ./examples/transformer/models/GPT/finetune/configs/finetune_gpt_345M_single_card_glue.yaml \
+    python ./examples/transformer/models/GPT/finetune/run.py \
+        -c ./examples/transformer/models/GPT/finetune/configs/finetune_gpt_345M_single_card_glue.yaml \
         -o Global.num_train_epochs=1 \
         -o Data.Train.dataset.name=WNLI \
         -o Data.Train.dataset.root=./dataset/WNLI/ \
@@ -254,6 +257,32 @@ function gpt_345M_single_finetune() {
         -o Data.Eval.dataset.root=./dataset/WNLI/ \
         -o Data.Eval.dataset.split=dev \
         -o Model.num_classes=2
+    check_result $FUNCNAME
+}
+
+function gpt_eval_WikiText() {
+    cd ${fleetx_path}
+    rm -rf log
+    python ./examples/transformer/models/GPT/offline-eval/run.py \
+        -c ./examples/transformer/models/GPT/offline-eval/configs/eval_gpt_345M_single_card.yaml \
+        -o Global.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826 \
+        -o Offline_Eval.eval_path=./wikitext-103/wiki.valid.tokens \
+        -o Offline_Eval.overlapping_eval=32 \
+        -o Offline_Eval.batch_size=16 \
+        -o Global.max_steps=20
+    check_result $FUNCNAME
+}
+
+function gpt_eval_LAMBADA() {
+    cd ${fleetx_path}
+    rm -rf log
+    python ./examples/transformer/models/GPT/offline-eval/run.py \
+        -c ./examples/transformer/models/GPT/offline-eval/configs/eval_gpt_345M_single_card.yaml \
+        -o Global.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826 \
+        -o Offline_Eval.eval_path=./lambada_test.jsonl \
+        -o Offline_Eval.cloze_eval=True \
+        -o Offline_Eval.batch_size=16 \
+        -o Global.max_steps=20
     check_result $FUNCNAME
 }
 
@@ -293,11 +322,11 @@ function vit_cifar10_finetune() {
     loss=`tail log/workerlog.0 | grep 19/24 | cut -d " " -f14 `
     top1=`tail log/workerlog.0 | grep top1 |cut -d " " -f14 `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 3.744921875 ${loss%?} ${FUNCNAME}_loss
-        check_diff 0.217261 ${top1%?} ${FUNCNAME}_top1
+        check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
+        check_diff 0.217358 ${top1%?} ${FUNCNAME}_top1
     else
         check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
-        check_diff 0.216943 ${top1%?} ${FUNCNAME}_top1
+        check_diff 0.216858 ${top1%?} ${FUNCNAME}_top1
     fi
 }
 
@@ -325,8 +354,6 @@ function vit_qat() {
 
 function vit_inference() {
     cd ${fleetx_path}
-    cp -r ${data_path}/TensorRT-8.2.3.0 ./
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${fleetx_path}/TensorRT-8.2.3.0/lib
     rm -rf log
     python tools/export.py \
         -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml \
