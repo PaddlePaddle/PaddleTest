@@ -140,7 +140,6 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
 
     monitor.stop()
     monitor_result = monitor.output()
-    print(monitor_result)
 
     cpu_mem = (
         monitor_result["result"]["cpu_memory.used"]
