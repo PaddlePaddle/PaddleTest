@@ -93,14 +93,16 @@ def compare_diff(base_res, benchmark_res, metric_list):
 
         for item in metric_list:
             compare_res[model][item]["benchmark"] = benchmark_res[model][item]["value"]
+            if compare_res[model][item]["base"] <= 0:
+                continue
             gap = compare_res[model][item]["benchmark"] - compare_res[model][item]["base"]
             diff = gap / compare_res[model][item]["base"]
             compare_res[model][item]["diff"] = diff
-            if diff >= -0.05 and diff <= 0.05:
+            if diff >= -compare_res[model][item]["th"] and diff <= compare_res[model][item]["th"]:
                 compare_res[model][item]["gsb"] = "s"
-            elif diff < -0.05:
+            elif diff < -compare_res[model][item]["th"]:
                 compare_res[model][item]["gsb"] = "b"
-            elif diff > 0.05:
+            elif diff > compare_res[model][item]["th"]:
                 compare_res[model][item]["gsb"] = "g"
 
     return compare_res
@@ -407,7 +409,7 @@ def run():
         "cudnn_version": cudnn_version,
         "trt_version": trt_version,
         "device": device,
-        "threshold": 0.05,
+        "threshold": "时延/内存/显存 0.05，精度 0.01",
     }
 
     benchmark_res = {}
@@ -456,7 +458,7 @@ def run():
     env_str += "  "
     env_str += cpu
     env_str += "  "
-    env_str += "阈值: 0.05"
+    env_str += "阈值: 时延/内存/显存 0.05，精度 0.01"
     env_str += "  "
 
     # save result to xlsx

@@ -90,7 +90,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python38" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-TagBuild-Training-Linux-Gpu-Cuda11.2-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda112-Trtoff-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-TagBuild-Training-Linux-Gpu-Cuda11.2-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
     fi
@@ -143,6 +143,7 @@ export AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID}   #效率云依赖参数
 export AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} #效率云依赖参数
 export AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID}   #效率云依赖参数
 export AGILE_WORKSPACE=${AGILE_WORKSPACE}   #效率云依赖参数
+export REPORT_SERVER_PASSWORD=${REPORT_SERVER_PASSWORD}   #上传全局变量
 
 #### 根据PaddleTest & 框架名称决定的参数
 export CE_version_name=${CE_version_name:-TestFrameWork}    #与测试框架的名称一致
@@ -261,6 +262,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
         -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
         -e AGILE_WORKSPACE=${AGILE_WORKSPACE} \
+        -e REPORT_SERVER_PASSWORD=${REPORT_SERVER_PASSWORD} \
         -e Python_version=${Python_version} \
         -e models_list=${models_list} \
         -e models_file=${models_file} \

@@ -78,7 +78,7 @@ def write(res):
                 item["cuda_version"],
                 item["cudnn_version"],
                 item["trt_version"],
-                item["device_type"],
+                item["device"],
                 item["thread_num"],
                 item["jingdu"],
                 item["jingdu_unit"],
