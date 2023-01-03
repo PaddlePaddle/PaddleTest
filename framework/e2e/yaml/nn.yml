@@ -8554,7 +8554,7 @@ SpectralNorm_7:
 #        range: [ -1, 1]
 #    params:
 #      weight_shape: [4, 3, 5]
-#      dim: 1
+#      axis: 1
 #      power_iters: 10
 #      dtype: "float64"
 

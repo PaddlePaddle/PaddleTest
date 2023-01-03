@@ -1,0 +1,3 @@
+configs^rec^rec_resnet_stn_bilstm_att.yml
+configs^rec^rec_d28_can.yml
+configs^kie^vi_layoutxlm^re_vi_layoutxlm_xfund_zh.yml

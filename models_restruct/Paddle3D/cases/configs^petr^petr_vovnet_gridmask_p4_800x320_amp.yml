@@ -1,6 +1,6 @@
 case:
     linux:
-        base: ./base/3d_base_pretrained.yaml
+        base: ./base/3d_base_pretrained_petr.yaml
         predict:
           -
             name: pretrained

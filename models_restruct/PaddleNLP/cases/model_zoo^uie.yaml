@@ -18,7 +18,7 @@ case:
       -
         name: finetune
         path: model_zoo/uie
-        cmd: python -u -m paddle.distributed.launch --gpus "0,1" finetune.py
+        cmd: python -u -m paddle.distributed.launch  finetune.py
         params:
           - --device gpu
           - --logging_steps 2

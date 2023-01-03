@@ -47,7 +47,7 @@ echo "[Benchmark] Run PP-HumanSeg-Lite trt fp16"
 $PYTHON test_segmentation_infer.py --model_path=models/pp_humanseg_fp32/pp_humanseg_fp32.onnx --dataset='human' --dataset_config=configs/humanseg_dataset.yaml --deploy_backend=tensorrt --precision=fp16 --model_name=PP-HumanSeg-Lite
 # PP-Liteseg trt fp16
 echo "[Benchmark] Run PP-Liteseg trt fp16"
-$PYTHON test_segmentation_infer.py --model_path=models/pp_liteseg_fp32/pp_liteseg_fp32.onnx --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --deploy_backend=tensorrt --precision=fp16 --model_name=ppliteseg
+$PYTHON test_segmentation_infer.py --model_path=models/pp_liteseg_fp32/pp_liteseg_fp32.onnx --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --deploy_backend=tensorrt --precision=fp16 --model_name=PP-Liteseg
 # HRNet trt fp16
 echo "[Benchmark] Run HRNet trt fp16"
 $PYTHON test_segmentation_infer.py --model_path=models/hrnet_fp32/hrnet_fp32.onnx --dataset='cityscape' --dataset_config=configs/cityscapes_1024x512_scale1.0.yml --deploy_backend=tensorrt --precision=fp16 --model_name=HRNet

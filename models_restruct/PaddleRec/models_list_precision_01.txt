@@ -1,0 +1,4 @@
+models^contentunderstanding^textcnn^config_bigdata.yaml
+models^match^dssm^config_bigdata.yaml
+models^rank^wide_deep^config_bigdata.yaml
+models^recall^ncf^config_bigdata.yaml

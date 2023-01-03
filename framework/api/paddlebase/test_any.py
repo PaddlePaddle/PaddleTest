@@ -20,7 +20,7 @@ class TestAny(APIBase):
         """
         implement
         """
-        self.types = [np.bool]
+        self.types = [np.bool_]
         # self.debug = True
         # self.static = True
         # enable check grad

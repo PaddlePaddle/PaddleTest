@@ -93,12 +93,12 @@ main(){
                 wget -P models/${model_name}/${argmax_opt}/pretrain_model ${premodel_link} > download_data.log 2>&1
                 echo ++++++++++++++++++++++${model_name} ${argmax_opt} from pretrained model export infer model!!!++++++++++++++++++++++
                 if [ ${argmax_opt} == 'with_argmax' ]; then
-                $py_cmd export.py \
+                $py_cmd tools/export.py \
                      --config ${yaml_path} \
                      --model_path models/${model_name}/${argmax_opt}/pretrain_model/model.pdparams \
                      --save_dir models/${model_name}/${argmax_opt}/infer_model >> onnx_log/${model_name}/${argmax_opt}/export.log 2>&1
                 else
-                $py_cmd export.py \
+                $py_cmd tools/export.py \
                      --config ${yaml_path} \
                      --model_path models/${model_name}/${argmax_opt}/pretrain_model/model.pdparams \
                      --save_dir models/${model_name}/${argmax_opt}/infer_model \
