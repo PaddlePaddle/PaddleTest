@@ -1,34 +1,6 @@
 
 rem do not uset chinese note  beacause of linux tar problem
 
-rem set path
-set "PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;%PATH%"
-
-rem cuda_version
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda102" >nul
-if %errorlevel% equ 0 (
-    set cuda_version=10.2
-)
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda112" >nul
-if %errorlevel% equ 0 (
-    set cuda_version=11.2
-)
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda116" >nul
-if %errorlevel% equ 0 (
-    set cuda_version=11.6
-)
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda117" >nul
-if %errorlevel% equ 0 (
-    set cuda_version=11.7
-)
-rem not xly use default cuda_version
-if not defined cuda_version set cuda_version=11.7
-set "PATH=C:\Program Files\NVIDIA Corporation\NVSMI;%PATH%"
-set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\libnvvp;%PATH%"
-set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\bin;%PATH%"
-set "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v%cuda_version%"
-rem nvcc -V
-
 rem change path
 set pwd_org=%cd%
 echo "org path is %pwd_org%"
@@ -48,7 +20,6 @@ cd ce
 
 rem AGILE_PIPELINE_NAME    must set as:   PaddleClas-Windows-Cuda117-Python310-P0-Develop
 rem do not use "-",   split as  "-"  so please set value in order
-
 
 rem reponame
 if not defined reponame for /f "tokens=1 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set reponame=%%a
@@ -91,6 +62,34 @@ echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
     CALL D:\Windows_env\%reponame%_py310\Scripts\activate.bat
 )
+
+rem set path
+set "PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;%PATH%"
+
+rem cuda_version
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda102" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=10.2
+)
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda112" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=11.2
+)
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda116" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=11.6
+)
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda117" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=11.7
+)
+rem not xly use default cuda_version
+if not defined cuda_version set cuda_version=11.7
+set "PATH=C:\Program Files\NVIDIA Corporation\NVSMI;%PATH%"
+set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\libnvvp;%PATH%"
+set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\bin;%PATH%"
+set "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v%cuda_version%"
+rem nvcc -V
 
 rem paddle_whl
 echo %AGILE_PIPELINE_NAME% | findstr "Cuda117" >nul

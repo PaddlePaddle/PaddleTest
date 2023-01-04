@@ -273,6 +273,7 @@ class PaddleClas_Build(Model_Build):
                 os.system("git checkout develop")
                 os.system("git pull")
                 os.system("python -m pip install -r requirements.txt")
+                os.system("python -m pip uninstall paddleslim -y")
                 cmd_return = os.system("python setup.py install > paddleslim_install.log 2>&1 ")
                 os.chdir(path_now)
             if cmd_return:
