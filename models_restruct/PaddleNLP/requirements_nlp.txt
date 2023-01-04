@@ -22,3 +22,4 @@ GPUtil
 yacs
 editdistance>=0.6.0
 rouge
+paddleslim
