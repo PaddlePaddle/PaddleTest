@@ -77,7 +77,7 @@ case:
           - --num_epochs 1
           - --eval_steps 39
           - --logging_steps 1
-          --encoder ernie-3.0-mini-zh
+          - --encoder ernie-3.0-mini-zh
         result:
           loss:
             base: 2282887.188
