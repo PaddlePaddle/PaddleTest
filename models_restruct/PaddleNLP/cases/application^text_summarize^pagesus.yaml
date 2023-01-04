@@ -9,7 +9,7 @@ case:
       -
         name: train
         path: applications/text_summarization/pegasus
-        cmd: python -m paddle.distributed.launch --gpus '0,1' train.py
+        cmd: python -m paddle.distributed.launch train.py
     eval: skipped
     infer:
       -

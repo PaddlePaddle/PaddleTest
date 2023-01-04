@@ -45,7 +45,7 @@ def test_config():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.trt_fp16
-def test_trtfp16_more_bz():
+def test_trt_fp16_more_bz():
     """
     compared trt fp16 batch_size=1-10 vgg11 outputs with true val
     """
@@ -81,7 +81,7 @@ def test_trtfp16_more_bz():
 
 @pytest.mark.jetson
 @pytest.mark.trt_fp16
-def test_trtfp16_more_bz():
+def test_jetson_trt_fp16_more_bz():
     """
     compared trt fp16 batch_size=1-10 vgg11 outputs with true val
     """
@@ -116,7 +116,7 @@ def test_trtfp16_more_bz():
 
 
 @pytest.mark.trt_fp16_multi_thread
-def test_trtfp16_bz1_multi_thread():
+def test_trt_fp16_bz1_multi_thread():
     """
     compared trt fp16 batch_size=1 vgg11 multi_thread outputs with true val
     """

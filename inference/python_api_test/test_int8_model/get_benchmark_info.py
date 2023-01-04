@@ -93,14 +93,16 @@ def compare_diff(base_res, benchmark_res, metric_list):
 
         for item in metric_list:
             compare_res[model][item]["benchmark"] = benchmark_res[model][item]["value"]
+            if compare_res[model][item]["base"] <= 0:
+                continue
             gap = compare_res[model][item]["benchmark"] - compare_res[model][item]["base"]
             diff = gap / compare_res[model][item]["base"]
             compare_res[model][item]["diff"] = diff
-            if diff >= -0.05 and diff <= 0.05:
+            if diff >= -compare_res[model][item]["th"] and diff <= compare_res[model][item]["th"]:
                 compare_res[model][item]["gsb"] = "s"
-            elif diff < -0.05:
+            elif diff < -compare_res[model][item]["th"]:
                 compare_res[model][item]["gsb"] = "b"
-            elif diff > 0.05:
+            elif diff > compare_res[model][item]["th"]:
                 compare_res[model][item]["gsb"] = "g"
 
     return compare_res
@@ -182,8 +184,10 @@ def res_summary(diff_res, mode_list, metric_list):
     tongji.setdefault("total", gsb_total)
 
     # 详细数据
-    m = list(diff_res.keys())[0]
-    models = diff_res[m].keys()
+    m = list(diff_res.keys())
+    if len(m) < 1:
+        return res, tongji
+    models = diff_res[m[0]].keys()
     for model in models:
         res[model] = {}
         for mode in mode_list:
@@ -201,7 +205,7 @@ def res_summary(diff_res, mode_list, metric_list):
     return res, tongji
 
 
-def res2xls(env, res, tongji, mode_list, metric_list, save_file):
+def res2xls(env, res, tongji, mode_list, metric_list, jingping_list, save_file):
     """
     将结果保存为excel文件
     """
@@ -215,7 +219,8 @@ def res2xls(env, res, tongji, mode_list, metric_list, save_file):
     # 表头
     sheet_detail.cell(1, 2).value = env
 
-    n = len(metric_list) * 4
+    D = 1 + 2 * len(jingping_list)
+    n = len(metric_list) * D
     row_s = 2
     column_s = 2
     for m in mode_list:
@@ -227,33 +232,44 @@ def res2xls(env, res, tongji, mode_list, metric_list, save_file):
     for m in mode_list:
         for k in metric_list:
             sheet_detail.cell(row_s, column_s).value = k
-            column_s += 4
+            column_s += D
 
     row_s = 4
     column_s = 2
     n = len(mode_list) * len(metric_list)
     for i in range(n):
-        sheet_detail.cell(4, column_s).value = "base值"
-        sheet_detail.cell(4, column_s + 1).value = "实际值"
-        sheet_detail.cell(4, column_s + 2).value = "阈值"
-        sheet_detail.cell(4, column_s + 3).value = "diff"
-        column_s += 4
+        w = 0
+        sheet_detail.cell(4, column_s + w).value = "实际值"
+        for jingping in jingping_list:
+            w += 1
+            sheet_detail.cell(4, column_s + w).value = "{}值".format(jingping)
+            w += 1
+            sheet_detail.cell(4, column_s + w).value = "diff-{}".format(jingping)
+        column_s += D
 
     # 数据
     row_s = 5
-    for model, info in res.items():
+    models = list(res["base"].keys())
+    for model in models:
         column_s = 1
+        w = 0
         sheet_detail.cell(row_s, column_s).value = model
         for m in mode_list:
             for k in metric_list:
-                sheet_detail.cell(row_s, column_s + 1).value = info[m][k]["base"]
-                sheet_detail.cell(row_s, column_s + 2).value = info[m][k]["benchmark"]
-                sheet_detail.cell(row_s, column_s + 3).value = info[m][k]["th"]
-                sheet_detail.cell(row_s, column_s + 4).value = info[m][k]["diff"]
-                _color = info[m][k]["gsb"]
-                _font = Font(color=FONT[_color])
-                sheet_detail.cell(row_s, column_s + 4).font = _font
-                column_s += 4
+                w += 1
+                sheet_detail.cell(row_s, column_s + w).value = res["base"][model][m][k]["benchmark"]
+                for jingping in jingping_list:
+                    if (model in res[jingping].keys()) and (m in res[jingping][model].keys()):
+                        w += 1
+                        sheet_detail.cell(row_s, column_s + w).value = res[jingping][model][m][k]["base"]
+                        w += 1
+                        sheet_detail.cell(row_s, column_s + w).value = res[jingping][model][m][k]["diff"]
+                        _color = res[jingping][model][m][k]["gsb"]
+                        _font = Font(color=FONT[_color])
+                        sheet_detail.cell(row_s, column_s + w).font = _font
+                    else:
+                        w += 1
+                        w += 1
         row_s += 1
 
     # 合并表头单元格
@@ -274,8 +290,19 @@ def res2xls(env, res, tongji, mode_list, metric_list, save_file):
     """
 
     # table2: gsb统计数据
-    sheet_gsb = wb.create_sheet(index=1, title="gsb")
-    sheet_gsb = wb["gsb"]
+    for jingping in jingping_list:
+        add_table_gsb(wb, jingping, tongji[jingping], metric_list, mode_list)
+
+    wb.save("{}".format(save_file))
+
+
+def add_table_gsb(wb, jingping, tongji, metric_list, mode_list):
+    """
+    gsb
+    """
+    title = "gsb-{}".format(jingping)
+    sheet_gsb = wb.create_sheet(index=1, title=title)
+    sheet_gsb = wb[title]
 
     # 表头
     column_s = 2
@@ -310,8 +337,6 @@ def res2xls(env, res, tongji, mode_list, metric_list, save_file):
     sheet_gsb.merge_cells("B1:D1")
     sheet_gsb.merge_cells("E1:G1")
 
-    wb.save("{}".format(save_file))
-
 
 def res2db(env, benchmark_res, mode_list, metric_list):
     """
@@ -342,7 +367,7 @@ def res2db(env, benchmark_res, mode_list, metric_list):
                 "cuda_version": env["cuda_version"],
                 "cudnn_version": env["cudnn_version"],
                 "trt_version": env["trt_version"],
-                "device_type": env["device_type"]["gpu"],
+                "device": env["device"],
                 "thread_num": 1,
             }
             res.append(item)
@@ -364,11 +389,10 @@ def run():
     cuda_version = sys.argv[7]
     cudnn_version = sys.argv[8]
     trt_version = sys.argv[9]
-    gpu = sys.argv[10]
-    cpu = sys.argv[11]
-    modes = sys.argv[12]
-    metrics = sys.argv[13]
-    save_file = sys.argv[14]
+    device = sys.argv[10]
+    modes = sys.argv[11]
+    metrics = sys.argv[12]
+    save_file = sys.argv[13]
 
     mode_list = modes.split(",")
     metric_list = metrics.split(",")
@@ -384,23 +408,38 @@ def run():
         "cuda_version": cuda_version,
         "cudnn_version": cudnn_version,
         "trt_version": trt_version,
-        "device_type": {
-            "gpu": gpu,
-            "cpu": cpu,
-        },
+        "device": device,
+        "threshold": "时延/内存/显存 0.05，精度 0.01",
     }
 
     benchmark_res = {}
     diff_res = {}
+    diff_res_nv = {}
     for mode in mode_list:
         log_file = "eval_{}_acc.log".format(mode)
         _current = get_runtime_info(log_file)
+        benchmark_res.setdefault(mode, _current)
         _base = get_base_info(mode)
         _diff = compare_diff(_base, _current, metric_list)
-        benchmark_res.setdefault(mode, _current)
         diff_res.setdefault(mode, _diff)
+        if mode in ["trt_int8", "trt_fp16"]:
+            _base_nv = get_base_info("nv_" + mode)
+            _diff_nv = compare_diff(_base_nv, _current, metric_list)
+            diff_res_nv.setdefault(mode, _diff_nv)
 
-    res, tongji = res_summary(diff_res, mode_list, metric_list)
+    res_base, tongji_base = res_summary(diff_res, mode_list, metric_list)
+    res_nv, tongji_nv = res_summary(diff_res_nv, list(diff_res_nv.keys()), metric_list)
+    res = {
+        "base": res_base,
+        "NV-TRT": res_nv,
+    }
+    tongji = {
+        "base": tongji_base,
+        "NV-TRT": tongji_nv,
+    }
+    jingping_list = ["base"]
+    if "trt_int8" in mode_list:
+        jingping_list.append("NV-TRT")
 
     env_str = "环境: "
     env_str += "docker: "
@@ -419,16 +458,18 @@ def run():
     env_str += "  "
     env_str += cpu
     env_str += "  "
+    env_str += "阈值: 时延/内存/显存 0.05，精度 0.01"
+    env_str += "  "
 
     # save result to xlsx
-    res2xls(env_str, res, tongji, mode_list, metric_list, save_file)
+    res2xls(env_str, res, tongji, mode_list, metric_list, jingping_list, save_file)
 
     # save result to db
     db_res = res2db(env, benchmark_res, mode_list, metric_list)
     write_db.write(db_res)
 
     # send mail
-    mail_report.report_day(task_dt, env, tongji, res, mode_list, metric_list)
+    mail_report.report_day(task_dt, env, tongji, res, mode_list, metric_list, jingping_list)
 
 
 if __name__ == "__main__":
