@@ -23,6 +23,8 @@ fleet_gpu_model_list=( \
     gpt_inference_345M_single \
     gpt_inference_345M_dp8 \
     gpt_345M_single_finetune \
+    gpt_eval_WikiText \
+    gpt_eval_LAMBADA \
     ernie_base_3D \
     ernie_dp2 \
     vit_cifar10_finetune \
@@ -32,8 +34,6 @@ fleet_gpu_model_list=( \
     imagen_text2im_397M_64x64_bs2048 \
     imagen_super_resolution_512_single \
     )
-    # gpt_eval_WikiText \
-    # gpt_eval_LAMBADA \
 
 
 function gpt_preprocess_data() {
@@ -57,7 +57,8 @@ function gpt_preprocess_data() {
 function gpt_345M_single() {
     cd ${fleetx_path}
     rm -rf log
-    python examples/transformer/models/GPT/pretrain/run.py -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_345M_single_card.yaml \
+    python examples/transformer/models/GPT/pretrain/run.py \
+        -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_345M_single_card.yaml \
         -o Model.num_layers=4 -o Model.num_attention_heads=4 \
         -o Global.max_steps=10 -o Global.eval_freq=10 \
         -o Global.eval_iters=5 -o Global.save_load.save_steps=10
