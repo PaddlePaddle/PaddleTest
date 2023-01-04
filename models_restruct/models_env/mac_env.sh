@@ -51,7 +51,7 @@ fi
 
 if [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/2.1.2/macos/macos-cpu-openblas/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-Mac/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
     fi
