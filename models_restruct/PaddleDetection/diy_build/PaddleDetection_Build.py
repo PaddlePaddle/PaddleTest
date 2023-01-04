@@ -8,6 +8,8 @@ import sys
 import logging
 import tarfile
 import argparse
+import subprocess
+import platform
 import numpy as np
 import yaml
 import wget
@@ -67,40 +69,69 @@ class PaddleDetection_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir(self.reponame)
         path_repo = os.getcwd()
+        # set sed
+        if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
+            os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
+            cmd_weight = (
+                '{} -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection'
+                '/det_pretrained#g" ppdet/utils/download.py'.format(os.getenv("sed"))
+            )
+            subprocess.run(cmd_weight)
+        else:
+            os.environ["sed"] = "sed"
         # get video
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/test_demo.mp4")
         # avoid hang in yolox
-        cmd = 'sed -i "s|norm_type: sync_bn|norm_type: bn|g" configs/yolox/_base_/yolox_cspdarknet.yml'
-        os.system(cmd)
+        cmd = '{} -i "s|norm_type: sync_bn|norm_type: bn|g" configs/yolox/_base_/yolox_cspdarknet.yml'.format(
+            os.getenv("sed")
+        )
+        if platform.system() == "Windows":
+            subprocess.run(cmd)
+        else:
+            subprocess.run(cmd, shell=True)
         # use small data
-        cmd_voc = 'sed -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'
-        os.system(cmd_voc)
+        cmd_voc = '{} -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'.format(os.getenv("sed"))
+        if platform.system() == "Windows":
+            subprocess.run(cmd_voc)
+        else:
+            subprocess.run(cmd_voc, shell=True)
         cmd_iter1 = (
-            'sed -i "/for step_id, data in enumerate(self.loader):/i\\            max_step_id'
-            '=1" ppdet/engine/trainer.py'
+            '{} -i "/for step_id, data in enumerate(self.loader):/i\\            max_step_id'
+            '=1" ppdet/engine/trainer.py'.format(os.getenv("sed"))
         )
         cmd_iter2 = (
-            'sed -i "/for step_id, data in enumerate(self.loader):/a\\                if step_id == '
-            'max_step_id: break" ppdet/engine/trainer.py'
+            '{} -i "/for step_id, data in enumerate(self.loader):/a\\                if step_id == '
+            'max_step_id: break" ppdet/engine/trainer.py'.format(os.getenv("sed"))
         )
-        os.system(cmd_iter1)
-        os.system(cmd_iter2)
-        cmd_mot1 = 'sed -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'
+        if platform.system() == "Windows":
+            subprocess.run(cmd_iter1)
+            subprocess.run(cmd_iter2)
+        else:
+            subprocess.run(cmd_iter1, shell=True)
+            subprocess.run(cmd_iter2, shell=True)
+        cmd_mot1 = '{} -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         cmd_mot2 = (
-            'sed -i "/for step_id, data in enumerate(dataloader):/i\\        max_step_id=1" ppdet/engine/tracker.py'
+            '{} -i "/for step_id, data in enumerate(dataloader):/i\\        '
+            'max_step_id=1" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         )
         cmd_mot3 = (
-            'sed -i "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
-            'max_step_id: break" ppdet/engine/tracker.py'
+            '{} -i "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
+            'max_step_id: break" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         )
-        os.system(cmd_mot1)
-        os.system(cmd_mot2)
-        os.system(cmd_mot3)
+        if platform.system() == "Windows":
+            subprocess.run(cmd_mot1)
+            subprocess.run(cmd_mot2)
+            subprocess.run(cmd_mot3)
+        else:
+            subprocess.run(cmd_mot1, shell=True)
+            subprocess.run(cmd_mot2, shell=True)
+            subprocess.run(cmd_mot3, shell=True)
         # compile op
         os.system("python ppdet/ext_op/setup.py install")
         if os.path.exists("/root/.cache/paddle/weights"):
             os.system("rm -rf /root/.cache/paddle/weights")
         os.system("ln -s {}/data/ppdet_pretrained /root/.cache/paddle/weights".format("/ssd2/ce_data/PaddleDetection"))
+        # dataset
         os.chdir("dataset")
         if os.path.exists("coco"):
             os.system("rm -rf coco")
@@ -109,6 +140,8 @@ class PaddleDetection_Build(Model_Build):
         os.system("unzip coco.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota.zip")
         os.system("unzip dota.zip")
+        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota_ms.zip")
+        os.system("unzip dota_ms.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mot.zip")
         os.system("unzip mot.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/visdrone.zip")

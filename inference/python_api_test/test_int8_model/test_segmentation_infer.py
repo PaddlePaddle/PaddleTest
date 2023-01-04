@@ -86,13 +86,15 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     time_min = float("inf")
     time_max = float("-inf")
     warmup = 20
-    monitor = Monitor(0)
+
+    use_gpu = True
+    if FLAGS.device == "CPU":
+        use_gpu = False
+    monitor = Monitor(0, use_gpu)
+
     if not rerun_flag:
         monitor.start()
     print("Start evaluating (total_samples: {}, total_iters: {}).".format(FLAGS.total_samples, FLAGS.sample_nums))
-
-    monitor = Monitor(0)
-    monitor.start()
 
     for batch_id, data in enumerate(loader):
         image = np.array(data[0])
@@ -138,7 +140,6 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
 
     monitor.stop()
     monitor_result = monitor.output()
-    print(monitor_result)
 
     cpu_mem = (
         monitor_result["result"]["cpu_memory.used"]
@@ -158,21 +159,6 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     kappa = metrics.kappa(intersect_area_all, pred_area_all, label_area_all)
     _, mdice = metrics.dice(intersect_area_all, pred_area_all, label_area_all)
 
-    monitor.stop()
-    monitor_result = monitor.output()
-
-    cpu_mem = (
-        monitor_result["result"]["cpu_memory.used"]
-        if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
-        else 0
-    )
-    gpu_mem = (
-        monitor_result["result"]["gpu_memory.used"]
-        if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
-        else 0
-    )
-
-    print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
     time_avg = predict_time / FLAGS.sample_nums
     print(
         "[Benchmark]Batch size: {}, Inference time(ms): min={}, max={}, avg={}".format(

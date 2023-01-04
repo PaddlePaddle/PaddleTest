@@ -1046,7 +1046,7 @@ for apicase in `ls`;do
 done
 }
 faster_generation(){
-cd ${nlp_dir}/faster_generation/samples
+cd ${nlp_dir}/fast_generation/samples
 python codegen_sample.py >${log_path}/fast_generation_codegen >>${log_path}/fast_generation_codegen 2>&1
 print_info $? fast_generation_codegen
 

@@ -17,4 +17,5 @@ case:
     export: skipped
     predict: skipped
 
+
 function: paddlelas_imagenet_parse

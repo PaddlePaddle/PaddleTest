@@ -12,7 +12,11 @@ case:
           - --do_train
           - --do_eval
           - --do_export
+<<<<<<< HEAD
           - --config configs/default.yml
+=======
+          - --config=configs/default.yml
+>>>>>>> fffb64025fab469c8a0e07dfa008d3fe7bfc1d07
         result:
           loss:
             base: 2.797840
@@ -30,7 +34,11 @@ case:
           - --do_train
           - --do_eval
           - --do_export
+<<<<<<< HEAD
           - --config configs/default.yml
+=======
+          - --config=configs/default.yml
+>>>>>>> fffb64025fab469c8a0e07dfa008d3fe7bfc1d07
         result:
           loss:
             base: 0.498312
@@ -44,7 +52,11 @@ case:
           - --model_name_or_path best_models/cmrc2018/
           - --dataset cmrc2018
           - --output_dir ./best_models --do_predict
+<<<<<<< HEAD
           - --config configs/default.yml
+=======
+          - --config=configs/default.yml
+>>>>>>> fffb64025fab469c8a0e07dfa008d3fe7bfc1d07
         result:
           loss:
             base: 0.563974
@@ -58,7 +70,11 @@ case:
           - --model_name_or_path best_models/afqmc/
           - --dataset afqmc
           - --output_dir ./best_models/afqmc
+<<<<<<< HEAD
           - --config configs/default.yml
+=======
+          - --config=configs/default.yml
+>>>>>>> fffb64025fab469c8a0e07dfa008d3fe7bfc1d07
         result:
           loss:
             base: 0.995620
@@ -72,7 +88,11 @@ case:
           - --model_name_or_path best_models/msra_ner/
           - --dataset msra_ner
           - --output_dir ./best_models/msra_ner
+<<<<<<< HEAD
           - --config configs/default.yml
+=======
+          - --config=configs/default.yml
+>>>>>>> fffb64025fab469c8a0e07dfa008d3fe7bfc1d07
         result:
           loss:
             base: 0.995620
@@ -90,7 +110,11 @@ case:
           - --model_name_or_path best_models/cmrc2018/
           - --dataset cmrc2018
           - --output_dir ./best_models/cmrc2018
+<<<<<<< HEAD
           - --config configs/default.yml
+=======
+          - --config=configs/default.yml
+>>>>>>> fffb64025fab469c8a0e07dfa008d3fe7bfc1d07
         result:
           loss:
             base: 0.995620
@@ -106,7 +130,11 @@ case:
               - --dataset afqmc
               - --output_dir ./best_models
               - --do_predict
+<<<<<<< HEAD
               - --config configs/default.yml
+=======
+              - --config=configs/default.yml
+>>>>>>> fffb64025fab469c8a0e07dfa008d3fe7bfc1d07
             result:
               loss:
                 base: 2.797840
@@ -121,7 +149,11 @@ case:
               - --dataset msra_ner
               - --output_dir ./best_models
               - --do_predict
+<<<<<<< HEAD
               - --config configs/default.yml
+=======
+              - --config=configs/default.yml
+>>>>>>> fffb64025fab469c8a0e07dfa008d3fe7bfc1d07
             result:
               loss:
                 base: 0.498312
@@ -135,7 +167,11 @@ case:
               - --model_name_or_path best_models/cmrc2018/
               - --dataset cmrc2018
               - --output_dir ./best_models --do_predict
+<<<<<<< HEAD
               - --config configs/default.yml
+=======
+              - --config=configs/default.yml
+>>>>>>> fffb64025fab469c8a0e07dfa008d3fe7bfc1d07
             result:
               loss:
                 base: 0.563974

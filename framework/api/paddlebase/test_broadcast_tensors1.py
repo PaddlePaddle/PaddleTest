@@ -16,7 +16,7 @@ def test_broadcast_tensors_base():
     """
     base
     """
-    types = [np.float32, np.float64, np.int32, np.int64, np.bool]
+    types = [np.float32, np.float64, np.int32, np.int64, np.bool_]
     if paddle.device.is_compiled_with_cuda() is True:
         places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
     else:

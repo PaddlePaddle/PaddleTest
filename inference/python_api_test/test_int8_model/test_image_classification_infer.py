@@ -120,8 +120,15 @@ def eval(predictor, FLAGS):
     sample_nums = len(val_loader)
     if FLAGS.small_data:
         sample_nums = 1000
-    monitor = Monitor(0)
-    monitor.start()
+
+    use_gpu = True
+    if FLAGS.device == "CPU":
+        use_gpu = False
+    monitor = Monitor(0, use_gpu)
+    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
+    # in collect shape mode ,we do not start monitor!
+    if not rerun_flag:
+        monitor.start()
     for batch_id, (image, label) in enumerate(val_loader):
         image = np.array(image)
         # classfication model usually having only one input
@@ -160,13 +167,11 @@ def eval(predictor, FLAGS):
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
             sys.stdout.flush()
-        rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
         if rerun_flag:
             return
 
     monitor.stop()
     monitor_result = monitor.output()
-    print(monitor_result)
 
     cpu_mem = (
         monitor_result["result"]["cpu_memory.used"]

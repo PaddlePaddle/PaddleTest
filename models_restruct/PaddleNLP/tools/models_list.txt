@@ -1,10 +1,10 @@
-model_zoo^electra.yaml
 application^information_extraction^text.yaml
 application^information_extraction^document.yaml
 application^text_summarize^pagesus.yaml
 applications^sentiment_analysis^ASO_analysis.yaml
 applications^sentiment_analysis^ASO_analysis^extration.yaml
 applications^sentiment_analysis^ASO_analysis^pp_minilm.yaml
+model_zoo^electra.yaml
 examples^few_shot^efl.yaml
 examples^few_shot^p-tuning.yaml
 examples^few_shot^pet.yaml
@@ -16,6 +16,8 @@ model_zoo^ernie-1.0_static.yaml
 model_zoo^ernie-1.0.yaml
 model_zoo^ernie-doc.yaml
 model_zoo^ernie-gen.yaml
+model_zoo^ernie-health.yaml
 model_zoo^ernie-health_cblue.yaml
+model_zoo^ernie-layout.yaml
 model_zoo^tinybert.yaml
 fast_generation^samples.yaml

@@ -129,8 +129,8 @@ for file_name in `git diff --numstat origin |awk '{print $NF}'`;do
     elif [[ ${dir1} =~ "paddlenlp" ]];then # API 升级
         if [[ ${dir2} =~ "__init__" ]];then # 针对发版mini test
             P0case_list[${#P0case_list[*]}]=bert
-            # P0case_list[${#P0case_list[*]}]=bert
-            # P0case_list[${#P0case_list[*]}]=gpt
+        if [[ ${dir2} =~ "VERSION" ]];then # 针对发版mini test
+            P0case_list[${#P0case_list[*]}]=transformer
         elif [[ ${!all_P0case_dic[*]} =~ ${dir2} ]];then
             P0case_list[${#P0case_list[*]}]=${dir2}
         elif [[ ${dir2} =~ "transformers" ]];then
@@ -218,6 +218,7 @@ if [[ ${#P0case_list[*]} -ne 0 ]] || [[ ${#APIcase_list[*]} -ne 0 ]];then
     for p0case in ${P0case_list[*]};do
         echo -e "\033[35m ---- running P0case $case_num/${#P0case_list[*]}: ${p0case} \033[0m"
         if [[ ${!Normal_dic[*]} =~ ${p0case} ]];then
+            # bash ci_normal_case.sh ${Normal_dic[${p0case}]} ${p0case}
             python ci_normal_case.py ${Normal_dic[${p0case}]}
             let case_num++
         else

@@ -83,10 +83,10 @@ def test_transpose3():
     paddle.disable_static()
     x = np.array(
         [[[[False, True], [True, False]], [[False, False], [True, False]], [[True, True], [False, True]]]]
-    ).astype(np.bool)
+    ).astype(np.bool_)
     exp = np.array(
         [[[[False, True], [True, False]]], [[[False, False], [True, False]]], [[[True, True], [False, True]]]]
-    ).astype(np.bool)
+    ).astype(np.bool_)
     x_p = paddle.to_tensor(x)
     perm = [1, 0, 2, 3]
     res = paddle.transpose(x_p, perm)
@@ -102,8 +102,8 @@ def test_transpose4():
     """
     paddle.disable_static()
     x = np.random.random((2, 1, 3, 4, 2, 1, 2)) * 4 - 2
-    x_p = paddle.to_tensor(x.astype(np.bool))
+    x_p = paddle.to_tensor(x.astype(np.bool_))
     perm = [6, 0, 1, 4, 3, 5, 2]
-    exp = np.transpose(x.astype(np.bool), perm)
+    exp = np.transpose(x.astype(np.bool_), perm)
     res = paddle.transpose(x_p, perm)
     compare(res.numpy(), exp)
