@@ -10,7 +10,7 @@ case:
           - --dev_path "../data/ext_data/dev.txt"
           - --label_path "../data/ext_data/label.dict"
           - --num_epochs 1
-          - --batch_size 16
+          - --batch_size 4
           - --max_seq_len 256
           - --learning_rate 5e-5
           - --weight_decay 0.01

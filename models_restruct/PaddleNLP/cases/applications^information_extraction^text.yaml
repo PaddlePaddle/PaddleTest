@@ -122,7 +122,7 @@ case:
           - --test_path student_data/dev_data.json
           - --task_type relation_extraction
           - --label_maps_path student_data/label_maps.json
-          ---encoder ernie-3.0-mini-zh
+          - --encoder ernie-3.0-mini-zh
         result:
           loss:
             base: 2282887.188
