@@ -8,6 +8,15 @@ cd ce;
 # 使虚拟环境生效
 source ~/.bashrc
 
+if [[ `uname -m` =~ "arm" ]];then
+    echo "M1"
+    source activate
+    export env_run=conda
+else
+    echo "Intel"
+    export env_run=pyenv
+fi
+
 ######################## 定义变量 ########################
 # AGILE_PIPELINE_NAME 格式类似: PaddleClas-MAC-Intel-Python310-P9-Develop
 #其它内容或者可能不一致的不要随意加 "-", 下面是按照 "-" split 按序号填入的
@@ -41,11 +50,11 @@ fi
 #指定python版本
 export Python_version=${Python_version:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F 'Python' '{print $2}'|awk -F '-' '{print $1}')`"}
 if [[ ${Python_version} =~ "39" ]];then
-    pyenv activate ${reponame}_py39
+    ${env_run} activate ${reponame}_py39
 elif [[ ${Python_version} =~ "310" ]];then
-    pyenv activate ${reponame}_py310
+    ${env_run} activate ${reponame}_py310
 else
-    pyenv activate ${reponame}_py310
+    ${env_run} activate ${reponame}_py310
     echo "default set python verison is python3.10"
 fi
 
