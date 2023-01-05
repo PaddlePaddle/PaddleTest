@@ -5,9 +5,7 @@ pwd;
 rm -rf ce && mkdir ce;
 cd ce;
 
-# 使虚拟环境生效
-source ~/.bashrc
-
+uname -m
 if [[ `uname -m` =~ "arm" ]];then
     echo "M1"
     source activate
@@ -16,6 +14,10 @@ else
     echo "Intel"
     export env_run=pyenv
 fi
+export env_run=conda
+
+# 使虚拟环境生效
+source ~/.bashrc
 
 ######################## 定义变量 ########################
 # AGILE_PIPELINE_NAME 格式类似: PaddleClas-MAC-Intel-Python310-P9-Develop
@@ -49,16 +51,15 @@ fi
 
 #指定python版本
 export Python_version=${Python_version:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F 'Python' '{print $2}'|awk -F '-' '{print $1}')`"}
-echo Python_version: ${Python_version}
 if [[ ${Python_version} =~ "39" ]];then
     ${env_run} activate ${reponame}_py39
+    echo "${env_run} activate ${reponame}_py310"
 elif [[ ${Python_version} =~ "310" ]];then
-    python -c 'import sys; print(sys.version_info[:])';
     ${env_run} activate ${reponame}_py310
     echo "${env_run} activate ${reponame}_py310"
-    python -c 'import sys; print(sys.version_info[:])';
 else
     ${env_run} activate ${reponame}_py310
+    echo "${env_run} activate ${reponame}_py310"
     echo "default set python verison is python3.10"
 fi
 
