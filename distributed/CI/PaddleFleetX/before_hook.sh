@@ -36,7 +36,7 @@ function requirements() {
         export https_proxy=${proxy}
         export http_proxy=${proxy}
         sed -i "s/paddlenlp/#paddlenlp/g" ./PaddleFleetX/requirements.txt
-        python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html
+        python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html --force-reinstall
         unset http_proxy && unset https_proxy
     fi
 
