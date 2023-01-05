@@ -45,6 +45,8 @@ function requirements() {
     export http_proxy=${proxy}
     export https_proxy=${proxy}
     python -m pip install -r requirements.txt --force-reinstall
+
+    python -m pip list|grep paddle
 }
 
 function download() {
@@ -113,6 +115,8 @@ function download() {
         rm -rf ${data_path}/cc12m_base64.tar
     fi
     ln -s ${data_path}/cc12m_base64 ${fleetx_path}/cc12m_base64
+
+    
 
     rm -rf wikitext-103
     if [[ -e ${data_path}/wikitext-103 ]]; then
