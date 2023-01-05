@@ -31,6 +31,13 @@ function requirements() {
         python setup.py install
         cd -
         unset http_proxy && unset https_proxy
+
+        echo " ---------- PaddleFleetX develop paddlenlp---------- "
+        export https_proxy=${proxy}
+        export http_proxy=${proxy}
+        sed -i "s/paddlenlp/#paddlenlp/g" ./PaddleFleetX/requirements.txt
+        python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html
+        unset http_proxy && unset https_proxy
     fi
 
     # install requirements
