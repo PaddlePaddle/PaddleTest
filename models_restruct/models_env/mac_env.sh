@@ -5,7 +5,13 @@ pwd;
 rm -rf ce && mkdir ce;
 cd ce;
 
+# 使虚拟环境生效
+source ~/.bashrc
+
+uname
 uname -m
+uname -a
+ifconfig
 if [[ `uname -m` =~ "arm" ]];then
     echo "M1"
     source activate
@@ -14,10 +20,10 @@ else
     echo "Intel"
     export env_run=pyenv
 fi
+source activate
 export env_run=conda
 
-# 使虚拟环境生效
-source ~/.bashrc
+
 
 ######################## 定义变量 ########################
 # AGILE_PIPELINE_NAME 格式类似: PaddleClas-MAC-Intel-Python310-P9-Develop
