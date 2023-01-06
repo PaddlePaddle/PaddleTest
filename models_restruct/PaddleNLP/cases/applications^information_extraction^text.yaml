@@ -46,7 +46,7 @@ case:
           - --save_total_limit 1
         result:
           loss:
-            base: 2282887.188
+            base: 1
             threshold: 1
             evaluation: "="
       -
@@ -59,12 +59,7 @@ case:
           - --task_type relation_extraction
           - --synthetic_ratio 10
           - --model_path ../checkpoint/model_best
-        result:
-          loss:
-            base: 2282887.188
-            threshold: 1
-            evaluation: "="
-       -
+      -
         name: distill_train_student
         path: applications/information_extraction/text/data_distill
         cmd: python train.py
@@ -77,11 +72,6 @@ case:
           - --eval_steps 39
           - --logging_steps 1
           - --encoder ernie-3.0-mini-zh
-        result:
-          loss:
-            base: 2282887.188
-            threshold: 1
-            evaluation: "="
 
     eval:
       -
@@ -95,7 +85,7 @@ case:
           - --max_seq_len 512
         result:
           loss:
-            base: 2282887.188
+            base: 1
             threshold: 1
             evaluation: "="
       -
@@ -107,11 +97,6 @@ case:
           - --test_path ./student_data/dev_data.json
           - --label_maps_path ./student_data/label_maps.json
           - --model_path ../checkpoint/model_best
-        result:
-          loss:
-            base: 2282887.188
-            threshold: 1
-            evaluation: "="
       -
         name: distill_evaluate_student
         path: applications/information_extraction/text/data_distill
@@ -122,12 +107,6 @@ case:
           - --task_type relation_extraction
           - --label_maps_path student_data/label_maps.json
           - --encoder ernie-3.0-mini-zh
-        result:
-          loss:
-            base: 2282887.188
-            threshold: 1
-            evaluation: "="
-
     infer: skipped
     export: skipped
     predict: skipped

@@ -14,7 +14,7 @@ case:
     infer:
       -
         name: trained
-        cmd: python -m predict.py
+        cmd: python predict.py
     export:
       -
         name: trained
@@ -22,7 +22,7 @@ case:
     predict:
       -
         name: trained
-        path: /deploy/paddle_inference/
+        path: applications/text_summarization/pegasus/deploy/paddle_inference/
         cmd: python inference_pegasus.py
 
   windows:
