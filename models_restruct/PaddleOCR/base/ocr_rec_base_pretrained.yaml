@@ -100,32 +100,45 @@ export:
       evaluation: "="
 
 predict:
-  name: trained
-  cmd:  python tools/infer/predict_rec.py
-  params:
-    - --image_dir="./doc/imgs_words_en/word_336.png"
-    - --rec_model_dir="./models_inference/"${qa_yaml_name}
-    - --rec_image_shape=${image_shape}
-    - --rec_algorithm=${algorithm}
-    - --rec_char_dict_path=${rec_dict}
-    - --use_gpu=${use_gpu}
-    - --use_tensorrt=False
-    - --enable_mkldnn=False
-
-  name: pretrained
-  cmd:  python tools/infer/predict_rec.py
-  params:
-    - --image_dir=./doc/imgs_words_en/word_336.png
-    - --rec_model_dir=./models_inference/${model}
-    - --rec_image_shape=${image_shape}
-    - --rec_algorithm=${algorithm}
-    - --rec_char_dict_path=${rec_dict}
-    - --use_space_char=False
-    - --use_gpu=${use_gpu}
-    - --use_tensorrt=False
-    - --enable_mkldnn=False
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+  -  
+     name: trained
+     cmd:  python tools/infer/predict_rec.py
+     params:
+      - --image_dir="./doc/imgs_words_en/word_336.png"
+      - --rec_model_dir="./models_inference/"${qa_yaml_name}
+      - --rec_image_shape=${image_shape}
+      - --rec_algorithm=${algorithm}
+      - --rec_char_dict_path=${rec_dict}
+      - --use_gpu=${use_gpu}
+      - --use_tensorrt=False
+      - --enable_mkldnn=False
+  -
+     name: pretrained
+     cmd:  python tools/infer/predict_rec.py
+     params:
+      - --image_dir=./doc/imgs_words_en/word_336.png
+      - --rec_model_dir=./models_inference/${model}
+      - --rec_image_shape=${image_shape}
+      - --rec_algorithm=${algorithm}
+      - --rec_char_dict_path=${rec_dict}
+      - --use_space_char=False
+      - --use_gpu=${use_gpu}
+      - --use_tensorrt=False
+      - --enable_mkldnn=False
+  
+  - 
+     name: pretrained_C_plus_plus_GPU
+     path: deploy/cpp_infer
+     cmd:  ./build/ppocr
+     params: 
+      - --image_dir=../../doc/imgs_words_en/word_336.png
+      - --rec_model_dir=../../models_inference/${model}
+      - --rec=true
+      - --det=false
+      - --cls=false
+      - --use_angle_cls=false
+     result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
