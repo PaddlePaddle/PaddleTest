@@ -112,6 +112,7 @@ predict:
     - --use_tensorrt=False
     - --enable_mkldnn=False
     - --det_model_dir=./models_inference/${model}
+
 api: 
   name: pretrained_C_plus_plus_GPU
   path: deploy/cpp_infer
