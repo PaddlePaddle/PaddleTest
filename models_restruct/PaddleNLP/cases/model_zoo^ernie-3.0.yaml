@@ -47,7 +47,7 @@ case:
         params:
           - --model_name_or_path best_models/cmrc2018/
           - --dataset cmrc2018
-          - --output_dir ./best_models 
+          - --output_dir ./best_models
           - --do_predict
           - --config configs/default.yml
           - --max_steps 2

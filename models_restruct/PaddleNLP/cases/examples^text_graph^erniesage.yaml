@@ -12,8 +12,8 @@ case:
       -
         name: train
         path: examples/text_graph/erniesage
-        cmd: python -m paddle.distributed.launch --gpus "0" link_prediction.py --conf ./config/erniesage_link_prediction.yaml 
-    eval: 
+        cmd: python -m paddle.distributed.launch --gpus "0" link_prediction.py --conf ./config/erniesage_link_prediction.yaml
+    eval:
       -
         name: train
         path: examples/text_graph/erniesage
