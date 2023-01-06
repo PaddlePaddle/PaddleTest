@@ -170,8 +170,9 @@ class PaddleOCR_Build(Model_Build):
             % (install_path)
         )
         repo_result = subprocess.getstatusoutput(cmd)
-        exit_code = repo_result[0]
+        # exit_code = repo_result[0]
         output = repo_result[1]
+        print(output)
         # make
         os.system("make -j")
         # make install
@@ -217,7 +218,7 @@ x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz"
         )
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
-        exit_code = repo_result[0]
+        # exit_code = repo_result[0]
         output = repo_result[1]
         print(output)
         os.system("make -j")
