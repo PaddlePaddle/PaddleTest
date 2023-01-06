@@ -12,9 +12,9 @@
 **************************************************************************/
 """
 import paddle
+import paddle.fluid as fluid
 import pytest
 import numpy as np
-import paddle.fluid as fluid
 
 # global params
 types = [np.float32, np.float64]
