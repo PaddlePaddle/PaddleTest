@@ -12,12 +12,12 @@
 *
 **************************************************************************/
 """
+import platform
 from apibase import APIBase
 from apibase import randtool
 import paddle
 import pytest
 import numpy as np
-import platform
 
 
 class TestConv1d(APIBase):
