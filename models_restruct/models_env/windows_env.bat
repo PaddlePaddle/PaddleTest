@@ -92,56 +92,71 @@ set "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v%cuda_version
 rem nvcc -V
 
 rem paddle_whl
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda117" >nul
+echo %AGILE_PIPELINE_NAME% | findstr "Develop" >nul
 if %errorlevel% equ 0 (
-    echo %Python_version% | findstr "310" >nul
-    if %errorlevel% equ 0 (
-        echo %AGILE_PIPELINE_NAME% | findstr "Develop" >nul
-        if %errorlevel% equ 0 (
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
-        )  else  (
-            rem Release
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
-        )
+    set flag_branch=1
+)  else  (
+    set flag_branch=0
+)
+echo flag_branch %flag_branch%
+
+echo %AGILE_PIPELINE_NAME% | findstr "Intel-Python310" >nul
+if %errorlevel% equ 0 (
+    set flag_version=310
+)  else  (
+    set flag_version=0
+)
+echo flag_version %flag_version%
+if %flag_version% equ 310 (
+    if %flag_branch% equ 1 (
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
+    )  else  (
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
     )
 )
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda116" >nul
+
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda117-Python310" >nul
 if %errorlevel% equ 0 (
-    echo %Python_version% | findstr "39" >nul
-    if %errorlevel% equ 0 (
-        echo %AGILE_PIPELINE_NAME% | findstr "Develop" >nul
-        if %errorlevel% equ 0 (
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
-        )  else  (
-            rem Release
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
-        )
+    set flag_version=117310
+)  else  (
+    set flag_version=0
+)
+echo flag_version %flag_version%
+if %flag_version% equ 117310 (
+    if %flag_branch% equ 1 (
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+    )  else  (
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
     )
 )
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda112" >nul
+
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda116-Python39" >nul
 if %errorlevel% equ 0 (
-    echo %Python_version% | findstr "38" >nul
-    if %errorlevel% equ 0 (
-        echo %AGILE_PIPELINE_NAME% | findstr "Develop" >nul
-        if %errorlevel% equ 0 (
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
-        )  else  (
-            rem Release
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
-        )
+    set flag_version=11639
+)  else  (
+    set flag_version=0
+)
+echo flag_version %flag_version%
+if %flag_version% equ 11639 (
+    if %flag_branch% equ 1 (
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
+    )  else  (
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
     )
 )
-echo %AGILE_PIPELINE_NAME% | findstr "Intel" >nul
+
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda112-Python38" >nul
 if %errorlevel% equ 0 (
-    echo %Python_version% | findstr "310" >nul
-    if %errorlevel% equ 0 (
-        echo %AGILE_PIPELINE_NAME% | findstr "Develop" >nul
-        if %errorlevel% equ 0 (
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
-        )  else  (
-            rem Release
-            if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
-        )
+    set flag_version=11238
+)  else  (
+    set flag_version=0
+)
+echo flag_version %flag_version%
+if %flag_version% equ 11238 (
+    if %flag_branch% equ 1 (
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
+    )  else  (
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
     )
 )
 
