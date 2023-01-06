@@ -236,6 +236,10 @@ def main(FLAGS):
     main func
     """
     predictor = None
+
+    if FLAGS.use_mkldnn:
+        FLAGS.device = "CPU"
+
     if FLAGS.deploy_backend == "paddle_inference":
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
