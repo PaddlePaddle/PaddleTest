@@ -7,7 +7,6 @@ test Conv2DTranspose
 from apibase import APIBase
 from apibase import randtool
 import paddle
-import paddle.fluid as fluid
 import pytest
 import numpy as np
 
@@ -58,8 +57,8 @@ def test_transpose_conv2d_base():
         stride=stride,
         padding=padding,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -107,8 +106,8 @@ def test_transpose_conv2d():
         stride=stride,
         padding=padding,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -136,8 +135,8 @@ def test_transpose_conv2d1():
         stride=stride,
         padding=padding,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=3.3),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-1.7),
+        weight_attr=paddle.nn.initializer.Constant(value=3.3),
+        bias_attr=paddle.nn.initializer.Constant(value=-1.7),
     )
 
 
@@ -170,8 +169,8 @@ def test_transpose_conv2d2():
         stride=stride,
         padding=padding,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -218,8 +217,8 @@ def test_transpose_conv2d3():
         stride=stride,
         padding=padding,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -261,8 +260,8 @@ def test_transpose_conv2d4():
         padding=padding,
         dilation=dilation,
         groups=groups,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -305,8 +304,8 @@ def test_transpose_conv2d5():
         dilation=dilation,
         groups=groups,
         data_format="NHWC",
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -381,6 +380,6 @@ def test_transpose_conv2d6():
         groups=groups,
         data_format="NHWC",
         output_padding=output_padding,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
