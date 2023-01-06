@@ -38,7 +38,7 @@ class PaddleOCR_Build(Model_Build):
 
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.test_root_path=os.getcwd()
-        print("self.REPO_PATH:{}".format(self.REPO_PATH))
+       
         self.reponame = args.reponame
         self.models_list = args.models_list
         self.models_file = args.models_file
