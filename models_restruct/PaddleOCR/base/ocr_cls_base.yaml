@@ -1,5 +1,5 @@
-train:
-  name: multi！
+ddddtrain:
+  name: multi
   cmd : python -m paddle.distributed.launch tools/train.py
   params:
     - -c ${rd_yaml_path}
@@ -86,7 +86,7 @@ predict:
     - --use_gpu=True
     - --use_tensorrt=False
     - --enable_mkldnn=False
-
+api:
   name: trained_C_plus_plus_GPU
   path: deploy/cpp_infer
   cmd:  ./build/ppocr
@@ -97,6 +97,8 @@ predict:
     - --det=false
     - --cls=true
     - --use_angle_cls=true
+    - --use_gpu=${use_gpu}
+    - --enable_mkldnn=false
 
   result:
     exit_code:
