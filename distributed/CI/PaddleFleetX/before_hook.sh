@@ -23,14 +23,8 @@ function requirements() {
         export https_proxy=${proxy}
         export http_proxy=${proxy}
         sed -i "s/git+https/#git+https/g" ./PaddleFleetX/requirements.txt
-        wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim/PaddleSlim-develop.tar.gz --no-proxy >/dev/null
-        tar zxvf PaddleSlim-develop.tar.gz && rm -rf PaddleSlim-develop.tar.gz
-        rm -rf /usr/local/lib/python3.7/dist-packages/paddleslim*
         python -m pip uninstall paddleslim -y
-        cd PaddleSlim-develop
-        python -m pip install -r requirements.txt --force-reinstall
-        python setup.py install
-        cd -
+        python -m pip install https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl --no-cache-dir --force-reinstall --no-dependencies
         unset http_proxy && unset https_proxy
 
         # echo " ---------- PaddleFleetX develop paddlenlp---------- "
