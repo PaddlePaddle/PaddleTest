@@ -110,7 +110,7 @@ predict:
     - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
-  
+api:  
   name: pretrained_C_plus_plus_GPU
   path: deploy/cpp_infer
   cmd:  ./build/ppocr
@@ -121,6 +121,8 @@ predict:
     - --table_model_dir=../../models_inference/${model}
     - --type=structure
     - --table=true
+    - --use_gpu=${use_gpu}
+    - --enable_mkldnn=false
 
 
 

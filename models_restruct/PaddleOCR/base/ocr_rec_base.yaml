@@ -83,7 +83,7 @@ predict:
     - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
-  
+api: 
   name: trained_C_plus_plus_GPU
   path: deploy/cpp_infer
   cmd:  ./build/ppocr
@@ -94,6 +94,8 @@ predict:
     - --det=false
     - --cls=false
     - --use_angle_cls=false
+    - --use_gpu=${use_gpu}
+    - --enable_mkldnn=false
 
   result:
     exit_code:
