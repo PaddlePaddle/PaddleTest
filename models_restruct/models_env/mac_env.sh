@@ -8,7 +8,7 @@ cd ce;
 # 使虚拟环境生效
 source ~/.bashrc
 
-if [[ `uname -a` =~ "ARM64" ]];then
+if [[ `uname -a` =~ "ARM64" ]] || [[ `uname -m` =~ "arm64" ]];then
     echo "M1"
     source activate
     export env_run=conda
