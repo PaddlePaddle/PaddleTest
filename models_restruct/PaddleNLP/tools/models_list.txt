@@ -3,6 +3,7 @@ applications^information_extraction^document.yaml
 applications^text_summarize^pagesus.yaml
 model_zoo^ernie-3.0.yaml
 model_zoo^electra.yaml
+examples^text_graph^erniesage.yaml
 examples^few_shot^efl.yaml
 examples^few_shot^p-tuning.yaml
 examples^few_shot^pet.yaml
