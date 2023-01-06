@@ -1,4 +1,4 @@
-ddddtrain:
+train:
   name: multi
   cmd : python -m paddle.distributed.launch tools/train.py
   params:
