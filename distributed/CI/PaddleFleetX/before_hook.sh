@@ -23,10 +23,11 @@ function requirements() {
         export https_proxy=${proxy}
         export http_proxy=${proxy}
         sed -i "s/git+https/#git+https/g" ./PaddleFleetX/requirements.txt
-        git clone --depth=1 -b develop https://github.com/PaddlePaddle/PaddleSlim.git
+        wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim/PaddleSlim-develop.tar.gz --no-proxy >/dev/null
+        tar zxvf PaddleSlim-develop.tar.gz && rm -rf PaddleSlim-develop.tar.gz
         rm -rf /usr/local/lib/python3.7/dist-packages/paddleslim*
         python -m pip uninstall paddleslim -y
-        cd PaddleSlim
+        cd PaddleSlim-develop
         python -m pip install -r requirements.txt --force-reinstall
         python setup.py install
         cd -
@@ -116,7 +117,14 @@ function download() {
     fi
     ln -s ${data_path}/cc12m_base64 ${fleetx_path}/cc12m_base64
 
-
+    rm -rf part-00079
+    if [[ -e ${data_path}/part-00079 ]]; then
+        echo "part-00079 downloaded"
+    else
+        # download part-00079 for imagen
+        wget -O ${data_path}/part-00079 https://paddlefleetx.bj.bcebos.com/data/laion400m/part-00079
+    fi
+    cp ${data_path}/part-00079 ${fleetx_path}/projects/imagen
 
     rm -rf wikitext-103
     if [[ -e ${data_path}/wikitext-103 ]]; then
