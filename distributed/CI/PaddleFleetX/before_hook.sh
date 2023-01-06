@@ -32,12 +32,12 @@ function requirements() {
         cd -
         unset http_proxy && unset https_proxy
 
-        echo " ---------- PaddleFleetX develop paddlenlp---------- "
-        export https_proxy=${proxy}
-        export http_proxy=${proxy}
-        sed -i "s/paddlenlp/#paddlenlp/g" ./PaddleFleetX/requirements.txt
-        python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html --force-reinstall
-        unset http_proxy && unset https_proxy
+        # echo " ---------- PaddleFleetX develop paddlenlp---------- "
+        # export https_proxy=${proxy}
+        # export http_proxy=${proxy}
+        # sed -i "s/paddlenlp/#paddlenlp/g" ./PaddleFleetX/requirements.txt
+        # python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html --force-reinstall
+        # unset http_proxy && unset https_proxy
     fi
 
     # install requirements
@@ -116,7 +116,7 @@ function download() {
     fi
     ln -s ${data_path}/cc12m_base64 ${fleetx_path}/cc12m_base64
 
-    
+
 
     rm -rf wikitext-103
     if [[ -e ${data_path}/wikitext-103 ]]; then
