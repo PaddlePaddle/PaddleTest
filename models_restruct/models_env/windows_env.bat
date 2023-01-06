@@ -4,13 +4,17 @@ rem do not uset chinese note  beacause of linux tar problem
 rem change path
 set pwd_org=%cd%
 echo "org path is %pwd_org%"
-if not defined AGILE_PIPELINE_NAME set AGILE_PIPELINE_NAME="test"
-if exist D:\PaddleMT\%AGILE_PIPELINE_NAME% ( rmdir D:\PaddleMT\%AGILE_PIPELINE_NAME% /S /Q)
-md D:\PaddleMT\%AGILE_PIPELINE_NAME%
-cd D:\PaddleMT\%AGILE_PIPELINE_NAME%
-d:
-echo "change path to D:\PaddleMT\%AGILE_PIPELINE_NAME%, so do not run same xly task in the same time"
-chdir
+if not defined AGILE_PIPELINE_NAME (
+    echo "do not exit AGILE_PIPELINE_NAME, use org path %pwd_org%"
+)  else  (
+    set AGILE_PIPELINE_NAME="test"
+    if exist D:\PaddleMT\%AGILE_PIPELINE_NAME% ( rmdir D:\PaddleMT\%AGILE_PIPELINE_NAME% /S /Q)
+    md D:\PaddleMT\%AGILE_PIPELINE_NAME%
+    cd D:\PaddleMT\%AGILE_PIPELINE_NAME%
+    d:
+    echo "change path to D:\PaddleMT\%AGILE_PIPELINE_NAME%, so do not run same xly task in the same time"
+    chdir
+)
 
 @ echo off
 rmdir ce  /S /Q
