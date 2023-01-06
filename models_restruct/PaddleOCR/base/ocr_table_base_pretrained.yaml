@@ -110,11 +110,11 @@ predict:
     - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
-api:  
+api:
   name: pretrained_C_plus_plus_GPU
   path: deploy/cpp_infer
   cmd:  ./build/ppocr
-  params: 
+  params:
     - --image_dir=../../ppstructure/docs/table/table.jpg
     - --det_model_dir=../../models_inference/det_mv3_db
     - --rec_model_dir=../../models_inference/rec_mv3_none_bilstm_ctc

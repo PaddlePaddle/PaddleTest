@@ -73,11 +73,11 @@ predict:
     - --enable_mkldnn=False
     - --det_model_dir=./models_inference/${qa_yaml_name}
 
-api: 
+api:
   name: trained_C_plus_plus_GPU
   path: deploy/cpp_infer
   cmd:  ./build/ppocr
-  params: 
+  params:
     - --image_dir=../../doc/imgs_en/img_10.jpg
     - --rec_model_dir=../../models_inference/${qa_yaml_name}
     - --rec=false

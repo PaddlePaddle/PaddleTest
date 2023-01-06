@@ -113,11 +113,11 @@ predict:
     - --enable_mkldnn=False
     - --det_model_dir=./models_inference/${model}
 
-api: 
+api:
   name: pretrained_C_plus_plus_GPU
   path: deploy/cpp_infer
   cmd:  ./build/ppocr
-  params: 
+  params:
     - --image_dir=../../doc/imgs_en/img_10.jpg
     - --det_model_dir=../../models_inference/${model}
     - --rec=false
