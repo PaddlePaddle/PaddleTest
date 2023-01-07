@@ -32,8 +32,8 @@ fleet_gpu_model_list=( \
     vit_qat \
     imagen_text2im_397M_64x64_single \
     imagen_text2im_397M_64x64_bs2048 \
-    imagen_super_resolution_512_single \
     )
+    # imagen_super_resolution_512_single \
 
 
 function gpt_preprocess_data() {
