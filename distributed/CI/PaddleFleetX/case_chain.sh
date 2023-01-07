@@ -392,7 +392,7 @@ function imagen_super_resolution_512_single() {
     cd ${fleetx_path}
     rm -rf log
     python tools/train.py \
-        -c ppfleetx/configs/multimodal/imagen/imagen_super_resolution_512.yaml \
+        -c ppfleetx/configs/multimodal/imagen/imagen_text2im_64x64_T5-11B.yaml \
         -o Data.Train.loader.num_workers=8 \
         -o Engine.max_steps=100
     check_result $FUNCNAME
