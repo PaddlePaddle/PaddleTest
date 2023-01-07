@@ -100,16 +100,42 @@ function download() {
     fi
     cp -r ${data_path}/dataset ${fleetx_path}/
 
-    rm -rf cc12m_base64
-    if [[ -e ${data_path}/cc12m_base64 ]]; then
-        echo "cc12m_base64 downloaded"
+    rm -rf ./projects/imagen/t5
+    if [[ -e ${data_path}/t5 ]]; then
+        echo "imagen/t5 downloaded"
     else
-        # download cc12m_base64 for imagen
-        wget -O ${data_path}/cc12m_base64.tar https://fleetx.bj.bcebos.com/datasets/cc12m_base64.tar
-        tar xf ${data_path}/cc12m_base64.tar -C ${data_path}/
-        rm -rf ${data_path}/cc12m_base64.tar
+        # download t5 model
+        mkdir -p ${data_path}/t5/t5-11b/ && cd ${data_path}/t5/t5-11b/
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.0
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.1
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.2
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.3
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.4
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/t5/t5-11b/config.json
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/t5/t5-11b/spiece.model
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/t5/t5-11b/tokenizer.json
+        cat t5.pd.tar.gz.* |tar -xf - 
+        rm -rf t5.pd.tar.gz.*
+        cd -
     fi
-    ln -s ${data_path}/cc12m_base64 ${fleetx_path}/cc12m_base64
+    ln -s ${data_path}/t5 ${fleetx_path}/projects/imagen/t5
+
+    rm -rf ./projects/imagen/cache
+    if [[ -e ${data_path}/cache ]]; then
+        echo "imagen/cache downloaded"
+    else
+        # download debertav2 for imagen
+        mkdir -p ${data_path}/cache && cd ${data_path}/cache
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/config.json
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/spm.model
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/tokenizer_config.json
+        wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.0
+        wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.1
+        tar debertav2.pd.tar.gz.* | tar -xf -  
+        rm -rf debertav2.pd.tar.gz.*
+        cd -
+    fi
+    ln -s ${data_path}/cache ${fleetx_path}/projects/imagen/cache
 
     rm -rf part-00079
     if [[ -e ${data_path}/part-00079 ]]; then
