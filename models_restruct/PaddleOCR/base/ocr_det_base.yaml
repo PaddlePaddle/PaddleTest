@@ -79,7 +79,7 @@ api:
   cmd:  ./build/ppocr
   params:
     - --image_dir=../../doc/imgs_en/img_10.jpg
-    - --rec_model_dir=../../models_inference/${qa_yaml_name}
+    - --det_model_dir=../../models_inference/${qa_yaml_name}
     - --rec=false
     - --det=true
     - --cls=false
