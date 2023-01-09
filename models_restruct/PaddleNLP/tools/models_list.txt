@@ -1,5 +1,6 @@
 applications^information_extraction^text.yaml
 applications^information_extraction^document.yaml
+applications^question_answering^unsupervised_qa.yaml
 applications^text_summarize^pagesus.yaml
 model_zoo^ernie-3.0.yaml
 model_zoo^electra.yaml
