@@ -15,15 +15,15 @@ fleet_gpu_model_list=( \
     gpt_auto_dp2mp2sharding2 \
     gpt_auto_dp2pp2sharding2 \
     gpt_auto_dp2mp2pp2sharding2 \
+    gpt_auto_pass_o1_stage1 \
+    gpt_auto_pass_o1_stage2 \
     gpt_auto_export \
     )
-    # gpt_auto_pass_o1_stage1 \
-    # gpt_auto_pass_o3_stage1 \
 
-    # gpt_auto_pass_o1_stage2 \
     # gpt_auto_pass_o2_stage1 \
     # gpt_auto_pass_o2_stage2 \
     # gpt_auto_pass_o3_stage2 \
+    # gpt_auto_pass_o3_stage1 \
 
 function gpt_save_ckpt() {
     cd ${fleetx_path}
