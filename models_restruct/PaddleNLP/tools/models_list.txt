@@ -1,3 +1,4 @@
+examples^lexical_analysis.yaml
 applications^information_extraction^text.yaml
 applications^information_extraction^document.yaml
 applications^question_answering^unsupervised_qa.yaml
