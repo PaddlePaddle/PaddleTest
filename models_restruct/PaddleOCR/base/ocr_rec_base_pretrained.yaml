@@ -139,7 +139,7 @@ api:
     - --use_angle_cls=false
     - --use_gpu=${use_gpu}
     - --enable_mkldnn=false
-    result:
+  result:
     exit_code:
       base: 0
       threshold: 0
