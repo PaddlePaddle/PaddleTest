@@ -72,6 +72,20 @@ predict:
     - --use_tensorrt=False
     - --enable_mkldnn=False
     - --det_model_dir=./models_inference/${qa_yaml_name}
+
+api:
+  name: trained_C_plus_plus_GPU
+  path: deploy/cpp_infer
+  cmd:  ./build/ppocr
+  params:
+    - --image_dir=../../doc/imgs_en/img_10.jpg
+    - --rec_model_dir=../../models_inference/${qa_yaml_name}
+    - --rec=false
+    - --det=true
+    - --cls=false
+    - --use_angle_cls=false
+    - --use_gpu=${use_gpu}
+    - --enable_mkldnn=false
   result:
     exit_code:
       base: 0
