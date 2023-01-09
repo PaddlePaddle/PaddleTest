@@ -22,6 +22,18 @@ case:
       infer: skipped
       export: skipped
       predict: skipped
+      
+  windows_cpu:
+      base: ./base/normal_case.yaml
+      train:
+        -
+          name: multi
+          path: examples/few_shot/efl
+          cmd: python -m paddle.distributed.launch run_train.py
+      eval: skipped
+      infer: skipped
+      export: skipped
+      predict: skipped
 
   mac:
     base: ./base/normal_case.yaml
@@ -34,3 +46,4 @@ case:
     infer: skipped
     export: skipped
     predict: skipped
+  
