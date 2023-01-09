@@ -26,7 +26,7 @@ case:
     infer: skipped
     export: skipped
     predict: skipped
-  
+
   windows:
     train:
       -
@@ -82,7 +82,7 @@ case:
     infer: skipped
     export: skipped
     predict: skipped
-  
+
   mac:
     train:
       -
