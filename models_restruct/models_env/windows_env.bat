@@ -6,8 +6,8 @@ set pwd_org=%cd%
 echo "org path is %pwd_org%"
 if not defined AGILE_PIPELINE_NAME (
     echo "do not exit AGILE_PIPELINE_NAME, use org path %pwd_org%"
+    set AGILE_PIPELINE_NAME=test
 )  else  (
-    set AGILE_PIPELINE_NAME="test"
     if exist D:\PaddleMT\%AGILE_PIPELINE_NAME% ( rmdir D:\PaddleMT\%AGILE_PIPELINE_NAME% /S /Q)
     md D:\PaddleMT\%AGILE_PIPELINE_NAME%
     cd D:\PaddleMT\%AGILE_PIPELINE_NAME%
@@ -113,9 +113,11 @@ if %errorlevel% equ 0 (
 echo flag_version %flag_version%
 if %flag_version% equ 310 (
     if %flag_branch% equ 1 (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
+        @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-2.4.1-cp310-cp310-win_amd64.whl"
     )  else  (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
+        @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-2.4.1-cp310-cp310-win_amd64.whl"
     )
 )
 
@@ -128,9 +130,12 @@ if %errorlevel% equ 0 (
 echo flag_version %flag_version%
 if %flag_version% equ 117310 (
     if %flag_branch% equ 1 (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+        @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-2.4.1.post117-cp310-cp310-win_amd64.whl"
+
     )  else  (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+        @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-2.4.1.post117-cp310-cp310-win_amd64.whl"
     )
 )
 
@@ -143,9 +148,11 @@ if %errorlevel% equ 0 (
 echo flag_version %flag_version%
 if %flag_version% equ 11639 (
     if %flag_branch% equ 1 (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
+        @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-2.4.1.post116-cp39-cp39-win_amd64.whl"
     )  else  (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
+        @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post116-cp39-cp39-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.6-cudnn8.4.0-mkl-avx-vs2019/paddlepaddle_gpu-2.4.1.post116-cp39-cp39-win_amd64.whl"
     )
 )
 
@@ -158,14 +165,17 @@ if %errorlevel% equ 0 (
 echo flag_version %flag_version%
 if %flag_version% equ 11238 (
     if %flag_branch% equ 1 (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
+        @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-2.4.1.post112-cp38-cp38-win_amd64.whl"
     )  else  (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
+        @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-gpu-cuda11.2-cudnn8.2.1-mkl-avx-vs2019/paddlepaddle_gpu-2.4.1.post112-cp38-cp38-win_amd64.whl"
     )
 )
 
 rem not xly use default paddle_whl
-if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+@REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-2.4.1.post117-cp310-cp310-win_amd64.whl"
 
 rem default value
 if not defined step set step=train
