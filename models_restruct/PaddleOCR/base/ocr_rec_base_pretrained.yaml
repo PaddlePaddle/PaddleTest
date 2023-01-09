@@ -126,7 +126,7 @@ predict:
     - --use_tensorrt=False
     - --enable_mkldnn=False
 
- api:
+api:
   name: pretrained_C_plus_plus_GPU
   path: deploy/cpp_infer
   cmd:  ./build/ppocr
