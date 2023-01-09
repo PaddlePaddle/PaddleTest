@@ -100,6 +100,17 @@ function download() {
     fi
     cp -r ${data_path}/dataset ${fleetx_path}/
 
+    rm -rf cc12m_base64
+    if [[ -e ${data_path}/cc12m_base64 ]]; then
+        echo "cc12m_base64 downloaded"
+    else
+        # download cc12m_base64
+        wget -O ${data_path}/cc12m_base64.tar https://fleetx.bj.bcebos.com/datasets/cc12m_base64.tar
+        tar xf ${data_path}/cc12m_base64.tar -C ${data_path}/
+        rm -rf ${data_path}/cc12m_base64.tar
+    fi
+    ln -s ${data_path}/cc12m_base64 ${fleetx_path}/cc12m_base64
+
     rm -rf ./projects/imagen/t5
     if [[ -e ${data_path}/t5 ]]; then
         echo "imagen/t5 downloaded"
@@ -114,7 +125,7 @@ function download() {
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/t5/t5-11b/config.json
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/t5/t5-11b/spiece.model
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/t5/t5-11b/tokenizer.json
-        cat t5.pd.tar.gz.* |tar -xf - 
+        cat t5.pd.tar.gz.* |tar -xf -
         rm -rf t5.pd.tar.gz.*
         cd -
     fi
@@ -131,7 +142,7 @@ function download() {
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/tokenizer_config.json
         wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.0
         wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.1
-        tar debertav2.pd.tar.gz.* | tar -xf -  
+        tar debertav2.pd.tar.gz.* | tar -xf -
         rm -rf debertav2.pd.tar.gz.*
         cd -
     fi
