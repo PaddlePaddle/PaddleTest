@@ -9,21 +9,32 @@ case:
         name: train
         path: applications/text_summarization/pegasus
         cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --max_steps 2
+          - --save_steps 2
+          - --device gpu
+          - --output_dir ./output/
     eval: skipped
     infer:
       -
         name: trained
         cmd: python predict.py
+        params:
+          - --device gpu
+          - --init_checkpoint_dir ./output/
     export:
       -
         name: trained
         cmd: python export_model.py
+        params:
+          - --export_output_dir ./inference_model/
     predict:
       -
         name: trained
         path: applications/text_summarization/pegasus/deploy/paddle_inference/
         cmd: python inference_pegasus.py
-
+        params:
+          - --inference_model_dir ../../inference_model/
   windows:
     train:
       -
@@ -34,21 +45,68 @@ case:
         name: train
         path: applications/text_summarization/pegasus
         cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --max_steps 2
+          - --save_steps 2
+          - --device gpu
+          - --output_dir ./output/
     eval: skipped
     infer:
       -
         name: trained
-        cmd: python -m predict.py
+        cmd: python predict.py
+        params:
+          - --device gpu
+          - --init_checkpoint_dir ./output/
     export:
       -
         name: trained
         cmd: python export_model.py
+        params:
+          - --export_output_dir ./inference_model/
     predict:
       -
         name: trained
-        path: /deploy/paddle_inference/
+        path: applications/text_summarization/pegasus/deploy/paddle_inference/
         cmd: python inference_pegasus.py
-
+        params:
+          - --inference_model_dir ../../inference_model/
+  windows_cpu:
+    train:
+      -
+        name: prepare
+        path: applications/text_summarization/pegasus
+        cmd: python run_prepare.py
+      -
+        name: train
+        path: applications/text_summarization/pegasus
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --max_steps 2
+          - --save_steps 2
+          - --device cpu
+          - --output_dir ./output/
+    eval: skipped
+    infer:
+      -
+        name: trained
+        cmd: python predict.py
+        params:
+          - --device cpu
+          - --init_checkpoint_dir ./output/
+    export:
+      -
+        name: trained
+        cmd: python export_model.py
+        params:
+          - --export_output_dir ./inference_model/
+    predict:
+      -
+        name: trained
+        path: applications/text_summarization/pegasus/deploy/paddle_inference/
+        cmd: python inference_pegasus.py
+        params:
+          - --inference_model_dir ../../inference_model/
   mac:
     train:
       -
@@ -59,17 +117,30 @@ case:
         name: train
         path: applications/text_summarization/pegasus
         cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --max_steps 2
+          - --save_steps 2
+          - --device cpu
+          - --output_dir ./output/
     eval: skipped
     infer:
       -
         name: trained
-        cmd: python -m predict.py
+        cmd: python predict.py
+        params:
+          - --device cpu
+          - --init_checkpoint_dir ./output/
     export:
       -
         name: trained
         cmd: python export_model.py
+        params:
+          - --export_output_dir ./inference_model/
     predict:
       -
         name: trained
-        path: /deploy/paddle_inference/
+        path: applications/text_summarization/pegasus/deploy/paddle_inference/
         cmd: python inference_pegasus.py
+        params:
+          - --inference_model_dir ../../inference_model/
+
