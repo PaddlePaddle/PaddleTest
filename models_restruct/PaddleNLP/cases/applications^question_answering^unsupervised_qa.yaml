@@ -69,7 +69,6 @@ case:
         path: applications/question_answering/unsupervised_qa
         cmd: python -u run_qa_pairs_generation.py
         params: python -u -m paddle.distributed.launch  --log_dir log/question_generation finetune/question_generation/train.py
-          -
           - --train_file=data/finetune/question_generation/train.json
           - --predict_file=data/finetune/question_generation/dev.json
           - --save_dir=log/question_generation/checkpoints
@@ -95,9 +94,8 @@ case:
       -
         name: filtration_finetune
         path: applications/question_answering/unsupervised_qa
-        cmd: python -u run_qa_pairs_generation.py
+        cmd: python -u -m paddle.distributed.launch --log_dir log/filtration finetune/answer_extraction_and_roundtrip_filtration/finetune.py
         params:
-          - python -u -m paddle.distributed.launch --log_dir log/filtration finetune/answer_extraction_and_roundtrip_filtration/finetune.py
           - --train_path=data/finetune/filtration/train.json
           -  --dev_path=data/finetune/filtration/dev.json
           - --save_dir=log/filtration/checkpoints

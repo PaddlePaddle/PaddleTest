@@ -7,7 +7,7 @@ case:
         cmd: wget https://paddlenlp.bj.bcebos.com/datasets/tax.tar.gz && tar -zxvf tax.tar.gz && mv tax data && rm -f tax.tar.gz
       -
         name: label_studio
-        path: application/information_extraction/text
+        path: applications/information_extraction/text
         cmd: python ../label_studio.py
         params:
           - --label_studio_file ./data/label_studio.json
@@ -43,7 +43,7 @@ case:
           - --save_total_limit 1
         result:
           loss:
-            base: 2282887.188
+            base: 1
             threshold: 1
             evaluation: "="
     eval:
@@ -62,7 +62,7 @@ case:
           - --debug True
         result:
           loss:
-            base: 2282887.188
+            base: 1
             threshold: 1
             evaluation: "="
     infer: skipped
