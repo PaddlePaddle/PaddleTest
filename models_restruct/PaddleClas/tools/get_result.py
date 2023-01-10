@@ -3,6 +3,7 @@
 根据之前执行的结果获取kpi值
 """
 import os
+import time
 import sys
 import json
 import shutil
@@ -11,7 +12,6 @@ import tarfile
 import argparse
 import yaml
 import wget
-import time
 import numpy as np
 
 
