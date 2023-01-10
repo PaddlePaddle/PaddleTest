@@ -59,7 +59,7 @@ class PaddleNLP_Build(Model_Build):
         path_now = os.getcwd()
         platform = self.system
         if platform == "linux" :
-            os.system("python -m pip install -r requirements__nlp.txt")  # 安装模型依赖
+            os.system("python -m pip install -r requirements_nlp.txt")  # 安装模型依赖
         else:
             os.system("python -m pip install -r requirements_win.txt")  # 安装模型依赖
         import nltk
