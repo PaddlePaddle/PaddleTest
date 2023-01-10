@@ -67,7 +67,10 @@ class PaddleOCR_Build(Model_Build):
 
             sysstr = platform.system()
             if sysstr == "Linux":
-                src_path = "/ssd2/ce_data/PaddleOCR"
+                if os.path.exists('/ssd2/ce_data/PaddleOCR'):
+                    src_path = "/ssd2/ce_data/PaddleOCR"
+                else: 
+                    src_path="/home/data/cfs/models_ce/PaddleOCR"
             elif sysstr == "Windows":
                 src_path = "F:\\PaddleOCR"
                 os.system("mklink /d train_data F:\\PaddleOCR\\train_data")
@@ -92,7 +95,7 @@ class PaddleOCR_Build(Model_Build):
                 # dataset
                 if not os.path.exists("train_data/ctw1500"):
                     self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/ctw1500.tar", "train_data")
-
+          
                 if not os.path.exists("train_data/icdar2015"):
                     self.download_data(
                         "https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/icdar2015.tar", "train_data"
