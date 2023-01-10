@@ -30,6 +30,8 @@ case:
         name: single
         path: examples/few_shot/p-tuning
         cmd: python -m paddle.distributed.launch run_train.py
+        params:
+          - --device cpu
     eval: skipped
     infer: skipped
     export: skipped
@@ -42,6 +44,8 @@ case:
         name: multi
         path: examples/few_shot/p-tuning
         cmd: python -m paddle.distributed.launch run_train.py
+        params:
+          - --device cpu
     eval: skipped
     infer: skipped
     export: skipped

@@ -78,6 +78,7 @@ case:
           - --learning_rate 1e-5
           - --template "{'text':'text_a'} It was {'mask'}."
           - --verbalizer "{'0':'terrible','1':'great'}"
+          - --device cpu
     eval: skipped
     infer: skipped
     export: skipped
@@ -106,6 +107,7 @@ case:
           - --learning_rate 1e-5
           - --template "{'text':'text_a'} It was {'mask'}."
           - --verbalizer "{'0':'terrible','1':'great'}"
+          - --device cpu
     eval: skipped
     infer: skipped
     export: skipped
