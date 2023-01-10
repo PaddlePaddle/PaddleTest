@@ -143,4 +143,3 @@ case:
         cmd: python inference_pegasus.py
         params:
           - --inference_model_dir ../../inference_model/
-

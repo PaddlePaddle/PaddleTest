@@ -4,8 +4,8 @@ case:
       -
         name: prepare
         path: examples/text_graph/erniesage
-        cmd: python ./preprocessing/dump_graph.py 
-        params:  
+        cmd: python ./preprocessing/dump_graph.py
+        params:
           - --conf ./config/erniesage_link_prediction.yaml
       -
         name: change_epoch
@@ -14,16 +14,16 @@ case:
       -
         name: train
         path: examples/text_graph/erniesage
-        cmd: python -m paddle.distributed.launch --gpus "0" link_prediction.py 
+        cmd: python -m paddle.distributed.launch --gpus "0" link_prediction.py
         params:
           - --conf ./config/erniesage_link_prediction.yaml
     eval:
       -
         name: train
         path: examples/text_graph/erniesage
-        cmd: python -m paddle.distributed.launch link_prediction.py 
+        cmd: python -m paddle.distributed.launch link_prediction.py
         params:
-          - --conf ./config/erniesage_link_prediction.yaml 
+          - --conf ./config/erniesage_link_prediction.yaml
           - --do_predict
     infer: skipped
     export: skipped
