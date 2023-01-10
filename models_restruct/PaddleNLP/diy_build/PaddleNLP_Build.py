@@ -3,6 +3,7 @@
 自定义环境准备
 """
 import os
+from platform import platform
 import sys
 import logging
 import tarfile
@@ -56,6 +57,8 @@ class PaddleNLP_Build(Model_Build):
         安装依赖包
         """
         path_now = os.getcwd()
+        platform = self.system
+        print(platform)
         os.system("python -m pip install -r requirements_nlp.txt")  # 安装模型依赖
         # import nltk
 
