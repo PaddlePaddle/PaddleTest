@@ -77,7 +77,7 @@ class PaddleOCR_Build(Model_Build):
                 os.system("mklink /d pretrain_models F:\\PaddleOCR\\pretrain_models")
             elif sysstr == "Darwin":
                 src_path = "/Users/paddle/PaddleTest/ce_data/PaddleOCR"
-
+            print("PaddleOCR dataset path:{}".format(src_path))
             # dataset link
             # train_data_path = os.path.join(src_path, "train_data")
             # pretrain_models_path = os.path.join(src_path, "pretrain_models")
@@ -91,6 +91,9 @@ class PaddleOCR_Build(Model_Build):
                     os.symlink(os.path.join(src_path, "train_data"), "train_data")
                 if not os.path.exists("pretrain_models"):
                     os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
+            if not os.path.exists("train_data"):
+                print('train_data not exists!')
+                sys.exit(1)
 
                 # dataset
                 if not os.path.exists("train_data/ctw1500"):
