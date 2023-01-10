@@ -23,9 +23,9 @@ case:
         path: examples/lexical_analysis/
         cmd: python predict.py
         params:
-          - --data_dir ./lexical_analysis_dataset_tiny \
-          - --init_checkpoint ./save_dir/model_15.pdparams \
-          - --batch_size 32 \
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --init_checkpoint ./save_dir/model_15.pdparams
+          - --batch_size 32
           - --device gpu
     infer: skipped
     export:
@@ -71,9 +71,9 @@ case:
         path: examples/lexical_analysis/
         cmd: python predict.py
         params:
-          - --data_dir ./lexical_analysis_dataset_tiny \
-          - --init_checkpoint ./save_dir/model_15.pdparams \
-          - --batch_size 32 \
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --init_checkpoint ./save_dir/model_15.pdparams
+          - --batch_size 32
           - --device gpu
     infer: skipped
     export:
@@ -119,9 +119,9 @@ case:
         path: examples/lexical_analysis/
         cmd: python predict.py
         params:
-          - --data_dir ./lexical_analysis_dataset_tiny \
-          - --init_checkpoint ./save_dir/model_15.pdparams \
-          - --batch_size 32 \
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --init_checkpoint ./save_dir/model_15.pdparams
+          - --batch_size 32
           - --device cpu
     infer: skipped
     export:
@@ -166,9 +166,9 @@ case:
         path: examples/lexical_analysis/
         cmd: python predict.py
         params:
-          - --data_dir ./lexical_analysis_dataset_tiny \
-          - --init_checkpoint ./save_dir/model_15.pdparams \
-          - --batch_size 32 \
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --init_checkpoint ./save_dir/model_15.pdparams
+          - --batch_size 32
           - --device cpu
     infer: skipped
     export:
