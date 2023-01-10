@@ -1,6 +1,5 @@
 case:
   linux:
-    base: ./base/normal_case.yaml
     train:
       -
         name: prepare
@@ -26,7 +25,6 @@ case:
         cmd: python inference_pegasus.py
 
   windows:
-    base: ./base/normal_case.yaml
     train:
       -
         name: prepare
@@ -52,7 +50,6 @@ case:
         cmd: python inference_pegasus.py
 
   mac:
-    base: ./base/normal_case.yaml
     train:
       -
         name: prepare
