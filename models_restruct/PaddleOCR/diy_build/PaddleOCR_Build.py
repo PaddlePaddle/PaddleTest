@@ -67,7 +67,10 @@ class PaddleOCR_Build(Model_Build):
 
             sysstr = platform.system()
             if sysstr == "Linux":
-                src_path = "/ssd2/ce_data/PaddleOCR"
+                if os.path.exists("/ssd2/ce_data/PaddleOCR"):
+                    src_path = "/ssd2/ce_data/PaddleOCR"
+                else:
+                    src_path = "/home/data/cfs/models_ce/PaddleOCR"
             elif sysstr == "Windows":
                 src_path = "F:\\PaddleOCR"
                 os.system("mklink /d train_data F:\\PaddleOCR\\train_data")
