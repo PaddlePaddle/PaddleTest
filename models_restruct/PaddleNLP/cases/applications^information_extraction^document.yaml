@@ -7,7 +7,7 @@ case:
         cmd: wget https://paddlenlp.bj.bcebos.com/datasets/tax.tar.gz && tar -zxvf tax.tar.gz && mv tax data && rm -f tax.tar.gz
       -
         name: label_studio
-        path: applications/information_extraction/text
+        path: applications/information_extraction/document
         cmd: python ../label_studio.py
         params:
           - --label_studio_file ./data/label_studio.json

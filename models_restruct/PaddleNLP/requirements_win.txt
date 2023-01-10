@@ -2,7 +2,6 @@ regex
 nltk
 xlrd==1.2.0
 visualdl
-paddleslim
 pybind11
 editdistance
 h5py
