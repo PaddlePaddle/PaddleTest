@@ -92,7 +92,7 @@ class PaddleOCR_Build(Model_Build):
                 if not os.path.exists("pretrain_models"):
                     os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
             if not os.path.exists("train_data"):
-                print('train_data not exists!')
+                print("train_data not exists!")
                 sys.exit(1)
 
                 # dataset
