@@ -125,21 +125,21 @@ class PaddleOCR_Start(object):
             os.makedirs("cases")
 
         case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
-        det_distill=['det_dml','det_distill','det_dml','det_cml']
+        det_distill = ["det_dml", "det_distill", "det_dml", "det_cml"]
         if not os.path.exists(case_file):
             if any(item in self.qa_yaml_name for item in det_distill):
                 with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
                     f.writelines(
-                            (
-                                "case:" + os.linesep,
-                                "    linux:" + os.linesep,
-                                "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
-                                "    windows:" + os.linesep,
-                                "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
-                                "    mac:" + os.linesep,
-                                "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
-                            )
+                        (
+                            "case:" + os.linesep,
+                            "    linux:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
+                            "    windows:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
+                            "    mac:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                         )
+                    )
             else:
                 with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
                     if self.model in pretrained_yaml[self.category].keys():
