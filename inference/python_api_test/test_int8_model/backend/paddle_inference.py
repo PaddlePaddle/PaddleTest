@@ -60,7 +60,6 @@ class PaddleInferenceEngine(object):
                 "Predict by TensorRT mode: {}, expect device=='GPU', but device == {}".format(precision, device)
             )
         config = Config(os.path.join(model_dir, model_filename), os.path.join(model_dir, params_filename))
-        config.switch_ir_debug()
         if device == "GPU":
             # initial GPU memory(M), device ID
             config.enable_use_gpu(200, 0)
@@ -99,7 +98,7 @@ class PaddleInferenceEngine(object):
                     print("trt set dynamic shape done!")
                 else:
                     # In order to avoid memory overflow when collecting dynamic shapes, it is changed to use CPU.
-                    # config.disable_gpu()
+                    config.disable_gpu()
                     config.set_cpu_math_library_num_threads(10)
                     config.collect_shape_range_info(dynamic_shape_file)
                     print("Start collect dynamic shape...")
