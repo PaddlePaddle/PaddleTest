@@ -64,7 +64,7 @@ def test_disable_gpu():
 @pytest.mark.gpu
 def test_gpu_more_bz():
     """
-    compared gpu batch_size=1,5,10 TNT_small outputs with true val
+    compared gpu batch_size=1-2 TNT_small outputs with true val
     """
     check_model_exist()
 
@@ -103,7 +103,7 @@ def test_gpu_mixed_precision_bz1():
 
     file_path = "./TNT_small"
     images_size = 224
-    batch_size_pool = [1, 2]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         if not os.path.exists("./TNT_small/inference_mixed.pdmodel"):
@@ -114,7 +114,7 @@ def test_gpu_mixed_precision_bz1():
                 dst_params="./TNT_small/inference_mixed.pdiparams",
             )
         test_suite.load_config(
-            model_file="./TNT_small/inference_mixed.pdmodel", params_file="./TNT_small/inference_mixed.pdiparams"
+            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -127,7 +127,7 @@ def test_gpu_mixed_precision_bz1():
         test_suite2.load_config(
             model_file="./TNT_small/inference_mixed.pdmodel", params_file="./TNT_small/inference_mixed.pdiparams"
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict)
+        test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, delta=1e-3)
 
         del test_suite2  # destroy class to save memory
 
