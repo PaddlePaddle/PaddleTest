@@ -3,7 +3,7 @@ case:
     train:
       -
         name: prepare
-        path: application/information_extraction/document
+        path: applications/information_extraction/document
         cmd: wget https://paddlenlp.bj.bcebos.com/datasets/tax.tar.gz && tar -zxvf tax.tar.gz && mv tax data && rm -f tax.tar.gz
       -
         name: label_studio
@@ -16,7 +16,7 @@ case:
           - --task_type ext
       -
         name: fintune
-        path: application/information_extraction/document
+        path: applications/information_extraction/document
         cmd: python -u -m paddle.distributed.launch  finetune.py
         params:
           - --device gpu
@@ -49,7 +49,7 @@ case:
     eval:
       -
         name: evaluate
-        path: application/information_extraction/document
+        path: applications/information_extraction/document
         cmd: python evaluate.py
         params:
           - --device 'gpu'

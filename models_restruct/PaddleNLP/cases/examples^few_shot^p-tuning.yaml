@@ -10,3 +10,27 @@ case:
     infer: skipped
     export: skipped
     predict: skipped
+
+  windows:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: multi
+        path: examples/few_shot/p-tuning
+        cmd: python -m paddle.distributed.launch run_train.py
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: multi
+        path: examples/few_shot/p-tuning
+        cmd: python -m paddle.distributed.launch run_train.py
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
