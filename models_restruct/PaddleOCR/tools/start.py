@@ -166,9 +166,13 @@ class PaddleOCR_Start(object):
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                             )
                         )
+
     def prepare_dataset(self):
+        """
+        prepare_dataset
+        """
         path_now = os.getcwd()
-        os.chdir('PaddleOCR')
+        os.chdir("PaddleOCR")
         sysstr = platform.system()
         if sysstr == "Linux":
             if os.path.exists("/ssd2/ce_data/PaddleOCR"):
@@ -177,22 +181,21 @@ class PaddleOCR_Start(object):
                 src_path = "/home/data/cfs/models_ce/PaddleOCR"
 
             if not os.path.exists("train_data"):
-                print('PaddleOCR train_data link:')
+                print("PaddleOCR train_data link:")
                 os.symlink(os.path.join(src_path, "train_data"), "train_data")
-                os.system('ll')
+                os.system("ll")
                 if not os.path.exists("train_data"):
-                    os.system('ln -s /home/data/cfs/models_ce/PaddleOCR/train_data train_data')
-                    os.system('ll')
+                    os.system("ln -s /home/data/cfs/models_ce/PaddleOCR/train_data train_data")
+                    os.system("ll")
             if not os.path.exists("pretrain_models"):
-                print('PaddleOCR pretrain_models link:')
+                print("PaddleOCR pretrain_models link:")
                 os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
-                os.system('ll')
+                os.system("ll")
                 if not os.path.exists("pretrain_models"):
-                    os.system('ln -s /home/data/cfs/models_ce/PaddleOCR/pretrain_models pretrain_models')
-                    os.system('ll')
-  
-        os.chdir(path_now)
+                    os.system("ln -s /home/data/cfs/models_ce/PaddleOCR/pretrain_models pretrain_models")
+                    os.system("ll")
 
+        os.chdir(path_now)
 
     def build_prepare(self):
         """
