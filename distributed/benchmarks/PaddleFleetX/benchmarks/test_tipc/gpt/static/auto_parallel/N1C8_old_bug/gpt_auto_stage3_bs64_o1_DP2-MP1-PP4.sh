@@ -1,13 +1,13 @@
-model_item=gpt_auto_stage2
-dp_degree=16
+model_item=gpt_auto_stage3
+dp_degree=2
 mp_degree=1
-pp_degree=1
-bs_item=128
-fp_item=o2
-run_mode=DP16-MP1-PP1
-device_num=N2C16
-sharding_degree=16
-sharding_stage=2
+pp_degree=4
+bs_item=64
+fp_item=o1
+run_mode=DP2-MP1-PP4
+device_num=N1C8
+sharding_degree=2
+sharding_stage=3
 
 model=gpt
 micro_bs=8

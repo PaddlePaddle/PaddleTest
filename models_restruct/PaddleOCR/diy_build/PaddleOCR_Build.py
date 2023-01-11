@@ -96,6 +96,7 @@ class PaddleOCR_Build(Model_Build):
 #                sys.exit(1)
 
                 # dataset
+                '''
                 if not os.path.exists("train_data/ctw1500"):
                     self.download_data("https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/ctw1500.tar", "train_data")
 
@@ -107,6 +108,7 @@ class PaddleOCR_Build(Model_Build):
                     self.download_data(
                         "https://paddle-qa.bj.bcebos.com/PaddleOCR/train_data/data_lmdb_release.tar", "train_data"
                     )
+                '''
             # configs/rec/rec_resnet_stn_bilstm_att.yml
             # os.system("python -m pip install fasttext")
             # if not os.path.exists("cc.en.300.bin"):

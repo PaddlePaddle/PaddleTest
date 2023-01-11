@@ -1,16 +1,16 @@
-model_item=gpt_auto_stage2
-dp_degree=16
-mp_degree=1
-pp_degree=1
-bs_item=128
-fp_item=o2
-run_mode=DP16-MP1-PP1
-device_num=N2C16
-sharding_degree=16
-sharding_stage=2
+model_item=gpt_auto_stage1
+dp_degree=1
+mp_degree=2
+pp_degree=4
+bs_item=64
+fp_item=o1
+run_mode=DP1-MP2-PP4
+device_num=N1C8
+sharding_degree=1
+sharding_stage=1
 
 model=gpt
-micro_bs=8
+micro_bs=16
 
 cd ./benchmarks
 bash ./test_tipc/gpt/static/auto_parallel/benchmark_common/prepare.sh
