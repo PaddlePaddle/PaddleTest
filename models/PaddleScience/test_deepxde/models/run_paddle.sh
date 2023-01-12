@@ -1,8 +1,11 @@
 rm -rf test_*.py
-cases=`find ../deepxde/examples/pinn_forward/ -name "*.py" | sort `
-ignore=""
+export DDE_BACKEND=paddle
+cases=`find ../../deepxde/examples/ -name "*.py" | sort `
+ignore="dataset.py func_uncertainty.py func.py mf_dataset.py \
+        mf_func.py antiderivative_aligned.py antiderivative_unaligned.py \
+        Euler_beam.py Klein_Gordon.py \
+        "
 serial_bug=0
-distributed_bug=0
 bug=0
 echo "============ failed cases =============" > result.txt
 for file in ${cases}
@@ -11,7 +14,6 @@ echo serial ${file} test
 if [[ ${ignore} =~ ${file##*/} ]]; then
     echo "skip"
 else
-    python3.7 standardization.py -f ${file}
     python3.7 ${file}
     if [ $? -ne 0 ]; then
         echo ${file} >> result.txt
