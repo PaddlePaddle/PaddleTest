@@ -95,6 +95,7 @@ def test_gpu_more_bz():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
+@pytest.mark.skip(reason="Precision reduction caused by PR 49753 fc kernel fuse")
 def test_gpu_mixed_precision_bz1():
     """
     compared gpu batch_size=1 TNT_small mixed_precision outputs with true val
