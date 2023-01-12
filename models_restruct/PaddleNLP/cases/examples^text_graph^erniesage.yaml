@@ -1,0 +1,23 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: examples/text_graph/erniesage
+        cmd: python ./preprocessing/dump_graph.py  --conf ./config/erniesage_link_prediction.yaml
+      -
+        name: change_epoch
+        path: examples/text_graph/erniesage
+        cmd: sed -i "s/epoch: 30/epoch: 1/g" config/erniesage_link_prediction.yaml
+      -
+        name: train
+        path: examples/text_graph/erniesage
+        cmd: python -m paddle.distributed.launch --gpus "0" link_prediction.py --conf ./config/erniesage_link_prediction.yaml
+    eval:
+      -
+        name: train
+        path: examples/text_graph/erniesage
+        cmd: python -m paddle.distributed.launch link_prediction.py --conf ./config/erniesage_link_prediction.yaml --do_predict
+    infer: skipped
+    export: skipped
+    predict: skipped
