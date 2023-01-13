@@ -684,6 +684,9 @@ class InferenceTest(object):
         use_static=False,
         use_calib_mode=False,
         delete_pass_list=None,
+        dynamic=False,
+        tuned=False,
+        shape_range_file="shape_range.pbtxt",
     ):
         """
         test enable_tensorrt_engine()
@@ -711,14 +714,29 @@ class InferenceTest(object):
             "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=1,
-            min_subgraph_size=min_subgraph_size,
-            precision_mode=trt_precision_map[precision],
-            use_static=use_static,
-            use_calib_mode=use_calib_mode,
-        )
+        if dynamic:
+            if tuned:
+                self.pd_config.collect_shape_range_info("shape_range.pbtxt")
+            else:
+                self.pd_config.enable_tensorrt_engine(
+                    workspace_size=1 << 30,
+                    max_batch_size=1,
+                    min_subgraph_size=min_subgraph_size,
+                    precision_mode=trt_precision_map[precision],
+                    use_static=use_static,
+                    use_calib_mode=use_calib_mode,
+                )
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape(shape_range_file, True)
+        else:
+            self.pd_config.enable_tensorrt_engine(
+                workspace_size=1 << 30,
+                max_batch_size=1,
+                min_subgraph_size=min_subgraph_size,
+                precision_mode=trt_precision_map[precision],
+                use_static=use_static,
+                use_calib_mode=use_calib_mode,
+            )
+
         if delete_pass_list:
             for ir_pass in delete_pass_list:
                 self.pd_config.delete_pass(ir_pass)
