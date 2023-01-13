@@ -65,7 +65,7 @@ def test_disable_gpu():
 @pytest.mark.gpu
 def test_gpu_more_bz():
     """
-    compared gpu vgg11 outputs with true val
+    compared gpu batch_size=1-2 vgg11 outputs with true val
     """
     check_model_exist()
 
@@ -94,7 +94,7 @@ def test_gpu_more_bz():
 @pytest.mark.gpu
 def test_gpu_mixed_precision_bz1():
     """
-    compared gpu vgg11 mixed_precision outputs with true val
+    compared gpu batch_size=1 vgg11 mixed_precision outputs with true val
     """
     check_model_exist()
 
@@ -110,9 +110,7 @@ def test_gpu_mixed_precision_bz1():
                 dst_model="./vgg11/inference_mixed.pdmodel",
                 dst_params="./vgg11/inference_mixed.pdiparams",
             )
-        test_suite.load_config(
-            model_file="./vgg11/inference_mixed.pdmodel", params_file="./vgg11/inference_mixed.pdiparams"
-        )
+        test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
@@ -124,7 +122,7 @@ def test_gpu_mixed_precision_bz1():
         test_suite2.load_config(
             model_file="./vgg11/inference_mixed.pdmodel", params_file="./vgg11/inference_mixed.pdiparams"
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict)
+        test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, delta=1e-4)
 
         del test_suite2  # destroy class to save memory
 
@@ -133,7 +131,7 @@ def test_gpu_mixed_precision_bz1():
 @pytest.mark.gpu
 def test_jetson_gpu_more_bz():
     """
-    compared gpu vgg11 outputs with true val
+    compared gpu batch_size=1  vgg11 outputs with true val
     """
     check_model_exist()
 

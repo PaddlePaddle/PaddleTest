@@ -64,7 +64,7 @@ def test_disable_gpu():
 @pytest.mark.gpu
 def test_gpu_more_bz():
     """
-    compared trt gpu batch_size=1-10 resnet50 outputs with true val
+    compared gpu batch_size=1-2 pcpvt_base outputs with true val
     """
     check_model_exist()
 
@@ -114,7 +114,7 @@ def test_gpu_mixed_precision_bz1():
                 dst_params="./pcpvt_base/inference_mixed.pdiparams",
             )
         test_suite.load_config(
-            model_file="./pcpvt_base/inference_mixed.pdmodel", params_file="./pcpvt_base/inference_mixed.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -127,7 +127,7 @@ def test_gpu_mixed_precision_bz1():
         test_suite2.load_config(
             model_file="./pcpvt_base/inference_mixed.pdmodel", params_file="./pcpvt_base/inference_mixed.pdiparams"
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=2e-3)
+        test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, delta=5e-3)
 
         del test_suite2  # destroy class to save memory
 
@@ -136,7 +136,7 @@ def test_gpu_mixed_precision_bz1():
 @pytest.mark.gpu
 def test_jetson_gpu_more_bz():
     """
-    compared trt gpu batch_size=1-10 resnet50 outputs with true val
+    compared gpu batch_size=1 pcpvt_base outputs with true val
     """
     check_model_exist()
 
