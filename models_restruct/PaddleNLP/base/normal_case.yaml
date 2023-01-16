@@ -18,7 +18,7 @@ infer:
 export:
   name: trained
   params:
-    - --export_output_dir ./inference_model/ 
+    - --export_output_dir ./inference_model/
 predict:
   name: trained
   params:
