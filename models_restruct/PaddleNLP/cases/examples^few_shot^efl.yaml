@@ -22,7 +22,6 @@ case:
       infer: skipped
       export: skipped
       predict: skipped
-
   windows_cpu:
       base: ./base/normal_case.yaml
       train:
@@ -36,7 +35,6 @@ case:
       infer: skipped
       export: skipped
       predict: skipped
-
   mac:
     base: ./base/normal_case.yaml
     train:

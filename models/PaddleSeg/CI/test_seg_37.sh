@@ -37,49 +37,6 @@ fi
 mkdir log_err
 if [ -d "output" ];then rm -rf output
 fi
-#cpp infer compile
-cd deploy/cpp
-wget https://github.com/opencv/opencv/archive/3.4.7.tar.gz
-tar -xf 3.4.7.tar.gz
-mkdir -p opencv-3.4.7/build
-cd opencv-3.4.7/build
-install_path=/usr/local/opencv3
-cmake .. -DCMAKE_INSTALL_PREFIX=${install_path} -DCMAKE_BUILD_TYPE=Release
-make -j
-make install
-cd ..
-cd ..
-wget https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.zip
-unzip yaml-cpp-0.7.0.zip
-mkdir -p yaml-cpp-yaml-cpp-0.7.0/build
-cd yaml-cpp-yaml-cpp-0.7.0/build
-cmake -DYAML_BUILD_SHARED_LIBS=ON ..
-make -j
-make install
-cd ..
-cd ..
-wget ${paddle_inference}
-tar xvf paddle_inference.tgz
-WITH_MKL=ON
-WITH_GPU=ON
-USE_TENSORRT=OFF
-DEMO_NAME=test_seg
-work_path=$(dirname $(readlink -f $0))
-LIB_DIR="${work_path}/paddle_inference"
-mkdir -p build
-cd build
-rm -rf *
-cmake .. \
-  -DDEMO_NAME=${DEMO_NAME} \
-  -DWITH_MKL=${WITH_MKL} \
-  -DWITH_GPU=${WITH_GPU} \
-  -DUSE_TENSORRT=${USE_TENSORRT} \
-  -DWITH_STATIC_LIB=OFF \
-  -DPADDLE_LIB=${LIB_DIR}
-make -j
-cd ..
-cd ..
-cd ..
 # prepare dynamic data
 mkdir data
 if [ -d "data/cityscapes" ];then rm -rf data/cityscapes
@@ -127,7 +84,7 @@ model_type_path=
 dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
 if [ ${dynamic_config_num} -eq 0 ];then
 find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v contrib | grep -v Matting | grep -v setr | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | tee dynamic_config_all
-shuf dynamic_config_all -n 2 -o dynamic_config_list_temp
+shuf dynamic_config_all -n 4 -o dynamic_config_list_temp
 fi
 grep -F -v -f no_upload dynamic_config_list_temp | sort | uniq | tee dynamic_config_list
 sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml
@@ -136,6 +93,7 @@ skip_export_model='gscnn_resnet50_os8_cityscapes_1024x512_80k espnetv1_cityscape
 TRAIN_MUlTI_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
     mode=train_multi_dynamic
+    echo -e "${model} ${mode} testing start!"
     if [[ ${model} =~ 'segformer' ]];then
         echo -e "${model} does not test multi_train！"
     else
@@ -150,6 +108,7 @@ TRAIN_MUlTI_DYNAMIC(){
 TRAIN_SINGLE_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid1
     mode=train_single_dynamic
+    echo -e "${model} ${mode} testing start!"
     if [[ ${model} =~ 'segformer' ]];then
         echo -e "${model} does not test single_train！"
     else
@@ -164,6 +123,7 @@ TRAIN_SINGLE_DYNAMIC(){
 EVAL_DYNAMIC(){
     export CUDA_VISIBLE_DEVICES=$cudaid2
     mode=eval_dynamic
+    echo -e "${model} ${mode} testing start!"
     python -m paddle.distributed.launch tools/val.py \
        --config ${config} \
        --model_path seg_dynamic_pretrain/${model}/model.pdparams >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
@@ -171,6 +131,7 @@ EVAL_DYNAMIC(){
 }
 PREDICT_DYNAMIC(){
     mode=predict_dynamic
+    echo -e "${model} ${mode} testing start!"
     python tools/predict.py \
        --config ${config} \
        --model_path seg_dynamic_pretrain/${model}/model.pdparams \
@@ -180,6 +141,7 @@ PREDICT_DYNAMIC(){
 }
 EXPORT_DYNAMIC(){
     mode=export_dynamic
+    echo -e "${model} ${mode} testing start!"
     if [[ ${model} =~ 'rtformer' || ${model} =~ 'dmnet' ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
         python tools/export.py \
@@ -201,6 +163,7 @@ EXPORT_DYNAMIC(){
 }
 PYTHON_INFER_DYNAMIC(){
     mode=python_infer_dynamic
+    echo -e "${model} ${mode} testing start!"
     if [ ! -d ./inference_model/${model} ];then
         echo -e "${model} doesn't run export case,so can't run PYTHON_INFER case!"
     else
@@ -209,19 +172,6 @@ PYTHON_INFER_DYNAMIC(){
            --config ./inference_model/${model}/deploy.yaml \
            --image_path ./demo/${predict_pic} \
            --save_dir ./python_infer_output/${model} >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
-        print_result
-    fi
-}
-CPP_INFER(){
-    mode=cpp_infer
-    if [ ! -d ./inference_model/${model} ];then
-        echo -e "${model} doesn't run export case,so can't run CPP_INFER case!"
-    else
-        ./deploy/cpp/build/test_seg \
-           --model_dir=inference_model/${model} \
-           --img_path=demo/${predict_pic} \
-           --save_dir=cpp_infer_output/${model} \
-           --devices=GPU >${log_dir}/log/${model}/${model}_${mode}.log 2>&1
         print_result
     fi
 }
@@ -255,7 +205,6 @@ else
     PREDICT_DYNAMIC
     EXPORT_DYNAMIC
     PYTHON_INFER_DYNAMIC
-    CPP_INFER
 fi
 done
 

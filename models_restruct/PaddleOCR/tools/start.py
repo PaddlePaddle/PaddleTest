@@ -125,32 +125,77 @@ class PaddleOCR_Start(object):
             os.makedirs("cases")
 
         case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
+        det_distill = ["det_dml", "det_distill", "det_dml", "det_cml"]
         if not os.path.exists(case_file):
-            with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
-                if self.model in pretrained_yaml[self.category].keys():
+            if any(item in self.qa_yaml_name for item in det_distill):
+                with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
                     f.writelines(
                         (
                             "case:" + os.linesep,
                             "    linux:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    windows:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    mac:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                         )
                     )
-                else:
-                    f.writelines(
-                        (
-                            "case:" + os.linesep,
-                            "    linux:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
-                            "    windows:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
-                            "    mac:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+            else:
+                with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
+                    if self.model in pretrained_yaml[self.category].keys():
+                        f.writelines(
+                            (
+                                "case:" + os.linesep,
+                                "    linux:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "    windows:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "    mac:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                            )
                         )
-                    )
+                    else:
+                        f.writelines(
+                            (
+                                "case:" + os.linesep,
+                                "    linux:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "    windows:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "    mac:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                            )
+                        )
+
+    def prepare_dataset(self):
+        """
+        prepare_dataset
+        """
+        path_now = os.getcwd()
+        os.chdir("PaddleOCR")
+        sysstr = platform.system()
+        if sysstr == "Linux":
+            if os.path.exists("/ssd2/ce_data/PaddleOCR"):
+                src_path = "/ssd2/ce_data/PaddleOCR"
+            else:
+                src_path = "/home/data/cfs/models_ce/PaddleOCR"
+
+            if not os.path.exists("train_data"):
+                print("PaddleOCR train_data link:")
+                os.symlink(os.path.join(src_path, "train_data"), "train_data")
+                os.system("ll")
+                if not os.path.exists("train_data"):
+                    os.system("ln -s /home/data/cfs/models_ce/PaddleOCR/train_data train_data")
+                    os.system("ll")
+            if not os.path.exists("pretrain_models"):
+                print("PaddleOCR pretrain_models link:")
+                os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
+                os.system("ll")
+                if not os.path.exists("pretrain_models"):
+                    os.system("ln -s /home/data/cfs/models_ce/PaddleOCR/pretrain_models pretrain_models")
+                    os.system("ll")
+
+        os.chdir(path_now)
 
     def build_prepare(self):
         """
@@ -163,6 +208,7 @@ class PaddleOCR_Start(object):
             logger.info("build prepare_config_params failed")
         self.prepare_pretrained_model()
         self.gengrate_test_case()
+        self.prepare_dataset()
         os.environ[self.reponame] = json.dumps(self.env_dict)
         for k, v in self.env_dict.items():
             os.environ[k] = v

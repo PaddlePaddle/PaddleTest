@@ -577,6 +577,7 @@ def test_beamsearchdecoder8():
     Exception to the type of start_id
     """
     paddle.seed(33)
+    paddle.enable_static()
     trg_embeder = Embedding(100, 16)
     output_layer = Linear(16, 16)
     decoder_cell = GRUCell(input_size=16, hidden_size=16)
@@ -592,6 +593,7 @@ def test_beamsearchdecoder8():
             pass
         else:
             raise Exception
+    paddle.disable_static()
 
 
 @pytest.mark.api_nn_BeamSearchDecoder_exception

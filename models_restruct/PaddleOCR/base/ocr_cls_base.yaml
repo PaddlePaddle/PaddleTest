@@ -83,7 +83,7 @@ predict:
   params:
     - --image_dir="doc/imgs_words_en/word_10.png"
     - --cls_model_dir="./models_inference/"${qa_yaml_name}
-    - --use_gpu=True
+    - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
 
@@ -92,9 +92,22 @@ predict:
   params:
     - --image_dir="doc/imgs_words_en/word_10.png"
     - --cls_model_dir="./models_inference/"${qa_yaml_name}
-    - --use_gpu=True
+    - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
+api:
+  name: trained_C_plus_plus_GPU
+  path: deploy/cpp_infer
+  cmd:  ./build/ppocr
+  params:
+    - --image_dir=../../doc/imgs_words_en/word_10.png
+    - --cls_model_dir=../../models_inference/${qa_yaml_name}
+    - --rec=false
+    - --det=false
+    - --cls=true
+    - --use_angle_cls=true
+    - --use_gpu=${use_gpu}
+    - --enable_mkldnn=false
 
   result:
     exit_code:
