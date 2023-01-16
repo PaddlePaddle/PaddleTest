@@ -1,5 +1,6 @@
 case:
   linux:
+    base: ./base/normal_case.yaml
     train:
       -
         name: prepare
@@ -9,11 +10,6 @@ case:
         name: train
         path: applications/text_summarization/pegasus
         cmd: python -m paddle.distributed.launch train.py
-        params:
-          - --max_steps 2
-          - --save_steps 2
-          - --device gpu
-          - --output_dir ./output/
     eval: skipped
     infer:
       -
@@ -36,6 +32,7 @@ case:
         params:
           - --inference_model_dir ../../inference_model/
   windows:
+    base: ./base/normal_case.yaml
     train:
       -
         name: prepare
@@ -45,11 +42,6 @@ case:
         name: train
         path: applications/text_summarization/pegasus
         cmd: python -m paddle.distributed.launch train.py
-        params:
-          - --max_steps 2
-          - --save_steps 2
-          - --device gpu
-          - --output_dir ./output/
     eval: skipped
     infer:
       -
@@ -108,6 +100,7 @@ case:
         params:
           - --inference_model_dir ../../inference_model/
   mac:
+    base: ./base/normal_case.yaml
     train:
       -
         name: prepare
@@ -117,19 +110,11 @@ case:
         name: train
         path: applications/text_summarization/pegasus
         cmd: python -m paddle.distributed.launch train.py
-        params:
-          - --max_steps 2
-          - --save_steps 2
-          - --device cpu
-          - --output_dir ./output/
     eval: skipped
     infer:
       -
         name: trained
-        cmd: python predict.py
-        params:
-          - --device cpu
-          - --init_checkpoint_dir ./output/
+        cmd: python -m predict.py
     export:
       -
         name: trained

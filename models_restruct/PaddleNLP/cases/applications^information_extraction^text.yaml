@@ -59,7 +59,12 @@ case:
           - --task_type relation_extraction
           - --synthetic_ratio 10
           - --model_path ../checkpoint/model_best
-      -
+        result:
+          loss:
+            base: 2282887.188
+            threshold: 1
+            evaluation: "="
+       -
         name: distill_train_student
         path: applications/information_extraction/text/data_distill
         cmd: python train.py
@@ -72,7 +77,6 @@ case:
           - --eval_steps 39
           - --logging_steps 1
           - --encoder ernie-3.0-mini-zh
-
     eval:
       -
         name: evaluate

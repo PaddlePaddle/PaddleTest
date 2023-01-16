@@ -3,7 +3,7 @@ train:
   cmd : python -m paddle.distributed.launch tools/train.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.use_gpu=True
+    - -o Global.use_gpu=${use_gpu}
     - Global.epoch_num=1
     - Global.save_epoch_step=1
     - Global.eval_batch_step=200
@@ -28,12 +28,14 @@ eval:
   cmd:  python tools/eval.py
   params:
     - -c ${rd_yaml_path}
+    - -o Global.use_gpu=${use_gpu}
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
 
   name: pretrained
   cmd:  python tools/eval.py
   params:
     - -c ${rd_yaml_path}
+    - -o Global.use_gpu=${use_gpu}
     - -o Global.pretrained_model=${model}/best_accuracy
     - Eval.dataset.data_dir=train_data/table/pubtabnet/val
     - Eval.loader.batch_size_per_card=10
@@ -49,6 +51,7 @@ infer:
   cmd:  python tools/infer_table.py
   params:
     - -c ${rd_yaml_path}
+    - -o Global.use_gpu=${use_gpu}
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.infer_img="ppstructure/docs/table/table.jpg"
     - Global.test_batch_size_per_card=1
@@ -57,6 +60,7 @@ infer:
   cmd:  python tools/infer_table.py
   params:
     - -c ${rd_yaml_path}
+    - -o Global.use_gpu=${use_gpu}
     - -o Global.pretrained_model=${model}/best_accuracy
     - Global.infer_img="ppstructure/docs/table/table.jpg"
     - Global.test_batch_size_per_card=1
@@ -71,6 +75,7 @@ export:
   cmd:  python tools/export_model.py
   params:
     - -c ${rd_yaml_path}
+    - -o Global.use_gpu=${use_gpu}
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.save_inference_dir=./models_inference/${qa_yaml_name}
 
@@ -78,6 +83,7 @@ export:
   cmd:  python tools/export_model.py
   params:
     - -c ${rd_yaml_path}
+    - -o Global.use_gpu=${use_gpu}
     - -o Global.pretrained_model=${model}/best_accuracy
     - Global.save_inference_dir=./models_inference/${model}
 
@@ -110,6 +116,21 @@ predict:
     - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
+api:
+  name: pretrained_C_plus_plus_GPU
+  path: deploy/cpp_infer
+  cmd:  ./build/ppocr
+  params:
+    - --image_dir=../../ppstructure/docs/table/table.jpg
+    - --det_model_dir=../../models_inference/det_mv3_db
+    - --rec_model_dir=../../models_inference/rec_mv3_none_bilstm_ctc
+    - --table_model_dir=../../models_inference/${model}
+    - --type=structure
+    - --table=true
+    - --use_gpu=${use_gpu}
+    - --enable_mkldnn=false
+
+
 
   result:
     exit_code:
