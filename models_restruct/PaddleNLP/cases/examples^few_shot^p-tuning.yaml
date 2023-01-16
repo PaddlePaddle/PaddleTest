@@ -3,7 +3,7 @@ case:
     base: ./base/normal_case.yaml
     train:
       -
-        name: multi
+        name: single
         path: examples/few_shot/p-tuning
         cmd: python -m paddle.distributed.launch run_train.py
     eval: skipped
