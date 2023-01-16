@@ -4,7 +4,7 @@ case:
       -
         name: prepare
         path: model_zoo/ernie-1.0/
-        cmd: mkdir data_static && cd data_static && wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/wudao_200g_sample_ernie-1.0-base-zh_ids.npy && wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/wudao_200g_sample_ernie-1.0-base-zh_idx.npz && cd -
+        cmd: mkdir data && cd data && wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/wudao_200g_sample_ernie-1.0-base-zh_ids.npy && wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/wudao_200g_sample_ernie-1.0-base-zh_idx.npz
       -
         name: static
         path: model_zoo/ernie-1.0/
@@ -12,7 +12,7 @@ case:
         params:
           - --model_type "ernie"
           - --model_name_or_path "ernie-1.0"
-          - --input_dir "./data_static/"
+          - --input_dir "./data/"
           - --output_dir "./output/"
           - --max_seq_len 512
           - --micro_batch_size 16
@@ -24,14 +24,14 @@ case:
           - --use_recompute false
           - --max_lr 0.0001
           - --min_lr 0.00001
-          - --max_steps 40
-          - --save_steps 20
-          - --checkpoint_steps 5000
+          - --max_steps 2
+          - --save_steps 2
+          - --checkpoint_steps 2
           - --decay_steps 3960000
           - --weight_decay 0.01
           - --warmup_rate 0.0025
           - --grad_clip 1.0
-          - --logging_freq 20
+          - --logging_freq 1
           - --num_workers 2
           - --eval_freq 1000
           - --device "gpu"
