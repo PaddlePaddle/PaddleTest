@@ -3,8 +3,8 @@ case:
     train:
       -
         name: prepare
-        path: applications/information_extraction/text
-        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/military.tar.gz && tar -xvf military.tar.gz && mv military data && rm -f military.tar.gz
+        path: applications/zero_shot_text_classification
+        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/utc-medical.tar.gz  && tar -xvf utc-medical.tar.gz && mv utc-medical data
       -
         name: label_studio
         path: applications/information_extraction/text
@@ -59,12 +59,7 @@ case:
           - --task_type relation_extraction
           - --synthetic_ratio 10
           - --model_path ../checkpoint/model_best
-        result:
-          loss:
-            base: 2282887.188
-            threshold: 1
-            evaluation: "="
-       -
+      -
         name: distill_train_student
         path: applications/information_extraction/text/data_distill
         cmd: python train.py
@@ -77,6 +72,7 @@ case:
           - --eval_steps 39
           - --logging_steps 1
           - --encoder ernie-3.0-mini-zh
+
     eval:
       -
         name: evaluate
