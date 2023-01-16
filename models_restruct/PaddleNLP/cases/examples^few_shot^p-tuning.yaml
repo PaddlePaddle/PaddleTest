@@ -27,7 +27,7 @@ case:
     base: ./base/normal_case.yaml
     train:
       -
-        name: single
+        name: train
         path: examples/few_shot/p-tuning
         cmd: python -m paddle.distributed.launch run_train.py
         params:
@@ -41,7 +41,7 @@ case:
     base: ./base/normal_case.yaml
     train:
       -
-        name: multi
+        name: train
         path: examples/few_shot/p-tuning
         cmd: python -m paddle.distributed.launch run_train.py
         params:

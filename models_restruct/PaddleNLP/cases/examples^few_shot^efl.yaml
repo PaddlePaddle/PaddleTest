@@ -27,7 +27,7 @@ case:
       base: ./base/normal_case.yaml
       train:
         -
-          name: single
+          name: train
           path: examples/few_shot/efl
           cmd: python -m paddle.distributed.launch run_train.py
           params:
@@ -36,12 +36,12 @@ case:
       infer: skipped
       export: skipped
       predict: skipped
-      
+
   mac:
     base: ./base/normal_case.yaml
     train:
       -
-        name: single
+        name: train
         path: examples/few_shot/efl
         cmd: python -m paddle.distributed.launch run_train.py
         params:
