@@ -64,8 +64,8 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install -r requirements_win.txt")  # 安装模型依赖
         import nltk
 
-        nltk.download("punkt")
-        from visualdl import LogWriter
+        # nltk.download("punkt")
+        # from visualdl import LogWriter
 
         os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
         cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")

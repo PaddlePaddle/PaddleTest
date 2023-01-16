@@ -1,3 +1,5 @@
+opencv-python==4.6.0.66
+opencv-contrib-python==4.6.0.66
 regex
 nltk
 xlrd==1.2.0
