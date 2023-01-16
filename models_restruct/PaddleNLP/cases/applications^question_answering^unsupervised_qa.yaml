@@ -68,7 +68,7 @@ case:
         name: question_generation_finetune
         path: applications/question_answering/unsupervised_qa
         cmd: python -u -m paddle.distributed.launch  --log_dir log/question_generation finetune/question_generation/train.py
-        params: 
+        params:
           - --train_file=data/finetune/question_generation/train.json
           - --predict_file=data/finetune/question_generation/dev.json
           - --save_dir=log/question_generation/checkpoints
