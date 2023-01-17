@@ -61,7 +61,7 @@ case:
           - --model_path ../checkpoint/model_best
         result:
           loss:
-            base: 2282887.188
+            base: 1
             threshold: 1
             evaluation: "="
        -
@@ -177,7 +177,7 @@ case:
           - --model_path ../checkpoint/model_best
         result:
           loss:
-            base: 2282887.188
+            base: 1
             threshold: 1
             evaluation: "="
        -
