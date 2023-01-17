@@ -17,7 +17,7 @@ def test_lstm_base0():
     """
     test_lstm_base
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     obj0 = RnnBase(paddle.nn.LSTM)
     np.random.seed(22)
     x = np.random.rand(1, 2, 4)
@@ -33,7 +33,7 @@ def test_lstm_base0():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
+    
 
 
 @pytest.mark.api_nn_LSTM_vartype
@@ -41,7 +41,7 @@ def test_lstm_base1():
     """
     test_lstm_base
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     obj1 = RnnBase(paddle.nn.LSTM)
     obj1.dtype = "float64"
     obj1.enable_static = False
@@ -59,7 +59,7 @@ def test_lstm_base1():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
+    
 
 
 @pytest.mark.api_nn_LSTM_parameters
@@ -67,7 +67,7 @@ def test_lstm0():
     """
     default
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     obj2 = RnnBase(paddle.nn.LSTM)
     obj2.enable_static = False
     np.random.seed(22)
@@ -84,7 +84,7 @@ def test_lstm0():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
+    
 
 
 @pytest.mark.api_nn_LSTM_parameters
@@ -92,7 +92,7 @@ def test_lstm1():
     """
     set (h,c)
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     obj3 = RnnBase(paddle.nn.LSTM)
     obj3.enable_static = False
     np.random.seed(22)
@@ -111,7 +111,7 @@ def test_lstm1():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
+    
 
 
 @pytest.mark.api_nn_LSTM_parameters
@@ -119,7 +119,7 @@ def test_lstm2():
     """
     direction='bidirect'
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     obj4 = RnnBase(paddle.nn.LSTM)
     obj4.enable_static = False
     obj4.atol = 1e-4
@@ -137,7 +137,7 @@ def test_lstm2():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
+    
 
 
 @pytest.mark.api_nn_LSTM_parameters
@@ -145,7 +145,7 @@ def test_lstm3():
     """
     direction='bidirectional'
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     obj5 = RnnBase(paddle.nn.LSTM)
     obj5.enable_static = False
     obj5.atol = 1e-4
@@ -163,7 +163,7 @@ def test_lstm3():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
+    
 
 
 @pytest.mark.api_nn_LSTM_parameters
@@ -172,7 +172,7 @@ def test_lstm4():
     set (h,c)
     num_layers=4
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     obj6 = RnnBase(paddle.nn.LSTM)
     obj6.enable_static = False
     np.random.seed(22)
@@ -192,7 +192,7 @@ def test_lstm4():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
+    
 
 
 @pytest.mark.api_nn_LSTM_parameters
@@ -202,7 +202,7 @@ def test_lstm5():
     num_layers=4
     time_major=True
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     obj7 = RnnBase(paddle.nn.LSTM)
     obj7.enable_static = False
     np.random.seed(22)
@@ -228,4 +228,4 @@ def test_lstm5():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
+    

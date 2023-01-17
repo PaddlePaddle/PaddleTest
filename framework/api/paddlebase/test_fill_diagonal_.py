@@ -23,7 +23,7 @@ def fill_diagonal_base(x, value, offset=0, warp=False):
     """
     api calculate
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     outputs, gradients = [], []
     for place in places:
         for t in types:
@@ -33,12 +33,13 @@ def fill_diagonal_base(x, value, offset=0, warp=False):
             y = paddle.to_tensor(y)
             y.stop_gradient = False
             y = y * 2
+            y.retain_grads()
             out = paddle.Tensor.fill_diagonal_(y, value, offset, warp)
             outputs.append(out.numpy())
             loss = paddle.sum(out)
             loss.backward()
             gradients.append(y.grad.numpy())
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
+   
     return outputs, gradients
 
 
