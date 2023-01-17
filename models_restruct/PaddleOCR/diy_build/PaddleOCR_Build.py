@@ -118,7 +118,10 @@ class PaddleOCR_Build(Model_Build):
 
             # kie requirements
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
-
+            
+            if sysstr == "Windows":
+                os.system('set PATH=F:\\install\\GnuWin32\\bin;%PATH%')
+            
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
                 if "rec" in filename:
