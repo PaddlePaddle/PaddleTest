@@ -24,12 +24,11 @@ case:
     predict: skipped
 
   windows_cpu:
-    base: ./base/normal_case.yaml
     train:
       -
         name: train
         path: examples/few_shot/p-tuning
-        cmd: python  run_train.py
+        cmd: python run_train.py
         params:
           - --max_steps 2
           - --save_steps 2
@@ -41,7 +40,6 @@ case:
     predict: skipped
 
   mac:
-    base: ./base/normal_case.yaml
     train:
       -
         name: train

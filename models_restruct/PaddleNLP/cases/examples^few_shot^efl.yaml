@@ -24,7 +24,6 @@ case:
       predict: skipped
 
   windows_cpu:
-      base: ./base/normal_case.yaml
       train:
         -
           name: train
