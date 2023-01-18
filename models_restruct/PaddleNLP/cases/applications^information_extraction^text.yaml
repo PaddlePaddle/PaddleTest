@@ -4,7 +4,7 @@ case:
       -
         name: prepare
         path: applications/information_extraction/text
-        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/military.tar.gz && tar -xvf military.tar.gz && mv military data && rm -f military.tar.gz
+        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/military.tar.gz && tar -xvf military.tar.gz && mv military data
       -
         name: label_studio
         path: applications/information_extraction/text
