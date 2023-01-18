@@ -212,4 +212,4 @@ def test_lstm5():
         weight_hh_attr=initializer.Constant(2),
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
-    )    
+    )

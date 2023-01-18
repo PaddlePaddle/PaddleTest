@@ -574,6 +574,7 @@ class APIBase(object):
             loss = paddle.mean(res[0])
         else:
             loss = paddle.mean(res)
+        loss.retain_grads()
         loss.backward()
         grad = {}
         for k, v in self.kwargs.items():

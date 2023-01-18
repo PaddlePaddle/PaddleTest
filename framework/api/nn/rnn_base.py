@@ -45,6 +45,7 @@ class RnnBase(object):
         else:
             loss = paddle.mean(r)
         # loss.backward(retain_graph=True)
+        loss.retain_grads()
         loss.backward()
         return r[0], self.data[0].grad
 
