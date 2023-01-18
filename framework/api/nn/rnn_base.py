@@ -39,6 +39,7 @@ class RnnBase(object):
         """
         paddle.disable_static(place)
         cell = self.func(**self.kwargs)
+        self.data[0].retain_grads()
         r = cell(*self.data)
         if isinstance(r, tuple):
             loss = paddle.mean(r[0])
@@ -124,10 +125,8 @@ class RnnBase(object):
 
             paddle.set_default_dtype(self.dtype)
             self.process_dtype(self.dtype)
-            logging.info("--->>> device: {}; dtype: {}".format(place, self.data[0].dtype))
 
             dynamic_res, dynamic_grad = self.cal_dynamic(place)
-            print("Asdasd")
             numeric_grad = self.numerical_gradients()
             if self.enable_static:
                 static_res, static_grad = self.cal_static(place)
