@@ -23,7 +23,6 @@ def fill_diagonal_base(x, value, offset=0, warp=False):
     """
     api calculate
     """
-   
     outputs, gradients = [], []
     for place in places:
         for t in types:
@@ -39,7 +38,6 @@ def fill_diagonal_base(x, value, offset=0, warp=False):
             loss = paddle.sum(out)
             loss.backward()
             gradients.append(y.grad.numpy())
-   
     return outputs, gradients
 
 

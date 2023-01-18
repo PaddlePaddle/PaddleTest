@@ -19,7 +19,6 @@ def test_simplernn_base0():
     """
     test_grucell_base
     """
-   
     obj0 = RnnBase(paddle.nn.SimpleRNN)
     np.random.seed(22)
     x = np.random.rand(1, 2, 3)
@@ -34,7 +33,6 @@ def test_simplernn_base0():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_SimpleRNN_vartype
@@ -42,7 +40,6 @@ def test_simplernn_base1():
     """
     test_grucell_base
     """
-   
     obj1 = RnnBase(paddle.nn.SimpleRNN)
     obj1.dtype = "float64"
     obj1.enable_static = False
@@ -59,7 +56,6 @@ def test_simplernn_base1():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_SimpleRNN_parameters
@@ -67,7 +63,6 @@ def test_simplernn0():
     """
     default
     """
-   
     obj2 = RnnBase(paddle.nn.SimpleRNN)
     obj2.enable_static = False
     np.random.seed(22)
@@ -85,7 +80,6 @@ def test_simplernn0():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_SimpleRNN_parameters
@@ -93,7 +87,6 @@ def test_simplernn1():
     """
     num_layer=2
     """
-   
     obj3 = RnnBase(paddle.nn.SimpleRNN)
     obj3.enable_static = False
     np.random.seed(22)
@@ -111,8 +104,7 @@ def test_simplernn1():
         weight_hh_attr=initializer.Constant(2),
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
-    )
-    
+    )    
 
 
 @pytest.mark.api_nn_SimpleRNN_parameters
@@ -121,7 +113,6 @@ def test_simplernn2():
     num_layer=2
     activation='relu'
     """
-   
     obj4 = RnnBase(paddle.nn.SimpleRNN)
     obj4.enable_static = False
     np.random.seed(22)
@@ -149,7 +140,6 @@ def test_simplernn2():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_SimpleRNN_parameters
@@ -157,7 +147,6 @@ def test_simplernn3():
     """
     time_major=True
     """
-   
     obj5 = RnnBase(paddle.nn.SimpleRNN)
     obj5.enable_static = False
     np.random.seed(22)
@@ -176,7 +165,6 @@ def test_simplernn3():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_SimpleRNN_parameters
@@ -184,7 +172,6 @@ def test_simplernn4():
     """
     dropout=0.8
     """
-   
     obj6 = RnnBase(paddle.nn.SimpleRNN)
     obj6.enable_static = False
     np.random.seed(22)
@@ -203,7 +190,6 @@ def test_simplernn4():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_SimpleRNN_parameters
@@ -211,7 +197,6 @@ def test_simplernn5():
     """
     dropout=0.8
     """
-   
     obj7 = RnnBase(paddle.nn.SimpleRNN)
     obj7.enable_static = False
     np.random.seed(22)
@@ -232,4 +217,3 @@ def test_simplernn5():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    

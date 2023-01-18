@@ -143,7 +143,6 @@ def test_birnn3():
         bias_hh_attr=initializer.Constant(4),
     )
     obj5.run(res, x_data, (h_data, h1_data), cell_fw=cell_fw, cell_bw=cell_bw)
-    
 
 
 @pytest.mark.api_nn_BiRNN_parameters
@@ -176,4 +175,4 @@ def test_birnn4():
         bias_hh_attr=initializer.Constant(4),
     )
     obj6.run(res, x_data, (h_data, h1_data), cell_fw=cell_fw, cell_bw=cell_bw)
-    
+

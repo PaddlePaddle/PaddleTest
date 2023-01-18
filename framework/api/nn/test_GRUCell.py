@@ -17,7 +17,6 @@ def test_grucell_base0():
     """
     test_grucell_base
     """
-    
     obj0 = RnnBase(paddle.nn.GRUCell)
     np.random.seed(22)
     x = np.random.rand(1, 2)
@@ -34,7 +33,6 @@ def test_grucell_base0():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_GRUCell_vartype
@@ -42,7 +40,6 @@ def test_grucell_base1():
     """
     test_grucell_base
     """
-    
     obj1 = RnnBase(paddle.nn.GRUCell)
     obj1.dtype = "float64"
     obj1.enable_static = False
@@ -61,7 +58,6 @@ def test_grucell_base1():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_GRUCell_parameters
@@ -69,7 +65,6 @@ def test_grucell0():
     """
     test_grucell0
     """
-    
     obj2 = RnnBase(paddle.nn.GRUCell)
     obj2.enable_static = False
     np.random.seed(22)
@@ -162,4 +157,3 @@ def test_grucell0():
         bias_ih_attr=initializer.Constant(4),
         bias_hh_attr=initializer.Constant(4),
     )
-    

@@ -17,7 +17,6 @@ def test_lstmcell_base0():
     """
     test_grucell_base
     """
-   
     obj0 = RnnBase(paddle.nn.LSTMCell)
     np.random.seed(22)
     x = np.random.rand(1, 2)
@@ -33,7 +32,6 @@ def test_lstmcell_base0():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_LSTMCell_vartype
@@ -41,7 +39,6 @@ def test_lstmcell_base1():
     """
     test_grucell_base
     """
-   
     obj1 = RnnBase(paddle.nn.LSTMCell)
     obj1.dtype = "float64"
     np.random.seed(22)
@@ -58,7 +55,6 @@ def test_lstmcell_base1():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_LSTMCell_parameters
@@ -66,7 +62,6 @@ def test_lstmcell0():
     """
     test_grucell0
     """
-   
     obj2 = RnnBase(paddle.nn.LSTMCell)
     obj2.enable_static = False
     obj2.atol = 1e-4
@@ -159,7 +154,6 @@ def test_lstmcell0():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    
 
 
 @pytest.mark.api_nn_LSTMCell_parameters
@@ -167,7 +161,6 @@ def test_lstmcell1():
     """
     set states
     """
-   
     obj3 = RnnBase(paddle.nn.LSTMCell)
     obj3.enable_static = False
     np.random.seed(22)
@@ -186,4 +179,3 @@ def test_lstmcell1():
         bias_ih_attr=initializer.Constant(4),
         bias_hh_attr=initializer.Constant(4),
     )
-    

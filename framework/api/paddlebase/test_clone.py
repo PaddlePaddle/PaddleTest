@@ -21,10 +21,10 @@ def test_clone0():
     x.stop_gradient = False
     clone_x = paddle.clone(x)
     y = clone_x**3
+    y.retain_grads()
     y.backward()
     assert np.allclose(x.numpy(), clone_x.numpy())
     assert np.allclose(x.grad.numpy(), clone_x.grad.numpy())
-    
 
 
 @pytest.mark.api_base_clone_parameters
@@ -36,12 +36,13 @@ def test_clone1():
     xp = np.ones((3, 3))
     x = paddle.to_tensor(xp)
     x.stop_gradient = False
+    x.retain_grads()
     clone_x = paddle.clone(x)
     y = clone_x**3
+    y.retain_grads()
     y.backward()
     assert np.allclose(x.numpy(), clone_x.numpy())
     assert np.allclose(x.grad.numpy(), clone_x.grad.numpy())
-    
 
 
 @pytest.mark.api_base_clone_parameters
@@ -52,13 +53,14 @@ def test_clone2():
    
     xp = np.ones((3, 3, 4))
     x = paddle.to_tensor(xp)
+    x.retain_grads()
     x.stop_gradient = False
     clone_x = paddle.clone(x)
     y = clone_x**3
+    y.retain_grads()
     y.backward()
     assert np.allclose(x.numpy(), clone_x.numpy())
     assert np.allclose(x.grad.numpy(), clone_x.grad.numpy())
-    
 
 
 @pytest.mark.api_base_clone_parameters
@@ -66,13 +68,13 @@ def test_clone3():
     """
     x: 4d-tensor
     """
-   
     xp = np.ones((3, 3, 4, 4))
     x = paddle.to_tensor(xp)
+    x.retain_grads()
     x.stop_gradient = False
     clone_x = paddle.clone(x)
     y = clone_x**3
+    y.retain_grads()
     y.backward()
     assert np.allclose(x.numpy(), clone_x.numpy())
     assert np.allclose(x.grad.numpy(), clone_x.grad.numpy())
-    
