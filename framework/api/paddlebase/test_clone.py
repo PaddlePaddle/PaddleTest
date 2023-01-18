@@ -15,7 +15,6 @@ def test_clone0():
     """
     x: 1d-tensor
     """
-   
     xp = np.ones((3,))
     x = paddle.to_tensor(xp)
     x.stop_gradient = False
@@ -32,7 +31,6 @@ def test_clone1():
     """
     x: 2d-tensor
     """
-   
     xp = np.ones((3, 3))
     x = paddle.to_tensor(xp)
     x.stop_gradient = False
@@ -50,7 +48,6 @@ def test_clone2():
     """
     x: 3d-tensor
     """
-   
     xp = np.ones((3, 3, 4))
     x = paddle.to_tensor(xp)
     x.retain_grads()
