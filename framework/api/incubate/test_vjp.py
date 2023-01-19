@@ -185,7 +185,6 @@ def test_vjp8():
     multi_input and multi_output
     set v
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.random.rand(4, 4)
     v1 = np.random.rand(4, 4)
     paddle.disable_static()
@@ -193,4 +192,3 @@ def test_vjp8():
         func3, [paddle.to_tensor(x), paddle.to_tensor(x)], v=[paddle.to_tensor(v1), paddle.to_tensor(v1)]
     )
     obj.run(res=res, func=func3, xs=[x, x], v=[v1, v1])
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
