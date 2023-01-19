@@ -128,7 +128,6 @@ class APIBase(object):
         if self.debug:
             for place in self.places:
                 self.place = place
-                logging.info("[Place] is ===============================>>>>>>>>" + str(self.place))
                 # start run paddle dygraph
                 if self.dygraph:
                     paddle.disable_static(self.place)
@@ -136,41 +135,30 @@ class APIBase(object):
                         paddle.set_device("cpu")
                     else:
                         paddle.set_device("gpu:0")
-                    logging.info("[start] run " + self.__class__.__name__ + " dygraph")
                     paddle.seed(self.seed)
                     self._check_params(res, data, **kwargs)
                     dygraph_forward_res = self._dygraph_forward()
-                    logging.info("dygraph forward result is :")
                     if isinstance(dygraph_forward_res, (list)):
                         compare(dygraph_forward_res, res, self.delta, self.rtol)
-                        logging.info(dygraph_forward_res)
                     else:
                         compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
-                        logging.info(dygraph_forward_res.numpy())
                     if self.enable_backward:
                         dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
-                        logging.info("[dygraph grad]")
-                        logging.info(dygraph_backward_res)
+                     
                     paddle.enable_static()
                 if self.static:
                     # start run paddle static
-                    logging.info("[start] run " + self.__class__.__name__ + " static")
                     if self.enable_backward:
                         static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
-                        logging.info("static forward result is :")
-                        logging.info(static_forward_res)
-                        logging.info("[static grad]")
-                        logging.info(static_backward_res)
+                       
                     else:
                         static_forward_res = self._static_forward(res, data, **kwargs)
-                        logging.info("static forward result is :")
-                        logging.info(static_forward_res)
+                       
                     compare(static_forward_res, res, self.delta, self.rtol)
                     # start run torch
                 if self.enable_backward:
                     grad = self.compute_grad(res, data, **kwargs)
-                    logging.info("[numeric grad]")
-                    logging.info(grad)
+                  
                     if self.static and self.dygraph:
                         compare_grad(
                             static_backward_res, dygraph_backward_res, mode="both", no_grad_var=self.no_grad_var
@@ -196,7 +184,6 @@ class APIBase(object):
         else:
             for place in self.places:
                 self.place = place
-                logging.info("[Place] is ===============================>>>>>>>>" + str(self.place))
 
                 # (1) start run paddle dygraph
                 if self.dygraph:
@@ -205,7 +192,6 @@ class APIBase(object):
                         paddle.set_device("cpu")
                     else:
                         paddle.set_device("gpu:0")
-                    logging.info("[start] run " + self.__class__.__name__ + " dygraph")
                     # paddle.disable_static(self.place)
                     paddle.seed(self.seed)
                     self._check_params(res, data, **kwargs)
@@ -224,7 +210,6 @@ class APIBase(object):
                 # (2) start run paddle static
                 if self.static:
                     paddle.enable_static()
-                    logging.info("[start] run " + self.__class__.__name__ + " static")
                     # ① calculate forward and backward result
                     if self.enable_backward:
                         static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
@@ -280,40 +265,29 @@ class APIBase(object):
                 else:
                     paddle.set_device("gpu:0")
                 paddle.seed(self.seed)
-                logging.info("[start] run " + self.__class__.__name__ + " dygraph")
                 self._check_params(res, data, **kwargs)
                 dygraph_forward_res = self._dygraph_forward()
-                logging.info("dygraph forward result is :")
                 if isinstance(dygraph_forward_res, (list)):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
-                    logging.info(dygraph_forward_res)
                 else:
                     compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
-                    logging.info(dygraph_forward_res.numpy())
                 if self.enable_backward:
                     dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
-                    logging.info("[dygraph grad]")
-                    logging.info(dygraph_backward_res)
+                    
                 paddle.enable_static()
             if self.static:
                 # start run paddle static
-                logging.info("[start] run " + self.__class__.__name__ + " static")
                 if self.enable_backward:
                     static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
-                    logging.info("static forward result is :")
-                    logging.info(static_forward_res)
-                    logging.info("[static grad]")
-                    logging.info(static_backward_res)
+                  
                 else:
                     static_forward_res = self._static_forward(res, data, **kwargs)
-                    logging.info("static forward result is :")
-                    logging.info(static_forward_res)
+                    
                 compare(static_forward_res, res, self.delta, self.rtol)
                 # start run torch
             if self.enable_backward:
                 grad = self.compute_grad(res, data, **kwargs)
-                logging.info("[numeric grad]")
-                logging.info(grad)
+              
                 if self.static and self.dygraph:
                     compare_grad(static_backward_res, dygraph_backward_res, mode="both", no_grad_var=self.no_grad_var)
                 if self.dygraph:
@@ -343,7 +317,6 @@ class APIBase(object):
                 else:
                     paddle.set_device("gpu:0")
                 paddle.seed(self.seed)
-                logging.info("[start] run " + self.__class__.__name__ + " dygraph")
                 self._check_params(res, data, **kwargs)
 
                 # ① calculate forward result
@@ -360,7 +333,6 @@ class APIBase(object):
             # (2) start run paddle static
             if self.static:
                 paddle.enable_static()
-                logging.info("[start] run " + self.__class__.__name__ + " static")
                 # ① calculate forward and backward result
                 if self.enable_backward:
                     static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
@@ -410,7 +382,6 @@ class APIBase(object):
         backward_tag = self.enable_backward
         for place in self.places:
             self.place = place
-            logging.info("[Place] is ===============================>>>>>>>>" + str(self.place))
             tag = True
             for dtype in self.types:
                 # 判断是否应该做反向计算，只有float类型的需要反向，同时如果api明确没有反向，需要根据配置进行反向截断。
@@ -418,7 +389,6 @@ class APIBase(object):
                     self.enable_backward = True
                 else:
                     self.enable_backward = False
-                logging.info("[test dtype] " + self.__class__.__name__ + str(dtype))
                 try:
                     self.dtype = dtype
                     self._baserun(res, data, **kwargs)
@@ -470,7 +440,6 @@ class APIBase(object):
             delta (float, optional): [delta]. Defaults to 0.001.
         """
         paddle.disable_static(self.place)
-        logging.info("[grad] compute " + self.__class__.__name__ + " grad")
         self._check_params(res, data, **kwargs)
         loss = self._numeric_grad()
         self.kwargs = copy.deepcopy(kwargs)
@@ -691,7 +660,6 @@ def compare_grad(result, expect, delta=1e-6, rtol=0.001, mode=None, no_grad_var=
         delta = 1e-3 * 5
     if rtol < 1e-4:
         rtol = 1e-3
-    logging.info("[{}] start check grad:".format(mode))
     if no_grad_var is not None:
         for key in no_grad_var:
             if key in result.keys():
@@ -703,9 +671,7 @@ def compare_grad(result, expect, delta=1e-6, rtol=0.001, mode=None, no_grad_var=
         logging.error(expect.keys())
         assert False, "grad KeyError"
     for k in result.keys():
-        logging.info("check " + k + " grad ... ")
         compare(result[k], expect[k], delta, rtol)
-        logging.info("check " + k + " grad ... ok")
 
 
 def compare(result, expect, delta=1e-6, rtol=1e-5):

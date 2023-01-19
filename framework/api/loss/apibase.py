@@ -143,34 +143,26 @@ class APIBase(object):
                     logging.info("dygraph forward result is :")
                     if isinstance(dygraph_forward_res, (list, tuple)):
                         compare(dygraph_forward_res, res, self.delta, self.rtol)
-                        logging.info(dygraph_forward_res)
                     else:
                         compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
-                        logging.info(dygraph_forward_res.numpy())
                     if self.enable_backward:
                         dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
-                        logging.info("[dygraph grad]")
-                        logging.info(dygraph_backward_res)
+                       
                     paddle.enable_static()
                 if self.static:
                     # start run paddle static
                     logging.info("[start] run " + self.__class__.__name__ + " static")
                     if self.enable_backward:
                         static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
-                        logging.info("static forward result is :")
-                        logging.info(static_forward_res)
-                        logging.info("[static grad]")
-                        logging.info(static_backward_res)
+                       
                     else:
                         static_forward_res = self._static_forward(res, data, **kwargs)
-                        logging.info("static forward result is :")
-                        logging.info(static_forward_res)
+                      
                     compare(static_forward_res, res, self.delta, self.rtol)
                     # start run torch
                 if self.enable_backward:
                     grad = self.compute_grad(res, data, **kwargs)
-                    logging.info("[numeric grad]")
-                    logging.info(grad)
+                  
                     if self.static and self.dygraph:
                         compare_grad(
                             static_backward_res, dygraph_backward_res, mode="both", no_grad_var=self.no_grad_var
@@ -286,34 +278,26 @@ class APIBase(object):
                 logging.info("dygraph forward result is :")
                 if isinstance(dygraph_forward_res, (list, tuple)):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
-                    logging.info(dygraph_forward_res)
                 else:
                     compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
-                    logging.info(dygraph_forward_res.numpy())
                 if self.enable_backward:
                     dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
-                    logging.info("[dygraph grad]")
-                    logging.info(dygraph_backward_res)
+                   
                 paddle.enable_static()
             if self.static:
                 # start run paddle static
                 logging.info("[start] run " + self.__class__.__name__ + " static")
                 if self.enable_backward:
                     static_forward_res, static_backward_res = self._static_forward(res, data, **kwargs)
-                    logging.info("static forward result is :")
-                    logging.info(static_forward_res)
-                    logging.info("[static grad]")
-                    logging.info(static_backward_res)
+                   
                 else:
                     static_forward_res = self._static_forward(res, data, **kwargs)
-                    logging.info("static forward result is :")
-                    logging.info(static_forward_res)
+                  
                 compare(static_forward_res, res, self.delta, self.rtol)
                 # start run torch
             if self.enable_backward:
                 grad = self.compute_grad(res, data, **kwargs)
-                logging.info("[numeric grad]")
-                logging.info(grad)
+               
                 if self.static and self.dygraph:
                     compare_grad(static_backward_res, dygraph_backward_res, mode="both", no_grad_var=self.no_grad_var)
                 if self.dygraph:
