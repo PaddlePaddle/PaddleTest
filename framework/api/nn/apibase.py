@@ -556,11 +556,15 @@ class APIBase(object):
         Returns:
             result
         """
+        for k, v in self.kwargs.items():
+            if isinstance(v, paddle.Tensor):
+                v.retain_grads()
         if self.__layertype == "func":
             res = self.func(**self.kwargs)
             return res
         elif self.__layertype == "class":
             obj = self.func(**self.kwargs)
+            self.data.retain_grads()
             res = obj(self.data)
             return res
 
