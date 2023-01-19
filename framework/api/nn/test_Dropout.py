@@ -27,6 +27,7 @@ def test_dygraph():
             paddle.disable_static(place)
             x_data = np.arange(1, 7).reshape(6).astype(t)
             x = paddle.to_tensor(x_data, stop_gradient=False)
+            x.retain_grads()
             dropout = paddle.nn.Dropout(p=0.5)
             for i in range(1):
                 out = dropout(x)
@@ -48,6 +49,7 @@ def test_dygraph1():
             paddle.disable_static(place)
             x_data = np.arange(1, 7).reshape(6).astype(t)
             x = paddle.to_tensor(x_data, stop_gradient=False)
+            x.retain_grads()
             dropout = paddle.nn.Dropout(p=paddle.to_tensor(0.5))
             for i in range(1):
                 out = dropout(x)

@@ -53,6 +53,7 @@ def test_clone2():
     x.retain_grads()
     x.stop_gradient = False
     clone_x = paddle.clone(x)
+    clone_x.retain_grads()
     y = clone_x**3
     y.retain_grads()
     y.backward()
@@ -70,6 +71,7 @@ def test_clone3():
     x.retain_grads()
     x.stop_gradient = False
     clone_x = paddle.clone(x)
+    clone_x.retain_grads()
     y = clone_x**3
     y.retain_grads()
     y.backward()
