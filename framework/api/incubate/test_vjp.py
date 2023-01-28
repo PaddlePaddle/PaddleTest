@@ -169,13 +169,11 @@ def test_vjp7():
     x: 2-d tensor
     multi_input and multi_output
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.random.rand(3, 3)
     y = np.random.rand(3, 3)
     paddle.disable_static()
     res = ans.vjp_with_jac(func3, [paddle.to_tensor(x), paddle.to_tensor(y)])
     obj.run(res=res, func=func3, xs=[x, y])
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_incubate_vjp_parameters
