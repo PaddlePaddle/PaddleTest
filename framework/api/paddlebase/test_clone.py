@@ -15,7 +15,6 @@ def test_clone0():
     """
     x: 1d-tensor
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     xp = np.ones((3,))
     x = paddle.to_tensor(xp)
     x.stop_gradient = False
