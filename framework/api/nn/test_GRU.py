@@ -17,7 +17,6 @@ def test_gru_base0():
     """
     Sigmoid_base
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj0 = RnnBase(paddle.nn.GRU)
     np.random.seed(22)
     x = np.random.rand(1, 2, 4)
@@ -41,7 +40,6 @@ def test_gru_base0():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_GRU_vartype
@@ -49,7 +47,6 @@ def test_gru_base1():
     """
     Sigmoid_base
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj1 = RnnBase(paddle.nn.GRU)
     obj1.dtype = "float64"
     obj1.enable_static = False
@@ -75,7 +72,6 @@ def test_gru_base1():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_GRU_parameters
@@ -83,7 +79,6 @@ def test_gru0():
     """
     default
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj2 = RnnBase(paddle.nn.GRU)
     obj2.enable_static = False
     np.random.seed(22)
@@ -108,7 +103,6 @@ def test_gru0():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_GRU_parameters
@@ -116,7 +110,6 @@ def test_gru1():
     """
     num_layers = 3
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj3 = RnnBase(paddle.nn.GRU)
     obj3.enable_static = False
     np.random.seed(22)
@@ -142,7 +135,6 @@ def test_gru1():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_GRU_parameters
@@ -151,7 +143,6 @@ def test_gru2():
     num_layers = 3
     direction='bidirect'
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj4 = RnnBase(paddle.nn.GRU)
     obj4.enable_static = False
     np.random.seed(22)
@@ -200,7 +191,6 @@ def test_gru2():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_GRU_parameters
@@ -209,7 +199,6 @@ def test_gru3():
     num_layers = 3
     direction='bidirectional'
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj5 = RnnBase(paddle.nn.GRU)
     obj5.enable_static = False
     np.random.seed(22)
@@ -258,7 +247,6 @@ def test_gru3():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_GRU_parameters
@@ -268,7 +256,6 @@ def test_gru4():
     direction='bidirectional'
     time_major = True
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj6 = RnnBase(paddle.nn.GRU)
     obj6.enable_static = False
     np.random.seed(22)
@@ -320,7 +307,6 @@ def test_gru4():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_GRU_parameters
@@ -331,7 +317,6 @@ def test_gru5():
     time_major = True
     dropout = 0
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj7 = RnnBase(paddle.nn.GRU)
     obj7.enable_static = False
     np.random.seed(22)
@@ -385,7 +370,6 @@ def test_gru5():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 @pytest.mark.api_nn_GRU_parameters
@@ -396,7 +380,6 @@ def test_gru6():
     time_major = True
     dropout = 0
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     obj8 = RnnBase(paddle.nn.GRU)
     obj8.enable_static = False
     np.random.seed(22)
@@ -450,7 +433,6 @@ def test_gru6():
         bias_ih_attr=initializer.Constant(2),
         bias_hh_attr=initializer.Constant(2),
     )
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})
 
 
 # @pytest.mark.api_nn_GRU_parameters

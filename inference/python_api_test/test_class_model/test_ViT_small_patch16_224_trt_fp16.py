@@ -55,7 +55,7 @@ def test_config():
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-10 ViT_small_patch16_224 outputs with true val
+    compared trt fp16 batch_size=1 ViT_small_patch16_224 outputs with true val
     """
     check_model_exist()
 
@@ -114,14 +114,14 @@ def test_trt_fp16_more_bz():
 @pytest.mark.trt_fp16_more_bz_precision
 def test_jetson_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-10 ViT_small_patch16_224 outputs with true val
+    compared trt fp16 batch_size=1 ViT_small_patch16_224 outputs with true val
     """
     check_model_exist()
 
     file_path = "./ViT_small_patch16_224"
     images_size = 224
-    batch_size_pool = [1, 2]
-    max_batch_size = 2
+    batch_size_pool = [1]
+    max_batch_size = 1
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(

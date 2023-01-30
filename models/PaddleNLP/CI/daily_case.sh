@@ -238,51 +238,51 @@ print_info $? gpt_p_depoly
 # time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
 # print_info $? gpt_test_acc
 # FT
-# cd ${nlp_dir}/
-# export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-# wget -q https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
-# tar -xzvf paddle_inference.tgz
-# cd ${nlp_dir}/paddlenlp/ops
-# export CC=/usr/local/gcc-8.2/bin/gcc
-# export CXX=/usr/local/gcc-8.2/bin/g++
-# #python
-# mkdir build_gpt_so
-# cd build_gpt_so/
-# cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ON
-# make -j >${log_path}/GPT_python_FT >>${log_path}/gpt_python_FT 2>&1
-# print_info $? gpt_python_FT
-# cd ../
-# #c++
-# mkdir build_gpt_cc
-# cd build_gpt_cc/
-# cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON -DWITH_ONNXRUNTIME=ON
-# make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
-# print_info $? gpt_C_FT
-# #depoly python
-# cd ${nlp_dir}/model_zoo/gpt/faster_gpt/
-# python infer.py \
-#     --model_name_or_path gpt2-medium-en \
-#     --batch_size 1 \
-#     --topk 4 \
-#     --topp 0.0 \
-#     --max_length 32 \
-#     --start_token "<|endoftext|>" \
-#     --end_token "<|endoftext|>" \
-#     --temperature 1.0  >${log_path}/gpt_deploy_P_FT >>${log_path}/gpt_deploy_P_FT 2>&1
-# print_info $? gpt_deploy_P_FT
-# #depoly C++
-# python export_model.py \
-#     --model_name_or_path gpt2-medium-en \
-#     --decoding_lib ${nlp_dir}/paddlenlp/ops/build_gpt_so/lib/libdecoding_op.so \
-#     --topk 4 \
-#     --topp 0.0 \
-#     --max_out_len 32 \
-#     --temperature 1.0 \
-#     --inference_model_dir ./infer_model/
-# mv infer_model/ ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
-# cd ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
-# ./gpt -batch_size 1 -gpu_id 0 -model_dir ./infer_model -vocab_file ./infer_model/vocab.txt -start_token "<|endoftext|>" -end_token "<|endoftext|>"  >${log_path}/gpt_deploy_C_FT >>${log_path}/gpt_deploy_C_FT 2>&1
-# print_info $? gpt_deploy_C_FT
+cd ${nlp_dir}/
+export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
+wget -q https://paddle-inference-lib.bj.bcebos.com/2.4.0/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+tar -xzvf paddle_inference.tgz
+cd ${nlp_dir}/paddlenlp/ops
+export CC=/usr/local/gcc-8.2/bin/gcc
+export CXX=/usr/local/gcc-8.2/bin/g++
+#python
+mkdir build_gpt_so
+cd build_gpt_so/
+cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ON
+make -j >${log_path}/GPT_python_FT >>${log_path}/gpt_python_FT 2>&1
+print_info $? gpt_python_FT
+cd ../
+#c++
+mkdir build_gpt_cc
+cd build_gpt_cc/
+cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON -DWITH_ONNXRUNTIME=ON
+make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
+print_info $? gpt_C_FT
+#depoly python
+cd ${nlp_dir}/model_zoo/gpt/faster_gpt/
+python infer.py \
+    --model_name_or_path gpt2-medium-en \
+    --batch_size 1 \
+    --topk 4 \
+    --topp 0.0 \
+    --max_length 32 \
+    --start_token "<|endoftext|>" \
+    --end_token "<|endoftext|>" \
+    --temperature 1.0  >${log_path}/gpt_deploy_P_FT >>${log_path}/gpt_deploy_P_FT 2>&1
+print_info $? gpt_deploy_P_FT
+#depoly C++
+python export_model.py \
+    --model_name_or_path gpt2-medium-en \
+    --decoding_lib ${nlp_dir}/paddlenlp/ops/build_gpt_so/lib/libdecoding_op.so \
+    --topk 4 \
+    --topp 0.0 \
+    --max_out_len 32 \
+    --temperature 1.0 \
+    --inference_model_dir ./infer_model/
+mv infer_model/ ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
+cd ${nlp_dir}/paddlenlp/ops/build_gpt_cc/bin/
+./gpt -batch_size 1 -gpu_id 0 -model_dir ./infer_model -vocab_file ./infer_model/vocab.txt -start_token "<|endoftext|>" -end_token "<|endoftext|>"  >${log_path}/gpt_deploy_C_FT >>${log_path}/gpt_deploy_C_FT 2>&1
+print_info $? gpt_deploy_C_FT
 }
 
 ernie-1.0 (){

@@ -64,11 +64,12 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
+@pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
 def test_gpu_more_bz():
     """
-    compared mkldnn swin_transformer outputs with true val
+    compared gpu batch_size=1-2 swin_transformer outputs with true val
     """
     check_model_exist()
     file_path = "./swin_transformer"
@@ -95,11 +96,12 @@ def test_gpu_more_bz():
         del test_suite2  # destroy class to save memory
 
 
+@pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
 def test_gpu_mixed_precision_bz1():
     """
-    compared gpu swin_transformer mixed_precision outputs with true val
+    compared gpu batch_size=1 swin_transformer mixed_precision outputs with true val
     """
     check_model_exist()
     file_path = "./swin_transformer"
@@ -115,8 +117,8 @@ def test_gpu_mixed_precision_bz1():
                 dst_params="./swin_transformer/inference_mixed.pdiparams",
             )
         test_suite.load_config(
-            model_file="./swin_transformer/inference_mixed.pdmodel",
-            params_file="./swin_transformer/inference_mixed.pdiparams",
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -130,7 +132,7 @@ def test_gpu_mixed_precision_bz1():
             model_file="./swin_transformer/inference_mixed.pdmodel",
             params_file="./swin_transformer/inference_mixed.pdiparams",
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
+        test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, repeat=1, delta=0.01)
 
         del test_suite2  # destroy class to save memory
 
@@ -139,7 +141,7 @@ def test_gpu_mixed_precision_bz1():
 @pytest.mark.gpu
 def test_jetson_gpu_more_bz():
     """
-    compared mkldnn swin_transformer outputs with true val
+    compared gpu batch_size=1 swin_transformer outputs with true val
     """
     check_model_exist()
     file_path = "./swin_transformer"

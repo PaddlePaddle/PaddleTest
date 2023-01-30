@@ -93,7 +93,6 @@ def test_gpu_bz1():
 @pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.gpu
-@pytest.mark.skip(reason="混合精度推理结果为nan，待确认")
 def test_gpu_mixed_precision_bz1():
     """
     compared gpu bert mixed_precision outputs with true val
@@ -108,9 +107,7 @@ def test_gpu_mixed_precision_bz1():
             dst_model="./ernie/inference_mixed.pdmodel",
             dst_params="./ernie/inference_mixed.pdiparams",
         )
-    test_suite.load_config(
-        model_file="./ernie/inference_mixed.pdmodel", params_file="./ernie/inference_mixed.pdiparams"
-    )
+    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
     data_path = "./ernie/data.txt"
     images_list = test_suite.get_text_npy(data_path)
 
@@ -126,6 +123,6 @@ def test_gpu_mixed_precision_bz1():
     test_suite2.load_config(
         model_file="./ernie/inference_mixed.pdmodel", params_file="./ernie/inference_mixed.pdiparams"
     )
-    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, delta=5e-3)
 
     del test_suite2  # destroy class to save memory

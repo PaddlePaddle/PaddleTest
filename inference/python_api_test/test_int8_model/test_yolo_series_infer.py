@@ -115,7 +115,12 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     time_max = float("-inf")
     warmup = 20
     repeats = 20 if FLAGS.small_data else 1
-    monitor = Monitor(0)
+
+    use_gpu = True
+    if FLAGS.device == "CPU":
+        use_gpu = False
+    monitor = Monitor(0, use_gpu)
+
     if not rerun_flag:
         monitor.start()
     for batch_id, data in enumerate(val_loader):

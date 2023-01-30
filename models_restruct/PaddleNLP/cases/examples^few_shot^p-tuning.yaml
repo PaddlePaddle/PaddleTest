@@ -3,9 +3,49 @@ case:
     base: ./base/normal_case.yaml
     train:
       -
-        name: multi
+        name: single
         path: examples/few_shot/p-tuning
         cmd: python -m paddle.distributed.launch run_train.py
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: single
+        path: examples/few_shot/p-tuning
+        cmd: python -m paddle.distributed.launch run_train.py
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: train
+        path: examples/few_shot/p-tuning
+        cmd: python -m paddle.distributed.launch run_train.py
+        params:
+          - --device cpu
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: train
+        path: examples/few_shot/p-tuning
+        cmd: python -m paddle.distributed.launch run_train.py
+        params:
+          - --device cpu
     eval: skipped
     infer: skipped
     export: skipped

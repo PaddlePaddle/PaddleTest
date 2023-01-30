@@ -17,32 +17,22 @@ function requirements() {
     echo "=============================paddle commit============================="
     python -c "import paddle;print(paddle.__git_commit__)"
 
-    echo " ---------- PaddleFleetX paddlenlp---------- "
-    cd /paddle
-    export https_proxy=${proxy}
-    export http_proxy=${proxy}
-    sed -i "s/paddlenlp>=2.4.3/paddlenlp==2.4.5/g" ./PaddleFleetX/requirements.txt
-    # git clone --depth=1 -b develop https://github.com/PaddlePaddle/PaddleNLP.git
-    # cd PaddleNLP
-    # python -m pip install -r requirements.txt --force-reinstall
-    # python setup.py install
-    # cd -
-    # unset http_proxy && unset https_proxy
-
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
         cd /paddle
         echo " ---------- PaddleFleetX develop Slim---------- "
         export https_proxy=${proxy}
         export http_proxy=${proxy}
-        sed -i "s/paddleslim/#paddleslim/g" ./PaddleFleetX/requirements.txt
-        git clone --depth=1 -b develop https://github.com/PaddlePaddle/PaddleSlim.git
-        rm -rf /usr/local/lib/python3.7/dist-packages/paddleslim*
+        sed -i "s/git+https/#git+https/g" ./PaddleFleetX/requirements.txt
         python -m pip uninstall paddleslim -y
-        cd PaddleSlim
-        python -m pip install -r requirements.txt --force-reinstall
-        python setup.py install
-        cd -
+        python -m pip install https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl --no-cache-dir --force-reinstall --no-dependencies
         unset http_proxy && unset https_proxy
+
+        # echo " ---------- PaddleFleetX develop paddlenlp---------- "
+        # export https_proxy=${proxy}
+        # export http_proxy=${proxy}
+        # sed -i "s/paddlenlp/#paddlenlp/g" ./PaddleFleetX/requirements.txt
+        # python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html --force-reinstall
+        # unset http_proxy && unset https_proxy
     fi
 
     # install requirements
@@ -50,6 +40,8 @@ function requirements() {
     export http_proxy=${proxy}
     export https_proxy=${proxy}
     python -m pip install -r requirements.txt --force-reinstall
+
+    python -m pip list|grep paddle
 }
 
 function download() {
@@ -59,7 +51,7 @@ function download() {
     if [[ -e ${data_path}/ckpt/PaddleFleetX_GPT_345M_220826 ]]; then
         echo "ckpt/PaddleFleetX_GPT_345M_220826 downloaded"
     else
-        # download ckpt
+        # download ckpt for gpt
         mkdir -p ${data_path}/ckpt
         wget -O ${data_path}/ckpt/GPT_345M.tar.gz \
             https://paddlefleetx.bj.bcebos.com/model/nlp/gpt/GPT_345M.tar.gz
@@ -70,7 +62,7 @@ function download() {
     if [[ -e ${data_path}/ckpt/model.pdparams ]]; then
         echo "ckpt/imagenet2012-ViT-B_16-224.pdparams downloaded"
     else
-        # download ckpt
+        # download ckpt for vit
         mkdir -p ${data_path}/ckpt
         wget -O ${data_path}/ckpt/model.pdparams \
             https://paddlefleetx.bj.bcebos.com/model/vision/vit/imagenet2012-ViT-B_16-224.pdparams
@@ -81,7 +73,7 @@ function download() {
     if [[ -e ${data_path}/data ]]; then
         echo "data downloaded"
     else
-        # download data
+        # download data for gpt
         mkdir ${data_path}/data;
         wget -O ${data_path}/data/gpt_en_dataset_300m_ids.npy https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy;
         wget -O ${data_path}/data/gpt_en_dataset_300m_idx.npz https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz;
@@ -100,10 +92,11 @@ function download() {
         echo "dataset/ernie downloaded"
     else
         # download dataset/ernie
-        unset https_proxy && unset http_proxy
         mkdir -p ${data_path}/dataset/ernie;
-        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids.npy http://10.255.129.12:8811/cluecorpussmall_14g_1207_ids.npy
-        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_idx.npz http://10.255.129.12:8811/cluecorpussmall_14g_1207_idx.npz
+        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids_part0 https://paddlefleetx.bj.bcebos.com/model/nlp/ernie/cluecorpussmall_14g_1207_ids_part0
+        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids_part1 https://paddlefleetx.bj.bcebos.com/model/nlp/ernie/cluecorpussmall_14g_1207_ids_part1
+        cat ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids_part* &> ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids.npy
+        wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_idx.npz https://paddlefleetx.bj.bcebos.com/model/nlp/ernie/cluecorpussmall_14g_1207_idx.npz
     fi
     cp -r ${data_path}/dataset ${fleetx_path}/
 
@@ -117,6 +110,72 @@ function download() {
         rm -rf ${data_path}/cc12m_base64.tar
     fi
     ln -s ${data_path}/cc12m_base64 ${fleetx_path}/cc12m_base64
+
+    rm -rf ./projects/imagen/t5
+    if [[ -e ${data_path}/t5 ]]; then
+        echo "imagen/t5 downloaded"
+    else
+        # download t5 model
+        mkdir -p ${data_path}/t5/t5-11b/ && cd ${data_path}/t5/t5-11b/
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.0
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.1
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.2
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.3
+        wget https://fleetx.bj.bcebos.com/T5/t5-11b/t5.pd.tar.gz.4
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/t5/t5-11b/config.json
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/t5/t5-11b/spiece.model
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/t5/t5-11b/tokenizer.json
+        cat t5.pd.tar.gz.* |tar -xf -
+        rm -rf t5.pd.tar.gz.*
+        cd -
+    fi
+    ln -s ${data_path}/t5 ${fleetx_path}/projects/imagen/t5
+
+    rm -rf ./projects/imagen/cache
+    if [[ -e ${data_path}/cache ]]; then
+        echo "imagen/cache downloaded"
+    else
+        # download debertav2 for imagen
+        mkdir -p ${data_path}/cache && cd ${data_path}/cache
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/config.json
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/spm.model
+        wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/tokenizer_config.json
+        wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.0
+        wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.1
+        tar debertav2.pd.tar.gz.* | tar -xf -
+        rm -rf debertav2.pd.tar.gz.*
+        cd -
+    fi
+    ln -s ${data_path}/cache ${fleetx_path}/projects/imagen/cache
+
+    rm -rf part-00079
+    if [[ -e ${data_path}/part-00079 ]]; then
+        echo "part-00079 downloaded"
+    else
+        # download part-00079 for imagen
+        wget -O ${data_path}/part-00079 https://paddlefleetx.bj.bcebos.com/data/laion400m/part-00079
+    fi
+    cp ${data_path}/part-00079 ${fleetx_path}/projects/imagen
+
+    rm -rf wikitext-103
+    if [[ -e ${data_path}/wikitext-103 ]]; then
+        echo "wikitext-103 downloaded"
+    else
+        # download wikitext-103 for gpt eval
+        wget -O ${data_path}/wikitext-103-v1.zip https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip
+        unzip -q ${data_path}/wikitext-103-v1.zip
+        rm -rf ${data_path}/wikitext-103-v1.zip
+    fi
+    ln -s ${data_path}/wikitext-103 ${fleetx_path}/wikitext-103
+
+    rm -rf lambada_test.jsonl
+    if [[ -e ${data_path}/lambada_test.jsonl ]]; then
+        echo "lambada_test.jsonl downloaded"
+    else
+        # download lambada_test.jsonl for gpt eval
+        wget -O ${data_path}/lambada_test.jsonl https://raw.githubusercontent.com/cybertronai/bflm/master/lambada_test.jsonl
+    fi
+    cp ${data_path}/lambada_test.jsonl ${fleetx_path}/
 }
 
 

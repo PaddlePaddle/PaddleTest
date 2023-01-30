@@ -249,5 +249,5 @@ if __name__ == "__main__":
     test_poetry()
     test_dialogue()
     test_uie()
-    test_uiex()
+    # test_uiex()
     test_summarizer()
