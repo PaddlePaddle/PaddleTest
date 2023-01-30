@@ -205,17 +205,31 @@ if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认
     if [ $tc_name == "release_02" ];then
         echo release_02
         export set_cuda=2,3;
-
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia2 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia3 | awk '{print $0}' | xargs kill -9
+        fi
     elif [ $tc_name == "release_03" ];then
         echo release_03
         export set_cuda=4,5;
-
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia4 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia5 | awk '{print $0}' | xargs kill -9
+        fi
     elif [ $tc_name == "release_04" ];then
         echo release_04
         export set_cuda=6,7;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia6 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia7 | awk '{print $0}' | xargs kill -9
+        fi
     else
         echo release_01
         export set_cuda=0,1;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia0 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia1 | awk '{print $0}' | xargs kill -9
+        fi
     fi
 else
     echo already seted CUDA_id  #这里需要再细化下，按下面的方法指定无用，直接默认按common中指定0,1卡了

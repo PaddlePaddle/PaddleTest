@@ -1,11 +1,8 @@
-opencv-python==4.6.0.66
-opencv-contrib-python==4.6.0.66
 regex
 nltk
 xlrd==1.2.0
 visualdl
 pybind11
-tool_helpers
 editdistance
 h5py
 attrdict==2.0.1
@@ -23,6 +20,4 @@ GPUtil
 yacs
 rouge
 https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl
-paddleocr
-easydict
-pgl
+lac
