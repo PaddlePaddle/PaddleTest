@@ -102,10 +102,9 @@ def test_gpu_more_bz():
 @pytest.mark.server
 @pytest.mark.gpu
 @pytest.mark.gpu_more
-@pytest.mark.skip(reason="混合精度推理结果 精度阈值待确认")
 def test_gpu_mixed_precision_bz1():
     """
-    compared trt fp32 batch_size=1,2 ocr_det_mv3_db outputs with true val
+    compared trt fp32 batch_size=1 ocr_det_mv3_db outputs with true val
     """
     check_model_exist()
 
@@ -122,8 +121,8 @@ def test_gpu_mixed_precision_bz1():
                 dst_params="./ocr_det_mv3_db/inference_mixed.pdiparams",
             )
         test_suite.load_config(
-            model_file="./ocr_det_mv3_db/inference_mixed.pdmodel",
-            params_file="./ocr_det_mv3_db/inference_mixed.pdiparams",
+            model_file="./ocr_det_mv3_db/inference.pdmodel",
+            params_file="./ocr_det_mv3_db/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -138,7 +137,7 @@ def test_gpu_mixed_precision_bz1():
             params_file="./ocr_det_mv3_db/inference_mixed.pdiparams",
         )
 
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=3e-3)
+        test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, repeat=1, delta=0.3)
 
         del test_suite2  # destroy class to save memory
 
