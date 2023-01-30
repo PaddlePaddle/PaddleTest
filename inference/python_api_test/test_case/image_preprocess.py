@@ -163,7 +163,7 @@ def sig_fig_compare(array1, array2, delta=5):
         diff(numpy array): return diff array
     """
     # start = time.time()
-    if np.any(abs(array2) > 10):
+    if np.any(abs(array2) > 100):
         normalize_func = np.vectorize(normalize)
         array1_normal = normalize_func(array1)
         array2_normal = normalize_func(array2)
