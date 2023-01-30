@@ -301,11 +301,9 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            diff = sig_fig_compare(output_data, output_data_truth_val)
+            diff_count = np.sum(diff > delta)
+            assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}"
 
     def onnxruntime_test(self, input_data_dict: dict, output_data_dict: dict, repeat=2, delta=1e-5):
         """
@@ -336,11 +334,9 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            diff = sig_fig_compare(output_data, output_data_truth_val)
+            diff_count = np.sum(diff > delta)
+            assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}"
 
     def gpu_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
         """
@@ -369,11 +365,9 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            diff = sig_fig_compare(output_data, output_data_truth_val)
+            diff_count = np.sum(diff > delta)
+            assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}"
 
     def gpu_more_bz_test_mix(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=5e-3, gpu_mem=1000):
         """
@@ -489,11 +483,9 @@ class InferenceTest(object):
             output_data = output_handle.copy_to_cpu()
             output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            diff = sig_fig_compare(output_data, output_data_truth_val)
+            diff_count = np.sum(diff > delta)
+            assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}"
 
     def trt_more_bz_test(
         self,
@@ -582,11 +574,9 @@ class InferenceTest(object):
             if result_sort:
                 output_data = np.sort(output_data)
                 output_data_truth_val = np.sort(output_data_truth_val)
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+                diff = sig_fig_compare(output_data, output_data_truth_val)
+                diff_count = np.sum(diff > delta)
+                assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}"
 
     def trt_more_bz_dynamic_test(
         self,

@@ -133,7 +133,7 @@ def preprocess(img, img_size, center=True, model_type="class"):
     return img[np.newaxis, :][0]
 
 
-def sig_fig_compare(num0, num1, delta=5):
+def sig_fig_compare(array1, array2, delta=5):
     """
     compare significant figure
     Args:
@@ -142,20 +142,5 @@ def sig_fig_compare(num0, num1, delta=5):
     Returns:
         diff(float): return diff
     """
-    difference = num0 - num1
-    num0_int_length = len(str(int(num0)))
-    num1_int_length = len(str(int(num1)))
-    num0_int = int(num0)
-    num1_int = int(num1)
-    if num0 < 1 and num1 < 1 and abs(difference) < 1:
-        return abs(difference)
-    elif num0_int_length == num1_int_length:
-        if num0_int_length >= delta:
-            return abs(num0_int - num1_int)
-        else:
-            scale = delta - num1_int_length
-            num0_padding = num0 * scale
-            num1_padding = num1 * scale
-            return abs(num0_padding - num1_padding) / (10 * scale)
-    elif num0_int_length != num1_int_length:
-        return abs(difference)
+    diff = np.abs(array1 - array2)
+    return diff
