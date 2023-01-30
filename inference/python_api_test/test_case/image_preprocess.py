@@ -145,7 +145,10 @@ def normalize(num):
     abs_value = abs(num)
     if abs_value > 10:
         length = len(str(int(abs_value)))
-        return num / 10 * (length - 2)
+        if length >= 3:
+            return num / 10 ** (length - 2)
+        else:
+            return num / 10 ** (length - 1)
     else:
         return num
 
@@ -160,7 +163,7 @@ def sig_fig_compare(array1, array2, delta=5):
         diff(numpy array): return diff array
     """
     # start = time.time()
-    if np.all(abs(array2) > 10):
+    if np.any(abs(array2) > 10):
         normalize_func = np.vectorize(normalize)
         array1_normal = normalize_func(array1)
         array2_normal = normalize_func(array2)
