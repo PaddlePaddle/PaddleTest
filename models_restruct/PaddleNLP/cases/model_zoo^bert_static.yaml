@@ -56,3 +56,24 @@ case:
           - --model_path ./tmp/model_2/model
           - --batch_size 32
           - --max_seq_length 128
+ 
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

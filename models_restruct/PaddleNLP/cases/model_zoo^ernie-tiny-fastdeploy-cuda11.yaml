@@ -148,3 +148,24 @@ case:
         name: deploy_cpp_compress_cpu
         path: model_zoo/ernie-tiny/deploy/cpp/build
         cmd: ./infer_demo --device cpu --backend paddle_tensorrt --model_prefix int8 --model_dir ../../../output/BS64_LR5e-5_EPOCHS30 --slot_label_path ../../../data/slot_label.txt --intent_label_path ../../../data/intent_label.txt
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

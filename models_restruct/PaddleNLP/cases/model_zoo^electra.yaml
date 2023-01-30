@@ -198,3 +198,17 @@ case:
           - --batch_size 2
           - --max_seq_length 128
           - --model_name electra-small
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

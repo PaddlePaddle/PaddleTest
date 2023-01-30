@@ -154,3 +154,24 @@ case:
           - --model_path ./infer_model/model
           - --device gpu
           - --max_seq_length 128
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

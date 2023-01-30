@@ -106,3 +106,17 @@ case:
           - --device gpu
     export: skipped
     predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
