@@ -58,10 +58,6 @@ case:
   windows_cpu:
     train:
       -
-        name: prepare
-        path: examples/few_shot/RGL
-        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/k-shot-glue/rgl-k-shot.zip && unzip rgl-k-shot.zip
-      -
         name: train
         path: examples/few_shot/RGL
         cmd: python rgl.py
