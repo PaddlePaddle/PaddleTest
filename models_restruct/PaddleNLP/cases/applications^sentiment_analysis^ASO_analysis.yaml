@@ -80,3 +80,17 @@ case:
         path: applications/sentiment_analysis/ASO_analysis/
         cmd: sh run_export_model.sh classification
     predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

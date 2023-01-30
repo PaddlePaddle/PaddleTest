@@ -68,3 +68,17 @@ case:
         cmd: python inference_pegasus.py
         params:
           - --inference_model_dir ../../inference_model/
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
