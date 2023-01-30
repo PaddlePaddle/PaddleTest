@@ -1,4 +1,4 @@
+examples^lexical_analysis.yaml
 examples^few_shot^RGL.yaml
 examples^few_shot^efl.yaml
 examples^few_shot^p-tuning.yaml
-examples^lexical_analysis.yaml
