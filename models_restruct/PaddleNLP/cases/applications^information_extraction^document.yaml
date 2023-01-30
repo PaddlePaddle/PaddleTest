@@ -53,8 +53,8 @@ case:
         cmd: python evaluate.py
         params:
           - --device 'gpu'
-          - --model_path ./checkpoint/model_best 
-          - --test_path ./data/dev.txt 
+          - --model_path ./checkpoint/model_best
+          - --test_path ./data/dev.txt
           - --output_dir ./checkpoint/model_best
           - --label_names 'start_positions' 'end_positions'
           - --max_seq_len 512
@@ -123,11 +123,11 @@ case:
         cmd: python evaluate.py
         params:
           - --device 'gpu'
-          - --model_path ./checkpoint/model_best 
-          - --test_path ./data/dev.txt 
-          - --output_dir ./checkpoint/model_best 
+          - --model_path ./checkpoint/model_best
+          - --test_path ./data/dev.txt
+          - --output_dir ./checkpoint/model_best
           - --label_names 'start_positions' 'end_positions'
-          - --max_seq_len 512 
+          - --max_seq_len 512
           - --per_device_eval_batch_size 16
           - --debug True
         result:

@@ -198,4 +198,3 @@ case:
           - --batch_size 2
           - --max_seq_length 128
           - --model_name electra-small
-

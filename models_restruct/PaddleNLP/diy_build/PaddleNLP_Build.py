@@ -59,11 +59,15 @@ class PaddleNLP_Build(Model_Build):
         path_now = os.getcwd()
         platform = self.system
         if platform == "linux":
-            os.system("python -m pip install -r requirements_nlp.txt") 
-            os.system("python -m pip install {}".format(self.paddle_whl))  # install paddle for lac requirement paddle>=1.6
+            os.system("python -m pip install -r requirements_nlp.txt")
+            os.system(
+                "python -m pip install {}".format(self.paddle_whl)
+            )  # install paddle for lac requirement paddle>=1.6
         else:
-            os.system("python -m pip install -r requirements_win.txt") 
-            os.system("python -m pip install {}".format(self.paddle_whl))  # install paddle for lac requirement paddle>=1.6
+            os.system("python -m pip install -r requirements_win.txt")
+            os.system(
+                "python -m pip install {}".format(self.paddle_whl)
+            )  # install paddle for lac requirement paddle>=1.6
         import nltk
 
         # nltk.download("punkt")

@@ -114,7 +114,7 @@ case:
     infer: skipped
     export: skipped
     predict: skipped
-  
+
   windows:
     train:
       -
