@@ -182,6 +182,7 @@ class PaddleOCR_Start(object):
 
             if not os.path.exists("train_data"):
                 print("PaddleOCR train_data link:")
+                shutil.rmtree("train_data")
                 os.symlink(os.path.join(src_path, "train_data"), "train_data")
                 os.system("ll")
                 if not os.path.exists("train_data"):
@@ -189,6 +190,7 @@ class PaddleOCR_Start(object):
                     os.system("ll")
             if not os.path.exists("pretrain_models"):
                 print("PaddleOCR pretrain_models link:")
+                shutil.rmtree("pretrain_models")
                 os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
                 os.system("ll")
                 if not os.path.exists("pretrain_models"):
