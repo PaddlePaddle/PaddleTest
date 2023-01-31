@@ -148,7 +148,7 @@ class PaddleSpeech_Start(object):
             # delete exp
             if os.path.exists("exp"):
                 shutil.rmtree("exp")
-            
+
             sysstr = platform.system()
             if sysstr == "Linux":
                 if os.path.exists("/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"):
