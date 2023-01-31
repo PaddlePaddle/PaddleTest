@@ -71,8 +71,13 @@ class PaddleOCR_Start(object):
                         else:
                             image_shape = image_shape[0]
                             print("len(image_shape)={}".format(len(image_shape.split(","))))
+                            
+                            #  image_shape: [100, 32] # W H
+                            if algorithm == 'NRTR':
+                                image_shape="32,100"
                             if len(image_shape.split(",")) == 2:
                                 image_shape = "1," + image_shape
+
                         print(image_shape)
                         break
                     else:
