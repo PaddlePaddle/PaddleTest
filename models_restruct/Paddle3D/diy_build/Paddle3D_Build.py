@@ -66,7 +66,10 @@ class Paddle3D_Build(Model_Build):
 
             sysstr = platform.system()
             if sysstr == "Linux":
-                src_path = "/ssd2/ce_data/Paddle3D"
+                if os.path.exists("/ssd2/ce_data/Paddle3D"):
+                    src_path = "/ssd2/ce_data/Paddle3D"
+                else:
+                    src_path = "/home/data/cfs/models_ce/Paddle3D"
             elif sysstr == "Windows":
                 src_path = "F:\\ce_data\\Paddle3D"
             elif sysstr == "Darwin":
