@@ -94,7 +94,7 @@ class InferenceTest(object):
         for _, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
+            # output_data = output_data.flatten()
             output_data_dict[output_data_name] = output_data
         return output_data_dict
 
@@ -296,16 +296,20 @@ class InferenceTest(object):
             predictor.run()
 
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            # diff_count = np.sum(diff > delta)
+            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
+            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def onnxruntime_test(self, input_data_dict: dict, output_data_dict: dict, repeat=2, delta=1e-5):
         """
@@ -331,16 +335,20 @@ class InferenceTest(object):
             predictor.run()
 
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            # diff_count = np.sum(diff > delta)
+            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
+            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def gpu_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
         """
@@ -364,16 +372,20 @@ class InferenceTest(object):
         for i in range(repeat):
             predictor.run()
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            # diff_count = np.sum(diff > delta)
+            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
+            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def gpu_more_bz_test_mix(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=5e-3, gpu_mem=1000):
         """
@@ -399,16 +411,20 @@ class InferenceTest(object):
         output_names = predictor.get_output_names()
         # Change the accuracy check to sequential comparison
         truth_value_names = list(output_data_dict.keys())
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[truth_value_names[i]].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[truth_value_names[i]]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            # diff_count = np.sum(diff > delta)
+            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
+            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def trt_bz1_test(
         self,
@@ -484,16 +500,20 @@ class InferenceTest(object):
             predictor.run()
 
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            # diff_count = np.sum(diff > delta)
+            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
+            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def trt_more_bz_test(
         self,
@@ -574,19 +594,20 @@ class InferenceTest(object):
         if tuned:  # collect_shape_range_info收集动态shape需要predictor后再退出
             return 0
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            if result_sort:
-                output_data = np.sort(output_data)
-                output_data_truth_val = np.sort(output_data_truth_val)
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            # diff_count = np.sum(diff > delta)
+            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
+            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def trt_more_bz_dynamic_test(
         self,
