@@ -67,6 +67,11 @@ class PaddleSpeech_Build(Model_Build):
             os.system("yum update")
             os.system("yum install -y libsndfile")
 
+        if platform.machine() == "arm64":
+            print("mac M1")
+            os.system("conda install -y scikit-learn")
+            os.system("conda install -y onnx")
+
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)

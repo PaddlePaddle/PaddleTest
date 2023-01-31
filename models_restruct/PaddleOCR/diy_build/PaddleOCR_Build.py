@@ -135,6 +135,7 @@ class PaddleOCR_Build(Model_Build):
             print("build dataset!")
 
             if platform.machine() == "arm64":
+                print("mac M1")
                 os.system("conda install -y scikit-image")
                 os.system("conda install -y imgaug")
 
