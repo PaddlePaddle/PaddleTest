@@ -64,7 +64,7 @@ case:
             base: 1
             threshold: 1
             evaluation: "="
-      -
+       -
         name: distill_train_student
         path: applications/information_extraction/text/data_distill
         cmd: python train.py
@@ -180,7 +180,7 @@ case:
             base: 1
             threshold: 1
             evaluation: "="
-      -
+       -
         name: distill_train_student
         path: applications/information_extraction/text/data_distill
         cmd: python train.py

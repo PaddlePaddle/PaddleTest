@@ -8,3 +8,6 @@ gflv2_r50_fpn_1x_coco
 tood_r50_fpn_1x_coco
 ssdlite_mobilenet_v3_large_320_coco
 deformable_detr_r50_1x_coco
+botsort_ppyoloe
+centertrack_dla34_70e_mot17
+centertrack_dla34_70e_mot17half

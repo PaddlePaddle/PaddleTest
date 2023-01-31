@@ -14,16 +14,25 @@ case:
     infer:
       -
         name: trained
-        cmd: python -m predict.py
+        path: applications/text_summarization/pegasus
+        cmd: python predict.py
+        params:
+          - --device gpu
+          - --init_checkpoint_dir ./output/
     export:
       -
         name: trained
+        path: applications/text_summarization/pegasus
         cmd: python export_model.py
+        params:
+          - --export_output_dir ./inference_model/
     predict:
       -
         name: trained
-        path: /deploy/paddle_inference/
+        path: applications/text_summarization/pegasus/deploy/paddle_inference/
         cmd: python inference_pegasus.py
+        params:
+          - --inference_model_dir ../../inference_model/
 
   windows:
     base: ./base/normal_case.yaml
@@ -40,39 +49,36 @@ case:
     infer:
       -
         name: trained
-        cmd: python -m predict.py
+        path: applications/text_summarization/pegasus
+        cmd: python predict.py
+        params:
+          - --device gpu
+          - --init_checkpoint_dir ./output/
     export:
       -
         name: trained
+        path: applications/text_summarization/pegasus
         cmd: python export_model.py
+        params:
+          - --export_output_dir ./inference_model/
     predict:
       -
         name: trained
-        path: /deploy/paddle_inference/
+        path: applications/text_summarization/pegasus/deploy/paddle_inference/
         cmd: python inference_pegasus.py
+        params:
+          - --inference_model_dir ../../inference_model/
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
 
   mac:
-    base: ./base/normal_case.yaml
-    train:
-      -
-        name: prepare
-        path: applications/text_summarization/pegasus
-        cmd: python run_prepare.py
-      -
-        name: train
-        path: applications/text_summarization/pegasus
-        cmd: python -m paddle.distributed.launch train.py
+    train: skipped
     eval: skipped
-    infer:
-      -
-        name: trained
-        cmd: python -m predict.py
-    export:
-      -
-        name: trained
-        cmd: python export_model.py
-    predict:
-      -
-        name: trained
-        path: /deploy/paddle_inference/
-        cmd: python inference_pegasus.py
+    infer: skipped
+    export: skipped
+    predict: skipped

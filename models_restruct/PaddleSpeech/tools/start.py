@@ -255,7 +255,9 @@ waveflow_ljspeech_ckpt_0.3.zip"
         # 进入repo中
         speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
         speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
-        self.category = speech_map[self.model]["category"]
+
+        if "paddlespeech_cli" not in self.model:
+            self.category = speech_map[self.model]["category"]
 
         if "paddlespeech_cli" in self.model:
             self.prepare_cli_cmd()
