@@ -30,10 +30,13 @@ fleet_gpu_model_list=( \
     vit_cifar10_finetune \
     vit_inference \
     vit_qat \
+    imagen_text2im_397M_64x64_single \
+    imagen_text2im_397M_64x64_dp8 \
+    imagen_text2im_2B_64x64_sharding8 \
+    imagen_text2im_64x64_DebertaV2_dp8 \
+    imagen_super_resolution_256_single_card \
     )
-    # imagen_super_resolution_512_single \
-    # imagen_text2im_397M_64x64_single \
-    # imagen_text2im_397M_64x64_bs2048 \
+        # imagen_super_resolution_256_dp8 \
 
 
 function gpt_preprocess_data() {
@@ -372,41 +375,61 @@ function imagen_text2im_397M_64x64_single() {
     rm -rf log
     python tools/train.py \
         -c ppfleetx/configs/multimodal/imagen/imagen_397M_text2im_64x64.yaml \
-        -o Data.Train.loader.num_workers=8 \
         -o Engine.max_steps=100
     check_result $FUNCNAME
 }
 
-function imagen_text2im_397M_64x64_bs2048() {
+function imagen_text2im_397M_64x64_dp8() {
     cd ${fleetx_path}
     rm -rf log
     python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py \
         -c ppfleetx/configs/multimodal/imagen/imagen_397M_text2im_64x64.yaml \
-        -o Distributed.dp_degree=8 \
-        -o Data.Train.loader.num_workers=8 \
+        -o Distributed.dp_degree=8 
         -o Engine.max_steps=100
     check_result $FUNCNAME
 }
 
-function imagen_super_resolution_512_single() {
+function imagen_text2im_2B_64x64_sharding8() {
     cd ${fleetx_path}
     rm -rf log
     python tools/train.py \
         -c ppfleetx/configs/multimodal/imagen/imagen_text2im_64x64_T5-11B.yaml \
-        -o Data.Train.loader.num_workers=8 \
+        -o Distributed.sharding.sharding_stage=2 \
+        -o Distributed.sharding.sharding_degree=8 
         -o Engine.max_steps=100
     check_result $FUNCNAME
 }
 
-# function imagen_super_resolution_1024_single() {
-#     cd ${fleetx_path}
-#     rm -rf log
-#     python tools/train.py \
-#         -c ppfleetx/configs/multimodal/imagen/imagen_super_resolution_1024.yaml \
-#         -o Data.Train.loader.num_workers=0 \
-#         -o Engine.max_steps=100
-#     check_result $FUNCNAME
-# }
+function imagen_text2im_64x64_DebertaV2_dp8() {
+    cd ${fleetx_path}
+    rm -rf log
+    python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
+        tools/train.py \
+        -c ppfleetx/configs/multimodal/imagen/imagen_text2im_64x64_DebertaV2.yaml \
+        -o Distributed.dp_degree=8 \
+        -o Engine.max_steps=100
+    check_result $FUNCNAME
+}
+
+function imagen_super_resolution_256_single_card() {
+    cd ${fleetx_path}
+    rm -rf log
+    python tools/train.py \
+        -c ppfleetx/configs/multimodal/imagen/imagen_super_resolution_256.yaml \
+        -o Engine.max_steps=100
+    check_result $FUNCNAME
+}
+
+function imagen_super_resolution_256_dp8() {
+    cd ${fleetx_path}
+    rm -rf log
+    python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
+        tools/train.py \
+        -c ./ppfleetx/configs/multimodal/imagen/imagen_super_resolution_256.yaml \
+        -o Distributed.dp_degree=8 \
+        -o Engine.max_steps=100
+    check_result $FUNCNAME
+}
 
 function check_generation_txt() {
     if [[ -e ./generation_base.txt ]]; then
