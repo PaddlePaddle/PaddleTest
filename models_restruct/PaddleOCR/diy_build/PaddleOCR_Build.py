@@ -134,9 +134,9 @@ class PaddleOCR_Build(Model_Build):
             os.chdir(self.test_root_path)
             print("build dataset!")
 
-            if platform.machine()=='arm64':
-                os.system('conda install -y scikit-image')
-                os.system('conda install -y imgaug')
+            if platform.machine() == "arm64":
+                os.system("conda install -y scikit-image")
+                os.system("conda install -y imgaug")
 
     def download_data(self, data_link, destination):
         """
