@@ -63,7 +63,7 @@ fi
 
 if [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_10_9_x86_64.whl"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-Mac/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
     fi
@@ -75,9 +75,9 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Pyt
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-Mac-Avx-Openblas-Py39-Compile/latest/paddlepaddle-0.0.0-cp39-cp39-macosx_10_14_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac/latest/paddlepaddle-0.0.0-cp39-cp39-macosx_10_9_x86_64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Cpu-Mac-Avx-Openblas-Python39-Compile/latest/paddlepaddle-0.0.0-cp39-cp39-macosx_10_14_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-Mac/latest/paddlepaddle-0.0.0-cp39-cp39-macosx_10_14_x86_64.whl"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     echo "do not have python39 M1 paddle_whl url"
@@ -147,5 +147,6 @@ cd ./${CE_version_name}/
 python -c 'import sys; print(sys.version_info[:])';
 git --version;
 python -m pip install -U pip #升级pip
+python -m pip uninstall opencv-python -y #预先卸载一遍opencv
 python -m pip install -r requirements.txt #预先安装依赖包
 python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
