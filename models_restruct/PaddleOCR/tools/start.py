@@ -71,8 +71,13 @@ class PaddleOCR_Start(object):
                         else:
                             image_shape = image_shape[0]
                             print("len(image_shape)={}".format(len(image_shape.split(","))))
+
+                            #  image_shape: [100, 32] # W H
+                            if algorithm == "NRTR":
+                                image_shape = "32,100"
                             if len(image_shape.split(",")) == 2:
                                 image_shape = "1," + image_shape
+
                         print(image_shape)
                         break
                     else:
@@ -182,6 +187,7 @@ class PaddleOCR_Start(object):
 
             if not os.path.exists("train_data"):
                 print("PaddleOCR train_data link:")
+                shutil.rmtree("train_data")
                 os.symlink(os.path.join(src_path, "train_data"), "train_data")
                 os.system("ll")
                 if not os.path.exists("train_data"):
@@ -189,6 +195,7 @@ class PaddleOCR_Start(object):
                     os.system("ll")
             if not os.path.exists("pretrain_models"):
                 print("PaddleOCR pretrain_models link:")
+                shutil.rmtree("pretrain_models")
                 os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
                 os.system("ll")
                 if not os.path.exists("pretrain_models"):

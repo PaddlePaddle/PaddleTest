@@ -133,7 +133,7 @@ find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v be
 find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep dcn/ | awk '{print $NF}' | tee dcn_list
 cat cascade_list centernet_list picodet_list dcn_list >>config_list
 else
-find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v vitdet | grep -v deploy | grep -v layout | grep -v application | grep -v objects365 | awk '{print $NF}' | tee config_list
+find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v vitdet | grep -v deploy | grep -v layout | grep -v application | grep -v pcb | grep -v objects365 | awk '{print $NF}' | tee config_list
 fi
 
 print_result(){

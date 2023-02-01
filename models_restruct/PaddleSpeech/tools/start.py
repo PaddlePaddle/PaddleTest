@@ -12,6 +12,7 @@ import logging
 import zipfile
 import argparse
 import subprocess
+import platform
 import yaml
 import wget
 import numpy as np
@@ -148,8 +149,14 @@ class PaddleSpeech_Start(object):
             if os.path.exists("exp"):
                 shutil.rmtree("exp")
 
+            sysstr = platform.system()
+            if sysstr == "Linux":
+                if os.path.exists("/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"):
+                    src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"
+                else:
+                    src_path = "/home/data/cfs/models_ce/PaddleSpeech_t2s/preprocess_data"
+
             if not os.path.exists("dump") and (self.model != "waveflow"):
-                src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"
                 os.symlink(os.path.join(src_path, self.data_path, "dump"), "dump")
 
             if self.model == "transformer_tts":

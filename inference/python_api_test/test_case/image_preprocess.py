@@ -5,6 +5,7 @@ image preprocess
 """
 import os
 import sys
+import time
 
 import cv2
 import numpy as np
@@ -133,29 +134,52 @@ def preprocess(img, img_size, center=True, model_type="class"):
     return img[np.newaxis, :][0]
 
 
-def sig_fig_compare(num0, num1, delta=5):
+def normalize(num):
+    """
+    normalize input array elements
+    Args:
+        num(float): input num
+    Returns:
+        num(float): return num
+    """
+    abs_value = abs(num)
+    if abs_value > 10:
+        length = len(str(int(abs_value)))
+        if length >= 3:
+            return num / 10 ** (length - 2)
+        else:
+            return num / 10 ** (length - 1)
+    else:
+        return num
+
+
+def sig_fig_compare(array1, array2, delta=5):
     """
     compare significant figure
     Args:
-        num0(float): input num 0
-        num1(float): input num 1
+        array1(numpy array): input array 1
+        array2(numpy array): input array 2
     Returns:
-        diff(float): return diff
+        diff(numpy array): return diff array
     """
-    difference = num0 - num1
-    num0_int_length = len(str(int(num0)))
-    num1_int_length = len(str(int(num1)))
-    num0_int = int(num0)
-    num1_int = int(num1)
-    if num0 < 1 and num1 < 1 and abs(difference) < 1:
-        return abs(difference)
-    elif num0_int_length == num1_int_length:
-        if num0_int_length >= delta:
-            return abs(num0_int - num1_int)
-        else:
-            scale = delta - num1_int_length
-            num0_padding = num0 * scale
-            num1_padding = num1 * scale
-            return abs(num0_padding - num1_padding) / (10 * scale)
-    elif num0_int_length != num1_int_length:
-        return abs(difference)
+    # start = time.time()
+    if np.any(abs(array2) > 100):
+        normalize_func = np.vectorize(normalize)
+        array1_normal = normalize_func(array1)
+        array2_normal = normalize_func(array2)
+    else:
+        array1_normal = array1
+        array2_normal = array2
+    diff = np.abs(array1_normal - array2_normal)
+    diff_count = np.sum(diff > delta)
+    print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+    print("output max: ", np.max(abs(array1)), "output min: ", np.min(abs(array1)))
+    print("output value debug: ", array1)
+    print("output diff array: ", array1[diff > delta])
+    print("truth diff array:  ", array2[diff > delta])
+    assert (
+        diff_count == 0
+    ), f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \noutput: {array1} \ntruth: {array2}"
+    # end = time.time()
+    # print(f"精度校验cost：{(end - start) * 1000}ms")
+    return diff
