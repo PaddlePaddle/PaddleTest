@@ -3,7 +3,6 @@ from configtrans import YamlLoader
 
 
 flag_LBFGS= False
-
 def parse_args():
     """
     parse args
@@ -58,16 +57,17 @@ args = parse_args()
 yamldir = YamlLoader(args.file)
 case_num, py = yamldir.get_case(0)
 filedir = py
-#alter(filedir, "tf", "paddle")
-#alter("../../deepxde/deepxde/backend/paddle/tensor.py", "2.3.0", "0.0.0")
-#alter(filedir, "model.train(", "model.train(display_every=1,", True, "model.train(0")
+alter(filedir, "tf", "paddle")
+
+alter(filedir, "model.train(", "model.train(display_every=1,", True, "model.train(0")
 alter(filedir, "model.train(", "losshistory, train_state = model.train(")
-#alter(filedir, "display_every=1000", "display_every=1")
-#alter(filedir, "display_every=500", " ",False)
+alter(filedir, "display_every=1000", " ", False)
+alter(filedir, "display_every=500", " ", False)
 add_seed(filedir, "import deepxde", "import paddle\n")
 #add_seed(filedir, "import paddle", "paddle.seed(1)\n")
 add_seed(filedir, "import deepxde", "import numpy as np\n")
 add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")
+
 
 add_seed(filedir, "L-BFGS", "result = np.sum(losshistory.loss_train, axis=1)\n")
 add_seed(filedir, "result = np.sum(losshistory.loss_train, axis=1)", "result = result[:200]\n")
@@ -75,23 +75,15 @@ add_seed(filedir, "result = result[:200]", "np.save('loss.npy',result)\n")
 if flag_LBFGS == False:
     with open(filedir, "a") as f:
         f.write( "\n"
-                 "result = model.loss_list[:200]\n"
+                 "result = np.sum(losshistory.loss_train, axis=1)\n"
+                 "result = result[:200]\n"
                  "np.save('loss.npy',result)\n"
                  "np.save('metric.npy',model.train_state.best_metrics)\n"
                  )
 else:
-    alter(filedir, "model.train(", "model.train(display_every=1,", True, "model.train(0")
-    alter(filedir, "model.train(", "losshistory, train_state = model.train(")
-    alter(filedir, "display_every=1000", " ", False)
-    alter(filedir, "display_every=500", " ", False)
     with open(filedir, "a") as f:
         f.write( "\n"
                  "np.save('metric.npy',model.train_state.best_metrics)\n"
                  )
-
-#add_seed(filedir, "model.train(", "result = np.sum(losshistory.loss_train, axis=1)\n")
-#add_seed(filedir, "result = np.sum(losshistory.loss_train, axis=1)", "result = result[:200]\n")
-#add_seed(filedir, "result = result[:200]", "np.save('loss.npy',result)\n")
-#add_seed(filedir, "np.save('loss.npy',result)", "np.save('metric.npy',model.train_state.best_metric)\n")
 
 print("Successfully replaced the backend as paddle!")

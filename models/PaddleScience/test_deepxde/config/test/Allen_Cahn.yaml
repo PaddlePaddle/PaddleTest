@@ -1,5 +1,0 @@
-- test: 0
-  Dir: '../../deepxde/examples/pinn_forward/Allen_Cahn.py'
-  Post-processing:
-    solution_metric_dir: "../standard_data/Allen_Cahn_metric.npy"
-    solution_loss_dir: "../standard_data/Allen_Cahn_loss.npy"
