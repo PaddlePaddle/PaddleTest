@@ -76,7 +76,7 @@ class PaddleSpeech_Build(Model_Build):
             path_now = os.getcwd()
             os.chdir(self.reponame)
             os.system("python -m pip install . --ignore-installed")
-            
+
             # mac intel install paddlespeech_ctcdecoders
             sysstr = platform.system()
             if sysstr == "Darwin" and platform.machine() == "x86_64":
