@@ -66,6 +66,8 @@ class PaddleDetection_Build(Model_Build):
         os.system("pip install -r requirements.txt --ignore-installed")
         os.system("pip install cython_bbox --ignore-installed")
         os.system("pip install zip --ignore-installed")
+        os.system("rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro")
+        os.system("rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm")
         os.system("yum install ffmpeg ffmpeg-devel -y")
         os.system("apt-get update")
         os.system("apt-get install ffmpeg -y")
