@@ -8,6 +8,13 @@ cd ce;
 # 使虚拟环境生效
 source ~/.bashrc
 
+######################## 定义变量 ########################
+# AGILE_PIPELINE_NAME 格式类似: PaddleClas-MAC-Intel-Python310-P9-Develop
+#其它内容或者可能不一致的不要随意加 "-", 下面是按照 "-" split 按序号填入的
+
+#repo的名称
+export reponame=${reponame:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $1}')`"}
+
 if [[ `uname -a` =~ "ARM64" ]] || [[ `uname -m` =~ "arm64" ]];then
     echo "M1"
     source activate
@@ -15,14 +22,11 @@ if [[ `uname -a` =~ "ARM64" ]] || [[ `uname -m` =~ "arm64" ]];then
 else
     echo "Intel"
     export env_run=pyenv
+    ${env_run} activate ${reponame}_py39
+    sed -i '' 's/include-system-site-packages = false/include-system-site-packages = true/g' /var/root/.pyenv/versions/${reponame}_py39/pyvenv.cfg
+    sed -i '' 's/include-system-site-packages = false/include-system-site-packages = true/g' /var/root/.pyenv/versions/${reponame}_py310/pyvenv.cfg
+    cat /var/root/.pyenv/versions/${reponame}_py310/pyvenv.cfg
 fi
-
-######################## 定义变量 ########################
-# AGILE_PIPELINE_NAME 格式类似: PaddleClas-MAC-Intel-Python310-P9-Develop
-#其它内容或者可能不一致的不要随意加 "-", 下面是按照 "-" split 按序号填入的
-
-#repo的名称
-export reponame=${reponame:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $1}')`"}
 
 #模型列表文件 , 固定路径及格式为 tools/reponame_优先级_list   优先级P2有多个用P21、P22  中间不用"-"划分, 防止按 "-" split 混淆
 export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $5}')`_list"}
@@ -148,7 +152,6 @@ cd ./${CE_version_name}/
 
 python -c 'import sys; print(sys.version_info[:])';
 git --version;
-python -m pip install -U pip #升级pip
-python -m pip uninstall opencv-python -y #预先卸载一遍opencv
-python -m pip install -r requirements.txt #预先安装依赖包
+python -m pip install --user -U pip #升级pip
+python -m pip install --user -r requirements.txt #预先安装依赖包
 python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --timeout=${timeout:-3600}
