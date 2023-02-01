@@ -58,7 +58,7 @@ class Paddle3D_Start(object):
             os.chdir(self.reponame)
 
             # change batch_size=1
-            cmd = "sed -i 's/batch_size: 4/batch_size: 1/g %s" % self.rd_yaml_path
+            cmd = "sed -i 's/batch_size: 4/batch_size: 1/g' %s" % self.rd_yaml_path
             os.system(cmd)
 
             # delete output
