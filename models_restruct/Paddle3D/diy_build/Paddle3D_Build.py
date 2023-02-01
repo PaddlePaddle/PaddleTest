@@ -85,11 +85,11 @@ class Paddle3D_Build(Model_Build):
             # petr
             if not os.path.exists("data"):
                 os.makedirs("data")
-                os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petr", "data/nuscenes")
+                os.symlink(os.path.join(src_path, "nuscenes_petr"), "data/nuscenes")
                 os.makedirs("/workspace/datset/nuScenes/", exist_ok=True)
-                os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petr", "/workspace/datset/nuScenes/nuscenes")
+                os.symlink(os.path.join(src_path, "nuscenes_petr"), "/workspace/datset/nuScenes/nuscenes")
 
-                os.symlink("/ssd2/ce_data/Paddle3D/kitti", "data/kitti")
+                os.symlink(os.path.join(src_path, "kitti"), "data/kitti")
 
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))

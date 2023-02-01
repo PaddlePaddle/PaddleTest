@@ -56,6 +56,11 @@ class Paddle3D_Start(object):
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
+
+            # change batch_size=1
+            cmd = "sed -i 's/batch_size: 4/batch_size: 1/g %s" % self.rd_yaml_path
+            os.system(cmd)
+
             # delete output
             if os.path.exists("output"):
                 shutil.rmtree("output")
