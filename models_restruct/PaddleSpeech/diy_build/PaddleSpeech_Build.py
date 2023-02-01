@@ -75,6 +75,7 @@ class PaddleSpeech_Build(Model_Build):
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
+            os.system("python -m pip uninstall -y paddlespeech")
             os.system("python -m pip install . --ignore-installed")
 
             # mac intel install paddlespeech_ctcdecoders
