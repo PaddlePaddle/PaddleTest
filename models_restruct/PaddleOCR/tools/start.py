@@ -14,6 +14,7 @@ import argparse
 import platform
 import yaml
 import wget
+import paddle
 import numpy as np
 
 logger = logging.getLogger("ce")
@@ -90,11 +91,10 @@ class PaddleOCR_Start(object):
             else:
                 self.env_dict["kie_token"] = "kie_token_ser_re"
         # use_gpu
-        sysstr = platform.system()
-        if sysstr == "Darwin":
-            self.env_dict["use_gpu"] = "False"
-        else:
+        if paddle.is_compiled_with_cuda():
             self.env_dict["use_gpu"] = "True"
+        else:
+            self.env_dict["use_gpu"] = "False"
 
     def prepare_pretrained_model(self):
         """
@@ -141,6 +141,8 @@ class PaddleOCR_Start(object):
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    windows:" + os.linesep,
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
+                            "    windows_cpu:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    mac:" + os.linesep,
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                         )
@@ -155,6 +157,8 @@ class PaddleOCR_Start(object):
                                 "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
                                 "    windows:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "    windows_cpu:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
                                 "    mac:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                             )
@@ -166,6 +170,8 @@ class PaddleOCR_Start(object):
                                 "    linux:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                                 "    windows:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "    windows_cpu:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                                 "    mac:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
