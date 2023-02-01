@@ -180,6 +180,7 @@ if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4
 rem default value
 if not defined step set step=train
 if not defined mode set mode=function
+if not defined timeout set timeout=3600
 if not defined use_build set use_build=yes
 if not defined branch set branch=develop
 if not defined get_repo set get_repo=wget
@@ -222,6 +223,8 @@ echo "@@@paddle_whl: %paddle_whl%"
 echo "@@@step: %step%"
 echo "@@@branch: %branch%"
 echo "@@@mode: %mode%"
+echo "@@@timeout: %timeout%"
+
 
 rem if already download PaddleTest direct mv
 if exist "%pwd_org%/task" (
@@ -254,4 +257,4 @@ python -m pip install -U pip
 python -m pip uninstall opencv-python -y
 python -m pip install -r requirements.txt
 rem install package
-python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target%
+python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target% --timeout=%timeout%
