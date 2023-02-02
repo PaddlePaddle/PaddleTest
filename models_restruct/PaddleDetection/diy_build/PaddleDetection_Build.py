@@ -63,6 +63,7 @@ class PaddleDetection_Build(Model_Build):
         path_repo = os.getcwd()
         os.system("python -m pip install --upgrade pip --ignore-installed")
         os.system("pip install Cython --ignore-installed")
+        os.system("pip install setuptools")
         os.system("pip install -r requirements.txt --ignore-installed")
         os.system("pip install cython_bbox --ignore-installed")
         os.system("pip install zip --ignore-installed")
