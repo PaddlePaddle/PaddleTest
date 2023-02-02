@@ -125,8 +125,7 @@ class PaddleOCR_Build(Model_Build):
                     if sysstr == "Darwin":
                         cmd = "sed -i '' 's!data_lmdb_release/training!data_lmdb_release/validation!g' %s" % filename
                     elif sysstr == "Windows":
-                        cmd = "set PATH=F:\\install\\GnuWin32\\bin;%PATH%"
-                        os.system(cmd)
+                        os.environ["PATH"] = "F:\\install\\GnuWin32\\bin;" + os.environ.get("PATH")
                         cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
                         os.system(cmd)
                     else:
