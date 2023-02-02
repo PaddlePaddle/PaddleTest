@@ -2,8 +2,8 @@ models^contentunderstanding^tagspace^config.yaml
 models^contentunderstanding^textcnn^config.yaml
 models^match^dssm^config.yaml
 models^match^kim^config.yaml
-models^match^match_pyramid^config.yaml
-models^match^multiview_simnet^config.yaml
+models^match^match-pyramid^config.yaml
+models^match^multiview-simnet^config.yaml
 models^multitask^aitm^config.yaml
 models^multitask^dselect_k^config.yaml
 models^multitask^escm2^config.yaml
