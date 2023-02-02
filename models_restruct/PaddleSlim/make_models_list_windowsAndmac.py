@@ -20,6 +20,7 @@ for file in files:
                 file_data_windows += file
             else:
                 file_data_windows += "\n" + file
+                
         if content["case"].get("mac"):
             if file_data_mac == "":
                 file_data_mac += file
