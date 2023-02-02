@@ -382,7 +382,8 @@ function imagen_text2im_397M_64x64_single() {
 function imagen_text2im_397M_64x64_dp8() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py \
+    python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
+        tools/train.py \
         -c ppfleetx/configs/multimodal/imagen/imagen_397M_text2im_64x64.yaml \
         -o Distributed.dp_degree=8 \
         -o Engine.max_steps=100
@@ -392,7 +393,8 @@ function imagen_text2im_397M_64x64_dp8() {
 function imagen_text2im_2B_64x64_sharding8() {
     cd ${fleetx_path}
     rm -rf log
-    python tools/train.py \
+     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
+        tools/train.py \
         -c ppfleetx/configs/multimodal/imagen/imagen_text2im_64x64_T5-11B.yaml \
         -o Distributed.sharding.sharding_stage=2 \
         -o Distributed.sharding.sharding_degree=8 \
