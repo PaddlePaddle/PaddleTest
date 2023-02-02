@@ -118,16 +118,15 @@ class PaddleOCR_Build(Model_Build):
 
             # kie requirements
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
+            
+            if sysstr == "Windows":
+                os.environ["PATH"] = "F:\\install\\GnuWin32\\bin;" + os.environ.get("PATH")
 
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
                 if "rec" in filename:
                     if sysstr == "Darwin":
                         cmd = "sed -i '' 's!data_lmdb_release/training!data_lmdb_release/validation!g' %s" % filename
-                    elif sysstr == "Windows":
-                        os.environ["PATH"] = "F:\\install\\GnuWin32\\bin;" + os.environ.get("PATH")
-                        cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
-                        os.system(cmd)
                     else:
                         cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
 
