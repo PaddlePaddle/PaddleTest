@@ -58,17 +58,19 @@ class PaddleDetection_Build(Model_Build):
         """
         安装依赖包
         """
+        path_now = os.getcwd()
+        os.chdir(self.reponame)
+        path_repo = os.getcwd()
         os.system("python -m pip install --upgrade pip --ignore-installed")
         os.system("pip install Cython --ignore-installed")
         os.system("pip install -r requirements.txt --ignore-installed")
         os.system("pip install cython_bbox --ignore-installed")
         os.system("pip install zip --ignore-installed")
+        os.system("rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro")
+        os.system("rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm")
         os.system("yum install ffmpeg ffmpeg-devel -y")
         os.system("apt-get update")
         os.system("apt-get install ffmpeg -y")
-        path_now = os.getcwd()
-        os.chdir(self.reponame)
-        path_repo = os.getcwd()
         # set sed
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"

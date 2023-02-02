@@ -80,9 +80,9 @@ function _train(){
     fi
 
     local_batch_size=`expr ${global_batch_size} / ${dp_degree} / ${sharding_degree}`
-    train_cmd="-o Engine.max_steps=${max_iter} \
-               -o Engine.eval_freq=${eval_freq} \
-               -o Engine.save_load.save_steps=100000 \
+    train_cmd="-o Global.max_steps=${max_iter} \
+               -o Global.eval_freq=${eval_freq} \
+               -o Global.save_load.save_steps=100000 \
                -o Global.local_batch_size=${local_batch_size} \
                -o Global.micro_batch_size=${micro_batch_size} \
                -o Distributed.dp_degree=${dp_degree} \
@@ -98,13 +98,13 @@ function _train(){
     if [[ ${model_item} =~ "CE" ]];then # CE
         echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 \
-            tools/train.py -c ppfleetx/configs/nlp/gpt/pretrain_gpt_1.3B_dp8.yaml \
+            ./pretrain/run.py -c ./pretrain/configs/pretrain_gpt_1.3B_dp8.yaml \
             ${train_cmd}"
         workerlog_id=0
     else
         echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 \
-            tools/train.py -c ppfleetx/configs/nlp/gpt/pretrain_gpt_6.7B_sharding16.yaml \
+            ./pretrain/run.py -c ./pretrain/configs/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
         workerlog_id=0
     fi
@@ -130,7 +130,7 @@ function _train(){
     #     ;;
     # *) echo "choose run_mode "; exit 1;
     # esac
-    cd ../
+    cd ../examples/transformer/models/GPT/
     echo "train_cmd: ${train_cmd}  log_file: ${log_file}"
     if [[ ${model_item} =~ "CE" ]];then # CE精度-不限制执行时间
         ${train_cmd} > ${log_file} 2>&1

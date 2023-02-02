@@ -267,14 +267,21 @@ class PaddleClas_Build(Model_Build):
                         os.rename("PaddleSlim-develop", "PaddleSlim")
                 except:
                     logger.info("#### prepare download failed {} failed".format("PaddleSlim.tar.gz"))
-            if os.path.exists("PaddleSlim"):
+            if os.path.exists("PaddleSlim") and (
+                "develop" in self.paddle_whl or "Develop" in self.paddle_whl or "None" in str(self.paddle_whl)
+            ):
+                logger.info("#### install devlop paddleslim")
                 path_now = os.getcwd()
                 os.chdir("PaddleSlim")
                 os.system("git checkout develop")
                 os.system("git pull")
                 os.system("python -m pip install -r requirements.txt")
+                os.system("python -m pip uninstall paddleslim -y")
                 cmd_return = os.system("python setup.py install > paddleslim_install.log 2>&1 ")
                 os.chdir(path_now)
+            else:
+                logger.info("#### install release paddleslim")
+                cmd_return = os.system("python -m pip install -U paddleslim")
             if cmd_return:
                 logger.info("repo {} python -m pip install paddleslim failed".format(self.reponame))
                 # return 1

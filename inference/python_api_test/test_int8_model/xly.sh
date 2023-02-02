@@ -6,9 +6,10 @@ DOCKER_NAME="test_infer_slim"
 # DOCKER_IMAGE="paddlepaddle/paddle_manylinux_devel:cuda11.1-cudnn8.1-gcc82-trt7"
 # PADDLE_WHL="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release_GpuAll_LinuxCentos_Gcc82_Cuda11.1_cudnn8.1.1_trt8406_Py38_Compile_H/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"
 DOCKER_IMAGE=${DOCKER_IMAGE:-registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.1-trt8.0-gcc8.2}
-PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl}
+#PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl}
+PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda112-Trton-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl}
 FRAME=${FRAME:-paddle}
-FRAME_BRANCH=${FRAME_BRANCH:-release/2.4}
+FRAME_BRANCH=${FRAME_BRANCH:-develop}
 FRAME_VERSION=${FRAME_VERSION:-0.0.0}
 DEVICE=${DEVICE:-T4}
 MODE=${MODE:-trt_int8,trt_fp16,mkldnn_int8,mkldnn_fp32}
@@ -55,17 +56,6 @@ wget https://paddle-qa.bj.bcebos.com/tools/TensorRT-8.4.0.6.tgz
 tar -zxf TensorRT-8.4.0.6.tgz
 export LD_LIBRARY_PATH=${PWD}/TensorRT-8.4.0.6/lib/:${LD_LIBRARY_PATH}
 
-PADDLE_COMMIT=`python -c "import paddle; print(paddle.version.commit)"`
-DT=`date "+%Y-%m-%d"`
-SAVE_FILE=${DT}_${FRAME}_${FRAME_BRANCH/\//-}_${PADDLE_COMMIT}_${DEVICE}.xlsx
-
-PYTHON_VERSION=${PYTHON_VERSION:-3.8}
-CUDA_VERSION=${CUDA_VERSION:-11.2}
-CUDNN_VERSION=${CUDNN_VERSION:-8.2}
-TRT_VERSION=${TRT_VERSION:-8}
-GPU=${DEVICE}
-CPU="-"
-
 
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
@@ -93,6 +83,17 @@ pip install nvidia-tensorrt
 pip install openpyxl
 pip install pymysql
 pip install bce-python-sdk
+
+PADDLE_COMMIT=`python -c "import paddle; print(paddle.version.commit)"`
+DT=`date "+%Y-%m-%d"`
+SAVE_FILE=${DT}_${FRAME}_${FRAME_BRANCH/\//-}_${PADDLE_COMMIT}_${DEVICE}.xlsx
+
+PYTHON_VERSION=${PYTHON_VERSION:-3.8}
+CUDA_VERSION=${CUDA_VERSION:-11.2}
+CUDNN_VERSION=${CUDNN_VERSION:-8.2}
+TRT_VERSION=${TRT_VERSION:-8}
+GPU=${DEVICE}
+CPU="-"
 
 bash run.sh
 

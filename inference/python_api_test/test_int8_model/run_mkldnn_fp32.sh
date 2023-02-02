@@ -51,10 +51,10 @@ $PYTHON test_segmentation_infer.py --model_path=models/RES-paddle2-Deeplabv3-Res
 
 # ERNIE 3.0-Medium MKLDNN fp32
 echo "[Benchmark] Run ERNIE 3.0-Medium MKLDNN fp32"
-$PYTHON test_nlp_infer.py --model_path=models/AFQMC --model_filename=infer.pdmodel --params_filename=infer.pdiparams --task_name='afqmc' --device=cpu --use_mkldnn=True --cpu_threads=10 --model_name=ERNIE_3.0-Medium
+$PYTHON test_nlp_infer.py --model_path=models/AFQMC --model_filename=infer.pdmodel --params_filename=infer.pdiparams --task_name='afqmc' --device=CPU --use_mkldnn=True --cpu_threads=10 --model_name=ERNIE_3.0-Medium
 # PP-MiniLM MKLDNN fp32
 echo "[Benchmark] Run PP-MiniLM MKLDNN fp32"
-$PYTHON test_nlp_infer.py --model_path=models/afqmc --task_name='afqmc' --device=cpu --use_mkldnn=True --cpu_threads=10 --model_name=PP-MiniLM
+$PYTHON test_nlp_infer.py --model_path=models/afqmc --task_name='afqmc' --device=CPU --use_mkldnn=True --cpu_threads=10 --model_name=PP-MiniLM
 # BERT Base MKLDNN fp32
 echo "[Benchmark] Run BERT Base MKLDNN fp32"
-$PYTHON test_bert_infer.py --model_path=models/x2paddle_cola --device=cpu --use_mkldnn=True --cpu_threads=10 --batch_size=1 --model_name=BERT_Base
+$PYTHON test_bert_infer.py --model_path=models/x2paddle_cola --device=CPU --use_mkldnn=True --cpu_threads=10 --batch_size=1 --model_name=BERT_Base

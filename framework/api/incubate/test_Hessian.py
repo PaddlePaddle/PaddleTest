@@ -137,7 +137,6 @@ def test_Hessian4():
     x: 2-d tensor
     single_input
     """
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": True})
     x = np.random.rand(4, 3)
     paddle.disable_static()
     res = ans.numerical_hessian(func2, paddle.to_tensor(x, dtype="float64"), is_batched=True)
@@ -145,4 +144,3 @@ def test_Hessian4():
     obj.static = False
     obj.enable_backward = False
     obj.run(res=res, func=func2, inputs=x, is_batched=True)
-    paddle.fluid.set_flags({"FLAGS_retain_grad_for_all_tensor": False})

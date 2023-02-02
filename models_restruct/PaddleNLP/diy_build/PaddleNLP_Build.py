@@ -3,6 +3,7 @@
 自定义环境准备
 """
 import os
+from platform import platform
 import sys
 import logging
 import tarfile
@@ -56,11 +57,21 @@ class PaddleNLP_Build(Model_Build):
         安装依赖包
         """
         path_now = os.getcwd()
-        os.system("python -m pip install -r requirements_nlp.txt")  # 安装模型依赖
+        platform = self.system
+        if platform == "linux":
+            os.system("python -m pip install -r requirements_nlp.txt")
+            os.system(
+                "python -m pip install {}".format(self.paddle_whl)
+            )  # install paddle for lac requirement paddle>=1.6
+        else:
+            os.system("python -m pip install -r requirements_win.txt")
+            os.system(
+                "python -m pip install {}".format(self.paddle_whl)
+            )  # install paddle for lac requirement paddle>=1.6
         import nltk
 
-        nltk.download("punkt")
-        from visualdl import LogWriter
+        # nltk.download("punkt")
+        # from visualdl import LogWriter
 
         os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
         cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")

@@ -233,16 +233,16 @@ time (python -m paddle.distributed.launch run_pretrain.py \
     --micro_batch_size 2 \
     --device gpu >${log_path}/gpt_pretrain) >>${log_path}/gpt_pretrain 2>&1
 print_info $? gpt_pretrain
-# time (
-# python export_model.py --model_type=gpt \
-#     --model_path=gpt2-medium-en \
-#     --output_path=./infer_model/model >${log_path}/gpt_export) >>${log_path}/gpt_export 2>&1
-# print_info $? gpt_export
-# time (
-# python deploy/python/inference.py \
-#     --model_type gpt \
-#     --model_path ./infer_model/model >${log_path}/gpt_p_depoly) >>${log_path}/gpt_p_depoly 2>&1
-# print_info $? gpt_p_depoly
+time (
+python export_model.py --model_type=gpt \
+    --model_path=gpt2-medium-en \
+    --output_path=./infer_model/model >${log_path}/gpt_export) >>${log_path}/gpt_export 2>&1
+print_info $? gpt_export
+time (
+python deploy/python/inference.py \
+    --model_type gpt \
+    --model_path ./infer_model/model >${log_path}/gpt_p_depoly) >>${log_path}/gpt_p_depoly 2>&1
+print_info $? gpt_p_depoly
 # test acc
 # cd ${nlp_dir}/tests/examples/gpt/
 # time (python -m unittest test_accuracy.py >${log_path}/gpt_test_acc) >>${log_path}/gpt_test_acc 2>&1
@@ -250,7 +250,7 @@ print_info $? gpt_pretrain
 # # FT
 # cd ${nlp_dir}/
 # export PYTHONPATH=$PWD/PaddleNLP/:$PYTHONPATH
-# wget -q https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
+# wget -q https://paddle-inference-lib.bj.bcebos.com/2.4.0/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
 # tar -zxf paddle_inference.tgz
 # cd ${nlp_dir}/paddlenlp/ops
 # export CC=/usr/local/gcc-8.2/bin/gcc
@@ -258,14 +258,14 @@ print_info $? gpt_pretrain
 # #python
 # mkdir build_gpt_so
 # cd build_gpt_so/
-# cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ONcd
+# cmake ..  -DCMAKE_BUILD_TYPE=Release -DPY_CMD=python -DWITH_GPT=ON
 # make -j >${log_path}/GPT_python_FT >>${log_path}/gpt_python_FT 2>&1
 # print_info $? gpt_python_FT
 # cd ../
 # #c++
 # mkdir build_gpt_cc
 # cd build_gpt_cc/
-# cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON
+# cmake ..  -DWITH_GPT=ON -DCMAKE_BUILD_TYPE=Release -DPADDLE_LIB=${nlp_dir}/paddle_inference/ -DDEMO=${nlp_dir}/paddlenlp/ops/faster_transformer/src/demo/gpt.cc -DON_INFER=ON -DWITH_MKL=ON -DWITH_ONNXRUNTIME=ON
 # make -j >${log_path}/GPT_C_FT >>${log_path}/gpt_C_FT 2>&1
 # print_info $? gpt_C_FT
 # #depoly python
@@ -983,8 +983,6 @@ python -u run_clue_classifier.py  \
 print_info $? clue-class
 cd ${nlp_dir}/examples/benchmark/clue/mrc
 export CUDA_VISIBLE_DEVICES=${cudaid1}
-unset http_proxy
-unset https_proxy
 python -m paddle.distributed.launch run_cmrc2018.py \
     --model_name_or_path ernie-3.0-base-zh \
     --batch_size 16 \
@@ -999,8 +997,6 @@ python -m paddle.distributed.launch run_cmrc2018.py \
     --max_steps 1 \
     --output_dir ./tmp >${log_path}/clue-mrc >>${log_path}/clue-mrc 2>&1
 print_info $? clue-mrc
-export http_proxy=${http_proxy};
-export https_proxy=${http_proxy}
 }
 #32 textcnn
 textcnn(){
@@ -1048,5 +1044,27 @@ for apicase in `ls`;do
         print_info $? tests ${apicase}_unittest
     fi
 done
+}
+faster_generation(){
+cd ${nlp_dir}/fast_generation/samples
+python codegen_sample.py >${log_path}/fast_generation_codegen >>${log_path}/fast_generation_codegen 2>&1
+print_info $? fast_generation_codegen
+
+python gpt_sample.py >${log_path}/fast_generation_gpt >>${log_path}/fast_generation_gpt 2>&1
+print_info $? fast_generation_gpt
+
+python mbart_sample.py >${log_path}/fast_generation_mbart >>${log_path}/fast_generation_mbart 2>&1
+print_info $? fast_generation_mbart
+
+python plato_sample.py >${log_path}/fast_generation_plato >>${log_path}/fast_generation_plato 2>&1
+print_info $? fast_generation_plato
+
+python t5_sample.py --use_faster >${log_path}/fast_generation_t5 >>${log_path}/fast_generation_t5 2>&1
+print_info $? fast_generation_t5
+
+cd ${nlp_dir}/paddlenlp/ops/faster_transformer/sample/
+python bart_decoding_sample.py >${log_path}/fast_generation_bart >>${log_path}/fast_generation_bart 2>&1
+print_info $? fast_generation_bart
+
 }
 $1
