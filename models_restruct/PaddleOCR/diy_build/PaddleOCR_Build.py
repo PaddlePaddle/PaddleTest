@@ -118,7 +118,7 @@ class PaddleOCR_Build(Model_Build):
 
             # kie requirements
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
-            
+
             if sysstr == "Windows":
                 os.environ["PATH"] = "F:\\install\\GnuWin32\\bin;" + os.environ.get("PATH")
 
