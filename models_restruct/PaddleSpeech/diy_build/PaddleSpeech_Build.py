@@ -77,7 +77,7 @@ class PaddleSpeech_Build(Model_Build):
             os.chdir(self.reponame)
             os.system("python -m pip uninstall -y paddlespeech")
             os.system("python -m pip install . --ignore-installed")
-            
+
             # mac from numba.np.ufunc import _internal
             os.system("python -m pip install -U numpy==1.23.5")
 
