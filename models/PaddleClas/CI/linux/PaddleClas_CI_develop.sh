@@ -94,9 +94,9 @@ if ([[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]) &&  [[ ! ${p
     unset https_proxy
     echo "######  ----install  paddle-----"
     python -m pip install --ignore-installed --upgrade \
-        pip -i https://mirror.baidu.com/pypi/simple
+        pip --user -i https://mirror.baidu.com/pypi/simple
     python -m pip uninstall paddlepaddle-gpu -y
-    python -m pip install ${paddle_compile} -i https://mirror.baidu.com/pypi/simple #paddle_compile
+    python -m pip install ${paddle_compile} --user -i https://mirror.baidu.com/pypi/simple #paddle_compile
 
 fi
 
@@ -124,10 +124,8 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # python -m pip install --ignore-installed --upgrade \
 #    setuptools==59.5.0 -i https://mirror.baidu.com/pypi/simple #before install bcolz
-python -m pip install --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip uninstall opencv-python -y
 python -m pip install --ignore-installed --upgrade \
-   pip -i https://mirror.baidu.com/pypi/simple
+   pip --user -i https://mirror.baidu.com/pypi/simple
 # python -m pip install  --ignore-installed --upgrade paddleslim \
 
 #slim要用develop
@@ -144,7 +142,7 @@ if [[ paddle_compile =~ "develop" ]] || [[ paddle_compile =~ "Develop" ]];then
         git checkout develop
         git pull
         python -m pip install -r requirements.txt \
-            -i https://mirror.baidu.com/pypi/simple
+            --user -i https://mirror.baidu.com/pypi/simple
         python setup.py install
         cd ..
         python -m pip list|grep paddleslim
@@ -152,13 +150,13 @@ if [[ paddle_compile =~ "develop" ]] || [[ paddle_compile =~ "Develop" ]];then
     fi
 else
     python -m pip install -U paddleslim \
-        -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+        --user  -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
 fi
 
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \
-   -i https://mirror.baidu.com/pypi/simple
+   --user  -i https://mirror.baidu.com/pypi/simple
 python setup.py install
 
 python -m pip list |grep opencv
@@ -264,8 +262,8 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
                 wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl --no-proxy
                 wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl --no-proxy
             fi
-            python -m pip install nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
-            # python -m pip install nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl
+            python -m pip install --user nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
+            # python -m pip install --user nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl
             export FLAGS_cudnn_deterministic=False #amp单独考虑，不能固定随机量，否则报错如下
 
             #增加静态图验证 只跑一个不放在循环中

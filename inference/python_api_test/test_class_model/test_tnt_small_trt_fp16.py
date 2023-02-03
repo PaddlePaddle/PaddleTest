@@ -67,11 +67,19 @@ def test_trt_fp16_more_bz():
 
         del test_suite  # destroy class to save memory
 
+        # collect shape for trt
+        test_suite_c = InferenceTest()
+        test_suite_c.load_config(
+            model_file=file_path + "/inference.pdmodel", params_file=file_path + "/inference.pdiparams"
+        )
+        test_suite_c.collect_shape_info(model_path=file_path, input_data_dict=input_data_dict, device="gpu")
+        del test_suite_c  # destroy class to save memory
+
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
         )
-        # TODO:DLTP-58929修复后去掉delete pass
+
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -79,7 +87,8 @@ def test_trt_fp16_more_bz():
             max_batch_size=10,
             min_subgraph_size=30,
             precision="trt_fp16",
-            delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
+            dynamic=True,
+            shape_range_file=file_path + "/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory
@@ -108,11 +117,19 @@ def test_jetson_trt_fp16_more_bz():
 
         del test_suite  # destroy class to save memory
 
+        # collect shape for trt
+        test_suite_c = InferenceTest()
+        test_suite_c.load_config(
+            model_file=file_path + "/inference.pdmodel", params_file=file_path + "/inference.pdiparams"
+        )
+        test_suite_c.collect_shape_info(model_path=file_path, input_data_dict=input_data_dict, device="gpu")
+        del test_suite_c
+
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
         )
-        # TODO:DLTP-58929修复后去掉delete pass
+
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -120,7 +137,8 @@ def test_jetson_trt_fp16_more_bz():
             max_batch_size=10,
             min_subgraph_size=30,
             precision="trt_fp16",
-            delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
+            dynamic=True,
+            shape_range_file=file_path + "/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory
@@ -147,15 +165,24 @@ def test_trt_fp16_bz1_multi_thread():
 
     del test_suite  # destroy class to save memory
 
+    # collect shape for trt
+    test_suite_c = InferenceTest()
+    test_suite_c.load_config(
+        model_file=file_path + "/inference.pdmodel", params_file=file_path + "/inference.pdiparams"
+    )
+    test_suite_c.collect_shape_info(model_path=file_path, input_data_dict=input_data_dict, device="gpu")
+    del test_suite_c
+
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
-    # TODO:DLTP-58929修复后去掉delete pass
+
     test_suite2.trt_bz1_multi_thread_test(
         input_data_dict,
         output_data_dict,
         min_subgraph_size=30,
         precision="trt_fp16",
-        delete_pass_list=["layernorm_shift_partition_fuse_pass", "preln_residual_bias_fuse_pass"],
+        dynamic=True,
+        shape_range_file="./TNT_small/shape_range.pbtxt",
     )
 
     del test_suite2  # destroy class to save memory
