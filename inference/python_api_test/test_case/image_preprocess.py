@@ -177,9 +177,7 @@ def sig_fig_compare(array1, array2, delta=5):
     print("output value debug: ", array1)
     print("output diff array: ", array1[diff > delta])
     print("truth diff array:  ", array2[diff > delta])
-    assert (
-        diff_count == 0
-    ), f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \noutput: {array1} \ntruth: {array2}"
+    assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}"
     # end = time.time()
     # print(f"精度校验cost：{(end - start) * 1000}ms")
     return diff
