@@ -103,9 +103,9 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
     unset https_proxy
     echo "######  ----install  paddle-----"
     python -m pip install --ignore-installed  --upgrade pip \
-        -i https://mirror.baidu.com/pypi/simple
+        --user -i https://mirror.baidu.com/pypi/simple
     python -m pip uninstall paddlepaddle-gpu -y
-    python -m pip install ${paddle_compile} -i https://mirror.baidu.com/pypi/simple #paddle_compile
+    python -m pip install ${paddle_compile} --user -i https://mirror.baidu.com/pypi/simple #paddle_compile
 fi
 
 # paddle
@@ -155,20 +155,18 @@ unset http_proxy
 unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed  --upgrade pip \
-    -i https://mirror.baidu.com/pypi/simple
+    --user -i https://mirror.baidu.com/pypi/simple
 echo "######  install ppgan "
 python -m pip install  ppgan \
-    -i https://mirror.baidu.com/pypi/simple
-python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
+    --user -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -v -e. --user -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
 # python -m pip install --ignore-installed  dlib
 python -m pip install  dlib \
-    -i https://mirror.baidu.com/pypi/simple
-# python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
-# python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
+    --user -i https://mirror.baidu.com/pypi/simple
 python -c 'import dlib'
 python -m pip install -r requirements.txt  \
-    -i https://mirror.baidu.com/pypi/simple
+    --user -i https://mirror.baidu.com/pypi/simple
 
 echo "######  install done "
 

@@ -67,13 +67,17 @@ fi
 mkdir /workspace/logs
 export log_path=/workspace/logs
 ####################################
-git remote add upstream https://github.com/PaddlePaddle/PaddleSlim.git
-git fetch upstream
+# git 操作失败，则直接退出
+git remote add upstream https://github.com/PaddlePaddle/PaddleSlim.git && git fetch upstream
+if [ $? -ne 0 ];then
+    echo -e "\033[31m ---- git operation Failed!  \033[0m"
+    exit 1
+fi
 ##########################
 IF_UT=false
 for file_name in `git diff --numstat upstream/develop |awk '{print $NF}'`;do
     dir1=${file_name%%/*}
-    echo ${file_name}
+    echo ---diff file patt:${file_name}---
 #    if [[ ${file_name##*.} =~ "md" ]] || [[ ${file_name##*.} =~ "rst" ]] || [[ ${dir1} =~ "demo" ]] || [[ ${dir1} =~ "docs" ]];then
     if [[ ${dir1} =~ "tests" ]] || [[ ${dir1} =~ "paddleslim" ]] ;then
         IF_UT=true

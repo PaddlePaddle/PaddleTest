@@ -39,6 +39,7 @@ fleet_gpu_model_list=( \
     # imagen_super_resolution_256_dp8 \
 
 
+
 function gpt_preprocess_data() {
     cd ${fleetx_path}
     rm -rf log
