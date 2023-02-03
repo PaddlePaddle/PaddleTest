@@ -2,6 +2,7 @@
 rem do not uset chinese note  beacause of linux tar problem
 
 rem change path
+set sed="C:\Program Files\Git\usr\bin\sed.exe"
 set pwd_org=%cd%
 echo "org path is %pwd_org%"
 if not defined AGILE_PIPELINE_NAME (
@@ -49,22 +50,32 @@ if not defined Python_version set Python_version=310
 echo %Python_version% | findstr "36" >nul
 if %errorlevel% equ 0 (
     CALL D:\Windows_env\%reponame%_py36\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py36\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py36\pyvenv.cfg
 )
 echo %Python_version% | findstr "37" >nul
 if %errorlevel% equ 0 (
     CALL D:\Windows_env\%reponame%_py37\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py37\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py37\pyvenv.cfg
 )
 echo %Python_version% | findstr "38" >nul
 if %errorlevel% equ 0 (
     CALL D:\Windows_env\%reponame%_py38\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py38\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py38\pyvenv.cfg
 )
 echo %Python_version% | findstr "39" >nul
 if %errorlevel% equ 0 (
     CALL D:\Windows_env\%reponame%_py39\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py39\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py39\pyvenv.cfg
 )
 echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
     CALL D:\Windows_env\%reponame%_py310\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py310\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py310\pyvenv.cfg
 )
 
 rem set path
@@ -180,6 +191,7 @@ if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4
 rem default value
 if not defined step set step=train
 if not defined mode set mode=function
+if not defined timeout set timeout=3600
 if not defined use_build set use_build=yes
 if not defined branch set branch=develop
 if not defined get_repo set get_repo=wget
@@ -222,6 +234,8 @@ echo "@@@paddle_whl: %paddle_whl%"
 echo "@@@step: %step%"
 echo "@@@branch: %branch%"
 echo "@@@mode: %mode%"
+echo "@@@timeout: %timeout%"
+
 
 rem if already download PaddleTest direct mv
 if exist "%pwd_org%/task" (
@@ -250,7 +264,7 @@ dir
 rem python version
 python  --version
 git --version
-python -m pip install -U pip
-python -m pip install -r requirements.txt
+python -m pip install --user -U pip
+python -m pip install --user -r requirements.txt
 rem install package
-python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target%
+python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target% --timeout=%timeout%

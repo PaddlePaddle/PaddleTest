@@ -14,6 +14,7 @@ import argparse
 import platform
 import yaml
 import wget
+import paddle
 import numpy as np
 
 logger = logging.getLogger("ce")
@@ -71,8 +72,13 @@ class PaddleOCR_Start(object):
                         else:
                             image_shape = image_shape[0]
                             print("len(image_shape)={}".format(len(image_shape.split(","))))
+
+                            #  image_shape: [100, 32] # W H
+                            if algorithm == "NRTR":
+                                image_shape = "32,100"
                             if len(image_shape.split(",")) == 2:
                                 image_shape = "1," + image_shape
+
                         print(image_shape)
                         break
                     else:
@@ -85,11 +91,10 @@ class PaddleOCR_Start(object):
             else:
                 self.env_dict["kie_token"] = "kie_token_ser_re"
         # use_gpu
-        sysstr = platform.system()
-        if sysstr == "Darwin":
-            self.env_dict["use_gpu"] = "False"
-        else:
+        if paddle.is_compiled_with_cuda():
             self.env_dict["use_gpu"] = "True"
+        else:
+            self.env_dict["use_gpu"] = "False"
 
     def prepare_pretrained_model(self):
         """
@@ -136,6 +141,8 @@ class PaddleOCR_Start(object):
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    windows:" + os.linesep,
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
+                            "    windows_cpu:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    mac:" + os.linesep,
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                         )
@@ -150,6 +157,8 @@ class PaddleOCR_Start(object):
                                 "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
                                 "    windows:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "    windows_cpu:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
                                 "    mac:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                             )
@@ -161,6 +170,8 @@ class PaddleOCR_Start(object):
                                 "    linux:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                                 "    windows:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "    windows_cpu:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                                 "    mac:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
@@ -182,6 +193,7 @@ class PaddleOCR_Start(object):
 
             if not os.path.exists("train_data"):
                 print("PaddleOCR train_data link:")
+                shutil.rmtree("train_data")
                 os.symlink(os.path.join(src_path, "train_data"), "train_data")
                 os.system("ll")
                 if not os.path.exists("train_data"):
@@ -189,6 +201,7 @@ class PaddleOCR_Start(object):
                     os.system("ll")
             if not os.path.exists("pretrain_models"):
                 print("PaddleOCR pretrain_models link:")
+                shutil.rmtree("pretrain_models")
                 os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
                 os.system("ll")
                 if not os.path.exists("pretrain_models"):

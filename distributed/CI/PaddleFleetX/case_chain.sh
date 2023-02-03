@@ -30,10 +30,10 @@ fleet_gpu_model_list=( \
     vit_cifar10_finetune \
     vit_inference \
     vit_qat \
-    imagen_text2im_397M_64x64_single \
-    imagen_text2im_397M_64x64_bs2048 \
     )
     # imagen_super_resolution_512_single \
+    # imagen_text2im_397M_64x64_single \
+    # imagen_text2im_397M_64x64_bs2048 \
 
 
 function gpt_preprocess_data() {

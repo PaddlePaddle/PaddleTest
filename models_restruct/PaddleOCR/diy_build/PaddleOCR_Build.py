@@ -120,7 +120,7 @@ class PaddleOCR_Build(Model_Build):
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
 
             if sysstr == "Windows":
-                os.system("set PATH=F:\\install\\GnuWin32\\bin;%PATH%")
+                os.environ["PATH"] = "F:\\install\\GnuWin32\\bin;" + os.environ.get("PATH")
 
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
@@ -130,9 +130,14 @@ class PaddleOCR_Build(Model_Build):
                     else:
                         cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
 
-                    subprocess.getstatusoutput(cmd)
+                    os.system(cmd)
             os.chdir(self.test_root_path)
             print("build dataset!")
+
+            if platform.machine() == "arm64":
+                print("mac M1")
+                os.system("conda install -y scikit-image")
+                os.system("conda install -y imgaug")
 
     def download_data(self, data_link, destination):
         """
