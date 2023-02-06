@@ -219,6 +219,8 @@ waveflow_ljspeech_ckpt_0.3.zip"
                         "        base: ./base/speech_cli_base.yaml" + os.linesep,
                         "    windows:" + os.linesep,
                         "        base: ./base/speech_cli_base.yaml" + os.linesep,
+                        "    windows_cpu:" + os.linesep,
+                        "        base: ./base/speech_cli_base.yaml" + os.linesep,
                     )
                 )
 

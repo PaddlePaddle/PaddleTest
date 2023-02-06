@@ -85,7 +85,7 @@ class PaddleSpeech_Build(Model_Build):
                 os.system("python -m pip install -U protobuf==3.19.6")
 
             os.system("python -m pip uninstall -y paddlespeech")
-            os.system("python -m pip install . --ignore-installed")
+            os.system("python -m pip install --user . --ignore-installed")
 
             # mac from numba.np.ufunc import _internal
             os.system("python -m pip install -U numpy==1.23.5")
