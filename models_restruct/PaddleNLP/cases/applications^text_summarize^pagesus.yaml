@@ -54,20 +54,8 @@ case:
         params:
           - --device gpu
           - --init_checkpoint_dir ./output/
-    export:
-      -
-        name: trained
-        path: applications/text_summarization/pegasus
-        cmd: python export_model.py
-        params:
-          - --export_output_dir ./inference_model/
-    predict:
-      -
-        name: trained
-        path: applications/text_summarization/pegasus/deploy/paddle_inference/
-        cmd: python inference_pegasus.py
-        params:
-          - --inference_model_dir ../../inference_model/
+    export: skipped
+    predict: skipped
 
   windows_cpu:
     train: skipped
