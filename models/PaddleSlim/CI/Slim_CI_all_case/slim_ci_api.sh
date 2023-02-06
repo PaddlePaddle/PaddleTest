@@ -97,9 +97,9 @@ if [ $IF_UT == 'true' ];then
 fi
 ##################
 check_code_style(){
-python -m pip install pip==20.2.4
+python -m pip install -U pip 
 pip install cpplint pylint pytest astroid isort
-pip install pre-commit
+python -m pip install -U pre-commit
 pre-commit install
 commit_files=on
 check_sty_EXCODE=0
