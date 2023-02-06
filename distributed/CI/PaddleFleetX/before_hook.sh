@@ -136,13 +136,13 @@ function download() {
         echo "imagen/cache downloaded"
     else
         # download debertav2 for imagen
-        mkdir -p ${data_path}/cache && cd ${data_path}/cache
+        mkdir -p ${data_path}/cache/deberta-v-xxlarge && cd ${data_path}/cache/deberta-v-xxlarge
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/config.json
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/spm.model
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/tokenizer_config.json
         wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.0
         wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.1
-        tar debertav2.pd.tar.gz.* | tar -xf -
+        cat debertav2.pd.tar.gz.* | tar -xf -
         rm -rf debertav2.pd.tar.gz.*
         cd -
     fi
