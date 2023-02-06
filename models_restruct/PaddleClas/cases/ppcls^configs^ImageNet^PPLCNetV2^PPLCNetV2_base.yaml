@@ -13,6 +13,7 @@ case:
           - -o Global.seed=1234
           - -o DataLoader.Train.sampler.first_bs=32
           - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
@@ -29,6 +30,7 @@ case:
           - -o Global.seed=1234
           - -o DataLoader.Train.sampler.first_bs=32
           - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
@@ -45,6 +47,7 @@ case:
           - -o Global.seed=1234
           - -o DataLoader.Train.sampler.first_bs=32
           - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
@@ -61,6 +64,7 @@ case:
           - -o Global.seed=1234
           - -o DataLoader.Train.sampler.first_bs=32
           - -o DataLoader.Train.loader.num_workers=0
+          - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
           ${kpi_value_eval}:
