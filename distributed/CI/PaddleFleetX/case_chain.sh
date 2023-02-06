@@ -326,8 +326,8 @@ function vit_cifar10_finetune() {
     loss=`tail log/workerlog.0 | grep 19/24 | cut -d " " -f14 `
     top1=`tail log/workerlog.0 | grep top1 |cut -d " " -f14 `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
-        #check_diff 0.217358 ${top1%?} ${FUNCNAME}_top1
+        check_diff 3.744531250 ${loss%?} ${FUNCNAME}_loss
+        check_diff 0.217041 ${top1%?} ${FUNCNAME}_top1
     else
         check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
         check_diff 0.216858 ${top1%?} ${FUNCNAME}_top1
