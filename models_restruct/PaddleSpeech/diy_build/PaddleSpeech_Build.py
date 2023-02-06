@@ -75,13 +75,21 @@ class PaddleSpeech_Build(Model_Build):
         if os.path.exists(self.reponame):
             path_now = os.getcwd()
             os.chdir(self.reponame)
-            os.system("python -m pip uninstall -y paddlespeech")
-            os.system("python -m pip install . --ignore-installed")
+
+            # mac from numba.np.ufunc import _internal
+            os.system("python -m pip install -U numpy==1.23.5")
 
             # mac intel install paddlespeech_ctcdecoders
             sysstr = platform.system()
             if sysstr == "Darwin" and platform.machine() == "x86_64":
                 os.system("python -m pip install -U protobuf==3.19.6")
+
+            os.system("python -m pip uninstall -y paddlespeech")
+            os.system("python -m pip install --user . --ignore-installed")
+
+            # mac from numba.np.ufunc import _internal
+            os.system("python -m pip install -U numpy==1.23.5")
+
             os.chdir(path_now)
             print("build paddlespeech wheel!")
 

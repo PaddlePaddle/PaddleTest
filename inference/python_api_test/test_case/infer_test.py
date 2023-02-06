@@ -680,17 +680,16 @@ class InferenceTest(object):
             predictor.run()
 
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-        predictor.try_shrink_memory()
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
 
     def trt_bz1_multi_thread_test(
         self,
@@ -705,6 +704,9 @@ class InferenceTest(object):
         use_static=False,
         use_calib_mode=False,
         delete_pass_list=None,
+        dynamic=False,
+        tuned=False,
+        shape_range_file="shape_range.pbtxt",
     ):
         """
         test enable_tensorrt_engine()
@@ -732,14 +734,29 @@ class InferenceTest(object):
             "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=1,
-            min_subgraph_size=min_subgraph_size,
-            precision_mode=trt_precision_map[precision],
-            use_static=use_static,
-            use_calib_mode=use_calib_mode,
-        )
+        if dynamic:
+            if tuned:
+                self.pd_config.collect_shape_range_info("shape_range.pbtxt")
+            else:
+                self.pd_config.enable_tensorrt_engine(
+                    workspace_size=1 << 30,
+                    max_batch_size=1,
+                    min_subgraph_size=min_subgraph_size,
+                    precision_mode=trt_precision_map[precision],
+                    use_static=use_static,
+                    use_calib_mode=use_calib_mode,
+                )
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape(shape_range_file, True)
+        else:
+            self.pd_config.enable_tensorrt_engine(
+                workspace_size=1 << 30,
+                max_batch_size=1,
+                min_subgraph_size=min_subgraph_size,
+                precision_mode=trt_precision_map[precision],
+                use_static=use_static,
+                use_calib_mode=use_calib_mode,
+            )
+
         if delete_pass_list:
             for ir_pass in delete_pass_list:
                 self.pd_config.delete_pass(ir_pass)
@@ -844,16 +861,16 @@ class InferenceTest(object):
         for i in range(repeat):
             predictor.run()
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
 
 
 def get_gpu_mem(gpu_id=0):
