@@ -680,17 +680,16 @@ class InferenceTest(object):
             predictor.run()
 
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-        predictor.try_shrink_memory()
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
 
     def trt_bz1_multi_thread_test(
         self,
@@ -862,16 +861,16 @@ class InferenceTest(object):
         for i in range(repeat):
             predictor.run()
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
 
 
 def get_gpu_mem(gpu_id=0):

@@ -8,6 +8,7 @@ import os
 import sys
 import logging
 import tarfile
+import shutil
 import six
 import wget
 import pytest
@@ -56,6 +57,11 @@ def test_trt_fp32_more_bz():
     images_size = 224
     batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
+        try:
+            shutil.rmtree(f"{file_path}/_opt_cache")  # delete trt serialized cache
+        except Exception as e:
+            print("no need to delete trt serialized cache")
+
         test_suite = InferenceTest()
         test_suite.load_config(
             model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
