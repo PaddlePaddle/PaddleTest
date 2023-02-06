@@ -3,6 +3,6 @@ psutil
 pytest
 pynvml==11.0.0
 opencv-python==4.6.0.66
-paddlenlp==2.2.1
+paddlenlp==2.5.0
 dataclasses ; python_version == "3.6"
 sentencepiece==0.1.96
