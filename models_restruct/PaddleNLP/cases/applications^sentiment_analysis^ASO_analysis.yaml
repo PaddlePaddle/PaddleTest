@@ -49,19 +49,19 @@ case:
       -
         name: checkpoints_prepare_ext
         path: applications/sentiment_analysis/ASO_analysis/
-        cmd: mkdir ./checkpoints/ && cd checkpoints && mkdir ext_checkpoints &&  cd ext_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_ext.pdparams && ren best_ext.pdparams best.pdparams
+        cmd: mkdir ./checkpoints/ && cd checkpoints && mkdir ext_checkpoints &&  cd ext_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_ext.pdparams
       -
         name: checkpoints_prepare_cls
         path: applications/sentiment_analysis/ASO_analysis/checkpoints
-        cmd: mkdir cls_checkpoints && cd cls_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_cls.pdparams && ren best_cls.pdparams best.pdparams
+        cmd: mkdir cls_checkpoints && cd cls_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_cls.pdparams
     eval:
       -
         name: eval
         path: applications/sentiment_analysis/ASO_analysis/
         cmd: python predict.py
         params:
-          - --ext_model_path "./checkpoints/ext_checkpoints/best.pdparams"
-          - --cls_model_path "./checkpoints/cls_checkpoints/best.pdparams"
+          - --ext_model_path "./checkpoints/ext_checkpoints/best_ext.pdparams"
+          - --cls_model_path "./checkpoints/cls_checkpoints/best_cls.pdparams"
           - --test_path "./data/aos_tes.txt"
           - --ext_label_path "./data/ext_data/label.dict"
           - --cls_label_path "./data/cls_data/label.dict"
