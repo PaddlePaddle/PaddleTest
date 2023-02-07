@@ -74,7 +74,7 @@ case:
       -
         name: prepare
         path: applications/information_extraction/document
-        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/tax.tar.gz && tar -zxvf tax.tar.gz && mv tax data && rm -f tax.tar.gz
+        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/tax.tar.gz && tar -zxvf tax.tar.gz && ren tax data
       -
         name: label_studio
         path: applications/information_extraction/document
