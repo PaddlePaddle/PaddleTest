@@ -65,13 +65,3 @@ ppcls^configs^ImageNet^LeViT^LeViT_256.yaml
 ppcls^configs^ImageNet^LeViT^LeViT_128S.yaml
 ppcls^configs^ImageNet^LeViT^LeViT_384.yaml
 ppcls^configs^ImageNet^LeViT^LeViT_192.yaml
-ppcls^configs^slim^ResNet50_vehicle_reid_quantization.yaml
-ppcls^configs^slim^ResNet50_vd_quantization.yaml
-ppcls^configs^slim^PPLCNet_x1_0_quantization.yaml
-ppcls^configs^slim^ResNet50_vd_prune.yaml
-ppcls^configs^slim^ResNet50_vehicle_cls_quantization.yaml
-ppcls^configs^slim^MobileNetV3_large_x1_0_quantization.yaml
-ppcls^configs^slim^GeneralRecognition_PPLCNet_x2_5_quantization.yaml
-ppcls^configs^slim^ResNet50_vehicle_cls_prune.yaml
-ppcls^configs^slim^MobileNetV3_large_x1_0_prune.yaml
-ppcls^configs^slim^ResNet50_vehicle_reid_prune.yaml
