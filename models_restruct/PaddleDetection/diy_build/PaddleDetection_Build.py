@@ -96,21 +96,35 @@ class PaddleDetection_Build(Model_Build):
             subprocess.run(cmd, shell=True)
         # use small data
         cmd_voc = '{} -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'.format(os.getenv("sed"))
+        cmd_voc_mac = '{} -i '' "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'.format(os.getenv("sed"))
         if platform.system() == "Windows":
             subprocess.run(cmd_voc)
+        elif platform.system() == "Darwin":
+            subprocess.run(cmd_voc_mac, shell=True)
         else:
             subprocess.run(cmd_voc, shell=True)
         cmd_iter1 = (
             '{} -i "/for step_id, data in enumerate(self.loader):/i\\            max_step_id'
             '=1" ppdet/engine/trainer.py'.format(os.getenv("sed"))
         )
+        cmd_iter1_mac = (
+            '{} -i '' "/for step_id, data in enumerate(self.loader):/i\\            max_step_id'
+            '=1" ppdet/engine/trainer.py'.format(os.getenv("sed"))
+        )
         cmd_iter2 = (
             '{} -i "/for step_id, data in enumerate(self.loader):/a\\                if step_id == '
+            'max_step_id: break" ppdet/engine/trainer.py'.format(os.getenv("sed"))
+        )
+        cmd_iter2_mac = (
+            '{} -i '' "/for step_id, data in enumerate(self.loader):/a\\                if step_id == '
             'max_step_id: break" ppdet/engine/trainer.py'.format(os.getenv("sed"))
         )
         if platform.system() == "Windows":
             subprocess.run(cmd_iter1)
             subprocess.run(cmd_iter2)
+        elif platform.system() == "Darwin":
+            subprocess.run(cmd_iter1_mac, shell=True)
+            subprocess.run(cmd_iter2_mac, shell=True)
         else:
             subprocess.run(cmd_iter1, shell=True)
             subprocess.run(cmd_iter2, shell=True)
@@ -123,10 +137,23 @@ class PaddleDetection_Build(Model_Build):
             '{} -i "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
             'max_step_id: break" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         )
+        cmd_mot1_mac = '{} -i '' "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'.format(os.getenv("sed"))
+        cmd_mot2_mac = (
+            '{} -i '' "/for step_id, data in enumerate(dataloader):/i\\        '
+            'max_step_id=1" ppdet/engine/tracker.py'.format(os.getenv("sed"))
+        )
+        cmd_mot3_mac = (
+            '{} -i '' "/for step_id, data in enumerate(dataloader):/a\\            if step_id == '
+            'max_step_id: break" ppdet/engine/tracker.py'.format(os.getenv("sed"))
+        )
         if platform.system() == "Windows":
             subprocess.run(cmd_mot1)
             subprocess.run(cmd_mot2)
             subprocess.run(cmd_mot3)
+        elif platform.system() == "Darwin":
+            subprocess.run(cmd_mot1_mac, shell=True)
+            subprocess.run(cmd_mot2_mac, shell=True)
+            subprocess.run(cmd_mot3_mac, shell=True)
         else:
             subprocess.run(cmd_mot1, shell=True)
             subprocess.run(cmd_mot2, shell=True)
