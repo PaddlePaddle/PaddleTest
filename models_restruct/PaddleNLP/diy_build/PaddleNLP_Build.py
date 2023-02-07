@@ -74,7 +74,6 @@ class PaddleNLP_Build(Model_Build):
 
         nltk.download("punkt")
         from visualdl import LogWriter
-
         os.system("python -m pip list")
 
         os.chdir("PaddleNLP")  # 执行setup要先切到路径下面

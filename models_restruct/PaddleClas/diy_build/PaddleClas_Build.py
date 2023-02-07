@@ -268,7 +268,7 @@ class PaddleClas_Build(Model_Build):
                 except:
                     logger.info("#### prepare download failed {} failed".format("PaddleSlim.tar.gz"))
             if os.path.exists("PaddleSlim") and (
-                "develop" in self.paddle_whl or "Develop" in self.paddle_whl or "None" in str(self.paddle_whl)
+                "develop" in str(self.paddle_whl) or "Develop" in str(self.paddle_whl) or "None" in str(self.paddle_whl)
             ):
                 logger.info("#### install devlop paddleslim")
                 path_now = os.getcwd()
