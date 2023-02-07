@@ -78,7 +78,7 @@ class Paddle3D_Build(Model_Build):
             if not os.path.exists("datasets"):
                 os.symlink(src_path, "datasets")
             print("build dataset!")
-            os.system('python -m pip install -U scikit-learn')
+            os.system("python -m pip install -U scikit-learn")
             os.system("python -m pip install .")
             print("build wheel!")
 
