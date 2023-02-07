@@ -86,8 +86,8 @@ class PaddleNLP_Build(Model_Build):
         os.system("python -m pip list")
 
         import paddle
-        print('paddle version:',paddle.__version__,'paddle commit:',paddle.version.commit)
 
+        print("paddle version:", paddle.__version__, "paddle commit:", paddle.version.commit)
 
     def build_env(self):
         """
