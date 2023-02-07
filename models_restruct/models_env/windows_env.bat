@@ -127,7 +127,7 @@ if %flag_version% equ 310 (
         if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
         @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-2.4.1-cp310-cp310-win_amd64.whl"
     )  else  (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.4/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
         @REM if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-2.4.1-cp310-cp310-win_amd64.whl"
     )
 )
