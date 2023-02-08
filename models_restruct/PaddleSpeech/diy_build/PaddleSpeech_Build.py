@@ -85,6 +85,8 @@ class PaddleSpeech_Build(Model_Build):
                 os.system("python -m pip install -U protobuf==3.19.6")
 
             os.system("python -m pip uninstall -y paddlespeech")
+            # paddlespeech are installed in '/root/.local/bin' which is not on PATH
+            os.system("python -m pip install -U pyinstaller")
             os.system("python -m pip install --user . --ignore-installed")
 
             # mac from numba.np.ufunc import _internal
