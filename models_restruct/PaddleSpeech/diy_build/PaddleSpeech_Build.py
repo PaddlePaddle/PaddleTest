@@ -83,10 +83,14 @@ class PaddleSpeech_Build(Model_Build):
             sysstr = platform.system()
             if sysstr == "Darwin" and platform.machine() == "x86_64":
                 os.system("python -m pip install -U protobuf==3.19.6")
+                # mac interl: installed in '/var/root/.local/bin' which is not on PATH.
+                os.environ["PATH"] += os.pathsep + "/var/root/.local/bin"
 
             os.system("python -m pip uninstall -y paddlespeech")
-            # paddlespeech are installed in '/root/.local/bin' which is not on PATH
-            os.system("python -m pip install -U pyinstaller")
+            if sysstr == "Linux":
+                # linux：paddlespeech are installed in '/root/.local/bin' which is not on PATH
+                os.environ["PATH"] += os.pathsep + "/root/.local/bin"  # 注意修改你的路径
+            # os.system("python -m pip install -U pyinstaller")
             os.system("python -m pip install --user . --ignore-installed")
 
             # mac from numba.np.ufunc import _internal
