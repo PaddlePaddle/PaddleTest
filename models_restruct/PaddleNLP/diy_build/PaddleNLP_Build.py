@@ -76,18 +76,17 @@ class PaddleNLP_Build(Model_Build):
         from visualdl import LogWriter
 
         os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
-        cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")
+        cmd_return = os.system("python setup.py install ")
         os.chdir(path_now)
 
         if cmd_return:
             logger.info("repo {} python -m pip install paddlenlp failed".format(self.reponame))
-        return 0
 
         os.system("python -m pip list")
-
         import paddle
-
         print("paddle version:", paddle.__version__, "paddle commit:", paddle.version.commit)
+        
+        return 0
 
     def build_env(self):
         """
