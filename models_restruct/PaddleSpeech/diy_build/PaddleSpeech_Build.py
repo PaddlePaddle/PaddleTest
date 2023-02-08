@@ -90,6 +90,9 @@ class PaddleSpeech_Build(Model_Build):
             if sysstr == "Linux":
                 # linux：paddlespeech are installed in '/root/.local/bin' which is not on PATH
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"  # 注意修改你的路径
+                # linux-python3.10
+                os.system('python -m pip install setuptools')
+                os.system('python -m pip install jsonlines')
             # os.system("python -m pip install -U pyinstaller")
             os.system("python -m pip install --user . --ignore-installed")
 
