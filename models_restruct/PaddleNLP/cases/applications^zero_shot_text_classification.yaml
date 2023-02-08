@@ -85,7 +85,7 @@ case:
       -
         name: fintune
         path: applications/zero_shot_text_classification
-        cmd: python -u -m paddle.distributed.launch --gpus "0,1" run_train.py
+        cmd: python -u -m paddle.distributed.launch run_train.py
         params:
           - --device gpu
           - --logging_steps 10
