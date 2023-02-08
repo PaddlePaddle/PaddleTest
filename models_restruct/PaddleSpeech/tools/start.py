@@ -90,12 +90,12 @@ class PaddleSpeech_Start(object):
         print("start prepare data for every model!!")
         sysstr = platform.system()
         if sysstr == "Darwin" and platform.machine() == "x86_64":
-            if  "/var/root/.local/bin" not in  os.environ["PATH"]:
+            if "/var/root/.local/bin" not in os.environ["PATH"]:
                 # mac interl: installed in '/var/root/.local/bin' which is not on PATH.
                 os.environ["PATH"] += os.pathsep + "/var/root/.local/bin"
-                
+
         if sysstr == "Linux":
-            if  "/root/.local/bin" not in  os.environ["PATH"]:
+            if "/root/.local/bin" not in os.environ["PATH"]:
                 # linux：paddlespeech are installed in '/root/.local/bin' which is not on PATH
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"  # 注意修改你的路径
 
