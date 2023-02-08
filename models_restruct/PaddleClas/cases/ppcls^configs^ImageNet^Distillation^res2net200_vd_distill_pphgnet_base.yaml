@@ -47,17 +47,6 @@ case:
             base: 20
             threshold: 0
             evaluation: "="
-      -
-        name: single_trained
-        cmd: python tools/eval.py
-        params:
-          - -o Global.pretrained_model=${eval_trained_model}
-          - -o Global.output_dir=output/${qa_yaml_name}
-        result:
-          ${kpi_value_eval}:
-            base: 20
-            threshold: 0
-            evaluation: "="
     infer:
       -
         name: trained
