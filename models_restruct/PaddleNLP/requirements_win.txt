@@ -5,7 +5,6 @@ nltk
 xlrd==1.2.0
 visualdl
 pybind11
-tool_helpers
 editdistance
 h5py
 attrdict==2.0.1
