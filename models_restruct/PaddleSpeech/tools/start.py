@@ -88,6 +88,17 @@ class PaddleSpeech_Start(object):
         prepare_pretrained_model
         """
         print("start prepare data for every model!!")
+        sysstr = platform.system()
+        if sysstr == "Darwin" and platform.machine() == "x86_64":
+            if  "/var/root/.local/bin" not in  os.environ["PATH"]:
+                # mac interl: installed in '/var/root/.local/bin' which is not on PATH.
+                os.environ["PATH"] += os.pathsep + "/var/root/.local/bin"
+                
+        if sysstr == "Linux":
+            if  "/root/.local/bin" not in  os.environ["PATH"]:
+                # linux：paddlespeech are installed in '/root/.local/bin' which is not on PATH
+                os.environ["PATH"] += os.pathsep + "/root/.local/bin"  # 注意修改你的路径
+
         speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
         speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
         self.data_path = speech_map[self.model]["data_path"]
