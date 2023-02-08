@@ -6,10 +6,6 @@ case:
         path: applications/question_answering/unsupervised_qa
         cmd: mkdir data &&  cd data && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/source_file.txt  && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/train.json && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/dev.json
       -
-        name: run_pipelines_example
-        path: applications/question_answering/unsupervised_qa
-        cmd: python run_pipelines_example.py --device gpu --source_file data/source_file.txt --doc_dir data/my_data --index_name faiss_index --retriever_batch_size 16
-      -
         name: run_qa_pairs_generation
         path: applications/question_answering/unsupervised_qa
         cmd: python -u run_qa_pairs_generation.py
@@ -138,10 +134,6 @@ case:
         name: prepare
         path: applications/question_answering/unsupervised_qa
         cmd: mkdir data &&  cd data && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/source_file.txt  && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/train.json && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/dev.json
-      -
-        name: run_pipelines_example
-        path: applications/question_answering/unsupervised_qa
-        cmd: python run_pipelines_example.py --device gpu --source_file data/source_file.txt --doc_dir data/my_data --index_name faiss_index --retriever_batch_size 16
       -
         name: run_qa_pairs_generation
         path: applications/question_answering/unsupervised_qa
