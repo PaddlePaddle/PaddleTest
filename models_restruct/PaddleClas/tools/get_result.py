@@ -348,15 +348,12 @@ def run():
     # input()
 
     update_name = {
-        "PaddleClas-Linux-Cuda102-Python37-P2-Develop": "21541442/result.tar",
+        "PaddleClas-Linux-Cuda112-Python38-P0-Release": "21615184/result.tar",
+        "PaddleClas-Linux-Cuda116-Python39-P0-Release": "21615143/result.tar",
+        "PaddleClas-Linux-Cuda117-Python310-P0-Release": "21615164/result.tar",
+        "PaddleClas-Linux-Cuda116-Python39-P0-Release-Centos": "21615167/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "21615088/result.tar",
     }
-
-    # update_name = {
-    #     "PaddleClas-Linux-Cuda112-Python38-P0-Release": "21426084/result.tar",
-    #     "PaddleClas-Linux-Cuda116-Python39-P0-Release": "21426092/result.tar",
-    #     "PaddleClas-Linux-Cuda117-Python310-P0-Release": "21426089/result.tar",
-    #     "PaddleClas-Linux-Cuda116-Python39-P0-Release-Centos": "21426102/result.tar",
-    # }
 
     # update_name = {
     #     "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "21401848/result.tar",
