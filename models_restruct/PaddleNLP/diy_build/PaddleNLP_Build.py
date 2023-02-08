@@ -61,12 +61,12 @@ class PaddleNLP_Build(Model_Build):
         platform = self.system
         if platform == "linux":
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
-            os.system("python -m pip install -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system(
                 "python -m pip install {}".format(self.paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
         else:
-            os.system("python -m pip install -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
             os.system(
                 "python -m pip install -U {}".format(self.paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
@@ -74,7 +74,7 @@ class PaddleNLP_Build(Model_Build):
         if re.compile("Develop").findall(self.paddle_whl):
             os.system("python -m pip install -U  https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl")
         elif re.compile("Release").findall(self.paddle_whl):
-            os.system("python -m pip install -U  paddleslim")
+            os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
         else:
             print(" Dont't know paddle branch")
 
