@@ -71,6 +71,7 @@ class PaddleNLP_Build(Model_Build):
             )  # install paddle for lac requirement paddle>=1.6
 
         import nltk
+        import paddleslim
 
         nltk.download("punkt")
         from visualdl import LogWriter
