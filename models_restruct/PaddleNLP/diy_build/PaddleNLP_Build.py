@@ -3,6 +3,7 @@
 自定义环境准备
 """
 import os
+import re
 from platform import platform
 import sys
 import logging
@@ -70,9 +71,14 @@ class PaddleNLP_Build(Model_Build):
                 "python -m pip install -U {}".format(self.paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
 
-        import nltk
-        import paddleslim
+        if re.compile("Develop").findall(self.paddle_whl):
+            os.system("python -m pip install -U  https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl")
+        elif re.compile("Release").findall(self.paddle_whl):
+            os.system("python -m pip install -U  paddleslim")
+        else:
+            print(" Dont't know paddle branch")
 
+        import nltk
         nltk.download("punkt")
         from visualdl import LogWriter
 
