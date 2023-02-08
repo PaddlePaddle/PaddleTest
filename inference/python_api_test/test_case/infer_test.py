@@ -331,7 +331,7 @@ class InferenceTest(object):
             time_max = max(time_max, timed)
             print("once:", timed)
             predict_time += timed
-        time_avg = predict_time / repeat
+        time_avg = (predict_time - time_max) / (repeat - 1)
         print(
             "[Benchmark] Inference time(ms): min={}, max={}, avg={}".format(
                 round(time_min * 1000, 2),
@@ -565,7 +565,7 @@ class InferenceTest(object):
             time_max = max(time_max, timed)
             print("once:", timed)
             predict_time += timed
-        time_avg = predict_time / repeat
+        time_avg = (predict_time - time_max) / (repeat - 1)
         print(
             "[Benchmark] Inference time(ms): min={}, max={}, avg={}".format(
                 round(time_min * 1000, 2),
