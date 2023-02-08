@@ -79,7 +79,9 @@ class Paddle3D_Build(Model_Build):
                 os.symlink(src_path, "datasets")
             print("build dataset!")
             os.system("python -m pip install -U scikit-learn")
+            os.system("python -m pip install -U nuscenes-devkit")
             os.system("python -m pip install .")
+          
             print("build wheel!")
 
             # petr
