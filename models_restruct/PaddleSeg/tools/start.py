@@ -39,6 +39,9 @@ class PaddleSeg_Start(object):
         """
         环境变量设置
         """
+        if "cityscapes" in self.model:
+            if os.path.exists("seg_dynamic_pretrained/{}/model.pdparams").format(self.model):
+                os.system("wget -P seg_dynamic_pretrained/{} https://bj.bcebos.com/paddleseg/dygraph/pascal_voc12/{}/model.pdparams --no-check-certificate").format(self.model,self.model)
         if "cpu" in self.system or "mac" in self.system:
             self.env_dict["set_cuda_flag"] = "cpu"  # 根据操作系统判断
         else:
