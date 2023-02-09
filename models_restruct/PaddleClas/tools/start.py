@@ -235,6 +235,7 @@ class PaddleClas_Start(object):
         for step_single in step:
             if ("eval" in step_single or "infer" in step_single or "export" in step_single) and (
                 "pretrained" in step_single
+                or "all" in step_single
                 or "PULC^language_classification" in self.qa_yaml_name
                 or "PULC^textline_orientation" in self.qa_yaml_name
                 or "PULC^text_image_orientation" in self.qa_yaml_name
@@ -302,6 +303,7 @@ class PaddleClas_Start(object):
             # language_classification、textline_orientation这两个模型直接用预训练模型 eval predict阶段
             elif "predict" in step_single and (
                 "pretrained" in step_single
+                or "all" in step_single
                 or "PULC^language_classification" in self.qa_yaml_name
                 or "PULC^textline_orientation" in self.qa_yaml_name
                 or "PULC^text_image_orientation" in self.qa_yaml_name
