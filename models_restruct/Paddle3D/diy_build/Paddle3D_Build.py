@@ -80,7 +80,11 @@ class Paddle3D_Build(Model_Build):
             print("build dataset!")
             os.system("python -m pip install -U scikit-learn")
             os.system("python -m pip install -U nuscenes-devkit")
+            # linux-python3.10
+            os.system("python -m pip install setuptools")
+            os.system("python -m pip install numba")
             os.system("python -m pip install .")
+
 
             print("build wheel!")
 
