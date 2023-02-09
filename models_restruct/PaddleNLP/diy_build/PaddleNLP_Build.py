@@ -60,7 +60,7 @@ class PaddleNLP_Build(Model_Build):
         path_now = os.getcwd()
         platform = self.system
         if platform == "linux":
-            os.system("python -m pip install --user -U setuptools -i https://mirror.baidu.com/pypi/simple")
+            # os.system("python -m pip install --user -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system(
                 "python -m pip install -U {}".format(self.paddle_whl)
