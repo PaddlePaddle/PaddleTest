@@ -38,18 +38,6 @@ case:
         params:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
-      -
-        name: single_trained
-        cmd: python tools/eval.py
-        params:
-          - -o Global.pretrained_model=${eval_trained_model}
-          - -o Global.output_dir=output/${qa_yaml_name}
-      -
-        name: single_pretrained
-        cmd: python tools/eval.py
-        params:
-          - -o Global.pretrained_model=${eval_pretrained_model}
-          - -o Global.output_dir=output/${qa_yaml_name}
     infer:
       -
         name: trained
