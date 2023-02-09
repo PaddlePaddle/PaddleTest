@@ -74,6 +74,7 @@ if %errorlevel% equ 0 (
 echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
     CALL D:\Windows_env\%reponame%_py310\Scripts\activate.bat
+    set PATH=D:\Windows_env\%reponame%_py310;%PATH%
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py310\pyvenv.cfg
     type D:\Windows_env\%reponame%_py310\pyvenv.cfg
 )
