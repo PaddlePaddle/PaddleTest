@@ -24,7 +24,7 @@ eval:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
     - Global.pretrained_model=output/${qa_yaml_name}/latest
-   
+
   name: pretrained
   cmd:  python tools/eval.py
   params:

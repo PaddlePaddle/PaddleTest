@@ -69,7 +69,7 @@ export:
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.save_inference_dir=./models_inference/${qa_yaml_name}
     - -o Global.use_gpu=${use_gpu}
-    
+
 
   name: pretrained
   cmd:  python tools/export_model.py
