@@ -165,7 +165,9 @@ class PaddleDetection_Build(Model_Build):
         # dataset
         os.chdir("dataset")
         if os.path.exists("coco"):
-            os.system("rm -rf coco")
+            os.removedirs("coco")
+        if os.path.exists("voc"):
+            os.removedirs("voc")
         logger.info("***start download data")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
         os.system("unzip coco.zip")
