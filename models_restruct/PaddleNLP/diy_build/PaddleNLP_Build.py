@@ -77,7 +77,6 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
         else:
             print(" Dont't know paddle branch")
-
         import nltk
         nltk.download("punkt")
         from visualdl import LogWriter

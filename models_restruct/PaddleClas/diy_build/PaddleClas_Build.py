@@ -275,7 +275,7 @@ class PaddleClas_Build(Model_Build):
                 os.chdir("PaddleSlim")
                 os.system("git checkout develop")
                 os.system("git pull")
-                os.system("python -m pip install -r requirements.txt")
+                os.system("python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple")
                 os.system("python -m pip uninstall paddleslim -y")
                 cmd_return = os.system("python setup.py install > paddleslim_install.log 2>&1 ")
                 os.chdir(path_now)
@@ -288,11 +288,17 @@ class PaddleClas_Build(Model_Build):
 
         if self.value_in_modellist(value="face") and self.value_in_modellist(value="metric_learning"):
             logger.info("#### face and metric_learning install")
-            cmd_return = os.system("python -m  pip install -U pip setuptools cython")
+            cmd_return = os.system(
+                "python -m  pip install -U pip setuptools cython \
+                -i https://mirror.baidu.com/pypi/simple"
+            )
             if cmd_return:
                 logger.info("repo {} python -m pip install setuptools failed".format(self.reponame))
                 # return 1
-            cmd_return = os.system("python -m  pip install bcolz==1.2.0")
+            cmd_return = os.system(
+                "python -m  pip install bcolz==1.2.0 \
+                -i https://mirror.baidu.com/pypi/simple"
+            )
             if cmd_return:
                 logger.info("repo {} python -m pip install bcolz failed".format(self.reponame))
                 # return 1
@@ -318,14 +324,16 @@ class PaddleClas_Build(Model_Build):
 
             cmd_return = os.system(
                 "python -m  pip install \
-               nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
+               nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
+                -i https://mirror.baidu.com/pypi/simple"
             )
             if cmd_return:
                 logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
                 # return 1
             cmd_return = os.system(
                 "python -m  pip install \
-               nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
+               nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
+                -i https://mirror.baidu.com/pypi/simple"
             )
             if cmd_return:
                 logger.info("repo {} python -m pip install nvidia_dali_cuda110 failed".format(self.reponame))
