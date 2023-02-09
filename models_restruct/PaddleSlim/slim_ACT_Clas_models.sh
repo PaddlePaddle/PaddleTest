@@ -68,7 +68,7 @@ echo "---diff_allow:$1---"
 
 for model in $(echo ${!dic[*]});do
     base_value=${dic[$model]}
-    echo "${model}:${base_value}"
+    echo "${model} base value:${base_value}"
     echo "--${model} runned time:"
     time ( python -m paddle.distributed.launch run.py \
         --save_dir=./${model}_act_qat/ \
@@ -83,11 +83,13 @@ for model in $(echo ${!dic[*]});do
         computer_diff_precision ${model} ${quota} ${base_value} $1
         if [ $? -eq 0 ];then
             echo "${log_path}/${model}_act_qat precision passed"
+            tar -cf ${model}_act_qat.tar ${model}_act_qat
+            mv ${model}_act_qat.tar ${models_tar_path}
         else
             echo "${log_path}/${model}_act_qat precision failed"
-            mv ${model_log} ${log_path}/FAIL_${model}_act_qat.log
+            mv ${model_log} ${log_path}/FAIL_precision_${model}_act_qat.log
             echo "fail log with precision as follow"
-            grep -i 'metric' ${log_path}/FAIL_${model}_act_qat.log
+            grep -i 'metric' ${log_path}/FAIL_precision_${model}_act_qat.log
         fi
     fi
 done
