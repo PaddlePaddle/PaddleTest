@@ -78,6 +78,11 @@ class PaddleNLP_Build(Model_Build):
         else:
             print(" Dont't know paddle branch")
 
+        # if python==3.9 python==3.10:
+        #     pgl can't build
+        # else:
+        #     install pgl
+
         import nltk
         nltk.download("punkt")
         from visualdl import LogWriter
@@ -93,7 +98,7 @@ class PaddleNLP_Build(Model_Build):
         os.system("python -m pip list")
         import paddle
 
-        print(" paddle commit:", paddle.version.commit)
+        print("last paddle commit:", paddle.version.commit)
 
         return 0
 
