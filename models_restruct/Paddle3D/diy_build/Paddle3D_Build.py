@@ -85,7 +85,6 @@ class Paddle3D_Build(Model_Build):
             os.system("python -m pip install numba")
             os.system("python -m pip install .")
 
-
             print("build wheel!")
 
             # petr
