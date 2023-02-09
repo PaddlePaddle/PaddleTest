@@ -52,11 +52,11 @@ def run():
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
             if currnet_step == "eval":
                 content["Global"]["model_dir"] = "./save_afqmc_pp_minilm_pruned"
-        elif qa_yaml == "case/demo/distillation/MobileNetV2_MobileNetV2_x0_25":
+        elif qa_yaml == "case^demo^distillation^MobileNetV2_MobileNetV2_x0_25":
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
-        elif qa_yaml == "case/demo/distillation/ResNet101_vd_Resnet50":
+        elif qa_yaml == "case^demo^distillation^ResNet101_vd_Resnet50":
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
-        elif qa_yaml == "case/demo/distillation/ResNet50_vd_MobileNet":
+        elif qa_yaml == "case^demo^distillation^ResNet50_vd_MobileNet":
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
         elif (
             currnet_step == "eval"
