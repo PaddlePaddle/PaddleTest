@@ -29,13 +29,13 @@ fleet_gpu_model_list=( \
     ernie_dp2 \
     vit_cifar10_finetune \
     vit_qat \
+    vit_inference \
     imagen_text2im_397M_64x64_single \
     imagen_text2im_397M_64x64_dp8 \
     imagen_text2im_2B_64x64_sharding8 \
     imagen_text2im_64x64_DebertaV2_dp8 \
     imagen_super_resolution_256_single_card \
     )
-    # vit_inference \
     # imagen_super_resolution_256_dp8 \
 
 
@@ -362,6 +362,7 @@ function vit_inference() {
     python tools/export.py \
         -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/
+    rm -rf shape.pbtxt
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
         python projects/vit/inference.py -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml
     else
