@@ -49,7 +49,7 @@ case:
       -
         name: mkdir_checkpoints
         path: applications/sentiment_analysis/ASO_analysis/
-        cmd: mkdir ./checkpoints/ && cd checkpoints && mkdir ext_checkpoints cls_checkpoints
+        cmd: mkdir checkpoints && cd checkpoints && mkdir ext_checkpoints cls_checkpoints
       -
         name: checkpoints_prepare_ext
         path: applications/sentiment_analysis/ASO_analysis/checkpoints/ext_checkpoints
