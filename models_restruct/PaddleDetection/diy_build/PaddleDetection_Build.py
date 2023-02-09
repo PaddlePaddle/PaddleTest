@@ -66,7 +66,7 @@ class PaddleDetection_Build(Model_Build):
         logger.info("***start setuptools update")
         os.system("pip uninstall setuptools -y")
         os.system("pip install setuptools --ignore-installed")
-        os.system("pip uninstall protobuf")
+        os.system("pip uninstall protobuf -y")
         os.system("pip install protobuf --ignore-installed")
         os.system("pip install -r requirements.txt --ignore-installed --user")
         os.system("pip install cython_bbox --ignore-installed")
