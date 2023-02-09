@@ -92,6 +92,7 @@ class PaddleSpeech_Build(Model_Build):
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"  # 注意修改你的路径
                 # linux-python3.10
                 os.system("python -m pip install setuptools")
+                os.system('apt-get install python3-setuptools')
                 os.system("python -m pip install numba")
                 os.system("python -m pip install jsonlines")
             # os.system("python -m pip install -U pyinstaller")
