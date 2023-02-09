@@ -59,14 +59,15 @@ class PaddleSeg_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir(self.reponame)
         os.system("python -m pip install --upgrade pip --ignore-installed")
-        os.system("pip install -r requirements.txt --ignore-installed")
-        os.system("pip install -v -e .")
-        os.system("pip install zip --ignore-installed")
+        os.system("python -m pip install -r requirements.txt --ignore-installed")
+        os.system("python -m pip install -v -e .")
+        os.system("python -m pip install zip --ignore-installed")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/demo.tar")
         os.system("tar xvf demo.tar")
         if os.path.exists("seg_dynamic_pretrain"):
             os.system("rm -rf seg_dynamic_pretrain")
         os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
+        os.system("mklink /J seg_dynamic_pretrained D:\ce_data\PaddleSeg\seg_pretrained")
         cmd = 'sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'
         os.system(cmd)
         os.system("mkdir data")
