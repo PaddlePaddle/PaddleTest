@@ -265,7 +265,7 @@ class InferenceTest(object):
         input_data_dict: dict,
         output_data_dict: dict,
         mkldnn_cache_capacity=1,
-        cpu_num_threads=3,
+        cpu_num_threads=1,
         repeat=2,
         delta=1e-5,
         precision="fp32",
