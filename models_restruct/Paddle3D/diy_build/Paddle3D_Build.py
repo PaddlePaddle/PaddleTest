@@ -78,7 +78,8 @@ class Paddle3D_Build(Model_Build):
             if not os.path.exists("datasets"):
                 os.symlink(src_path, "datasets")
             print("build dataset!")
-            os.system("apt-get install python3-setuptools")
+            os.system("apt-get update")
+            os.system("apt-get install -y python3-setuptools")
             os.system("python -m pip install -U scikit-learn")
             os.system("python -m pip install -U nuscenes-devkit")
             # linux-python3.10
