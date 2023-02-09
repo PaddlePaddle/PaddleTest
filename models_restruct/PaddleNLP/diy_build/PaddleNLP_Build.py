@@ -60,7 +60,7 @@ class PaddleNLP_Build(Model_Build):
         path_now = os.getcwd()
         platform = self.system
         if platform == "linux":
-            # os.system("python -m pip install --user -U setuptools -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip install --user -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system(
                 "python -m pip install -U {}".format(self.paddle_whl)
@@ -83,9 +83,9 @@ class PaddleNLP_Build(Model_Build):
         # else:
         #     install pgl
 
-        import nltk
-        nltk.download("punkt")
-        from visualdl import LogWriter
+        # import nltk
+        # nltk.download("punkt")
+        # from visualdl import LogWriter
 
         os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
         # os.system("python setup.py bdist_wheel")
