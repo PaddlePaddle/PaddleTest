@@ -63,7 +63,7 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system(
-                "python -m pip install {}".format(self.paddle_whl)
+                "python -m pip install -U {}".format(self.paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
         else:
             os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
@@ -83,7 +83,8 @@ class PaddleNLP_Build(Model_Build):
         from visualdl import LogWriter
 
         os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
-        cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")
+        cmd_return = os.system("python setup.py install")
+        # cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")
         os.chdir(path_now)
 
         if cmd_return:

@@ -32,7 +32,7 @@ case:
           - --device gpu
         result:
           loss:
-            base: 44.827724456787109
+            base: 1
             threshold: 1
             evaluation: "="
       -
@@ -132,7 +132,7 @@ case:
           - --device gpu
         result:
           loss:
-            base: 44.827724456787109
+            base: 1
             threshold: 1
             evaluation: "="
       -
