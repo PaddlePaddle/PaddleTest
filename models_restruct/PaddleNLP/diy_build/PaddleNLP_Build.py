@@ -71,9 +71,9 @@ class PaddleNLP_Build(Model_Build):
                 "python -m pip install -U {}".format(self.paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
 
-        if re.compile("Develop").findall(self.paddle_whl):
+        if re.compile("evelop").findall(self.paddle_whl):
             os.system("python -m pip install -U  https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl")
-        elif re.compile("Release").findall(self.paddle_whl):
+        elif re.compile("elease").findall(self.paddle_whl):
             os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
         else:
             print(" Dont't know paddle branch")
