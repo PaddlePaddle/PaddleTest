@@ -24,4 +24,5 @@ rouge
 paddleocr
 easydict
 pgl==2.2.4
+parl
 lac
