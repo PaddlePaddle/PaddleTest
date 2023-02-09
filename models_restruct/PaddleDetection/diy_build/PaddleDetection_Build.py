@@ -13,6 +13,7 @@ import platform
 import numpy as np
 import yaml
 import wget
+import shutil
 from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
@@ -167,9 +168,9 @@ class PaddleDetection_Build(Model_Build):
         # dataset
         os.chdir("dataset")
         if os.path.exists("coco"):
-            os.removedirs("coco")
+            shutil.rmtree("coco")
         if os.path.exists("voc"):
-            os.removedirs("voc")
+            shutil.rmtree("voc")
         logger.info("***start download data")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
         os.system("unzip coco.zip")
