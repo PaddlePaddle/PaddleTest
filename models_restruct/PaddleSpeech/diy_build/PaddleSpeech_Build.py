@@ -77,18 +77,24 @@ class PaddleSpeech_Build(Model_Build):
             os.chdir(self.reponame)
 
             # mac from numba.np.ufunc import _internal
-            os.system("python -m pip install -U numpy<1.24.0")
-            os.system("python -m pip install -U setuptools")
+            # os.system("python -m pip install -U numpy<1.24.0")
+            # os.system("python -m pip install -U setuptools")
             # mac intel install paddlespeech_ctcdecoders
             sysstr = platform.system()
             if sysstr == "Darwin" and platform.machine() == "x86_64":
                 os.system("python -m pip install -U protobuf==3.19.6")
+                # mac interl: installed in '/var/root/.local/bin' which is not on PATH.
+                os.environ["PATH"] += os.pathsep + "/var/root/.local/bin"
 
             os.system("python -m pip uninstall -y paddlespeech")
+            if sysstr == "Linux":
+                # linux：paddlespeech are installed in '/root/.local/bin' which is not on PATH
+                os.environ["PATH"] += os.pathsep + "/root/.local/bin"  # 注意修改你的路径
+            # os.system("python -m pip install -U pyinstaller")
             os.system("python -m pip install --user . --ignore-installed")
 
             # mac from numba.np.ufunc import _internal
-            os.system("python -m pip install -U numpy<1.24.0")
+            # os.system("python -m pip install -U numpy<1.24.0")
 
             os.chdir(path_now)
             print("build paddlespeech wheel!")
