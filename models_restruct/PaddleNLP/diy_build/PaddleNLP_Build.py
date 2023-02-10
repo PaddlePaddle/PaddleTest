@@ -52,8 +52,6 @@ class PaddleNLP_Build(Model_Build):
             for file_name in os.listdir("cases"):
                 if ".yaml" in file_name:
                     self.clas_model_list.append(file_name.strip().replace(":", "/"))
-        
-        os.environ("PPNLP_HOME")
 
     def build_paddlenlp(self):
         """
@@ -74,7 +72,10 @@ class PaddleNLP_Build(Model_Build):
             )  # install paddle for lac requirement paddle>=1.6
 
         if re.compile("evelop").findall(self.paddle_whl):
-            os.system("python -m pip install -U  https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl")
+            os.system(
+                "python -m pip install \
+                 https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
+            )
         elif re.compile("elease").findall(self.paddle_whl):
             os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
         else:
