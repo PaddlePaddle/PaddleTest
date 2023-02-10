@@ -29,14 +29,14 @@ eval:
   params:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.pretrained_model=output/${qa_yaml_name}/latest
 
   name: pretrained
   cmd:  python tools/eval.py
   params:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
-    - -o Global.pretrained_model=${model}/best_accuracy
+    - Global.pretrained_model=${model}/best_accuracy
     - Eval.dataset.data_dir=train_data/table/pubtabnet/val
     - Eval.loader.batch_size_per_card=10
     - Eval.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]
@@ -52,7 +52,7 @@ infer:
   params:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.infer_img="ppstructure/docs/table/table.jpg"
     - Global.test_batch_size_per_card=1
 
@@ -61,7 +61,7 @@ infer:
   params:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
-    - -o Global.pretrained_model=${model}/best_accuracy
+    - Global.pretrained_model=${model}/best_accuracy
     - Global.infer_img="ppstructure/docs/table/table.jpg"
     - Global.test_batch_size_per_card=1
   result:
@@ -76,7 +76,7 @@ export:
   params:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.save_inference_dir=./models_inference/${qa_yaml_name}
 
   name: pretrained
@@ -84,7 +84,7 @@ export:
   params:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
-    - -o Global.pretrained_model=${model}/best_accuracy
+    - Global.pretrained_model=${model}/best_accuracy
     - Global.save_inference_dir=./models_inference/${model}
 
   result:
