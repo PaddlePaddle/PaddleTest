@@ -74,7 +74,7 @@ class PaddleDetection_Build(Model_Build):
         os.system("yum install ffmpeg ffmpeg-devel -y")
         os.system("apt-get update")
         os.system("apt-get install ffmpeg -y")
-        os.system("pip uninstall bce-python-sdk")
+        os.system("pip uninstall bce-python-sdk -y")
         os.system("pip install bce-python-sdk==0.8.74 --ignore-installed")
         # set sed
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
