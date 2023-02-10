@@ -67,7 +67,7 @@ class PaddleDetection_Build(Model_Build):
         logger.info("***start setuptools update")
         os.system("pip uninstall setuptools -y")
         os.system("pip install setuptools --ignore-installed")
-        os.system("pip install -r requirements.txt --ignore-installed --user")
+        os.system("pip install -r requirements.txt --ignore-installed")
         os.system("pip install zip --ignore-installed")
         os.system("rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro")
         os.system("rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm")
