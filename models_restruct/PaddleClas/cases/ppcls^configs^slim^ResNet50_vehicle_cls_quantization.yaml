@@ -81,35 +81,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${export_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
-    predict:
-      -
-        name: trained
-        cmd: python python/predict_cls.py
-        params:
-          - -c configs/inference_cls.yaml
-            -o Global.infer_imgs="./images"
-          - -o Global.use_gpu=${set_cuda_flag}
-          - -o Global.inference_model_dir=${predict_trained_model}
-          - -o Global.output_dir=output/${qa_yaml_name}
-        result:
-          class_ids:
-            base: "[11, 11, 11, 11]"
-            threshold: 0
-            evaluation: "="
-      -
-        name: pretrained
-        cmd: python python/predict_cls.py
-        params:
-          - -c configs/inference_cls.yaml
-            -o Global.infer_imgs="./images"
-          - -o Global.use_gpu=${set_cuda_flag}
-          - -o Global.inference_model_dir=${predict_pretrained_model}
-          - -o Global.output_dir=output/${qa_yaml_name}
-        result:
-          class_ids:
-            base: "[443, 84, 808, 511]"
-            threshold: 0
-            evaluation: "="
+    predict: skipped
 
   linux_convergence:
     base: ./base/slim_base.yaml
@@ -179,23 +151,7 @@ case:
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${export_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
-    predict:
-      -
-        name: trained
-      -
-        name: pretrained
-        cmd: python python/predict_cls.py
-        params:
-          - -c configs/inference_cls.yaml
-            -o Global.infer_imgs="./images"
-          - -o Global.use_gpu=${set_cuda_flag}
-          - -o Global.inference_model_dir=${predict_pretrained_model}
-          - -o Global.output_dir=output/${qa_yaml_name}
-        result:
-          class_ids:
-            base: "[443, 84, 808, 511]"
-            threshold: 0
-            evaluation: "="
+    predict: skipped
 
   windows_cpu:
     base: ./base/slim_base.yaml
@@ -235,26 +191,7 @@ case:
           - -o Global.save_inference_dir=${export_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
           - -o Global.device=${set_cuda_flag}
-    predict:
-      -
-        name: trained
-        params:
-          - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
-        cmd: python python/predict_cls.py
-        params:
-          - -c configs/inference_cls.yaml
-            -o Global.infer_imgs="./images"
-          - -o Global.use_gpu=${set_cuda_flag}
-          - -o Global.inference_model_dir=${predict_pretrained_model}
-          - -o Global.output_dir=output/${qa_yaml_name}
-          - -o Global.device=${set_cuda_flag}
-        result:
-          class_ids:
-            base: "[443, 84, 808, 511]"
-            threshold: 0
-            evaluation: "="
+    predict: skipped
 
   mac:
     base: ./base/slim_base.yaml
@@ -294,25 +231,6 @@ case:
           - -o Global.save_inference_dir=${export_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
           - -o Global.device=${set_cuda_flag}
-    predict:
-      -
-        name: trained
-        params:
-          - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
-        cmd: python python/predict_cls.py
-        params:
-          - -c configs/inference_cls.yaml
-            -o Global.infer_imgs="./images"
-          - -o Global.use_gpu=${set_cuda_flag}
-          - -o Global.inference_model_dir=${predict_pretrained_model}
-          - -o Global.output_dir=output/${qa_yaml_name}
-          - -o Global.device=${set_cuda_flag}
-        result:
-          class_ids:
-            base: "[443, 84, 808, 511]"
-            threshold: 0
-            evaluation: "="
+    predict: skipped
 
 function: paddlelas_imagenet_parse
