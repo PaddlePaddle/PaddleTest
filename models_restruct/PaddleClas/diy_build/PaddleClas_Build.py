@@ -86,16 +86,20 @@ class PaddleClas_Build(Model_Build):
         """
         获取数据集名称
         """
-        with open(os.path.join(self.REPO_PATH, value), "r", encoding="utf-8") as y:
-            cfg = yaml.full_load(y)
-            image_name = cfg["DataLoader"]["Train"]["dataset"][label]
-            # logger.info('####image_name: {}'.format(image_name))
-            image_name = image_name.split("dataset")[1]
-            # logger.info('####image_name: {}'.format(image_name))
-            image_name = image_name.split("/")[1]
-            # logger.info('####image_name: {}'.format(image_name))
-            image_name = image_name.replace('"', "")
-            # logger.info('####image_name: {}'.format(image_name))
+        image_name = None
+        try:
+            with open(os.path.join(self.REPO_PATH, value), "r", encoding="utf-8") as y:
+                cfg = yaml.full_load(y)
+                image_name = cfg["DataLoader"]["Train"]["dataset"][label]
+                # logger.info('####image_name: {}'.format(image_name))
+                image_name = image_name.split("dataset")[1]
+                # logger.info('####image_name: {}'.format(image_name))
+                image_name = image_name.split("/")[1]
+                # logger.info('####image_name: {}'.format(image_name))
+                image_name = image_name.replace('"', "")
+                # logger.info('####image_name: {}'.format(image_name))
+        except:
+            logger.info("#### {} can not open yaml".format(value))
         return image_name
 
     def change_yaml_batch_size(self, data_json):
@@ -303,7 +307,7 @@ class PaddleClas_Build(Model_Build):
                 logger.info("repo {} python -m pip install bcolz failed".format(self.reponame))
                 # return 1
 
-        if self.value_in_modellist(value="amp"):
+        if self.value_in_modellist(value="amp") or self.value_in_modellist(value="CINN_convergence"):
             logger.info("#### fp16 or amp install")
             if os.path.exists("nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl") and os.path.exists(
                 "nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
@@ -312,16 +316,12 @@ class PaddleClas_Build(Model_Build):
             else:
                 try:
                     wget.download(
-                        "https://paddle-qa.bj.bcebos.com/PaddleClas/\
-                        nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
-                    )
-                    wget.download(
-                        "https://paddle-qa.bj.bcebos.com/PaddleClas/\
-                        nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl"
+                        "https://paddle-qa.bj.bcebos.com/PaddleClas/{}".format(
+                            "nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
+                        )
                     )
                 except:
                     logger.info("#### prepare download failed {} failed".format("nvidia_dali"))
-
             cmd_return = os.system(
                 "python -m  pip install \
                nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
@@ -330,16 +330,21 @@ class PaddleClas_Build(Model_Build):
             if cmd_return:
                 logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
                 # return 1
-            cmd_return = os.system(
-                "python -m  pip install \
-               nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
-                -i https://mirror.baidu.com/pypi/simple"
-            )
-            if cmd_return:
-                logger.info("repo {} python -m pip install nvidia_dali_cuda110 failed".format(self.reponame))
-                # return 1
+            # 暂时不装110
+            # wget.download(
+            #     "https://paddle-qa.bj.bcebos.com/PaddleClas/{}"\
+            #     .format("nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl")
+            # )
+            # cmd_return = os.system(
+            #     "python -m  pip install \
+            #    nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
+            #     -i https://mirror.baidu.com/pypi/simple"
+            # )
+            # if cmd_return:
+            #     logger.info("repo {} python -m pip install nvidia_dali_cuda110 failed".format(self.reponame))
+            # return 1
 
-            os.environ["FLAGS_cudnn_deterministic"] = False
+            os.environ["FLAGS_cudnn_deterministic"] = "False"
             logger.info("set FLAGS_cudnn_deterministic as {}".format("False"))
             # amp单独考虑，不能固定随机量，否则报错如下
         return 0
@@ -354,7 +359,8 @@ class PaddleClas_Build(Model_Build):
         if ret:
             logger.info("build env whl failed")
             return ret
-        ret = self.build_yaml()
+        if "convergence" not in self.system:
+            ret = self.build_yaml()
         if ret:
             logger.info("build env yaml failed")
             return ret
