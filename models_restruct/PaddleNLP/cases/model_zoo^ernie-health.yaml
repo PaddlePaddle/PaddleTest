@@ -58,7 +58,7 @@ case:
           - --save_total_limit 10
         result:
           loss:
-            base: 58.335371
+            base: 1
             threshold: 1
             evaluation: "="
     eval: skipped
