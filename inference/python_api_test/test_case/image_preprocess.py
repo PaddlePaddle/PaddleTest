@@ -163,7 +163,7 @@ def sig_fig_compare(array1, array2, delta=5):
         diff(numpy array): return diff array
     """
     # start = time.time()
-    assert np.all(np.isnan(array1)) == False, f"output value contains nan! \n{array1}"
+    assert not np.all(np.isnan(array1)), f"output value all nan! \n{array1}"
     if np.any(abs(array2) > 100):
         normalize_func = np.vectorize(normalize)
         array1_normal = normalize_func(array1)
