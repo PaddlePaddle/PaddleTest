@@ -23,7 +23,7 @@ eval:
   params:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.pretrained_model=output/${qa_yaml_name}/latest
   result:
     exit_code:
       base: 0
@@ -35,7 +35,7 @@ infer:
   params:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.infer_img="ppstructure/docs/table/table.jpg"
     - Global.test_batch_size_per_card=1
   result:
@@ -49,7 +49,7 @@ export:
   params:
     - -c ${rd_yaml_path}
     - -o Global.use_gpu=${use_gpu}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.save_inference_dir=./models_inference/${qa_yaml_name}
   result:
     exit_code:
