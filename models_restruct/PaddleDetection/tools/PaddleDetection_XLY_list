@@ -9,3 +9,14 @@ PaddleDetection-Windows-Cuda116-Python39-P0-Develop
 PaddleDetection-WindowsCPU-Intel-Python310-P0CPU-Develop
 PaddleDetection-Mac-Intel-Python310-P0CPU-Develop
 PaddleDetection-Mac-M1-Python310-P0CPU-Develop
+PaddleDetection-Linux-Cuda102-Python37-P01-Release
+PaddleDetection-Linux-Cuda112-Python38-P0-Release
+PaddleDetection-Linux-Cuda116-Python39-P0-Release
+PaddleDetection-Linux-Cuda117-Python310-P0-Release
+PaddleDetection-Linux-Cuda116-Python39-P0-Release-Centos
+PaddleDetection-Windows-Cuda117-Python310-P01-Release
+PaddleDetection-Windows-Cuda112-Python38-P0-Release
+PaddleDetection-Windows-Cuda116-Python39-P0-Release
+PaddleDetection-WindowsCPU-Intel-Python310-P0CPU-Release
+PaddleDetection-Mac-Intel-Python310-P0CPU-Release
+PaddleDetection-Mac-M1-Python310-P0CPU-Release
