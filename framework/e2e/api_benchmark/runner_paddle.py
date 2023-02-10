@@ -158,6 +158,7 @@ if __name__ == "__main__":
     parser.add_argument("--comment", type=str, default=None, help="your comment")
     parser.add_argument("--test_index", type=str, default=None, help="[case_0] or [case_1] or [case_2]")
     parser.add_argument("--enable_backward", type=str, default="True", help="if True, enable backward test")
+    parser.add_argument("--storage", type=str, default=None, help="path of storage.yaml")
     args = parser.parse_args()
 
     # 验证参数组合正确性
@@ -168,7 +169,7 @@ if __name__ == "__main__":
     if args.mode == "schedule":
         # 判断log文件是否干净
         delete("./log")
-        db = DB()
+        db = DB(storage=args.storage)
         try:
             db.init_mission(
                 framework=args.framework,

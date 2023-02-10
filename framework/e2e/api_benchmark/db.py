@@ -11,6 +11,7 @@ import socket
 import platform
 from datetime import datetime
 import json
+import yaml
 import paddle
 import pymysql
 from utils.logger import logger
@@ -19,11 +20,24 @@ from utils.logger import logger
 class DB(object):
     """DB class"""
 
-    def __init__(self):
-        self.db = pymysql.connect(
-            # 手动填写内容
-        )
+    def __init__(self, storage="storage.yaml"):
+        host, port, user, password, database = self.load_storge(storage)
+        self.db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset="utf8")
         self.cursor = self.db.cursor()
+
+    def load_storge(self, storage):
+        """
+        解析storage.yaml的内容添加到self.db
+        """
+        with open(storage, "r") as f:
+            data = yaml.safe_load(f)
+        tmp_dict = data.get("PRODUCTION").get("mysql").get("api_benchmark")
+        host = tmp_dict.get("host")
+        port = tmp_dict.get("port")
+        user = tmp_dict.get("user")
+        password = tmp_dict.get("password")
+        database = tmp_dict.get("db_name")
+        return host, port, user, password, database
 
     def timestamp(self):
         """

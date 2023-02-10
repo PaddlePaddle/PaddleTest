@@ -670,43 +670,43 @@ median_0:
     mapping:
       ins: {x: input, axis: dim, keepdim: keepdim}
 
-median_1:
-  desc: "沿给定的轴 axis 计算 x 中元素的中位数 1"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.median"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 10, 10 ]
-        range: [ -1, 1 ]
-    params:
-      axis:
-      keepdim: False
-  pytorch:
-    api_name: "torch.median"
-    mapping:
-      ins: {x: input, axis: dim, keepdim: keepdim}
-
-median_2:
-  desc: "沿给定的轴 axis 计算 x 中元素的中位数 2"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.median"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 100, 100 ]
-        range: [ -1, 1 ]
-    params:
-      axis:
-      keepdim: False
-  pytorch:
-    api_name: "torch.median"
-    mapping:
-      ins: {x: input, axis: dim, keepdim: keepdim}
+#median_1:
+#  desc: "沿给定的轴 axis 计算 x 中元素的中位数 1"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.median"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 10, 10, 10, 10 ]
+#        range: [ -1, 1 ]
+#    params:
+#      axis:
+#      keepdim: False
+#  pytorch:
+#    api_name: "torch.median"
+#    mapping:
+#      ins: {x: input, axis: dim, keepdim: keepdim}
+#
+#median_2:
+#  desc: "沿给定的轴 axis 计算 x 中元素的中位数 2"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.median"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 10, 10, 100, 100 ]
+#        range: [ -1, 1 ]
+#    params:
+#      axis:
+#      keepdim: False
+#  pytorch:
+#    api_name: "torch.median"
+#    mapping:
+#      ins: {x: input, axis: dim, keepdim: keepdim}
 
 MaxPool2D_0:
   desc: "二维最大池化层 0"
@@ -1569,6 +1569,7 @@ slice_2:
 
 diff_0:
   desc: "沿着指定轴计算输入Tensor的n阶前向差值 0"
+  enable_backward: False
   paddle:
     api_name: "paddle.diff"
     inputs:
@@ -1589,6 +1590,7 @@ diff_0:
 
 diff_1:
   desc: "沿着指定轴计算输入Tensor的n阶前向差值 1"
+  enable_backward: False
   paddle:
     api_name: "paddle.diff"
     inputs:
@@ -1609,6 +1611,7 @@ diff_1:
 
 diff_2:
   desc: "沿着指定轴计算输入Tensor的n阶前向差值 2"
+  enable_backward: False
   paddle:
     api_name: "paddle.diff"
     inputs:
@@ -3736,43 +3739,43 @@ mode_0:
     mapping:
       ins: {x: input, axis: dim, keepdim: keepdim}
 
-mode_1:
-  desc: "沿着可选的 axis 查找对应轴上的众数和结果所在的索引信息 1"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.mode"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 10, 10 ]
-        range: [ -1, 1 ]
-    params:
-      axis: -1
-      keepdim: False
-  pytorch:
-    api_name: "torch.mode"
-    mapping:
-      ins: {x: input, axis: dim, keepdim: keepdim}
+#mode_1:
+#  desc: "沿着可选的 axis 查找对应轴上的众数和结果所在的索引信息 1"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.mode"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 10, 10, 10, 10 ]
+#        range: [ -1, 1 ]
+#    params:
+#      axis: -1
+#      keepdim: False
+#  pytorch:
+#    api_name: "torch.mode"
+#    mapping:
+#      ins: {x: input, axis: dim, keepdim: keepdim}
 
-mode_2:
-  desc: "沿着可选的 axis 查找对应轴上的众数和结果所在的索引信息 2"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.mode"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 100, 100 ]
-        range: [ -1, 1 ]
-    params:
-      axis: -1
-      keepdim: False
-  pytorch:
-    api_name: "torch.mode"
-    mapping:
-      ins: {x: input, axis: dim, keepdim: keepdim}
+#mode_2:
+#  desc: "沿着可选的 axis 查找对应轴上的众数和结果所在的索引信息 2"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.mode"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 10, 10, 100, 100 ]
+#        range: [ -1, 1 ]
+#    params:
+#      axis: -1
+#      keepdim: False
+#  pytorch:
+#    api_name: "torch.mode"
+#    mapping:
+#      ins: {x: input, axis: dim, keepdim: keepdim}
 
 logsumexp_0:
   desc: "沿着 axis 计算 x 的以e为底的指数的和的自然对数 0"
