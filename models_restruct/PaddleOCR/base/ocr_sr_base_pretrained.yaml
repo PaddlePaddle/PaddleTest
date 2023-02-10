@@ -3,7 +3,7 @@ train:
   cmd : python -m paddle.distributed.launch tools/train.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.use_gpu=True
+    - -o Global.use_gpu=${use_gpu}
     - Global.epoch_num=1
     - Global.save_epoch_step=1
     - Global.eval_batch_step=200
@@ -22,13 +22,15 @@ eval:
   cmd:  python tools/eval.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - -o Global.use_gpu=${use_gpu}
+    - Global.pretrained_model=output/${qa_yaml_name}/latest
 
   name: pretrained
   cmd:  python tools/eval.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.pretrained_model=${model}/best_accuracy
+    - -o Global.use_gpu=${use_gpu}
+    - Global.pretrained_model=${model}/best_accuracy
 
   result:
     exit_code:
@@ -40,7 +42,8 @@ infer:
   cmd:  python tools/infer_sr.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - -o Global.use_gpu=${use_gpu}
+    - Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.infer_img="./doc/imgs_words_en/word_52.png"
     - Global.test_batch_size_per_card=1
 
@@ -48,7 +51,8 @@ infer:
   cmd:  python tools/infer_sr.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.pretrained_model=${model}/best_accuracy
+    - -o Global.use_gpu=${use_gpu}
+    - Global.pretrained_model=${model}/best_accuracy
     - Global.infer_img="./doc/imgs_words_en/word_52.png"
     - Global.test_batch_size_per_card=1
 
@@ -62,14 +66,16 @@ export:
   cmd:  python tools/export_model.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - -o Global.use_gpu=${use_gpu}
+    - Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.save_inference_dir=./models_inference/${qa_yaml_name}
 
   name: pretrained
   cmd:  python tools/export_model.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.pretrained_model=${model}/best_accuracy
+    - -o Global.use_gpu=${use_gpu}
+    - Global.pretrained_model=${model}/best_accuracy
     - Global.save_inference_dir=./models_inference/${model}
 
   result:
@@ -84,7 +90,7 @@ predict:
     - --image_dir="./doc/imgs_words_en/word_52.png"
     - --sr_model_dir="./models_inference/"${qa_yaml_name}
     - --sr_image_shape=${image_shape}
-    - --use_gpu=True
+    - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
 
@@ -94,7 +100,7 @@ predict:
     - --image_dir="./doc/imgs_words_en/word_52.png"
     - --sr_model_dir="./models_inference/"${model}
     - --sr_image_shape=${image_shape}
-    - --use_gpu=True
+    - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
 

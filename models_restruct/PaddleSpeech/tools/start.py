@@ -12,6 +12,7 @@ import logging
 import zipfile
 import argparse
 import subprocess
+import platform
 import yaml
 import wget
 import numpy as np
@@ -87,6 +88,17 @@ class PaddleSpeech_Start(object):
         prepare_pretrained_model
         """
         print("start prepare data for every model!!")
+        sysstr = platform.system()
+        if sysstr == "Darwin" and platform.machine() == "x86_64":
+            if "/var/root/.local/bin" not in os.environ["PATH"]:
+                # mac interl: installed in '/var/root/.local/bin' which is not on PATH.
+                os.environ["PATH"] += os.pathsep + "/var/root/.local/bin"
+
+        if sysstr == "Linux":
+            if "/root/.local/bin" not in os.environ["PATH"]:
+                # linux：paddlespeech are installed in '/root/.local/bin' which is not on PATH
+                os.environ["PATH"] += os.pathsep + "/root/.local/bin"  # 注意修改你的路径
+
         speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
         speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
         self.data_path = speech_map[self.model]["data_path"]
@@ -148,8 +160,14 @@ class PaddleSpeech_Start(object):
             if os.path.exists("exp"):
                 shutil.rmtree("exp")
 
+            sysstr = platform.system()
+            if sysstr == "Linux":
+                if os.path.exists("/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"):
+                    src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"
+                else:
+                    src_path = "/home/data/cfs/models_ce/PaddleSpeech_t2s/preprocess_data"
+
             if not os.path.exists("dump") and (self.model != "waveflow"):
-                src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"
                 os.symlink(os.path.join(src_path, self.data_path, "dump"), "dump")
 
             if self.model == "transformer_tts":
@@ -212,6 +230,8 @@ waveflow_ljspeech_ckpt_0.3.zip"
                         "        base: ./base/speech_cli_base.yaml" + os.linesep,
                         "    windows:" + os.linesep,
                         "        base: ./base/speech_cli_base.yaml" + os.linesep,
+                        "    windows_cpu:" + os.linesep,
+                        "        base: ./base/speech_cli_base.yaml" + os.linesep,
                     )
                 )
 
@@ -255,7 +275,9 @@ waveflow_ljspeech_ckpt_0.3.zip"
         # 进入repo中
         speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
         speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
-        self.category = speech_map[self.model]["category"]
+
+        if "paddlespeech_cli" not in self.model:
+            self.category = speech_map[self.model]["category"]
 
         if "paddlespeech_cli" in self.model:
             self.prepare_cli_cmd()

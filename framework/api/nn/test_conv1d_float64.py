@@ -7,7 +7,6 @@ test Conv1D
 from apibase import APIBase
 from apibase import randtool
 import paddle
-import paddle.fluid as fluid
 import pytest
 import numpy as np
 
@@ -54,8 +53,8 @@ def test_conv1d_base():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -80,8 +79,8 @@ def test_conv1d():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -106,8 +105,8 @@ def test_conv1d1():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -137,8 +136,8 @@ def test_conv1d2():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -163,8 +162,8 @@ def test_conv1d3():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -189,8 +188,8 @@ def test_conv1d4():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -222,8 +221,8 @@ def test_conv1d5():
         stride=stride,
         padding=padding,
         groups=groups,
-        weight_attr=fluid.initializer.ConstantInitializer(value=1),
-        bias_attr=fluid.initializer.ConstantInitializer(value=0),
+        weight_attr=paddle.nn.initializer.Constant(value=1),
+        bias_attr=paddle.nn.initializer.Constant(value=0),
     )
 
 
@@ -248,8 +247,8 @@ def test_conv1d6():
         kernel_size=kernel_size,
         stride=stride,
         padding=padding,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )
 
 
@@ -276,8 +275,8 @@ def test_conv1d7():
         stride=stride,
         padding=padding,
         data_format=data_format,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )
 
 
@@ -304,8 +303,8 @@ def test_conv1d8():
         stride=stride,
         padding=padding,
         padding_mode=padding_mode,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )
 
 
@@ -332,8 +331,8 @@ def test_conv1d9():
         stride=stride,
         padding=padding,
         padding_mode=padding_mode,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )
 
 
@@ -360,8 +359,8 @@ def test_conv1d10():
         stride=stride,
         padding=padding,
         padding_mode=padding_mode,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )
 
 
@@ -390,8 +389,8 @@ def test_conv1d11():
         padding=padding,
         padding_mode=padding_mode,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )
 
 
@@ -420,8 +419,8 @@ def test_conv1d12():
         padding=padding,
         padding_mode=padding_mode,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )
 
 
@@ -450,8 +449,8 @@ def test_conv1d13():
         padding=padding,
         padding_mode=padding_mode,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )
 
 
@@ -480,8 +479,8 @@ def test_conv1d14():
         padding=padding,
         padding_mode=padding_mode,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )
 
 
@@ -510,6 +509,6 @@ def test_conv1d15():
         padding=padding,
         padding_mode=padding_mode,
         dilation=dilation,
-        weight_attr=fluid.initializer.ConstantInitializer(value=0.7),
-        bias_attr=fluid.initializer.ConstantInitializer(value=-0.3),
+        weight_attr=paddle.nn.initializer.Constant(value=0.7),
+        bias_attr=paddle.nn.initializer.Constant(value=-0.3),
     )

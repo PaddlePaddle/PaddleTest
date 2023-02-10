@@ -66,7 +66,10 @@ class Paddle3D_Build(Model_Build):
 
             sysstr = platform.system()
             if sysstr == "Linux":
-                src_path = "/ssd2/ce_data/Paddle3D"
+                if os.path.exists("/ssd2/ce_data/Paddle3D"):
+                    src_path = "/ssd2/ce_data/Paddle3D"
+                else:
+                    src_path = "/home/data/cfs/models_ce/Paddle3D"
             elif sysstr == "Windows":
                 src_path = "F:\\ce_data\\Paddle3D"
             elif sysstr == "Darwin":
@@ -75,18 +78,27 @@ class Paddle3D_Build(Model_Build):
             if not os.path.exists("datasets"):
                 os.symlink(src_path, "datasets")
             print("build dataset!")
-
+            os.system("apt-get update")
+            os.system("apt-get install -y python3-setuptools")
+            os.system("python -m pip install -U scikit-learn")
+            os.system("python -m pip install -U nuscenes-devkit")
+            # linux-python3.10
+            os.system("python -m pip install -U pip setuptools")
+            os.system("python -m pip install numba")
+            os.system("cat requirements.txt | xargs -n 1 pip install -i https://mirror.baidu.com/pypi/simple")
+            # paddle3d
             os.system("python -m pip install .")
+
             print("build wheel!")
 
             # petr
             if not os.path.exists("data"):
                 os.makedirs("data")
-                os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petr", "data/nuscenes")
+                os.symlink(os.path.join(src_path, "nuscenes_petr"), "data/nuscenes")
                 os.makedirs("/workspace/datset/nuScenes/", exist_ok=True)
-                os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petr", "/workspace/datset/nuScenes/nuscenes")
+                os.symlink(os.path.join(src_path, "nuscenes_petr"), "/workspace/datset/nuScenes/nuscenes")
 
-                os.symlink("/ssd2/ce_data/Paddle3D/kitti", "data/kitti")
+                os.symlink(os.path.join(src_path, "kitti"), "data/kitti")
 
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))

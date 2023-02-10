@@ -92,7 +92,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda112-Trtoff-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-TagBuild-Training-Linux-Gpu-Cuda11.2-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda112-Trton-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
@@ -125,6 +125,7 @@ fi
 export step=${step:-train}  #阶段 demo:train:multi,single+eval:trained,pretrained, 所有流水线都要自己改
 export branch=${branch:-develop}    # repo的分支，大部分为develop，如果有master dygraph等注意设置!!
 export mode=${mode:-function}   #function只验证功能是否正常  precision验证功能&小数据集精度
+export timeout=${timeout:-3600}   #timeout 为超时取消时间, 单位为秒
 export docker_flag=${docker_flag:-} # 如果北京集群cce环境为False，自己的开发机&release机器不用设置
 
 #### 建议不改的参数
@@ -177,6 +178,7 @@ echo "@@@step: ${step}"
 echo "@@@branch: ${branch}"
 echo "@@@mode: ${mode}"
 echo "@@@docker_flag: ${docker_flag}"
+echo "@@@timeout: ${timeout}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -205,17 +207,31 @@ if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认
     if [ $tc_name == "release_02" ];then
         echo release_02
         export set_cuda=2,3;
-
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia2 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia3 | awk '{print $0}' | xargs kill -9
+        fi
     elif [ $tc_name == "release_03" ];then
         echo release_03
         export set_cuda=4,5;
-
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia4 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia5 | awk '{print $0}' | xargs kill -9
+        fi
     elif [ $tc_name == "release_04" ];then
         echo release_04
         export set_cuda=6,7;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia6 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia7 | awk '{print $0}' | xargs kill -9
+        fi
     else
         echo release_01
         export set_cuda=0,1;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia0 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia1 | awk '{print $0}' | xargs kill -9
+        fi
     fi
 else
     echo already seted CUDA_id  #这里需要再细化下，按下面的方法指定无用，直接默认按common中指定0,1卡了
@@ -269,6 +285,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e system=${system} \
         -e step=${step} \
         -e reponame=${reponame} \
+        -e timeout=${timeout} \
         -e mode=${mode} \
         -e use_build=${use_build} \
         -e branch=${branch} \
@@ -345,9 +362,9 @@ if [[ "${docker_flag}" == "" ]]; then
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
-        python -m pip install -U pip #升级pip
-        python -m pip install -r requirements.txt #预先安装依赖包
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
+        python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
+        python -m pip install --user -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600}
     ' &
     wait $!
     exit $?
@@ -418,7 +435,7 @@ else
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
     git --version;
-    python -m pip install -U pip #升级pip
-    python -m pip install -r requirements.txt #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
+    python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
+    python -m pip install --user -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600}
 fi

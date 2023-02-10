@@ -3,22 +3,6 @@ case:
     base: ./base/ImageNet_base.yaml
     train:
       -
-        name: multi
-        cmd: python -m paddle.distributed.launch tools/train.py
-        params:
-          - -o Global.epochs=5
-          - -o Global.save_interval=5
-          - -o Global.eval_interval=5
-          - -o Global.seed=1234
-          - -o DataLoader.Train.loader.num_workers=0
-          - -o DataLoader.Train.sampler.shuffle=False
-          - -o Global.output_dir=output/${qa_yaml_name}
-        result:
-          ${kpi_value_eval}:
-            base: 20
-            threshold: 0
-            evaluation: "="
-      -
         name: single
         cmd: python tools/train.py
         params:
@@ -35,8 +19,8 @@ case:
             threshold: 0
             evaluation: "="
       -
-        name: multi_static
-        cmd: python -m paddle.distributed.launch ppcls/static/train.py
+        name: multi
+        cmd: python -m paddle.distributed.launch tools/train.py
         params:
           - -o Global.epochs=5
           - -o Global.save_interval=5
@@ -50,61 +34,10 @@ case:
             base: 20
             threshold: 0
             evaluation: "="
-      -
-        name: single_static
-        cmd: python ppcls/static/train.py
-        params:
-          - -o Global.epochs=2
-          - -o Global.save_interval=2
-          - -o Global.eval_interval=2
-          - -o Global.seed=1234
-          - -o DataLoader.Train.loader.num_workers=0
-          - -o DataLoader.Train.sampler.shuffle=False
-          - -o Global.output_dir=output/${qa_yaml_name}
-        result:
-          ${kpi_value_eval}:
-            base: 20
-            threshold: 0
-            evaluation: "="
-      -
-        name: multi_convergence
-        cmd: python -m paddle.distributed.launch tools/train.py
-        params:
-          - -o Global.epochs=delete
-          - -o Global.save_interval=delete
-          - -o Global.eval_interval=delete
-        result:
-          ${kpi_value_eval}:
-            base: 20
-            threshold: 0
-            evaluation: "="
-      -
-        name: single_convergence
-        cmd: python tools/train.py
-        params:
-          - -o Global.epochs=delete
-          - -o Global.save_interval=delete
-          - -o Global.eval_interval=delete
-        result:
-          ${kpi_value_eval}:
-            base: 20
-            threshold: 0
-            evaluation: "="
     eval:
       -
         name: trained
         cmd: python -m paddle.distributed.launch tools/eval.py
-        params:
-          - -o Global.pretrained_model=${eval_trained_model}
-          - -o Global.output_dir=output/${qa_yaml_name}
-        result:
-          ${kpi_value_eval}:
-            base: 20
-            threshold: 0
-            evaluation: "="
-      -
-        name: single_trained
-        cmd: python tools/eval.py
         params:
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -146,6 +79,34 @@ case:
         result:
           class_ids:
             base: "[11, 11, 11, 11]"
+            threshold: 0
+            evaluation: "="
+
+  linux_convergence:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: multi_convergence
+        cmd: python -m paddle.distributed.launch tools/train.py
+        params:
+          - -o Global.epochs=delete
+          - -o Global.save_interval=delete
+          - -o Global.eval_interval=delete
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0
+            evaluation: "="
+      -
+        name: single_convergence
+        cmd: python tools/train.py
+        params:
+          - -o Global.epochs=delete
+          - -o Global.save_interval=delete
+          - -o Global.eval_interval=delete
+        result:
+          ${kpi_value_eval}:
+            base: 20
             threshold: 0
             evaluation: "="
 

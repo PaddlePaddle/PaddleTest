@@ -53,8 +53,6 @@ ppcls^configs^ImageNet^ESNet^ESNet_x0_25.yaml
 ppcls^configs^ImageNet^ResNeXt101_wsl^ResNeXt101_32x8d_wsl.yaml
 ppcls^configs^Products^ResNet50_vd_SOP.yaml
 ppcls^configs^Vehicle^ResNet50_ReID.yaml
-ppcls^configs^slim^ResNet50_vehicle_reid_quantization.yaml
-ppcls^configs^slim^ResNet50_vd_quantization.yaml
 ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5_dml.yaml
 ppcls^configs^DeepHash^DSHSD.yaml
 ppcls^configs^PULC^language_classification^MobileNetV3_small_x0_35.yaml
@@ -67,3 +65,9 @@ ppcls^configs^PULC^person_exists^MobileNetV3_small_x0_35.yaml
 ppcls^configs^PULC^person_attribute^MobileNetV3_small_x0_35.yaml
 ppcls^configs^PULC^text_image_orientation^MobileNetV3_small_x0_35.yaml
 ppcls^configs^reid^strong_baseline^baseline.yaml
+ppcls^configs^Products^ResNet50_vd_Aliproduct.yaml
+ppcls^configs^Products^MV3_Large_1x_Aliproduct_DLBHC.yaml
+ppcls^configs^Vehicle^PPLCNet_2.5x_ReID.yaml
+ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5_udml.yaml
+ppcls^configs^DeepHash^LCDSH.yaml
+ppcls^configs^reid^strong_baseline^softmax_triplet.yaml

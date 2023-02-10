@@ -26,7 +26,7 @@ echo -e '*****************detection_version****'
 git rev-parse HEAD
 #find modified config file of this pr
 rm -rf config_list
-git diff --numstat --diff-filter=AMR upstream/${branch} | grep .yml | grep configs | grep -v kunlun | grep -v xpu | grep -v reader | grep -v test | grep -v oidv5 |grep -v _base_ |grep -v datasets | grep -v runtime |grep -v slim | grep -v roadsign | grep -v pruner | grep -v bytetrack | grep -v deepsort | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v deploy | grep -v layout | grep -v pcb | awk '{print $NF}' | tee config_list
+git diff --numstat --diff-filter=AMR upstream/${branch} | grep .yml | grep configs | grep -v kunlun | grep -v xpu | grep -v reader | grep -v test | grep -v oidv5 |grep -v _base_ |grep -v datasets | grep -v runtime |grep -v slim | grep -v roadsign | grep -v pruner | grep -v bytetrack | grep -v deepsort | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v deploy | grep -v layout | grep -v pcb | grep -v objects365 | awk '{print $NF}' | tee config_list
 echo -e '******************config_list****'
 cat config_list
 #create log dir
@@ -112,7 +112,7 @@ TRAIN(){
     python -m paddle.distributed.launch \
     tools/train.py \
            -c ${config} \
-           -o TrainReader.batch_size=1 epoch=1 >log/${model}/${model}_${mode}.log 2>&1
+           -o TrainReader.batch_size=1 epoch=1 SemiTrainReader.sup_batch_size=1 SemiTrainReader.unsup_batch_size=1 >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 TRAIN_CPU(){
@@ -120,7 +120,7 @@ TRAIN_CPU(){
     export CPU_NUM=10
     python tools/train.py \
            -c ${config} \
-           -o TrainReader.batch_size=1 epoch=1 use_gpu=false >log/${model}/${model}_${mode}.log 2>&1
+           -o TrainReader.batch_size=1 SemiTrainReader.sup_batch_size=1 SemiTrainReader.unsup_batch_size=1 epoch=1 use_gpu=false >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 TRAIN_AMP(){
@@ -128,7 +128,7 @@ TRAIN_AMP(){
     python tools/train.py \
            --amp \
            -c ${config} \
-           -o TrainReader.batch_size=1 epoch=1 >log/${model}/${model}_${mode}.log 2>&1
+           -o TrainReader.batch_size=1 SemiTrainReader.sup_batch_size=1 SemiTrainReader.unsup_batch_size=1 epoch=1 >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 TRAIN_WITH_EVAL(){
@@ -136,7 +136,7 @@ TRAIN_WITH_EVAL(){
     python -m paddle.distributed.launch \
     tools/train.py \
            -c ${config} \
-           -o TrainReader.batch_size=1 epoch=1 --eval >log/${model}/${model}_${mode}.log 2>&1
+           -o TrainReader.batch_size=1 SemiTrainReader.sup_batch_size=1 SemiTrainReader.unsup_batch_size=1 epoch=1 --eval >log/${model}/${model}_${mode}.log 2>&1
     print_result
 }
 EVAL(){

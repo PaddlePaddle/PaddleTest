@@ -3,7 +3,7 @@ train:
   cmd : python -m paddle.distributed.launch tools/train.py
   params:
     - -c ${rd_yaml_path}
-    - -o Global.use_gpu=True
+    - -o Global.use_gpu=${use_gpu}
     - Global.epoch_num=1
     - Global.save_epoch_step=1
     - Global.eval_batch_step=200
@@ -23,6 +23,8 @@ eval:
   params:
     - -c ${rd_yaml_path}
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.use_gpu=${use_gpu}
+
 
 eval:
   name: pretrained
@@ -30,6 +32,7 @@ eval:
   params:
     - -c ${rd_yaml_path}
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.use_gpu=${use_gpu}
 
   result:
     exit_code:
@@ -44,6 +47,7 @@ infer:
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.infer_img="doc/imgs_words_en/word_10.png"
     - Global.test_batch_size_per_card=1
+    - Global.use_gpu=${use_gpu}
 
   name: pretrained
   cmd:  python tools/infer_cls.py
@@ -52,6 +56,7 @@ infer:
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.infer_img="doc/imgs_words_en/word_10.png"
     - Global.test_batch_size_per_card=1
+    - Global.use_gpu=${use_gpu}
 
   result:
     exit_code:
@@ -65,6 +70,7 @@ export:
     - -c ${rd_yaml_path}
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.save_inference_dir=./models_inference/${qa_yaml_name}
+    - Global.use_gpu=${use_gpu}
 
   name: pretrained
   cmd:  python tools/export_model.py
@@ -72,6 +78,7 @@ export:
     - -c ${rd_yaml_path}
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.save_inference_dir=./models_inference/${qa_yaml_name}
+    - Global.use_gpu=${use_gpu}
   result:
     exit_code:
       base: 0
@@ -83,7 +90,7 @@ predict:
   params:
     - --image_dir="doc/imgs_words_en/word_10.png"
     - --cls_model_dir="./models_inference/"${qa_yaml_name}
-    - --use_gpu=True
+    - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
 
@@ -92,9 +99,22 @@ predict:
   params:
     - --image_dir="doc/imgs_words_en/word_10.png"
     - --cls_model_dir="./models_inference/"${qa_yaml_name}
-    - --use_gpu=True
+    - --use_gpu=${use_gpu}
     - --use_tensorrt=False
     - --enable_mkldnn=False
+api:
+  name: trained_C_plus_plus_GPU
+  path: deploy/cpp_infer
+  cmd:  ./build/ppocr
+  params:
+    - --image_dir=../../doc/imgs_words_en/word_10.png
+    - --cls_model_dir=../../models_inference/${qa_yaml_name}
+    - --rec=false
+    - --det=false
+    - --cls=true
+    - --use_angle_cls=true
+    - --use_gpu=${use_gpu}
+    - --enable_mkldnn=false
 
   result:
     exit_code:

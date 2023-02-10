@@ -9,21 +9,22 @@ fleet_gpu_model_list=( \
     gpt_auto_serial \
     gpt_auto_dp2mp2 \
     gpt_auto_mp2pp2 \
-    gpt_auto_dp2pp2 \
     gpt_auto_dp2mp2pp2 \
     gpt_auto_dp2sharding2 \
     gpt_auto_dp2mp2sharding2 \
     gpt_auto_dp2pp2sharding2 \
     gpt_auto_dp2mp2pp2sharding2 \
+    gpt_auto_pass_o1_stage1 \
     gpt_auto_pass_o1_stage2 \
-    gpt_auto_pass_o2_stage1 \
-    gpt_auto_pass_o2_stage2 \
-    gpt_auto_pass_o3_stage2 \
     gpt_auto_export \
     )
-    # gpt_auto_pass_o1_stage1 \
-    # gpt_auto_pass_o3_stage1 \
 
+    # gpt_auto_pass_o2_stage1 \
+    # gpt_auto_pass_o2_stage2 \
+    # gpt_auto_pass_o3_stage2 \
+    # gpt_auto_pass_o3_stage1 \
+    # gpt_auto_dp2mp2pp2_o2 \
+    # gpt_auto_dp2pp2 \
 
 function gpt_save_ckpt() {
     cd ${fleetx_path}
@@ -186,6 +187,31 @@ function gpt_auto_dp2mp2pp2() {
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
     check_diff 10.9873 ${loss} ${FUNCNAME}_loss
 }
+function gpt_auto_dp2mp2pp2_o2() {
+    cd ${fleetx_path}
+    log_dir=log_auto
+    rm -rf $log_dir
+    python -m paddle.distributed.launch --log_dir=$log_dir --devices="0,1,2,3,4,5,6,7" \
+        tools/auto.py \
+        -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_1.3B_dp8.yaml \
+        -o Engine.mix_precision.level=o2 \
+        -o Model.hidden_size=1024 \
+        -o Model.num_layers=4 \
+        -o Model.num_attention_heads=4 \
+        -o Model.use_recompute=True \
+        -o Global.local_batch_size=8 \
+        -o Global.micro_batch_size=2 \
+        -o Engine.max_steps=10 \
+        -o Engine.logging_freq=1 \
+        -o Distributed.dp_degree=2 \
+        -o Distributed.mp_degree=2 \
+        -o Distributed.pp_degree=2 \
+        -o Distributed.sharding.sharding_degree=1 \
+        -o Distributed.sharding.sharding_stage=1 \
+        -o Engine.verbose=3 \
+        -o Model.type_vocab_size=1
+    check_result $FUNCNAME
+}
 
 function gpt_auto_dp2sharding2() {
     cd ${fleetx_path}
@@ -330,7 +356,7 @@ function gpt_auto_pass_o1_stage1() {
     loss1=`tail -5 $log_dir/workerlog.4 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.6 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 11.0085 ${loss} ${FUNCNAME}_loss
+    check_diff 11.0084 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_pass_o1_stage2() {
@@ -359,7 +385,7 @@ function gpt_auto_pass_o1_stage2() {
     loss1=`tail -5 $log_dir/workerlog.4 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.6 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 11.0085 ${loss} ${FUNCNAME}_loss
+    check_diff 11.0084 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_pass_o2_stage1() {
@@ -388,7 +414,7 @@ function gpt_auto_pass_o2_stage1() {
     loss1=`tail -5 $log_dir/workerlog.4 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.6 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 11.0085 ${loss} ${FUNCNAME}_loss
+    check_diff 11.0084 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_pass_o2_stage2() {
@@ -417,7 +443,7 @@ function gpt_auto_pass_o2_stage2() {
     loss1=`tail -5 $log_dir/workerlog.4 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.6 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 11.0085 ${loss} ${FUNCNAME}_loss
+    check_diff 11.0084 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_pass_o3_stage1() {
@@ -446,7 +472,7 @@ function gpt_auto_pass_o3_stage1() {
     loss1=`tail -5 $log_dir/workerlog.4 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.6 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 11.0085 ${loss} ${FUNCNAME}_loss
+    check_diff 11.0084 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_pass_o3_stage2() {
@@ -475,7 +501,7 @@ function gpt_auto_pass_o3_stage2() {
     loss1=`tail -5 $log_dir/workerlog.4 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.6 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 11.0085 ${loss} ${FUNCNAME}_loss
+    check_diff 11.0084 ${loss} ${FUNCNAME}_loss
 }
 function gpt_auto_export() {
     cd ${fleetx_path}

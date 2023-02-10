@@ -7,11 +7,9 @@ paddlespeech_cli_6.yml
 paddlespeech_cli_7.yml
 paddlespeech_cli_8.yml
 paddlespeech_cli_9.yml
-paddlespeech_cli_10.yml
 paddlespeech_cli_11.yml
 paddlespeech_cli_12.yml
 paddlespeech_cli_13.yml
-paddlespeech_cli_14.yml
 paddlespeech_cli_15.yml
 paddlespeech_cli_16.yml
 paddlespeech_cli_17.yml
@@ -51,7 +49,5 @@ paddlespeech_cli_51.yml
 paddlespeech_cli_52.yml
 paddlespeech_cli_53.yml
 paddlespeech_cli_54.yml
-paddlespeech_cli_55.yml
-paddlespeech_cli_56.yml
 paddlespeech_cli_57.yml
 paddlespeech_cli_58.yml

@@ -14,6 +14,7 @@ import argparse
 import platform
 import yaml
 import wget
+import paddle
 import numpy as np
 
 logger = logging.getLogger("ce")
@@ -71,8 +72,13 @@ class PaddleOCR_Start(object):
                         else:
                             image_shape = image_shape[0]
                             print("len(image_shape)={}".format(len(image_shape.split(","))))
+
+                            #  image_shape: [100, 32] # W H
+                            if algorithm == "NRTR":
+                                image_shape = "32,100"
                             if len(image_shape.split(",")) == 2:
                                 image_shape = "1," + image_shape
+
                         print(image_shape)
                         break
                     else:
@@ -85,11 +91,10 @@ class PaddleOCR_Start(object):
             else:
                 self.env_dict["kie_token"] = "kie_token_ser_re"
         # use_gpu
-        sysstr = platform.system()
-        if sysstr == "Darwin":
-            self.env_dict["use_gpu"] = "False"
-        else:
+        if paddle.is_compiled_with_cuda():
             self.env_dict["use_gpu"] = "True"
+        else:
+            self.env_dict["use_gpu"] = "False"
 
     def prepare_pretrained_model(self):
         """
@@ -125,32 +130,85 @@ class PaddleOCR_Start(object):
             os.makedirs("cases")
 
         case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
+        det_distill = ["det_dml", "det_distill", "det_dml", "det_cml"]
         if not os.path.exists(case_file):
-            with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
-                if self.model in pretrained_yaml[self.category].keys():
+            if any(item in self.qa_yaml_name for item in det_distill):
+                with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
                     f.writelines(
                         (
                             "case:" + os.linesep,
                             "    linux:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    windows:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
+                            "    windows_cpu:" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    mac:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                            "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                         )
                     )
-                else:
-                    f.writelines(
-                        (
-                            "case:" + os.linesep,
-                            "    linux:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
-                            "    windows:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
-                            "    mac:" + os.linesep,
-                            "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+            else:
+                with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
+                    if self.model in pretrained_yaml[self.category].keys():
+                        f.writelines(
+                            (
+                                "case:" + os.linesep,
+                                "    linux:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "    windows:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "    windows_cpu:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "    mac:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                            )
                         )
-                    )
+                    else:
+                        f.writelines(
+                            (
+                                "case:" + os.linesep,
+                                "    linux:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "    windows:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "    windows_cpu:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "    mac:" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                            )
+                        )
+
+    def prepare_dataset(self):
+        """
+        prepare_dataset
+        """
+        path_now = os.getcwd()
+        os.chdir("PaddleOCR")
+        sysstr = platform.system()
+        if sysstr == "Linux":
+            if os.path.exists("/ssd2/ce_data/PaddleOCR"):
+                src_path = "/ssd2/ce_data/PaddleOCR"
+            else:
+                src_path = "/home/data/cfs/models_ce/PaddleOCR"
+
+            if not os.path.exists("train_data"):
+                print("PaddleOCR train_data link:")
+                shutil.rmtree("train_data")
+                os.symlink(os.path.join(src_path, "train_data"), "train_data")
+                os.system("ll")
+                if not os.path.exists("train_data"):
+                    os.system("ln -s /home/data/cfs/models_ce/PaddleOCR/train_data train_data")
+                    os.system("ll")
+            if not os.path.exists("pretrain_models"):
+                print("PaddleOCR pretrain_models link:")
+                shutil.rmtree("pretrain_models")
+                os.symlink(os.path.join(src_path, "pretrain_models"), "pretrain_models")
+                os.system("ll")
+                if not os.path.exists("pretrain_models"):
+                    os.system("ln -s /home/data/cfs/models_ce/PaddleOCR/pretrain_models pretrain_models")
+                    os.system("ll")
+
+        os.chdir(path_now)
 
     def build_prepare(self):
         """
@@ -163,6 +221,7 @@ class PaddleOCR_Start(object):
             logger.info("build prepare_config_params failed")
         self.prepare_pretrained_model()
         self.gengrate_test_case()
+        self.prepare_dataset()
         os.environ[self.reponame] = json.dumps(self.env_dict)
         for k, v in self.env_dict.items():
             os.environ[k] = v
