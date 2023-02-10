@@ -81,13 +81,17 @@ class Paddle3D_Build(Model_Build):
             # os.system("apt-get update")
             # os.system("apt-get install -y python3-setuptools")
             os.system("python -m pip install -U scikit-learn")
-            os.system("python -m pip install -U nuscenes-devkit")
+            # os.system("python -m pip install -U nuscenes-devkit")
             # linux-python3.10
             # os.system("python -m pip install -U pip setuptools")
-            os.system("python -m pip install numba")
+            # os.system("python -m pip install numba")
             # os.system("cat requirements.txt | xargs -n 1 pip install -i https://mirror.baidu.com/pypi/simple")
             # paddle3d
-            os.system("python -m pip install .")
+            sysstr = platform.system()
+            if sysstr == "Linux":
+                # linux：xx are installed in '/root/.local/bin' which is not on PATH
+                os.environ["PATH"] += os.pathsep + "/root/.local/bin" 
+            os.system("python -m pip install . ")
 
             print("build wheel!")
 
