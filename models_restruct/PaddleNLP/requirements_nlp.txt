@@ -10,7 +10,7 @@ tool_helpers
 editdistance
 h5py
 attrdict==2.0.1
-PyYAML==5.4.1
+parl
 subword_nmt==0.3.7
 pyrouge
 beautifulsoup4
@@ -25,5 +25,4 @@ yacs
 rouge
 paddleocr
 easydict
-pgl
 lac
