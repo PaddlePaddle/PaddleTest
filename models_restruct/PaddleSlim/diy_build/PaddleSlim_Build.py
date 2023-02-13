@@ -59,6 +59,8 @@ class PaddleSlim_Build(Model_Build):
         path_now = os.getcwd()
         platform = self.system
         os.chdir("PaddleSlim") 
+        logger.info("install required whl")
+        os.system("python -m pip install --user setuptools")
         os.system("python -m pip install --user pycocotools")
         os.system("python -m pip install --user sklearn==0.0")
         os.system("python -m pip install --user numpy==1.23.1")
@@ -66,6 +68,7 @@ class PaddleSlim_Build(Model_Build):
         os.system("python -m pip install --user -U paddleseg==2.5.0")
         os.system("python -m pip install --user -U paddledet")
         os.system("python -m pip install --user -U paddlenlp")
+        os.system("python -m pip install --user -U x2paddle==1.3.9")
         os.system("python -m pip install --user {}".format(self.paddle_whl))
         os.system("python -m pip install -r requirements.txt")
         os.system("python setup.py bdist_wheel")

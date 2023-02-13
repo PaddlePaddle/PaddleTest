@@ -1031,8 +1031,8 @@ demo_act_clas_ResNet50_vd(){
 
 demo_act_clas_MobileNetV3(){
 	cd ${slim_dir}/example/auto_compression/image_classification/
-	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_ssld_infer.tar
-  tar -xf MobileNetV3_large_x1_0_ssld_infer.tar
+	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_infer.tar
+  tar -xf MobileNetV3_large_x1_0_infer.tar
 
 	sed -i 's/eval_iter: 5000/eval_iter: 10/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
 	sed -i 's/epochs: 2/epochs: 1/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
