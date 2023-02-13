@@ -99,12 +99,12 @@ class PaddleNLP_Build(Model_Build):
         os.chdir(path_now)
 
         if cmd_return:
-            logger.info("repo {} python -m pip install paddlenlp failed".format(self.reponame))
+            logger.info("repo {} python -m pip install-failed".format(self.reponame))
 
         os.system("python -m pip list")
         import paddle
 
-        print("last paddle commit:", paddle.version.commit)
+        print("paddle-commit:", paddle.version.commit)
 
         return 0
 
