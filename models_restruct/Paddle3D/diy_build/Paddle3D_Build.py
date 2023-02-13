@@ -96,6 +96,7 @@ class Paddle3D_Build(Model_Build):
                 os.system('/usr/bin/python3.10  -m pip install --upgrade setuptools')
                 os.system('python -m pip install --upgrade pip')
                 os.system('apt-get install -y python3-setuptools')
+                os.system('apt-get install python-setuptools')
                 os.system('python -m pip install ez_setup')
                 os.system('curl -O http://python-distribute.org/distribute_setup.py')
                 os.system('python distribute_setup.py')
