@@ -124,6 +124,12 @@ def run():
             content["TrainConfig"]["eval_iter"] = 10
             content["Global"]["model_dir"] = current_path + "/yolov5s.onnx"
             content["Global"]["coco_dataset_dir"] = current_path + "/coco"
+        elif qa_yaml == "case^demo^distillation^MobileNetV2_MobileNetV2_x0_25":
+            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
+        elif qa_yaml == "case^demo^distillation^ResNet101_vd_Resnet50":
+            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
+        elif qa_yaml == "case^demo^distillation^ResNet50_vd_MobileNet":
+            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
         elif qa_yaml == "example^auto_compression^image_classification^configs^MobileNetV1^qat_dis":
             paddleslim_start.wget_and_tar(
                 "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar"
