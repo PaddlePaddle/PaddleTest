@@ -3388,25 +3388,25 @@ solve_1:
     mapping:
       ins: {x: A, y: B}
 
-solve_2:
-  desc: "计算线性方程组的解  2"
-  paddle:
-    api_name: "paddle.linalg.solve"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 1000, 1000 ]
-        range: [ -1, 1 ]
-      y:
-        random: true
-        dtype: "float32"
-        shape: [ 1000, 1000 ]
-        range: [ -1, 1 ]
-  pytorch:
-    api_name: "torch.linalg.solve"
-    mapping:
-      ins: {x: A, y: B}
+#solve_2:
+#  desc: "计算线性方程组的解  2"
+#  paddle:
+#    api_name: "paddle.linalg.solve"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 1000, 1000 ]
+#        range: [ -1, 1 ]
+#      y:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 1000, 1000 ]
+#        range: [ -1, 1 ]
+#  pytorch:
+#    api_name: "torch.linalg.solve"
+#    mapping:
+#      ins: {x: A, y: B}
 
 BCELoss_0:
   desc: "二值交叉熵损失值 0"
