@@ -17,7 +17,7 @@ fp_item=fp16o2
 bs_item=128
 run_mode=DP8-MP1
 device_num=N1C8
-yaml_path=./ask/classification/swin/configs/swin_base_patch4_window7_224_in1k_1n8c_dp_fp16o2.yaml
+yaml_path=./task/classification/swin/configs/swin_base_patch4_window7_224_in1k_1n8c_dp_fp16o2.yaml
 max_iter=6259 # epoch=5
 
 bash ./tests/test_tipc/classification/benchmark_common/prepare.sh
