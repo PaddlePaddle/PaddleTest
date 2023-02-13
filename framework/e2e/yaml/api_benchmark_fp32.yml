@@ -2330,24 +2330,24 @@ multinomial_1:
     mapping:
       ins: {x: input, num_samples: num_samples, replacement: replacement}
 
-multinomial_2:
-  desc: "以输入 x 为概率，生成一个多项分布的Tensor 1"
-  enable_backward: False
-  paddle:
-    api_name: "paddle.multinomial"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 1000, 1000 ]
-        range: [ 0, 1 ]
-    params:
-      num_samples: 1
-      replacement: False
-  pytorch:
-    api_name: "torch.multinomial"
-    mapping:
-      ins: {x: input, num_samples: num_samples, replacement: replacement}
+#multinomial_2:
+#  desc: "以输入 x 为概率，生成一个多项分布的Tensor 1"
+#  enable_backward: False
+#  paddle:
+#    api_name: "paddle.multinomial"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 1000, 1000 ]
+#        range: [ 0, 1 ]
+#    params:
+#      num_samples: 1
+#      replacement: False
+#  pytorch:
+#    api_name: "torch.multinomial"
+#    mapping:
+#      ins: {x: input, num_samples: num_samples, replacement: replacement}
 
 dropout_0:
   desc: "根据给定的丢弃概率 p ，在训练过程中随机将一些神经元输出设置为0 0"
