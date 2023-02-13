@@ -121,6 +121,7 @@ def test_int8_more_bz():
             min_subgraph_size=30,
             # use_calib_mode=True,
             with_benchmark=True,
+            base_latency_ms=1.553,
         )
 
         del test_suite  # destroy class to save memory
@@ -162,6 +163,7 @@ def test_mkldnn_int8():
         cpu_num_threads=10,
         with_benchmark=True,
         delta=1e-1,
+        base_latency_ms=7.838,
     )
 
     del test_suite2  # destroy class to save memory
