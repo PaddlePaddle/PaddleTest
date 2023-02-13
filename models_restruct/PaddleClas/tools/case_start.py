@@ -35,9 +35,9 @@ class PaddleClas_Case_Start(object):
         """
         执行准备过程
         """
-        if "CINN_convergence" in self.qa_yaml_name:
-            logger.info("CINN_convergence tag is: {}".format(self.case_name.split("train_")[-1]))
-            
+        if "dy2st_convergence" in self.qa_yaml_name:
+            logger.info("dy2st_convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
             os.environ["FLAGS_prim_all"] = ""
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
             os.environ["FLAGS_use_cinn"] = ""
@@ -51,20 +51,16 @@ class PaddleClas_Case_Start(object):
             os.environ["FLAGS_conv_workspace_size_limit"] = "400"
             logger.info("set FLAGS_conv_workspace_size_limit {}".format(os.getenv("FLAGS_conv_workspace_size_limit")))
 
-            if "dy2st_cinn" == self.case_name.split("train_")[-1]:
+            if self.case_name.split("train_")[-1] == "dy2st_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
-                logger.info("set FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
-            elif "dy2st_prim" == self.case_name.split("train_")[-1]:
+            elif self.case_name.split("train_")[-1] == "dy2st_prim":
                 os.environ["FLAGS_prim_all"] = "true"
-                logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
-            elif "dy2st_prim_cinn" == self.case_name.split("train_")[-1]:
+            elif self.case_name.split("train_")[-1] == "dy2st_prim_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"
-                logger.info("set FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
-                logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
-            else:
-                logger.info("use defalt FLAGS_use_cinn is {}".format(os.getenv("FLAGS_use_cinn")))
-                logger.info("use defalt FLAGS_prim_all is {}".format(os.getenv("FLAGS_prim_all")))
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("set FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
         else:
             return 0
 
