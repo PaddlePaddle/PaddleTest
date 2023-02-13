@@ -156,7 +156,7 @@ export models_name=${models_name:-models_restruct}  #后面复制使用，和模
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
-wget -q ${CE_Link} #需要全局定义
+wget -q ${CE_Link}  --no-check-certificate #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export
@@ -186,7 +186,7 @@ echo "@@@timeout: ${timeout}"
 if [[ -d "../task" ]];then
     mv ../task .  #如果预先下载直接mv
 else
-    wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy  >/dev/null
+    wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy  --no-check-certificate >/dev/null
     tar xf PaddleTest.tar.gz >/dev/null 2>&1
     mv PaddleTest task
 fi
@@ -270,7 +270,7 @@ if [[ "${docker_flag}" == "" ]]; then
         --name ${docker_name} \
         --network=host \
         --shm-size 128G \
-        -d  -v $(pwd):/workspace \
+        -v $(pwd):/workspace \
         -v /home/:/home/ \
         -v /mnt:/mnt  \
         -v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi \
