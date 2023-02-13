@@ -263,17 +263,17 @@ if [[ "${docker_flag}" == "" ]]; then
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
     export CUDA_SO="$(\ls /usr/lib64/libcuda* | grep -v 418 | xargs -I{} echo '-v {}:{}') $(\ls /usr/lib64/libnvidia* | grep -v 418 | grep -v ".1.1.2" | xargs -I{} echo '-v {}:{}')"
-    export DEVICES=$(\ls /dev/nvidia* | xargs -I{} echo '--device {}:{}')
+    # export DEVICES=$(\ls /dev/nvidia* | xargs -I{} echo '--device {}:{}')
     export NVIDIA_SMI="-v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi"
 
-    docker run ${CUDA_SO} ${DEVICES} ${NVIDIA_SMI} 
+    docker run ${CUDA_SO} ${DEVICES} ${NVIDIA_SMI} -i --rm \
         --name ${docker_name} \
         --network=host \
+        --shm-size 128G \
         -d  -v $(pwd):/workspace \
         -v /home/:/home/ \
         -v /mnt:/mnt  \
         -v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi \
-        -w /workspace   \
         -e AK=${AK} \
         -e SK=${SK} \
         -e bce_whl_url=${bce_whl_url} \
@@ -302,8 +302,9 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
-        --shm-size 128G \
-        -it ${Image_version}  /bin/bash -c '
+        -w /workspace   \
+        ${Image_version}  \
+        /bin/bash -c '
 
         ldconfig;
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/:/usr/local/lib/
@@ -376,3 +377,4 @@ if [[ "${docker_flag}" == "" ]]; then
     ' &
     wait $!
     exit $?
+fi
