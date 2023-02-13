@@ -59,6 +59,9 @@ class PaddleNLP_Build(Model_Build):
         """
         path_now = os.getcwd()
         platform = self.system
+        os.environ["no_proxy"]="bcebos.com,huggingface.co,baidu.com"
+        print(os.environ["no_proxy"])
+
         if platform == "linux":
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
