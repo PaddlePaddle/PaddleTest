@@ -38,10 +38,10 @@ class PaddleClas_Case_Start(object):
         if "dy2st_convergence" in self.qa_yaml_name:
             logger.info("dy2st_convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
-            os.environ["FLAGS_prim_all"] = ""
-            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
-            os.environ["FLAGS_use_cinn"] = ""
-            logger.info("set FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
+            os.environ["FLAGS_prim_all"] = "false"
+            logger.info("set org FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+            os.environ["FLAGS_use_cinn"] = "0"
+            logger.info("set org FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
             os.environ["FLAGS_CONVERT_GRAPH_TO_PROGRAM"] = "1"
             logger.info("set FLAGS_CONVERT_GRAPH_TO_PROGRAM {}".format(os.getenv("FLAGS_CONVERT_GRAPH_TO_PROGRAM")))
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
