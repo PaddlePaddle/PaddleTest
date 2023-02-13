@@ -91,10 +91,14 @@ class Paddle3D_Build(Model_Build):
             if sysstr == "Linux":
                 # linux：xx are installed in '/root/.local/bin' which is not on PATH
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"
-            os.system('python -m pip uninstall -y setuptools')
-            os.system('python -m pip install --upgrade setuptools')
-            os.system('python -m pip install --upgrade pip')
-            os.system("python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple")
+                # setuptools not found on python3.10
+                os.system('python -m pip uninstall -y setuptools')
+                os.system('python -m pip install --upgrade setuptools')
+                os.system('python -m pip install --upgrade pip')
+                os.system('apt-get install -y python3-setuptools')
+                os.system('curl -O https://bootstrap.pypa.io/get-pip.py')
+                os.system('python get-pip.py')
+                os.system("python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install . ")
           
 
