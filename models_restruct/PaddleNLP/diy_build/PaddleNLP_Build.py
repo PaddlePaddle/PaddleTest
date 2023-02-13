@@ -33,6 +33,7 @@ class PaddleNLP_Build(Model_Build):
         self.set_cuda = args.set_cuda
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
+        self.python_version = args.Python_version
 
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
@@ -81,14 +82,13 @@ class PaddleNLP_Build(Model_Build):
         else:
             print(" Dont't know paddle branch")
 
-        # if python==3.9 python==3.10:
-        #     pgl can't build
-        # else:
-        #     install pgl
+        import nltk
+        nltk.download("punkt")
+        from visualdl import LogWriter
 
-        # import nltk
-        # nltk.download("punkt")
-        # from visualdl import LogWriter
+        if self.python_version=='38':
+            os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
+
 
         os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
         # os.system("python setup.py bdist_wheel")

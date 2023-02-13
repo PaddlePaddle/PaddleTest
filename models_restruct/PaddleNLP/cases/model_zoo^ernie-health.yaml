@@ -62,6 +62,7 @@ case:
             threshold: 1
             evaluation: "="
     eval: skipped
+    infer: skipped
     export: skipped
     predict: skipped
 
