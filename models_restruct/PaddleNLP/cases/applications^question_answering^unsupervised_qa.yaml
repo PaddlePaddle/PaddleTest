@@ -146,7 +146,7 @@ case:
           - --filtration_model_path uie-base-qa-filter-v1
           - --batch_size 8
           - --a_max_answer_candidates 10
-          - --a_prompt '答案'
+          - --a_prompt "答案"
           - --a_position_prob 0.01
           - --q_num_return_sequences 3
           - --q_max_question_length 50

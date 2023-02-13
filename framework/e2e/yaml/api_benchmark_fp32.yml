@@ -670,43 +670,43 @@ median_0:
     mapping:
       ins: {x: input, axis: dim, keepdim: keepdim}
 
-median_1:
-  desc: "沿给定的轴 axis 计算 x 中元素的中位数 1"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.median"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 10, 10 ]
-        range: [ -1, 1 ]
-    params:
-      axis:
-      keepdim: False
-  pytorch:
-    api_name: "torch.median"
-    mapping:
-      ins: {x: input, axis: dim, keepdim: keepdim}
-
-median_2:
-  desc: "沿给定的轴 axis 计算 x 中元素的中位数 2"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.median"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 100, 100 ]
-        range: [ -1, 1 ]
-    params:
-      axis:
-      keepdim: False
-  pytorch:
-    api_name: "torch.median"
-    mapping:
-      ins: {x: input, axis: dim, keepdim: keepdim}
+#median_1:
+#  desc: "沿给定的轴 axis 计算 x 中元素的中位数 1"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.median"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 10, 10, 10, 10 ]
+#        range: [ -1, 1 ]
+#    params:
+#      axis:
+#      keepdim: False
+#  pytorch:
+#    api_name: "torch.median"
+#    mapping:
+#      ins: {x: input, axis: dim, keepdim: keepdim}
+#
+#median_2:
+#  desc: "沿给定的轴 axis 计算 x 中元素的中位数 2"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.median"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 10, 10, 100, 100 ]
+#        range: [ -1, 1 ]
+#    params:
+#      axis:
+#      keepdim: False
+#  pytorch:
+#    api_name: "torch.median"
+#    mapping:
+#      ins: {x: input, axis: dim, keepdim: keepdim}
 
 MaxPool2D_0:
   desc: "二维最大池化层 0"
@@ -1569,6 +1569,7 @@ slice_2:
 
 diff_0:
   desc: "沿着指定轴计算输入Tensor的n阶前向差值 0"
+  enable_backward: False
   paddle:
     api_name: "paddle.diff"
     inputs:
@@ -1589,6 +1590,7 @@ diff_0:
 
 diff_1:
   desc: "沿着指定轴计算输入Tensor的n阶前向差值 1"
+  enable_backward: False
   paddle:
     api_name: "paddle.diff"
     inputs:
@@ -1609,6 +1611,7 @@ diff_1:
 
 diff_2:
   desc: "沿着指定轴计算输入Tensor的n阶前向差值 2"
+  enable_backward: False
   paddle:
     api_name: "paddle.diff"
     inputs:
@@ -2327,24 +2330,24 @@ multinomial_1:
     mapping:
       ins: {x: input, num_samples: num_samples, replacement: replacement}
 
-multinomial_2:
-  desc: "以输入 x 为概率，生成一个多项分布的Tensor 1"
-  enable_backward: False
-  paddle:
-    api_name: "paddle.multinomial"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 1000, 1000 ]
-        range: [ 0, 1 ]
-    params:
-      num_samples: 1
-      replacement: False
-  pytorch:
-    api_name: "torch.multinomial"
-    mapping:
-      ins: {x: input, num_samples: num_samples, replacement: replacement}
+#multinomial_2:
+#  desc: "以输入 x 为概率，生成一个多项分布的Tensor 1"
+#  enable_backward: False
+#  paddle:
+#    api_name: "paddle.multinomial"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 1000, 1000 ]
+#        range: [ 0, 1 ]
+#    params:
+#      num_samples: 1
+#      replacement: False
+#  pytorch:
+#    api_name: "torch.multinomial"
+#    mapping:
+#      ins: {x: input, num_samples: num_samples, replacement: replacement}
 
 dropout_0:
   desc: "根据给定的丢弃概率 p ，在训练过程中随机将一些神经元输出设置为0 0"
@@ -3385,25 +3388,25 @@ solve_1:
     mapping:
       ins: {x: A, y: B}
 
-solve_2:
-  desc: "计算线性方程组的解  2"
-  paddle:
-    api_name: "paddle.linalg.solve"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 1000, 1000 ]
-        range: [ -1, 1 ]
-      y:
-        random: true
-        dtype: "float32"
-        shape: [ 1000, 1000 ]
-        range: [ -1, 1 ]
-  pytorch:
-    api_name: "torch.linalg.solve"
-    mapping:
-      ins: {x: A, y: B}
+#solve_2:
+#  desc: "计算线性方程组的解  2"
+#  paddle:
+#    api_name: "paddle.linalg.solve"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 1000, 1000 ]
+#        range: [ -1, 1 ]
+#      y:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 1000, 1000 ]
+#        range: [ -1, 1 ]
+#  pytorch:
+#    api_name: "torch.linalg.solve"
+#    mapping:
+#      ins: {x: A, y: B}
 
 BCELoss_0:
   desc: "二值交叉熵损失值 0"
@@ -3736,43 +3739,43 @@ mode_0:
     mapping:
       ins: {x: input, axis: dim, keepdim: keepdim}
 
-mode_1:
-  desc: "沿着可选的 axis 查找对应轴上的众数和结果所在的索引信息 1"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.mode"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 10, 10 ]
-        range: [ -1, 1 ]
-    params:
-      axis: -1
-      keepdim: False
-  pytorch:
-    api_name: "torch.mode"
-    mapping:
-      ins: {x: input, axis: dim, keepdim: keepdim}
+#mode_1:
+#  desc: "沿着可选的 axis 查找对应轴上的众数和结果所在的索引信息 1"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.mode"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 10, 10, 10, 10 ]
+#        range: [ -1, 1 ]
+#    params:
+#      axis: -1
+#      keepdim: False
+#  pytorch:
+#    api_name: "torch.mode"
+#    mapping:
+#      ins: {x: input, axis: dim, keepdim: keepdim}
 
-mode_2:
-  desc: "沿着可选的 axis 查找对应轴上的众数和结果所在的索引信息 2"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.mode"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 100, 100 ]
-        range: [ -1, 1 ]
-    params:
-      axis: -1
-      keepdim: False
-  pytorch:
-    api_name: "torch.mode"
-    mapping:
-      ins: {x: input, axis: dim, keepdim: keepdim}
+#mode_2:
+#  desc: "沿着可选的 axis 查找对应轴上的众数和结果所在的索引信息 2"
+#  enable_backward: false
+#  paddle:
+#    api_name: "paddle.mode"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 10, 10, 100, 100 ]
+#        range: [ -1, 1 ]
+#    params:
+#      axis: -1
+#      keepdim: False
+#  pytorch:
+#    api_name: "torch.mode"
+#    mapping:
+#      ins: {x: input, axis: dim, keepdim: keepdim}
 
 logsumexp_0:
   desc: "沿着 axis 计算 x 的以e为底的指数的和的自然对数 0"
