@@ -97,7 +97,7 @@ class PaddleDetection_Build(Model_Build):
         else:
             subprocess.run(cmd, shell=True)
         # use small data
-        cmd_voc = '{} -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'.format)
+        cmd_voc = '{} -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml'.format(os.getenv("sed"))
         else:
             subprocess.run(cmd_voc, shell=True)
         cmd_iter1 = (
