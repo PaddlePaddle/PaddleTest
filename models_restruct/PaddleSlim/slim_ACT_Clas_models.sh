@@ -1,4 +1,4 @@
-# $1 精度允许diff范围
+# $1 精度允许diff范围 $2 本地待上传目录 $3 上传到bos路径 $4 slim commit
 print_info(){
 if [ $1 -ne 0 ];then
     mv ${log_path}/$2 ${log_path}/FAIL_$2.log
@@ -84,7 +84,10 @@ for model in $(echo ${!dic[*]});do
         if [ $? -eq 0 ];then
             echo "${log_path}/${model}_act_qat precision passed"
             tar -cf ${model}_act_qat.tar ${model}_act_qat
-            mv ${model}_act_qat.tar ${models_tar_path}
+            mv ${model}_act_qat.tar $2
+            unset http_proxy && unset https_proxy
+            python Bos/upload.py $2 $3/${slim_commit}
+            python Bos/upload.py $2 $3
         else
             echo "${log_path}/${model}_act_qat precision failed"
             mv ${model_log} ${log_path}/FAIL_precision_${model}_act_qat.log
