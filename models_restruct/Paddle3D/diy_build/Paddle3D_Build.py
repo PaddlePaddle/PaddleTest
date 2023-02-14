@@ -91,7 +91,30 @@ class Paddle3D_Build(Model_Build):
             if sysstr == "Linux":
                 # linux：xx are installed in '/root/.local/bin' which is not on PATH
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"
+                # setuptools not found on python3.10
+                os.system('/usr/bin/python3.10  -m pip uninstall -y setuptools')
+                os.system('/usr/bin/python3.10  -m pip install --upgrade setuptools')
+                os.system('python -m pip install --upgrade pip')
+                os.system('apt-get install -y python3-setuptools')
+                os.system('apt-get install -y python-setuptools')
+                os.system('python -m pip install ez_setup')
+                os.system('curl -O http://python-distribute.org/distribute_setup.py')
+                os.system('python distribute_setup.py')
+                os.system('easy_install pip')
+                os.system("python -m pip install https://files.pythonhosted.org/packages/34/6a/d89fe6b83a7fa4c39686d8a5cda83b48da0b117a13484f0e294c2cc2c337/setuptools-67.2.0-py3-none-any.whl")
+               
+                os.system('wget https://files.pythonhosted.org/packages/5f/36/7374297692bb9dbd7569a0f84887c7e5e314c41d5d9518cb76fbb130620d/setuptools-67.2.0.tar.gz')
+                os.system('tar xf setuptools-67.2.0.tar.gz')
+                os.system('cd setuptools-67.2.0')
+               
+                os.system("python setup.py build")
+                os.system("python setup.py install”")
+                os.system("cd ..")
+                os.system("python -m pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple")
+
+            sys.path
             os.system("python -m pip install . ")
+          
 
             print("build wheel!")
 
