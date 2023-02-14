@@ -61,7 +61,7 @@ waveflow:
 deepspeech2:
     category: asr
     model_path: examples/tiny/asr0
-    model: deepspeech2
+    model_bin: deepspeech2
     model_yml: conf/deepspeech2.yaml
 conformer:
     category: asr
