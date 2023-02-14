@@ -4,7 +4,7 @@ case:
       -
         name: prepare
         path: model_zoo/uie
-        cmd: mkdir data && cd data wget https://bj.bcebos.com/paddlenlp/datasets/uie/doccano_ext.json && cd ../
+        cmd: mkdir data && cd data && wget https://bj.bcebos.com/paddlenlp/datasets/uie/doccano_ext.json
       -
         name: doccano
         path: model_zoo/uie

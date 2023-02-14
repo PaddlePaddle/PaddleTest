@@ -42,8 +42,8 @@ case:
         path: model_zoo/ernie-layout
         cmd: python -u run_ner.py
         params:
-          - --model_name_or_path ernie-layoutx-base-uncased \
-          - --output_dir ./ernie-layoutx-base-uncased/models/funsd/ \
+          - --model_name_or_path ernie-layoutx-base-uncased
+          - --output_dir ./ernie-layoutx-base-uncased/models/funsd/
           - --dataset_name funsd \
           - --do_train
           - --do_eval
