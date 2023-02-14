@@ -91,7 +91,9 @@ class Paddle3D_Build(Model_Build):
             if sysstr == "Linux":
                 # linux：xx are installed in '/root/.local/bin' which is not on PATH
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"
-            os.system("python -m pip install . ")
+            # os.system("python -m pip install . ")
+            os.system("python setup.py bdist_wheel")
+            os.system(" python -m pip install -U dist/p****.whl")
 
             print("build wheel!")
 
