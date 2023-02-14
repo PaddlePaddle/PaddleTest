@@ -33,6 +33,7 @@ eval:
     - -c ${rd_yaml_path}
     - -o Global.pretrained_model=output/${qa_yaml_name}/latest
     - Global.use_gpu=${use_gpu}
+    - Eval.loader.batch_size_per_card=10
 
   result:
     exit_code:
