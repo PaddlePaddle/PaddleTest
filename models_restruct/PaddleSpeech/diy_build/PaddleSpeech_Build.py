@@ -120,12 +120,18 @@ class PaddleSpeech_Build(Model_Build):
             wget.download("https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav")
             wget.download("https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav")
             os.system('echo "demo1 85236145389.wav \n demo2 85236145389.wav" > vec.job')
+            
             # asr tiny data
-            os.chdir("dataset")
-
-            if os.path.exists("librispeech"):
-                shutil.rmtree("librispeech")
-                os.symlink("/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/deepspeech/librispeech", "librispeech")
+            sysstr = platform.system()
+            if sysstr == "Linux":
+                os.chdir("dataset")                  
+                if os.path.exists("librispeech"):
+                    shutil.rmtree("librispeech")            
+                if os.path.exists("/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/asr/librispeech"):
+                    src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/asr/librispeech"
+                else:
+                    src_path = "/home/data/cfs/models_ce/PaddleSpeech_t2s/preprocess_data/asr/librispeech"
+                os.symlink(src_path, "librispeech")
             os.chdir(path_now)
 
     def build_env(self):
