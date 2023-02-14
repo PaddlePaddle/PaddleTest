@@ -52,15 +52,50 @@ def add_seed(file,old_str,new_str):
     with open(file,"w",encoding="utf-8") as f:
         f.write(file_data)
 
+def change_backend(file,backend,flag):
+    """
+    change models.py backend
+    """
+    file_data = ""
+    if flag==True:
+        index = False
+        with open(file, "r", encoding="utf-8") as f:
+            for line in f:
+                if index==True:
+                    if "# " in line:
+                        line = line.replace("# ", "")
+                    else:
+                        index = False
+                if backend in line:
+                    index = True
+                file_data += line
+        with open(file,"w",encoding="utf-8") as f:
+            f.write(file_data)                
+    else:
+        index = False 
+        with open(file, "r", encoding="utf-8") as f:
+            for line in f:
+                if index==True:
+                    if "Backend paddle" not in line:
+                        line = "# " + line
+                    else:
+                        index = False
+                if backend in line:
+                    index = True
+                file_data += line
+        with open(file,"w",encoding="utf-8") as f:
+            f.write(file_data)
 
 args = parse_args()
 yamldir = YamlLoader(args.file)
 case_num, py = yamldir.get_case(0)
 filedir = py
 alter(filedir, "tf", "paddle")
-
+change_backend(filedir, "Backend paddle", True)
+change_backend(filedir,"Backend tensorflow.compat.v1", False)
 alter(filedir, "model.train(", "model.train(display_every=1,", True, "model.train(0")
 alter(filedir, "model.train(", "losshistory, train_state = model.train(")
+alter(filedir, "display_every=1000,", " ", False)
 alter(filedir, "display_every=1000", " ", False)
 alter(filedir, "display_every=500", " ", False)
 add_seed(filedir, "import deepxde", "import paddle\n")

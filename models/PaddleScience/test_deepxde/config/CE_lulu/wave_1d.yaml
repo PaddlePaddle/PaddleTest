@@ -1,0 +1,5 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_forward/wave_1d.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/wave_1d_lulu_metric.npy"
+    solution_loss_dir: "../standard_data/wave_1d_lulu_loss.npy"
