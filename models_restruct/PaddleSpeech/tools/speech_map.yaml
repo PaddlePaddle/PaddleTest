@@ -118,3 +118,4 @@ paddlespeech_cli_55: paddlespeech whisper --task transcribe --input ./zh.wav
 paddlespeech_cli_56: paddlespeech whisper --task translate --input ./zh.wav
 paddlespeech_cli_57: paddlespeech ssl --task asr --lang en --input ./en.wav
 paddlespeech_cli_58: paddlespeech ssl --task vector --lang en --input ./en.wav
+paddlespeech_cli_59: paddlespeech asr --model conformer_talcs --lang zh_en --codeswitch True --input ./ch_zh_mix.wav

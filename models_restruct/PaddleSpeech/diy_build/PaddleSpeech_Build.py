@@ -116,6 +116,7 @@ class PaddleSpeech_Build(Model_Build):
             wget.download("https://paddlespeech.bj.bcebos.com/PaddleAudio/dog.wav")
             wget.download("https://paddlespeech.bj.bcebos.com/PaddleAudio/zh.wav")
             wget.download("https://paddlespeech.bj.bcebos.com/PaddleAudio/en.wav")
+            wget.download("https://paddlespeech.bj.bcebos.com/PaddleAudio/ch_zh_mix.wav")
             wget.download("https://paddlespeech.bj.bcebos.com/datasets/single_wav/zh/test_long_audio_01.wav")
             wget.download("https://paddlespeech.bj.bcebos.com/vector/audio/85236145389.wav")
             os.system('echo "demo1 85236145389.wav \n demo2 85236145389.wav" > vec.job')
