@@ -58,6 +58,17 @@ waveflow:
     model_path: examples/ljspeech/voc0
     ckpt_name: step-10
 
+deepspeech2:
+    category: asr
+    model_path: examples/tiny/asr0
+    model: deepspeech2
+    model_yml: conf/deepspeech2.yaml
+conformer:
+    category: asr
+    model_path: examples/tiny/asr1
+    model_bin: u2
+    model_yml: conf/transformer.yaml
+
 
 cli:
 paddlespeech_cli_1: paddlespeech cls --input ./cat.wav --topk 10
