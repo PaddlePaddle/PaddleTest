@@ -69,29 +69,29 @@ sed -i '/for step_id, data in enumerate(dataloader):/a\            if step_id ==
 if [ -d 'dataset/coco' ];then
 rm -rf dataset/coco
 fi
-ln -s ${file_path}/data/coco dataset/coco
+ln -s $1/coco dataset/coco
 if [ -d 'dataset/voc' ];then
 rm -rf dataset/voc
 fi
-ln -s ${file_path}/data/pascalvoc dataset/voc
+ln -s $1/pascalvoc dataset/voc
 if [ -d "dataset/mot" ];then rm -rf dataset/mot
 fi
-ln -s ${file_path}/data/mot dataset/mot
+ln -s $1/mot dataset/mot
 if [ -d "dataset/dota" ];then rm -rf dataset/dota
 fi
-ln -s ${file_path}/data/dota dataset/dota
+ln -s $1/dota dataset/dota
 if [ -d "dataset/dota_ms" ];then rm -rf dataset/dota_ms
 fi
-ln -s ${file_path}/data/dota dataset/dota_ms
+ln -s $1/dota dataset/dota_ms
 if [ -d "dataset/mainbody" ];then rm -rf dataset/mainbody
 fi
-ln -s ${file_path}/data/mainbody dataset/mainbody
+ln -s $1/mainbody dataset/mainbody
 if [ -d "dataset/visdrone" ];then rm -rf dataset/visdrone
 fi
-ln -s ${file_path}/data/visdrone dataset/visdrone
+ln -s $1/visdrone dataset/visdrone
 if [ -d "dataset/SKU110K_fixed" ];then rm -rf dataset/SKU110K_fixed
 fi
-ln -s ${file_path}/data/SKU110K_fixed dataset/SKU110K_fixed
+ln -s $1/SKU110K_fixed dataset/SKU110K_fixed
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
