@@ -68,6 +68,11 @@ conformer:
     model_path: examples/tiny/asr1
     model_bin: u2
     model_yml: conf/transformer.yaml
+tal_cs:
+    category: asr
+    model_path: examples/tal_cs/asr1
+    model_bin: u2
+    model_yml: conf/conformer.yaml
 
 
 cli:
