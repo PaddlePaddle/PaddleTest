@@ -102,7 +102,6 @@ def test_trt_fp16_more_bz():
             repeat=1,
             delta=1,
             precision="trt_fp16",
-            result_sort=True,
             dynamic=True,
             shape_range_file="./ppyolo/shape_range.pbtxt",
         )

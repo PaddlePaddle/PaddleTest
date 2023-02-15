@@ -599,7 +599,8 @@ class InferenceTest(object):
         dynamic=False,
         shape_range_file="shape_range.pbtxt",
         tuned=False,
-        result_sort=False,
+        det_top_bbox=False,
+        det_top_bbox_threshold=0.75,
         delete_pass_list=None,
     ):
         """
@@ -672,7 +673,7 @@ class InferenceTest(object):
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
-            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta, det_top_bbox, det_top_bbox_threshold)
 
     def trt_more_bz_dynamic_test(
         self,

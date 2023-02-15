@@ -64,7 +64,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
     else
-        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
     fi
 else
     if [[ ${Image_version} ]];then
@@ -127,7 +127,7 @@ fi
 export step=${step:-train}  #阶段 demo:train:multi,single+eval:trained,pretrained, 所有流水线都要自己改
 export branch=${branch:-develop}    # repo的分支，大部分为develop，如果有master dygraph等注意设置!!
 export mode=${mode:-function}   #function只验证功能是否正常  precision验证功能&小数据集精度
-export timeout=${timeout:-3600}   #timeout 为超时取消时间, 单位为秒
+export timeout=${timeout:-72000}   #timeout 为超时取消时间, 单位为秒
 export docker_flag=${docker_flag:-} # 如果北京集群cce环境为False，自己的开发机&release机器不用设置
 
 #### 建议不改的参数
@@ -156,7 +156,7 @@ export models_name=${models_name:-models_restruct}  #后面复制使用，和模
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
-wget -q ${CE_Link} #需要全局定义
+wget -q ${CE_Link}  --no-check-certificate #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export
@@ -186,7 +186,7 @@ echo "@@@timeout: ${timeout}"
 if [[ -d "../task" ]];then
     mv ../task .  #如果预先下载直接mv
 else
-    wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy  >/dev/null
+    wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy  --no-check-certificate >/dev/null
     tar xf PaddleTest.tar.gz >/dev/null 2>&1
     mv PaddleTest task
 fi
@@ -208,31 +208,31 @@ if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认
     echo "teamcity path:" $tc_name
     if [ $tc_name == "release_02" ];then
         echo release_02
-        export set_cuda=2,3;
+        export set_cuda=1;
+        export DEVICES="--device /dev/nvidia1:/dev/nvidia1 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-modeset:/dev/nvidia-modeset  --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools --device /dev/nvidia-caps:/dev/nvidia-caps"
         if [[ "${docker_flag}" == "" ]]; then
-            fuser -v /dev/nvidia2 | awk '{print $0}' | xargs kill -9
-            fuser -v /dev/nvidia3 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia1 | awk '{print $0}' | xargs kill -9
         fi
     elif [ $tc_name == "release_03" ];then
-        echo release_03
-        export set_cuda=4,5;
+        echo release_02
+        export set_cuda=2;
+        export DEVICES="--device /dev/nvidia2:/dev/nvidia2 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-modeset:/dev/nvidia-modeset  --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools --device /dev/nvidia-caps:/dev/nvidia-caps"
         if [[ "${docker_flag}" == "" ]]; then
-            fuser -v /dev/nvidia4 | awk '{print $0}' | xargs kill -9
-            fuser -v /dev/nvidia5 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia2 | awk '{print $0}' | xargs kill -9
         fi
     elif [ $tc_name == "release_04" ];then
         echo release_04
-        export set_cuda=6,7;
+        export set_cuda=3;
+        export DEVICES="--device /dev/nvidia3:/dev/nvidia3 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-modeset:/dev/nvidia-modeset  --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools --device /dev/nvidia-caps:/dev/nvidia-caps"
         if [[ "${docker_flag}" == "" ]]; then
-            fuser -v /dev/nvidia6 | awk '{print $0}' | xargs kill -9
-            fuser -v /dev/nvidia7 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia3 | awk '{print $0}' | xargs kill -9
         fi
     else
         echo release_01
-        export set_cuda=0,1;
+        export set_cuda=0;
+        export DEVICES="--device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-modeset:/dev/nvidia-modeset  --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools --device /dev/nvidia-caps:/dev/nvidia-caps"
         if [[ "${docker_flag}" == "" ]]; then
             fuser -v /dev/nvidia0 | awk '{print $0}' | xargs kill -9
-            fuser -v /dev/nvidia1 | awk '{print $0}' | xargs kill -9
         fi
     fi
 else
@@ -241,7 +241,6 @@ else
 fi
 
 if [[ "${docker_flag}" == "" ]]; then
-
     echo "before set_cuda: $set_cuda" #在docker外更改set_cuda从0开始计数, 在cce或线下已在docker中不执行
     export set_cuda_back=${set_cuda};
     array=(${set_cuda_back//,/ });
@@ -263,11 +262,18 @@ if [[ "${docker_flag}" == "" ]]; then
     }
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
-    NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
-        --name=${docker_name} --net=host \
-        --shm-size=128G \
+    export CUDA_SO="$(\ls /usr/lib64/libcuda* | grep -v 418 | xargs -I{} echo '-v {}:{}') $(\ls /usr/lib64/libnvidia* | grep -v 418 | grep -v ".1.1.2" | xargs -I{} echo '-v {}:{}')"
+    # export DEVICES=$(\ls /dev/nvidia* | xargs -I{} echo '--device {}:{}')
+    export NVIDIA_SMI="-v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi"
+
+    docker run ${CUDA_SO} ${DEVICES} ${NVIDIA_SMI} -i --rm \
+        --name ${docker_name} \
+        --network=host \
+        --shm-size 128G \
         -v $(pwd):/workspace \
-        -v /ssd2:/ssd2 \
+        -v /home/:/home/ \
+        -v /mnt:/mnt  \
+        -v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi \
         -e AK=${AK} \
         -e SK=${SK} \
         -e bce_whl_url=${bce_whl_url} \
@@ -296,11 +302,12 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
-        -w /workspace \
+        -w /workspace   \
         ${Image_version}  \
         /bin/bash -c '
 
         ldconfig;
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/:/usr/local/lib/
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
             case ${Python_version} in
@@ -370,74 +377,4 @@ if [[ "${docker_flag}" == "" ]]; then
     ' &
     wait $!
     exit $?
-else
-    ldconfig;
-    #额外的变量, PORT_RANGE是出现IP_ANY:36986端口占用报错暂时屏蔽一些,221108新出现60636被占用
-    export PORT_RANGE=62000:65536
-    if [[ `yum --help` =~ "yum" ]];then
-        echo "centos"
-        case ${Python_version} in
-        36)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
-        ;;
-        37)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-        ;;
-        38)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-        ;;
-        39)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
-        ;;
-        310)
-        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
-        export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
-        ;;
-        esac
-    else
-        echo "ubuntu"
-        case ${Python_version} in
-        36)
-        mkdir run_env_py36;
-        ln -s $(which python3.6) run_env_py36/python;
-        ln -s $(which pip3.6) run_env_py36/pip;
-        export PATH=$(pwd)/run_env_py36:${PATH};
-        ;;
-        37)
-        mkdir run_env_py37;
-        ln -s $(which python3.7) run_env_py37/python;
-        ln -s $(which pip3.7) run_env_py37/pip;
-        export PATH=$(pwd)/run_env_py37:${PATH};
-        ;;
-        38)
-        mkdir run_env_py38;
-        ln -s $(which python3.8) run_env_py38/python;
-        ln -s $(which pip3.8) run_env_py38/pip;
-        export PATH=$(pwd)/run_env_py38:${PATH};
-        ;;
-        39)
-        mkdir run_env_py39;
-        ln -s $(which python3.9) run_env_py39/python;
-        ln -s $(which pip3.9) run_env_py39/pip;
-        export PATH=$(pwd)/run_env_py39:${PATH};
-        ;;
-        310)
-        mkdir run_env_py310;
-        ln -s $(which python3.10) run_env_py310/python;
-        ln -s $(which pip3.10) run_env_py310/pip;
-        export PATH=$(pwd)/run_env_py310:${PATH};
-        ;;
-        esac
-    fi
-
-    nvidia-smi;
-    python -c "import sys; print(sys.version_info[:])";
-    git --version;
-    python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
-    python -m pip install --user -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600}
 fi
