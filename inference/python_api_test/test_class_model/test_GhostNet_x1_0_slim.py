@@ -44,7 +44,8 @@ def test_config():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./GhostNet_x1_0_act_qat/inference.pdmodel", params_file="./GhostNet_x1_0_act_qat/inference.pdiparams"
+        model_file="./GhostNet_x1_0_act_qat/inference.pdmodel",
+        params_file="./GhostNet_x1_0_act_qat/inference.pdiparams",
     )
     test_suite.config_test()
 
@@ -59,7 +60,8 @@ def test_disable_gpu():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./GhostNet_x1_0_act_qat/inference.pdmodel", params_file="./GhostNet_x1_0_act_qat/inference.pdiparams"
+        model_file="./GhostNet_x1_0_act_qat/inference.pdmodel",
+        params_file="./GhostNet_x1_0_act_qat/inference.pdiparams",
     )
     batch_size = 1
     fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
@@ -142,7 +144,8 @@ def test_mkldnn_int8():
     batch_size = 1
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./GhostNet_x1_0_act_qat/inference.pdmodel", params_file="./GhostNet_x1_0_act_qat/inference.pdiparams"
+        model_file="./GhostNet_x1_0_act_qat/inference.pdmodel",
+        params_file="./GhostNet_x1_0_act_qat/inference.pdiparams",
     )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -153,7 +156,8 @@ def test_mkldnn_int8():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(
-        model_file="./GhostNet_x1_0_act_qat/inference.pdmodel", params_file="./GhostNet_x1_0_act_qat/inference.pdiparams"
+        model_file="./GhostNet_x1_0_act_qat/inference.pdmodel",
+        params_file="./GhostNet_x1_0_act_qat/inference.pdiparams",
     )
     test_suite2.mkldnn_test(
         input_data_dict,
