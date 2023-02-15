@@ -117,7 +117,7 @@ class PaddleOCR_Build(Model_Build):
             #    )
 
             # kie requirements
-            os.system('python -m pip uninstall -y paddlenlp')
+            os.system("python -m pip uninstall -y paddlenlp")
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
 
             if sysstr == "Windows":
