@@ -35,8 +35,8 @@ fleet_gpu_model_list=( \
     imagen_text2im_2B_64x64_sharding8 \
     imagen_text2im_64x64_DebertaV2_dp8 \
     imagen_super_resolution_256_single_card \
+    imagen_super_resolution_256_dp8 \
     )
-    # imagen_super_resolution_256_dp8 \
 
 
 function gpt_preprocess_data() {
