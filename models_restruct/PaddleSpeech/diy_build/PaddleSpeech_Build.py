@@ -123,13 +123,13 @@ class PaddleSpeech_Build(Model_Build):
 
             # asr tiny data
             sysstr = platform.system()
-            if sysstr == "Linux":        
+            if sysstr == "Linux":
                 os.chdir("dataset")
                 if os.path.exists("/ssd2/ce_data/PaddleSpeech_t2s/asr"):
                     src_path = "/ssd2/ce_data/PaddleSpeech_t2s/asr"
                 else:
                     src_path = "/home/data/cfs/models_ce/PaddleSpeech_t2s/asr"
-                
+
                 # asr librispeech
                 if os.path.exists("librispeech"):
                     shutil.rmtree("librispeech")
