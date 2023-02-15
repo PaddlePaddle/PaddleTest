@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-model_item=CE_gpt
+model_item=gpt
 dp_degree=1
 mp_degree=4
 pp_degree=1
