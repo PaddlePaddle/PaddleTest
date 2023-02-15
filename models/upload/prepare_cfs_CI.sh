@@ -1,4 +1,5 @@
 # $1：挂载点ip $2:挂载目录
+unset http_proxy && unset https_proxy 
 apt-get install nfs-common -y
 if [ -d "$2" ];then
    rm -rf $2
