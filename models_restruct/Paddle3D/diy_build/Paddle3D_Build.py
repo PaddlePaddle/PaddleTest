@@ -93,7 +93,6 @@ class Paddle3D_Build(Model_Build):
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"
             os.system("python -m pip install . ")
 
-
             print("build wheel!")
 
             # petr
