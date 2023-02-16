@@ -71,6 +71,8 @@ class PaddleSlim_Build(Model_Build):
         os.system("python -m pip install --user -U x2paddle==1.3.9")
         os.system("python -m pip install --user {}".format(self.paddle_whl))
         os.system("python -m pip install -r requirements.txt")
+        os.system("python -m pip install wheel")
+        os.system("python -m pip install twine")
         os.system("python setup.py bdist_wheel")
         os.system("python -m pip uninstall paddleslim -y")
         cmd_return = os.system("python -m pip install -U dist/paddleslim*.whl")
