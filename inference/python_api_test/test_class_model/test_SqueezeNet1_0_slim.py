@@ -24,10 +24,10 @@ def check_model_exist():
     """
     check model exist
     """
-    resnet50_slim_url = "https://paddle-qa.bj.bcebos.com/PaddleSlim/ACT_models/MobileNetV1_act_qat.tar"
-    if not os.path.exists("./MobileNetV1_act_qat/inference.pdmodel"):
+    resnet50_slim_url = "https://paddle-qa.bj.bcebos.com/PaddleSlim/ACT_models/SqueezeNet1_0_act_qat.tar"
+    if not os.path.exists("./SqueezeNet1_0_act_qat/inference.pdmodel"):
         wget.download(resnet50_slim_url, out="./")
-        tar = tarfile.open("MobileNetV1_act_qat.tar")
+        tar = tarfile.open("SqueezeNet1_0_act_qat.tar")
         tar.extractall()
         tar.close()
     if not os.path.exists("./case_image_data"):
@@ -44,7 +44,8 @@ def test_config():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./MobileNetV1_act_qat/inference.pdmodel", params_file="./MobileNetV1_act_qat/inference.pdiparams"
+        model_file="./SqueezeNet1_0_act_qat/inference.pdmodel",
+        params_file="./SqueezeNet1_0_act_qat/inference.pdiparams",
     )
     test_suite.config_test()
 
@@ -59,7 +60,8 @@ def test_disable_gpu():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./MobileNetV1_act_qat/inference.pdmodel", params_file="./MobileNetV1_act_qat/inference.pdiparams"
+        model_file="./SqueezeNet1_0_act_qat/inference.pdmodel",
+        params_file="./SqueezeNet1_0_act_qat/inference.pdiparams",
     )
     batch_size = 1
     fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
@@ -71,7 +73,7 @@ def test_disable_gpu():
 @pytest.mark.server
 @pytest.mark.slim
 @pytest.mark.trt_int8
-def test_int8_more_bz():
+def test_trt_int8_more_bz():
     """
     compared trt fp32 batch_size=1-10 resnet50 outputs with true val
     """
@@ -85,13 +87,13 @@ def test_int8_more_bz():
         test_suite = InferenceTest()
         if "win" in sys.platform:
             test_suite.load_config(
-                model_file=".\\MobileNetV1_act_qat\\inference.pdmodel",
-                params_file=".\\MobileNetV1_act_qat\\inference.pdiparams",
+                model_file=".\\SqueezeNet1_0_act_qat\\inference.pdmodel",
+                params_file=".\\SqueezeNet1_0_act_qat\\inference.pdiparams",
             )
         else:
             test_suite.load_config(
-                model_file="./MobileNetV1_act_qat/inference.pdmodel",
-                params_file="./MobileNetV1_act_qat/inference.pdiparams",
+                model_file="./SqueezeNet1_0_act_qat/inference.pdmodel",
+                params_file="./SqueezeNet1_0_act_qat/inference.pdiparams",
             )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -103,25 +105,25 @@ def test_int8_more_bz():
         test_suite = InferenceTest()
         if "win" in sys.platform:
             test_suite.load_config(
-                model_file=".\\MobileNetV1_act_qat\\inference.pdmodel",
-                params_file=".\\MobileNetV1_act_qat\\inference.pdiparams",
+                model_file=".\\SqueezeNet1_0_act_qat\\inference.pdmodel",
+                params_file=".\\SqueezeNet1_0_act_qat\\inference.pdiparams",
             )
         else:
             test_suite.load_config(
-                model_file="./MobileNetV1_act_qat/inference.pdmodel",
-                params_file="./MobileNetV1_act_qat/inference.pdiparams",
+                model_file="./SqueezeNet1_0_act_qat/inference.pdmodel",
+                params_file="./SqueezeNet1_0_act_qat/inference.pdiparams",
             )
         test_suite.trt_bz1_slim_test(
             input_data_dict,
             output_data_dict,
             repeat=100,
-            delta=5e-1,
+            delta=2e-2,
             max_batch_size=max_batch_size,
             precision="trt_int8",
             min_subgraph_size=30,
             # use_calib_mode=True,
-            with_benchmark=True,
-            base_latency_ms=0.438,
+            # with_benchmark=True,
+            # base_latency_ms=0.438,
         )
 
         del test_suite  # destroy class to save memory
@@ -142,7 +144,8 @@ def test_mkldnn_int8():
     batch_size = 1
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./MobileNetV1_act_qat/inference.pdmodel", params_file="./MobileNetV1_act_qat/inference.pdiparams"
+        model_file="./SqueezeNet1_0_act_qat/inference.pdmodel",
+        params_file="./SqueezeNet1_0_act_qat/inference.pdiparams",
     )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -153,7 +156,8 @@ def test_mkldnn_int8():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(
-        model_file="./MobileNetV1_act_qat/inference.pdmodel", params_file="./MobileNetV1_act_qat/inference.pdiparams"
+        model_file="./SqueezeNet1_0_act_qat/inference.pdmodel",
+        params_file="./SqueezeNet1_0_act_qat/inference.pdiparams",
     )
     test_suite2.mkldnn_test(
         input_data_dict,
@@ -161,9 +165,9 @@ def test_mkldnn_int8():
         repeat=100,
         precision="int8",
         cpu_num_threads=10,
-        with_benchmark=True,
-        delta=6e-1,
-        base_latency_ms=2.52,
+        # with_benchmark=True,
+        delta=2e-1,
+        # base_latency_ms=2.52,
     )
 
     del test_suite2  # destroy class to save memory

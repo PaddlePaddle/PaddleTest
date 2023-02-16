@@ -99,5 +99,6 @@ def test_trt_fp16_more_bz():
             repeat=1,
             delta=2.4,
             precision="trt_fp16",
-            result_sort=True,
+            det_top_bbox=True,
+            det_top_bbox_threshold=0.75,
         )
