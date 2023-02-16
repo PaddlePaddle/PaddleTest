@@ -32,7 +32,8 @@ def check_model_exist():
         tar.extractall()
         tar.close()
         clip_model_extra_op(
-            path_prefix="./ViT_large_patch16_224/inference", output_model_path="./ViT_large_patch16_224/inference"
+            path_prefix="./ViT_large_patch16_224/inference",
+            output_model_path="./ViT_large_patch16_224/inference",
         )
 
 
@@ -85,7 +86,6 @@ def test_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             precision="trt_fp32",
-            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
             tuned=True,
         )
@@ -102,7 +102,6 @@ def test_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             precision="trt_fp32",
-            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
         )
 
@@ -144,7 +143,6 @@ def test_jetson_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             precision="trt_fp32",
-            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
             tuned=True,
         )
@@ -161,7 +159,6 @@ def test_jetson_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             precision="trt_fp32",
-            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
         )
 
@@ -196,7 +193,9 @@ def test_trt_fp32_bz1_multi_thread():
         params_file="./ViT_large_patch16_224/inference.pdiparams",
     )
     test_suite2.trt_bz1_multi_thread_test(
-        input_data_dict, output_data_dict, precision="trt_fp32", delete_pass_list=["preln_residual_bias_fuse_pass"]
+        input_data_dict,
+        output_data_dict,
+        precision="trt_fp32",
     )
 
     del test_suite2  # destroy class to save memory

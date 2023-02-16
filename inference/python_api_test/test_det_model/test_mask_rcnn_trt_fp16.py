@@ -95,6 +95,5 @@ def test_trt_fp16_more_bz():
             precision="trt_fp16",
             dynamic=True,
             tuned=False,
-            result_sort=True,
             min_subgraph_size=35,
         )
