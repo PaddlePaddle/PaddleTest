@@ -11,7 +11,7 @@ train:
     - Global.save_model_dir=output/${qa_yaml_name}
     - Train.loader.batch_size_per_card=4
     - Global.print_batch_step=1
-    - Train.loader.shuffle=False 
+    - Train.loader.shuffle=False
     - Train.loader.num_workers=False
   result:
     exit_code:
