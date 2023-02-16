@@ -30,7 +30,7 @@ train:
     - Train.loader.num_workers=False
 
   result:
-    exit_code:
+    loss:
       base: 0
       threshold: 0
       evaluation: "="
