@@ -25,4 +25,5 @@ yacs
 rouge
 paddleocr
 easydict
+rouge_score
 lac
