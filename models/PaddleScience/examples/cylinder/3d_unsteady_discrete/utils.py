@@ -272,13 +272,8 @@ def compile_and_convert_back_to_program(
         func6-3
         """
         build_strategy = paddle.static.BuildStrategy()
-        exec_strategy = paddle.static.ExecutionStrategy()
 
-        exec_strategy.num_threads = 1
-
-        compiled_program = paddle.static.CompiledProgram(program).with_data_parallel(
-            loss_name=loss_name, build_strategy=build_strategy, exec_strategy=exec_strategy
-        )
+        compiled_program = paddle.static.CompiledProgram(program, build_strategy=build_strategy)
 
         return compiled_program
 
