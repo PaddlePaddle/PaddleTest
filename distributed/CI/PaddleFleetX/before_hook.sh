@@ -17,15 +17,15 @@ function requirements() {
     echo "=============================paddle commit============================="
     python -c "import paddle;print(paddle.__git_commit__)"
 
-    if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        cd /paddle
-        echo " ---------- PaddleFleetX develop Slim---------- "
-        export https_proxy=${proxy}
-        export http_proxy=${proxy}
-        sed -i "s/git+https/#git+https/g" ./PaddleFleetX/requirements.txt
-        python -m pip uninstall paddleslim -y
-        python -m pip install https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl --no-cache-dir --force-reinstall --no-dependencies
-        unset http_proxy && unset https_proxy
+    # if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
+    #     cd /paddle
+    #     echo " ---------- PaddleFleetX develop Slim---------- "
+    #     export https_proxy=${proxy}
+    #     export http_proxy=${proxy}
+    #     sed -i "s/git+https/#git+https/g" ./PaddleFleetX/requirements.txt
+    #     python -m pip uninstall paddleslim -y
+    #     python -m pip install https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl --no-cache-dir --force-reinstall --no-dependencies
+    #     unset http_proxy && unset https_proxy
 
         # echo " ---------- PaddleFleetX develop paddlenlp---------- "
         # export https_proxy=${proxy}
@@ -33,7 +33,7 @@ function requirements() {
         # sed -i "s/paddlenlp/#paddlenlp/g" ./PaddleFleetX/requirements.txt
         # python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html --force-reinstall
         # unset http_proxy && unset https_proxy
-    fi
+    # fi
 
     # install requirements
     cd ${fleetx_path}
