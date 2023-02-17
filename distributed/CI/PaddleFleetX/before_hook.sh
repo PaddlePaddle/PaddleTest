@@ -17,23 +17,23 @@ function requirements() {
     echo "=============================paddle commit============================="
     python -c "import paddle;print(paddle.__git_commit__)"
 
-    if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        cd /paddle
-        echo " ---------- PaddleFleetX develop Slim---------- "
-        export https_proxy=${proxy}
-        export http_proxy=${proxy}
-        sed -i "s/git+https/#git+https/g" ./PaddleFleetX/requirements.txt
-        python -m pip uninstall paddleslim -y
-        python -m pip install https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl --no-cache-dir --force-reinstall --no-dependencies
-        unset http_proxy && unset https_proxy
+    # if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
+    #     cd /paddle
+    #     echo " ---------- PaddleFleetX develop Slim---------- "
+    #     export https_proxy=${proxy}
+    #     export http_proxy=${proxy}
+    #     sed -i "s/git+https/#git+https/g" ./PaddleFleetX/requirements.txt
+    #     python -m pip uninstall paddleslim -y
+    #     python -m pip install https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl --no-cache-dir --force-reinstall --no-dependencies
+    #     unset http_proxy && unset https_proxy
 
-        # echo " ---------- PaddleFleetX develop paddlenlp---------- "
-        # export https_proxy=${proxy}
-        # export http_proxy=${proxy}
-        # sed -i "s/paddlenlp/#paddlenlp/g" ./PaddleFleetX/requirements.txt
-        # python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html --force-reinstall
-        # unset http_proxy && unset https_proxy
-    fi
+    #     echo " ---------- PaddleFleetX develop paddlenlp---------- "
+    #     export https_proxy=${proxy}
+    #     export http_proxy=${proxy}
+    #     sed -i "s/paddlenlp/#paddlenlp/g" ./PaddleFleetX/requirements.txt
+    #     python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html --force-reinstall
+    #     unset http_proxy && unset https_proxy
+    # fi
 
     # install requirements
     cd ${fleetx_path}
@@ -67,7 +67,6 @@ function download() {
         wget -O ${data_path}/ckpt/model.pdparams \
             https://paddlefleetx.bj.bcebos.com/model/vision/vit/imagenet2012-ViT-B_16-224.pdparams
     fi
-    ln -s ${data_path}/ckpt ${fleetx_path}/ckpt
 
     rm -rf data
     if [[ -e ${data_path}/data ]]; then
@@ -78,7 +77,6 @@ function download() {
         wget -O ${data_path}/data/gpt_en_dataset_300m_ids.npy https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy;
         wget -O ${data_path}/data/gpt_en_dataset_300m_idx.npz https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz;
     fi
-    cp -r ${data_path}/data ${fleetx_path}/
 
     rm -rf dataset
     if [[ -e ${data_path}/dataset/wikitext_103_en ]]; then
@@ -98,7 +96,6 @@ function download() {
         cat ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids_part* &> ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_ids.npy
         wget -O ${data_path}/dataset/ernie/cluecorpussmall_14g_1207_idx.npz https://paddlefleetx.bj.bcebos.com/model/nlp/ernie/cluecorpussmall_14g_1207_idx.npz
     fi
-    cp -r ${data_path}/dataset ${fleetx_path}/
 
     rm -rf cc12m_base64
     if [[ -e ${data_path}/cc12m_base64 ]]; then
@@ -109,7 +106,6 @@ function download() {
         tar xf ${data_path}/cc12m_base64.tar -C ${data_path}/
         rm -rf ${data_path}/cc12m_base64.tar
     fi
-    ln -s ${data_path}/cc12m_base64 ${fleetx_path}/cc12m_base64
 
     rm -rf ./projects/imagen/t5
     if [[ -e ${data_path}/t5 ]]; then
@@ -129,24 +125,22 @@ function download() {
         rm -rf t5.pd.tar.gz.*
         cd -
     fi
-    ln -s ${data_path}/t5 ${fleetx_path}/projects/imagen/t5
 
     rm -rf ./projects/imagen/cache
     if [[ -e ${data_path}/cache ]]; then
         echo "imagen/cache downloaded"
     else
         # download debertav2 for imagen
-        mkdir -p ${data_path}/cache && cd ${data_path}/cache
+        mkdir -p ${data_path}/cache/deberta-v-xxlarge && cd ${data_path}/cache/deberta-v-xxlarge
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/config.json
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/spm.model
         wget https://paddlefleetx.bj.bcebos.com/tokenizers/debertav2/tokenizer_config.json
         wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.0
         wget https://fleetx.bj.bcebos.com/DebertaV2/debertav2.pd.tar.gz.1
-        tar debertav2.pd.tar.gz.* | tar -xf -
+        cat debertav2.pd.tar.gz.* | tar -xf -
         rm -rf debertav2.pd.tar.gz.*
         cd -
     fi
-    ln -s ${data_path}/cache ${fleetx_path}/projects/imagen/cache
 
     rm -rf part-00079
     if [[ -e ${data_path}/part-00079 ]]; then
@@ -155,7 +149,6 @@ function download() {
         # download part-00079 for imagen
         wget -O ${data_path}/part-00079 https://paddlefleetx.bj.bcebos.com/data/laion400m/part-00079
     fi
-    cp ${data_path}/part-00079 ${fleetx_path}/projects/imagen
 
     rm -rf wikitext-103
     if [[ -e ${data_path}/wikitext-103 ]]; then
@@ -166,7 +159,6 @@ function download() {
         unzip -q ${data_path}/wikitext-103-v1.zip
         rm -rf ${data_path}/wikitext-103-v1.zip
     fi
-    ln -s ${data_path}/wikitext-103 ${fleetx_path}/wikitext-103
 
     rm -rf lambada_test.jsonl
     if [[ -e ${data_path}/lambada_test.jsonl ]]; then
@@ -175,6 +167,16 @@ function download() {
         # download lambada_test.jsonl for gpt eval
         wget -O ${data_path}/lambada_test.jsonl https://raw.githubusercontent.com/cybertronai/bflm/master/lambada_test.jsonl
     fi
+
+
+    ln -s ${data_path}/ckpt ${fleetx_path}/ckpt
+    cp -r ${data_path}/data ${fleetx_path}/
+    cp -r ${data_path}/dataset ${fleetx_path}/
+    ln -s ${data_path}/cc12m_base64 ${fleetx_path}/cc12m_base64
+    ln -s ${data_path}/t5 ${fleetx_path}/projects/imagen/t5
+    ln -s ${data_path}/cache ${fleetx_path}/projects/imagen/cache
+    cp ${data_path}/part-00079 ${fleetx_path}/projects/imagen
+    ln -s ${data_path}/wikitext-103 ${fleetx_path}/wikitext-103
     cp ${data_path}/lambada_test.jsonl ${fleetx_path}/
 }
 
