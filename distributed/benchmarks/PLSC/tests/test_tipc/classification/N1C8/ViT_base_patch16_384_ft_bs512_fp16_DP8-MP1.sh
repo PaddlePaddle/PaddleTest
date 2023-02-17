@@ -18,7 +18,7 @@ bs_item=512
 run_mode=DP8-MP1
 device_num=N1C8
 yaml_path=./task/classification/vit/configs/ViT_base_patch16_384_ft_in1k_1n8c_dp_fp16o2.yaml
-max_iter=5003 # epoch=2
+max_iter=2501 # epoch=1
 pretrained_model=./pretrained/ViT_base_patch16_224/imagenet2012-ViT-B_16-224
 
 bash ./tests/test_tipc/classification/benchmark_common/prepare.sh

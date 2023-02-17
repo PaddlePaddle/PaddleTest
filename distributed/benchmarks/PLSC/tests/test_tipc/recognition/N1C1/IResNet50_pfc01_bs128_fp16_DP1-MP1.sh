@@ -18,7 +18,7 @@ bs_item=128
 run_mode=DP1-MP1
 device_num=N1C1
 yaml_path=./task/recognition/face/configs/IResNet50_MS1MV3_ArcFace_pfc10_1n8c_dp_mp_fp16o1.yaml
-max_iter=121394 # epoch=3
+max_iter=20000 # epoch=1
 sample_ratio=0.1
 
 bash ./tests/test_tipc/recognition/benchmark_common/prepare.sh
