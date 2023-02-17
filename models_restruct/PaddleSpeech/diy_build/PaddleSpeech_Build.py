@@ -62,10 +62,12 @@ class PaddleSpeech_Build(Model_Build):
         if os.path.exists("/etc/lsb-release"):
             os.system("apt-get update")
             os.system("apt-get install -y libsndfile1")
+            os.system("apt-get install -y python3-tk")
 
         if os.path.exists("/etc/redhat-release"):
             os.system("yum update")
             os.system("yum install -y libsndfile")
+            os.system("yum install -y python3-tk")
 
         if platform.machine() == "arm64":
             print("mac M1")
