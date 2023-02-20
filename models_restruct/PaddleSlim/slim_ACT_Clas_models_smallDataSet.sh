@@ -62,9 +62,13 @@ fi
 }
 
 declare -A dic
+# dic=([EfficientNetB0]=0.752 [GhostNet_x1_0]=0.726 [InceptionV3]=0.783 \
+#     [MobileNetV1]=0.706 [MobileNetV3_large_x1_0]=0.741 [PPHGNet_tiny]=0.792 \
+#     [PPLCNetV2_base]=0.763 [PPLCNet_x1_0]=0.8 [ResNet50_vd]=0.787 \
+#     [ShuffleNetV2_x1_0]=0.683 [SqueezeNet1_0]=0.594 [MobileNetV3_large_x1_0_ssld]=0.771)
 dic=([EfficientNetB0]=0.752 [GhostNet_x1_0]=0.726 [InceptionV3]=0.783 \
-    [MobileNetV1]=0.706 [MobileNetV3_large_x1_0]=0.741 [PPHGNet_tiny]=0.792 \
-    [PPLCNetV2_base]=0.763 [PPLCNet_x1_0]=0.8 [ResNet50_vd]=0.787 \
+    [MobileNetV3_large_x1_0]=0.741 [PPHGNet_tiny]=0.792 \
+    [PPLCNetV2_base]=0.763 [PPLCNet_x1_0]=0.8 \
     [ShuffleNetV2_x1_0]=0.683 [SqueezeNet1_0]=0.594 [MobileNetV3_large_x1_0_ssld]=0.771)
 echo "---models and values---"
 echo ${!dic[*]}   # 输出所有的key
