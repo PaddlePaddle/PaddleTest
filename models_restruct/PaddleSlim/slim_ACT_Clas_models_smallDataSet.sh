@@ -19,7 +19,7 @@ tar xf ILSVRC2012.tar
 echo ---infer ILSVRC2012_mini downloaded-----
 }
 
-#wget_ILSVRC2012_mini
+wget_ILSVRC2012_mini
 
 wget_infer_models(){
 echo ---infer models downloading-----
@@ -29,8 +29,11 @@ root_url="https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference"
 #     PPHGNet_tiny InceptionV3 EfficientNetB0 GhostNet_x1_0 \
 #     MobileNetV3_large_x1_0 MobileNetV3_large_x1_0_ssld "
     # 因ViT_base_patch16_224、PPLCNet_x1_0 压缩前后精度不能对齐，暂时去掉；
-pre_models="MobileNetV1 ResNet50_vd"
-# 其他的模型在小数据集下压缩、训练
+#MobileNetV1 ResNet50_vd 在大数据集下压缩、训练
+pre_models="ShuffleNetV2_x1_0 \
+    SqueezeNet1_0 PPLCNetV2_base PPLCNet_x1_0 \
+    PPHGNet_tiny InceptionV3 EfficientNetB0 GhostNet_x1_0 \
+    MobileNetV3_large_x1_0 MobileNetV3_large_x1_0_ssld "
 
 for model in ${pre_models}
 do
