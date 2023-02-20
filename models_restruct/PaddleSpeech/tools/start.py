@@ -243,6 +243,7 @@ waveflow_ljspeech_ckpt_0.3.zip"
         speech_map_yaml = os.path.join(os.getcwd(), "tools/speech_map.yaml")
         speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
         self.model_path = speech_map[self.model]["model_path"]
+        self.model_yml = speech_map[self.model]["model_yml"]
 
         self.env_dict["model"] = self.model
         self.env_dict["model_path"] = speech_map[self.model]["model_path"]
@@ -254,6 +255,9 @@ waveflow_ljspeech_ckpt_0.3.zip"
             os.chdir(self.reponame)
             os.chdir(self.model_path)
             os.system("sed -i 's/python3/python/g'  `grep -rl python3  ./local/*`")
+            # tal_cs
+            cmd = "sed -i 's/n_epoch: 100/n_epoch: 1/g %s'" % self.model_yml
+            os.system(cmd)
             os.chdir(path_now)
 
         if not os.path.exists("cases"):
