@@ -76,6 +76,7 @@ echo ${dic[*]}    # 输出所有的value
 echo "---diff_allow:$1---"
 
 for model in $(echo ${!dic[*]});do
+    echo ${PWD}
     base_value=${dic[$model]}
     echo "${model} base value:${base_value}"
     echo "--${model} runned time:"
