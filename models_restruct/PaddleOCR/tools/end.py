@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-执行case后：回收数据避免占用太多存储空间
+执行case后：获取log中的数值
 """
 import os
 import sys
