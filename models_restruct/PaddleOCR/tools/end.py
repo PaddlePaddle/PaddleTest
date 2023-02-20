@@ -59,24 +59,23 @@ class PaddleOCR_End(object):
         update_json
         """
         # 1.读取原始json文件
-        with open(self.LOG_PATH, "r") as f:
+        with open(filename, "r") as f:
             content = json.load(f)
+        logger.info("#### content: {}".format(content))
 
         # 2.更新字典dict
         value_dict = {self.model: value}
         content.update(value_dict)
+        logger.info("#### value_dict: {}".format(value_dict))
 
         # 3.写入
-        with open(filename, "a") as f_new:
+        with open(filename, "w") as f_new:
             json.dump(content, f_new)
-        return 0 
-
+        
     def collect_data_value(self):
         """
         回收之前下载的数据
         """
-        path_now = os.getcwd()
-        os.chdir(self.reponame)
         if self.category == "det":
             loss_data = self.getdata(self.LOG_PATH, "loss:", ", loss_shrink_maps")
         elif self.category == "table":
@@ -84,12 +83,10 @@ class PaddleOCR_End(object):
         else:
             loss_data = self.getdata(self.LOG_PATH, "loss:", ", avg_reader_cost")
         
+        logger.info("#### loss_data: {}".format(loss_data))
+
         self.update_json("tools/train.json", loss_data)
-    
 
-
-        os.chdir(path_now)
-        return 0
 
     def build_end(self):
         """
