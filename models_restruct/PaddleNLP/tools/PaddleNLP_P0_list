@@ -28,6 +28,7 @@ model_zoo^tinybert.yaml
 model_zoo^uie.yaml
 examples^code_generation^codegen.yaml
 examples^dependency_parsing^ddparsing.yaml
+examples^multimodal^layoutlm.yaml
 examples^multimodal^layoutxlm.yaml
 examples^question_generation^t5.yaml
 examples^question_generation^unimo-text.yaml

@@ -91,9 +91,14 @@ class PaddleNLP_Build(Model_Build):
         if re.compile("38").findall(self.paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
-        os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
+        os.chdir("PaddleNLP")
         os.system("python setup.py bdist_wheel")
         cmd_return = os.system(" python -m pip install -U dist/p****.whl")
+
+        # For more detail: https://github.com/lucidrains/imagen-pytorch/issues/92
+        if re.compile("310").findall(self.paddle_whl):
+            os.system("apt-get install lzma")
+            os.system("apt-get install liblzma-dev")
 
         # cmd_return = os.system("python setup.py install")
         # cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")

@@ -26,4 +26,5 @@ model_zoo^ernie-layout.yaml
 model_zoo^ernie-m.yaml
 model_zoo^tinybert.yaml
 model_zoo^uie.yaml
+model_zoo^ernie-tiny.yaml
 model_zoo^ernie-tiny-fastdeploy.yaml
