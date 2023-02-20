@@ -1,0 +1,93 @@
+case:
+  linux:
+    train:
+      -
+        name: multi
+        path: examples/question_generation/t5
+        cmd: python -m paddle.distributed.launch train.py 
+        params:
+          - --model_name_or_path=t5-base
+          - --dataset_name=squad 
+          - --output_dir=output 
+          - --max_source_length=1024 
+          - --max_target_length=142 
+          - --learning_rate=1e-4 
+          - --num_train_epochs=6 
+          - --logging_steps=100 
+          - --save_steps=2 
+          - --seed=42 
+          - --train_batch_size=4 
+          - --eval_batch_size=64 
+          - --warmup_proportion=0.1 
+          - --ignore_pad_token_for_loss 
+          - --device=gpu 
+          - --max_steps 2 
+    eval: 
+      -
+        name: eval
+        path: examples/question_generation/t5
+        cmd:  python predict.py
+        params:
+          - --model_name_or_path=./checkpoints/model_xx
+          - --dataset_name=squad 
+          - --output_path=generate.txt 
+          - --max_source_length=1024 
+          - --max_target_length=142 
+          - --decode_strategy=greedy_search 
+          - --top_k=2 
+          - --top_p=1.0 
+          - --num_beams=1 
+          - --length_penalty=0.0 
+          - --batch_size=64 
+          - --seed=42
+          - --ignore_pad_token_for_loss
+          - --logging_steps=20
+          - --device=gpu
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: examples/multimodal/layoutlm
+        cmd: wget https://bj.bcebos.com/v1/paddlenlp/datasets/FUNSD.zip && unzip FUNSD.zip
+      -
+        name: single
+        path: examples/multimodal/layoutlm
+        cmd:   python train_funsd.py 
+        params:
+          - -data_dir "./data/" 
+          - --model_name_or_path "layoutlm-base-uncased" 
+          - --do_lower_case 
+          - --max_seq_length 512 
+          - --do_train 
+          - --do_eval y
+          - --num_train_epochs 100 
+          - --logging_steps 1 
+          - --save_steps 1 
+          - --output_dir "output/" 
+          - --labels "./data/labels.txt" 
+          - --per_gpu_train_batch_size 16 
+          - --per_gpu_eval_batch_size 16 
+          - --evaluate_during_training 
+          - --max_steps 1
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
