@@ -71,7 +71,7 @@ class PaddleOCR_End(object):
         # 3.写入
         with open(filename, "w") as f_new:
             json.dump(content, f_new)
-        
+
     def collect_data_value(self):
         """
         回收之前下载的数据
@@ -82,11 +82,10 @@ class PaddleOCR_End(object):
             loss_data = self.getdata(self.LOG_PATH, "loss:", ", horizon_bbox_loss")
         else:
             loss_data = self.getdata(self.LOG_PATH, "loss:", ", avg_reader_cost")
-        
+
         logger.info("#### loss_data: {}".format(loss_data))
 
         self.update_json("tools/train.json", loss_data)
-
 
     def build_end(self):
         """
