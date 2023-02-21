@@ -43,7 +43,7 @@ eval:
     - Global.use_gpu=${use_gpu}
 
   result:
-    acc:
+    f_score_e2e:
       base: ${eval_base_acc}
       threshold: 0
       evaluation: "="

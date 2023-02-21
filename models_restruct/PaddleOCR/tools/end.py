@@ -34,11 +34,12 @@ class PaddleOCR_End(object):
         self.step = os.environ["step"]
         self.paddle_whl = os.environ["paddle_whl"]
         self.mode = os.environ["mode"]  # function or precision
-        self.LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)  # 所有和yaml相关的变量与此拼接
         self.model = os.path.splitext(os.path.basename(self.rd_yaml_path))[0]
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
-
+        self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
+        self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained.log")
+        
     def getdata(self, filename, delimiter1, delimiter2):
         """
         get_data
@@ -76,16 +77,30 @@ class PaddleOCR_End(object):
         """
         回收之前下载的数据
         """
+        # eval acc
+        pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
+        pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
+        with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
+            if self.model in pretrained_yaml[self.category].keys():
+                if self.category == "det" or self.category == "kie":
+                    eval_acc=self.getdata(self.EVAL_LOG_PATH, "hmean:", "")
+                elif self.category == "sr":
+                    loss_data = self.getdata(self.TRAIN_LOG_PATH, "psnr_avg:", "")
+                else:
+                    loss_data = self.getdata(self.TRAIN_LOG_PATH, "loss:", "")
+
+        # train loss
         if self.category == "det":
-            loss_data = self.getdata(self.LOG_PATH, "loss:", ", loss_shrink_maps")
+            loss_data = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
         elif self.category == "table":
-            loss_data = self.getdata(self.LOG_PATH, "loss:", ", horizon_bbox_loss")
+            loss_data = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", horizon_bbox_loss")
         else:
-            loss_data = self.getdata(self.LOG_PATH, "loss:", ", avg_reader_cost")
+            loss_data = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", avg_reader_cost")
 
         logger.info("#### loss_data: {}".format(loss_data))
 
         self.update_json("tools/train.json", loss_data)
+        self.update_json("tools/eval.json", eval_acc)
 
     def build_end(self):
         """

@@ -97,12 +97,12 @@ class PaddleOCR_Start(object):
             self.env_dict["use_gpu"] = "False"
 
         # check kpi value
-        self.env_dict["train_base_loss"] = 1
+        self.env_dict["train_base_loss"] = "1"
         # with open("tools/train.json", "r") as f:
         #    content = json.load(f)
         #    train_base_loss=content['train_base_loss']
         #    logger.info("#### train_base_loss: {}".format(train_base_loss))
-        self.env_dict["train_threshold"] = 0.5
+        self.env_dict["train_threshold"] = "0.5"
 
     def prepare_pretrained_model(self):
         """
@@ -228,7 +228,6 @@ class PaddleOCR_Start(object):
         if ret:
             logger.info("build prepare_config_params failed")
         self.prepare_pretrained_model()
-        self.gengrate_test_case()
         self.prepare_dataset()
         os.environ[self.reponame] = json.dumps(self.env_dict)
         for k, v in self.env_dict.items():
