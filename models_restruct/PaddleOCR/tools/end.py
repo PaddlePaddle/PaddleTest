@@ -55,7 +55,7 @@ class PaddleOCR_End(object):
                     data.append(float(result[0]))
         return data[-1]
 
-    def getdata(filename, kpi):
+    def getdata(self, filename, kpi):
         """
         get_data
         """
