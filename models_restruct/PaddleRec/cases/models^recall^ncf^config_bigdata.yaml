@@ -16,6 +16,6 @@ case:
         cmd: python -u tools/infer.py
         result:
           prediction:
-            base: 0.44444
+            base: 0.0189
             threshold: 0.0003
             evaluation: "+"

@@ -3,7 +3,6 @@
 自定义环境准备
 """
 import os
-import re
 from platform import platform
 import sys
 import logging
@@ -17,7 +16,7 @@ from Model_Build import Model_Build
 logger = logging.getLogger("ce")
 
 
-class PaddleNLP_Build(Model_Build):
+class PaddleRec_Build(Model_Build):
     """
     自定义环境准备
     """
@@ -53,75 +52,29 @@ class PaddleNLP_Build(Model_Build):
                 if ".yaml" in file_name:
                     self.clas_model_list.append(file_name.strip().replace(":", "/"))
 
-    def build_paddlenlp(self):
+    def build_paddlerec(self):
         """
         安装依赖包
         """
         path_now = os.getcwd()
         platform = self.system
-        os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
-        print(os.environ["no_proxy"])
 
-        if platform == "linux":
-            os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
-            os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
-            os.system(
-                "python -m pip install -U {}".format(self.paddle_whl)
-            )  # install paddle for lac requirement paddle>=1.6
-        else:
-            os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
-            os.system(
-                "python -m pip install -U {}".format(self.paddle_whl)
-            )  # install paddle for lac requirement paddle>=1.6
-
-        if re.compile("evelop").findall(self.paddle_whl):
-            os.system(
-                "python -m pip install \
-                 https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
-            )
-        elif re.compile("elease").findall(self.paddle_whl):
-            os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
-        else:
-            print(" Dont't know paddle branch")
-
-        import nltk
-
-        nltk.download("punkt")
-        from visualdl import LogWriter
-
-        if re.compile("38").findall(self.paddle_whl):
-            os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
-
-        os.chdir("PaddleNLP")
-        os.system("python setup.py bdist_wheel")
-        cmd_return = os.system(" python -m pip install -U dist/p****.whl")
-
-        # For more detail: https://github.com/lucidrains/imagen-pytorch/issues/92
-        if re.compile("310").findall(self.paddle_whl):
-            os.system("apt-get install lzma")
-            os.system("apt-get install liblzma-dev")
-
-        # cmd_return = os.system("python setup.py install")
-        # cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")
+        os.chdir("PaddleRec") 
+        os.system("python -m pip install -r requirements.txt")
         os.chdir(path_now)
-
+        
+        cmd_return = os.system("python -m pip install {}".format(self.paddle_whl))
         if cmd_return:
-            logger.info("repo {} python -m pip install-failed".format(self.reponame))
-
-        os.system("python -m pip list")
-        import paddle
-
-        print("paddle-commit:", paddle.version.commit)
-
+            logger.info("repo {} python -m pip install paddle failed".format(self.reponame))
         return 0
 
     def build_env(self):
         """
         使用父类实现好的能力
         """
-        super(PaddleNLP_Build, self).build_env()
+        super(PaddleRec_Build, self).build_env()
         ret = 0
-        ret = self.build_paddlenlp()
+        ret = self.build_paddlerec()
         if ret:
             logger.info("build env whl failed")
             return ret
@@ -142,5 +95,5 @@ if __name__ == "__main__":
         return args
 
     args = parse_args()
-    model = PaddleNLP_Build(args)
-    model.build_paddlenlp()
+    model = PaddleRec_Build(args)
+    model.build_paddlerec()
