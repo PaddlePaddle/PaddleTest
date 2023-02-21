@@ -55,7 +55,7 @@ class PaddleOCR_End(object):
                     data.append(float(result[0]))
         return data[-1]
 
-    def getdata(filename, kpi):
+    def getdata(self, filename, kpi):
         """
         get_data
         """
@@ -98,6 +98,8 @@ class PaddleOCR_End(object):
         if self.model in pretrained_yaml[self.category].keys():
             if self.category == "det" or self.category == "kie":
                 eval_acc = self.getdata(self.EVAL_LOG_PATH, "hmean")
+            elif self.category == "e2e":
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "f_score_e2e")
             elif self.category == "sr":
                 eval_acc = self.getdata(self.EVAL_LOG_PATH, "psnr_avg")
             else:
