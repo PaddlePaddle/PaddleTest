@@ -3,7 +3,6 @@
 自定义环境准备
 """
 import os
-from platform import platform
 import sys
 import logging
 import tarfile
