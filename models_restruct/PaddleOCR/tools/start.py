@@ -228,6 +228,7 @@ class PaddleOCR_Start(object):
         if ret:
             logger.info("build prepare_config_params failed")
         self.prepare_pretrained_model()
+        self.gengrate_test_case()
         self.prepare_dataset()
         os.environ[self.reponame] = json.dumps(self.env_dict)
         for k, v in self.env_dict.items():
