@@ -45,15 +45,15 @@ case:
         path: model_zoo/ernie-3.0/
         cmd: python run_qa.py
         params:
-          -  --model_name_or_path ernie-3.0-medium-zh 
-          - --dataset cmrc2018  
-          - --output_dir ./best_models 
-          - --export_model_dir best_models/ 
-          - --do_train 
-          - --do_eval 
-          - --do_export 
-          - --config=configs/default.yml 
-          - --max_steps=2 
+          -  --model_name_or_path ernie-3.0-medium-zh
+          - --dataset cmrc2018
+          - --output_dir ./best_models
+          - --export_model_dir best_models/
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --config=configs/default.yml
+          - --max_steps=2
           - --save_step=2
           loss:
             base: 0.563974

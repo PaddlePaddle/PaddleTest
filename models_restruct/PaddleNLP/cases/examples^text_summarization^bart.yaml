@@ -6,45 +6,45 @@ case:
         path: examples/text_summarization/bart
         cmd:   python -m paddle.distributed.launch run_summarization.py
         params:
-          - --model_name_or_path=bart-base 
-          - --dataset_name=cnn_dailymail 
+          - --model_name_or_path=bart-base
+          - --dataset_name=cnn_dailymail
           - --output_dir=output
-          - --max_source_length=1024 
-          - --max_target_length=142 
-          - --learning_rate=1e-4 
-          - --num_train_epochs=6 
-          - --logging_steps=1 
+          - --max_source_length=1024
+          - --max_target_length=142
+          - --learning_rate=1e-4
+          - --num_train_epochs=6
+          - --logging_steps=1
           - --save_steps=1
-          - --seed=42 
+          - --seed=42
           - --train_batch_size=2
-          - --eval_batch_size=32 
-          - --warmup_proportion=0.1 
-          - --ignore_pad_token_for_loss=True 
-          - --device=gpu 
+          - --eval_batch_size=32
+          - --warmup_proportion=0.1
+          - --ignore_pad_token_for_loss=True
+          - --device=gpu
           - --max_steps 1
     eval: skipped
     infer: skipped
     export: skipped
-    predict: 
+    predict:
       -
         name: faster
         path: examples/text_summarization/bart
         cmd: python generate.py
         params:
           - --model_name_or_path=bart-base-cnndm-model
-          - --dataset_name=cnn_dailymail 
-          - --output_path=generate.txt 
-          - --max_source_length=1024 
-          - --max_target_length=142 
-          - --decode_strategy=greedy_search 
-          - --top_k=2 
-          - --top_p=1.0 
-          - --num_beams=1 
-          - --length_penalty=0.0 
-          - --batch_size=64 
-          - --seed=42 
-          - --ignore_pad_token_for_loss=True 
-          - --logging_steps=100 
+          - --dataset_name=cnn_dailymail
+          - --output_path=generate.txt
+          - --max_source_length=1024
+          - --max_target_length=142
+          - --decode_strategy=greedy_search
+          - --top_k=2
+          - --top_p=1.0
+          - --num_beams=1
+          - --length_penalty=0.0
+          - --batch_size=64
+          - --seed=42
+          - --ignore_pad_token_for_loss=True
+          - --logging_steps=100
           - --faster
           - --use_fp16_decoding
           - --device=gpu

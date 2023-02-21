@@ -6,76 +6,76 @@ case:
         path: examples/language_model/t5
         cmd: python run_glue.py
         params:
-          - --model_name_or_path t5-base 
-          - --task_name rte 
-          - --max_seq_length 256 
-          - --train_batch_size 16 
-          - --eval_batch_size 64 
-          - --learning_rate 1e-4 
-          - --weight_decay 0.01 
-          - --warmup_radio 0.1 
-          - --num_train_epochs 1 
-          - --logging_steps 1 
-          - --save_steps 10 
+          - --model_name_or_path t5-base
+          - --task_name rte
+          - --max_seq_length 256
+          - --train_batch_size 16
+          - --eval_batch_size 64
+          - --learning_rate 1e-4
+          - --weight_decay 0.01
+          - --warmup_radio 0.1
+          - --num_train_epochs 1
+          - --logging_steps 1
+          - --save_steps 10
           - --seed 42
           - --scheduler_type linear
-          - --output_dir outputs/rte/ 
+          - --output_dir outputs/rte/
       -
         name: trainer_finetune_rte
         path: examples/language_model/t5
         cmd: python -m paddle.distributed.launch run_glue_trainer.py
         params:
-          - --model_name_or_path t5-base 
-          - --task_name rte 
-          - --max_seq_length 256 
-          - --do_train 
-          - --do_eval 
-          - --per_device_train_batch_size 16 
-          - --per_device_eval_batch_size 64 
-          - --learning_rate 1e-4 
-          - --weight_decay 0.01 
-          - --warmup_ratio 0.1 
-          - --num_train_epochs 10 
-          - --eval_steps 2 
-          - --logging_steps 1 
-          - --save_steps 2 
-          - --save_total_limit 3 
-          - --metric_for_best_model "eval_accuracy" 
-          - --fp16 false 
-          - --fp16_opt_level "O1" 
-          - --recompute true 
-          - --sharding "stage1" 
-          - --overwrite_output_dir 
-          - --disable_tqdm true 
-          - --output_dir outputs/rte/ 
+          - --model_name_or_path t5-base
+          - --task_name rte
+          - --max_seq_length 256
+          - --do_train
+          - --do_eval
+          - --per_device_train_batch_size 16
+          - --per_device_eval_batch_size 64
+          - --learning_rate 1e-4
+          - --weight_decay 0.01
+          - --warmup_ratio 0.1
+          - --num_train_epochs 10
+          - --eval_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --save_total_limit 3
+          - --metric_for_best_model "eval_accuracy"
+          - --fp16 false
+          - --fp16_opt_level "O1"
+          - --recompute true
+          - --sharding "stage1"
+          - --overwrite_output_dir
+          - --disable_tqdm true
+          - --output_dir outputs/rte/
           - --max_steps 2
       -
         name: trainer_finetune_cluewsc2020
         path: examples/language_model/t5
         cmd: python -m paddle.distributed.launch run_glue_trainer.py
         params:
-          - --model_name_or_path Langboat/mengzi-t5-base-mt 
-          - --task_name cluewsc2020 
-          - --max_seq_length 512 
-          - --do_train 
-          - --do_eval 
-          - --per_device_train_batch_size 16 
-          - --per_device_eval_batch_size 64 
-          - --learning_rate 1e-4 
-          - --weight_decay 0.01 
-          - --warmup_ratio 0.1 
-          - --num_train_epochs 1 
-          - --eval_steps 2 
-          - --logging_steps 1 
-          - --save_steps 2 
-          - --save_total_limit 3 
-          - --metric_for_best_model "eval_accuracy" 
-          - --fp16 false 
-          - --fp16_opt_level "O1" 
-          - --recompute true 
-          - --sharding "stage1" 
+          - --model_name_or_path Langboat/mengzi-t5-base-mt
+          - --task_name cluewsc2020
+          - --max_seq_length 512
+          - --do_train
+          - --do_eval
+          - --per_device_train_batch_size 16
+          - --per_device_eval_batch_size 64
+          - --learning_rate 1e-4
+          - --weight_decay 0.01
+          - --warmup_ratio 0.1
+          - --num_train_epochs 1
+          - --eval_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --save_total_limit 3
+          - --metric_for_best_model "eval_accuracy"
+          - --fp16 false
+          - --fp16_opt_level "O1"
+          - --recompute true
+          - --sharding "stage1"
           - --overwrite_output_dir
-          - --disable_tqdm true 
+          - --disable_tqdm true
           - --output_dir outputs/clue/cluewsc2020
           - --max_steps 2
     eval: skipped
@@ -90,76 +90,76 @@ case:
         path: examples/language_model/t5
         cmd: python run_glue.py
         params:
-          - --model_name_or_path t5-base 
-          - --task_name rte 
-          - --max_seq_length 256 
-          - --train_batch_size 16 
-          - --eval_batch_size 64 
-          - --learning_rate 1e-4 
-          - --weight_decay 0.01 
-          - --warmup_radio 0.1 
-          - --num_train_epochs 1 
-          - --logging_steps 1 
-          - --save_steps 10 
+          - --model_name_or_path t5-base
+          - --task_name rte
+          - --max_seq_length 256
+          - --train_batch_size 16
+          - --eval_batch_size 64
+          - --learning_rate 1e-4
+          - --weight_decay 0.01
+          - --warmup_radio 0.1
+          - --num_train_epochs 1
+          - --logging_steps 1
+          - --save_steps 10
           - --seed 42
           - --scheduler_type linear
-          - --output_dir outputs/rte/ 
+          - --output_dir outputs/rte/
       -
         name: trainer_finetune_rte
         path: examples/language_model/t5
         cmd: python -m paddle.distributed.launch run_glue_trainer.py
         params:
-          - --model_name_or_path t5-base 
-          - --task_name rte 
-          - --max_seq_length 256 
-          - --do_train 
-          - --do_eval 
-          - --per_device_train_batch_size 16 
-          - --per_device_eval_batch_size 64 
-          - --learning_rate 1e-4 
-          - --weight_decay 0.01 
-          - --warmup_ratio 0.1 
-          - --num_train_epochs 10 
-          - --eval_steps 2 
-          - --logging_steps 1 
-          - --save_steps 2 
-          - --save_total_limit 3 
-          - --metric_for_best_model "eval_accuracy" 
-          - --fp16 false 
-          - --fp16_opt_level "O1" 
-          - --recompute true 
-          - --sharding "stage1" 
-          - --overwrite_output_dir 
-          - --disable_tqdm true 
-          - --output_dir outputs/rte/ 
+          - --model_name_or_path t5-base
+          - --task_name rte
+          - --max_seq_length 256
+          - --do_train
+          - --do_eval
+          - --per_device_train_batch_size 16
+          - --per_device_eval_batch_size 64
+          - --learning_rate 1e-4
+          - --weight_decay 0.01
+          - --warmup_ratio 0.1
+          - --num_train_epochs 10
+          - --eval_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --save_total_limit 3
+          - --metric_for_best_model "eval_accuracy"
+          - --fp16 false
+          - --fp16_opt_level "O1"
+          - --recompute true
+          - --sharding "stage1"
+          - --overwrite_output_dir
+          - --disable_tqdm true
+          - --output_dir outputs/rte/
           - --max_steps 2
       -
         name: trainer_finetune_cluewsc2020
         path: examples/language_model/t5
         cmd: python -m paddle.distributed.launch run_glue_trainer.py
         params:
-          - --model_name_or_path Langboat/mengzi-t5-base-mt 
-          - --task_name cluewsc2020 
-          - --max_seq_length 512 
-          - --do_train 
-          - --do_eval 
-          - --per_device_train_batch_size 16 
-          - --per_device_eval_batch_size 64 
-          - --learning_rate 1e-4 
-          - --weight_decay 0.01 
-          - --warmup_ratio 0.1 
-          - --num_train_epochs 1 
-          - --eval_steps 2 
-          - --logging_steps 1 
-          - --save_steps 2 
-          - --save_total_limit 3 
-          - --metric_for_best_model "eval_accuracy" 
-          - --fp16 false 
-          - --fp16_opt_level "O1" 
-          - --recompute true 
-          - --sharding "stage1" 
+          - --model_name_or_path Langboat/mengzi-t5-base-mt
+          - --task_name cluewsc2020
+          - --max_seq_length 512
+          - --do_train
+          - --do_eval
+          - --per_device_train_batch_size 16
+          - --per_device_eval_batch_size 64
+          - --learning_rate 1e-4
+          - --weight_decay 0.01
+          - --warmup_ratio 0.1
+          - --num_train_epochs 1
+          - --eval_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --save_total_limit 3
+          - --metric_for_best_model "eval_accuracy"
+          - --fp16 false
+          - --fp16_opt_level "O1"
+          - --recompute true
+          - --sharding "stage1"
           - --overwrite_output_dir
-          - --disable_tqdm true 
+          - --disable_tqdm true
           - --output_dir outputs/clue/cluewsc2020
           - --max_steps 2
     eval: skipped

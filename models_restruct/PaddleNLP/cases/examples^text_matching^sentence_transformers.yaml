@@ -4,19 +4,19 @@ case:
       -
         name: train
         path: examples/text_matching/sentence_transformers
-        cmd: python -m paddle.distributed.launch  train.py 
+        cmd: python -m paddle.distributed.launch  train.py
         params:
-          - --device gpu 
-          - --save_dir ./checkpoints 
+          - --device gpu
+          - --save_dir ./checkpoints
           - --epoch 1
     eval:
       -
         name: eval
         path: examples/text_matching/sentence_transformers
-        cmd: python predict.py 
+        cmd: python predict.py
         params:
-          - --device gpu 
-          - --params_path ./checkpoints/model_7000/model_state.pdparams 
+          - --device gpu
+          - --params_path ./checkpoints/model_7000/model_state.pdparams
     infer: skipped
     export: skipped
     predict: skipped
@@ -26,23 +26,23 @@ case:
       -
         name: train
         path: examples/text_matching/sentence_transformers
-        cmd: python -m paddle.distributed.launch  train.py 
+        cmd: python -m paddle.distributed.launch  train.py
         params:
-          - --device gpu 
-          - --save_dir ./checkpoints 
+          - --device gpu
+          - --save_dir ./checkpoints
           - --epoch 1
     eval:
       -
         name: train
         path: examples/text_matching/sentence_transformers
-        cmd: python predict.py 
+        cmd: python predict.py
         params:
-          - --device gpu 
-          - --params_path ./checkpoints/model_7000/model_state.pdparams 
+          - --device gpu
+          - --params_path ./checkpoints/model_7000/model_state.pdparams
     infer: skipped
     export: skipped
     predict: skipped
-  
+
 
   windows_cpu:
     train: skipped

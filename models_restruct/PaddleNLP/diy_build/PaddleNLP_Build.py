@@ -59,7 +59,7 @@ class PaddleNLP_Build(Model_Build):
         """
         path_now = os.getcwd()
         platform = self.system
-        os.environ["no_proxy"]="bcebos.com,huggingface.co,baidu.com"
+        os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
         print(os.environ["no_proxy"])
 
         if platform == "linux":
@@ -85,6 +85,7 @@ class PaddleNLP_Build(Model_Build):
             print(" Dont't know paddle branch")
 
         import nltk
+
         nltk.download("punkt")
         from visualdl import LogWriter
 

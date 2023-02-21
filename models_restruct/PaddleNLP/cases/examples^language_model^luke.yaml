@@ -14,28 +14,28 @@ case:
         path: examples/language_model/luke
         cmd: python -m paddle.distributed.launch run_squad.py
         params:
-          - --model_type luke 
-          - --device gpu 
-          - --learning_rate 15e-6 
-          - --num_train_epochs 1 
-          - --batch_size 8 
-          - --do_predict 
-          - --do_train 
-          - --model_name_or_path luke-large 
-          - --logging_steps 1 
-          - --max_steps 2 
+          - --model_type luke
+          - --device gpu
+          - --learning_rate 15e-6
+          - --num_train_epochs 1
+          - --batch_size 8
+          - --do_predict
+          - --do_train
+          - --model_name_or_path luke-large
+          - --logging_steps 1
+          - --max_steps 2
           - --save_step 2
       -
-        name: run_open_entity.py 
+        name: run_open_entity.py
         path: examples/language_model/luke
         cmd: python -m paddle.distributed.launch run_open_entity.py
         params:
-          - --model_type luke-large 
-          - --data_dir data/ 
-          - --output_dir output/ 
-          - --device gpu 
-          - --learning_rate 1e-5 
-          - --num_train_epochs 1 
+          - --model_type luke-large
+          - --data_dir data/
+          - --output_dir output/
+          - --device gpu
+          - --learning_rate 1e-5
+          - --num_train_epochs 1
           - --batch_size 2
     eval: skipped
     infer: skipped

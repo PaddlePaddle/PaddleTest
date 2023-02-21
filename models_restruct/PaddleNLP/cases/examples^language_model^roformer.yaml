@@ -3,37 +3,37 @@ case:
     train:
       -
         name: run_thucnews
-        path: examples/language_model/roformer 
-        cmd: python -m paddle.distributed.launch run_thucnews.py 
+        path: examples/language_model/roformer
+        cmd: python -m paddle.distributed.launch run_thucnews.py
         params:
-          - --model_type roformer 
-          - --model_name_or_path roformer-chinese-base 
-          - --max_seq_length 256 
-          - --batch_size 64   
-          - --learning_rate 2e-5 
-          - --num_train_epochs 3 
-          - --logging_steps 1 
-          - --save_steps 2 
-          - --output_dir ./thucnews/ 
-          - --device gpu 
-          - --use_amp True 
-          - --max_steps 2 
+          - --model_type roformer
+          - --model_name_or_path roformer-chinese-base
+          - --max_seq_length 256
+          - --batch_size 64
+          - --learning_rate 2e-5
+          - --num_train_epochs 3
+          - --logging_steps 1
+          - --save_steps 2
+          - --output_dir ./thucnews/
+          - --device gpu
+          - --use_amp True
+          - --max_steps 2
       -
         name: run_cail2019_scm
         path: examples/language_model/roformer
-        cmd: python -m paddle.distributed.launch run_cail2019_scm.py 
+        cmd: python -m paddle.distributed.launch run_cail2019_scm.py
         params:
-          - --model_type roformer_mean_pooling 
-          - --model_name_or_path roformer-chinese-base 
-          - --max_seq_length 512 
-          - --batch_size 16   
-          - --learning_rate 6e-6 
-          - --num_train_epochs 20 
-          - --logging_steps 1 
+          - --model_type roformer_mean_pooling
+          - --model_name_or_path roformer-chinese-base
+          - --max_seq_length 512
+          - --batch_size 16
+          - --learning_rate 6e-6
+          - --num_train_epochs 20
+          - --logging_steps 1
           - --save_steps 2
-          - --output_dir ./cail2019_scm/ 
-          - --device gpu 
-          - --use_amp True 
+          - --output_dir ./cail2019_scm/
+          - --device gpu
+          - --use_amp True
           - --max_steps 2
     eval: skipped
     infer: skipped
@@ -44,37 +44,37 @@ case:
     train:
       -
         name: run_thucnews
-        path: examples/language_model/roformer 
-        cmd: python -m paddle.distributed.launch run_thucnews.py 
+        path: examples/language_model/roformer
+        cmd: python -m paddle.distributed.launch run_thucnews.py
         params:
-          - --model_type roformer 
-          - --model_name_or_path roformer-chinese-base 
-          - --max_seq_length 256 
-          - --batch_size 64   
-          - --learning_rate 2e-5 
-          - --num_train_epochs 3 
-          - --logging_steps 1 
-          - --save_steps 2 
-          - --output_dir ./thucnews/ 
-          - --device gpu 
-          - --use_amp True 
-          - --max_steps 2 
+          - --model_type roformer
+          - --model_name_or_path roformer-chinese-base
+          - --max_seq_length 256
+          - --batch_size 64
+          - --learning_rate 2e-5
+          - --num_train_epochs 3
+          - --logging_steps 1
+          - --save_steps 2
+          - --output_dir ./thucnews/
+          - --device gpu
+          - --use_amp True
+          - --max_steps 2
       -
         name: run_cail2019_scm
         path: examples/language_model/roformer
-        cmd: python -m paddle.distributed.launch run_cail2019_scm.py 
+        cmd: python -m paddle.distributed.launch run_cail2019_scm.py
         params:
-          - --model_type roformer_mean_pooling 
-          - --model_name_or_path roformer-chinese-base 
-          - --max_seq_length 512 
-          - --batch_size 16   
-          - --learning_rate 6e-6 
-          - --num_train_epochs 20 
-          - --logging_steps 1 
+          - --model_type roformer_mean_pooling
+          - --model_name_or_path roformer-chinese-base
+          - --max_seq_length 512
+          - --batch_size 16
+          - --learning_rate 6e-6
+          - --num_train_epochs 20
+          - --logging_steps 1
           - --save_steps 2
-          - --output_dir ./cail2019_scm/ 
-          - --device gpu 
-          - --use_amp True 
+          - --output_dir ./cail2019_scm/
+          - --device gpu
+          - --use_amp True
           - --max_steps 2
     eval: skipped
     infer: skipped

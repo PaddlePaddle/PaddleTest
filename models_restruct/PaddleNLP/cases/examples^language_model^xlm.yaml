@@ -14,19 +14,19 @@ case:
         path: examples/language_model/xlm
         cmd: python xnli_train.py
         params:
-          - --batch_size 8 
-          - --model_name_or_path xlm-mlm-tlm-xnli15-1024 
-          - --save_steps 2 
+          - --batch_size 8
+          - --model_name_or_path xlm-mlm-tlm-xnli15-1024
+          - --save_steps 2
           - --output_dir outputs
-          - --logging_steps 1 
+          - --logging_steps 1
           - --max_steps 2
-    eval: 
+    eval:
       -
         name: eval_xnli
         path: examples/language_model/xlm
         cmd: python xnli_eval.py
         params:
-          - --batch_size 8 
+          - --batch_size 8
           - --model_name_or_path outputs/best_model
     infer: skipped
     export: skipped
