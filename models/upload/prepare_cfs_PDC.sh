@@ -22,6 +22,7 @@ export http_proxy=$1
 export https_proxy=$1
 export no_proxy=bcebos.com
 
+# 安装客户端
 apt-get update
 apt-get install nfs-common -y
 

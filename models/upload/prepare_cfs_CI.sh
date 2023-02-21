@@ -1,5 +1,6 @@
 # $1：挂载点ip $2:挂载目录
 unset http_proxy && unset https_proxy 
+apt-get update
 apt-get install nfs-common -y
 echo ---cfs_folder:$2
 if [ -d $2 ];then
