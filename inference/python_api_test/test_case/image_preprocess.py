@@ -153,7 +153,7 @@ def normalize(num):
         return num
 
 
-def sig_fig_compare(array1, array2, delta=5):
+def sig_fig_compare(array1, array2, delta=5, det_top_bbox=False, det_top_bbox_threshold=0.75):
     """
     compare significant figure
     Args:
@@ -164,6 +164,12 @@ def sig_fig_compare(array1, array2, delta=5):
     """
     # start = time.time()
     assert not np.all(np.isnan(array1)), f"output value all nan! \n{array1}"
+    if det_top_bbox and len(array1.shape) == 2:
+        # 适配部分fp16检测模型case,只对比超过置信度阈值的检测框
+        if array1.shape[1] == 6:
+            top_count = sum(array1[:, 1] >= det_top_bbox_threshold)
+            array1 = array1[:top_count, :]
+            array2 = array2[:top_count, :]
     if np.any(abs(array2) > 100):
         normalize_func = np.vectorize(normalize)
         array1_normal = normalize_func(array1)

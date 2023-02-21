@@ -11,11 +11,13 @@ train:
     - Global.save_model_dir=output/${qa_yaml_name}
     - Train.loader.batch_size_per_card=10
     - Global.print_batch_step=1
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+    - Train.loader.shuffle=False
+    - Train.loader.num_workers=False
+   result:
+    loss:
+      base: ${train_base_loss}
+      threshold: ${train_threshold}
+      evaluation: "-"
 
 eval:
   name: trained
@@ -33,8 +35,8 @@ eval:
     - Global.pretrained_model=${model}/best_accuracy
 
   result:
-    exit_code:
-      base: 0
+    acc:
+      base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
 infer:
