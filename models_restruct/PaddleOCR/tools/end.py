@@ -52,7 +52,7 @@ class PaddleOCR_End(object):
                 if len(result) > 0:
                     # print(float(result[0]))
                     data.append(float(result[0]))
-        return np.mean(data)
+        return data[-1]
 
     def update_json(self, filename, value):
         """

@@ -31,9 +31,9 @@ train:
 
   result:
     loss:
-      base: 0
-      threshold: 0
-      evaluation: "="
+      base: ${train_base_loss}
+      threshold: ${train_threshold}
+      evaluation: "-"
 
 eval:
   name: trained
