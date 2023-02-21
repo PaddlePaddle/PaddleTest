@@ -28,7 +28,7 @@ case:
         path: examples/question_generation/t5
         cmd:  python predict.py
         params:
-          - --model_name_or_path=./checkpoints/model_xx
+          - --model_name_or_path=./checkpoints/model_2
           - --dataset_name=squad 
           - --output_path=generate.txt 
           - --max_source_length=1024 

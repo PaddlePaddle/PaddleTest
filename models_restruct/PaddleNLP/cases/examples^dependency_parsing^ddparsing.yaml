@@ -2,7 +2,7 @@ case:
   linux:
     train:
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch train.py 
         params:
@@ -15,7 +15,7 @@ case:
           - --batch_size=1000 
           - --lstm_lr=0.002
       -
-        name: LSTMByWPEncoder+MLP+BiAffine
+        name: LSTMByWPEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch train.py 
         params:
@@ -26,7 +26,7 @@ case:
           - --save_dir=./model_file
           - --lstm_lr=0.002
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch train.py 
         params:
@@ -38,7 +38,7 @@ case:
           - --ernie_lr=5e-5
     eval:
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch predict.py 
         params:
@@ -49,7 +49,7 @@ case:
           - --params_path=./model_file/best.pdparams 
           - --infer_output_file=infer_output.conll
       -
-        name: LSTMByWPEncoder+MLP+BiAffine
+        name: LSTMByWPEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch predict.py 
         params:
@@ -60,7 +60,7 @@ case:
           - --params_path=./ByWPEncoder/best.pdparams 
           - --infer_output_file=infer_output.conll
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch predict.py 
         params:
@@ -72,14 +72,14 @@ case:
     infer: skipped
     export:
       -
-        name: LSTMByWPEncoder+MLP+BiAffine
+        name: LSTMByWPEncoder_MLPF_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python export_model.py --encoding_model=lstm-pe 
         params:
           - --params_path=./ByWPEncoder/best.pdparams 
           - --output_path=./ByWPEncoder/output
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python export_model.py --encoding_model=rnie-gram-zh
         params:
@@ -87,14 +87,14 @@ case:
           - --output_path=./ErnieEncoder/output
     predict:
       -
-        name: LSTMByWPEncoder+MLP+BiAffine
+        name: LSTMByWPEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python deploy/python/predict.py 
         params:
           - --model_dir=./ByWPEncoder/output
           - --task_name=nlpcc13_evsam05_hit
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python deploy/python/predict.py 
         params:
@@ -104,7 +104,7 @@ case:
   windows:
     train:
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch train.py 
         params:
@@ -117,7 +117,7 @@ case:
           - --batch_size=1000 
           - --lstm_lr=0.002
       -
-        name: LSTMByWPEncoder+MLP+BiAffine
+        name: LSTMByWPEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch train.py 
         params:
@@ -128,7 +128,7 @@ case:
           - --save_dir=./model_file
           - --lstm_lr=0.002
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch train.py 
         params:
@@ -140,7 +140,7 @@ case:
           - --ernie_lr=5e-5
     eval:
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch predict.py 
         params:
@@ -151,7 +151,7 @@ case:
           - --params_path=./model_file/best.pdparams 
           - --infer_output_file=infer_output.conll
       -
-        name: LSTMByWPEncoder+MLP+BiAffine
+        name: LSTMByWPEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch predict.py 
         params:
@@ -162,7 +162,7 @@ case:
           - --params_path=./ByWPEncoder/best.pdparams 
           - --infer_output_file=infer_output.conll
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python -m paddle.distributed.launch predict.py 
         params:
@@ -174,14 +174,14 @@ case:
     infer: skipped
     export:
       -
-        name: LSTMByWPEncoder+MLP+BiAffine
+        name: LSTMByWPEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python export_model.py --encoding_model=lstm-pe 
         params:
           - --params_path=./ByWPEncoder/best.pdparams 
           - --output_path=./ByWPEncoder/output
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python export_model.py --encoding_model=rnie-gram-zh
         params:
@@ -189,14 +189,14 @@ case:
           - --output_path=./ErnieEncoder/output
     predict:
       -
-        name: LSTMByWPEncoder+MLP+BiAffine
+        name: LSTMByWPEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python deploy/python/predict.py 
         params:
           - --model_dir=./ByWPEncoder/output
           - --task_name=nlpcc13_evsam05_hit
       -
-        name: LSTMEncoder+MLP+BiAffine
+        name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
         cmd: python deploy/python/predict.py 
         params:
