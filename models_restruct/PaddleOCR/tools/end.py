@@ -85,9 +85,10 @@ class PaddleOCR_End(object):
                 if self.category == "det" or self.category == "kie":
                     eval_acc=self.getdata(self.EVAL_LOG_PATH, "hmean:", "")
                 elif self.category == "sr":
-                    train_loss = self.getdata(self.EVAL_LOG_PATH, "psnr_avg:", "")
+                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "psnr_avg:", "")
                 else:
-                    train_loss = self.getdata(self.EVAL_LOG_PATH, "acc:", "")
+                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "acc:", "")
+                logger.info("#### eval_acc: {}".format(eval_acc))
 
         # train loss
         if self.category == "det":
