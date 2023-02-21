@@ -235,6 +235,7 @@ class PaddleClas_Start(object):
         for step_single in step:
             if ("eval" in step_single or "infer" in step_single or "export" in step_single) and (
                 "pretrained" in step_single
+                or "all" in step_single
                 or "PULC^language_classification" in self.qa_yaml_name
                 or "PULC^textline_orientation" in self.qa_yaml_name
                 or "PULC^text_image_orientation" in self.qa_yaml_name
@@ -302,6 +303,7 @@ class PaddleClas_Start(object):
             # language_classification、textline_orientation这两个模型直接用预训练模型 eval predict阶段
             elif "predict" in step_single and (
                 "pretrained" in step_single
+                or "all" in step_single
                 or "PULC^language_classification" in self.qa_yaml_name
                 or "PULC^textline_orientation" in self.qa_yaml_name
                 or "PULC^text_image_orientation" in self.qa_yaml_name
@@ -466,7 +468,7 @@ class PaddleClas_Start(object):
                 with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
                     yaml.dump(content, f, sort_keys=False)
         except:
-            logger.info("do not update yaml value !!!")
+            logger.info("do not update yaml value !!!!")
 
     def build_prepare(self):
         """
@@ -474,7 +476,8 @@ class PaddleClas_Start(object):
         """
         # 进入repo中
         ret = 0
-        ret = self.prepare_env()
+        if "convergence" not in self.system:
+            ret = self.prepare_env()
         if ret:
             logger.info("build prepare_env failed")
             return ret

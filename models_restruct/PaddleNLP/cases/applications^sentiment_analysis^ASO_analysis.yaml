@@ -47,13 +47,17 @@ case:
         path: applications/sentiment_analysis/ASO_analysis/
         cmd: mkdir data && cd data && wget https://bj.bcebos.com/v1/paddlenlp/data/ext_data.tar.gz && tar -xzvf ext_data.tar.gz && wget https://bj.bcebos.com/v1/paddlenlp/data/cls_data.tar.gz && tar -xzvf cls_data.tar.gz && wget https://paddle-qa.bj.bcebos.com/paddlenlp/aos_tes.txt
       -
-        name: checkpoints_prepare_ext
+        name: mkdir_checkpoints
         path: applications/sentiment_analysis/ASO_analysis/
-        cmd: mkdir ./checkpoints/ && cd checkpoints && mkdir ext_checkpoints &&  cd ext_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_ext.pdparams && mv best_ext.pdparams best.pdparams
+        cmd: mkdir checkpoints && cd checkpoints && mkdir ext_checkpoints cls_checkpoints
+      -
+        name: checkpoints_prepare_ext
+        path: applications/sentiment_analysis/ASO_analysis/checkpoints/ext_checkpoints
+        cmd:  wget https://bj.bcebos.com/paddlenlp/models/best_ext.pdparams && ren best_ext.pdparams best.pdparams
       -
         name: checkpoints_prepare_cls
-        path: applications/sentiment_analysis/ASO_analysis/checkpoints
-        cmd: mkdir cls_checkpoints && cd cls_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_cls.pdparams && mv best_cls.pdparams best.pdparams
+        path: applications/sentiment_analysis/ASO_analysis/checkpoints/cls_checkpoints
+        cmd: wget https://bj.bcebos.com/paddlenlp/models/best_cls.pdparams && ren best_cls.pdparams best.pdparams
     eval:
       -
         name: eval

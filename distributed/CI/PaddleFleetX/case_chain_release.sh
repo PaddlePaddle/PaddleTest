@@ -355,6 +355,7 @@ function vit_inference() {
     python tools/export.py \
         -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/
+    rm -rf shape.pbtxt
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
         python projects/vit/inference.py -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml
     else

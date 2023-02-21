@@ -1,5 +1,6 @@
 opencv-python==4.6.0.66
 opencv-contrib-python==4.6.0.66
+numpy>=1.18.5,<1.24.0
 regex
 nltk
 xlrd==1.2.0
@@ -9,7 +10,7 @@ tool_helpers
 editdistance
 h5py
 attrdict==2.0.1
-PyYAML==5.4.1
+parl
 subword_nmt==0.3.7
 pyrouge
 beautifulsoup4
@@ -22,7 +23,6 @@ pynvml
 GPUtil
 yacs
 rouge
-https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl
 paddleocr
 easydict
-pgl
+lac

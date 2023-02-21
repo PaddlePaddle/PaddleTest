@@ -153,7 +153,7 @@ def normalize(num):
         return num
 
 
-def sig_fig_compare(array1, array2, delta=5):
+def sig_fig_compare(array1, array2, delta=5, det_top_bbox=False, det_top_bbox_threshold=0.75):
     """
     compare significant figure
     Args:
@@ -163,6 +163,13 @@ def sig_fig_compare(array1, array2, delta=5):
         diff(numpy array): return diff array
     """
     # start = time.time()
+    assert not np.all(np.isnan(array1)), f"output value all nan! \n{array1}"
+    if det_top_bbox and len(array1.shape) == 2:
+        # 适配部分fp16检测模型case,只对比超过置信度阈值的检测框
+        if array1.shape[1] == 6:
+            top_count = sum(array1[:, 1] >= det_top_bbox_threshold)
+            array1 = array1[:top_count, :]
+            array2 = array2[:top_count, :]
     if np.any(abs(array2) > 100):
         normalize_func = np.vectorize(normalize)
         array1_normal = normalize_func(array1)
@@ -177,9 +184,7 @@ def sig_fig_compare(array1, array2, delta=5):
     print("output value debug: ", array1)
     print("output diff array: ", array1[diff > delta])
     print("truth diff array:  ", array2[diff > delta])
-    assert (
-        diff_count == 0
-    ), f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \noutput: {array1} \ntruth: {array2}"
+    assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}"
     # end = time.time()
     # print(f"精度校验cost：{(end - start) * 1000}ms")
     return diff

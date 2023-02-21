@@ -72,7 +72,7 @@ case:
       -
         name: prepare
         path: applications/zero_shot_text_classification
-        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/utc-medical.tar.gz  && tar -xvf utc-medical.tar.gz && mv utc-medical data
+        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/utc-medical.tar.gz  && tar -xvf utc-medical.tar.gz && ren utc-medical data
       -
         name: label_studio
         path: applications/zero_shot_text_classification
@@ -85,7 +85,7 @@ case:
       -
         name: fintune
         path: applications/zero_shot_text_classification
-        cmd: python -u -m paddle.distributed.launch --gpus "0,1" run_train.py
+        cmd: python -u -m paddle.distributed.launch run_train.py
         params:
           - --device gpu
           - --logging_steps 10

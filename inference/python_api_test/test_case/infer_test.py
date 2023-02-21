@@ -265,9 +265,13 @@ class InferenceTest(object):
         input_data_dict: dict,
         output_data_dict: dict,
         mkldnn_cache_capacity=1,
+        cpu_num_threads=1,
         repeat=2,
         delta=1e-5,
         precision="fp32",
+        with_benchmark=False,
+        base_latency_ms=np.nan,
+        benchmark_threshold=5e-2,
     ):
         """
         test enable_mkldnn() or enable_mkldnn_int8()
@@ -282,6 +286,7 @@ class InferenceTest(object):
             None
         """
         self.pd_config.enable_mkldnn()
+        self.pd_config.set_cpu_math_library_num_threads(cpu_num_threads)
         if precision == "int8":
             self.pd_config.enable_mkldnn_int8()
         self.pd_config.set_mkldnn_cache_capacity(mkldnn_cache_capacity)
@@ -292,7 +297,7 @@ class InferenceTest(object):
             input_handle = predictor.get_input_handle(input_data_name)
             input_handle.copy_from_cpu(input_data_dict[input_data_name])
 
-        for i in range(repeat):
+        for i in range(2):
             predictor.run()
 
         output_names = predictor.get_output_names()
@@ -306,10 +311,39 @@ class InferenceTest(object):
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
-            # diff_count = np.sum(diff > delta)
-            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
-            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
-            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
+
+        # benchmark
+        if not with_benchmark:
+            return
+        # warm up
+        output_tensor = predictor.get_output_handle(output_names[0])
+        for i in range(5):
+            predictor.run()
+            batch_output = output_tensor.copy_to_cpu()
+        predict_time = 0.0
+        time_min = float("inf")
+        time_max = float("-inf")
+        for i in range(repeat):
+            start = time.time()
+            predictor.run()
+            batch_output = output_tensor.copy_to_cpu()
+            end = time.time()
+            timed = end - start
+            time_min = min(time_min, timed)
+            time_max = max(time_max, timed)
+            print("once:", timed)
+            predict_time += timed
+        time_avg = (predict_time - time_max) / (repeat - 1)
+        print(
+            "[Benchmark] Inference time(ms): min={}, max={}, avg={}".format(
+                round(time_min * 1000, 2),
+                round(time_max * 1000, 2),
+                round(time_avg * 1000, 2),
+            )
+        )
+        benchmark_diff = (time_avg * 1000 - base_latency_ms) / base_latency_ms
+        print(f"benchmark diff: {benchmark_diff}")
+        assert benchmark_diff <= benchmark_threshold, f"benchmark diff:{benchmark_diff} > {benchmark_threshold}"
 
     def onnxruntime_test(self, input_data_dict: dict, output_data_dict: dict, repeat=2, delta=1e-5):
         """
@@ -426,20 +460,32 @@ class InferenceTest(object):
             # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
             #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
-    def trt_bz1_test(
+    def trt_bz1_slim_test(
         self,
         input_data_dict: dict,
         output_data_dict: dict,
-        repeat=5,
+        repeat=1,
         delta=1e-5,
         gpu_mem=1000,
+        max_batch_size=3,
         min_subgraph_size=10,
-        precision="trt_fp32",
-        use_static=False,
+        precision="fp32",
+        use_static=True,
         use_calib_mode=False,
+        dynamic=False,
+        shape_range_file="shape_range.pbtxt",
+        tuned=False,
+        result_sort=False,
+        delete_pass_list=None,
+        with_benchmark=False,
+        base_latency_ms=np.nan,
+        benchmark_threshold=5e-2,
     ):
         """
-        test enable_use_gpu()
+        test slim model enable_tensorrt_engine()
+        batch_size = 10
+        trt max_batch_size = 10
+        precision_mode = fp32,fp16,int8
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
@@ -458,62 +504,85 @@ class InferenceTest(object):
             "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=1,
-            min_subgraph_size=min_subgraph_size,
-            precision_mode=trt_precision_map[precision],
-            use_static=use_static,
-            use_calib_mode=use_calib_mode,
-        )
+        if dynamic:
+            if tuned:
+                self.pd_config.collect_shape_range_info("shape_range.pbtxt")
+            else:
+                self.pd_config.enable_tensorrt_engine(
+                    workspace_size=1 << 30,
+                    max_batch_size=max_batch_size,
+                    min_subgraph_size=min_subgraph_size,
+                    precision_mode=trt_precision_map[precision],
+                    use_static=use_static,
+                    use_calib_mode=use_calib_mode,
+                )
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape(shape_range_file, True)
+        else:
+            self.pd_config.enable_tensorrt_engine(
+                workspace_size=1 << 30,
+                max_batch_size=max_batch_size,
+                min_subgraph_size=min_subgraph_size,
+                precision_mode=trt_precision_map[precision],
+                use_static=use_static,
+                use_calib_mode=use_calib_mode,
+            )
+        if delete_pass_list:
+            for ir_pass in delete_pass_list:
+                self.pd_config.delete_pass(ir_pass)
+
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
         for _, input_data_name in enumerate(input_names):
             input_handle = predictor.get_input_handle(input_data_name)
             input_handle.copy_from_cpu(input_data_dict[input_data_name])
-
-        for i in range(repeat):
-            predictor.run()
-
-        output_names = predictor.get_output_names()
-        for i, output_data_name in enumerate(output_names):
-            output_handle = predictor.get_output_handle(output_data_name)
-            output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-
-        predictor.try_shrink_memory()  # try_shrink_memory
-        predictor = paddle_infer.create_predictor(self.pd_config)
-
-        input_names = predictor.get_input_names()
-        for _, input_data_name in enumerate(input_names):
-            input_handle = predictor.get_input_handle(input_data_name)
-            input_handle.copy_from_cpu(input_data_dict[input_data_name])
-
-        for i in range(repeat):
-            predictor.run()
-
         output_names = predictor.get_output_names()
         print("output_names:", output_names)
         print("truth_value_names:", list(output_data_dict.keys()))
+
+        predictor.run()
+        if tuned:  # collect_shape_range_info收集动态shape需要predictor后再退出
+            return 0
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
-            # diff_count = np.sum(diff > delta)
-            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
-            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
-            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
+
+        # benchmark
+        if not with_benchmark:
+            return
+        # warm up
+        output_tensor = predictor.get_output_handle(output_names[0])
+        for i in range(5):
+            predictor.run()
+            batch_output = output_tensor.copy_to_cpu()
+        predict_time = 0.0
+        time_min = float("inf")
+        time_max = float("-inf")
+        for i in range(repeat):
+            start = time.time()
+            predictor.run()
+            batch_output = output_tensor.copy_to_cpu()
+            end = time.time()
+            timed = end - start
+            time_min = min(time_min, timed)
+            time_max = max(time_max, timed)
+            print("once:", timed)
+            predict_time += timed
+        time_avg = (predict_time - time_max) / (repeat - 1)
+        print(
+            "[Benchmark] Inference time(ms): min={}, max={}, avg={}".format(
+                round(time_min * 1000, 2),
+                round(time_max * 1000, 2),
+                round(time_avg * 1000, 2),
+            )
+        )
+        benchmark_diff = (time_avg * 1000 - base_latency_ms) / base_latency_ms
+        print(f"benchmark diff: {benchmark_diff}")
+        assert benchmark_diff <= benchmark_threshold, f"benchmark diff:{benchmark_diff} > {benchmark_threshold}"
 
     def trt_more_bz_test(
         self,
@@ -530,7 +599,8 @@ class InferenceTest(object):
         dynamic=False,
         shape_range_file="shape_range.pbtxt",
         tuned=False,
-        result_sort=False,
+        det_top_bbox=False,
+        det_top_bbox_threshold=0.75,
         delete_pass_list=None,
     ):
         """
@@ -603,11 +673,7 @@ class InferenceTest(object):
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
-            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
-            # diff_count = np.sum(diff > delta)
-            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
-            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
-            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta, det_top_bbox, det_top_bbox_threshold)
 
     def trt_more_bz_dynamic_test(
         self,
@@ -680,17 +746,16 @@ class InferenceTest(object):
             predictor.run()
 
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
-        predictor.try_shrink_memory()
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
 
     def trt_bz1_multi_thread_test(
         self,
@@ -705,6 +770,9 @@ class InferenceTest(object):
         use_static=False,
         use_calib_mode=False,
         delete_pass_list=None,
+        dynamic=False,
+        tuned=False,
+        shape_range_file="shape_range.pbtxt",
     ):
         """
         test enable_tensorrt_engine()
@@ -732,14 +800,29 @@ class InferenceTest(object):
             "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.enable_tensorrt_engine(
-            workspace_size=1 << 30,
-            max_batch_size=1,
-            min_subgraph_size=min_subgraph_size,
-            precision_mode=trt_precision_map[precision],
-            use_static=use_static,
-            use_calib_mode=use_calib_mode,
-        )
+        if dynamic:
+            if tuned:
+                self.pd_config.collect_shape_range_info("shape_range.pbtxt")
+            else:
+                self.pd_config.enable_tensorrt_engine(
+                    workspace_size=1 << 30,
+                    max_batch_size=1,
+                    min_subgraph_size=min_subgraph_size,
+                    precision_mode=trt_precision_map[precision],
+                    use_static=use_static,
+                    use_calib_mode=use_calib_mode,
+                )
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape(shape_range_file, True)
+        else:
+            self.pd_config.enable_tensorrt_engine(
+                workspace_size=1 << 30,
+                max_batch_size=1,
+                min_subgraph_size=min_subgraph_size,
+                precision_mode=trt_precision_map[precision],
+                use_static=use_static,
+                use_calib_mode=use_calib_mode,
+            )
+
         if delete_pass_list:
             for ir_pass in delete_pass_list:
                 self.pd_config.delete_pass(ir_pass)
@@ -844,16 +927,16 @@ class InferenceTest(object):
         for i in range(repeat):
             predictor.run()
         output_names = predictor.get_output_names()
+        print("output_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data = output_data.flatten()
-            output_data_truth_val = output_data_dict[output_data_name].flatten()
-            for j, out_data in enumerate(output_data):
-                diff = sig_fig_compare(out_data, output_data_truth_val[j])
-                assert (
-                    diff <= delta
-                ), f"{out_data} and {output_data_truth_val[j]} significant digits {diff} diff > {delta}"
+            # output_data = output_data.flatten()
+            output_data_truth_val = output_data_dict[output_data_name]
+            print("output_data_shape:", output_data.shape)
+            print("truth_value_shape:", output_data_truth_val.shape)
+            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
 
 
 def get_gpu_mem(gpu_id=0):

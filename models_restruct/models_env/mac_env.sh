@@ -35,6 +35,8 @@ export models_list=${models_list:-None} #模型列表
 #指定case操作系统
 if [[ ${AGILE_PIPELINE_NAME} =~ "-Linux-" ]];then
     export system=${system:-"linux"}   # linux windows windows_cpu mac 与yaml case下字段保持一致
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-LinuxConvergence-" ]];then
+    export system=${system:-"linux_convergence"}
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-Windows-" ]];then
     export system=${system:-"windows"}
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-WindowsCPU-" ]];then
@@ -152,6 +154,6 @@ cd ./${CE_version_name}/
 
 python -c 'import sys; print(sys.version_info[:])';
 git --version;
-python -m pip install --user -U pip #升级pip
-python -m pip install --user -r requirements.txt #预先安装依赖包
+python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
+python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
 python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --timeout=${timeout:-3600}
