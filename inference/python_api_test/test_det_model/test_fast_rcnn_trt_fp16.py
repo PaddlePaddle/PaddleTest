@@ -120,5 +120,7 @@ def test_trt_fp16_more_bz():
             precision="trt_fp16",
             dynamic=True,
             tuned=False,
+            det_top_bbox=True,
+            need_sort=True,
         )
         del test_suite2
