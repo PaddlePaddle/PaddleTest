@@ -43,8 +43,8 @@ eval:
     - Eval.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]
 
   result:
-    exit_code:
-      base: 0
+    acc:
+      base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
 infer:

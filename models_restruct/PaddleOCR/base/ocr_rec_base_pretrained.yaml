@@ -54,8 +54,8 @@ eval:
     - -o Global.pretrained_model=${model}/best_accuracy
     - Global.use_gpu=${use_gpu}
   result:
-    exit_code:
-      base: 0
+    acc:
+      base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
 

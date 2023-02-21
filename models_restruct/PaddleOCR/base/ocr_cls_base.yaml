@@ -39,8 +39,8 @@ eval:
     - Eval.loader.batch_size_per_card=10
 
   result:
-    exit_code:
-      base: 0
+    acc:
+      base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
 infer:
