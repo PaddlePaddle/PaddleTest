@@ -34,12 +34,13 @@ class PaddleOCR_End(object):
         self.step = os.environ["step"]
         self.paddle_whl = os.environ["paddle_whl"]
         self.mode = os.environ["mode"]  # function or precision
-        self.LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)  # 所有和yaml相关的变量与此拼接
         self.model = os.path.splitext(os.path.basename(self.rd_yaml_path))[0]
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
+        self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
+        self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained.log")
 
-    def getdata(self, filename, delimiter1, delimiter2):
+    def getdata1(self, filename, delimiter1, delimiter2):
         """
         get_data
         """
@@ -53,6 +54,21 @@ class PaddleOCR_End(object):
                     # print(float(result[0]))
                     data.append(float(result[0]))
         return data[-1]
+
+    def getdata(filename, kpi):
+        """
+        get_data
+        """
+        f = open(filename, encoding="utf-8", errors="ignore")
+        for line in f.readlines():
+            if kpi + ":" in line:
+                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
+                r = re.findall(regexp, line)
+                # 如果解析不到符合格式到指标，默认值设置为-1
+                kpi_value = float(r[0].strip()) if len(r) > 0 else -1
+                print(kpi_value)
+        f.close()
+        return kpi_value
 
     def update_json(self, filename, value):
         """
@@ -76,16 +92,32 @@ class PaddleOCR_End(object):
         """
         回收之前下载的数据
         """
-        if self.category == "det":
-            loss_data = self.getdata(self.LOG_PATH, "loss:", ", loss_shrink_maps")
-        elif self.category == "table":
-            loss_data = self.getdata(self.LOG_PATH, "loss:", ", horizon_bbox_loss")
-        else:
-            loss_data = self.getdata(self.LOG_PATH, "loss:", ", avg_reader_cost")
+        # eval acc
+        pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
+        pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
+        if self.model in pretrained_yaml[self.category].keys():
+            if self.category == "det" or self.category == "kie":
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "hmean")
+            elif self.category == "sr":
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "psnr_avg")
+            else:
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "acc")
+            logger.info("#### eval_acc: {}".format(eval_acc))
 
-        logger.info("#### loss_data: {}".format(loss_data))
+        # train loss
+        # if self.category == "det":
+        #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
+        # elif self.category == "table":
+        #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", horizon_bbox_loss")
+        # else:
+        #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", avg_reader_cost")
 
-        self.update_json("tools/train.json", loss_data)
+        # parse kpi
+        train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss")
+        logger.info("#### train_loss: {}".format(train_loss))
+
+        self.update_json("tools/train.json", train_loss)
+        self.update_json("tools/eval.json", eval_acc)
 
     def build_end(self):
         """

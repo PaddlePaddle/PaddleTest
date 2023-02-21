@@ -35,7 +35,7 @@ eval:
     - Global.pretrained_model=${model}/best_accuracy
 
   result:
-    acc:
+    psnr_avg:
       base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
