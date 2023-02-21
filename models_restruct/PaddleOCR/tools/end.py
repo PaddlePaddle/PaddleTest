@@ -85,21 +85,21 @@ class PaddleOCR_End(object):
                 if self.category == "det" or self.category == "kie":
                     eval_acc=self.getdata(self.EVAL_LOG_PATH, "hmean:", "")
                 elif self.category == "sr":
-                    loss_data = self.getdata(self.EVAL_LOG_PATH, "psnr_avg:", "")
+                    train_loss = self.getdata(self.EVAL_LOG_PATH, "psnr_avg:", "")
                 else:
-                    loss_data = self.getdata(self.EVAL_LOG_PATH, "acc:", "")
+                    train_loss = self.getdata(self.EVAL_LOG_PATH, "acc:", "")
 
         # train loss
         if self.category == "det":
-            loss_data = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
+            train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
         elif self.category == "table":
-            loss_data = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", horizon_bbox_loss")
+            train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", horizon_bbox_loss")
         else:
-            loss_data = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", avg_reader_cost")
+            train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", avg_reader_cost")
 
-        logger.info("#### loss_data: {}".format(loss_data))
+        logger.info("#### train_loss: {}".format(train_loss))
 
-        self.update_json("tools/train.json", loss_data)
+        self.update_json("tools/train.json", train_loss)
         self.update_json("tools/eval.json", eval_acc)
 
     def build_end(self):
