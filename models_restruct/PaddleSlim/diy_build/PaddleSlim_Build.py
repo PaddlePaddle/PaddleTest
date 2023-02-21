@@ -56,7 +56,6 @@ class PaddleSlim_Build(Model_Build):
         安装依赖包
         """
         path_now = os.getcwd()
-        platform = self.system
         os.chdir("PaddleSlim") 
         logger.info("install required whl")
         os.system("python -m pip install --user setuptools")
