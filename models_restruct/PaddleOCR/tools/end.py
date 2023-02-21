@@ -39,7 +39,7 @@ class PaddleOCR_End(object):
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
         self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained.log")
-        
+
     def getdata1(self, filename, delimiter1, delimiter2):
         """
         get_data
@@ -54,12 +54,12 @@ class PaddleOCR_End(object):
                     # print(float(result[0]))
                     data.append(float(result[0]))
         return data[-1]
-    
+
     def getdata(filename, kpi):
         """
         get_data
         """
-        f = open(filename, encoding='utf-8', errors='ignore')
+        f = open(filename, encoding="utf-8", errors="ignore")
         for line in f.readlines():
             if kpi + ":" in line:
                 regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
@@ -97,9 +97,9 @@ class PaddleOCR_End(object):
         pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
         if self.model in pretrained_yaml[self.category].keys():
             if self.category == "det" or self.category == "kie":
-                eval_acc=self.getdata(self.EVAL_LOG_PATH, "hmean")
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "hmean")
             elif self.category == "e2e":
-                eval_acc = self.getdata(self.EVAL_LOG_PATH, "f_score_e2e")    
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "f_score_e2e")
             elif self.category == "sr":
                 eval_acc = self.getdata(self.EVAL_LOG_PATH, "psnr_avg")
             else:
@@ -113,7 +113,7 @@ class PaddleOCR_End(object):
         #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", horizon_bbox_loss")
         # else:
         #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", avg_reader_cost")
-        
+
         # parse kpi
         train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss")
         logger.info("#### train_loss: {}".format(train_loss))
