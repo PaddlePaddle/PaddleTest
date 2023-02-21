@@ -6,10 +6,7 @@ PaddleSlim-Linux-Cuda117-Python310-P0-Develop
 PaddleSlim-Linux-Cuda116-Python39-P0-Develop-Centos
 PaddleSlim-Windows-Cuda112-Python38-P0-Develop
 PaddleSlim-Mac-Intel-Python310-P0CPU-Develop
-<<<<<<< HEAD
 PaddleSlim-Mac-M1-Python310-P0CPU-Develop
-=======
->>>>>>> a55d727a3654ab8aefd403b1d37177bc8a870cdb
 PaddleSlim-Linux-Cuda102-Python37-P0-Release
 PaddleSlim-Linux-Cuda102-Python37-P0-Release-Precision
 PaddleSlim-Linux-Cuda112-Python38-P0-Release
@@ -18,7 +15,4 @@ PaddleSlim-Linux-Cuda117-Python310-P0-Release
 PaddleSlim-Linux-Cuda116-Python39-P0-Release-Centos
 PaddleSlim-Windows-Cuda112-Python38-P0-Release
 PaddleSlim-Mac-Intel-Python310-P0CPU-Release
-<<<<<<< HEAD
 PaddleSlim-Mac-M1-Python310-P0CPU-Release
-=======
->>>>>>> a55d727a3654ab8aefd403b1d37177bc8a870cdb
