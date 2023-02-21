@@ -90,7 +90,7 @@ case:
     predict:
       -
         name: predict
-        path: model_zoo/electra/depoly/python
+        path: model_zoo/electra/deploy/python
         cmd: python -u ./predict.py
         params:
           - --model_file ../../electra-deploy.pdmodel
@@ -191,7 +191,7 @@ case:
     predict:
       -
         name: predict
-        path: model_zoo/electra/depoly/python
+        path: model_zoo/electra/deploy/python
         cmd: python -u ./predict.py
         params:
           - --model_file ../../electra-deploy.pdmodel
