@@ -67,7 +67,7 @@ class PaddleOCR_End(object):
                 r = re.findall(regexp, line)
                 # 如果解析不到符合格式到指标，默认值设置为-1
                 kpi_value = float(r[0].strip()) if len(r) > 0 else -1
-                print(kpi_value)               
+                print(kpi_value)
         f.close()
         return kpi_value
 
