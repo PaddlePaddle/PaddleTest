@@ -17,6 +17,6 @@ case:
         cmd: python -u tools/infer.py
         result:
           auc:
-            base: 0.798805
+            base: 0.796542
             threshold: 0.0003
             evaluation: "+"

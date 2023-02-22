@@ -10,7 +10,7 @@ case:
           - --model_name_or_path bert-base-uncased
           - --task_name SST-2
           - --max_seq_length 128
-          - --batch_size 128
+          - --batch_size 32
           - --learning_rate 3e-5
           - --max_steps 2
           - --logging_steps 1
