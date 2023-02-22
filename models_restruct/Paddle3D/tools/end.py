@@ -17,7 +17,7 @@ import numpy as np
 logger = logging.getLogger("ce")
 
 
-class PaddleOCR_End(object):
+class Paddle3D_End(object):
     """
     回收类
     """
@@ -138,7 +138,7 @@ def run():
     """
     执行入口
     """
-    model = PaddleOCR_End()
+    model = Paddle3D_End()
     model.build_end()
     return 0
 
