@@ -120,4 +120,5 @@ def test_trt_fp16_more_bz():
             dynamic=True,
             tuned=False,
             min_subgraph_size=35,
+            det_top_bbox=True,
         )

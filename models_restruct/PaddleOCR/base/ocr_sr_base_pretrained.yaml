@@ -13,7 +13,7 @@ train:
     - Global.print_batch_step=1
     - Train.loader.shuffle=False
     - Train.loader.num_workers=False
-   result:
+  result:
     loss:
       base: ${train_base_loss}
       threshold: ${train_threshold}
@@ -35,7 +35,7 @@ eval:
     - Global.pretrained_model=${model}/best_accuracy
 
   result:
-    acc:
+    psnr_avg:
       base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
