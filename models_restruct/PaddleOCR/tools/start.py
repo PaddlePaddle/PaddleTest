@@ -96,13 +96,15 @@ class PaddleOCR_Start(object):
         else:
             self.env_dict["use_gpu"] = "False"
 
-        # check kpi value
-        self.env_dict["train_base_loss"] = "1"
-        # with open("tools/train.json", "r") as f:
-        #    content = json.load(f)
-        #    train_base_loss=content['train_base_loss']
-        #    logger.info("#### train_base_loss: {}".format(train_base_loss))
-        self.env_dict["train_threshold"] = "0.5"
+        if self.mode == "precision":
+            # check kpi value
+            # self.env_dict["train_base_loss"] = "1"
+            with open("tools/train.json", "r") as f:
+                content = json.load(f)
+                train_base_loss = content[self.model]
+                logger.info("#### train_base_loss: {}".format(train_base_loss))
+            self.env_dict["train_base_loss"] = str(train_base_loss)
+            self.env_dict["train_threshold"] = "0.5"
 
     def prepare_pretrained_model(self):
         """
