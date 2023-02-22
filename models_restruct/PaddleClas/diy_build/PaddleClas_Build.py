@@ -419,7 +419,7 @@ class PaddleClas_Build(Model_Build):
                 return ret
 
         logger.info("self.dataset_target is {}".format(self.dataset_target))
-        if "None" not in str(self.dataset_target):
+        if "None" in str(self.dataset_target):
             ret = self.build_dataset()
             if ret:
                 logger.info("build env dataset failed")
