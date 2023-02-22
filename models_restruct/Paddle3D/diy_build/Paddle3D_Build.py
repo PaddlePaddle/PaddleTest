@@ -91,9 +91,15 @@ class Paddle3D_Build(Model_Build):
             if sysstr == "Linux":
                 # linux：xx are installed in '/root/.local/bin' which is not on PATH
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"
-            # os.system("python -m pip install . ")
-            os.system("python setup.py bdist_wheel")
-            os.system(" python -m pip install -U dist/p****.whl")
+                if not os.path.exists("/root/.paddle3d/pretrained/dla34/"):
+                    os.makedirs("/root/.paddle3d/pretrained/dla34/")
+                if os.path.exists("/root/.paddle3d/pretrained/dla34/dla34.pdparams"):
+                    os.remove("/root/.paddle3d/pretrained/dla34/dla34.pdparams")
+                wget.download(
+                    "https://bj.bcebos.com/paddle3d/pretrained/dla34.pdparams", out="/root/.paddle3d/pretrained/dla34/"
+                )
+
+            os.system("python -m pip install . ")
 
             print("build wheel!")
 

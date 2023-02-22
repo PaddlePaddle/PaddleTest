@@ -8,6 +8,7 @@ import os
 import sys
 import logging
 import tarfile
+import shutil
 import six
 import wget
 import pytest
@@ -15,7 +16,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +31,10 @@ def check_model_exist():
         tar = tarfile.open("yolov3.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(
+            path_prefix="./yolov3/model",
+            output_model_path="./yolov3/model",
+        )
 
 
 def test_config():
@@ -38,7 +43,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+    test_suite.load_config(
+        model_file="./yolov3/model.pdmodel",
+        params_file="./yolov3/model.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -55,7 +63,10 @@ def test_trtfp32_more_bz_multi_thread():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -88,9 +99,16 @@ def test_trtfp32_more_bz_multi_thread():
 
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
         test_suite.trt_bz1_multi_thread_test(
-            input_data_dict, output_data_dict, repeat=1, delta=1e-4, precision="trt_fp32"
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=1e-4,
+            precision="trt_fp32",
         )
 
         del test_suite  # destroy class to save memory
@@ -109,9 +127,16 @@ def test_trtfp32_more_bz():
     images_size = 608
     batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
+        try:
+            shutil.rmtree(f"{file_path}/_opt_cache")  # delete trt serialized cache
+        except Exception as e:
+            print("no need to delete trt serialized cache")
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -144,12 +169,42 @@ def test_trtfp32_more_bz():
 
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.trt_more_bz_test(
-            input_data_dict, output_data_dict, repeat=1, max_batch_size=10, delta=1e-4, precision="trt_fp32"
+
+        del test_suite
+
+        test_suite1 = InferenceTest()
+        test_suite1.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
+        test_suite1.trt_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            max_batch_size=10,
+            delta=1e-4,
+            precision="trt_fp32",
+            dynamic=True,
+            tuned=True,
+        )
+        del test_suite1  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
+        test_suite2.trt_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            max_batch_size=10,
+            delta=1e-4,
+            precision="trt_fp32",
+            dynamic=True,
         )
 
-        del test_suite  # destroy class to save memory
+        del test_suite2  # destroy class to save memory
 
 
 @pytest.mark.jetson
@@ -166,7 +221,10 @@ def test_jetson_trt_fp32_more_bz():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -199,9 +257,38 @@ def test_jetson_trt_fp32_more_bz():
 
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.trt_more_bz_test(
-            input_data_dict, output_data_dict, repeat=1, max_batch_size=10, delta=1e-4, precision="trt_fp32"
+        del test_suite
+
+        test_suite1 = InferenceTest()
+        test_suite1.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
+        test_suite1.trt_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            max_batch_size=10,
+            delta=1e-4,
+            precision="trt_fp32",
+            dynamic=True,
+            tuned=True,
+        )
+        del test_suite1  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
+        test_suite2.trt_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            max_batch_size=10,
+            delta=1e-4,
+            precision="trt_fp32",
+            dynamic=True,
         )
 
-        del test_suite  # destroy class to save memory
+        del test_suite2  # destroy class to save memory

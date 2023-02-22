@@ -1,6 +1,6 @@
 train:
   name: multi
-  cmd:  python -m paddle.distributed.launch tools/train.py
+  cmd:  export no_proxy=bcebos.com; python -m paddle.distributed.launch tools/train.py
   params:
     - --config ${rd_yaml_path}
     - --num_workers 2

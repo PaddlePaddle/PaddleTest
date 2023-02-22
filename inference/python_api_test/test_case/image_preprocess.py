@@ -153,7 +153,7 @@ def normalize(num):
         return num
 
 
-def sig_fig_compare(array1, array2, delta=5, det_top_bbox=False, det_top_bbox_threshold=0.75):
+def sig_fig_compare(array1, array2, delta=5, det_top_bbox=False, need_sort=False, det_top_bbox_threshold=0.75):
     """
     compare significant figure
     Args:
@@ -164,12 +164,20 @@ def sig_fig_compare(array1, array2, delta=5, det_top_bbox=False, det_top_bbox_th
     """
     # start = time.time()
     assert not np.all(np.isnan(array1)), f"output value all nan! \n{array1}"
-    if det_top_bbox and len(array1.shape) == 2:
-        # 适配部分fp16检测模型case,只对比超过置信度阈值的检测框
-        if array1.shape[1] == 6:
-            top_count = sum(array1[:, 1] >= det_top_bbox_threshold)
-            array1 = array1[:top_count, :]
-            array2 = array2[:top_count, :]
+    if det_top_bbox:
+        if len(array1.shape) == 2:
+            # 适配部分fp16检测模型case,只对比超过置信度阈值的检测框
+            if array1.shape[1] == 6:
+                if need_sort:
+                    # 将检测框tensor按置信度降序排序
+                    array1 = array1[array1[:, 1].argsort()[::-1]]
+                    array2 = array2[array2[:, 1].argsort()[::-1]]
+                top_count = sum(array1[:, 1] >= det_top_bbox_threshold)
+                array1 = array1[:top_count, :]
+                array2 = array2[:top_count, :]
+        elif len(array1.shape) == 1:
+            # 部分检测模型输出检测框数量，在trt fp16下可能与关闭优化的检测框数量不同，跳过，只关注高置信度检测框
+            return
     if np.any(abs(array2) > 100):
         normalize_func = np.vectorize(normalize)
         array1_normal = normalize_func(array1)
@@ -184,7 +192,7 @@ def sig_fig_compare(array1, array2, delta=5, det_top_bbox=False, det_top_bbox_th
     print("output value debug: ", array1)
     print("output diff array: ", array1[diff > delta])
     print("truth diff array:  ", array2[diff > delta])
-    assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}"
+    assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} delta:{delta}"
     # end = time.time()
     # print(f"精度校验cost：{(end - start) * 1000}ms")
     return diff
