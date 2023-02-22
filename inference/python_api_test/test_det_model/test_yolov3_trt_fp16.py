@@ -201,6 +201,8 @@ def test_trt_fp16_more_bz():
             delta=6e-2,
             precision="trt_fp16",
             dynamic=True,
+            det_top_bbox=True,
+            det_top_bbox_threshold=0.85,
         )
 
         del test_suite2  # destroy class to save memory

@@ -123,4 +123,5 @@ def test_trt_fp16_more_bz():
             precision="trt_fp16",
             dynamic=True,
             shape_range_file="./ppyolo/shape_range.pbtxt",
+            det_top_bbox=True,
         )
