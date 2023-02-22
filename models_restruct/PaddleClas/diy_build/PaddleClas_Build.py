@@ -10,6 +10,7 @@ import argparse
 import numpy as np
 import yaml
 import wget
+import platform
 from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
@@ -283,7 +284,7 @@ class PaddleClas_Build(Model_Build):
                     "python -m pip install -r requirements.txt \
                     -i https://mirror.baidu.com/pypi/simple"
                 )
-                if exit_code_paddleslim:
+                if exit_code_paddleslim and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                     exit_code_paddleslim = os.system(
                         "python -m pip install --user -r requirements.txt \
                     -i https://mirror.baidu.com/pypi/simple"
@@ -297,7 +298,7 @@ class PaddleClas_Build(Model_Build):
                     "python -m pip install -U paddleslim \
                     -i https://mirror.baidu.com/pypi/simple"
                 )
-            if exit_code_paddleslim:
+            if exit_code_paddleslim and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_paddleslim = os.system(
                     "python -m pip install --user -U paddleslim \
                     -i https://mirror.baidu.com/pypi/simple"
@@ -323,7 +324,7 @@ class PaddleClas_Build(Model_Build):
                 "python -m  pip install bcolz==1.2.0 \
                 -i https://mirror.baidu.com/pypi/simple"
             )
-            if exit_code_bcolz:
+            if exit_code_bcolz and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_bcolz = os.system(
                     "python -m  pip install bcolz==1.2.0 --user \
                 -i https://mirror.baidu.com/pypi/simple"
@@ -358,7 +359,7 @@ class PaddleClas_Build(Model_Build):
                 "python -m  pip install numpy==1.20.2 \
                 -i https://mirror.baidu.com/pypi/simple"
             )
-            if exit_code_numpy:
+            if exit_code_numpy and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_numpy = os.system(
                     "python -m  pip install --user numpy==1.20.2 \
                     -i https://mirror.baidu.com/pypi/simple"
@@ -369,7 +370,7 @@ class PaddleClas_Build(Model_Build):
             nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
                 -i https://mirror.baidu.com/pypi/simple"
             )
-            if exit_code_nvidia:
+            if exit_code_nvidia and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_nvidia = os.system(
                     "python -m  pip install --user\
             nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
@@ -393,6 +394,7 @@ class PaddleClas_Build(Model_Build):
             # if exit_code_nvidia:
             #     logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
             #     # return 1
+        if self.value_in_modellist(value="amp"):
             os.environ["FLAGS_cudnn_deterministic"] = "False"
             logger.info("set FLAGS_cudnn_deterministic as {}".format("False"))
             # amp单独考虑，不能固定随机量，否则报错如下
@@ -408,17 +410,20 @@ class PaddleClas_Build(Model_Build):
         if ret:
             logger.info("build env whl failed")
             return ret
-        logger.info("self.system  is {}".format("self.system"))
-        logger.info("convergence in system flag is {}".format("convergence" not in self.system))
+
+        logger.info("self.system  is {}".format(self.system))
         if "convergence" not in self.system:
             ret = self.build_yaml()
-        if ret:
-            logger.info("build env yaml failed")
-            return ret
-        ret = self.build_dataset()
-        if ret:
-            logger.info("build env dataset failed")
-            return ret
+            if ret:
+                logger.info("build env yaml failed")
+                return ret
+
+        logger.info("self.dataset_target is {}".format(self.dataset_target))
+        if "None" not in str(self.dataset_target):
+            ret = self.build_dataset()
+            if ret:
+                logger.info("build env dataset failed")
+                return ret
         return ret
 
 
