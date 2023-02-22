@@ -67,6 +67,8 @@ class PaddleOCR_End(object):
                 # 如果解析不到符合格式到指标，默认值设置为-1
                 kpi_value = float(r[0].strip()) if len(r) > 0 else -1
                 print(kpi_value)
+            else:
+                kpi_value = -1
         f.close()
         return kpi_value
 
@@ -110,7 +112,10 @@ class PaddleOCR_End(object):
             pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
             if self.model in pretrained_yaml[self.category].keys():
                 if self.category == "det" or self.category == "kie":
-                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "hmean")
+                    if self.model == 'det_r18_vd_ct':
+                        eval_acc = self.getdata(self.EVAL_LOG_PATH, "f_score")
+                    else:
+                        eval_acc = self.getdata(self.EVAL_LOG_PATH, "hmean")
                 elif self.category == "e2e":
                     eval_acc = self.getdata(self.EVAL_LOG_PATH, "f_score_e2e")
                 elif self.category == "sr":
