@@ -64,7 +64,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
     else
-        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2-v1"}
     fi
 else
     if [[ ${Image_version} ]];then
