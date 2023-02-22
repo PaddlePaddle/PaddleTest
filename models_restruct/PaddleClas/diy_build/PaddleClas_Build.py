@@ -4,13 +4,13 @@
 """
 import os
 import sys
+import platform
 import logging
 import tarfile
 import argparse
 import numpy as np
 import yaml
 import wget
-import platform
 from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
