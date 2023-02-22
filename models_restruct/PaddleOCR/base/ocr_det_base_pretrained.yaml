@@ -48,7 +48,7 @@ eval:
     - -o Global.pretrained_model=${model}/best_accuracy
     - Global.use_gpu=${use_gpu}
   result:
-    acc:
+    hmean:
       base: ${eval_base_acc}
       threshold: 0
       evaluation: "="

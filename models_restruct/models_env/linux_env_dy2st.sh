@@ -64,7 +64,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
     else
-        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2-v1"}
     fi
 else
     if [[ ${Image_version} ]];then
@@ -209,28 +209,24 @@ if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认
     if [ $tc_name == "release_02" ];then
         echo release_02
         export set_cuda=1;
-        export DEVICES="--device /dev/nvidia1:/dev/nvidia1 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-modeset:/dev/nvidia-modeset  --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools --device /dev/nvidia-caps:/dev/nvidia-caps"
         if [[ "${docker_flag}" == "" ]]; then
             fuser -v /dev/nvidia1 | awk '{print $0}' | xargs kill -9
         fi
     elif [ $tc_name == "release_03" ];then
         echo release_02
         export set_cuda=2;
-        export DEVICES="--device /dev/nvidia2:/dev/nvidia2 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-modeset:/dev/nvidia-modeset  --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools --device /dev/nvidia-caps:/dev/nvidia-caps"
         if [[ "${docker_flag}" == "" ]]; then
             fuser -v /dev/nvidia2 | awk '{print $0}' | xargs kill -9
         fi
     elif [ $tc_name == "release_04" ];then
         echo release_04
         export set_cuda=3;
-        export DEVICES="--device /dev/nvidia3:/dev/nvidia3 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-modeset:/dev/nvidia-modeset  --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools --device /dev/nvidia-caps:/dev/nvidia-caps"
         if [[ "${docker_flag}" == "" ]]; then
             fuser -v /dev/nvidia3 | awk '{print $0}' | xargs kill -9
         fi
     else
         echo release_01
         export set_cuda=0;
-        export DEVICES="--device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-modeset:/dev/nvidia-modeset  --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools --device /dev/nvidia-caps:/dev/nvidia-caps"
         if [[ "${docker_flag}" == "" ]]; then
             fuser -v /dev/nvidia0 | awk '{print $0}' | xargs kill -9
         fi
@@ -241,6 +237,7 @@ else
 fi
 
 if [[ "${docker_flag}" == "" ]]; then
+
     echo "before set_cuda: $set_cuda" #在docker外更改set_cuda从0开始计数, 在cce或线下已在docker中不执行
     export set_cuda_back=${set_cuda};
     array=(${set_cuda_back//,/ });
@@ -262,18 +259,12 @@ if [[ "${docker_flag}" == "" ]]; then
     }
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
-    export CUDA_SO="$(\ls /usr/lib64/libcuda* | grep -v 418 | xargs -I{} echo '-v {}:{}') $(\ls /usr/lib64/libnvidia* | grep -v 418 | grep -v ".1.1.2" | xargs -I{} echo '-v {}:{}')"
-    # export DEVICES=$(\ls /dev/nvidia* | xargs -I{} echo '--device {}:{}')
-    export NVIDIA_SMI="-v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi"
-
-    docker run ${CUDA_SO} ${DEVICES} ${NVIDIA_SMI} -i --rm \
-        --name ${docker_name} \
-        --network=host \
-        --shm-size 128G \
+    NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
+        --name=${docker_name} --net=host \
+        --shm-size=128G \
         -v $(pwd):/workspace \
         -v /home/:/home/ \
         -v /mnt:/mnt  \
-        -v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi \
         -e AK=${AK} \
         -e SK=${SK} \
         -e bce_whl_url=${bce_whl_url} \
@@ -302,12 +293,11 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
-        -w /workspace   \
+        -w /workspace \
         ${Image_version}  \
         /bin/bash -c '
 
         ldconfig;
-        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/:/usr/local/lib/
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
             case ${Python_version} in
@@ -371,6 +361,8 @@ if [[ "${docker_flag}" == "" ]]; then
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
+        #解决编译BUG,加mkdir
+        mkdir -p /paddle/build/third_party/CINN/src/external_cinn-build/thirds/install/jitify/stl_headers/algorithm
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600}

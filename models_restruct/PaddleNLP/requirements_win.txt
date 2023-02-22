@@ -1,14 +1,15 @@
 opencv-python==4.6.0.66
 opencv-contrib-python==4.6.0.66
-numpy>=1.18.5,<1.24.0
+numpy
 regex
-nltk
+nltk==3.5
 xlrd==1.2.0
 visualdl
 pybind11
 editdistance
 h5py
 attrdict==2.0.1
+parl
 subword_nmt==0.3.7
 pyrouge
 beautifulsoup4
@@ -23,6 +24,6 @@ yacs
 rouge
 paddleocr
 easydict
-pgl==2.2.4
-parl
+rouge_score
+evaluate==0.2.2
 lac
