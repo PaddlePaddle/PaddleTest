@@ -59,6 +59,9 @@ class PaddleNLP_Build(Model_Build):
         """
         path_now = os.getcwd()
         platform = self.system
+        os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
+        print(os.environ["no_proxy"])
+
         if platform == "linux":
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
@@ -81,30 +84,34 @@ class PaddleNLP_Build(Model_Build):
         else:
             print(" Dont't know paddle branch")
 
-        # if python==3.9 python==3.10:
-        #     pgl can't build
-        # else:
-        #     install pgl
+        import nltk
 
-        # import nltk
-        # nltk.download("punkt")
-        # from visualdl import LogWriter
+        nltk.download("punkt")
+        from visualdl import LogWriter
 
-        os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
-        # os.system("python setup.py bdist_wheel")
-        # cmd_return = os.system(" python -m pip install -U dist/p****.whl")
+        if re.compile("38").findall(self.paddle_whl):
+            os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
-        cmd_return = os.system("python setup.py install")
+        os.chdir("PaddleNLP")
+        os.system("python setup.py bdist_wheel")
+        cmd_return = os.system(" python -m pip install -U dist/p****.whl")
+
+        # For more detail: https://github.com/lucidrains/imagen-pytorch/issues/92
+        if re.compile("310").findall(self.paddle_whl):
+            os.system("apt-get install lzma")
+            os.system("apt-get install liblzma-dev")
+
+        # cmd_return = os.system("python setup.py install")
         # cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")
         os.chdir(path_now)
 
         if cmd_return:
-            logger.info("repo {} python -m pip install paddlenlp failed".format(self.reponame))
+            logger.info("repo {} python -m pip install-failed".format(self.reponame))
 
         os.system("python -m pip list")
         import paddle
 
-        print("last paddle commit:", paddle.version.commit)
+        print("paddle-commit:", paddle.version.commit)
 
         return 0
 
