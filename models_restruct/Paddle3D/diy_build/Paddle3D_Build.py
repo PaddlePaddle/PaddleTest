@@ -2,7 +2,6 @@
 """
 自定义环境准备
 """
-from genericpath import exists
 import os
 import sys
 import logging
@@ -94,10 +93,11 @@ class Paddle3D_Build(Model_Build):
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"
                 if not os.path.exists("/root/.paddle3d/pretrained/dla34/"):
                     os.makedirs("/root/.paddle3d/pretrained/dla34/")
-                if  os.path.exists("/root/.paddle3d/pretrained/dla34/dla34.pdparams"):
+                if os.path.exists("/root/.paddle3d/pretrained/dla34/dla34.pdparams"):
                     os.remove("/root/.paddle3d/pretrained/dla34/dla34.pdparams")
-                wget.download("https://bj.bcebos.com/paddle3d/pretrained/dla34.pdparams",\
-out="/root/.paddle3d/pretrained/dla34/")
+                wget.download(
+                    "https://bj.bcebos.com/paddle3d/pretrained/dla34.pdparams", out="/root/.paddle3d/pretrained/dla34/"
+                )
 
             os.system("python -m pip install . ")
 
