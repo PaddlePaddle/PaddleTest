@@ -92,34 +92,35 @@ class PaddleOCR_End(object):
         """
         回收之前下载的数据
         """
-        # eval acc
-        pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
-        pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
-        if self.model in pretrained_yaml[self.category].keys():
-            if self.category == "det" or self.category == "kie":
-                eval_acc = self.getdata(self.EVAL_LOG_PATH, "hmean")
-            elif self.category == "e2e":
-                eval_acc = self.getdata(self.EVAL_LOG_PATH, "f_score_e2e")
-            elif self.category == "sr":
-                eval_acc = self.getdata(self.EVAL_LOG_PATH, "psnr_avg")
-            else:
-                eval_acc = self.getdata(self.EVAL_LOG_PATH, "acc")
-            logger.info("#### eval_acc: {}".format(eval_acc))
-
-        # train loss
-        # if self.category == "det":
-        #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
-        # elif self.category == "table":
-        #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", horizon_bbox_loss")
-        # else:
-        #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", avg_reader_cost")
-
-        # parse kpi
-        train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss")
-        logger.info("#### train_loss: {}".format(train_loss))
-
-        self.update_json("tools/train.json", train_loss)
-        self.update_json("tools/eval.json", eval_acc)
+        if self.step == "train":
+            # train loss
+            # if self.category == "det":
+            #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
+            # elif self.category == "table":
+            #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", horizon_bbox_loss")
+            # else:
+            #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", avg_reader_cost")
+            # parse kpi
+            train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss")
+            logger.info("#### train_loss: {}".format(train_loss))
+            self.update_json("tools/train.json", train_loss)
+        elif self.step == "eval":
+            # eval acc
+            pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
+            pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
+            if self.model in pretrained_yaml[self.category].keys():
+                if self.category == "det" or self.category == "kie":
+                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "hmean")
+                elif self.category == "e2e":
+                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "f_score_e2e")
+                elif self.category == "sr":
+                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "psnr_avg")
+                else:
+                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "acc")
+                logger.info("#### eval_acc: {}".format(eval_acc))
+                self.update_json("tools/eval.json", eval_acc)
+        else:
+            pass
 
     def build_end(self):
         """
