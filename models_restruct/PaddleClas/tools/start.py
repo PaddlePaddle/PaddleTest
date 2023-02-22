@@ -476,7 +476,8 @@ class PaddleClas_Start(object):
         """
         # 进入repo中
         ret = 0
-        ret = self.prepare_env()
+        if "convergence" not in self.system:
+            ret = self.prepare_env()
         if ret:
             logger.info("build prepare_env failed")
             return ret

@@ -246,6 +246,7 @@ waveflow_ljspeech_ckpt_0.3.zip"
 
         self.env_dict["model"] = self.model
         self.env_dict["model_path"] = speech_map[self.model]["model_path"]
+        self.env_dict["model_bin"] = speech_map[self.model]["model_bin"]
         self.env_dict["conf_path"] = speech_map[self.model]["model_yml"]
 
         if os.path.exists(self.reponame):
