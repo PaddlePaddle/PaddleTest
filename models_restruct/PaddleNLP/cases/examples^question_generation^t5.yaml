@@ -2,7 +2,7 @@ case:
   linux:
     train:
       -
-        name: multi
+        name: train
         path: examples/question_generation/t5
         cmd: python -m paddle.distributed.launch train.py
         params:

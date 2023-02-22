@@ -92,7 +92,7 @@ class PaddleNLP_Build(Model_Build):
         nltk.download("punkt")
         from visualdl import LogWriter
 
-        if re.compile("38").findall(self.paddle_whl):
+        if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
         os.chdir("PaddleNLP")
