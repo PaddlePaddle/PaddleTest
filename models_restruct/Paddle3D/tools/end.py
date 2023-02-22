@@ -17,7 +17,7 @@ import numpy as np
 logger = logging.getLogger("ce")
 
 
-class PaddleOCR_End(object):
+class Paddle3D_End(object):
     """
     回收类
     """
@@ -102,29 +102,21 @@ class PaddleOCR_End(object):
             # else:
             #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", avg_reader_cost")
             # parse kpi
-            train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss")
+            train_loss = self.getdata(self.TRAIN_LOG_PATH, "total_loss")
             logger.info("#### train_loss: {}".format(train_loss))
             self.update_json("tools/train.json", train_loss)
         elif self.step == "eval":
             # eval acc
-            pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
-            pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
-            if self.model in pretrained_yaml[self.category].keys():
-                if self.category == "det" or self.category == "kie":
-                    if self.model == "det_r18_vd_ct":
-                        eval_acc = self.getdata(self.EVAL_LOG_PATH, "f_score")
-                    else:
-                        eval_acc = self.getdata(self.EVAL_LOG_PATH, "hmean")
-                elif self.category == "e2e":
-                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "f_score_e2e")
-                elif self.category == "sr":
-                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "psnr_avg")
-                else:
-                    eval_acc = self.getdata(self.EVAL_LOG_PATH, "acc")
-                logger.info("#### eval_acc: {}".format(eval_acc))
-                self.update_json("tools/eval.json", eval_acc)
-        else:
-            pass
+            if self.category == "smoke" or self.category == "pointpillars":
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "AP_R11@25%")
+            elif self.category == "centerpoint":
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "mAP")
+            elif self.category == "squeezesegv3":
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "Acc avg")
+            else:
+                pass
+            logger.info("#### eval_acc: {}".format(eval_acc))
+            self.update_json("tools/eval.json", eval_acc)
 
     def build_end(self):
         """
@@ -145,7 +137,7 @@ def run():
     """
     执行入口
     """
-    model = PaddleOCR_End()
+    model = Paddle3D_End()
     model.build_end()
     return 0
 
