@@ -81,7 +81,7 @@ case:
       -
         name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
-        cmd: python export_model.py --encoding_model=rnie-gram-zh
+        cmd: python export_model.py --encoding_model=ernie-gram-zh
         params:
           - --params_path=./ErnieEncoderbest.pdparams
           - --output_path=./ErnieEncoder/output
@@ -183,7 +183,7 @@ case:
       -
         name: LSTMEncoder_MLP_BiAffine
         path: examples/dependency_parsing/ddparser
-        cmd: python export_model.py --encoding_model=rnie-gram-zh
+        cmd: python export_model.py --encoding_model=ernie-gram-zh
         params:
           - --params_path=./ErnieEncoderbest.pdparams
           - --output_path=./ErnieEncoder/output

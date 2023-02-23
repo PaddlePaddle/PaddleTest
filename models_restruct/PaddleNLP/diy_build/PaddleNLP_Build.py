@@ -65,44 +65,37 @@ class PaddleNLP_Build(Model_Build):
         if platform == "linux":
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip uninstall paddlepaddle -y")
             os.system(
                 "python -m pip install -U {}".format(self.paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
         else:
             os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip uninstall paddlepaddle -y")
             os.system(
                 "python -m pip install -U {}".format(self.paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
 
-        if re.compile("evelop").findall(self.paddle_whl):
+        if re.compile("elease").findall(self.paddle_whl):
+            os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
+        else:
             os.system(
                 "python -m pip install \
                  https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
             )
-        elif re.compile("elease").findall(self.paddle_whl):
-            os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
-        else:
-            print(" Dont't know paddle branch")
 
         import nltk
 
         nltk.download("punkt")
         from visualdl import LogWriter
 
-        if re.compile("38").findall(self.paddle_whl):
+        if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
         os.chdir("PaddleNLP")
         os.system("python setup.py bdist_wheel")
         cmd_return = os.system(" python -m pip install -U dist/p****.whl")
 
-        # For more detail: https://github.com/lucidrains/imagen-pytorch/issues/92
-        if re.compile("310").findall(self.paddle_whl):
-            os.system("apt-get install lzma")
-            os.system("apt-get install liblzma-dev")
-
-        # cmd_return = os.system("python setup.py install")
-        # cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")
         os.chdir(path_now)
 
         if cmd_return:

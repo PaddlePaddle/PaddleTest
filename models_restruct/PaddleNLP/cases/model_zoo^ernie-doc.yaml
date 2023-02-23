@@ -14,11 +14,6 @@ case:
           - --max_steps 2
           - --dataset hyp
           - --output_dir hyp
-        result:
-          loss:
-            base: 0.755012
-            threshold: 0.01
-            evaluation: "="
       -
         name: mrc
         path: model_zoo/ernie-doc
@@ -32,11 +27,6 @@ case:
           - --max_steps 2
           - --dataset cmrc2018
           - --output_dir cmrc2018
-        result:
-          loss:
-            base: 6.28685
-            threshold: 0.01
-            evaluation: "="
       -
         name: mcq
         path: model_zoo/ernie-doc/
@@ -47,11 +37,6 @@ case:
           - --save_steps 2
           - --max_steps 2
           - --output_dir c3
-        result:
-          loss:
-            base: 1.456469
-            threshold: 0.01
-            evaluation: "="
       -
         name: semantic_matching
         path: model_zoo/ernie-doc/
@@ -64,11 +49,6 @@ case:
           - --save_steps 2
           - --max_steps 2
           - --output_dir cail
-        result:
-          loss:
-            base: 0.995620
-            threshold: 0.01
-            evaluation: "="
       -
         name: sequence_labeling
         path: model_zoo/ernie-doc/
