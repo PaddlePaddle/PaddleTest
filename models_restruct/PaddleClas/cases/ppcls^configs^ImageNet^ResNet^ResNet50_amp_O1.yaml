@@ -11,7 +11,7 @@ case:
           - -o Global.eval_interval=10
           - -o Global.seed=1234
           - -o DataLoader.Train.loader.num_workers=1
-          - -o Optimizer.lr.name=Cosine 
+          - -o Optimizer.lr.name=Cosine
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
@@ -28,7 +28,7 @@ case:
           - -o Global.eval_interval=20
           - -o Global.seed=1234
           - -o DataLoader.Train.loader.num_workers=1
-          - -o Optimizer.lr.name=Cosine 
+          - -o Optimizer.lr.name=Cosine
           - -o DataLoader.Train.sampler.shuffle=False
           - -o Global.output_dir=output/${qa_yaml_name}
         result:
