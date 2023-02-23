@@ -25,3 +25,6 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0.yaml
 ppcls^configs^PULC^person_exists^PPLCNet_x1_0.yaml
 ppcls^configs^PULC^person_attribute^PPLCNet_x1_0.yaml
 ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0.yaml
+ppcls^configs^ImageNet^ResNet^ResNet50_amp_O2_ultra.yaml
+ppcls^configs^ImageNet^ResNet^ResNet50_amp_O1_ultra.yaml
+ppcls^configs^ImageNet^ResNet^ResNet50_amp_O1.yaml
