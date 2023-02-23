@@ -80,6 +80,8 @@ class PaddleSeg_Start(object):
         if ret:
             logger.info("build prepare_gpu_env failed")
             return ret
+        os.environ[self.reponame] = json.dumps(self.env_dict)
+        return ret
 
 
 def run():
