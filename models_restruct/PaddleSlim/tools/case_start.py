@@ -44,7 +44,6 @@ def run():
     if qa_yaml.split("^")[0] != "case":
         with open(rd_yaml, "r") as f:
             content = yaml.load(f, Loader=yaml.FullLoader)
-
         if qa_yaml == "example^auto_compression^nlp^configs^ernie3.0^afqmc":
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
             if currnet_step == "eval":
@@ -83,7 +82,6 @@ def run():
             yaml.dump(content, f)
     else:    
         logger.info("******* yaml：{} no exists".format(rd_yaml))
-
 
 if __name__ == "__main__":
     run()
