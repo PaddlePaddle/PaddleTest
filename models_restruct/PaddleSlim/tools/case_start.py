@@ -66,6 +66,11 @@ def run():
         ):
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
         elif (
+            qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_sparse"
+            and current_name == "single"
+        ):
+            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
+        elif (
             qa_yaml == "example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis"
             and system == "windows"
         ):
@@ -76,12 +81,23 @@ def run():
         with open(rd_yaml, "w") as f:
             yaml.dump(content, f)
     elif (
-        qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact"
-        or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_false"
+        qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact" \
+        or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_false" \
         or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_precision"
     ):
         os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
     else:
+        if qa_yaml in ["case^demo^distillation^MobileNetV2_MobileNetV2_x0_25", \
+            "case^demo^distillation^ResNet101_vd_Resnet50", \
+            "case^demo^distillation^ResNet50_vd_MobileNet", \
+            "case^demo^prune^MobileNetV1", \
+            "case^demo^distillation^MobileNetV2_MobileNetV2_x0_25", \
+            "case^demo^prune^MobileNetV2" , \
+            "case^demo^prune^Resnet34" , \
+            "case^demo^prune^Resnet50" , \
+            "case^demo^quant^quant_aware^MobileNet" , \
+            "case^demo^quant^quant_aware^ResNet34" , \
+            
         logger.info("******* yaml：{} no exists".format(rd_yaml))
 
 
