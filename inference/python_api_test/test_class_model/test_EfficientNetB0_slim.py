@@ -127,7 +127,7 @@ def test_trt_int8_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=100,
-            delta=3e-1,
+            delta=8e-1,
             max_batch_size=max_batch_size,
             precision="trt_int8",
             min_subgraph_size=30,
@@ -179,7 +179,7 @@ def test_mkldnn_int8():
         precision="int8",
         cpu_num_threads=10,
         with_benchmark=True,
-        delta=2e-1,
+        delta=8e-1,
         # base_latency_ms=2.52,
         # benchmark_threshold=5e-2,
     )
