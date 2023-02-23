@@ -27,4 +27,7 @@ paddleocr
 easydict
 rouge_score
 evaluate==0.2.2
+sacremoses
+pythainlp
+kytea
 lac
