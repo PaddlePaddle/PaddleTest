@@ -62,7 +62,7 @@ class PaddleSeg_Build(Model_Build):
         logger.info("***start paddleseg install")
         os.system("python -m pip install -v -e .")
         os.system("python -m pip install zip --ignore-installed")
-        os.system("pip uninstall bce-python-sdk")
+        os.system("pip uninstall bce-python-sdk -y")
         os.system("pip install bce-python-sdk==0.8.74 --ignore-installed")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/demo.tar")
         os.system("tar xvf demo.tar")
