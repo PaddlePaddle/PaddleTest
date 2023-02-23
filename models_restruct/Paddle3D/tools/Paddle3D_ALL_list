@@ -1,4 +1,3 @@
-configs^smoke^smoke_dla34_no_dcn_kitti.yml
 configs^smoke^smoke_hrnet18_no_dcn_kitti.yml
 configs^pointpillars^pointpillars_xyres16_kitti_car.yml
 configs^pointpillars^pointpillars_xyres16_kitti_cyclist_pedestrian.yml
