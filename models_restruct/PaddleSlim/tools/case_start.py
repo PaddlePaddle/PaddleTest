@@ -37,7 +37,7 @@ def run():
     system = paddleslim_case_start.system
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_case_start.set_cuda
     set_cuda_single_card = paddleslim_case_start.set_cuda.split(",")[0]
-    if current_name == "single"
+    if current_name == "single":
         os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
     rd_yaml = os.path.join(paddleslim_case_start.REPO_PATH, paddleslim_case_start.rd_yaml_path)
     qa_yaml = paddleslim_case_start.qa_yaml_name
