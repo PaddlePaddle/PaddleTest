@@ -96,13 +96,6 @@ class PaddleNLP_Build(Model_Build):
         os.system("python setup.py bdist_wheel")
         cmd_return = os.system(" python -m pip install -U dist/p****.whl")
 
-        # For more detail: https://github.com/lucidrains/imagen-pytorch/issues/92
-        # if re.compile("310").findall(self.paddle_whl):
-        #     os.system("apt-get install lzma")
-        #     os.system("apt-get install liblzma-dev")
-
-        # cmd_return = os.system("python setup.py install")
-        # cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")
         os.chdir(path_now)
 
         if cmd_return:
