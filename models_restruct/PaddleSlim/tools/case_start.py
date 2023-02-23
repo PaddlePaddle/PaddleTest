@@ -37,7 +37,8 @@ def run():
     system = paddleslim_case_start.system
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_case_start.set_cuda
     set_cuda_single_card = paddleslim_case_start.set_cuda.split(",")[0]
-
+    if current_name == "single"
+        os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
     rd_yaml = os.path.join(paddleslim_case_start.REPO_PATH, paddleslim_case_start.rd_yaml_path)
     qa_yaml = paddleslim_case_start.qa_yaml_name
     if qa_yaml.split("^")[0] != "case":
@@ -80,24 +81,7 @@ def run():
 
         with open(rd_yaml, "w") as f:
             yaml.dump(content, f)
-    elif (
-        qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact" \
-        or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_false" \
-        or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_precision"
-    ):
-        os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
-    else:
-        if qa_yaml in ["case^demo^distillation^MobileNetV2_MobileNetV2_x0_25", \
-            "case^demo^distillation^ResNet101_vd_Resnet50", \
-            "case^demo^distillation^ResNet50_vd_MobileNet", \
-            "case^demo^prune^MobileNetV1", \
-            "case^demo^distillation^MobileNetV2_MobileNetV2_x0_25", \
-            "case^demo^prune^MobileNetV2" , \
-            "case^demo^prune^Resnet34" , \
-            "case^demo^prune^Resnet50" , \
-            "case^demo^quant^quant_aware^MobileNet" , \
-            "case^demo^quant^quant_aware^ResNet34" , \
-            
+    else:    
         logger.info("******* yaml：{} no exists".format(rd_yaml))
 
 
