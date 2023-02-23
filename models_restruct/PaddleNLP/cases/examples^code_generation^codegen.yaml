@@ -6,7 +6,7 @@ case:
         path: examples/code_generation/codegen
         cmd: wget https://paddle-qa.bj.bcebos.com/paddlenlp/codegen.tar.gz && tar -xzvf codegen.tar.gz
       -
-        name: multi
+        name: single
         path: examples/code_generation/codegen
         cmd:   python -m paddle.distributed.launch run_clm.py
         params:
