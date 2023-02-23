@@ -4,7 +4,7 @@ case:
       -
         name: classifier
         path: model_zoo/ernie-doc
-        cmd: python -m paddle.distributed.launch --gpus '0,1' --log_dir hyp run_classifier.py
+        cmd: python -m paddle.distributed.launch --log_dir hyp run_classifier.py
         params:
           - --epochs 15
           - --layerwise_decay 0.7
