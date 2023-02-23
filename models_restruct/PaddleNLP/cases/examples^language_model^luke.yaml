@@ -4,11 +4,11 @@ case:
       -
         name: prepare
         path: examples/language_model/luke
-        cmd: mkdir data && wget https://data.deepai.org/squad1.1.zip --no-check-certificate && unzip squad1.1.zip
+        cmd: mkdir data && cd data && wget https://data.deepai.org/squad1.1.zip --no-check-certificate
       -
         name: prepare_data
         path: examples/language_model/luke/data
-        cmd: cp train-v1.1.json  train.json && cp dev-v1.1.json  dev.json
+        cmd: unzip squad1.1.zip && mv train-v1.1.json train.json && mv dev-v1.1.json dev.json
       -
         name: run_squad
         path: examples/language_model/luke

@@ -187,7 +187,7 @@ def sig_fig_compare(array1, array2, delta=5, det_top_bbox=False, need_sort=False
         array2_normal = array2
     diff = np.abs(array1_normal - array2_normal)
     diff_count = np.sum(diff > delta)
-    print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+    print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} delta:{delta}")
     print("output max: ", np.max(abs(array1)), "output min: ", np.min(abs(array1)))
     print("output value debug: ", array1)
     print("output diff array: ", array1[diff > delta])

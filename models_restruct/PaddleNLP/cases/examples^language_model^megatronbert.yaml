@@ -18,13 +18,13 @@ case:
           - --max_steps 2
           - --save_step 2
       -
-        name: run_squad
+        name: run_open_entity
         path: examples/language_model/luke
         cmd: python -m paddle.distributed.launch run_open_entity.py
         params:
           - --model_type luke-large
           - --data_dir data/
-          - --output_dir output/
+          - --output_dir ./output
           - --device gpu
           - --learning_rate 1e-5
           - --num_train_epochs 1

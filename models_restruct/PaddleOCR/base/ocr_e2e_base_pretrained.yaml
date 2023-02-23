@@ -9,12 +9,13 @@ train:
     - Global.eval_batch_step=200
     - Global.print_batch_step=10
     - Global.save_model_dir=output/${qa_yaml_name}
-    - Train.loader.batch_size_per_card=10
+    - Train.loader.batch_size_per_card=1
     - Global.print_batch_step=1
     - Train.dataset.data_dir=./train_data/total_text_e2e/train
     - Train.dataset.label_file_list=[./train_data/total_text_e2e/train/train.txt]
     - Eval.dataset.data_dir=./train_data/total_text_e2e/test
     - Eval.dataset.label_file_list=[./train_data/total_text_e2e/test/test.txt]
+    - Eval.loader.batch_size_per_card=1
     - Train.loader.shuffle=False
     - Train.loader.num_workers=False
   result:
@@ -32,6 +33,7 @@ eval:
     - Eval.dataset.data_dir=./train_data/total_text_e2e/test
     - label_file_list=[./train_data/total_text_e2e/test/test.txt]
     - Global.use_gpu=${use_gpu}
+    - Eval.loader.batch_size_per_card=1
 
   name: pretrained
   cmd:  python tools/eval.py
@@ -41,6 +43,7 @@ eval:
     - Eval.dataset.data_dir=./train_data/total_text_e2e/test
     - Eval.dataset.label_file_list=[./train_data/total_text_e2e/test/test.txt]
     - Global.use_gpu=${use_gpu}
+    - Eval.loader.batch_size_per_card=1
 
   result:
     f_score_e2e:
