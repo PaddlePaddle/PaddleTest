@@ -75,11 +75,11 @@ class PaddleNLP_Build(Model_Build):
             os.system(
                 "python -m pip install -U {}".format(self.paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
-  
+
         if re.compile("elease").findall(self.paddle_whl):
             os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
         else:
-             os.system(
+            os.system(
                 "python -m pip install \
                  https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
             )

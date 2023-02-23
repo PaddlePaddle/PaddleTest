@@ -4,7 +4,7 @@ case:
       -
         name: prepare
         path: examples/language_model/luke
-        cmd: mkdir data && cd data && wget https://data.deepai.org/squad1.1.zip --no-check-certificate 
+        cmd: mkdir data && cd data && wget https://data.deepai.org/squad1.1.zip --no-check-certificate
       -
         name: prepare_data
         path: examples/language_model/luke/data
