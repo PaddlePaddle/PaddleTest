@@ -8,6 +8,7 @@ import shutil
 import logging
 import wget
 import subprocess
+import platform
 
 logger = logging.getLogger("ce")
 
