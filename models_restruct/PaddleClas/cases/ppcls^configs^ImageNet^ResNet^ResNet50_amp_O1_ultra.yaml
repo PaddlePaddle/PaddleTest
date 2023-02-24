@@ -102,7 +102,7 @@ case:
         name: trained
         cmd: python python/predict_cls.py
         params:
-          - -c configs/inference_cls.yaml
+          - -c configs/inference_cls_ch4.yaml
           - -o Global.infer_imgs="./images"
           - -o Global.inference_model_dir=${predict_trained_model}
           - -o Global.use_gpu=${set_cuda_flag}
@@ -116,7 +116,7 @@ case:
         name: pretrained
         cmd: python python/predict_cls.py
         params:
-          - -c configs/inference_cls.yaml
+          - -c configs/inference_cls_ch4.yaml
           - -o Global.infer_imgs="./images"
           - -o Global.inference_model_dir=${predict_pretrained_model}
           - -o Global.use_gpu=${set_cuda_flag}
@@ -134,11 +134,31 @@ case:
         name: multi_convergence
         cmd: python -m paddle.distributed.launch tools/train.py -c ${rd_yaml_path}
         params:
-          - -o Global.epochs=delete
-          - -o Global.save_interval=delete
-          - -o Global.eval_interval=delete
+          - -o Global.epochs=5
+          - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
+          - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
         result:
-          ${kpi_value_eval}:
+          loss:
+            base: 20
+            threshold: 0
+            evaluation: "="
+      -
+        name: multi_static_convergence
+        cmd: python -m paddle.distributed.launch ppcls/static/train.py -c ${rd_yaml_path}
+        params:
+          - -o Global.epochs=5
+          - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
+          - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
+        result:
+          loss:
             base: 20
             threshold: 0
             evaluation: "="
@@ -146,11 +166,15 @@ case:
         name: single_convergence
         cmd: python tools/train.py -c ${rd_yaml_path}
         params:
-          - -o Global.epochs=delete
-          - -o Global.save_interval=delete
-          - -o Global.eval_interval=delete
+          - -o Global.epochs=3
+          - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
+          - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
+          - -o Global.save_interval=3
+          - -o Global.eval_interval=3
         result:
-          ${kpi_value_eval}:
+          loss:
             base: 20
             threshold: 0
             evaluation: "="
@@ -169,6 +193,7 @@ case:
     base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
+    infer: skipped
     export: skipped
     predict: skipped
 
@@ -176,6 +201,7 @@ case:
     base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
+    infer: skipped
     export: skipped
     predict: skipped
 
@@ -184,6 +210,7 @@ case:
     base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
+    infer: skipped
     export: skipped
     predict: skipped
 
