@@ -6,9 +6,9 @@ import sys
 import json
 import shutil
 import logging
-import wget
-import subprocess
 import platform
+import subprocess
+import wget
 
 logger = logging.getLogger("ce")
 

@@ -10,10 +10,10 @@ import tarfile
 import argparse
 import subprocess
 import platform
+import shutil
 import numpy as np
 import yaml
 import wget
-import shutil
 from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
