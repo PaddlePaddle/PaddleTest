@@ -63,7 +63,7 @@ class Paddle3D_End(object):
         f = open(filename, encoding="utf-8", errors="ignore")
         for line in f.readlines():
             if kpi + ":" in line:
-                regexp = r"%s(:=)(\s*\d+(?:\.\d+)?)" % kpi
+                regexp = r"%s(:|=)(\s*\d+(?:\.\d+)?)" % kpi
                 r = re.findall(regexp, line)
                 # 如果解析不到符合格式到指标，默认值设置为-1
                 kpi_value = float(r[0].strip()) if len(r) > 0 else -1
