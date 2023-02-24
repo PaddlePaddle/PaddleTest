@@ -69,7 +69,7 @@ class PaddleSeg_Build(Model_Build):
         if os.path.exists("seg_dynamic_pretrain"):
             shutil.rmtree("seg_dynamic_pretrain")
         os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
-        os.system("mklink /J seg_dynamic_pretrain D:\ce_data\PaddleSeg\seg_pretrained")
+        os.system("mklink /J seg_dynamic_pretrain D:/ce_data/PaddleSeg/seg_pretrained")
         cmd = 'sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'
         os.system(cmd)
         os.system("mkdir data")
