@@ -45,7 +45,7 @@ class PaddleSeg_Start(object):
             if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
                 cmd1 = (
                     "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
-                    "/cityscapes/{}/model.pdparams".format(self.model,self.model)
+                    "/cityscapes/{}/model.pdparams".format(self.model, self.model)
                 )
                 if platform.system() == "Windows":
                     subprocess.run(cmd1)
@@ -55,7 +55,7 @@ class PaddleSeg_Start(object):
             if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
                 cmd2 = (
                     "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
-                    "/pascal_voc12/{}/model.pdparams".format(self.model,self.model)
+                    "/pascal_voc12/{}/model.pdparams".format(self.model, self.model)
                 )
                 if platform.system() == "Windows":
                     subprocess.run(cmd2)
