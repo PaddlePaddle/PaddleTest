@@ -10,6 +10,7 @@ import logging
 import tarfile
 import argparse
 import numpy as np
+import platform
 import yaml
 import wget
 from Model_Build import Model_Build
@@ -68,8 +69,12 @@ class PaddleSeg_Build(Model_Build):
         os.system("tar xvf demo.tar")
         if os.path.exists("seg_dynamic_pretrain"):
             shutil.rmtree("seg_dynamic_pretrain")
-        os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
-        os.system("mklink /J seg_dynamic_pretrain {}").format("D:/ce_data/PaddleSeg/seg_pretrained")
+        if platform.system() == "Linux":
+            os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
+        elif platform.system() == "Windows":
+            os.system("mklink /J seg_dynamic_pretrain {}").format("D:/ce_data/PaddleSeg/seg_pretrained")
+        else:
+            os.system("mkdir seg_dynamic_pretrain")
         cmd = 'sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'
         os.system(cmd)
         os.system("mkdir data")
