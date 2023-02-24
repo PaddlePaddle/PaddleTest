@@ -24,10 +24,10 @@ def check_model_exist():
     """
     check model exist
     """
-    resnet50_slim_url = "https://paddle-qa.bj.bcebos.com/PaddleSlim/ACT_models/PPLCNetV2_base_act_qat.tar"
-    if not os.path.exists("./PPLCNetV2_base_act_qat/inference.pdmodel"):
+    resnet50_slim_url = "https://paddle-qa.bj.bcebos.com/PaddleSlim/ACT_models/PPHGNet_tiny_act_qat.tar"
+    if not os.path.exists("./PPHGNet_tiny_act_qat/inference.pdmodel"):
         wget.download(resnet50_slim_url, out="./")
-        tar = tarfile.open("PPLCNetV2_base_act_qat.tar")
+        tar = tarfile.open("PPHGNet_tiny_act_qat.tar")
         tar.extractall()
         tar.close()
     if not os.path.exists("./case_image_data"):
@@ -44,8 +44,8 @@ def test_config():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./PPLCNetV2_base_act_qat/inference.pdmodel",
-        params_file="./PPLCNetV2_base_act_qat/inference.pdiparams",
+        model_file="./PPHGNet_tiny_act_qat/inference.pdmodel",
+        params_file="./PPHGNet_tiny_act_qat/inference.pdiparams",
     )
     test_suite.config_test()
 
@@ -60,8 +60,8 @@ def test_disable_gpu():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./PPLCNetV2_base_act_qat/inference.pdmodel",
-        params_file="./PPLCNetV2_base_act_qat/inference.pdiparams",
+        model_file="./PPHGNet_tiny_act_qat/inference.pdmodel",
+        params_file="./PPHGNet_tiny_act_qat/inference.pdiparams",
     )
     batch_size = 1
     fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
@@ -87,13 +87,13 @@ def test_trt_int8_more_bz():
         test_suite = InferenceTest()
         if "win" in sys.platform:
             test_suite.load_config(
-                model_file=".\\PPLCNetV2_base_act_qat\\inference.pdmodel",
-                params_file=".\\PPLCNetV2_base_act_qat\\inference.pdiparams",
+                model_file=".\\PPHGNet_tiny_act_qat\\inference.pdmodel",
+                params_file=".\\PPHGNet_tiny_act_qat\\inference.pdiparams",
             )
         else:
             test_suite.load_config(
-                model_file="./PPLCNetV2_base_act_qat/inference.pdmodel",
-                params_file="./PPLCNetV2_base_act_qat/inference.pdiparams",
+                model_file="./PPHGNet_tiny_act_qat/inference.pdmodel",
+                params_file="./PPHGNet_tiny_act_qat/inference.pdiparams",
             )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -103,15 +103,25 @@ def test_trt_int8_more_bz():
         del test_suite
 
         test_suite = InferenceTest()
+        test_suite.load_config(
+            model_file="./PPHGNet_tiny_act_qat/inference.pdmodel",
+            params_file="./PPHGNet_tiny_act_qat/inference.pdiparams",
+        )
+        test_suite.collect_shape_info(
+            model_path="./PPHGNet_tiny_act_qat/", input_data_dict=input_data_dict, device="gpu"
+        )
+        del test_suite
+
+        test_suite = InferenceTest()
         if "win" in sys.platform:
             test_suite.load_config(
-                model_file=".\\PPLCNetV2_base_act_qat\\inference.pdmodel",
-                params_file=".\\PPLCNetV2_base_act_qat\\inference.pdiparams",
+                model_file=".\\PPHGNet_tiny_act_qat\\inference.pdmodel",
+                params_file=".\\PPHGNet_tiny_act_qat\\inference.pdiparams",
             )
         else:
             test_suite.load_config(
-                model_file="./PPLCNetV2_base_act_qat/inference.pdmodel",
-                params_file="./PPLCNetV2_base_act_qat/inference.pdiparams",
+                model_file="./PPHGNet_tiny_act_qat/inference.pdmodel",
+                params_file="./PPHGNet_tiny_act_qat/inference.pdiparams",
             )
         test_suite.trt_bz1_slim_test(
             input_data_dict,
@@ -121,9 +131,12 @@ def test_trt_int8_more_bz():
             max_batch_size=max_batch_size,
             precision="trt_int8",
             min_subgraph_size=30,
+            dynamic=True,
+            shape_range_file="./PPHGNet_tiny_act_qat/shape_range.pbtxt",
             # use_calib_mode=True,
-            # with_benchmark=True,
+            with_benchmark=True,
             # base_latency_ms=0.438,
+            # benchmark_threshold=5e-2,
         )
 
         del test_suite  # destroy class to save memory
@@ -144,8 +157,8 @@ def test_mkldnn_int8():
     batch_size = 1
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./PPLCNetV2_base_act_qat/inference.pdmodel",
-        params_file="./PPLCNetV2_base_act_qat/inference.pdiparams",
+        model_file="./PPHGNet_tiny_act_qat/inference.pdmodel",
+        params_file="./PPHGNet_tiny_act_qat/inference.pdiparams",
     )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -156,8 +169,8 @@ def test_mkldnn_int8():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(
-        model_file="./PPLCNetV2_base_act_qat/inference.pdmodel",
-        params_file="./PPLCNetV2_base_act_qat/inference.pdiparams",
+        model_file="./PPHGNet_tiny_act_qat/inference.pdmodel",
+        params_file="./PPHGNet_tiny_act_qat/inference.pdiparams",
     )
     test_suite2.mkldnn_test(
         input_data_dict,
@@ -165,9 +178,10 @@ def test_mkldnn_int8():
         repeat=100,
         precision="int8",
         cpu_num_threads=10,
-        # with_benchmark=True,
-        delta=3e-1,
+        with_benchmark=True,
+        delta=9e-1,
         # base_latency_ms=2.52,
+        # benchmark_threshold=5e-2,
     )
 
     del test_suite2  # destroy class to save memory
