@@ -134,15 +134,11 @@ case:
         name: multi_convergence
         cmd: python -m paddle.distributed.launch tools/train.py -c ${rd_yaml_path}
         params:
-          - -o Global.epochs=5
-          - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
-          - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
-          - -o Global.save_interval=5
-          - -o Global.eval_interval=5
+          - -o Global.epochs=delete
+          - -o Global.save_interval=delete
+          - -o Global.eval_interval=delete
         result:
-          loss:
+          ${kpi_value_eval}:
             base: 20
             threshold: 0
             evaluation: "="
@@ -150,15 +146,11 @@ case:
         name: single_convergence
         cmd: python tools/train.py -c ${rd_yaml_path}
         params:
-          - -o Global.epochs=3
-          - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
-          - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
-          - -o Global.save_interval=3
-          - -o Global.eval_interval=3
+          - -o Global.epochs=delete
+          - -o Global.save_interval=delete
+          - -o Global.eval_interval=delete
         result:
-          loss:
+          ${kpi_value_eval}:
             base: 20
             threshold: 0
             evaluation: "="
@@ -177,7 +169,6 @@ case:
     base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
-    infer: skipped
     export: skipped
     predict: skipped
 
@@ -185,7 +176,6 @@ case:
     base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
-    infer: skipped
     export: skipped
     predict: skipped
 
@@ -194,7 +184,6 @@ case:
     base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
-    infer: skipped
     export: skipped
     predict: skipped
 

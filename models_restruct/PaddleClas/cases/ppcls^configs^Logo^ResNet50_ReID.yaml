@@ -142,8 +142,6 @@ case:
     train:
       -
         name: single
-        params:
-        - -o DataLoader.Train.sampler.batch_size=64
     eval:
       -
         name: trained
