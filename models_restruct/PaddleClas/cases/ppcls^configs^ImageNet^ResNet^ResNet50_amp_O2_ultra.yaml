@@ -1,6 +1,6 @@
 case:
   linux:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/ImageNet_base_ampultra.yaml
     train:
       -
         name: single
@@ -128,7 +128,7 @@ case:
             evaluation: "="
 
   linux_convergence:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/ImageNet_base_ampultra.yaml
     train:
       -
         name: multi_convergence
@@ -142,7 +142,7 @@ case:
           - -o Global.save_interval=5
           - -o Global.eval_interval=5
         result:
-          loss:
+          ${kpi_value_eval}:
             base: 20
             threshold: 0
             evaluation: "="
@@ -158,13 +158,13 @@ case:
           - -o Global.save_interval=3
           - -o Global.eval_interval=3
         result:
-          loss:
+          ${kpi_value_eval}:
             base: 20
             threshold: 0
             evaluation: "="
 
   # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
-    # base: ./base/ImageNet_base.yaml
+    # base: ./base/ImageNet_base_ampultra.yaml
   #   train:
   #     -
   #       name: cpu
@@ -174,7 +174,7 @@ case:
   #         exit_code: 0
 
   windows:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/ImageNet_base_ampultra.yaml
     train: skipped
     eval: skipped
     infer: skipped
@@ -182,7 +182,7 @@ case:
     predict: skipped
 
   windows_cpu:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/ImageNet_base_ampultra.yaml
     train: skipped
     eval: skipped
     infer: skipped
@@ -191,7 +191,7 @@ case:
 
 
   mac:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/ImageNet_base_ampultra.yaml
     train: skipped
     eval: skipped
     infer: skipped

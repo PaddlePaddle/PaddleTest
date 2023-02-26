@@ -142,7 +142,7 @@ case:
           - -o Global.save_interval=5
           - -o Global.eval_interval=5
         result:
-          loss:
+          ${kpi_value_eval}:
             base: 20
             threshold: 0
             evaluation: "="
@@ -158,7 +158,7 @@ case:
           - -o Global.save_interval=3
           - -o Global.eval_interval=3
         result:
-          loss:
+          ${kpi_value_eval}:
             base: 20
             threshold: 0
             evaluation: "="
