@@ -75,8 +75,11 @@ class PaddleSeg_Build(Model_Build):
             os.system("mklink /J seg_dynamic_pretrain {}".format("D:/ce_data/PaddleSeg/seg_pretrained"))
         else:
             os.system("mkdir seg_dynamic_pretrain")
-        cmd = 'sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'
-        os.system(cmd)
+        cmd_voc = 'sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'
+        if platform.system() == "Windows":
+            subprocess.run(cmd_voc)
+        else:
+            subprocess.run(cmd_voc, shell=True)
         os.system("mkdir data")
         os.chdir("data")
         if os.path.exists("cityscapes"):
