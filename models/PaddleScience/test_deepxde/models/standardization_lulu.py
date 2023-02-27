@@ -62,7 +62,7 @@ def change_backend(file,backend,flag):
         with open(file, "r", encoding="utf-8") as f:
             for line in f:
                 if index==True:
-                    if "# " in line:
+                    if "# " in line and "Backend jax" not in line:
                         line = line.replace("# ", "")
                     else:
                         index = False
