@@ -109,8 +109,7 @@ class PaddleClas_Build(Model_Build):
         """
         if isinstance(data_json, dict):
             for key, val in data_json.items():
-                # if (key == "batch_size" and "@" not in str(val)) or (key == "first_bs" and "@" not in str(val)):
-                if key == "batch_size" and "@" not in str(val):
+                if (key == "batch_size" and "@" not in str(val)) or (key == "first_bs" and "@" not in str(val)):
                     data_json[key] = str(int(np.ceil(float(val) / 3))) + "  #@"
                 if isinstance(data_json[key], dict):
                     self.change_yaml_batch_size(data_json[key])
