@@ -15,7 +15,8 @@ case:
           - --train_batch_size=2
           - --eval_batch_size=32
           - --warmup_proportion=0.1
-          - --device=gpu
+          - --model_name_or_path=bart-base 
+          - --output_dir=output
           - --max_steps 1
     eval: skipped
     infer: skipped
@@ -35,7 +36,8 @@ case:
           - --train_batch_size=2
           - --eval_batch_size=32
           - --warmup_proportion=0.1
-          - --device=gpu
+          - --model_name_or_path=bart-base 
+          - --output_dir=output
           - --max_steps 1
 
   windows:

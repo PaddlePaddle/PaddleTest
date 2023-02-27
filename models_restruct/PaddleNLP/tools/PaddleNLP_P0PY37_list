@@ -3,7 +3,6 @@ examples^language_model^luke.yaml
 examples^language_model^megatronbert.yaml
 examples^language_model^t5.yaml
 examples^language_model^xlm.yaml
-examples^text_matching^diffcse.yaml
 examples^text_matching^sentence_transformers.yaml
 examples^text_matching^simnet.yaml
 fast_generation^samples.yaml
