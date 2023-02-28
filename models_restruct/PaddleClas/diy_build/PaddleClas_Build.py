@@ -109,7 +109,7 @@ class PaddleClas_Build(Model_Build):
         """
         if isinstance(data_json, dict):
             for key, val in data_json.items():
-                if key == "batch_size" and "@" not in str(val):
+                if (key == "batch_size" and "@" not in str(val)) or (key == "first_bs" and "@" not in str(val)):
                     data_json[key] = str(int(np.ceil(float(val) / 3))) + "  #@"
                 if isinstance(data_json[key], dict):
                     self.change_yaml_batch_size(data_json[key])
@@ -394,10 +394,11 @@ class PaddleClas_Build(Model_Build):
             # if exit_code_nvidia:
             #     logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
             #     # return 1
-        if self.value_in_modellist(value="amp"):
-            os.environ["FLAGS_cudnn_deterministic"] = "False"
-            logger.info("set FLAGS_cudnn_deterministic as {}".format("False"))
-            # amp单独考虑，不能固定随机量，否则报错如下
+
+        # amp 静态图 单独考虑，不能固定随机量，否则报错如下, 或者 set FLAGS_cudnn_exhaustive_search=False
+        # if self.value_in_modellist(value="amp"):
+        #     os.environ["FLAGS_cudnn_deterministic"] = "False"
+        #     logger.info("set FLAGS_cudnn_deterministic as {}".format("False"))
         return 0
 
     def build_env(self):
@@ -418,12 +419,12 @@ class PaddleClas_Build(Model_Build):
                 logger.info("build env yaml failed")
                 return ret
 
-        logger.info("self.dataset_target is {}".format(self.dataset_target))
-        if "None" in str(self.dataset_target):
-            ret = self.build_dataset()
-            if ret:
-                logger.info("build env dataset failed")
-                return ret
+        # logger.info("self.dataset_target is {}".format(self.dataset_target))
+        # if "None" in str(self.dataset_target):
+        ret = self.build_dataset()
+        if ret:
+            logger.info("build env dataset failed")
+            return ret
         return ret
 
 
