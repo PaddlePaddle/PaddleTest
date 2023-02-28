@@ -1,4 +1,5 @@
 # $1：挂载点ip $2:cfs目录(以套件名称为存储路径) $3:本地挂载目录
+echo "args_1:$1 args_3:$3"
 unset http_proxy && unset https_proxy 
 apt-get update
 apt-get install nfs-common -y
