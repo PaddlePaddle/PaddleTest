@@ -224,6 +224,30 @@ if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认
         if [[ "${docker_flag}" == "" ]]; then
             fuser -v /dev/nvidia3 | awk '{print $0}' | xargs kill -9
         fi
+    elif [ $tc_name == "release_05" ];then
+        echo release_05
+        export set_cuda=4;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia4 | awk '{print $0}' | xargs kill -9
+        fi
+    elif [ $tc_name == "release_06" ];then
+        echo release_06
+        export set_cuda=5;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia5 | awk '{print $0}' | xargs kill -9
+        fi
+    elif [ $tc_name == "release_07" ];then
+        echo release_07
+        export set_cuda=6;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia6 | awk '{print $0}' | xargs kill -9
+        fi
+    elif [ $tc_name == "release_08" ];then
+        echo release_08
+        export set_cuda=7;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia7 | awk '{print $0}' | xargs kill -9
+        fi
     else
         echo release_01
         export set_cuda=0;

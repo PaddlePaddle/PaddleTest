@@ -87,6 +87,7 @@ case:
         name: trained
         cmd: python tools/export_model.py -c ${rd_yaml_path}
         params:
+          - -o Arch.data_format="NCHW"
           - -o Global.pretrained_model=${eval_trained_model}
           - -o Global.save_inference_dir=${export_trained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
@@ -94,6 +95,7 @@ case:
         name: pretrained
         cmd: python tools/export_model.py -c ${rd_yaml_path}
         params:
+          - -o Arch.data_format="NCHW"
           - -o Global.pretrained_model=${eval_pretrained_model}
           - -o Global.save_inference_dir=${export_pretrained_model}
           - -o Global.output_dir=output/${qa_yaml_name}
