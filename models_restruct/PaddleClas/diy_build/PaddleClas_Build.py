@@ -381,17 +381,17 @@ class PaddleClas_Build(Model_Build):
             #     logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
             #     # return 1
 
-            # cuda11 不需要更改numpy版本已适配
-            # logger.info("because of dali have np.int, so change numpy version")
-            # exit_code_numpy = os.system(
-            #     "python -m  pip install numpy==1.20.2 \
-            #     -i https://mirror.baidu.com/pypi/simple"
-            # )
-            # if exit_code_numpy and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
-            #     exit_code_numpy = os.system(
-            #         "python -m  pip install --user numpy==1.20.2 \
-            #         -i https://mirror.baidu.com/pypi/simple"
-            #     )
+            # cuda11
+            logger.info("because of dali have np.int, so change numpy version")
+            exit_code_numpy = os.system(
+                "python -m  pip install numpy==1.20.2 \
+                -i https://mirror.baidu.com/pypi/simple"
+            )
+            if exit_code_numpy and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
+                exit_code_numpy = os.system(
+                    "python -m  pip install --user numpy==1.20.2 \
+                    -i https://mirror.baidu.com/pypi/simple"
+                )
             # 安装nvidia
             exit_code_nvidia = os.system(
                 "python -m  pip install \
