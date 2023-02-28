@@ -10,6 +10,7 @@ import logging
 import tarfile
 import argparse
 import numpy as np
+import subprocess
 import platform
 import yaml
 import wget
@@ -84,6 +85,8 @@ class PaddleSeg_Build(Model_Build):
         os.chdir("data")
         if os.path.exists("cityscapes"):
             shutil.rmtree("cityscapes")
+        if os.path.exists("voc"):
+            shutil.rmtree("voc")
         logger.info("***start download data")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes.zip")
         os.system("unzip cityscapes.zip")
