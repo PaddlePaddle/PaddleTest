@@ -503,6 +503,7 @@ function gpt_auto_pass_o3_stage2() {
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
     check_diff 11.0084 ${loss} ${FUNCNAME}_loss
 }
+
 function gpt_auto_export() {
     cd ${fleetx_path}
     log_dir=log_auto
