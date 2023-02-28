@@ -61,7 +61,7 @@ class Paddle3D_End(object):
         """
         kpi_value = -1
         f = open(filename, encoding="utf-8", errors="ignore")
-        delimiter_list=[':','=',' ']
+        delimiter_list = [":", "=", " "]
         for line in f.readlines():
             # if kpi + ":" in line:
             if any(kpi + delimiter in line for delimiter in delimiter_list):
@@ -110,7 +110,11 @@ class Paddle3D_End(object):
         elif self.step == "eval":
             # eval acc
             # kiit
-            if self.category == "smoke" or self.model=='pointpillars_xyres16_kitti_cyclist_pedestrian' or self.model == "centerpoint_pillars_016voxel_kitti":
+            if (
+                self.category == "smoke"
+                or self.model == "pointpillars_xyres16_kitti_cyclist_pedestrian"
+                or self.model == "centerpoint_pillars_016voxel_kitti"
+            ):
                 eval_acc = self.getdata(self.EVAL_LOG_PATH, "AP_R11@25%")
             elif self.model == "pointpillars_xyres16_kitti_car":
                 eval_acc = self.getdata(self.EVAL_LOG_PATH, "AP_R11@50%")
