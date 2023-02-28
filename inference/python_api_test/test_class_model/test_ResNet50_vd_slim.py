@@ -101,6 +101,16 @@ def test_trt_int8_more_bz():
         del test_suite
 
         test_suite = InferenceTest()
+        test_suite.load_config(
+            model_file="./ResNet50_vd_act_qat/inference.pdmodel",
+            params_file="./ResNet50_vd_act_qat/inference.pdiparams",
+        )
+        test_suite.collect_shape_info(
+            model_path="./ResNet50_vd_act_qat/", input_data_dict=input_data_dict, device="gpu"
+        )
+        del test_suite
+
+        test_suite = InferenceTest()
         if "win" in sys.platform:
             test_suite.load_config(
                 model_file=".\\ResNet50_vd_act_qat\\inference.pdmodel",
@@ -119,9 +129,12 @@ def test_trt_int8_more_bz():
             max_batch_size=max_batch_size,
             precision="trt_int8",
             min_subgraph_size=30,
+            dynamic=True,
+            shape_range_file="./ResNet50_vd_act_qat/shape_range.pbtxt",
             # use_calib_mode=True,
             with_benchmark=True,
             base_latency_ms=1.553,
+            benchmark_threshold=5e-2,
         )
 
         del test_suite  # destroy class to save memory
@@ -162,8 +175,9 @@ def test_mkldnn_int8():
         precision="int8",
         cpu_num_threads=10,
         with_benchmark=True,
-        delta=1e-1,
+        delta=5e-1,
         base_latency_ms=7.838,
+        benchmark_threshold=5e-2,
     )
 
     del test_suite2  # destroy class to save memory

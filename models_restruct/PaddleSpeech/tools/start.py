@@ -256,7 +256,9 @@ waveflow_ljspeech_ckpt_0.3.zip"
             os.chdir(self.model_path)
             os.system("sed -i 's/python3/python/g'  `grep -rl python3  ./local/*`")
             # tal_cs
-            cmd = "sed -i 's/n_epoch: 100/n_epoch: 1/g %s'" % self.model_yml
+            cmd = "sed -i 's/n_epoch: 100/n_epoch: 1/g' %s" % self.model_yml
+            # conformer
+            cmd = "sed -i 's/n_epoch: 5/n_epoch: 1/g' %s" % self.model_yml
             os.system(cmd)
             os.chdir(path_now)
 
