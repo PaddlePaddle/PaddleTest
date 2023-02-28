@@ -12,3 +12,4 @@ case:
           - --pretrained_model ../pretrain/ResNet50_pretrained/
           - --num_epochs 1
           - --use_gpu True
+          - --batch_size 32

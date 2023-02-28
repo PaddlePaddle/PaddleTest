@@ -35,14 +35,14 @@ configs^rotate^s2anet^s2anet_1x_spine.yml
 configs^rotate^s2anet^s2anet_conv_2x_dota.yml
 configs^rotate^s2anet^s2anet_alignconv_2x_dota.yml
 configs^ppyoloe^ppyoloe_crn_l_300e_coco.yml
-configs^ppyoloe^ppyoloe_plus_crn_s_30e_voc.yml
+configs^ppyoloe^voc^ppyoloe_plus_crn_s_30e_voc.yml
 configs^ppyoloe^ppyoloe_plus_crn_x_80e_coco.yml
 configs^ppyoloe^ppyoloe_crn_m_300e_coco.yml
 configs^ppyoloe^ppyoloe_crn_s_300e_coco.yml
 configs^ppyoloe^ppyoloe_plus_crn_l_80e_coco.yml
 configs^ppyoloe^ppyoloe_crn_s_400e_coco.yml
 configs^ppyoloe^ppyoloe_crn_x_300e_coco.yml
-configs^ppyoloe^ppyoloe_plus_crn_l_30e_voc.yml
+configs^ppyoloe^voc^ppyoloe_plus_crn_l_30e_voc.yml
 configs^ppyoloe^ppyoloe_plus_crn_s_80e_coco.yml
 configs^ppyoloe^ppyoloe_plus_crn_m_80e_coco.yml
 configs^picodet^picodet_l_320_coco_lcnet.yml

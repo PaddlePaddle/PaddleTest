@@ -132,6 +132,13 @@ class PaddleOCR_Build(Model_Build):
                         cmd = "sed -i s!data_lmdb_release/training!data_lmdb_release/validation!g %s" % filename
 
                     os.system(cmd)
+
+                if "e2e_r50_vd_pg" in filename:
+                    if sysstr == "Darwin":
+                        cmd = "sed -i '' 's/batch_size: 14/batch_size: 1/g' %s" % filename
+                    else:
+                        cmd = "sed -i s/batch_size: 14/batch_size: 1/g %s" % filename
+                        os.system(cmd)
             os.chdir(self.test_root_path)
             print("build dataset!")
 
