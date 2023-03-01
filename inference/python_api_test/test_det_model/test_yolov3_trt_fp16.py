@@ -72,9 +72,9 @@ def test_trt_fp16_more_bz_multi_thread():
             file_path, images_size, center=False, model_type="det"
         )
 
-        img = images_origin_list[0:batch_size]
+        img = images_origin_list[1 : batch_size + 1]
         result = npy_list[0 : batch_size * 2]
-        data = np.array(images_list[0:batch_size]).astype("float32")
+        data = np.array(images_list[1 : batch_size + 1]).astype("float32")
         scale_factor_pool = []
         for batch in range(batch_size):
             scale_factor = (
@@ -142,9 +142,9 @@ def test_trt_fp16_more_bz():
             file_path, images_size, center=False, model_type="det"
         )
 
-        img = images_origin_list[0:batch_size]
+        img = images_origin_list[1 : batch_size + 1]
         result = npy_list[0 : batch_size * 2]
-        data = np.array(images_list[0:batch_size]).astype("float32")
+        data = np.array(images_list[1 : batch_size + 1]).astype("float32")
         scale_factor_pool = []
         for batch in range(batch_size):
             scale_factor = (
@@ -212,7 +212,7 @@ def test_trt_fp16_more_bz():
 @pytest.mark.trt_fp16
 def test_jetson_trt_fp16_more_bz():
     """
-    compared trt fp32 batch_size=1,5,10 yolov3 outputs with true val
+    compared trt fp32 batch_size=1 yolov3 outputs with true val
     """
     check_model_exist()
 
@@ -222,14 +222,17 @@ def test_jetson_trt_fp16_more_bz():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
 
-        img = images_origin_list[0:batch_size]
+        img = images_origin_list[1 : batch_size + 1]
         result = npy_list[0 : batch_size * 2]
-        data = np.array(images_list[0:batch_size]).astype("float32")
+        data = np.array(images_list[1 : batch_size + 1]).astype("float32")
         scale_factor_pool = []
         for batch in range(batch_size):
             scale_factor = (
