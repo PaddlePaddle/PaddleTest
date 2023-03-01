@@ -41,8 +41,9 @@ class PaddleOCR_End(object):
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
         self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained.log")
-        self.paddle_commit = os.environ.get("paddle_commit")
+        # self.paddle_commit = os.environ.get("paddle_commit")
         self.model_commit = os.environ.get("model_commit")
+        self.branch = os.environ.get["branch"]
 
     def getdata1(self, filename, delimiter1, delimiter2):
         """
