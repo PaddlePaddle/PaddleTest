@@ -9,9 +9,9 @@ import shutil
 import logging
 import tarfile
 import argparse
-import numpy as np
 import subprocess
 import platform
+import numpy as np
 import yaml
 import wget
 from Model_Build import Model_Build
