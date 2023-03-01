@@ -12,6 +12,8 @@ import argparse
 import logging
 import yaml
 import wget
+import platform
+import paddle
 import numpy as np
 
 logger = logging.getLogger("ce")
@@ -125,6 +127,28 @@ class PaddleOCR_End(object):
                 self.update_json("tools/eval.json", eval_acc)
         else:
             pass
+    
+    def config_report_enviorement_variable(self):
+        """
+        generate report_enviorement_variable dict
+        """
+        logger.info("config_report_enviorement_variable start")
+        report_enviorement_dict={}
+        python_version=platform.python_version()
+        paddle_version=paddle.__version__
+        # paddle_commit=paddle.version.commit
+        report_enviorement_dict['python_version']=python_version
+        report_enviorement_dict['paddle_version']=paddle_version
+        report_enviorement_dict['paddle_commit']=os.environ.get("paddle_commit")
+        report_enviorement_dict['model_repo_name']=self.reponame
+        report_enviorement_dict['model_branch']=self.branch   
+        report_enviorement_dict['models_commit']=os.environ.get("models_commit")
+
+        if os.path.exists("result/environment.properties"):
+            os.remove("result/environment.properties")
+        with open('result/environment.properties', 'w') as f:
+            for key, value in report_enviorement_dict.items():
+                f.write(str(key) + "=" + str(value) + '\n')
 
     def build_end(self):
         """
@@ -138,6 +162,10 @@ class PaddleOCR_End(object):
             logger.info("build collect_data_value failed")
             return ret
         logger.info("build collect_data_value end")
+        # report_enviorement_dict
+        logger.info("config_report_enviorement_variable start")
+        self.config_report_enviorement_variable()
+        logger.info("config_report_enviorement_variable start")
         return ret
 
 
