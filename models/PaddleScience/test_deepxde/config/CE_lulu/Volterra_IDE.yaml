@@ -1,0 +1,5 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_forward/Volterra_IDE.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/Volterra_IDE.metric.npy"
+    solution_loss_dir: "../standard_data/Volterra_IDE.loss.npy"
