@@ -139,15 +139,15 @@ class PaddleOCR_End(object):
         paddle_version = paddle.__version__
         paddle_commit = paddle.version.commit
         os.chdir(self.reponame)
-        models_commit = os.popen('git rev-parse HEAD').read().replace("\n", "")
+        models_commit = os.popen("git rev-parse HEAD").read().replace("\n", "")
         os.chdir("..")
-        
+
         report_enviorement_dict["python_version"] = python_version
         report_enviorement_dict["paddle_version"] = paddle_version
         report_enviorement_dict["paddle_commit"] = paddle_commit
         report_enviorement_dict["model_repo_name"] = self.reponame
         report_enviorement_dict["model_branch"] = self.branch
-        report_enviorement_dict["models_commit"] =  models_commit
+        report_enviorement_dict["models_commit"] = models_commit
 
         if os.path.exists("result/environment.properties"):
             os.remove("result/environment.properties")
