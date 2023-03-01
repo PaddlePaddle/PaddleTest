@@ -68,6 +68,7 @@ class PaddleSeg_Build(Model_Build):
         os.system("pip install bce-python-sdk==0.8.74 --ignore-installed")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/demo.tar")
         os.system("tar xvf demo.tar")
+        logger.info("***start pretrain model prepare")
         if os.path.exists("seg_dynamic_pretrain"):
             shutil.rmtree("seg_dynamic_pretrain")
         if platform.system() == "Linux":
