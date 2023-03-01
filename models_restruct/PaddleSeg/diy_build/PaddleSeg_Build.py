@@ -9,6 +9,8 @@ import shutil
 import logging
 import tarfile
 import argparse
+import subprocess
+import platform
 import numpy as np
 import yaml
 import wget
@@ -66,16 +68,30 @@ class PaddleSeg_Build(Model_Build):
         os.system("pip install bce-python-sdk==0.8.74 --ignore-installed")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/demo.tar")
         os.system("tar xvf demo.tar")
+        logger.info("***start pretrain model prepare")
         if os.path.exists("seg_dynamic_pretrain"):
             shutil.rmtree("seg_dynamic_pretrain")
-        os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
-        os.system("mklink /J seg_dynamic_pretrain D:/ce_data/PaddleSeg/seg_pretrained")
-        cmd = 'sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'
-        os.system(cmd)
+        if platform.system() == "Linux":
+            os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
+        elif platform.system() == "Windows":
+            os.system("mklink /J seg_dynamic_pretrain {}".format("D:/ce_data/PaddleSeg/seg_pretrained"))
+        else:
+            os.system("mkdir seg_dynamic_pretrain")
+        if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
+            os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
+        else:
+            os.environ["sed"] = "sed"
+        cmd_voc = '{} -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'.format(os.getenv("sed"))
+        if platform.system() == "Windows":
+            subprocess.run(cmd_voc)
+        else:
+            subprocess.run(cmd_voc, shell=True)
         os.system("mkdir data")
         os.chdir("data")
         if os.path.exists("cityscapes"):
             shutil.rmtree("cityscapes")
+        if os.path.exists("voc"):
+            shutil.rmtree("voc")
         logger.info("***start download data")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes.zip")
         os.system("unzip cityscapes.zip")

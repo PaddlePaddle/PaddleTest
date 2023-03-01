@@ -53,7 +53,7 @@ case:
         name: python
         cmd: python deploy/python/keypoint_infer.py
   mac:
-    base: ./base/normal_base.yml
+    base: ./base/keypoint_base.yml
     train:
       -
         name: single
