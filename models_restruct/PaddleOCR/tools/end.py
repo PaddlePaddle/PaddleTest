@@ -41,9 +41,7 @@ class PaddleOCR_End(object):
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
         self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained.log")
-        # self.paddle_commit = os.environ.get("paddle_commit")
-        self.model_commit = os.environ.get("model_commit")
-        self.branch = os.environ.get["branch"]
+        self.branch = os.environ["branch"]
 
     def getdata1(self, filename, delimiter1, delimiter2):
         """
@@ -140,12 +138,16 @@ class PaddleOCR_End(object):
         python_version = platform.python_version()
         paddle_version = paddle.__version__
         paddle_commit = paddle.version.commit
+        os.chdir(self.reponame)
+        models_commit = os.popen("git rev-parse HEAD").read().replace("\n", "")
+        os.chdir("..")
+
         report_enviorement_dict["python_version"] = python_version
         report_enviorement_dict["paddle_version"] = paddle_version
         report_enviorement_dict["paddle_commit"] = paddle_commit
         report_enviorement_dict["model_repo_name"] = self.reponame
         report_enviorement_dict["model_branch"] = self.branch
-        report_enviorement_dict["models_commit"] = os.environ.get("models_commit")
+        report_enviorement_dict["models_commit"] = models_commit
 
         if os.path.exists("result/environment.properties"):
             os.remove("result/environment.properties")
