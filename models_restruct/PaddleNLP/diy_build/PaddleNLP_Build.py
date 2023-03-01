@@ -93,8 +93,11 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
         os.chdir("PaddleNLP")
-        os.system("python setup.py bdist_wheel")
-        cmd_return = os.system(" python -m pip install -U dist/p****.whl")
+        # os.system("python setup.py bdist_wheel")
+        # cmd_return = os.system(" python -m pip install -U dist/p****.whl")
+        cmd_return = os.system(
+            "python -m pip install --pre --upgrade paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html"
+        )
 
         os.chdir(path_now)
 

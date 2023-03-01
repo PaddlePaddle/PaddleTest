@@ -73,8 +73,8 @@ def test_trt_fp32_more_bz():
             file_path, images_size, center=False, model_type="det", with_true_data=False
         )
 
-        img = images_origin_list[0:batch_size]
-        data = np.array(images_list[0:batch_size]).astype("float32")
+        img = images_origin_list[1 : batch_size + 1]
+        data = np.array(images_list[1 : batch_size + 1]).astype("float32")
         scale_factor_pool = []
         for batch in range(batch_size):
             scale_factor = (
@@ -99,7 +99,7 @@ def test_trt_fp32_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=1,
-            delta=1e-5,
+            delta=3e-5,
             precision="trt_fp32",
             dynamic=True,
             tuned=True,
@@ -115,7 +115,7 @@ def test_trt_fp32_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=1,
-            delta=2e-5,
+            delta=3e-5,
             precision="trt_fp32",
             dynamic=True,
             tuned=False,

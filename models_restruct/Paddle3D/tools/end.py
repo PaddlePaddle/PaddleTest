@@ -38,7 +38,7 @@ class Paddle3D_End(object):
         self.model = os.path.splitext(os.path.basename(self.rd_yaml_path))[0]
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
-        self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained.log")
+        self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained_bs1.log")
 
     def getdata1(self, filename, delimiter1, delimiter2):
         """
@@ -61,13 +61,15 @@ class Paddle3D_End(object):
         """
         kpi_value = -1
         f = open(filename, encoding="utf-8", errors="ignore")
+        delimiter_list = [":", "=", " "]
         for line in f.readlines():
-            if kpi + ":" in line:
-                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
+            # if kpi + ":" in line:
+            if any(kpi + delimiter in line for delimiter in delimiter_list):
+                # regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
+                regexp = r"%s[:= ](\s*\d+(?:\.\d+)?)" % kpi
                 r = re.findall(regexp, line)
                 # 如果解析不到符合格式到指标，默认值设置为-1
                 kpi_value = float(r[0].strip()) if len(r) > 0 else -1
-                print(kpi_value)
         f.close()
         return kpi_value
 
@@ -107,8 +109,16 @@ class Paddle3D_End(object):
             self.update_json("tools/train.json", train_loss)
         elif self.step == "eval":
             # eval acc
-            if self.category == "smoke" or self.category == "pointpillars":
+            # kiit
+            if (
+                self.category == "smoke"
+                or self.model == "pointpillars_xyres16_kitti_cyclist_pedestrian"
+                or self.model == "centerpoint_pillars_016voxel_kitti"
+            ):
                 eval_acc = self.getdata(self.EVAL_LOG_PATH, "AP_R11@25%")
+            elif self.model == "pointpillars_xyres16_kitti_car":
+                eval_acc = self.getdata(self.EVAL_LOG_PATH, "AP_R11@50%")
+            # nuscenes dataset
             elif self.category == "centerpoint":
                 eval_acc = self.getdata(self.EVAL_LOG_PATH, "mAP")
             elif self.category == "squeezesegv3":

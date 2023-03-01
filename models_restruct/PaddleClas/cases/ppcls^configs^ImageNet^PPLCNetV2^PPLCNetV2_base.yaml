@@ -171,6 +171,8 @@ case:
     train:
       -
         name: single
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
     eval:
       -
         name: trained
