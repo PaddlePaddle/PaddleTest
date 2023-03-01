@@ -133,6 +133,7 @@ case:
           - -o Global.to_static=True
           - -o Global.device=gpu
           - -o Global.print_batch_step=10
+          - -o Global.epochs=120
           - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
@@ -155,6 +156,7 @@ case:
           - -o Global.to_static=True
           - -o Global.device=gpu
           - -o Global.print_batch_step=10
+          - -o Global.epochs=120
           - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
@@ -177,6 +179,7 @@ case:
           - -o Global.to_static=True
           - -o Global.device=gpu
           - -o Global.print_batch_step=10
+          - -o Global.epochs=120
           - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
@@ -199,6 +202,7 @@ case:
           - -o Global.to_static=True
           - -o Global.device=gpu
           - -o Global.print_batch_step=10
+          - -o Global.epochs=120
           - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
