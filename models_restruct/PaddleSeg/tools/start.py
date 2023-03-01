@@ -43,32 +43,54 @@ class PaddleSeg_Start(object):
         """
         if "cityscapes" in self.model:
             if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
-                cmd1 = (
+                cmd = (
                     "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
                     "/cityscapes/{}/model.pdparams".format(self.model, self.model)
                 )
                 if platform.system() == "Windows":
-                    subprocess.run(cmd1)
+                    subprocess.run(cmd)
                 else:
-                    subprocess.run(cmd1, shell=True)
+                    subprocess.run(cmd, shell=True)
         if "voc12" in self.model:
             if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
-                cmd2 = (
+                cmd = (
                     "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
                     "/pascal_voc12/{}/model.pdparams".format(self.model, self.model)
                 )
                 if platform.system() == "Windows":
-                    subprocess.run(cmd2)
+                    subprocess.run(cmd)
                 else:
-                    subprocess.run(cmd2, shell=True)
+                    subprocess.run(cmd, shell=True)
+        if "ade20k" in self.model:
+            if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
+                cmd = (
+                    "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
+                    "/ade20k/{}/model.pdparams".format(self.model, self.model)
+                )
+                if platform.system() == "Windows":
+                    subprocess.run(cmd)
+                else:
+                    subprocess.run(cmd, shell=True)
+        if "camvid" in self.model:
+            if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
+                cmd = (
+                    "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
+                    "/camvid/{}/model.pdparams".format(self.model, self.model)
+                )
+                if platform.system() == "Windows":
+                    subprocess.run(cmd)
+                else:
+                    subprocess.run(cmd, shell=True)
         if "cpu" in self.system or "mac" in self.system:
             self.env_dict["set_cuda_flag"] = "cpu"  # 根据操作系统判断
         else:
             self.env_dict["set_cuda_flag"] = "gpu"  # 根据操作系统判断
         if "voc12" in self.model:
             os.environ["image"] = "2007_000033.jpg"
+            self.env_dict["image"] = "2007_000033.jpg"
         else:
             os.environ["image"] = "leverkusen_000029_000019_leftImg8bit.png"
+            self.env_dict["image"] = "leverkusen_000029_000019_leftImg8bit.png"
         return 0
 
     def build_prepare(self):
