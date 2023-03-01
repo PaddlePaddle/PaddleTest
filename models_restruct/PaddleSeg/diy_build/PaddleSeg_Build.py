@@ -76,7 +76,11 @@ class PaddleSeg_Build(Model_Build):
             os.system("mklink /J seg_dynamic_pretrain {}".format("D:/ce_data/PaddleSeg/seg_pretrained"))
         else:
             os.system("mkdir seg_dynamic_pretrain")
-        cmd_voc = 'sed -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'
+        if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
+            os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
+        else:
+            os.environ["sed"] = "sed"
+        cmd_voc = '{} -i "s/trainaug/train/g" configs/_base_/pascal_voc12aug.yml'.format(os.getenv("sed"))
         if platform.system() == "Windows":
             subprocess.run(cmd_voc)
         else:
