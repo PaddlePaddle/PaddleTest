@@ -109,7 +109,7 @@ class PaddleClas_Build(Model_Build):
         """
         if isinstance(data_json, dict):
             for key, val in data_json.items():
-                if key == "batch_size" and "@" not in str(val):
+                if (key == "batch_size" and "@" not in str(val)) or (key == "first_bs" and "@" not in str(val)):
                     data_json[key] = str(int(np.ceil(float(val) / 3))) + "  #@"
                 if isinstance(data_json[key], dict):
                     self.change_yaml_batch_size(data_json[key])
@@ -336,7 +336,7 @@ class PaddleClas_Build(Model_Build):
         if self.value_in_modellist(value="amp") or self.value_in_modellist(value="dy2st_convergence"):
             logger.info("#### fp16 or amp install")
             if os.path.exists("nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl") and os.path.exists(
-                "nvidia_dali_cuda110-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl"
+                "nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl"
             ):
                 logger.info("#### already download nvidia_dali_cuda102 nvidia_dali_cuda110")
             else:
@@ -353,7 +353,35 @@ class PaddleClas_Build(Model_Build):
                     )
                 except:
                     logger.info("#### prepare download failed {} failed".format("nvidia_dali"))
-            # 改变numpy版本
+            # # 改变numpy版本
+            # cuda102 只支持py310以下
+            # logger.info("because of dali have np.int, so change numpy version")
+            # exit_code_numpy = os.system(
+            #     "python -m  pip install numpy==1.20.2 \
+            #     -i https://mirror.baidu.com/pypi/simple"
+            # )
+            # if exit_code_numpy and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
+            #     exit_code_numpy = os.system(
+            #         "python -m  pip install --user numpy==1.20.2 \
+            #         -i https://mirror.baidu.com/pypi/simple"
+            #     )
+            # # 安装nvidia
+            # exit_code_nvidia = os.system(
+            #     "python -m  pip install \
+            # nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
+            #     -i https://mirror.baidu.com/pypi/simple"
+            # )
+            # if exit_code_nvidia and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
+            #     exit_code_nvidia = os.system(
+            #         "python -m  pip install --user\
+            # nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
+            #     -i https://mirror.baidu.com/pypi/simple"
+            #     )
+            # if exit_code_nvidia:
+            #     logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
+            #     # return 1
+
+            # cuda11
             logger.info("because of dali have np.int, so change numpy version")
             exit_code_numpy = os.system(
                 "python -m  pip install numpy==1.20.2 \
@@ -367,32 +395,17 @@ class PaddleClas_Build(Model_Build):
             # 安装nvidia
             exit_code_nvidia = os.system(
                 "python -m  pip install \
-            nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
+            nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl \
                 -i https://mirror.baidu.com/pypi/simple"
             )
             if exit_code_nvidia and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_nvidia = os.system(
                     "python -m  pip install --user\
-            nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl \
+            nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl \
                 -i https://mirror.baidu.com/pypi/simple"
                 )
             if exit_code_nvidia:
-                logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
-                # return 1
-            # 不安装cuda11
-            # exit_code_nvidia = os.system(
-            #     "python -m  pip install \
-            # nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl \
-            #     -i https://mirror.baidu.com/pypi/simple"
-            # )
-            # if exit_code_nvidia:
-            #     exit_code_nvidia = os.system(
-            #         "python -m  pip install --user\
-            # nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl \
-            #     -i https://mirror.baidu.com/pypi/simple"
-            #     )
-            # if exit_code_nvidia:
-            #     logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
+                logger.info("repo {} python -m pip install nvidia_dali_cuda110 failed".format(self.reponame))
             #     # return 1
 
         # amp 静态图 单独考虑，不能固定随机量，否则报错如下, 或者 set FLAGS_cudnn_exhaustive_search=False
