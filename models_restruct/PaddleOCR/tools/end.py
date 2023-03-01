@@ -10,9 +10,9 @@ import glob
 import shutil
 import argparse
 import logging
+import platform
 import yaml
 import wget
-import platform
 import paddle
 import numpy as np
 
@@ -41,6 +41,8 @@ class PaddleOCR_End(object):
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
         self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained.log")
+        self.paddle_commit = os.environ.get("paddle_commit")
+        self.model_commit = os.environ.get("model_commit")
 
     def getdata1(self, filename, delimiter1, delimiter2):
         """
@@ -127,28 +129,28 @@ class PaddleOCR_End(object):
                 self.update_json("tools/eval.json", eval_acc)
         else:
             pass
-    
+
     def config_report_enviorement_variable(self):
         """
         generate report_enviorement_variable dict
         """
         logger.info("config_report_enviorement_variable start")
-        report_enviorement_dict={}
-        python_version=platform.python_version()
-        paddle_version=paddle.__version__
-        # paddle_commit=paddle.version.commit
-        report_enviorement_dict['python_version']=python_version
-        report_enviorement_dict['paddle_version']=paddle_version
-        report_enviorement_dict['paddle_commit']=os.environ.get("paddle_commit")
-        report_enviorement_dict['model_repo_name']=self.reponame
-        report_enviorement_dict['model_branch']=self.branch   
-        report_enviorement_dict['models_commit']=os.environ.get("models_commit")
+        report_enviorement_dict = {}
+        python_version = platform.python_version()
+        paddle_version = paddle.__version__
+        paddle_commit = paddle.version.commit
+        report_enviorement_dict["python_version"] = python_version
+        report_enviorement_dict["paddle_version"] = paddle_version
+        report_enviorement_dict["paddle_commit"] = paddle_commit
+        report_enviorement_dict["model_repo_name"] = self.reponame
+        report_enviorement_dict["model_branch"] = self.branch
+        report_enviorement_dict["models_commit"] = os.environ.get("models_commit")
 
         if os.path.exists("result/environment.properties"):
             os.remove("result/environment.properties")
-        with open('result/environment.properties', 'w') as f:
+        with open("result/environment.properties", "w") as f:
             for key, value in report_enviorement_dict.items():
-                f.write(str(key) + "=" + str(value) + '\n')
+                f.write(str(key) + "=" + str(value) + "\n")
 
     def build_end(self):
         """
