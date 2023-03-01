@@ -28,12 +28,15 @@ fleet_gpu_model_list=( \
     ernie_base_3D \
     ernie_dp2 \
     vit_cifar10_finetune \
-    vit_inference \
     vit_qat \
+    vit_inference \
+    imagen_text2im_397M_64x64_single \
+    imagen_text2im_397M_64x64_dp8 \
+    imagen_text2im_2B_64x64_sharding8 \
+    imagen_text2im_64x64_DebertaV2_dp8 \
+    imagen_super_resolution_256_single_card \
+    imagen_super_resolution_256_dp8 \
     )
-    # imagen_super_resolution_512_single \
-    # imagen_text2im_397M_64x64_single \
-    # imagen_text2im_397M_64x64_bs2048 \
 
 
 function gpt_preprocess_data() {
@@ -57,22 +60,22 @@ function gpt_preprocess_data() {
 function gpt_345M_single() {
     cd ${fleetx_path}
     rm -rf log
-    python examples/transformer/models/GPT/pretrain/run.py \
-        -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_345M_single_card.yaml \
+    python tools/train.py \
+        -c ppfleetx/configs/nlp/gpt/pretrain_gpt_345M_single_card.yaml \
         -o Model.num_layers=4 -o Model.num_attention_heads=4 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10
     check_result $FUNCNAME
 }
 
 function gpt_1.3B_dp() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" examples/transformer/models/GPT/pretrain/run.py\
-        -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_1.3B_dp8.yaml \
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py\
+        -c ppfleetx/configs/nlp/gpt/pretrain_gpt_1.3B_dp8.yaml \
         -o Model.num_layers=4 -o Model.num_attention_heads=4 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10
     check_result $FUNCNAME
 }
 
@@ -80,13 +83,13 @@ function gpt_6.7B_stage2_dp2_sharding4() {
     cd ${fleetx_path}
     rm -rf log
     python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" \
-        examples/transformer/models/GPT/pretrain/run.py -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_6.7B_sharding16.yaml \
+        tools/train.py -c ppfleetx/configs/nlp/gpt/pretrain_gpt_6.7B_sharding16.yaml \
         -o Model.num_layers=4 -o Model.num_attention_heads=4 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10 \
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Distributed.sharding.sharding_degree=4 -o Distributed.sharding.sharding_stage=2 \
         -o Distributed.sharding.reduce_overlap=False -o Distributed.sharding.broadcast_overlap=False \
-        -o Global.logging_freq=5
+        -o Engine.logging_freq=5
     check_result $FUNCNAME
 }
 
@@ -94,13 +97,13 @@ function gpt_6.7B_stage3_dp2_sharding4() {
     cd ${fleetx_path}
     rm -rf log
     python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" \
-        examples/transformer/models/GPT/pretrain/run.py -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_6.7B_sharding16.yaml \
+        tools/train.py -c ppfleetx/configs/nlp/gpt/pretrain_gpt_6.7B_sharding16.yaml \
         -o Model.num_layers=4 -o Model.num_attention_heads=4 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10 \
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Distributed.sharding.sharding_degree=4 -o Distributed.sharding.sharding_stage=3 \
         -o Distributed.sharding.reduce_overlap=False -o Distributed.sharding.broadcast_overlap=False \
-        -o Global.logging_freq=5
+        -o Engine.logging_freq=5
     check_result $FUNCNAME
 }
 
@@ -108,24 +111,24 @@ function gpt_6.7B_stage2_sharding8() {
     cd ${fleetx_path}
     rm -rf log
     python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" \
-        examples/transformer/models/GPT/pretrain/run.py -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_6.7B_sharding16.yaml \
+        tools/train.py -c ppfleetx/configs/nlp/gpt/pretrain_gpt_6.7B_sharding16.yaml \
         -o Model.num_layers=4 -o Model.num_attention_heads=4 \
-        -o Global.max_steps=20 -o Global.eval_freq=20 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10 \
+        -o Engine.max_steps=20 -o Engine.eval_freq=20 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Distributed.sharding.sharding_degree=8 -o Distributed.sharding.sharding_stage=2 \
         -o Distributed.sharding.reduce_overlap=True -o Distributed.sharding.broadcast_overlap=True \
-        -o Global.logging_freq=5
+        -o Engine.logging_freq=5
     check_result $FUNCNAME
 }
 
 function gpt_175B_DP1_MP4_PP2() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" examples/transformer/models/GPT/pretrain/run.py\
-        -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_175B_mp8_pp16.yaml \
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py\
+        -c ppfleetx/configs/nlp/gpt/pretrain_gpt_175B_mp8_pp16.yaml \
         -o Model.hidden_size=1024 -o Model.num_layers=4 -o Model.num_attention_heads=4 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10 \
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Global.local_batch_size=16 -o Global.micro_batch_size=2 \
         -o Distributed.mp_degree=4 -o Distributed.pp_degree=2 \
         -o Model.sequence_parallel=False
@@ -135,11 +138,11 @@ function gpt_175B_DP1_MP4_PP2() {
 function gpt_175B_DP1_MP4_PP2_sp() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" examples/transformer/models/GPT/pretrain/run.py\
-        -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_175B_mp8_pp16.yaml \
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py\
+        -c ppfleetx/configs/nlp/gpt/pretrain_gpt_175B_mp8_pp16.yaml \
         -o Model.hidden_size=1024 -o Model.num_layers=4 -o Model.num_attention_heads=4 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10 \
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Global.local_batch_size=16 -o Global.micro_batch_size=2 \
         -o Distributed.mp_degree=4 -o Distributed.pp_degree=2 -o Model.sequence_parallel=True
     check_result $FUNCNAME
@@ -148,11 +151,11 @@ function gpt_175B_DP1_MP4_PP2_sp() {
 function gpt_175B_DP1_MP8_PP1() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" examples/transformer/models/GPT/pretrain/run.py\
-        -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_175B_mp8_pp16.yaml \
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py\
+        -c ppfleetx/configs/nlp/gpt/pretrain_gpt_175B_mp8_pp16.yaml \
         -o Model.hidden_size=1024 -o Model.num_layers=16 -o Model.num_attention_heads=16 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10 \
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Global.local_batch_size=16 -o Global.micro_batch_size=2 \
         -o Distributed.mp_degree=8 -o Distributed.pp_degree=1 \
         -o Model.sequence_parallel=False
@@ -162,11 +165,11 @@ function gpt_175B_DP1_MP8_PP1() {
 function gpt_175B_DP1_MP8_PP1_sp() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" examples/transformer/models/GPT/pretrain/run.py\
-        -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_175B_mp8_pp16.yaml \
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py\
+        -c ppfleetx/configs/nlp/gpt/pretrain_gpt_175B_mp8_pp16.yaml \
         -o Model.hidden_size=1024 -o Model.num_layers=16 -o Model.num_attention_heads=16 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10 \
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Global.local_batch_size=16 -o Global.micro_batch_size=2 \
         -o Distributed.mp_degree=8 -o Distributed.pp_degree=1 -o Model.sequence_parallel=True
     check_result $FUNCNAME
@@ -175,11 +178,11 @@ function gpt_175B_DP1_MP8_PP1_sp() {
 function gpt_175B_DP1_MP1_PP8() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" examples/transformer/models/GPT/pretrain/run.py\
-        -c examples/transformer/models/GPT/pretrain/configs/pretrain_gpt_175B_mp8_pp16.yaml \
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py\
+        -c ppfleetx/configs/nlp/gpt/pretrain_gpt_175B_mp8_pp16.yaml \
         -o Model.hidden_size=1024 -o Model.num_layers=32 -o Model.num_attention_heads=16 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10 \
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10 \
         -o Global.local_batch_size=16 -o Global.micro_batch_size=1 \
         -o Distributed.mp_degree=1 -o Distributed.pp_degree=8 \
         -o Model.virtual_pp_degree=2 -o Distributed.pp_recompute_interval=2 \
@@ -191,20 +194,20 @@ function gpt_175B_DP1_MP1_PP8() {
 function gpt_345M_mp8_qat() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" examples/transformer/models/GPT/pretrain/run.py\
-        -c examples/transformer/models/GPT/pretrain/configs/qat_gpt_345M_mp8.yaml \
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py\
+        -c ppfleetx/configs/nlp/gpt/qat_gpt_345M_mp8.yaml \
         -o Model.num_layers=4 -o Model.num_attention_heads=8 \
-        -o Global.max_steps=10 -o Global.eval_freq=10 \
-        -o Global.eval_iters=5 -o Global.save_load.save_steps=10
+        -o Engine.max_steps=10 -o Engine.eval_freq=10 \
+        -o Engine.eval_iters=5 -o Engine.save_load.save_steps=10
     check_result $FUNCNAME
 }
 
 function gpt_generation_345M_single() {
     cd ${fleetx_path}
     rm -rf log
-    python examples/transformer/models/GPT/generation/run.py \
-        -c examples/transformer/models/GPT/generation/configs/generation_gpt_345M_single_card.yaml \
-        -o Global.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
+    python tasks/gpt/generation.py \
+        -c ppfleetx/configs/nlp/gpt/generation_gpt_345M_single_card.yaml \
+        -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
     check_result $FUNCNAME
     # check_generation_txt $FUNCNAME ./log
 }
@@ -212,9 +215,9 @@ function gpt_generation_345M_single() {
 function gpt_generation_345M_hybrid() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0" examples/transformer/models/GPT/generation/run.py \
-        -c examples/transformer/models/GPT/generation/configs/generation_gpt_345M_dp8.yaml \
-        -o Global.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
+    python -m paddle.distributed.launch --devices "0" tasks/gpt/generation.py \
+        -c ppfleetx/configs/nlp/gpt/generation_gpt_345M_dp8.yaml \
+        -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
     check_result $FUNCNAME
     # tail -12 log/workerlog.0 > ./generation_345M_dp8.txt
     # check_generation_txt $FUNCNAME ./generation_345M_dp8.txt
@@ -223,11 +226,11 @@ function gpt_generation_345M_hybrid() {
 function gpt_inference_345M_single() {
     cd ${fleetx_path}
     rm -rf log
-    python examples/transformer/models/GPT/generation/export.py \
-        -c examples/transformer/models/GPT/generation/configs/inference_gpt_345M_single_card.yaml \
-        -o Global.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
-    python examples/transformer/models/GPT/generation/inference.py \
-        -c examples/transformer/models/GPT/generation/configs/inference_gpt_345M_single_card.yaml
+    python tools/export.py \
+        -c ppfleetx/configs/nlp/gpt/inference_gpt_345M_single_card.yaml \
+        -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
+    python tasks/gpt/inference.py \
+        -c ppfleetx/configs/nlp/gpt/inference_gpt_345M_single_card.yaml
     check_result $FUNCNAME
     # check_generation_txt $FUNCNAME ./log
 }
@@ -235,12 +238,12 @@ function gpt_inference_345M_single() {
 function gpt_inference_345M_dp8() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0" examples/transformer/models/GPT/generation/export.py \
-        -c examples/transformer/models/GPT/generation/configs/inference_gpt_345M_single_card.yaml \
-        -o Global.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
+    python -m paddle.distributed.launch --devices "0" tools/export.py \
+        -c ppfleetx/configs/nlp/gpt/inference_gpt_345M_single_card.yaml \
+        -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
     python -m paddle.distributed.launch --devices "0" \
-        examples/transformer/models/GPT/generation/inference.py \
-        -c examples/transformer/models/GPT/generation/configs/inference_gpt_345M_single_card.yaml
+        tasks/gpt/inference.py \
+        -c ppfleetx/configs/nlp/gpt/inference_gpt_345M_single_card.yaml
     check_result $FUNCNAME
     # tail -12 log/workerlog.0 > ./inference_345M_single.txt
     # check_generation_txt $FUNCNAME ./inference_345M_single.txt
@@ -249,9 +252,9 @@ function gpt_inference_345M_dp8() {
 function gpt_345M_single_finetune() {
     cd ${fleetx_path}
     rm -rf log
-    python ./examples/transformer/models/GPT/finetune/run.py \
-        -c ./examples/transformer/models/GPT/finetune/configs/finetune_gpt_345M_single_card_glue.yaml \
-        -o Global.num_train_epochs=1 \
+    python ./tools/train.py \
+        -c ./ppfleetx/configs/nlp/gpt/finetune_gpt_345M_single_card_glue.yaml \
+        -o Engine.num_train_epochs=1 \
         -o Data.Train.dataset.name=WNLI \
         -o Data.Train.dataset.root=./dataset/WNLI/ \
         -o Data.Eval.dataset.name=WNLI \
@@ -264,26 +267,26 @@ function gpt_345M_single_finetune() {
 function gpt_eval_WikiText() {
     cd ${fleetx_path}
     rm -rf log
-    python ./examples/transformer/models/GPT/offline-eval/run.py \
-        -c ./examples/transformer/models/GPT/offline-eval/configs/eval_gpt_345M_single_card.yaml \
-        -o Global.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826 \
+    python ./tools/eval.py \
+        -c ./ppfleetx/configs/nlp/gpt/eval_gpt_345M_single_card.yaml \
+        -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826 \
         -o Offline_Eval.eval_path=./wikitext-103/wiki.valid.tokens \
         -o Offline_Eval.overlapping_eval=32 \
         -o Offline_Eval.batch_size=16 \
-        -o Global.max_steps=20
+        -o Engine.max_steps=20
     check_result $FUNCNAME
 }
 
 function gpt_eval_LAMBADA() {
     cd ${fleetx_path}
     rm -rf log
-    python ./examples/transformer/models/GPT/offline-eval/run.py \
-        -c ./examples/transformer/models/GPT/offline-eval/configs/eval_gpt_345M_single_card.yaml \
-        -o Global.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826 \
+    python ./tools/eval.py \
+        -c ./ppfleetx/configs/nlp/gpt/eval_gpt_345M_single_card.yaml \
+        -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826 \
         -o Offline_Eval.eval_path=./lambada_test.jsonl \
         -o Offline_Eval.cloze_eval=True \
         -o Offline_Eval.batch_size=16 \
-        -o Global.max_steps=20
+        -o Engine.max_steps=20
     check_result $FUNCNAME
 }
 
@@ -323,8 +326,8 @@ function vit_cifar10_finetune() {
     loss=`tail log/workerlog.0 | grep 19/24 | cut -d " " -f14 `
     top1=`tail log/workerlog.0 | grep top1 |cut -d " " -f14 `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
-        #check_diff 0.217358 ${top1%?} ${FUNCNAME}_top1
+        check_diff 3.744531250 ${loss%?} ${FUNCNAME}_loss
+        check_diff 0.217041 ${top1%?} ${FUNCNAME}_top1
     else
         check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
         check_diff 0.216858 ${top1%?} ${FUNCNAME}_top1
@@ -359,6 +362,7 @@ function vit_inference() {
     python tools/export.py \
         -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/
+    rm -rf shape.pbtxt
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
         python projects/vit/inference.py -c ppfleetx/configs/vis/vit/ViT_base_patch16_224_inference.yaml
     else
@@ -372,41 +376,69 @@ function imagen_text2im_397M_64x64_single() {
     rm -rf log
     python tools/train.py \
         -c ppfleetx/configs/multimodal/imagen/imagen_397M_text2im_64x64.yaml \
-        -o Data.Train.loader.num_workers=8 \
-        -o Engine.max_steps=100
+        -o Engine.max_steps=10 \
+        -o Engine.logging_freq=1
     check_result $FUNCNAME
 }
 
-function imagen_text2im_397M_64x64_bs2048() {
+function imagen_text2im_397M_64x64_dp8() {
     cd ${fleetx_path}
     rm -rf log
-    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py \
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" \
+        tools/train.py \
         -c ppfleetx/configs/multimodal/imagen/imagen_397M_text2im_64x64.yaml \
         -o Distributed.dp_degree=8 \
-        -o Data.Train.loader.num_workers=8 \
-        -o Engine.max_steps=100
+        -o Engine.max_steps=10 \
+        -o Engine.logging_freq=1
     check_result $FUNCNAME
 }
 
-function imagen_super_resolution_512_single() {
+function imagen_text2im_2B_64x64_sharding8() {
+    cd ${fleetx_path}
+    rm -rf log
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" \
+        tools/train.py \
+        -c ppfleetx/configs/multimodal/imagen/imagen_text2im_64x64_T5-11B.yaml \
+        -o Distributed.sharding.sharding_stage=2 \
+        -o Distributed.sharding.sharding_degree=8 \
+        -o Engine.max_steps=10 \
+        -o Engine.logging_freq=1
+    check_result $FUNCNAME
+}
+
+function imagen_text2im_64x64_DebertaV2_dp8() {
+    cd ${fleetx_path}
+    rm -rf log
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" \
+        tools/train.py \
+        -c ppfleetx/configs/multimodal/imagen/imagen_text2im_64x64_DebertaV2.yaml \
+        -o Distributed.dp_degree=8 \
+        -o Engine.max_steps=10 \
+        -o Engine.logging_freq=1
+    check_result $FUNCNAME
+}
+
+function imagen_super_resolution_256_single_card() {
     cd ${fleetx_path}
     rm -rf log
     python tools/train.py \
-        -c ppfleetx/configs/multimodal/imagen/imagen_text2im_64x64_T5-11B.yaml \
-        -o Data.Train.loader.num_workers=8 \
-        -o Engine.max_steps=100
+        -c ppfleetx/configs/multimodal/imagen/imagen_super_resolution_256.yaml \
+        -o Engine.max_steps=10 \
+        -o Engine.logging_freq=1
     check_result $FUNCNAME
 }
 
-# function imagen_super_resolution_1024_single() {
-#     cd ${fleetx_path}
-#     rm -rf log
-#     python tools/train.py \
-#         -c ppfleetx/configs/multimodal/imagen/imagen_super_resolution_1024.yaml \
-#         -o Data.Train.loader.num_workers=0 \
-#         -o Engine.max_steps=100
-#     check_result $FUNCNAME
-# }
+function imagen_super_resolution_256_dp8() {
+    cd ${fleetx_path}
+    rm -rf log
+    python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" \
+        tools/train.py \
+        -c ./ppfleetx/configs/multimodal/imagen/imagen_super_resolution_256.yaml \
+        -o Distributed.dp_degree=8 \
+        -o Engine.max_steps=10 \
+        -o Engine.logging_freq=1
+    check_result $FUNCNAME
+}
 
 function check_generation_txt() {
     if [[ -e ./generation_base.txt ]]; then

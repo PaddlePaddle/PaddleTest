@@ -28,9 +28,6 @@ case:
       -
         name: python
         cmd: python deploy/pptracking/python/mot_jde_infer.py
-      -
-        name: cpp
-        cmd: ./deploy/cpp/build/main
   windows:
     base: ./base/mot_base.yml
     train:

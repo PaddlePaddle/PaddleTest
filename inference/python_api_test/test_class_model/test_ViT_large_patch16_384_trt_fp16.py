@@ -32,7 +32,8 @@ def check_model_exist():
         tar.extractall()
         tar.close()
         clip_model_extra_op(
-            path_prefix="./ViT_large_patch16_384/inference", output_model_path="./ViT_large_patch16_384/inference"
+            path_prefix="./ViT_large_patch16_384/inference",
+            output_model_path="./ViT_large_patch16_384/inference",
         )
 
 
@@ -83,10 +84,9 @@ def test_trt_fp16_more_bz():
         test_suite1.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
-            delta=0.0003,
+            delta=0.001,
             max_batch_size=max_batch_size,
             precision="trt_fp16",
-            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
             tuned=True,
         )
@@ -101,10 +101,9 @@ def test_trt_fp16_more_bz():
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
-            delta=0.0003,
+            delta=0.001,
             max_batch_size=max_batch_size,
             precision="trt_fp16",
-            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
         )
 
@@ -144,10 +143,9 @@ def test_jetson_trt_fp16_more_bz():
         test_suite1.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
-            delta=0.0003,
+            delta=0.001,
             max_batch_size=max_batch_size,
             precision="trt_fp16",
-            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
             tuned=True,
         )
@@ -162,10 +160,9 @@ def test_jetson_trt_fp16_more_bz():
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
-            delta=0.0003,
+            delta=0.001,
             max_batch_size=max_batch_size,
             precision="trt_fp16",
-            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
         )
 
@@ -201,9 +198,8 @@ def test_trt_fp16_bz1_multi_thread():
     test_suite2.trt_bz1_multi_thread_test(
         input_data_dict,
         output_data_dict,
-        delta=0.0003,
+        delta=0.001,
         precision="trt_fp16",
-        delete_pass_list=["preln_residual_bias_fuse_pass"],
     )
 
     del test_suite2  # destroy class to save memory

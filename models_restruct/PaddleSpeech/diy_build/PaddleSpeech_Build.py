@@ -62,10 +62,14 @@ class PaddleSpeech_Build(Model_Build):
         if os.path.exists("/etc/lsb-release"):
             os.system("apt-get update")
             os.system("apt-get install -y libsndfile1")
+            os.system("apt-get install -y python3-tk")
+            os.system("apt install -y tk-dev")
 
         if os.path.exists("/etc/redhat-release"):
-            os.system("yum update")
+            os.system("yum -y update")
             os.system("yum install -y libsndfile")
+            os.system("yum install -y python3-tk")
+            os.system("yum install -y tk-devel")
 
         if platform.machine() == "arm64":
             print("mac M1")
@@ -97,7 +101,7 @@ class PaddleSpeech_Build(Model_Build):
                 os.system("python -m pip install numba")
                 os.system("python -m pip install jsonlines")
             # os.system("python -m pip install -U pyinstaller")
-            os.system("python -m pip install --user . --ignore-installed")
+            os.system("python -m pip install . --ignore-installed")
             # mac from numba.np.ufunc import _internal
             # os.system("python -m pip install -U numpy<1.24.0")
             # bug: bce-python-sdk==0.8.79
@@ -125,14 +129,19 @@ class PaddleSpeech_Build(Model_Build):
             sysstr = platform.system()
             if sysstr == "Linux":
                 os.chdir("dataset")
+                if os.path.exists("/ssd2/ce_data/PaddleSpeech_t2s/asr"):
+                    src_path = "/ssd2/ce_data/PaddleSpeech_t2s/asr"
+                else:
+                    src_path = "/home/data/cfs/models_ce/PaddleSpeech_t2s/asr"
+
+                # asr librispeech
                 if os.path.exists("librispeech"):
                     shutil.rmtree("librispeech")
-                if os.path.exists("/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/asr/librispeech"):
-                    src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data/asr/librispeech"
-                else:
-                    src_path = "/home/data/cfs/models_ce/PaddleSpeech_t2s/preprocess_data/asr/librispeech"
-                os.symlink(src_path, "librispeech")
-            os.chdir(path_now)
+                    os.symlink(os.path.join(src_path, "librispeech"), "librispeech")
+                # asr tal_cs
+                os.chdir("tal_cs")
+                os.symlink(os.path.join(src_path, "TALCS_corpus"), "TALCS_corpus")
+                os.chdir(path_now)
 
     def build_env(self):
         """

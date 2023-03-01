@@ -1,16 +1,16 @@
 train:
   name: multi
-  cmd:  python -m paddle.distributed.launch tools/train.py
+  cmd:  export no_proxy=bcebos.com; python -m paddle.distributed.launch tools/train.py
   params:
     - --config ${rd_yaml_path}
     - --num_workers 2
     - --log_interval 50
     - --save_interval 5000
   result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+    total_loss:
+      base: ${train_base_loss}
+      threshold: ${train_threshold}
+      evaluation: "-"
 
 eval:
   name: pretrained
@@ -21,7 +21,7 @@ eval:
     - --model ${model}/model.pdparams
   result:
     exit_code:
-      base: 0
+      base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
 

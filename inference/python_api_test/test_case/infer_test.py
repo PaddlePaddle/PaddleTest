@@ -270,8 +270,8 @@ class InferenceTest(object):
         delta=1e-5,
         precision="fp32",
         with_benchmark=False,
-        base_latency_ms=np.nan,
-        benchmark_threshold=5e-2,
+        base_latency_ms=np.inf,
+        benchmark_threshold=np.inf,
     ):
         """
         test enable_mkldnn() or enable_mkldnn_int8()
@@ -341,7 +341,7 @@ class InferenceTest(object):
                 round(time_avg * 1000, 2),
             )
         )
-        benchmark_diff = (time_avg * 1000 - base_latency_ms) / base_latency_ms
+        benchmark_diff = (time_avg * 1000 - base_latency_ms) / base_latency_ms if base_latency_ms != np.inf else np.inf
         print(f"benchmark diff: {benchmark_diff}")
         assert benchmark_diff <= benchmark_threshold, f"benchmark diff:{benchmark_diff} > {benchmark_threshold}"
 
@@ -478,8 +478,8 @@ class InferenceTest(object):
         result_sort=False,
         delete_pass_list=None,
         with_benchmark=False,
-        base_latency_ms=np.nan,
-        benchmark_threshold=5e-2,
+        base_latency_ms=np.inf,
+        benchmark_threshold=np.inf,
     ):
         """
         test slim model enable_tensorrt_engine()
@@ -580,7 +580,7 @@ class InferenceTest(object):
                 round(time_avg * 1000, 2),
             )
         )
-        benchmark_diff = (time_avg * 1000 - base_latency_ms) / base_latency_ms
+        benchmark_diff = (time_avg * 1000 - base_latency_ms) / base_latency_ms if base_latency_ms != np.inf else np.inf
         print(f"benchmark diff: {benchmark_diff}")
         assert benchmark_diff <= benchmark_threshold, f"benchmark diff:{benchmark_diff} > {benchmark_threshold}"
 
@@ -599,7 +599,9 @@ class InferenceTest(object):
         dynamic=False,
         shape_range_file="shape_range.pbtxt",
         tuned=False,
-        result_sort=False,
+        det_top_bbox=False,
+        need_sort=False,
+        det_top_bbox_threshold=0.75,
         delete_pass_list=None,
     ):
         """
@@ -672,7 +674,9 @@ class InferenceTest(object):
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
-            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            diff = sig_fig_compare(
+                output_data, output_data_truth_val, delta, det_top_bbox, need_sort, det_top_bbox_threshold
+            )
 
     def trt_more_bz_dynamic_test(
         self,

@@ -436,8 +436,12 @@ class PaddleClas_Start(object):
                                     content[key][i][key1] = content_result[key][i][key1]
                                 except:
                                     logger.info("#### can not update value")
+                                    logger.info("#### self.step: {}".format(self.step))
+                                    logger.info("#### key: {}".format(key))
+                                    logger.info("#### i: {}".format(i))
                                     logger.info("#### key1: {}".format(key1))
-                                    logger.info("#### content_result[key][i]: {}".format(content_result[key][i]))
+                                    logger.info("#### content_result: {}".format(content_result))
+                                    logger.info("#### show content_result[key][i]")
         return content, content_result
 
     def update_kpi(self):
@@ -476,7 +480,8 @@ class PaddleClas_Start(object):
         """
         # 进入repo中
         ret = 0
-        ret = self.prepare_env()
+        if "convergence" not in self.system:
+            ret = self.prepare_env()
         if ret:
             logger.info("build prepare_env failed")
             return ret
