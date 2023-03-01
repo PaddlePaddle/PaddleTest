@@ -47,6 +47,24 @@ class Paddle3D_Start(object):
         print("start prepare_config_params!")
         self.env_dict["model"] = self.model
         self.env_dict["category"] = self.category
+        # precision
+        if self.mode == "precision" and self.step == "train":
+            # check kpi value
+            # self.env_dict["train_base_loss"] = "1"
+            with open("tools/train.json", "r") as f:
+                content = json.load(f)
+                train_base_loss = content[self.model]
+                logger.info("#### train_base_loss: {}".format(train_base_loss))
+            self.env_dict["train_base_loss"] = str(train_base_loss)
+            self.env_dict["train_threshold"] = "0.5"
+
+        if self.mode == "precision" and self.step == "eval":
+            # check eval kpi value
+            with open("tools/eval.json", "r") as f:
+                content = json.load(f)
+                eval_base_acc = content[self.model]
+                logger.info("#### eval_base_acc: {}".format(eval_base_acc))
+            self.env_dict["eval_base_acc"] = str(eval_base_acc)
 
     def prepare_pretrained_model(self):
         """

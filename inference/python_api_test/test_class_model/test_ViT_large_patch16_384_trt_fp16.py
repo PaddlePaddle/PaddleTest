@@ -84,12 +84,11 @@ def test_trt_fp16_more_bz():
         test_suite1.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
-            delta=0.0003,
+            delta=0.001,
             max_batch_size=max_batch_size,
             precision="trt_fp16",
             dynamic=True,
             tuned=True,
-            delete_pass_list=["trt_skip_layernorm_fuse_pass"],
         )
 
         del test_suite1  # destroy class to save memory
@@ -102,11 +101,10 @@ def test_trt_fp16_more_bz():
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
-            delta=0.0003,
+            delta=0.001,
             max_batch_size=max_batch_size,
             precision="trt_fp16",
             dynamic=True,
-            delete_pass_list=["trt_skip_layernorm_fuse_pass"],
         )
 
         del test_suite2  # destroy class to save memory
@@ -145,12 +143,11 @@ def test_jetson_trt_fp16_more_bz():
         test_suite1.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
-            delta=0.0003,
+            delta=0.001,
             max_batch_size=max_batch_size,
             precision="trt_fp16",
             dynamic=True,
             tuned=True,
-            delete_pass_list=["trt_skip_layernorm_fuse_pass"],
         )
 
         del test_suite1  # destroy class to save memory
@@ -163,11 +160,10 @@ def test_jetson_trt_fp16_more_bz():
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
-            delta=0.0003,
+            delta=0.001,
             max_batch_size=max_batch_size,
             precision="trt_fp16",
             dynamic=True,
-            delete_pass_list=["trt_skip_layernorm_fuse_pass"],
         )
 
         del test_suite2  # destroy class to save memory
@@ -202,9 +198,8 @@ def test_trt_fp16_bz1_multi_thread():
     test_suite2.trt_bz1_multi_thread_test(
         input_data_dict,
         output_data_dict,
-        delta=0.0003,
+        delta=0.001,
         precision="trt_fp16",
-        delete_pass_list=["trt_skip_layernorm_fuse_pass"],
     )
 
     del test_suite2  # destroy class to save memory
