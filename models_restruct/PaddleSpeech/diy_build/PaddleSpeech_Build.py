@@ -141,7 +141,7 @@ class PaddleSpeech_Build(Model_Build):
                 # asr tal_cs
                 os.chdir("tal_cs")
                 os.symlink(os.path.join(src_path, "TALCS_corpus"), "TALCS_corpus")
-                os.chdir(path_now)
+            os.chdir(path_now)
 
     def build_env(self):
         """
