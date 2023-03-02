@@ -61,6 +61,7 @@ class PaddleSeg_Build(Model_Build):
         """
         path_now = os.getcwd()
         os.chdir(self.reponame)
+        path_repo = os.getcwd()
         logger.info("****start paddleseg install")
         os.system("python -m pip install -r requirements.txt")
         os.system("python -m pip install -v -e .")
@@ -109,7 +110,7 @@ class PaddleSeg_Build(Model_Build):
         os.system("unzip mini_supervisely.zip")
         logger.info("***download data ended")
         #cpp infer compile
-        os.system("cd deploy/cpp")
+        os.chdir(path_repo + "/deploy/cpp")
         wget.download(
             "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos"
             "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
