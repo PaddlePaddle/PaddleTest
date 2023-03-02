@@ -32,22 +32,7 @@ eval:
       base: 0
       threshold: 0
       evaluation: "="
-
-  name: trained
-  cmd:  python tools/eval.py
-  params:
-    - -c ${rd_yaml_path}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
-    - Global.use_gpu=${use_gpu}
-    - Eval.loader.batch_size_per_card=10
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
-
-
-eval:
+      
   name: pretrained
   cmd:  python tools/eval.py
   params:
