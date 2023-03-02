@@ -103,10 +103,11 @@ add_seed(filedir, "import deepxde", "import paddle\n")
 add_seed(filedir, "import deepxde", "import numpy as np\n")
 add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")
 
+if filedir != '../../deepxde/examples/pinn_forward/Volterra_IDE.py':
+    add_seed(filedir, "L-BFGS", "result = np.sum(losshistory.loss_train, axis=1)\n")
+    add_seed(filedir, "result = np.sum(losshistory.loss_train, axis=1)", "result = result[:200]\n")
+    add_seed(filedir, "result = result[:200]", "np.save('loss.npy',result)\n")
 
-add_seed(filedir, "L-BFGS", "result = np.sum(losshistory.loss_train, axis=1)\n")
-add_seed(filedir, "result = np.sum(losshistory.loss_train, axis=1)", "result = result[:200]\n")
-add_seed(filedir, "result = result[:200]", "np.save('loss.npy',result)\n")
 if flag_LBFGS == False:
     with open(filedir, "a") as f:
         f.write( "\n"
