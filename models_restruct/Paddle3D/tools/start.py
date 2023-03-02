@@ -48,7 +48,7 @@ class Paddle3D_Start(object):
         self.env_dict["model"] = self.model
         self.env_dict["category"] = self.category
         # precision
-        if self.mode == "precision" and self.step == "train":
+        if self.mode == "precision" and self.step == "train:multi":
             # check kpi value
             # self.env_dict["train_base_loss"] = "1"
             with open("tools/train.json", "r") as f:
