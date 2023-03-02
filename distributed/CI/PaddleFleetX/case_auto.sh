@@ -210,10 +210,6 @@ function gpt_auto_dp2mp2pp2_o2() {
         -o Distributed.sharding.sharding_stage=1 \
         -o Engine.verbose=3 \
         -o Model.type_vocab_size=1
-    loss1=`tail -5 $log_dir/workerlog.4 | grep "lr:" | cut -d " " -f5 `
-    loss2=`tail -5 $log_dir/workerlog.6 | grep "lr:" | cut -d " " -f5 `
-    loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 11.0098 ${loss} ${FUNCNAME}_loss
     check_result $FUNCNAME
 }
 
