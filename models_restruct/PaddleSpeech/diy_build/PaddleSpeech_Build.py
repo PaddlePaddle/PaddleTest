@@ -97,7 +97,8 @@ class PaddleSpeech_Build(Model_Build):
 
                 os.system("python -m pip install numba")
                 os.system("python -m pip install jsonlines")
-            os.system("python -m pip install . --ignore-installed")
+            # M1: cant not add --ignore-installed"
+            os.system("python -m pip install .")
             # mac from numba.np.ufunc import _internal
             # os.system("python -m pip install -U numpy<1.24.0")
             # bug: bce-python-sdk==0.8.79
