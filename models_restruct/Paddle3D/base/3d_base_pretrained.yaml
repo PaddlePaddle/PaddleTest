@@ -13,18 +13,6 @@ train:
       evaluation: "-"
 
 eval:
-  name: pretrained
-  cmd:  python tools/evaluate.py
-  params:
-    - --config ${rd_yaml_path}
-    - --num_workers 2
-    - --model ${model}/model.pdparams
-  result:
-    exit_code:
-      base: ${eval_base_acc}
-      threshold: 0
-      evaluation: "="
-
   name: pretrained_bs1
   cmd:  python tools/evaluate.py
   params:
@@ -33,8 +21,19 @@ eval:
     - --model ${model}/model.pdparams
     - --batch_size 1
   result:
-    exit_code:
-      base: 0
+    ${eval_key}:
+      base: ${eval_base_acc}
+      threshold: 0
+      evaluation: "="
+  
+  name: pretrained
+  cmd:  python tools/evaluate.py
+  params:
+    - --config ${rd_yaml_path}
+    - --num_workers 2
+    - --model ${model}/model.pdparams
+  ${eval_key}:
+      base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
 
