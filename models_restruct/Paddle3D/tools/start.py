@@ -74,8 +74,6 @@ class Paddle3D_Start(object):
             self.env_dict["eval_key"] = eval_key
             logger.info("#### eval_key: {}".format(eval_key))
 
-            
-
     def prepare_pretrained_model(self):
         """
         prepare_pretrained_model

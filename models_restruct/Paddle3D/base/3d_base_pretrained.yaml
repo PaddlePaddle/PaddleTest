@@ -25,7 +25,7 @@ eval:
       base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
-  
+
   name: pretrained
   cmd:  python tools/evaluate.py
   params:
