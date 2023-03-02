@@ -62,6 +62,10 @@ class PaddleSeg_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir(self.reponame)
         logger.info("****start paddleseg install")
+<<<<<<< HEAD
+        os.system("python -m pip install -r requirements.txt")
+=======
+>>>>>>> ea8103468055f974c6ba9ff55a44a6201877acc7
         os.system("python -m pip install -v -e .")
         os.system("python -m pip install zip --ignore-installed")
         os.system("pip uninstall bce-python-sdk -y")
@@ -107,6 +111,10 @@ class PaddleSeg_Build(Model_Build):
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/mini_supervisely.zip")
         os.system("unzip mini_supervisely.zip")
         logger.info("***download data ended")
+        #cpp infer compile
+        os.system("cd deploy/cpp")
+        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cpp_infer.sh")
+        os.system("bash cpp_infer.sh") 
         os.chdir(path_now)
         return 0
 
