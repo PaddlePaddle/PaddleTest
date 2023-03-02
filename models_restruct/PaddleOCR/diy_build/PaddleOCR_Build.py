@@ -137,7 +137,7 @@ class PaddleOCR_Build(Model_Build):
                     if sysstr == "Darwin":
                         cmd = "sed -i '' 's/batch_size: 14/batch_size: 1/g' %s" % filename
                     else:
-                        cmd = "sed -i s/batch_size: 14!batch_size: 1/g %s" % filename
+                        cmd = "sed -i s/batch_size: 14/batch_size: 1/g %s" % filename
                         os.system(cmd)
             os.chdir(self.test_root_path)
             print("build dataset!")
