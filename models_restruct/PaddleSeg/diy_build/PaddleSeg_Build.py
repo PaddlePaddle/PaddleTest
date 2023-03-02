@@ -62,10 +62,7 @@ class PaddleSeg_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir(self.reponame)
         logger.info("****start paddleseg install")
-<<<<<<< HEAD
         os.system("python -m pip install -r requirements.txt")
-=======
->>>>>>> ea8103468055f974c6ba9ff55a44a6201877acc7
         os.system("python -m pip install -v -e .")
         os.system("python -m pip install zip --ignore-installed")
         os.system("pip uninstall bce-python-sdk -y")
