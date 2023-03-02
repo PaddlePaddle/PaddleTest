@@ -37,8 +37,8 @@ eval:
   result:
     psnr_avg:
       base: ${eval_base_acc}
-      threshold: 0
-      evaluation: "="
+      threshold: 0.02
+      evaluation: "+"
 infer:
   name: trained
   cmd:  python tools/infer_sr.py
