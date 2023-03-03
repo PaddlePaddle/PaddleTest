@@ -189,7 +189,7 @@ PREDICT_DYNAMIC(){
 }
 EXPORT_DYNAMIC(){
     mode=export_dynamic
-    if [[ ${model} =~ 'rtformer' || ${model} =~ 'dmnet' ]];then
+    if [[ ${model} =~ 'rtformer' || ${model} =~ 'dmnet' || ${model} =~ 'segnext' ]];then
         export CUDA_VISIBLE_DEVICES=$cudaid1
         python tools/export.py \
            --config ${config} \
