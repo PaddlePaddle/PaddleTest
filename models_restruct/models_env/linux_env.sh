@@ -266,12 +266,13 @@ if [[ "${docker_flag}" == "" ]]; then
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
     NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
-        --name=${docker_name} --net=host \
+        --name=${docker_name} --net=host --cap-add=SYS_ADMIN \
         --shm-size=128G \
         -v $(pwd):/workspace \
         -v /ssd2:/ssd2 \
         -e AK=${AK} \
         -e SK=${SK} \
+        -e CFS_IP=${CFS_IP} \
         -e bce_whl_url=${bce_whl_url} \
         -e PORT_RANGE="62000:65536" \
         -e no_proxy=${no_proxy} \
@@ -305,6 +306,7 @@ if [[ "${docker_flag}" == "" ]]; then
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
+            yum install nfs-utils -y
             case ${Python_version} in
             36)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -329,6 +331,8 @@ if [[ "${docker_flag}" == "" ]]; then
             esac
         else
             echo "ubuntu"
+            apt-get update
+            apt-get install nfs-common -y
             case ${Python_version} in
             36)
             mkdir run_env_py36;
@@ -362,13 +366,24 @@ if [[ "${docker_flag}" == "" ]]; then
             ;;
             esac
         fi
-
+        # setup
+        export DATA_PATH=/ssd2/models_data_${AGILE_JOB_BUILD_ID}
+        if [ -d ${DATA_PATH} ];then
+            rm -rf ${DATA_PATH}
+        fi
+        mkdir -p ${DATA_PATH}
+        mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${DATA_PATH}
+        
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600}
+        exit_code=$?
+        # teardown
+        cd /  &&  umount ${DATA_PATH}  && rm -rf ${DATA_PATH}
+        exit ${exit_code}
     ' &
     wait $!
     exit $?
