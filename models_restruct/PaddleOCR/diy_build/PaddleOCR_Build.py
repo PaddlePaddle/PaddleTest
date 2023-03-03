@@ -119,6 +119,9 @@ class PaddleOCR_Build(Model_Build):
             # kie requirements
             os.system("python -m pip install -U  paddlenlp")
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
+            # paddle=dev, paddlenlp=2.5.1 not supported
+            os.system("python -m pip uninstall -y paddlenlp")
+            os.system("python -m pip install -U https://paddlenlp.bj.bcebos.com/wheels/paddlenlp-ci-py3-none-any.whl")
 
             if sysstr == "Windows":
                 os.environ["PATH"] = "F:\\install\\GnuWin32\\bin;" + os.environ.get("PATH")
