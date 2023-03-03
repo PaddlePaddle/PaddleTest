@@ -21,6 +21,7 @@ case:
         name: pretrained
         cmd: python tools/export.py
     predict: skipped
+    api: skipped
   windows:
     base: ./base/normal_base.yml
     train:
