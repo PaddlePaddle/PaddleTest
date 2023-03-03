@@ -41,7 +41,8 @@ def test_embedding():
             words = tokenizer.cut("中国人民")
             with io.open("./embedding_success.log", "a+", encoding="utf-8") as flog:
                 flog.write(
-                    "token_embedding:{},search_embedding:{},cosin_sim_embedding:{},dot_embedding:{},cut_embedding:{}".format(
+                    "token_embedding:{},search_embedding:{},cosin_sim_embedding:{},\
+                        dot_embedding:{},cut_embedding:{}".format(
                         token_embedding, search_embedding, cosin_sim_embedding, dot_embedding, words
                     )
                     + "\r\n"
