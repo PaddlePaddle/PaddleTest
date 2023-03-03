@@ -137,7 +137,7 @@ class PaddleOCR_Build(Model_Build):
                     if sysstr == "Darwin":
                         cmd = "sed -i '' 's/batch_size: 14/batch_size: 1/g' %s" % filename
                     else:
-                        cmd = '''sed -i "s/batch_size: 14/batch_size: 1/g" %s''' % filename
+                        cmd = """sed -i "s/batch_size: 14/batch_size: 1/g" %s""" % filename
                     os.system(cmd)
             os.chdir(self.test_root_path)
             print("build dataset!")
@@ -260,11 +260,11 @@ x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz"
             return ret
 
         sysstr = platform.system()
-        '''
+        """
         if sysstr == "Linux":
             self.prepare_opencv()
             self.prepare_c_predict_library()
             self.compile_c_predict_demo()
-        '''
+        """
 
         return ret
