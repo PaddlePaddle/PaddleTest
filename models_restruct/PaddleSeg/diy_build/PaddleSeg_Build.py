@@ -110,14 +110,15 @@ class PaddleSeg_Build(Model_Build):
         os.system("unzip mini_supervisely.zip")
         logger.info("***download data ended")
         #cpp infer compile
-        os.chdir(path_repo + "/deploy/cpp")
-        wget.download(
-            "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos"
-            "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
-        )
-        os.system("tar xvf paddle_inference.tgz")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cpp_infer.sh")
-        os.system("bash cpp_infer.sh")
+        if platform.system() == "Linux":
+            os.chdir(path_repo + "/deploy/cpp")
+            wget.download(
+                "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos"
+                "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
+            )
+            os.system("tar xvf paddle_inference.tgz")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cpp_infer.sh")
+            os.system("bash cpp_infer.sh")
         os.chdir(path_now)
         return 0
 
