@@ -173,6 +173,8 @@ class PaddleSpeech_Start(object):
                 # waveflow
                 os.symlink(os.path.join(src_path, self.data_path,\
 "waveflow/preprocessed_ljspeech"), "preprocessed_ljspeech")
+            else:
+                pass
 
 
             if self.model == "transformer_tts":
