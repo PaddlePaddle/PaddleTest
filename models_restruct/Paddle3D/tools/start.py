@@ -48,7 +48,7 @@ class Paddle3D_Start(object):
         self.env_dict["model"] = self.model
         self.env_dict["category"] = self.category
         # precision
-        if self.mode == "precision" and self.step == "train":
+        if self.mode == "precision":
             # check kpi value
             # self.env_dict["train_base_loss"] = "1"
             with open("tools/train.json", "r") as f:
@@ -58,13 +58,20 @@ class Paddle3D_Start(object):
             self.env_dict["train_base_loss"] = str(train_base_loss)
             self.env_dict["train_threshold"] = "0.5"
 
-        if self.mode == "precision" and self.step == "eval":
             # check eval kpi value
             with open("tools/eval.json", "r") as f:
                 content = json.load(f)
                 eval_base_acc = content[self.model]
                 logger.info("#### eval_base_acc: {}".format(eval_base_acc))
             self.env_dict["eval_base_acc"] = str(eval_base_acc)
+            # eval_key
+            # self.env_dict["eval_key"] = "AP_R11@25%"
+            logger.info("start prepare eval_key")
+            speech_map_yaml = os.path.join(os.getcwd(), "tools/3d_map.yaml")
+            speech_map = yaml.load(open(speech_map_yaml, "rb"), Loader=yaml.Loader)
+            eval_key = speech_map[self.model]
+            self.env_dict["eval_key"] = eval_key
+            logger.info("#### eval_key: {}".format(eval_key))
 
     def prepare_pretrained_model(self):
         """

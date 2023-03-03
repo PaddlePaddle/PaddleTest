@@ -348,7 +348,7 @@ class PaddleClas_Build(Model_Build):
                     )
                     wget.download(
                         "https://paddle-qa.bj.bcebos.com/PaddleClas/{}".format(
-                            "nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl"
+                            "nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl"
                         )
                     )
                 except:
@@ -381,27 +381,27 @@ class PaddleClas_Build(Model_Build):
             #     logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
             #     # return 1
 
-            # cuda11
+            # cuda11  最新numpy有BUG
             logger.info("because of dali have np.int, so change numpy version")
             exit_code_numpy = os.system(
-                "python -m  pip install numpy==1.20.2 \
+                "python -m  pip install numpy==1.21.2 \
                 -i https://mirror.baidu.com/pypi/simple"
             )
             if exit_code_numpy and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_numpy = os.system(
-                    "python -m  pip install --user numpy==1.20.2 \
+                    "python -m  pip install --user numpy==1.21.2 \
                     -i https://mirror.baidu.com/pypi/simple"
                 )
             # 安装nvidia
             exit_code_nvidia = os.system(
                 "python -m  pip install \
-            nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl \
+            nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl \
                 -i https://mirror.baidu.com/pypi/simple"
             )
             if exit_code_nvidia and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_nvidia = os.system(
                     "python -m  pip install --user\
-            nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl \
+            nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl \
                 -i https://mirror.baidu.com/pypi/simple"
                 )
             if exit_code_nvidia:
