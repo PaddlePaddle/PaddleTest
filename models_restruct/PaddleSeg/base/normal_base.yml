@@ -68,7 +68,7 @@ api:
     - --model_dir ./inference_model/${model}
     - --img_path ./demo/${image}
     - --save_dir ./cpp_infer_output/${model}/
-    - --device=GPU
+    - --devices=GPU
   result:
     exit_code:
       base: 0
