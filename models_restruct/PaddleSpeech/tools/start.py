@@ -172,7 +172,7 @@ class PaddleSpeech_Start(object):
             elif not os.path.exists("preprocessed_ljspeech") and (self.model == "waveflow"):
                 # waveflow
                 os.symlink(
-                    os.path.join(src_path, self.data_path, "waveflow/preprocessed_ljspeech"), "preprocessed_ljspeech"
+                    os.path.join(src_path, "waveflow/preprocessed_ljspeech"), "preprocessed_ljspeech"
                 )
             else:
                 pass
