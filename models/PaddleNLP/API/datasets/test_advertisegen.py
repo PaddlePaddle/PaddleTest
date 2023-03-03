@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,28 +25,35 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'source': '类型#裤*版型#宽松*风格#性感*图案#线条*裤型#阔腿裤', 'target': '宽松的阔腿裤这两年真的吸粉不少，明星时尚达人的心头爱。毕竟好穿时尚，'
-        '谁都能穿出腿长2米的效果宽松的裤腿，当然是遮肉小能手啊。上身随性自然不拘束，面料亲肤舒适贴身体验感棒棒哒。系带部分增加设计看点，还让单品的设计感更强。'
-        '腿部线条若隐若现的，性感撩人。颜色敲温柔的，与裤子本身所呈现的风格有点反差萌。', 'id': 0}),
+        "train": (
+            {
+                "source": "类型#裤*版型#宽松*风格#性感*图案#线条*裤型#阔腿裤",
+                "target": "宽松的阔腿裤这两年真的吸粉不少，明星时尚达人的心头爱。毕竟好穿时尚，"
+                "谁都能穿出腿长2米的效果宽松的裤腿，当然是遮肉小能手啊。上身随性自然不拘束，面料亲肤舒适贴身体验感棒棒哒。系带部分增加设计看点，还让单品的设计感更强。"
+                "腿部线条若隐若现的，性感撩人。颜色敲温柔的，与裤子本身所呈现的风格有点反差萌。",
+                "id": 0,
+            }
+        ),
     }
     return examples[mode]
+
 
 class TestAdevertisegen(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'advertisegen'
-        self.config['splits'] = ['train','dev']
+        self.config["path_or_read_func"] = "advertisegen"
+        self.config["splits"] = ["train", "dev"]
 
     def test_train_set(self):
         """
@@ -53,22 +61,23 @@ class TestAdevertisegen(CpuCommonTest):
         """
         expected_ds_num = 2
         expected_len = 114599
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
 
-        self.check_output_equal(expected_train['source'], ds[0][0]['source'])
-        self.check_output_equal(expected_train['id'], ds[0][0]['id'])
-        self.check_output_equal(expected_train['target'], ds[0][0]['target'])
+        self.check_output_equal(expected_train["source"], ds[0][0]["source"])
+        self.check_output_equal(expected_train["id"], ds[0][0]["id"])
+        self.check_output_equal(expected_train["target"], ds[0][0]["target"])
 
 
 class TestAdvertisegenNoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'advertisegen'
+        self.config["path_or_read_func"] = "advertisegen"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

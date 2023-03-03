@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,27 +25,32 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'tokens': ['海', '钓', '比', '赛', '地', '点', '在', '厦', '门', '与', '金', '门', '之', '间', '的', '海', '域', '。'], 
-        'labels': [6, 6, 6, 6, 6, 6, 6, 4, 5, 6, 4, 5, 6, 6, 6, 6, 6, 6]}),
+        "train": (
+            {
+                "tokens": ["海", "钓", "比", "赛", "地", "点", "在", "厦", "门", "与", "金", "门", "之", "间", "的", "海", "域", "。"],
+                "labels": [6, 6, 6, 6, 6, 6, 6, 4, 5, 6, 4, 5, 6, 6, 6, 6, 6, 6],
+            }
+        ),
     }
     return examples[mode]
+
 
 class TestPeoples_daily_ner(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'peoples_daily_ner'
-        self.config['splits'] = ['train','dev','test']
+        self.config["path_or_read_func"] = "peoples_daily_ner"
+        self.config["splits"] = ["train", "dev", "test"]
 
     def test_train_set(self):
         """
@@ -52,21 +58,22 @@ class TestPeoples_daily_ner(CpuCommonTest):
         """
         expected_ds_num = 3
         expected_len = 20864
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
 
-        self.check_output_equal(expected_train['tokens'], ds[0][0]['tokens'])
-        self.check_output_equal(expected_train['labels'], ds[0][0]['labels'])
+        self.check_output_equal(expected_train["tokens"], ds[0][0]["tokens"])
+        self.check_output_equal(expected_train["labels"], ds[0][0]["labels"])
 
 
 class TestPeoples_daily_nerNoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'peoples_daily_ner'
+        self.config["path_or_read_func"] = "peoples_daily_ner"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

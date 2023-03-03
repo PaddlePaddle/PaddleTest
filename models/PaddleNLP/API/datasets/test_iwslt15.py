@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,26 +25,32 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'en': 'Rachel Pike : The science behind a climate headline', 'vi': 'Khoa học đằng sau một tiêu đề về khí hậu'}),
+        "train": (
+            {
+                "en": "Rachel Pike : The science behind a climate headline",
+                "vi": "Khoa học đằng sau một tiêu đề về khí hậu",
+            }
+        ),
     }
     return examples[mode]
+
 
 class TestIWSLT15(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'iwslt15'
-        self.config['splits'] = ['train', 'dev','test']
+        self.config["path_or_read_func"] = "iwslt15"
+        self.config["splits"] = ["train", "dev", "test"]
 
     def test_train_set(self):
         """
@@ -51,21 +58,22 @@ class TestIWSLT15(CpuCommonTest):
         """
         expected_ds_num = 3
         expected_len = 133207
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
 
-        self.check_output_equal(expected_train['en'], ds[0][0]['en'])
-        self.check_output_equal(expected_train['vi'], ds[0][0]['vi'])
+        self.check_output_equal(expected_train["en"], ds[0][0]["en"])
+        self.check_output_equal(expected_train["vi"], ds[0][0]["vi"])
 
 
 class TestIWELT15NoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'iwslt15'
+        self.config["path_or_read_func"] = "iwslt15"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

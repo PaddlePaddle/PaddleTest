@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,27 +25,134 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'tokens': ['当', '希', '望', '工', '程', '救', '助', '的', '百', '万', '儿', '童', '成', '长', '起', '来', '，', '科', '教', '兴', '国', '蔚', '然', '成', '风', '时', '，', '今', '天', '有', '收', '藏', '价', '值', '的', '书', '你', '没', '买', '，', '明', '日', '就', '叫', '你', '悔', '不', '当', '初', '！'], 
-        'labels': [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]}),
+        "train": (
+            {
+                "tokens": [
+                    "当",
+                    "希",
+                    "望",
+                    "工",
+                    "程",
+                    "救",
+                    "助",
+                    "的",
+                    "百",
+                    "万",
+                    "儿",
+                    "童",
+                    "成",
+                    "长",
+                    "起",
+                    "来",
+                    "，",
+                    "科",
+                    "教",
+                    "兴",
+                    "国",
+                    "蔚",
+                    "然",
+                    "成",
+                    "风",
+                    "时",
+                    "，",
+                    "今",
+                    "天",
+                    "有",
+                    "收",
+                    "藏",
+                    "价",
+                    "值",
+                    "的",
+                    "书",
+                    "你",
+                    "没",
+                    "买",
+                    "，",
+                    "明",
+                    "日",
+                    "就",
+                    "叫",
+                    "你",
+                    "悔",
+                    "不",
+                    "当",
+                    "初",
+                    "！",
+                ],
+                "labels": [
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                ],
+            }
+        ),
     }
     return examples[mode]
+
 
 class TestMSRA_NER(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'msra_ner'
-        self.config['splits'] = ['train','test']
+        self.config["path_or_read_func"] = "msra_ner"
+        self.config["splits"] = ["train", "test"]
 
     def test_train_set(self):
         """
@@ -52,21 +160,22 @@ class TestMSRA_NER(CpuCommonTest):
         """
         expected_ds_num = 2
         expected_len = 45000
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
 
-        self.check_output_equal(expected_train['tokens'], ds[0][0]['tokens'])
-        self.check_output_equal(expected_train['labels'], ds[0][0]['labels'])
+        self.check_output_equal(expected_train["tokens"], ds[0][0]["tokens"])
+        self.check_output_equal(expected_train["labels"], ds[0][0]["labels"])
 
 
 class TestMSRA_NERNoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'msra_ner'
+        self.config["path_or_read_func"] = "msra_ner"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

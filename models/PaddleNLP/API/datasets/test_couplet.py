@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,26 +25,27 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'first': '晚\x02风\x02摇\x02树\x02树\x02还\x02挺', 'second': '晨\x02露\x02润\x02花\x02花\x02更\x02红'}),
+        "train": ({"first": "晚\x02风\x02摇\x02树\x02树\x02还\x02挺", "second": "晨\x02露\x02润\x02花\x02花\x02更\x02红"}),
     }
     return examples[mode]
+
 
 class TestCOUPLET(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'couplet'
-        self.config['splits'] = ['train', 'dev','test']
+        self.config["path_or_read_func"] = "couplet"
+        self.config["splits"] = ["train", "dev", "test"]
 
     def test_train_set(self):
         """
@@ -51,21 +53,22 @@ class TestCOUPLET(CpuCommonTest):
         """
         expected_ds_num = 3
         expected_len = 702594
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
 
-        self.check_output_equal(expected_train['first'], ds[0][0]['first'])
-        self.check_output_equal(expected_train['second'], ds[0][0]['second'])
+        self.check_output_equal(expected_train["first"], ds[0][0]["first"])
+        self.check_output_equal(expected_train["second"], ds[0][0]["second"])
 
 
 class TestCOUPLETNoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'couplet'
+        self.config["path_or_read_func"] = "couplet"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,31 +25,30 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'sentence': "Our friends won't buy this analysis, let alone the next one we propose.", 'labels': 1}),
-        'test':
-        ({"id": 0, "sentence1": "借呗什么时候会取消", "sentence2": "蚂蚁借呗什么时候可以恢复***个月"}),
-        'dev':
-        ({"sentence1": "双十一花呗提额在哪", "sentence2": "里可以提花呗额度", "label": "0"}),
+        "train": ({"sentence": "Our friends won't buy this analysis, let alone the next one we propose.", "labels": 1}),
+        "test": ({"id": 0, "sentence1": "借呗什么时候会取消", "sentence2": "蚂蚁借呗什么时候可以恢复***个月"}),
+        "dev": ({"sentence1": "双十一花呗提额在哪", "sentence2": "里可以提花呗额度", "label": "0"}),
     }
     return examples[mode]
+
 
 class TestGlueCOLA(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'glue'
-        self.config['name'] = 'cola'
-        self.config['splits'] = ['train', 'dev','test']
+        self.config["path_or_read_func"] = "glue"
+        self.config["name"] = "cola"
+        self.config["splits"] = ["train", "dev", "test"]
 
     def test_train_set(self):
         """
@@ -56,24 +56,23 @@ class TestGlueCOLA(CpuCommonTest):
         """
         expected_ds_num = 3
         expected_len = 8551
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
 
-        self.check_output_equal(expected_train['sentence'], ds[0][0]['sentence'])
-        self.check_output_equal(int(expected_train['labels']), ds[0][0]['labels'])
-
-
+        self.check_output_equal(expected_train["sentence"], ds[0][0]["sentence"])
+        self.check_output_equal(int(expected_train["labels"]), ds[0][0]["labels"])
 
 
 class TestClueAFQMCNoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'glue'
-        self.config['task_name'] = 'cola'
+        self.config["path_or_read_func"] = "glue"
+        self.config["task_name"] = "cola"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

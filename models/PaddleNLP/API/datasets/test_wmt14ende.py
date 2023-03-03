@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,26 +25,27 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'en': 'Res@@ um@@ ption of the session', 'de': 'Wiederaufnahme der Sitzungsperiode'}),
+        "train": ({"en": "Res@@ um@@ ption of the session", "de": "Wiederaufnahme der Sitzungsperiode"}),
     }
     return examples[mode]
+
 
 class TestWMT14ENDE(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'wmt14ende'
-        self.config['splits'] = ['train', 'dev', 'test', 'dev-eval', 'test-eval']
+        self.config["path_or_read_func"] = "wmt14ende"
+        self.config["splits"] = ["train", "dev", "test", "dev-eval", "test-eval"]
 
     def test_train_set(self):
         """
@@ -51,21 +53,22 @@ class TestWMT14ENDE(CpuCommonTest):
         """
         expected_ds_num = 5
         expected_len = 4575637
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
 
-        self.check_output_equal(expected_train['en'], ds[0][0]['en'])
-        self.check_output_equal(expected_train['de'], ds[0][0]['de'])
+        self.check_output_equal(expected_train["en"], ds[0][0]["en"])
+        self.check_output_equal(expected_train["de"], ds[0][0]["de"])
 
 
 class TestWMT14ENDENoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'wmt14ENDE'
+        self.config["path_or_read_func"] = "wmt14ENDE"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

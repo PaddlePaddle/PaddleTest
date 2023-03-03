@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,27 +25,35 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'id': 0, 'question': '$recycle.bin文件夹可以删除么', 'answer': '$RECYCLE.BIN 是 Win7、vista 的回收站，RECYCLER '
-        '是 XP 的回收站，如果是 xp、win7双系统机器，或者 xp、vista 双系统机器，xp 系统也会有$RECYCLE.BIN，这是系统文件，不是病毒，不需要删除。', 'labels': 1}),
+        "train": (
+            {
+                "id": 0,
+                "question": "$recycle.bin文件夹可以删除么",
+                "answer": "$RECYCLE.BIN 是 Win7、vista 的回收站，RECYCLER "
+                "是 XP 的回收站，如果是 xp、win7双系统机器，或者 xp、vista 双系统机器，xp 系统也会有$RECYCLE.BIN，这是系统文件，不是病毒，不需要删除。",
+                "labels": 1,
+            }
+        ),
     }
     return examples[mode]
+
 
 class TestDireaderYesno(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'dureader_yesno'
-        self.config['splits'] = ['train','dev','test']
+        self.config["path_or_read_func"] = "dureader_yesno"
+        self.config["splits"] = ["train", "dev", "test"]
 
     def test_train_set(self):
         """
@@ -52,23 +61,24 @@ class TestDireaderYesno(CpuCommonTest):
         """
         expected_ds_num = 3
         expected_len = 75391
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
 
-        self.check_output_equal(expected_train['id'], ds[0][0]['id'])
-        self.check_output_equal(expected_train['question'], ds[0][0]['question'])
-        self.check_output_equal(expected_train['answer'], ds[0][0]['answer'])
-        self.check_output_equal(expected_train['labels'], ds[0][0]['labels'])
+        self.check_output_equal(expected_train["id"], ds[0][0]["id"])
+        self.check_output_equal(expected_train["question"], ds[0][0]["question"])
+        self.check_output_equal(expected_train["answer"], ds[0][0]["answer"])
+        self.check_output_equal(expected_train["labels"], ds[0][0]["labels"])
 
 
 class TestDureaderYesnoNoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'dureader_yesno'
+        self.config["path_or_read_func"] = "dureader_yesno"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

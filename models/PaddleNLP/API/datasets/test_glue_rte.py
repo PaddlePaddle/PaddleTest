@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,31 +25,47 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'sentence1': 'No Weapons of Mass Destruction Found in Iraq Yet.', 'sentence2': 'Weapons of Mass Destruction Found in Iraq.', 'labels': 1}),
-        'dev':
-        ({'sentence1': 'Dana Reeve, the widow of the actor Christopher Reeve, has died of lung cancer at age 44, according to the Christopher Reeve Foundation.', 'sentence2': 'Christopher Reeve had an accident.', 'labels': 1}),
-        'test':
-        ({'sentence1': "Mangla was summoned after Madhumita's sister Nidhi Shukla, who was the first witness in the case.", 'sentence2': 'Shukla is related to Mangla.'}),
+        "train": (
+            {
+                "sentence1": "No Weapons of Mass Destruction Found in Iraq Yet.",
+                "sentence2": "Weapons of Mass Destruction Found in Iraq.",
+                "labels": 1,
+            }
+        ),
+        "dev": (
+            {
+                "sentence1": "Dana Reeve, the widow of the actor Christopher Reeve, has died of lung cancer at age 44, according to the Christopher Reeve Foundation.",
+                "sentence2": "Christopher Reeve had an accident.",
+                "labels": 1,
+            }
+        ),
+        "test": (
+            {
+                "sentence1": "Mangla was summoned after Madhumita's sister Nidhi Shukla, who was the first witness in the case.",
+                "sentence2": "Shukla is related to Mangla.",
+            }
+        ),
     }
     return examples[mode]
+
 
 class TestGlueRTE(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'glue'
-        self.config['name'] = 'rte'
-        self.config['splits'] = ['train', 'dev','test']
+        self.config["path_or_read_func"] = "glue"
+        self.config["name"] = "rte"
+        self.config["splits"] = ["train", "dev", "test"]
 
     def test_train_set(self):
         """
@@ -56,23 +73,24 @@ class TestGlueRTE(CpuCommonTest):
         """
         expected_ds_num = 3
         expected_len = 2490
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
 
-        self.check_output_equal(expected_train['sentence1'], ds[0][0]['sentence1'])
-        self.check_output_equal(expected_train['sentence2'], ds[0][0]['sentence2'])
-        self.check_output_equal(expected_train['labels'], ds[0][0]['labels'])
+        self.check_output_equal(expected_train["sentence1"], ds[0][0]["sentence1"])
+        self.check_output_equal(expected_train["sentence2"], ds[0][0]["sentence2"])
+        self.check_output_equal(expected_train["labels"], ds[0][0]["labels"])
 
 
 class TestClueRTENoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'glue'
-        self.config['task_name'] = 'rte'
+        self.config["path_or_read_func"] = "glue"
+        self.config["task_name"] = "rte"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

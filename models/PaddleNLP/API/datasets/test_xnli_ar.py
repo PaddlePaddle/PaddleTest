@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,27 +25,34 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'premise': '- و قد ال كريم المفاهيمية اثنان اساسيين - المنتج والجغرافيا .', 'hypothesis': 'المنتج والجغرافيا هو ما يجعل كريم القشط العمل .', 'label': 1}),
+        "train": (
+            {
+                "premise": "- و قد ال كريم المفاهيمية اثنان اساسيين - المنتج والجغرافيا .",
+                "hypothesis": "المنتج والجغرافيا هو ما يجعل كريم القشط العمل .",
+                "label": 1,
+            }
+        ),
     }
     return examples[mode]
+
 
 class TestXnliAR(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'xnli'
-        self.config['name'] = 'ar'
-        self.config['splits'] = ['train', 'dev','test']
+        self.config["path_or_read_func"] = "xnli"
+        self.config["name"] = "ar"
+        self.config["splits"] = ["train", "dev", "test"]
 
     def test_train_set(self):
         """
@@ -52,7 +60,7 @@ class TestXnliAR(CpuCommonTest):
         """
         expected_ds_num = 3
         expected_len = 390702
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         # self.check_output_equal(len(ds), expected_ds_num)
         # self.check_output_equal(len(ds[0]), expected_len)
@@ -64,11 +72,12 @@ class TestXnliAR(CpuCommonTest):
 
 class TestXnliARNoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'xnli'
-        self.config['task_name'] = 'ar'
+        self.config["path_or_read_func"] = "xnli"
+        self.config["task_name"] = "ar"
 
     @util.assert_raises
     def test_no_split_datafiles(self):

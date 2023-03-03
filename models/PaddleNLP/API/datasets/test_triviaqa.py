@@ -17,6 +17,7 @@ import unittest
 from paddlenlp.datasets import load_dataset
 
 import sys
+
 sys.path.append(os.pardir)
 
 from common_test import CpuCommonTest
@@ -24,26 +25,27 @@ import util
 import unittest
 
 
-def get_examples(mode='train'):
+def get_examples(mode="train"):
     """
     dataset[0][0] examples
     """
     examples = {
-        'train':
-        ({'id': 'sfq_9893', 'title': '', 'answers': ['hollinger internation'], 'answer_starts': [199]}),
+        "train": ({"id": "sfq_9893", "title": "", "answers": ["hollinger internation"], "answer_starts": [199]}),
     }
     return examples[mode]
+
 
 class TestTriviaqa(CpuCommonTest):
     """
     clue tnews case
     """
+
     def setUp(self):
         """
         check input params & datasets all flies
         """
-        self.config['path_or_read_func'] = 'triviaqa'
-        self.config['splits'] = ['train', 'dev']
+        self.config["path_or_read_func"] = "triviaqa"
+        self.config["splits"] = ["train", "dev"]
 
     def test_train_set(self):
         """
@@ -51,7 +53,7 @@ class TestTriviaqa(CpuCommonTest):
         """
         expected_ds_num = 2
         expected_len = 106831
-        expected_train= get_examples('train')
+        expected_train = get_examples("train")
         ds = load_dataset(**self.config)
         self.check_output_equal(len(ds), expected_ds_num)
         self.check_output_equal(len(ds[0]), expected_len)
@@ -59,17 +61,18 @@ class TestTriviaqa(CpuCommonTest):
         # self.check_output_equal(expected_train['id'], ds[0][0]['id'])
         # self.check_output_equal(expected_train['title'], ds[0][0]['title'])
         # self.check_output_equal(expected_train['context'], ds[0][0]['context'])
-        self.check_output_equal(expected_train['answers'], ds[0][0]['answers'])
-        self.check_output_equal(expected_train['answer_starts'], ds[0][0]['answer_starts'])
+        self.check_output_equal(expected_train["answers"], ds[0][0]["answers"])
+        self.check_output_equal(expected_train["answer_starts"], ds[0][0]["answer_starts"])
         # self.check_output_equal(expected_train['is_impossible'], ds[0][0]['is_impossible'])
 
 
 class TestTriviaqaNoSplitDataFiles(CpuCommonTest):
     """
-    check no splits 
+    check no splits
     """
+
     def setUp(self):
-        self.config['path_or_read_func'] = 'triviaqa'
+        self.config["path_or_read_func"] = "triviaqa"
 
     @util.assert_raises
     def test_no_split_datafiles(self):
