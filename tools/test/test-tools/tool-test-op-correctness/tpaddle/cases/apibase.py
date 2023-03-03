@@ -572,9 +572,9 @@ class APIBase(object):
                         if isinstance(v, (np.generic, np.ndarray)):
                             # no_grad_Var不需要转换类型
                             if self.no_grad_var is not None and k in self.no_grad_var:
-                                params[k] = fluid.data(name=k, shape=v.shape, dtype=v.dtype)
+                                params[k] = paddle.static.data(name=k, shape=v.shape, dtype=v.dtype)
                             else:
-                                params[k] = fluid.data(name=k, shape=v.shape, dtype=self.dtype)
+                                params[k] = paddle.static.data(name=k, shape=v.shape, dtype=self.dtype)
                             xyz.append(k)
                             # enable compute gradient
                             params[k].stop_gradient = False
@@ -621,14 +621,14 @@ class APIBase(object):
                         if isinstance(v, (np.generic, np.ndarray)):
                             # no_grad_Var不需要转换类型
                             if self.no_grad_var is not None and k in self.no_grad_var:
-                                params[k] = fluid.data(name=k, shape=v.shape, dtype=v.dtype)
+                                params[k] = paddle.static.data(name=k, shape=v.shape, dtype=v.dtype)
                             else:
-                                params[k] = fluid.data(name=k, shape=v.shape, dtype=self.dtype)
+                                params[k] = paddle.static.data(name=k, shape=v.shape, dtype=self.dtype)
                             # enable compute gradient
                             params[k].stop_gradient = False
                     if data is not None:
                         data = data.astype(self.dtype)
-                        self.data = fluid.data(name="data", shape=data.shape, dtype=self.dtype)
+                        self.data = paddle.static.data(name="data", shape=data.shape, dtype=self.dtype)
                         self.data.stop_gradient = False
                     data = dict({"data": data}, **kwargs)
                     obj = self.func(**params)
