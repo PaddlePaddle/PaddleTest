@@ -24,7 +24,6 @@ case:
       -
         name: python
         cmd: python deploy/python/infer.py
-    api:
       -
         name: cpp
         cmd: ./deploy/cpp/build/test_seg
