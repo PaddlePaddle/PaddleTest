@@ -40,9 +40,11 @@ def test_transformers():
         try:
             num_classes = 1
             model_pretrained = AutoModel.from_pretrained(model_name, num_labels=num_classes)
-
             model_pretrained.save_pretrained(save_dir + model_name)
+
             model_local = AutoModel.from_pretrained(save_dir + model_name)
+            print("model from load load succes", model_local)
+
             model_state = paddle.load(save_dir + model_name + "/model_state.pdparams")
             model_pretrained.set_state_dict(model_state)
 
