@@ -260,9 +260,11 @@ x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz"
             return ret
 
         sysstr = platform.system()
+        '''
         if sysstr == "Linux":
             self.prepare_opencv()
             self.prepare_c_predict_library()
             self.compile_c_predict_demo()
+        '''
 
         return ret
