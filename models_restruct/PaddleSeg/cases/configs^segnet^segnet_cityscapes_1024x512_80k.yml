@@ -20,7 +20,14 @@ case:
       -
         name: pretrained
         cmd: python tools/export.py
-    predict: skipped
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/infer.py
+    api:
+      -
+        name: cpp
+        cmd: ./deploy/cpp/build/test_seg
   windows:
     base: ./base/normal_base.yml
     train:
@@ -39,7 +46,10 @@ case:
       -
         name: pretrained
         cmd: python tools/export.py
-    predict: skipped
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/infer.py
 
 
 function: paddlelas_imagenet_parse
