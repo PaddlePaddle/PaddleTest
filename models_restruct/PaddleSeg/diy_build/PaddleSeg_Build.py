@@ -109,7 +109,7 @@ class PaddleSeg_Build(Model_Build):
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/mini_supervisely.zip")
         os.system("unzip mini_supervisely.zip")
         logger.info("***download data ended")
-        #cpp infer compile
+        # cpp infer compile
         if platform.system() == "Linux":
             os.chdir(path_repo + "/deploy/cpp")
             wget.download(
