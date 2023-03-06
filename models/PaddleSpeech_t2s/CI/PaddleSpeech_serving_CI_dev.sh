@@ -87,6 +87,10 @@ echo $(($num%$max+$min))
 # paddlespeech
 python -m pip uninstall -y paddlespeech
 python -m pip install .
+# paddle=dev not supported  paddlenlp=2.5.1
+python -m pip uninstall paddlenlp
+python -m pip install -U https://paddlenlp.bj.bcebos.com/wheels/paddlenlp-ci-py3-none-any.whl
+
 
 unset http_proxy
 unset https_proxy
