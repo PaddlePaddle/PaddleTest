@@ -12,6 +12,7 @@ case:
     infer: skipped
     export: skipped
     predict: skipped
+    api: skipped
   windows:
     base: ./base/normal_base.yml
     train:
