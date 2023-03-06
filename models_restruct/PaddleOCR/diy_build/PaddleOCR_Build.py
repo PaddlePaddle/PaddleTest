@@ -119,6 +119,9 @@ class PaddleOCR_Build(Model_Build):
             # kie requirements
             os.system("python -m pip install -U  paddlenlp")
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
+            # paddle=dev, paddlenlp=2.5.1 not supported
+            os.system("python -m pip uninstall -y paddlenlp")
+            os.system("python -m pip install -U https://paddlenlp.bj.bcebos.com/wheels/paddlenlp-ci-py3-none-any.whl")
 
             if sysstr == "Windows":
                 os.environ["PATH"] = "F:\\install\\GnuWin32\\bin;" + os.environ.get("PATH")
@@ -137,8 +140,8 @@ class PaddleOCR_Build(Model_Build):
                     if sysstr == "Darwin":
                         cmd = "sed -i '' 's/batch_size: 14/batch_size: 1/g' %s" % filename
                     else:
-                        cmd = "sed -i s/batch_size: 14/batch_size: 1/g %s" % filename
-                        os.system(cmd)
+                        cmd = """sed -i "s/batch_size: 14/batch_size: 1/g" %s""" % filename
+                    os.system(cmd)
             os.chdir(self.test_root_path)
             print("build dataset!")
 
@@ -259,10 +262,12 @@ x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz"
             logger.info("build env dataset failed")
             return ret
 
+        """
         sysstr = platform.system()
         if sysstr == "Linux":
             self.prepare_opencv()
             self.prepare_c_predict_library()
             self.compile_c_predict_demo()
+        """
 
         return ret
