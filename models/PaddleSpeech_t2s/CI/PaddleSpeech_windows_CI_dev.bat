@@ -11,11 +11,8 @@ rem paddlespeech
 python -m pip uninstall -y paddlespeech
 python -m pip install .
 
-<<<<<<< HEAD
+
 rem paddle=dev not supported  paddlenlp=2.5.1
-=======
-# paddle=dev not supported  paddlenlp=2.5.1
->>>>>>> 464e7f048fa5b300907f2bea4aa69bbc9a1c3f96
 python -m pip uninstall paddlenlp
 python -m pip install -U https://paddlenlp.bj.bcebos.com/wheels/paddlenlp-ci-py3-none-any.whl
 
