@@ -94,18 +94,19 @@ class PaddleSpeech_Build(Model_Build):
             if sysstr == "Linux":
                 # linux：paddlespeech are installed in '/root/.local/bin' which is not on PATH
                 os.environ["PATH"] += os.pathsep + "/root/.local/bin"  # 注意修改你的路径
-                # linux-python3.10
-                # os.system("python -m pip install setuptools")
-                # os.system("apt-get update")
-                # os.system("apt-get install -y python3-setuptools")
+
                 os.system("python -m pip install numba")
                 os.system("python -m pip install jsonlines")
-            # os.system("python -m pip install -U pyinstaller")
-            os.system("python -m pip install . --ignore-installed")
+            # M1: cant not add --ignore-installed"
+            os.system("python -m pip install .")
+            # paddle=dev, paddlenlp=2.5.1 not supported
+            os.system("python -m pip uninstall -y paddlenlp")
+            os.system("python -m pip install -U https://paddlenlp.bj.bcebos.com/wheels/paddlenlp-ci-py3-none-any.whl")
             # mac from numba.np.ufunc import _internal
             # os.system("python -m pip install -U numpy<1.24.0")
             # bug: bce-python-sdk==0.8.79
             os.system("python -m pip install bce-python-sdk==0.8.74")
+            os.system("python -m pip install -U protobuf==3.20.0")
             os.chdir(path_now)
             print("build paddlespeech wheel!")
 
@@ -141,7 +142,7 @@ class PaddleSpeech_Build(Model_Build):
                 # asr tal_cs
                 os.chdir("tal_cs")
                 os.symlink(os.path.join(src_path, "TALCS_corpus"), "TALCS_corpus")
-                os.chdir(path_now)
+            os.chdir(path_now)
 
     def build_env(self):
         """
