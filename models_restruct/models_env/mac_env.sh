@@ -1,7 +1,10 @@
 set +x;
 pwd;
 
-export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data"}
+if [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]];then
+    export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data"}
+    ls ${dataset_org}
+fi
 
 ####ce框架根目录
 rm -rf ce && mkdir ce;
@@ -9,6 +12,7 @@ cd ce;
 
 # 使虚拟环境生效
 source ~/.bashrc
+source activate
 
 ######################## 定义变量 ########################
 # AGILE_PIPELINE_NAME 格式类似: PaddleClas-MAC-Intel-Python310-P9-Develop
@@ -17,8 +21,7 @@ source ~/.bashrc
 #repo的名称
 export reponame=${reponame:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $1}')`"}
 
-source activate
-export env_run=conda
+#统一使用conda 暂时删除下述
 # if [[ `uname -a` =~ "ARM64" ]] || [[ `uname -m` =~ "arm64" ]];then
 #     echo "M1"
 #     source activate
@@ -60,14 +63,14 @@ fi
 #指定python版本
 export Python_version=${Python_version:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F 'Python' '{print $2}'|awk -F '-' '{print $1}')`"}
 if [[ ${Python_version} =~ "39" ]];then
-    ${env_run} activate ${reponame}_py39
-    echo "${env_run} activate ${reponame}_py310"
+    conda activate ${reponame}_py39
+    echo "conda activate ${reponame}_py310"
 elif [[ ${Python_version} =~ "310" ]];then
-    ${env_run} activate ${reponame}_py310
-    echo "${env_run} activate ${reponame}_py310"
+    conda activate ${reponame}_py310
+    echo "conda activate ${reponame}_py310"
 else
-    ${env_run} activate ${reponame}_py310
-    echo "${env_run} activate ${reponame}_py310"
+    conda activate ${reponame}_py310
+    echo "conda activate ${reponame}_py310"
     echo "default set python verison is python3.10"
 fi
 
