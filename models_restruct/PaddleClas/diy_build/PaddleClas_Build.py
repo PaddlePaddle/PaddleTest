@@ -34,7 +34,7 @@ class PaddleClas_Build(Model_Build):
         self.dataset_org = args.dataset_org
         if str(args.dataset_target) == "None":
             os.environ["dataset_target"] = os.path.join(os.getcwd(), "PaddleClas/dataset")
-        elif "download_data" in  args.dataset_target:
+        elif str(args.dataset_target) == "download_data":
             os.environ["dataset_target"] = "None"
         else:
             os.environ["dataset_target"] = args.dataset_target
