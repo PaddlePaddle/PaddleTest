@@ -209,6 +209,7 @@ class PaddleClas_Build(Model_Build):
                 os.path.join(self.reponame, self.dataset_target),
                 os.path.join(self.reponame, self.dataset_target + "_" + str(int(time.time()))),
             )
+        logger.info("#### self.dataset_org file have {}".format(os.listdir(self.dataset_org)))
         exit_code = os.symlink(self.dataset_org, os.path.join(self.reponame, self.dataset_target))
         if exit_code:
             logger.info("#### link_dataset failed")
