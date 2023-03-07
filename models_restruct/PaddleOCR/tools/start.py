@@ -12,6 +12,7 @@ import logging
 import tarfile
 import argparse
 import platform
+import time
 import yaml
 import wget
 import paddle
@@ -140,6 +141,8 @@ class PaddleOCR_Start(object):
         """
         gengrate_test_case
         """
+        # sleep for linux rec hang
+        time.sleep(10)
         print(os.path.join("cases", self.qa_yaml_name))
         pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
         pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
