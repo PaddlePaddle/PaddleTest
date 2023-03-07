@@ -371,6 +371,9 @@ if [[ "${docker_flag}" == "" ]]; then
             export dataset_org="/workspace/MT_data"
             if [[ -d ${dataset_org} ]];then
                 mv ${dataset_org} ${dataset_org}_back
+                mkdir -p ${dataset_org}
+            else
+                mkdir -p ${dataset_org}
             fi
             mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
         fi
@@ -455,6 +458,9 @@ else
         export dataset_org="/workspace/MT_data"
         if [[ -d ${dataset_org} ]];then
             mv ${dataset_org} ${dataset_org}_back
+            mkdir -p ${dataset_org}
+        else
+            mkdir -p ${dataset_org}
         fi
         mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
     fi
