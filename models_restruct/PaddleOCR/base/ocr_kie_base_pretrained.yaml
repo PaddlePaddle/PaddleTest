@@ -31,7 +31,7 @@ eval:
   cmd:  python tools/eval.py
   params:
     - -c ${rd_yaml_path}
-    - -o Architecture.Backbone.checkpoints==${model}/best_accuracy
+    - -o Architecture.Backbone.checkpoints=${model}/best_accuracy
     - Global.use_gpu=${use_gpu}
 
   result:
