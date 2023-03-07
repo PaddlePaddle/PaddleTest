@@ -46,9 +46,9 @@ class PaddleClas_End(object):
                 os.remove(file_name)
                 logger.info("#### clean data: {}".format(file_name))
 
-            if file_name == "inference":
-                shutil.rmtree("inference")
-                logger.info("#### clean data inference: {}".format("inference"))
+            # if file_name == "inference":
+            #     shutil.rmtree("inference")
+            #     logger.info("#### clean data inference: {}".format("inference"))
 
             if file_name == "output":
                 del_pdparams = glob.glob(r"output/*/*/*.pdparams")
