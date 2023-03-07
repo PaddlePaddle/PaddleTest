@@ -266,12 +266,13 @@ if [[ "${docker_flag}" == "" ]]; then
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
     NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
-        --name=${docker_name} --net=host \
+        --name=${docker_name} --net=host --cap-add=SYS_ADMIN \
         --shm-size=128G \
         -v $(pwd):/workspace \
         -v /ssd2:/ssd2 \
         -e AK=${AK} \
         -e SK=${SK} \
+        -e CFS_IP=${CFS_IP} \
         -e bce_whl_url=${bce_whl_url} \
         -e PORT_RANGE="62000:65536" \
         -e no_proxy=${no_proxy} \
@@ -305,6 +306,7 @@ if [[ "${docker_flag}" == "" ]]; then
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
+            yum install nfs-utils -y
             case ${Python_version} in
             36)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -329,6 +331,7 @@ if [[ "${docker_flag}" == "" ]]; then
             esac
         else
             echo "ubuntu"
+            apt-get install nfs-common -y
             case ${Python_version} in
             36)
             mkdir run_env_py36;
@@ -363,6 +366,13 @@ if [[ "${docker_flag}" == "" ]]; then
             esac
         fi
 
+        #挂载数据
+        export dataset_org=/workspace/MT_data
+        if [ -d ${dataset_org} ];then
+            mv ${dataset_org} ${dataset_org}_back
+        fi
+        mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
+
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
@@ -378,6 +388,7 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
+        yum install nfs-utils -y
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -402,6 +413,7 @@ else
         esac
     else
         echo "ubuntu"
+        apt-get install nfs-common -y
         case ${Python_version} in
         36)
         mkdir run_env_py36;
@@ -435,6 +447,19 @@ else
         ;;
         esac
     fi
+
+    #挂载数据
+    export dataset_org=/ssd2/MT_data_${AGILE_JOB_BUILD_ID}
+    export dataset_target=/workspace/MT_data
+    if [ -d ${dataset_org} ];then
+        mv ${dataset_org} ${dataset_org}_back
+    fi
+    mkdir -p ${dataset_target}
+    if [ -d ${dataset_target} ];then
+        mv ${dataset_target} ${dataset_target}_back
+    fi
+    mkdir -p ${dataset_target}
+    mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
 
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
