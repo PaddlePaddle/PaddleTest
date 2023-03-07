@@ -366,12 +366,14 @@ if [[ "${docker_flag}" == "" ]]; then
             esac
         fi
 
-        #挂载数据
-        export dataset_org=/workspace/MT_data
-        if [ -d ${dataset_org} ];then
-            mv ${dataset_org} ${dataset_org}_back
+        #挂载数据, 如果之前定义过dataset_org则不挂载
+        if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} == "/workspace/MT_data" ]];then
+            export dataset_org="/workspace/MT_data"
+            if [[ -d ${dataset_org} ]];then
+                mv ${dataset_org} ${dataset_org}_back
+            fi
+            mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
         fi
-        mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
 
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
@@ -448,18 +450,14 @@ else
         esac
     fi
 
-    #挂载数据
-    export dataset_org=/ssd2/MT_data_${AGILE_JOB_BUILD_ID}
-    export dataset_target=/workspace/MT_data
-    if [ -d ${dataset_org} ];then
-        mv ${dataset_org} ${dataset_org}_back
+    #挂载数据, 如果之前定义过dataset_org则不挂载
+    if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} == "/workspace/MT_data" ]];then
+        export dataset_org="/workspace/MT_data"
+        if [[ -d ${dataset_org} ]];then
+            mv ${dataset_org} ${dataset_org}_back
+        fi
+        mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
     fi
-    mkdir -p ${dataset_target}
-    if [ -d ${dataset_target} ];then
-        mv ${dataset_target} ${dataset_target}_back
-    fi
-    mkdir -p ${dataset_target}
-    mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
 
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";

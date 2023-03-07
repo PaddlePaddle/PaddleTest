@@ -1,7 +1,7 @@
 set +x;
 pwd;
 
-export dataset_org="/Volumes/210-share-data/MT_data"
+export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data"}
 
 ####ce框架根目录
 rm -rf ce && mkdir ce;

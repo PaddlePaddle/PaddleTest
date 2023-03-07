@@ -1,6 +1,6 @@
 
 rem do not uset chinese note  beacause of linux tar problem
-set dataset_org="H:\MT_data"
+if not defined dataset_org set dataset_org="H:\MT_data"
 
 rem change path
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
