@@ -32,10 +32,12 @@ class PaddleClas_Build(Model_Build):
         self.system = args.system
         self.set_cuda = args.set_cuda
         self.dataset_org = args.dataset_org
-        if "download_data" in str(args.dataset_target):
+        if str(args.dataset_target) == "None":
+            os.environ["dataset_target"] = os.path.join(os.getcwd(), "PaddleClas/dataset")
+        elif "download_data" in  args.dataset_target:
             os.environ["dataset_target"] = "None"
         else:
-            os.environ["dataset_target"] = os.path.join(os.getcwd(), "PaddleClas/dataset")
+            os.environ["dataset_target"] = args.dataset_target
         self.dataset_target = os.getenv("dataset_target")
         logger.info("#### dataset_org is  {}".format(self.dataset_org))
         logger.info("#### dataset_target is  {}".format(self.dataset_target))
