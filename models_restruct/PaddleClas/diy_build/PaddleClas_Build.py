@@ -31,7 +31,7 @@ class PaddleClas_Build(Model_Build):
         self.branch = args.branch
         self.system = args.system
         self.set_cuda = args.set_cuda
-        if str(args.dataset_org) == "/workspace/MT_data":
+        if "MT_data" in str(args.dataset_org):
             self.dataset_org = os.path.join(str(args.dataset_org), args.reponame)
         else:
             self.dataset_org = str(args.dataset_org)
