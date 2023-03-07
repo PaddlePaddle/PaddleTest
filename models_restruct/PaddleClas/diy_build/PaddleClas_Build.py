@@ -31,8 +31,10 @@ class PaddleClas_Build(Model_Build):
         self.branch = args.branch
         self.system = args.system
         self.set_cuda = args.set_cuda
-        if str(args.dataset_org) != "None":
+        if str(args.dataset_org) == "/workspace/MT_data":
             self.dataset_org = os.path.join(str(args.dataset_org), args.reponame)
+        else:
+            self.dataset_org = str(args.dataset_org)
         if str(args.dataset_target) == "None":
             os.environ["dataset_target"] = os.path.join(os.getcwd(), "PaddleClas/dataset")
         elif str(args.dataset_target) == "download_data":
