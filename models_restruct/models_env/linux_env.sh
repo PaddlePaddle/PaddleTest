@@ -380,7 +380,9 @@ if [[ "${docker_flag}" == "" ]]; then
                 ls ${dataset_org}
             fi
         else
-            export dataset_target=${dataset_target:-"download_data"}
+            if [[ ${dataset_target} == "None" ]];then
+                export dataset_target="download_data"
+            fi
         fi
 
         nvidia-smi;
@@ -472,7 +474,9 @@ else
             ls ${dataset_org}
         fi
     else
-        export dataset_target=${dataset_target:-"download_data"}
+        if [[ ${dataset_target} == "None" ]];then
+            export dataset_target="download_data"
+        fi
     fi
 
     nvidia-smi;
