@@ -21,8 +21,8 @@ catchException() {
 
 cudaid1=$2;
 cudaid2=$3;
-echo ---cudaid1:${cudaid1}---
-echo ---cudaid2:${cudaid2}---
+echo ---cudaid1:${cudaid1}----
+echo ---cudaid2:${cudaid2}----
 
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 # 1 dist
