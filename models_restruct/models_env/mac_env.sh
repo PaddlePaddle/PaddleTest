@@ -3,12 +3,6 @@ pwd;
 
 export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data"}
 ls ${dataset_org}
-# if [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]];then
-#     export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data"}
-#     ls ${dataset_org}
-# else
-#     export dataset_target=${dataset_target:-"download_data"}
-# fi
 
 ####ce框架根目录
 rm -rf ce && mkdir ce;
