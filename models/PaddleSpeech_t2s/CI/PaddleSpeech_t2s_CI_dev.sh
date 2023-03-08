@@ -30,10 +30,6 @@ python -m pip install pyparsing==2.4.7 --ignore-installed
 #pip install -e .
 pip install .
 
-# paddle=dev not supported  paddlenlp=2.5.1
-python -m pip uninstall -y paddlenlp
-python -m pip install -U https://paddlenlp.bj.bcebos.com/wheels/paddlenlp-ci-py3-none-any.whl
-
 # fix protobuf upgrade
 python -m pip uninstall protobuf -y
 python -m pip install protobuf==3.20.1

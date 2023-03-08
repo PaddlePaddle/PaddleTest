@@ -100,9 +100,6 @@ class PaddleSpeech_Build(Model_Build):
             # M1: cant not add --ignore-installed"
             # windows install add --user
             os.system("python -m pip install --user .  -i https://mirror.baidu.com/pypi/simple")
-            # paddle=dev, paddlenlp=2.5.1 not supported
-            os.system("python -m pip uninstall -y paddlenlp")
-            os.system("python -m pip install -U https://paddlenlp.bj.bcebos.com/wheels/paddlenlp-ci-py3-none-any.whl")
             # mac from numba.np.ufunc import _internal
             # os.system("python -m pip install -U numpy<1.24.0")
             # bug: bce-python-sdk==0.8.79
