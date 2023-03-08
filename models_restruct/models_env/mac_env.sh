@@ -164,7 +164,8 @@ cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
-python -c 'import sys; print(sys.version_info[:])';
+python -c 'import sys; print(sys.version_info[:])'
+python -c "import getpass;print(getpass.getuser())"
 git --version;
 python -m pip install -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
 python -m pip install -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
