@@ -44,6 +44,7 @@ function requirements() {
     cd ppfleetx/ops && python setup_cuda.py install && cd ../..
 
     python -m pip list|grep paddle
+    export PYTHONPATH=/paddle/PaddleFleetX:$PYTHONPATH
 }
 
 function download() {
@@ -158,7 +159,7 @@ function download() {
     else
         # download wikitext-103 for gpt eval
         wget -O ${data_path}/wikitext-103-v1.zip https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip
-        unzip -q ${data_path}/wikitext-103-v1.zip
+        unzip -q ${data_path}/wikitext-103-v1.zip -d ${data_path}/
         rm -rf ${data_path}/wikitext-103-v1.zip
     fi
 
@@ -170,6 +171,25 @@ function download() {
         wget -O ${data_path}/lambada_test.jsonl https://raw.githubusercontent.com/cybertronai/bflm/master/lambada_test.jsonl
     fi
 
+    rm -rf GPT_auto_345M
+    if [[ -e ${data_path}/GPT_auto_345M ]]; then
+        echo "GPT_auto_345M downloaded"
+    else
+        # download GPT_auto_345M for gpt export
+        wget -O ${data_path}/GPT_auto_345M.tar.gz https://paddlefleetx.bj.bcebos.com/model/nlp/gpt/GPT_auto_345M.tar.gz
+        tar -zxvf ${data_path}/GPT_auto_345M.tar.gz -C ${data_path}/
+        rm -rf ${data_path}/GPT_auto_345M.tar.gz
+    fi
+
+    rm -rf GPT_345M_QAT_wo_analysis
+    if [[ -e ${data_path}/GPT_345M_QAT_wo_analysis ]]; then
+        echo "GPT_345M_QAT_wo_analysis downloaded"
+    else
+        # download GPT_345M_QAT_wo_analysis for gpt qat
+        wget -O ${data_path}/GPT_345M_QAT_wo_analysis.tar https://paddlefleetx.bj.bcebos.com/model/nlp/gpt/GPT_345M_QAT_wo_analysis.tar
+        tar xf ${data_path}/GPT_345M_QAT_wo_analysis.tar -C ${data_path}/
+        rm -rf ${data_path}/GPT_345M_QAT_wo_analysis.tar
+    fi
 
     ln -s ${data_path}/ckpt ${fleetx_path}/ckpt
     cp -r ${data_path}/data ${fleetx_path}/
@@ -180,6 +200,8 @@ function download() {
     cp ${data_path}/part-00079 ${fleetx_path}/projects/imagen
     ln -s ${data_path}/wikitext-103 ${fleetx_path}/wikitext-103
     cp ${data_path}/lambada_test.jsonl ${fleetx_path}/
+    ln -s ${data_path}/auto_infer ${fleetx_path}/auto_infer 
+    ln -s ${data_path}/GPT_345M_QAT_wo_analysis ${fleetx_path}/GPT_345M_QAT_wo_analysis
 }
 
 
