@@ -200,7 +200,7 @@ function download() {
     cp ${data_path}/part-00079 ${fleetx_path}/projects/imagen
     ln -s ${data_path}/wikitext-103 ${fleetx_path}/wikitext-103
     cp ${data_path}/lambada_test.jsonl ${fleetx_path}/
-    ln -s ${data_path}/auto_infer ${fleetx_path}/auto_infer 
+    ln -s ${data_path}/auto_infer ${fleetx_path}/auto_infer
     ln -s ${data_path}/GPT_345M_QAT_wo_analysis ${fleetx_path}/GPT_345M_QAT_wo_analysis
 }
 
