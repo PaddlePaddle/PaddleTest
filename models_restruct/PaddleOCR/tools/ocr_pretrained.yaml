@@ -48,6 +48,6 @@ table:
    SLANet_ch: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/ch_ppstructure_mobile_v2.0_SLANet_train.tar
 
 cls:
-   cls:
+   cls_mv3: https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_train.tar
 e2e:
    e2e_r50_vd_pg: https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar

@@ -92,6 +92,9 @@ ln -s ${file_path}/visdrone dataset/visdrone
 if [ -d "dataset/SKU110K_fixed" ];then rm -rf dataset/SKU110K_fixed
 fi
 ln -s ${file_path}/SKU110K_fixed dataset/SKU110K_fixed
+if [ -d "dataset/traindata" ];then rm -rf dataset/traindata
+fi
+ln -s ${file_path}/traindata dataset/traindata
 print_result(){
     if [ $? -ne 0 ];then
         echo -e "${model},${mode},FAIL"
@@ -346,6 +349,10 @@ EVAL
 INFER
 EXPORT
 PYTHON_INFER_KEYPOINT
+elif [[ -n `echo "${config}" | grep "pose3d"` ]];then
+weight_dir=pose3d/
+EVAL
+INFER
 else
 EVAL
 INFER

@@ -4,6 +4,7 @@
 """
 import os
 import sys
+import time
 import platform
 import logging
 import tarfile
@@ -30,8 +31,19 @@ class PaddleClas_Build(Model_Build):
         self.branch = args.branch
         self.system = args.system
         self.set_cuda = args.set_cuda
-        self.dataset_org = args.dataset_org
-        self.dataset_target = args.dataset_target
+        if "MT_data" in str(args.dataset_org):
+            self.dataset_org = os.path.join(str(args.dataset_org), args.reponame)
+        else:
+            self.dataset_org = str(args.dataset_org)
+        if str(args.dataset_target) == "None":
+            os.environ["dataset_target"] = os.path.join(os.getcwd(), "PaddleClas/dataset")
+        elif str(args.dataset_target) == "download_data":
+            os.environ["dataset_target"] = "None"
+        else:
+            os.environ["dataset_target"] = args.dataset_target
+        self.dataset_target = os.getenv("dataset_target")
+        logger.info("#### dataset_org is  {}".format(self.dataset_org))
+        logger.info("#### dataset_target is  {}".format(self.dataset_target))
 
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
@@ -151,9 +163,9 @@ class PaddleClas_Build(Model_Build):
             logger.info("check you {} path".format(self.reponame))
         return 0
 
-    def build_dataset(self):
+    def build_infer_dataset(self):
         """
-        自定义下载数据集
+        下载预测相关数据集
         """
         if os.path.exists(self.reponame):
             # 下载rec数据集 速度很快就默认下载了
@@ -182,7 +194,34 @@ class PaddleClas_Build(Model_Build):
                 )
                 logger.info("#### end download rec_demo")
             os.chdir(path_now)
+        else:
+            logger.info("check you {} path".format(self.reponame))
+        return 0
 
+    def link_dataset(self):
+        """
+        软链数据
+        """
+        if os.path.exists(os.path.join(self.reponame, self.dataset_target)):
+            logger.info(
+                "already have {} will mv {} to {}".format(
+                    self.dataset_target, self.dataset_target, self.dataset_target + "_" + str(int(time.time()))
+                )
+            )
+            os.rename(
+                os.path.join(self.reponame, self.dataset_target),
+                os.path.join(self.reponame, self.dataset_target + "_" + str(int(time.time()))),
+            )
+        exit_code = os.symlink(self.dataset_org, os.path.join(self.reponame, self.dataset_target))
+        if exit_code:
+            logger.info("#### link_dataset failed")
+        return 0
+
+    def build_dataset(self):
+        """
+        自定义下载数据集
+        """
+        if os.path.exists(self.reponame):
             # 下载dataset数据集 解析yaml下载
             path_now = os.getcwd()
             os.chdir(self.reponame)
@@ -348,7 +387,7 @@ class PaddleClas_Build(Model_Build):
                     )
                     wget.download(
                         "https://paddle-qa.bj.bcebos.com/PaddleClas/{}".format(
-                            "nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl"
+                            "nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl"
                         )
                     )
                 except:
@@ -381,27 +420,27 @@ class PaddleClas_Build(Model_Build):
             #     logger.info("repo {} python -m pip install nvidia_dali_cuda102 failed".format(self.reponame))
             #     # return 1
 
-            # cuda11
+            # cuda11  最新numpy有BUG
             logger.info("because of dali have np.int, so change numpy version")
             exit_code_numpy = os.system(
-                "python -m  pip install numpy==1.20.2 \
+                "python -m  pip install numpy==1.21.2 \
                 -i https://mirror.baidu.com/pypi/simple"
             )
             if exit_code_numpy and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_numpy = os.system(
-                    "python -m  pip install --user numpy==1.20.2 \
+                    "python -m  pip install --user numpy==1.21.2 \
                     -i https://mirror.baidu.com/pypi/simple"
                 )
             # 安装nvidia
             exit_code_nvidia = os.system(
                 "python -m  pip install \
-            nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl \
+            nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl \
                 -i https://mirror.baidu.com/pypi/simple"
             )
             if exit_code_nvidia and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_nvidia = os.system(
                     "python -m  pip install --user\
-            nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl \
+            nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl \
                 -i https://mirror.baidu.com/pypi/simple"
                 )
             if exit_code_nvidia:
@@ -432,12 +471,20 @@ class PaddleClas_Build(Model_Build):
                 logger.info("build env yaml failed")
                 return ret
 
-        # logger.info("self.dataset_target is {}".format(self.dataset_target))
-        # if "None" in str(self.dataset_target):
-        ret = self.build_dataset()
+        ret = self.build_infer_dataset()
+        if ret:
+            logger.info("build env infer dataset failed")
+            return ret
+
+        logger.info("self.dataset_target is {}".format(self.dataset_target))
+        if str(self.dataset_target) == "None":
+            ret = self.build_dataset()
+        else:
+            ret = self.link_dataset()
         if ret:
             logger.info("build env dataset failed")
             return ret
+
         return ret
 
 

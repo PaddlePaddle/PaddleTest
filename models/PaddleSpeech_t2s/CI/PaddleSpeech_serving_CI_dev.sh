@@ -88,6 +88,7 @@ echo $(($num%$max+$min))
 python -m pip uninstall -y paddlespeech
 python -m pip install .
 
+
 unset http_proxy
 unset https_proxy
 python -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple

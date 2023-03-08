@@ -38,7 +38,7 @@ class Paddle3D_End(object):
         self.model = os.path.splitext(os.path.basename(self.rd_yaml_path))[0]
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_multi.log")
-        self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained_bs1.log")
+        self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained.log")
 
     def getdata1(self, filename, delimiter1, delimiter2):
         """
