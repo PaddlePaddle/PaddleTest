@@ -270,6 +270,6 @@ git --version
 python -m pip install -U pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install -U -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 rem kill python.exe in case can not uninstall sit-package
-python -c "import os;os.system('taskkill /f /im %s' % 'python.exe')"
+python -c "import os;os.system('taskkill /f /im %s % python.exe')"
 rem install package
 python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target% --timeout=%timeout%
