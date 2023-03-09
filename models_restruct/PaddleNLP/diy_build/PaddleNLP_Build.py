@@ -57,7 +57,7 @@ class PaddleNLP_Build(Model_Build):
         """
         安装依赖包
         """
-        path_now = os.getcwd()
+        # path_now = os.getcwd()
         platform = self.system
         os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
         print(os.environ["no_proxy"])

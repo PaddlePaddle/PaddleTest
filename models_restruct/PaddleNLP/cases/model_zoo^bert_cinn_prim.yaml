@@ -1,0 +1,94 @@
+case:
+  linux_convergence:
+    train:
+      -
+        name: prepare_datasets_seqlen128
+        path: model_zoo/bert/data
+        cmd: wget -q https://bj.bcebos.com/paddlenlp/datasets/benchmark_wikicorpus_en_seqlen128.tar && tar -xf benchmark_wikicorpus_en_seqlen128.tar
+      -
+        name: prepare_datasets_seqlen512
+        path: model_zoo/bert/data
+        cmd: wget -q https://bj.bcebos.com/paddlenlp/datasets/benchmark_hdf5_lower_case_1_seq_len_512_max_pred_80_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5.tar && tar -xf benchmark_hdf5_lower_case_1_seq_len_512_max_pred_80_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5.tar
+      -
+        name: prepare_datasets_link
+        path: model_zoo/bert/data
+        cmd: ln -s hdf5_lower_case_1_seq_len_512_max_pred_80_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en_seqlen512/ wikicorpus_en_seqlen512
+      -
+        name: dy2st
+        path: model_zoo/bert
+        cmd: python model_zoo/bert/run_pretrain.py
+        params:
+          - --max_predictions_per_seq 20
+          - --learning_rate 1e-4
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --output_dir ./tmp2/
+          - --logging_steps 10
+          - --save_steps 20000
+          - --model_type bert
+          - --fuse_transformer false
+          - --input_dir ./data/wikicorpus_en_seqlen128
+          - --model_name_or_path bert-base-uncased
+          - --max_step 25000
+          - --batch_size 64
+          - --seed 42
+      -
+        name: dy2st_cinn
+        path: model_zoo/bert
+        cmd: python model_zoo/bert/run_pretrain.py
+        params:
+          - --max_predictions_per_seq 20
+          - --learning_rate 1e-4
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --output_dir ./tmp2/
+          - --logging_steps 10
+          - --save_steps 20000
+          - --model_type bert
+          - --fuse_transformer false
+          - --input_dir ./data/wikicorpus_en_seqlen128
+          - --model_name_or_path bert-base-uncased
+          - --max_step 25000
+          - --batch_size 64
+          - --seed 42
+      -
+        name: dy2st_cinn
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        params:
+          - --max_predictions_per_seq 20
+          - --learning_rate 1e-4
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --output_dir ./tmp2/
+          - --logging_steps 10
+          - --save_steps 20000
+          - --model_type bert
+          - --fuse_transformer false
+          - --input_dir ./data/wikicorpus_en_seqlen128
+          - --model_name_or_path bert-base-uncased
+          - --max_step 25000
+          - --batch_size 64
+          - --seed 42
+      -
+        name: dy2st_cinn_prim
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        params:
+          - --max_predictions_per_seq 20
+          - --learning_rate 1e-4
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --output_dir ./tmp2/
+          - --logging_steps 10
+          - --save_steps 20000
+          - --model_type bert
+          - --fuse_transformer false
+          - --input_dir ./data/wikicorpus_en_seqlen128
+          - --model_name_or_path bert-base-uncased
+          - --max_step 25000
+          - --batch_size 64
+          - --seed 42
+
