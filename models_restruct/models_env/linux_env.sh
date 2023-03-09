@@ -380,6 +380,8 @@ if [[ "${docker_flag}" == "" ]]; then
                 ls ${dataset_org}
             fi
         fi
+        echo "@@@dataset_org: ${dataset_org}"
+        echo "@@@dataset_target: ${dataset_target}"
 
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
@@ -470,6 +472,8 @@ else
             ls ${dataset_org}
         fi
     fi
+    echo "@@@dataset_org: ${dataset_org}"
+    echo "@@@dataset_target: ${dataset_target}"
 
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";

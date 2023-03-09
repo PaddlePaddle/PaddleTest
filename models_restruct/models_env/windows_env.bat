@@ -237,7 +237,8 @@ echo "@@@step: %step%"
 echo "@@@branch: %branch%"
 echo "@@@mode: %mode%"
 echo "@@@timeout: %timeout%"
-
+echo "@@@dataset_org: %dataset_org%"
+echo "@@@dataset_target: %dataset_target%"
 
 rem if already download PaddleTest direct mv
 if exist "%pwd_org%/task" (
