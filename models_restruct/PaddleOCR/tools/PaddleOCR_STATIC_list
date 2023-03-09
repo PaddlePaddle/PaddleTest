@@ -1,0 +1,5 @@
+configs^det^det_mv3_db.yml
+configs^rec^PP-OCRv3^ch_PP-OCRv3_rec.yml
+configs^table^table_master.yml
+configs^kie^vi_layoutxlm^ser_vi_layoutxlm_xfund_zh.yml
+configs^table^SLANet.yml
