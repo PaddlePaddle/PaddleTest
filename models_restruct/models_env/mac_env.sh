@@ -1,12 +1,17 @@
 set +x;
 pwd;
 
+export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data"}
+ls ${dataset_org}
+
 ####ce框架根目录
 rm -rf ce && mkdir ce;
 cd ce;
 
 # 使虚拟环境生效
 source ~/.bashrc
+# conda activate
+source activate
 
 ######################## 定义变量 ########################
 # AGILE_PIPELINE_NAME 格式类似: PaddleClas-MAC-Intel-Python310-P9-Develop
@@ -15,18 +20,19 @@ source ~/.bashrc
 #repo的名称
 export reponame=${reponame:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $1}')`"}
 
-if [[ `uname -a` =~ "ARM64" ]] || [[ `uname -m` =~ "arm64" ]];then
-    echo "M1"
-    source activate
-    export env_run=conda
-else
-    echo "Intel"
-    export env_run=pyenv
-    ${env_run} activate ${reponame}_py39
-    sed -i '' 's/include-system-site-packages = false/include-system-site-packages = true/g' /var/root/.pyenv/versions/${reponame}_py39/pyvenv.cfg
-    sed -i '' 's/include-system-site-packages = false/include-system-site-packages = true/g' /var/root/.pyenv/versions/${reponame}_py310/pyvenv.cfg
-    cat /var/root/.pyenv/versions/${reponame}_py310/pyvenv.cfg
-fi
+#统一使用conda 暂时删除下述
+# if [[ `uname -a` =~ "ARM64" ]] || [[ `uname -m` =~ "arm64" ]];then
+#     echo "M1"
+#     source activate
+#     export env_run=conda
+# else
+#     echo "Intel"
+#     export env_run=pyenv
+#     ${env_run} activate ${reponame}_py39
+#     sed -i '' 's/include-system-site-packages = false/include-system-site-packages = true/g' /var/root/.pyenv/versions/${reponame}_py39/pyvenv.cfg
+#     sed -i '' 's/include-system-site-packages = false/include-system-site-packages = true/g' /var/root/.pyenv/versions/${reponame}_py310/pyvenv.cfg
+#     cat /var/root/.pyenv/versions/${reponame}_py310/pyvenv.cfg
+# fi
 
 #模型列表文件 , 固定路径及格式为 tools/reponame_优先级_list   优先级P2有多个用P21、P22  中间不用"-"划分, 防止按 "-" split 混淆
 export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $5}')`_list"}
@@ -56,14 +62,14 @@ fi
 #指定python版本
 export Python_version=${Python_version:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F 'Python' '{print $2}'|awk -F '-' '{print $1}')`"}
 if [[ ${Python_version} =~ "39" ]];then
-    ${env_run} activate ${reponame}_py39
-    echo "${env_run} activate ${reponame}_py310"
+    conda activate ${reponame}_py39
+    echo "conda activate ${reponame}_py310"
 elif [[ ${Python_version} =~ "310" ]];then
-    ${env_run} activate ${reponame}_py310
-    echo "${env_run} activate ${reponame}_py310"
+    conda activate ${reponame}_py310
+    echo "conda activate ${reponame}_py310"
 else
-    ${env_run} activate ${reponame}_py310
-    echo "${env_run} activate ${reponame}_py310"
+    conda activate ${reponame}_py310
+    echo "conda activate ${reponame}_py310"
     echo "default set python verison is python3.10"
 fi
 
@@ -152,7 +158,8 @@ cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
-python -c 'import sys; print(sys.version_info[:])';
+python -c 'import sys; print(sys.version_info[:])'
+python -c "import getpass;print(getpass.getuser())"
 git --version;
 python -m pip install -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
 python -m pip install -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
