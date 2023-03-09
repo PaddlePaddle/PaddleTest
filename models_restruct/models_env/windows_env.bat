@@ -51,35 +51,33 @@ rem Python_version
 if not defined Python_version for /f "tokens=4 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set Python_version=%%a
 rem not xly use default Python_version
 if not defined Python_version set Python_version=310
-echo %Python_version% | findstr "36" >nul
-if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py36\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py36\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py36\pyvenv.cfg
-)
 echo %Python_version% | findstr "37" >nul
 if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py37\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py37\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py37\pyvenv.cfg
+    C:\Python37\Scripts\virtualenv %reponame%_py37
+    CALL %cd%\%reponame%_py37\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py37\pyvenv.cfg
+    type %cd%\%reponame%_py37\pyvenv.cfg
 )
 echo %Python_version% | findstr "38" >nul
 if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py38\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py38\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py38\pyvenv.cfg
+    C:\Python38\Scripts\virtualenv %reponame%_py38
+    CALL %cd%\%reponame%_py38\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py38\pyvenv.cfg
+    type %cd%\%reponame%_py38\pyvenv.cfg
 )
 echo %Python_version% | findstr "39" >nul
 if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py39\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py39\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py39\pyvenv.cfg
+    C:\Python39\Scripts\virtualenv %reponame%_py39
+    CALL %cd%\%reponame%_py39\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py39\pyvenv.cfg
+    type %cd%\%reponame%_py39\pyvenv.cfg
 )
 echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py310\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py310\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py310\pyvenv.cfg
+    C:\Python310\Scripts\virtualenv %reponame%_py310
+    CALL %cd%\%reponame%_py310\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py310\pyvenv.cfg
+    type %cd%\%reponame%_py310\pyvenv.cfg
 )
 
 rem set path
