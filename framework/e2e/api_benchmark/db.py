@@ -31,7 +31,8 @@ class DB(object):
         """
         with open(storage, "r") as f:
             data = yaml.safe_load(f)
-        tmp_dict = data.get("PRODUCTION").get("mysql").get("api_benchmark")
+        # tmp_dict = data.get("PRODUCTION").get("mysql").get("api_benchmark")
+        tmp_dict = data.get("DEV").get("mysql").get("api_benchmark")
         host = tmp_dict.get("host")
         port = tmp_dict.get("port")
         user = tmp_dict.get("user")
@@ -75,6 +76,7 @@ class DB(object):
                 continue
         # 插入数据
         data = self.reader()
+        print('this jid is: ', self.job_id)
         for k, v in data.items():
             sql = (
                 "insert into `case`(`jid`, `case_name`, `api`, `result`, `create_time`) "
@@ -82,6 +84,7 @@ class DB(object):
                     self.job_id, k, json.loads(v).get("api"), v, self.timestamp()
                 )
             )
+            print('sql is: ', sql)
             try:
                 self.cursor.execute(sql)
                 self.db.commit()
@@ -117,7 +120,7 @@ class DB(object):
                 print(e)
                 continue
 
-    def init_mission(self, framework, mode, place, cuda, cudnn, card=None, comment=None):
+    def init_mission(self, framework, mode, place, cuda, cudnn, routine, enable_backward, python, yaml_info, card=None, comment=None):
         """init mission"""
         if framework == "paddle":
             version = paddle.__version__
@@ -133,12 +136,12 @@ class DB(object):
 
             version = torch.__version__
             snapshot = {"os": platform.platform(), "card": card, "cuda": cuda, "cudnn": cudnn, "comment": comment}
-
         sql = (
             "insert into `job` (`framework`, `status`, `mode`, `commit`, `version`, "
             "`hostname`, `place`, `system`, `cuda`, `cudnn`, `snapshot`,`create_time`, "
-            "`update_time`) values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', "
-            "'{}', '{}', '{}', '{}', '{}');".format(
+            "`update_time`, `routine`, `enable_backward`, `python`, "
+            "`yaml_info`) values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', "
+            "'{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(
                 framework,
                 "running",
                 mode,
@@ -152,11 +155,17 @@ class DB(object):
                 json.dumps(snapshot),
                 self.timestamp(),
                 self.timestamp(),
+                routine,   # routine例行标记
+                enable_backward,
+                python,
+                yaml_info,
             )
         )
+
         try:
             self.cursor.execute(sql)
             self.job_id = self.db.insert_id()
+            print('insert_id self.job_id is: ', self.job_id)
             self.db.commit()
         except Exception as e:
             print(e)

@@ -32,8 +32,8 @@ def schedule(
     case_name=None,
     place=None,
     card=None,
-    test_index=None,
-    enable_backward=True,
+    yaml_info=None,
+    enable_backward=1,
 ):
     """
     例行任务，调试任务二次运行调用。 一定入库，存在数据库操作
@@ -53,22 +53,22 @@ def schedule(
             # if not case_name.endswith("_0"):
             #     logger.get_log().warning("skip case -->{}<--".format(case_name))
             #     continue
-            if test_index == "case_0":
+            if yaml_info == "case_0":
                 if not case_name.endswith("_0"):
                     logger.get_log().warning("skip case -->{}<--".format(case_name))
                     continue
-            if test_index == "case_1":
+            if yaml_info == "case_1":
                 if not case_name.endswith("_1"):
                     logger.get_log().warning("skip case -->{}<--".format(case_name))
                     continue
-            if test_index == "case_2":
+            if yaml_info == "case_2":
                 if not case_name.endswith("_2"):
                     logger.get_log().warning("skip case -->{}<--".format(case_name))
                     continue
             case_info = yaml_loader.get_case_info(case_name)
             try:
                 bt = BenchTrans(case_info)
-                if enable_backward == "False":
+                if enable_backward == 0:
                     enable_backward_trigger = False
                 else:
                     enable_backward_trigger = bt.enable_backward()
@@ -95,7 +95,7 @@ def schedule(
         bt = BenchTrans(case_info)
         if framework == "paddle":
             api = bt.get_paddle_api()
-            if enable_backward == "False":
+            if enable_backward == 0:
                 enable_backward_trigger = False
             else:
                 enable_backward_trigger = bt.enable_backward()
@@ -112,7 +112,7 @@ def schedule(
             jelly.run_schedule()
 
 
-def testing(yaml_path, case_name, framework, place=None, card=None, enable_backward=True):
+def testing(yaml_path, case_name, framework, place=None, card=None, enable_backward=1):
     """
     testing mode 本地调试用
     """
@@ -122,7 +122,7 @@ def testing(yaml_path, case_name, framework, place=None, card=None, enable_backw
     bt = BenchTrans(case_info)
     if framework == "paddle":
         api = bt.get_paddle_api()
-        if enable_backward == "False":
+        if enable_backward == 0:
             enable_backward_trigger = False
         else:
             enable_backward_trigger = bt.enable_backward()
@@ -149,6 +149,7 @@ if __name__ == "__main__":
         help="""choose mode: [schedule] for ce or [testing] for native test or [rerun] for double check.
               [schedule] and [rerun] will write data into database """,
     )
+    parser.add_argument("--routine", type=int, default=1, help="if 1, daily routine mission")
     parser.add_argument("--framework", type=str, default="paddle", help="[paddle] | [torch] | [all]")
     parser.add_argument("--case", type=str, default="Tanh", help="case name for [testing] and [rerun] mode")
     parser.add_argument("--place", type=str, default="cpu", help="[cpu] or [gpu]")
@@ -156,8 +157,9 @@ if __name__ == "__main__":
     parser.add_argument("--cudnn", type=str, default=None, help="cudnn version like v7.6.5 etc.")
     parser.add_argument("--card", type=str, default=None, help="card number , default is 0")
     parser.add_argument("--comment", type=str, default=None, help="your comment")
-    parser.add_argument("--test_index", type=str, default=None, help="[case_0] or [case_1] or [case_2]")
-    parser.add_argument("--enable_backward", type=str, default="True", help="if True, enable backward test")
+    parser.add_argument("--yaml_info", type=str, default=None, help="[case_0] or [case_1] or [case_2]")
+    parser.add_argument("--enable_backward", type=int, default=1, help="if 1, enable backward test")
+    parser.add_argument("--python", type=str, default=None, help="python version like python3.7 | python3.8 etc.")
     parser.add_argument("--storage", type=str, default=None, help="path of storage.yaml")
     args = parser.parse_args()
 
@@ -177,6 +179,10 @@ if __name__ == "__main__":
                 place=args.place,
                 cuda=args.cuda,
                 cudnn=args.cudnn,
+                routine=args.routine,
+                enable_backward=args.enable_backward,
+                python=args.python,
+                yaml_info=args.yaml_info,
                 card=args.card,
                 comment=args.comment,
             )
@@ -185,7 +191,7 @@ if __name__ == "__main__":
                 framework=args.framework,
                 place=args.place,
                 card=args.card,
-                test_index=args.test_index,
+                yaml_info=args.yaml_info,
                 enable_backward=args.enable_backward,
             )
             db.save()
@@ -218,7 +224,7 @@ if __name__ == "__main__":
                 case_name=args.case,
                 place=args.place,
                 card=args.card,
-                test_index=args.test_index,
+                yaml_info=args.yaml_info,
                 enable_backward=args.enable_backward,
             )
             # db.save()
