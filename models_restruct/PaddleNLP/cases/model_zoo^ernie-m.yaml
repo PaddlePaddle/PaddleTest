@@ -2,7 +2,7 @@ case:
   linux:
     train:
       -
-        name: run_classifier
+        name: run_classifier_clt
         path: model_zoo/ernie-m/
         cmd: python -m paddle.distributed.launch --log_dir output_clt run_classifier.py
         params:
@@ -28,7 +28,7 @@ case:
             threshold: 0.01
             evaluation: "="
       -
-        name: multi
+        name: run_classifier_tta
         path: model_zoo/ernie-m/
         cmd: python -m paddle.distributed.launch --log_dir output_tta run_classifier.py
         params:
@@ -39,8 +39,8 @@ case:
           - --task_type translate-train-all
           - --model_name_or_path __internal_testing__/ernie-m
           - --use_test_data True
-          - --test_data_path ../../tests/fixtures/tests_samples/xnli/xnli.jsonl \
-          - --output_dir output_tta \
+          - --test_data_path ../../tests/fixtures/tests_samples/xnli/xnli.jsonl
+          - --output_dir output_tta
           - --export_model_dir output_tta
           - --per_device_train_batch_size 8
           - --save_steps 1

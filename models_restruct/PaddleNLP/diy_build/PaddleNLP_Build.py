@@ -57,7 +57,7 @@ class PaddleNLP_Build(Model_Build):
         """
         安装依赖包
         """
-        path_now = os.getcwd()
+        # path_now = os.getcwd()
         platform = self.system
         os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
         print(os.environ["no_proxy"])
@@ -92,14 +92,14 @@ class PaddleNLP_Build(Model_Build):
         if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
-        os.chdir("PaddleNLP")
+        # os.chdir("PaddleNLP")
         # os.system("python setup.py bdist_wheel")
         # cmd_return = os.system(" python -m pip install -U dist/p****.whl")
         cmd_return = os.system(
             "python -m pip install --pre --upgrade paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html"
         )
 
-        os.chdir(path_now)
+        # os.chdir(path_now)
 
         if cmd_return:
             logger.info("repo {} python -m pip install-failed".format(self.reponame))
