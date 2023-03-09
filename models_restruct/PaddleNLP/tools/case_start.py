@@ -44,14 +44,6 @@ class PaddleNLP_Case_Start(object):
             logger.info("export NVIDIA_TF32_OVERRIDE=1")
             logger.info("export FLAGS_cudnn_deterministic=1")
 
-            os.unsetenv["FLAGS_prim_all"]
-            os.unsetenv["FLAGS_use_cinn"]
-            os.unsetenv["FLAGS_deny_cinn_ops"]
-
-            logger.info("unset FLAGS_prim_all")
-            logger.info("unset FLAGS_use_cinn")
-            logger.info("unset FLAGS_deny_cinn_ops")
-
             if self.case_name.split("train_")[-1] == "dy2st_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_deny_cinn_ops"] = "dropout"
