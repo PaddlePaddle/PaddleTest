@@ -117,7 +117,9 @@ class DB(object):
                 print(e)
                 continue
 
-    def init_mission(self, framework, mode, place, cuda, cudnn, card=None, comment=None):
+    def init_mission(
+        self, framework, mode, place, cuda, cudnn, routine, enable_backward, python, yaml_info, card=None, comment=None
+    ):
         """init mission"""
         if framework == "paddle":
             version = paddle.__version__
@@ -133,12 +135,12 @@ class DB(object):
 
             version = torch.__version__
             snapshot = {"os": platform.platform(), "card": card, "cuda": cuda, "cudnn": cudnn, "comment": comment}
-
         sql = (
             "insert into `job` (`framework`, `status`, `mode`, `commit`, `version`, "
             "`hostname`, `place`, `system`, `cuda`, `cudnn`, `snapshot`,`create_time`, "
-            "`update_time`) values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', "
-            "'{}', '{}', '{}', '{}', '{}');".format(
+            "`update_time`, `routine`, `enable_backward`, `python`, "
+            "`yaml_info`) values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', "
+            "'{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(
                 framework,
                 "running",
                 mode,
@@ -152,8 +154,13 @@ class DB(object):
                 json.dumps(snapshot),
                 self.timestamp(),
                 self.timestamp(),
+                routine,  # routine例行标记
+                enable_backward,
+                python,
+                yaml_info,
             )
         )
+
         try:
             self.cursor.execute(sql)
             self.job_id = self.db.insert_id()
