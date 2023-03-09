@@ -170,8 +170,8 @@ function download() {
         wget -O ${data_path}/lambada_test.jsonl https://raw.githubusercontent.com/cybertronai/bflm/master/lambada_test.jsonl
     fi
 
-    rm -rf GPT_auto_345M
-    if [[ -e ${data_path}/GPT_auto_345M ]]; then
+    rm -rf auto_infer
+    if [[ -e ${data_path}/auto_infer ]]; then
         echo "GPT_auto_345M downloaded"
     else
         # download GPT_auto_345M for gpt export
