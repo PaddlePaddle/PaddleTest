@@ -50,8 +50,6 @@ if not defined system set system=windows
 rem Python_version
 if not defined Python_version for /f "tokens=4 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set Python_version=%%a
 rem not xly use default Python_version
-conda init
-conda activate
 if not defined Python_version set Python_version=310
 echo %Python_version% | findstr "37" >nul
 if %errorlevel% equ 0 (
