@@ -44,7 +44,6 @@ function requirements() {
     cd ppfleetx/ops && python setup_cuda.py install && cd ../..
 
     python -m pip list|grep paddle
-    export PYTHONPATH=/paddle/PaddleFleetX:$PYTHONPATH
 }
 
 function download() {
