@@ -297,12 +297,12 @@ class PaddleGAN_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir(self.reponame)  # 执行setup要先切到路径下面
         # cmd_return = os.system("python -m pip install paddlegan")
-        cmd_return = os.system("python -v -e . > paddlegan_install.log 2>&1 ")
+        cmd_return = os.system("python setup.py install > paddlegan_install.log 2>&1 ")
         cmd_return1 = os.system("python -m pip install dlib >> paddlegan_install.log 2>&1 ")
         os.chdir(path_now)
 
         if cmd_return and cmd_return1:
-            logger.info("repo {} python -m pip install paddlegan failed".format(self.reponame))
+            logger.info("repo {} python -m pip install paddlegan or dlib failed".format(self.reponame))
             # return 1
 
         return 0
