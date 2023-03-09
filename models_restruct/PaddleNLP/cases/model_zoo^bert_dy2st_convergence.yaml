@@ -8,7 +8,7 @@ case:
       -
         name: dy2st
         path: model_zoo/bert
-        cmd: python model_zoo/bert/run_pretrain.py
+        cmd: python run_pretrain.py
         params:
           - --max_predictions_per_seq 20
           - --learning_rate 1e-4
@@ -29,7 +29,7 @@ case:
       -
         name: dy2st_cinn
         path: model_zoo/bert
-        cmd: python model_zoo/bert/run_pretrain.py
+        cmd: python run_pretrain.py
         params:
           - --max_predictions_per_seq 20
           - --learning_rate 1e-4
@@ -50,7 +50,7 @@ case:
       -
         name: dy2st_cinn
         path: model_zoo/bert
-        cmd: python model_zoo/bert/run_pretrain.py
+        cmd: python run_pretrain.py
         params:
           - --max_predictions_per_seq 20
           - --learning_rate 1e-4
@@ -71,7 +71,7 @@ case:
       -
         name: dy2st_prim_cinn
         path: model_zoo/bert
-        cmd: python model_zoo/bert/run_pretrain.py
+        cmd: python run_pretrain.py
         params:
           - --max_predictions_per_seq 20
           - --learning_rate 1e-4
