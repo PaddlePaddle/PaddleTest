@@ -53,7 +53,7 @@ rem not xly use default Python_version
 if not defined Python_version set Python_version=310
 echo %Python_version% | findstr "37" >nul
 if %errorlevel% equ 0 (
-    conda activate %reponame%_py37
+    CALL conda activate %reponame%_py37
     @REM C:\Python37\Scripts\virtualenv %reponame%_py37
     @REM CALL %cd%\%reponame%_py37\Scripts\activate.bat
     @REM %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py37\pyvenv.cfg
@@ -61,7 +61,7 @@ if %errorlevel% equ 0 (
 )
 echo %Python_version% | findstr "38" >nul
 if %errorlevel% equ 0 (
-    conda activate %reponame%_py38
+    CALL conda activate %reponame%_py38
     @REM C:\Python38\Scripts\virtualenv %reponame%_py38
     @REM CALL %cd%\%reponame%_py38\Scripts\activate.bat
     @REM %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py38\pyvenv.cfg
@@ -69,7 +69,7 @@ if %errorlevel% equ 0 (
 )
 echo %Python_version% | findstr "39" >nul
 if %errorlevel% equ 0 (
-    conda activate %reponame%_py39
+    CALL conda activate %reponame%_py39
     @REM C:\Python39\Scripts\virtualenv %reponame%_py39
     @REM CALL %cd%\%reponame%_py39\Scripts\activate.bat
     @REM %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py39\pyvenv.cfg
@@ -77,7 +77,7 @@ if %errorlevel% equ 0 (
 )
 echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
-    conda activate %reponame%_py310
+    CALL conda activate %reponame%_py310
     @REM C:\Python310\Scripts\virtualenv %reponame%_py310
     @REM CALL %cd%\%reponame%_py310\Scripts\activate.bat
     @REM %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py310\pyvenv.cfg
