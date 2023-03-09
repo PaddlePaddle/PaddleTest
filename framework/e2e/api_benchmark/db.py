@@ -31,8 +31,7 @@ class DB(object):
         """
         with open(storage, "r") as f:
             data = yaml.safe_load(f)
-        # tmp_dict = data.get("PRODUCTION").get("mysql").get("api_benchmark")
-        tmp_dict = data.get("DEV").get("mysql").get("api_benchmark")
+        tmp_dict = data.get("PRODUCTION").get("mysql").get("api_benchmark")
         host = tmp_dict.get("host")
         port = tmp_dict.get("port")
         user = tmp_dict.get("user")
@@ -76,7 +75,6 @@ class DB(object):
                 continue
         # 插入数据
         data = self.reader()
-        print('this jid is: ', self.job_id)
         for k, v in data.items():
             sql = (
                 "insert into `case`(`jid`, `case_name`, `api`, `result`, `create_time`) "
@@ -84,7 +82,6 @@ class DB(object):
                     self.job_id, k, json.loads(v).get("api"), v, self.timestamp()
                 )
             )
-            print('sql is: ', sql)
             try:
                 self.cursor.execute(sql)
                 self.db.commit()
