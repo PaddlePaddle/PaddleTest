@@ -18,9 +18,7 @@ def parse_args():
     parser.add_argument(
         "--enable_ce", action="store_true", help="If set, run the task with continuous evaluation logs."
     )
-    parser.add_argument(
-        "--use_gpu", type=bool, default=False, help="Whether to use GPU or not."
-    )
+    parser.add_argument("--use_gpu", type=bool, default=False, help="Whether to use GPU or not.")
     parser.add_argument("--num_epochs", type=int, default=1, help="number of epochs.")
     parser.add_argument("--dry-run", action="store_true", default=True, help="quickly check a single pass")
     args = parser.parse_args()
@@ -128,13 +126,12 @@ def train(nn_type, use_cuda, save_dirname=None, model_filename=None, params_file
             train_test_program=test_program, train_test_reader=test_reader, train_test_feed=feeder
         )
 
-        print("Test with Epoch %d, avg_cost: %s, acc: %s" %(epoch_id, avg_loss_val, acc_val))
+        print("Test with Epoch %d, avg_cost: %s, acc: %s" % (epoch_id, avg_loss_val, acc_val))
         lists.append((epoch_id, avg_loss_val, acc_val))
         if save_dirname is not None:
             fluid.io.save_inference_model(
                 save_dirname, ["img"], [prediction], exe, model_filename=model_filename, params_filename=params_filename
             )
-
 
     # find the best pass
     best = sorted(lists, key=lambda list: float(list[1]))[0]
