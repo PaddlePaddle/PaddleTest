@@ -5,7 +5,7 @@ case:
         name: prepare_datasets_seqlen128
         path: model_zoo/bert/data
         cmd: wget -q https://bj.bcebos.com/paddlenlp/datasets/benchmark_wikicorpus_en_seqlen128.tar && tar -xf benchmark_wikicorpus_en_seqlen128.tar
-   -
+      -
         name: dy2st
         path: model_zoo/bert
         cmd: python model_zoo/bert/run_pretrain.py
