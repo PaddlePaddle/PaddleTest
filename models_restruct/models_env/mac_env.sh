@@ -1,12 +1,8 @@
 set +x;
 pwd;
 
-if [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]];then
-    export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data"}
-    ls ${dataset_org}
-else
-    export dataset_target=${dataset_target:-"download_data"}
-fi
+export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data"}
+ls ${dataset_org}
 
 ####ce框架根目录
 rm -rf ce && mkdir ce;
@@ -14,6 +10,7 @@ cd ce;
 
 # 使虚拟环境生效
 source ~/.bashrc
+# conda activate
 source activate
 
 ######################## 定义变量 ########################
@@ -161,7 +158,8 @@ cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
-python -c 'import sys; print(sys.version_info[:])';
+python -c 'import sys; print(sys.version_info[:])'
+python -c "import getpass;print(getpass.getuser())"
 git --version;
 python -m pip install -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
 python -m pip install -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包

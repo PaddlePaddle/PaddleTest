@@ -20,6 +20,9 @@ fleet_gpu_model_list=( \
     gpt_345M_mp8_qat \
     gpt_generation_345M_single \
     gpt_generation_345M_hybrid  \
+    gpt_export_345M_mp1 \
+    gpt_export_qat_345M \
+    gpt_inference_mp1 \
     gpt_inference_345M_single \
     gpt_inference_345M_dp8 \
     gpt_345M_single_finetune \
@@ -221,6 +224,42 @@ function gpt_generation_345M_hybrid() {
     check_result $FUNCNAME
     # tail -12 log/workerlog.0 > ./generation_345M_dp8.txt
     # check_generation_txt $FUNCNAME ./generation_345M_dp8.txt
+}
+
+function gpt_export_345M_mp1() {
+    cd ${fleetx_path}
+    log_dir=log_export
+    rm -rf $log_dir
+
+    python -m paddle.distributed.launch --log_dir $log_dir --devices "1" \
+        ./tools/auto_export.py \
+        -c ./ppfleetx/configs/nlp/gpt/auto/generation_gpt_345M_single_card.yaml \
+        -o Engine.save_load.ckpt_dir=./auto_infer/auto
+    check_result $FUNCNAME
+}
+
+function gpt_export_qat_345M() {
+    cd ${fleetx_path}
+    log_dir=log_export
+    rm -rf $log_dir
+
+    python ./tools/export.py \
+        -c ./ppfleetx/configs/nlp/gpt/generation_qat_gpt_345M_single_card.yaml \
+        -o Model.hidden_dropout_prob=0.0 \
+        -o Model.attention_probs_dropout_prob=0.0 \
+        -o Engine.save_load.ckpt_dir='./GPT_345M_QAT_wo_analysis/'
+    check_result $FUNCNAME
+}
+
+function gpt_inference_mp1() {
+    cd ${fleetx_path}
+    rm -rf log
+    export CUDA_VISIBLE_DEVICES=1
+    python -m paddle.distributed.launch --devices "0" \
+        projects/gpt/inference.py --mp_degree 1 --model_dir output
+    unset CUDA_VISIBLE_DEVICES
+    check_result $FUNCNAME
+    # check_generation_txt $FUNCNAME ./log
 }
 
 function gpt_inference_345M_single() {
