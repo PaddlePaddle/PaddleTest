@@ -298,11 +298,11 @@ class PaddleClas_Build(Model_Build):
         os.chdir(self.reponame)  # 执行setup要先切到路径下面
         # cmd_return = os.system("python -m pip install paddleclas")
         cmd_return = os.system("python setup.py install > paddleclas_install.log 2>&1 ")
-        os.chdir(path_now)
-
+        logger.info("repo {} python -m pip install paddleclas done".format(self.reponame))
         if cmd_return:
             logger.info("repo {} python -m pip install paddleclas failed".format(self.reponame))
             # return 1
+        os.chdir(path_now)
 
         if self.value_in_modellist(value="slim"):
             logger.info("#### slim install")

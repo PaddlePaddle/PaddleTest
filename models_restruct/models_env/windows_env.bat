@@ -272,6 +272,7 @@ rem python version
 python  --version
 git --version
 python -m pip install -U pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install -U pyyaml --user -i https://mirror.baidu.com/pypi/simple
 python -m pip install -U --no-cache-dir --force-reinstall  --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 rem kill python.exe in case can not uninstall sit-package
 python -c "import os;os.system('taskkill /f /im %s % python.exe')"
