@@ -370,8 +370,8 @@ if [[ "${docker_flag}" == "" ]]; then
 
         #挂载数据, 如果之前定义过dataset_org则不挂载
         if [[ ${AGILE_PIPELINE_NAME} =~ "Release" ]];then
-            if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} == "/workspace/MT_data" ]];then
-                export dataset_org="/workspace/MT_data"
+            if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} =~ "/workspace/MT_data" ]];then
+                export dataset_org="/workspace/MT_data/${reponame}"
                 if [[ -d ${dataset_org} ]];then
                     mv ${dataset_org} ${dataset_org}_back
                     mkdir -p ${dataset_org}
@@ -383,6 +383,7 @@ if [[ "${docker_flag}" == "" ]]; then
             fi
         fi
         echo "@@@dataset_org: ${dataset_org}"
+        ls ${dataset_org}
         echo "@@@dataset_target: ${dataset_target}"
 
         nvidia-smi;
@@ -464,8 +465,8 @@ else
 
     #挂载数据, 如果之前定义过dataset_org则不挂载
     if [[ ${AGILE_PIPELINE_NAME} =~ "Release" ]];then
-        if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} == "/workspace/MT_data" ]];then
-            export dataset_org="/workspace/MT_data"
+        if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} =~ "/workspace/MT_data" ]];then
+            export dataset_org="/workspace/MT_data/${reponame}"
             if [[ -d ${dataset_org} ]];then
                 mv ${dataset_org} ${dataset_org}_back
                 mkdir -p ${dataset_org}

@@ -1,7 +1,5 @@
 
 rem do not uset chinese note  beacause of linux tar problem
-if not defined dataset_org set dataset_org="H:\MT_data"
-dir "H:\MT_data"
 
 rem change path
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
@@ -30,6 +28,10 @@ rem do not use "-",   split as  "-"  so please set value in order
 
 rem reponame
 if not defined reponame for /f "tokens=1 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set reponame=%%a
+
+rem load self reponame data
+if not defined dataset_org set dataset_org="H:\MT_data\%reponame%"
+dir "H:\MT_data"
 
 rem must set as: tools/reponame_priority_list   do not use "-" , in case mix "-" split
 if not defined models_file for /f "tokens=5 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set models_file="tools/%reponame%_%%a_list"

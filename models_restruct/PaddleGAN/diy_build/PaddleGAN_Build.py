@@ -4,7 +4,9 @@
 """
 import os
 import sys
+import time
 import logging
+import platform
 import tarfile
 import argparse
 import numpy as np
@@ -32,10 +34,7 @@ class PaddleGAN_Build(Model_Build):
         self.system = args.system
         self.set_cuda = args.set_cuda
 
-        if "MT_data" in str(args.dataset_org):  # 如果使用挂载方式, 拼接模型库名称
-            self.dataset_org = os.path.join(str(args.dataset_org), self.reponame)
-        else:
-            self.dataset_org = str(args.dataset_org)
+        self.dataset_org = str(args.dataset_org)
         if str(args.dataset_target) != "None":  # 如果已经执行则不定义
             os.environ["dataset_target"] = args.dataset_target
         else:
