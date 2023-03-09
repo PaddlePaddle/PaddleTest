@@ -133,7 +133,7 @@ class PaddleOCR_End(object):
         """
         generate report_enviorement_variable dict
         """
-        logger.info("config_report_enviorement_variable start")
+        logger.info("config report_enviorement_dict start")
         report_enviorement_dict = {}
         python_version = platform.python_version()
         paddle_version = paddle.__version__
@@ -168,9 +168,9 @@ class PaddleOCR_End(object):
             return ret
         logger.info("build collect_data_value end")
         # report_enviorement_dict
-        logger.info("config_report_enviorement_variable start")
-        self.config_report_enviorement_variable()
-        logger.info("config_report_enviorement_variable start")
+        # logger.info("config_report_enviorement_variable start")
+        # self.config_report_enviorement_variable()
+        # logger.info("config_report_enviorement_variable end")
         return ret
 
 
