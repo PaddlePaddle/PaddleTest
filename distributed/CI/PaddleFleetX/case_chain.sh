@@ -254,10 +254,8 @@ function gpt_export_qat_345M() {
 function gpt_inference_mp1() {
     cd ${fleetx_path}
     rm -rf log
-    export CUDA_VISIBLE_DEVICES=1
     python -m paddle.distributed.launch --devices "0" \
         projects/gpt/inference.py --mp_degree 1 --model_dir output
-    unset CUDA_VISIBLE_DEVICES
     check_result $FUNCNAME
     # check_generation_txt $FUNCNAME ./log
 }
