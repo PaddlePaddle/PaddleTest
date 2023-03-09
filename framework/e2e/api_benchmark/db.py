@@ -117,7 +117,9 @@ class DB(object):
                 print(e)
                 continue
 
-    def init_mission(self, framework, mode, place, cuda, cudnn, routine, enable_backward, python, yaml_info, card=None, comment=None):
+    def init_mission(
+        self, framework, mode, place, cuda, cudnn, routine, enable_backward, python, yaml_info, card=None, comment=None
+    ):
         """init mission"""
         if framework == "paddle":
             version = paddle.__version__
@@ -152,7 +154,7 @@ class DB(object):
                 json.dumps(snapshot),
                 self.timestamp(),
                 self.timestamp(),
-                routine,   # routine例行标记
+                routine,  # routine例行标记
                 enable_backward,
                 python,
                 yaml_info,
@@ -162,7 +164,6 @@ class DB(object):
         try:
             self.cursor.execute(sql)
             self.job_id = self.db.insert_id()
-            print('insert_id self.job_id is: ', self.job_id)
             self.db.commit()
         except Exception as e:
             print(e)
