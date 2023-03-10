@@ -57,6 +57,7 @@ class PaddleNLP_Case_Start(object):
             logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
             logger.info("set FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+            logger.info("set FLAGS_deny_cinn_ops as {}".format(os.getenv("FLAGS_deny_cinn_ops")))
         else:
             return 0
 
