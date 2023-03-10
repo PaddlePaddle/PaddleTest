@@ -35,8 +35,8 @@ class PaddleNLP_Case_Start(object):
         """
         执行准备过程
         """
-        if "dy2st_convergence" in self.qa_yaml_name:
-            logger.info("dy2st_convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+        if "convergence" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
             os.environ["FLAGS_cudnn_deterministic"] = "1"
