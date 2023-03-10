@@ -271,7 +271,7 @@ dir
 rem python version
 python  --version
 git --version
-rem org install
+rem org install python
 py -3.%Python_version:3=% -m pip install -U pip -i https://mirror.baidu.com/pypi/simple
 py -3.%Python_version:3=% -m pip install -U -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 python -m pip install -U pip -i https://mirror.baidu.com/pypi/simple
