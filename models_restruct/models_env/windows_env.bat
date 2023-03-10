@@ -1,7 +1,5 @@
 
 rem do not uset chinese note  beacause of linux tar problem
-if not defined dataset_org set dataset_org="H:\MT_data"
-dir "H:\MT_data"
 
 rem change path
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
@@ -31,6 +29,10 @@ rem do not use "-",   split as  "-"  so please set value in order
 rem reponame
 if not defined reponame for /f "tokens=1 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set reponame=%%a
 
+rem load self reponame data
+if not defined dataset_org set dataset_org="H:\MT_data\%reponame%"
+dir "H:\MT_data"
+
 rem must set as: tools/reponame_priority_list   do not use "-" , in case mix "-" split
 if not defined models_file for /f "tokens=5 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set models_file="tools/%reponame%_%%a_list"
 if not defined models_list set models_list=None
@@ -48,36 +50,38 @@ if not defined system set system=windows
 rem Python_version
 if not defined Python_version for /f "tokens=4 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set Python_version=%%a
 rem not xly use default Python_version
-if not defined Python_version set Python_version=310
-echo %Python_version% | findstr "36" >nul
-if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py36\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py36\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py36\pyvenv.cfg
-)
+if not defined Python_version set Python_version=Python310
 echo %Python_version% | findstr "37" >nul
 if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py37\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py37\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py37\pyvenv.cfg
+    @REM CALL conda activate %reponame%_py37
+    C:\Python37\Scripts\virtualenv %reponame%_py37
+    CALL %cd%\%reponame%_py37\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py37\pyvenv.cfg
+    type %cd%\%reponame%_py37\pyvenv.cfg
 )
 echo %Python_version% | findstr "38" >nul
 if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py38\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py38\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py38\pyvenv.cfg
+    @REM CALL conda activate %reponame%_py38
+    C:\Python38\Scripts\virtualenv %reponame%_py38
+    CALL %cd%\%reponame%_py38\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py38\pyvenv.cfg
+    type %cd%\%reponame%_py38\pyvenv.cfg
 )
 echo %Python_version% | findstr "39" >nul
 if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py39\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py39\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py39\pyvenv.cfg
+    @REM CALL conda activate %reponame%_py39
+    C:\Python39\Scripts\virtualenv %reponame%_py39
+    CALL %cd%\%reponame%_py39\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py39\pyvenv.cfg
+    type %cd%\%reponame%_py39\pyvenv.cfg
 )
 echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
-    CALL D:\Windows_env\%reponame%_py310\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py310\pyvenv.cfg
-    type D:\Windows_env\%reponame%_py310\pyvenv.cfg
+    @REM CALL conda activate %reponame%_py310
+    C:\Python310\Scripts\virtualenv %reponame%_py310
+    CALL %cd%\%reponame%_py310\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py310\pyvenv.cfg
+    type %cd%\%reponame%_py310\pyvenv.cfg
 )
 
 rem set path
@@ -237,7 +241,8 @@ echo "@@@step: %step%"
 echo "@@@branch: %branch%"
 echo "@@@mode: %mode%"
 echo "@@@timeout: %timeout%"
-
+echo "@@@dataset_org: %dataset_org%"
+echo "@@@dataset_target: %dataset_target%"
 
 rem if already download PaddleTest direct mv
 if exist "%pwd_org%/task" (
@@ -266,9 +271,12 @@ dir
 rem python version
 python  --version
 git --version
+rem org install
+py -3.%Python_version:Python3=% -m pip install -U pip -i https://mirror.baidu.com/pypi/simple
+py -3.%Python_version:Python3=% -m pip install -U -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 python -m pip install -U pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install -U -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 rem kill python.exe in case can not uninstall sit-package
-python -c "import os;os.system('taskkill /f /im %s' % 'python.exe')"
+rem python -c "import os;os.system('taskkill /f /im %s % python.exe')"
 rem install package
 python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target% --timeout=%timeout%

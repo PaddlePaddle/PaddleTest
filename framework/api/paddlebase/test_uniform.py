@@ -193,7 +193,7 @@ def test_static3():
             feed = {"shape": shape}
             with fluid.unique_name.guard():
                 with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-                    shape = fluid.data(name="shape", shape=[2], dtype="int32")
+                    shape = paddle.static.data(name="shape", shape=[2], dtype="int32")
                     exe = fluid.Executor(place)
                     exe.run(startup_program)
                     output = paddle.uniform(shape=shape)
@@ -215,7 +215,7 @@ def test_static4():
             feed = {"shape": shape}
             with fluid.unique_name.guard():
                 with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-                    shape = fluid.data(name="shape", shape=[2], dtype="int32")
+                    shape = paddle.static.data(name="shape", shape=[2], dtype="int32")
                     exe = fluid.Executor(place)
                     exe.run(startup_program)
                     output = paddle.uniform(shape=shape)
@@ -236,7 +236,7 @@ def test_static5():
         feed = {"shape": shape}
         with fluid.unique_name.guard():
             with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-                shape = fluid.data(name="shape", shape=[2], dtype="int32")
+                shape = paddle.static.data(name="shape", shape=[2], dtype="int32")
                 exe = fluid.Executor(place)
                 exe.run(startup_program)
                 output = paddle.uniform(shape=shape, dtype="float32", min=-1, max=1)
