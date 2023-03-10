@@ -1,16 +1,13 @@
 set +x;
 pwd;
 
-export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data"}
-ls ${dataset_org}
-
 ####ce框架根目录
 rm -rf ce && mkdir ce;
 cd ce;
 
 # 使虚拟环境生效
 source ~/.bashrc
-# conda activate
+# conda activate 激活
 source activate
 
 ######################## 定义变量 ########################
@@ -20,19 +17,10 @@ source activate
 #repo的名称
 export reponame=${reponame:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $1}')`"}
 
-#统一使用conda 暂时删除下述
-# if [[ `uname -a` =~ "ARM64" ]] || [[ `uname -m` =~ "arm64" ]];then
-#     echo "M1"
-#     source activate
-#     export env_run=conda
-# else
-#     echo "Intel"
-#     export env_run=pyenv
-#     ${env_run} activate ${reponame}_py39
-#     sed -i '' 's/include-system-site-packages = false/include-system-site-packages = true/g' /var/root/.pyenv/versions/${reponame}_py39/pyvenv.cfg
-#     sed -i '' 's/include-system-site-packages = false/include-system-site-packages = true/g' /var/root/.pyenv/versions/${reponame}_py310/pyvenv.cfg
-#     cat /var/root/.pyenv/versions/${reponame}_py310/pyvenv.cfg
-# fi
+#挂载数据, 只挂在自己仓库的
+export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data/${reponame}"}
+echo "@@@dataset_org: ${dataset_org}"
+ls ${dataset_org}
 
 #模型列表文件 , 固定路径及格式为 tools/reponame_优先级_list   优先级P2有多个用P21、P22  中间不用"-"划分, 防止按 "-" split 混淆
 export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $5}')`_list"}
@@ -137,6 +125,7 @@ echo "@@@step: ${step}"
 echo "@@@branch: ${branch}"
 echo "@@@mode: ${mode}"
 echo "@@@timeout: ${timeout}"
+echo "@@@dataset_target: ${dataset_target}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
