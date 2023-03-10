@@ -22,6 +22,7 @@ fleet_gpu_model_list=( \
     gpt_generation_345M_hybrid  \
     gpt_export_345M_mp1 \
     gpt_export_qat_345M \
+    gpt_inference_mp1 \
     gpt_inference_345M_single \
     gpt_inference_345M_dp8 \
     gpt_345M_single_finetune \
@@ -39,7 +40,6 @@ fleet_gpu_model_list=( \
     imagen_super_resolution_256_dp8 \
     )
     # imagen_text2im_2B_64x64_sharding8 \
-    # gpt_inference_mp1 \
 
 
 function gpt_preprocess_data() {
