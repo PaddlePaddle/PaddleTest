@@ -306,6 +306,7 @@ if [[ "${docker_flag}" == "" ]]; then
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
+            yum update
             yum install nfs-utils -y
             case ${Python_version} in
             36)
@@ -331,6 +332,7 @@ if [[ "${docker_flag}" == "" ]]; then
             esac
         else
             echo "ubuntu"
+            apt-get update
             apt-get install nfs-common -y
             case ${Python_version} in
             36)
@@ -368,18 +370,21 @@ if [[ "${docker_flag}" == "" ]]; then
 
         #挂载数据, 如果之前定义过dataset_org则不挂载
         if [[ ${AGILE_PIPELINE_NAME} =~ "Release" ]];then
-            if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} == "/workspace/MT_data" ]];then
-                export dataset_org="/workspace/MT_data"
+            if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} =~ "/workspace/MT_data" ]];then
+                export dataset_org="/workspace/MT_data/${reponame}"
                 if [[ -d ${dataset_org} ]];then
                     mv ${dataset_org} ${dataset_org}_back
                     mkdir -p ${dataset_org}
                 else
                     mkdir -p ${dataset_org}
                 fi
-                mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
+                mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${dataset_org}
                 ls ${dataset_org}
             fi
         fi
+        echo "@@@dataset_org: ${dataset_org}"
+        ls ${dataset_org}
+        echo "@@@dataset_target: ${dataset_target}"
 
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
@@ -396,6 +401,7 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
+        yum update
         yum install nfs-utils -y
         case ${Python_version} in
         36)
@@ -421,6 +427,7 @@ else
         esac
     else
         echo "ubuntu"
+        apt-get update
         apt-get install nfs-common -y
         case ${Python_version} in
         36)
@@ -458,18 +465,20 @@ else
 
     #挂载数据, 如果之前定义过dataset_org则不挂载
     if [[ ${AGILE_PIPELINE_NAME} =~ "Release" ]];then
-        if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} == "/workspace/MT_data" ]];then
-            export dataset_org="/workspace/MT_data"
+        if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} =~ "/workspace/MT_data" ]];then
+            export dataset_org="/workspace/MT_data/${reponame}"
             if [[ -d ${dataset_org} ]];then
                 mv ${dataset_org} ${dataset_org}_back
                 mkdir -p ${dataset_org}
             else
                 mkdir -p ${dataset_org}
             fi
-            mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/ ${dataset_org}
+            mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${dataset_org}
             ls ${dataset_org}
         fi
     fi
+    echo "@@@dataset_org: ${dataset_org}"
+    echo "@@@dataset_target: ${dataset_target}"
 
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
