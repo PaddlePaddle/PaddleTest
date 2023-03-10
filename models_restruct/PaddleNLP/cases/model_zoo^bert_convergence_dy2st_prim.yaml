@@ -16,13 +16,13 @@ case:
           - --adam_epsilon 1e-6
           - --warmup_steps 10000
           - --output_dir ./prim/
-          - --logging_steps 10
-          - --save_steps 20000
+          - --logging_steps 1
+          - --save_steps 20
           - --model_type bert
           - --fuse_transformer false
           - --input_dir ./data/wikicorpus_en_seqlen128
           - --model_name_or_path bert-base-uncased
-          - --max_step 25000
+          - --max_step 25
           - --batch_size 64
           - --seed 42
           - --to_static True
