@@ -50,7 +50,7 @@ if not defined system set system=windows
 rem Python_version
 if not defined Python_version for /f "tokens=4 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set Python_version=%%a
 rem not xly use default Python_version
-if not defined Python_version set Python_version=310
+if not defined Python_version set Python_version=Python310
 echo %Python_version% | findstr "37" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py37
@@ -271,9 +271,12 @@ dir
 rem python version
 python  --version
 git --version
+rem org install
+py -3.%Python_version:Python3=% -m pip install -U pip -i https://mirror.baidu.com/pypi/simple
+py -3.%Python_version:Python3=% -m pip install -U -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 python -m pip install -U pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install -U -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 rem kill python.exe in case can not uninstall sit-package
-python -c "import os;os.system('taskkill /f /im %s % python.exe')"
+rem python -c "import os;os.system('taskkill /f /im %s % python.exe')"
 rem install package
 python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target% --timeout=%timeout%
