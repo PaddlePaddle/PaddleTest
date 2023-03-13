@@ -17,12 +17,11 @@ fleet_gpu_model_list=( \
     gpt_175B_DP1_MP8_PP1 \
     gpt_175B_DP1_MP8_PP1_sp \
     gpt_175B_DP1_MP1_PP8 \
-    gpt_345M_mp8_qat \
     gpt_generation_345M_single \
     gpt_generation_345M_hybrid  \
+    gpt_345M_mp8_qat \
     gpt_export_345M_mp1 \
-    gpt_export_qat_345M \
-    gpt_inference_mp1 \
+    gpt_export_345M_mp2 \
     gpt_inference_345M_single \
     gpt_inference_345M_dp8 \
     gpt_345M_single_finetune \
@@ -40,6 +39,7 @@ fleet_gpu_model_list=( \
     imagen_super_resolution_256_dp8 \
     )
     # imagen_text2im_2B_64x64_sharding8 \
+    # gpt_export_qat_345M \
 
 
 function gpt_preprocess_data() {
@@ -231,10 +231,32 @@ function gpt_export_345M_mp1() {
     log_dir=log_export
     rm -rf $log_dir
 
+    export PYTHONPATH=/paddle/PaddleFleetX:$PYTHONPATH
+    export CUDA_VISIBLE_DEVICES=1
     python -m paddle.distributed.launch --log_dir $log_dir --devices "1" \
         ./tools/auto_export.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/generation_gpt_345M_single_card.yaml \
         -o Engine.save_load.ckpt_dir=./pretrained/inference_model
+    python -m paddle.distributed.launch --devices "1" \
+        projects/gpt/inference.py --mp_degree 1 --model_dir output
+    unset CUDA_VISIBLE_DEVICES
+    check_result $FUNCNAME
+}
+
+function gpt_export_345M_mp2() {
+    cd ${fleetx_path}
+    log_dir=log_export
+    rm -rf $log_dir
+
+    export PYTHONPATH=/paddle/PaddleFleetX:$PYTHONPATH
+    export CUDA_VISIBLE_DEVICES=0,1
+    python -m paddle.distributed.launch --devices "0,1" \
+        ./tools/auto_export.py \
+        -c ./ppfleetx/configs/nlp/gpt/auto/generation_gpt_345M_mp2.yaml \
+        -o Engine.save_load.ckpt_dir=./pretrained/inference_model
+    # python -m paddle.distributed.launch --devices "0,1" \
+    #     projects/gpt/inference.py --mp_degree 2 --model_dir output
+    unset CUDA_VISIBLE_DEVICES
     check_result $FUNCNAME
 }
 
@@ -248,20 +270,9 @@ function gpt_export_qat_345M() {
         -o Model.hidden_dropout_prob=0.0 \
         -o Model.attention_probs_dropout_prob=0.0 \
         -o Engine.save_load.ckpt_dir='./GPT_345M_QAT_wo_analysis/'
-    check_result $FUNCNAME
-}
-
-function gpt_inference_mp1() {
-    cd ${fleetx_path}
-    rm -rf log
-    
-    export PYTHONPATH=/paddle/PaddleFleetX:$PYTHONPATH
-    export CUDA_VISIBLE_DEVICES=0
     python -m paddle.distributed.launch --devices "0" \
         projects/gpt/inference.py --mp_degree 1 --model_dir output
-    unset CUDA_VISIBLE_DEVICES
     check_result $FUNCNAME
-    # check_generation_txt $FUNCNAME ./log
 }
 
 function gpt_inference_345M_single() {
