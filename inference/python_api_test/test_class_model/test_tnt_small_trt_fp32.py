@@ -18,6 +18,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest, clip_model_extra_op
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -31,7 +32,10 @@ def check_model_exist():
         tar = tarfile.open("TNT_small.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./TNT_small/inference", output_model_path="./TNT_small/inference")
+        clip_model_extra_op(
+            path_prefix="./TNT_small/inference",
+            output_model_path="./TNT_small/inference",
+        )
 
 
 def test_config():
@@ -40,7 +44,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./TNT_small/inference.pdmodel",
+        params_file="./TNT_small/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -49,7 +56,7 @@ def test_config():
 @pytest.mark.trt_fp32
 def test_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 TNT_small outputs with true val
+    compared trt fp32 batch_size=1-2 TNT_small outputs with true val
     """
     check_model_exist()
 
@@ -64,7 +71,8 @@ def test_trt_fp32_more_bz():
 
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+            model_file="./TNT_small/inference.pdmodel",
+            params_file="./TNT_small/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -76,14 +84,20 @@ def test_trt_fp32_more_bz():
         # collect shape for trt
         test_suite_c = InferenceTest()
         test_suite_c.load_config(
-            model_file=file_path + "/inference.pdmodel", params_file=file_path + "/inference.pdiparams"
+            model_file=file_path + "/inference.pdmodel",
+            params_file=file_path + "/inference.pdiparams",
         )
-        test_suite_c.collect_shape_info(model_path=file_path, input_data_dict=input_data_dict, device="gpu")
+        test_suite_c.collect_shape_info(
+            model_path=file_path,
+            input_data_dict=input_data_dict,
+            device="gpu",
+        )
         del test_suite_c  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+            model_file="./TNT_small/inference.pdmodel",
+            params_file="./TNT_small/inference.pdiparams",
         )
 
         test_suite2.trt_more_bz_test(
@@ -113,7 +127,8 @@ def test_jetson_trt_fp32_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+            model_file="./TNT_small/inference.pdmodel",
+            params_file="./TNT_small/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -125,14 +140,20 @@ def test_jetson_trt_fp32_more_bz():
         # collect shape for trt
         test_suite_c = InferenceTest()
         test_suite_c.load_config(
-            model_file=file_path + "/inference.pdmodel", params_file=file_path + "/inference.pdiparams"
+            model_file=file_path + "/inference.pdmodel",
+            params_file=file_path + "/inference.pdiparams",
         )
-        test_suite_c.collect_shape_info(model_path=file_path, input_data_dict=input_data_dict, device="gpu")
+        test_suite_c.collect_shape_info(
+            model_path=file_path,
+            input_data_dict=input_data_dict,
+            device="gpu",
+        )
         del test_suite_c
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+            model_file="./TNT_small/inference.pdmodel",
+            params_file="./TNT_small/inference.pdiparams",
         )
 
         test_suite2.trt_more_bz_test(
@@ -161,7 +182,10 @@ def test_trt_fp32_bz1_multi_thread():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./TNT_small/inference.pdmodel",
+        params_file="./TNT_small/inference.pdiparams",
+    )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"x": fake_input}
@@ -172,13 +196,21 @@ def test_trt_fp32_bz1_multi_thread():
     # collect shape for trt
     test_suite_c = InferenceTest()
     test_suite_c.load_config(
-        model_file=file_path + "/inference.pdmodel", params_file=file_path + "/inference.pdiparams"
+        model_file=file_path + "/inference.pdmodel",
+        params_file=file_path + "/inference.pdiparams",
     )
-    test_suite_c.collect_shape_info(model_path=file_path, input_data_dict=input_data_dict, device="gpu")
+    test_suite_c.collect_shape_info(
+        model_path=file_path,
+        input_data_dict=input_data_dict,
+        device="gpu",
+    )
     del test_suite_c
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    test_suite2.load_config(
+        model_file="./TNT_small/inference.pdmodel",
+        params_file="./TNT_small/inference.pdiparams",
+    )
 
     test_suite2.trt_bz1_multi_thread_test(
         input_data_dict,

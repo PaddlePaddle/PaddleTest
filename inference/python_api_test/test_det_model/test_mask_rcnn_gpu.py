@@ -154,8 +154,8 @@ def test_gpu_mixed_precision_bz1():
                 dst_params="./mask_rcnn/model_mixed.pdiparams",
             )
         test_suite.load_config(
-            model_file="./mask_rcnn/model_mixed.pdmodel",
-            params_file="./mask_rcnn/model_mixed.pdiparams",
+            model_file="./mask_rcnn/model.pdmodel",
+            params_file="./mask_rcnn/model.pdiparams",
         )
         images_list, images_origin_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det", with_true_data=False

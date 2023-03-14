@@ -17,6 +17,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest, clip_model_extra_op
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -30,7 +31,10 @@ def check_model_exist():
         tar = tarfile.open("solov2.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./solov2/inference", output_model_path="./solov2/inference")
+        clip_model_extra_op(
+            path_prefix="./solov2/model",
+            output_model_path="./solov2/model",
+        )
 
 
 def test_config():
@@ -39,7 +43,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./solov2/model.pdmodel", params_file="./solov2/model.pdiparams")
+    test_suite.load_config(
+        model_file="./solov2/model.pdmodel",
+        params_file="./solov2/model.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -58,7 +65,10 @@ def test_more_bz_onnxruntime():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./solov2/model.pdmodel", params_file="./solov2/model.pdiparams")
+        test_suite.load_config(
+            model_file="./solov2/model.pdmodel",
+            params_file="./solov2/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -81,5 +91,13 @@ def test_more_bz_onnxruntime():
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
-        test_suite.load_config(model_file="./solov2/model.pdmodel", params_file="./solov2/model.pdiparams")
-        test_suite.onnxruntime_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
+        test_suite.load_config(
+            model_file="./solov2/model.pdmodel",
+            params_file="./solov2/model.pdiparams",
+        )
+        test_suite.onnxruntime_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=1e-4,
+        )

@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +30,10 @@ def check_model_exist():
         tar = tarfile.open("mask_rcnn.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(
+            path_prefix="./mask_rcnn/model",
+            output_model_path="./mask_rcnn/model",
+        )
 
 
 def test_config():
@@ -38,7 +42,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./mask_rcnn/model.pdmodel", params_file="./mask_rcnn/model.pdiparams")
+    test_suite.load_config(
+        model_file="./mask_rcnn/model.pdmodel",
+        params_file="./mask_rcnn/model.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -57,7 +64,10 @@ def test_mkldnn_int8_more_bz():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./mask_rcnn/model.pdmodel", params_file="./mask_rcnn/model.pdiparams")
+        test_suite.load_config(
+            model_file="./mask_rcnn/model.pdmodel",
+            params_file="./mask_rcnn/model.pdiparams",
+        )
         images_list, images_origin_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det", with_true_data=False
         )
@@ -80,5 +90,14 @@ def test_mkldnn_int8_more_bz():
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
-        test_suite.load_config(model_file="./mask_rcnn/model.pdmodel", params_file="./mask_rcnn/model.pdiparams")
-        test_suite.mkldnn_test(input_data_dict, output_data_dict, repeat=1, delta=2e-2, precision="int8")
+        test_suite.load_config(
+            model_file="./mask_rcnn/model.pdmodel",
+            params_file="./mask_rcnn/model.pdiparams",
+        )
+        test_suite.mkldnn_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=2e-2,
+            precision="int8",
+        )

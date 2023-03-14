@@ -17,6 +17,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest, clip_model_extra_op
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -31,7 +32,8 @@ def check_model_exist():
         tar.extractall()
         tar.close()
         clip_model_extra_op(
-            path_prefix="./swin_transformer/inference", output_model_path="./swin_transformer/inference"
+            path_prefix="./swin_transformer/inference",
+            output_model_path="./swin_transformer/inference",
         )
 
 
@@ -42,7 +44,8 @@ def test_config():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        model_file="./swin_transformer/inference.pdmodel",
+        params_file="./swin_transformer/inference.pdiparams",
     )
     test_suite.config_test()
 
@@ -56,7 +59,8 @@ def test_disable_gpu():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        model_file="./swin_transformer/inference.pdmodel",
+        params_file="./swin_transformer/inference.pdiparams",
     )
     batch_size = 1
     fake_input = np.random.randn(batch_size, 3, 384, 384).astype("float32")
@@ -78,7 +82,8 @@ def test_gpu_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -89,9 +94,15 @@ def test_gpu_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
+        test_suite2.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=1e-4,
+        )
 
         del test_suite2  # destroy class to save memory
 
@@ -132,7 +143,12 @@ def test_gpu_mixed_precision_bz1():
             model_file="./swin_transformer/inference_mixed.pdmodel",
             params_file="./swin_transformer/inference_mixed.pdiparams",
         )
-        test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, repeat=1, delta=0.01)
+        test_suite2.gpu_more_bz_test_mix(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=0.01,
+        )
 
         del test_suite2  # destroy class to save memory
 
@@ -150,7 +166,8 @@ def test_jetson_gpu_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -161,8 +178,14 @@ def test_jetson_gpu_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
+        test_suite2.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=1e-4,
+        )
 
         del test_suite2  # destroy class to save memory

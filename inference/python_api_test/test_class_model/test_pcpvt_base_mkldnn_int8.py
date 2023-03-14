@@ -15,7 +15,8 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
+
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +31,10 @@ def check_model_exist():
         tar = tarfile.open("pcpvt_base.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(
+            path_prefix="./pcpvt_base/inference",
+            output_model_path="./pcpvt_base/inference",
+        )
 
 
 def test_config():
@@ -38,7 +43,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./pcpvt_base/inference.pdmodel",
+        params_file="./pcpvt_base/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -55,7 +63,10 @@ def test_mkldnn_int8():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./pcpvt_base/inference.pdmodel",
+        params_file="./pcpvt_base/inference.pdiparams",
+    )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"x": fake_input}
@@ -64,7 +75,15 @@ def test_mkldnn_int8():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
-    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-2, precision="int8")
+    test_suite2.load_config(
+        model_file="./pcpvt_base/inference.pdmodel",
+        params_file="./pcpvt_base/inference.pdiparams",
+    )
+    test_suite2.mkldnn_test(
+        input_data_dict,
+        output_data_dict,
+        delta=1e-2,
+        precision="int8",
+    )
 
     del test_suite2  # destroy class to save memory

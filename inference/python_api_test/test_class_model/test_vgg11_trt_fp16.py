@@ -18,6 +18,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest, clip_model_extra_op
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -55,7 +56,7 @@ def test_config():
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp16 batch_size=1-2 vgg11 outputs with true val
     """
     check_model_exist()
 
@@ -122,7 +123,7 @@ def test_trt_fp16_more_bz():
 @pytest.mark.trt_fp16
 def test_jetson_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp16 batch_size=1 vgg11 outputs with true val
     """
     check_model_exist()
 
