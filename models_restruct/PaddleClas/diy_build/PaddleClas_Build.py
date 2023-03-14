@@ -26,24 +26,25 @@ class PaddleClas_Build(Model_Build):
         """
         初始化变量
         """
+        self.data_path_endswith = "dataset"
+        self.reponame = args.reponame
         self.paddle_whl = args.paddle_whl
         self.get_repo = args.get_repo
         self.branch = args.branch
         self.system = args.system
         self.set_cuda = args.set_cuda
-        if "MT_data" in str(args.dataset_org):
-            self.dataset_org = os.path.join(str(args.dataset_org), args.reponame)
-        else:
-            self.dataset_org = str(args.dataset_org)
-        if str(args.dataset_target) == "None":
-            os.environ["dataset_target"] = os.path.join(os.getcwd(), "PaddleClas/dataset")
-        elif str(args.dataset_target) == "download_data":
-            os.environ["dataset_target"] = "None"
-        else:
+
+        self.dataset_org = str(args.dataset_org)
+        if str(args.dataset_target) != "None":  # 如果已经执行则不定义
             os.environ["dataset_target"] = args.dataset_target
+        else:
+            if "MT_data" in str(args.dataset_org):  # 如果使用挂载方式, 拼接模型库具体指定地址
+                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
         self.dataset_target = os.getenv("dataset_target")
-        logger.info("#### dataset_org is  {}".format(self.dataset_org))
-        logger.info("#### dataset_target is  {}".format(self.dataset_target))
+        if os.path.exists(self.dataset_org) is True:
+            logger.info("#### dataset_org in diy_build files have  {}".format(os.listdir(self.dataset_org)))
+        logger.info("#### dataset_org in diy_build is  {}".format(self.dataset_org))
+        logger.info("#### dataset_target in diy_build is  {}".format(self.dataset_target))
 
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
@@ -202,19 +203,22 @@ class PaddleClas_Build(Model_Build):
         """
         软链数据
         """
-        if os.path.exists(os.path.join(self.reponame, self.dataset_target)):
-            logger.info(
-                "already have {} will mv {} to {}".format(
-                    self.dataset_target, self.dataset_target, self.dataset_target + "_" + str(int(time.time()))
+        if os.path.exists(self.reponame):
+            if os.path.exists(os.path.join(self.reponame, self.dataset_target)):
+                logger.info(
+                    "already have {} will mv {} to {}".format(
+                        self.dataset_target, self.dataset_target, self.dataset_target + "_" + str(int(time.time()))
+                    )
                 )
-            )
-            os.rename(
-                os.path.join(self.reponame, self.dataset_target),
-                os.path.join(self.reponame, self.dataset_target + "_" + str(int(time.time()))),
-            )
-        exit_code = os.symlink(self.dataset_org, os.path.join(self.reponame, self.dataset_target))
-        if exit_code:
-            logger.info("#### link_dataset failed")
+                os.rename(
+                    os.path.join(self.reponame, self.dataset_target),
+                    os.path.join(self.reponame, self.dataset_target + "_" + str(int(time.time()))),
+                )
+            exit_code = os.symlink(self.dataset_org, os.path.join(self.reponame, self.dataset_target))
+            if exit_code:
+                logger.info("#### link_dataset failed")
+        else:
+            logger.info("check you {} path".format(self.reponame))
         return 0
 
     def build_dataset(self):
@@ -225,9 +229,9 @@ class PaddleClas_Build(Model_Build):
             # 下载dataset数据集 解析yaml下载
             path_now = os.getcwd()
             os.chdir(self.reponame)
-            if os.path.exists("dataset") is False:
-                os.mkdir("dataset")
-            os.chdir("dataset")
+            if os.path.exists(self.data_path_endswith) is False:
+                os.mkdir(self.data_path_endswith)
+            os.chdir(self.data_path_endswith)
             # 根据不同的模型下载数据
             for line in self.clas_model_list:
                 image_name = None  # 初始化
@@ -294,11 +298,11 @@ class PaddleClas_Build(Model_Build):
         os.chdir(self.reponame)  # 执行setup要先切到路径下面
         # cmd_return = os.system("python -m pip install paddleclas")
         cmd_return = os.system("python setup.py install > paddleclas_install.log 2>&1 ")
-        os.chdir(path_now)
-
+        logger.info("repo {} python -m pip install paddleclas done".format(self.reponame))
         if cmd_return:
             logger.info("repo {} python -m pip install paddleclas failed".format(self.reponame))
             # return 1
+        os.chdir(path_now)
 
         if self.value_in_modellist(value="slim"):
             logger.info("#### slim install")
