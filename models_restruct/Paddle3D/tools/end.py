@@ -95,7 +95,7 @@ class Paddle3D_End(object):
         """
         回收之前下载的数据
         """
-        if self.step == "train":
+        if self.step == "train" and os.environ.get('UPDATA_BASE_VALUE')==True:
             # train loss
             # if self.category == "det":
             #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
@@ -107,7 +107,7 @@ class Paddle3D_End(object):
             train_loss = self.getdata(self.TRAIN_LOG_PATH, "total_loss")
             logger.info("#### train_loss: {}".format(train_loss))
             self.update_json("tools/train.json", train_loss)
-        elif self.step == "eval":
+        elif self.step == "eval" and os.environ.get('UPDATA_BASE_VALUE')==True:
             # eval acc
             # kiit
             if (
