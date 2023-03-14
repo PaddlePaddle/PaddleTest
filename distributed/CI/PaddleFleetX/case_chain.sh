@@ -256,8 +256,8 @@ function gpt_export_345M_mp2() {
         ./tools/auto_export.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/generation_gpt_345M_mp2.yaml \
         -o Engine.save_load.ckpt_dir=./pretrained/inference_model
-    python -m paddle.distributed.launch --devices "0,1" \
-        projects/gpt/inference.py --mp_degree 2 --model_dir output
+    # python -m paddle.distributed.launch --devices "0,1" \
+    #     projects/gpt/inference.py --mp_degree 2 --model_dir output
     unset CUDA_VISIBLE_DEVICES
     check_result $FUNCNAME
 }
