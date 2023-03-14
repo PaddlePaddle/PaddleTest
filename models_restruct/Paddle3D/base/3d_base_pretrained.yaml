@@ -23,8 +23,8 @@ eval:
   result:
     ${eval_key}:
       base: ${eval_base_acc}
-      threshold: 0
-      evaluation: "="
+      threshold: 0.1
+      evaluation: "+"
 
   name: pretrained
   cmd:  python tools/evaluate.py
@@ -34,8 +34,8 @@ eval:
     - --model ${model}/model.pdparams
   ${eval_key}:
       base: ${eval_base_acc}
-      threshold: 0
-      evaluation: "="
+      threshold: 0.1
+      evaluation: "+"
 
 infer: skipped
 
