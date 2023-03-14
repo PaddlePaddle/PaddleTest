@@ -56,7 +56,7 @@ def test_config():
 @pytest.mark.trt_fp32
 def test_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp32 batch_size=1-2 vgg11 outputs with true val
     """
     check_model_exist()
 
@@ -117,7 +117,7 @@ def test_trt_fp32_more_bz():
 @pytest.mark.trt_fp32
 def test_jetson_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp32 batch_size=1 vgg11 outputs with true val
     """
     check_model_exist()
 

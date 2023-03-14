@@ -15,7 +15,8 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
+
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +31,10 @@ def check_model_exist():
         tar = tarfile.open("yolov3.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(
+            path_prefix="./yolov3/model",
+            output_model_path="./yolov3/model",
+        )
 
 
 def test_config():
@@ -38,7 +43,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+    test_suite.load_config(
+        model_file="./yolov3/model.pdmodel",
+        params_file="./yolov3/model.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -47,7 +55,7 @@ def test_config():
 @pytest.mark.mkldnn_more_bz_precision
 def test_more_bz_mkldnn():
     """
-    compared mkldnn yolov3 batch size = [1,4,8,10] outputs with true val
+    compared mkldnn yolov3 batch size = [1,2] outputs with true val
     """
     check_model_exist()
 
@@ -57,7 +65,10 @@ def test_more_bz_mkldnn():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -90,5 +101,13 @@ def test_more_bz_mkldnn():
 
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.mkldnn_test(input_data_dict, output_data_dict, repeat=1, delta=3e-4)
+        test_suite.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
+        test_suite.mkldnn_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=3e-4,
+        )

@@ -15,7 +15,8 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
+
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +31,10 @@ def check_model_exist():
         tar = tarfile.open("vgg11.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(
+            path_prefix="./vgg11/inference",
+            output_model_path="./vgg11/inference",
+        )
 
 
 def test_config():
@@ -38,7 +43,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./vgg11/inference.pdmodel",
+        params_file="./vgg11/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -47,7 +55,7 @@ def test_config():
 @pytest.mark.mkldnn
 def test_mkldnn():
     """
-    compared mkldnn vgg11 outputs with true val
+    compared mkldnn batch_size=1 vgg11 outputs with true val
     """
     check_model_exist()
 
@@ -55,7 +63,10 @@ def test_mkldnn():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./vgg11/inference.pdmodel",
+        params_file="./vgg11/inference.pdiparams",
+    )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"x": fake_input}
@@ -64,7 +75,10 @@ def test_mkldnn():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+    test_suite2.load_config(
+        model_file="./vgg11/inference.pdmodel",
+        params_file="./vgg11/inference.pdiparams",
+    )
     test_suite2.mkldnn_test(input_data_dict, output_data_dict)
 
     del test_suite2  # destroy class to save memory

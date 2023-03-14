@@ -30,7 +30,10 @@ def check_model_exist():
         tar = tarfile.open("AFQMC_base.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./AFQMC_base/inference", output_model_path="./AFQMC_base/inference")
+        clip_model_extra_op(
+            path_prefix="./AFQMC_base/inference",
+            output_model_path="./AFQMC_base/inference",
+        )
 
 
 def test_config():
@@ -39,7 +42,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -53,7 +59,10 @@ def test_trt_fp16_bz1():
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
 
     src_ids = (
         np.array(
@@ -274,13 +283,23 @@ def test_trt_fp16_bz1():
     output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
     del test_suite.pd_config
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
-    test_suite.collect_shape_info(model_path="./AFQMC_base/", input_data_dict=input_data_dict, device="gpu")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
+    test_suite.collect_shape_info(
+        model_path="./AFQMC_base/",
+        input_data_dict=input_data_dict,
+        device="gpu",
+    )
 
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite2.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
     test_suite2.pd_config.exp_disable_tensorrt_ops(["elementwise_sub"])
     test_suite2.trt_more_bz_test(
         input_data_dict,
@@ -305,7 +324,10 @@ def test_trt_fp16_bz1_multi_thread():
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
 
     src_ids = (
         np.array(
@@ -526,16 +548,31 @@ def test_trt_fp16_bz1_multi_thread():
     output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
     del test_suite.pd_config
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
-    test_suite.collect_shape_info(model_path="./AFQMC_base/", input_data_dict=input_data_dict, device="gpu")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
+    test_suite.collect_shape_info(
+        model_path="./AFQMC_base/",
+        input_data_dict=input_data_dict,
+        device="gpu",
+    )
 
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite2.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
     test_suite2.pd_config.exp_disable_tensorrt_ops(["elementwise_sub"])
     test_suite2.trt_bz1_multi_thread_test(
-        input_data_dict, output_data_dict, min_subgraph_size=5, delta=1e-2, use_static=False, precision="trt_fp16"
+        input_data_dict,
+        output_data_dict,
+        min_subgraph_size=5,
+        delta=1e-2,
+        use_static=False,
+        precision="trt_fp16",
     )
 
     del test_suite2  # destroy class to save memory

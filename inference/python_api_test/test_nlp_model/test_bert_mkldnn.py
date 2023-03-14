@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest
+from test_case import InferenceTest, clip_model_extra_op
 
 # pylint: enable=wrong-import-position
 
@@ -30,6 +30,10 @@ def check_model_exist():
         tar = tarfile.open("bert.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(
+            path_prefix="./bert/inference",
+            output_model_path="./bert/inference",
+        )
 
 
 def test_config():
@@ -38,7 +42,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -52,7 +59,10 @@ def test_mkldnn():
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
     data_path = "./bert/data.txt"
     images_list = test_suite.get_text_npy(data_path)
 
@@ -65,7 +75,14 @@ def test_mkldnn():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
-    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
+    test_suite2.mkldnn_test(
+        input_data_dict,
+        output_data_dict,
+        delta=1e-5,
+    )
 
     del test_suite2  # destroy class to save memory

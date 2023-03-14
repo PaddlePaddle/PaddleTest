@@ -30,6 +30,10 @@ def check_model_exist():
         tar = tarfile.open("AFQMC_base.tgz")
         tar.extractall()
         tar.close()
+        clip_model_extra_op(
+            path_prefix="./AFQMC_base/inference",
+            output_model_path="./AFQMC_base/inference",
+        )
 
 
 def test_config():
@@ -38,7 +42,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -52,7 +59,10 @@ def test_onnxruntime():
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
 
     src_ids = (
         np.array(
@@ -275,7 +285,14 @@ def test_onnxruntime():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
-    test_suite2.onnxruntime_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
+    test_suite2.onnxruntime_test(
+        input_data_dict,
+        output_data_dict,
+        delta=1e-5,
+    )
 
     del test_suite2  # destroy class to save memory
