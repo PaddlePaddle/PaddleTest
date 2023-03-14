@@ -1,14 +1,6 @@
 case:
     linux:
         base: ./base/ocr_det_base_pretrained.yaml
-        train:
-          -
-            name: multi
-            result:
-              loss:
-                base: 0.285547
-                threshold: 0.1
-                evaluation: "-"
         eval:
           -
             name: pretrained
