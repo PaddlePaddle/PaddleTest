@@ -376,7 +376,9 @@ class PaddleClas_Build(Model_Build):
                 logger.info("repo {} python -m pip install bcolz failed".format(self.reponame))
                 # return 1
 
-        if self.value_in_modellist(value="amp") or self.value_in_modellist(value="dy2st_convergence"):
+        if (self.value_in_modellist(value="amp") or self.value_in_modellist(value="dy2st_convergence")) and (
+            "Windows" not in platform.system() and "Darwin" not in platform.system()
+        ):
             logger.info("#### fp16 or amp install")
             if os.path.exists("nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl") and os.path.exists(
                 "nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl"
