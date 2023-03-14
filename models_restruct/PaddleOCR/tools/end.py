@@ -96,7 +96,7 @@ class PaddleOCR_End(object):
         """
         回收之前下载的数据
         """
-        if self.step == "train" and os.environ.get('UPDATA_BASE_VALUE')==True:
+        if self.step == "train" and os.environ.get("UPDATA_BASE_VALUE") is True:
             # train loss
             # if self.category == "det":
             #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
@@ -108,7 +108,7 @@ class PaddleOCR_End(object):
             train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss")
             logger.info("#### train_loss: {}".format(train_loss))
             self.update_json("tools/train.json", train_loss)
-        elif self.step == "eval" and os.environ.get('UPDATA_BASE_VALUE')==True:
+        elif self.step == "eval" and os.environ.get("UPDATA_BASE_VALUE") is True:
             # eval acc
             pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
             pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
