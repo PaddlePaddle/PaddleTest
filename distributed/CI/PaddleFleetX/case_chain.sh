@@ -230,6 +230,8 @@ function gpt_export_345M_mp1() {
     cd ${fleetx_path}
     log_dir=log_export
     rm -rf $log_dir
+    rm -rf output
+    cd ppfleetx/ops && python setup_cuda.py install && cd ../..
 
     export PYTHONPATH=/paddle/PaddleFleetX:$PYTHONPATH
     export CUDA_VISIBLE_DEVICES=1
@@ -247,6 +249,7 @@ function gpt_export_345M_mp2() {
     cd ${fleetx_path}
     log_dir=log_export
     rm -rf $log_dir
+    rm -rf output
 
     export PYTHONPATH=/paddle/PaddleFleetX:$PYTHONPATH
     export CUDA_VISIBLE_DEVICES=0,1
@@ -264,6 +267,7 @@ function gpt_export_qat_345M() {
     cd ${fleetx_path}
     log_dir=log_export
     rm -rf $log_dir
+    rm -rf output
 
     python ./tools/export.py \
         -c ./ppfleetx/configs/nlp/gpt/generation_qat_gpt_345M_single_card.yaml \
@@ -278,6 +282,7 @@ function gpt_export_qat_345M() {
 function gpt_inference_345M_single() {
     cd ${fleetx_path}
     rm -rf log
+    rm -rf output
     python tools/export.py \
         -c ppfleetx/configs/nlp/gpt/inference_gpt_345M_single_card.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
@@ -290,6 +295,7 @@ function gpt_inference_345M_single() {
 function gpt_inference_345M_dp8() {
     cd ${fleetx_path}
     rm -rf log
+    rm -rf output
     python -m paddle.distributed.launch --devices "0" tools/export.py \
         -c ppfleetx/configs/nlp/gpt/inference_gpt_345M_single_card.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
