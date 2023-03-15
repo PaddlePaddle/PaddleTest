@@ -109,13 +109,17 @@ class PaddleOCR_Start(object):
 
         pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
         pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
-        if (self.mode == "precision") and ("eval" in self.step) and (self.model in pretrained_yaml[self.category].keys())
-            # check eval kpi value
-            with open("tools/eval.json", "r") as f:
-                content = json.load(f)
-                eval_base_acc = content[self.model]
-                logger.info("#### eval_base_acc: {}".format(eval_base_acc))
-            self.env_dict["eval_base_acc"] = str(eval_base_acc)
+        if self.mode == "precision" and "eval" in self.step:
+            if self.model in pretrained_yaml[self.category].keys():
+                logger.info("#### pretrained model exist! Get eval_base_acc!")
+                # check eval kpi value
+                with open("tools/eval.json", "r") as f:
+                    content = json.load(f)
+                    eval_base_acc = content[self.model]
+                    logger.info("#### eval_base_acc: {}".format(eval_base_acc))
+                self.env_dict["eval_base_acc"] = str(eval_base_acc)
+            else:
+                logger.info("#### pretrained model not exist! Do not get eval_base_acc!")
 
     def prepare_pretrained_model(self):
         """
