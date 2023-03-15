@@ -30,8 +30,9 @@ rem reponame
 if not defined reponame for /f "tokens=1 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set reponame=%%a
 
 rem load self reponame data
-if not defined dataset_org set dataset_org="H:\MT_data\%reponame%"
-dir "H:\MT_data"
+set mount_path="H:\MT_data\%reponame%"
+echo mount_path: %mount_path%
+dir %mount_path%
 
 rem must set as: tools/reponame_priority_list   do not use "-" , in case mix "-" split
 if not defined models_file for /f "tokens=5 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set models_file="tools/%reponame%_%%a_list"
@@ -55,33 +56,33 @@ echo %Python_version% | findstr "37" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py37
     C:\Python37\Scripts\virtualenv %reponame%_py37
-    CALL %cd%\%reponame%_py37\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py37\pyvenv.cfg
-    type %cd%\%reponame%_py37\pyvenv.cfg
+    CALL D:\Windows_env\%reponame%_py37\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py37\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py37\pyvenv.cfg
 )
 echo %Python_version% | findstr "38" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py38
     C:\Python38\Scripts\virtualenv %reponame%_py38
-    CALL %cd%\%reponame%_py38\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py38\pyvenv.cfg
-    type %cd%\%reponame%_py38\pyvenv.cfg
+    CALL D:\Windows_env\%reponame%_py38\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py38\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py38\pyvenv.cfg
 )
 echo %Python_version% | findstr "39" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py39
     C:\Python39\Scripts\virtualenv %reponame%_py39
-    CALL %cd%\%reponame%_py39\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py39\pyvenv.cfg
-    type %cd%\%reponame%_py39\pyvenv.cfg
+    CALL D:\Windows_env\%reponame%_py39\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py39\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py39\pyvenv.cfg
 )
 echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py310
     C:\Python310\Scripts\virtualenv %reponame%_py310
-    CALL %cd%\%reponame%_py310\Scripts\activate.bat
-    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g %cd%\%reponame%_py310\pyvenv.cfg
-    type %cd%\%reponame%_py310\pyvenv.cfg
+    CALL D:\Windows_env\%reponame%_py310\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py310\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py310\pyvenv.cfg
 )
 
 rem set path
