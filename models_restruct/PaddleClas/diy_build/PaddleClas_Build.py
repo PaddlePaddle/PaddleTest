@@ -37,7 +37,9 @@ class PaddleClas_Build(Model_Build):
         self.dataset_org = str(args.dataset_org)
         self.dataset_target = str(args.dataset_target)
         self.mount_path = str(os.getenv("mount_path"))
-        if "Windows" in platform.system() or "Darwin" in platform.system():  # linux 性能损失使用自动下载的数据,不使用mount数据
+        if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exit(
+            self.mount_path
+        ):  # linux 性能损失使用自动下载的数据,不使用mount数据
             if os.listdir(self.mount_path) != []:
                 self.dataset_org = self.mount_path
                 os.environ["dataset_org"] = self.mount_path
