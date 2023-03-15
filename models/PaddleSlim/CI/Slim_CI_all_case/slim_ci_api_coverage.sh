@@ -33,8 +33,9 @@ static_test_num=`ls test_*.py|wc -l`
 dygraph_test_num=`ls dygraph/test_*.py|wc -l`
 act_test_num=`ls act/test_*.py|wc -l`
 quant_analysis_test_num=`ls quant_analysis/test_*.py|wc -l`
+quantization_test_num=`ls quantization/test_*.py|wc -l`
 
-all_test_num=`expr ${static_test_num} + ${dygraph_test_num} + ${act_test_num} + ${quant_analysis_test_num}`
+all_test_num=`expr ${static_test_num} + ${dygraph_test_num} + ${act_test_num} + ${quant_analysis_test_num} + ${quantization_test_num}`
 
 run_api_case(){
 cases=`find ./ -name "test*.py" | sort`
@@ -116,6 +117,26 @@ else
 fi
 }
 run_api_case_quant_analysis
+
+run_api_case_quantization(){
+if [ -d ${slim_dir}/tests/quantization ];then
+cd ${slim_dir}/tests/quantization
+for line in `ls test_*.py | sort`
+do
+    {
+    name=`echo ${line} | cut -d \. -f 1`
+    echo ${test_num}_"/"_${all_test_num}_quantization_${name}
+    python -m coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_quantization_${name} 2>&1
+    print_info $? ${test_num}_quantization_${name}
+    }&
+    let test_num++
+done
+else
+    echo -e "\033[31m no tests/quantization \033[0m"
+fi
+}
+run_api_case_quantization
+wait
 
 cd ${slim_dir}/tests
 
