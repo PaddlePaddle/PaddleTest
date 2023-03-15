@@ -96,18 +96,18 @@ class PaddleSeg_Build(Model_Build):
             shutil.rmtree("voc")
         logger.info("***start download data")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes.zip")
-        os.system("unzip cityscapes.zip")
+        os.system("unzip -q cityscapes.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/voc.zip")
-        os.system("unzip voc.zip")
+        os.system("unzip -q voc.zip")
         os.system("mv voc/VOCdevkit .")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/ADEChallengeData2016.zip")
-        os.system("unzip ADEChallengeData2016.zip")
+        os.system("unzip -q ADEChallengeData2016.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/PP-HumanSeg14K.zip")
-        os.system("unzip PP-HumanSeg14K.zip")
+        os.system("unzip -q PP-HumanSeg14K.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/camvid.zip")
-        os.system("unzip camvid.zip")
+        os.system("unzip -q camvid.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/mini_supervisely.zip")
-        os.system("unzip mini_supervisely.zip")
+        os.system("unzip -q mini_supervisely.zip")
         logger.info("***download data ended")
         # cpp infer compile
         if platform.system() == "Linux":
@@ -116,7 +116,7 @@ class PaddleSeg_Build(Model_Build):
                 "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos"
                 "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
             )
-            os.system("tar xvf paddle_inference.tgz")
+            os.system("tar -xf paddle_inference.tgz")
             wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cpp_infer.sh")
             os.system("bash cpp_infer.sh")
         os.chdir(path_now)
