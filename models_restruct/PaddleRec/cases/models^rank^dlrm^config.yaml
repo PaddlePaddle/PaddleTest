@@ -21,6 +21,9 @@ case:
       -
         name: static
         cmd: python -u tools/static_infer.py
+      -
+        name: dy2st
+        cmd: python -u tools/paddle_infer.py
         params:
           - --model_file=output_model_dlrm/2/tostatic.pdmodel
           - --params_file=output_model_dlrm/2/tostatic.pdiparams
