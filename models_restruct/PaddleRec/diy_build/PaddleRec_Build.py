@@ -62,7 +62,7 @@ class PaddleRec_Build(Model_Build):
         os.chdir("PaddleRec") 
         os.system("python -m pip install -r requirements.txt")
         os.system("python -m pip install sklearn==0.0")
-        os.system("python -m pip install pgl==2.2.4")
+        os.system("python -m pip install pgl")
         os.system("python -m pip install nltk")
         os.system("python -m pip install h5py")
         os.system("python -m pip install faiss-cpu")
