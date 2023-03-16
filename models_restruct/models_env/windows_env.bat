@@ -5,6 +5,8 @@ rem change path
 set sed="C:\Program Files\Git\usr\bin\sed.exe"
 set pwd_org=%cd%
 echo "org path is %pwd_org%"
+echo del useless files
+for /d /r "D:\Windows_env" %%i in (~*) do rd /s /q "%%i"
 if not defined AGILE_PIPELINE_NAME (
     echo "do not exit AGILE_PIPELINE_NAME, use org path %pwd_org%"
     set AGILE_PIPELINE_NAME=test
