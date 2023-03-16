@@ -306,7 +306,6 @@ if [[ "${docker_flag}" == "" ]]; then
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
-            yum update > install_update 2>&1
             yum install nfs-utils -y > install_nfs 2>&1
             case ${Python_version} in
             36)
@@ -395,7 +394,6 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
-        yum update > install_update 2>&1
         yum install nfs-utils -y > install_nfs 2>&1
         case ${Python_version} in
         36)
