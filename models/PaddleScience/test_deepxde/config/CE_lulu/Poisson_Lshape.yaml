@@ -3,3 +3,4 @@
   Post-processing:
     solution_metric_dir: "../standard_data/Poisson_Lshape_metric.npy"
     solution_loss_dir: "../standard_data/Poisson_Lshape_loss.npy"
+    run_time: 373.089621

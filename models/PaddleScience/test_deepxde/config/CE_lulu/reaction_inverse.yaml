@@ -3,3 +3,4 @@
   Post-processing:
     solution_metric_dir: "../standard_data/reaction_inverse_metric.npy"
     solution_loss_dir: "../standard_data/reaction_inverse_loss.npy"
+    run_time: 1342.012342

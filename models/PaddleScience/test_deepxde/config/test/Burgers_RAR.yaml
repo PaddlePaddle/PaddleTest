@@ -3,4 +3,4 @@
   Post-processing:
     solution_metric_dir: "../standard_data/Burgers_RAR_metric.npy"
     solution_loss_dir: "../standard_data/Burgers_RAR_loss.npy"
-    run_time: 45.118323
+    run_time: 55.118323

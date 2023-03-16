@@ -3,3 +3,4 @@
   Post-processing:
     solution_metric_dir: "../standard_data/diffusion_reaction_rate_lulu_metric.npy"
     solution_loss_dir: "../standard_data/diffusion_reaction_rate_lulu_loss.npy"
+    run_time: 141.269283

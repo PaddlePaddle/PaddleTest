@@ -3,3 +3,4 @@
   Post-processing:
     solution_metric_dir: "../standard_data/ode_system_metric.npy"
     solution_loss_dir: "../standard_data/ode_system_loss.npy"
+    run_time: 79.442398

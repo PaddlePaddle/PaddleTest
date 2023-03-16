@@ -3,3 +3,4 @@
   Post-processing:
     solution_metric_dir: "../standard_data/diffusion_1d_exactBC_metric.npy"
     solution_loss_dir: "../standard_data/diffusion_1d_exactBC_loss.npy"
+    run_time: 86.365774

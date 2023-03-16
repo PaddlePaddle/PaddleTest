@@ -3,3 +3,4 @@
   Post-processing:
     solution_metric_dir: "../standard_data/heat_metric.npy"
     solution_loss_dir: "../standard_data/heat_loss.npy"
+    run_time: 91.202207

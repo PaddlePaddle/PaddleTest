@@ -3,3 +3,4 @@
   Post-processing:
     solution_metric_dir: "../standard_data/Lorenz_inverse_forced_metric.npy"
     solution_loss_dir: "../standard_data/Lorenz_inverse_forced_loss.npy"
+    run_time: 361.444807

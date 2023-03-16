@@ -3,4 +3,4 @@
   Post-processing:
     solution_metric_dir: "../standard_data/brinkman_forchheimer_metric.npy"
     solution_loss_dir: "../standard_data/brinkman_forchheimer_loss.npy"
-    run_time: 208.74345
+    run_time: 157.636753
