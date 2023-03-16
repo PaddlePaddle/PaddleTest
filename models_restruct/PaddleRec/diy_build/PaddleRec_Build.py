@@ -61,6 +61,18 @@ class PaddleRec_Build(Model_Build):
 
         os.chdir("PaddleRec") 
         os.system("python -m pip install -r requirements.txt")
+        os.system("python -m pip install sklearn==0.0")
+        os.system("python -m pip install pgl==2.2.4")
+        os.system("python -m pip install nltk")
+        os.system("python -m pip install h5py")
+        os.system("python -m pip install faiss-cpu")
+        os.system("python -m pip install faiss")
+        os.system("python -m pip install numba")
+        os.system("python -m pip install regex")
+        os.system("python -m pip install llvmlite")
+        os.system("python -m pip install opencv-python==4.6.0.66")
+        os.system("python -m pip install scipy")
+        os.system("python -m pip install pandas")
         os.chdir(path_now)
         
         os.system("python -m pip install https://paddle-qa.bj.bcebos.com/PaddleRec/auto_log-1.2.0-py3-none-any.whl")
