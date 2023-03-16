@@ -34,7 +34,7 @@ def test_initializer_assign_base():
     """
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
-    out_channels = 1
+    out_channels = 2
     kernel_size = [3, 3]
     stride = 1
     padding = 0
@@ -72,7 +72,7 @@ def test_initializer_assign1():
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
-    out_channels = 1
+    out_channels = 2
     kernel_size = [2, 2]
     stride = 1
     padding = 0
@@ -142,13 +142,13 @@ def test_initializer_assign1():
 @pytest.mark.api_initializer_assign_parameters
 def test_initializer_assign2():
     """
-    kernel_size = [2, 2], out_channels = 3
+    kernel_size = [2, 2], out_channels = 2
     paddle.nn.initializer.Assign(np.ndarray)
     """
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
-    out_channels = 3
+    out_channels = 2
     kernel_size = [2, 2]
     stride = 1
     padding = 0
@@ -186,7 +186,7 @@ def test_initializer_assign3():
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
-    out_channels = 1
+    out_channels = 2
     kernel_size = [3, 3]
     stride = 2
     padding = 0
@@ -213,7 +213,7 @@ def test_initializer_assign3_1():
     np.random.seed(obj.seed)
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
-    out_channels = 1
+    out_channels = 2
     kernel_size = [3, 3]
     stride = 2
     padding = 0
@@ -241,7 +241,7 @@ def test_initializer_assign4():
     paddle.disable_static()
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
-    out_channels = 1
+    out_channels = 2
     kernel_size = [3, 3]
     stride = 2
     padding = 1
@@ -309,7 +309,7 @@ def test_initializer_assign5():
     paddle.disable_static()
     x = randtool("float", 0, 1, [2, 3, 4, 4])
     in_channels = 3
-    out_channels = 1
+    out_channels = 2
     kernel_size = [3, 3]
     stride = 2
     padding = 1
