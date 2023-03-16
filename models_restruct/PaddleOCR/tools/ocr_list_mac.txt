@@ -1,5 +1,0 @@
-configs^rec^PP-OCRv3^multi_language^ta_PP-OCRv3_rec.yml
-configs^rec^PP-OCRv3^ch_PP-OCRv3_rec_distillation.yml
-configs^rec^PP-OCRv3^ch_PP-OCRv3_rec.yml
-configs^rec^rec_svtrnet_ch.yml
-configs^rec^rec_mv3_tps_bilstm_ctc.yml

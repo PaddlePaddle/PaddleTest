@@ -3,6 +3,8 @@
 自定义环境准备
 """
 import os
+import re
+from platform import platform
 import sys
 import logging
 import tarfile
@@ -55,19 +57,58 @@ class PaddleNLP_Build(Model_Build):
         """
         安装依赖包
         """
-        path_now = os.getcwd()
-        os.system("python -m pip install -r requirements_nlp.txt")  # 安装模型依赖
+        # path_now = os.getcwd()
+        platform = self.system
+        os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
+        print(os.environ["no_proxy"])
+
+        if platform == "linux":
+            os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip uninstall paddlepaddle -y")
+            os.system(
+                "python -m pip install -U {}".format(self.paddle_whl)
+            )  # install paddle for lac requirement paddle>=1.6
+        else:
+            os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip uninstall paddlepaddle -y")
+            os.system(
+                "python -m pip install -U {}".format(self.paddle_whl)
+            )  # install paddle for lac requirement paddle>=1.6
+
+        if re.compile("elease").findall(self.paddle_whl):
+            os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
+        else:
+            os.system(
+                "python -m pip install \
+                 https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
+            )
+
         import nltk
 
         nltk.download("punkt")
         from visualdl import LogWriter
 
-        os.chdir("PaddleNLP")  # 执行setup要先切到路径下面
-        cmd_return = os.system("python setup.py install > paddlenlp_install.log 2>&1 ")
-        os.chdir(path_now)
+        if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
+            os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
+
+        # os.chdir("PaddleNLP")
+        # os.system("python setup.py bdist_wheel")
+        # cmd_return = os.system(" python -m pip install -U dist/p****.whl")
+        cmd_return = os.system(
+            "python -m pip install --pre --upgrade paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html"
+        )
+
+        # os.chdir(path_now)
 
         if cmd_return:
-            logger.info("repo {} python -m pip install paddlenlp failed".format(self.reponame))
+            logger.info("repo {} python -m pip install-failed".format(self.reponame))
+
+        os.system("python -m pip list")
+        import paddle
+
+        print("paddle-commit:", paddle.version.commit)
+
         return 0
 
     def build_env(self):

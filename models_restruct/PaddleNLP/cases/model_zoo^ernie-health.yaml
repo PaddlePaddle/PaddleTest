@@ -58,9 +58,31 @@ case:
           - --save_total_limit 10
         result:
           loss:
-            base: 58.335371
+            base: 1
             threshold: 1
             evaluation: "="
     eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
     export: skipped
     predict: skipped

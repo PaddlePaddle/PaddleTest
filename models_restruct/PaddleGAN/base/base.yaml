@@ -18,6 +18,7 @@ eval:
   params:
     - --config-file ${rd_yaml_path}
     - --evaluate-only
+    - --load ${eval_trained_model}
   result:
     exit_code:
       base: 0

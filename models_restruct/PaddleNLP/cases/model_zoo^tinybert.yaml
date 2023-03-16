@@ -10,7 +10,7 @@ case:
           - --model_name_or_path bert-base-uncased
           - --task_name SST-2
           - --max_seq_length 128
-          - --batch_size 128
+          - --batch_size 32
           - --learning_rate 3e-5
           - --max_steps 2
           - --logging_steps 1
@@ -74,6 +74,27 @@ case:
           threshold: 0.01
           evaluation: "="
 
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
     eval: skipped
     infer: skipped
     export: skipped

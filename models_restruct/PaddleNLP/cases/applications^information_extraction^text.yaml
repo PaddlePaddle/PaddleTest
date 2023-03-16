@@ -1,0 +1,246 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: applications/information_extraction/text
+        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/military.tar.gz && tar -xvf military.tar.gz && mv military data
+      -
+        name: label_studio
+        path: applications/information_extraction/text
+        cmd: python ../label_studio.py
+        params:
+          - --label_studio_file ./data/label_studio.json
+          - --save_dir ./data
+          - --splits 0.76 0.24 0
+          - --negative_ratio 3
+          - --task_type ext
+      -
+        name: fintune
+        path: applications/information_extraction/text
+        cmd: python -u -m paddle.distributed.launch finetune.py
+        params:
+          - --device gpu
+          - --max_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --eval_steps 2
+          - --seed 1000
+          - --model_name_or_path uie-base
+          - --output_dir ./checkpoint/model_best
+          - --train_path data/train.txt
+          - --dev_path data/dev.txt
+          - --max_seq_len 512
+          - --per_device_train_batch_size  2
+          - --per_device_eval_batch_size 2
+          - --num_train_epochs 20
+          - --learning_rate 1e-5
+          - --label_names 'start_positions' 'end_positions'
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --export_model_dir ./checkpoint/model_best
+          - --overwrite_output_dir
+          - --metric_for_best_model eval_f1
+          - --load_best_model_at_end  True
+          - --save_total_limit 1
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+      -
+        name: data_distill
+        path: applications/information_extraction/text/data_distill
+        cmd: python data_distill.py
+        params:
+          - --data_path ../data
+          - --save_dir student_data
+          - --task_type relation_extraction
+          - --synthetic_ratio 10
+          - --model_path ../checkpoint/model_best
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+      -
+        name: distill_train_student
+        path: applications/information_extraction/text/data_distill
+        cmd: python train.py
+        params:
+          - --task_type relation_extraction
+          - --train_path student_data/train_data.json
+          - --dev_path student_data/dev_data.json
+          - --label_maps_path student_data/label_maps.json
+          - --num_epochs 1
+          - --eval_steps 39
+          - --logging_steps 1
+          - --encoder ernie-3.0-mini-zh
+    eval:
+      -
+        name: evaluate
+        path: applications/information_extraction/text
+        cmd: python evaluate.py
+        params:
+          - --model_path ./checkpoint/model_best
+          - --test_path ./data/dev.txt
+          - --batch_size 16
+          - --max_seq_len 512
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+      -
+        name: distill_evaluate_teacher
+        path: applications/information_extraction/text/data_distill
+        cmd: python evaluate_teacher.py
+        params:
+          - --task_type relation_extraction
+          - --test_path ./student_data/dev_data.json
+          - --label_maps_path ./student_data/label_maps.json
+          - --model_path ../checkpoint/model_best
+      -
+        name: distill_evaluate_student
+        path: applications/information_extraction/text/data_distill
+        cmd: python evaluate.py
+        params:
+          - --model_path ./checkpoint/model_39
+          - --test_path student_data/dev_data.json
+          - --task_type relation_extraction
+          - --label_maps_path student_data/label_maps.json
+          - --encoder ernie-3.0-mini-zh
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: applications/information_extraction/text
+        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/military.tar.gz && tar -xvf military.tar.gz && ren military data
+      -
+        name: label_studio
+        path: applications/information_extraction/text
+        cmd: python ../label_studio.py
+        params:
+          - --label_studio_file ./data/label_studio.json
+          - --save_dir ./data
+          - --splits 0.76 0.24 0
+          - --negative_ratio 3
+          - --task_type ext
+      -
+        name: fintune
+        path: applications/information_extraction/text
+        cmd: python -u -m paddle.distributed.launch finetune.py
+        params:
+          - --device gpu
+          - --max_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --eval_steps 2
+          - --seed 1000
+          - --model_name_or_path uie-base
+          - --output_dir "./checkpoint/model_best"
+          - --train_path data/train.txt
+          - --dev_path data/dev.txt
+          - --max_seq_len 512
+          - --per_device_train_batch_size  2
+          - --per_device_eval_batch_size 2
+          - --num_train_epochs 20
+          - --learning_rate 1e-5
+          - --label_names "start_positions" "end_positions"
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --export_model_dir ./checkpoint/model_best
+          - --overwrite_output_dir
+          - --metric_for_best_model eval_f1
+          - --load_best_model_at_end  True
+          - --save_total_limit 1
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+      -
+        name: data_distill
+        path: applications/information_extraction/text/data_distill
+        cmd: python data_distill.py
+        params:
+          - --data_path ../data
+          - --save_dir student_data
+          - --task_type relation_extraction
+          - --synthetic_ratio 10
+          - --model_path ../checkpoint/model_best
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+      -
+        name: distill_train_student
+        path: applications/information_extraction/text/data_distill
+        cmd: python train.py
+        params:
+          - --task_type relation_extraction
+          - --train_path student_data/train_data.json
+          - --dev_path student_data/dev_data.json
+          - --label_maps_path student_data/label_maps.json
+          - --num_epochs 1
+          - --eval_steps 39
+          - --logging_steps 1
+          - --encoder ernie-3.0-mini-zh
+    eval:
+      -
+        name: evaluate
+        path: applications/information_extraction/text
+        cmd: python evaluate.py
+        params:
+          - --model_path ./checkpoint/model_best
+          - --test_path ./data/dev.txt
+          - --batch_size 16
+          - --max_seq_len 512
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+      -
+        name: distill_evaluate_teacher
+        path: applications/information_extraction/text/data_distill
+        cmd: python evaluate_teacher.py
+        params:
+          - --task_type relation_extraction
+          - --test_path ./student_data/dev_data.json
+          - --label_maps_path ./student_data/label_maps.json
+          - --model_path ../checkpoint/model_best
+      -
+        name: distill_evaluate_student
+        path: applications/information_extraction/text/data_distill
+        cmd: python evaluate.py
+        params:
+          - --model_path ./checkpoint/model_39
+          - --test_path student_data/dev_data.json
+          - --task_type relation_extraction
+          - --label_maps_path student_data/label_maps.json
+          - --encoder ernie-3.0-mini-zh
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

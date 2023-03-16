@@ -17,6 +17,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest, clip_model_extra_op
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -30,7 +31,10 @@ def check_model_exist():
         tar = tarfile.open("mask_rcnn.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./mask_rcnn/model", output_model_path="./mask_rcnn/model")
+        clip_model_extra_op(
+            path_prefix="./mask_rcnn/model",
+            output_model_path="./mask_rcnn/model",
+        )
 
 
 def test_config():
@@ -39,7 +43,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./mask_rcnn/model.pdmodel", params_file="./mask_rcnn/model.pdiparams")
+    test_suite.load_config(
+        model_file="./mask_rcnn/model.pdmodel",
+        params_file="./mask_rcnn/model.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -52,7 +59,10 @@ def test_disable_gpu():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./mask_rcnn/model.pdmodel", params_file="./mask_rcnn/model.pdiparams")
+    test_suite.load_config(
+        model_file="./mask_rcnn/model.pdmodel",
+        params_file="./mask_rcnn/model.pdiparams",
+    )
     batch_size = 1
     im_size = 608
     im = np.random.randn(batch_size, 3, 608, 608).astype("float32")
@@ -81,13 +91,16 @@ def test_gpu_more_bz():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./mask_rcnn/model.pdmodel", params_file="./mask_rcnn/model.pdiparams")
+        test_suite.load_config(
+            model_file="./mask_rcnn/model.pdmodel",
+            params_file="./mask_rcnn/model.pdiparams",
+        )
         images_list, images_origin_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det", with_true_data=False
         )
 
-        img = images_origin_list[0:batch_size]
-        data = np.array(images_list[0:batch_size]).astype("float32")
+        img = images_origin_list[1 : batch_size + 1]
+        data = np.array(images_list[1 : batch_size + 1]).astype("float32")
         scale_factor_pool = []
         for batch in range(batch_size):
             scale_factor = (
@@ -104,8 +117,16 @@ def test_gpu_more_bz():
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        test_suite.load_config(model_file="./mask_rcnn/model.pdmodel", params_file="./mask_rcnn/model.pdiparams")
-        test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=2e-1)
+        test_suite.load_config(
+            model_file="./mask_rcnn/model.pdmodel",
+            params_file="./mask_rcnn/model.pdiparams",
+        )
+        test_suite.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=2e-1,
+        )
 
 
 @pytest.mark.win
@@ -133,14 +154,15 @@ def test_gpu_mixed_precision_bz1():
                 dst_params="./mask_rcnn/model_mixed.pdiparams",
             )
         test_suite.load_config(
-            model_file="./mask_rcnn/model_mixed.pdmodel", params_file="./mask_rcnn/model_mixed.pdiparams"
+            model_file="./mask_rcnn/model_mixed.pdmodel",
+            params_file="./mask_rcnn/model_mixed.pdiparams",
         )
         images_list, images_origin_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det", with_true_data=False
         )
 
-        img = images_origin_list[0:batch_size]
-        data = np.array(images_list[0:batch_size]).astype("float32")
+        img = images_origin_list[1 : batch_size + 1]
+        data = np.array(images_list[1 : batch_size + 1]).astype("float32")
         scale_factor_pool = []
         for batch in range(batch_size):
             scale_factor = (
@@ -158,6 +180,12 @@ def test_gpu_mixed_precision_bz1():
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(
-            model_file="./mask_rcnn/model_mixed.pdmodel", params_file="./mask_rcnn/model_mixed.pdiparams"
+            model_file="./mask_rcnn/model_mixed.pdmodel",
+            params_file="./mask_rcnn/model_mixed.pdiparams",
         )
-        test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=2e-1)
+        test_suite.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=2e-1,
+        )

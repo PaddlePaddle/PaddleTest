@@ -58,6 +58,25 @@ waveflow:
     model_path: examples/ljspeech/voc0
     ckpt_name: step-10
 
+deepspeech2:
+    category: asr
+    model_path: examples/tiny/asr0
+    model_bin: deepspeech2
+    model_yml: conf/deepspeech2.yaml
+    ckpt: deepspeech2
+conformer:
+    category: asr
+    model_path: examples/tiny/asr1
+    model_bin: u2
+    model_yml: conf/transformer.yaml
+    ckpt: transformer
+tal_cs:
+    category: asr
+    model_path: examples/tal_cs/asr1
+    model_bin: u2
+    model_yml: conf/conformer.yaml
+    ckpt: conformer
+
 
 cli:
 paddlespeech_cli_1: paddlespeech cls --input ./cat.wav --topk 10
@@ -118,3 +137,4 @@ paddlespeech_cli_55: paddlespeech whisper --task transcribe --input ./zh.wav
 paddlespeech_cli_56: paddlespeech whisper --task translate --input ./zh.wav
 paddlespeech_cli_57: paddlespeech ssl --task asr --lang en --input ./en.wav
 paddlespeech_cli_58: paddlespeech ssl --task vector --lang en --input ./en.wav
+paddlespeech_cli_59: paddlespeech asr --model conformer_talcs --lang zh_en --codeswitch True --input ./ch_zh_mix.wav

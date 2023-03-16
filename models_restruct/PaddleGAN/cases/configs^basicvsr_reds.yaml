@@ -1,0 +1,45 @@
+case:
+  linux:
+    base: ./base/base.yaml
+    train:
+      -
+        name: multi
+        cmd: python -m paddle.distributed.launch tools/main.py
+        params:
+          - dataset.train.batch_size=1
+        result:
+          ${kpi_value_eval}:
+            base: 99999999
+            threshold: 100
+            evaluation: "-"
+      -
+        name: single
+        cmd: python tools/main.py
+        params:
+          - dataset.train.batch_size=1
+        result:
+          ${kpi_value_eval}:
+            base: 99999999
+            threshold: 100
+            evaluation: "-"
+    eval:
+      -
+        name: trained
+        cmd: python tools/main.py
+        params:
+          - --load ${eval_trained_model}
+
+  windows:
+    base: ./base/base.yaml
+    train:
+      -
+        name: single
+        cmd: python tools/main.py
+        params:
+          - dataset.train.batch_size=1
+
+  windows_cpu:
+    base: ./base/base.yaml
+
+  mac:
+    base: ./base/base.yaml

@@ -12,5 +12,17 @@ case:
     infer: skipped
     export: skipped
     predict: skipped
+    api: skipped
+  windows:
+    base: ./base/normal_base.yml
+    train:
+      -
+        name: single
+        cmd : python tools/train.py
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
 
 function: paddlelas_imagenet_parse

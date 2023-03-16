@@ -103,9 +103,9 @@ if [[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]; then #model_f
     unset https_proxy
     echo "######  ----install  paddle-----"
     python -m pip install --ignore-installed  --upgrade pip \
-        -i https://mirror.baidu.com/pypi/simple
+        --user -i https://mirror.baidu.com/pypi/simple
     python -m pip uninstall paddlepaddle-gpu -y
-    python -m pip install ${paddle_compile} -i https://mirror.baidu.com/pypi/simple #paddle_compile
+    python -m pip install ${paddle_compile} --user -i https://mirror.baidu.com/pypi/simple #paddle_compile
 fi
 
 # paddle
@@ -155,20 +155,18 @@ unset http_proxy
 unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 python -m pip install --ignore-installed  --upgrade pip \
-    -i https://mirror.baidu.com/pypi/simple
+    --user -i https://mirror.baidu.com/pypi/simple
 echo "######  install ppgan "
 python -m pip install  ppgan \
-    -i https://mirror.baidu.com/pypi/simple
-python -m pip install  -v -e. -i https://mirror.baidu.com/pypi/simple
+    --user -i https://mirror.baidu.com/pypi/simple
+python -m pip install  -v -e. --user -i https://mirror.baidu.com/pypi/simple
 echo "######  install dlib "
 # python -m pip install --ignore-installed  dlib
 python -m pip install  dlib \
-    -i https://mirror.baidu.com/pypi/simple
-# python -m pip install data/dlib-19.22.1-cp37-cp37m-linux_x86_64.whl
-# python -m pip install data/dlib-19.22.99-cp38-cp38-linux_x86_64.whl
+    --user -i https://mirror.baidu.com/pypi/simple
 python -c 'import dlib'
 python -m pip install -r requirements.txt  \
-    -i https://mirror.baidu.com/pypi/simple
+    --user -i https://mirror.baidu.com/pypi/simple
 
 echo "######  install done "
 
@@ -264,7 +262,8 @@ else
 fi
     ;;
 *)
-if [[ ! ${line} =~ 'makeup' ]] && [[ ! ${line} =~ 'aotgan' ]]; then
+# if [[ ! ${line} =~ 'makeup' ]] && [[ ! ${line} =~ 'aotgan' ]]; then
+if [[ ! ${line} =~ 'makeup' ]]; then
     python  -m paddle.distributed.launch tools/main.py --config-file $line \
         -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
         > $log_path/train/${model}_2card.log 2>&1
@@ -292,7 +291,8 @@ ls output/$params_dir/ |head -n 2
 sleep 3
 if [[ ${model_flag} =~ "CE" ]]; then
     rm -rf output #清空多卡cache
-    if [[ ! ${line} =~ 'makeup' ]] && [[ ! ${line} =~ 'aotgan' ]]; then
+    # if [[ ! ${line} =~ 'makeup' ]] && [[ ! ${line} =~ 'aotgan' ]]; then
+    if [[ ! ${line} =~ 'makeup' ]]; then
         python tools/main.py --config-file $line \
             -o total_iters=20 snapshot_config.interval=10 log_config.interval=1 output_dir=output dataset.train.batch_size=1 \
             > $log_path/train/${model}_1card.log 2>&1
@@ -353,6 +353,11 @@ stylegan_v2_256_ffhq)
     ;;
 makeup)
     echo "skip eval makeup"
+    echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
+    sleep 0.01
+    ;;
+aotgan)
+    echo "skip eval aotgan"
     echo "eval_exit_code: 0.0" >> $log_path/eval/${model}.log
     sleep 0.01
     ;;

@@ -1,0 +1,11 @@
+case:
+    linux:
+        base: ./base/ocr_det_base_pretrained.yaml
+        eval:
+          -
+            name: pretrained
+            result:
+              f_score:
+                base: ${eval_base_acc}
+                threshold: 0
+                evaluation: "="

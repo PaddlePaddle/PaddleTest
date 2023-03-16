@@ -10,6 +10,7 @@ import tarfile
 import argparse
 import subprocess
 import platform
+import shutil
 import numpy as np
 import yaml
 import wget
@@ -58,17 +59,23 @@ class PaddleDetection_Build(Model_Build):
         """
         安装依赖包
         """
-        os.system("python -m pip install --upgrade pip --ignore-installed")
-        os.system("pip install Cython --ignore-installed")
-        os.system("pip install -r requirements.txt --ignore-installed")
-        os.system("pip install cython_bbox --ignore-installed")
-        os.system("pip install zip --ignore-installed")
-        os.system("yum install ffmpeg ffmpeg-devel -y")
-        os.system("apt-get update")
-        os.system("apt-get install ffmpeg -y")
         path_now = os.getcwd()
         os.chdir(self.reponame)
         path_repo = os.getcwd()
+        os.system("python -m pip install --upgrade pip --ignore-installed")
+        os.system("python -m pip install Cython --ignore-installed")
+        logger.info("***start setuptools update")
+        os.system("python -m pip uninstall setuptools -y")
+        os.system("python -m pip install setuptools --ignore-installed")
+        os.system("python -m pip install -r requirements.txt --ignore-installed")
+        os.system("python -m pip install zip --ignore-installed")
+        os.system("rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro")
+        os.system("rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm")
+        os.system("yum install ffmpeg ffmpeg-devel -y")
+        os.system("apt-get update")
+        os.system("apt-get install ffmpeg -y")
+        os.system("python -m pip uninstall bce-python-sdk -y")
+        os.system("python -m pip install bce-python-sdk==0.8.74 --ignore-installed")
         # set sed
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
@@ -134,7 +141,9 @@ class PaddleDetection_Build(Model_Build):
         # dataset
         os.chdir("dataset")
         if os.path.exists("coco"):
-            os.system("rm -rf coco")
+            shutil.rmtree("coco")
+        if os.path.exists("voc"):
+            shutil.rmtree("voc")
         logger.info("***start download data")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
         os.system("unzip coco.zip")
@@ -157,7 +166,7 @@ class PaddleDetection_Build(Model_Build):
         # compile cpp
         os.chdir(path_repo + "/deploy/cpp")
         wget.download(
-            "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos"
+            "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos"
             "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
         )
         os.system("tar xvf paddle_inference.tgz")

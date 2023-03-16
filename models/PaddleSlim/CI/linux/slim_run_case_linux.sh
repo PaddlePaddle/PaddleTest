@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # run_CI/run_CE/ALL 、cudaid1、cudaid2
-echo ---run slim case with $1 ---
+echo ---run slim case with $1 ----
 
 print_info(){
 if [ $1 -ne 0 ];then
@@ -21,8 +21,8 @@ catchException() {
 
 cudaid1=$2;
 cudaid2=$3;
-echo ---cudaid1:${cudaid1}---
-echo ---cudaid2:${cudaid2}---
+echo ---cudaid1:${cudaid1}----
+echo ---cudaid2:${cudaid2}----
 
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 # 1 dist
@@ -31,12 +31,13 @@ cd ${slim_dir}/demo/distillation || catchException demo_distill_01
 if [ -d "output" ];then
     rm -rf output
 fi
-
+CUDA_VISIBLE_DEVICES=${cudaid1}
 python distill.py --num_epochs 1 --batch_size 64 --save_inference True > ${log_path}/st_distill_ResNet50_vd_MobileNet 2>&1
 print_info $? st_distill_ResNet50_vd_MobileNet
 }
 
 demo_distill_02(){
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/distillation || catchException demo_distill_02
 if [ -d "output" ];then
     rm -rf output
@@ -49,6 +50,7 @@ print_info $? st_distill_ResNet101_vd_ResNet50
 }
 
 demo_distill_03(){
+CUDA_VISIBLE_DEVICES=${cudaid1}
 cd ${slim_dir}/demo/distillation || catchException demo_distill_03
 if [ -d "output" ];then
     rm -rf output
@@ -437,7 +439,7 @@ sed -i  's/region_ptq_out/yolov6s.onnx/' ./configs/yolov6s_fine_tune.yaml
 python fine_tune.py \
 --config_path=./configs/yolov6s_fine_tune.yaml \
 --recon_level=layer-wise \
---save_dir=layer_ptq_out > ${log_path}/ptq_yolo_series_region_layer 2>&1
+--save_dir=layer_ptq_out > ${log_path}/ptq_yolo_series_layer_train 2>&1
 print_info $? ptq_yolo_series_layer_train
 
 sed -i  's/yolov6s.onnx/layer_ptq_out/' ./configs/yolov6s_fine_tune.yaml
@@ -1029,8 +1031,8 @@ demo_act_clas_ResNet50_vd(){
 
 demo_act_clas_MobileNetV3(){
 	cd ${slim_dir}/example/auto_compression/image_classification/
-	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_ssld_infer.tar
-  tar -xf MobileNetV3_large_x1_0_ssld_infer.tar
+	wget -q https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_infer.tar
+  tar -xf MobileNetV3_large_x1_0_infer.tar
 
 	sed -i 's/eval_iter: 5000/eval_iter: 10/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml
 	sed -i 's/epochs: 2/epochs: 1/' ./configs/MobileNetV3_large_x1_0/qat_dis.yaml

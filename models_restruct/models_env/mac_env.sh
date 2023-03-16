@@ -7,6 +7,8 @@ cd ce;
 
 # 使虚拟环境生效
 source ~/.bashrc
+# conda activate 激活
+source activate
 
 ######################## 定义变量 ########################
 # AGILE_PIPELINE_NAME 格式类似: PaddleClas-MAC-Intel-Python310-P9-Develop
@@ -15,18 +17,25 @@ source ~/.bashrc
 #repo的名称
 export reponame=${reponame:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $1}')`"}
 
+#挂载数据, 只挂在自己仓库的
+export mount_path="/Volumes/210-share-data/MT_data/${reponame}"
+echo "@@@mount_path: ${mount_path}"
+ls ${mount_path}
+
 #模型列表文件 , 固定路径及格式为 tools/reponame_优先级_list   优先级P2有多个用P21、P22  中间不用"-"划分, 防止按 "-" split 混淆
 export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $5}')`_list"}
 export models_list=${models_list:-None} #模型列表
 
 #指定case操作系统
-if [[ ${AGILE_PIPELINE_NAME} =~ "Linux" ]];then
+if [[ ${AGILE_PIPELINE_NAME} =~ "-Linux-" ]];then
     export system=${system:-"linux"}   # linux windows windows_cpu mac 与yaml case下字段保持一致
-elif [[ ${AGILE_PIPELINE_NAME} =~ "Windows" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-LinuxConvergence-" ]];then
+    export system=${system:-"linux_convergence"}
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Windows-" ]];then
     export system=${system:-"windows"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "WindowsCPU" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-WindowsCPU-" ]];then
     export system=${system:-"windows_cpu"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "Mac" ]] ;then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Mac-" ]] ;then
     export system=${system:-"mac"}
 else
     if [[ ${system} ]];then
@@ -41,19 +50,22 @@ fi
 #指定python版本
 export Python_version=${Python_version:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F 'Python' '{print $2}'|awk -F '-' '{print $1}')`"}
 if [[ ${Python_version} =~ "39" ]];then
-    pyenv activate ${reponame}_py39
+    conda activate ${reponame}_py39
+    echo "conda activate ${reponame}_py310"
 elif [[ ${Python_version} =~ "310" ]];then
-    pyenv activate ${reponame}_py310
+    conda activate ${reponame}_py310
+    echo "conda activate ${reponame}_py310"
 else
-    pyenv activate ${reponame}_py310
+    conda activate ${reponame}_py310
+    echo "conda activate ${reponame}_py310"
     echo "default set python verison is python3.10"
 fi
 
 if [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/2.1.2/macos/macos-cpu-openblas/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_10_9_x86_64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/2.1.2/macos/macos-cpu-openblas/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-Mac/latest/paddlepaddle-0.0.0-cp310-cp310-macosx_10_14_universal2.whl"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
@@ -63,9 +75,9 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Pyt
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-Intel-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-Mac-Avx-Openblas-Py39-Compile/latest/paddlepaddle-0.0.0-cp39-cp39-macosx_10_14_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-Mac/latest/paddlepaddle-0.0.0-cp39-cp39-macosx_10_9_x86_64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Cpu-Mac-Avx-Openblas-Python39-Compile/latest/paddlepaddle-0.0.0-cp39-cp39-macosx_10_14_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-Mac/latest/paddlepaddle-0.0.0-cp39-cp39-macosx_10_14_x86_64.whl"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     echo "do not have python39 M1 paddle_whl url"
@@ -73,6 +85,7 @@ fi
 #### 预设默认参数
 export step=${step:-train}
 export mode=${mode:-function}
+export timeout=${timeout:-3600}
 export use_build=${use_build:-yes}
 export branch=${branch:-develop}
 export get_repo=${get_repo:-wget} #现支持10个库，需要的话可以加，wget快很多
@@ -111,6 +124,8 @@ echo "@@@paddle_whl: ${paddle_whl}"
 echo "@@@step: ${step}"
 echo "@@@branch: ${branch}"
 echo "@@@mode: ${mode}"
+echo "@@@timeout: ${timeout}"
+echo "@@@dataset_target: ${dataset_target}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -132,8 +147,9 @@ cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
-python -c 'import sys; print(sys.version_info[:])';
+python -c 'import sys; print(sys.version_info[:])'
+python -c "import getpass;print(getpass.getuser())"
 git --version;
-python -m pip install -U pip #升级pip
-python -m pip install -r requirements.txt #预先安装依赖包
-python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None}
+python -m pip install -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
+python -m pip install -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --timeout=${timeout:-3600}
