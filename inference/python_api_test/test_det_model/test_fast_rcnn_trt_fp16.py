@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 
 # pylint: enable=wrong-import-position
@@ -25,16 +25,12 @@ def check_model_exist():
     """
     check model exist
     """
-    fast_rcnn_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2.2/detection/fast_rcnn.tgz"
+    fast_rcnn_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.2.2/detection/fast_rcnn.tgz"
     if not os.path.exists("./fast_rcnn/model.pdiparams"):
         wget.download(fast_rcnn_url, out="./")
         tar = tarfile.open("fast_rcnn.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./fast_rcnn/model",
-            output_model_path="./fast_rcnn/model",
-        )
 
 
 def test_config():
@@ -56,7 +52,7 @@ def test_config():
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
-    compared mkldnn fast_rcnn batch size = [1] outputs with true val
+    compared mkldnn fast_rcnn batch_size = [1] outputs with true val
     """
     check_model_exist()
 

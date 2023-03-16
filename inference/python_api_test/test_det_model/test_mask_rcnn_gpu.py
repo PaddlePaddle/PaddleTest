@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 
 # pylint: enable=wrong-import-position
@@ -25,16 +25,12 @@ def check_model_exist():
     """
     check model exist
     """
-    mask_rcnn_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2.2/detection/mask_rcnn.tgz"
+    mask_rcnn_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.2.2/detection/mask_rcnn.tgz"
     if not os.path.exists("./mask_rcnn/model.pdiparams"):
         wget.download(mask_rcnn_url, out="./")
         tar = tarfile.open("mask_rcnn.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./mask_rcnn/model",
-            output_model_path="./mask_rcnn/model",
-        )
 
 
 def test_config():
@@ -81,7 +77,7 @@ def test_disable_gpu():
 @pytest.mark.gpu
 def test_gpu_more_bz():
     """
-    compared gpu mask_rcnn batch size = [1] outputs with true val
+    compared gpu mask_rcnn batch_size = [1] outputs with true val
     """
     check_model_exist()
 
@@ -136,7 +132,7 @@ def test_gpu_more_bz():
 @pytest.mark.skip(reason="检测框nms结果排序问题，暂时跳过")
 def test_gpu_mixed_precision_bz1():
     """
-    compared gpu mask_rcnn batch size = [1] mixed_precision outputs with true val
+    compared gpu mask_rcnn batch_size = [1] mixed_precision outputs with true val
     """
     check_model_exist()
 
@@ -154,8 +150,8 @@ def test_gpu_mixed_precision_bz1():
                 dst_params="./mask_rcnn/model_mixed.pdiparams",
             )
         test_suite.load_config(
-            model_file="./mask_rcnn/model_mixed.pdmodel",
-            params_file="./mask_rcnn/model_mixed.pdiparams",
+            model_file="./mask_rcnn/model.pdmodel",
+            params_file="./mask_rcnn/model.pdiparams",
         )
         images_list, images_origin_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det", with_true_data=False

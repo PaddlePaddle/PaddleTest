@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 # pylint: enable=wrong-import-position
 
@@ -24,13 +24,12 @@ def check_model_exist():
     """
     check model exist
     """
-    ocr_det_mv3_db_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.1/ocr/ocr_det_mv3_db.tgz"
+    ocr_det_mv3_db_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.1/ocr/ocr_det_mv3_db.tgz"
     if not os.path.exists("./ocr_det_mv3_db/inference.pdiparams"):
         wget.download(ocr_det_mv3_db_url, out="./")
         tar = tarfile.open("ocr_det_mv3_db.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./ocr_det_mv3_db/inference", output_model_path="./ocr_det_mv3_db/inference")
 
 
 def test_config():
@@ -40,7 +39,8 @@ def test_config():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./ocr_det_mv3_db/inference.pdmodel", params_file="./ocr_det_mv3_db/inference.pdiparams"
+        model_file="./ocr_det_mv3_db/inference.pdmodel",
+        params_file="./ocr_det_mv3_db/inference.pdiparams",
     )
     test_suite.config_test()
 
@@ -55,7 +55,8 @@ def test_disable_gpu():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./ocr_det_mv3_db/inference.pdmodel", params_file="./ocr_det_mv3_db/inference.pdiparams"
+        model_file="./ocr_det_mv3_db/inference.pdmodel",
+        params_file="./ocr_det_mv3_db/inference.pdiparams",
     )
     batch_size = 1
     fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
@@ -79,7 +80,8 @@ def test_gpu_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./ocr_det_mv3_db/inference.pdmodel", params_file="./ocr_det_mv3_db/inference.pdiparams"
+            model_file="./ocr_det_mv3_db/inference.pdmodel",
+            params_file="./ocr_det_mv3_db/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -90,10 +92,16 @@ def test_gpu_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./ocr_det_mv3_db/inference.pdmodel", params_file="./ocr_det_mv3_db/inference.pdiparams"
+            model_file="./ocr_det_mv3_db/inference.pdmodel",
+            params_file="./ocr_det_mv3_db/inference.pdiparams",
         )
 
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=2e-5)
+        test_suite2.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=2e-5,
+        )
 
         del test_suite2  # destroy class to save memory
 
@@ -137,7 +145,12 @@ def test_gpu_mixed_precision_bz1():
             params_file="./ocr_det_mv3_db/inference_mixed.pdiparams",
         )
 
-        test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, repeat=1, delta=0.3)
+        test_suite2.gpu_more_bz_test_mix(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=0.3,
+        )
 
         del test_suite2  # destroy class to save memory
 
@@ -156,7 +169,8 @@ def test_jetson_gpu_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./ocr_det_mv3_db/inference.pdmodel", params_file="./ocr_det_mv3_db/inference.pdiparams"
+            model_file="./ocr_det_mv3_db/inference.pdmodel",
+            params_file="./ocr_det_mv3_db/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -167,9 +181,15 @@ def test_jetson_gpu_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./ocr_det_mv3_db/inference.pdmodel", params_file="./ocr_det_mv3_db/inference.pdiparams"
+            model_file="./ocr_det_mv3_db/inference.pdmodel",
+            params_file="./ocr_det_mv3_db/inference.pdiparams",
         )
 
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=3e-4)
+        test_suite2.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=3e-4,
+        )
 
         del test_suite2  # destroy class to save memory
