@@ -99,12 +99,12 @@ class PaddleSpeech_Build(Model_Build):
                 os.system("python -m pip install jsonlines")
             # M1: cant not add --ignore-installed"
             # windows install add --user
-            os.system("python -m pip install --user .  -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip install .  -i https://mirror.baidu.com/pypi/simple")
             # mac from numba.np.ufunc import _internal
             # os.system("python -m pip install -U numpy<1.24.0")
             # bug: bce-python-sdk==0.8.79
-            os.system("python -m pip install --user bce-python-sdk==0.8.74")
-            os.system("python -m pip install --user -U protobuf==3.20.0")
+            os.system("python -m pip install  bce-python-sdk==0.8.74")
+            os.system("python -m pip install -U protobuf==3.20.0")
             os.chdir(path_now)
             print("build paddlespeech wheel!")
 
