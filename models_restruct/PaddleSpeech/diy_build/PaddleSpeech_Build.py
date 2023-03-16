@@ -86,7 +86,7 @@ class PaddleSpeech_Build(Model_Build):
             # mac intel install paddlespeech_ctcdecoders
             sysstr = platform.system()
             if sysstr == "Darwin" and platform.machine() == "x86_64":
-                os.system("python -m pip install -U protobuf==3.19.6")
+                # os.system("python -m pip install -U protobuf==3.19.6")
                 # mac interl: installed in '/var/root/.local/bin' which is not on PATH.
                 os.environ["PATH"] += os.pathsep + "/var/root/.local/bin"
 
