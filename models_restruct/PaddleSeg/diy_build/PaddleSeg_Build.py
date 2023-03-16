@@ -113,7 +113,7 @@ class PaddleSeg_Build(Model_Build):
         if platform.system() == "Linux":
             os.chdir(path_repo + "/deploy/cpp")
             wget.download(
-                "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos"
+                "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos"
                 "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
             )
             os.system("tar -xf paddle_inference.tgz")
