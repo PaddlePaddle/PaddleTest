@@ -306,8 +306,8 @@ if [[ "${docker_flag}" == "" ]]; then
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
-            yum update
-            yum install nfs-utils -y
+            yum update > install_update 2>&1
+            yum install nfs-utils -y > install_nfs 2>&1
             case ${Python_version} in
             36)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -332,8 +332,8 @@ if [[ "${docker_flag}" == "" ]]; then
             esac
         else
             echo "ubuntu"
-            apt-get update
-            apt-get install nfs-common -y
+            apt-get update > install_update 2>&1
+            apt-get install nfs-common -y > install_nfs 2>&1
             case ${Python_version} in
             36)
             mkdir run_env_py36;
@@ -368,23 +368,17 @@ if [[ "${docker_flag}" == "" ]]; then
             esac
         fi
 
-        #挂载数据, 如果之前定义过dataset_org则不挂载
-        if [[ ${AGILE_PIPELINE_NAME} =~ "Release" ]];then
-            if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} =~ "/workspace/MT_data" ]];then
-                export dataset_org="/workspace/MT_data/${reponame}"
-                if [[ -d ${dataset_org} ]];then
-                    mv ${dataset_org} ${dataset_org}_back
-                    mkdir -p ${dataset_org}
-                else
-                    mkdir -p ${dataset_org}
-                fi
-                mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${dataset_org}
-                ls ${dataset_org}
-            fi
+        #挂载数据, 地址特定为mount_path
+        export mount_path = "/workspace/MT_data/${reponame}"
+        if [[ -d ${mount_path} ]];then
+            mv ${mount_path} ${mount_path}_back
+            mkdir -p ${mount_path}
+        else
+            mkdir -p ${else}
         fi
-        echo "@@@dataset_org: ${dataset_org}"
-        ls ${dataset_org}
-        echo "@@@dataset_target: ${dataset_target}"
+        mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
+        ls ${mount_path}
+        echo "@@@mount_path: ${mount_path}"
 
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
@@ -401,8 +395,8 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
-        yum update
-        yum install nfs-utils -y
+        yum update > install_update 2>&1
+        yum install nfs-utils -y > install_nfs 2>&1
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -427,8 +421,8 @@ else
         esac
     else
         echo "ubuntu"
-        apt-get update
-        apt-get install nfs-common -y
+        apt-get update > install_update 2>&1
+        apt-get install nfs-common -y > install_nfs 2>&1
         case ${Python_version} in
         36)
         mkdir run_env_py36;
@@ -463,22 +457,17 @@ else
         esac
     fi
 
-    #挂载数据, 如果之前定义过dataset_org则不挂载
-    if [[ ${AGILE_PIPELINE_NAME} =~ "Release" ]];then
-        if [[ ${dataset_org} == "None" ]] || [[ ${dataset_org} =~ "/workspace/MT_data" ]];then
-            export dataset_org="/workspace/MT_data/${reponame}"
-            if [[ -d ${dataset_org} ]];then
-                mv ${dataset_org} ${dataset_org}_back
-                mkdir -p ${dataset_org}
-            else
-                mkdir -p ${dataset_org}
-            fi
-            mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${dataset_org}
-            ls ${dataset_org}
-        fi
+    #挂载数据, 地址特定为mount_path
+    export mount_path = "/workspace/MT_data/${reponame}"
+    if [[ -d ${mount_path} ]];then
+        mv ${mount_path} ${mount_path}_back
+        mkdir -p ${mount_path}
+    else
+        mkdir -p ${else}
     fi
-    echo "@@@dataset_org: ${dataset_org}"
-    echo "@@@dataset_target: ${dataset_target}"
+    mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
+    ls ${mount_path}
+    echo "@@@mount_path: ${mount_path}"
 
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";

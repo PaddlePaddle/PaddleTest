@@ -20,7 +20,7 @@ train:
     - Train.loader.num_workers=False
     - Global.to_static=True
 
- name: amp
+  name: amp
   cmd : python -m paddle.distributed.launch tools/train.py
   params:
     - -c ${rd_yaml_path}

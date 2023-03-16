@@ -35,14 +35,16 @@ class PaddleClas_Build(Model_Build):
         self.set_cuda = args.set_cuda
 
         self.dataset_org = str(args.dataset_org)
-        if str(args.dataset_target) != "None":  # 如果已经执行则不定义
-            os.environ["dataset_target"] = args.dataset_target
-        else:
-            if "MT_data" in str(args.dataset_org):  # 如果使用挂载方式, 拼接模型库具体指定地址
+        self.dataset_target = str(args.dataset_target)
+        self.mount_path = str(os.getenv("mount_path"))
+        if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(
+            self.mount_path
+        ):  # linux 性能损失使用自动下载的数据,不使用mount数据
+            if os.listdir(self.mount_path) != []:
+                self.dataset_org = self.mount_path
+                os.environ["dataset_org"] = self.mount_path
+                self.dataset_target = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
                 os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
-        self.dataset_target = os.getenv("dataset_target")
-        if os.path.exists(self.dataset_org) is True:
-            logger.info("#### dataset_org in diy_build files have  {}".format(os.listdir(self.dataset_org)))
         logger.info("#### dataset_org in diy_build is  {}".format(self.dataset_org))
         logger.info("#### dataset_target in diy_build is  {}".format(self.dataset_target))
 
@@ -376,7 +378,9 @@ class PaddleClas_Build(Model_Build):
                 logger.info("repo {} python -m pip install bcolz failed".format(self.reponame))
                 # return 1
 
-        if self.value_in_modellist(value="amp") or self.value_in_modellist(value="dy2st_convergence"):
+        if (self.value_in_modellist(value="amp") or self.value_in_modellist(value="dy2st_convergence")) and (
+            "Windows" not in platform.system() and "Darwin" not in platform.system()
+        ):
             logger.info("#### fp16 or amp install")
             if os.path.exists("nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl") and os.path.exists(
                 "nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl"
