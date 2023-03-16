@@ -31,7 +31,7 @@ function gpt_save_ckpt() {
     rm -rf log
     python ./tools/train.py \
         -c ./ppfleetx/configs/nlp/gpt/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.use_pure_fp16=False \
+        -o Engine.mix_precision.enable=False \
         -o Model.hidden_dropout_prob=0. \
         -o Model.attention_probs_dropout_prob=0. \
         -o Model.num_layers=4 \
