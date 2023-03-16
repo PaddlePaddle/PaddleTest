@@ -29,3 +29,5 @@ configs^u2net^u2net_cityscapes_1024x512_160k.yml
 configs^u2net^u2netp_cityscapes_1024x512_160k.yml
 configs^unet_3plus^unet_3plus_cityscapes_1024x512_160k.yml
 configs^unet_plusplus^unet_plusplus_cityscapes_1024x512_160k.yml
+configs^portraitnet^portraitnet_eg1800_224x224_46k.yml
+configs^portraitnet^portraitnet_supervisely_224x224_60k.yml
