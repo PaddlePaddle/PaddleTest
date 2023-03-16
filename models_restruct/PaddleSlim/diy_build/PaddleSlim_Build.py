@@ -78,7 +78,10 @@ class PaddleSlim_Build(Model_Build):
         os.system("python -m pip uninstall paddleslim -y")
         cmd_return = os.system("python -m pip install -U dist/paddleslim*.whl")
         if cmd_return:
-            logger.info("repo {} python -m pip install paddleslim failed".format(self.reponame))
+            logger.info("repo {} python -m pip install paddleslim failed with dist".format(self.reponame))
+            cmd_setup = os.system("python setup.py install")
+            if cmd_setup:
+                logger.info("repo {} python -m pip install paddleslim failed with setup".format(self.reponame))
         os.chdir(path_now)
         return 0
 
