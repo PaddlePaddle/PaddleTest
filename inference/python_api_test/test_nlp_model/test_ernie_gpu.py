@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 # pylint: enable=wrong-import-position
 
@@ -24,7 +24,7 @@ def check_model_exist():
     """
     check model exist
     """
-    ernie_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.2/nlp/ernie.tgz"
+    ernie_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.2/nlp/ernie.tgz"
     if not os.path.exists("./ernie/inference.pdiparams"):
         wget.download(ernie_url, out="./")
         tar = tarfile.open("ernie.tgz")
@@ -38,7 +38,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./ernie/inference.pdmodel",
+        params_file="./ernie/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -51,7 +54,10 @@ def test_disable_gpu():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./ernie/inference.pdmodel",
+        params_file="./ernie/inference.pdiparams",
+    )
     batch_size = 1
     fake_input0 = np.zeros((batch_size, 128)).astype("int64")
     fake_input1 = np.zeros((batch_size, 128)).astype("int64")
@@ -65,12 +71,15 @@ def test_disable_gpu():
 @pytest.mark.gpu
 def test_gpu_bz1():
     """
-    compared gpu bert outputs with true val
+    compared gpu ernie outputs with true val
     """
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./ernie/inference.pdmodel",
+        params_file="./ernie/inference.pdiparams",
+    )
     data_path = "./ernie/data.txt"
     images_list = test_suite.get_text_npy(data_path)
 
@@ -83,8 +92,15 @@ def test_gpu_bz1():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
-    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.load_config(
+        model_file="./ernie/inference.pdmodel",
+        params_file="./ernie/inference.pdiparams",
+    )
+    test_suite2.gpu_more_bz_test(
+        input_data_dict,
+        output_data_dict,
+        delta=1e-5,
+    )
 
     del test_suite2  # destroy class to save memory
 
@@ -107,7 +123,10 @@ def test_gpu_mixed_precision_bz1():
             dst_model="./ernie/inference_mixed.pdmodel",
             dst_params="./ernie/inference_mixed.pdiparams",
         )
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./ernie/inference.pdmodel",
+        params_file="./ernie/inference.pdiparams",
+    )
     data_path = "./ernie/data.txt"
     images_list = test_suite.get_text_npy(data_path)
 
@@ -121,8 +140,13 @@ def test_gpu_mixed_precision_bz1():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(
-        model_file="./ernie/inference_mixed.pdmodel", params_file="./ernie/inference_mixed.pdiparams"
+        model_file="./ernie/inference_mixed.pdmodel",
+        params_file="./ernie/inference_mixed.pdiparams",
     )
-    test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, delta=5e-3)
+    test_suite2.gpu_more_bz_test_mix(
+        input_data_dict,
+        output_data_dict,
+        delta=5e-3,
+    )
 
     del test_suite2  # destroy class to save memory

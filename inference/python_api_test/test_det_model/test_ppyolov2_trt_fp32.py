@@ -17,6 +17,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -24,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    ppyolov2_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.0/detection/ppyolov2.tgz"
+    ppyolov2_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.0/detection/ppyolov2.tgz"
     if not os.path.exists("./ppyolov2/model.pdiparams"):
         wget.download(ppyolov2_url, out="./")
         tar = tarfile.open("ppyolov2.tgz")
@@ -38,7 +39,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
+    test_suite.load_config(
+        model_file="./ppyolov2/model.pdmodel",
+        params_file="./ppyolov2/model.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -48,7 +52,7 @@ def test_config():
 @pytest.mark.trt_fp32
 def test_trt_fp32_more_bz():
     """
-    compared gpu ppyolov2 more batch size outputs with true val
+    compared gpu ppyolov2 batch_size = [1] outputs with true val
     """
     check_model_exist()
 
@@ -58,7 +62,10 @@ def test_trt_fp32_more_bz():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
+        test_suite.load_config(
+            model_file="./ppyolov2/model.pdmodel",
+            params_file="./ppyolov2/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -91,7 +98,15 @@ def test_trt_fp32_more_bz():
 
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        test_suite.load_config(model_file="./ppyolov2/model.pdmodel", params_file="./ppyolov2/model.pdiparams")
+        test_suite.load_config(
+            model_file="./ppyolov2/model.pdmodel",
+            params_file="./ppyolov2/model.pdiparams",
+        )
         test_suite.trt_more_bz_test(
-            input_data_dict, output_data_dict, min_subgraph_size=10, repeat=1, delta=1, precision="trt_fp32"
+            input_data_dict,
+            output_data_dict,
+            min_subgraph_size=10,
+            repeat=1,
+            delta=1,
+            precision="trt_fp32",
         )

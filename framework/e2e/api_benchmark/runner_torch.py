@@ -137,6 +137,7 @@ def testing(yaml_path, case_name, framework, place=None, card=None, enable_backw
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--id", type=int, default=0, help="job id")
     parser.add_argument("--yaml", type=str, help="input the yaml path")
     parser.add_argument(
         "--mode",
@@ -169,6 +170,7 @@ if __name__ == "__main__":
         db = DB(storage=args.storage)
         try:
             db.init_mission(
+                id=args.id,
                 framework=args.framework,
                 mode=args.mode,
                 place=args.place,
@@ -206,6 +208,7 @@ if __name__ == "__main__":
         db = DB()
         try:
             # db.init_mission(
+            #     id = args.id,
             #     framework=args.framework,
             #     mode=args.mode,
             #     place=args.place,

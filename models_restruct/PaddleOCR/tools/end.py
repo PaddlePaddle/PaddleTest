@@ -96,7 +96,7 @@ class PaddleOCR_End(object):
         """
         回收之前下载的数据
         """
-        if self.step == "train":
+        if self.step == "train" and os.environ.get("UPDATA_BASE_VALUE") is True:
             # train loss
             # if self.category == "det":
             #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
@@ -108,7 +108,7 @@ class PaddleOCR_End(object):
             train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss")
             logger.info("#### train_loss: {}".format(train_loss))
             self.update_json("tools/train.json", train_loss)
-        elif self.step == "eval":
+        elif self.step == "eval" and os.environ.get("UPDATA_BASE_VALUE") is True:
             # eval acc
             pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
             pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)
@@ -133,7 +133,7 @@ class PaddleOCR_End(object):
         """
         generate report_enviorement_variable dict
         """
-        logger.info("config_report_enviorement_variable start")
+        logger.info("config report_enviorement_dict start")
         report_enviorement_dict = {}
         python_version = platform.python_version()
         paddle_version = paddle.__version__
@@ -168,9 +168,9 @@ class PaddleOCR_End(object):
             return ret
         logger.info("build collect_data_value end")
         # report_enviorement_dict
-        logger.info("config_report_enviorement_variable start")
-        self.config_report_enviorement_variable()
-        logger.info("config_report_enviorement_variable start")
+        # logger.info("config_report_enviorement_variable start")
+        # self.config_report_enviorement_variable()
+        # logger.info("config_report_enviorement_variable end")
         return ret
 
 

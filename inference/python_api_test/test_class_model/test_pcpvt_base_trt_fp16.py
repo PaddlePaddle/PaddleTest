@@ -17,6 +17,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -24,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    pcpvt_base_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.1/class/pcpvt_base.tgz"
+    pcpvt_base_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.1/class/pcpvt_base.tgz"
     if not os.path.exists("./pcpvt_base/inference.pdiparams"):
         wget.download(pcpvt_base_url, out="./")
         tar = tarfile.open("pcpvt_base.tgz")
@@ -38,7 +39,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./pcpvt_base/inference.pdmodel",
+        params_file="./pcpvt_base/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -47,7 +51,7 @@ def test_config():
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-10 pcpvt_base outputs with true val
+    compared trt fp16 batch_size=1 pcpvt_base outputs with true val
     """
     check_model_exist()
 
@@ -57,7 +61,8 @@ def test_trt_fp16_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -65,15 +70,21 @@ def test_trt_fp16_more_bz():
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         del test_suite.pd_config
         test_suite.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
-        test_suite.collect_shape_info(model_path="./pcpvt_base/", input_data_dict=input_data_dict, device="gpu")
+        test_suite.collect_shape_info(
+            model_path="./pcpvt_base/",
+            input_data_dict=input_data_dict,
+            device="gpu",
+        )
 
         del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
         test_suite2.trt_more_bz_test(
             input_data_dict,
@@ -92,7 +103,7 @@ def test_trt_fp16_more_bz():
 @pytest.mark.trt_fp16
 def test_jetson_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-10 pcpvt_base outputs with true val
+    compared trt fp16 batch_size=1 pcpvt_base outputs with true val
     """
     check_model_exist()
 
@@ -102,7 +113,8 @@ def test_jetson_trt_fp16_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -110,15 +122,21 @@ def test_jetson_trt_fp16_more_bz():
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         del test_suite.pd_config
         test_suite.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
-        test_suite.collect_shape_info(model_path="./pcpvt_base/", input_data_dict=input_data_dict, device="gpu")
+        test_suite.collect_shape_info(
+            model_path="./pcpvt_base/",
+            input_data_dict=input_data_dict,
+            device="gpu",
+        )
 
         del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
         test_suite2.trt_more_bz_test(
             input_data_dict,
@@ -144,7 +162,10 @@ def test_trt_fp16_bz1_multi_thread():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./pcpvt_base/inference.pdmodel",
+        params_file="./pcpvt_base/inference.pdiparams",
+    )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"x": fake_input}
@@ -153,7 +174,15 @@ def test_trt_fp16_bz1_multi_thread():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
-    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, delta=1e-1, precision="trt_fp16")
+    test_suite2.load_config(
+        model_file="./pcpvt_base/inference.pdmodel",
+        params_file="./pcpvt_base/inference.pdiparams",
+    )
+    test_suite2.trt_bz1_multi_thread_test(
+        input_data_dict,
+        output_data_dict,
+        delta=1e-1,
+        precision="trt_fp16",
+    )
 
     del test_suite2  # destroy class to save memory

@@ -4,7 +4,9 @@
 """
 import os
 import sys
+import time
 import logging
+import platform
 import tarfile
 import argparse
 import numpy as np
@@ -24,16 +26,29 @@ class PaddleGAN_Build(Model_Build):
         """
         初始化变量
         """
-        self.data_path = "data"
+        self.data_path_endswith = "data"
+        self.reponame = args.reponame
         self.paddle_whl = args.paddle_whl
         self.get_repo = args.get_repo
         self.branch = args.branch
         self.system = args.system
         self.set_cuda = args.set_cuda
-        self.dataset_org = args.dataset_org
-        self.dataset_target = args.dataset_target
+
+        self.dataset_org = str(args.dataset_org)
+        self.dataset_target = str(args.dataset_target)
+        self.mount_path = str(os.getenv("mount_path"))
+        if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(
+            self.mount_path
+        ):  # linux 性能损失使用自动下载的数据,不使用mount数据
+            if os.listdir(self.mount_path) != []:
+                self.dataset_org = self.mount_path
+                os.environ["dataset_org"] = self.mount_path
+                self.dataset_target = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
+                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
+        logger.info("#### dataset_org in diy_build is  {}".format(self.dataset_org))
+        logger.info("#### dataset_target in diy_build is  {}".format(self.dataset_target))
+
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
-        self.reponame = args.reponame
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.gan_model_list = []
@@ -188,6 +203,52 @@ class PaddleGAN_Build(Model_Build):
             logger.info("check you {} path".format(self.reponame))
         return 0
 
+    def build_infer_dataset(self):
+        """
+        下载预测相关数据集
+        """
+        if os.path.exists(self.reponame):
+            # 下载dataset数据集 解析yaml下载
+            path_now = os.getcwd()
+            os.chdir(self.reponame)
+            if os.path.exists(self.data_path_endswith) is False:
+                os.mkdir(self.data_path_endswith)
+            os.chdir(self.data_path_endswith)
+
+            # 下载特殊数据
+            logger.info("#### start download other data")
+            if os.path.exists("Peking_input360p_clip_10_11.mp4") is False:
+                wget.download("https://paddle-qa.bj.bcebos.com/PaddleGAN/ce_data/Peking_input360p_clip_10_11.mp4")
+            if os.path.exists("starrynew.png") is False:
+                wget.download("https://paddle-qa.bj.bcebos.com/PaddleGAN/ce_data/starrynew.png")
+            logger.info("#### end download other data")
+            os.chdir(path_now)
+        else:
+            logger.info("check you {} path".format(self.reponame))
+        return 0
+
+    def link_dataset(self):
+        """
+        软链数据
+        """
+        if os.path.exists(self.reponame):
+            if os.path.exists(os.path.join(self.reponame, self.dataset_target)):
+                logger.info(
+                    "already have {} will mv {} to {}".format(
+                        self.dataset_target, self.dataset_target, self.dataset_target + "_" + str(int(time.time()))
+                    )
+                )
+                os.rename(
+                    os.path.join(self.reponame, self.dataset_target),
+                    os.path.join(self.reponame, self.dataset_target + "_" + str(int(time.time()))),
+                )
+            exit_code = os.symlink(self.dataset_org, os.path.join(self.reponame, self.dataset_target))
+            if exit_code:
+                logger.info("#### link_dataset failed")
+        else:
+            logger.info("check you {} path".format(self.reponame))
+        return 0
+
     def build_dataset(self):
         """
         自定义下载数据集
@@ -196,9 +257,9 @@ class PaddleGAN_Build(Model_Build):
             # 下载dataset数据集 解析yaml下载
             path_now = os.getcwd()
             os.chdir(self.reponame)
-            if os.path.exists(self.data_path) is False:
-                os.mkdir(self.data_path)
-            os.chdir(self.data_path)
+            if os.path.exists(self.data_path_endswith) is False:
+                os.mkdir(self.data_path_endswith)
+            os.chdir(self.data_path_endswith)
 
             # 下载特殊数据
             logger.info("#### start download other data")
@@ -238,12 +299,12 @@ class PaddleGAN_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir(self.reponame)  # 执行setup要先切到路径下面
         # cmd_return = os.system("python -m pip install paddlegan")
-        cmd_return = os.system("python -v -e . > paddlegan_install.log 2>&1 ")
+        cmd_return = os.system("python setup.py install > paddlegan_install.log 2>&1 ")
         cmd_return1 = os.system("python -m pip install dlib >> paddlegan_install.log 2>&1 ")
         os.chdir(path_now)
 
         if cmd_return and cmd_return1:
-            logger.info("repo {} python -m pip install paddlegan failed".format(self.reponame))
+            logger.info("repo {} python -m pip install paddlegan or dlib failed".format(self.reponame))
             # return 1
 
         return 0
@@ -262,7 +323,17 @@ class PaddleGAN_Build(Model_Build):
         if ret:
             logger.info("build env yaml failed")
             return ret
-        ret = self.build_dataset()
+
+        ret = self.build_infer_dataset()
+        if ret:
+            logger.info("build env infer dataset failed")
+            return ret
+
+        logger.info("self.dataset_target is {}".format(self.dataset_target))
+        if str(self.dataset_target) == "None":
+            ret = self.build_dataset()
+        else:
+            ret = self.link_dataset()
         if ret:
             logger.info("build env dataset failed")
             return ret
