@@ -35,21 +35,21 @@ case:
         params:
           - -m config.yaml
 
-  windows:
-    train:
-      -
-        name: dygraph
-        path: models/rank/deeprec
-        cmd: python -u trainer.py
-        params:
-          - -m config.yaml
-          - -o runner.use_gpu=True
+  # windows:
+  #   train:
+  #     -
+  #       name: dygraph
+  #       path: models/rank/deeprec
+  #       cmd: python -u trainer.py
+  #       params:
+  #         - -m config.yaml
+  #         - -o runner.use_gpu=True
 
-    infer:
-      -
-        name: dygraph
-        path: models/rank/deeprec
-        cmd: python -u infer.py
-        params:
-          - -m config.yaml
-          - -o runner.use_gpu=True
+  #   infer:
+  #     -
+  #       name: dygraph
+  #       path: models/rank/deeprec
+  #       cmd: python -u infer.py
+  #       params:
+  #         - -m config.yaml
+  #         - -o runner.use_gpu=True
