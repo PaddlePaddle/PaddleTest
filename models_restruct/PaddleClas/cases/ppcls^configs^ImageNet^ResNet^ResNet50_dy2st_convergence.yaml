@@ -4,7 +4,7 @@ case:
     train:
       -
         name: dy
-        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
         params:
           - -o Global.device=gpu
           - -o Global.print_batch_step=10
@@ -28,7 +28,7 @@ case:
             evaluation: "="
       -
         name: dy2st
-        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
         params:
           - -o Global.to_static=True
           - -o Global.device=gpu
@@ -53,7 +53,7 @@ case:
             evaluation: "="
       -
         name: dy2st_cinn
-        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
         params:
           - -o Global.to_static=True
           - -o Global.device=gpu
@@ -78,7 +78,7 @@ case:
             evaluation: "="
       -
         name: dy2st_prim
-        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
         params:
           - -o Global.to_static=True
           - -o Global.device=gpu
@@ -103,7 +103,7 @@ case:
             evaluation: "="
       -
         name: dy2st_prim_cinn
-        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
         params:
           - -o Global.to_static=True
           - -o Global.device=gpu
@@ -128,7 +128,7 @@ case:
             evaluation: "="
       -
         name: dy2st_all
-        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
         params:
           - -o Global.to_static=True
           - -o Global.device=gpu
@@ -151,7 +151,7 @@ case:
             evaluation: "="
       -
         name: dy2st_cinn_all
-        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
         params:
           - -o Global.to_static=True
           - -o Global.device=gpu
@@ -174,7 +174,7 @@ case:
             evaluation: "="
       -
         name: dy2st_prim_all
-        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
         params:
           - -o Global.to_static=True
           - -o Global.device=gpu
@@ -197,7 +197,7 @@ case:
             evaluation: "="
       -
         name: dy2st_prim_cinn_all
-        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
         params:
           - -o Global.to_static=True
           - -o Global.device=gpu

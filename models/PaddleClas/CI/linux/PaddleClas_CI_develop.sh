@@ -157,7 +157,7 @@ fi
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \
    --user  -i https://mirror.baidu.com/pypi/simple
-python setup.py install
+python setup.py install > clas_install.log 2>&1
 
 python -m pip list |grep opencv
 
@@ -632,7 +632,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
     find ppcls/configs/Products/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec
     find ppcls/configs/Vehicle/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec
-    find ppcls/configs/slim/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成slim
+    # find ppcls/configs/slim/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成slim
     find ppcls/configs/GeneralRecognition/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' \
         |grep -v 'Gallery2FC_PPLCNet_x2_5' >> models_list_rec #后续改成slim
     find ppcls/configs/DeepHash/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成deephash
@@ -659,8 +659,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             | grep diff|grep yaml|grep configs|grep Products|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
         git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
             | grep diff|grep yaml|grep configs|grep Vehicle|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
-        git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
-            | grep diff|grep yaml|grep configs|grep slim|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
+        # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
+        #     | grep diff|grep yaml|grep configs|grep slim|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
         git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
             | grep diff|grep yaml|grep configs|grep GeneralRecognition|awk -F 'b/' '{print$2}' |tee -a  models_list_diff_rec
         git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \

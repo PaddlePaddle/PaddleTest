@@ -130,7 +130,7 @@ def test_static2():
             feed = {"mean": mean}
             with fluid.unique_name.guard():
                 with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-                    mean1 = fluid.data(name="mean", shape=[-1], dtype="float32")
+                    mean1 = paddle.static.data(name="mean", shape=[-1], dtype="float32")
                     exe = fluid.Executor(place)
                     exe.run(startup_program)
                     output = paddle.normal(shape=[3, 4], mean=mean1)
@@ -154,8 +154,8 @@ def test_static3():
             feed = {"mean": mean, "std": std}
             with fluid.unique_name.guard():
                 with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-                    mean1 = fluid.data(name="mean", shape=[-1], dtype="float32")
-                    std1 = fluid.data(name="std", shape=[-1], dtype="float32")
+                    mean1 = paddle.static.data(name="mean", shape=[-1], dtype="float32")
+                    std1 = paddle.static.data(name="std", shape=[-1], dtype="float32")
                     exe = fluid.Executor(place)
                     exe.run(startup_program)
                     output = paddle.normal(shape=[3, 4], mean=mean1, std=std1)

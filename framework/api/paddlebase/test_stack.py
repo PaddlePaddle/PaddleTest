@@ -94,7 +94,7 @@ def test_stack3():
 #         places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
 #     else:
 #         places = [fluid.CPUPlace()]
-#     x = fluid.data(name="x", shape=[1, 2], dtype="float64")
+#     x = paddle.static.data(name="x", shape=[1, 2], dtype="float64")
 #     res = paddle.stack(x, axis=0)
 #     exe = fluid.Executor(fluid.CPUPlace())
 #     x1 = np.array([[2, 1]]).astype("float64")
@@ -117,8 +117,8 @@ def test_stack5():
         places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
     else:
         places = [fluid.CPUPlace()]
-    x = fluid.data(name="x", shape=[1, 2], dtype=np.float64)
-    y = fluid.data(name="y", shape=[1, 2], dtype=np.float64)
+    x = paddle.static.data(name="x", shape=[1, 2], dtype=np.float64)
+    y = paddle.static.data(name="y", shape=[1, 2], dtype=np.float64)
     res = paddle.stack([x, y], axis=0)
     for place in places:
         exe = fluid.Executor(place)
@@ -142,8 +142,8 @@ def test_stack6():
         places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
     else:
         places = [fluid.CPUPlace()]
-    x = fluid.data(name="x", shape=[1, 2], dtype="float64")
-    y = fluid.data(name="y", shape=[1, 2], dtype="float64")
+    x = paddle.static.data(name="x", shape=[1, 2], dtype="float64")
+    y = paddle.static.data(name="y", shape=[1, 2], dtype="float64")
     res = paddle.stack((x, y), axis=0)
     for place in places:
         exe = fluid.Executor(place)
@@ -215,8 +215,8 @@ def test_stack9():
         places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
     else:
         places = [fluid.CPUPlace()]
-    x = fluid.data(name="x", shape=[1, 2], dtype="float64")
-    y = fluid.data(name="y", shape=[1, 2], dtype="float64")
+    x = paddle.static.data(name="x", shape=[1, 2], dtype="float64")
+    y = paddle.static.data(name="y", shape=[1, 2], dtype="float64")
     res = paddle.stack((x, y), axis=-2)
     for place in places:
         exe = fluid.Executor(place)
@@ -240,8 +240,8 @@ def test_stack10():
         places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
     else:
         places = [fluid.CPUPlace()]
-    x = fluid.data(name="x", shape=[1, 2], dtype="float64")
-    y = fluid.data(name="y", shape=[1, 2], dtype="float64")
+    x = paddle.static.data(name="x", shape=[1, 2], dtype="float64")
+    y = paddle.static.data(name="y", shape=[1, 2], dtype="float64")
     res = paddle.stack((x, y), axis=1)
     for place in places:
         exe = fluid.Executor(place)

@@ -8,6 +8,11 @@ case:
       -
         name: static
         cmd: python -u tools/static_trainer.py
+      -
+        name: dy2st
+        cmd: python -u test_tipc/configs/dselect_k/to_static.py
+        params:
+          - -o runner.model_init_path=output_model_dselect_k/9
 
     infer:
       -
@@ -16,6 +21,16 @@ case:
       -
         name: static
         cmd: python -u tools/static_infer.py
+      -
+        name: dy2st
+        cmd: python -u tools/paddle_infer.py 
+        params:
+          - --model_file=output_model_dselect_k/9/tostatic.pdmodel
+          - --params_file=output_model_dselect_k/9/tostatic.pdiparams
+          - --use_gpu=True
+          - --data_dir=models/multitask/dselect_k/data
+          - --reader_file=models/multitask/dselect_k/multiMNIST_reader.py
+          - --batchsize=5
 
   mac:
     base: ./base/train_infer_with_cpu_base.yaml

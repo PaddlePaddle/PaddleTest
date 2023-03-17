@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 # pylint: enable=wrong-import-position
 
@@ -24,13 +24,12 @@ def check_model_exist():
     """
     check model exist
     """
-    ernie_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.2/nlp/ernie.tgz"
+    ernie_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.2/nlp/ernie.tgz"
     if not os.path.exists("./ernie/inference.pdiparams"):
         wget.download(ernie_url, out="./")
         tar = tarfile.open("ernie.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./ernie/inference", output_model_path="./ernie/inference")
 
 
 def test_config():
@@ -39,7 +38,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./ernie/inference.pdmodel",
+        params_file="./ernie/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -48,12 +50,15 @@ def test_config():
 @pytest.mark.mkldnn_int8
 def test_mkldnn_int8():
     """
-    compared mkldnn_int8 bert outputs with true val
+    compared mkldnn_int8 ernie outputs with true val
     """
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./ernie/inference.pdmodel",
+        params_file="./ernie/inference.pdiparams",
+    )
     data_path = "./ernie/data.txt"
     images_list = test_suite.get_text_npy(data_path)
 
@@ -66,7 +71,15 @@ def test_mkldnn_int8():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./ernie/inference.pdmodel", params_file="./ernie/inference.pdiparams")
-    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5, precision="int8")
+    test_suite2.load_config(
+        model_file="./ernie/inference.pdmodel",
+        params_file="./ernie/inference.pdiparams",
+    )
+    test_suite2.mkldnn_test(
+        input_data_dict,
+        output_data_dict,
+        delta=1e-5,
+        precision="int8",
+    )
 
     del test_suite2  # destroy class to save memory
