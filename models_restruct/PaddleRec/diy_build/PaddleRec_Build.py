@@ -3,7 +3,6 @@
 自定义环境准备
 """
 import os
-from platform import platform
 import sys
 import logging
 import tarfile
@@ -33,7 +32,8 @@ class PaddleRec_Build(Model_Build):
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
 
-        self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
+        self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)
+        # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
         self.models_list = args.models_list
         self.models_file = args.models_file
@@ -57,8 +57,6 @@ class PaddleRec_Build(Model_Build):
         安装依赖包
         """
         path_now = os.getcwd()
-        platform = self.system
-
         os.chdir("PaddleRec") 
         os.system("python -m pip install -r requirements.txt")
         os.system("python -m pip install sklearn==0.0")
@@ -80,7 +78,7 @@ class PaddleRec_Build(Model_Build):
         os.system("python -m pip uninstall paddlepaddle-gpu -y")
         cmd_return = os.system("python -m pip install {}".format(self.paddle_whl))
         if cmd_return:
-            logger.info("repo {} python -m pip install paddle failed".format(self.reponame))
+            logger.info("repo {} python -m pip install paddle failed".format(self.paddle_whl))
         return 0
 
     def build_env(self):

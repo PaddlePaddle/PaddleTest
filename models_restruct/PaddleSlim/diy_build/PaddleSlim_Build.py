@@ -32,7 +32,8 @@ class PaddleSlim_Build(Model_Build):
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
 
-        self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
+        self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)
+        # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
         self.models_list = args.models_list
         self.models_file = args.models_file
