@@ -1,6 +1,6 @@
 case:
   linux:
-    base: ./base/normal_base.yml
+    base: ./base/keypoint_base.yml
     train:
       -
         name: multi
@@ -18,7 +18,7 @@ case:
     predict: skipped
     api: skipped
   windows:
-    base: ./base/normal_base.yml
+    base: ./base/keypoint_base.yml
     train:
       -
         name: multi
