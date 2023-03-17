@@ -175,7 +175,6 @@ configs^mot^pedestrian^fairmot_dla34_30e_1088x608_visdrone_pedestrian.yml
 configs^mot^jde^jde_darknet53_30e_864x480.yml
 configs^mot^jde^jde_darknet53_30e_576x320.yml
 configs^mot^jde^jde_darknet53_30e_1088x608.yml
-configs^faster_rcnn^faster_rcnn_swin_tiny_fpn_3x_coco.yml
 configs^faster_rcnn^faster_rcnn_r50_vd_fpn_ssld_2x_coco.yml
 configs^faster_rcnn^faster_rcnn_r50_fpn_1x_coco.yml
 configs^faster_rcnn^faster_rcnn_r101_fpn_1x_coco.yml

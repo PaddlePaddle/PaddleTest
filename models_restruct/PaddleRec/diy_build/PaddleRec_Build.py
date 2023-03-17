@@ -63,6 +63,7 @@ class PaddleRec_Build(Model_Build):
         os.system("python -m pip install -r requirements.txt")
         os.chdir(path_now)
         
+        os.system("python -m pip install https://paddle-qa.bj.bcebos.com/PaddleRec/auto_log-1.2.0-py3-none-any.whl")
         cmd_return = os.system("python -m pip install {}".format(self.paddle_whl))
         if cmd_return:
             logger.info("repo {} python -m pip install paddle failed".format(self.reponame))

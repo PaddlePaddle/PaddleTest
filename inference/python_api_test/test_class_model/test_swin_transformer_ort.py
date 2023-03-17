@@ -15,7 +15,8 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
+
 
 # pylint: enable=wrong-import-position
 
@@ -24,15 +25,12 @@ def check_model_exist():
     """
     check model exist
     """
-    swin_transformer_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1/class/swin_transformer.tgz"
+    swin_transformer_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/swin_transformer.tgz"
     if not os.path.exists("./swin_transformer/inference.pdiparams"):
         wget.download(swin_transformer_url, out="./")
         tar = tarfile.open("swin_transformer.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./swin_transformer/inference", output_model_path="./swin_transformer/inference"
-        )
 
 
 def test_config():
@@ -42,7 +40,8 @@ def test_config():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        model_file="./swin_transformer/inference.pdmodel",
+        params_file="./swin_transformer/inference.pdiparams",
     )
     test_suite.config_test()
 
@@ -52,7 +51,7 @@ def test_config():
 @pytest.mark.onnxruntime
 def test_more_bz_onnxruntime():
     """
-    compared onnxruntime swin_transformer outputs with true val
+    compared onnxruntime batch_size=1-2 swin_transformer outputs with true val
     """
     check_model_exist()
     file_path = "./swin_transformer"
@@ -61,7 +60,8 @@ def test_more_bz_onnxruntime():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -72,8 +72,14 @@ def test_more_bz_onnxruntime():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
-        test_suite2.onnxruntime_test(input_data_dict, output_data_dict, repeat=1, delta=1e-4)
+        test_suite2.onnxruntime_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=1e-4,
+        )
 
         del test_suite2  # destroy class to save memory

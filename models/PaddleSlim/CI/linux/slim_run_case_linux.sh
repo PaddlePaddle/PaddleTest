@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # run_CI/run_CE/ALL 、cudaid1、cudaid2
-echo ---run slim case with $1 ---
+echo ---run slim case with $1 ----
 
 print_info(){
 if [ $1 -ne 0 ];then
@@ -21,8 +21,8 @@ catchException() {
 
 cudaid1=$2;
 cudaid2=$3;
-echo ---cudaid1:${cudaid1}---
-echo ---cudaid2:${cudaid2}---
+echo ---cudaid1:${cudaid1}----
+echo ---cudaid2:${cudaid2}----
 
 export CUDA_VISIBLE_DEVICES=${cudaid2}
 # 1 dist

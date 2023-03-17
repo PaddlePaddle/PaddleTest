@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 
 # pylint: enable=wrong-import-position
@@ -25,16 +25,14 @@ def check_model_exist():
     """
     check model exist
     """
-    ViT_small_patch16_224_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.0/class/ViT_small_patch16_224.tgz"
+    ViT_small_patch16_224_url = (
+        "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.0/class/ViT_small_patch16_224.tgz"
+    )
     if not os.path.exists("./ViT_small_patch16_224/inference.pdiparams"):
         wget.download(ViT_small_patch16_224_url, out="./")
         tar = tarfile.open("ViT_small_patch16_224.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./ViT_small_patch16_224/inference",
-            output_model_path="./ViT_small_patch16_224/inference",
-        )
 
 
 def test_config():
