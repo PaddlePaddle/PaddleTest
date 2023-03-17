@@ -1,4 +1,4 @@
-case:
+e:
   linux:
     base: ./base/mot_base.yml
     train:
