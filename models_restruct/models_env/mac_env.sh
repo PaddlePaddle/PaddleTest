@@ -18,9 +18,9 @@ source activate
 export reponame=${reponame:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $1}')`"}
 
 #挂载数据, 只挂在自己仓库的
-export dataset_org=${dataset_org:-"/Volumes/210-share-data/MT_data/${reponame}"}
-echo "@@@dataset_org: ${dataset_org}"
-ls ${dataset_org}
+export mount_path="/Volumes/210-share-data/MT_data/${reponame}"
+echo "@@@mount_path: ${mount_path}"
+ls ${mount_path}
 
 #模型列表文件 , 固定路径及格式为 tools/reponame_优先级_list   优先级P2有多个用P21、P22  中间不用"-"划分, 防止按 "-" split 混淆
 export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAME}|awk -F '-' '{print $5}')`_list"}
