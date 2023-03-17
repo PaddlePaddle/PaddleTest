@@ -118,7 +118,20 @@ class DB(object):
                 continue
 
     def init_mission(
-        self, id, framework, mode, place, cuda, cudnn, routine, enable_backward, python, yaml_info, card=None, comment=None
+        self,
+        id,
+        framework,
+        wheel_link,
+        mode,
+        place,
+        cuda,
+        cudnn,
+        routine,
+        enable_backward,
+        python,
+        yaml_info,
+        card=None,
+        comment=None,
     ):
         """init mission"""
         if framework == "paddle":
@@ -138,12 +151,13 @@ class DB(object):
 
         if routine == 1 and id == 0:
             sql = (
-                "insert into `job` (`framework`, `status`, `mode`, `commit`, `version`, "
+                "insert into `job` (`framework`, `wheel_link`, `status`, `mode`, `commit`, `version`, "
                 "`hostname`, `place`, `system`, `cuda`, `cudnn`, `snapshot`,`create_time`, "
                 "`update_time`, `routine`, `comment`, `enable_backward`, `python`, "
-                "`yaml_info`) values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', "
+                "`yaml_info`) values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', "
                 "'{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(
                     framework,
+                    wheel_link,
                     "running",
                     mode,
                     paddle.__git_commit__,
@@ -170,29 +184,32 @@ class DB(object):
             except Exception as e:
                 print(e)
         else:
-            sql = "update `job` set `framework`='{}', `status`='{}', `mode`='{}', " \
-                  "`commit`='{}', `version`='{}', `hostname`='{}', `place`='{}'," \
-                  "`system`='{}', `cuda`='{}', `cudnn`='{}', `snapshot`='{}', `update_time`='{}', " \
-                  "`routine`='{}', `comment`='{}', `enable_backward`='{}', `python`='{}', " \
-                  "`yaml_info`='{}' where id='{}';".format(
-                framework,
-                "running",
-                mode,
-                paddle.__git_commit__,
-                version,
-                socket.gethostname(),
-                place,
-                platform.system(),
-                cuda,
-                cudnn,
-                json.dumps(snapshot),
-                self.timestamp(),
-                routine,
-                comment,
-                enable_backward,
-                python,
-                yaml_info,
-                id,
+            sql = (
+                "update `job` set `framework`='{}', `wheel_link`='{}', `status`='{}', `mode`='{}', "
+                "`commit`='{}', `version`='{}', `hostname`='{}', `place`='{}',"
+                "`system`='{}', `cuda`='{}', `cudnn`='{}', `snapshot`='{}', `update_time`='{}', "
+                "`routine`='{}', `comment`='{}', `enable_backward`='{}', `python`='{}', "
+                "`yaml_info`='{}' where id='{}';".format(
+                    framework,
+                    wheel_link,
+                    "running",
+                    mode,
+                    paddle.__git_commit__,
+                    version,
+                    socket.gethostname(),
+                    place,
+                    platform.system(),
+                    cuda,
+                    cudnn,
+                    json.dumps(snapshot),
+                    self.timestamp(),
+                    routine,
+                    comment,
+                    enable_backward,
+                    python,
+                    yaml_info,
+                    id,
+                )
             )
             try:
                 self.cursor.execute(sql)
