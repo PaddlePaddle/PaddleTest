@@ -145,8 +145,8 @@ class APIBase(object):
                         compare(dygraph_forward_res, res, self.delta, self.rtol)
                         logging.info(dygraph_forward_res)
                     else:
-                        compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
-                        logging.info(dygraph_forward_res.numpy())
+                        compare(dygraph_forward_res.numpy(False), res, self.delta, self.rtol)
+                        logging.info(dygraph_forward_res.numpy(False))
                     if self.enable_backward:
                         dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
                         logging.info("[dygraph grad]")
@@ -216,7 +216,7 @@ class APIBase(object):
                     if isinstance(dygraph_forward_res, (list, tuple)):
                         compare(dygraph_forward_res, res, self.delta, self.rtol)
                     else:
-                        compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
+                        compare(dygraph_forward_res.numpy(False), res, self.delta, self.rtol)
                     # ③ calculate backward result
                     if self.enable_backward:
                         dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
@@ -288,8 +288,8 @@ class APIBase(object):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
                     logging.info(dygraph_forward_res)
                 else:
-                    compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
-                    logging.info(dygraph_forward_res.numpy())
+                    compare(dygraph_forward_res.numpy(False), res, self.delta, self.rtol)
+                    logging.info(dygraph_forward_res.numpy(False))
                 if self.enable_backward:
                     dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
                     logging.info("[dygraph grad]")
@@ -352,7 +352,7 @@ class APIBase(object):
                 if isinstance(dygraph_forward_res, (list, tuple)):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
                 else:
-                    compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
+                    compare(dygraph_forward_res.numpy(False), res, self.delta, self.rtol)
                 # ③ calculate backward result
                 if self.enable_backward:
                     dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
@@ -489,7 +489,7 @@ class APIBase(object):
             for k, v in self.kwargs.items():
                 if isinstance(v, paddle.Tensor) and k not in self.no_grad_var:
                     grad = []
-                    shape = v.numpy().shape
+                    shape = v.numpy(False).shape
                     for i in range(len(v.numpy().flatten())):
                         tmp = v.numpy().flatten()
                         tmp[i] = tmp[i] + self.gap
@@ -537,17 +537,17 @@ class APIBase(object):
         if self.__layertype == "func":
             res = self.func(**self.kwargs)
             if isinstance(res, (list, tuple)):
-                loss = paddle.mean(res[0]).numpy()
+                loss = paddle.mean(res[0]).numpy(False)
             else:
-                loss = paddle.mean(res).numpy()
+                loss = paddle.mean(res).numpy(False)
             return loss
         elif self.__layertype == "class":
             obj = self.func(**self.kwargs)
             res = obj(self.data)
             if isinstance(res, (list, tuple)):
-                loss = paddle.mean(res[0]).numpy()
+                loss = paddle.mean(res[0]).numpy(False)
             else:
-                loss = paddle.mean(res).numpy()
+                loss = paddle.mean(res).numpy(False)
             return loss
 
     def _dygraph_forward(self):
@@ -756,7 +756,7 @@ def compare(result, expect, delta=1e-6, rtol=1e-5):
             if isinstance(j, (np.generic, np.ndarray)):
                 compare(j, expect[i], delta, rtol)
             else:
-                compare(j.numpy(), expect[i], delta, rtol)
+                compare(j.numpy(False), expect[i], delta, rtol)
         # result = np.array(result)
         # expect = np.array(expect)
         # res = np.allclose(result, expect, atol=delta)
