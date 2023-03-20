@@ -135,7 +135,7 @@ class PaddleDetection_Build(Model_Build):
             subprocess.run(cmd_mot1, shell=True)
             subprocess.run(cmd_mot2, shell=True)
             subprocess.run(cmd_mot3, shell=True)
-        #tiny_pose use coco data
+        # tiny_pose use coco data
         os.chdir(path_repo + "/configs/keypoint")
         if os.path.exists("tiny_pose"):
             shutil.rmtree("tiny_pose")
