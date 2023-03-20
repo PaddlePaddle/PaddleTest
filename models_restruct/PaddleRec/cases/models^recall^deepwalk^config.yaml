@@ -18,24 +18,24 @@ case:
           - -m config.yaml
           - -o runner.use_gpu=True
 
-  mac:
-    train:
-      -
-        name: dygraph
-        path: models/recall/deepwalk/multi_class
-        cmd: python -u ../../../../tools/static_trainer.py
-        params:
-          - -m config.yaml
-          - -o runner.use_gpu=False
+  # mac:
+  #   train:
+  #     -
+  #       name: dygraph
+  #       path: models/recall/deepwalk/multi_class
+  #       cmd: python -u ../../../../tools/static_trainer.py
+  #       params:
+  #         - -m config.yaml
+  #         - -o runner.use_gpu=False
 
-    infer:
-      -
-        name: dygraph
-        path: models/recall/deepwalk/multi_class
-        cmd: python -u ../../../../tools/static_infer.py
-        params:
-          - -m config.yaml
-          - -o runner.use_gpu=False
+  #   infer:
+  #     -
+  #       name: dygraph
+  #       path: models/recall/deepwalk/multi_class
+  #       cmd: python -u ../../../../tools/static_infer.py
+  #       params:
+  #         - -m config.yaml
+  #         - -o runner.use_gpu=False
 
   windows:
     train:

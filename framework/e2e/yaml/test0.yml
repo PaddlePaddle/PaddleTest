@@ -32,7 +32,7 @@ Tanh_0:
 #    api_name: "torch.fft.fft"
 #    mapping:
 #      ins: { x: input, n: "n", norm: "norm"}
-#
+
 conv2d_0:
   desc: "2维卷积"
   paddle:

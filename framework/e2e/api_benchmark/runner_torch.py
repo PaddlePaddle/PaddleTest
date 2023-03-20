@@ -148,6 +148,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--routine", type=int, default=1, help="if 1, daily routine mission")
     parser.add_argument("--framework", type=str, default="paddle", help="[paddle] | [torch] | [all]")
+    parser.add_argument("--wheel_link", type=str, default="not_yet", help="paddle wheel link")
     parser.add_argument("--case", type=str, default="Tanh", help="case name for [testing] and [rerun] mode")
     parser.add_argument("--place", type=str, default="cpu", help="[cpu] or [gpu]")
     parser.add_argument("--cuda", type=str, default=None, help="cuda version like v10.2 | v11.2 etc.")
@@ -172,6 +173,7 @@ if __name__ == "__main__":
             db.init_mission(
                 id=args.id,
                 framework=args.framework,
+                wheel_link=args.wheel_link,
                 mode=args.mode,
                 place=args.place,
                 cuda=args.cuda,
@@ -210,6 +212,7 @@ if __name__ == "__main__":
             # db.init_mission(
             #     id = args.id,
             #     framework=args.framework,
+            #     wheel_link = args.wheel_link,
             #     mode=args.mode,
             #     place=args.place,
             #     cuda=args.cuda,
