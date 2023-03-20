@@ -34,6 +34,19 @@ case:
     infer: skipped
     export: skipped
     predict: skipped
+  mac:
+    base: ./base/normal_base.yml
+    train:
+      -
+        name: single
+        cmd : python tools/train.py
+        params:
+          - TrainReader.batch_size=1
+          - use_gpu=false
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
 
 
 function: paddlelas_imagenet_parse
