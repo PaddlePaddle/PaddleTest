@@ -99,6 +99,8 @@ class PaddleNLP_Build(Model_Build):
         #     "python -m pip install --pre --upgrade paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html"
         # )
 
+        os.chdir(path_now)
+
         if cmd_return:
             logger.info("repo {} python -m pip install-failed".format(self.reponame))
 
