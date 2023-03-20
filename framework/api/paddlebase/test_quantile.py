@@ -118,7 +118,7 @@ def test_quantile4():
     x_p = paddle.to_tensor(x)
     exp = np.quantile(x, q=q)
     res = paddle.quantile(x_p, q=q)
-    compare(res.numpy(), exp)
+    compare(res.numpy(False), exp)
 
 
 # q = 0.5

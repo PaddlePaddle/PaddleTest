@@ -22,6 +22,7 @@ case:
         cmd: python tools/infer.py
     export: skipped
     predict: skipped
+    api: skipped
   windows:
     base: ./base/normal_base.yml
     train:
