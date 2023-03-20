@@ -12,6 +12,10 @@ case:
         cmd : python tools/train.py
         params:
           - TrainReader.batch_size=1
+      -
+        name: amp_multi
+      -
+        name: static_multi
     eval:
       -
         name: pretrained

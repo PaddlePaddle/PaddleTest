@@ -1,6 +1,6 @@
 case:
   linux:
-    base: ./base/keypoint_base.yml
+    base: ./base/normal_base.yml
     train:
       -
         name: multi
@@ -12,6 +12,10 @@ case:
         cmd : python tools/train.py
         params:
           - TrainReader.batch_size=1
+      -
+        name: amp_multi
+      -
+        name: static_multi
     eval:
       -
         name: pretrained
@@ -27,9 +31,13 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/python/keypoint_infer.py
+        cmd: python deploy/python/infer.py
+    api:
+      -
+        name: cpp
+        cmd: ./deploy/cpp/build/main
   windows:
-    base: ./base/keypoint_base.yml
+    base: ./base/normal_base.yml
     train:
       -
         name: single
@@ -51,7 +59,7 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/python/keypoint_infer.py
+        cmd: python deploy/python/infer.py
 
 
 function: paddlelas_imagenet_parse
