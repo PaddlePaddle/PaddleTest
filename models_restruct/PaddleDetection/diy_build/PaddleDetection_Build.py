@@ -117,6 +117,7 @@ class PaddleDetection_Build(Model_Build):
         else:
             subprocess.run(cmd_iter1, shell=True)
             subprocess.run(cmd_iter2, shell=True)
+        # mot use small data
         cmd_mot1 = '{} -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         cmd_mot2 = (
             '{} -i "/for step_id, data in enumerate(dataloader):/i\\        '
@@ -134,6 +135,13 @@ class PaddleDetection_Build(Model_Build):
             subprocess.run(cmd_mot1, shell=True)
             subprocess.run(cmd_mot2, shell=True)
             subprocess.run(cmd_mot3, shell=True)
+        # tiny_pose use coco data
+        os.chdir(path_repo + "/configs/keypoint")
+        if os.path.exists("tiny_pose"):
+            shutil.rmtree("tiny_pose")
+        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/tiny_pose.zip")
+        os.system("unzip -q tiny_pose.zip")
+        os.chdir(path_repo)
         # compile op
         os.system("python ppdet/ext_op/setup.py install")
         if os.path.exists("/root/.cache/paddle/weights"):
