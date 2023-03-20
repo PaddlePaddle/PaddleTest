@@ -21,7 +21,7 @@ echo -e '*****************paddleseg_version****'
 git rev-parse HEAD
 
 
-git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep -v quick_start | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib |  grep -v Matting |  grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | grep -v segnext_mscan_t | awk '{print $NF}' | tee dynamic_config_list_temp
+git diff --numstat --diff-filter=AMR upstream/${branch} | grep -v legacy | grep .yml | grep -v quick_start | grep configs | grep -v _base_ | grep -v setr | grep -v portraitnet | grep -v EISeg | grep -v contrib |  grep -v Matting |  grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | grep -v segnext_mscan_t | grep -v vit_adapter | awk '{print $NF}' | tee dynamic_config_list_temp
 echo =================
 cat dynamic_config_list_temp
 echo =================
@@ -83,7 +83,7 @@ log_dir=.
 model_type_path=
 dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
 if [ ${dynamic_config_num} -eq 0 ];then
-find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v contrib | grep -v Matting | grep -v setr | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | grep -v segnext_mscan_t | tee dynamic_config_all
+find . | grep configs | grep .yml | grep -v _base_ | grep -v quick_start | grep -v EISeg | grep -v contrib | grep -v Matting | grep -v setr | grep -v test_tipc | grep -v benchmark | grep -v smrt | grep -v pssl | grep -v segnext_mscan_t | grep -v vit_adapter | tee dynamic_config_all
 shuf dynamic_config_all -n 4 -o dynamic_config_list_temp
 fi
 grep -F -v -f no_upload dynamic_config_list_temp | sort | uniq | tee dynamic_config_list

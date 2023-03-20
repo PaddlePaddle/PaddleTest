@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 
 # pylint: enable=wrong-import-position
@@ -31,10 +31,6 @@ def check_model_exist():
         tar = tarfile.open("ViT_large_patch16_384.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./ViT_large_patch16_384/inference",
-            output_model_path="./ViT_large_patch16_384/inference",
-        )
 
 
 def test_config():

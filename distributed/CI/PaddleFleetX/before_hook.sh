@@ -44,7 +44,6 @@ function requirements() {
     cd ppfleetx/ops && python setup_cuda.py install && cd ../..
 
     python -m pip list|grep paddle
-    export PYTHONPATH=/paddle/PaddleFleetX:$PYTHONPATH
 }
 
 function download() {
@@ -171,14 +170,14 @@ function download() {
         wget -O ${data_path}/lambada_test.jsonl https://raw.githubusercontent.com/cybertronai/bflm/master/lambada_test.jsonl
     fi
 
-    rm -rf GPT_auto_345M
-    if [[ -e ${data_path}/GPT_auto_345M ]]; then
-        echo "GPT_auto_345M downloaded"
+    rm -rf pretrained
+    if [[ -e ${data_path}/pretrained ]]; then
+        echo "GPT_345M_FP16 downloaded"
     else
-        # download GPT_auto_345M for gpt export
-        wget -O ${data_path}/GPT_auto_345M.tar.gz https://paddlefleetx.bj.bcebos.com/model/nlp/gpt/GPT_auto_345M.tar.gz
-        tar -zxvf ${data_path}/GPT_auto_345M.tar.gz -C ${data_path}/
-        rm -rf ${data_path}/GPT_auto_345M.tar.gz
+        # download GPT_345M_FP16 for gpt export
+        wget -O ${data_path}/GPT_345M_FP16.tar.gz https://paddlefleetx.bj.bcebos.com/model/nlp/gpt/GPT_345M_FP16.tar.gz
+        tar -zxvf ${data_path}/GPT_345M_FP16.tar.gz -C ${data_path}/
+        rm -rf ${data_path}/GPT_345M_FP16.tar.gz
     fi
 
     rm -rf GPT_345M_QAT_wo_analysis
@@ -200,7 +199,7 @@ function download() {
     cp ${data_path}/part-00079 ${fleetx_path}/projects/imagen
     ln -s ${data_path}/wikitext-103 ${fleetx_path}/wikitext-103
     cp ${data_path}/lambada_test.jsonl ${fleetx_path}/
-    ln -s ${data_path}/auto_infer ${fleetx_path}/auto_infer
+    ln -s ${data_path}/pretrained ${fleetx_path}/pretrained
     ln -s ${data_path}/GPT_345M_QAT_wo_analysis ${fleetx_path}/GPT_345M_QAT_wo_analysis
 }
 

@@ -16,7 +16,8 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
+
 
 # pylint: enable=wrong-import-position
 
@@ -25,16 +26,12 @@ def check_model_exist():
     """
     check model exist
     """
-    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.1/detection/yolov3.tgz"
+    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.1/detection/yolov3.tgz"
     if not os.path.exists("./yolov3/model.pdiparams"):
         wget.download(yolov3_url, out="./")
         tar = tarfile.open("yolov3.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./yolov3/model",
-            output_model_path="./yolov3/model",
-        )
 
 
 def test_config():
@@ -53,7 +50,7 @@ def test_config():
 @pytest.mark.trt_fp32_multi_thread
 def test_trtfp32_more_bz_multi_thread():
     """
-    compared trt fp32 batch_size=4 yolov3 multi_thread outputs with true val
+    compared trt fp32 batch_size=1 yolov3 multi_thread outputs with true val
     """
     check_model_exist()
 
@@ -119,7 +116,7 @@ def test_trtfp32_more_bz_multi_thread():
 @pytest.mark.trt_fp32
 def test_trtfp32_more_bz():
     """
-    compared trt fp32 batch_size=1,5,10 yolov3 outputs with true val
+    compared trt fp32 batch_size = [1, 2] yolov3 outputs with true val
     """
     check_model_exist()
 

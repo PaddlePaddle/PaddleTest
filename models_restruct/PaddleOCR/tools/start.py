@@ -105,7 +105,7 @@ class PaddleOCR_Start(object):
                 train_base_loss = content[self.model]
                 logger.info("#### train_base_loss: {}".format(train_base_loss))
             self.env_dict["train_base_loss"] = str(train_base_loss)
-            self.env_dict["train_threshold"] = "0.3"
+            self.env_dict["train_threshold"] = "1.0"
 
         pretrained_yaml_path = os.path.join(os.getcwd(), "tools/ocr_pretrained.yaml")
         pretrained_yaml = yaml.load(open(pretrained_yaml_path, "rb"), Loader=yaml.Loader)

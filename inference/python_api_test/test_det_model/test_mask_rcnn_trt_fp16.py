@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 
 # pylint: enable=wrong-import-position
@@ -25,16 +25,12 @@ def check_model_exist():
     """
     check model exist
     """
-    mask_rcnn_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2.2/detection/mask_rcnn.tgz"
+    mask_rcnn_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.2.2/detection/mask_rcnn.tgz"
     if not os.path.exists("./mask_rcnn/model.pdiparams"):
         wget.download(mask_rcnn_url, out="./")
         tar = tarfile.open("mask_rcnn.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./mask_rcnn/model",
-            output_model_path="./mask_rcnn/model",
-        )
 
 
 def test_config():
@@ -55,7 +51,7 @@ def test_config():
 @pytest.mark.jetson
 def test_trt_fp16_more_bz():
     """
-    compared trt_fp16 mask_rcnn batch size = [1] outputs with true val
+    compared trt_fp16 mask_rcnn batch_size = [1] outputs with true val
     """
     check_model_exist()
 
@@ -90,7 +86,7 @@ def test_trt_fp16_more_bz():
             im_shape_pool.append(im_shape)
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(
             model_file="./mask_rcnn/model.pdmodel",
             params_file="./mask_rcnn/model.pdiparams",

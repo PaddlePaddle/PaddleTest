@@ -24,7 +24,7 @@ def check_model_exist():
     """
     check model exist
     """
-    bert_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.2/nlp/bert.tgz"
+    bert_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.2/nlp/bert.tgz"
     if not os.path.exists("./bert/inference.pdiparams"):
         wget.download(bert_url, out="./")
         tar = tarfile.open("bert.tgz")
@@ -38,7 +38,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -52,7 +55,10 @@ def test_mkldnn():
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
     data_path = "./bert/data.txt"
     images_list = test_suite.get_text_npy(data_path)
 
@@ -65,7 +71,14 @@ def test_mkldnn():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
-    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
+    test_suite2.mkldnn_test(
+        input_data_dict,
+        output_data_dict,
+        delta=1e-5,
+    )
 
     del test_suite2  # destroy class to save memory

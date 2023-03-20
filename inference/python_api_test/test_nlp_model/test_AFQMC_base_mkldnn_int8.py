@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 # pylint: enable=wrong-import-position
 
@@ -24,7 +24,7 @@ def check_model_exist():
     """
     check model exist
     """
-    model_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2.2/nlp/AFQMC_base.tgz"
+    model_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.2.2/nlp/AFQMC_base.tgz"
     if not os.path.exists("./AFQMC_base/inference.pdmodel"):
         wget.download(model_url, out="./")
         tar = tarfile.open("AFQMC_base.tgz")
@@ -38,7 +38,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -47,12 +50,15 @@ def test_config():
 @pytest.mark.mkldnn_int8
 def test_mkldnn_int8():
     """
-    compared mkldnn_int8 batch_size=1 bert outputs with true val
+    compared mkldnn_int8 batch_size = [1] AFQMC_base outputs with true val
     """
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
 
     src_ids = (
         np.array(
@@ -275,7 +281,15 @@ def test_mkldnn_int8():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
-    test_suite2.mkldnn_test(input_data_dict, output_data_dict, delta=1e-5, precision="int8")
+    test_suite2.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
+    test_suite2.mkldnn_test(
+        input_data_dict,
+        output_data_dict,
+        delta=1e-5,
+        precision="int8",
+    )
 
     del test_suite2  # destroy class to save memory

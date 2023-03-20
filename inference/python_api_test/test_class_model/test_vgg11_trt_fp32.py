@@ -16,7 +16,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 
 # pylint: enable=wrong-import-position
@@ -26,16 +26,12 @@ def check_model_exist():
     """
     check model exist
     """
-    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1/class/vgg11.tgz"
+    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/vgg11.tgz"
     if not os.path.exists("./vgg11/inference.pdiparams"):
         wget.download(vgg11_url, out="./")
         tar = tarfile.open("vgg11.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./vgg11/inference",
-            output_model_path="./vgg11/inference",
-        )
 
 
 def test_config():
@@ -56,7 +52,7 @@ def test_config():
 @pytest.mark.trt_fp32
 def test_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp32 batch_size=1-2 vgg11 outputs with true val
     """
     check_model_exist()
 
@@ -117,7 +113,7 @@ def test_trt_fp32_more_bz():
 @pytest.mark.trt_fp32
 def test_jetson_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp32 batch_size=1 vgg11 outputs with true val
     """
     check_model_exist()
 
