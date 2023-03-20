@@ -1,5 +1,6 @@
 pip3.7 install pytest
 export FLAGS_call_stack_level=2
+export FLAGS_set_to_1d=0
 cases=`find . -name "test*.py" | sort`
 ignore=""
 bug=0

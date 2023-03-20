@@ -80,7 +80,7 @@ class Runner(object):
                     # logging.info('at {}, res is: {}'.format(i, loss))
                     if self.debug:
                         print(loss)
-                    self.result.append(float(loss))
+                    self.result.append(loss.numpy()[0])
                 # logging.info('at {}, result is: {}'.format(i, self.result))
                 self.check(result=self.result, expect=expect)
 
@@ -172,7 +172,7 @@ class Runner(object):
                     # logging.info('at {}, res is: {}'.format(i, loss))
                     if self.debug:
                         print(loss)
-                    self.result.append(float(loss))
+                    self.result.append(loss.numpy()[0])
                 # logging.info('at {}, result is: {}'.format(i, self.result))
                 self.check(result=self.result, expect=expect)
 
