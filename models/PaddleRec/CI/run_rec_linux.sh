@@ -1,5 +1,6 @@
 #! /bin/bash
 # $1:python_version $2:paddle_compile_path $3:run_CI/run_CE/run_ALL/run_CPU $4:cudaid1 $5:cudaid2
+echo "---$1、$2、$3、$4--"
 
 case $1 in
 27)
