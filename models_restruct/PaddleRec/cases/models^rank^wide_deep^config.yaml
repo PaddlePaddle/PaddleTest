@@ -22,7 +22,6 @@ case:
       -
         name: static
         cmd: python -u tools/static_infer.py
-
       -
         name: dy2st
         cmd: python -u tools/paddle_infer.py
