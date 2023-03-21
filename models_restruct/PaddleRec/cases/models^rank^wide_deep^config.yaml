@@ -29,7 +29,7 @@ case:
           - --model_file=output_model_wide_deep/3/tostatic.pdmodel
           - --params_file=output_model_wide_deep/3/tostatic.pdiparams
           - --data_dir=models/rank/wide_deep/data/sample_data/train
-          - --reader_file=models/rank/wide_deep/criteo_reader.py 
+          - --reader_file=models/rank/wide_deep/criteo_reader.py
           - --batchsize=5
 
   mac:
