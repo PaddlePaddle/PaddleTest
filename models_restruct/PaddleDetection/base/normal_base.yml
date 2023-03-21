@@ -5,6 +5,8 @@ train:
     params:
       - -c ${rd_yaml_path}
       - -o epoch=1
+      - SemiTrainReader.sup_batch_size=1
+      - SemiTrainReader.unsup_batch_size=1
     result:
       exit_code:
         base: 0
