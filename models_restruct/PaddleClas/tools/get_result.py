@@ -3,6 +3,7 @@
 根据之前执行的结果获取kpi值
 """
 import os
+import time
 import sys
 import json
 import shutil
@@ -220,6 +221,8 @@ class PaddleClas_Collect(object):
                         # 单独处理固定不了随机量的 HRNet、 LeViT、 SwinTransformer、 VisionTransformer
                         if (
                             "^HRNet" in case_value["model_name"]
+                            or "^PPLCNetV2_base" in case_value["model_name"]
+                            or "^InceptionV3" in case_value["model_name"]
                             or "^LeViT" in case_value["model_name"]
                             or "^SwinTransformer" in case_value["model_name"]
                             or "^VisionTransformer" in case_value["model_name"]
@@ -243,6 +246,8 @@ class PaddleClas_Collect(object):
                         if (
                             (
                                 "^HRNet" in case_value["model_name"]
+                                or "^PPLCNetV2_base" in case_value["model_name"]
+                                or "^InceptionV3" in case_value["model_name"]
                                 or "^LeViT" in case_value["model_name"]
                                 or "^SwinTransformer" in case_value["model_name"]
                                 or "^VisionTransformer" in case_value["model_name"]
@@ -292,8 +297,33 @@ class PaddleClas_Collect(object):
             tf = tarfile.open(tar_name)
             tf.extractall(os.getcwd())
             os.system("python -m pip install bce-python-sdk")
+
             exit_code = os.system("python {} {} paddle-qa/PaddleMT/PaddleClas/".format(python_name, self.save_name))
-            os.remove(self.save_name)
+            print("### upload {} and exit_code is  {}".format(self.save_name, exit_code))
+
+            # 上传备份
+            shutil.copyfile(
+                self.save_name,
+                self.save_name.replace(".yaml", time.strftime("_%Y_%m_%d", time.gmtime(time.time())) + ".yaml"),
+            )
+            exit_code = os.system(
+                "python {} {} paddle-qa/PaddleMT/PaddleClas/date_kpi_value/".format(
+                    python_name,
+                    self.save_name.replace(".yaml", time.strftime("_%Y_%m_%d", time.gmtime(time.time())) + ".yaml"),
+                )
+            )
+            print(
+                "### upload {} and exit_code is  {}".format(
+                    self.save_name.replace(".yaml", time.strftime("_%Y_%m_%d", time.gmtime(time.time())) + ".yaml"),
+                    exit_code,
+                )
+            )
+
+            #   暂不打开备份上传, check产出的结果
+            if os.path.exists(self.save_name):
+                os.remove(self.save_name)
+            #     os.remove(self.save_name.replace(".yaml", \
+            #         time.strftime("_%Y_%m_%d", time.gmtime(time.time())) + ".yaml"))
             if os.path.exists(python_name):
                 os.remove(tar_name)
                 os.remove(python_name)
@@ -302,7 +332,6 @@ class PaddleClas_Collect(object):
                 os.remove("sts_sample_conf.py")
                 os.remove("StsClient.py")
                 shutil.rmtree("__pycache__")
-            print("### upload {} and exit_code is  {}".format(self.save_name, exit_code))
         else:
             print("### 未生成 {} ".format(self.save_name))
 
@@ -321,33 +350,35 @@ def run():
     # content = json.loads(content)
     # print('###content',content["case"]["linux"]["eval"])
     # input()
+
     # update_name = {
-    #     "PaddleClas-Linux-Cuda116-Python39-P0-Develop": "21186528/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P22-Develop": "21186488/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "21186472/result.tar",
+    #     "PaddleClas-Linux-Cuda112-Python38-P0-Release": "21615184/result.tar",
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Release": "21615143/result.tar",
+    #     "PaddleClas-Linux-Cuda117-Python310-P0-Release": "21615164/result.tar",
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Release-Centos": "21615167/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "21615088/result.tar",
     # }
 
-    update_name = {
-        "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "21234596/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "21230017/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P2-Develop": "21229991/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P21-Develop": "21230053/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P22-Develop": "21230021/result.tar",
-        "PaddleClas-Linux-Cuda112-Python38-P0-Develop": "21234581/result.tar",
-        "PaddleClas-Linux-Cuda116-Python39-P0-Develop": "21230033/result.tar",
-        "PaddleClas-Linux-Cuda117-Python310-P0-Develop": "21230081/result.tar",
-        "PaddleClas-Linux-Cuda116-Python39-P0-Develop-Centos": "21235847/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P0-Release": "21230002/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P2-Release": "21230072/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P1-Release": "21230047/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P21-Release": "21230070/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P22-Release": "21230024/result.tar",
-        "PaddleClas-Linux-Cuda112-Python38-P0-Release": "21234582/result.tar",
-        "PaddleClas-Linux-Cuda116-Python39-P0-Release": "21230042/result.tar",
-        "PaddleClas-Linux-Cuda117-Python310-P0-Release": "21230026/result.tar",
-        "PaddleClas-Linux-Cuda116-Python39-P0-Release-Centos": "21235753/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P9-Release": "21238383/result.tar",
-    }
+    update_name = {"PaddleClas-Linux-Cuda102-Python37-P11-Develop": "21938525/result.tar"}
+
+    # update_name = {
+    #     "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "21880106/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "21849919/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P11-Develop": "21880127/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P12-Develop": "21849965/result.tar",
+    #     "PaddleClas-Linux-Cuda112-Python38-P0-Develop": "21880168/result.tar",
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Develop": "21880154/result.tar",
+    #     "PaddleClas-Linux-Cuda117-Python310-P0-Develop": "21880155/result.tar",
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Develop-Centos": "21880164/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P0-Release": "21880207/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P1-Release": "21880204/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P11-Release": "21849910/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P12-Release": "21849999/result.tar",
+    #     "PaddleClas-Linux-Cuda112-Python38-P0-Release": "21880150/result.tar",
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Release": "21880167/result.tar",
+    #     "PaddleClas-Linux-Cuda117-Python310-P0-Release": "21882918/result.tar",
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Release-Centos": "21880163/result.tar",
+    # }
 
     for (key, value) in update_name.items():
         if value != "None":
@@ -360,4 +391,9 @@ def run():
 
 
 if __name__ == "__main__":
+    try:
+        os.environ["TZ"] = "Asia/Shanghai"
+        time.tzset()
+    except:
+        print(" do not set time tz")
     run()

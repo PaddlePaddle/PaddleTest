@@ -14,8 +14,6 @@ ppcls^configs^Cartoonface^ResNet50_icartoon.yaml
 ppcls^configs^Logo^ResNet50_ReID.yaml
 ppcls^configs^Products^ResNet50_vd_Inshop.yaml
 ppcls^configs^Vehicle^ResNet50.yaml
-ppcls^configs^slim^PPLCNet_x1_0_quantization.yaml
-ppcls^configs^slim^ResNet50_vd_prune.yaml
 ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5.yaml
 ppcls^configs^DeepHash^DCH.yaml
 ppcls^configs^PULC^language_classification^PPLCNet_x1_0.yaml
@@ -27,3 +25,6 @@ ppcls^configs^PULC^vehicle_attribute^PPLCNet_x1_0.yaml
 ppcls^configs^PULC^person_exists^PPLCNet_x1_0.yaml
 ppcls^configs^PULC^person_attribute^PPLCNet_x1_0.yaml
 ppcls^configs^PULC^text_image_orientation^PPLCNet_x1_0.yaml
+ppcls^configs^ImageNet^ResNet^ResNet50_amp_O2_ultra.yaml
+ppcls^configs^ImageNet^ResNet^ResNet50_amp_O1_ultra.yaml
+ppcls^configs^ImageNet^ResNet^ResNet50_amp_O1.yaml

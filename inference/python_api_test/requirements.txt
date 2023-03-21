@@ -2,7 +2,7 @@ wget
 psutil
 pytest
 pynvml==11.0.0
-opencv-python
-paddlenlp==2.2.1
+opencv-python==4.6.0.66
+paddlenlp==2.5.2
 dataclasses ; python_version == "3.6"
 sentencepiece==0.1.96

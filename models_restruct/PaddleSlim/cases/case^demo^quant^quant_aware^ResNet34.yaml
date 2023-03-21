@@ -2,7 +2,7 @@ case:
   linux:
     train:
       -
-        name: multi
+        name: single
         path: demo/quant/quant_aware
         cmd: python train.py
         params:

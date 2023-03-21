@@ -1,0 +1,62 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: examples/language_model/convbert
+        cmd: python -u run_glue.py
+        params:
+          - --model_type convbert
+          - --model_name_or_path convbert-small
+          - --task_name $TASK_NAME
+          - --max_seq_length 128
+          - --batch_size 256
+          - --learning_rate 1e-4
+          - --num_train_epochs 1
+          - --logging_steps 1
+          - --save_steps 2
+          - --output_dir ./glue/$TASK_NAME/
+          - --device gpu
+          - --max_steps 2
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: single
+        path: examples/language_model/convbert
+        cmd: python -u run_glue.py
+        params:
+          - --model_type convbert
+          - --model_name_or_path convbert-small
+          - --task_name $TASK_NAME
+          - --max_seq_length 128
+          - --batch_size 256
+          - --learning_rate 1e-4
+          - --num_train_epochs 1
+          - --logging_steps 1
+          - --save_steps 2
+          - --output_dir ./glue/$TASK_NAME/
+          - --device gpu
+          - --max_steps 2
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

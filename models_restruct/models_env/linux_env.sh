@@ -18,13 +18,15 @@ export models_file=${models_file:-"tools/${reponame}_`(echo ${AGILE_PIPELINE_NAM
 export models_list=${models_list:-None} #模型列表
 
 #指定case操作系统
-if [[ ${AGILE_PIPELINE_NAME} =~ "Linux" ]];then
+if [[ ${AGILE_PIPELINE_NAME} =~ "-Linux-" ]];then
     export system=${system:-"linux"}   # linux windows windows_cpu mac 与yaml case下字段保持一致
-elif [[ ${AGILE_PIPELINE_NAME} =~ "Windows" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-LinuxConvergence-" ]];then
+    export system=${system:-"linux_convergence"}
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Windows-" ]];then
     export system=${system:-"windows"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "WindowsCPU" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-WindowsCPU-" ]];then
     export system=${system:-"windows_cpu"}
-elif [[ ${AGILE_PIPELINE_NAME} =~ "MAC" ]];then
+elif [[ ${AGILE_PIPELINE_NAME} =~ "-Mac-" ]];then
     export system=${system:-"mac"}
 else
     if [[ ${system} ]];then
@@ -62,7 +64,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
     else
-        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2"}
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2-v1"}
     fi
 else
     if [[ ${Image_version} ]];then
@@ -85,14 +87,16 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Py
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python37" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
+        #230223 stride test
+        # export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/xieyunshen/TempPRBuild/50444/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python38" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-TagBuild-Training-Linux-Gpu-Cuda11.2-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda112-Trtoff-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"}
     else
-        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-TagBuild-Training-Linux-Gpu-Cuda11.2-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post112-cp38-cp38-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda112-Trton-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
@@ -125,6 +129,7 @@ fi
 export step=${step:-train}  #阶段 demo:train:multi,single+eval:trained,pretrained, 所有流水线都要自己改
 export branch=${branch:-develop}    # repo的分支，大部分为develop，如果有master dygraph等注意设置!!
 export mode=${mode:-function}   #function只验证功能是否正常  precision验证功能&小数据集精度
+export timeout=${timeout:-3600}   #timeout 为超时取消时间, 单位为秒
 export docker_flag=${docker_flag:-} # 如果北京集群cce环境为False，自己的开发机&release机器不用设置
 
 #### 建议不改的参数
@@ -143,6 +148,7 @@ export AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID}   #效率云依赖参数
 export AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} #效率云依赖参数
 export AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID}   #效率云依赖参数
 export AGILE_WORKSPACE=${AGILE_WORKSPACE}   #效率云依赖参数
+export REPORT_SERVER_PASSWORD=${REPORT_SERVER_PASSWORD}   #上传全局变量
 
 #### 根据PaddleTest & 框架名称决定的参数
 export CE_version_name=${CE_version_name:-TestFrameWork}    #与测试框架的名称一致
@@ -176,6 +182,7 @@ echo "@@@step: ${step}"
 echo "@@@branch: ${branch}"
 echo "@@@mode: ${mode}"
 echo "@@@docker_flag: ${docker_flag}"
+echo "@@@timeout: ${timeout}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -204,17 +211,31 @@ if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认
     if [ $tc_name == "release_02" ];then
         echo release_02
         export set_cuda=2,3;
-
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia2 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia3 | awk '{print $0}' | xargs kill -9
+        fi
     elif [ $tc_name == "release_03" ];then
         echo release_03
         export set_cuda=4,5;
-
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia4 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia5 | awk '{print $0}' | xargs kill -9
+        fi
     elif [ $tc_name == "release_04" ];then
         echo release_04
         export set_cuda=6,7;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia6 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia7 | awk '{print $0}' | xargs kill -9
+        fi
     else
         echo release_01
         export set_cuda=0,1;
+        if [[ "${docker_flag}" == "" ]]; then
+            fuser -v /dev/nvidia0 | awk '{print $0}' | xargs kill -9
+            fuser -v /dev/nvidia1 | awk '{print $0}' | xargs kill -9
+        fi
     fi
 else
     echo already seted CUDA_id  #这里需要再细化下，按下面的方法指定无用，直接默认按common中指定0,1卡了
@@ -245,12 +266,13 @@ if [[ "${docker_flag}" == "" ]]; then
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
     NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
-        --name=${docker_name} --net=host \
+        --name=${docker_name} --net=host --cap-add=SYS_ADMIN \
         --shm-size=128G \
         -v $(pwd):/workspace \
         -v /ssd2:/ssd2 \
         -e AK=${AK} \
         -e SK=${SK} \
+        -e CFS_IP=${CFS_IP} \
         -e bce_whl_url=${bce_whl_url} \
         -e PORT_RANGE="62000:65536" \
         -e no_proxy=${no_proxy} \
@@ -261,12 +283,14 @@ if [[ "${docker_flag}" == "" ]]; then
         -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
         -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
         -e AGILE_WORKSPACE=${AGILE_WORKSPACE} \
+        -e REPORT_SERVER_PASSWORD=${REPORT_SERVER_PASSWORD} \
         -e Python_version=${Python_version} \
         -e models_list=${models_list} \
         -e models_file=${models_file} \
         -e system=${system} \
         -e step=${step} \
         -e reponame=${reponame} \
+        -e timeout=${timeout} \
         -e mode=${mode} \
         -e use_build=${use_build} \
         -e branch=${branch} \
@@ -282,6 +306,8 @@ if [[ "${docker_flag}" == "" ]]; then
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
+            yum update > install_update 2>&1
+            yum install nfs-utils -y > install_nfs 2>&1
             case ${Python_version} in
             36)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -306,6 +332,8 @@ if [[ "${docker_flag}" == "" ]]; then
             esac
         else
             echo "ubuntu"
+            apt-get update > install_update 2>&1
+            apt-get install nfs-common -y > install_nfs 2>&1
             case ${Python_version} in
             36)
             mkdir run_env_py36;
@@ -340,12 +368,24 @@ if [[ "${docker_flag}" == "" ]]; then
             esac
         fi
 
+        #挂载数据, 地址特定为mount_path
+        export mount_path = "/workspace/MT_data/${reponame}"
+        if [[ -d ${mount_path} ]];then
+            mv ${mount_path} ${mount_path}_back
+            mkdir -p ${mount_path}
+        else
+            mkdir -p ${else}
+        fi
+        mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
+        ls ${mount_path}
+        echo "@@@mount_path: ${mount_path}"
+
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
-        python -m pip install -U pip #升级pip
-        python -m pip install -r requirements.txt #预先安装依赖包
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
+        python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
+        python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600}
     ' &
     wait $!
     exit $?
@@ -355,6 +395,8 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
+        yum update > install_update 2>&1
+        yum install nfs-utils -y > install_nfs 2>&1
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -379,6 +421,8 @@ else
         esac
     else
         echo "ubuntu"
+        apt-get update > install_update 2>&1
+        apt-get install nfs-common -y > install_nfs 2>&1
         case ${Python_version} in
         36)
         mkdir run_env_py36;
@@ -413,10 +457,22 @@ else
         esac
     fi
 
+    #挂载数据, 地址特定为mount_path
+    export mount_path = "/workspace/MT_data/${reponame}"
+    if [[ -d ${mount_path} ]];then
+        mv ${mount_path} ${mount_path}_back
+        mkdir -p ${mount_path}
+    else
+        mkdir -p ${else}
+    fi
+    mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
+    ls ${mount_path}
+    echo "@@@mount_path: ${mount_path}"
+
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
     git --version;
-    python -m pip install -U pip #升级pip
-    python -m pip install -r requirements.txt #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1}
+    python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
+    python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600}
 fi

@@ -60,7 +60,7 @@ serverPrintFun(){
 }
 
 displayFun(){
-num=`cat $1 | grep -i "error" | wc -l`
+num=`cat $1 | grep -i "error" | grep -v "received 1000" | wc -l`
 if [ "${num}" -gt "0" ];then
 cat $1
 echo -e "\033[31m $2  start failed!\033[0m"|tee -a $log_path/result.log
@@ -87,6 +87,7 @@ echo $(($num%$max+$min))
 # paddlespeech
 python -m pip uninstall -y paddlespeech
 python -m pip install .
+
 
 unset http_proxy
 unset https_proxy

@@ -29,6 +29,7 @@ python -m pip install numpy==1.20.1 --ignore-installed
 python -m pip install pyparsing==2.4.7 --ignore-installed
 #pip install -e .
 pip install .
+
 # fix protobuf upgrade
 python -m pip uninstall protobuf -y
 python -m pip install protobuf==3.20.1

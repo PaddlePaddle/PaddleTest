@@ -51,10 +51,10 @@ $PYTHON test_segmentation_infer.py --model_path=models/deeplabv3_qat --dataset='
 
 # ERNIE 3.0-Medium MKLDNN int8
 echo "[Benchmark] Run ERNIE 3.0-Medium MKLDNN int8"
-$PYTHON test_nlp_infer.py --model_path=models/save_ernie3_afqmc_new_cablib --model_filename=infer.pdmodel --params_filename=infer.pdiparams --task_name='afqmc' --device=cpu --use_mkldnn=True --cpu_threads=10 --precision=int8 --model_name=ERNIE_3.0-Medium
+$PYTHON test_nlp_infer.py --model_path=models/save_ernie3_afqmc_new_cablib --model_filename=infer.pdmodel --params_filename=infer.pdiparams --task_name='afqmc' --device=CPU --use_mkldnn=True --cpu_threads=10 --precision=int8 --model_name=ERNIE_3.0-Medium
 # PP-MiniLM MKLDNN int8
 echo "[Benchmark] Run PP-MiniLM MKLDNN int8"
-$PYTHON test_nlp_infer.py --model_path=models/save_ppminilm_afqmc_new_calib --task_name='afqmc' --device=cpu --use_mkldnn=True --cpu_threads=10 --precision=int8 --model_name=PP-MiniLM
+$PYTHON test_nlp_infer.py --model_path=models/save_ppminilm_afqmc_new_calib --task_name='afqmc' --device=CPU --use_mkldnn=True --cpu_threads=10 --precision=int8 --model_name=PP-MiniLM
 # BERT Base MKLDNN int8
 echo "[Benchmark] Run BERT Base MKLDNN int8"
-$PYTHON test_bert_infer.py --model_path=models/x2paddle_cola_new_calib --device=cpu --use_mkldnn=True --cpu_threads=10 --batch_size=1 --precision=int8 --model_name=BERT_Base
+$PYTHON test_bert_infer.py --model_path=models/x2paddle_cola_new_calib --device=CPU --use_mkldnn=True --cpu_threads=10 --batch_size=1 --precision=int8 --model_name=BERT_Base

@@ -125,8 +125,10 @@ def eval(predictor, FLAGS):
     if FLAGS.device == "CPU":
         use_gpu = False
     monitor = Monitor(0, use_gpu)
-
-    monitor.start()
+    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
+    # in collect shape mode ,we do not start monitor!
+    if not rerun_flag:
+        monitor.start()
     for batch_id, (image, label) in enumerate(val_loader):
         image = np.array(image)
         # classfication model usually having only one input
@@ -165,7 +167,6 @@ def eval(predictor, FLAGS):
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
             sys.stdout.flush()
-        rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
         if rerun_flag:
             return
 
@@ -235,6 +236,10 @@ def main(FLAGS):
     main func
     """
     predictor = None
+
+    if FLAGS.use_mkldnn:
+        FLAGS.device = "CPU"
+
     if FLAGS.deploy_backend == "paddle_inference":
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,

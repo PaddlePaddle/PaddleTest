@@ -37,13 +37,13 @@ def run():
     system = paddleslim_case_start.system
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_case_start.set_cuda
     set_cuda_single_card = paddleslim_case_start.set_cuda.split(",")[0]
-
+    if current_name == "single":
+        os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
     rd_yaml = os.path.join(paddleslim_case_start.REPO_PATH, paddleslim_case_start.rd_yaml_path)
     qa_yaml = paddleslim_case_start.qa_yaml_name
     if qa_yaml.split("^")[0] != "case":
         with open(rd_yaml, "r") as f:
             content = yaml.load(f, Loader=yaml.FullLoader)
-
         if qa_yaml == "example^auto_compression^nlp^configs^ernie3.0^afqmc":
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
             if currnet_step == "eval":
@@ -66,6 +66,11 @@ def run():
         ):
             os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
         elif (
+            qa_yaml == "example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_sparse"
+            and current_name == "single"
+        ):
+            os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
+        elif (
             qa_yaml == "example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis"
             and system == "windows"
         ):
@@ -75,15 +80,8 @@ def run():
 
         with open(rd_yaml, "w") as f:
             yaml.dump(content, f)
-    elif (
-        qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact"
-        or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_false"
-        or qa_yaml == "case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_precision"
-    ):
-        os.environ["CUDA_VISIBLE_DEVICES"] = set_cuda_single_card
-    else:
+    else:    
         logger.info("******* yaml：{} no exists".format(rd_yaml))
-
 
 if __name__ == "__main__":
     run()

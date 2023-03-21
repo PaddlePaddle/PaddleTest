@@ -13,6 +13,8 @@ import time
 
 import mail_conf
 
+MTRICE_CHINESE = {"jingdu": "精度", "xingneng": "时延", "cpu_mem": "内存", "gpu_mem": "显存"}
+
 
 def mail(sender_addr, receiver_addr, subject, content, proxy):
     """
@@ -49,7 +51,7 @@ def add_table_gsb(jingping, gsb, metric_list):
     D_gsb = 3
     content += "<tr><td></td>"
     for k in metric_list:
-        content += "<td>{}</td>".format(k)
+        content += "<td>{}</td>".format(MTRICE_CHINESE[k])
         for i in range(D_gsb - 1):
             content += "<td></td>"
     content += "</tr>"
@@ -134,7 +136,7 @@ def create_table_day(task_dt, env, gsb, detail, mode_list, metric_list, jingping
     content += "<tr><td></td>"
     for m in mode_list:
         for k in metric_list:
-            content += "<td>{}</td>".format(k)
+            content += "<td>{}</td>".format(MTRICE_CHINESE[k])
             for i in range(D - 1):
                 content += "<td></td>"
     content += "</tr>"

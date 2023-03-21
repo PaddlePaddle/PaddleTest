@@ -17,10 +17,10 @@ ps aux | grep paddlespeech_server | awk '{print $2}' | xargs kill -9
 }
 
 displayFun(){
-num=`cat $1 | grep -i "error" | wc -l`
+num=`cat $1 | grep -i "error"  | grep -v "received 1000" | wc -l`
 if [ "${num}" -gt "0" ];then
 cat $1
-# echo -e "\033[31m $2  start failed!\033[0m"|tee -a $log_path/result.log
+echo -e "\033[31m $2  start failed!\033[0m"|tee -a $log_path/result.log
 fi
 }
 

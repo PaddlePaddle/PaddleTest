@@ -2,16 +2,12 @@ case:
   linux:
     train:
       -
-        name: prepare
-        path: model_zoo/ernie-1.0/
-        cmd: mkdir data && cd data && wget https://bj.bcebos.com/paddlenlp/models/transformers/data_tools/wudao_200g_sample_ernie-3.0-base-zh_ids.npy && wget https://bj.bcebos.com/paddlenlp/models/transformers/data_tools/wudao_200g_sample_ernie-3.0-base-zh_idx.npz && cd -
-      -
         name: pretrain
         path: model_zoo/ernie-1.0/
         cmd: python -m paddle.distributed.launch --log_dir ./log run_pretrain.py
         params:
           - --model_type "ernie"
-          - --model_name_or_path "ernie-3.0-base-zh"
+          - --model_name_or_path "ernie-1.0"
           - --input_dir ./data
           - --output_dir ./output
           - --split 949,50,1
@@ -30,7 +26,7 @@ case:
           - --weight_decay 0.01
           - --warmup_rate 0.01
           - --grad_clip 1.0
-          - --logging_freq 20
+          - --logging_freq 1
           - --num_workers 3
           - --eval_freq 1000
           - --device "gpu"
@@ -45,20 +41,26 @@ case:
             evaluation: "="
     eval: skipped
     infer: skipped
-    export:
-      -
-        name: export
-        path: model_zoo/gpt
-        cmd:  python export_model.py
-        params:
-          - --model_type=gpt
-          - --model_path=gpt2-medium-en
-          - --output_path=./infer_model/model
-    predict:
-      -
-        name: predict
-        path: model_zoo/gpt/deploy/python/
-        cmd: python inference.py
-        params:
-          - --model_type gpt
-          - --model_path ./infer_model/model
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -39,6 +39,7 @@ class RnnBase(object):
         """
         paddle.disable_static(place)
         cell = self.func(**self.kwargs)
+        self.data[0].retain_grads()
         r = cell(*self.data)
         if isinstance(r, tuple):
             loss = paddle.mean(r[0])

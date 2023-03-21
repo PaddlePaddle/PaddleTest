@@ -89,8 +89,8 @@ if [ "${num}" -eq "0" ]; then
    python -m pip install --ignore-installed fasttext -i https://mirror.baidu.com/pypi/simple
 fi
 # paddleocr
-python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
-python -m pip install  --ignore-installed gast==0.3.3 -i https://mirror.baidu.com/pypi/simple
+# python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
+# python -m pip install  --ignore-installed gast==0.3.3 -i https://mirror.baidu.com/pypi/simple
 
 # dir
 log_path=log

@@ -70,8 +70,8 @@ def test_gpu():
 
 @pytest.mark.win
 @pytest.mark.server
+@pytest.mark.jetson
 @pytest.mark.gpu
-@pytest.mark.skip(reason="混合精度推理结果为nan，待确认; release/2.4转换报错")
 def test_gpu_mixed_precision_bz1():
     """
     compared gpu lac mixed_precision outputs with true val
@@ -86,7 +86,7 @@ def test_gpu_mixed_precision_bz1():
             dst_model="./lac/inference_mixed.pdmodel",
             dst_params="./lac/inference_mixed.pdiparams",
         )
-    test_suite.load_config(model_file="./lac/inference_mixed.pdmodel", params_file="./lac/inference_mixed.pdiparams")
+    test_suite.load_config(model_file="./lac/inference.pdmodel", params_file="./lac/inference.pdiparams")
     in1 = np.random.randint(0, 100, (1, 20)).astype(np.int64)
     in2 = np.array([20]).astype(np.int64)
     input_data_dict = {"token_ids": in1, "length": in2}
@@ -96,6 +96,6 @@ def test_gpu_mixed_precision_bz1():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_file="./lac/inference_mixed.pdmodel", params_file="./lac/inference_mixed.pdiparams")
-    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
+    test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, delta=5e-3)
 
     del test_suite2  # destroy class to save memory

@@ -1,0 +1,4 @@
+ppcls^configs^ImageNet^ResNet^ResNet50_amp_O2_ultra.yaml
+ppcls^configs^ImageNet^ResNet^ResNet50_amp_O1_ultra.yaml
+ppcls^configs^ImageNet^ResNet^ResNet50_amp_O1.yaml
+ppcls^configs^ImageNet^ResNet^ResNet50.yaml
