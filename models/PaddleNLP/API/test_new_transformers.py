@@ -1,15 +1,6 @@
-from http.client import NO_CONTENT
 import importlib
-import io
-import re
-import os
-import warnings
-from matplotlib import transforms
 import paddle
-import tqdm
-import shutil
 import pytest
-import paddlenlp
 from paddlenlp.transformers.auto.modeling import *
 from paddlenlp.transformers import *
 from paddlenlp.transformers.auto.modeling import get_name_mapping
