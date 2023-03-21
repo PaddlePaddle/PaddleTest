@@ -8,6 +8,10 @@ case:
       -
         name: single
         cmd : python tools/train.py
+      -
+        name: amp_multi
+      -
+        name: static_multi
     eval:
       -
         name: pretrained
@@ -50,6 +54,30 @@ case:
       -
         name: python
         cmd: python deploy/python/infer.py
+  mac:
+    base: ./base/normal_base.yml
+    train:
+      -
+        name: single
+        cmd : python tools/train.py
+    eval:
+      -
+        name: pretrained
+        cmd: python tools/val.py
+    infer:
+      -
+        name: pretrained
+        cmd: python tools/predict.py
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export.py
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/infer.py
+        params:
+          - --device cpu
 
 
 function: paddlelas_imagenet_parse
