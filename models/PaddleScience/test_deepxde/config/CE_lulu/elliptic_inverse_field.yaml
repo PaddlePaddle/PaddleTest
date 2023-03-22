@@ -1,0 +1,6 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_inverse/elliptic_inverse_field.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/elliptic_inverse_field_metric.npy"
+    solution_loss_dir: "../standard_data/elliptic_inverse_field_loss.npy"
+    run_time: 190.983348
