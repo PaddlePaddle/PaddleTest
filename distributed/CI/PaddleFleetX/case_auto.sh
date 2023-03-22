@@ -51,7 +51,7 @@ function gpt_auto_serial() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -79,7 +79,7 @@ function gpt_auto_dp2mp2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -107,7 +107,7 @@ function gpt_auto_mp2pp2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -135,7 +135,7 @@ function gpt_auto_dp2pp2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -165,7 +165,7 @@ function gpt_auto_dp2mp2pp2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -194,7 +194,8 @@ function gpt_auto_dp2mp2pp2_o2() {
     python -m paddle.distributed.launch --log_dir=$log_dir --devices="0,1,2,3,4,5,6,7" \
         tools/auto.py \
         -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_1.3B_dp8.yaml \
-        -o Engine.mix_precision.level=o2 \
+        -o Engine.mix_precision.dtype="float16" \
+        -o Engine.mix_precision.level="o2" \
         -o Model.hidden_size=1024 \
         -o Model.num_layers=4 \
         -o Model.num_attention_heads=4 \
@@ -220,7 +221,7 @@ function gpt_auto_dp2sharding2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -248,7 +249,7 @@ function gpt_auto_dp2mp2sharding2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -276,7 +277,7 @@ function gpt_auto_dp2pp2sharding2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -306,7 +307,7 @@ function gpt_auto_dp2mp2pp2sharding2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -336,6 +337,7 @@ function gpt_auto_pass_o1_stage1() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o1" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -366,6 +368,7 @@ function gpt_auto_pass_o1_stage2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o1" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -395,6 +398,7 @@ function gpt_auto_pass_o2_stage1() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o2" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -424,6 +428,7 @@ function gpt_auto_pass_o2_stage2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o2" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -453,6 +458,7 @@ function gpt_auto_pass_o3_stage1() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o3" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -482,6 +488,7 @@ function gpt_auto_pass_o3_stage2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o3" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
