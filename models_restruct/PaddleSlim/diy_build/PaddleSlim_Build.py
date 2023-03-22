@@ -32,7 +32,8 @@ class PaddleSlim_Build(Model_Build):
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
 
-        self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
+        self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)
+        # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
         self.models_list = args.models_list
         self.models_file = args.models_file
@@ -58,6 +59,9 @@ class PaddleSlim_Build(Model_Build):
         path_now = os.getcwd()
         os.chdir("PaddleSlim") 
         logger.info("install required whl")
+        os.system("python -m pip uninstall paddleslim -y")
+        os.system("python -m pip uninstall paddlepaddle -y")
+        os.system("python -m pip uninstall paddlepaddle-gpu -y")
         os.system("python -m pip install --user setuptools")
         os.system("python -m pip install --user pycocotools")
         os.system("python -m pip install --user sklearn==0.0")
@@ -68,15 +72,21 @@ class PaddleSlim_Build(Model_Build):
         #os.system("python -m pip install --user -U paddlenlp")
         os.system("python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
         os.system("python -m pip install --user -U x2paddle==1.3.9")
-        os.system("python -m pip install --user {}".format(self.paddle_whl))
+        cmd_return = os.system("python -m pip install {}".format(self.paddle_whl))
+        if cmd_return:
+            logger.info("repo {} python -m pip install paddle failed".format(self.reponame))
         os.system("python -m pip install -r requirements.txt")
+        os.system("python -m pip install faiss")
         os.system("python -m pip install wheel")
         os.system("python -m pip install twine")
         os.system("python setup.py bdist_wheel")
         os.system("python -m pip uninstall paddleslim -y")
         cmd_return = os.system("python -m pip install -U dist/paddleslim*.whl")
         if cmd_return:
-            logger.info("repo {} python -m pip install paddleslim failed".format(self.reponame))
+            logger.info("repo {} python -m pip install paddleslim failed with dist".format(self.reponame))
+            cmd_setup = os.system("python setup.py install")
+            if cmd_setup:
+                logger.info("repo {} python -m pip install paddleslim failed with setup".format(self.reponame))
         os.chdir(path_now)
         return 0
 
@@ -97,8 +107,7 @@ if __name__ == "__main__":
 
     def parse_args():
         """
-        接收和解析命令传入的参数
-            最好尽可能减少输入给一些默认参数就能跑的示例!
+        接收和解析命令传入的参数最好尽可能减少输入给一些默认参数就能跑的示例!
         """
         parser = argparse.ArgumentParser("Tool for running CE task")
         parser.add_argument("--models_file", help="模型列表文件", type=str, default=None)

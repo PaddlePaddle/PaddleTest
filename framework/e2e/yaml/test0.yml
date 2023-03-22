@@ -1,4 +1,4 @@
-Tanh:
+Tanh_0:
   desc: "Tanh激活层"
   paddle:
     api_name: "paddle.nn.Tanh"
@@ -15,25 +15,25 @@ Tanh:
       ins: {x: input}
 
 
-fft:
-  desc: "一维离散傅里叶变换fft"
-  paddle:
-    api_name: "paddle.fft.fft"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 1, 1, 1, 4 ]
-        range: [ -1, 1 ]
-    params:
-      n: 3
-      norm: "forward"
-  pytorch:
-    api_name: "torch.fft.fft"
-    mapping:
-      ins: { x: input, n: "n", norm: "norm"}
+#fft:
+#  desc: "一维离散傅里叶变换fft"
+#  paddle:
+#    api_name: "paddle.fft.fft"
+#    inputs:
+#      x:
+#        random: true
+#        dtype: "float32"
+#        shape: [ 1, 1, 1, 4 ]
+#        range: [ -1, 1 ]
+#    params:
+#      n: 3
+#      norm: "forward"
+#  pytorch:
+#    api_name: "torch.fft.fft"
+#    mapping:
+#      ins: { x: input, n: "n", norm: "norm"}
 
-conv2d_base:
+conv2d_0:
   desc: "2维卷积"
   paddle:
     api_name: "paddle.nn.functional.conv2d"

@@ -31,7 +31,7 @@ function gpt_save_ckpt() {
     rm -rf log
     python ./tools/train.py \
         -c ./ppfleetx/configs/nlp/gpt/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.use_pure_fp16=False \
+        -o Engine.mix_precision.enable=False \
         -o Model.hidden_dropout_prob=0. \
         -o Model.attention_probs_dropout_prob=0. \
         -o Model.num_layers=4 \
@@ -51,7 +51,7 @@ function gpt_auto_serial() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -69,7 +69,7 @@ function gpt_auto_serial() {
         -o Engine.save_load.ckpt_dir="./ckpt_dynamic/epoch_0_step_1/auto_infer/auto"
     check_result $FUNCNAME
     loss=`tail -5 $log_dir/workerlog.0 | grep "lr:" | cut -d " " -f5 `
-    check_diff 10.9596 ${loss} ${FUNCNAME}_loss
+    check_diff 10.9509 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_dp2mp2() {
@@ -79,7 +79,7 @@ function gpt_auto_dp2mp2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -97,7 +97,7 @@ function gpt_auto_dp2mp2() {
         -o Engine.save_load.ckpt_dir="./ckpt_dynamic/epoch_0_step_1/auto_infer/auto"
     check_result $FUNCNAME
     loss=`tail -5 $log_dir/workerlog.0 | grep "lr:" | cut -d " " -f5 `
-    check_diff 10.9587 ${loss} ${FUNCNAME}_loss
+    check_diff 10.9697 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_mp2pp2() {
@@ -107,7 +107,7 @@ function gpt_auto_mp2pp2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -125,7 +125,7 @@ function gpt_auto_mp2pp2() {
         -o Engine.save_load.ckpt_dir="./ckpt_dynamic/epoch_0_step_1/auto_infer/auto"
     check_result $FUNCNAME
     loss=`tail -5 $log_dir/workerlog.2 | grep "lr:" | cut -d " " -f5 `
-    check_diff 10.9596 ${loss} ${FUNCNAME}_loss
+    check_diff 10.9509 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_dp2pp2() {
@@ -135,7 +135,7 @@ function gpt_auto_dp2pp2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -155,7 +155,7 @@ function gpt_auto_dp2pp2() {
     loss1=`tail -5 $log_dir/workerlog.2 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.3 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 10.9687 ${loss} ${FUNCNAME}_loss
+    check_diff 10.9732 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_dp2mp2pp2() {
@@ -165,7 +165,7 @@ function gpt_auto_dp2mp2pp2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -185,7 +185,7 @@ function gpt_auto_dp2mp2pp2() {
     loss1=`tail -5 $log_dir/workerlog.4 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.6 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 10.9687 ${loss} ${FUNCNAME}_loss
+    check_diff 10.9732 ${loss} ${FUNCNAME}_loss
 }
 function gpt_auto_dp2mp2pp2_o2() {
     cd ${fleetx_path}
@@ -194,7 +194,8 @@ function gpt_auto_dp2mp2pp2_o2() {
     python -m paddle.distributed.launch --log_dir=$log_dir --devices="0,1,2,3,4,5,6,7" \
         tools/auto.py \
         -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_1.3B_dp8.yaml \
-        -o Engine.mix_precision.level=o2 \
+        -o Engine.mix_precision.dtype="float16" \
+        -o Engine.mix_precision.level="o2" \
         -o Model.hidden_size=1024 \
         -o Model.num_layers=4 \
         -o Model.num_attention_heads=4 \
@@ -220,7 +221,7 @@ function gpt_auto_dp2sharding2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -238,7 +239,7 @@ function gpt_auto_dp2sharding2() {
         -o Engine.save_load.ckpt_dir="./ckpt_dynamic/epoch_0_step_1/auto_infer/auto"
     check_result $FUNCNAME
     loss=`tail -5 $log_dir/workerlog.0 | grep "lr:" | cut -d " " -f5 `
-    check_diff 10.9587 ${loss} ${FUNCNAME}_loss
+    check_diff 10.9697 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_dp2mp2sharding2() {
@@ -248,7 +249,7 @@ function gpt_auto_dp2mp2sharding2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -266,7 +267,7 @@ function gpt_auto_dp2mp2sharding2() {
         -o Engine.save_load.ckpt_dir="./ckpt_dynamic/epoch_0_step_1/auto_infer/auto"
     check_result $FUNCNAME
     loss=`tail -5 $log_dir/workerlog.0 | grep "lr:" | cut -d " " -f5 `
-    check_diff 10.9587 ${loss} ${FUNCNAME}_loss
+    check_diff 10.9697 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_dp2pp2sharding2() {
@@ -276,7 +277,7 @@ function gpt_auto_dp2pp2sharding2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -296,7 +297,7 @@ function gpt_auto_dp2pp2sharding2() {
     loss1=`tail -5 $log_dir/workerlog.2 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.3 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 10.9687 ${loss} ${FUNCNAME}_loss
+    check_diff 10.9732 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_dp2mp2pp2sharding2() {
@@ -306,7 +307,7 @@ function gpt_auto_dp2mp2pp2sharding2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
-        -o Engine.mix_precision.level="" \
+        -o Engine.mix_precision.dtype="" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
         -o Model.num_layers=4 \
@@ -326,7 +327,7 @@ function gpt_auto_dp2mp2pp2sharding2() {
     loss1=`tail -5 $log_dir/workerlog.4 | grep "lr:" | cut -d " " -f5 `
     loss2=`tail -5 $log_dir/workerlog.6 | grep "lr:" | cut -d " " -f5 `
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_diff 10.9687 ${loss} ${FUNCNAME}_loss
+    check_diff 10.9732 ${loss} ${FUNCNAME}_loss
 }
 
 function gpt_auto_pass_o1_stage1() {
@@ -336,6 +337,7 @@ function gpt_auto_pass_o1_stage1() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o1" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -366,6 +368,7 @@ function gpt_auto_pass_o1_stage2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o1" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -395,6 +398,7 @@ function gpt_auto_pass_o2_stage1() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o2" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -424,6 +428,7 @@ function gpt_auto_pass_o2_stage2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o2" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -453,6 +458,7 @@ function gpt_auto_pass_o3_stage1() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o3" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -482,6 +488,7 @@ function gpt_auto_pass_o3_stage2() {
     python -m paddle.distributed.launch --log_dir $log_dir --devices "0,1,2,3,4,5,6,7" \
         ./tools/auto.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_345M_single_card.yaml \
+        -o Engine.mix_precision.dtype="float16" \
         -o Engine.mix_precision.level="o3" \
         -o Model.hidden_dropout_prob=0 \
         -o Model.attention_probs_dropout_prob=0 \
@@ -551,7 +558,6 @@ function run_gpu_models(){
       do
         echo "=========== ${model} run begin ==========="
         $model
-        # sleep 1
         echo "=========== ${model} run  end ==========="
       done
 }

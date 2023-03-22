@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 
 # pylint: enable=wrong-import-position
@@ -25,16 +25,12 @@ def check_model_exist():
     """
     check model exist
     """
-    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.0/detection/ppyolo.tgz"
+    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.0/detection/ppyolo.tgz"
     if not os.path.exists("./ppyolo/model.pdiparams"):
         wget.download(ppyolo_url, out="./")
         tar = tarfile.open("ppyolo.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./ppyolo/model",
-            output_model_path="./ppyolo/model",
-        )
 
 
 def test_config():
@@ -56,7 +52,7 @@ def test_config():
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
-    compared trt_fp16 ppyolo batch size = [1] outputs with true val
+    compared trt_fp16 ppyolo batch_size = [1] outputs with true val
     """
     check_model_exist()
 

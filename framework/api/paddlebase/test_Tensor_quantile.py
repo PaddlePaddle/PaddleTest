@@ -42,7 +42,7 @@ def test_quantile_base():
     exp = np.quantile(x, q=q, axis=axis)
     x_p = paddle.to_tensor(x)
     res = x_p.quantile(q=q, axis=axis)
-    compare(res.numpy(), exp)
+    compare(res.numpy(False), exp)
 
 
 @pytest.mark.api_base_quantile_parameters
@@ -58,7 +58,7 @@ def test_quantile():
     exp = np.quantile(x, q=q, axis=axis)
     x_p = paddle.to_tensor(x)
     res = x_p.quantile(q=q, axis=axis)
-    compare(res.numpy(), exp)
+    compare(res.numpy(False), exp)
 
 
 @pytest.mark.api_base_quantile_parameters
@@ -76,7 +76,7 @@ def test_quantile1():
     exp = np.quantile(x, q=q, axis=axis, keepdims=keepdims)
     x_p = paddle.to_tensor(x)
     res = x_p.quantile(q=q, axis=axis, keepdim=keepdims)
-    compare(res.numpy(), exp)
+    compare(res.numpy(False), exp)
 
 
 @pytest.mark.api_base_quantile_parameters
@@ -94,7 +94,7 @@ def test_quantile2():
     exp = np.quantile(x, q=q, axis=axis, keepdims=keepdims)
     x_p = paddle.to_tensor(x)
     res = x_p.quantile(q=q, axis=axis, keepdim=keepdims)
-    compare(res.numpy(), exp)
+    compare(res.numpy(False), exp)
 
 
 @pytest.mark.api_base_quantile_parameters
@@ -112,7 +112,7 @@ def test_quantile3():
     exp = np.quantile(x, q=q, axis=axis, keepdims=keepdims)
     x_p = paddle.to_tensor(x)
     res = x_p.quantile(q=q, axis=axis, keepdim=keepdims)
-    compare(res.numpy(), exp)
+    compare(res.numpy(False), exp)
 
 
 @pytest.mark.api_base_quantile_parameters
@@ -128,4 +128,4 @@ def test_quantile4():
     x_p = paddle.to_tensor(x)
     exp = np.quantile(x, q=q)
     res = x_p.quantile(q=q)
-    compare(res.numpy(), exp)
+    compare(res.numpy(False), exp)

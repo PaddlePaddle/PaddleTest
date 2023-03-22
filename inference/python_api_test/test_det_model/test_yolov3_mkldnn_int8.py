@@ -17,6 +17,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -24,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.1/detection/yolov3.tgz"
+    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.1/detection/yolov3.tgz"
     if not os.path.exists("./yolov3/model.pdiparams"):
         wget.download(yolov3_url, out="./")
         tar = tarfile.open("yolov3.tgz")
@@ -38,7 +39,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+    test_suite.load_config(
+        model_file="./yolov3/model.pdmodel",
+        params_file="./yolov3/model.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -57,7 +61,10 @@ def test_more_bz_mkldnn_int8():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
+        test_suite.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -89,6 +96,15 @@ def test_more_bz_mkldnn_int8():
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        test_suite.load_config(model_file="./yolov3/model.pdmodel", params_file="./yolov3/model.pdiparams")
-        test_suite.mkldnn_test(input_data_dict, output_data_dict, repeat=1, delta=3e-4, precision="int8")
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
+        test_suite.load_config(
+            model_file="./yolov3/model.pdmodel",
+            params_file="./yolov3/model.pdiparams",
+        )
+        test_suite.mkldnn_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=3e-4,
+            precision="int8",
+        )

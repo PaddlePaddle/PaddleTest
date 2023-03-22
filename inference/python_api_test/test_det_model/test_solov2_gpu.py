@@ -15,7 +15,8 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
+
 
 # pylint: enable=wrong-import-position
 
@@ -24,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    solov2_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.3/detection/solov2.tgz"
+    solov2_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.3/detection/solov2.tgz"
     if not os.path.exists("./solov2/model.pdiparams"):
         wget.download(solov2_url, out="./")
         tar = tarfile.open("solov2.tgz")
@@ -38,7 +39,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./solov2/model.pdmodel", params_file="./solov2/model.pdiparams")
+    test_suite.load_config(
+        model_file="./solov2/model.pdmodel",
+        params_file="./solov2/model.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -51,7 +55,10 @@ def test_disable_gpu():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./solov2/model.pdmodel", params_file="./solov2/model.pdiparams")
+    test_suite.load_config(
+        model_file="./solov2/model.pdmodel",
+        params_file="./solov2/model.pdiparams",
+    )
     batch_size = 1
     im_size = 608
     im = np.random.randn(batch_size, 3, 608, 608).astype("float32")
@@ -69,7 +76,7 @@ def test_disable_gpu():
 @pytest.mark.gpu
 def test_gpu_more_bz():
     """
-    compared gpu solov2 batch size = [1] outputs with true val
+    compared gpu solov2 batch_size = [1] outputs with true val
     """
     check_model_exist()
 
@@ -79,7 +86,10 @@ def test_gpu_more_bz():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./solov2/model.pdmodel", params_file="./solov2/model.pdiparams")
+        test_suite.load_config(
+            model_file="./solov2/model.pdmodel",
+            params_file="./solov2/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -102,7 +112,10 @@ def test_gpu_more_bz():
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        test_suite.load_config(model_file="./solov2/model.pdmodel", params_file="./solov2/model.pdiparams")
+        test_suite.load_config(
+            model_file="./solov2/model.pdmodel",
+            params_file="./solov2/model.pdiparams",
+        )
         test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-5)
 
 
@@ -112,7 +125,7 @@ def test_gpu_more_bz():
 @pytest.mark.skip(reason="检测框nms结果排序问题，暂时跳过")
 def test_gpu_mixed_precision_bz1():
     """
-    compared gpu solov2 batch size = [1] mixed_precision outputs with true val
+    compared gpu solov2 batch_size = [1] mixed_precision outputs with true val
     """
     check_model_exist()
 
@@ -129,7 +142,10 @@ def test_gpu_mixed_precision_bz1():
                 dst_model="./solov2/model_mixed.pdmodel",
                 dst_params="./solov2/model_mixed.pdiparams",
             )
-        test_suite.load_config(model_file="./solov2/model_mixed.pdmodel", params_file="./solov2/model_mixed.pdiparams")
+        test_suite.load_config(
+            model_file="./solov2/model.pdmodel",
+            params_file="./solov2/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -152,5 +168,13 @@ def test_gpu_mixed_precision_bz1():
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        test_suite.load_config(model_file="./solov2/model_mixed.pdmodel", params_file="./solov2/model_mixed.pdiparams")
-        test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-5)
+        test_suite.load_config(
+            model_file="./solov2/model_mixed.pdmodel",
+            params_file="./solov2/model_mixed.pdiparams",
+        )
+        test_suite.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=1e-5,
+        )

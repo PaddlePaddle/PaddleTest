@@ -69,6 +69,7 @@ class PaddleDetection_Build(Model_Build):
         os.system("python -m pip install setuptools --ignore-installed")
         os.system("python -m pip install -r requirements.txt --ignore-installed")
         os.system("python -m pip install zip --ignore-installed")
+        logger.info("***start ffmpeg install***")
         os.system("rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro")
         os.system("rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm")
         os.system("yum install ffmpeg ffmpeg-devel -y")
@@ -116,6 +117,7 @@ class PaddleDetection_Build(Model_Build):
         else:
             subprocess.run(cmd_iter1, shell=True)
             subprocess.run(cmd_iter2, shell=True)
+        # mot use small data
         cmd_mot1 = '{} -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         cmd_mot2 = (
             '{} -i "/for step_id, data in enumerate(dataloader):/i\\        '
@@ -133,6 +135,13 @@ class PaddleDetection_Build(Model_Build):
             subprocess.run(cmd_mot1, shell=True)
             subprocess.run(cmd_mot2, shell=True)
             subprocess.run(cmd_mot3, shell=True)
+        # tiny_pose use coco data
+        os.chdir(path_repo + "/configs/keypoint")
+        if os.path.exists("tiny_pose"):
+            shutil.rmtree("tiny_pose")
+        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/tiny_pose.zip")
+        os.system("unzip -q tiny_pose.zip")
+        os.chdir(path_repo)
         # compile op
         os.system("python ppdet/ext_op/setup.py install")
         if os.path.exists("/root/.cache/paddle/weights"):
@@ -146,21 +155,21 @@ class PaddleDetection_Build(Model_Build):
             shutil.rmtree("voc")
         logger.info("***start download data")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
-        os.system("unzip coco.zip")
+        os.system("unzip -q coco.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota.zip")
-        os.system("unzip dota.zip")
+        os.system("unzip -q dota.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota_ms.zip")
-        os.system("unzip dota_ms.zip")
+        os.system("unzip -q dota_ms.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mot.zip")
-        os.system("unzip mot.zip")
+        os.system("unzip -q mot.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/visdrone.zip")
-        os.system("unzip visdrone.zip")
+        os.system("unzip -q visdrone.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/VisDrone2019_coco.zip")
-        os.system("unzip VisDrone2019_coco.zip")
+        os.system("unzip -q VisDrone2019_coco.zip")
         # wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mainbody.zip")
         # os.system("unzip mainbody.zip")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/voc.zip")
-        os.system("unzip voc.zip")
+        os.system("unzip -q voc.zip")
         # wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/aic_coco_train_cocoformat.json")
         logger.info("***download data ended")
         # compile cpp
@@ -169,7 +178,7 @@ class PaddleDetection_Build(Model_Build):
             "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos"
             "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
         )
-        os.system("tar xvf paddle_inference.tgz")
+        os.system("tar -xf paddle_inference.tgz")
         os.system('sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh')
         os.system('sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh')
         os.system('sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh')

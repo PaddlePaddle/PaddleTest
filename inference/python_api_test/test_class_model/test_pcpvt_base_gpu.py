@@ -15,7 +15,8 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
+
 
 # pylint: enable=wrong-import-position
 
@@ -24,13 +25,12 @@ def check_model_exist():
     """
     check model exist
     """
-    pcpvt_base_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.1/class/pcpvt_base.tgz"
+    pcpvt_base_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.1/class/pcpvt_base.tgz"
     if not os.path.exists("./pcpvt_base/inference.pdiparams"):
         wget.download(pcpvt_base_url, out="./")
         tar = tarfile.open("pcpvt_base.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./pcpvt_base/inference", output_model_path="./pcpvt_base/inference")
 
 
 def test_config():
@@ -39,7 +39,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./pcpvt_base/inference.pdmodel",
+        params_file="./pcpvt_base/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -52,7 +55,10 @@ def test_disable_gpu():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./pcpvt_base/inference.pdmodel",
+        params_file="./pcpvt_base/inference.pdiparams",
+    )
     batch_size = 1
     fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
     input_data_dict = {"x": fake_input}
@@ -74,7 +80,8 @@ def test_gpu_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -85,9 +92,14 @@ def test_gpu_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5)
+        test_suite2.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            delta=1e-5,
+        )
 
         del test_suite2  # destroy class to save memory
 
@@ -114,7 +126,8 @@ def test_gpu_mixed_precision_bz1():
                 dst_params="./pcpvt_base/inference_mixed.pdiparams",
             )
         test_suite.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -125,9 +138,14 @@ def test_gpu_mixed_precision_bz1():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./pcpvt_base/inference_mixed.pdmodel", params_file="./pcpvt_base/inference_mixed.pdiparams"
+            model_file="./pcpvt_base/inference_mixed.pdmodel",
+            params_file="./pcpvt_base/inference_mixed.pdiparams",
         )
-        test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, delta=5e-3)
+        test_suite2.gpu_more_bz_test_mix(
+            input_data_dict,
+            output_data_dict,
+            delta=5e-3,
+        )
 
         del test_suite2  # destroy class to save memory
 
@@ -146,7 +164,8 @@ def test_jetson_gpu_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -157,8 +176,14 @@ def test_jetson_gpu_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./pcpvt_base/inference.pdmodel", params_file="./pcpvt_base/inference.pdiparams"
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
-        test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5, gpu_mem=4000)
+        test_suite2.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            delta=1e-5,
+            gpu_mem=4000,
+        )
 
         del test_suite2  # destroy class to save memory

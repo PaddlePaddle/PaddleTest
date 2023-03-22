@@ -15,7 +15,8 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
+
 
 # pylint: enable=wrong-import-position
 
@@ -24,13 +25,12 @@ def check_model_exist():
     """
     check model exist
     """
-    tnt_small_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2rc/class/TNT_small.tgz"
+    tnt_small_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.2rc/class/TNT_small.tgz"
     if not os.path.exists("./TNT_small/inference.pdiparams"):
         wget.download(tnt_small_url, out="./")
         tar = tarfile.open("TNT_small.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./TNT_small/inference", output_model_path="./TNT_small/inference")
 
 
 def test_config():
@@ -39,7 +39,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./TNT_small/inference.pdmodel",
+        params_file="./TNT_small/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -52,7 +55,10 @@ def test_disable_gpu():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./TNT_small/inference.pdmodel",
+        params_file="./TNT_small/inference.pdiparams",
+    )
     batch_size = 1
     fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
     input_data_dict = {"x": fake_input}
@@ -74,7 +80,8 @@ def test_gpu_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+            model_file="./TNT_small/inference.pdmodel",
+            params_file="./TNT_small/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -85,7 +92,8 @@ def test_gpu_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+            model_file="./TNT_small/inference.pdmodel",
+            params_file="./TNT_small/inference.pdiparams",
         )
         test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict)
 
@@ -114,7 +122,8 @@ def test_gpu_mixed_precision_bz1():
                 dst_params="./TNT_small/inference_mixed.pdiparams",
             )
         test_suite.load_config(
-            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+            model_file="./TNT_small/inference.pdmodel",
+            params_file="./TNT_small/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -125,7 +134,8 @@ def test_gpu_mixed_precision_bz1():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./TNT_small/inference_mixed.pdmodel", params_file="./TNT_small/inference_mixed.pdiparams"
+            model_file="./TNT_small/inference_mixed.pdmodel",
+            params_file="./TNT_small/inference_mixed.pdiparams",
         )
         test_suite2.gpu_more_bz_test_mix(input_data_dict, output_data_dict, delta=5e-3)
 
@@ -146,7 +156,8 @@ def test_jetson_gpu_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+            model_file="./TNT_small/inference.pdmodel",
+            params_file="./TNT_small/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -157,7 +168,8 @@ def test_jetson_gpu_more_bz():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./TNT_small/inference.pdmodel", params_file="./TNT_small/inference.pdiparams"
+            model_file="./TNT_small/inference.pdmodel",
+            params_file="./TNT_small/inference.pdiparams",
         )
         test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict)
 

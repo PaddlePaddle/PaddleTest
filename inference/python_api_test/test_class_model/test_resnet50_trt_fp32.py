@@ -16,7 +16,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 
 # pylint: enable=wrong-import-position
@@ -26,16 +26,12 @@ def check_model_exist():
     """
     check model exist
     """
-    resnet50_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.0/class/resnet50.tgz"
+    resnet50_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.0/class/resnet50.tgz"
     if not os.path.exists("./resnet50/inference.pdiparams"):
         wget.download(resnet50_url, out="./")
         tar = tarfile.open("resnet50.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(
-            path_prefix="./resnet50/inference",
-            output_model_path="./resnet50/inference",
-        )
 
 
 def test_config():
@@ -56,7 +52,7 @@ def test_config():
 @pytest.mark.trt_fp32
 def test_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 resnet50 outputs with true val
+    compared trt fp32 batch_size=1-2 resnet50 outputs with true val
     """
     check_model_exist()
 
@@ -117,7 +113,7 @@ def test_trt_fp32_more_bz():
 @pytest.mark.trt_fp32_more_bz_precision
 def test_jetson_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 resnet50 outputs with true val
+    compared trt fp32 batch_size=1 resnet50 outputs with true val
     """
     check_model_exist()
 

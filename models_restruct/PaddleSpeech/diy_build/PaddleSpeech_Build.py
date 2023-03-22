@@ -99,6 +99,7 @@ class PaddleSpeech_Build(Model_Build):
                 os.system("python -m pip install jsonlines")
             # M1: cant not add --ignore-installed"
             # windows install add --user
+            os.system("python -m pip install -U setuptools")
             os.system("python -m pip install .  -i https://mirror.baidu.com/pypi/simple")
             # mac from numba.np.ufunc import _internal
             # os.system("python -m pip install -U numpy<1.24.0")
