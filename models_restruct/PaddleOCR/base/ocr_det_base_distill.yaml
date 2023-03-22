@@ -1,7 +1,7 @@
 train:
   -
     name: single
-    cmd : python tools/train.py
+    cmd : python -m paddle.distributed.launch tools/train.py
     params:
       - -c ${rd_yaml_path}
       - -o Global.epoch_num=1
@@ -30,7 +30,7 @@ train:
         evaluation: "-"
   -
     name: amp
-    cmd : python tools/train.py
+    cmd : python -m paddle.distributed.launch tools/train.py
     params:
       - -c ${rd_yaml_path}
       - -o Global.epoch_num=1

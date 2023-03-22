@@ -1,7 +1,7 @@
 train:
   -
     name: amp
-    cmd : python tools/train.py
+    cmd : python -m paddle.distributed.launch tools/train.py
     params:
       - -c ${rd_yaml_path}
       - -o Global.use_gpu=True
