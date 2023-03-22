@@ -32,5 +32,5 @@ def test_numel_base():
     base
     """
     x = np.arange(20).reshape(4, 5)
-    res = np.array([20])
+    res = np.array(20)
     obj.base(res=res, x=x)
