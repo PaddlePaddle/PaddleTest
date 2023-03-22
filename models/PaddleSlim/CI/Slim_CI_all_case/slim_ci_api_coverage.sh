@@ -50,7 +50,8 @@ do
     if [[ ${ignore} =~ ${line##*/} ]]; then
         echo "skip" ${line##*/}
     else
-       python -m paddle.distributed.launch coverage run --source=${source} --branch -p ${line} > ${log_path}/${test_num}_distribution_${name} 2>&1
+        python -m coverage run --source=${source} --branch -p \
+            -m paddle.distributed.launch ${line} > ${log_path}/${test_num}_distribution_${name} 2>&1
        print_info $? ${test_num}_distribution_${name}
     fi
     }&
@@ -58,10 +59,12 @@ do
 done
 }
 export CUDA_VISIBLE_DEVICES=${cudaid2}
+echo "---distribution UT case is running with ${CUDA_VISIBLE_DEVICES}"
 run_distribution_case
 wait
 
 export CUDA_VISIBLE_DEVICES=${cudaid1}
+echo "---single card UT case is running with ${CUDA_VISIBLE_DEVICES}"
 run_api_case(){
 cases=`find ./ -name "test*.py" | sort`
 #ignore="test_analysis_helper.py"

@@ -62,6 +62,8 @@ pre-commit install
 
 echo "---start code-style check---"
 commit_files=on
+git remote add upstream https://github.com/PaddlePaddle/PaddleRec.git
+git fetch upstream
 git diff --numstat upstream/master
 git diff --numstat upstream/master |awk '{print $NF}'
 for file_name in `git diff --numstat upstream/master |awk '{print $NF}'`;do
