@@ -1,0 +1,5 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_forward/fractional_Poisson_1d.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/fractional_Poisson_1d_metric.npy"
+    solution_loss_dir: "../standard_data/fractional_Poisson_1d_loss.npy"
