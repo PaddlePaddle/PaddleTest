@@ -42,7 +42,7 @@ train:
       - Train.loader.num_workers=False
       - Global.use_amp=True
       - Global.scale_loss=1024.0
-      - Global.use_dynamic_loss_scaling=True
+      - Global.use_dynamic_loss_scaling=False
   -
     name: multi
     cmd : python -m paddle.distributed.launch tools/train.py
