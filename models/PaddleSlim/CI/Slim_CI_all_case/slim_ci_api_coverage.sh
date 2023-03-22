@@ -66,7 +66,8 @@ wait
 export CUDA_VISIBLE_DEVICES=${cudaid1}
 echo "---single card UT case is running with ${CUDA_VISIBLE_DEVICES}"
 run_api_case(){
-cases=`find ./ -name "test*.py" | sort`
+cd ${slim_dir}/tests/
+#cases=`find ./ -name "test*.py" | sort`
 #ignore="test_analysis_helper.py"
 ignore=""
 for line in `ls test_*.py | sort`
