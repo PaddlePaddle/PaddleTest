@@ -7,6 +7,7 @@ train:
       - -o epoch=1
       - SemiTrainReader.sup_batch_size=1
       - SemiTrainReader.unsup_batch_size=1
+      - TrainReader.batch_size=1
     result:
       exit_code:
         base: 0
@@ -32,6 +33,30 @@ train:
     params:
       - -c ${rd_yaml_path}
       - --to_static
+      - -o epoch=1
+      - TrainReader.batch_size=1
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: quant_multi
+    cmd: python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o epoch=1
+      - TrainReader.batch_size=1
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: prune_multi
+    cmd: python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
       - -o epoch=1
       - TrainReader.batch_size=1
     result:
