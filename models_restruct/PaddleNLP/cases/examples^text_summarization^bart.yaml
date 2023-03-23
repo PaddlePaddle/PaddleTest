@@ -24,7 +24,7 @@ case:
         cmd: python generate.py
         params:
           - --dataset_name=cnn_dailymail 
-          - --model_name_or_path=bart-base-cnndm-model 
+          - --model_name_or_path=bart-base
           - --logging_steps=100
           - --train_batch_size=2
           - --eval_batch_size=32
