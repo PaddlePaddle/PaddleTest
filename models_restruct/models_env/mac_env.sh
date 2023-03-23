@@ -92,6 +92,10 @@ export get_repo=${get_repo:-wget} #现支持10个库，需要的话可以加，w
 export dataset_org=${dataset_org:-None}
 export dataset_target=${dataset_target:-None}
 
+#### 二分定位使用
+export binary_search_flag=${binary_search_flag:-False}  #True表示在使用二分定位, main中一些跳出方法不生效
+
+
 #额外的变量
 export http_proxy=${http_proxy:-}
 export no_proxy=${no_proxy:-}
@@ -126,6 +130,7 @@ echo "@@@branch: ${branch}"
 echo "@@@mode: ${mode}"
 echo "@@@timeout: ${timeout}"
 echo "@@@dataset_target: ${dataset_target}"
+echo "@@@binary_search_flag: ${binary_search_flag}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -152,4 +157,4 @@ python -c "import getpass;print(getpass.getuser())"
 git --version;
 python -m pip install -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
 python -m pip install -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --timeout=${timeout:-3600}
+python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False}
