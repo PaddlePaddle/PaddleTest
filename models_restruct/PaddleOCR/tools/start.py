@@ -157,15 +157,22 @@ class PaddleOCR_Start(object):
             os.makedirs("cases")
 
         case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
-        det_distill = ["det_dml", "det_distill", "det_dml", "det_cml"]
+        ocr_distill = ["rec_distillation", "det_distill", "det_dml", "det_cml"]
         if not os.path.exists(case_file):
-            if any(item in self.qa_yaml_name for item in det_distill):
+            if any(item in self.qa_yaml_name for item in ocr_distill):
                 with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
                     f.writelines(
                         (
                             "case:" + os.linesep,
                             "    linux:" + os.linesep,
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
+                            "        train:" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: multi" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: amp" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: static" + os.linesep,
                             "    windows:" + os.linesep,
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    windows_cpu:" + os.linesep,
@@ -182,6 +189,13 @@ class PaddleOCR_Start(object):
                                 "case:" + os.linesep,
                                 "    linux:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: amp" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: static" + os.linesep,
                                 "    windows:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
                                 "    windows_cpu:" + os.linesep,
@@ -196,6 +210,13 @@ class PaddleOCR_Start(object):
                                 "case:" + os.linesep,
                                 "    linux:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: amp" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: static" + os.linesep,
                                 "    windows:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
                                 "    windows_cpu:" + os.linesep,
