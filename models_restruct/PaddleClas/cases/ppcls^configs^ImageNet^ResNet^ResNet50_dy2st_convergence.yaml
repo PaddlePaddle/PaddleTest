@@ -35,6 +35,7 @@ case:
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=delete
+          - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
         result:
@@ -51,6 +52,7 @@ case:
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=delete
+          - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
         result:
@@ -67,6 +69,7 @@ case:
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=delete
+          - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
         result:
@@ -83,6 +86,7 @@ case:
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=delete
+          - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
         result:

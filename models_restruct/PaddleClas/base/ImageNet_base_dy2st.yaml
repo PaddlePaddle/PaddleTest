@@ -11,7 +11,7 @@ train:
       - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_train_list.txt
       - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
       - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_val_list.txt
-      - -o Global.save_interval=10000
+      - -o Global.save_interval=10
       - -o Global.eval_interval=1
       - -o Global.eval_during_train=True
       - -o Global.use_dali=True
