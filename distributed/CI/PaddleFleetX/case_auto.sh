@@ -25,7 +25,6 @@ fleet_gpu_model_list=( \
     gpt_auto_export \
     )
 
-
 function gpt_save_ckpt() {
     cd ${fleetx_path}
     rm -rf log
