@@ -49,6 +49,10 @@ case:
     train:
       -
         name: function
+      -
+        name: function_dy2st
+      -
+        name: function_amp
     eval:
       -
         name: trained

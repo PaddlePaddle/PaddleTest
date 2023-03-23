@@ -68,6 +68,14 @@ case:
         name: function
         params:
           - -o DataLoader.Train.sampler.first_bs=32
+      -
+        name: function_dy2st
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+      -
+        name: function_amp
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
     eval:
       -
         name: trained

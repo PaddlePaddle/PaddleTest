@@ -8,6 +8,29 @@ train:
       - -o Global.save_interval=1
       - -o Global.eval_interval=1
   -
+    name: function_dy2st
+    cmd: python tools/train.py -c ${rd_yaml_path}
+    params:
+      - -o Global.epochs=1
+      - -o Global.save_interval=1
+      - -o Global.eval_interval=1
+      - -o Global.output_dir=output/${qa_yaml_name}_train_function_dy2st
+      - -o Global.to_static=True
+  -
+    name: function_amp
+    cmd: python tools/train.py -c ${rd_yaml_path}
+    params:
+      - -o Global.epochs=1
+      - -o Global.save_interval=1
+      - -o Global.eval_interval=1
+      - -o Global.output_dir=output/${qa_yaml_name}_train_function_amp
+      - -o Optimizer.multi_precision=True
+      - -o Optimizer.lr.name=Cosine
+      - -o DataLoader.Train.loader.use_shared_memory=False
+      - -o AMP.scale_loss=128
+      - -o AMP.use_dynamic_loss_scaling=True
+      - -o AMP.level=O2
+  -
     name: single
     cmd: python tools/train.py -c ${rd_yaml_path}
     params:
