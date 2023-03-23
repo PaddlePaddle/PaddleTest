@@ -11,6 +11,33 @@ train:
         threshold: 0
         evaluation: "="
   -
+    name: amp_multi
+    cmd: python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - --amp
+      - -o epoch=1
+      - TrainReader.batch_size=1
+      - amp_level=O2
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: static_multi
+    cmd: python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - --to_static
+      - -o epoch=1
+      - TrainReader.batch_size=1
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
     name: quant_multi
     cmd: python -m paddle.distributed.launch tools/train.py
     params:
@@ -71,15 +98,57 @@ export:
       threshold: 0
       evaluation: "="
 predict:
-  name: python
-  cmd: python deploy/python/keypoint_infer.py
-  params:
-    - --model_dir=inference_model/${model}
-    - --image_file=demo/000000570688.jpg
-    - --device=GPU
-    - --output_dir=python_infer_output/${model}/
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+  -
+    name: python
+    cmd: python deploy/python/keypoint_infer.py
+    params:
+      - --model_dir=inference_model/${model}
+      - --image_file=demo/000000570688.jpg
+      - --device=GPU
+      - --output_dir=python_infer_output/${model}/
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: mkldnn
+    cmd: python deploy/python/keypoint_infer.py
+    params:
+      - --model_dir=inference_model/${model}
+      - --image_file=demo/000000570688.jpg
+      - --device=CPU
+      - --enable_mkldnn=True
+      - --threshold=0.5
+      - --output_dir=python_infer_mkldnn_output/${model}/
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: paddle2onnx
+    cmd: paddle2onnx
+    params:
+      - --model_dir inference_model/${model}
+      - --model_filename model.pdmode
+      - --params_filename model.pdiparams
+      - --opset_version 11
+      - --save_file ${model}.onnx
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: onnx_infer
+    cmd: python deploy/third_engine/onnx/infer.py
+    params:
+      - --infer_cfg inference_model/${model}/infer_cfg.yml
+      - --onnx_file ${model}.onnx
+      - --image_file demo/000000570688.jpg
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="  

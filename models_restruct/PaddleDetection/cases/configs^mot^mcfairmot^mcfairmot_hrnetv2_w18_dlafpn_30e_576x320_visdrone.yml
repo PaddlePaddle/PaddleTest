@@ -31,7 +31,12 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/pptracking/python/mot_jde_infer.py
+      -
+        name: mkldnn
+      -
+        name: paddle2onnx
+      -
+        name: onnx_infer
   windows:
     base: ./base/mot_base.yml
     train:

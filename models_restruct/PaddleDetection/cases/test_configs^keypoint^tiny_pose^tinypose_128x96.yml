@@ -35,7 +35,12 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/python/keypoint_infer.py
+      -
+        name: mkldnn
+      -
+        name: paddle2onnx
+      -
+        name: onnx_infer
   windows:
     base: ./base/keypoint_base.yml
     train:
