@@ -57,7 +57,7 @@ if not defined Python_version set Python_version=Python310
 echo %Python_version% | findstr "37" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py37
-    C:\Python37\Scripts\virtualenv %reponame%_py37
+    @REM C:\Python37\Scripts\virtualenv %reponame%_py37
     CALL D:\Windows_env\%reponame%_py37\Scripts\activate.bat
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py37\pyvenv.cfg
     type D:\Windows_env\%reponame%_py37\pyvenv.cfg
@@ -65,7 +65,7 @@ if %errorlevel% equ 0 (
 echo %Python_version% | findstr "38" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py38
-    C:\Python38\Scripts\virtualenv %reponame%_py38
+    @REM C:\Python38\Scripts\virtualenv %reponame%_py38
     CALL D:\Windows_env\%reponame%_py38\Scripts\activate.bat
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py38\pyvenv.cfg
     type D:\Windows_env\%reponame%_py38\pyvenv.cfg
@@ -73,7 +73,7 @@ if %errorlevel% equ 0 (
 echo %Python_version% | findstr "39" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py39
-    C:\Python39\Scripts\virtualenv %reponame%_py39
+    @REM C:\Python39\Scripts\virtualenv %reponame%_py39
     CALL D:\Windows_env\%reponame%_py39\Scripts\activate.bat
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py39\pyvenv.cfg
     type D:\Windows_env\%reponame%_py39\pyvenv.cfg
@@ -81,7 +81,7 @@ if %errorlevel% equ 0 (
 echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py310
-    C:\Python310\Scripts\virtualenv %reponame%_py310
+    @REM C:\Python310\Scripts\virtualenv %reponame%_py310
     CALL D:\Windows_env\%reponame%_py310\Scripts\activate.bat
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py310\pyvenv.cfg
     type D:\Windows_env\%reponame%_py310\pyvenv.cfg

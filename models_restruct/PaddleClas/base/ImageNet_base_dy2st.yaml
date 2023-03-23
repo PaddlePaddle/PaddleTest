@@ -1,59 +1,23 @@
 train:
   -
-    name: function
-    cmd: python tools/train.py -c ${rd_yaml_path}
+    name: dy
+    cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
     params:
-      - -o Global.output_dir=output/${qa_yaml_name}_train_function
-      - -o Global.epochs=1
-      - -o Global.save_interval=1
+      - -o Global.device=gpu
+      - -o Global.print_batch_step=10
+      - -o Global.epochs=20
+      - -o DataLoader.Train.sampler.batch_size=64
+      - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
+      - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_train_list.txt
+      - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
+      - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_val_list.txt
+      - -o Global.save_interval=10000
       - -o Global.eval_interval=1
-  -
-    name: single
-    cmd: python tools/train.py -c ${rd_yaml_path}
-    params:
-      - -o Global.epochs=5
-      - -o Global.save_interval=5
-      - -o Global.eval_interval=5
+      - -o Global.eval_during_train=True
+      - -o Global.use_dali=True
       - -o Global.seed=1234
-      - -o DataLoader.Train.loader.num_workers=0
-      - -o DataLoader.Train.sampler.shuffle=False
-      - -o Global.output_dir=output/${qa_yaml_name}_train_single
-    result:
-      ${kpi_value_eval}:
-        base: 20
-        threshold: 0
-        evaluation: "="
-  -
-    name: multi
-    cmd: python -m paddle.distributed.launch tools/train.py -c ${rd_yaml_path}
-    params:
-      - -o Global.epochs=5
-      - -o Global.save_interval=5
-      - -o Global.eval_interval=5
-      - -o Global.seed=1234
-      - -o DataLoader.Train.loader.num_workers=0
-      - -o DataLoader.Train.sampler.shuffle=False
-      - -o Global.output_dir=output/${qa_yaml_name}_train_multi
-    result:
-      ${kpi_value_eval}:
-        base: 20
-        threshold: 0
-        evaluation: "="
-  -
-    name: single_convergence
-    cmd: python tools/train.py -c ${rd_yaml_path}
-    params:
-      - -o Global.output_dir=output/${qa_yaml_name}_train_single_convergence
-    result:
-      ${kpi_value_eval}:
-        base: 20
-        threshold: 0
-        evaluation: "="
-  -
-    name: multi_convergence
-    cmd: python -m paddle.distributed.launch tools/train.py -c ${rd_yaml_path}
-    params:
-      - -o Global.output_dir=output/${qa_yaml_name}_train_multi_convergence
+      - -o Optimizer.lr.name=Cosine
+      - -o Optimizer.lr.learning_rate=0.2
     result:
       ${kpi_value_eval}:
         base: 20
@@ -87,7 +51,39 @@ eval:
         base: 20
         threshold: 0
         evaluation: "="
-infer: skipped
+infer:
+  -
+    name: function
+    cmd: python tools/infer.py -c ${rd_yaml_path}
+    params:
+      - -o Global.output_dir=output/${qa_yaml_name}_infer_function
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: trained
+    cmd: python tools/infer.py -c ${rd_yaml_path}
+    params:
+      - -o Global.pretrained_model=${eval_trained_model}
+      - -o Global.output_dir=output/${qa_yaml_name}_infer_trained
+    result:
+      class_ids:
+        base: "[22, 22, 22, 22, 22]"
+        threshold: 0
+        evaluation: "="
+  -
+    name: pretrained
+    cmd: python tools/infer.py -c ${rd_yaml_path}
+    params:
+      - -o Global.pretrained_model=${eval_pretrained_model}
+      - -o Global.output_dir=output/${qa_yaml_name}_infer_pretrained
+    result:
+      class_ids:
+        base: "[8, 7, 86, 82, 476]"
+        threshold: 0
+        evaluation: "="
 export:
   -
     name: function
@@ -115,8 +111,8 @@ predict:
     path: deploy
     cmd: python python/predict_cls.py
     params:
-      - -c configs/PULC/${model_type_PULC}/inference_${model_type_PULC}.yaml
-      - -o Global.inference_model_dir=${predict_trained_model}
+      - -c configs/inference_cls.yaml
+      - -o Global.inference_model_dir=../inference/${qa_yaml_name}
       - -o Global.use_gpu=${set_cuda_flag}
       - -o Global.output_dir=output/${qa_yaml_name}_predict_function
   -
@@ -124,9 +120,10 @@ predict:
     path: deploy
     cmd: python python/predict_cls.py
     params:
-      - -c configs/PULC/${model_type_PULC}/inference_${model_type_PULC}.yaml
-      - -o Global.use_gpu=${set_cuda_flag}
+      - -c configs/inference_cls.yaml
+      - -o Global.infer_imgs="./images"
       - -o Global.inference_model_dir=${predict_trained_model}
+      - -o Global.use_gpu=${set_cuda_flag}
       - -o Global.output_dir=output/${qa_yaml_name}_predict_trained
     result:
       class_ids:
@@ -138,9 +135,10 @@ predict:
     path: deploy
     cmd: python python/predict_cls.py
     params:
-      - -c configs/PULC/${model_type_PULC}/inference_${model_type_PULC}.yaml
-      - -o Global.use_gpu=${set_cuda_flag}
+      - -c configs/inference_cls.yaml
+      - -o Global.infer_imgs="./images"
       - -o Global.inference_model_dir=${predict_pretrained_model}
+      - -o Global.use_gpu=${set_cuda_flag}
       - -o Global.output_dir=output/${qa_yaml_name}_predict_pretrained
     result:
       class_ids:
