@@ -12,6 +12,8 @@ case:
         name: amp_multi
       -
         name: static_multi
+      -
+        name: quant_multi
     eval:
       -
         name: pretrained

@@ -47,6 +47,21 @@ train:
         base: 0
         threshold: 0
         evaluation: "="
+  -
+    name: quant_multi
+    cmd: python -m paddle.distributed.launch deploy/slim/quant/qat_train.py
+    params:
+      - --config ${rd_yaml_path}
+      - --iters 10
+      - --save_interval 100
+      - --batch_size 1
+      - --num_workers 8
+      - --save_dir output/${model}
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
 eval:
   name: pretrained
   cmd:  python -m paddle.distributed.launch tools/val.py
