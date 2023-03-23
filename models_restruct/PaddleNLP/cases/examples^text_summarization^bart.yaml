@@ -23,14 +23,12 @@ case:
         path: examples/text_summarization/bart
         cmd: python generate.py
         params:
-          - --dataset_name=cnn_dailymail
-          - --logging_steps=1
-          - --save_steps=1
+          - --dataset_name=cnn_dailymail 
+          - --model_name_or_path=bart-base-cnndm-model 
+          - --logging_steps=100
           - --train_batch_size=2
           - --eval_batch_size=32
-          - --model_name_or_path=bart-base
           - --output_dir=output
-          - --max_steps 1
 
   windows:
     train: skipped
