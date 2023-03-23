@@ -11,6 +11,10 @@ case:
         params:
           - -o DataLoader.Train.sampler.first_bs=32
       -
+        name: multi_dy2st
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+      -
         name: multi_amp
         params:
           - -o DataLoader.Train.sampler.first_bs=32

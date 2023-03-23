@@ -1,55 +1,56 @@
 # 原来是O2, 不用改, amp yaml包括dali, 跳过windows和mac
 # 增加了 NCHW 所以导出模型 预测增加params
+# O2 ultra 待优化适配静态图训练完成后评估, 剔除multi_static_convergence
 case:
-    linux:
-      base: ./base/ImageNet_base.yaml
-      train:
-        -
-          name: single
-        -
-          name: multi
-        -
-          name: multi_amp
-        -
-          name: multi_amp_dy2st
-      eval:
-        -
-          name: trained
-        -
-          name: pretrained
-      infer:
-        -
-          name: trained
-        -
-          name: pretrained
-      export:
-        -
-          name: trained
-          params:
-            - -o Arch.data_format="NCHW"
-        -
-          name: pretrained
-          params:
-            - -o Arch.data_format="NCHW"
-      predict:
-        -
-          name: trained
+  linux:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single
+      -
+        name: multi
+      -
+        name: multi_amp
+      -
+        name: multi_dy2st
+      -
+        name: multi_amp_dy2st
+    eval:
+      -
+        name: trained
+      -
+        name: pretrained
+    infer:
+      -
+        name: trained
+      -
+        name: pretrained
+    export:
+      -
+        name: trained
         params:
-          - -c configs/inference_cls_ch4.yaml
-        -
-          name: pretrained
+          - -o Arch.data_format="NCHW"
+      -
+        name: pretrained
         params:
-          - -c configs/inference_cls_ch4.yaml
+          - -o Arch.data_format="NCHW"
+    predict:
+      -
+        name: trained
+      params:
+        - -c configs/inference_cls_ch4.yaml
+      -
+        name: pretrained
+      params:
+        - -c configs/inference_cls_ch4.yaml
 
-    linux_convergence:
-      base: ./base/ImageNet_base.yaml
-      train:
-        -
-          name: single_convergence
-        -
-          name: multi_convergence
-        -
-          name: multi_static_convergence
+  linux_convergence:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single_convergence
+      -
+        name: multi_convergence
 
   windows:
     base: ./base/ImageNet_base_ampultra.yaml

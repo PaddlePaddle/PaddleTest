@@ -32,7 +32,8 @@ rem reponame
 if not defined reponame for /f "tokens=1 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set reponame=%%a
 
 rem load self reponame data
-set mount_path="H:\MT_data\%reponame%"
+rem do not use ""
+set mount_path=H:\MT_data\%reponame%
 echo mount_path: %mount_path%
 dir %mount_path%
 
@@ -103,7 +104,7 @@ echo %AGILE_PIPELINE_NAME% | findstr "Cuda116" >nul
 if %errorlevel% equ 0 (
     set cuda_version=11.6
 )
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda117" >nul
+echo %AGILE_PIPELINE_NAME% | findstr "\Cuda117" >nul
 if %errorlevel% equ 0 (
     set cuda_version=11.7
 )

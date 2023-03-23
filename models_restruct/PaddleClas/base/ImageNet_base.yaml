@@ -24,6 +24,23 @@ train:
         threshold: 0
         evaluation: "="
   -
+    name: single_dy2st
+    cmd: python tools/train.py -c ${rd_yaml_path}
+    params:
+      - -o Global.epochs=2
+      - -o Global.save_interval=2
+      - -o Global.eval_interval=2
+      - -o Global.seed=1234
+      - -o DataLoader.Train.loader.num_workers=0
+      - -o DataLoader.Train.sampler.shuffle=False
+      - -o Global.output_dir=output/${qa_yaml_name}_train_single
+      - -o Global.to_static=True
+    result:
+      ${kpi_value_eval}:
+        base: 20
+        threshold: 0
+        evaluation: "="
+  -
     name: single_amp
     cmd: python tools/train.py -c ${rd_yaml_path}
     params:
@@ -79,6 +96,23 @@ train:
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
       - -o Global.output_dir=output/${qa_yaml_name}_multi
+    result:
+      ${kpi_value_eval}:
+        base: 20
+        threshold: 0
+        evaluation: "="
+  -
+    name: multi_dy2st
+    cmd: python -m paddle.distributed.launch tools/train.py -c ${rd_yaml_path}
+    params:
+      - -o Global.epochs=5
+      - -o Global.save_interval=5
+      - -o Global.eval_interval=5
+      - -o Global.seed=1234
+      - -o DataLoader.Train.loader.num_workers=0
+      - -o DataLoader.Train.sampler.shuffle=False
+      - -o Global.output_dir=output/${qa_yaml_name}_multi
+      - -o Global.to_static=True
     result:
       ${kpi_value_eval}:
         base: 20

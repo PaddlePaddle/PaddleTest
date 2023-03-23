@@ -7,6 +7,8 @@ case:
       -
         name: multi
       -
+        name: multi_dy2st
+      -
         name: multi_amp
       -
         name: multi_amp_dy2st
