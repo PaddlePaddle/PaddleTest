@@ -31,7 +31,7 @@ case:
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
-          - -o Global.eval_interval=6
+          - -o Global.eval_interval=1000
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=delete
@@ -48,7 +48,7 @@ case:
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
-          - -o Global.eval_interval=6
+          - -o Global.eval_interval=1000
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=delete
@@ -65,7 +65,7 @@ case:
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
-          - -o Global.eval_interval=6
+          - -o Global.eval_interval=1000
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=delete
@@ -82,7 +82,7 @@ case:
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
-          - -o Global.eval_interval=6
+          - -o Global.eval_interval=1000
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=delete
