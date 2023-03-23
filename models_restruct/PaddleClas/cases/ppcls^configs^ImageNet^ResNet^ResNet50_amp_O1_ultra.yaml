@@ -1,5 +1,6 @@
 # 原来是O1, 改成O1, amp yaml包括dali, 跳过windows和mac
 # 增加了 NCHW 所以导出模型 预测增加params
+# num_workers 在 O1 / O2不能为0, 但即使设置为1仍能固定随机量
 case:
   linux:
     base: ./base/ImageNet_base.yaml
@@ -8,22 +9,27 @@ case:
         name: single
         params:
           - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
       -
         name: multi
         params:
           - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
       -
         name: multi_dy2st
         params:
           - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
       -
         name: multi_amp
         params:
           - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
       -
         name: multi_amp_dy2st
         params:
           - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
     eval:
       -
         name: trained
@@ -50,12 +56,12 @@ case:
     predict:
       -
         name: trained
-      params:
-        - -c configs/inference_cls_ch4.yaml
+        params:
+          - -c configs/inference_cls_ch4.yaml
       -
         name: pretrained
-      params:
-        - -c configs/inference_cls_ch4.yaml
+        params:
+          - -c configs/inference_cls_ch4.yaml
 
   linux_convergence:
     base: ./base/ImageNet_base.yaml

@@ -7,14 +7,24 @@ case:
     train:
       -
         name: single
+        params:
+          - -o DataLoader.Train.loader.num_workers=1
       -
         name: multi
+        params:
+          - -o DataLoader.Train.loader.num_workers=1
       -
         name: multi_amp
+        params:
+          - -o DataLoader.Train.loader.num_workers=1
       -
         name: multi_dy2st
+        params:
+          - -o DataLoader.Train.loader.num_workers=1
       -
         name: multi_amp_dy2st
+        params:
+          - -o DataLoader.Train.loader.num_workers=1
     eval:
       -
         name: trained
@@ -37,12 +47,12 @@ case:
     predict:
       -
         name: trained
-      params:
-        - -c configs/inference_cls_ch4.yaml
+        params:
+          - -c configs/inference_cls_ch4.yaml
       -
         name: pretrained
-      params:
-        - -c configs/inference_cls_ch4.yaml
+        params:
+          - -c configs/inference_cls_ch4.yaml
 
   linux_convergence:
     base: ./base/ImageNet_base.yaml
