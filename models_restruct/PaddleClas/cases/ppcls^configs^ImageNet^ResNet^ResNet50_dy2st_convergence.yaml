@@ -22,7 +22,7 @@ case:
         params:
           - -o Global.to_static=True
         result:
-          ${kpi_value_eval}:
+          loss:
             base: 20
             threshold: 0
             evaluation: "-"
@@ -38,7 +38,7 @@ case:
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
         result:
-          ${kpi_value_eval}:
+          loss:
             base: 20
             threshold: 0
             evaluation: "-"
@@ -54,7 +54,7 @@ case:
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
         result:
-          ${kpi_value_eval}:
+          loss:
             base: 20
             threshold: 0
             evaluation: "-"
@@ -70,7 +70,7 @@ case:
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
         result:
-          ${kpi_value_eval}:
+          loss:
             base: 20
             threshold: 0
             evaluation: "-"
@@ -86,7 +86,7 @@ case:
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
         result:
-          ${kpi_value_eval}:
+          loss:
             base: 20
             threshold: 0
             evaluation: "-"
