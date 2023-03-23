@@ -19,7 +19,7 @@ train:
       - -o Optimizer.lr.name=Cosine
       - -o Optimizer.lr.learning_rate=0.2
     result:
-      ${kpi_value_eval}:
+      loss:
         base: 20
         threshold: 0
         evaluation: "="
@@ -36,7 +36,7 @@ eval:
       - -o Global.pretrained_model=${eval_trained_model}
       - -o Global.output_dir=output/${qa_yaml_name}_eval_trained
     result:
-      ${kpi_value_eval}:
+      loss:
         base: 20
         threshold: 0
         evaluation: "="
@@ -47,7 +47,7 @@ eval:
       - -o Global.pretrained_model=${eval_pretrained_model}
       - -o Global.output_dir=output/${qa_yaml_name}_eval_pretrained
     result:
-      ${kpi_value_eval}:
+      loss:
         base: 20
         threshold: 0
         evaluation: "="
