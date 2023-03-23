@@ -126,7 +126,7 @@ fi
 
 
 #### 可能要改的参数
-export step=${step:-train}  #阶段 demo:train:multi,single+eval:trained,pretrained, 所有流水线都要自己改
+export step=${step:-train:all+eval:all+infer:all+export:all+predict:all}  #阶段 demo:train:multi,single+eval:trained,pretrained, 所有流水线都要自己改
 export branch=${branch:-develop}    # repo的分支，大部分为develop，如果有master dygraph等注意设置!!
 export mode=${mode:-function}   #function只验证功能是否正常  precision验证功能&小数据集精度
 export timeout=${timeout:-3600}   #timeout 为超时取消时间, 单位为秒
