@@ -21,11 +21,11 @@ case:
         name: dy2st_prim_cinn
         params:
           - -o Global.to_static=True
-          result:
-            ${kpi_value_eval}:
-              base: 20
-              threshold: 0
-              evaluation: "-"
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0
+            evaluation: "-"
       -
         name: dy2st_all
         params:
@@ -37,11 +37,11 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
-          result:
-            ${kpi_value_eval}:
-              base: 20
-              threshold: 0
-              evaluation: "-"
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0
+            evaluation: "-"
       -
         name: dy2st_cinn_all
         params:
@@ -53,11 +53,11 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
-          result:
-            ${kpi_value_eval}:
-              base: 20
-              threshold: 0
-              evaluation: "-"
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0
+            evaluation: "-"
       -
         name: dy2st_prim_all
         params:
@@ -69,11 +69,11 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
-          result:
-            ${kpi_value_eval}:
-              base: 20
-              threshold: 0
-              evaluation: "-"
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0
+            evaluation: "-"
       -
         name: dy2st_prim_cinn_all
         params:
@@ -85,10 +85,10 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
-          result:
-            ${kpi_value_eval}:
-              base: 20
-              threshold: 0
-              evaluation: "-"
+        result:
+          ${kpi_value_eval}:
+            base: 20
+            threshold: 0
+            evaluation: "-"
 
 function: paddlelas_imagenet_parse
