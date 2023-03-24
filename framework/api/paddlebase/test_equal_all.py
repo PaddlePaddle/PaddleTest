@@ -37,7 +37,7 @@ def test_equal_all_base():
     """
     x = randtool("int", -10, 10, [3, 3, 3])
     y = x
-    res = np.array([True])
+    res = np.array(True)
     obj.base(res=res, x=x, y=y)
 
 
@@ -48,7 +48,7 @@ def test_equal_all():
     """
     x = randtool("float", -10, 10, [3, 3, 3])
     y = x
-    res = np.array([True])
+    res = np.array(True)
     obj.run(res=res, x=x, y=y)
 
 
@@ -59,7 +59,7 @@ def test_equal_all1():
     """
     x = randtool("float", -10, 10, [3, 3, 3])
     y = randtool("int", -10, 10, [3, 3, 3])
-    res = np.array([False])
+    res = np.array(False)
     obj.run(res=res, x=x, y=y)
 
 
@@ -70,7 +70,7 @@ def test_equal_all2():
     """
     x = randtool("float", -10, 10, [3, 3, 3])
     y = randtool("int", -10, 10, [3, 3])
-    res = np.array([False])
+    res = np.array(False)
     obj.run(res=res, x=x, y=y)
 
 
@@ -81,7 +81,7 @@ def test_equal_all4():
     """
     x = np.array([[3, 3, 3], [3, 3, 3]])
     y = np.array([[3, 3, 3]])
-    res = np.array([False])
+    res = np.array(False)
     obj.run(res=res, x=x, y=y)
 
 
@@ -102,7 +102,7 @@ def test_equal_all6():
     """
     x = np.array([[True, False, True], [True, False, True]])
     y = np.array([[True, False, True]])
-    res = np.array([False])
+    res = np.array(False)
     obj.run(res=res, x=x, y=y)
 
 
@@ -113,7 +113,7 @@ def test_equal_all7():
     """
     x = np.array([[[True, False, True], [True, False, True]]])
     y = np.array([[True, False, True], [True, False, True]])
-    res = np.array([False])
+    res = np.array(False)
     obj.run(res=res, x=x, y=y)
 
 
@@ -124,5 +124,5 @@ def test_equal_all8():
     """
     x = np.array([[[[[True, False, True], [True, False, True]]]]])
     y = x
-    res = np.array([True])
+    res = np.array(True)
     obj.run(res=res, x=x, y=y)

@@ -1,16 +1,19 @@
 [[ -n $1 ]] && export CUDA_VISIBLE_DEVICES=$1
 export FLAGS_call_stack_level=2
-cases="test_yolov3_gpu.py \
-       test_yolov3_mkldnn.py \
-       test_ppyolo_gpu.py \
-       test_ppyolo_mkldnn.py \
-       test_ppyolov2_mkldnn.py \
-       test_solov2_gpu.py \
-       test_solov2_mkldnn.py \
-       test_fast_rcnn_mkldnn.py \
-       test_fast_rcnn_gpu.py \
-       test_fast_rcnn_trt_fp32.py
+cases="./test_fast_rcnn_mkldnn.py \
+       ./test_fast_rcnn_gpu.py \
+       ./test_fast_rcnn_trt_fp32.py \
+       ./test_ppyolo_gpu.py \
+       ./test_ppyolo_mkldnn.py \
+       ./test_ppyolov2_mkldnn.py \
+       ./test_solov2_gpu.py \
+       ./test_solov2_mkldnn.py \
+       ./test_yolov3_gpu.py \
+       ./test_yolov3_mkldnn.py \
+       ../test_class_model/test_ViT_base_patch16_224_trt_fp32.py \
+       ../test_class_model/test_ViT_small_patch16_224_trt_fp32.py
       "
+# The reason for adding ViT_class_cases is to balance task execution time
 bug=0
 
 echo "============ failed cases =============" >> result.txt

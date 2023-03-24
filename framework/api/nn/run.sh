@@ -1,5 +1,6 @@
 pip3.7 install pytest
 export FLAGS_call_stack_level=2
+export FLAGS_set_to_1d=0
 cases=`find . -name "test*.py" | sort`
 ignore="test_adaptive_avg_pool1D.py \
 test_adaptive_avg_pool2D.py \

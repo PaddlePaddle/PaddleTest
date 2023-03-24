@@ -1,0 +1,5 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_forward/Schrodinger.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/Schrodinger_metric.npy"
+    solution_loss_dir: "../standard_data/Schrodinger_loss.npy"
