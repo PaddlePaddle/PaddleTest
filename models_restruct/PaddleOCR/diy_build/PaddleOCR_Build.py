@@ -75,10 +75,10 @@ class PaddleOCR_Build(Model_Build):
                 # src_path = "F:\\PaddleOCR"
                 # os.system("mklink /d train_data F:\\PaddleOCR\\train_data")
                 # os.system("mklink /d pretrain_models F:\\PaddleOCR\\pretrain_models")
-                src_path="H:\MT_data\PaddleOCR"
+                src_path = "H:\\MT_data\\PaddleOCR"
             elif sysstr == "Darwin":
                 # src_path = "/Users/paddle/PaddleTest/ce_data/PaddleOCR"
-                src_path ="/Volumes/210-share-data/MT_data/PaddleOCR"
+                src_path = "/Volumes/210-share-data/MT_data/PaddleOCR"
             print("PaddleOCR dataset path:{}".format(src_path))
             # dataset link
             # train_data_path = os.path.join(src_path, "train_data")
