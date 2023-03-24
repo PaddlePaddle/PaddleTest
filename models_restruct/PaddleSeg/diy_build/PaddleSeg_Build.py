@@ -28,6 +28,7 @@ class PaddleSeg_Build(Model_Build):
         """
         初始化变量
         """
+                
         self.paddle_whl = args.paddle_whl
         self.get_repo = args.get_repo
         self.branch = args.branch
@@ -70,15 +71,6 @@ class PaddleSeg_Build(Model_Build):
         os.system("pip install bce-python-sdk==0.8.74 --ignore-installed")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/demo.tar")
         os.system("tar xvf demo.tar")
-        logger.info("****start pretrain model prepare")
-        if os.path.exists("seg_dynamic_pretrain"):
-            shutil.rmtree("seg_dynamic_pretrain")
-        if platform.system() == "Linux":
-            os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
-        elif platform.system() == "Windows":
-            os.system("mklink /J seg_dynamic_pretrain {}".format("D:\\ce_data\\PaddleSeg\\seg_pretrained"))
-        else:
-            os.system("mkdir seg_dynamic_pretrain")
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
         else:
@@ -90,6 +82,9 @@ class PaddleSeg_Build(Model_Build):
             subprocess.run(cmd_voc, shell=True)
         os.system("mkdir data")
         os.chdir("data")
+        # prepare pretrain model
+        if platform.system() == "Linux":
+            os.system("ln -s {}/seg_dynamic_pretrain data/seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
         if os.path.exists("cityscapes"):
             shutil.rmtree("cityscapes")
         if os.path.exists("voc"):

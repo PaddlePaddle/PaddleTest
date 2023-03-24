@@ -34,6 +34,8 @@ class PaddleDetection_Build(Model_Build):
         self.branch = args.branch
         self.system = args.system
         self.set_cuda = args.set_cuda
+        self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
+        self.reponame = args.reponame
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
         self.mount_path = str(os.getenv("mount_path"))
@@ -55,8 +57,6 @@ class PaddleDetection_Build(Model_Build):
         logger.info("#### dataset_target in diy_build is  {}".format(self.dataset_target))
                
 
-        self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
-        self.reponame = args.reponame
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.detection_model_list = []
