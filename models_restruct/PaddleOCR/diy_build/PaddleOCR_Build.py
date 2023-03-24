@@ -88,7 +88,7 @@ class PaddleOCR_Build(Model_Build):
             #    os.makedirs(train_data_path)
             # if not os.path.exists(pretrain_models_path):
             #    os.makedirs(pretrain_models_path)
-            # if sysstr != "Windows":t 
+            # if sysstr != "Windows":
             if not os.path.exists("train_data"):
                 os.symlink(os.path.join(src_path, "train_data"), "train_data")
             if not os.path.exists("pretrain_models"):
