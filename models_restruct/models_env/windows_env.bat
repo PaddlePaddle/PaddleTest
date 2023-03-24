@@ -199,7 +199,7 @@ rem not xly use default paddle_whl
 if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-2.4.1.post117-cp310-cp310-win_amd64.whl"
 
 rem default value
-if not defined step set step=train
+if not defined step set step=train:all+eval:all+infer:all+export:all+predict:all
 if not defined mode set mode=function
 if not defined timeout set timeout=3600
 if not defined use_build set use_build=yes
@@ -209,6 +209,8 @@ if not defined dataset_org set dataset_org=None
 if not defined dataset_target set dataset_target=None
 
 if not defined binary_search_flag set binary_search_flag=False
+if not defined use_data_cfs set use_data_cfs=False
+
 
 rem expend value
 if not defined http_proxy set http_proxy=
@@ -250,6 +252,7 @@ echo "@@@timeout: %timeout%"
 echo "@@@dataset_org: %dataset_org%"
 echo "@@@dataset_target: %dataset_target%"
 echo "@@@binary_search_flag: %binary_search_flag%"
+echo "@@@use_data_cfs: %use_data_cfs%"
 
 rem if already download PaddleTest direct mv
 if exist "%pwd_org%/task" (
@@ -286,4 +289,4 @@ python -m pip install -U -r requirements.txt -i https://mirror.baidu.com/pypi/si
 rem kill python.exe in case can not uninstall sit-package
 rem python -c "import os;os.system('taskkill /f /im %s % python.exe')"
 rem install package
-python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target% --timeout=%timeout%  --binary_search_flag=%binary_search_flag%
+python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target% --timeout=%timeout%  --binary_search_flag=%binary_search_flag% --use_data_cfs=%use_data_cfs%

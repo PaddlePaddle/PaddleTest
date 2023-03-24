@@ -118,7 +118,7 @@ train:
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
-      - -o Global.output_dir=output/${qa_yaml_name}_multi
+      - -o Global.output_dir=output/${qa_yaml_name}_train_multi
     result:
       ${kpi_value_eval}:
         base: 20
@@ -134,7 +134,7 @@ train:
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
-      - -o Global.output_dir=output/${qa_yaml_name}_multi
+      - -o Global.output_dir=output/${qa_yaml_name}_train_multi
       - -o Global.to_static=True
     result:
       ${kpi_value_eval}:
@@ -339,6 +339,38 @@ predict:
       - -o Global.inference_model_dir=${predict_trained_model}
       - -o Global.use_gpu=${set_cuda_flag}
       - -o Global.output_dir=output/${qa_yaml_name}_predict_trained
+    result:
+      class_ids:
+        base: "[11, 11, 11, 11]"
+        threshold: 0
+        evaluation: "="
+  -
+    name: trained_mkldnn
+    path: deploy
+    cmd: python python/predict_cls.py
+    params:
+      - -c configs/inference_cls.yaml
+      - -o Global.infer_imgs="./images"
+      - -o Global.inference_model_dir=${predict_trained_model}
+      - -o Global.use_gpu=${set_cuda_flag}
+      - -o Global.output_dir=output/${qa_yaml_name}_predict_trained_mkldnn
+      - -o Global.enable_mkldnn=True
+    result:
+      class_ids:
+        base: "[11, 11, 11, 11]"
+        threshold: 0
+        evaluation: "="
+  -
+    name: trained_trt
+    path: deploy
+    cmd: python python/predict_cls.py
+    params:
+      - -c configs/inference_cls.yaml
+      - -o Global.infer_imgs="./images"
+      - -o Global.inference_model_dir=${predict_trained_model}
+      - -o Global.use_gpu=${set_cuda_flag}
+      - -o Global.output_dir=output/${qa_yaml_name}_predict_trained_trt
+      - -o Global.use_tensorrt=True
     result:
       class_ids:
         base: "[11, 11, 11, 11]"

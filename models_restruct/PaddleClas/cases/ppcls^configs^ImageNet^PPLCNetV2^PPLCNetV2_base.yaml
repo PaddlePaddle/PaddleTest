@@ -41,6 +41,10 @@ case:
       -
         name: trained
       -
+        name: trained_mkldnn
+      -
+        name: trained_trt
+      -
         name: pretrained
 
   linux_convergence:
@@ -95,6 +99,10 @@ case:
       -
         name: trained
       -
+        name: trained_mkldnn
+      -
+        name: trained_trt
+      -
         name: pretrained
 
   windows_cpu:
@@ -147,6 +155,14 @@ case:
     train:
       -
         name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: function_dy2st
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: function_amp
         params:
           - -o Global.device=${set_cuda_flag}
           - -o DataLoader.Train.sampler.first_bs=32
