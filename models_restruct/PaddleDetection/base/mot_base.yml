@@ -132,7 +132,7 @@ predict:
     cmd: paddle2onnx
     params:
       - --model_dir inference_model/${model}
-      - --model_filename model.pdmode
+      - --model_filename model.pdmodel
       - --params_filename model.pdiparams
       - --opset_version 11
       - --save_file ${model}.onnx
