@@ -24,7 +24,7 @@ train:
       - --batch_size 1
       - --num_workers 8
       - --save_dir output/${model}
-      - --precision fp16 
+      - --precision fp16
       - --amp_level "O2"
     result:
       exit_code:

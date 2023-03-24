@@ -60,7 +60,7 @@ train:
       exit_code:
         base: 0
         threshold: 0
-        evaluation: "=" 
+        evaluation: "="
 eval:
   name: pretrained
   cmd:  python tools/eval.py
@@ -151,4 +151,4 @@ predict:
       exit_code:
         base: 0
         threshold: 0
-        evaluation: "="  
+        evaluation: "="
