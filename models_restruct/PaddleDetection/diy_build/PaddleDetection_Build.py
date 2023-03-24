@@ -71,6 +71,7 @@ class PaddleDetection_Build(Model_Build):
         os.system("python -m pip install zip --ignore-installed")
         os.system("python -m pip uninstall paddleslim -y")
         os.system("python -m pip install https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl")
+        os.system("python -m pip install onnxruntime")
         logger.info("***start ffmpeg install***")
         os.system("rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro")
         os.system("rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm")
