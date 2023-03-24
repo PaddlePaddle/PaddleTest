@@ -28,7 +28,7 @@ class PaddleSeg_Build(Model_Build):
         """
         初始化变量
         """
-                
+        self.data_path_endswith = "data"
         self.paddle_whl = args.paddle_whl
         self.get_repo = args.get_repo
         self.branch = args.branch
@@ -39,6 +39,24 @@ class PaddleSeg_Build(Model_Build):
 
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
+        self.mount_path = str(os.getenv("mount_path"))
+        if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(
+            self.mount_path
+        ):  # linux 性能损失使用自动下载的数据,不使用mount数据
+            logger.info("#### mount_path diy_build is {}".format(self.mount_path))
+            if os.listdir(self.mount_path) != []:
+                self.dataset_org = self.mount_path
+                os.environ["dataset_org"] = self.mount_path
+                self.dataset_target = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
+                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)   
+                if os.path.exists(self.dataset_target):
+                    shutil.rmtree(self.dataset_target)
+                exit_code = os.symlink(self.dataset_org, self.dataset_target)
+                if exit_code:
+                    logger.info("#### link_dataset failed")
+        logger.info("#### dataset_org in diy_build is  {}".format(self.dataset_org))
+        logger.info("#### dataset_target in diy_build is  {}".format(self.dataset_target))
+
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.seg_model_list = []
@@ -80,30 +98,30 @@ class PaddleSeg_Build(Model_Build):
             subprocess.run(cmd_voc)
         else:
             subprocess.run(cmd_voc, shell=True)
-        os.system("mkdir data")
-        os.chdir("data")
         # prepare pretrain model
         if platform.system() == "Linux":
+            os.system("mkdir data")
+            os.chdir("data")
             os.system("ln -s {}/seg_dynamic_pretrain data/seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
-        if os.path.exists("cityscapes"):
-            shutil.rmtree("cityscapes")
-        if os.path.exists("voc"):
-            shutil.rmtree("voc")
-        logger.info("***start download data")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes.zip")
-        os.system("unzip -q cityscapes.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/voc.zip")
-        os.system("unzip -q voc.zip")
-        os.system("mv voc/VOCdevkit .")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/ADEChallengeData2016.zip")
-        os.system("unzip -q ADEChallengeData2016.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/PP-HumanSeg14K.zip")
-        os.system("unzip -q PP-HumanSeg14K.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/camvid.zip")
-        os.system("unzip -q camvid.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/mini_supervisely.zip")
-        os.system("unzip -q mini_supervisely.zip")
-        logger.info("***download data ended")
+            if os.path.exists("cityscapes"):
+                shutil.rmtree("cityscapes")
+            if os.path.exists("voc"):
+                shutil.rmtree("voc")
+            logger.info("***start download data")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes.zip")
+            os.system("unzip -q cityscapes.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/voc.zip")
+            os.system("unzip -q voc.zip")
+            os.system("mv voc/VOCdevkit .")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/ADEChallengeData2016.zip")
+            os.system("unzip -q ADEChallengeData2016.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/PP-HumanSeg14K.zip")
+            os.system("unzip -q PP-HumanSeg14K.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/camvid.zip")
+            os.system("unzip -q camvid.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/mini_supervisely.zip")
+            os.system("unzip -q mini_supervisely.zip")
+            logger.info("***download data ended")
         # cpp infer compile
         if platform.system() == "Linux":
             os.chdir(path_repo + "/deploy/cpp")
