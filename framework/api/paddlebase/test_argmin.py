@@ -52,7 +52,7 @@ def test_argmin():
     """
     x = randtool("float", -10, 10, [3, 3, 3])
     res = np.argmin(a=x)
-    obj.run(res=[res], x=x)
+    obj.run(res=res, x=x)
 
 
 @pytest.mark.api_base_argmin_parameters
@@ -87,7 +87,7 @@ def test_argmin3():
     x = randtool("int", -10, 10, [3, 3])
     dtype = "int32"
     res = np.argmin(a=x)
-    obj.run(res=[res], x=x, dtype=dtype)
+    obj.run(res=res, x=x, dtype=dtype)
 
 
 @pytest.mark.api_base_argmin_parameters
@@ -133,7 +133,7 @@ def test_argmin7():
     x = np.array([[-1], [2], [3]])
     keepdim = None
     res = np.argmin(a=x)
-    obj.run(res=[res], x=x, keepdim=keepdim)
+    obj.run(res=res, x=x, keepdim=keepdim)
 
 
 @pytest.mark.api_base_argmin_parameters
@@ -155,7 +155,7 @@ def test_argmin9():
     """
     x = randtool("float", -1, 1, [3, 3])
     axis = 2
-    obj.exception(mode="c", etype="InvalidArgumentError", x=x, axis=axis)
+    obj.exception(mode="c", etype="InvalidArgument", x=x, axis=axis)
 
 
 @pytest.mark.api_base_argmin_exception
@@ -175,7 +175,7 @@ def test_argmin11():
     """
     x = randtool("float", -10, 10, [3, 3])
     dtype = np.float32
-    obj.exception(mode="c", etype="InvalidArgumentError", x=x, dtype=dtype)
+    obj.exception(mode="c", etype="InvalidArgument", x=x, dtype=dtype)
 
 
 @pytest.mark.api_base_argmin_exception

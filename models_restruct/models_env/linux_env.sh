@@ -126,7 +126,7 @@ fi
 
 
 #### 可能要改的参数
-export step=${step:-train}  #阶段 demo:train:multi,single+eval:trained,pretrained, 所有流水线都要自己改
+export step=${step:-train:all+eval:all+infer:all+export:all+predict:all}  #阶段 demo:train:multi,single+eval:trained,pretrained, 所有流水线都要自己改
 export branch=${branch:-develop}    # repo的分支，大部分为develop，如果有master dygraph等注意设置!!
 export mode=${mode:-function}   #function只验证功能是否正常  precision验证功能&小数据集精度
 export timeout=${timeout:-3600}   #timeout 为超时取消时间, 单位为秒
@@ -154,6 +154,8 @@ export REPORT_SERVER_PASSWORD=${REPORT_SERVER_PASSWORD}   #上传全局变量
 export CE_version_name=${CE_version_name:-TestFrameWork}    #与测试框架的名称一致
 export models_name=${models_name:-models_restruct}  #后面复制使用，和模型库的父路径目录一致（后续改为models）
 
+#### 二分定位使用
+export binary_search_flag=${binary_search_flag:-False}  #True表示在使用二分定位, main中一些跳出方法不生效
 
 
 ######################## 开始执行 ########################
@@ -183,6 +185,7 @@ echo "@@@branch: ${branch}"
 echo "@@@mode: ${mode}"
 echo "@@@docker_flag: ${docker_flag}"
 echo "@@@timeout: ${timeout}"
+echo "@@@binary_search_flag: ${binary_search_flag}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -293,6 +296,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e timeout=${timeout} \
         -e mode=${mode} \
         -e use_build=${use_build} \
+        -e binary_search_flag=${binary_search_flag} \
         -e branch=${branch} \
         -e get_repo=${get_repo} \
         -e paddle_whl=${paddle_whl} \
@@ -384,7 +388,7 @@ if [[ "${docker_flag}" == "" ]]; then
         git --version;
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600}
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False}
     ' &
     wait $!
     exit $?
@@ -472,5 +476,5 @@ else
     git --version;
     python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
     python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600}
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False}
 fi

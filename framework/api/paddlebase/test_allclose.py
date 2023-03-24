@@ -51,7 +51,7 @@ def test_allclose_base():
     a = 0.01
     r = 0.01
     res = np.allclose(x, y, rtol=r, atol=a, equal_nan=False)
-    res = np.array([res])
+    res = np.array(res)
     obj.base(res=res, x=x, y=y, rtol=r, atol=a, equal_nan=False)
 
 
@@ -65,7 +65,7 @@ def test_allclose1():
     a = 0.0
     r = 0.01
     res = np.allclose(x, y, rtol=r, atol=a, equal_nan=False)
-    res = np.array([res])
+    res = np.array(res)
     obj2.run(res=res, x=x, y=y, rtol=r, atol=a, equal_nan=False)
 
 
@@ -79,7 +79,7 @@ def test_allclose2():
     a = 0.001
     r = 0.000001
     res = np.allclose(x, y, rtol=r, atol=a, equal_nan=False)
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y, rtol=r, atol=a, equal_nan=False)
 
 
@@ -93,7 +93,7 @@ def test_allclose3():
     a = 0.001
     r = 0.000001
     res = np.allclose(x, y, rtol=r, atol=a, equal_nan=True)
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y, rtol=r, atol=a, equal_nan=True)
 
 
@@ -107,7 +107,7 @@ def test_allclose4():
     a = 0.001
     r = 0.00001
     res = np.allclose(x, y, rtol=r, atol=a, equal_nan=True)
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y, rtol=r, atol=a, equal_nan=True)
 
 
@@ -121,7 +121,7 @@ def test_allclose5():
     a = 0.001
     r = 0.00001
     res = np.allclose(x, y, rtol=r, atol=a, equal_nan=False)
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y, rtol=r, atol=a, equal_nan=False)
 
 
@@ -133,7 +133,7 @@ def test_allclose6():
     x = np.array([10.001])
     y = np.array([10.00001])
     res = np.allclose(x, y)
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y)
 
 
@@ -145,7 +145,7 @@ def test_allclose7():
     x = 0.1 + np.arange(24).reshape(2, 2, 2, 3)
     y = np.arange(24).reshape(2, 2, 2, 3)
     res = np.allclose(x, y)
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y)
 
 
@@ -159,7 +159,7 @@ def test_allclose8():
     a = -2.0
     r = -3.0
     res = np.allclose(x, y, rtol=r, atol=a)
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y, rtol=r, atol=a)
 
 
@@ -171,7 +171,7 @@ def test_allclose9():
     x = np.array([])
     y = np.array([])
     res = np.allclose(x, y)
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y)
 
 
@@ -199,4 +199,4 @@ def test_allclose10():
     """
     x = np.array([10.001])
     y = np.array([10.00001])
-    obj1.exception(mode="c", etype="NotFoundError", x=x, y=y)
+    obj1.exception(mode="c", etype="NotFound", x=x, y=y)
