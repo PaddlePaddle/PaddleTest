@@ -1,0 +1,6 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_forward/ide.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/ide_metric.npy"
+    solution_loss_dir: "../standard_data/ide_loss.npy"
+    run_time: 37.446683

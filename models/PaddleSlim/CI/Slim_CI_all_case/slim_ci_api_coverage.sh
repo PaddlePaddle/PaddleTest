@@ -34,11 +34,40 @@ dygraph_test_num=`ls dygraph/test_*.py|wc -l`
 act_test_num=`ls act/test_*.py|wc -l`
 quant_analysis_test_num=`ls quant_analysis/test_*.py|wc -l`
 quantization_test_num=`ls quantization/test_*.py|wc -l`
+distribution_test_num=`ls distribution/test_*.py|wc -l`
 
-all_test_num=`expr ${static_test_num} + ${dygraph_test_num} + ${act_test_num} + ${quant_analysis_test_num} + ${quantization_test_num}`
+all_test_num=`expr ${static_test_num} + ${dygraph_test_num} + ${act_test_num} + ${quant_analysis_test_num} \
+    + ${quantization_test_num} + ${distribution_test_num} `
 
+run_distribution_case(){
+cd ${slim_dir}/tests/distribution
+ignore=""
+for line in `ls test_*.py | sort`
+do
+    {
+    name=`echo ${line} | cut -d \. -f 1`
+    echo ${test_num}_"/"_${all_test_num}_${name}
+    if [[ ${ignore} =~ ${line##*/} ]]; then
+        echo "skip" ${line##*/}
+    else
+        python -m coverage run --source=${source} --branch -p \
+            -m paddle.distributed.launch ${line} > ${log_path}/${test_num}_distribution_${name} 2>&1
+       print_info $? ${test_num}_distribution_${name}
+    fi
+    }&
+    let test_num++
+done
+}
+export CUDA_VISIBLE_DEVICES=${cudaid2}
+echo "---distribution UT case is running with ${CUDA_VISIBLE_DEVICES}"
+run_distribution_case
+wait
+
+export CUDA_VISIBLE_DEVICES=${cudaid1}
+echo "---single card UT case is running with ${CUDA_VISIBLE_DEVICES}"
 run_api_case(){
-cases=`find ./ -name "test*.py" | sort`
+cd ${slim_dir}/tests/
+#cases=`find ./ -name "test*.py" | sort`
 #ignore="test_analysis_helper.py"
 ignore=""
 for line in `ls test_*.py | sort`
