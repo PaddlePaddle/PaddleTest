@@ -25,6 +25,10 @@ case:
     predict:
       -
         name: trained
+      -
+        name: trained_mkldnn
+      -
+        name: trained_trt
 
   linux_convergence:
     base: ./base/ImageNet_base.yaml
@@ -65,6 +69,10 @@ case:
     predict:
       -
         name: trained
+      -
+        name: trained_mkldnn
+      -
+        name: trained_trt
 
   windows_cpu:
     base: ./base/ImageNet_base.yaml
@@ -99,6 +107,14 @@ case:
     train:
       -
         name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: function_dy2st
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: function_amp
         params:
           - -o Global.device=${set_cuda_flag}
     eval:
