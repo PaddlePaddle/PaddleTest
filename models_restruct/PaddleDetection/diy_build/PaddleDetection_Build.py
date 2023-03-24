@@ -106,8 +106,8 @@ class PaddleDetection_Build(Model_Build):
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
             cmd_weight = (
-                '{} -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection'
-                '/det_pretrained#g" ppdet/utils/download.py'.format(os.getenv("sed"))
+                '{} -i "s#~/.cache/paddle/weights#{}'
+                '/det_pretrained#g" ppdet/utils/download.py'.format(os.getenv("sed"), os.getenv("dataset_target"))
             )
             subprocess.run(cmd_weight)
         else:
