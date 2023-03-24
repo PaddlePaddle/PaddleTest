@@ -73,6 +73,7 @@ class PaddleDetection_Build(Model_Build):
         os.system(
             "python -m pip install https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
         )
+        os.system("python -m pip install paddle2onnx")
         os.system("python -m pip install onnxruntime")
         logger.info("***start ffmpeg install***")
         os.system("rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro")
