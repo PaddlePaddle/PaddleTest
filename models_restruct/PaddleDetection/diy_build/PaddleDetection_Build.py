@@ -144,7 +144,7 @@ class PaddleDetection_Build(Model_Build):
             subprocess.run(cmd_iter2, shell=True)
         # mot use small data
         cmd_mot1 = '{} -i "/for seq in seqs/for seq in [seqs[0]]/g" ppdet/engine/tracker.py'.format(os.getenv("sed"))
-        if platform.system() == "Windows":cmd_mot2 = (
+        cmd_mot2 = (
             '{} -i "/for step_id, data in enumerate(dataloader):/i\\        '
             'max_step_id=1" ppdet/engine/tracker.py'.format(os.getenv("sed"))
         )
