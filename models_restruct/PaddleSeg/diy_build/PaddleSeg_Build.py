@@ -48,12 +48,7 @@ class PaddleSeg_Build(Model_Build):
                 self.dataset_org = self.mount_path
                 os.environ["dataset_org"] = self.mount_path
                 self.dataset_target = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
-                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)   
-                if os.path.exists(self.dataset_target):
-                    shutil.rmtree(self.dataset_target)
-                exit_code = os.symlink(self.dataset_org, self.dataset_target)
-                if exit_code:
-                    logger.info("#### link_dataset failed")
+                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
         logger.info("#### dataset_org in diy_build is  {}".format(self.dataset_org))
         logger.info("#### dataset_target in diy_build is  {}".format(self.dataset_target))
 
@@ -122,6 +117,12 @@ class PaddleSeg_Build(Model_Build):
             wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/mini_supervisely.zip")
             os.system("unzip -q mini_supervisely.zip")
             logger.info("***download data ended")
+        else:
+            if os.path.exists(self.dataset_target):
+                shutil.rmtree(self.dataset_target)
+            exit_code = os.symlink(self.dataset_org, self.dataset_target)
+            if exit_code:
+                logger.info("#### link_dataset failed")
         # cpp infer compile
         if platform.system() == "Linux":
             os.chdir(path_repo + "/deploy/cpp")
