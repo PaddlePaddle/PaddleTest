@@ -1,6 +1,11 @@
 case:
     linux:
         base: ./base/ocr_kie_base_pretrained.yaml
+        train:
+          -
+            name: multi
+          -
+            name: amp
         infer:
           -
             name: pretrained
