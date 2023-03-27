@@ -5,6 +5,7 @@
 import os
 import time
 import sys
+import copy
 import json
 import shutil
 import logging
@@ -119,6 +120,48 @@ class PaddleClas_Collect(object):
                 if label.get("name") == "case_info":
                     self.case_info_list.extend(json.loads(label.get("value")))
 
+    def get_base_result(self, data_json):
+        """
+        获取原始base yaml中result信息
+        """
+        if isinstance(data_json, dict):
+            for key, val in data_json.items():
+                if key == "base":
+                    with open(os.path.join("..", val), "r") as f:
+                        content_base = yaml.load(f, Loader=yaml.FullLoader)
+                if isinstance(data_json[key], dict):
+                    self.get_base_result(data_json[key])
+                elif isinstance(data_json[key], list):
+                    # print('###data_json[key]', data_json[key])
+                    data_json_copy = copy.deepcopy(data_json[key])
+                    for i, name in enumerate(data_json_copy):
+                        for key1, val1 in name.items():
+                            if key1 == "name":
+                                # print('###key1', key1)
+                                # print('###key', key)
+                                # print('###val1', val1)
+                                for key_, val_ in content_base.items():
+                                    if key == key_:
+                                        for name_ in val_:
+                                            if name_["name"] == val1:
+                                                # print('###key_', key_)
+                                                # print('###name_', name_)
+                                                try:
+                                                    # print('###name_', name_['result'])
+                                                    data_json[key][i]["result"] = name_["result"]
+                                                except:
+                                                    pass
+                                                #     print("###key {} val1 {} do not have result".format(key, val1))
+                                                # print('###data_json[key]', data_json[key])
+                                                # input()
+                        # print('###name11111', name)
+                        # input()
+                        # for key1 in key_pop:
+                        #     name.pop(key1)
+                        # print('###name2222', name)
+                        # input()
+        return data_json
+
     def pop_yaml_useless(self, data_json):
         """
         去除原来yaml中的无效信息
@@ -176,12 +219,18 @@ class PaddleClas_Collect(object):
             # input()
             if case_value["model_name"] not in content.keys():
                 content[case_value["model_name"]] = eval(case_value["model_name"].split("^")[2])
-                # print('###case_value222', content[case_value["model_name"]])
+                # print('###case_value model_name', content[case_value["model_name"]])
                 # print("    ")
+                # 删除yaml中无效的params
+                # print('###content000', content)
                 content = self.pop_yaml_useless(content)
-                # print('###content', content)
+                # print('###content111', content)
+                # 从base中获取result的格式填充到case中
+                content[case_value["model_name"]] = self.get_base_result(content[case_value["model_name"]])
+                # print('###content222', content)
                 # print('###content', type(content))
                 # print("    ")
+                # input()
                 with open(os.path.join(self.repo_name, case_value["model_name"].replace("^", "/") + ".yaml"), "r") as f:
                     content_rd_yaml = yaml.load(f, Loader=yaml.FullLoader)
                 if "ATTRMetric" in str(content_rd_yaml):
@@ -359,10 +408,10 @@ def run():
     #     "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "21615088/result.tar",
     # }
 
-    update_name = {
-        "PaddleClas-Linux-Cuda102-Python37-P0-Release": "21880207/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P1-Release": "21880204/result.tar",
-    }
+    # update_name = {
+    #     "PaddleClas-Linux-Cuda102-Python37-P0-Release": "21880207/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P1-Release": "21880204/result.tar",
+    # }
 
     # update_name = {
     #     "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "21880106/result.tar",
