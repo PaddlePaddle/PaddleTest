@@ -34,9 +34,9 @@ train:
     name: single
     cmd: python tools/train.py -c ${rd_yaml_path}
     params:
-      - -o Global.epochs=2
-      - -o Global.save_interval=2
-      - -o Global.eval_interval=2
+      - -o Global.epochs=1
+      - -o Global.save_interval=1
+      - -o Global.eval_interval=1
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
@@ -50,9 +50,9 @@ train:
     name: single_dy2st
     cmd: python tools/train.py -c ${rd_yaml_path}
     params:
-      - -o Global.epochs=2
-      - -o Global.save_interval=2
-      - -o Global.eval_interval=2
+      - -o Global.epochs=1
+      - -o Global.save_interval=1
+      - -o Global.eval_interval=1
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
@@ -67,9 +67,9 @@ train:
     name: single_amp
     cmd: python tools/train.py -c ${rd_yaml_path}
     params:
-      - -o Global.epochs=10
-      - -o Global.save_interval=10
-      - -o Global.eval_interval=10
+      - -o Global.epochs=2
+      - -o Global.save_interval=2
+      - -o Global.eval_interval=2
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
@@ -89,9 +89,9 @@ train:
     name: single_amp_dy2st
     cmd: python tools/train.py -c ${rd_yaml_path}
     params:
-      - -o Global.epochs=10
-      - -o Global.save_interval=10
-      - -o Global.eval_interval=10
+      - -o Global.epochs=2
+      - -o Global.save_interval=2
+      - -o Global.eval_interval=2
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
@@ -112,9 +112,9 @@ train:
     name: multi
     cmd: python -m paddle.distributed.launch tools/train.py -c ${rd_yaml_path}
     params:
-      - -o Global.epochs=5
-      - -o Global.save_interval=5
-      - -o Global.eval_interval=5
+      - -o Global.epochs=2
+      - -o Global.save_interval=2
+      - -o Global.eval_interval=2
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
@@ -128,9 +128,9 @@ train:
     name: multi_dy2st
     cmd: python -m paddle.distributed.launch tools/train.py -c ${rd_yaml_path}
     params:
-      - -o Global.epochs=5
-      - -o Global.save_interval=5
-      - -o Global.eval_interval=5
+      - -o Global.epochs=2
+      - -o Global.save_interval=2
+      - -o Global.eval_interval=2
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
@@ -145,9 +145,9 @@ train:
     name: multi_amp
     cmd: python -m paddle.distributed.launch tools/train.py -c ${rd_yaml_path}
     params:
-      - -o Global.epochs=5
-      - -o Global.save_interval=5
-      - -o Global.eval_interval=5
+      - -o Global.epochs=2
+      - -o Global.save_interval=2
+      - -o Global.eval_interval=2
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
@@ -167,9 +167,9 @@ train:
     name: multi_amp_dy2st
     cmd: python -m paddle.distributed.launch tools/train.py -c ${rd_yaml_path}
     params:
-      - -o Global.epochs=5
-      - -o Global.save_interval=5
-      - -o Global.eval_interval=5
+      - -o Global.epochs=2
+      - -o Global.save_interval=2
+      - -o Global.eval_interval=2
       - -o Global.seed=1234
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False

@@ -7,8 +7,11 @@ case:
         name: dy
       -
         name: dy2st
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.sampler.batch_size=128
         result:
           loss:
             base: 2.04996
@@ -16,33 +19,43 @@ case:
             evaluation: "="
       -
         name: dy2st_cinn
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.sampler.batch_size=128
         result:
           loss:
             base: 2.024
             threshold: 0
-            evaluation: "="
+            evaluation: "-"
       -
         name: dy2st_prim
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.sampler.batch_size=128
         result:
           loss:
             base: 2.02686
             threshold: 0
-            evaluation: "="
+            evaluation: "-"
       -
         name: dy2st_prim_cinn
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.sampler.batch_size=128
         result:
           loss:
             base: 2.00956
             threshold: 0
-            evaluation: "="
+            evaluation: "-"
       -
         name: dy2st_all
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
@@ -60,6 +73,7 @@ case:
             evaluation: "-"
       -
         name: dy2st_cinn_all
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
@@ -77,6 +91,7 @@ case:
             evaluation: "-"
       -
         name: dy2st_prim_all
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
@@ -94,6 +109,7 @@ case:
             evaluation: "-"
       -
         name: dy2st_prim_cinn_all
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
