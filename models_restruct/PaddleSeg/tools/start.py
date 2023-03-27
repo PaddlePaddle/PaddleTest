@@ -42,9 +42,9 @@ class PaddleSeg_Start(object):
         环境变量设置
         """
         if "cityscapes" in self.model:
-            if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
+            if not os.path.exists("PaddleSeg/data/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
                 cmd = (
-                    "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
+                    "wget -P PaddleSeg/data/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
                     "/cityscapes/{}/model.pdparams".format(self.model, self.model)
                 )
                 if platform.system() == "Windows":
@@ -52,9 +52,9 @@ class PaddleSeg_Start(object):
                 else:
                     subprocess.run(cmd, shell=True)
         if "voc12" in self.model:
-            if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
+            if not os.path.exists("PaddleSeg/data/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
                 cmd = (
-                    "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
+                    "wget -P PaddleSeg/data/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
                     "/pascal_voc12/{}/model.pdparams".format(self.model, self.model)
                 )
                 if platform.system() == "Windows":
@@ -62,9 +62,9 @@ class PaddleSeg_Start(object):
                 else:
                     subprocess.run(cmd, shell=True)
         if "ade20k" in self.model:
-            if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
+            if not os.path.exists("PaddleSeg/data/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
                 cmd = (
-                    "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
+                    "wget -P PaddleSeg/data/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
                     "/ade20k/{}/model.pdparams".format(self.model, self.model)
                 )
                 if platform.system() == "Windows":
@@ -72,9 +72,9 @@ class PaddleSeg_Start(object):
                 else:
                     subprocess.run(cmd, shell=True)
         if "camvid" in self.model:
-            if not os.path.exists("PaddleSeg/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
+            if not os.path.exists("PaddleSeg/data/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
                 cmd = (
-                    "wget -P PaddleSeg/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
+                    "wget -P PaddleSeg/data/seg_dynamic_pretrain/{} https://bj.bcebos.com/paddleseg/dygraph"
                     "/camvid/{}/model.pdparams".format(self.model, self.model)
                 )
                 if platform.system() == "Windows":
