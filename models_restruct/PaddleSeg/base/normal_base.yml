@@ -99,17 +99,58 @@ export:
       threshold: 0
       evaluation: "="
 predict:
-  name: python
-  cmd: python deploy/python/infer.py
-  params:
-    - --config ./inference_model/${model}/deploy.yaml
-    - --image_path ./demo/${image}
-    - --save_dir ./python_infer_output/${model}/
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+  -
+    name: python
+    cmd: python deploy/python/infer.py
+    params:
+      - --config ./inference_model/${model}/deploy.yaml
+      - --image_path ./demo/${image}
+      - --save_dir ./python_infer_output/${model}/
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: mkldnn
+    cmd: python deploy/python/infer.py
+    params:
+      - --config ./inference_model/${model}/deploy.yaml
+      - --image_path ./demo/${image}
+      - --save_dir ./python_infer_output/${model}/
+      - --enable_mkldnn=True
+      - --device=cpu
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: paddle2onnx
+    cmd: paddle2onnx
+    params:
+      - --model_dir inference_model/${model}
+      - --model_filename model.pdmodel
+      - --params_filename model.pdiparams
+      - --opset_version 11
+      - --save_file ${model}.onnx
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: onnx_infer
+    cmd: python deploy/python/infer_onnx.py
+    params:
+      - --img_path ./demo/${image}
+      - --onnx_file ${model}.onnx
+      - --save_dir ./onnx_out/${model}
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
 api:
   name: cpp
   cmd: ./deploy/cpp/build/test_seg

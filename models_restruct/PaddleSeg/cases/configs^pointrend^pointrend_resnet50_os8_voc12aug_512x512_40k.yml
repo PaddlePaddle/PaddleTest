@@ -27,7 +27,12 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/python/infer.py
+      -
+        name: mkldnn
+      -
+        name: paddle2onnx
+      -
+        name: onnx_infer
     api:
       -
         name: cpp
