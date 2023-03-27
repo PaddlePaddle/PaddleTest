@@ -102,7 +102,7 @@ class PaddleSeg_Build(Model_Build):
         if platform.system() == "Linux":
             os.system("mkdir data")
             os.chdir("data")
-            os.system("ln -s {}/seg_dynamic_pretrain data/seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
+            os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
             if os.path.exists("cityscapes"):
                 shutil.rmtree("cityscapes")
             if os.path.exists("voc"):
