@@ -1,6 +1,0 @@
-- test: 0
-  Dir: '../../deepxde/examples/pinn_forward/Beltrami_flow.py'
-  Post-processing:
-    solution_metric_dir: "../standard_data/Beltrami_flow_metric.npy"
-    solution_loss_dir: "../standard_data/Beltrami_flow_loss.npy"
-    run_time: 2710.589999
