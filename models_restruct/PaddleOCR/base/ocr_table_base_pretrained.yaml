@@ -138,30 +138,80 @@ export:
       base: 0
       threshold: 0
       evaluation: "="
-predict:
-  name: trained
-  cmd:  python tools/infer/predict_structure.py
-  params:
-    - --image_dir="ppstructure/docs/table/table.jpg"
-    - --table_model_dir="./models_inference/"${qa_yaml_name}
-    - --table_char_dict_path=${rec_dict}
-    - --table_max_len=488
-    - --vis_font_path=./doc/fonts/simfang.ttf
-    - --use_gpu=${use_gpu}
-    - --use_tensorrt=False
-    - --enable_mkldnn=False
 
-  name: pretrained
-  cmd:  python ppstructure/table/predict_structure.py
-  params:
-    - --image_dir="ppstructure/docs/table/table.jpg"
-    - --table_model_dir="./models_inference/"${model}
-    - --table_char_dict_path=${rec_dict}
-    - --table_max_len=488
-    - --vis_font_path=./doc/fonts/simfang.ttf
-    - --use_gpu=${use_gpu}
-    - --use_tensorrt=False
-    - --enable_mkldnn=False
+predict:
+  -
+    name: trained
+    cmd:  python tools/infer/predict_structure.py
+    params:
+      - --image_dir="ppstructure/docs/table/table.jpg"
+      - --table_model_dir="./models_inference/"${qa_yaml_name}
+      - --table_char_dict_path=${rec_dict}
+      - --table_max_len=488
+      - --vis_font_path=./doc/fonts/simfang.ttf
+      - --use_gpu=${use_gpu}
+      - --use_tensorrt=False
+      - --enable_mkldnn=False
+  -
+    name: trained_mkldnn
+    cmd:  python tools/infer/predict_structure.py
+    params:
+      - --image_dir="ppstructure/docs/table/table.jpg"
+      - --table_model_dir="./models_inference/"${qa_yaml_name}
+      - --table_char_dict_path=${rec_dict}
+      - --table_max_len=488
+      - --vis_font_path=./doc/fonts/simfang.ttf
+      - --use_gpu=False
+      - --use_tensorrt=False
+      - --enable_mkldnn=True
+  -
+    name: trained_tensorRT
+    cmd:  python tools/infer/predict_structure.py
+    params:
+      - --image_dir="ppstructure/docs/table/table.jpg"
+      - --table_model_dir="./models_inference/"${qa_yaml_name}
+      - --table_char_dict_path=${rec_dict}
+      - --table_max_len=488
+      - --vis_font_path=./doc/fonts/simfang.ttf
+      - --use_gpu=True
+      - --use_tensorrt=True
+      - --enable_mkldnn=False
+  -
+    name: pretrained
+    cmd:  python ppstructure/table/predict_structure.py
+    params:
+      - --image_dir="ppstructure/docs/table/table.jpg"
+      - --table_model_dir="./models_inference/"${model}
+      - --table_char_dict_path=${rec_dict}
+      - --table_max_len=488
+      - --vis_font_path=./doc/fonts/simfang.ttf
+      - --use_gpu=${use_gpu}
+      - --use_tensorrt=False
+      - --enable_mkldnn=False
+  -
+    name: pretrained_mkldnn
+    cmd:  python ppstructure/table/predict_structure.py
+    params:
+      - --image_dir="ppstructure/docs/table/table.jpg"
+      - --table_model_dir="./models_inference/"${model}
+      - --table_char_dict_path=${rec_dict}
+      - --table_max_len=488
+      - --vis_font_path=./doc/fonts/simfang.ttf
+      - --use_gpu=False
+      - --use_tensorrt=False
+      - --enable_mkldnn=True
+  -
+    name: pretrained_tensorRT
+    cmd:  python ppstructure/table/predict_structure.py
+    params:
+      - --image_dir="ppstructure/docs/table/table.jpg"
+      - --table_model_dir="./models_inference/"${model}
+      - --table_char_dict_path=${rec_dict}
+      - --table_max_len=488
+      - --vis_font_path=./doc/fonts/simfang.ttf
+      - --use_gpu=True
+      - --use_tensorrt=True
+      - --enable_mkldnn=False
 api:
   name: pretrained_C_plus_plus_GPU
   path: deploy/cpp_infer

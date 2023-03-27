@@ -104,17 +104,42 @@ export:
       threshold: 0
       evaluation: "="
 predict:
-  name: trained
-  cmd:  python tools/infer/predict_structure.py
-  params:
-    - --image_dir="ppstructure/docs/table/table.jpg"
-    - --table_model_dir="./models_inference/"${qa_yaml_name}
-    - --table_char_dict_path=${rec_dict}
-    - --table_max_len=488
-    - --vis_font_path=./doc/fonts/simfang.ttf
-    - --use_gpu=${use_gpu}
-    - --use_tensorrt=False
-    - --enable_mkldnn=False
+  -
+    name: trained
+    cmd:  python tools/infer/predict_structure.py
+    params:
+      - --image_dir="ppstructure/docs/table/table.jpg"
+      - --table_model_dir="./models_inference/"${qa_yaml_name}
+      - --table_char_dict_path=${rec_dict}
+      - --table_max_len=488
+      - --vis_font_path=./doc/fonts/simfang.ttf
+      - --use_gpu=${use_gpu}
+      - --use_tensorrt=False
+      - --enable_mkldnn=False
+  -
+    name: trained_mkldnn
+    cmd:  python tools/infer/predict_structure.py
+    params:
+      - --image_dir="ppstructure/docs/table/table.jpg"
+      - --table_model_dir="./models_inference/"${qa_yaml_name}
+      - --table_char_dict_path=${rec_dict}
+      - --table_max_len=488
+      - --vis_font_path=./doc/fonts/simfang.ttf
+      - --use_gpu=False
+      - --use_tensorrt=False
+      - --enable_mkldnn=True
+  -
+    name: trained_tensorRT
+    cmd:  python tools/infer/predict_structure.py
+    params:
+      - --image_dir="ppstructure/docs/table/table.jpg"
+      - --table_model_dir="./models_inference/"${qa_yaml_name}
+      - --table_char_dict_path=${rec_dict}
+      - --table_max_len=488
+      - --vis_font_path=./doc/fonts/simfang.ttf
+      - --use_gpu=True
+      - --use_tensorrt=True
+      - --enable_mkldnn=False
 
   result:
     exit_code:
