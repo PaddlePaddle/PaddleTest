@@ -1,6 +1,6 @@
 case:
   linux:
-    base: ./base/mot_base.yml
+    base: ./base/normal_base.yml
     train:
       -
         name: multi
@@ -19,11 +19,11 @@ case:
     eval:
       -
         name: pretrained
-        cmd: python tools/eval_mot.py
+        cmd: python tools/eval.py
     infer:
       -
         name: pretrained
-        cmd: python tools/infer_mot.py
+        cmd: python tools/infer.py
     export:
       -
         name: pretrained
@@ -34,11 +34,19 @@ case:
       -
         name: mkldnn
       -
+        name: trt_fp32
+      -
+        name: trt_fp16
+      -
         name: paddle2onnx
       -
         name: onnx_infer
+    api:
+      -
+        name: cpp
+        cmd: ./deploy/cpp/build/main
   windows:
-    base: ./base/mot_base.yml
+    base: ./base/normal_base.yml
     train:
       -
         name: single
@@ -48,11 +56,11 @@ case:
     eval:
       -
         name: pretrained
-        cmd: python tools/eval_mot.py
+        cmd: python tools/eval.py
     infer:
       -
         name: pretrained
-        cmd: python tools/infer_mot.py
+        cmd: python tools/infer.py
     export:
       -
         name: pretrained
@@ -60,7 +68,40 @@ case:
     predict:
       -
         name: python
-        cmd: python deploy/pptracking/python/mot_jde_infer.py
+        cmd: python deploy/python/infer.py
+  mac:
+    base: ./base/normal_base.yml
+    train:
+      -
+        name: single
+        cmd : python tools/train.py
+        params:
+          - TrainReader.batch_size=1
+          - use_gpu=false
+    eval:
+      -
+        name: pretrained
+        cmd: python tools/eval.py
+        params:
+          - use_gpu=false
+    infer:
+      -
+        name: pretrained
+        cmd: python tools/infer.py
+        params:
+          - use_gpu=false
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export_model.py
+        params:
+          - use_gpu=false
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/infer.py
+        params:
+          - --device=CPU
 
 
 function: paddlelas_imagenet_parse

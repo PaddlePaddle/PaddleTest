@@ -132,6 +132,36 @@ predict:
         threshold: 0
         evaluation: "="
   -
+    name: trt_fp32
+    cmd: python deploy/python/infer.py
+    params:
+      - --model_dir=inference_model/${model}
+      - --image_file=demo/000000570688.jpg
+      - --device=GPU
+      - --run_mode=trt_fp32
+      - --threshold=0.5
+      - --output_dir=python_infer_trtfp32_output/${model}/
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: trt_fp16
+    cmd: python deploy/python/infer.py
+    params:
+      - --model_dir=inference_model/${model}
+      - --image_file=demo/000000570688.jpg
+      - --device=GPU
+      - --run_mode=trt_fp16
+      - --threshold=0.5
+      - --output_dir=python_infer_trtfp16_output/${model}/
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
     name: paddle2onnx
     cmd: paddle2onnx
     params:
