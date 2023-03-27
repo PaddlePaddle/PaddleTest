@@ -123,6 +123,24 @@ predict:
       - --use_tensorrt=False
       - --enable_mkldnn=False
   -
+    name: trained_mkldnn
+    cmd:  python tools/infer/predict_cls.py
+    params:
+      - --image_dir="doc/imgs_words_en/word_10.png"
+      - --cls_model_dir="./models_inference/"${qa_yaml_name}
+      - --use_gpu=False
+      - --use_tensorrt=False
+      - --enable_mkldnn=True
+    -
+    name: trained_tensorRT
+    cmd:  python tools/infer/predict_cls.py
+    params:
+      - --image_dir="doc/imgs_words_en/word_10.png"
+      - --cls_model_dir="./models_inference/"${qa_yaml_name}
+      - --use_gpu=True
+      - --use_tensorrt=True
+      - --enable_mkldnn=False
+  -
     name: pretrained
     cmd:  python tools/infer/predict_cls.py
     params:
@@ -130,6 +148,24 @@ predict:
       - --cls_model_dir="./models_inference/"${model}
       - --use_gpu=${use_gpu}
       - --use_tensorrt=False
+      - --enable_mkldnn=False
+  -
+    name: pretrained_mkldnn
+    cmd:  python tools/infer/predict_cls.py
+    params:
+      - --image_dir="doc/imgs_words_en/word_10.png"
+      - --cls_model_dir="./models_inference/"${model}
+      - --use_gpu=False
+      - --use_tensorrt=False
+      - --enable_mkldnn=True
+  -
+    name: pretrained_tensorRT
+    cmd:  python tools/infer/predict_cls.py
+    params:
+      - --image_dir="doc/imgs_words_en/word_10.png"
+      - --cls_model_dir="./models_inference/"${model}
+      - --use_gpu=True
+      - --use_tensorrt=True
       - --enable_mkldnn=False
 api:
   name: trained_C_plus_plus_GPU
