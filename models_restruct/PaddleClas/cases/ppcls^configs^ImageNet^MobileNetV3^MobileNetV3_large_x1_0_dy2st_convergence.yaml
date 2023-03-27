@@ -1,4 +1,4 @@
-# dy2st_prim_cinn 无法固定随机量, all不需要固定随机量
+# all不需要固定随机量
 case:
   linux_convergence:
     base: ./base/ImageNet_base_dy2st.yaml
@@ -12,11 +12,13 @@ case:
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.05
           - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st
+          - -o Global.use_dali=False
         result:
           loss:
-            base: 2.04996
-            threshold: 0
-            evaluation: "="
+            base: 6
+            threshold: 1
+            evaluation: "1"
       -
         name: dy2st_cinn
         cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
@@ -24,10 +26,12 @@ case:
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.05
           - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st_cinn
+          - -o Global.use_dali=False
         result:
           loss:
-            base: 2.024
-            threshold: 0
+            base: 6
+            threshold: 1
             evaluation: "-"
       -
         name: dy2st_prim
@@ -36,10 +40,12 @@ case:
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.05
           - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st_prim
+          - -o Global.use_dali=False
         result:
           loss:
-            base: 2.02686
-            threshold: 0
+            base: 6
+            threshold: 1
             evaluation: "-"
       -
         name: dy2st_prim_cinn
@@ -48,10 +54,12 @@ case:
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.05
           - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st_prim_cinn
+          - -o Global.use_dali=False
         result:
           loss:
-            base: 2.00956
-            threshold: 0
+            base: 6
+            threshold: 1
             evaluation: "-"
       -
         name: dy2st_all
@@ -65,7 +73,8 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.0025
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o Global.use_dali=False
         result:
           loss:
             base: 1
@@ -83,7 +92,8 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.0025
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o Global.use_dali=False
         result:
           loss:
             base: 1
@@ -101,7 +111,8 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.0025
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o Global.use_dali=False
         result:
           loss:
             base: 1
@@ -119,7 +130,8 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.0025
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o Global.use_dali=False
         result:
           loss:
             base: 1

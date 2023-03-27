@@ -1,4 +1,4 @@
-# dy2st_prim_cinn 无法固定随机量, all不需要固定随机量
+# all不需要固定随机量
 case:
   linux_convergence:
     base: ./base/ImageNet_base_dy2st.yaml
@@ -9,6 +9,7 @@ case:
         name: dy2st
         params:
           - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st
         result:
           loss:
             base: 2.04996
@@ -18,6 +19,7 @@ case:
         name: dy2st_cinn
         params:
           - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_cinn
         result:
           loss:
             base: 2.024
@@ -27,6 +29,7 @@ case:
         name: dy2st_prim
         params:
           - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_prim
         result:
           loss:
             base: 2.02686
@@ -36,6 +39,7 @@ case:
         name: dy2st_prim_cinn
         params:
           - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
         result:
           loss:
             base: 2.00956
