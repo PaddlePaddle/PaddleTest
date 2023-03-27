@@ -197,9 +197,15 @@ class PaddleClas_Start(object):
 
         # 准备评估内容 这里使用多卡的结果产出的模型
         self.env_dict["kpi_value_eval"] = self.kpi_value_eval
-        self.env_dict["eval_trained_model"] = os.path.join(
-            "output", self.qa_yaml_name + "_train_multi", self.eval_trained_params, "latest"
-        )
+        # windows mac 使用function得到的结果
+        if "Windows" in platform.system() or "Darwin" in platform.system():
+            self.env_dict["eval_trained_model"] = os.path.join(
+                "output", self.qa_yaml_name + "_train_function", self.eval_trained_params, "latest"
+            )
+        else:
+            self.env_dict["eval_trained_model"] = os.path.join(
+                "output", self.qa_yaml_name + "_train_multi", self.eval_trained_params, "latest"
+            )
 
         # 准备导出模型
         self.env_dict["export_trained_model"] = os.path.join("inference", self.qa_yaml_name)
