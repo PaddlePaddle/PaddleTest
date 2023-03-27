@@ -232,6 +232,7 @@ class PaddleClas_Collect(object):
                 # print("    ")
                 # input()
                 with open(os.path.join(self.repo_name, case_value["model_name"].replace("^", "/") + ".yaml"), "r") as f:
+                    # 针对dy2st 进行.replace("_dy2st_convergence","")
                     content_rd_yaml = yaml.load(f, Loader=yaml.FullLoader)
                 if "ATTRMetric" in str(content_rd_yaml):
                     self.kpi_value_eval = "label_f1"
@@ -408,10 +409,12 @@ def run():
     #     "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "21615088/result.tar",
     # }
 
-    # update_name = {
-    #     "PaddleClas-Linux-Cuda102-Python37-P0-Release": "21880207/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P1-Release": "21880204/result.tar",
-    # }
+    update_name = {
+        "PaddleClas-LinuxConvergence-Cuda112-Python38-dy2st-Develop": "22217926/result.tar",
+        "PaddleClas-LinuxConvergence-Cuda112-Python38-cinn-Develop": "22217924/result.tar",
+        "PaddleClas-LinuxConvergence-Cuda112-Python38-prim-Develop": "22217923/result.tar",
+        "PaddleClas-LinuxConvergence-Cuda112-Python38-primcinn-Develop": "22217927/result.tar",
+    }
 
     # update_name = {
     #     "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "21880106/result.tar",
