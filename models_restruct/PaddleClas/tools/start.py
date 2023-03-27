@@ -5,6 +5,7 @@
 import os
 import sys
 import json
+import platform
 import shutil
 import logging
 import tarfile
