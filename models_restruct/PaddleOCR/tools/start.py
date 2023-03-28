@@ -388,7 +388,7 @@ class PaddleOCR_Start(object):
         执行准备过程
         """
         # 进入repo中
-        if self.category == 'benchmark':
+        if self.category == "benchmark":
             print("PaddleOCR/benchmark")
         else:
             ret = 0
