@@ -6,6 +6,11 @@ case:
             name: multi
           -
             name: amp
+        export:
+          -
+            name: trained
+          -
+            name: pretrained
         predict:
           -
             name: pretrained

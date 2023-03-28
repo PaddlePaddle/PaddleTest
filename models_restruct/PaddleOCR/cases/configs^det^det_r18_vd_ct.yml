@@ -14,3 +14,8 @@ case:
                 base: ${eval_base_acc}
                 threshold: 0
                 evaluation: "="
+        export:
+          -
+            name: trained
+          -
+            name: pretrained
