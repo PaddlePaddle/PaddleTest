@@ -388,17 +388,20 @@ class PaddleOCR_Start(object):
         执行准备过程
         """
         # 进入repo中
-        ret = 0
-        ret = self.prepare_config_params()
-        if ret:
-            logger.info("build prepare_config_params failed")
-        self.prepare_pretrained_model()
-        self.gengrate_test_case()
-        self.prepare_dataset()
-        os.environ[self.reponame] = json.dumps(self.env_dict)
-        for k, v in self.env_dict.items():
-            os.environ[k] = v
-        return ret
+        if self.category == "benchmark":
+            print("PaddleOCR/benchmark")
+        else:
+            ret = 0
+            ret = self.prepare_config_params()
+            if ret:
+                logger.info("build prepare_config_params failed")
+            self.prepare_pretrained_model()
+            self.gengrate_test_case()
+            self.prepare_dataset()
+            os.environ[self.reponame] = json.dumps(self.env_dict)
+            for k, v in self.env_dict.items():
+                os.environ[k] = v
+            return ret
 
 
 def run():
