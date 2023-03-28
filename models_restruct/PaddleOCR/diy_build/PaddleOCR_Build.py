@@ -156,7 +156,7 @@ class PaddleOCR_Build(Model_Build):
                 os.system("conda install -y scikit-image")
                 os.system("conda install -y imgaug")
 
-    def download_data(self, data_link, destination='.'):
+    def download_data(self, data_link, destination="."):
         """
         下载数据集
         """
