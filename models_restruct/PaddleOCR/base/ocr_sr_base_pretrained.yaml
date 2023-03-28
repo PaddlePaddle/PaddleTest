@@ -83,21 +83,22 @@ infer:
       threshold: 0
       evaluation: "="
 export:
-  name: trained
-  cmd:  python tools/export_model.py
-  params:
-    - -c ${rd_yaml_path}
-    - -o Global.use_gpu=${use_gpu}
-    - Global.pretrained_model=output/${qa_yaml_name}/latest
-    - Global.save_inference_dir=./models_inference/${qa_yaml_name}
-
-  name: pretrained
-  cmd:  python tools/export_model.py
-  params:
-    - -c ${rd_yaml_path}
-    - -o Global.use_gpu=${use_gpu}
-    - Global.pretrained_model=${model}/best_accuracy
-    - Global.save_inference_dir=./models_inference/${model}
+  -
+    name: trained
+    cmd:  python tools/export_model.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.use_gpu=${use_gpu}
+      - Global.pretrained_model=output/${qa_yaml_name}/latest
+      - Global.save_inference_dir=./models_inference/${qa_yaml_name}
+  -
+    name: pretrained
+    cmd:  python tools/export_model.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.use_gpu=${use_gpu}
+      - Global.pretrained_model=${model}/best_accuracy
+      - Global.save_inference_dir=./models_inference/${model}
 
   result:
     exit_code:

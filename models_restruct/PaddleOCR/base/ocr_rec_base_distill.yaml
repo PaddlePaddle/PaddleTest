@@ -74,17 +74,18 @@ train:
       - Global.to_static=True
 
 eval:
-  name: trained
-  cmd:  python tools/eval.py
-  params:
-    - -c ${rd_yaml_path}
-    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
-    - Global.use_gpu=${use_gpu}
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+  -
+    name: trained
+    cmd:  python tools/eval.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+      - Global.use_gpu=${use_gpu}
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
 infer:
   name: trained
   cmd:  python tools/infer_rec.py

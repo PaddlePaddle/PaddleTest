@@ -13,6 +13,11 @@ case:
             params:
               - -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml
               - -o_ser Architecture.Backbone.checkpoints=ser_vi_layoutxlm_xfund_zh/best_accuracy
+        export:
+          -
+            name: trained
+          -
+            name: pretrained
         predict:
           -
             name: pretrained
