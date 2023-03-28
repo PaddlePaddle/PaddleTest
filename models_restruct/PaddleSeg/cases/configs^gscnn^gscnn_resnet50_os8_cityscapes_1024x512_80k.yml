@@ -20,9 +20,27 @@ case:
       -
         name: pretrained
         cmd: python tools/predict.py
-    export: skipped
-    predict: skipped
-    api: skipped
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export.py
+    predict:
+      -
+        name: python
+      -
+        name: mkldnn
+      -
+        name: trt_fp32
+      -
+        name: trt_fp16
+      -
+        name: paddle2onnx
+      -
+        name: onnx_infer
+    api:
+      -
+        name: cpp
+        cmd: ./deploy/cpp/build/test_seg
   windows:
     base: ./base/normal_base.yml
     train:
@@ -37,8 +55,14 @@ case:
       -
         name: pretrained
         cmd: python tools/predict.py
-    export: skipped
-    predict: skipped
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export.py
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/infer.py
   mac:
     base: ./base/normal_base.yml
     train:
@@ -53,8 +77,16 @@ case:
       -
         name: pretrained
         cmd: python tools/predict.py
-    export: skipped
-    predict: skipped
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export.py
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/infer.py
+        params:
+          - --device cpu
 
 
 function: paddlelas_imagenet_parse
