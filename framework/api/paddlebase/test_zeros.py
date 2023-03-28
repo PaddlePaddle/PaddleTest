@@ -383,11 +383,12 @@ def test_zeros31():
 @pytest.mark.api_base_zeros_exception
 def test_zeros32():
     """
-    shape_type=tuple,shape=(1000, 1),dtype=np.int8,static TypeError
+    shape_type=tuple,shape=(1000, 1),dtype=np.int8
     """
     shape = (1000, 1)
     dtype = np.int8
-    obj.exception(mode="c", etype="NotFound", shape=shape, dtype=dtype)
+    res = np.zeros(shape, dtype=dtype)
+    obj.run(res=res, shape=shape, dtype=dtype)
 
 
 @pytest.mark.api_base_zeros_exception
