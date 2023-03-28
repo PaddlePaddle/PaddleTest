@@ -5,6 +5,7 @@
 import os
 import sys
 import json
+import platform
 import shutil
 import logging
 import tarfile
@@ -195,11 +196,17 @@ class PaddleClas_Start(object):
         path_now = os.getcwd()  # 切入路径
         os.chdir(self.reponame)
 
-        # 准备评估内容
+        # 准备评估内容 这里使用多卡的结果产出的模型
         self.env_dict["kpi_value_eval"] = self.kpi_value_eval
-        self.env_dict["eval_trained_model"] = os.path.join(
-            "output", self.qa_yaml_name, self.eval_trained_params, "latest"
-        )
+        # windows mac 使用function得到的结果
+        if "Windows" in platform.system() or "Darwin" in platform.system():
+            self.env_dict["eval_trained_model"] = os.path.join(
+                "output", self.qa_yaml_name + "_train_function", self.eval_trained_params, "latest"
+            )
+        else:
+            self.env_dict["eval_trained_model"] = os.path.join(
+                "output", self.qa_yaml_name + "_train_multi", self.eval_trained_params, "latest"
+            )
 
         # 准备导出模型
         self.env_dict["export_trained_model"] = os.path.join("inference", self.qa_yaml_name)
@@ -250,7 +257,6 @@ class PaddleClas_Start(object):
                     "PULC^language_classification" in self.qa_yaml_name
                     or "PULC^textline_orientation" in self.qa_yaml_name
                     or "PULC^text_image_orientation" in self.qa_yaml_name
-                    or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
                 ):
                     # 因为训练不足会导致报 batch_norm2d_0.w_2 问题

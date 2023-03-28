@@ -8,6 +8,10 @@ case:
       -
         name: single
         cmd : python tools/train.py
+      -
+        name: amp_multi
+      -
+        name: static_multi
     eval:
       -
         name: pretrained
