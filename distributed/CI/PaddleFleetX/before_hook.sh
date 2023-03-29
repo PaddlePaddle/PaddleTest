@@ -41,7 +41,6 @@ function requirements() {
     export https_proxy=${proxy}
     python -m pip install -r requirements.txt --force-reinstall
     cd ppfleetx/ops && python setup_cuda.py install && cd ../..
-        # uninstall padle -y
     python -m pip list|grep paddle
 }
 
