@@ -32,6 +32,7 @@ class PaddleRec_Build(Model_Build):
         self.set_cuda = args.set_cuda
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
+        self.data_path_endswith = "datasets"
 
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)
         # 所有和yaml相关的变量与此拼接
@@ -59,19 +60,18 @@ class PaddleRec_Build(Model_Build):
         self.dataset_target = str(args.dataset_target)
         # 使用数据服务时，将被用于更新dataset_org参数
         self.mount_path = str(os.getenv("mount_path"))
-        # linux release 是否用数据服务，默认为False
+        #linux 环境通过use_data_cfs控制是否使用数据服务（True：使用）
         self.use_data_cfs = str(args.use_data_cfs)
-        # windows、mac 系统下使用数据服务 
-        # linux release机器下使用数据服务
+        # windows、mac、liunx系统下使用数据服务
         if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(self.mount_path) \
-            or (os.path.exists(self.mount_path) and self.use_data_cfs): 
+            or (os.path.exists(self.mount_path) and self.use_data_cfs == "True"): 
             logger.info("#### mount_path diy_build is {}".format(self.mount_path))
-            # 设置dataset_target为mount_path
+            # 设置dataset_org为mount_path
             if os.listdir(self.mount_path) != []:
                 self.dataset_org = self.mount_path
                 os.environ["dataset_org"] = self.mount_path
-                self.dataset_target = os.path.join(os.getcwd(), self.reponame)
-                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame)
+                self.dataset_target = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
+                os.environ["dataset_target"] = self.dataset_target
 
         # 将dataset_org 软链到dataset_targ
             exit_code = os.symlink(self.dataset_org, os.path.join(self.reponame, self.dataset_target))
