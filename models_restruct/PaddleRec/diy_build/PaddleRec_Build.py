@@ -64,7 +64,7 @@ class PaddleRec_Build(Model_Build):
         self.use_data_cfs = str(args.use_data_cfs)
         # windows、mac、liunx系统下使用数据服务
         if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(self.mount_path) \
-            or (os.path.exists(self.mount_path) and self.use_data_cfs == "True"): 
+            or (os.path.exists(self.mount_path) and self.use_data_cfs == "True"):
             logger.info("#### mount_path diy_build is {}".format(self.mount_path))
             # 设置dataset_org为mount_path
             if os.listdir(self.mount_path) != []:
