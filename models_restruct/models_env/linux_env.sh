@@ -458,7 +458,7 @@ else
         esac
     fi
 
-    #集群环境已在节点挂载，容器内只需定义mount_path即可
+    #集群环境已在节点挂载，任务中配置挂载卷，再需定义mount_path即可
     export mount_path="/home/paddleqa/cfs"
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
