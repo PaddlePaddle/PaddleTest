@@ -400,7 +400,6 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
-        yum install nfs-utils -y > install_nfs 2>&1
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -425,8 +424,6 @@ else
         esac
     else
         echo "ubuntu"
-        apt-get update > install_update 2>&1
-        apt-get install nfs-common -y > install_nfs 2>&1
         case ${Python_version} in
         36)
         mkdir run_env_py36;
@@ -461,7 +458,7 @@ else
         esac
     fi
 
-    #挂载数据, 地址特定为mount_path
+    #集群环境已在节点挂载，容器内只需定义mount_path即可
     export mount_path="/home/paddleqa/cfs"
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
