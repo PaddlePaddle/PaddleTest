@@ -199,7 +199,7 @@ class PaddleOCR_End(object):
         for line in f.readlines():
             # if kpi + ":" in line:
             if all(kpi + ":" in line for kpi in kpi_list):
-                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
+                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi_list[0]
                 r = re.findall(regexp, line)
                 # 如果解析不到符合格式到指标，默认值设置为-1
                 kpi_value = float(r[0].strip()) if len(r) > 0 else -1
@@ -246,8 +246,9 @@ class PaddleOCR_End(object):
             logger.info("Get data successfully!")
             self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss")
             logger.info("Plot figure successfully!")
-            self.allure_attach("dygraph2static_train_loss.png", \
-"dygraph2static_train_loss.png", allure.attachment_type.PNG)
+            self.allure_attach(
+                "dygraph2static_train_loss.png", "dygraph2static_train_loss.png", allure.attachment_type.PNG
+            )
             # hmeans
             data_baseline_hmeans = self.get_paddle_data(filepath_baseline, ["hmeans", "test"])
             logger.info(filepath_prim)
@@ -255,11 +256,9 @@ class PaddleOCR_End(object):
             logger.info("Get data successfully!")
             self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans")
             logger.info("Plot figure successfully!")
-            self.allure_attach("dygraph2static_eval_hmeans.png", \
-"dygraph2static_eval_hmeans.png", allure.attachment_type.PNG)
-
-
-
+            self.allure_attach(
+                "dygraph2static_eval_hmeans.png", "dygraph2static_eval_hmeans.png", allure.attachment_type.PNG
+            )
 
     def build_end(self):
         """

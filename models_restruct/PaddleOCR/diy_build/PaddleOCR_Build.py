@@ -151,7 +151,7 @@ class PaddleOCR_Build(Model_Build):
                 print("filename:{}".format(filename))
                 if "benchmark" in filename:
                     os.system("python -m pip install -U numpy==1.23.5")
-            
+
             os.chdir(self.test_root_path)
             print("build dataset!")
 
