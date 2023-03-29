@@ -462,14 +462,7 @@ else
     fi
 
     #挂载数据, 地址特定为mount_path
-    export mount_path = "/workspace/MT_data/${reponame}"
-    if [[ -d ${mount_path} ]];then
-        mv ${mount_path} ${mount_path}_back
-        mkdir -p ${mount_path}
-    else
-        mkdir -p ${else}
-    fi
-    mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
+    export mount_path="/home/paddleqa/cfs"
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
 
