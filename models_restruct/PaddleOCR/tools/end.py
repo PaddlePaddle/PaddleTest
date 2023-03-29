@@ -158,9 +158,9 @@ class PaddleOCR_End(object):
             for key, value in report_enviorement_dict.items():
                 f.write(str(key) + "=" + str(value) + "\n")
 
-    def plot_paddle_compare_loss(self, data1, data2, model):
+    def plot_paddle_compare_value(self, data1, data2, value):
         """
-        plot_paddle_compare_loss
+        plot_paddle_compare_value
         """
         ydata1 = data1
         xdata1 = list(range(0, len(ydata1)))
@@ -172,8 +172,8 @@ class PaddleOCR_End(object):
         # plot the data
         fig = plt.figure()
         ax = fig.add_subplot(1, 1, 1)
-        ax.plot(xdata1, ydata1, label="paddle_dygraph2static_baseline_loss", color="b", linewidth=2)
-        ax.plot(xdata2, ydata2, label="paddle_dygraph2static_prim_loss", color="r", linewidth=2)
+        ax.plot(xdata1, ydata1, label="paddle_dygraph2static_baseline_" + value, color="b", linewidth=2)
+        ax.plot(xdata2, ydata2, label="paddle_dygraph2static_prim_" + value, color="r", linewidth=2)
 
         # set the legend
         ax.legend()
@@ -182,22 +182,23 @@ class PaddleOCR_End(object):
         ax.set_ylim([0, math.ceil(max(ydata1))])
 
         ax.set_xlabel("iteration")
-        ax.set_ylabel("train loss")
+        ax.set_ylabel(value)
         ax.grid()
-        ax.set_title(model)
+        ax.set_title("PaddleOCR_DB")
 
         # display the plot
         plt.show()
-        plt.savefig("dygraph2static_loss.png")
+        plt.savefig("dygraph2static_" + value + ".png")
 
-    def get_paddle_data(self, filepath, kpi):
+    def get_paddle_data(self, filepath, kpi_list):
         """
         get_paddle_data(
         """
         data_list = []
         f = open(filepath, encoding="utf-8", errors="ignore")
         for line in f.readlines():
-            if kpi + ":" in line:
+            # if kpi + ":" in line:
+            if all(kpi + ":" in line for kpi in kpi_list):
                 regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
                 r = re.findall(regexp, line)
                 # 如果解析不到符合格式到指标，默认值设置为-1
@@ -238,13 +239,27 @@ class PaddleOCR_End(object):
                 "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/", "train_dygraph2static_prim.log"
             )
             logger.info(filepath_baseline)
-            data_baseline = self.get_paddle_data(filepath_baseline, "loss")
+            # loss
+            data_baseline = self.get_paddle_data(filepath_baseline, ["loss"])
             logger.info(filepath_prim)
-            data_prime = self.get_paddle_data(filepath_prim, "loss")
+            data_prime = self.get_paddle_data(filepath_prim, ["loss"])
             logger.info("Get data successfully!")
-            self.plot_paddle_compare_loss(data_baseline, data_prime, "PaddleOCR_DB")
+            self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss")
             logger.info("Plot figure successfully!")
-            self.allure_attach("dygraph2static_loss.png", "dygraph2static_loss.png", allure.attachment_type.PNG)
+            self.allure_attach("dygraph2static_train_loss.png", \
+"dygraph2static_train_loss.png", allure.attachment_type.PNG)
+            # hmeans
+            data_baseline_hmeans = self.get_paddle_data(filepath_baseline, ["hmeans", "test"])
+            logger.info(filepath_prim)
+            data_prime_hmeans = self.get_paddle_data(filepath_prim, ["hmeans", "test"])
+            logger.info("Get data successfully!")
+            self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans")
+            logger.info("Plot figure successfully!")
+            self.allure_attach("dygraph2static_eval_hmeans.png", \
+"dygraph2static_eval_hmeans.png", allure.attachment_type.PNG)
+
+
+
 
     def build_end(self):
         """
