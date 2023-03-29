@@ -56,7 +56,7 @@ case:
           - -o DataLoader.Eval.sampler.batch_size=32
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o DataLoader.Eval.sampler.batch_size=32
       -
@@ -66,7 +66,7 @@ case:
     infer: skipped
     export:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     predict: skipped
@@ -82,7 +82,7 @@ case:
           - -o DataLoader.Eval.sampler.batch_size=32
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
           - -o DataLoader.Eval.sampler.batch_size=32
@@ -94,7 +94,7 @@ case:
     infer: skipped
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -114,7 +114,7 @@ case:
           - -o DataLoader.Eval.sampler.batch_size=32
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
           - -o DataLoader.Eval.sampler.batch_size=32
@@ -126,7 +126,7 @@ case:
     infer: skipped
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
