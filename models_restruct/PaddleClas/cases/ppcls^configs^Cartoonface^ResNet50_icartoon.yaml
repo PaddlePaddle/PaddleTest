@@ -47,18 +47,18 @@ case:
         name: function
     eval:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     infer: skipped
     export:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     predict:
       -
-        name: trained
+        name: function
       -
         name: pretrained
 
@@ -71,26 +71,32 @@ case:
           - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
     infer: skipped
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
 
   mac:
     base: ./base/Cartoonface_base.yaml
@@ -101,25 +107,31 @@ case:
           - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
     infer: skipped
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
 
 function: paddlelas_imagenet_parse

@@ -14,9 +14,7 @@ train:
       - -o Global.save_interval=10
       - -o Global.eval_interval=1
       - -o Global.eval_during_train=True
-      - -o Global.use_dali=True
       - -o Global.seed=1234
-      - -o Optimizer.lr.name=Cosine
       - -o Optimizer.lr.learning_rate=0.2
     result:
       loss:

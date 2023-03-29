@@ -66,7 +66,7 @@ case:
           - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o DataLoader.Eval.sampler.batch_size=64
       -
@@ -76,12 +76,12 @@ case:
     infer: skipped
     export:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     predict:
       -
-        name: trained
+        name: function
       -
         name: pretrained
 
@@ -98,7 +98,7 @@ case:
           - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
           - -o DataLoader.Eval.sampler.batch_size=64
@@ -109,7 +109,7 @@ case:
     infer: skipped
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -118,7 +118,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -139,7 +139,7 @@ case:
           - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
           - -o DataLoader.Eval.sampler.batch_size=64
@@ -151,7 +151,7 @@ case:
     infer: skipped
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -160,7 +160,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
