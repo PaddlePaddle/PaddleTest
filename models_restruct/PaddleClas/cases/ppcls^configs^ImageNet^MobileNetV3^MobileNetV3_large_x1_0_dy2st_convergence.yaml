@@ -13,7 +13,6 @@ case:
           - -o Optimizer.lr.learning_rate=0.05
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/MobileNetV3_dy2st
-          - -o Global.use_dali=False
         result:
           loss:
             base: 6
@@ -27,7 +26,6 @@ case:
           - -o Optimizer.lr.learning_rate=0.05
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/MobileNetV3_dy2st_cinn
-          - -o Global.use_dali=False
         result:
           loss:
             base: 6
@@ -41,7 +39,6 @@ case:
           - -o Optimizer.lr.learning_rate=0.05
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/MobileNetV3_dy2st_prim
-          - -o Global.use_dali=False
         result:
           loss:
             base: 6
@@ -55,7 +52,6 @@ case:
           - -o Optimizer.lr.learning_rate=0.05
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/MobileNetV3_dy2st_prim_cinn
-          - -o Global.use_dali=False
         result:
           loss:
             base: 6
@@ -74,7 +70,6 @@ case:
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.05
-          - -o Global.use_dali=False
         result:
           loss:
             base: 1
@@ -93,7 +88,6 @@ case:
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.05
-          - -o Global.use_dali=False
         result:
           loss:
             base: 1
@@ -112,7 +106,6 @@ case:
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.05
-          - -o Global.use_dali=False
         result:
           loss:
             base: 1
@@ -131,7 +124,6 @@ case:
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.05
-          - -o Global.use_dali=False
         result:
           loss:
             base: 1
