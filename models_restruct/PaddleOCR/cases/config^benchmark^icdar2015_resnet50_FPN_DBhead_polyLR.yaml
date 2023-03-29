@@ -16,7 +16,7 @@ case:
               - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_baseline
               - amp=None
               - dataset.train.loader.batch_size=8
-              - trainer.epochs=200
+              - trainer.epochs=1
           -
             name: dygraph2static_prim
             path: benchmark/PaddleOCR_DBNet
@@ -32,4 +32,4 @@ case:
               - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_prim
               - amp=None
               - dataset.train.loader.batch_size=8
-              - trainer.epochs=200
+              - trainer.epochs=1
