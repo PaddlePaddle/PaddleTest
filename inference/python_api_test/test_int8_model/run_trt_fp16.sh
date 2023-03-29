@@ -1,5 +1,7 @@
 export CUDA_VISIBLE_DEVICES=0
 export FLAGS_call_stack_level=2
+# Add this to reduce cpu memory!
+export CUDA_MODULE_LOADING=LAZY
 PYTHON="python"
 
 # PPYOLOE trt fp16
