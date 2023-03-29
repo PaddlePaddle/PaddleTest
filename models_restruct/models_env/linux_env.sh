@@ -46,7 +46,7 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"}
     else
-        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"}
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
@@ -372,7 +372,6 @@ if [[ "${docker_flag}" == "" ]]; then
             ;;
             esac
         fi
-
         #挂载数据, 地址特定为mount_path
         export mount_path="/workspace/MT_data/${reponame}"
         if [[ -d ${mount_path} ]];then
