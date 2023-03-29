@@ -89,7 +89,7 @@ if %errorlevel% equ 0 (
 )
 
 rem set path
-set "PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;%PATH%"
+set "PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;D:\TensorRT-8.4.1.5\lib;%PATH%"
 
 rem cuda_version
 echo %AGILE_PIPELINE_NAME% | findstr "Cuda102" >nul
