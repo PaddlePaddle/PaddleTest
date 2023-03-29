@@ -43,13 +43,13 @@ case:
         name: function
     eval:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     infer: skipped
     export:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     predict: skipped
@@ -63,7 +63,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -73,7 +73,7 @@ case:
     infer: skipped
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -91,7 +91,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -101,7 +101,7 @@ case:
     infer: skipped
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
