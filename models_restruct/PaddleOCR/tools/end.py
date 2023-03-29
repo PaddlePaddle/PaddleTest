@@ -8,13 +8,16 @@ import re
 import json
 import glob
 import shutil
+import math
 import argparse
 import logging
 import platform
 import yaml
 import wget
 import paddle
+import allure
 import numpy as np
+import matplotlib.pyplot as plt
 
 logger = logging.getLogger("ce")
 
@@ -154,6 +157,92 @@ class PaddleOCR_End(object):
         with open("result/environment.properties", "w") as f:
             for key, value in report_enviorement_dict.items():
                 f.write(str(key) + "=" + str(value) + "\n")
+
+    def plot_paddle_compare_loss(self, data1, data2, model):
+        """
+        plot_paddle_compare_loss
+        """
+        ydata1=data1
+        xdata1=list(range(0, len(ydata1)))
+        ydata2=data2
+        xdata2=list(range(0, len(ydata2)))
+        ydata1=data1[:len(data2)]
+        xdata1=list(range(0, len(ydata1)))
+
+        # plot the data
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        ax.plot(xdata1, ydata1, label='paddle_dygraph2static_baseline_loss', color='b', linewidth=2)
+        ax.plot(xdata2, ydata2, label='paddle_dygraph2static_prim_loss', color='r', linewidth=2)
+        
+        # set the legend
+        ax.legend()
+        # set the limits
+        ax.set_xlim([0, len(xdata1)])
+        ax.set_ylim([0, math.ceil(max(ydata1))])
+
+        ax.set_xlabel("iteration")
+        ax.set_ylabel("train loss")
+        ax.grid()
+        ax.set_title(model)
+
+        # display the plot
+        plt.show()
+        plt.savefig("dygraph2static_loss.png")
+
+    def get_paddle_data(self, filepath, kpi):
+        """
+        get_paddle_data(
+        """
+        data_list=[]
+        f = open(filepath, encoding='utf-8', errors='ignore')
+        for line in f.readlines():
+            if kpi + ":" in line:
+                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
+                r = re.findall(regexp, line)
+                # 如果解析不到符合格式到指标，默认值设置为-1
+                kpi_value = float(r[0].strip()) if len(r) > 0 else -1
+                data_list.append(kpi_value)
+        return data_list
+    
+    def allure_attach(self, filename, name, fileformat):
+        """
+        allure_attach
+        """
+        with open(filename, mode='rb') as f:
+            file_content = f.read()
+        allure.attach(file_content, name=name, attachment_type=fileformat)
+
+    def build_end(self):
+        """
+        执行准备过程
+        """
+        # 进入repo中
+        logger.info("build collect data  value start")
+        ret = 0
+        ret = self.collect_data_value()
+        if ret:
+            logger.info("build collect_data_value failed")
+            return ret
+        logger.info("build collect_data_value end")
+        # report_enviorement_dict
+        # logger.info("config_report_enviorement_variable start")
+        # self.config_report_enviorement_variable()
+        # logger.info("config_report_enviorement_variable end")
+        if os.getenv('FLAGS_prim_all', False) is True:
+            filepath_baseline=os.path.join("logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/", \
+    'train_dygraph2static_baseline.log')
+            filepath_prim=os.path.join("logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/",\
+    'train_dygraph2static_prim.log')
+            logger.info(filepath_baseline)
+            data_baseline=self.get_paddle_data(filepath_baseline, 'loss')
+            logger.info(filepath_prim)
+            data_prime=self.get_paddle_data(filepath_prim, 'loss')
+            logger.info("Get data successfully!")
+            self.plot_paddle_compare_loss(data_baseline, data_prime, 'PaddleOCR_DB')
+            logger.info("Plot figure successfully!")
+            self.allure_attach("dygraph2static_loss.png", \
+ 'dygraph2static_loss.png', allure.attachment_type.PNG)
 
     def build_end(self):
         """
