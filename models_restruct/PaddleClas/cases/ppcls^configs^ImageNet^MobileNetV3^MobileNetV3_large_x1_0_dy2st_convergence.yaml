@@ -17,7 +17,7 @@ case:
           loss:
             base: 6
             threshold: 1
-            evaluation: "1"
+            evaluation: "-"
       -
         name: dy2st_cinn
         cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
@@ -69,10 +69,10 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.05
+          - -o Optimizer.lr.learning_rate=0.0025
         result:
           loss:
-            base: 1
+            base: 6
             threshold: 1
             evaluation: "-"
       -
@@ -87,7 +87,7 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.05
+          - -o Optimizer.lr.learning_rate=0.0025
         result:
           loss:
             base: 1
@@ -105,7 +105,7 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.05
+          - -o Optimizer.lr.learning_rate=0.0025
         result:
           loss:
             base: 1
@@ -123,7 +123,7 @@ case:
           - -o DataLoader.Train.sampler.batch_size=delete
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.05
+          - -o Optimizer.lr.learning_rate=0.0025
         result:
           loss:
             base: 1
