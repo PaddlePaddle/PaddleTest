@@ -35,7 +35,7 @@ class PaddleNLP_Case_Start(object):
         """
         执行准备过程
         """
-        if "convergence" in self.qa_yaml_name:
+        if "bert_convergence" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
@@ -46,18 +46,37 @@ class PaddleNLP_Case_Start(object):
 
             if self.case_name.split("train_")[-1] == "dy2st_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
+                os.environ["FLAGS_use_reduce_split_pass"] = "1"
                 os.environ["FLAGS_deny_cinn_ops"] = "dropout"
             elif self.case_name.split("train_")[-1] == "dy2st_prim":
                 os.environ["FLAGS_prim_all"] = "true"
             elif self.case_name.split("train_")[-1] == "dy2st_prim_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
+                os.environ["FLAGS_use_reduce_split_pass"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"
                 os.environ["FLAGS_deny_cinn_ops"] = "dropout"
 
             logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
             logger.info("set FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
+            logger.info("set FLAGS_use_reduce_split_pass as {}".format(os.getenv("FLAGS_use_reduce_split_pass")))
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
             logger.info("set FLAGS_deny_cinn_ops as {}".format(os.getenv("FLAGS_deny_cinn_ops")))
+
+        elif  "gpt_convergence" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
+            if self.case_name.split("train_")[-1] == "dy2st_prim":
+                os.environ["FLAGS_prim_all"] = "True"
+
+            elif self.case_name.split("train_")[-1] == "dy2st_baseline":
+                os.environ["FLAGS_prim_all"] = "False"
+
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+
+
+        elif  "ernie_convergence" in self.qa_yaml_name:
+        
         else:
             return 0
 

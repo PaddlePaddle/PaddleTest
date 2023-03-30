@@ -23,6 +23,8 @@ case:
           - --input_dir ./data/wikicorpus_en_seqlen128
           - --model_name_or_path bert-base-uncased
           - --max_step 25000
-          - --batch_size 64
+          - --batch_size 128
           - --seed 42
           - --to_static True
+          - --use_amp True 
+          - --amp_level O2
