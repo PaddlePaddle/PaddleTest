@@ -378,18 +378,16 @@ if [[ "${docker_flag}" == "" ]]; then
             mv ${mount_path} ${mount_path}_back
             mkdir -p ${mount_path}
         else
-            mkdir -p ${else}
+            mkdir -p ${mount_path}
         fi
         mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
         ls ${mount_path}
         echo "@@@mount_path: ${mount_path}"
 
-        echo 111@
-        echo $LD_LIBRARY_PATH
-        # add tensortr path
-        # export LD_LIBRARY_PATH=/usr/local/TensorRT-7.0.0.11/lib:$LD_LIBRARY_PATH
-        echo 222@
-        echo $LD_LIBRARY_PATH
+        echo add tensortr path
+        echo before LD_LIBRARY_PATH: $LD_LIBRARY_PATH
+        export LD_LIBRARY_PATH=/usr/local/TensorRT-7.0.0.11/lib:$LD_LIBRARY_PATH
+        echo after LD_LIBRARY_PATH: $LD_LIBRARY_PATH
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
@@ -468,8 +466,10 @@ else
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
 
-    # add tensortr path
+    echo add tensortr path
+    echo before LD_LIBRARY_PATH: $LD_LIBRARY_PATH
     export LD_LIBRARY_PATH=/usr/local/TensorRT-7.0.0.11/lib:$LD_LIBRARY_PATH
+    echo after LD_LIBRARY_PATH: $LD_LIBRARY_PATH
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
     git --version;
