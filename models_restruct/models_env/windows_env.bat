@@ -32,7 +32,8 @@ rem reponame
 if not defined reponame for /f "tokens=1 delims=-" %%a in ("%AGILE_PIPELINE_NAME%") do set reponame=%%a
 
 rem load self reponame data
-set mount_path="H:\MT_data\%reponame%"
+rem do not use ""
+set mount_path=H:\MT_data\%reponame%
 echo mount_path: %mount_path%
 dir %mount_path%
 
@@ -57,7 +58,7 @@ if not defined Python_version set Python_version=Python310
 echo %Python_version% | findstr "37" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py37
-    C:\Python37\Scripts\virtualenv %reponame%_py37
+    @REM C:\Python37\Scripts\virtualenv %reponame%_py37
     CALL D:\Windows_env\%reponame%_py37\Scripts\activate.bat
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py37\pyvenv.cfg
     type D:\Windows_env\%reponame%_py37\pyvenv.cfg
@@ -65,7 +66,7 @@ if %errorlevel% equ 0 (
 echo %Python_version% | findstr "38" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py38
-    C:\Python38\Scripts\virtualenv %reponame%_py38
+    @REM C:\Python38\Scripts\virtualenv %reponame%_py38
     CALL D:\Windows_env\%reponame%_py38\Scripts\activate.bat
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py38\pyvenv.cfg
     type D:\Windows_env\%reponame%_py38\pyvenv.cfg
@@ -73,7 +74,7 @@ if %errorlevel% equ 0 (
 echo %Python_version% | findstr "39" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py39
-    C:\Python39\Scripts\virtualenv %reponame%_py39
+    @REM C:\Python39\Scripts\virtualenv %reponame%_py39
     CALL D:\Windows_env\%reponame%_py39\Scripts\activate.bat
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py39\pyvenv.cfg
     type D:\Windows_env\%reponame%_py39\pyvenv.cfg
@@ -81,14 +82,14 @@ if %errorlevel% equ 0 (
 echo %Python_version% | findstr "310" >nul
 if %errorlevel% equ 0 (
     @REM CALL conda activate %reponame%_py310
-    C:\Python310\Scripts\virtualenv %reponame%_py310
+    @REM C:\Python310\Scripts\virtualenv %reponame%_py310
     CALL D:\Windows_env\%reponame%_py310\Scripts\activate.bat
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py310\pyvenv.cfg
     type D:\Windows_env\%reponame%_py310\pyvenv.cfg
 )
 
 rem set path
-set "PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;%PATH%"
+set "PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;D:\TensorRT-8.4.1.5\lib;%PATH%"
 
 rem cuda_version
 echo %AGILE_PIPELINE_NAME% | findstr "Cuda102" >nul
@@ -103,7 +104,7 @@ echo %AGILE_PIPELINE_NAME% | findstr "Cuda116" >nul
 if %errorlevel% equ 0 (
     set cuda_version=11.6
 )
-echo %AGILE_PIPELINE_NAME% | findstr "Cuda117" >nul
+echo %AGILE_PIPELINE_NAME% | findstr "\Cuda117" >nul
 if %errorlevel% equ 0 (
     set cuda_version=11.7
 )
@@ -198,7 +199,7 @@ rem not xly use default paddle_whl
 if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/2.4.1/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-2.4.1.post117-cp310-cp310-win_amd64.whl"
 
 rem default value
-if not defined step set step=train
+if not defined step set step=train:all+eval:all+infer:all+export:all+predict:all
 if not defined mode set mode=function
 if not defined timeout set timeout=3600
 if not defined use_build set use_build=yes
@@ -206,6 +207,10 @@ if not defined branch set branch=develop
 if not defined get_repo set get_repo=wget
 if not defined dataset_org set dataset_org=None
 if not defined dataset_target set dataset_target=None
+
+if not defined binary_search_flag set binary_search_flag=False
+if not defined use_data_cfs set use_data_cfs=False
+
 
 rem expend value
 if not defined http_proxy set http_proxy=
@@ -246,6 +251,8 @@ echo "@@@mode: %mode%"
 echo "@@@timeout: %timeout%"
 echo "@@@dataset_org: %dataset_org%"
 echo "@@@dataset_target: %dataset_target%"
+echo "@@@binary_search_flag: %binary_search_flag%"
+echo "@@@use_data_cfs: %use_data_cfs%"
 
 rem if already download PaddleTest direct mv
 if exist "%pwd_org%/task" (
@@ -282,4 +289,4 @@ python -m pip install -U -r requirements.txt -i https://mirror.baidu.com/pypi/si
 rem kill python.exe in case can not uninstall sit-package
 rem python -c "import os;os.system('taskkill /f /im %s % python.exe')"
 rem install package
-python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target% --timeout=%timeout%
+python main.py --models_list=%models_list% --models_file=%models_file% --system=%system% --step=%step% --reponame=%reponame% --mode=%mode% --use_build=%use_build% --branch=%branch% --get_repo=%get_repo% --paddle_whl=%paddle_whl% --dataset_org=%dataset_org% --dataset_target=%dataset_target% --timeout=%timeout%  --binary_search_flag=%binary_search_flag% --use_data_cfs=%use_data_cfs%

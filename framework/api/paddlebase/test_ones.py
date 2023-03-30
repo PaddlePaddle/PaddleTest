@@ -383,11 +383,12 @@ def test_ones31():
 @pytest.mark.api_base_ones_exception
 def test_ones32():
     """
-    shape_type=tuple,shape=(1000, 1),dtype=np.int8,static TypeError
+    shape_type=tuple,shape=(1000, 1),dtype=np.int8
     """
     shape = (1000, 1)
     dtype = np.int8
-    obj.exception(mode="c", etype="NotFound", shape=shape, dtype=dtype)
+    res = np.ones(shape, dtype=dtype)
+    obj.run(res=res, shape=shape, dtype=dtype)
 
 
 @pytest.mark.api_base_ones_exception

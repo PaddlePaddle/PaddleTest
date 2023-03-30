@@ -1,0 +1,5 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_forward/diffusion_reaction.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/diffusion_reaction_metric.npy"
+    solution_loss_dir: "../standard_data/diffusion_reaction_loss.npy"

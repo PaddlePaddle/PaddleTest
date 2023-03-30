@@ -157,15 +157,32 @@ class PaddleOCR_Start(object):
             os.makedirs("cases")
 
         case_file = os.path.join("cases", self.qa_yaml_name) + ".yml"
-        det_distill = ["det_dml", "det_distill", "det_dml", "det_cml"]
+        ocr_distill = ["rec_distillation", "det_distill", "det_dml", "det_cml"]
         if not os.path.exists(case_file):
-            if any(item in self.qa_yaml_name for item in det_distill):
+            if any(item in self.qa_yaml_name for item in ocr_distill):
                 with open((os.path.join("cases", self.qa_yaml_name) + ".yml"), "w") as f:
                     f.writelines(
                         (
                             "case:" + os.linesep,
                             "    linux:" + os.linesep,
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
+                            "        train:" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: multi" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: amp" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: static" + os.linesep,
+                            "        export:" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: trained" + os.linesep,
+                            "        predict:" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: trained" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: trained_mkldnn" + os.linesep,
+                            "          -" + os.linesep,
+                            "            name: trained_tensorRT" + os.linesep,
                             "    windows:" + os.linesep,
                             "        base: ./base/ocr_" + self.category + "_base_distill.yaml" + os.linesep,
                             "    windows_cpu:" + os.linesep,
@@ -182,12 +199,88 @@ class PaddleOCR_Start(object):
                                 "case:" + os.linesep,
                                 "    linux:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: amp" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: static" + os.linesep,
+                                "        export:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained" + os.linesep,
+                                "        predict:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_mkldnn" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_tensorRT" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained_mkldnn" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained_tensorRT" + os.linesep,
                                 "    windows:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "        export:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained" + os.linesep,
+                                "        predict:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_mkldnn" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_tensorRT" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained_mkldnn" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained_tensorRT" + os.linesep,
                                 "    windows_cpu:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "        export:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained" + os.linesep,
+                                "        predict:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_mkldnn" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained_mkldnn" + os.linesep,
                                 "    mac:" + os.linesep,
-                                "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "        base: ./base/ocr_" + self.category + "_base_pretrained.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "        export:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained" + os.linesep,
+                                "        predict:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained" + os.linesep,
                             )
                         )
                     else:
@@ -196,12 +289,65 @@ class PaddleOCR_Start(object):
                                 "case:" + os.linesep,
                                 "    linux:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: amp" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: static" + os.linesep,
+                                "        export:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "        predict:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_mkldnn" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_tensorRT" + os.linesep,
                                 "    windows:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "        export:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: pretrained" + os.linesep,
+                                "        predict:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_mkldnn" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_tensorRT" + os.linesep,
                                 "    windows_cpu:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "        export:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "        predict:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained_mkldnn" + os.linesep,
                                 "    mac:" + os.linesep,
                                 "        base: ./base/ocr_" + self.category + "_base.yaml" + os.linesep,
+                                "        train:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: multi" + os.linesep,
+                                "        export:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
+                                "          -" + os.linesep,
+                                "        predict:" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: trained" + os.linesep,
                             )
                         )
 
@@ -242,17 +388,20 @@ class PaddleOCR_Start(object):
         执行准备过程
         """
         # 进入repo中
-        ret = 0
-        ret = self.prepare_config_params()
-        if ret:
-            logger.info("build prepare_config_params failed")
-        self.prepare_pretrained_model()
-        self.gengrate_test_case()
-        self.prepare_dataset()
-        os.environ[self.reponame] = json.dumps(self.env_dict)
-        for k, v in self.env_dict.items():
-            os.environ[k] = v
-        return ret
+        if self.category == "benchmark":
+            print("PaddleOCR/benchmark")
+        else:
+            ret = 0
+            ret = self.prepare_config_params()
+            if ret:
+                logger.info("build prepare_config_params failed")
+            self.prepare_pretrained_model()
+            self.gengrate_test_case()
+            self.prepare_dataset()
+            os.environ[self.reponame] = json.dumps(self.env_dict)
+            for k, v in self.env_dict.items():
+                os.environ[k] = v
+            return ret
 
 
 def run():

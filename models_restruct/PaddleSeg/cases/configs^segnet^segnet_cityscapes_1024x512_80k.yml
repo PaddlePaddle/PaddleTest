@@ -8,6 +8,10 @@ case:
       -
         name: single
         cmd : python tools/train.py
+      -
+        name: amp_multi
+      -
+        name: static_multi
     eval:
       -
         name: pretrained
@@ -23,6 +27,25 @@ case:
     predict: skipped
     api: skipped
   windows:
+    base: ./base/normal_base.yml
+    train:
+      -
+        name: single
+        cmd : python tools/train.py
+    eval:
+      -
+        name: pretrained
+        cmd: python tools/val.py
+    infer:
+      -
+        name: pretrained
+        cmd: python tools/predict.py
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export.py
+    predict: skipped
+  mac:
     base: ./base/normal_base.yml
     train:
       -
