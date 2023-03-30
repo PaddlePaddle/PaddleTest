@@ -384,10 +384,6 @@ if [[ "${docker_flag}" == "" ]]; then
         ls ${mount_path}
         echo "@@@mount_path: ${mount_path}"
 
-        echo add tensortr path
-        echo before LD_LIBRARY_PATH: $LD_LIBRARY_PATH
-        export LD_LIBRARY_PATH=/usr/local/TensorRT-7.0.0.11/lib:$LD_LIBRARY_PATH
-        echo after LD_LIBRARY_PATH: $LD_LIBRARY_PATH
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
@@ -466,10 +462,6 @@ else
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
 
-    echo add tensortr path
-    echo before LD_LIBRARY_PATH: $LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH=/usr/local/TensorRT-7.0.0.11/lib:$LD_LIBRARY_PATH
-    echo after LD_LIBRARY_PATH: $LD_LIBRARY_PATH
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
     git --version;
