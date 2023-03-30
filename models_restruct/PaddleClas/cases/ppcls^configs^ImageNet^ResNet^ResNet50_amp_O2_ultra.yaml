@@ -71,7 +71,7 @@ case:
         name: multi_convergence
 
   windows:
-    base: ./base/ImageNet_base_ampultra.yaml
+    base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
     infer: skipped
@@ -79,7 +79,7 @@ case:
     predict: skipped
 
   windows_cpu:
-    base: ./base/ImageNet_base_ampultra.yaml
+    base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
     infer: skipped
@@ -88,7 +88,7 @@ case:
 
 
   mac:
-    base: ./base/ImageNet_base_ampultra.yaml
+    base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
     infer: skipped

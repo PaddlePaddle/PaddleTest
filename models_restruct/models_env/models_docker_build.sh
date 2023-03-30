@@ -3,7 +3,8 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"
     else
-        Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"
+        Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+        #230320 change registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev for add trt
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
