@@ -116,6 +116,9 @@ def test_Pretrained_Models_and_Tokenizer(resource_model_name):
     load_from_model_local = AutoModel.from_pretrained(PPNLP_HOME + resource_model_name)
     load_from_tokenizer_local = AutoTokenizer.from_pretrained(PPNLP_HOME + resource_model_name)
 
+    logger.info(load_from_model_local)
+    logger.info(load_from_tokenizer_local)
+
     # 4. paddle load
     model_state = paddle.load(PPNLP_HOME + resource_model_name + "/model_state.pdparams")
     model_pretrained.set_state_dict(model_state)
