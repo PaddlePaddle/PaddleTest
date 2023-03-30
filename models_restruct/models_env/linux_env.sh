@@ -46,7 +46,7 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"}
     else
-        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"}
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
@@ -156,6 +156,7 @@ export models_name=${models_name:-models_restruct}  #后面复制使用，和模
 
 #### 二分定位使用
 export binary_search_flag=${binary_search_flag:-False}  #True表示在使用二分定位, main中一些跳出方法不生效
+export use_data_cfs=${use_data_cfs:-False}  #False表示不用cfs挂载
 
 
 ######################## 开始执行 ########################
@@ -186,6 +187,7 @@ echo "@@@mode: ${mode}"
 echo "@@@docker_flag: ${docker_flag}"
 echo "@@@timeout: ${timeout}"
 echo "@@@binary_search_flag: ${binary_search_flag}"
+echo "@@@use_data_cfs: ${use_data_cfs}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -370,9 +372,8 @@ if [[ "${docker_flag}" == "" ]]; then
             ;;
             esac
         fi
-
         #挂载数据, 地址特定为mount_path
-        export mount_path = "/workspace/MT_data/${reponame}"
+        export mount_path="/workspace/MT_data/${reponame}"
         if [[ -d ${mount_path} ]];then
             mv ${mount_path} ${mount_path}_back
             mkdir -p ${mount_path}
@@ -388,7 +389,7 @@ if [[ "${docker_flag}" == "" ]]; then
         git --version;
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False}
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False}
     ' &
     wait $!
     exit $?
@@ -398,7 +399,6 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
-        yum install nfs-utils -y > install_nfs 2>&1
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -423,8 +423,6 @@ else
         esac
     else
         echo "ubuntu"
-        apt-get update > install_update 2>&1
-        apt-get install nfs-common -y > install_nfs 2>&1
         case ${Python_version} in
         36)
         mkdir run_env_py36;
@@ -459,15 +457,8 @@ else
         esac
     fi
 
-    #挂载数据, 地址特定为mount_path
-    export mount_path = "/workspace/MT_data/${reponame}"
-    if [[ -d ${mount_path} ]];then
-        mv ${mount_path} ${mount_path}_back
-        mkdir -p ${mount_path}
-    else
-        mkdir -p ${else}
-    fi
-    mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
+    #集群环境已在节点挂载，任务中配置挂载卷，再需定义mount_path即可
+    export mount_path="/home/paddleqa/cfs/${reponame}"
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
 
@@ -476,5 +467,5 @@ else
     git --version;
     python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
     python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False}
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False}
 fi

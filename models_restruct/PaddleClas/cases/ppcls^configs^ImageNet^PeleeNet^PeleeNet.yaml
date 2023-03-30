@@ -25,6 +25,10 @@ case:
     predict:
       -
         name: trained
+      -
+        name: trained_mkldnn
+      -
+        name: trained_trt
 
   linux_convergence:
     base: ./base/ImageNet_base.yaml
@@ -55,16 +59,20 @@ case:
         name: function_amp
     eval:
       -
-        name: trained
+        name: function
     infer:
       -
-        name: trained
+        name: function
     export:
       -
-        name: trained
+        name: function
     predict:
       -
-        name: trained
+        name: function
+      -
+        name: function_mkldnn
+      -
+        name: function_trt
 
   windows_cpu:
     base: ./base/ImageNet_base.yaml
@@ -75,22 +83,22 @@ case:
           - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
     infer:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
 
@@ -101,24 +109,32 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
+      -
+        name: function_dy2st
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: function_amp
+        params:
+          - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
     infer:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
 

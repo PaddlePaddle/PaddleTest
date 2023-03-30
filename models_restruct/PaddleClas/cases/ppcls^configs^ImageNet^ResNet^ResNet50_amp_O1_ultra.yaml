@@ -59,6 +59,14 @@ case:
         params:
           - -c configs/inference_cls_ch4.yaml
       -
+        name: trained_mkldnn
+        params:
+          - -c configs/inference_cls_ch4.yaml
+      -
+        name: trained_trt
+        params:
+          - -c configs/inference_cls_ch4.yaml
+      -
         name: pretrained
         params:
           - -c configs/inference_cls_ch4.yaml

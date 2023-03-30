@@ -83,7 +83,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "-M1-" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Pyt
     echo "do not have python39 M1 paddle_whl url"
 fi
 #### 预设默认参数
-export step=${step:-train}
+export step=${step:-train:all+eval:all+infer:all+export:all+predict:all}  #阶段 demo:train:multi,single+eval:trained,pretrained, 所有流水线都要自己改
 export mode=${mode:-function}
 export timeout=${timeout:-3600}
 export use_build=${use_build:-yes}
@@ -94,6 +94,7 @@ export dataset_target=${dataset_target:-None}
 
 #### 二分定位使用
 export binary_search_flag=${binary_search_flag:-False}  #True表示在使用二分定位, main中一些跳出方法不生效
+export use_data_cfs=${use_data_cfs:-False}  #False表示不用cfs挂载
 
 
 #额外的变量
@@ -131,6 +132,7 @@ echo "@@@mode: ${mode}"
 echo "@@@timeout: ${timeout}"
 echo "@@@dataset_target: ${dataset_target}"
 echo "@@@binary_search_flag: ${binary_search_flag}"
+echo "@@@use_data_cfs: ${use_data_cfs}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -157,4 +159,4 @@ python -c "import getpass;print(getpass.getuser())"
 git --version;
 python -m pip install -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
 python -m pip install -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False}
+python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False}
