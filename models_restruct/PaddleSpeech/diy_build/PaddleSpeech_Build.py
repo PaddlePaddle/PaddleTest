@@ -140,6 +140,8 @@ class PaddleSpeech_Build(Model_Build):
                     os.symlink(os.path.join(src_path, "librispeech"), "librispeech")
                 # asr tal_cs
                 os.chdir("tal_cs")
+                if os.path.exists("TALCS_corpus"):
+                    shutil.rmtree("TALCS_corpus")
                 os.symlink(os.path.join(src_path, "TALCS_corpus"), "TALCS_corpus")
             os.chdir(path_now)
 
