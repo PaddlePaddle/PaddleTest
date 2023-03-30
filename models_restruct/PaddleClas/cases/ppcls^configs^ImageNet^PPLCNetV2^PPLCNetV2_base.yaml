@@ -112,7 +112,7 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
-          - -o DataLoader.Train.sampler.first_bs=32
+          - -o DataLoader.Train.sampler.first_bs=8
     eval:
       -
         name: function
@@ -157,15 +157,12 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Train.sampler.first_bs=8
       -
         name: function_dy2st
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: function_amp
-        params:
-          - -o Global.device=${set_cuda_flag}
-          - -o DataLoader.Train.sampler.first_bs=32
+          - -o DataLoader.Train.sampler.first_bs=8
     eval:
       -
         name: function
