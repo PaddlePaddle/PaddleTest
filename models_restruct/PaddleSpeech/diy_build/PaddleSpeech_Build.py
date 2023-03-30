@@ -136,7 +136,7 @@ class PaddleSpeech_Build(Model_Build):
 
                 # asr librispeech
                 if os.path.exists("librispeech"):
-                    if os.path.islink("librispeech") == False:
+                    if os.path.islink("librispeech") is False:
                         shutil.rmtree("librispeech")
                     else:
                         os.unlink("librispeech")
@@ -144,7 +144,7 @@ class PaddleSpeech_Build(Model_Build):
                 # asr tal_cs
                 os.chdir("tal_cs")
                 if os.path.exists("TALCS_corpus"):
-                    if os.path.islink("TALCS_corpu") == False:
+                    if os.path.islink("TALCS_corpu") is False:
                         shutil.rmtree("TALCS_corpu")
                     else:
                         os.unlink("TALCS_corpu")
