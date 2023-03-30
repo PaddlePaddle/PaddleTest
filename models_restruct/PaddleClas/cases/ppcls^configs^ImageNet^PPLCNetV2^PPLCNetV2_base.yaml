@@ -41,6 +41,10 @@ case:
       -
         name: trained
       -
+        name: trained_mkldnn
+      -
+        name: trained_trt
+      -
         name: pretrained
 
   linux_convergence:
@@ -78,22 +82,26 @@ case:
           - -o DataLoader.Train.sampler.first_bs=32
     eval:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     infer:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     export:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     predict:
       -
-        name: trained
+        name: function
+      -
+        name: function_mkldnn
+      -
+        name: function_trt
       -
         name: pretrained
 
@@ -107,7 +115,7 @@ case:
           - -o DataLoader.Train.sampler.first_bs=32
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -116,7 +124,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     infer:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -125,7 +133,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -134,7 +142,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -149,10 +157,18 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
+      -
+        name: function_dy2st
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: function_amp
+        params:
+          - -o Global.device=${set_cuda_flag}
           - -o DataLoader.Train.sampler.first_bs=32
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -161,7 +177,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     infer:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -170,7 +186,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -179,7 +195,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -

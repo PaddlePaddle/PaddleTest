@@ -7,54 +7,59 @@ case:
         name: dy
       -
         name: dy2st
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
-          - -o Global.output_dir=output/ResNet50_dy2st
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st
         result:
           loss:
-            base: 2.04996
-            threshold: 0
-            evaluation: "="
+            base: 6
+            threshold: 1
+            evaluation: "-"
       -
         name: dy2st_cinn
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
-          - -o Global.output_dir=output/ResNet50_dy2st_cinn
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st_cinn
         result:
           loss:
-            base: 2.024
-            threshold: 0
-            evaluation: "="
+            base: 6
+            threshold: 1
+            evaluation: "-"
       -
         name: dy2st_prim
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
-          - -o Global.output_dir=output/ResNet50_dy2st_prim
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st_prim
         result:
           loss:
-            base: 2.02686
-            threshold: 0
-            evaluation: "="
+            base: 6
+            threshold: 1
+            evaluation: "-"
       -
         name: dy2st_prim_cinn
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
-          - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st_prim_cinn
         result:
           loss:
-            base: 2.00956
-            threshold: 0
-            evaluation: "="
+            base: 6
+            threshold: 1
+            evaluation: "-"
       -
         name: dy2st_all
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
@@ -65,15 +70,14 @@ case:
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
         result:
           loss:
-            base: 1
+            base: 6
             threshold: 1
             evaluation: "-"
       -
         name: dy2st_cinn_all
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
@@ -84,8 +88,6 @@ case:
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
         result:
           loss:
             base: 1
@@ -93,6 +95,7 @@ case:
             evaluation: "-"
       -
         name: dy2st_prim_all
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
@@ -103,8 +106,6 @@ case:
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
         result:
           loss:
             base: 1
@@ -112,6 +113,7 @@ case:
             evaluation: "-"
       -
         name: dy2st_prim_cinn_all
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
           - -o Global.epochs=120
@@ -122,8 +124,6 @@ case:
           - -o Global.print_batch_step=delete
           - -o Global.seed=delete
           - -o Optimizer.lr.learning_rate=0.0025
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
         result:
           loss:
             base: 1

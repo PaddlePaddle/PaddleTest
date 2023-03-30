@@ -8,13 +8,16 @@ import re
 import json
 import glob
 import shutil
+import math
 import argparse
 import logging
 import platform
 import yaml
 import wget
 import paddle
+import allure
 import numpy as np
+import matplotlib.pyplot as plt
 
 logger = logging.getLogger("ce")
 
@@ -154,6 +157,108 @@ class PaddleOCR_End(object):
         with open("result/environment.properties", "w") as f:
             for key, value in report_enviorement_dict.items():
                 f.write(str(key) + "=" + str(value) + "\n")
+
+    def plot_paddle_compare_value(self, data1, data2, value):
+        """
+        plot_paddle_compare_value
+        """
+        ydata1 = data1
+        xdata1 = list(range(0, len(ydata1)))
+        ydata2 = data2
+        xdata2 = list(range(0, len(ydata2)))
+        ydata1 = data1[: len(data2)]
+        xdata1 = list(range(0, len(ydata1)))
+
+        # plot the data
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        ax.plot(xdata1, ydata1, label="paddle_dygraph2static_baseline_" + value, color="b", linewidth=2)
+        ax.plot(xdata2, ydata2, label="paddle_dygraph2static_prim_" + value, color="r", linewidth=2)
+
+        # set the legend
+        ax.legend()
+        # set the limits
+        ax.set_xlim([0, len(xdata1)])
+        ax.set_ylim([0, math.ceil(max(ydata1))])
+
+        ax.set_xlabel("iteration")
+        ax.set_ylabel(value)
+        ax.grid()
+        ax.set_title("PaddleOCR_DB")
+
+        # display the plot
+        plt.show()
+        plt.savefig("dygraph2static_" + value + ".png")
+
+    def get_paddle_data(self, filepath, kpi_list):
+        """
+        get_paddle_data(
+        """
+        data_list = []
+        f = open(filepath, encoding="utf-8", errors="ignore")
+        for line in f.readlines():
+            # if kpi + ":" in line:
+            if all(kpi + ":" in line for kpi in kpi_list):
+                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi_list[0]
+                r = re.findall(regexp, line)
+                # 如果解析不到符合格式到指标，默认值设置为-1
+                kpi_value = float(r[0].strip()) if len(r) > 0 else -1
+                data_list.append(kpi_value)
+        return data_list
+
+    def allure_attach(self, filename, name, fileformat):
+        """
+        allure_attach
+        """
+        with open(filename, mode="rb") as f:
+            file_content = f.read()
+        allure.attach(file_content, name=name, attachment_type=fileformat)
+
+    def build_end(self):
+        """
+        执行准备过程
+        """
+        # 进入repo中
+        logger.info("build collect data  value start")
+        ret = 0
+        ret = self.collect_data_value()
+        if ret:
+            logger.info("build collect_data_value failed")
+            return ret
+        logger.info("build collect_data_value end")
+        # report_enviorement_dict
+        # logger.info("config_report_enviorement_variable start")
+        # self.config_report_enviorement_variable()
+        # logger.info("config_report_enviorement_variable end")
+        if os.getenv("FLAGS_prim_all", False) is True:
+            filepath_baseline = os.path.join(
+                "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/",
+                "train_dygraph2static_baseline.log",
+            )
+            filepath_prim = os.path.join(
+                "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/", "train_dygraph2static_prim.log"
+            )
+            logger.info(filepath_baseline)
+            # loss
+            data_baseline = self.get_paddle_data(filepath_baseline, ["loss"])
+            logger.info(filepath_prim)
+            data_prime = self.get_paddle_data(filepath_prim, ["loss"])
+            logger.info("Get data successfully!")
+            self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss")
+            logger.info("Plot figure successfully!")
+            self.allure_attach(
+                "dygraph2static_train_loss.png", "dygraph2static_train_loss.png", allure.attachment_type.PNG
+            )
+            # hmeans
+            data_baseline_hmeans = self.get_paddle_data(filepath_baseline, ["hmeans", "test"])
+            logger.info(filepath_prim)
+            data_prime_hmeans = self.get_paddle_data(filepath_prim, ["hmeans", "test"])
+            logger.info("Get data successfully!")
+            self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans")
+            logger.info("Plot figure successfully!")
+            self.allure_attach(
+                "dygraph2static_eval_hmeans.png", "dygraph2static_eval_hmeans.png", allure.attachment_type.PNG
+            )
 
     def build_end(self):
         """
