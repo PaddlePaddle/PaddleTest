@@ -387,7 +387,7 @@ if [[ "${docker_flag}" == "" ]]; then
         echo 111@
         echo $LD_LIBRARY_PATH
         # add tensortr path
-        export LD_LIBRARY_PATH=/usr/local/TensorRT-7.0.0.11/lib:$LD_LIBRARY_PATH
+        # export LD_LIBRARY_PATH=/usr/local/TensorRT-7.0.0.11/lib:$LD_LIBRARY_PATH
         echo 222@
         echo $LD_LIBRARY_PATH
         nvidia-smi;
