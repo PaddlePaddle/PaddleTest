@@ -26,5 +26,5 @@ case:
           - --batch_size 128
           - --seed 42
           - --to_static True
-          - --use_amp True 
+          - --use_amp True
           - --amp_level O2

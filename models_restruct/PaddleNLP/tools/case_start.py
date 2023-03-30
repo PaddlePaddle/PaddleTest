@@ -62,7 +62,7 @@ class PaddleNLP_Case_Start(object):
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
             logger.info("set FLAGS_deny_cinn_ops as {}".format(os.getenv("FLAGS_deny_cinn_ops")))
 
-        elif  "gpt_convergence" in self.qa_yaml_name:
+        elif "gpt_convergence" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
             if self.case_name.split("train_")[-1] == "dy2st_prim":
@@ -74,9 +74,21 @@ class PaddleNLP_Case_Start(object):
             logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
 
+        elif "ernie_convergence" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
-        elif  "ernie_convergence" in self.qa_yaml_name:
-        
+            if self.case_name.split("train_")[-1] == "dy2st_prim":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_prim_all"] = "True"
+
+            elif self.case_name.split("train_")[-1] == "dy2st_baseline":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_prim_all"] = "False"
+
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("export FLAGS_cudnn_deterministic=1")
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+
         else:
             return 0
 
