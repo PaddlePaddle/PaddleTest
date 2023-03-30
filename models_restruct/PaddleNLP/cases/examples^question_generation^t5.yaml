@@ -9,13 +9,10 @@ case:
           - --model_name_or_path=t5-base
           - --dataset_name=squad
           - --output_dir=output
-          - --max_source_length=1024
-          - --logging_steps=100
+          - --logging_steps=1
           - --save_steps=2
-          - --seed=42
           - --train_batch_size=4
           - --eval_batch_size=64
-          - --warmup_proportion=0.1
           - --max_steps 2
     eval:
       -
@@ -48,18 +45,10 @@ case:
           - --model_name_or_path=t5-base
           - --dataset_name=squad
           - --output_dir=output
-          - --max_source_length=1024
-          - --max_target_length=142
-          - --learning_rate=1e-4
-          - --num_train_epochs=6
-          - --logging_steps=100
+          - --logging_steps=1
           - --save_steps=2
-          - --seed=42
           - --train_batch_size=4
           - --eval_batch_size=64
-          - --warmup_proportion=0.1
-          - --ignore_pad_token_for_loss
-          - --device=gpu
           - --max_steps 2
     eval:
       -

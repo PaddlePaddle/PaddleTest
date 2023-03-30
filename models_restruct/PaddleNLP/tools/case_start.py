@@ -35,8 +35,8 @@ class PaddleNLP_Case_Start(object):
         """
         执行准备过程
         """
-        if "dy2st_convergence" in self.qa_yaml_name:
-            logger.info("dy2st_convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+        if "bert_convergence" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
             os.environ["FLAGS_cudnn_deterministic"] = "1"
@@ -44,27 +44,51 @@ class PaddleNLP_Case_Start(object):
             logger.info("export NVIDIA_TF32_OVERRIDE=1")
             logger.info("export FLAGS_cudnn_deterministic=1")
 
-            os.unsetenv["FLAGS_prim_all"]
-            os.unsetenv["FLAGS_use_cinn"]
-            os.unsetenv["FLAGS_deny_cinn_ops"]
-
-            logger.info("unset FLAGS_prim_all")
-            logger.info("unset FLAGS_use_cinn")
-            logger.info("unset FLAGS_deny_cinn_ops")
-
             if self.case_name.split("train_")[-1] == "dy2st_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
+                os.environ["FLAGS_use_reduce_split_pass"] = "1"
                 os.environ["FLAGS_deny_cinn_ops"] = "dropout"
             elif self.case_name.split("train_")[-1] == "dy2st_prim":
                 os.environ["FLAGS_prim_all"] = "true"
             elif self.case_name.split("train_")[-1] == "dy2st_prim_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
+                os.environ["FLAGS_use_reduce_split_pass"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"
                 os.environ["FLAGS_deny_cinn_ops"] = "dropout"
 
             logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
             logger.info("set FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
+            logger.info("set FLAGS_use_reduce_split_pass as {}".format(os.getenv("FLAGS_use_reduce_split_pass")))
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+            logger.info("set FLAGS_deny_cinn_ops as {}".format(os.getenv("FLAGS_deny_cinn_ops")))
+
+        elif "gpt_convergence" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
+            if self.case_name.split("train_")[-1] == "dy2st_prim":
+                os.environ["FLAGS_prim_all"] = "True"
+
+            elif self.case_name.split("train_")[-1] == "dy2st_baseline":
+                os.environ["FLAGS_prim_all"] = "False"
+
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+
+        elif "ernie_convergence" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
+            if self.case_name.split("train_")[-1] == "dy2st_prim":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_prim_all"] = "True"
+
+            elif self.case_name.split("train_")[-1] == "dy2st_baseline":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_prim_all"] = "False"
+
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("export FLAGS_cudnn_deterministic=1")
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+
         else:
             return 0
 
