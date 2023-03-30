@@ -1,3 +1,4 @@
+""" resolve issues https://github.com/PaddlePaddle/PaddleNLP/issues/5158 """
 import importlib
 import paddle
 import pytest
@@ -15,8 +16,6 @@ from paddlenlp.transformers.chineseclip.modeling import CHINESE_CLIP_PRETRAINED_
 from paddlenlp.transformers.ernie_vil.modeling import ERNIE_VIL_PRETRAINED_MODEL_ARCHIVE_LIST
 from paddlenlp.utils.env import PPNLP_HOME
 from paddlenlp.utils.log import logger
-
-""" resolve issues https://github.com/PaddlePaddle/PaddleNLP/issues/5158 """
 
 
 def get_new_transformers_models():
