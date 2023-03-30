@@ -25,6 +25,17 @@ class PaddleSeg_Start(object):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
         logger.info("###self.qa_yaml_name: {}".format(self.qa_yaml_name))
+        if prim in self.rd_yaml_name:
+            self.rd_yaml_name = self.rd_yaml_name.split('^', 1)[1]
+            os.environ["FLAGS_prim_all"] = True
+            self.env_dict["FLAGS_prim_all"] = True
+            self.prim = True
+        if static in self.rd_yaml_name:
+            self.rd_yaml_name = self.rd_yaml_name.split('^', 1)[1]
+            os.environ["FLAGS_prim_all"] = False
+            self.env_dict["FLAGS_prim_all"] = False
+            self.prim = True
+        logger.info("###self.rd_yaml_name: {}".format(self.rd_yaml_name))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
         self.step = os.environ["step"]
@@ -41,6 +52,11 @@ class PaddleSeg_Start(object):
         """
         环境变量设置
         """
+        if self.prim and os.path.exists("PaddleSeg/data/cityscapes"):
+            shutil.rmtree("PaddleSeg/data/cityscapes")
+            cmd = (
+                "wget -P PaddleSeg/data https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes_pri_prim.zip"
+            )
         if "cityscapes" in self.model:
             if not os.path.exists("PaddleSeg/data/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
                 cmd = (

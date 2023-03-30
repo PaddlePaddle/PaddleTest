@@ -62,6 +62,22 @@ train:
         base: 0
         threshold: 0
         evaluation: "="
+  -
+    name: prim_single
+    cmd: python tools/train.py
+    params:
+      - --config ${rd_yaml_path}
+      - --iters 60000
+      - --save_interval 10000
+      - --num_workers 8
+      - --opts to_static_training=True
+      - --save_dir ./jit_out/${model}
+      - --seed 100
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
 eval:
   name: pretrained
   cmd:  python -m paddle.distributed.launch tools/val.py
