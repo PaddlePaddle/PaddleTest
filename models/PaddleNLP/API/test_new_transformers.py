@@ -1,5 +1,4 @@
 import importlib
-from matplotlib import transforms
 import paddle
 import pytest
 from paddlenlp.transformers.auto.modeling import *
@@ -62,7 +61,7 @@ def test_pretrained_resource_files(model_name):
         # configurations = ModelClasse.pretrained_init_configuration
         # model_type = find_transformer_model_type(ModelClasse)
 
-    except Exception as e:
+    except Exception:
         try:
             # 2. get PretrainedModel from cls.PRETRAINED_MODEL_ARCHIVE_LIST
             model_archive_name = model_name.rstrip("Model") + "_PRETRAINED_MODEL_ARCHIVE_LIST"
@@ -72,7 +71,7 @@ def test_pretrained_resource_files(model_name):
             model_archive_name_attr = getattr(module, model_archive_name)
             pretrained_resource_list.extend(model_archive_name_attr)
 
-        except Exception as e:
+        except Exception:
             NO_pretrained_resource_files_map_model_list.append(model_name)
             logger.warning(f"{model_name} Not definition PRETRAINED_RESOURCE_FILES_MAP ")
 
