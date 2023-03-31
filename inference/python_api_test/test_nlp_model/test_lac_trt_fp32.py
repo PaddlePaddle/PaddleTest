@@ -94,7 +94,7 @@ def test_lac_trt_fp32():
         delta=1e-5,
         precision="trt_fp32",
         dynamic=True,
-        tuned=True,
+        tuned=False,
         min_subgraph_size=1,
     )
 
