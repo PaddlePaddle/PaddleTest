@@ -39,7 +39,7 @@ class PaddleNLP_End(object):
         """
         num = 1
         for key ,value in stategy_info.items():
-            plt.figure()
+            plt.subplot(1,len(stategy_info.items()),num)
             plt.plot([i for i in range(len(baseline_info['baseline']))], baseline_info['baseline'], color = 'g', label='baseline')
             plt.plot([i for i in range(len(baseline_info['baseline']))], value, color = 'r', label=key)
         
@@ -47,13 +47,13 @@ class PaddleNLP_End(object):
             picture_name = model_name + '_baseline_{}'.format(key)
             plt.title(picture_name)
             num =num + 1
-        plt.savefig('./picture/{}.png'.format(model_name))
+        plt.savefig('./picture/{}.png'.format(self.pipeline_name))
         plt.close()
     
 
     def get_metrics(self, filename, kpi):
         """
-        get_data
+        get loss 
         """
         kpi_value = -1
         f = open(filename, encoding="utf-8", errors="ignore")
@@ -67,9 +67,10 @@ class PaddleNLP_End(object):
         f.close()
         return kpi_value
 
-    def analysis(self):
+    def analysis_log(self):
         """
-        analysis log & save it to picture
+        Analysis log & save it to ./picture/
+
         Return: dict-> log_info
         Examples:
             log_info={
@@ -79,7 +80,6 @@ class PaddleNLP_End(object):
              ...
             }
         """
-        # log_file = os.path.join(self.TRAIN_LOG_PATH + 'dy2st_baseline' + '.log')
         baseline_info = {}
         stategy_info ={}
         for file in os.listdir(self.TRAIN_LOG_PATH):
@@ -89,7 +89,6 @@ class PaddleNLP_End(object):
                 strategy = file.split('train_')[-1].replace('.log','')
                 stategy_info[strategy] = self.get.metrics(file,'loss')
 
-        stategy_info['model_name'] = re.findall('^','_',self.qa_yaml_name)
         self.drow_picture(self.qa_yaml_name,baseline_info, stategy_info)
 
 
