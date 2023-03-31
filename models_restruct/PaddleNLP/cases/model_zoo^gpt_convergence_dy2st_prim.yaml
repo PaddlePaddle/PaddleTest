@@ -2,10 +2,6 @@ case:
   linux_convergence:
     train:
       -
-        name: prepare_datasets
-        path: model_zoo/gpt
-        cmd: mkdir data && cd data && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy
-      -
         name: dy2st_prim
         path: model_zoo/gpt
         cmd: python run_pretrain.py
