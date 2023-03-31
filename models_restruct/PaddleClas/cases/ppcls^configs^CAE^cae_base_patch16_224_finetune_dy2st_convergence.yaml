@@ -9,6 +9,7 @@ case:
         name: dy2st
         cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
         params:
+          - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
           - -o DataLoader.Train.sampler.batch_size=128
@@ -22,6 +23,7 @@ case:
         name: dy2st_cinn
         cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
         params:
+          - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
           - -o DataLoader.Train.sampler.batch_size=128
@@ -35,6 +37,7 @@ case:
         name: dy2st_prim
         cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
         params:
+          - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
           - -o DataLoader.Train.sampler.batch_size=128
@@ -48,6 +51,7 @@ case:
         name: dy2st_prim_cinn
         cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
         params:
+          - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
           - -o DataLoader.Train.sampler.batch_size=128
