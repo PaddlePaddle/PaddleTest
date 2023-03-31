@@ -11,7 +11,6 @@ case:
           - -o Global.epochs=1
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
@@ -25,7 +24,6 @@ case:
           - -o Global.epochs=1
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_cinn
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
@@ -39,7 +37,6 @@ case:
           - -o Global.epochs=1
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_prim
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
@@ -53,7 +50,6 @@ case:
           - -o Global.epochs=1
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:

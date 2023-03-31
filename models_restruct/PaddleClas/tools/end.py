@@ -34,9 +34,7 @@ class PaddleClas_End(object):
         绘制动转静图片
         """
         path_now = os.getcwd()
-        logger.info("dy2st_plt before path is {}".format(os.getcwd()))
         os.chdir("picture")
-        logger.info("dy2st_plt before 2222 path is {}".format(os.getcwd()))
         with open("dy2st.yaml", "r", encoding="utf-8") as f:
             content = yaml.load(f, Loader=yaml.FullLoader)
         self.dy2st_yaml = content[self.qa_yaml_name]
@@ -53,7 +51,6 @@ class PaddleClas_End(object):
             )
             draw(train_log_info_map, self.dy2st_yaml, "eval")
         os.chdir(path_now)
-        logger.info("dy2st_plt after path is {}".format(os.getcwd()))
         return 0
 
     def remove_data(self):
