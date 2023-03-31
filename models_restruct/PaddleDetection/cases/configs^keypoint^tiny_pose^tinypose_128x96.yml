@@ -13,6 +13,10 @@ case:
         params:
           - TrainReader.batch_size=1
       -
+        name: quant_multi
+        params:
+          - --slim_config configs/slim/quant/tinypose_qat.yml
+      -
         name: amp_multi
       -
         name: static_multi

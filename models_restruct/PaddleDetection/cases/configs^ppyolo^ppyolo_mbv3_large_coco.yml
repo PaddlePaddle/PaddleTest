@@ -13,6 +13,14 @@ case:
         params:
           - TrainReader.batch_size=1
       -
+        name: quant_multi
+        params:
+          - --slim_config configs/slim/quant/ppyolo_mbv3_large_qat.yml
+      -
+        name: prune_multi
+        params:
+          - --slim_config configs/slim/prune/ppyolo_mbv3_large_prune_fpgm.yml
+      -
         name: amp_multi
       -
         name: static_multi
