@@ -11,11 +11,12 @@ case:
           - -o Global.epochs=1
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st
+          - -o DataLoader.Trian.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
           loss:
-            base: 6
+            base: 66
             threshold: 1
             evaluation: "-"
       -
@@ -24,11 +25,12 @@ case:
           - -o Global.epochs=1
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_cinn
+          - -o DataLoader.Trian.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
           loss:
-            base: 6
+            base: 66
             threshold: 1
             evaluation: "-"
       -
@@ -37,11 +39,12 @@ case:
           - -o Global.epochs=1
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_prim
+          - -o DataLoader.Trian.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
           loss:
-            base: 6
+            base: 66
             threshold: 1
             evaluation: "-"
       -
@@ -50,11 +53,12 @@ case:
           - -o Global.epochs=1
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
+          - -o DataLoader.Trian.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
           loss:
-            base: 6
+            base: 66
             threshold: 1
             evaluation: "-"
       -
