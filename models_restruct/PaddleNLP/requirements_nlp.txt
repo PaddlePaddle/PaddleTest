@@ -30,4 +30,5 @@ evaluate==0.2.2
 sacremoses
 pythainlp
 kytea
+fast-tokenizer-python
 lac

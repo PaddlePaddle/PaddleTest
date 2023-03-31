@@ -143,6 +143,16 @@ class PaddleOCR_Build(Model_Build):
                     else:
                         cmd = """sed -i "s/batch_size: 14/batch_size: 1/g" %s""" % filename
                     os.system(cmd)
+            # dygraph2static_dataset
+            os.chdir("benchmark/PaddleOCR_DBNet")
+            self.download_data("https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/benchmark_train/datasets.tar")
+            os.system("python -m pip install -r requirement.txt")
+            for filename in self.test_model_list:
+                print("filename:{}".format(filename))
+                if "benchmark" in filename:
+                    os.system("python -m pip install -U numpy==1.23.5")
+                    os.system("python -m pip install Polygon3")
+
             os.chdir(self.test_root_path)
             print("build dataset!")
 
@@ -151,7 +161,7 @@ class PaddleOCR_Build(Model_Build):
                 os.system("conda install -y scikit-image")
                 os.system("conda install -y imgaug")
 
-    def download_data(self, data_link, destination):
+    def download_data(self, data_link, destination="."):
         """
         下载数据集
         """

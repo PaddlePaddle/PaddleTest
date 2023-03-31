@@ -55,7 +55,9 @@ class Monitor(StatBase):
     def __init__(self, gpu_id=0, use_gpu=True, interval=0.1):
         self.result = {}
         self.result["result"] = {}
-        self.gpu_id = gpu_id
+        # in Paddle-Test int8 model test
+        # we usually export CUDA_VISIBLE_DEVICES=global_gpu_id first.
+        self.gpu_id = int(os.environ.get("CUDA_VISIBLE_DEVICES", gpu_id))
         self.use_gpu = use_gpu
         self.interval = interval
 

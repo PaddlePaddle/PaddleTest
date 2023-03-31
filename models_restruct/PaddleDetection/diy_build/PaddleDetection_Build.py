@@ -28,16 +28,28 @@ class PaddleDetection_Build(Model_Build):
         """
         初始化变量
         """
+        self.data_path_endswith = "dataset"
         self.paddle_whl = args.paddle_whl
         self.get_repo = args.get_repo
         self.branch = args.branch
         self.system = args.system
         self.set_cuda = args.set_cuda
-        self.dataset_org = args.dataset_org
-        self.dataset_target = args.dataset_target
-
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
+        self.dataset_org = args.dataset_org
+        self.dataset_target = args.dataset_target
+        self.mount_path = str(os.getenv("mount_path"))
+        if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(
+            self.mount_path
+        ):  # linux 性能损失使用自动下载的数据,不使用mount数据
+            logger.info("#### mount_path diy_build is {}".format(self.mount_path))
+            if os.listdir(self.mount_path) != []:
+                self.dataset_org = self.mount_path
+                os.environ["dataset_org"] = self.mount_path
+                self.dataset_target = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
+                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
+        logger.info("#### dataset_org in diy_build is  {}".format(self.dataset_org))
+        logger.info("#### dataset_target in diy_build is  {}".format(self.dataset_target))
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.detection_model_list = []
@@ -86,9 +98,8 @@ class PaddleDetection_Build(Model_Build):
         # set sed
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
-            cmd_weight = (
-                '{} -i "s#~/.cache/paddle/weights#D:/ce_data/paddledetection'
-                '/det_pretrained#g" ppdet/utils/download.py'.format(os.getenv("sed"))
+            cmd_weight = '{} -i "s#~/.cache/paddle/weights#dataset/det_pretrained#g" ppdet/utils/download.py'.format(
+                os.getenv("sed")
             )
             subprocess.run(cmd_weight)
         else:
@@ -153,31 +164,38 @@ class PaddleDetection_Build(Model_Build):
         if os.path.exists("/root/.cache/paddle/weights"):
             os.system("rm -rf /root/.cache/paddle/weights")
         os.system("ln -s {}/data/ppdet_pretrained /root/.cache/paddle/weights".format("/ssd2/ce_data/PaddleDetection"))
-        # dataset
-        os.chdir("dataset")
-        if os.path.exists("coco"):
-            shutil.rmtree("coco")
-        if os.path.exists("voc"):
-            shutil.rmtree("voc")
-        logger.info("***start download data")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
-        os.system("unzip -q coco.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota.zip")
-        os.system("unzip -q dota.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota_ms.zip")
-        os.system("unzip -q dota_ms.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mot.zip")
-        os.system("unzip -q mot.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/visdrone.zip")
-        os.system("unzip -q visdrone.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/VisDrone2019_coco.zip")
-        os.system("unzip -q VisDrone2019_coco.zip")
-        # wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mainbody.zip")
-        # os.system("unzip mainbody.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/voc.zip")
-        os.system("unzip -q voc.zip")
-        # wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/aic_coco_train_cocoformat.json")
-        logger.info("***download data ended")
+        # dataset download
+        if platform.system() == "Linux":
+            os.chdir("dataset")
+            if os.path.exists("coco"):
+                shutil.rmtree("coco")
+            if os.path.exists("voc"):
+                shutil.rmtree("voc")
+            logger.info("***start download data")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
+            os.system("unzip -q coco.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota.zip")
+            os.system("unzip -q dota.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/dota_ms.zip")
+            os.system("unzip -q dota_ms.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mot.zip")
+            os.system("unzip -q mot.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/visdrone.zip")
+            os.system("unzip -q visdrone.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/VisDrone2019_coco.zip")
+            os.system("unzip -q VisDrone2019_coco.zip")
+            # wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/mainbody.zip")
+            # os.system("unzip mainbody.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/voc.zip")
+            os.system("unzip -q voc.zip")
+            # wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/aic_coco_train_cocoformat.json")
+            logger.info("***download data ended")
+        else:
+            if os.path.exists(self.dataset_target):
+                shutil.rmtree(self.dataset_target)
+            exit_code = os.symlink(self.dataset_org, self.dataset_target)
+            if exit_code:
+                logger.info("#### link_dataset failed")
         # compile cpp
         os.chdir(path_repo + "/deploy/cpp")
         wget.download(
@@ -191,6 +209,18 @@ class PaddleDetection_Build(Model_Build):
         os.system('sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh')
         os.system("sh scripts/build.sh")
         os.chdir(path_now)
+        return 0
+
+    def link_dataset(self):
+        """
+        软链数据
+        """
+        if os.path.exists(self.reponame):
+            exit_code = os.symlink(self.dataset_org, self.dataset_target)
+            if exit_code:
+                logger.info("#### link_dataset failed")
+        else:
+            logger.info("check you {} path".format(self.reponame))
         return 0
 
     def build_env(self):

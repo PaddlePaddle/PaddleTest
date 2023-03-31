@@ -144,7 +144,7 @@ case:
           - --answer_generation_model_path uie-base-answer-extractor-v1
           - --question_generation_model_path unimo-text-1.0-question-generation
           - --filtration_model_path uie-base-qa-filter-v1
-          - --batch_size 8
+          - --batch_size 4
           - --a_max_answer_candidates 10
           - --a_prompt "答案"
           - --a_position_prob 0.01
@@ -181,7 +181,7 @@ case:
           - --dev_path data/finetune/answer_extraction/dev.json
           - --save_dir log/answer_extraction/checkpoints
           - --learning_rate 1e-5
-          - --batch_size 16
+          - --batch_size 4
           - --max_seq_len 512
           - --num_epochs 1
           - --model uie-base
@@ -203,7 +203,7 @@ case:
           - --logging_steps=1
           - --save_steps=100
           - --epochs=1
-          - --batch_size=16
+          - --batch_size=4
           - --learning_rate=1e-5
           - --warmup_proportion=0.02
           - --weight_decay=0.01
@@ -225,7 +225,7 @@ case:
           - --dev_path=data/finetune/filtration/dev.json
           - --save_dir=log/filtration/checkpoints
           - --learning_rate=1e-5
-          - --batch_size=16
+          - --batch_size=4
           - --max_seq_len=512
           - --num_epochs=1
           - --model=uie-base
@@ -241,7 +241,7 @@ case:
         params:
           - --model_path=log/answer_extraction/checkpoints/model_best
           - --test_path=data/finetune/answer_extraction/dev.json
-          - --batch_size=16
+          - --batch_size=4
           - --max_seq_len=512
           - --limit=0.01
         name: filtration_evaluate
@@ -250,7 +250,7 @@ case:
         params:
           - --model_path=log/filtration/checkpoints/model_best
           - --test_path=data/finetune/filtration/dev.json
-          - --batch_size=16
+          - --batch_size=4
           - --max_seq_len=512
           - --limit=0.5
     infer: skipped

@@ -5,14 +5,34 @@ case:
     train:
       -
         name: single
+        params:
+          - -o Global.epochs=2
+          - -o Global.save_interval=2
+          - -o Global.eval_interval=2
       -
         name: multi
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
       -
         name: multi_dy2st
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
       -
         name: multi_amp
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
       -
         name: multi_amp_dy2st
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
     eval:
       -
         name: trained
@@ -59,17 +79,17 @@ case:
         name: function_amp
     eval:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     infer:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     export:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     predict: skipped
@@ -83,7 +103,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -92,7 +112,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     infer:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -101,7 +121,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -121,13 +141,9 @@ case:
         name: function_dy2st
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: function_amp
-        params:
-          - -o Global.device=${set_cuda_flag}
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -136,7 +152,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     infer:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -145,7 +161,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -

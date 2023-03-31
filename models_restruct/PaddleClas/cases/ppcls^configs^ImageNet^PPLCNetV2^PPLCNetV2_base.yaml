@@ -82,26 +82,26 @@ case:
           - -o DataLoader.Train.sampler.first_bs=32
     eval:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     infer:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     export:
       -
-        name: trained
+        name: function
       -
         name: pretrained
     predict:
       -
-        name: trained
+        name: function
       -
-        name: trained_mkldnn
+        name: function_mkldnn
       -
-        name: trained_trt
+        name: function_trt
       -
         name: pretrained
 
@@ -112,10 +112,10 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
-          - -o DataLoader.Train.sampler.first_bs=32
+          - -o DataLoader.Train.sampler.first_bs=8
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -124,7 +124,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     infer:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -133,7 +133,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -142,7 +142,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -157,18 +157,15 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Train.sampler.first_bs=8
       -
         name: function_dy2st
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: function_amp
-        params:
-          - -o Global.device=${set_cuda_flag}
-          - -o DataLoader.Train.sampler.first_bs=32
+          - -o DataLoader.Train.sampler.first_bs=8
     eval:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -177,7 +174,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     infer:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -186,7 +183,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     export:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -
@@ -195,7 +192,7 @@ case:
           - -o Global.device=${set_cuda_flag}
     predict:
       -
-        name: trained
+        name: function
         params:
           - -o Global.device=${set_cuda_flag}
       -

@@ -59,6 +59,14 @@ case:
         params:
           - -c configs/inference_cls_ch4.yaml
       -
+        name: trained_mkldnn
+        params:
+          - -c configs/inference_cls_ch4.yaml
+      -
+        name: trained_trt
+        params:
+          - -c configs/inference_cls_ch4.yaml
+      -
         name: pretrained
         params:
           - -c configs/inference_cls_ch4.yaml
@@ -80,7 +88,7 @@ case:
           - -o AMP.level=O1
 
   windows:
-    base: ./base/ImageNet_base_ampultra.yaml
+    base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
     infer: skipped
@@ -88,7 +96,7 @@ case:
     predict: skipped
 
   windows_cpu:
-    base: ./base/ImageNet_base_ampultra.yaml
+    base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
     infer: skipped
@@ -97,7 +105,7 @@ case:
 
 
   mac:
-    base: ./base/ImageNet_base_ampultra.yaml
+    base: ./base/ImageNet_base.yaml
     train: skipped
     eval: skipped
     infer: skipped

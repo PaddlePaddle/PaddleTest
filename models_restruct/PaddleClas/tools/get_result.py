@@ -5,6 +5,7 @@
 import os
 import time
 import sys
+import copy
 import json
 import shutil
 import logging
@@ -119,6 +120,48 @@ class PaddleClas_Collect(object):
                 if label.get("name") == "case_info":
                     self.case_info_list.extend(json.loads(label.get("value")))
 
+    def get_base_result(self, data_json):
+        """
+        获取原始base yaml中result信息
+        """
+        if isinstance(data_json, dict):
+            for key, val in data_json.items():
+                if key == "base":
+                    with open(os.path.join("..", val), "r") as f:
+                        content_base = yaml.load(f, Loader=yaml.FullLoader)
+                if isinstance(data_json[key], dict):
+                    self.get_base_result(data_json[key])
+                elif isinstance(data_json[key], list):
+                    # print('###data_json[key]', data_json[key])
+                    data_json_copy = copy.deepcopy(data_json[key])
+                    for i, name in enumerate(data_json_copy):
+                        for key1, val1 in name.items():
+                            if key1 == "name":
+                                # print('###key1', key1)
+                                # print('###key', key)
+                                # print('###val1', val1)
+                                for key_, val_ in content_base.items():
+                                    if key == key_:
+                                        for name_ in val_:
+                                            if name_["name"] == val1:
+                                                # print('###key_', key_)
+                                                # print('###name_', name_)
+                                                try:
+                                                    # print('###name_', name_['result'])
+                                                    data_json[key][i]["result"] = name_["result"]
+                                                except:
+                                                    pass
+                                                #     print("###key {} val1 {} do not have result".format(key, val1))
+                                                # print('###data_json[key]', data_json[key])
+                                                # input()
+                        # print('###name11111', name)
+                        # input()
+                        # for key1 in key_pop:
+                        #     name.pop(key1)
+                        # print('###name2222', name)
+                        # input()
+        return data_json
+
     def pop_yaml_useless(self, data_json):
         """
         去除原来yaml中的无效信息
@@ -172,17 +215,23 @@ class PaddleClas_Collect(object):
             # print('###case_value111', case_value)
             # print('###case_value111', content.keys())
             # print('###case_value111["model_name"]', case_value["model_name"])
-            # print("    ")
-            # input()
             if case_value["model_name"] not in content.keys():
                 content[case_value["model_name"]] = eval(case_value["model_name"].split("^")[2])
-                # print('###case_value222', content[case_value["model_name"]])
+                # print('###case_value model_name', content[case_value["model_name"]])
                 # print("    ")
+                # 删除yaml中无效的params
+                # print('###content000', content)
                 content = self.pop_yaml_useless(content)
-                # print('###content', content)
-                # print('###content', type(content))
+                # print('###content111', content)
+                # 从base中获取result的格式填充到case中
                 # print("    ")
+                # print('###content model_name 111', content[case_value["model_name"]])
+                content[case_value["model_name"]] = self.get_base_result(content[case_value["model_name"]])
+                # print('###content model_name 222', content[case_value["model_name"]])
+                # print("    ")
+                # input()
                 with open(os.path.join(self.repo_name, case_value["model_name"].replace("^", "/") + ".yaml"), "r") as f:
+                    # 针对dy2st 进行.replace("_dy2st_convergence","")
                     content_rd_yaml = yaml.load(f, Loader=yaml.FullLoader)
                 if "ATTRMetric" in str(content_rd_yaml):
                     self.kpi_value_eval = "label_f1"
@@ -196,27 +245,46 @@ class PaddleClas_Collect(object):
                 content = json.dumps(content)
                 content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
                 content = json.loads(content)
-
             if case_value["kpi_name"] != "exit_code":
                 for index, tag_value in enumerate(
                     content[case_value["model_name"]]["case"][case_value["system"]][case_value["tag"].split("_")[0]]
                 ):
-                    if tag_value["name"] == case_value["tag"].split("_")[1]:
+                    # print('@@@@tag_value', tag_value)
+                    # print('@@@@case_value tag', case_value["tag"].split("_", 1)[1])
+                    # print('@@@@',\
+                    #  content[case_value["model_name"]]["case"][case_value["system"]][case_value["tag"].split("_")[0]])
+                    if tag_value["name"] == case_value["tag"].split("_", 1)[1]:
                         if case_value["kpi_value"] != -1.0:  # 异常值不保存
-                            # print("####case_info_list   model_name: {}".format(case_value["model_name"]))
-                            # print("####case_info_list   case tag is : {}".format(case_value["tag"]))
-                            # print("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
-                            # print("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
-                            # print(
-                            #     "####case_info_list   change: {}".format(
-                            #         content[case_value["model_name"]]["case"][case_value["system"]][
-                            #             case_value["tag"].split("_")[0]
-                            #         ][index]["result"][case_value["kpi_name"]]["base"]
-                            #     )
-                            # )
-                            content[case_value["model_name"]]["case"][case_value["system"]][
-                                case_value["tag"].split("_")[0]
-                            ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
+                            try:
+                                # print("####case_info_list   model_name: {}".format(case_value["model_name"]))
+                                # print("####case_info_list   case tag is : {}".format(case_value["tag"]))
+                                # print("####case_info_list   kpi_name: {}".format(case_value["kpi_name"]))
+                                # print("####case_info_list   kpi_base: {}".format(case_value["kpi_base"]))
+                                # print("####case_info_list   kpi_value: {}".format(case_value["kpi_value"]))
+                                content[case_value["model_name"]]["case"][case_value["system"]][
+                                    case_value["tag"].split("_")[0]
+                                ][index]["result"][case_value["kpi_name"]]["base"] = case_value["kpi_value"]
+                                # print(
+                                #     "####case_info_list   change: {}".format(
+                                #         content[case_value["model_name"]]["case"][case_value["system"]][
+                                #             case_value["tag"].split("_")[0]
+                                #         ]
+                                #     )
+                                # )
+                                # print(
+                                #     "####case_info_list   change: {}".format(
+                                #         content[case_value["model_name"]]["case"][case_value["system"]][
+                                #             case_value["tag"].split("_")[0]
+                                #         ][index]["result"][case_value["kpi_name"]]["base"]
+                                #     )
+                                # )
+                                # input()
+                            except:
+                                print(
+                                    "###maybe {}  already change class_ids to exit_code ".format(
+                                        case_value["model_name"]
+                                    )
+                                )
 
                         # 单独处理固定不了随机量的 HRNet、 LeViT、 SwinTransformer、 VisionTransformer
                         if (
@@ -240,7 +308,7 @@ class PaddleClas_Collect(object):
             for index, tag_value in enumerate(
                 content[case_value["model_name"]]["case"][case_value["system"]][case_value["tag"].split("_")[0]]
             ):
-                if tag_value["name"] == case_value["tag"].split("_")[1]:
+                if tag_value["name"] == case_value["tag"].split("_", 1)[1]:
                     if case_value["kpi_value"] != -1.0:  # 异常值不保存
                         # 处理存在随机量导致每次infer_trained结果不一致的情况
                         if (
@@ -256,7 +324,11 @@ class PaddleClas_Collect(object):
                                 case_value["tag"].split("_")[0] == "infer"
                                 or case_value["tag"].split("_")[0] == "predict"
                             )
-                            and tag_value["name"] == "trained"
+                            and (
+                                tag_value["name"] == "trained"
+                                or tag_value["name"] == "trained_mkldnn"
+                                or tag_value["name"] == "trained_trt"
+                            )
                         ):
                             try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code
                                 print("### {} change class_ids to exit_code ".format(case_value["model_name"]))
@@ -279,7 +351,6 @@ class PaddleClas_Collect(object):
                                 ][index]["result"]["exit_code"]["evaluation"] = "="
                             except:
                                 print("###can not change class_ids to exit_code")
-
             # print('###content333', content)
             # print('###content333', type(content))
             # print("    ")
@@ -360,9 +431,28 @@ def run():
     # }
 
     update_name = {
-        "PaddleClas-Linux-Cuda102-Python37-P0-Release": "21880207/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P1-Release": "21880204/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "22253813/result.tar",
     }
+
+    # update_name = {
+    #     "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "22253813/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "22235470/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P12-Develop": "22253763/result.tar",
+    #     "PaddleClas-Linux-Cuda112-Python38-P0-Develop": "22253821/result.tar",
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Develop": "22253833/result.tar",
+    #     "PaddleClas-Linux-Cuda117-Python310-P0-Develop": "22253836/result.tar",
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Develop-Centos": "22253878/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P0-Release": "22256500/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P1-Release": "22253777/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P11-Release": "22235528/result.tar",
+    #     "PaddleClas-Linux-Cuda102-Python37-P12-Release": "22235516/result.tar",
+    #     "PaddleClas-Linux-Cuda112-Python38-P0-Release": "22235567/result.tar",
+    #     "PaddleClas-Linux-Cuda116-Python39-P0-Release": "22238509/result.tar",
+    #     "PaddleClas-Linux-Cuda117-Python310-P0-Release": "22253862/result.tar",
+    # }
+
+    #     "PaddleClas-Linux-Cuda102-Python37-P11-Develop": "21880127/result.tar",
+    # "PaddleClas-Linux-Cuda116-Python39-P0-Release-Centos": "21880163/result.tar",
 
     # update_name = {
     #     "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "21880106/result.tar",

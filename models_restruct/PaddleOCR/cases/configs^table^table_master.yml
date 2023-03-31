@@ -1,6 +1,16 @@
 case:
     linux:
         base: ./base/ocr_table_base_pretrained.yaml
+        train:
+          -
+            name: multi
+          -
+            name: amp
+        export:
+          -
+            name: trained
+          -
+            name: pretrained
         predict:
           -
             name: pretrained

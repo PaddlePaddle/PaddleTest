@@ -38,8 +38,6 @@ eval:
         threshold: 0.1
         evaluation: "+"
 
-infer: skipped
-
 export:
   name: pretrained
   cmd: python tools/export.py

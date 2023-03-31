@@ -95,8 +95,8 @@ case:
           - --train_path data/train.txt
           - --dev_path data/dev.txt
           - --max_seq_length 512
-          - --per_device_eval_batch_size 16
-          - --per_device_train_batch_size  16
+          - --per_device_eval_batch_size 4
+          - --per_device_train_batch_size  4
           - --num_train_epochs 100
           - --learning_rate 1e-5
           - --do_train

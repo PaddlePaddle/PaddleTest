@@ -5,6 +5,8 @@
 import os
 import sys
 import json
+import copy
+import platform
 import shutil
 import logging
 import tarfile
@@ -197,9 +199,15 @@ class PaddleClas_Start(object):
 
         # 准备评估内容 这里使用多卡的结果产出的模型
         self.env_dict["kpi_value_eval"] = self.kpi_value_eval
-        self.env_dict["eval_trained_model"] = os.path.join(
-            "output", self.qa_yaml_name + "_train_multi", self.eval_trained_params, "latest"
-        )
+        # windows mac 使用function得到的结果
+        if "Windows" in platform.system() or "Darwin" in platform.system():
+            self.env_dict["eval_trained_model"] = os.path.join(
+                "output", self.qa_yaml_name + "_train_function", self.eval_trained_params, "latest"
+            )
+        else:
+            self.env_dict["eval_trained_model"] = os.path.join(
+                "output", self.qa_yaml_name + "_train_multi", self.eval_trained_params, "latest"
+            )
 
         # 准备导出模型
         self.env_dict["export_trained_model"] = os.path.join("inference", self.qa_yaml_name)
@@ -412,6 +420,48 @@ class PaddleClas_Start(object):
             self.env_dict["set_cuda_flag"] = "gpu"  # 根据操作系统判断
         return 0
 
+    def get_base_result(self, data_json):
+        """
+        获取原始base yaml中result信息
+        """
+        if isinstance(data_json, dict):
+            for key, val in data_json.items():
+                if key == "base":
+                    with open(val, "r") as f:
+                        content_base = yaml.load(f, Loader=yaml.FullLoader)
+                if isinstance(data_json[key], dict):
+                    self.get_base_result(data_json[key])
+                elif isinstance(data_json[key], list):
+                    # print('###data_json[key]', data_json[key])
+                    data_json_copy = copy.deepcopy(data_json[key])
+                    for i, name in enumerate(data_json_copy):
+                        for key1, val1 in name.items():
+                            if key1 == "name":
+                                # print('###key1', key1)
+                                # print('###key', key)
+                                # print('###val1', val1)
+                                for key_, val_ in content_base.items():
+                                    if key == key_:
+                                        for name_ in val_:
+                                            if name_["name"] == val1:
+                                                # print('###key_', key_)
+                                                # print('###name_', name_)
+                                                try:
+                                                    # print('###name_', name_['result'])
+                                                    data_json[key][i]["result"] = name_["result"]
+                                                except:
+                                                    pass
+                                                #     print("###key {} val1 {} do not have result".format(key, val1))
+                                                # print('###data_json[key]', data_json[key])
+                                                # input()
+                        # print('###name11111', name)
+                        # input()
+                        # for key1 in key_pop:
+                        #     name.pop(key1)
+                        # print('###name2222', name)
+                        # input()
+        return data_json
+
     def change_yaml_kpi(self, content, content_result):
         """
         递归修改变量值,直接全部整体替换,不管现在需要的是什么阶段
@@ -461,17 +511,22 @@ class PaddleClas_Start(object):
                 logger.info("#### change {} value".format(self.qa_yaml_name))
                 with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "r", encoding="utf-8") as f:
                     content = yaml.load(f, Loader=yaml.FullLoader)
+                # 从base中继承result
+                content = self.get_base_result(content)
 
                 content = json.dumps(content)
                 content = content.replace("${{{0}}}".format("kpi_value_eval"), self.kpi_value_eval)
                 content = json.loads(content)
 
+                # 修改kpi值
                 content, content_result = self.change_yaml_kpi(content, content_result[self.qa_yaml_name])
 
                 with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
                     yaml.dump(content, f, sort_keys=False)
-        except:
+        # except:
+        except Exception as e:
             logger.info("do not update yaml value !!!!")
+            logger.info("error info : {}".format(e))
 
     def build_prepare(self):
         """

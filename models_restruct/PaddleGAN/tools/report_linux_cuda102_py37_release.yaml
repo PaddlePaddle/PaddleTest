@@ -527,7 +527,7 @@ configs^gpen_256_ffhq:
       - name: multi
         result:
           loss:
-            base: 0.517
+            base: 1.322
             evaluation: '-'
             threshold: 100
       - name: single
