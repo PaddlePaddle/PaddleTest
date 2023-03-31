@@ -47,11 +47,9 @@ class PaddleDetection_Build(Model_Build):
                 self.dataset_org = self.mount_path
                 os.environ["dataset_org"] = self.mount_path
                 self.dataset_target = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
-                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)   
+                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
         logger.info("#### dataset_org in diy_build is  {}".format(self.dataset_org))
         logger.info("#### dataset_target in diy_build is  {}".format(self.dataset_target))
-               
-
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.detection_model_list = []
@@ -100,9 +98,8 @@ class PaddleDetection_Build(Model_Build):
         # set sed
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
-            cmd_weight = (
-                '{} -i "s#~/.cache/paddle/weights#dataset'
-                '/det_pretrained#g" ppdet/utils/download.py'.format(os.getenv("sed"))
+            cmd_weight = '{} -i "s#~/.cache/paddle/weights#dataset/det_pretrained#g" ppdet/utils/download.py'.format(
+                os.getenv("sed")
             )
             subprocess.run(cmd_weight)
         else:
