@@ -231,3 +231,6 @@ configs^res2net^mask_rcnn_res2net50_vb_26w_4s_fpn_2x_coco.yml
 configs^res2net^faster_rcnn_res2net50_vb_26w_4s_fpn_1x_coco.yml
 configs^hrnet^faster_rcnn_hrnetv2p_w18_2x_coco.yml
 configs^hrnet^faster_rcnn_hrnetv2p_w18_1x_coco.yml
+configs^vitdet^ppyoloe_vit_base_csppan_cae_36e_coco.yml
+configs^smalldet^ppyoloe_plus_sod_crn_l_80e_coco.yml
+configs^mot^ocsort^ocsort_ppyoloe.yml

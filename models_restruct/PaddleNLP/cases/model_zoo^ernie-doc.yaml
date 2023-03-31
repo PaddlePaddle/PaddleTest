@@ -164,6 +164,7 @@ case:
           - --epochs 1
           - --save_steps 2
           - --max_steps 2
+          - --batch_size 2
           - --output_dir msra
         result:
           loss:
