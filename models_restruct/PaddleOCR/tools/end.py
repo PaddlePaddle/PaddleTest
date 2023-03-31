@@ -170,6 +170,33 @@ class PaddleOCR_End(object):
                 data_list.append(kpi_value)
         return data_list
 
+    def get_traning_curve(self):
+        """
+        get_traning_curve
+        """
+        if "dygraph2static_prim" in self.step:
+            print("self.step:{}".format(self.step))
+            filepath_baseline = os.path.join(
+                "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/",
+                "train_dygraph2static_baseline.log",
+            )
+            filepath_prim = os.path.join(
+                "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/", "train_dygraph2static_prim.log"
+            )
+
+            # loss
+            data_baseline = self.get_paddle_data(filepath_baseline, "loss")
+            data_prime = self.get_paddle_data(filepath_prim, "loss")
+            logger.info("Get data successfully!")
+            self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss")
+            logger.info("Plot figure successfully!")
+
+            # hmeans
+            data_baseline_hmeans = self.get_paddle_data(filepath_baseline, "hmean")
+            data_prime_hmeans = self.get_paddle_data(filepath_prim, "hmean")
+            logger.info("Get data successfully!")
+            self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans")
+            logger.info("Plot figure successfully!")
 
     def build_end(self):
         """
@@ -187,29 +214,7 @@ class PaddleOCR_End(object):
         # logger.info("config_report_enviorement_variable start")
         # self.config_report_enviorement_variable()
         # logger.info("config_report_enviorement_variable end")
-        if 'dygraph2static_prim' in self.step:
-            print("self.step:{}".format(self.step))
-            filepath_baseline = os.path.join(
-                "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/",
-                "train_dygraph2static_baseline.log",
-            )
-            filepath_prim = os.path.join(
-                "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/", "train_dygraph2static_prim.log"
-            )
-
-            # loss
-            data_baseline = self.get_paddle_data(filepath_baseline, "loss")
-            data_prime = self.get_paddle_data(filepath_prim, "loss")
-            logger.info("Get data successfully!")
-            self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss")
-            logger.info("Plot figure successfully!")
-    
-            # hmeans
-            data_baseline_hmeans = self.get_paddle_data(filepath_baseline, "hmean")
-            data_prime_hmeans = self.get_paddle_data(filepath_prim, "hmean")
-            logger.info("Get data successfully!")
-            self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans")
-            logger.info("Plot figure successfully!")
+        self.get_traning_curve()
 
 
 def run():
