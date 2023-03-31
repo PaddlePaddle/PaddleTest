@@ -54,9 +54,12 @@ class PaddleSeg_Start(object):
         """
         if self.prim and os.path.exists("PaddleSeg/data/cityscapes"):
             shutil.rmtree("PaddleSeg/data/cityscapes")
-            cmd = (
+            cmd1 = (
                 "wget -P PaddleSeg/data https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes_pri_prim.zip"
             )
+            cmd2 = "unzip -q -d PaddleSeg/data/ PaddleSeg/data/cityscapes_pri_prim.zip"
+            subprocess.run(cmd1, shell=True)
+            subprocess.run(cmd2, shell=True)
         if "cityscapes" in self.model:
             if not os.path.exists("PaddleSeg/data/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
                 cmd = (

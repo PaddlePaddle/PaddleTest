@@ -67,7 +67,7 @@ train:
     cmd: python tools/train.py
     params:
       - --config ${rd_yaml_path}
-      - --iters 60000
+      - --iters 600
       - --save_interval 10000
       - --num_workers 8
       - --opts to_static_training=True
