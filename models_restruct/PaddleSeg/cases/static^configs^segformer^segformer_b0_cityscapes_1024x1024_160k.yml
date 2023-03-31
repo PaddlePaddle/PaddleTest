@@ -13,7 +13,7 @@ case:
       -
         name: static_multi
       -
-        name: quant_multi
+        name: prim_single
     eval:
       -
         name: pretrained
