@@ -22,6 +22,7 @@ class PaddleSeg_Start(object):
         """
         init
         """
+        self.env_dict = {}
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
         logger.info("###self.qa_yaml_name: {}".format(self.qa_yaml_name))
@@ -46,7 +47,6 @@ class PaddleSeg_Start(object):
         self.paddle_whl = os.environ["paddle_whl"]
         self.mode = os.environ["mode"]  # function or precision
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)
-        self.env_dict = {}
         self.model = self.qa_yaml_name.split("^")[-1]
         logger.info("###self.model_name: {}".format(self.model))
         self.env_dict["model"] = self.model

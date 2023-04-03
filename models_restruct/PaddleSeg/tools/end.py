@@ -52,6 +52,9 @@ class PaddleDetection_End(object):
         绘制曲线
         """
         logger.info("***draw curve start")
+        #step1, loss1 = self.get_loss(self.standard_log_path)
+        #step2, loss2 = self.get_loss(self.prim_log_path)
+        #file_name=''
     
     def build_end(self):
         """
