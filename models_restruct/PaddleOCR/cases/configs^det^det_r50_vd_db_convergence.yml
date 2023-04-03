@@ -1,0 +1,16 @@
+case:
+    linux:
+          train:
+          -
+            name: multi
+            cmd : export CUDA_VISIBLE_DEVICES=2,3,4,5; python -m paddle.distributed.launch tools/train.py
+            params:
+              - -c configs/det/det_r50_vd_db.yml
+          -
+            name: single
+            cmd : export CUDA_VISIBLE_DEVICES=1; python tools/train.py
+            params:
+              - -c configs/det/det_r50_vd_db.yml
+              - -o Optimizer.lr.learning_rate=0.00025
+
+
