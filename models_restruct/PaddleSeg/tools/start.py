@@ -27,11 +27,13 @@ class PaddleSeg_Start(object):
         logger.info("###self.qa_yaml_name: {}".format(self.qa_yaml_name))
         logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         if "prim" in self.rd_yaml_path:
+            logger.info("###prim mode")
             self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
             os.environ["FLAGS_prim_all"] = True
             self.env_dict["FLAGS_prim_all"] = True
             logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         if "static" in self.rd_yaml_path:
+            logger.info("###no prim mode")
             self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
             os.environ["FLAGS_prim_all"] = False
             self.env_dict["FLAGS_prim_all"] = False

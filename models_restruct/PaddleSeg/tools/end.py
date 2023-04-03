@@ -26,12 +26,32 @@ class PaddleDetection_End(object):
         初始化
         """
         self.reponame = os.environ["reponame"]
+
+    def get_loss(self, log_path):
+        """
+        获取loss值
+        """
+        step = []
+        loss = []
+        num = 0
+        fl = open(log_path, 'r').readlines()
+        for row in fl:
+            if 'epoch:' in row.strip():
+                member = row.strip.split(',')
+                for item in member:
+                    if "loss" in item:
+                        loss_item = item.strip.split(':')
+                        loss.append = float(loss_item[-1])
+                        step.append(num)
+                        num += 1
+        return step, loss
+
     
     def draw_curve(self):
         """
         绘制曲线
         """
-        print("ok")
+        logger.info("***draw curve start")
     
     def build_end(self):
         """
