@@ -17,7 +17,6 @@ from utils.yaml_loader import YamlLoader
 from utils.logger import logger
 from benchtrans import BenchTrans
 from jelly_v2 import Jelly_v2
-from db import DB
 from tools import delete
 
 
@@ -30,7 +29,8 @@ class ApiBenchmarkCI(object):
     """
     api benchmark 调度CI, 监控cpu+前向, 支持多个机器baseline
     """
-    def __init__(self, baseline, yaml_path, place='cpu', enable_backward=0):
+
+    def __init__(self, baseline, yaml_path, place="cpu", enable_backward=0):
         """
         :param baseline: 性能baseline键值对, key为case名, value为性能float
         """
@@ -85,7 +85,7 @@ class ApiBenchmarkCI(object):
                     api=api,
                     framework="paddle",
                     title=case_name,
-                    place='cpu',
+                    place="cpu",
                     card=None,
                     default_dtype="float32",
                     enable_backward=enable_backward_trigger,
@@ -93,10 +93,10 @@ class ApiBenchmarkCI(object):
                 jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
                 jelly.set_paddle_method(bt.get_paddle_method())
                 forward_time = jelly._return_forward()
-                print('forward_time is: ', forward_time)
-                print('forward_time type is: ', type(forward_time))
+                print("forward_time is: ", forward_time)
+                print("forward_time type is: ", type(forward_time))
                 self.forward_time_dict[case_name] = forward_time
-                print('forward_time_dict is: ', self.forward_time_dict)
+                print("forward_time_dict is: ", self.forward_time_dict)
 
             except Exception as e:
                 # 存储异常
@@ -121,7 +121,7 @@ class ApiBenchmarkCI(object):
                 if v > baseline_time:
                     res = (v / baseline_time) * -1
                 else:
-                    res = (baseline_time / v)
+                    res = baseline_time / v
             else:
                 res = v
             result_dict[k] = res
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     delete("./log")
 
     # baseline = {'Tanh_0': 0.00431584, 'conv2d_0': 0.022992369}
-    baseline = {'Tanh_0': 0.00331584, 'conv2d_0': 0.042992369}
+    baseline = {"Tanh_0": 0.00331584, "conv2d_0": 0.042992369}
     apibm = ApiBenchmarkCI(baseline, args.yaml)
     result_dict = apibm.compare()
-    print('result_dict is :', result_dict)
+    print("result_dict is :", result_dict)
