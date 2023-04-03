@@ -98,9 +98,7 @@ class PaddleNLP_Build(Model_Build):
             logger.info("installing develop PaddleNLP")
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system(" python -m pip install -U dist/p****.whl")
-            # cmd_return = os.system(
-            #     "python -m pip install --pre --upgrade paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html"
-            # )
+            
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format(self.reponame))
 
