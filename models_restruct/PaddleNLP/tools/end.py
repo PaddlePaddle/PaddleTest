@@ -20,40 +20,46 @@ logger = logging.getLogger("ce")
 
 class PaddleNLP_End(object):
     """
-    回收类
+    post processing
     """
 
     def __init__(self):
         """
         init
         """
-        self.pipeline_name = os.environ["AGILE_PIPELINE_NAME"]  # PaddleNLP-LinuxConvergence-Cuda112-Python38-GPT-Develop
+        self.pipeline_name = os.environ[
+            "AGILE_PIPELINE_NAME"
+        ]  # PaddleNLP-LinuxConvergence-Cuda112-Python38-GPT-Develop
         self.reponame = os.environ["reponame"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.case_step = os.environ["case_step"]
         self.case_name = os.environ["case_name"]
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_")
 
-    def drow_picture(self,model_name, baseline_info, stategy_info):
-        """
-        """
+    def drow_picture(self, model_name, baseline_info, stategy_info):
+        """ drowing loss curve"""
         num = 1
-        for key ,value in stategy_info.items():
-            plt.subplot(1,len(stategy_info.items()),num)
-            plt.plot([i for i in range(len(baseline_info['baseline']))], baseline_info['baseline'], color = 'g', label='baseline')
-            plt.plot([i for i in range(len(baseline_info['baseline']))], value, color = 'r', label=key)
-        
+        for key, value in stategy_info.items():
+            plt.subplot(1, len(stategy_info.items()), num)
+            plt.plot(
+                [i for i in range(len(baseline_info["baseline"]))],
+                baseline_info["baseline"],
+                color="g",
+                label="baseline",
+            )
+            plt.plot([i for i in range(len(baseline_info["baseline"]))], value, color="r", label=key)
+
             plt.legend()
-            picture_name = model_name + '_baseline_{}'.format(key)
+            picture_name = model_name + "_baseline_{}".format(key)
             plt.title(picture_name)
-            num =num + 1
-        plt.savefig('./picture/{}.png'.format(self.pipeline_name))
+            num = num + 1
+        plt.savefig("./picture/{}.png".format(self.pipeline_name))
         plt.close()
-    
 
     def get_metrics(self, filename, kpi):
         """
-        get loss 
+        get metrics:
+        loss acc ips ...
         """
         kpi_value = -1
         f = open(filename, encoding="utf-8", errors="ignore")
@@ -81,16 +87,15 @@ class PaddleNLP_End(object):
             }
         """
         baseline_info = {}
-        stategy_info ={}
+        stategy_info = {}
         for file in os.listdir(self.TRAIN_LOG_PATH):
             if re.compile("baseline").findall(file):
-                        baseline_info["baseline"] = self.get.metrics(file,'loss')
-            else:               
-                strategy = file.split('train_')[-1].replace('.log','')
-                stategy_info[strategy] = self.get.metrics(file,'loss')
+                baseline_info["baseline"] = self.get.metrics(file, "loss")
+            else:
+                strategy = file.split("train_")[-1].replace(".log", "")
+                stategy_info[strategy] = self.get.metrics(file, "loss")
 
-        self.drow_picture(self.qa_yaml_name,baseline_info, stategy_info)
-
+        self.drow_picture(self.qa_yaml_name, baseline_info, stategy_info)
 
     def build_end(self):
         """
