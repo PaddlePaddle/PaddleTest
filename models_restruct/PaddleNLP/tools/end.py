@@ -51,7 +51,7 @@ class PaddleNLP_End(object):
             if  num == 1:
                 plt.xlabel("step")
                 plt.ylabel("loss")
-                picture_name = model_name.lstrip('model_zoo^').upper()
+                picture_name = model_name.replace('model_zoo^','').upper()
                 plt.title(picture_name)
             num = num + 1
         if not os.path.exists("picture"):
