@@ -1,7 +1,3 @@
-model_zoo^bert_convergence_dy2st.yaml
-model_zoo^bert_convergence_dy2st_cinn.yaml
-model_zoo^bert_convergence_dy2st_prim.yaml
-model_zoo^bert_convergence_dy2st_prim_cinn.yaml
 model_zoo^gpt_convergence_dy2st.yaml
 model_zoo^gpt_convergence_dy2st_prim.yaml
 model_zoo^ernie_convergence_dy2st.yaml
