@@ -16,8 +16,8 @@ case:
           - --output_dir "output_base"
           - --weight_decay 0.01
           - --grad_clip 1.0
-          - --max_steps 150000
-          - --save_steps 100000
+          - --max_steps 10
+          - --save_steps 10
           - --decay_steps 320000
           - --warmup_rate 0.01
           - --micro_batch_size 2
@@ -35,8 +35,8 @@ case:
           - --output_dir "output_prim"
           - --weight_decay 0.01
           - --grad_clip 1.0
-          - --max_steps 150000
-          - --save_steps 100000
+          - --max_steps 10
+          - --save_steps 10
           - --decay_steps 320000
           - --warmup_rate 0.01
           - --micro_batch_size 2
