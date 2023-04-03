@@ -26,6 +26,7 @@ logger = logging.getLogger("ce")
           初始化
           """
           self.reponame = os.environ["reponame"]
+          self.model = os.environ["model"]
 
       def get_loss(self, log_path):
           """
@@ -52,17 +53,25 @@ logger = logging.getLogger("ce")
           绘制曲线
           """
           logger.info("***draw curve start")
-          #step1, loss1 = self.get_loss(self.standard_log_path)
-          #step2, loss2 = self.get_loss(self.prim_log_path)
-          #file_name=''
-          #plt.
-    
+          step1, loss1 = self.get_loss(self.standard_log_path)
+          step2, loss2 = self.get_loss(self.prim_log_path)
+          plt.add_subplot(1, 1, 1)
+          
+          ax.plot(step1, loss1, label=''+'_train', color='b', linewidth=2).format(self.model)
+          ax.legend()
+          ax.set_xlabel("steps")
+          ax.set_ylabel("loss")
+          ax.set_title("{}").format(self.model)
+          plt.savefig("model_curve_pic.png")
+          os.system("mkdir picture")
+          os.system("mv model_curve_pic.png picture")
+
       def build_end(self):
           """
           执行准备过程
           """
           ret = 0
-          ret = self.draw_curve()
+          #ret = self.draw_curve()
           if ret:
               logger.info("draw curve failed!")
               return ret
