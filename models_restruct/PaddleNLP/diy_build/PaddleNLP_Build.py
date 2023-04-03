@@ -92,6 +92,9 @@ class PaddleNLP_Build(Model_Build):
 
         if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
+        
+        os.chdir(self.reponame + '/ppdiffusers')
+        os.system("python setup.py install")
 
         os.chdir(self.reponame)
         os.system("python setup.py bdist_wheel")

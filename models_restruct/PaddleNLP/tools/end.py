@@ -51,12 +51,12 @@ class PaddleNLP_End(object):
             if  num == 1:
                 plt.xlabel("step")
                 plt.ylabel("loss")
-                picture_name = model_name.lstrip('model_zoo^').capitalize()
+                picture_name = model_name.lstrip('model_zoo^').upper()
                 plt.title(picture_name)
             num = num + 1
         if not os.path.exists("picture"):
             os.makedirs("picture")
-        plt.savefig("./picture/{}.png".format(self.pipeline_name))
+        plt.savefig("./picture/{}.png".format(picture_name))
         plt.close()
 
     def get_metrics(self, filename, kpi):
