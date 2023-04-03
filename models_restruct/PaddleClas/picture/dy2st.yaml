@@ -22,7 +22,7 @@ ppcls^configs^CAE^cae_base_patch16_224_finetune_dy2st_convergence:
   modes: 'train_dy2st;train_dy2st_prim'
   epoch: 5
   train:
-    targets: top1;top5;loss
+    targets: loss
     keywords: '[Train];ips'
   # eval:
   #   targets: top1;top5
@@ -33,6 +33,16 @@ ppcls^configs^ImageNet^ResNet^ResNet50_dy2st_convergence_test:
   epoch: 20
   train:
     targets: top1;top5;loss
+    keywords: '[Train];ips'
+  # eval:
+  #   targets: top1;top5
+  #   keywords: '[Eval];[Avg]'
+
+ppcls^configs^CAE^cae_base_patch16_224_finetune_dy2st_convergence_test:
+  modes: 'train_dy2st;train_dy2st_prim'
+  epoch: 5
+  train:
+    targets: loss
     keywords: '[Train];ips'
   # eval:
   #   targets: top1;top5

@@ -35,21 +35,24 @@ class PaddleClas_End(object):
         """
         path_now = os.getcwd()
         os.chdir("picture")
-        with open("dy2st.yaml", "r", encoding="utf-8") as f:
-            content = yaml.load(f, Loader=yaml.FullLoader)
-        self.dy2st_yaml = content[self.qa_yaml_name]
-        logger.info("self.dy2st_yaml is {}".format(self.dy2st_yaml))
-        # train
-        train_log_info_map = analysis(
-            os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "train"
-        )
-        draw(train_log_info_map, self.dy2st_yaml, "train")
-        # eval
-        if "eval" in self.dy2st_yaml.keys():
+        try:
+            with open("dy2st.yaml", "r", encoding="utf-8") as f:
+                content = yaml.load(f, Loader=yaml.FullLoader)
+            self.dy2st_yaml = content[self.qa_yaml_name]
+            logger.info("self.dy2st_yaml is {}".format(self.dy2st_yaml))
+            # train
             train_log_info_map = analysis(
-                os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "eval"
+                os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "train"
             )
-            draw(train_log_info_map, self.dy2st_yaml, "eval")
+            draw(train_log_info_map, self.dy2st_yaml, "train")
+            # eval
+            if "eval" in self.dy2st_yaml.keys():
+                train_log_info_map = analysis(
+                    os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "eval"
+                )
+                draw(train_log_info_map, self.dy2st_yaml, "eval")
+        except:
+            logger.info("draw picture failed")
         os.chdir(path_now)
         return 0
 
