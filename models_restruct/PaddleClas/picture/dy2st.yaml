@@ -34,9 +34,9 @@ ppcls^configs^ImageNet^ResNet^ResNet50_dy2st_convergence_test:
   train:
     targets: top1;top5;loss
     keywords: '[Train];ips'
-  # eval:
-  #   targets: top1;top5
-  #   keywords: '[Eval];[Avg]'
+  eval:
+    targets: top1;top5
+    keywords: '[Eval];[Avg]'
 
 ppcls^configs^CAE^cae_base_patch16_224_finetune_dy2st_convergence_test:
   modes: 'train_dy2st_test;train_dy2st_prim_test'

@@ -1,0 +1,189 @@
+# all不需要固定随机量
+case:
+  linux_convergence:
+    base: ./base/ImageNet_base_dy2st.yaml
+    train:
+      -
+        name: dy
+      -
+        name: dy2st
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_cinn
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_cinn
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_prim
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim_cinn
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_test
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_cinn_test
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_cinn
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim_test
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_prim
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim_cinn_test
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_all
+        params:
+          - -o Global.to_static=True
+          - -o Global.epochs=120
+          - -o Global.eval_interval=6
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
+          - -o DataLoader.Train.sampler.batch_size=delete
+          - -o Global.print_batch_step=delete
+          - -o Global.seed=delete
+          - -o Optimizer.lr.learning_rate=0.0025
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_cinn_all
+        params:
+          - -o Global.to_static=True
+          - -o Global.epochs=120
+          - -o Global.eval_interval=6
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
+          - -o DataLoader.Train.sampler.batch_size=delete
+          - -o Global.print_batch_step=delete
+          - -o Global.seed=delete
+          - -o Optimizer.lr.learning_rate=0.0025
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim_all
+        params:
+          - -o Global.to_static=True
+          - -o Global.epochs=120
+          - -o Global.eval_interval=6
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
+          - -o DataLoader.Train.sampler.batch_size=delete
+          - -o Global.print_batch_step=delete
+          - -o Global.seed=delete
+          - -o Optimizer.lr.learning_rate=0.0025
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim_cinn_all
+        params:
+          - -o Global.to_static=True
+          - -o Global.epochs=120
+          - -o Global.eval_interval=6
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
+          - -o DataLoader.Train.sampler.batch_size=delete
+          - -o Global.print_batch_step=delete
+          - -o Global.seed=delete
+          - -o Optimizer.lr.learning_rate=0.0025
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "-"
+
+function: paddlelas_imagenet_parse
