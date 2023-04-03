@@ -65,7 +65,7 @@ case:
         name: dy2st_test
         cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
         params:
-          - -o Global.epochs=1
+          - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
@@ -81,7 +81,7 @@ case:
         name: dy2st_cinn_test
         cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
         params:
-          - -o Global.epochs=1
+          - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
@@ -97,7 +97,7 @@ case:
         name: dy2st_prim_test
         cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
         params:
-          - -o Global.epochs=1
+          - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
@@ -113,7 +113,7 @@ case:
         name: dy2st_prim_cinn_test
         cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
         params:
-          - -o Global.epochs=1
+          - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
           - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
