@@ -89,15 +89,16 @@ class PaddleNLP_End(object):
             }
         """
         baseline_info = {}
-        stategy_info = {}
+        strategy_info = {}
         for file in os.listdir(self.TRAIN_LOG_PATH):
+            logger.info("check log file is {}".format(file))
             if re.compile("baseline").findall(file):
                 baseline_info["baseline"] = self.get_metrics(file, "loss")
             else:
                 strategy = file.split("train_")[-1].replace(".log", "")
-                stategy_info[strategy] = self.get_metrics(file, "loss")
+                strategy_info[strategy] = self.get_metrics(file, "loss")
 
-        self.drow_picture(self.qa_yaml_name, baseline_info, stategy_info)
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info)
 
     def build_end(self):
         """
