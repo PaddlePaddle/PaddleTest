@@ -27,9 +27,7 @@ class PaddleNLP_End(object):
         """
         init
         """
-        self.pipeline_name = os.environ[
-            "AGILE_PIPELINE_NAME"
-        ]
+        self.pipeline_name = os.environ["AGILE_PIPELINE_NAME"]
         self.reponame = os.environ["reponame"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name)
@@ -48,10 +46,10 @@ class PaddleNLP_End(object):
             plt.plot([i for i in range(len(baseline_info["baseline"]))], value, color="r", label=key)
 
             plt.legend()
-            if  num == 1:
+            if num == 1:
                 plt.xlabel("step")
                 plt.ylabel("loss")
-                picture_name = model_name.replace('model_zoo^','').upper()
+                picture_name = model_name.replace("model_zoo^", "").upper()
                 plt.title(picture_name)
             num = num + 1
         if not os.path.exists("picture"):
@@ -94,10 +92,10 @@ class PaddleNLP_End(object):
         for file in os.listdir(self.TRAIN_LOG_PATH):
             logger.info("check log file is {}".format(file))
             if re.compile("baseline").findall(file):
-                baseline_info["baseline"] = self.get_metrics(self.TRAIN_LOG_PATH+'/'+file, "loss")
+                baseline_info["baseline"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
             elif re.compile("dy2st").findall(file):
                 strategy = file.split("train_")[-1].replace(".log", "")
-                strategy_info[strategy] = self.get_metrics(self.TRAIN_LOG_PATH+'/'+file, "loss")
+                strategy_info[strategy] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
 
         self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info)
 

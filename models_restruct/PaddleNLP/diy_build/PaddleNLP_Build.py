@@ -62,8 +62,8 @@ class PaddleNLP_Build(Model_Build):
         os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
         print(os.environ["no_proxy"])
 
-        if platform == "linux" or platform=="linux_convergence":
-            print('linux')
+        if platform == "linux" or platform == "linux_convergence":
+            print("linux")
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall paddlepaddle -y")
@@ -93,7 +93,6 @@ class PaddleNLP_Build(Model_Build):
         if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
-        
         if os.path.exists(self.reponame):
             os.chdir(self.reponame)
             logger.info("installing develop PaddleNLP")
@@ -104,7 +103,7 @@ class PaddleNLP_Build(Model_Build):
             # )
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format(self.reponame))
-            
+
             logger.info("installing develop ppdiffusers")
             os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
         os.chdir(path_now)
