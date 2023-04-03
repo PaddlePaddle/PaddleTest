@@ -32,7 +32,6 @@ class ApiBenchmarkCI(object):
     """
     def __init__(self, baseline, yaml_path, place='cpu', enable_backward=0):
         """
-
         :param baseline: 性能baseline键值对, key为case名, value为性能float
         """
         self.baseline_dict = baseline
