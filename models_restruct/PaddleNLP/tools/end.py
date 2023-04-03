@@ -53,6 +53,8 @@ class PaddleNLP_End(object):
             picture_name = model_name + "_baseline_{}".format(key)
             plt.title(picture_name)
             num = num + 1
+        if not os.path.exists("picture"):
+            os.makedirs("picture")
         plt.savefig("./picture/{}.png".format(self.pipeline_name))
         plt.close()
 
@@ -90,7 +92,7 @@ class PaddleNLP_End(object):
         stategy_info = {}
         for file in os.listdir(self.TRAIN_LOG_PATH):
             if re.compile("baseline").findall(file):
-                baseline_info["baseline"] = self.get.metrics(file, "loss")
+                baseline_info["baseline"] = self.get_metrics(file, "loss")
             else:
                 strategy = file.split("train_")[-1].replace(".log", "")
                 stategy_info[strategy] = self.get_metrics(file, "loss")
