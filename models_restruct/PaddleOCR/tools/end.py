@@ -46,37 +46,6 @@ class PaddleOCR_End(object):
         self.EVAL_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "eval_pretrained.log")
         self.branch = os.environ["branch"]
 
-    def getdata1(self, filename, delimiter1, delimiter2):
-        """
-        get_data
-        """
-        data = []
-        with open(filename, "rt") as f:
-            for line in f:
-                pattern = re.compile(delimiter1 + "(.+)" + delimiter2)
-                #          pattern=re.compile('loss:(.+), ')
-                result = pattern.findall(line)
-                if len(result) > 0:
-                    # print(float(result[0]))
-                    data.append(float(result[0]))
-        return data[-1]
-
-    def getdata(self, filename, kpi):
-        """
-        get_data
-        """
-        kpi_value = -1
-        f = open(filename, encoding="utf-8", errors="ignore")
-        for line in f.readlines():
-            if kpi + ":" in line:
-                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
-                r = re.findall(regexp, line)
-                # 如果解析不到符合格式到指标，默认值设置为-1
-                kpi_value = float(r[0].strip()) if len(r) > 0 else -1
-                print(kpi_value)
-        f.close()
-        return kpi_value
-
     def update_json(self, filename, value):
         """
         update_json
@@ -100,13 +69,6 @@ class PaddleOCR_End(object):
         回收之前下载的数据
         """
         if self.step == "train" and os.environ.get("UPDATA_BASE_VALUE") is True:
-            # train loss
-            # if self.category == "det":
-            #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", loss_shrink_maps")
-            # elif self.category == "table":
-            #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", horizon_bbox_loss")
-            # else:
-            #    train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss:", ", avg_reader_cost")
             # parse kpi
             train_loss = self.getdata(self.TRAIN_LOG_PATH, "loss")
             logger.info("#### train_loss: {}".format(train_loss))
@@ -166,8 +128,6 @@ class PaddleOCR_End(object):
         xdata1 = list(range(0, len(ydata1)))
         ydata2 = data2
         xdata2 = list(range(0, len(ydata2)))
-        ydata1 = data1[: len(data2)]
-        xdata1 = list(range(0, len(ydata1)))
 
         # plot the data
         fig = plt.figure()
@@ -179,7 +139,10 @@ class PaddleOCR_End(object):
         ax.legend()
         # set the limits
         ax.set_xlim([0, len(xdata1)])
-        ax.set_ylim([0, math.ceil(max(ydata1))])
+        if "loss" in value:
+            ax.set_ylim([0, math.ceil(np.percentile(ydata1, 99))])
+        else:
+            ax.set_ylim([0, math.ceil(max(ydata1))])
 
         ax.set_xlabel("iteration")
         ax.set_ylabel(value)
@@ -188,49 +151,36 @@ class PaddleOCR_End(object):
 
         # display the plot
         plt.show()
-        plt.savefig("dygraph2static_" + value + ".png")
+        if not os.path.exists("picture"):
+            os.makedirs("picture")
+        plt.savefig("picture/dygraph2static_" + value + ".png")
 
-    def get_paddle_data(self, filepath, kpi_list):
+    def get_paddle_data(self, filepath, kpi):
         """
         get_paddle_data(
         """
         data_list = []
         f = open(filepath, encoding="utf-8", errors="ignore")
         for line in f.readlines():
-            # if kpi + ":" in line:
-            if all(kpi + ":" in line for kpi in kpi_list):
-                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi_list[0]
-                r = re.findall(regexp, line)
-                # 如果解析不到符合格式到指标，默认值设置为-1
-                kpi_value = float(r[0].strip()) if len(r) > 0 else -1
-                data_list.append(kpi_value)
+            if kpi + ":" in line:
+                if "current" in line:
+                    pass
+                else:
+                    regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
+                    r = re.findall(regexp, line)
+                    # 如果解析不到符合格式到指标，默认值设置为-1
+                    kpi_value = float(r[0].strip()) if len(r) > 0 else -1
+                    print("kpi_value:{}".format(kpi_value))
+                    logger.info("kpi_value:{}".format(kpi_value))
+                    data_list.append(kpi_value)
         return data_list
 
-    def allure_attach(self, filename, name, fileformat):
+    def get_traning_curve(self):
         """
-        allure_attach
+        get_traning_curve
         """
-        with open(filename, mode="rb") as f:
-            file_content = f.read()
-        allure.attach(file_content, name=name, attachment_type=fileformat)
-
-    def build_end(self):
-        """
-        执行准备过程
-        """
-        # 进入repo中
-        logger.info("build collect data  value start")
-        ret = 0
-        ret = self.collect_data_value()
-        if ret:
-            logger.info("build collect_data_value failed")
-            return ret
-        logger.info("build collect_data_value end")
-        # report_enviorement_dict
-        # logger.info("config_report_enviorement_variable start")
-        # self.config_report_enviorement_variable()
-        # logger.info("config_report_enviorement_variable end")
-        if os.getenv("FLAGS_prim_all", False) is True:
+        if "dygraph2static_prim" in self.step:
+            print("self.step:{}".format(self.step))
             filepath_baseline = os.path.join(
                 "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/",
                 "train_dygraph2static_baseline.log",
@@ -238,27 +188,20 @@ class PaddleOCR_End(object):
             filepath_prim = os.path.join(
                 "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/", "train_dygraph2static_prim.log"
             )
-            logger.info(filepath_baseline)
+
             # loss
-            data_baseline = self.get_paddle_data(filepath_baseline, ["loss"])
-            logger.info(filepath_prim)
-            data_prime = self.get_paddle_data(filepath_prim, ["loss"])
+            data_baseline = self.get_paddle_data(filepath_baseline, "loss")
+            data_prime = self.get_paddle_data(filepath_prim, "loss")
             logger.info("Get data successfully!")
             self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss")
             logger.info("Plot figure successfully!")
-            self.allure_attach(
-                "dygraph2static_train_loss.png", "dygraph2static_train_loss.png", allure.attachment_type.PNG
-            )
+
             # hmeans
-            data_baseline_hmeans = self.get_paddle_data(filepath_baseline, ["hmeans", "test"])
-            logger.info(filepath_prim)
-            data_prime_hmeans = self.get_paddle_data(filepath_prim, ["hmeans", "test"])
+            data_baseline_hmeans = self.get_paddle_data(filepath_baseline, "hmean")
+            data_prime_hmeans = self.get_paddle_data(filepath_prim, "hmean")
             logger.info("Get data successfully!")
             self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans")
             logger.info("Plot figure successfully!")
-            self.allure_attach(
-                "dygraph2static_eval_hmeans.png", "dygraph2static_eval_hmeans.png", allure.attachment_type.PNG
-            )
 
     def build_end(self):
         """
@@ -276,7 +219,7 @@ class PaddleOCR_End(object):
         # logger.info("config_report_enviorement_variable start")
         # self.config_report_enviorement_variable()
         # logger.info("config_report_enviorement_variable end")
-        return ret
+        self.get_traning_curve()
 
 
 def run():
