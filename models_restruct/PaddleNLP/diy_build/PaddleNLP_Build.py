@@ -93,16 +93,17 @@ class PaddleNLP_Build(Model_Build):
         if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
         
-        os.chdir(self.reponame)
-        logger.info("installing develop ppdiffusers")
-        os.system("python ./ppdiffusers/setup.py install")
-        
-        logger.info("installing develop PaddleNLP")
-        os.system("python setup.py bdist_wheel")
-        cmd_return = os.system(" python -m pip install -U dist/p****.whl")
-        # cmd_return = os.system(
-        #     "python -m pip install --pre --upgrade paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html"
-        # )
+        if os.path.exists(self.reponame):
+            os.chdir(self.reponame)
+            logger.info("installing develop ppdiffusers")
+            os.system("python ./ppdiffusers/setup.py install")
+            
+            logger.info("installing develop PaddleNLP")
+            os.system("python setup.py bdist_wheel")
+            cmd_return = os.system(" python -m pip install -U dist/p****.whl")
+            # cmd_return = os.system(
+            #     "python -m pip install --pre --upgrade paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html"
+            # )
 
         os.chdir(path_now)
 
