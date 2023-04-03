@@ -62,7 +62,8 @@ case:
         cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
-          - -o Optimizer.lr.learning_rate=0.05- -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/MobileNetV3_dy2st
@@ -76,7 +77,8 @@ case:
         cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
-          - -o Optimizer.lr.learning_rate=0.05- -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/MobileNetV3_dy2st_cinn
@@ -90,7 +92,8 @@ case:
         cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
-          - -o Optimizer.lr.learning_rate=0.05- -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/MobileNetV3_dy2st_prim
@@ -104,7 +107,8 @@ case:
         cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
         params:
           - -o Global.to_static=True
-          - -o Optimizer.lr.learning_rate=0.05- -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o Optimizer.lr.learning_rate=0.05
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/MobileNetV3_dy2st_prim_cinn

@@ -51,8 +51,9 @@ class PaddleClas_End(object):
                     os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "eval"
                 )
                 draw(train_log_info_map, self.dy2st_yaml, "eval")
-        except:
+        except Exception as e:
             logger.info("draw picture failed")
+            logger.info("error info : {}".format(e))
         os.chdir(path_now)
         return 0
 
