@@ -55,6 +55,7 @@ class PaddleDetection_End(object):
         #step1, loss1 = self.get_loss(self.standard_log_path)
         #step2, loss2 = self.get_loss(self.prim_log_path)
         #file_name=''
+        #plt.
     
     def build_end(self):
         """

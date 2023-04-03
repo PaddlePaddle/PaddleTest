@@ -30,7 +30,6 @@ class PaddleSeg_Start(object):
         if "prim" in self.rd_yaml_path:
             logger.info("###prim mode")
             self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
-            logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
             os.environ["FLAGS_prim_all"] = "True"
             self.env_dict["FLAGS_prim_all"] = "True"
             logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
@@ -51,6 +50,8 @@ class PaddleSeg_Start(object):
         logger.info("###self.model_name: {}".format(self.model))
         self.env_dict["model"] = self.model
         os.environ["model"] = self.model
+        self.env_dict["rd_yaml_path"] = self.rd_yaml_path
+        os.environ["rd_yaml_path"] = self.rd_yaml_path
 
     def prepare_env(self):
         """
