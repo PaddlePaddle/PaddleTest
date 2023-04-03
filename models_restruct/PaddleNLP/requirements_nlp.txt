@@ -32,4 +32,4 @@ pythainlp
 kytea
 fast-tokenizer-python
 lac
-ppdiffusers
+ppdiffusers==0.14.0
