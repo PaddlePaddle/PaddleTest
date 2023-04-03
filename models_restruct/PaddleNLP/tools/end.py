@@ -37,7 +37,7 @@ class PaddleNLP_End(object):
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_")
 
     def drow_picture(self, model_name, baseline_info, stategy_info):
-        """ drowing loss curve"""
+        """drowing loss curve"""
         num = 1
         for key, value in stategy_info.items():
             plt.subplot(1, len(stategy_info.items()), num)
