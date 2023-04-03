@@ -58,7 +58,7 @@ class PaddleDetection_End(object):
                         num += 1
         return step, loss
 
-     def draw_curve(self):
+    def draw_curve(self):
         """
         绘制曲线
         """
