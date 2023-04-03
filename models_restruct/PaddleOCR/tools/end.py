@@ -143,7 +143,6 @@ class PaddleOCR_End(object):
             ax.set_ylim([0, math.ceil(np.percentile(ydata1, 99))])
         else:
             ax.set_ylim([0, math.ceil(max(ydata1))])
-        
 
         ax.set_xlabel("iteration")
         ax.set_ylabel(value)
@@ -156,7 +155,6 @@ class PaddleOCR_End(object):
             os.makedirs("picture")
         plt.savefig("picture/dygraph2static_" + value + ".png")
 
-
     def get_paddle_data(self, filepath, kpi):
         """
         get_paddle_data(
@@ -167,7 +165,7 @@ class PaddleOCR_End(object):
             if kpi + ":" in line:
                 if "current" in line:
                     pass
-                else:               
+                else:
                     regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
                     r = re.findall(regexp, line)
                     # 如果解析不到符合格式到指标，默认值设置为-1
