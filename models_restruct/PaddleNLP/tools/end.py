@@ -93,7 +93,7 @@ class PaddleNLP_End(object):
                 baseline_info["baseline"] = self.get.metrics(file, "loss")
             else:
                 strategy = file.split("train_")[-1].replace(".log", "")
-                stategy_info[strategy] = self.get.metrics(file, "loss")
+                stategy_info[strategy] = self.get_metrics(file, "loss")
 
         self.drow_picture(self.qa_yaml_name, baseline_info, stategy_info)
 
