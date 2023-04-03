@@ -11,5 +11,3 @@ case:
             cmd : export CUDA_VISIBLE_DEVICES=1; python tools/train.py
             params:
               - -c configs/det/det_r50_vd_db.yml
-
-
