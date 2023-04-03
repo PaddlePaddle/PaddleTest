@@ -30,12 +30,10 @@ class PaddleSeg_Start(object):
             self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
             os.environ["FLAGS_prim_all"] = True
             self.env_dict["FLAGS_prim_all"] = True
-            self.prim = True
         if "static" in self.rd_yaml_path:
             self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
             os.environ["FLAGS_prim_all"] = False
             self.env_dict["FLAGS_prim_all"] = False
-            self.prim = True
         logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
@@ -53,7 +51,7 @@ class PaddleSeg_Start(object):
         """
         环境变量设置
         """
-        if self.prim and os.path.exists("PaddleSeg/data/cityscapes"):
+        if "prim" in self.rd_yaml_path or "static" in self.rd_yaml_path and os.path.exists("PaddleSeg/data/cityscapes"):
             shutil.rmtree("PaddleSeg/data/cityscapes")
             cmd1 = "wget -P PaddleSeg/data https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes_pri_prim.zip"
             cmd2 = "unzip -q -d PaddleSeg/data/ PaddleSeg/data/cityscapes_pri_prim.zip"
