@@ -102,7 +102,7 @@ class PaddleNLP_End(object):
         执行准备过程
         """
         # 进入repo中
-        logger.info("build remove_data start")
+        logger.info("build analysis log start")
         ret = 0
         ret = self.analysis_log()
         if ret:
