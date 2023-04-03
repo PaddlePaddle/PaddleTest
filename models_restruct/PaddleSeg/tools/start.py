@@ -29,16 +29,16 @@ class PaddleSeg_Start(object):
         logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         if "prim" in self.rd_yaml_path:
             logger.info("###prim mode")
-            self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
+        #    self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
             os.environ["FLAGS_prim_all"] = "True"
             self.env_dict["FLAGS_prim_all"] = "True"
-            logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
+        #    logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         if "static" in self.rd_yaml_path:
             logger.info("###no prim mode")
-            self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
+       #     self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
             os.environ["FLAGS_prim_all"] = "False"
             self.env_dict["FLAGS_prim_all"] = "False"
-            logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
+       #     logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
@@ -50,8 +50,8 @@ class PaddleSeg_Start(object):
         logger.info("###self.model_name: {}".format(self.model))
         self.env_dict["model"] = self.model
         os.environ["model"] = self.model
-        self.env_dict["rd_yaml_path"] = self.rd_yaml_path
-        os.environ["rd_yaml_path"] = self.rd_yaml_path
+       # self.env_dict["rd_yaml_path"] = self.rd_yaml_path
+       # os.environ["rd_yaml_path"] = self.rd_yaml_path
 
     def prepare_env(self):
         """
