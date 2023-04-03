@@ -36,6 +36,7 @@ class PaddleNLP_End(object):
 
     def drow_picture(self, model_name, baseline_info, strategy_info):
         """drowing loss curve"""
+        logger.info("strategy_info {}".format(strategy_info))
         num = 1
         for key, value in strategy_info.items():
             plt.subplot(1, len(strategy_info.items()), num)
@@ -51,7 +52,8 @@ class PaddleNLP_End(object):
             if  num == 1:
                 plt.xlabel("step")
                 plt.ylabel("loss")
-                plt.title(model_name)
+                picture_name = model_name.lstrip('model_zoo^').capitalize()
+                plt.title(picture_name)
             num = num + 1
         if not os.path.exists("picture"):
             os.makedirs("picture")
@@ -71,7 +73,6 @@ class PaddleNLP_End(object):
                 r = re.findall(regexp, line)
                 # 如果解析不到符合格式到指标，默认值设置为-1
                 kpi_value = float(r[0].strip()) if len(r) > 0 else -1
-                logger.info("kpi_value:{}".format(kpi_value))
                 data_list.append(kpi_value)
         f.close()
         return data_list
