@@ -52,13 +52,13 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.1-trt8.0-gcc8.2"}
     else
-        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.2-cudnn8.2-gcc82"}
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.2-cudnn8.2-trt8.0-gcc82"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4.0-trt8.4.0.6-gcc82"}
     else
-        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6.2-cudnn8.4.0-gcc82"}
+        export Image_version=${Image_version:-"registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.6.2-cudnn8.4.0-trt8.4.0.6-gcc82"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
@@ -378,7 +378,7 @@ if [[ "${docker_flag}" == "" ]]; then
             mv ${mount_path} ${mount_path}_back
             mkdir -p ${mount_path}
         else
-            mkdir -p ${else}
+            mkdir -p ${mount_path}
         fi
         mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
         ls ${mount_path}

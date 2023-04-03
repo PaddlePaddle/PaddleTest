@@ -28,6 +28,7 @@ class PaddleSeg_Build(Model_Build):
         """
         初始化变量
         """
+        self.data_path_endswith = "data"
         self.paddle_whl = args.paddle_whl
         self.get_repo = args.get_repo
         self.branch = args.branch
@@ -38,6 +39,19 @@ class PaddleSeg_Build(Model_Build):
 
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
+        self.mount_path = str(os.getenv("mount_path"))
+        if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(
+            self.mount_path
+        ):  # linux 性能损失使用自动下载的数据,不使用mount数据
+            logger.info("#### mount_path diy_build is {}".format(self.mount_path))
+            if os.listdir(self.mount_path) != []:
+                self.dataset_org = self.mount_path
+                os.environ["dataset_org"] = self.mount_path
+                self.dataset_target = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
+                os.environ["dataset_target"] = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
+        logger.info("#### dataset_org in diy_build is  {}".format(self.dataset_org))
+        logger.info("#### dataset_target in diy_build is  {}".format(self.dataset_target))
+
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.seg_model_list = []
@@ -68,17 +82,10 @@ class PaddleSeg_Build(Model_Build):
         os.system("python -m pip install zip --ignore-installed")
         os.system("pip uninstall bce-python-sdk -y")
         os.system("pip install bce-python-sdk==0.8.74 --ignore-installed")
+        os.system("python -m pip install paddle2onnx")
+        os.system("python -m pip install onnxruntime")
         wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/demo.tar")
         os.system("tar xvf demo.tar")
-        logger.info("****start pretrain model prepare")
-        if os.path.exists("seg_dynamic_pretrain"):
-            shutil.rmtree("seg_dynamic_pretrain")
-        if platform.system() == "Linux":
-            os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
-        elif platform.system() == "Windows":
-            os.system("mklink /J seg_dynamic_pretrain {}".format("D:\\ce_data\\PaddleSeg\\seg_pretrained"))
-        else:
-            os.system("mkdir seg_dynamic_pretrain")
         if os.path.exists("C:/Program Files/Git/usr/bin/sed.exe"):
             os.environ["sed"] = "C:/Program Files/Git/usr/bin/sed.exe"
         else:
@@ -88,27 +95,36 @@ class PaddleSeg_Build(Model_Build):
             subprocess.run(cmd_voc)
         else:
             subprocess.run(cmd_voc, shell=True)
-        os.system("mkdir data")
-        os.chdir("data")
-        if os.path.exists("cityscapes"):
-            shutil.rmtree("cityscapes")
-        if os.path.exists("voc"):
-            shutil.rmtree("voc")
-        logger.info("***start download data")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes.zip")
-        os.system("unzip -q cityscapes.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/voc.zip")
-        os.system("unzip -q voc.zip")
-        os.system("mv voc/VOCdevkit .")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/ADEChallengeData2016.zip")
-        os.system("unzip -q ADEChallengeData2016.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/PP-HumanSeg14K.zip")
-        os.system("unzip -q PP-HumanSeg14K.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/camvid.zip")
-        os.system("unzip -q camvid.zip")
-        wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/mini_supervisely.zip")
-        os.system("unzip -q mini_supervisely.zip")
-        logger.info("***download data ended")
+        # prepare pretrain model
+        if platform.system() == "Linux":
+            os.system("mkdir data")
+            os.chdir("data")
+            os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
+            if os.path.exists("cityscapes"):
+                shutil.rmtree("cityscapes")
+            if os.path.exists("voc"):
+                shutil.rmtree("voc")
+            logger.info("***start download data")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes.zip")
+            os.system("unzip -q cityscapes.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleDetection/voc.zip")
+            os.system("unzip -q voc.zip")
+            os.system("mv voc/VOCdevkit .")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/ADEChallengeData2016.zip")
+            os.system("unzip -q ADEChallengeData2016.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/PP-HumanSeg14K.zip")
+            os.system("unzip -q PP-HumanSeg14K.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/camvid.zip")
+            os.system("unzip -q camvid.zip")
+            wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/mini_supervisely.zip")
+            os.system("unzip -q mini_supervisely.zip")
+            logger.info("***download data ended")
+        else:
+            if os.path.exists(self.dataset_target):
+                shutil.rmtree(self.dataset_target)
+            exit_code = os.symlink(self.dataset_org, self.dataset_target)
+            if exit_code:
+                logger.info("#### link_dataset failed")
         # cpp infer compile
         if platform.system() == "Linux":
             os.chdir(path_repo + "/deploy/cpp")

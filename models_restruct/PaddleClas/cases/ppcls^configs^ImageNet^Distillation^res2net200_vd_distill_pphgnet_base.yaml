@@ -1,4 +1,5 @@
 #跳过 predict trained 因为训练不足出nan   train也会出nan，只判断退出码   无预训练模型所以跳过整个predict过程（pretrained）
+# 无pretrianed
 case:
   linux:
     base: ./base/ImageNet_base.yaml
@@ -16,18 +17,12 @@ case:
     eval:
       -
         name: trained
-      -
-        name: pretrained
     infer:
       -
         name: trained
-      -
-        name: pretrained
     export:
       -
         name: trained
-      -
-        name: pretrained
     predict: skipped
 
   linux_convergence:
@@ -60,18 +55,12 @@ case:
     eval:
       -
         name: function
-      -
-        name: pretrained
     infer:
       -
         name: function
-      -
-        name: pretrained
     export:
       -
         name: function
-      -
-        name: pretrained
     predict: skipped
 
   windows_cpu:
@@ -86,8 +75,6 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
     infer:
@@ -95,8 +82,6 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
     export:
@@ -104,8 +89,6 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
     predict: skipped
@@ -121,17 +104,11 @@ case:
         name: function_dy2st
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: function_amp
-        params:
-          - -o Global.device=${set_cuda_flag}
     eval:
       -
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
     infer:
@@ -139,8 +116,6 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
     export:
@@ -148,8 +123,6 @@ case:
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
     predict: skipped
