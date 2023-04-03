@@ -96,7 +96,7 @@ class PaddleNLP_Build(Model_Build):
         if os.path.exists(self.reponame):
             os.chdir(self.reponame)
             logger.info("installing develop ppdiffusers")
-            os.system("python ./ppdiffusers/setup.py install")
+            os.system("python pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
             
             logger.info("installing develop PaddleNLP")
             os.system("python setup.py bdist_wheel")
@@ -104,11 +104,12 @@ class PaddleNLP_Build(Model_Build):
             # cmd_return = os.system(
             #     "python -m pip install --pre --upgrade paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html"
             # )
+            if cmd_return:
+                logger.info("repo {} python -m pip install-failed".format(self.reponame))
 
         os.chdir(path_now)
 
-        if cmd_return:
-            logger.info("repo {} python -m pip install-failed".format(self.reponame))
+        
 
         os.system("python -m pip list")
         import paddle
