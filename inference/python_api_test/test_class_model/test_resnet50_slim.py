@@ -90,6 +90,8 @@ def test_int8_more_bz():
             max_batch_size=max_batch_size,
             precision="trt_int8",
             use_calib_mode=True,
+            dynamic=True,
+            tuned=True,
         )
 
         del test_suite  # destroy class to save memory

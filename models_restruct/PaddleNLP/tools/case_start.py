@@ -65,6 +65,7 @@ class PaddleNLP_Case_Start(object):
             logger.info("set FLAGS_deny_cinn_ops as {}".format(os.getenv("FLAGS_deny_cinn_ops")))
             logger.info("set FLAGS_nvrtc_compile_to_cubin as {}".format(os.getenv("FLAGS_nvrtc_compile_to_cubin")))
 
+
         elif "gpt_convergence" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 

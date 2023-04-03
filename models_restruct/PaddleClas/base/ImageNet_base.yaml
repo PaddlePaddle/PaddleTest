@@ -24,9 +24,6 @@ train:
       - -o Global.save_interval=1
       - -o Global.eval_interval=1
       - -o Global.output_dir=output/${qa_yaml_name}_train_function_amp
-      - -o Optimizer.multi_precision=True
-      - -o Optimizer.lr.name=Cosine
-      - -o DataLoader.Train.loader.use_shared_memory=False
       - -o AMP.scale_loss=128
       - -o AMP.use_dynamic_loss_scaling=True
       - -o AMP.level=O2
@@ -74,9 +71,6 @@ train:
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
       - -o Global.output_dir=output/${qa_yaml_name}_train_single_amp
-      - -o Optimizer.multi_precision=True
-      - -o Optimizer.lr.name=Cosine
-      - -o DataLoader.Train.loader.use_shared_memory=False
       - -o AMP.scale_loss=128
       - -o AMP.use_dynamic_loss_scaling=True
       - -o AMP.level=O2
@@ -96,9 +90,6 @@ train:
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
       - -o Global.output_dir=output/${qa_yaml_name}_train_single_amp_dy2st
-      - -o Optimizer.multi_precision=True
-      - -o Optimizer.lr.name=Cosine
-      - -o DataLoader.Train.loader.use_shared_memory=False
       - -o AMP.scale_loss=128
       - -o AMP.use_dynamic_loss_scaling=True
       - -o AMP.level=O2
@@ -152,9 +143,6 @@ train:
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
       - -o Global.output_dir=output/${qa_yaml_name}_train_multi_amp
-      - -o Optimizer.multi_precision=True
-      - -o Optimizer.lr.name=Cosine
-      - -o DataLoader.Train.loader.use_shared_memory=False
       - -o AMP.scale_loss=128
       - -o AMP.use_dynamic_loss_scaling=True
       - -o AMP.level=O2
@@ -174,9 +162,6 @@ train:
       - -o DataLoader.Train.loader.num_workers=0
       - -o DataLoader.Train.sampler.shuffle=False
       - -o Global.output_dir=output/${qa_yaml_name}_train_multi_amp_dy2st
-      - -o Optimizer.multi_precision=True
-      - -o Optimizer.lr.name=Cosine
-      - -o DataLoader.Train.loader.use_shared_memory=False
       - -o AMP.scale_loss=128
       - -o AMP.use_dynamic_loss_scaling=True
       - -o AMP.level=O2
