@@ -106,7 +106,7 @@ class PaddleNLP_Build(Model_Build):
                 logger.info("repo {} python -m pip install-failed".format(self.reponame))
             
             logger.info("installing develop ppdiffusers")
-            os.system("python pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
+            os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
         os.chdir(path_now)
 
         os.system("python -m pip list")
