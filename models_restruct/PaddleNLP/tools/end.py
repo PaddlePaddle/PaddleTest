@@ -36,7 +36,6 @@ class PaddleNLP_End(object):
 
     def drow_picture(self, model_name, baseline_info, strategy_info):
         """drowing loss curve"""
-        logger.info("strategy_info {}".format(strategy_info))
         num = 1
         for key, value in strategy_info.items():
             plt.subplot(1, len(strategy_info.items()), num)
@@ -96,7 +95,7 @@ class PaddleNLP_End(object):
             logger.info("check log file is {}".format(file))
             if re.compile("baseline").findall(file):
                 baseline_info["baseline"] = self.get_metrics(self.TRAIN_LOG_PATH+'/'+file, "loss")
-            else:
+            elif re.compile("dy2st").findall(file):
                 strategy = file.split("train_")[-1].replace(".log", "")
                 strategy_info[strategy] = self.get_metrics(self.TRAIN_LOG_PATH+'/'+file, "loss")
 
