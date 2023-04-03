@@ -29,18 +29,16 @@ class PaddleNLP_End(object):
         """
         self.pipeline_name = os.environ[
             "AGILE_PIPELINE_NAME"
-        ]  # PaddleNLP-LinuxConvergence-Cuda112-Python38-GPT-Develop
+        ]
         self.reponame = os.environ["reponame"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
-        self.case_step = os.environ["case_step"]
-        self.case_name = os.environ["case_name"]
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name)
 
-    def drow_picture(self, model_name, baseline_info, stategy_info):
+    def drow_picture(self, model_name, baseline_info, strategy_info):
         """drowing loss curve"""
         num = 1
-        for key, value in stategy_info.items():
-            plt.subplot(1, len(stategy_info.items()), num)
+        for key, value in strategy_info.items():
+            plt.subplot(1, len(strategy_info.items()), num)
             plt.plot(
                 [i for i in range(len(baseline_info["baseline"]))],
                 baseline_info["baseline"],
@@ -50,8 +48,10 @@ class PaddleNLP_End(object):
             plt.plot([i for i in range(len(baseline_info["baseline"]))], value, color="r", label=key)
 
             plt.legend()
-            picture_name = model_name + "_baseline_{}".format(key)
-            plt.title(picture_name)
+            if  num == 1:
+                plt.xlabel("step")
+                plt.ylabel("loss")
+                plt.title(model_name)
             num = num + 1
         if not os.path.exists("picture"):
             os.makedirs("picture")
@@ -63,7 +63,7 @@ class PaddleNLP_End(object):
         get metrics:
         loss acc ips ...
         """
-        kpi_value = -1
+        data_list = []
         f = open(filename, encoding="utf-8", errors="ignore")
         for line in f.readlines():
             if kpi + ":" in line:
@@ -71,9 +71,10 @@ class PaddleNLP_End(object):
                 r = re.findall(regexp, line)
                 # 如果解析不到符合格式到指标，默认值设置为-1
                 kpi_value = float(r[0].strip()) if len(r) > 0 else -1
-                print(kpi_value)
+                logger.info("kpi_value:{}".format(kpi_value))
+                data_list.append(kpi_value)
         f.close()
-        return kpi_value
+        return data_list
 
     def analysis_log(self):
         """
@@ -93,10 +94,10 @@ class PaddleNLP_End(object):
         for file in os.listdir(self.TRAIN_LOG_PATH):
             logger.info("check log file is {}".format(file))
             if re.compile("baseline").findall(file):
-                baseline_info["baseline"] = self.get_metrics(file, "loss")
+                baseline_info["baseline"] = self.get_metrics(self.TRAIN_LOG_PATH+'/'+file, "loss")
             else:
                 strategy = file.split("train_")[-1].replace(".log", "")
-                strategy_info[strategy] = self.get_metrics(file, "loss")
+                strategy_info[strategy] = self.get_metrics(self.TRAIN_LOG_PATH+'/'+file, "loss")
 
         self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info)
 
