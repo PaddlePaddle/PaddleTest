@@ -92,12 +92,10 @@ class PaddleNLP_Build(Model_Build):
 
         if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
+
         
         if os.path.exists(self.reponame):
             os.chdir(self.reponame)
-            logger.info("installing develop ppdiffusers")
-            os.system("python pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
-            
             logger.info("installing develop PaddleNLP")
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system(" python -m pip install -U dist/p****.whl")
@@ -106,10 +104,10 @@ class PaddleNLP_Build(Model_Build):
             # )
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format(self.reponame))
-
+            
+            logger.info("installing develop ppdiffusers")
+            os.system("python pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
         os.chdir(path_now)
-
-        
 
         os.system("python -m pip list")
         import paddle
