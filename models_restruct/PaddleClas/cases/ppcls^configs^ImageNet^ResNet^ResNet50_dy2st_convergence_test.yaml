@@ -10,6 +10,8 @@ case:
         params:
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
@@ -22,6 +24,8 @@ case:
         params:
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_cinn
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
@@ -34,6 +38,8 @@ case:
         params:
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_prim
+          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
         result:
@@ -43,60 +49,6 @@ case:
             evaluation: "-"
       -
         name: dy2st_prim_cinn
-        params:
-          - -o Global.to_static=True
-          - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
-        result:
-          loss:
-            base: 6
-            threshold: 1
-            evaluation: "-"
-      -
-        name: dy2st_test
-        params:
-          - -o Global.to_static=True
-          - -o Global.output_dir=output/ResNet50_dy2st
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
-        result:
-          loss:
-            base: 6
-            threshold: 1
-            evaluation: "-"
-      -
-        name: dy2st_cinn_test
-        params:
-          - -o Global.to_static=True
-          - -o Global.output_dir=output/ResNet50_dy2st_cinn
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
-        result:
-          loss:
-            base: 6
-            threshold: 1
-            evaluation: "-"
-      -
-        name: dy2st_prim_test
-        params:
-          - -o Global.to_static=True
-          - -o Global.output_dir=output/ResNet50_dy2st_prim
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
-          - -o Optimizer.lr.name=Cosine
-          - -o Global.use_dali=True
-        result:
-          loss:
-            base: 6
-            threshold: 1
-            evaluation: "-"
-      -
-        name: dy2st_prim_cinn_test
         params:
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
