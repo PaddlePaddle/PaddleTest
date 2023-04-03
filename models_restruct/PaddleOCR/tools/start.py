@@ -390,7 +390,7 @@ class PaddleOCR_Start(object):
         # 进入repo中
         if self.category == "benchmark":
             print("PaddleOCR/benchmark")
-        elif "convergence" in self.model: 
+        elif "convergence" in self.model:
             print("Convergence Test")
         else:
             ret = 0
