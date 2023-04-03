@@ -30,10 +30,12 @@ class PaddleSeg_Start(object):
             self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
             os.environ["FLAGS_prim_all"] = True
             self.env_dict["FLAGS_prim_all"] = True
+            logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         if "static" in self.rd_yaml_path:
             self.rd_yaml_path = self.rd_yaml_path.split("/", 1)[1]
             os.environ["FLAGS_prim_all"] = False
             self.env_dict["FLAGS_prim_all"] = False
+            logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
