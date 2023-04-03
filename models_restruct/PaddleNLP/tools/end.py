@@ -34,7 +34,7 @@ class PaddleNLP_End(object):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.case_step = os.environ["case_step"]
         self.case_name = os.environ["case_name"]
-        self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name, "train_")
+        self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name)
 
     def drow_picture(self, model_name, baseline_info, stategy_info):
         """drowing loss curve"""
