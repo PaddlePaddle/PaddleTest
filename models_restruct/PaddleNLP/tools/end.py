@@ -104,11 +104,11 @@ class PaddleNLP_End(object):
         # 进入repo中
         logger.info("build remove_data start")
         ret = 0
-        ret = self.remove_data()
+        ret = self.analysis_log()
         if ret:
-            logger.info("build remove_data failed")
+            logger.info("build analysis log failed")
             return ret
-        logger.info("build remove_data end")
+        logger.info("build analysis log end")
         return ret
 
 
