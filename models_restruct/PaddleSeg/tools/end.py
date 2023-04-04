@@ -28,10 +28,10 @@ class PaddleDetection_End(object):
         """
         self.reponame = os.environ["reponame"]
         self.model = os.environ["model"]
-        self.qa_model_name = os.environ["qa_model_name"]
+        self.qa_model_name = os.environ["qa_yaml_name"]
         self.log_dir = "logs"
         self.log_name = "train_prim_single.log"
-        self.log_path = os.path.join(os.getcwd(), self.log_dir, self.reponame, self.qa_model_name,self.log_name)
+        self.log_path = os.path.join(os.getcwd(), self.log_dir, self.reponame, self.qa_model_name, self.log_name)
         if "prim" in self.qa_model_name:
             self.prim_log_path = self.log_path
         if "static" in self.qa_model_name:
