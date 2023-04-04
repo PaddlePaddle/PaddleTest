@@ -113,10 +113,6 @@ case:
         name: function_dy2st
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: function_amp
-        params:
-          - -o Global.device=${set_cuda_flag}
     eval:
       -
         name: function

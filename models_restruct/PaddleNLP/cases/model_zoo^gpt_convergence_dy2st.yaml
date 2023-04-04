@@ -1,0 +1,45 @@
+case:
+  linux_convergence:
+    train:
+      -
+        name: prepare_datasets
+        path: model_zoo/gpt
+        cmd: mkdir data && cd data && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy
+      -
+        name: dy2st_baseline
+        path: model_zoo/gpt
+        cmd: python run_pretrain.py
+        params:
+          - --model_type gpt
+          - --model_name_or_path gpt2-en
+          - --input_dir "./data"
+          - --output_dir "output_base"
+          - --weight_decay 0.01
+          - --grad_clip 1.0
+          - --max_steps 150000
+          - --save_steps 100000
+          - --decay_steps 320000
+          - --warmup_rate 0.01
+          - --micro_batch_size 2
+          - --device gpu
+          - --to_static
+          - --seed 100
+      -
+        name: dy2st_prim
+        path: model_zoo/gpt
+        cmd: python run_pretrain.py
+        params:
+          - --model_type gpt
+          - --model_name_or_path gpt2-en
+          - --input_dir "./data"
+          - --output_dir "output_prim"
+          - --weight_decay 0.01
+          - --grad_clip 1.0
+          - --max_steps 150000
+          - --save_steps 100000
+          - --decay_steps 320000
+          - --warmup_rate 0.01
+          - --micro_batch_size 2
+          - --device gpu
+          - --to_static
+          - --seed 100

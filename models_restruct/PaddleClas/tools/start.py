@@ -523,8 +523,10 @@ class PaddleClas_Start(object):
 
                 with open(os.path.join("cases", self.qa_yaml_name) + ".yaml", "w") as f:
                     yaml.dump(content, f, sort_keys=False)
-        except:
+        # except:
+        except Exception as e:
             logger.info("do not update yaml value !!!!")
+            logger.info("error info : {}".format(e))
 
     def build_prepare(self):
         """

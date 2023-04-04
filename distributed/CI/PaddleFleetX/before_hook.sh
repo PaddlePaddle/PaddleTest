@@ -40,9 +40,7 @@ function requirements() {
     export http_proxy=${proxy}
     export https_proxy=${proxy}
     python -m pip install -r requirements.txt --force-reinstall
-    python -m pip install setuptools==50.3.2
     cd ppfleetx/ops && python setup_cuda.py install && cd ../..
-
     python -m pip list|grep paddle
 }
 

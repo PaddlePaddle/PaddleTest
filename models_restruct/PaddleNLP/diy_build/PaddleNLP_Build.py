@@ -57,12 +57,13 @@ class PaddleNLP_Build(Model_Build):
         """
         安装依赖包
         """
-        # path_now = os.getcwd()
+        path_now = os.getcwd()
         platform = self.system
         os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
         print(os.environ["no_proxy"])
 
-        if platform == "linux":
+        if platform == "linux" or platform == "linux_convergence":
+            print("linux")
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall paddlepaddle -y")
@@ -92,17 +93,18 @@ class PaddleNLP_Build(Model_Build):
         if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
-        # os.chdir("PaddleNLP")
-        # os.system("python setup.py bdist_wheel")
-        # cmd_return = os.system(" python -m pip install -U dist/p****.whl")
-        cmd_return = os.system(
-            "python -m pip install --pre --upgrade paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html"
-        )
+        if os.path.exists(self.reponame):
+            os.chdir(self.reponame)
+            logger.info("installing develop PaddleNLP")
+            os.system("python setup.py bdist_wheel")
+            cmd_return = os.system(" python -m pip install -U dist/p****.whl")
 
-        # os.chdir(path_now)
+            if cmd_return:
+                logger.info("repo {} python -m pip install-failed".format(self.reponame))
 
-        if cmd_return:
-            logger.info("repo {} python -m pip install-failed".format(self.reponame))
+            logger.info("installing develop ppdiffusers")
+            os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
+        os.chdir(path_now)
 
         os.system("python -m pip list")
         import paddle

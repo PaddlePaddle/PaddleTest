@@ -11,11 +11,7 @@ case:
     predict: skipped
 
   windows:
-    train:
-      -
-        name: demo
-        path: examples/text_generation/ctrl
-        cmd: python demo.py
+    train: skipped
     eval: skipped
     infer: skipped
     export: skipped

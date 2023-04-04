@@ -8,13 +8,9 @@ case:
         params:
           - --dataset_name=cnn_dailymail
           - --max_target_length=142
-          - --learning_rate=1e-4
           - --logging_steps=1
           - --save_steps=1
-          - --seed=42
           - --train_batch_size=2
-          - --eval_batch_size=32
-          - --warmup_proportion=0.1
           - --model_name_or_path=bart-base
           - --output_dir=output
           - --max_steps 1
@@ -28,17 +24,11 @@ case:
         cmd: python generate.py
         params:
           - --dataset_name=cnn_dailymail
-          - --max_target_length=142
-          - --learning_rate=1e-4
-          - --logging_steps=1
-          - --save_steps=1
-          - --seed=42
+          - --model_name_or_path=bart-base
+          - --logging_steps=100
           - --train_batch_size=2
           - --eval_batch_size=32
-          - --warmup_proportion=0.1
-          - --model_name_or_path=bart-base
           - --output_dir=output
-          - --max_steps 1
 
   windows:
     train: skipped
