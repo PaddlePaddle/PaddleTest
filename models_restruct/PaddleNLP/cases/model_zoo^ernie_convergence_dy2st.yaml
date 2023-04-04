@@ -18,7 +18,7 @@ case:
           - --seed 42
           - --task_name tnews
           - --to_static
-          - --max_steps=333500
+          - --max_steps=50000
           - --use_amp=False
           - --batch_size=16
       -
@@ -38,6 +38,6 @@ case:
           - --seed 42
           - --task_name tnews
           - --to_static
-          - --max_steps=333500
+          - --max_steps=50000
           - --use_amp=False
           - --batch_size=16
