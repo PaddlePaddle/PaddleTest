@@ -349,6 +349,20 @@ class Jelly_v2(object):
         if self.framework == "paddle":
             self.paddle_total()
 
+    def _return_forward(self):
+        """
+        返回前向时间
+        """
+        # 前反向时间
+        self._run_forward()
+        # if self.enable_backward:
+        #     self._run_total()
+        # 数据处理
+        head = int(self.loops / 5)
+        tail = int(self.loops - self.loops / 5)
+        res = sum(sorted(self.forward_time)[head:tail]) / (tail - head)
+        return res
+
     def _compute(self):
         """
         数据处理
