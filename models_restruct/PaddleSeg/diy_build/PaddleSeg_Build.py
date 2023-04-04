@@ -33,6 +33,7 @@ class PaddleSeg_Build(Model_Build):
         self.get_repo = args.get_repo
         self.branch = args.branch
         self.system = args.system
+        self.step = args.step
         self.set_cuda = args.set_cuda
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
@@ -128,7 +129,7 @@ class PaddleSeg_Build(Model_Build):
             if exit_code:
                 logger.info("#### link_dataset failed")
         # cpp infer compile
-        if platform.system() == "Linux":
+        if platform.system() == "Linux" and "api" in self.step:
             os.chdir(path_repo + "/deploy/cpp")
             wget.download(
                 "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos"
