@@ -1,4 +1,5 @@
 ppcls^configs^ImageNet^ResNet^ResNet50_dy2st_convergence:
+  base_mode: 'train_dy2st'
   modes: 'train_dy2st;train_dy2st_cinn;train_dy2st_prim;train_dy2st_prim_cinn'
   epoch: 20
   train:
@@ -8,17 +9,8 @@ ppcls^configs^ImageNet^ResNet^ResNet50_dy2st_convergence:
     targets: top1;top5
     keywords: '[Eval];[Avg]'
 
-ppcls^configs^ImageNet^MobileNetV3^MobileNetV3_large_x1_0_dy2st_convergence:
-  modes: 'train_dy2st;train_dy2st_prim'
-  epoch: 20
-  train:
-    targets: top1;top5;loss
-    keywords: '[Train];ips'
-  eval:
-    targets: top1;top5
-    keywords: '[Eval];[Avg]'
-
 ppcls^configs^CAE^cae_base_patch16_224_finetune_dy2st_convergence:
+  base_mode: 'train_dy2st'
   modes: 'train_dy2st;train_dy2st_prim'
   epoch: 5
   train:
@@ -28,7 +20,8 @@ ppcls^configs^CAE^cae_base_patch16_224_finetune_dy2st_convergence:
     targets: top1;top5
     keywords: '[Eval];[Avg]'
 
-ppcls^configs^ImageNet^ResNet^ResNet50_dy2st_convergence_test:
+ppcls^configs^ImageNet^MobileNetV3^MobileNetV3_large_x1_0_dy2st_convergence:
+  base_mode: 'train_dy2st'
   modes: 'train_dy2st;train_dy2st_prim'
   epoch: 20
   train:
@@ -38,7 +31,19 @@ ppcls^configs^ImageNet^ResNet^ResNet50_dy2st_convergence_test:
     targets: top1;top5
     keywords: '[Eval];[Avg]'
 
+ppcls^configs^ImageNet^ResNet^ResNet50_dy2st_convergence_test:
+  base_mode: 'train_dy2st'
+  modes: 'train_dy2st;train_dy2st_cinn;train_dy2st_prim;train_dy2st_prim_cinn'
+  epoch: 20
+  train:
+    targets: top1;top5;loss
+    keywords: '[Train];ips'
+  eval:
+    targets: top1;top5
+    keywords: '[Eval];[Avg]'
+
 ppcls^configs^CAE^cae_base_patch16_224_finetune_dy2st_convergence_test:
+  base_mode: 'train_dy2st'
   modes: 'train_dy2st;train_dy2st_prim'
   epoch: 5
   train:
@@ -49,6 +54,7 @@ ppcls^configs^CAE^cae_base_patch16_224_finetune_dy2st_convergence_test:
     keywords: '[Eval];[Avg]'
 
 ppcls^configs^ImageNet^MobileNetV3^MobileNetV3_large_x1_0_dy2st_convergence_test:
+  base_mode: 'train_dy2st'
   modes: 'train_dy2st;train_dy2st_prim'
   epoch: 20
   train:

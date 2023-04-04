@@ -56,20 +56,16 @@ case:
     predict:
       -
         name: trained
-        params:
-          - -c configs/inference_cls_ch4.yaml
+        cmd: python python/predict_cls.py -c configs/inference_cls.yaml
       -
         name: trained_mkldnn
-        params:
-          - -c configs/inference_cls_ch4.yaml
+        cmd: python python/predict_cls.py -c configs/inference_cls.yaml
       -
         name: trained_trt
-        params:
-          - -c configs/inference_cls_ch4.yaml
+        cmd: python python/predict_cls.py -c configs/inference_cls.yaml
       -
         name: pretrained
-        params:
-          - -c configs/inference_cls_ch4.yaml
+        cmd: python python/predict_cls.py -c configs/inference_cls.yaml
 
   linux_convergence:
     base: ./base/ImageNet_base.yaml
