@@ -114,7 +114,7 @@ def analysis(log_dir, config, train_or_eval):
     # pattern = '.*top1: (?P<top1>\d+(\.\d+)?).*, .*top5: (?P<top5>\d+(\.\d+)?).*, .*loss: (?P<loss>\d+(\.\d+)?)'
     pattern = ""
     for t in targets:
-        pattern += ".*{}: (?P<{}>\d+(\.\d+)?).*, ".format(t, t)
+        pattern = r".*{}: (?P<{}>\d+(\.\d+)?).*".format(t, t)
     pattern = pattern.rstrip(".*, ")
 
     log_info_map = {}
