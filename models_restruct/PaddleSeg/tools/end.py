@@ -32,7 +32,6 @@ class PaddleDetection_End(object):
         self.log_dir = "logs"
         self.log_name = "train_prim_single.log"
         self.log_path = os.path.join(os.getcwd(), self.log_dir, self.reponame, self.qa_model_name, self.log_name)
-        self.log_path_
         logger.info("log_path:{}".format(log_path))
         self.qa_model_name_base = ""
         self.prim_log_path = ""
