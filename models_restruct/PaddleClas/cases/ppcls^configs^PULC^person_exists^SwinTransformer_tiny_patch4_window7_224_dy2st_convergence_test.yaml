@@ -19,6 +19,7 @@ case:
           - -o AMP.level=O2
           - -o DataLoader.Train.dataset.cls_label_path=dataset/person_exists_demo_data/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/person_exists_demo_data/val_list.txt
+          - -o Global.start_eval_epoch=1
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st
         result:
           loss:
@@ -40,6 +41,7 @@ case:
           - -o AMP.level=O2
           - -o DataLoader.Train.dataset.cls_label_path=dataset/person_exists_demo_data/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/person_exists_demo_data/val_list.txt
+          - -o Global.start_eval_epoch=1
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_cinn
         result:
           loss:
@@ -61,6 +63,7 @@ case:
           - -o AMP.level=O2
           - -o DataLoader.Train.dataset.cls_label_path=dataset/person_exists_demo_data/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/person_exists_demo_data/val_list.txt
+          - -o Global.start_eval_epoch=1
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_prim
         result:
           loss:
@@ -82,6 +85,7 @@ case:
           - -o AMP.level=O2
           - -o DataLoader.Train.dataset.cls_label_path=dataset/person_exists_demo_data/train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/person_exists_demo_data/val_list.txt
+          - -o Global.start_eval_epoch=1
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_prim_cinn
         result:
           loss:

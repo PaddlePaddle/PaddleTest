@@ -34,12 +34,12 @@ ppcls^configs^ImageNet^MobileNetV3^MobileNetV3_large_x1_0_dy2st_convergence:
 ppcls^configs^PULC^person_exists^SwinTransformer_tiny_patch4_window7_224_dy2st_convergence:
   base_mode: 'train_dy2st'
   modes: 'train_dy2st;train_dy2st_prim'
-  epoch: 20
+  epoch: 10
   train:
-    targets: top1;loss
+    targets: top1;top2;loss
     keywords: '[Train];ips'
   eval:
-    targets: top1
+    targets: top1;top2
     keywords: '[Eval];[Avg]'
 
 ppcls^configs^ImageNet^ResNet^ResNet50_dy2st_convergence_test:
@@ -78,10 +78,10 @@ ppcls^configs^ImageNet^MobileNetV3^MobileNetV3_large_x1_0_dy2st_convergence_test
 ppcls^configs^PULC^person_exists^SwinTransformer_tiny_patch4_window7_224_dy2st_convergence_test:
   base_mode: 'train_dy2st'
   modes: 'train_dy2st;train_dy2st_prim'
-  epoch: 20
+  epoch: 10
   train:
-    targets: top1;loss
+    targets: top1;top2;loss
     keywords: '[Train];ips'
   eval:
-    targets: top1
+    targets: top1;top2
     keywords: '[Eval];[Avg]'

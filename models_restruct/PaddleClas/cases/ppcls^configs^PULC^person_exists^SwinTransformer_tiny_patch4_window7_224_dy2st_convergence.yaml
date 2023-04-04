@@ -17,6 +17,7 @@ case:
           - -o AMP.scale_loss=128
           - -o AMP.use_dynamic_loss_scaling=True
           - -o AMP.level=O2
+          - -o Global.start_eval_epoch=1
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st
         result:
           loss:
@@ -36,6 +37,7 @@ case:
           - -o AMP.scale_loss=128
           - -o AMP.use_dynamic_loss_scaling=True
           - -o AMP.level=O2
+          - -o Global.start_eval_epoch=1
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_cinn
         result:
           loss:
@@ -55,6 +57,7 @@ case:
           - -o AMP.scale_loss=128
           - -o AMP.use_dynamic_loss_scaling=True
           - -o AMP.level=O2
+          - -o Global.start_eval_epoch=1
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_prim
         result:
           loss:
@@ -74,6 +77,7 @@ case:
           - -o AMP.scale_loss=128
           - -o AMP.use_dynamic_loss_scaling=True
           - -o AMP.level=O2
+          - -o Global.start_eval_epoch=1
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_prim_cinn
         result:
           loss:
