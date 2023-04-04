@@ -1,0 +1,115 @@
+# 原来是O1, 改成O1, amp yaml包括dali, 跳过windows和mac
+# 增加了 NCHW 所以导出模型 预测增加params
+# num_workers 在 O1 / O2不能为0, 但即使设置为1仍能固定随机量
+case:
+  linux:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+      -
+        name: multi
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+      -
+        name: multi_dy2st
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+      -
+        name: multi_amp
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+      -
+        name: multi_amp_dy2st
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+    eval:
+      -
+        name: trained
+        params:
+          - -o AMP.level=O1
+      -
+        name: pretrained
+        params:
+          - -o AMP.level=O1
+    infer:
+      -
+        name: trained
+      -
+        name: pretrained
+    export:
+      -
+        name: trained
+        params:
+          - -o Arch.data_format="NCHW"
+      -
+        name: pretrained
+        params:
+          - -o Arch.data_format="NCHW"
+    predict:
+      -
+        name: trained
+        params:
+          - -c configs/inference_cls_ch4.yaml
+      -
+        name: trained_mkldnn
+        params:
+          - -c configs/inference_cls_ch4.yaml
+      -
+        name: trained_trt
+        params:
+          - -c configs/inference_cls_ch4.yaml
+      -
+        name: pretrained
+        params:
+          - -c configs/inference_cls_ch4.yaml
+
+  linux_convergence:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single_convergence
+        params:
+          - -o AMP.level=O1
+      -
+        name: multi_convergence
+        params:
+          - -o AMP.level=O1
+      -
+        name: multi_static_convergence
+        params:
+          - -o AMP.level=O1
+
+  windows:
+    base: ./base/ImageNet_base.yaml
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    base: ./base/ImageNet_base.yaml
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+
+  mac:
+    base: ./base/ImageNet_base.yaml
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse

@@ -1,0 +1,56 @@
+case:
+  linux:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: multi
+        path: examples/few_shot/efl
+        cmd: python -m paddle.distributed.launch run_train.py
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+      base: ./base/normal_case.yaml
+      train:
+        -
+          name: single
+          path: examples/few_shot/efl
+          cmd: python -m paddle.distributed.launch run_train.py
+      eval: skipped
+      infer: skipped
+      export: skipped
+      predict: skipped
+
+  windows_cpu:
+      train:
+        -
+          name: train
+          path: examples/few_shot/efl
+          cmd: python run_train.py
+          params:
+            - --max_steps 2
+            - --save_steps 2
+            - --device cpu
+            - --output_dir ./output/
+      eval: skipped
+      infer: skipped
+      export: skipped
+      predict: skipped
+
+  mac:
+    train:
+      -
+        name: train
+        path: examples/few_shot/efl
+        cmd: python run_train.py
+        params:
+          - --max_steps 2
+          - --save_steps 2
+          - --device cpu
+          - --output_dir ./output/
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

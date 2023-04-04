@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 # pylint: enable=wrong-import-position
 
@@ -24,7 +24,7 @@ def check_model_exist():
     """
     check model exist
     """
-    model_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.2.2/nlp/AFQMC_base.tgz"
+    model_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.2.2/nlp/AFQMC_base.tgz"
     if not os.path.exists("./AFQMC_base/inference.pdmodel"):
         wget.download(model_url, out="./")
         tar = tarfile.open("AFQMC_base.tgz")
@@ -38,32 +38,11 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
-    test_suite.config_test()
-
-
-def set_dynamic_shape(config):
-    """
-    set dynamic shape
-    """
-    names = ["embedding_3.tmp_0", "embedding_4.tmp_0", "embedding_5.tmp_0", "unsqueeze2_0.tmp_0"]
-    max_batch = 40
-    max_single_seq_len = 128
-    opt_single_seq_len = 64
-
-    min_shape = [1, 1, 768]
-    max_shape = [max_batch, max_single_seq_len, 768]
-    opt_shape = [1, opt_single_seq_len, 768]
-    config.set_trt_dynamic_shape_info(
-        {names[0]: min_shape, names[1]: min_shape, names[2]: min_shape, names[3]: [1, 1, 1, 1]},
-        {
-            names[0]: max_shape,
-            names[1]: max_shape,
-            names[2]: max_shape,
-            names[3]: [max_batch, 1, 1, max_single_seq_len],
-        },
-        {names[0]: opt_shape, names[1]: opt_shape, names[2]: opt_shape, names[3]: [1, 1, 1, opt_single_seq_len]},
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
     )
+    test_suite.config_test()
 
 
 @pytest.mark.win
@@ -71,12 +50,15 @@ def set_dynamic_shape(config):
 @pytest.mark.trt_fp32
 def test_trt_fp32_bz1():
     """
-    compared trt fp32 batch_size=1 bert outputs with true val
+    compared trt fp32 batch_size = [1] AFQMC_base outputs with true val
     """
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
 
     src_ids = (
         np.array(
@@ -293,16 +275,27 @@ def test_trt_fp32_bz1():
     )
     token_type_ids = np.tile(sent_ids, (40, 1))
 
-    output_data_path = "./AFQMC_base/trt_fp32"
-    output_data_dict = test_suite.get_output_data(output_data_path)
-
     input_data_dict = {"token_type_ids": token_type_ids, "input_ids": input_ids}
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+    del test_suite.pd_config
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
+    test_suite.collect_shape_info(
+        model_path="./AFQMC_base/",
+        input_data_dict=input_data_dict,
+        device="gpu",
+    )
 
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
-    set_dynamic_shape(test_suite2.pd_config)
+    test_suite2.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
     test_suite2.pd_config.exp_disable_tensorrt_ops(["elementwise_sub"])
     test_suite2.trt_more_bz_test(
         input_data_dict,
@@ -312,6 +305,8 @@ def test_trt_fp32_bz1():
         max_batch_size=40,
         use_static=False,
         precision="trt_fp32",
+        dynamic=True,
+        shape_range_file="./AFQMC_base/shape_range.pbtxt",
     )
 
     del test_suite2  # destroy class to save memory
@@ -325,7 +320,10 @@ def test_trt_fp32_bz1_multi_thread():
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
 
     src_ids = (
         np.array(
@@ -542,19 +540,35 @@ def test_trt_fp32_bz1_multi_thread():
     )
     token_type_ids = np.tile(sent_ids, (40, 1))
 
-    output_data_path = "./AFQMC_base/trt_fp32"
-    output_data_dict = test_suite.get_output_data(output_data_path)
-
     input_data_dict = {"token_type_ids": token_type_ids, "input_ids": input_ids}
+    output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+    del test_suite.pd_config
+    test_suite.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
+    test_suite.collect_shape_info(
+        model_path="./AFQMC_base/",
+        input_data_dict=input_data_dict,
+        device="gpu",
+    )
 
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./AFQMC_base/inference.pdmodel", params_file="./AFQMC_base/inference.pdiparams")
-    set_dynamic_shape(test_suite2.pd_config)
+    test_suite2.load_config(
+        model_file="./AFQMC_base/inference.pdmodel",
+        params_file="./AFQMC_base/inference.pdiparams",
+    )
     test_suite2.pd_config.exp_disable_tensorrt_ops(["elementwise_sub"])
     test_suite2.trt_bz1_multi_thread_test(
-        input_data_dict, output_data_dict, min_subgraph_size=5, delta=1e-5, use_static=False, precision="trt_fp32"
+        input_data_dict,
+        output_data_dict,
+        min_subgraph_size=5,
+        delta=1e-5,
+        use_static=False,
+        precision="trt_fp32",
     )
 
     del test_suite2  # destroy class to save memory

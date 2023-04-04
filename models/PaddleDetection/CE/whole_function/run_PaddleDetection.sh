@@ -40,10 +40,8 @@ export http_proxy=${http_proxy}
 export https_proxy=${http_proxy}
 tar xvf paddle_inference.tgz
 sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
-sed -i "s|WITH_TENSORRT=OFF|WITH_TENSORRT=ON|g" scripts/build.sh
 sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh
-sed -i "s|/path/to/paddle_inference|../paddle_inference_install_dir|g" scripts/build.sh
-sed -i "s|TENSORRT_LIB_DIR=/path/to/tensorrt/lib|TENSORRT_LIB_DIR=/usr/local/TensorRT-6.0.1.8/lib|g" scripts/build.sh
+sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh
 sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh
 sh scripts/build.sh
 cd ../..
@@ -61,15 +59,18 @@ if [ -d 'dataset/wider_face' ];then
 rm -rf dataset/wider_face
 fi
 ln -s ${data_path}/data/wider_face dataset/wider_face
-if [ -d "dataset/mot" ];then rm -rf dataset/mot
-fi
-ln -s ${data_path}/data/mot dataset/mot
 if [ -d "dataset/mpii" ];then rm -rf dataset/mpii
 fi
 ln -s ${data_path}/data/mpii_tar dataset/mpii
 if [ -d "dataset/dota" ];then rm -rf dataset/dota
 fi
 ln -s ${data_path}/data/dota dataset/dota
+if [ -d "dataset/dota_ms" ];then rm -rf dataset/dota_ms
+fi
+ln -s ${data_path}/data/dota dataset/dota_ms
+if [ -d "dataset/mot" ];then rm -rf dataset/mot
+fi
+ln -s ${data_path}/data/mot dataset/mot
 if [ -d "dataset/VisDrone2019_coco" ];then rm -rf dataset/VisDrone2019_coco
 fi
 ln -s ${data_path}/data/VisDrone2019_coco dataset/VisDrone2019_coco
@@ -85,9 +86,6 @@ ln -s ${data_path}/data/aic_coco_train_cocoformat.json dataset/aic_coco_train_co
 if [ -d "dataset/AIchallenge" ];then rm -rf dataset/AIchallenge
 fi
 ln -s ${data_path}/data/AIchallenge dataset/AIchallenge
-if [ -d "dataset/spine_coco" ];then rm -rf dataset/spine_coco
-fi
-ln -s ${data_path}/data/spine_coco dataset/spine_coco
 if [ -d "/root/.cache/paddle/weights" ];then rm -rf /root/.cache/paddle/weights
 fi
 ln -s ${data_path}/data/ppdet_pretrained /root/.cache/paddle/weights
@@ -114,26 +112,28 @@ sed -i '/for step_id, data in enumerate(self.loader):/a\                if step_
 sed -i '/for seq in seqs/for seq in [seqs[0]]/g' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/i\        max_step_id=1' ppdet/engine/tracker.py
 sed -i '/for step_id, data in enumerate(dataloader):/a\            if step_id == max_step_id: break' ppdet/engine/tracker.py
+#change weights dir
+#sed -i "s#~/.cache/paddle/weights#${data_path}/data/ppdet_pretrained#g" ppdet/utils/download.py
 
 if [ "${task_type}" == 'develop_d1' ];then
-find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner |  grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep -v mask_rcnn | grep -v detector | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v deploy | grep -v layout | awk '{print $NF}' | tee config_list
+find . | grep .yml | grep -v smrt | grep -v benchmark |  grep configs | grep -v static | grep -v _base_/ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v deepsort | grep -v test | grep -v pruner |  grep -v bytetrack | grep  -v minicoco | grep -v mot | grep -v cascade_rcnn | grep -v centernet | grep -v picodet | grep -v yolov3 | grep -v ssd | grep -v dcn | grep -v faster_rcnn  | grep -v mask_rcnn | grep -v detector | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v deploy | grep -v layout | grep -v application | grep -v pcb | grep -v objects365 | grep -v 3d_ | awk '{print $NF}' | tee config_list
 elif [ "${task_type}" == 'develop_d2' ];then
-find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v mot | grep yolov3/ | awk '{print $NF}' | tee yolov3_list
-find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v smrt | grep -v multiscaletest | grep faster_rcnn/ | awk '{print $NF}' | tee faster_list
+find . | grep .yml | grep -v _base_/ | grep -v static | grep -v slim | grep -v benchmark | grep -v mot | grep yolov3/ | awk '{print $NF}' | tee yolov3_list
+find . | grep .yml | grep -v _base_/ | grep -v static | grep -v slim | grep -v benchmark | grep -v smrt | grep -v multiscaletest | grep faster_rcnn/ | awk '{print $NF}' | tee faster_list
 cat yolov3_list faster_list >>config_list
 elif [ "${task_type}" == 'develop_d3' ];then
-find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v datasets | grep -v ppvehicle | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v test_tipc | grep mot/ | awk '{print $NF}' | tee mot_list
-find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep ssd/ | awk '{print $NF}' | tee ssd_list
-find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v dcn | grep -v cascade_rcnn | grep mask_rcnn/ | awk '{print $NF}' | tee mask_list
+find . | grep .yml | grep -v _base_/ | grep -v static | grep -v slim | grep -v benchmark | grep -v datasets | grep -v ppvehicle | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v test_tipc | grep mot/ | awk '{print $NF}' | tee mot_list
+find . | grep .yml | grep -v _base_/ | grep -v static | grep -v slim | grep -v benchmark | grep ssd/ | awk '{print $NF}' | tee ssd_list
+find . | grep .yml | grep -v _base_/ | grep -v static | grep -v slim | grep -v benchmark | grep -v dcn | grep -v cascade_rcnn | grep mask_rcnn/ | awk '{print $NF}' | tee mask_list
 cat  mask_list mot_list ssd_list >>config_list
 elif [ "${task_type}" == 'develop_d4' ];then
-find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v dcn | grep -v smrt | grep -v vitdet | grep cascade_rcnn/ | awk '{print $NF}' | tee cascade_list
-find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep centernet/ | awk '{print $NF}' | tee centernet_list
-find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep -v smrt | grep -v pruner | grep picodet/ | awk '{print $NF}' | tee picodet_list
-find . | grep .yml | grep -v _base_ | grep -v static | grep -v slim | grep -v benchmark | grep dcn/ | awk '{print $NF}' | tee dcn_list
+find . | grep .yml | grep -v _base_/ | grep -v static | grep -v slim | grep -v benchmark | grep -v dcn | grep -v smrt | grep -v vitdet | grep cascade_rcnn/ | awk '{print $NF}' | tee cascade_list
+find . | grep .yml | grep -v _base_/ | grep -v static | grep -v slim | grep -v benchmark | grep centernet/ | awk '{print $NF}' | tee centernet_list
+find . | grep .yml | grep -v _base_/ | grep -v static | grep -v slim | grep -v benchmark | grep -v smrt | grep -v pruner | grep -v layout | grep picodet/ | awk '{print $NF}' | tee picodet_list
+find . | grep .yml | grep -v _base_/ | grep -v static | grep -v slim | grep -v benchmark | grep dcn/ | awk '{print $NF}' | tee dcn_list
 cat cascade_list centernet_list picodet_list dcn_list >>config_list
 else
-find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v vitdet | grep -v deploy | grep -v layout | awk '{print $NF}' | tee config_list
+find . | grep .yml | grep -v smrt | grep -v benchmark | grep configs | grep -v static | grep -v _base_/ | grep -v datasets | grep -v runtime | grep -v slim | grep -v roadsign | grep -v test  | grep -v pruner | grep -v detector | grep  -v minicoco | grep -v deepsort | grep -v bytetrack | grep -v ocsort | grep -v pphuman | grep -v ppvehicle | grep -v smalldet | grep -v vitdet | grep -v deploy | grep -v layout | grep -v application | grep -v pcb | grep -v objects365 | grep -v 3d_ | awk '{print $NF}' | tee config_list
 fi
 
 print_result(){
@@ -160,7 +160,7 @@ TRAIN(){
     python -m paddle.distributed.launch \
     tools/train.py \
            -c ${config} \
-           -o TrainReader.batch_size=1 epoch=1 >log/${model}/${model}_${model_type}_${mode}.log 2>&1
+           -o TrainReader.batch_size=1 SemiTrainReader.sup_batch_size=1 SemiTrainReader.unsup_batch_size=1 epoch=1 >log/${model}/${model}_${model_type}_${mode}.log 2>&1
     print_result
 }
 EVAL(){
@@ -375,12 +375,12 @@ CPP_INFER(){
         echo "centos does not support cpp infer"
     fi
 }
-find . | grep configs | grep yml | grep mot | grep -v datasets | grep -v _base_ | grep -v deepsort >model_mot
-find . | grep configs | grep yml | grep keypoint | grep -v datasets | grep -v _base_ | grep -v static >model_keypoint
+find . | grep configs | grep yml | grep mot | grep -v datasets | grep -v _base_/ | grep -v deepsort >model_mot
+find . | grep configs | grep yml | grep keypoint | grep -v datasets | grep -v _base_/ | grep -v static >model_keypoint
 model_s2anet='s2anet_conv_1x_dota s2anet_1x_dota s2anet_1x_spine s2anet_alignconv_2x_dota s2anet_conv_2x_dota'
-model_skip_export='fairmot_enhance_hardnet85_30e_1088x608 tood_r50_fpn_1x_coco sparse_rcnn_r50_fpn_3x_pro100_coco sparse_rcnn_r50_fpn_3x_pro300_coco detr_r50_1x_coco gflv2_r50_fpn_1x_coco deformable_detr_r50_1x_coco faster_rcnn_swin_tiny_fpn_1x_coco faster_rcnn_swin_tiny_fpn_2x_coco faster_rcnn_swin_tiny_fpn_3x_coco'
+model_skip_export='fairmot_enhance_hardnet85_30e_1088x608 tood_r50_fpn_1x_coco sparse_rcnn_r50_fpn_3x_pro100_coco sparse_rcnn_r50_fpn_3x_pro300_coco detr_r50_1x_coco gflv2_r50_fpn_1x_coco deformable_detr_r50_1x_coco faster_rcnn_swin_tiny_fpn_1x_coco faster_rcnn_swin_tiny_fpn_2x_coco faster_rcnn_swin_tiny_fpn_3x_coco botsort_ppyoloe centertrack_dla34_70e_mot17 centertrack_dla34_70e_mot17half queryinst_r50_fpn_1x_pro100_coco queryinst_r50_fpn_ms_crop_3x_pro300_coco'
 model_skip_pyinfer='retinanet_r50_fpn_mstrain_1x_coco retinanet_r50_fpn_1x_coco picodet_s_320_pedestrian'
-model_skip_cpp='centernet_mbv3_small_140e_coco centernet_mbv3_large_140e_coco centernet_shufflenetv2_140e_coco centernet_mbv1_140e_coco centernet_shufflenetv2_1x_140e_coco centernet_mbv3_small_1x_140e_coco centernet_mbv3_large_1x_140e_coco centernet_mbv1_1x_140e_coco centernet_r50_140e_coco centernet_dla34_140e_coco solov2_r50_fpn_1x_coco solov2_r50_fpn_3x_coco solov2_r101_vd_fpn_3x_coco solov2_r50_enhance_coco faster_rcnn_r101_fpn_1x_coco ppyolov2_r50vd_dcn_voc yolov3_darknet53_270e_voc yolov3_darknet53_original_270e_coco tood_r50_fpn_1x_coco'
+model_skip_cpp='centernet_mbv3_small_140e_coco centernet_mbv3_large_140e_coco centernet_shufflenetv2_140e_coco centernet_mbv1_140e_coco centernet_shufflenetv2_1x_140e_coco centernet_mbv3_small_1x_140e_coco centernet_mbv3_large_1x_140e_coco centernet_mbv1_1x_140e_coco centernet_r50_140e_coco centernet_dla34_140e_coco ppyolov2_r50vd_dcn_voc yolov3_darknet53_270e_voc yolov3_darknet53_original_270e_coco tood_r50_fpn_1x_coco'
 err_sign=false
 model_type=dynamic
 if [ "$1" ];then
@@ -409,13 +409,13 @@ if [ "$2" ];then
     $2
 else
 if [[ -n `echo "${model}" | grep "pedestrian_yolov3_darknet"` ]];then
-    image=configs/pedestrian/demo/001.png
+    image=configs/pphuman/pedestrian_yolov3/demo/001.png
     INFER
     EXPORT
     PYTHON_INFER
     CPP_INFER
 elif [[ -n `echo "${model}" | grep "vehicle_yolov3_darknet"` ]];then
-    image=configs/vehicle/demo/003.png
+    image=configs/ppvehicle/vehicle_yolov3/demo/003.png
     INFER
     EXPORT
     PYTHON_INFER

@@ -89,15 +89,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.30329
+        kpi_base: 6.25226
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 16.19861
-        threshold: 0.00001
+        kpi_base: 113.69891
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -112,15 +112,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.37464
+        kpi_base: 6.38182
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 10.81129
-        threshold: 0.00001
+        kpi_base: 14.43399
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -135,15 +135,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.29603
+        kpi_base: 6.25226
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 51.10394
-        threshold: 0.00001
+        kpi_base: 113.69891
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -158,15 +158,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.40641
+        kpi_base: 6.38182
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 25.11636
-        threshold: 0.00001
+        kpi_base: 14.43399
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -231,8 +231,8 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 16.19861
-        threshold: 0.00001
+        kpi_base: 113.69891
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -247,8 +247,8 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 51.10394
-        threshold: 0.00001
+        kpi_base: 113.69891
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None

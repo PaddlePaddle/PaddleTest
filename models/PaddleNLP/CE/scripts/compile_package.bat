@@ -1,7 +1,7 @@
 @echo off
 cd ..
-python -m pip uninstall Pillow
-python -m pip install Pillow==8.4.0
+python -m pip uninstall --user Pillow -y
+python -m pip install --user Pillow==9.2
 cd models_repo
 
 python setup.py bdist_wheel
@@ -11,5 +11,4 @@ for %%i in (".\dist\*.whl") do (
 )
 
 python -m pip uninstall -y paddlenlp
-
 python -m pip install dist\%FileName%

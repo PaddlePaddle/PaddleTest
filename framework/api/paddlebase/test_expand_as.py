@@ -71,10 +71,10 @@ def test_expand_as2():
 
 # def test_expand_as3():
 #     """
-#     x_type=np.bool,todo:fix RC
+#     x_type=np.bool_,todo:fix RC
 #     """
-#     x = np.array([False, True]).astype(np.bool)
-#     y = np.ones([1, 2]).astype(np.bool)
+#     x = np.array([False, True]).astype(np.bool_)
+#     y = np.ones([1, 2]).astype(np.bool_)
 #     res = np.array([[False, True]])
 #     obj.run(res=res, x=x, y=y)
 

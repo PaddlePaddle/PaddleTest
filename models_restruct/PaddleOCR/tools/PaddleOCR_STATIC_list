@@ -1,0 +1,5 @@
+configs^det^ch_PP-OCRv3^ch_PP-OCRv3_det_cml.yml
+configs^rec^PP-OCRv3^ch_PP-OCRv3_rec_distillation.yml
+configs^table^table_master.yml
+configs^table^SLANet.yml
+configs^kie^vi_layoutxlm^ser_vi_layoutxlm_xfund_zh.yml

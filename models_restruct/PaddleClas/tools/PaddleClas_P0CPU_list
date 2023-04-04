@@ -1,0 +1,5 @@
+ppcls^configs^ImageNet^ResNet^ResNet50.yaml
+ppcls^configs^ImageNet^PPLCNetV2^PPLCNetV2_base.yaml
+ppcls^configs^PULC^car_exists^PPLCNet_x1_0.yaml
+ppcls^configs^GeneralRecognition^GeneralRecognition_PPLCNet_x2_5.yaml
+ppcls^configs^DeepHash^DCH.yaml

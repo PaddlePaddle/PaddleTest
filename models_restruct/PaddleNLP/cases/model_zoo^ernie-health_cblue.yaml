@@ -1,0 +1,122 @@
+case:
+  linux:
+    train:
+      -
+        name: classification
+        path: model_zoo/ernie-health/cblue
+        cmd: python -m paddle.distributed.launch train_classification.py
+        params:
+          - --dataset CHIP-CDN-2C
+          - --batch_size 256
+          - --max_seq_length 32
+          - --learning_rate 3e-5
+          - --epochs 16
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
+          - --save_dir cls
+        result:
+          loss:
+            base: 0.6557
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: ner
+        path: model_zoo/ernie-health/cblue
+        cmd: python -m paddle.distributed.launch train_ner.py
+        params:
+          - --batch_size 32
+          - --max_seq_length 128
+          - --learning_rate 6e-5
+          - --epochs 12
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
+          - --save_dir ner
+        result:
+          loss:
+            base: 1.942795
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: spo
+        path: model_zoo/ernie-health/cblue
+        cmd: python -m paddle.distributed.launch train_spo.py
+        params:
+          - --batch_size 12
+          - --max_seq_length 300
+          - --learning_rate 6e-5
+          - --epochs 12
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
+          - --save_dir spo
+        result:
+          loss:
+            base: 2282887.188
+            threshold: 1
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: classification
+        path: model_zoo/ernie-health/cblue
+        cmd: python export_model.py
+        params:
+          - --train_dataset CHIP-CDN-2C
+          - --params_path ./cls/model_2/
+          - --output_path ./export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: ner
+        path: model_zoo/ernie-health/cblue
+        cmd: python export_model.py
+        params:
+          - --train_dataset CMeIE
+          - --params_path ./ner/model_2/
+          - --output_path ./export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: spo
+        path: model_zoo/ernie-health/cblue
+        cmd: python export_model.py
+        params:
+          - --train_dataset CMeEE
+          - --params_path ./spo/model_2/
+          - --output_path ./export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

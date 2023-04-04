@@ -11,15 +11,15 @@ lie_index = 5
 b = []
 
 url_all = [
-    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15746602/result/reportUrl.html",
-    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15777850/result/reportUrl.html",
+    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20894918/result/reportUrl.html",
+    "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20894889/result/reportUrl.html",
 ]  # release
 with open("clas_release", "w", encoding="utf-8") as f:
 
     # url_all = [
-    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15715846/result/reportUrl.html",
-    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/15779389/result/reportUrl.html",
-    # ] #develop
+    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20894904/result/reportUrl.html",
+    #     "https://xly.bce.baidu.com/ipipe/ipipe-report/report/20896482/result/reportUrl.html",
+    # ]  # develop
     # with open("clas_develop", "w", encoding="utf-8") as f:
 
     for i, _ in enumerate(url_all):

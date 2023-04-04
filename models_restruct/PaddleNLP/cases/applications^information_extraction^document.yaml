@@ -1,0 +1,154 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: applications/information_extraction/document
+        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/tax.tar.gz && tar -zxvf tax.tar.gz && mv tax data && rm -f tax.tar.gz
+      -
+        name: label_studio
+        path: applications/information_extraction/document
+        cmd: python ../label_studio.py
+        params:
+          - --label_studio_file ./data/label_studio.json
+          - --save_dir ./data
+          - --splits 0.8 0.2 0
+          - --task_type ext
+      -
+        name: fintune
+        path: applications/information_extraction/document
+        cmd: python -u -m paddle.distributed.launch  finetune.py
+        params:
+          - --device gpu
+          - --max_steps 25
+          - --logging_steps 1
+          - --eval_steps 25
+          - --seed 42
+          - --model_name_or_path uie-x-base
+          - --output_dir ./checkpoint/model_best
+          - --train_path data/train.txt
+          - --dev_path data/dev.txt
+          - --max_seq_len 512
+          - --per_device_train_batch_size  2
+          - --per_device_eval_batch_size 2
+          - --num_train_epochs 20
+          - --learning_rate 1e-5
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --export_model_dir ./checkpoint/model_best
+          - --overwrite_output_dir
+          - --metric_for_best_model eval_f1
+          - --load_best_model_at_end  True
+          - --save_total_limit 1
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+    eval:
+      -
+        name: evaluate
+        path: applications/information_extraction/document
+        cmd: python evaluate.py
+        params:
+          - --device 'gpu'
+          - --model_path ./checkpoint/model_best
+          - --test_path ./data/dev.txt
+          - --output_dir ./checkpoint/model_best
+          - --label_names 'start_positions' 'end_positions'
+          - --max_seq_len 512
+          - --per_device_eval_batch_size 16
+          - --debug True
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: applications/information_extraction/document
+        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/tax.tar.gz && tar -zxvf tax.tar.gz && ren tax data
+      -
+        name: label_studio
+        path: applications/information_extraction/document
+        cmd: python ../label_studio.py
+        params:
+          - --label_studio_file ./data/label_studio.json
+          - --save_dir ./data
+          - --splits 0.8 0.2 0
+          - --task_type ext
+      -
+        name: fintune
+        path: applications/information_extraction/document
+        cmd: python -u -m paddle.distributed.launch  finetune.py
+        params:
+          - --device gpu
+          - --max_steps 25
+          - --logging_steps 1
+          - --eval_steps 25
+          - --seed 42
+          - --model_name_or_path uie-x-base
+          - --output_dir ./checkpoint/model_best
+          - --train_path data/train.txt
+          - --dev_path data/dev.txt
+          - --max_seq_len 512
+          - --per_device_train_batch_size  2
+          - --per_device_eval_batch_size 2
+          - --num_train_epochs 20
+          - --learning_rate 1e-5
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --export_model_dir ./checkpoint/model_best
+          - --overwrite_output_dir
+          - --metric_for_best_model eval_f1
+          - --load_best_model_at_end  True
+          - --save_total_limit 1
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+    eval:
+      -
+        name: evaluate
+        path: applications/information_extraction/document
+        cmd: python evaluate.py
+        params:
+          - --device 'gpu'
+          - --model_path ./checkpoint/model_best
+          - --test_path ./data/dev.txt
+          - --output_dir ./checkpoint/model_best
+          - --label_names 'start_positions' 'end_positions'
+          - --max_seq_len 512
+          - --per_device_eval_batch_size 16
+          - --debug True
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

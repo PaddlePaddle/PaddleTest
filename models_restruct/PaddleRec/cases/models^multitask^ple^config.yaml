@@ -1,0 +1,70 @@
+case:
+  linux:
+    base: ./base/train_infer_with_gpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+      -
+        name: static
+        cmd: python -u tools/static_trainer.py
+      -
+        name: dy2st
+        cmd: python -u test_tipc/configs/ple/to_static.py
+        params:
+          - -o runner.model_init_path=output_model_ple/2
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+      -
+        name: static
+        cmd: python -u tools/static_infer.py
+    
+      -
+        name: dy2st
+        cmd: python -u tools/paddle_infer.py
+        params:
+          - --model_file=output_model_ple/2/tostatic.pdmodel
+          - --params_file=output_model_ple/2/tostatic.pdiparams
+          - --use_gpu=True 
+          - --data_dir=models/multitask/ple/data/train
+          - --reader_file=models/multitask/ple/census_reader.py
+          - --batchsize=5
+
+  mac:
+    base: ./base/train_infer_with_cpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+      -
+        name: static
+        cmd: python -u tools/static_trainer.py
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+      -
+        name: static
+        cmd: python -u tools/static_infer.py
+
+  windows:
+    base: ./base/train_infer_with_gpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+      -
+        name: static
+        cmd: python -u tools/static_trainer.py
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+      -
+        name: static
+        cmd: python -u tools/static_infer.py

@@ -48,8 +48,8 @@ class TestSensitivity(StaticCase):
         main_program = fluid.Program()
         startup_program = fluid.Program()
         with fluid.program_guard(main_program, startup_program):
-            input = fluid.data(name="image", shape=[None, 1, 28, 28])
-            label = fluid.data(name="label", shape=[None, 1], dtype="int64")
+            input = paddle.static.data(name="image", shape=[None, 1, 28, 28], dtype="float32")
+            label = paddle.static.data(name="label", shape=[None, 1], dtype="int64")
             conv1 = conv_bn_layer(input, 8, 3, "conv1")
             conv2 = conv_bn_layer(conv1, 8, 3, "conv2")
             sum1 = conv1 + conv2

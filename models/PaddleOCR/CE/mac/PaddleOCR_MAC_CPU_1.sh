@@ -6,7 +6,11 @@ pwd
 # env
 unset http_proxy
 unset https_proxy
-python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# python -m pip install -r requirements.txt --ignore-installed  -i https://pypi.tuna.tsinghua.edu.cn/simple
+python -m pip uninstall -y  opencv-python
+python -m pip uninstall -y opencv-contrib-python-headless
+python -m pip install -U opencv-contrib-python-headless
 
 # dir
 log_path=log

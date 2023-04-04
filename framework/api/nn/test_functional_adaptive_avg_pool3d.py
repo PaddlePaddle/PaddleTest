@@ -31,14 +31,12 @@ obj = TestFunctionalAdaptiveAvgPool3d(paddle.nn.functional.adaptive_avg_pool3d)
 
 
 def adaptive_start_index(index, input_size, output_size):
-    """adaptive_start_index
-    """
+    """adaptive_start_index"""
     return int(np.floor(index * input_size / output_size))
 
 
 def adaptive_end_index(index, input_size, output_size):
-    """adaptive_end_index
-    """
+    """adaptive_end_index"""
     return int(np.ceil((index + 1) * input_size / output_size))
 
 
@@ -213,3 +211,15 @@ def test_adaptive_avg_pool3d8():
     data_format = "wrong"
     # res = compute_adaptive_pool3d(x=x, output_size=output_size, data_format=data_format)
     obj.exception(etype=ValueError, mode="python", x=x, output_size=output_size, data_format=data_format)
+
+
+@pytest.mark.api_nn_adaptive_avg_pool3d_parameters
+def test_adaptive_avg_pool3d9():
+    """
+    output_size = Tensor[1, 3, 2]
+    """
+    x = randtool("float", -10, 10, [2, 3, 8, 32, 32])
+    output_size = [1, 3, 2]
+    res = compute_adaptive_pool3d(x=x, output_size=output_size)
+    exp = paddle.nn.functional.adaptive_avg_pool3d(paddle.to_tensor(x), output_size=paddle.to_tensor(output_size))
+    assert np.allclose(exp.numpy(), res)

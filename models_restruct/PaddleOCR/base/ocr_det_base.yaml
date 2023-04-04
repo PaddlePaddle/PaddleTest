@@ -1,0 +1,147 @@
+train:
+  -
+    name: multi
+    cmd : python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.epoch_num=1
+      - Global.save_epoch_step=1
+      - Global.save_model_dir=output/${qa_yaml_name}
+      - Global.use_gpu=${use_gpu}
+      - Train.loader.batch_size_per_card=2
+      - Train.loader.shuffle=False
+      - Train.loader.num_workers=False
+    result:
+      loss:
+        base: ${train_base_loss}
+        threshold: ${train_threshold}
+        evaluation: "-"
+  -
+    name: single
+    cmd : python tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.epoch_num=1
+      - Global.save_epoch_step=1
+      - Global.save_model_dir=output/${qa_yaml_name}
+      - Global.use_gpu=${use_gpu}
+      - Train.loader.batch_size_per_card=2
+      - Train.loader.shuffle=False
+      - Train.loader.num_workers=False
+  -
+    name: amp
+    cmd : python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.epoch_num=1
+      - Global.save_epoch_step=1
+      - Global.save_model_dir=output/${qa_yaml_name}
+      - Global.use_gpu=${use_gpu}
+      - Train.loader.batch_size_per_card=2
+      - Train.loader.shuffle=False
+      - Train.loader.num_workers=False
+      - Global.use_amp=True
+      - Global.scale_loss=1024.0
+      - Global.use_dynamic_loss_scaling=False
+  -
+    name: static
+    cmd : python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.epoch_num=1
+      - Global.save_epoch_step=1
+      - Global.save_model_dir=output/${qa_yaml_name}
+      - Global.use_gpu=${use_gpu}
+      - Train.loader.batch_size_per_card=2
+      - Train.loader.shuffle=False
+      - Train.loader.num_workers=False
+      - Global.to_static=True
+
+eval:
+  name: trained
+  cmd:  python tools/eval.py
+  params:
+    - -c ${rd_yaml_path}
+    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.use_gpu=${use_gpu}
+  result:
+    exit_code:
+      base: 0
+      threshold: 0
+      evaluation: "="
+
+infer:
+  name: trained
+  cmd: python tools/infer_det.py
+  params:
+    - -c ${rd_yaml_path}
+    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.infer_img=doc/imgs_en/img_10.jpg
+    - Global.test_batch_size_per_card=1
+    - Global.use_gpu=${use_gpu}
+
+export:
+  -
+    name: trained
+    cmd: python tools/export_model.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+      - Global.save_inference_dir=./models_inference/${qa_yaml_name}
+      - Global.use_gpu=${use_gpu}
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+
+predict:
+  -
+    name: trained
+    cmd: python tools/infer/predict_det.py
+    params:
+      - --image_dir=doc/imgs_en/img_10.jpg
+      - --det_algorithm=${algorithm}
+      - --use_gpu=${use_gpu}
+      - --use_tensorrt=False
+      - --enable_mkldnn=False
+      - --det_model_dir=./models_inference/${qa_yaml_name}
+  -
+    name: trained_mkldnn
+    cmd: python tools/infer/predict_det.py
+    params:
+      - --image_dir=doc/imgs_en/img_10.jpg
+      - --det_algorithm=${algorithm}
+      - --use_gpu=False
+      - --use_tensorrt=False
+      - --enable_mkldnn=True
+      - --det_model_dir=./models_inference/${qa_yaml_name}
+  -
+    name: trained_tensorRT
+    cmd: python tools/infer/predict_det.py
+    params:
+      - --image_dir=doc/imgs_en/img_10.jpg
+      - --det_algorithm=${algorithm}
+      - --use_gpu=True
+      - --use_tensorrt=True
+      - --enable_mkldnn=False
+      - --det_model_dir=./models_inference/${qa_yaml_name}
+
+api:
+  name: trained_C_plus_plus_GPU
+  path: deploy/cpp_infer
+  cmd:  ./build/ppocr
+  params:
+    - --image_dir=../../doc/imgs_en/img_10.jpg
+    - --det_model_dir=../../models_inference/${qa_yaml_name}
+    - --rec=false
+    - --det=true
+    - --cls=false
+    - --use_angle_cls=false
+    - --use_gpu=${use_gpu}
+    - --enable_mkldnn=false
+  result:
+    exit_code:
+      base: 0
+      threshold: 0
+      evaluation: "="

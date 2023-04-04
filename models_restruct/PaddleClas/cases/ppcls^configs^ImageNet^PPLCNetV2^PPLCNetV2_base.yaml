@@ -1,0 +1,203 @@
+case:
+  linux:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+      -
+        name: multi
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+      -
+        name: multi_dy2st
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+      -
+        name: multi_amp
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+      -
+        name: multi_amp_dy2st
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+    eval:
+      -
+        name: trained
+      -
+        name: pretrained
+    infer:
+      -
+        name: trained
+      -
+        name: pretrained
+    export:
+      -
+        name: trained
+      -
+        name: pretrained
+    predict:
+      -
+        name: trained
+      -
+        name: trained_mkldnn
+      -
+        name: trained_trt
+      -
+        name: pretrained
+
+  linux_convergence:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single_convergence
+      -
+        name: multi_convergence
+      -
+        name: multi_static_convergence
+
+  # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
+    # base: ./base/ImageNet_base.yaml
+  #   train:
+  #     -
+  #       name: function
+  #       params:
+  #         - -o Global.device=cpu
+
+  windows:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+      -
+        name: function_dy2st
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+      -
+        name: function_amp
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+    eval:
+      -
+        name: function
+      -
+        name: pretrained
+    infer:
+      -
+        name: function
+      -
+        name: pretrained
+    export:
+      -
+        name: function
+      -
+        name: pretrained
+    predict:
+      -
+        name: function
+      -
+        name: function_mkldnn
+      -
+        name: function_trt
+      -
+        name: pretrained
+
+  windows_cpu:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Train.sampler.first_bs=8
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    infer:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+
+  mac:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Train.sampler.first_bs=8
+      -
+        name: function_dy2st
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Train.sampler.first_bs=8
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    infer:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+
+function: paddlelas_imagenet_parse

@@ -4,6 +4,7 @@
 """
 test_Linear
 """
+
 import paddle
 import pytest
 import numpy as np

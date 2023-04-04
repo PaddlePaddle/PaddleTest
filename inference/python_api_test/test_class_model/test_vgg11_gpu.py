@@ -15,7 +15,8 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
+
 
 # pylint: enable=wrong-import-position
 
@@ -24,13 +25,12 @@ def check_model_exist():
     """
     check model exist
     """
-    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1/class/vgg11.tgz"
+    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/vgg11.tgz"
     if not os.path.exists("./vgg11/inference.pdiparams"):
         wget.download(vgg11_url, out="./")
         tar = tarfile.open("vgg11.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./vgg11/inference", output_model_path="./vgg11/inference")
 
 
 def test_config():
@@ -39,7 +39,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./vgg11/inference.pdmodel",
+        params_file="./vgg11/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -52,7 +55,10 @@ def test_disable_gpu():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./vgg11/inference.pdmodel",
+        params_file="./vgg11/inference.pdiparams",
+    )
     batch_size = 1
     fake_input = np.random.randn(batch_size, 3, 224, 224).astype("float32")
     print(fake_input.shape)
@@ -65,7 +71,7 @@ def test_disable_gpu():
 @pytest.mark.gpu
 def test_gpu_more_bz():
     """
-    compared gpu vgg11 outputs with true val
+    compared gpu batch_size=1-2 vgg11 outputs with true val
     """
     check_model_exist()
 
@@ -74,7 +80,10 @@ def test_gpu_more_bz():
     batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        test_suite.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
@@ -83,17 +92,21 @@ def test_gpu_more_bz():
         del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
-        test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        test_suite2.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
         test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict)
 
         del test_suite2  # destroy class to save memory
 
 
-@pytest.mark.jetson
+@pytest.mark.win
+@pytest.mark.server
 @pytest.mark.gpu
-def test_jetson_gpu_more_bz():
+def test_gpu_mixed_precision_bz1():
     """
-    compared gpu vgg11 outputs with true val
+    compared gpu batch_size=1 vgg11 mixed_precision outputs with true val
     """
     check_model_exist()
 
@@ -102,7 +115,17 @@ def test_jetson_gpu_more_bz():
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        if not os.path.exists("./vgg11/inference_mixed.pdmodel"):
+            test_suite.convert_to_mixed_precision_model(
+                src_model="./vgg11/inference.pdmodel",
+                src_params="./vgg11/inference.pdiparams",
+                dst_model="./vgg11/inference_mixed.pdmodel",
+                dst_params="./vgg11/inference_mixed.pdiparams",
+            )
+        test_suite.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
@@ -111,7 +134,48 @@ def test_jetson_gpu_more_bz():
         del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
-        test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        test_suite2.load_config(
+            model_file="./vgg11/inference_mixed.pdmodel",
+            params_file="./vgg11/inference_mixed.pdiparams",
+        )
+        test_suite2.gpu_more_bz_test_mix(
+            input_data_dict,
+            output_data_dict,
+            delta=1e-4,
+        )
+
+        del test_suite2  # destroy class to save memory
+
+
+@pytest.mark.jetson
+@pytest.mark.gpu
+def test_jetson_gpu_more_bz():
+    """
+    compared gpu batch_size=1  vgg11 outputs with true val
+    """
+    check_model_exist()
+
+    file_path = "./vgg11"
+    images_size = 224
+    batch_size_pool = [1]
+    for batch_size in batch_size_pool:
+        test_suite = InferenceTest()
+        test_suite.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
+        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
+        fake_input = np.array(images_list[0:batch_size]).astype("float32")
+        input_data_dict = {"x": fake_input}
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+        del test_suite  # destroy class to save memory
+
+        test_suite2 = InferenceTest()
+        test_suite2.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
         test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict)
 
         del test_suite2  # destroy class to save memory

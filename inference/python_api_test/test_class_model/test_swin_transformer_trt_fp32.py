@@ -17,6 +17,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -24,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    swin_transformer_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1/class/swin_transformer.tgz"
+    swin_transformer_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/swin_transformer.tgz"
     if not os.path.exists("./swin_transformer/inference.pdiparams"):
         wget.download(swin_transformer_url, out="./")
         tar = tarfile.open("swin_transformer.tgz")
@@ -39,7 +40,8 @@ def test_config():
     check_model_exist()
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        model_file="./swin_transformer/inference.pdmodel",
+        params_file="./swin_transformer/inference.pdiparams",
     )
     test_suite.config_test()
 
@@ -48,7 +50,7 @@ def test_config():
 @pytest.mark.trt_fp32
 def test_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 swin_transformer outputs with true val
+    compared trt fp32 batch_size=1 swin_transformer outputs with true val
     """
     check_model_exist()
 
@@ -58,7 +60,8 @@ def test_trt_fp32_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -66,10 +69,24 @@ def test_trt_fp32_more_bz():
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
+        # collect shape for trt
+        test_suite_c = InferenceTest()
+        test_suite_c.load_config(
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
+        )
+        test_suite_c.collect_shape_info(
+            model_path=file_path,
+            input_data_dict=input_data_dict,
+            device="gpu",
+        )
+
+        del test_suite_c  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
         test_suite2.trt_more_bz_test(
             input_data_dict,
@@ -79,6 +96,8 @@ def test_trt_fp32_more_bz():
             min_subgraph_size=40,
             precision="trt_fp32",
             max_batch_size=batch_size,
+            dynamic=True,
+            shape_range_file="./swin_transformer/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory
@@ -88,7 +107,7 @@ def test_trt_fp32_more_bz():
 @pytest.mark.trt_fp32
 def test_jetson_trt_fp32_more_bz():
     """
-    compared trt fp32 batch_size=1-10 swin_transformer outputs with true val
+    compared trt fp32 batch_size=1 swin_transformer outputs with true val
     """
     check_model_exist()
 
@@ -98,7 +117,8 @@ def test_jetson_trt_fp32_more_bz():
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
         test_suite.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -107,10 +127,26 @@ def test_jetson_trt_fp32_more_bz():
 
         del test_suite  # destroy class to save memory
 
+        # collect shape for trt
+        test_suite_c = InferenceTest()
+        test_suite_c.load_config(
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
+        )
+        test_suite_c.collect_shape_info(
+            model_path=file_path,
+            input_data_dict=input_data_dict,
+            device="gpu",
+        )
+
+        del test_suite_c  # destroy class to save memory
+
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+            model_file="./swin_transformer/inference.pdmodel",
+            params_file="./swin_transformer/inference.pdiparams",
         )
+
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -119,6 +155,8 @@ def test_jetson_trt_fp32_more_bz():
             min_subgraph_size=10,
             precision="trt_fp32",
             max_batch_size=batch_size,
+            dynamic=True,
+            shape_range_file="./swin_transformer/shape_range.pbtxt",
         )
 
         del test_suite2  # destroy class to save memory
@@ -136,7 +174,8 @@ def test_trtfp32_bz1_multi_thread():
     batch_size = 1
     test_suite = InferenceTest()
     test_suite.load_config(
-        model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        model_file="./swin_transformer/inference.pdmodel",
+        params_file="./swin_transformer/inference.pdiparams",
     )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
@@ -147,10 +186,16 @@ def test_trtfp32_bz1_multi_thread():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(
-        model_file="./swin_transformer/inference.pdmodel", params_file="./swin_transformer/inference.pdiparams"
+        model_file="./swin_transformer/inference.pdmodel",
+        params_file="./swin_transformer/inference.pdiparams",
     )
     test_suite2.trt_bz1_multi_thread_test(
-        input_data_dict, output_data_dict, min_subgraph_size=10, repeat=1, delta=1e-4, precision="trt_fp32"
+        input_data_dict,
+        output_data_dict,
+        min_subgraph_size=10,
+        repeat=1,
+        delta=1e-4,
+        precision="trt_fp32",
     )
 
     del test_suite2  # destroy class to save memory

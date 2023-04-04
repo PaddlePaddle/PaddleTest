@@ -17,6 +17,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -24,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.0/detection/ppyolo.tgz"
+    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.0/detection/ppyolo.tgz"
     if not os.path.exists("./ppyolo/model.pdiparams"):
         wget.download(ppyolo_url, out="./")
         tar = tarfile.open("ppyolo.tgz")
@@ -38,7 +39,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
+    test_suite.load_config(
+        model_file="./ppyolo/model.pdmodel",
+        params_file="./ppyolo/model.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -48,7 +52,7 @@ def test_config():
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
-    compared trt_fp16 ppyolo batch size = [1] outputs with true val
+    compared trt_fp16 ppyolo batch_size = [1] outputs with true val
     """
     check_model_exist()
 
@@ -58,7 +62,10 @@ def test_trt_fp16_more_bz():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
+        test_suite.load_config(
+            model_file="./ppyolo/model.pdmodel",
+            params_file="./ppyolo/model.pdiparams",
+        )
         images_list, images_origin_list, npy_list = test_suite.get_images_npy(
             file_path, images_size, center=False, model_type="det"
         )
@@ -81,6 +88,7 @@ def test_trt_fp16_more_bz():
             im_shape_pool.append(im_shape)
         im_shape_pool = np.array(im_shape_pool).reshape((batch_size, 2))
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
+        test_suite.collect_shape_info(model_path="./ppyolo/", input_data_dict=input_data_dict, device="gpu")
 
         scale_0 = []
         for batch in range(0, batch_size * 2, 2):
@@ -89,8 +97,19 @@ def test_trt_fp16_more_bz():
         for batch in range(1, batch_size * 2, 2):
             scale_1 = np.concatenate((scale_1, result[batch].flatten()), axis=0)
 
-        output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
-        test_suite.load_config(model_file="./ppyolo/model.pdmodel", params_file="./ppyolo/model.pdiparams")
+        # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
+        del test_suite.pd_config
+
+        test_suite.load_config(
+            model_file="./ppyolo/model.pdmodel",
+            params_file="./ppyolo/model.pdiparams",
+        )
+        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
+
+        test_suite.load_config(
+            model_file="./ppyolo/model.pdmodel",
+            params_file="./ppyolo/model.pdiparams",
+        )
         test_suite.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -98,5 +117,7 @@ def test_trt_fp16_more_bz():
             repeat=1,
             delta=1,
             precision="trt_fp16",
-            result_sort=True,
+            dynamic=True,
+            shape_range_file="./ppyolo/shape_range.pbtxt",
+            det_top_bbox=True,
         )

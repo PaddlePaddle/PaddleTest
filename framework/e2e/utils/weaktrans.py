@@ -102,6 +102,16 @@ class WeakTrans(object):
         self.logger.get_log().info("Case的params设置：{}".format(params))
         return params
 
+    def get_method(self, framework):
+        """
+        get method
+        """
+        # 获取参数输入
+        method_info = self.case[framework].get("method", None)
+        # method = self._generate_params(method_info)
+        self.logger.get_log().info("Case的api调用的方法method设置：{}".format(method_info))
+        return method_info
+
     def get_func(self, framework):
         """
         get api or net
@@ -169,7 +179,24 @@ class WeakTrans(object):
         Dictionary（字典）
         Tensor （向量）
         """
-        data = None
+        # if isinstance(list(value.values())[0], list):
+        # print("value is : ", value)
+        if isinstance(value, list) and isinstance(value[0], dict):
+            data = []
+            for v in value:
+                # 参数可靠性校验
+                self._param_check(key, v)
+                if v.get("random", False):
+                    # 若开启random即进行自动数据生成,默认关闭
+                    data_range = v.get("range", [-1, 1])
+                    assert isinstance(data_range, list) and len(data_range) == 2
+                    data.append(self._randtool(v.get("dtype", "float"), data_range[0], data_range[1], v.get("shape")))
+                    # elif
+                else:
+                    data.append(np.array(v.get("value")).astype(v.get("dtype")))
+            return data
+
+        # data = None
         if isinstance(value, dict):
             # 参数可靠性校验
             self._param_check(key, value)

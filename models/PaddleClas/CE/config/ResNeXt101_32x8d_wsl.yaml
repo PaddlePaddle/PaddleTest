@@ -97,7 +97,7 @@ TRAIN: # 训练步骤
       train_eval:
         latest: True
         kpi_base: 243.64409
-        threshold: 0.00001
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -112,15 +112,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.79908
+        kpi_base: 6.79805
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 209.54898
-        threshold: 0.00001
+        kpi_base: 233.8596
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -135,15 +135,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.88583
+        kpi_base: 6.8861
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 152.66803
-        threshold: 0.00001
+        kpi_base: 243.64409
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -158,15 +158,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.79247
+        kpi_base: 6.79805
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 54.00892
-        threshold: 0.00001
+        kpi_base: 233.8596
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -232,7 +232,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 243.64409
-        threshold: 0.00001
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -247,8 +247,8 @@ EVAL: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 152.66804
-        threshold: 0.00001
+        kpi_base: 243.64409
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None

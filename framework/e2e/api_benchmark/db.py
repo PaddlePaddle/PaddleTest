@@ -11,6 +11,7 @@ import socket
 import platform
 from datetime import datetime
 import json
+import yaml
 import paddle
 import pymysql
 from utils.logger import logger
@@ -19,11 +20,24 @@ from utils.logger import logger
 class DB(object):
     """DB class"""
 
-    def __init__(self):
-        self.db = pymysql.connect(
-            # 手动填写内容
-        )
+    def __init__(self, storage="storage.yaml"):
+        host, port, user, password, database = self.load_storge(storage)
+        self.db = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset="utf8")
         self.cursor = self.db.cursor()
+
+    def load_storge(self, storage):
+        """
+        解析storage.yaml的内容添加到self.db
+        """
+        with open(storage, "r") as f:
+            data = yaml.safe_load(f)
+        tmp_dict = data.get("PRODUCTION").get("mysql").get("api_benchmark")
+        host = tmp_dict.get("host")
+        port = tmp_dict.get("port")
+        user = tmp_dict.get("user")
+        password = tmp_dict.get("password")
+        database = tmp_dict.get("db_name")
+        return host, port, user, password, database
 
     def timestamp(self):
         """
@@ -103,7 +117,22 @@ class DB(object):
                 print(e)
                 continue
 
-    def init_mission(self, framework, mode, place, cuda, cudnn, card=None):
+    def init_mission(
+        self,
+        id,
+        framework,
+        wheel_link,
+        mode,
+        place,
+        cuda,
+        cudnn,
+        routine,
+        enable_backward,
+        python,
+        yaml_info,
+        card=None,
+        comment=None,
+    ):
         """init mission"""
         if framework == "paddle":
             version = paddle.__version__
@@ -112,36 +141,79 @@ class DB(object):
                 "card": card,
                 "cuda": paddle.version.cuda(),
                 "cudnn": paddle.version.cudnn(),
+                "comment": comment,
             }
         elif framework == "torch":
             import torch
 
             version = torch.__version__
-            snapshot = {"os": platform.platform(), "card": card}
+            snapshot = {"os": platform.platform(), "card": card, "cuda": cuda, "cudnn": cudnn, "comment": comment}
 
-        sql = (
-            "insert into `job` (`framework`, `status`, `mode`, `commit`, `version`, "
-            "`hostname`, `place`, `system`, `cuda`, `cudnn`, `snapshot`,`create_time`, "
-            "`update_time`) values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', "
-            "'{}', '{}', '{}', '{}', '{}');".format(
-                framework,
-                "running",
-                mode,
-                paddle.__git_commit__,
-                version,
-                socket.gethostname(),
-                place,
-                platform.system(),
-                cuda,
-                cudnn,
-                json.dumps(snapshot),
-                self.timestamp(),
-                self.timestamp(),
+        if routine == 1 and id == 0:
+            sql = (
+                "insert into `job` (`framework`, `wheel_link`, `status`, `mode`, `commit`, `version`, "
+                "`hostname`, `place`, `system`, `cuda`, `cudnn`, `snapshot`,`create_time`, "
+                "`update_time`, `routine`, `comment`, `enable_backward`, `python`, "
+                "`yaml_info`) values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', "
+                "'{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(
+                    framework,
+                    wheel_link,
+                    "running",
+                    mode,
+                    paddle.__git_commit__,
+                    version,
+                    socket.gethostname(),
+                    place,
+                    platform.system(),
+                    cuda,
+                    cudnn,
+                    json.dumps(snapshot),
+                    self.timestamp(),
+                    self.timestamp(),
+                    routine,  # routine例行标记
+                    comment,
+                    enable_backward,
+                    python,
+                    yaml_info,
+                )
             )
-        )
-        try:
-            self.cursor.execute(sql)
-            self.job_id = self.db.insert_id()
-            self.db.commit()
-        except Exception as e:
-            print(e)
+            try:
+                self.cursor.execute(sql)
+                self.job_id = self.db.insert_id()
+                self.db.commit()
+            except Exception as e:
+                print(e)
+        else:
+            sql = (
+                "update `job` set `framework`='{}', `wheel_link`='{}', `status`='{}', `mode`='{}', "
+                "`commit`='{}', `version`='{}', `hostname`='{}', `place`='{}',"
+                "`system`='{}', `cuda`='{}', `cudnn`='{}', `snapshot`='{}', `update_time`='{}', "
+                "`routine`='{}', `comment`='{}', `enable_backward`='{}', `python`='{}', "
+                "`yaml_info`='{}' where id='{}';".format(
+                    framework,
+                    wheel_link,
+                    "running",
+                    mode,
+                    paddle.__git_commit__,
+                    version,
+                    socket.gethostname(),
+                    place,
+                    platform.system(),
+                    cuda,
+                    cudnn,
+                    json.dumps(snapshot),
+                    self.timestamp(),
+                    routine,
+                    comment,
+                    enable_backward,
+                    python,
+                    yaml_info,
+                    id,
+                )
+            )
+            try:
+                self.cursor.execute(sql)
+                self.job_id = id
+                self.db.commit()
+            except Exception as e:
+                print(e)

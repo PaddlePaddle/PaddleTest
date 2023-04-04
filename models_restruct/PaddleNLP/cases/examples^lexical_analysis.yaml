@@ -1,0 +1,191 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: examples/lexical_analysis/
+        cmd: python download.py --data_dir ./
+      -
+        name: train
+        path: examples/lexical_analysis/
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --model_save_dir ./save_dir
+          - --epochs 1
+          - --save_steps 15
+          - --logging_steps 1
+          - --batch_size 32
+          - --device gpu
+    eval:
+      -
+        name: eval
+        path: examples/lexical_analysis/
+        cmd: python predict.py
+        params:
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --init_checkpoint ./save_dir/model_15.pdparams
+          - --batch_size 32
+          - --device gpu
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/lexical_analysis/
+        cmd: python export_model.py
+        params:
+          - --data_dir=./lexical_analysis_dataset_tiny
+          - --params_path=./save_dir/model_15.pdparams
+          - --output_path=./infer_model/static_graph_params
+    predict:
+      -
+        name: predict
+        path: examples/lexical_analysis/
+        cmd: python deploy/predict.py
+        params:
+          - --model_file=infer_model/static_graph_params.pdmodel
+          - --params_file=infer_model/static_graph_params.pdiparams
+          - --data_dir lexical_analysis_dataset_tiny
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: examples/lexical_analysis/
+        cmd: python download.py --data_dir ./
+      -
+        name: train
+        path: examples/lexical_analysis/
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --model_save_dir ./save_dir
+          - --epochs 1
+          - --save_steps 15
+          - --logging_steps 1
+          - --batch_size 32
+          - --device gpu
+    eval:
+      -
+        name: eval
+        path: examples/lexical_analysis/
+        cmd: python predict.py
+        params:
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --init_checkpoint ./save_dir/model_15.pdparams
+          - --batch_size 32
+          - --device gpu
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/lexical_analysis/
+        cmd: python export_model.py
+        params:
+          - --data_dir=./lexical_analysis_dataset_tiny
+          - --params_path=./save_dir/model_15.pdparams
+          - --output_path=./infer_model/static_graph_params
+    predict:
+      -
+        name: predict
+        path: examples/lexical_analysis/
+        cmd: python deploy/predict.py
+        params:
+          - --model_file=infer_model/static_graph_params.pdmodel
+          - --params_file=infer_model/static_graph_params.pdiparams
+          - --data_dir lexical_analysis_dataset_tiny
+
+  windows_cpu:
+    train:
+      -
+        name: prepare
+        path: examples/lexical_analysis/
+        cmd: python download.py --data_dir ./
+      -
+        name: train
+        path: examples/lexical_analysis/
+        params:
+        cmd: python -m paddle.distributed.launch train.py
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --model_save_dir ./save_dir
+          - --epochs 1
+          - --save_steps 15
+          - --logging_steps 1
+          - --batch_size 32
+          - --device cpu
+    eval:
+      -
+        name: eval
+        path: examples/lexical_analysis/
+        cmd: python predict.py
+        params:
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --init_checkpoint ./save_dir/model_15.pdparams
+          - --batch_size 32
+          - --device cpu
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/lexical_analysis/
+        cmd: python export_model.py
+          - --data_dir=./lexical_analysis_dataset_tiny
+          - --params_path=./save_dir/model_15.pdparams
+          - --output_path=./infer_model/static_graph_params
+    predict:
+      -
+        name: predict
+        path: examples/lexical_analysis/
+        cmd: python deploy/predict.py
+        params:
+          - --model_file=infer_model/static_graph_params.pdmodel
+          - --params_file=infer_model/static_graph_params.pdiparams
+          - --data_dir lexical_analysis_dataset_tiny
+
+  mac:
+    train:
+      -
+        name: prepare
+        path: examples/lexical_analysis/
+        cmd: python download.py --data_dir ./
+      -
+        name: train
+        path: examples/lexical_analysis/
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --model_save_dir ./save_dir
+          - --epochs 1
+          - --save_steps 15
+          - --logging_steps 1
+          - --batch_size 32
+          - --device cpu
+    eval:
+      -
+        name: eval
+        path: examples/lexical_analysis/
+        cmd: python predict.py
+        params:
+          - --data_dir ./lexical_analysis_dataset_tiny
+          - --init_checkpoint ./save_dir/model_15.pdparams
+          - --batch_size 32
+          - --device cpu
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/lexical_analysis/
+        cmd: python export_model.py
+        params:
+          - --data_dir=./lexical_analysis_dataset_tiny
+          - --params_path=./save_dir/model_15.pdparams
+          - --output_path=./infer_model/static_graph_params
+    predict:
+      -
+        name: predict
+        path: examples/lexical_analysis/
+        cmd: python deploy/predict.py
+        params:
+          - --model_file=infer_model/static_graph_params.pdmodel
+          - --params_file=infer_model/static_graph_params.pdiparams
+          - --data_dir lexical_analysis_dataset_tiny

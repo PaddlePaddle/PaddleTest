@@ -1,0 +1,48 @@
+case:
+    linux:
+        base: ./base/ocr_table_base_pretrained.yaml
+        train:
+          -
+            name: multi
+          -
+            name: amp
+        export:
+          -
+            name: trained
+          -
+            name: pretrained
+        predict:
+          -
+            name: pretrained
+            cmd:  python ppstructure/table/predict_structure.py
+            params:
+              - --table_model_dir="./models_inference/"table_master
+              - --table_algorithm=TableMaster
+              - --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt
+              - --table_max_len=480
+              - --image_dir=ppstructure/docs/table/table.jpg
+
+    windows:
+        base: ./base/ocr_table_base_pretrained.yaml
+        predict:
+          -
+            name: pretrained
+            cmd:  python ppstructure/table/predict_structure.py
+            params:
+              - --table_model_dir="./models_inference/"table_master
+              - --table_algorithm=TableMaster
+              - --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt
+              - --table_max_len=480
+              - --image_dir=ppstructure/docs/table/table.jpg
+    mac:
+        base: ./base/ocr_table_base.yaml
+        predict:
+          -
+            name: pretrained
+            cmd:  python ppstructure/table/predict_structure.py
+            params:
+              - --table_model_dir="./models_inference/"table_master
+              - --table_algorithm=TableMaster
+              - --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt
+              - --table_max_len=480
+              - --image_dir=ppstructure/docs/table/table.jpg

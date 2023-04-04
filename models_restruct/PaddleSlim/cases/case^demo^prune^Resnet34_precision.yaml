@@ -1,0 +1,62 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/prune
+        cmd: python train.py
+        params:
+          - --model "ResNet34"
+          - --pruned_ratio 0.3125
+          - --data "imagenet"
+          - --pretrained_model ../pretrain/ResNet34_pretrained
+          - --num_epochs 30
+          - --lr_strategy="piecewise_decay"
+          - --criterion="geometry_median"
+          - --model_path="./fpgm_resnet34_models_gpu1"
+          - --save_inference True
+          - --ce_test=True
+          - --use_gpu True
+        result:
+          loss:
+            base: 0.31932157278
+            threshold: 0.0000001
+            evaluation: "-"
+          # acc_top1:
+          #   base: 0.734
+          #   threshold: 0
+          #   evaluation: "="
+          # acc_top5:
+          #   base: 0.886
+          #   threshold: 0
+          #   evaluation: "="
+
+      # -
+      #   name: multi
+      #   path: demo/prune
+      #   cmd: python train.py
+      #   params:
+      #     - --model "ResNet34"
+      #     - --pruned_ratio 0.3125
+      #     - --data "imagenet"
+      #     - --pretrained_model ../pretrain/ResNet34_pretrained
+      #     - --num_epochs 30
+      #     - --lr_strategy="piecewise_decay"
+      #     - --criterion="geometry_median"
+      #     - --model_path="./fpgm_resnet34_models_gpu1"
+      #     - --save_inference True
+      #     - --ce_test=True
+      #     - --use_gpu True
+      #   result:
+      #     loss:
+      #       base: 0.31932157278
+      #       threshold: 0.00000001
+      #       evaluation: "-"
+          # acc_top1:
+          #   base: 0.216
+          #   threshold: 0
+          #   evaluation: "="
+          # acc_top5:
+          #   base: 0.474
+          #   threshold: 0
+          #   evaluation: "="

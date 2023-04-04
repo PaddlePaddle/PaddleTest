@@ -1,0 +1,170 @@
+train:
+  -
+    name: static
+    cmd : python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.epoch_num=1
+      - Global.save_epoch_step=1
+      - Global.eval_batch_step=200
+      - Global.print_batch_step=10
+      - Global.save_model_dir=output/${qa_yaml_name}
+      - Train.loader.batch_size_per_card=10
+      - Global.print_batch_step=1
+      - Global.use_gpu=${use_gpu}
+      - Train.loader.shuffle=False
+      - Train.loader.num_workers=False
+      - Global.to_static=True
+  -
+    name: amp
+    cmd : python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.epoch_num=1
+      - Global.save_epoch_step=1
+      - Global.eval_batch_step=200
+      - Global.print_batch_step=10
+      - Global.save_model_dir=output/${qa_yaml_name}
+      - Train.loader.batch_size_per_card=10
+      - Global.print_batch_step=1
+      - Global.use_gpu=${use_gpu}
+      - Train.loader.shuffle=False
+      - Train.loader.num_workers=False
+      - Global.use_amp=True
+      - Global.scale_loss=1024.0
+      - Global.use_dynamic_loss_scaling=False
+  -
+    name: single
+    cmd : python tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.epoch_num=1
+      - Global.save_epoch_step=1
+      - Global.eval_batch_step=200
+      - Global.print_batch_step=10
+      - Global.save_model_dir=output/${qa_yaml_name}
+      - Train.loader.batch_size_per_card=10
+      - Global.print_batch_step=1
+      - Global.use_gpu=${use_gpu}
+      - Train.loader.shuffle=False
+      - Train.loader.num_workers=False
+  -
+    name: multi
+    cmd : python -m paddle.distributed.launch tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.epoch_num=1
+      - Global.save_epoch_step=1
+      - Global.eval_batch_step=200
+      - Global.print_batch_step=10
+      - Global.save_model_dir=output/${qa_yaml_name}
+      - Train.loader.batch_size_per_card=10
+      - Global.print_batch_step=1
+      - Global.use_gpu=${use_gpu}
+      - Train.loader.shuffle=False
+      - Train.loader.num_workers=False
+    result:
+      loss:
+        base: ${train_base_loss}
+        threshold: ${train_threshold}
+        evaluation: "-"
+
+eval:
+  name: trained
+  cmd:  python tools/eval.py
+  params:
+    - -c ${rd_yaml_path}
+    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.use_gpu=${use_gpu}
+  result:
+    exit_code:
+      base: 0
+      threshold: 0
+      evaluation: "="
+infer:
+  name: trained
+  cmd:  python tools/infer_rec.py
+  params:
+    - -c ${rd_yaml_path}
+    - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+    - Global.infer_img="./doc/imgs_words_en/word_336.png"
+    - Global.test_batch_size_per_card=1
+    - Global.use_gpu=${use_gpu}
+  result:
+    exit_code:
+      base: 0
+      threshold: 0
+      evaluation: "="
+export:
+  -
+    name: trained
+    cmd:  python tools/export_model.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.pretrained_model=output/${qa_yaml_name}/latest
+      - Global.save_inference_dir=./models_inference/${qa_yaml_name}
+      - Global.use_gpu=${use_gpu}
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+predict:
+  -
+    name: trained
+    cmd:  python tools/infer/predict_rec.py
+    params:
+      - --image_dir="./doc/imgs_words_en/word_336.png"
+      - --rec_model_dir="./models_inference/"${qa_yaml_name}
+      - --rec_image_shape=${image_shape}
+      - --rec_algorithm=${algorithm}
+      - --rec_char_dict_path=${rec_dict}
+      - --use_space_char=False
+      - --use_gpu=${use_gpu}
+      - --use_tensorrt=False
+      - --enable_mkldnn=False
+  -
+    name: trained_mkldnn
+    cmd:  python tools/infer/predict_rec.py
+    params:
+      - --image_dir="./doc/imgs_words_en/word_336.png"
+      - --rec_model_dir="./models_inference/"${qa_yaml_name}
+      - --rec_image_shape=${image_shape}
+      - --rec_algorithm=${algorithm}
+      - --rec_char_dict_path=${rec_dict}
+      - --use_space_char=False
+      - --use_gpu=False
+      - --use_tensorrt=False
+      - --enable_mkldnn=True
+  -
+    name: trained_tensorRT
+    cmd:  python tools/infer/predict_rec.py
+    params:
+      - --image_dir="./doc/imgs_words_en/word_336.png"
+      - --rec_model_dir="./models_inference/"${qa_yaml_name}
+      - --rec_image_shape=${image_shape}
+      - --rec_algorithm=${algorithm}
+      - --rec_char_dict_path=${rec_dict}
+      - --use_space_char=False
+      - --use_gpu=True
+      - --use_tensorrt=True
+      - --enable_mkldnn=False
+
+api:
+  name: trained_C_plus_plus_GPU
+  path: deploy/cpp_infer
+  cmd:  ./build/ppocr
+  params:
+    - --image_dir=../../doc/imgs_words_en/word_336.png
+    - --rec_model_dir=../../models_inference/${qa_yaml_name}
+    - --rec=true
+    - --det=false
+    - --cls=false
+    - --use_angle_cls=false
+    - --use_gpu=${use_gpu}
+    - --enable_mkldnn=false
+  result:
+    exit_code:
+      base: 0
+      threshold: 0
+      evaluation: "="

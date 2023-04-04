@@ -145,3 +145,19 @@ def test_multinomial_static3():
                     exe.run(startup_program)
                     static_out = exe.run(main_program, feed=feed, fetch_list=[res])
                     assert np.allclose(np.array(static_out).shape, [1, 6, 5], atol=0.005, rtol=0.05, equal_nan=True)
+
+
+@pytest.mark.api_base_multinomial_parameters
+def test_multinomial_dygraph4():
+    """
+    x=1-D Tensor,num_samples=Tensor(1)
+    """
+    paddle.disable_static()
+    for device in devices:
+        for t in dtypes:
+            np.random.seed(seed)
+            paddle.set_device(device)
+            x = np.random.random(6).astype(t)
+            res = paddle.multinomial(paddle.to_tensor(x), num_samples=paddle.to_tensor(1), name=None)
+            assert np.allclose(res.shape, [1], atol=0.005, rtol=0.05, equal_nan=True)
+    paddle.enable_static()

@@ -29,6 +29,7 @@ python -m pip install numpy==1.20.1 --ignore-installed
 python -m pip install pyparsing==2.4.7 --ignore-installed
 #pip install -e .
 pip install .
+
 # fix protobuf upgrade
 python -m pip uninstall protobuf -y
 python -m pip install protobuf==3.20.1
@@ -122,7 +123,7 @@ else
 fi
 
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
+# CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/inference/$line.log) -eq 0 ]];then
    echo -e "\033[33m inference of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
@@ -173,7 +174,7 @@ fi
 
 head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/synthesize_e2e.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
+# CUDA_VISIBLE_DEVICES=${gpus} ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name} > ../../../$log_path/synthesize_e2e/$line.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/synthesize_e2e/$line.log) -eq 0 ]];then
    echo -e "\033[33m synthesize_e2e of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else
@@ -182,7 +183,7 @@ else
 fi
 
 sed -i 's#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g' ./local/inference.sh
-CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
+# CUDA_VISIBLE_DEVICES=${gpus} ./local/inference.sh ${train_output_path} > ../../../$log_path/inference/$line.log 2>&1
 if [[ $? -eq 0 ]] && [[ $(grep -c "Error" ../../../$log_path/inference/$line.log) -eq 0 ]];then
    echo -e "\033[33m inference of $line successfully! \033[0m" | tee -a ../../../$log_path/result.log
 else

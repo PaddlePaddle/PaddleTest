@@ -145,8 +145,8 @@ class APIBase(object):
                         compare(dygraph_forward_res, res, self.delta, self.rtol)
                         logging.info(dygraph_forward_res)
                     else:
-                        compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
-                        logging.info(dygraph_forward_res.numpy())
+                        compare(dygraph_forward_res.numpy(False), res, self.delta, self.rtol)
+                        logging.info(dygraph_forward_res.numpy(False))
                     if self.enable_backward:
                         dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
                         logging.info("[dygraph grad]")
@@ -216,7 +216,7 @@ class APIBase(object):
                     if isinstance(dygraph_forward_res, (list, tuple)):
                         compare(dygraph_forward_res, res, self.delta, self.rtol)
                     else:
-                        compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
+                        compare(dygraph_forward_res.numpy(False), res, self.delta, self.rtol)
                     # ③ calculate backward result
                     if self.enable_backward:
                         dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
@@ -288,8 +288,8 @@ class APIBase(object):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
                     logging.info(dygraph_forward_res)
                 else:
-                    compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
-                    logging.info(dygraph_forward_res.numpy())
+                    compare(dygraph_forward_res.numpy(False), res, self.delta, self.rtol)
+                    logging.info(dygraph_forward_res.numpy(False))
                 if self.enable_backward:
                     dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
                     logging.info("[dygraph grad]")
@@ -352,7 +352,7 @@ class APIBase(object):
                 if isinstance(dygraph_forward_res, (list, tuple)):
                     compare(dygraph_forward_res, res, self.delta, self.rtol)
                 else:
-                    compare(dygraph_forward_res.numpy(), res, self.delta, self.rtol)
+                    compare(dygraph_forward_res.numpy(False), res, self.delta, self.rtol)
                 # ③ calculate backward result
                 if self.enable_backward:
                     dygraph_backward_res = self._dygraph_backward(dygraph_forward_res)
@@ -487,9 +487,9 @@ class APIBase(object):
                     self.kwargs[k].stop_gradient = False
         if data is None:
             for k, v in self.kwargs.items():
-                if isinstance(v, paddle.Tensor):
+                if isinstance(v, paddle.Tensor) and k not in self.no_grad_var:
                     grad = []
-                    shape = v.numpy().shape
+                    shape = v.numpy(False).shape
                     for i in range(len(v.numpy().flatten())):
                         tmp = v.numpy().flatten()
                         tmp[i] = tmp[i] + self.gap
@@ -537,17 +537,17 @@ class APIBase(object):
         if self.__layertype == "func":
             res = self.func(**self.kwargs)
             if isinstance(res, (list, tuple)):
-                loss = paddle.mean(res[0]).numpy()
+                loss = paddle.mean(res[0]).numpy(False)
             else:
-                loss = paddle.mean(res).numpy()
+                loss = paddle.mean(res).numpy(False)
             return loss
         elif self.__layertype == "class":
             obj = self.func(**self.kwargs)
             res = obj(self.data)
             if isinstance(res, (list, tuple)):
-                loss = paddle.mean(res[0]).numpy()
+                loss = paddle.mean(res[0]).numpy(False)
             else:
-                loss = paddle.mean(res).numpy()
+                loss = paddle.mean(res).numpy(False)
             return loss
 
     def _dygraph_forward(self):
@@ -557,10 +557,14 @@ class APIBase(object):
             result
         """
         if self.__layertype == "func":
+            for k, v in self.kwargs.items():
+                if isinstance(v, paddle.Tensor):
+                    v.retain_grads()
             res = self.func(**self.kwargs)
             return res
         elif self.__layertype == "class":
             obj = self.func(**self.kwargs)
+            self.data.retain_grads()
             res = obj(self.data)
             return res
 
@@ -609,9 +613,13 @@ class APIBase(object):
                         if isinstance(v, (np.generic, np.ndarray)):
                             # no_grad_Var不需要转换类型
                             if self.no_grad_var is not None and k in self.no_grad_var:
+                                # logging.info("params[{}] is: {}".format(k, params[k].dtype))
                                 params[k] = paddle.static.data(name=k, shape=v.shape, dtype=v.dtype)
+                                # logging.info("params[{}] is: {}".format(k, params[k]))
                             else:
+                                # logging.info("params[{}] is: {}".format(k, params[k].dtype))
                                 params[k] = paddle.static.data(name=k, shape=v.shape, dtype=self.dtype)
+                                # logging.info("params[{}] is: {}".format(k, params[k]))
                             xyz.append(k)
                             # enable compute gradient
                             if self.enable_backward is True:
@@ -621,7 +629,14 @@ class APIBase(object):
                         loss = paddle.mean(output)
                         grad_var = {}
                         for k in xyz:
+                            # logging.info("xyz is: {}".format(params))
+                            # logging.info("params is: {}".format(params))
+                            # # if k not in self.no_grad_var:
+                            # logging.info("start~~~")
+                            # logging.info("value in xyz is: {}".format(params[k]))
+                            # logging.info("loss dtype is: {}".format(loss))
                             grad_var[k] = paddle.static.gradients(loss, params[k])
+                            # logging.info("success~~~")
                         exe = paddle.static.Executor(self.place)
                         exe.run(startup_program)
                         # print(list(grad_var.values()))
@@ -741,7 +756,7 @@ def compare(result, expect, delta=1e-6, rtol=1e-5):
             if isinstance(j, (np.generic, np.ndarray)):
                 compare(j, expect[i], delta, rtol)
             else:
-                compare(j.numpy(), expect[i], delta, rtol)
+                compare(j.numpy(False), expect[i], delta, rtol)
         # result = np.array(result)
         # expect = np.array(expect)
         # res = np.allclose(result, expect, atol=delta)

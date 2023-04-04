@@ -1,0 +1,216 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: model_zoo/electra
+        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/BookCorpus.tar.gz && tar -xzvf BookCorpus.tar.gz
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: pretrain
+        path: model_zoo/electra
+        cmd: python -u ./run_pretrain.py
+        params:
+          - --model_type electra
+          - --model_name_or_path electra-small
+          - --input_dir ./BookCorpus/
+          - --output_dir ./pretrain_model/
+          - --train_batch_size 64
+          - --learning_rate 5e-4
+          - --max_seq_length 128
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --num_train_epochs 4
+          - --logging_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --device gpu
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+      -
+        name: get_fintune_model
+        path: model_zoo/electra
+        cmd: python -u ./get_ft_model.py
+        params:
+          - --model_dir ./pretrain_model/model_1.pdparams/
+      -
+        name: fintune_pretarined
+        path: model_zoo/electra
+        cmd: python -u ./run_glue.py
+        params:
+          - --model_type electra
+          - --model_name_or_path electra-small
+          - --task_name SST-2
+          - --max_seq_length 128
+          - --batch_size 32
+          - --learning_rate 1e-4
+          - --num_train_epochs 3
+          - --logging_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --output_dir ./SST-2
+          - --device gpu
+      -
+        name: fintune_local
+        path: model_zoo/electra
+        cmd: python -u ./run_glue.py
+        params:
+          - --model_type electra
+          - --model_name_or_path ./pretrain_model/model_1.pdparams/
+          - --task_name SST-2
+          - --max_seq_length 128
+          - --batch_size 32
+          - --learning_rate 1e-4
+          - --num_train_epochs 3
+          - --logging_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --output_dir ./SST-2
+          - --device gpu
+
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: export
+        path: model_zoo/electra
+        cmd: python -u ./export_model.py
+        params:
+          - --input_model_dir ./SST-2/sst-2_ft_model_1.pdparams/
+          - --output_model_dir ./
+          - --model_name electra-deploy
+    predict:
+      -
+        name: predict
+        path: model_zoo/electra/deploy/python
+        cmd: python -u ./predict.py
+        params:
+          - --model_file ../../electra-deploy.pdmodel
+          - --params_file ../../electra-deploy.pdiparams
+          - --predict_sentences "uneasy mishmash of styles and genres ." "director rob marshall went out gunning to make a great one ."
+          - --batch_size 2
+          - --max_seq_length 128
+          - --model_name electra-small
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: model_zoo/electra
+        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/BookCorpus.tar.gz && tar -xzvf BookCorpus.tar.gz
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: pretrain
+        path: model_zoo/electra
+        cmd: python -u ./run_pretrain.py
+        params:
+          - --model_type electra
+          - --model_name_or_path electra-small
+          - --input_dir ./BookCorpus/
+          - --output_dir ./pretrain_model/
+          - --train_batch_size 64
+          - --learning_rate 5e-4
+          - --max_seq_length 128
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --num_train_epochs 4
+          - --logging_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --device gpu
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+      -
+        name: get_fintune_model
+        path: model_zoo/electra
+        cmd: python -u ./get_ft_model.py
+        params:
+          - --model_dir ./pretrain_model/model_1.pdparams/
+      -
+        name: fintune_pretarined
+        path: model_zoo/electra
+        cmd: python -u ./run_glue.py
+        params:
+          - --model_type electra
+          - --model_name_or_path electra-small
+          - --task_name SST-2
+          - --max_seq_length 128
+          - --batch_size 32
+          - --learning_rate 1e-4
+          - --num_train_epochs 3
+          - --logging_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --output_dir ./SST-2
+          - --device gpu
+      -
+        name: fintune_local
+        path: model_zoo/electra
+        cmd: python -u ./run_glue.py
+        params:
+          - --model_type electra
+          - --model_name_or_path ./pretrain_model/model_1.pdparams/
+          - --task_name SST-2
+          - --max_seq_length 128
+          - --batch_size 32
+          - --learning_rate 1e-4
+          - --num_train_epochs 3
+          - --logging_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --output_dir ./SST-2
+          - --device gpu
+
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: export
+        path: model_zoo/electra
+        cmd: python -u ./export_model.py
+        params:
+          - --input_model_dir ./SST-2/sst-2_ft_model_1.pdparams/
+          - --output_model_dir ./
+          - --model_name electra-deploy
+    predict:
+      -
+        name: predict
+        path: model_zoo/electra/deploy/python
+        cmd: python -u ./predict.py
+        params:
+          - --model_file ../../electra-deploy.pdmodel
+          - --params_file ../../electra-deploy.pdiparams
+          - --predict_sentences "uneasy mishmash of styles and genres ." "director rob marshall went out gunning to make a great one ."
+          - --batch_size 2
+          - --max_seq_length 128
+          - --model_name electra-small
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

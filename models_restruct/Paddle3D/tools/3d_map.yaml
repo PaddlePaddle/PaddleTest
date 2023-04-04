@@ -1,0 +1,8 @@
+smoke_hrnet18_no_dcn_kitti: AP_R11@25%
+pointpillars_xyres16_kitti_cyclist_pedestrian: AP_R11@25%
+pointpillars_xyres16_kitti_car: AP_R11@50%
+centerpoint_pillars_016voxel_kitti: AP_R11@25%
+centerpoint_pillars_02voxel_nuscenes_10sweep: mAP
+centerpoint_voxels_0075voxel_nuscenes_10sweep: mAP
+squeezesegv3_rangenet21_semantickitti: Acc avg
+squeezesegv3_rangenet53_semantickitti: Acc avg

@@ -1,0 +1,74 @@
+case:
+  linux:
+    base: ./base/keypoint_base.yml
+    train:
+      -
+        name: multi
+        cmd : python -m paddle.distributed.launch tools/train.py
+        params:
+          - TrainReader.batch_size=1
+      -
+        name: single
+        cmd : python tools/train.py
+        params:
+          - TrainReader.batch_size=1
+      -
+        name: quant_multi
+        params:
+          - --slim_config configs/slim/quant/tinypose_qat.yml
+      -
+        name: amp_multi
+      -
+        name: static_multi
+    eval:
+      -
+        name: pretrained
+        cmd: python tools/eval.py
+    infer:
+      -
+        name: pretrained
+        cmd: python tools/infer.py
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export_model.py
+    predict:
+      -
+        name: python
+      -
+        name: mkldnn
+      -
+        name: trt_fp32
+      -
+        name: trt_fp16
+      -
+        name: paddle2onnx
+      -
+        name: onnx_infer
+  windows:
+    base: ./base/keypoint_base.yml
+    train:
+      -
+        name: single
+        cmd : python tools/train.py
+        params:
+          - TrainReader.batch_size=1
+    eval:
+      -
+        name: pretrained
+        cmd: python tools/eval.py
+    infer:
+      -
+        name: pretrained
+        cmd: python tools/infer.py
+    export:
+      -
+        name: pretrained
+        cmd: python tools/export_model.py
+    predict:
+      -
+        name: python
+        cmd: python deploy/python/keypoint_infer.py
+
+
+function: paddlelas_imagenet_parse

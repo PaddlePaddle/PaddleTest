@@ -241,7 +241,7 @@ def test_broadcast_to6():
     """
     broadcast_to6: 1D to 2D on dim0, bool
     """
-    x_data = np.array([0, 1]).reshape((2,)).astype(np.bool)
+    x_data = np.array([0, 1]).reshape((2,)).astype(np.bool_)
     out_shape = [5, 2]
     res = np.array([[False, True], [False, True], [False, True], [False, True], [False, True]])
 

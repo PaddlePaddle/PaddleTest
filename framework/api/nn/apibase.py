@@ -487,7 +487,7 @@ class APIBase(object):
                     self.kwargs[k].stop_gradient = False
         if data is None:
             for k, v in self.kwargs.items():
-                if isinstance(v, paddle.Tensor):
+                if isinstance(v, paddle.Tensor) and k not in self.no_grad_var:
                     grad = []
                     shape = v.numpy().shape
                     for i in range(len(v.numpy().flatten())):
@@ -556,11 +556,15 @@ class APIBase(object):
         Returns:
             result
         """
+        for k, v in self.kwargs.items():
+            if isinstance(v, paddle.Tensor):
+                v.retain_grads()
         if self.__layertype == "func":
             res = self.func(**self.kwargs)
             return res
         elif self.__layertype == "class":
             obj = self.func(**self.kwargs)
+            self.data.retain_grads()
             res = obj(self.data)
             return res
 

@@ -49,10 +49,10 @@ def test_cast():
     paddle.disable_static()
     if paddle.device.is_compiled_with_cuda() is True:
         place = ["cpu", "gpu"]
-        type_list = [np.int32, np.int64, np.bool, np.float32, np.float64, np.float16]
+        type_list = [np.int32, np.int64, np.bool_, np.float32, np.float64, np.float16]
     else:
         place = ["cpu"]
-        type_list = [np.int32, np.int64, np.bool, np.float32, np.float64, np.uint8]
+        type_list = [np.int32, np.int64, np.bool_, np.float32, np.float64, np.uint8]
     for p in place:
         paddle.set_device(p)
         print("++++++ use device {} ++++++".format(p))
@@ -83,10 +83,10 @@ def test_cast():
 #     paddle.disable_static()
 #     if paddle.device.is_compiled_with_cuda() is True:
 #         place = ['cpu', 'gpu']
-#         type_list = [np.int32, np.int64, np.bool, np.float32, np.float64, np.uint8, np.float16]
+#         type_list = [np.int32, np.int64, np.bool_, np.float32, np.float64, np.uint8, np.float16]
 #     else:
 #         place = ['cpu']
-#         type_list = [np.int32, np.int64, np.bool, np.float32, np.float64, np.uint8]
+#         type_list = [np.int32, np.int64, np.bool_, np.float32, np.float64, np.uint8]
 #     for p in place:
 #         paddle.set_device(p)
 #         print('++++++ use device {} ++++++'.format(p))

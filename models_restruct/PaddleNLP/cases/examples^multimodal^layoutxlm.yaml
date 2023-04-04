@@ -1,0 +1,52 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: examples/multimodal/layoutlm
+        cmd: wget https://bj.bcebos.com/v1/paddlenlp/datasets/FUNSD.zip && unzip FUNSD.zip
+      -
+        name: single
+        path: examples/multimodal/layoutlm
+        cmd:   python train_funsd.py
+        params:
+          - --data_dir "./data/"
+          - --model_name_or_path "layoutlm-base-uncased"
+          - --do_lower_case
+          - --max_seq_length 512
+          - --do_train
+          - --do_eval
+          - --num_train_epochs 100
+          - --logging_steps 1
+          - --save_steps 1
+          - --output_dir "output/"
+          - --labels "./data/labels.txt"
+          - --per_gpu_train_batch_size 16
+          - --per_gpu_eval_batch_size 16
+          - --evaluate_during_training
+          - --max_steps 1
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

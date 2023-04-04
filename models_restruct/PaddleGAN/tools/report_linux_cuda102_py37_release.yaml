@@ -1,0 +1,1246 @@
+configs^animeganv2:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          d_loss:
+            base: 295.632
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          d_loss:
+            base: 234.524
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^animeganv2_pretrain:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          init_c_loss:
+            base: 358.137
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          init_c_loss:
+            base: 300.415
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^aotgan:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          perceptual:
+            base: 3.581
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          perceptual:
+            base: 4.87
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^basicvsr++_reds:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 0.043
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 0.057
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^basicvsr++_vimeo90k_BD:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 0.03
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 0.021
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^basicvsr_reds:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 0.052
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 0.037
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^cyclegan_cityscapes:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          G_idt_A_loss:
+            base: 0.913
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          G_idt_A_loss:
+            base: 1.025
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^cyclegan_horse2zebra:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          G_idt_A_loss:
+            base: 2.266
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          G_idt_A_loss:
+            base: 1.925
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^dcgan_mnist:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 99999999
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss:
+            base: 99999999
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^drn_psnr_x4_div2k:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_dual:
+            base: 106.473
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_dual:
+            base: 194.794
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^edvr_l_w_tsa:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 7744.412
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 9561.752
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^edvr_l_wo_tsa:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 8257.375
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 9656.447
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^edvr_m_w_tsa:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 9917.679
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 9908.521
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^edvr_m_wo_tsa:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 12258.918
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 5604.984
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^esrgan_psnr_x2_div2k:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 14.479
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 16.654
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^esrgan_psnr_x4_div2k:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 6.299
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 18.774
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^esrgan_x4_div2k:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pix:
+            base: 0.225
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pix:
+            base: 0.27
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^firstorder_fashion:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          perceptual:
+            base: 194.711
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          perceptual:
+            base: 157.309
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^firstorder_vox_256:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          perceptual:
+            base: 278.547
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          perceptual:
+            base: 155.302
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^firstorder_vox_mobile_256:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: single
+        result:
+          perceptual:
+            base: 285.979
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^gfpgan_ffhq1024:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 50000.0
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss:
+            base: 50000.0
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^gpen_256_ffhq:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 1.322
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss:
+            base: 1.547
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^iconvsr_reds:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 0.063
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 0.04
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^invdn_denoising:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 19340.562
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss:
+            base: 78413.734
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^lapstyle_draft:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: single
+        result:
+          loss_c:
+            base: 6.499
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^lapstyle_rev_first:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: single
+        result:
+          D_fake_loss:
+            base: 0.69
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^lapstyle_rev_second:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: single
+        result:
+          D_fake_loss:
+            base: 0.625
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^lesrcnn_psnr_x4_div2k:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 0.214
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 0.376
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^mprnet_denoising:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 15385.165
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss:
+            base: 17646.873
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^mprnet_deraining:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 45378.141
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss:
+            base: 34473.184
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^msvsr_reds:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pix:
+            base: 0.05
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pix:
+            base: 0.041
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^msvsr_vimeo90k_BD:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pix:
+            base: 0.037
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pix:
+            base: 0.022
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^nafnet_denoising:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 5.159
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss:
+            base: 4.085
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^pan_psnr_x4_div2k:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 0.031
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 0.076
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^photopen:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          g_featloss:
+            base: 14.471
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          g_featloss:
+            base: 11.341
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^pix2pix_cityscapes:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          D_fake_loss:
+            base: 0.492
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          D_fake_loss:
+            base: 0.489
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^pix2pix_cityscapes_2gpus:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          D_fake_loss:
+            base: 0.499
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          D_fake_loss:
+            base: 0.735
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^pix2pix_facades:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          D_fake_loss:
+            base: 0.647
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          D_fake_loss:
+            base: 0.765
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^prenet:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: single
+        result:
+          loss_pixel:
+            base: 99999999
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^rcan_rssr_x4:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pixel:
+            base: 655176512.0
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pixel:
+            base: 382107904.0
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^realsr_bicubic_noise_x4_df2k:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pix:
+            base: 0.154
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pix:
+            base: 0.164
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^realsr_kernel_noise_x4_dped:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss_pix:
+            base: 0.208
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss_pix:
+            base: 0.23
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^singan_animation:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: single
+        result:
+          D_gradient_penalty:
+            base: 0.021
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^singan_finetune:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: single
+        result:
+          D_gradient_penalty:
+            base: 0.052
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^singan_sr:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: single
+        result:
+          D_gradient_penalty:
+            base: 0.082
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^singan_universal:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: single
+        result:
+          D_gradient_penalty:
+            base: 0.024
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^starganv2_afhq:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          G/latent_adv:
+            base: 5.757
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          G/latent_adv:
+            base: 63.826
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^starganv2_celeba_hq:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          G/latent_adv:
+            base: 2.818
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          G/latent_adv:
+            base: 6.746
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^stylegan_v2_256_ffhq:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          l_d:
+            base: 0.092
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          l_d:
+            base: 0.898
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^swinir_denoising:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          loss:
+            base: 0.602
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          loss:
+            base: 1.059
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^ugatit_photo2cartoon:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          discriminator_loss:
+            base: 2.216
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          discriminator_loss:
+            base: 2.761
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml
+configs^ugatit_selfie2anime_light:
+  case:
+    linux:
+      base: ./base/base.yaml
+      eval:
+      - name: trained
+      train:
+      - name: multi
+        result:
+          discriminator_loss:
+            base: 4.521
+            evaluation: '-'
+            threshold: 100
+      - name: single
+        result:
+          discriminator_loss:
+            base: 4.474
+            evaluation: '-'
+            threshold: 100
+    mac:
+      base: ./base/base.yaml
+    windows:
+      base: ./base/base.yaml
+    windows_cpu:
+      base: ./base/base.yaml

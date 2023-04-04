@@ -1,0 +1,137 @@
+# 无预训练模型
+case:
+  linux:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single
+      -
+        name: multi
+      -
+        name: multi_dy2st
+      -
+        name: multi_amp
+      -
+        name: multi_amp_dy2st
+    eval:
+      -
+        name: trained
+    infer:
+      -
+        name: trained
+    export:
+      -
+        name: trained
+    predict:
+      -
+        name: trained
+      -
+        name: trained_mkldnn
+      -
+        name: trained_trt
+
+  linux_convergence:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single_convergence
+      -
+        name: multi_convergence
+      -
+        name: multi_static_convergence
+
+  # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
+    # base: ./base/ImageNet_base.yaml
+  #   train:
+  #     -
+  #       name: function
+  #       params:
+  #         - -o Global.device=cpu
+
+  windows:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: function
+      -
+        name: function_dy2st
+      -
+        name: function_amp
+    eval:
+      -
+        name: function
+    infer:
+      -
+        name: function
+    export:
+      -
+        name: function
+    predict:
+      -
+        name: function
+      -
+        name: function_mkldnn
+      -
+        name: function_trt
+
+  windows_cpu:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    infer:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+
+  mac:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: function_dy2st
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    infer:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+
+function: paddlelas_imagenet_parse

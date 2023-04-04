@@ -1,5 +1,6 @@
 #! /bin/bash
 # $1:python_version $2:paddle_compile_path $3:run_CI/run_CE/run_ALL/run_CPU $4:cudaid1 $5:cudaid2
+echo "---$1、$2、$3、$4--"
 
 case $1 in
 27)
@@ -52,8 +53,36 @@ fi
 mkdir /workspace/logs
 export log_path=/workspace/logs
 
+cd ${rec_dir}
+git log --pretty=oneline -10
+python -m pip install pip==20.2.4
+python -m pip install cpplint pylint pytest astroid isort
+python -m pip install pre-commit==2.9.3
+pre-commit install
+
+echo "---start code-style check---"
+commit_files=on
+git remote add upstream https://github.com/PaddlePaddle/PaddleRec.git
+git fetch upstream
+git diff --numstat upstream/master
+git diff --numstat upstream/master |awk '{print $NF}'
+for file_name in `git diff --numstat upstream/master |awk '{print $NF}'`;do
+#for file_name in `git diff --numstat develop |awk '{print $NF}'`;do
+    echo -e "\033[35m ---- checking for: $file_name \033[0m"
+    if ! pre-commit run --files $file_name ; then
+        echo -e "\033[31m ---- check fail file_name: $file_name \033[0m"
+        git diff
+        commit_files=off
+    fi
+done
+if [ $commit_files == 'off' ];then
+    echo -e "\033[31m ---- check code style fail  \033[0m"
+    exit 2;
+fi
+
 # run_CI/run_CE/run_ALL/run_CPU 、cudaid1、cudaid2
 bash rec_run_case_linux.sh $3 $4 $5
+exit $?
 
 cd ${log_path}
 FF=`ls *FAIL*|wc -l`

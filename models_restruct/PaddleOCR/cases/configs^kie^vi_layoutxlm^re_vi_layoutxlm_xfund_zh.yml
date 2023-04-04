@@ -1,0 +1,31 @@
+case:
+    linux:
+        base: ./base/ocr_kie_base_pretrained.yaml
+        train:
+          -
+            name: multi
+          -
+            name: amp
+        infer:
+          -
+            name: pretrained
+            cmd:  python tools/infer_kie_token_ser_re.py
+            params:
+              - -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml
+              - -o_ser Architecture.Backbone.checkpoints=ser_vi_layoutxlm_xfund_zh/best_accuracy
+        export:
+          -
+            name: trained
+          -
+            name: pretrained
+        predict:
+          -
+            name: pretrained
+            cmd:  python ppstructure/kie/predict_kie_token_ser_re.py
+            params:
+              - --re_model_dir=./models_inference/${model}
+              - --ser_model_dir=./models_inference/ser_vi_layoutxlm_xfund_zh
+    windows:
+        base: ./base/ocr_kie_base_pretrained.yaml
+    mac:
+        base: ./base/ocr_kie_base.yaml

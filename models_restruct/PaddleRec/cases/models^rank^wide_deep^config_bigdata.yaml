@@ -1,0 +1,22 @@
+case:
+  linux:
+    base: ./base/train_infer_with_gpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+        result:
+          auc:
+            base: 0.795284
+            threshold: 0.0003
+            evaluation: "+"
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+        result:
+          auc:
+            base: 0.796542
+            threshold: 0.0003
+            evaluation: "+"

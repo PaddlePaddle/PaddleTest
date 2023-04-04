@@ -97,7 +97,7 @@ TRAIN: # 训练步骤
       train_eval:
         latest: True
         kpi_base: 347.85004
-        threshold: 0.00001
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -112,15 +112,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.7439
+        kpi_base: 6.73956
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 167.21382
-        threshold: 0.00001
+        kpi_base: 241.49366
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -135,15 +135,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.69878
+        kpi_base: 6.69799
         threshold: 0.0
         actived: True
         evaluation: "="
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 230.02113
-        threshold: 0.00001
+        kpi_base: 347.85004
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -158,15 +158,15 @@ TRAIN: # 训练步骤
     kpis: #kpi指标
       loss:
         latest: True
-        kpi_base: 6.74566
+        kpi_base: 6.73956
         threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
       train_eval:
         latest: True
-        kpi_base: 221.95624
-        threshold: 0.00001
+        kpi_base: 241.49366
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -232,7 +232,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.89191
-        threshold: 0.00001
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None
@@ -248,7 +248,7 @@ EVAL: # 训练步骤
       loss:
         latest: True
         kpi_base: 0.89191
-        threshold: 0.00001
+        threshold: 0.0
         actived: True
         evaluation: "-"
         unit_repr: None

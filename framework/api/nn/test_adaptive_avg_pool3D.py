@@ -31,14 +31,12 @@ obj = TestAdaptiveAvgPool3D(paddle.nn.AdaptiveAvgPool3D)
 
 
 def adaptive_start_index(index, input_size, output_size):
-    """adaptive_start_index
-    """
+    """adaptive_start_index"""
     return int(np.floor(index * input_size / output_size))
 
 
 def adaptive_end_index(index, input_size, output_size):
-    """adaptive_end_index
-    """
+    """adaptive_end_index"""
     return int(np.ceil((index + 1) * input_size / output_size))
 
 

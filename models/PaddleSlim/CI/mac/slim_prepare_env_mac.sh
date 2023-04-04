@@ -37,7 +37,7 @@ python -m pip uninstall paddlepaddle -y
 python -m pip install --upgrade pip
 python -m pip install $2 --no-cache-dir
 echo ---paddle commit:---
-python -c 'import paddle; print(paddle.version.commit)';
+python -c 'import paddle; print(paddle.version.commit)'
 
 ####################################
 # # for logs env

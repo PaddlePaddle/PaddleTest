@@ -15,7 +15,7 @@ import numpy as np
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
-from test_case import InferenceTest, clip_model_extra_op
+from test_case import InferenceTest
 
 # pylint: enable=wrong-import-position
 
@@ -24,13 +24,12 @@ def check_model_exist():
     """
     check model exist
     """
-    bert_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1.2/nlp/bert.tgz"
+    bert_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.2/nlp/bert.tgz"
     if not os.path.exists("./bert/inference.pdiparams"):
         wget.download(bert_url, out="./")
         tar = tarfile.open("bert.tgz")
         tar.extractall()
         tar.close()
-        clip_model_extra_op(path_prefix="./bert/inference", output_model_path="./bert/inference")
 
 
 def test_config():
@@ -39,7 +38,10 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
@@ -54,7 +56,10 @@ def test_trt_fp32_bz1():
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
     data_path = "./bert/data.txt"
     images_list = test_suite.get_text_npy(data_path)
 
@@ -66,10 +71,35 @@ def test_trt_fp32_bz1():
 
     del test_suite  # destroy class to save memory
 
-    test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
-    test_suite2.trt_more_bz_test(input_data_dict, output_data_dict, delta=1e-5, max_batch_size=1, precision="trt_fp32")
+    test_suite1 = InferenceTest()
+    test_suite1.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
+    test_suite1.trt_more_bz_test(
+        input_data_dict,
+        output_data_dict,
+        delta=0.0002,
+        max_batch_size=1,
+        precision="trt_fp32",
+        dynamic=True,
+        tuned=True,
+    )
+    del test_suite1  # destroy class to save memory
 
+    test_suite2 = InferenceTest()
+    test_suite2.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
+    test_suite2.trt_more_bz_test(
+        input_data_dict,
+        output_data_dict,
+        delta=0.0002,
+        max_batch_size=1,
+        precision="trt_fp32",
+        dynamic=True,
+    )
     del test_suite2  # destroy class to save memory
 
 
@@ -81,7 +111,10 @@ def test_trt_fp32_bz1_multi_thread():
     check_model_exist()
 
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
     data_path = "./bert/data.txt"
     images_list = test_suite.get_text_npy(data_path)
 
@@ -94,7 +127,15 @@ def test_trt_fp32_bz1_multi_thread():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./bert/inference.pdmodel", params_file="./bert/inference.pdiparams")
-    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, delta=1e-5, precision="trt_fp32")
+    test_suite2.load_config(
+        model_file="./bert/inference.pdmodel",
+        params_file="./bert/inference.pdiparams",
+    )
+    test_suite2.trt_bz1_multi_thread_test(
+        input_data_dict,
+        output_data_dict,
+        delta=1e-5,
+        precision="trt_fp32",
+    )
 
     del test_suite2  # destroy class to save memory

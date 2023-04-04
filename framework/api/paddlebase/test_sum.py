@@ -21,6 +21,7 @@ class TestSum(APIBase):
         """
         self.types = [np.float32, np.float64]
         self.enable_backward = True
+        self.no_grad_var = ["axis"]
 
 
 obj = TestSum(paddle.sum)
@@ -147,6 +148,7 @@ class TestSum1(APIBase):
         """
         self.types = [np.int32, np.int64]
         self.enable_backward = False
+        self.no_grad_var = ["axis"]
 
 
 obj1 = TestSum1(paddle.sum)
@@ -160,3 +162,29 @@ def test_sum10():
     x = np.array([[3, 5], [6, 2]])
     res = [np.sum(x)]
     obj1.run(res=res, x=x)
+
+
+@pytest.mark.api_base_sum_parameters
+def test_sum11():
+    """
+    axis=Tensor
+    """
+    paddle.disable_static()
+    x = np.array([[0.8, 0.4], [0.7, 0.9]])
+    axis = np.array([0, 1])
+    res = np.array([2.8])
+    exp = paddle.sum(paddle.to_tensor(x), axis=paddle.to_tensor(axis))
+    assert np.allclose(exp.numpy(), res)
+
+
+@pytest.mark.api_base_sum_parameters
+def test_sum12():
+    """
+    axis=Tensor
+    """
+    x = np.array([[0.8, 0.4], [0.7, 0.9]]).astype("float32")
+    res = np.array([1.5, 1.3])
+    axis = np.array([0]).astype("int64")
+    obj.static = False
+    obj.run(res=res, x=x, axis=axis)
+    obj.static = True

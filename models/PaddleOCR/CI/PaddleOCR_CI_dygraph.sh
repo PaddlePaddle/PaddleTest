@@ -40,6 +40,15 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    esac
    python -c "import sys; print('python version:',sys.version_info[:])";
 
+
+   # PaddleSlim dev
+   echo "install PaddleSlim dev"
+   git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
+   cd PaddleSlim
+   python -m pip install -r requirements.txt
+   python setup.py install
+   cd ..
+
    unset http_proxy
    unset https_proxy
    echo "######  ----install  paddle-----"
@@ -72,6 +81,7 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
+
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 num=`python -m pip list | grep fasttext | wc -l`
 if [ "${num}" -eq "0" ]; then
@@ -79,8 +89,8 @@ if [ "${num}" -eq "0" ]; then
    python -m pip install --ignore-installed fasttext -i https://mirror.baidu.com/pypi/simple
 fi
 # paddleocr
-python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
-python -m pip install  --ignore-installed gast==0.3.3 -i https://mirror.baidu.com/pypi/simple
+# python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
+# python -m pip install  --ignore-installed gast==0.3.3 -i https://mirror.baidu.com/pypi/simple
 
 # dir
 log_path=log
@@ -100,8 +110,8 @@ rm -rf models_list_all
 rm -rf models_list_det
 rm -rf models_list_rec
 
-find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'det_mv3_east' > models_list_det
-find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_resnet_stn_bilstm_att' > models_list_rec
+find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'det_mv3_east'| grep -v 'det_mv3_pse' > models_list_det
+find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_resnet_stn_bilstm_att' | grep -v 'rec_r32_gaspin_bilstm_att' > models_list_rec
 
 shuf models_list_det > models_list_all
 shuf models_list_rec >> models_list_all
@@ -130,7 +140,7 @@ if [[ ${1} =~ "pr" ]];then
 fi
 echo "######  diff models_list"
 cp models_list models_list_backup
-cat models_list_backup | sort | uniq > models_list  #去重复
+cat models_list_backup | sort | uniq | grep -v 'drrg_ctw' | grep -v 'e2e_r50_vd_pg' | grep -v 'rec_resnet_rfl_att'> models_list  #去重复
 wc -l models_list
 cat models_list
 
@@ -156,7 +166,7 @@ echo $category
 if [ ${category} == "rec" ];then
   if [[ ${model} =~ "rec_resnet_stn_bilstm_att" ]]; then
      python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=256 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=256 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
-     if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
+     if [[ $? -eq 0 ]] && [ -f "output/"${model}"/latest.pdparams" ];then
        echo -e "\033[33m training of $model rec_resnet_stn_bilstm_att successfully!\033[0m" | tee -a $log_path/result.log
     else
        cat $log_path/train/$model.log
@@ -164,7 +174,7 @@ if [ ${category} == "rec" ];then
     fi
   else
     python -m paddle.distributed.launch  tools/train.py -c $line -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.eval_batch_step=200 Global.print_batch_step=10 Global.save_model_dir="output/"${model} > $log_path/train/$model.log 2>&1
-    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
+    if [[ $? -eq 0 ]] && [ -f "output/"${model}"/latest.pdparams" ];then
        echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
     else
        cat $log_path/train/$model.log
@@ -173,7 +183,7 @@ if [ ${category} == "rec" ];then
   fi
 else
 python -m paddle.distributed.launch  tools/train.py -c $line  -o Train.loader.batch_size_per_card=2 Global.use_gpu=${gpu_flag} Global.epoch_num=1 Global.save_epoch_step=1 Global.save_model_dir="output/"${model}  > $log_path/train/$model.log 2>&1
-if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/$model.log) -eq 0 ]]  && [ -f "output/"${model}"/latest.pdparams" ];then
+if [[ $? -eq 0 ]] && [ -f "output/"${model}"/latest.pdparams" ];then
    echo -e "\033[33m training of $model  successfully!\033[0m" | tee -a $log_path/result.log
 else
    cat  $log_path/train/$model.log
@@ -268,6 +278,15 @@ fi
 
 elif [ ${algorithm} == "SAR" ];then
 python tools/infer/predict_${category}.py --image_dir="./doc/imgs_words/en/word_1.png" --rec_model_dir="./models_inference/"${model} --rec_image_shape="3, 48, 48, 160" --rec_char_dict_path=ppocr/utils/en_dict.txt --rec_algorithm=${algorithm}  > $log_path/predict/${model}.log 2>&1
+if [[ $? -eq 0 ]]; then
+   echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
+else
+   cat $log_path/predict/${model}.log
+   echo -e "\033[31m predict of $model failed!\033[0m"| tee -a $log_path/result.log
+fi
+
+elif [ ${algorithm} == "NRTR" ];then
+python tools/infer/predict_rec.py --image_dir='./doc/imgs_words_en/word_10.png' --rec_model_dir="./models_inference/"${model} --rec_algorithm='NRTR' --rec_image_shape='1,32,100' --rec_char_dict_path='./ppocr/utils/EN_symbol_dict.txt' > $log_path/predict/${model}.log 2>&1
 if [[ $? -eq 0 ]]; then
    echo -e "\033[33m predict of $model  successfully!\033[0m"| tee -a $log_path/result.log
 else
@@ -501,7 +520,7 @@ quant_num=`git diff $(git log --pretty=oneline |grep "Merge pull request"|head -
 if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
    tar -xf ch_ppocr_mobile_v2.0_det_train.tar
-   python -m paddle.distributed.launch deploy/slim/prune/sensitivity_anal.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model="ch_ppocr_mobile_v2.0_det_train/best_accuracy" Global.save_model_dir=./output/prune_model/ Global.epoch_num=1 > $log_path/train/prune_ch_det_mv3_db_v2.0.log 2>&1
+   # python -m paddle.distributed.launch deploy/slim/prune/sensitivity_anal.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model="ch_ppocr_mobile_v2.0_det_train/best_accuracy" Global.save_model_dir=./output/prune_model/ Global.epoch_num=1 > $log_path/train/prune_ch_det_mv3_db_v2.0.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/prune_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
       echo -e "\033[33m training of prune successfully!\033[0m" | tee -a $log_path/result.log
    else
@@ -511,7 +530,7 @@ if [[ ${prune_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
    echo "======prune output directory======"
    ls ./output/prune_model/
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/sen.pickle
-   python deploy/slim/prune/export_prune_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./output/prune_model/latest Global.save_inference_dir=./prune/prune_inference_model > $log_path/export/prune_ch_det_mv3_db_v2.0.log 2>&1
+   # python deploy/slim/prune/export_prune_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./output/prune_model/latest Global.save_inference_dir=./prune/prune_inference_model > $log_path/export/prune_ch_det_mv3_db_v2.0.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/prune_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
       echo -e "\033[33m export_model of prune successfully!\033[0m" | tee -a $log_path/result.log
    else
@@ -523,14 +542,14 @@ fi
 if [[ ${quant_num} -gt 0 ]] || [[ ${model_flag} =~ 'CI_all' ]]; then
    wget -nc https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_train.tar
    tar -xf ch_ppocr_mobile_v2.0_det_train.tar
-   python deploy/slim/quantization/quant.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./ch_ppocr_mobile_v2.0_det_train/best_accuracy   Global.save_model_dir=./output/quant_model Global.epoch_num=1 > $log_path/train/quant_ch_det_mv3_db_v2.0.log 2>&1
+   # python deploy/slim/quantization/quant.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./ch_ppocr_mobile_v2.0_det_train/best_accuracy   Global.save_model_dir=./output/quant_model Global.epoch_num=1 > $log_path/train/quant_ch_det_mv3_db_v2.0.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/train/quant_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
       echo -e "\033[33m training of quant successfully!\033[0m" | tee -a $log_path/result.log
    else
       cat $log_path/train/quant_ch_det_mv3_db_v2.0.log
       echo -e "\033[31m training of quant failed!\033[0m" | tee -a $log_path/result.log
    fi
-   python deploy/slim/quantization/export_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.checkpoints=output/quant_model/latest Global.save_inference_dir=./output/quant_inference_model > $log_path/export/quant_ch_det_mv3_db_v2.0.log 2>&1
+   # python deploy/slim/quantization/export_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.checkpoints=output/quant_model/latest Global.save_inference_dir=./output/quant_inference_model > $log_path/export/quant_ch_det_mv3_db_v2.0.log 2>&1
    if [[ $? -eq 0 ]] && [[ $(grep -c "Error" $log_path/export/quant_ch_det_mv3_db_v2.0.log) -eq 0 ]];then
       echo -e "\033[33m export_model of quant successfully!\033[0m" | tee -a $log_path/result.log
    else

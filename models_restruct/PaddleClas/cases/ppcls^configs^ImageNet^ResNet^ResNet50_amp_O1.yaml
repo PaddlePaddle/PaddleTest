@@ -1,0 +1,109 @@
+# 原来是O1, 改成O1, amp yaml包括dali, 跳过windows和mac
+case:
+  linux:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+      -
+        name: multi
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+      -
+        name: multi_dy2st
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+      -
+        name: multi_amp
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+      -
+        name: multi_amp_dy2st
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+    eval:
+      -
+        name: trained
+        params:
+          - -o AMP.level=O1
+      -
+        name: pretrained
+        params:
+          - -o AMP.level=O1
+    infer:
+      -
+        name: trained
+      -
+        name: pretrained
+    export:
+      -
+        name: trained
+      -
+        name: pretrained
+    predict:
+      -
+        name: trained
+      -
+        name: trained_mkldnn
+      -
+        name: trained_trt
+      -
+        name: pretrained
+
+  linux_convergence:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single_convergence
+        params:
+          - -o AMP.level=O1
+      -
+        name: multi_convergence
+        params:
+          - -o AMP.level=O1
+      -
+        name: multi_static_convergence
+        params:
+          - -o AMP.level=O1
+
+    # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
+      # base: ./base/ImageNet_base.yaml
+    #   train:
+    #     -
+    #       name: function
+    #       params:
+    #         - -o Global.device=cpu
+
+  windows:
+    base: ./base/ImageNet_base.yaml
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    base: ./base/ImageNet_base.yaml
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+
+  mac:
+    base: ./base/ImageNet_base.yaml
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse

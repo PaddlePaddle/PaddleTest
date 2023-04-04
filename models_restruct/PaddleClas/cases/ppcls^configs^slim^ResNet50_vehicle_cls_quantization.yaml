@@ -1,0 +1,138 @@
+case:
+  linux:
+    base: ./base/slim_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
+      -
+        name: multi
+        params:
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
+    eval:
+      -
+        name: trained
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=32
+      -
+        name: pretrained
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=32
+    infer: skipped
+    export:
+      -
+        name: trained
+      -
+        name: pretrained
+    predict: skipped
+
+  linux_convergence:
+    base: ./base/slim_base.yaml
+    train:
+      -
+        name: single_convergence
+      -
+        name: multi_convergence
+
+
+  # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
+    # base: ./base/slim_base.yaml
+  #   train:
+  #     -
+  #       name: function
+  #       params:
+  #         - -o Global.device=cpu
+
+  windows:
+    base: ./base/slim_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
+    eval:
+      -
+        name: function
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=32
+      -
+        name: pretrained
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=32
+    infer: skipped
+    export:
+      -
+        name: function
+      -
+        name: pretrained
+    predict: skipped
+
+  windows_cpu:
+    base: ./base/slim_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=32
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=32
+    infer: skipped
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict: skipped
+
+  mac:
+    base: ./base/slim_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=32
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=32
+    infer: skipped
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict: skipped
+
+function: paddlelas_imagenet_parse

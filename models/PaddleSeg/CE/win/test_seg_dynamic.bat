@@ -19,7 +19,7 @@ if exist dynamic_list (
 del /f dynamic_list
  )
 for /r configs %%i in (*.yml) do (
-echo %%i | findstr /i .yml | findstr /v /i "quick_start" | findstr /v /i "_base_" | findstr /v /i "contrib" | findstr /v /i "segformer" | findstr /v /i "smrt" | findstr /v /i "xpu" | findstr /v /i "pssl" >>dynamic_list
+echo %%i | findstr /i .yml | findstr /v /i "quick_start" | findstr /v /i "_base_" | findstr /v /i "contrib" | findstr /v /i "segformer" | findstr /v /i "smrt" | findstr /v /i "xpu" | findstr /v /i "pssl" | findstr /v /i "mscale_ocrnet" >>dynamic_list
 )
 echo test_start
 set err_sign=0
@@ -69,7 +69,7 @@ findstr /i /c:"!model!" "skip_train.txt" >tmp_train
 if !errorlevel! EQU 0 (
 echo !model! does not test train for some reason!
 ) else (
-python train.py --config !config_path! --save_interval 100 --iters 150 --save_dir train_model/!model! --batch_size=1 >log/!model!/!model!_train.log 2>&1
+python tools\train.py --config !config_path! --save_interval 100 --iters 150 --save_dir train_model/!model! --batch_size=1 >log/!model!/!model!_train.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_train.log log_err\!model!\
@@ -88,7 +88,7 @@ findstr /i /c:"!model!" "skip_eval.txt" >tmp_eval
 if !errorlevel! EQU 0 (
 echo !model! does not test eval for some reason!
 ) else (
-python val.py --config !config_path! --model_path seg_pretrained/!model!/model.pdparams >log/!model!/!model!_eval.log 2>&1
+python tools\val.py --config !config_path! --model_path seg_pretrained/!model!/model.pdparams >log/!model!/!model!_eval.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_eval.log log_err\!model!\
@@ -107,7 +107,7 @@ findstr /i /c:"!model!" "skip_predict.txt" >tmp_predict
 if !errorlevel! EQU 0 (
 echo !model! does not test predict for some reason!
 ) else (
-python predict.py --config !config_path!  --model_path seg_pretrained/!model!/model.pdparams --image_path demo/!predict_pic! --save_dir output/!model!/result >log/!model!/!model!_predict.log 2>&1
+python tools\predict.py --config !config_path!  --model_path seg_pretrained/!model!/model.pdparams --image_path demo/!predict_pic! --save_dir output/!model!/result >log/!model!/!model!_predict.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_predict.log log_err\!model!\
@@ -126,7 +126,7 @@ findstr /i /c:"!model!" "skip_export.txt" >tmp_export
 if !errorlevel! EQU 0 (
 echo !model! does not test export for some reason!
 ) else (
-python export.py --config !config_path! --model_path seg_pretrained/!model!/model.pdparams --save_dir ./inference_model/!model! >log/!model!/!model!_export.log 2>&1
+python tools\export.py --config !config_path! --model_path seg_pretrained/!model!/model.pdparams --save_dir ./inference_model/!model! >log/!model!/!model!_export.log 2>&1
 if !errorlevel! GTR 0 (
 cd log_err && md !model!
 cd .. && move log\!model!\!model!_export.log log_err\!model!\

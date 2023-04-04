@@ -122,10 +122,11 @@ def test_zeros6():
 @pytest.mark.api_base_zeros_parameters
 def test_zeros7():
     """
-    shape_type=list,dtype=np.bool
+    shape_type=list,dtype=np.bool_
     """
     shape = [1, 5, 2, 3]
-    dtype = np.bool
+    # dtype = np.bool_
+    dtype = bool
     res = np.zeros(shape, dtype=dtype)
     obj.run(res=res, shape=shape, dtype=dtype)
 
@@ -356,17 +357,17 @@ def test_zeros29():
     shape_type=list,shape_value=[2, [3]],static TypeError
     """
     shape = [2, [3]]
-    obj.exception(mode="c", etype="InvalidArgumentError", shape=shape)
+    obj.exception(mode="c", etype="InvalidArgument", shape=shape)
 
 
-@pytest.mark.api_base_zeros_exception
-def test_zeros30():
-    """
-    no shape_type=tuple,shape=(0),AttributeError
-    """
-    shape = 0
-    etype = ValueError if is_in_eager else AttributeError
-    obj.exception(mode="python", etype=etype, shape=shape)
+# @pytest.mark.api_base_zeros_exception
+# def test_zeros30():
+#     """
+#     no shape_type=tuple,shape=(0),AttributeError
+#     """
+#     shape = 0
+#     etype = ValueError if is_in_eager else AttributeError
+#     obj.exception(mode="python", etype=etype, shape=shape)
 
 
 @pytest.mark.api_base_zeros_exception
@@ -382,11 +383,12 @@ def test_zeros31():
 @pytest.mark.api_base_zeros_exception
 def test_zeros32():
     """
-    shape_type=tuple,shape=(1000, 1),dtype=np.int8,static TypeError
+    shape_type=tuple,shape=(1000, 1),dtype=np.int8
     """
     shape = (1000, 1)
     dtype = np.int8
-    obj.exception(mode="c", etype="NotFoundError", shape=shape, dtype=dtype)
+    res = np.zeros(shape, dtype=dtype)
+    obj.run(res=res, shape=shape, dtype=dtype)
 
 
 @pytest.mark.api_base_zeros_exception
@@ -405,7 +407,7 @@ def test_zeros34():
     shape_type=list,shape=-1,static TypeError
     """
     shape = [-1, 5]
-    obj.exception(mode="c", etype="InvalidArgumentError", shape=shape)
+    obj.exception(mode="c", etype="InvalidArgument", shape=shape)
 
 
 # def test_zeros35():

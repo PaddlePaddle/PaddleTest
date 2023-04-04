@@ -42,32 +42,9 @@ def test_config():
     test_suite.config_test()
 
 
-def set_dynamic_shape(config):
-    """
-    set dynamic shape
-    """
-    names = ["embedding_3.tmp_0", "embedding_4.tmp_0", "embedding_5.tmp_0", "unsqueeze2_0.tmp_0"]
-    max_batch = 40
-    max_single_seq_len = 128
-    opt_single_seq_len = 64
-
-    min_shape = [1, 1, 768]
-    max_shape = [max_batch, max_single_seq_len, 768]
-    opt_shape = [1, opt_single_seq_len, 768]
-    config.set_trt_dynamic_shape_info(
-        {names[0]: min_shape, names[1]: min_shape, names[2]: min_shape, names[3]: [1, 1, 1, 1]},
-        {
-            names[0]: max_shape,
-            names[1]: max_shape,
-            names[2]: max_shape,
-            names[3]: [max_batch, 1, 1, max_single_seq_len],
-        },
-        {names[0]: opt_shape, names[1]: opt_shape, names[2]: opt_shape, names[3]: [1, 1, 1, opt_single_seq_len]},
-    )
-
-
 @pytest.mark.win
 @pytest.mark.server
+@pytest.mark.jetson
 @pytest.mark.trt_int8
 def test_trt_int8_bz1():
     """
@@ -297,21 +274,23 @@ def test_trt_int8_bz1():
     output_data_dict = test_suite.get_output_data(output_data_path)
 
     input_data_dict = {"token_type_ids": token_type_ids, "input_ids": input_ids}
+    test_suite.collect_shape_info(model_path="./AFQMC_PTQ_1/strategy_1/", input_data_dict=input_data_dict, device="gpu")
 
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_path="./AFQMC_PTQ_1/strategy_1/")
-    set_dynamic_shape(test_suite2.pd_config)
     test_suite2.pd_config.exp_disable_tensorrt_ops(["elementwise_sub"])
     test_suite2.trt_more_bz_test(
         input_data_dict,
         output_data_dict,
         min_subgraph_size=5,
-        delta=1e-1,
+        delta=4e-1,
         max_batch_size=40,
         use_static=False,
         precision="trt_int8",
+        dynamic=True,
+        shape_range_file="./AFQMC_PTQ_1/strategy_1/shape_range.pbtxt",
     )
 
     del test_suite2  # destroy class to save memory

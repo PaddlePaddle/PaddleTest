@@ -1,0 +1,21 @@
+case:
+    linux:
+        base: ./base/ocr_det_base_pretrained.yaml
+        train:
+          -
+            name: multi
+          -
+            name: amp
+        eval:
+          -
+            name: pretrained
+            result:
+              f_score:
+                base: ${eval_base_acc}
+                threshold: 0
+                evaluation: "="
+        export:
+          -
+            name: trained
+          -
+            name: pretrained

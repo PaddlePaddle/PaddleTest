@@ -149,6 +149,92 @@ def test_uie():
     ie.set_schema(schema_bre)
     ie("李治即位后，让身在感业寺的武则天续起头发，重新纳入后宫。")
 
+    schema = {"竞赛名称": ["主办方", "承办方", "已举办次数"]}
+    ie.set_schema(schema)
+    ie("2022语言与智能技术竞赛由中国中文信息学会和中国计算机学会联合主办，百度公司、中国中文信息学会评测工作委员会和中国计算机学会自然语言处理专委会承办，已连续举办4届，成为全球最热门的中文NLP赛事之一。")
+
+    schema = ["Person", "Organization"]
+    ie_en = Taskflow("information_extraction", schema=schema, model="uie-base-en")
+    ie_en("In 1997, Steve was excited to become the CEO of Apple.")
+
+    schema = [{"Person": ["Company", "Position"]}]
+    ie_en.set_schema(schema)
+    ie_en("In 1997, Steve was excited to become the CEO of Apple.")
+
+    schema = [{"Aspect": ["Opinion", "Sentiment classification [negative, positive]"]}]
+    ie_en.set_schema(schema)
+    ie_en("The teacher is very nice.")
+
+    schema = "Sentiment classification [negative, positive]"
+    ie_en.set_schema(schema)
+    ie_en("I am sorry but this is the worst film I have ever seen in my life.")
+
+
+def test_summarizer():
+    """
+    test_summarizer
+    """
+    summarizer = Taskflow("text_summarization")
+    summarizer("2022年，中国房地产进入转型阵痛期，传统“高杠杆、快周转”的模式难以为继，万科甚至直接喊话，中国房地产进入“黑铁时代”")
+    summarizer(
+        [
+            "据悉，2022年教育部将围绕“巩固提高、深化落实、创新突破”三个关键词展开工作。要进一步强化学校教育主阵地作用，继续把落实“双减”作为学校工作的重中之重，\
+            重点从提高作业设计水平、提高课后服务水平、提高课堂教学水平、提高均衡发展水平四个方面持续巩固提高学校“双减”工作水平。",
+            "党参有降血脂，降血压的作用，可以彻底消除血液中的垃圾，从而对冠心病以及心血管疾病的患者都有一定的稳定预防工作作用，因此平时口服党参能远离三高的危害。\
+            另外党参除了益气养血，降低中枢神经作用，调整消化系统功能，健脾补肺的功能。",
+        ]
+    )
+
+
+def test_uiex():
+    """UIE-X"""
+    path = "./cases/"
+    if not os.path.exists(path):
+        os.mkdir(path)
+    os.system(
+        "cd %s && wget %s"
+        % (
+            path,
+            "https://user-images.githubusercontent.com/40840292/203457596-8dbc9241-833d-4b0e-9291-f134a790d0e1.jpeg",
+        )
+    )
+    os.system(
+        "cd %s && wget %s"
+        % (
+            path,
+            "https://user-images.githubusercontent.com/40840292/203457719-84a70241-607e-4bb1-ab4c-3d9beee9e254.jpeg",
+        )
+    )
+    os.system(
+        "cd %s && wget %s"
+        % (
+            path,
+            "https://user-images.githubusercontent.com/40840292/203457817-76fe638a-3277-4619-9066-d1dffd52c5d4.jpg ",
+        )
+    )
+    ie = Taskflow(
+        "information_extraction",
+        schema="",
+        schema_lang="ch",
+        ocr_lang="ch",
+        batch_size=16,
+        model="uie-x-base",
+        layout_analysis=False,
+        position_prob=0.5,
+        precision="fp32",
+        use_fast=True,
+    )
+    schema = ["姓名", "性别", "学校"]
+    ie({"doc": "./cases/203457596-8dbc9241-833d-4b0e-9291-f134a790d0e1.jpeg"})
+
+    schema = ["收发货人", "进口口岸", "进口日期", "申报日期", "提运单号"]
+    ie.set_schema(schema)
+    print(ie({"doc": "./cases/203457719-84a70241-607e-4bb1-ab4c-3d9beee9e254.jpeg"}))
+
+    schema = {"项目名": "单价"}
+    ie.set_schema(schema)
+    print(ie({"doc": "./cases/203457817-76fe638a-3277-4619-9066-d1dffd52c5d4.jpg"}))
+
 
 if __name__ == "__main__":
     test_knowledge_mining()
@@ -163,3 +249,5 @@ if __name__ == "__main__":
     test_poetry()
     test_dialogue()
     test_uie()
+    # test_uiex()
+    test_summarizer()

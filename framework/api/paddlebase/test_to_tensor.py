@@ -102,7 +102,7 @@ def test_to_tensor4():
     tensor.dtype is bool
     """
     a = np.random.random((2, 2, 1, 2, 1, 1, 2, 3, 5)) * 2 - 1
-    a_bool = a.astype(np.bool)
+    a_bool = a.astype(np.bool_)
     exp = a_bool.sum(2)
     for d in devices:
         paddle.set_device(d)
@@ -112,3 +112,95 @@ def test_to_tensor4():
             compare(exp, res, delta=1e-20, rtol=1e-20)
             assert res.stop_gradient is s
             assert exp.dtype == res.numpy().dtype
+
+
+# @pytest.mark.api_base_to_tensor_parameters
+# def test_to_tensor5():
+#     """
+#     test tensor jit.to_static
+#     """
+#     x = paddle.to_tensor([3.2])
+#
+#     def jit_case5(x):
+#         """test jit case"""
+#         paddle.set_default_dtype("float64")
+#         if paddle.device.is_compiled_with_cuda():
+#             place = paddle.CUDAPlace(0)
+#         else:
+#             place = paddle.CPUPlace()
+#         a = paddle.to_tensor([1], place=place)
+#         b = paddle.to_tensor([2.1], place=place, stop_gradient=False, dtype="int64")
+#         c = paddle.to_tensor([a, b, [1]], dtype="float32")
+#         return c
+#     exp = jit_case5(x)
+#     res = paddle.jit.to_static(jit_case5)(x)
+#     assert np.allclose(exp.numpy(), res.numpy())
+#     assert exp.dtype == res.dtype
+#     assert exp.stop_gradient == res.stop_gradient
+#     assert exp.place._equals(res.place)
+
+
+@pytest.mark.api_base_to_tensor_parameters
+def test_to_tensor6():
+    """
+    test tensor jit.to_static
+    """
+    x = paddle.to_tensor([3.2])
+
+    def jit_case6(x):
+        """test jit case"""
+        paddle.set_default_dtype("float64")
+        a = paddle.to_tensor([1, 2])
+
+        return a
+
+    exp = jit_case6(x)
+    res = paddle.jit.to_static(jit_case6)(x)
+    assert np.allclose(exp.numpy(), res.numpy())
+    assert exp.dtype == res.dtype
+    assert exp.stop_gradient == res.stop_gradient
+    assert exp.place._equals(res.place)
+
+
+@pytest.mark.api_base_to_tensor_parameters
+def test_to_tensor7():
+    """
+    test tensor jit.to_static
+    """
+    x = paddle.to_tensor([3.2])
+
+    def jit_case7(x):
+        """test jit case"""
+        na = np.array([1, 2], dtype="int32")
+        a = paddle.to_tensor(na)
+
+        return a
+
+    exp = jit_case7(x)
+    res = paddle.jit.to_static(jit_case7)(x)
+    assert np.allclose(exp.numpy(), res.numpy())
+    assert exp.dtype == res.dtype
+    assert exp.stop_gradient == res.stop_gradient
+    assert exp.place._equals(res.place)
+
+
+@pytest.mark.api_base_to_tensor_parameters
+def test_to_tensor8():
+    """
+    test tensor jit.to_static
+    """
+    x = paddle.to_tensor([3.2])
+
+    def jit_case8(x):
+        """test jit case"""
+        paddle.set_default_dtype("float64")
+        a = paddle.to_tensor([1, 2, 3], stop_gradient=False, dtype="float32")
+
+        return a
+
+    exp = jit_case8(x)
+    res = paddle.jit.to_static(jit_case8)(x)
+    assert np.allclose(exp.numpy(), res.numpy())
+    assert exp.dtype == res.dtype
+    assert exp.stop_gradient == res.stop_gradient
+    assert exp.place._equals(res.place)

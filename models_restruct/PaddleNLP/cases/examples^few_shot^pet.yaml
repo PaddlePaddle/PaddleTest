@@ -1,0 +1,38 @@
+case:
+  linux:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: multi
+        path: examples/few_shot/pet
+        cmd: python -m paddle.distributed.launch run_train.py
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: multi
+        path: examples/few_shot/pet
+        cmd: python -m paddle.distributed.launch run_train.py
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

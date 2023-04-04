@@ -158,7 +158,7 @@ for model in $(echo ${!dic[*]});do
     echo ${model} : ${model_path}
     cd ${rec_dir}/${model_path}
     model_kind=`echo ${model_path} | awk -F '/' '{print $2}'`
-    if [ ${model} == "ensfm" ] || [ ${model} == "tisas" ];then
+    if [ ${model} == "ensfm" ] || [ ${model} == "tisas" ] || [ ${model} == "dpin" ];then
         run_case_func ${model_kind}  ${model} dy_train $1 "../../../tools/trainer.py"
         run_case_func ${model_kind}  ${model} dy_infer $1 "infer.py"
     elif [ ${model} == "mhcn" ] ;then
@@ -202,19 +202,19 @@ done
 
 # rerank 暂时无模型
 run_CI_func(){
-    demo_contentunderstanding True
-    demo_match True
-    demo_multitask True
-    demo_rank True
-    demo_recall True
+    demo_contentunderstanding True &
+    demo_match True &
+    demo_multitask True &
+    demo_rank True &
+    demo_recall True &
 }
 
 run_freet_func(){
-    demo_contentunderstanding True freet_run
-    demo_match True freet_run
-    demo_multitask True freet_run
-    demo_rank True freet_run
-    demo_recall True freet_run
+    demo_contentunderstanding True # freet_run
+    demo_match True # freet_run
+    demo_multitask True # freet_run
+    demo_rank True # freet_run
+    demo_recall True # freet_run
 }
 
 run_CPU_func(){
@@ -247,6 +247,7 @@ fi
 case $1 in
 "run_CI")
     run_CI_func
+    wait
     print_logs
     ;;
 "run_CE")
@@ -264,5 +265,9 @@ case $1 in
 "run_demo")
     run_demo_func
     print_logs
+    ;;
+*)
+    echo " $1 models is running"
+    $1
     ;;
 esac

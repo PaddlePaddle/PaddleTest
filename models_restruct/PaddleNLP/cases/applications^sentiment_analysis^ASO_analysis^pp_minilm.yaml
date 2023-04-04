@@ -1,0 +1,62 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: applications/sentiment_analysis/ASO_analysis/pp_minilm
+        cmd: python train.py
+        params:
+          - --base_model_name "ppminilm-6l-768h"
+          - --train_path "../data/cls_data/train.txt"
+          - --dev_path "../data/cls_data/dev.txt"
+          - --label_path "../data/cls_data/label.dict"
+          - --num_epochs 1
+          - --batch_size 16
+          - --max_seq_len 256
+          - --learning_rate 3e-5
+          - --weight_decay 0.01
+          - --max_grad_norm 1.0
+          - --warmup_proportion 0.1
+          - --log_steps 1
+          - --eval_steps 100
+          - --seed 1000
+          - --device "gpu"
+          - --checkpoints "../checkpoints/pp_checkpoints/"
+    eval:
+      -
+        name: eval
+        path: applications/sentiment_analysis/ASO_analysis/pp_minilm
+        cmd: bash run_evaluate.sh
+    infer: skipped
+    export:
+      -
+        name: eval
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: sh run_export_model.sh pp_minilm
+
+    predict:
+      -
+        name: predict
+        path: applications/sentiment_analysis/ASO_analysis/pp_minilm
+        cmd: bash run_quant.sh
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

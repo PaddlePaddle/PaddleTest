@@ -61,7 +61,7 @@ def test_uique_consecutive1():
     """
     x = np.array([[0], [0], [1], [0]])
     # excepct result
-    res = np.array([[0, 1, 0], [0, 0, 1, 2]])
+    res = np.array([[0, 1, 0], [0, 0, 1, 2]], dtype=object)
     for place in obj.places:
         if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
@@ -88,7 +88,7 @@ def test_uique_consecutive2():
     """
     x = np.array([[0], [0], [1], [0], [0], [0]])
     # excepct result
-    res = np.array([[0, 1, 0], [0, 0, 1, 2, 2, 2], [2, 1, 3]])
+    res = np.array([[0, 1, 0], [0, 0, 1, 2, 2, 2], [2, 1, 3]], dtype=object)
     for place in obj.places:
         if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
@@ -117,7 +117,7 @@ def test_uique_consecutive3():
     x = np.array([[0, 2, 2, 0], [0, 2, 2, 1]])
     x = np.repeat(x, 3, 0)
     # excepct result
-    res = np.array(([[0, 2, 2, 0], [0, 2, 2, 1]], [0, 0, 0, 1, 1, 1], [3, 3]))
+    res = np.array(([[0, 2, 2, 0], [0, 2, 2, 1]], [0, 0, 0, 1, 1, 1], [3, 3]), dtype=object)
     for place in obj.places:
         if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
@@ -186,7 +186,7 @@ def test_uique_consecutive7():
     axis = None
     dtype = int64
     """
-    res = np.array([[0, 1, 0], [0, 0, 1, 2]])
+    res = np.array([[0, 1, 0], [0, 0, 1, 2]], dtype=object)
     for place in obj.places:
         if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
@@ -227,7 +227,7 @@ def test_uique_consecutive8():
     dtype = int64
     """
     x = np.array([[0], [0], [1], [0], [0], [0]])
-    res = np.array([[0, 1, 0], [0, 0, 1, 2, 2, 2], [2, 1, 3]])
+    res = np.array([[0, 1, 0], [0, 0, 1, 2, 2, 2], [2, 1, 3]], dtype=object)
     for place in obj.places:
         if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")
@@ -270,7 +270,7 @@ def test_uique_consecutive9():
     dtype = int64
     """
     # excepct result
-    res = np.array(([[0, 2, 2, 0], [0, 2, 2, 1]], [0, 0, 0, 1, 1, 1], [3, 3]))
+    res = np.array(([[0, 2, 2, 0], [0, 2, 2, 1]], [0, 0, 0, 1, 1, 1], [3, 3]), dtype=object)
     for place in obj.places:
         if isinstance(place, paddle.CPUPlace):
             paddle.set_device("cpu")

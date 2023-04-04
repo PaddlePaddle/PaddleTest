@@ -25,6 +25,7 @@ class TestSqueeze(APIBase):
         # self.static = True
         # enable check grad
         self.enable_backward = True
+        self.no_grad_var = ["axis"]
 
 
 obj = TestSqueeze(paddle.squeeze)
@@ -110,3 +111,14 @@ def test_squeeze_axis6():
     net = paddle.jit.to_static(naive_func)
     out = net((paddle.to_tensor(x_data)))
     assert np.allclose(out.numpy(), res)
+
+
+@pytest.mark.api_base_squeeze_parameters
+def test_squeeze_axis7():
+    """
+    axis = Tensor([2,3])
+    """
+    x_data = np.arange(6).reshape((1, 2, 1, 3)).astype(np.float32)
+    axis = np.array([2, 3])
+    res = np.array([[[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]]])
+    obj.run(res=res, x=x_data, axis=axis)

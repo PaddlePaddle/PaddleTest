@@ -1,0 +1,68 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/unstructured_prune
+        cmd: python train.py
+        params:
+          - --batch_size 64
+          - --data cifar10
+          - --pruning_mode ratio
+          - --ratio 0.75
+          - --lr 0.005
+          - --model MobileNet
+          - --num_epochs 20
+          - --step_epochs  13 17
+          - --initial_ratio 0.15
+          - --pruning_steps 10
+          - --stable_epochs 0
+          - --pruning_epochs 10
+          - --tunning_epochs 10
+          - --last_epoch -1
+          - --local_sparsity True
+          - --prune_params_type 'conv1x1_only'
+          - --pruning_strategy gmp
+          - --ce_test True
+        result:
+          acc_top1:
+            base: 0.5134354829
+            threshold: 0.00000001
+            evaluation: "+"
+          acc_top5:
+            base: 0.921377360820
+            threshold: 0.00000001
+            evaluation: "+"
+
+      -
+        name: multi
+        path: demo/unstructured_prune
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --batch_size 64
+          - --data cifar10
+          - --pruning_mode ratio
+          - --ratio 0.75
+          - --lr 0.005
+          - --model MobileNet
+          - --num_epochs 20
+          - --step_epochs  13 17
+          - --initial_ratio 0.15
+          - --pruning_steps 10
+          - --stable_epochs 0
+          - --pruning_epochs 10
+          - --tunning_epochs 10
+          - --last_epoch -1
+          - --local_sparsity True
+          - --prune_params_type 'conv1x1_only'
+          - --pruning_strategy gmp
+          - --ce_test True
+        result:
+          acc_top1:
+            base: 0.471536636352
+            threshold: 0.00000001
+            evaluation: "+"
+          acc_top5:
+            base: 0.9197850227
+            threshold: 0.00000001
+            evaluation: "+"

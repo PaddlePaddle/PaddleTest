@@ -33,7 +33,7 @@ def test_tensor_bitwise_not1():
     bitwise_not
     input.type=bool
     """
-    x = np.arange(-1, 2 * 3 * 3 * 3 * 4 * 1 * 5 * 2 - 1).reshape(2, 3, 3, 3, 4, 1, 5, 2).astype(np.bool)
+    x = np.arange(-1, 2 * 3 * 3 * 3 * 4 * 1 * 5 * 2 - 1).reshape(2, 3, 3, 3, 4, 1, 5, 2).astype(np.bool_)
     exp = np.bitwise_not(x)
     res = paddle.bitwise_not(paddle.to_tensor(x))
     compare(exp, res.numpy())

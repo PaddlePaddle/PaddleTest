@@ -1,0 +1,30 @@
+metric: COCO
+num_classes: 80
+
+
+# Datset configuration
+EvalDataset:
+  !COCODataSet
+    image_dir: val2017
+    anno_path: annotations/instances_val2017.json
+    dataset_dir: dataset/coco_val2017/
+
+TestDataset:
+  !COCODataSet
+    image_dir: val2017
+    anno_path: annotations/instances_val2017.json
+    dataset_dir: dataset/coco
+
+worker_num: 0
+eval_height: &eval_height 416
+eval_width: &eval_width 416
+eval_size: &eval_size [*eval_height, *eval_width]
+
+EvalReader:
+  sample_transforms:
+  - Decode: {}
+  - Resize: {interp: 2, target_size: *eval_size, keep_ratio: False}
+  - NormalizeImage: {mean: [0, 0, 0], std: [1, 1, 1], is_scale: True}
+  - Permute: {}
+  batch_size: 1
+  shuffle: false

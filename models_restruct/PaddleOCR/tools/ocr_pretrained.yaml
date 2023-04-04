@@ -1,0 +1,53 @@
+det:
+   det_r50_vd_db: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/det_r50_vd_db_v2.0_train.tar
+   det_mv3_db: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/det_mv3_db_v2.0_train.tar
+   det_r18_vd_ct: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/det_r18_ct_train.tar
+   det_r50_vd_east: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/det_r50_vd_east_v2.0_train.tar
+   det_mv3_east: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/det_mv3_east_v2.0_train.tar
+   det_r50_vd_dcn_fce_ctw: https://paddleocr.bj.bcebos.com/contribution/det_r50_dcn_fce_ctw_v2.0_train.tar
+   det_r50_vd_pse: https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/det_r50_vd_pse_v2.0_train.tar
+   det_mv3_pse: https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/det_mv3_pse_v2.0_train.tar
+
+rec:
+   rec_r34_vd_none_none_ctc: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r34_vd_none_none_ctc_v2.0_train.tar
+   rec_mv3_none_none_ctc: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_none_none_ctc_v2.0_train.tar
+   rec_r34_vd_none_bilstm_ctc: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r34_vd_none_bilstm_ctc_v2.0_train.tar
+   rec_mv3_none_bilstm_ctc: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_none_bilstm_ctc_v2.0_train.tar
+   rec_r34_vd_tps_bilstm_ctc: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r34_vd_tps_bilstm_ctc_v2.0_train.tar
+   rec_mv3_tps_bilstm_ctc: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_tps_bilstm_ctc_v2.0_train.tar
+   rec_r34_vd_tps_bilstm_att: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r34_vd_tps_bilstm_att_v2.0_train.tar
+   rec_mv3_tps_bilstm_att: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_tps_bilstm_att_v2.0_train.tar
+   rec_r50fpn_vd_none_srn: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r50_vd_srn_train.tar
+   rec_mtb_nrtr: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mtb_nrtr_train.tar
+   rec_r31_sar: https://paddleocr.bj.bcebos.com/dygraph_v2.1/rec/rec_r31_sar_train.tar
+   rec_resnet_stn_bilstm_att: https://paddleocr.bj.bcebos.com/dygraph_v2.1/rec/rec_resnet_stn_bilstm_att.tar
+   rec_svtr_tiny_none_ctc_en: https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/rec_svtr_tiny_none_ctc_en_train.tar
+   rec_vitstr_none_ce: https://paddleocr.bj.bcebos.com/rec_vitstr_none_ce_train.tar
+   rec_r45_abinet: https://paddleocr.bj.bcebos.com/rec_r45_abinet_train.tar
+   rec_r45_visionlan: https://paddleocr.bj.bcebos.com/VisionLAN/rec_r45_visionlan_train.tar
+   rec_r32_gaspin_bilstm_att: https://paddleocr.bj.bcebos.com/contribution/rec_r32_gaspin_bilstm_att.tar
+   rec_r31_robustscanner: https://paddleocr.bj.bcebos.com/contribution/rec_r31_robustscanner.tar
+   rec_resnet_rfl_att: https://paddleocr.bj.bcebos.com/contribution/rec_resnet_rfl_att_train.tar
+
+sr:
+   sr_telescope: https://paddleocr.bj.bcebos.com/contribution/sr_telescope_train.tar
+   sr_tsrn_transformer_strock: https://paddleocr.bj.bcebos.com/sr_tsrn_transformer_strock_train.tar
+
+kie:
+   ser_layoutxlm_xfund_zh: https://paddleocr.bj.bcebos.com/pplayout/ser_LayoutXLM_xfun_zh.tar
+   re_layoutxlm_xfund_zh: https://paddleocr.bj.bcebos.com/pplayout/re_LayoutXLM_xfun_zh.tar
+   ser_vi_layoutxlm_xfund_zh: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar
+   ser_vi_layoutxlm_xfund_zh_udml: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar
+   re_vi_layoutxlm_xfund_zh: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar
+   re_vi_layoutxlm_xfund_zh_udml: https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar
+
+table:
+   table_master: https://paddleocr.bj.bcebos.com/ppstructure/models/tablemaster/table_structure_tablemaster_train.tar
+   table: https://paddleocr.bj.bcebos.com/dygraph_v2.1/table/en_ppocr_mobile_v2.0_table_structure_train.tar
+   SLANet: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_train.tar
+   SLANet_ch: https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/ch_ppstructure_mobile_v2.0_SLANet_train.tar
+
+cls:
+   cls_mv3: https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_train.tar
+e2e:
+   e2e_r50_vd_pg: https://paddleocr.bj.bcebos.com/dygraph_v2.0/pgnet/en_server_pgnetA.tar

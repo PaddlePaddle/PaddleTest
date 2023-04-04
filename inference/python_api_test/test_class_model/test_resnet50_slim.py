@@ -80,6 +80,7 @@ def test_int8_more_bz():
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         fake_output = np.array(npy_list[0:batch_size]).astype("float32")
+        fake_output = np.squeeze(fake_output, axis=(1, 2))
         input_data_dict = {"image": fake_input}
         output_data_dict = {"save_infer_model/scale_0.tmp_0": fake_output}
         test_suite.trt_more_bz_test(
@@ -89,6 +90,8 @@ def test_int8_more_bz():
             max_batch_size=max_batch_size,
             precision="trt_int8",
             use_calib_mode=True,
+            dynamic=True,
+            tuned=True,
         )
 
         del test_suite  # destroy class to save memory

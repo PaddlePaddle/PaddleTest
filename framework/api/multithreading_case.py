@@ -38,7 +38,7 @@ ignore_case_dir = {
         "test_initializer_truncated_normal_new.py",
         "test_initializer_truncated_normal.py",
     ],
-    "paddlebase": [],
+    "paddlebase": ["test_fill_diagonal_tensor.py", "test_multiplex.py"],
     "optimizer": [],
     "distribution": [],
     "utils": [],

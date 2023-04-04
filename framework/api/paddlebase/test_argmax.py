@@ -52,7 +52,7 @@ def test_argmax():
     """
     x = randtool("float", -10, 10, [3, 3, 3])
     res = np.argmax(a=x)
-    obj.run(res=[res], x=x)
+    obj.run(res=res, x=x)
 
 
 @pytest.mark.api_base_argmax_parameters
@@ -87,7 +87,7 @@ def test_argmax3():
     x = randtool("int", -10, 10, [3, 3])
     dtype = "int32"
     res = np.argmax(a=x)
-    obj.run(res=[res], x=x, dtype=dtype)
+    obj.run(res=res, x=x, dtype=dtype)
 
 
 @pytest.mark.api_base_argmax_parameters
@@ -133,7 +133,7 @@ def test_argmax7():
     x = np.array([[-1], [2], [3]])
     keepdim = None
     res = np.argmax(a=x)
-    obj.run(res=[res], x=x, keepdim=keepdim)
+    obj.run(res=res, x=x, keepdim=keepdim)
 
 
 @pytest.mark.api_base_argmax_parameters
@@ -155,7 +155,7 @@ def test_argmax9():
     """
     x = randtool("float", -1, 1, [3, 3])
     axis = 2
-    obj.exception(mode="c", etype="InvalidArgumentError", x=x, axis=axis)
+    obj.exception(mode="c", etype="InvalidArgument", x=x, axis=axis)
 
 
 @pytest.mark.api_base_argmax_exception
@@ -175,14 +175,25 @@ def test_argmax11():
     """
     x = randtool("float", -10, 10, [3, 3])
     dtype = np.float32
-    obj.exception(mode="c", etype="InvalidArgumentError", x=x, dtype=dtype)
+    obj.exception(mode="c", etype="InvalidArgument", x=x, dtype=dtype)
 
 
 @pytest.mark.api_base_argmax_exception
-def test_argmin12():
+def test_argmax12():
     """
     dtype = None
     """
     x = randtool("int", -100, 10, [3, 3])
     dtype = None
     obj.exception(mode="python", etype=ValueError, x=x, dtype=dtype)
+
+
+@pytest.mark.api_base_argmin_parameters
+def test_argmax13():
+    """
+    axis = Tensor([-2])
+    """
+    x = randtool("int", -100, 10, [3, 3])
+    axis = np.array([-2])
+    res = np.argmax(a=x, axis=-2)
+    obj.run(res=res, x=x, axis=axis)

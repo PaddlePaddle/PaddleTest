@@ -1,0 +1,122 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: model_zoo/ernie-gen
+        cmd: wget --no-check-certificate https://bj.bcebos.com/paddlenlp/datasets/poetry.tar.gz && tar xvf poetry.tar.gz
+      -
+        name: pretrain
+        path: model_zoo/ernie-gen
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --model_name_or_path ernie-1.0
+          - --max_encode_len 24
+          - --max_decode_len 72
+          - --batch_size 2
+          - --learning_rate 2e-5
+          - --num_epochs 12
+          - --max_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --output_dir ./tmp/
+          - --device gpu
+        result:
+          loss:
+            base: 58.335371
+            threshold: 1
+            evaluation: "="
+    eval:
+      -
+        name: evaluate
+        path: model_zoo/ernie-gen
+        cmd:  python -u ./eval.py
+        params:
+          - --model_name_or_path ernie-1.0
+          - --max_encode_len 24
+          - --max_decode_len 72
+          - --batch_size 4
+          - --init_checkpoint ./tmp/model_2/model_state.pdparams
+          - --device gpu
+    infer:
+      -
+        name: evaluate
+        path: model_zoo/ernie-gen
+        cmd: python -u ./predict.py
+        params:
+          - --model_name_or_path ernie-1.0
+          - --max_encode_len 24
+          -  --max_decode_len 72
+          - --batch_size 4
+          - --init_checkpoint ./tmp/model_2/model_state.pdparams
+          - --device gpu
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: model_zoo/ernie-gen
+        cmd: wget --no-check-certificate https://bj.bcebos.com/paddlenlp/datasets/poetry.tar.gz && tar xvf poetry.tar.gz
+      -
+        name: pretrain
+        path: model_zoo/ernie-gen
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --model_name_or_path ernie-1.0
+          - --max_encode_len 24
+          - --max_decode_len 72
+          - --batch_size 2
+          - --learning_rate 2e-5
+          - --num_epochs 12
+          - --max_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --output_dir ./tmp/
+          - --device gpu
+        result:
+          loss:
+            base: 58.335371
+            threshold: 1
+            evaluation: "="
+    eval:
+      -
+        name: evaluate
+        path: model_zoo/ernie-gen
+        cmd:  python -u ./eval.py
+        params:
+          - --model_name_or_path ernie-1.0
+          - --max_encode_len 24
+          - --max_decode_len 72
+          - --batch_size 4
+          - --init_checkpoint ./tmp/model_2/model_state.pdparams
+          - --device gpu
+    infer:
+      -
+        name: evaluate
+        path: model_zoo/ernie-gen
+        cmd: python -u ./predict.py
+        params:
+          - --model_name_or_path ernie-1.0
+          - --max_encode_len 24
+          -  --max_decode_len 72
+          - --batch_size 4
+          - --init_checkpoint ./tmp/model_2/model_state.pdparams
+          - --device gpu
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

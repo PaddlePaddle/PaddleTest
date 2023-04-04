@@ -94,9 +94,9 @@ if ([[ ${model_flag} =~ 'pr' ]] || [[ ${model_flag} =~ 'single' ]]) &&  [[ ! ${p
     unset https_proxy
     echo "######  ----install  paddle-----"
     python -m pip install --ignore-installed --upgrade \
-        pip -i https://mirror.baidu.com/pypi/simple
+        pip --user -i https://mirror.baidu.com/pypi/simple
     python -m pip uninstall paddlepaddle-gpu -y
-    python -m pip install ${paddle_compile} -i https://mirror.baidu.com/pypi/simple #paddle_compile
+    python -m pip install ${paddle_compile} --user -i https://mirror.baidu.com/pypi/simple #paddle_compile
 
 fi
 
@@ -125,15 +125,39 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # python -m pip install --ignore-installed --upgrade \
 #    setuptools==59.5.0 -i https://mirror.baidu.com/pypi/simple #before install bcolz
 python -m pip install --ignore-installed --upgrade \
-   pip -i https://mirror.baidu.com/pypi/simple
+   pip --user -i https://mirror.baidu.com/pypi/simple
 # python -m pip install  --ignore-installed --upgrade paddleslim \
-python -m pip install --upgrade paddleslim \
-   -i https://mirror.baidu.com/pypi/simple
+
+#slim要用develop
+if [[ paddle_compile =~ "develop" ]] || [[ paddle_compile =~ "Develop" ]];then
+    echo "start clone paddleslim"
+    if [[ ! -d "PaddleSlim" ]];then
+        # git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
+        wget -q -c https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim.tar.gz --no-proxy
+        tar xf PaddleSlim.tar.gz
+    fi
+    echo "end clone paddleslim"
+    if [[ -d "PaddleSlim" ]];then
+        cd PaddleSlim
+        git checkout develop
+        git pull
+        python -m pip install -r requirements.txt \
+            --user -i https://mirror.baidu.com/pypi/simple
+        python setup.py install
+        cd ..
+        python -m pip list|grep paddleslim
+        echo "end install paddleslim"
+    fi
+else
+    python -m pip install -U paddleslim \
+        --user  -i https://mirror.baidu.com/pypi/simple  >/dev/null 2>&1
+fi
+
 # python -m pip install --ignore-installed dataset/visualdl-2.2.1-py3-none-any.whl \
 #    -i https://mirror.baidu.com/pypi/simple #已更新至2.2.3
 python -m pip install  -r requirements.txt  \
-   -i https://mirror.baidu.com/pypi/simple
-python setup.py install
+   --user  -i https://mirror.baidu.com/pypi/simple
+python setup.py install > clas_install.log 2>&1
 
 python -m pip list |grep opencv
 
@@ -228,9 +252,23 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
         shuf -n 5 models_list_diff >> models_list #防止diff yaml文件过多导致pr时间过长
 
         if [[ ${static_flag} =~ "on" ]];then
+            echo "fp16 or amp"
+            # python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist \
+            # --upgrade nvidia-dali-cuda102 --ignore-installed -i https://mirror.baidu.com/pypi/simple
+            if [[ -f "nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl" ]] && \
+                [[ -f "nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl" ]] ;then
+                echo "already download nvidia_dali_cuda102 nvidia_dali_cuda110"
+            else
+                wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl --no-proxy
+                wget -q https://paddle-qa.bj.bcebos.com/PaddleClas/nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl --no-proxy
+            fi
+            python -m pip install --user nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl
+            # python -m pip install --user nvidia_dali_cuda110-1.8.0-3362434-py3-none-manylinux2014_x86_64.whl
+            export FLAGS_cudnn_deterministic=False #amp单独考虑，不能固定随机量，否则报错如下
+
             #增加静态图验证 只跑一个不放在循环中
             python -m paddle.distributed.launch ppcls/static/train.py  \
-                -c ppcls/configs/ImageNet/ResNet/ResNet50.yaml \
+                -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O1_ultra.yaml \
                 -o Global.epochs=1 \
                 -o DataLoader.Train.sampler.batch_size=1 \
                 -o DataLoader.Eval.sampler.batch_size=1  \
@@ -594,7 +632,7 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
     find ppcls/configs/Logo/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' >> models_list_rec
     find ppcls/configs/Products/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec
     find ppcls/configs/Vehicle/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec
-    find ppcls/configs/slim/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成slim
+    # find ppcls/configs/slim/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成slim
     find ppcls/configs/GeneralRecognition/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}' \
         |grep -v 'Gallery2FC_PPLCNet_x2_5' >> models_list_rec #后续改成slim
     find ppcls/configs/DeepHash/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  >> models_list_rec #后续改成deephash
@@ -621,8 +659,8 @@ if [[ ${model_flag} =~ 'CI_step3' ]] || [[ ${model_flag} =~ 'all' ]] || [[ ${mod
             | grep diff|grep yaml|grep configs|grep Products|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
         git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
             | grep diff|grep yaml|grep configs|grep Vehicle|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
-        git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
-            | grep diff|grep yaml|grep configs|grep slim|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
+        # git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
+        #     | grep diff|grep yaml|grep configs|grep slim|awk -F 'b/' '{print$2}'|tee -a  models_list_diff_rec
         git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \
             | grep diff|grep yaml|grep configs|grep GeneralRecognition|awk -F 'b/' '{print$2}' |tee -a  models_list_diff_rec
         git diff $(git log --pretty=oneline |grep "Merge pull request"|head -1|awk '{print $1}') HEAD --diff-filter=AMR \

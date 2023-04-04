@@ -1,0 +1,173 @@
+#跳过 predict trained 因为训练不足出nan   train也会出nan，只判断退出码
+case:
+  linux:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o Global.epochs=2
+          - -o Global.save_interval=2
+          - -o Global.eval_interval=2
+      -
+        name: multi
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
+      -
+        name: multi_dy2st
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
+      -
+        name: multi_amp
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
+      -
+        name: multi_amp_dy2st
+        params:
+          - -o Global.epochs=5
+          - -o Global.save_interval=5
+          - -o Global.eval_interval=5
+    eval:
+      -
+        name: trained
+      -
+        name: pretrained
+    infer:
+      -
+        name: trained
+      -
+        name: pretrained
+    export:
+      -
+        name: trained
+      -
+        name: pretrained
+    predict: skipped
+
+  linux_convergence:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: single_convergence
+      -
+        name: multi_convergence
+      -
+        name: multi_static_convergence
+
+  # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
+    # base: ./base/ImageNet_base.yaml
+  #   train:
+  #     -
+  #       name: function
+  #       params:
+  #         - -o Global.device=cpu
+
+  windows:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: function
+      -
+        name: function_dy2st
+      -
+        name: function_amp
+    eval:
+      -
+        name: function
+      -
+        name: pretrained
+    infer:
+      -
+        name: function
+      -
+        name: pretrained
+    export:
+      -
+        name: function
+      -
+        name: pretrained
+    predict: skipped
+
+  windows_cpu:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    infer:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict: skipped
+
+  mac:
+    base: ./base/ImageNet_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: function_dy2st
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    infer:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict: skipped
+
+function: paddlelas_imagenet_parse

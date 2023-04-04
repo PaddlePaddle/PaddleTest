@@ -8,6 +8,7 @@ import os
 import sys
 import logging
 import tarfile
+import shutil
 import six
 import wget
 import pytest
@@ -17,6 +18,7 @@ import numpy as np
 sys.path.append("..")
 from test_case import InferenceTest
 
+
 # pylint: enable=wrong-import-position
 
 
@@ -24,7 +26,7 @@ def check_model_exist():
     """
     check model exist
     """
-    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.1/class/vgg11.tgz"
+    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/vgg11.tgz"
     if not os.path.exists("./vgg11/inference.pdiparams"):
         wget.download(vgg11_url, out="./")
         tar = tarfile.open("vgg11.tgz")
@@ -38,16 +40,19 @@ def test_config():
     """
     check_model_exist()
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./vgg11/inference.pdmodel",
+        params_file="./vgg11/inference.pdiparams",
+    )
     test_suite.config_test()
 
 
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.trt_fp16
-def test_trtfp16_more_bz():
+def test_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp16 batch_size=1-2 vgg11 outputs with true val
     """
     check_model_exist()
 
@@ -55,8 +60,16 @@ def test_trtfp16_more_bz():
     images_size = 224
     batch_size_pool = [1, 2]
     for batch_size in batch_size_pool:
+        try:
+            shutil.rmtree(f"{file_path}/_opt_cache")  # delete trt serialized cache
+        except Exception as e:
+            print("no need to delete trt serialized cache")
+
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        test_suite.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
@@ -64,8 +77,30 @@ def test_trtfp16_more_bz():
 
         del test_suite  # destroy class to save memory
 
+        test_suite1 = InferenceTest()
+        test_suite1.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
+        test_suite1.trt_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=1e-3,
+            gpu_mem=3000,
+            max_batch_size=batch_size,
+            precision="trt_fp16",
+            dynamic=True,
+            tuned=True,
+        )
+
+        del test_suite1  # destroy class to save memory
+
         test_suite2 = InferenceTest()
-        test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        test_suite2.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -74,6 +109,7 @@ def test_trtfp16_more_bz():
             gpu_mem=3000,
             max_batch_size=batch_size,
             precision="trt_fp16",
+            dynamic=True,
         )
 
         del test_suite2  # destroy class to save memory
@@ -81,9 +117,9 @@ def test_trtfp16_more_bz():
 
 @pytest.mark.jetson
 @pytest.mark.trt_fp16
-def test_trtfp16_more_bz():
+def test_jetson_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-10 vgg11 outputs with true val
+    compared trt fp16 batch_size=1 vgg11 outputs with true val
     """
     check_model_exist()
 
@@ -92,7 +128,10 @@ def test_trtfp16_more_bz():
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        test_suite.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
@@ -100,8 +139,30 @@ def test_trtfp16_more_bz():
 
         del test_suite  # destroy class to save memory
 
+        test_suite1 = InferenceTest()
+        test_suite1.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
+        test_suite1.trt_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=1e-3,
+            gpu_mem=3000,
+            max_batch_size=batch_size,
+            precision="trt_fp16",
+            dynamic=True,
+            tuned=True,
+        )
+
+        del test_suite1  # destroy class to save memory
+
         test_suite2 = InferenceTest()
-        test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+        test_suite2.load_config(
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
+        )
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
@@ -110,13 +171,14 @@ def test_trtfp16_more_bz():
             gpu_mem=3000,
             max_batch_size=batch_size,
             precision="trt_fp16",
+            tuned=True,
         )
 
         del test_suite2  # destroy class to save memory
 
 
 @pytest.mark.trt_fp16_multi_thread
-def test_trtfp16_bz1_multi_thread():
+def test_trt_fp16_bz1_multi_thread():
     """
     compared trt fp16 batch_size=1 vgg11 multi_thread outputs with true val
     """
@@ -126,7 +188,10 @@ def test_trtfp16_bz1_multi_thread():
     images_size = 224
     batch_size = 1
     test_suite = InferenceTest()
-    test_suite.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
+    test_suite.load_config(
+        model_file="./vgg11/inference.pdmodel",
+        params_file="./vgg11/inference.pdiparams",
+    )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
     input_data_dict = {"x": fake_input}
@@ -135,7 +200,18 @@ def test_trtfp16_bz1_multi_thread():
     del test_suite  # destroy class to save memory
 
     test_suite2 = InferenceTest()
-    test_suite2.load_config(model_file="./vgg11/inference.pdmodel", params_file="./vgg11/inference.pdiparams")
-    test_suite2.trt_bz1_multi_thread_test(input_data_dict, output_data_dict, gpu_mem=3000, precision="trt_fp16")
+    test_suite2.load_config(
+        model_file="./vgg11/inference.pdmodel",
+        params_file="./vgg11/inference.pdiparams",
+    )
+    test_suite2.trt_bz1_multi_thread_test(
+        input_data_dict,
+        output_data_dict,
+        repeat=1,
+        delta=1e-3,
+        gpu_mem=3000,
+        max_batch_size=batch_size,
+        precision="trt_fp16",
+    )
 
     del test_suite2  # destroy class to save memory
