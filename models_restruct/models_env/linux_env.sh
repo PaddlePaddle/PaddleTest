@@ -299,6 +299,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e mode=${mode} \
         -e use_build=${use_build} \
         -e binary_search_flag=${binary_search_flag} \
+        -e use_data_cfs=${use_data_cfs} \
         -e branch=${branch} \
         -e get_repo=${get_repo} \
         -e paddle_whl=${paddle_whl} \
