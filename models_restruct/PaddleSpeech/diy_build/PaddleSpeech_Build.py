@@ -133,7 +133,7 @@ class PaddleSpeech_Build(Model_Build):
             if sysstr == "Linux":
                 os.chdir("dataset")
                 if os.path.exists(self.mount_path) and self.use_data_cfs == "True":
-                    src_path = os.path.join(self.mount_path, 'asr')
+                    src_path = os.path.join(self.mount_path, "asr")
                 else:
                     if os.path.exists("/ssd2/ce_data/PaddleSpeech_t2s/asr"):
                         src_path = "/ssd2/ce_data/PaddleSpeech_t2s/asr"
