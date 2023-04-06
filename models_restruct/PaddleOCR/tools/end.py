@@ -120,10 +120,11 @@ class PaddleOCR_End(object):
             for key, value in report_enviorement_dict.items():
                 f.write(str(key) + "=" + str(value) + "\n")
 
-    def plot_paddle_compare_value(self, data1, data2, value):
+    def plot_paddle_compare_value(self, data1, data2, value, keyworld='prim'):
         """
         plot_paddle_compare_value
         """
+
         ydata1 = data1
         xdata1 = list(range(0, len(ydata1)))
         ydata2 = data2
@@ -152,10 +153,10 @@ class PaddleOCR_End(object):
         ax.set_title("PaddleOCR_DB")
 
         # display the plot
-        plt.show()
+        # plt.show()
         if not os.path.exists("picture"):
             os.makedirs("picture")
-        plt.savefig("picture/dygraph2static_" + value + ".png")
+        plt.savefig("picture/" + keyworld + "_dygraph2static_" + value + ".png")
 
     def get_paddle_data(self, filepath, kpi):
         """
@@ -175,7 +176,7 @@ class PaddleOCR_End(object):
                     data_list.append(kpi_value)
         return data_list
 
-    def get_traning_curve(self, tag1, tag2):
+    def get_traning_curve(self, tag1, tag2, keyworkd='prim'):
         """
         get_traning_curve
         """
@@ -193,14 +194,14 @@ class PaddleOCR_End(object):
             data_baseline = self.get_paddle_data(filepath_baseline, "loss")
             data_prime = self.get_paddle_data(filepath_prim, "loss")
             logger.info("Get data successfully!")
-            self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss")
+            self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss", keyworkd)
             logger.info("Plot figure successfully!")
 
             # hmeans
             data_baseline_hmeans = self.get_paddle_data(filepath_baseline, "hmean")
             data_prime_hmeans = self.get_paddle_data(filepath_prim, "hmean")
             logger.info("Get data successfully!")
-            self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans")
+            self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans", keyworkd)
             logger.info("Plot figure successfully!")
 
     def build_end(self):
@@ -219,8 +220,8 @@ class PaddleOCR_End(object):
         # logger.info("config_report_enviorement_variable start")
         # self.config_report_enviorement_variable()
         # logger.info("config_report_enviorement_variable end")
-        self.get_traning_curve("dygraph2static_baseline", "dygraph2static_prim")
-        self.get_traning_curve("dygraph2static_amp", "dygraph2static_amp_prim")
+        self.get_traning_curve("dygraph2static_baseline", "dygraph2static_prim", 'prim')
+        self.get_traning_curve("dygraph2static_amp", "dygraph2static_amp_prim", 'amp')
 
 
 def run():
