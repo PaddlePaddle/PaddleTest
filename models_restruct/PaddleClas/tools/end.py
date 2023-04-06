@@ -39,8 +39,8 @@ class PaddleClas_End(object):
         os.chdir("picture")
         try:
             path_list = []
-            for name in os.listdir("../logs"):
-                path_list.append(os.path.join("../logs", name))
+            for name in os.listdir(os.path.join("../logs", self.reponame, self.qa_yaml_name)):
+                path_list.append(os.path.join("../logs", self.reponame, self.qa_yaml_name, name))
             plt_dy2st(path_list, self.qa_yaml_name)
             # with open("dy2st.yaml", "r", encoding="utf-8") as f:
             #     content = yaml.load(f, Loader=yaml.FullLoader)
