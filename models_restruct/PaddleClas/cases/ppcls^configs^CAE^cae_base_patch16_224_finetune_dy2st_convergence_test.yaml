@@ -12,8 +12,8 @@ case:
           - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/CAE_dy2st
         result:
@@ -28,8 +28,8 @@ case:
           - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/CAE_dy2st_cinn
         result:
@@ -44,8 +44,8 @@ case:
           - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/CAE_dy2st_prim
         result:
@@ -60,85 +60,13 @@ case:
           - -o Global.epochs=5
           - -o Global.to_static=True
           - -o Optimizer.lr.learning_rate=0.001
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o DataLoader.Train.sampler.batch_size=128
           - -o Global.output_dir=output/CAE_dy2st_prim_cinn
         result:
           loss:
             base: 6
-            threshold: 1
-            evaluation: "-"
-      -
-        name: dy2st_all
-        cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
-        params:
-          - -o Global.to_static=True
-          - -o Global.epochs=120
-          - -o Global.eval_interval=6
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
-          - -o DataLoader.Train.sampler.batch_size=delete
-          - -o Global.print_batch_step=delete
-          - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.0025
-        result:
-          loss:
-            base: 6
-            threshold: 1
-            evaluation: "-"
-      -
-        name: dy2st_cinn_all
-        cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
-        params:
-          - -o Global.to_static=True
-          - -o Global.epochs=120
-          - -o Global.eval_interval=6
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
-          - -o DataLoader.Train.sampler.batch_size=delete
-          - -o Global.print_batch_step=delete
-          - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.0025
-        result:
-          loss:
-            base: 1
-            threshold: 1
-            evaluation: "-"
-      -
-        name: dy2st_prim_all
-        cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
-        params:
-          - -o Global.to_static=True
-          - -o Global.epochs=120
-          - -o Global.eval_interval=6
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
-          - -o DataLoader.Train.sampler.batch_size=delete
-          - -o Global.print_batch_step=delete
-          - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.0025
-        result:
-          loss:
-            base: 1
-            threshold: 1
-            evaluation: "-"
-      -
-        name: dy2st_prim_cinn_all
-        cmd: python tools/train.py -c ppcls/configs/CAE/cae_base_patch16_224_finetune.yaml
-        params:
-          - -o Global.to_static=True
-          - -o Global.epochs=120
-          - -o Global.eval_interval=6
-          - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/val_list.txt
-          - -o DataLoader.Train.sampler.batch_size=delete
-          - -o Global.print_batch_step=delete
-          - -o Global.seed=delete
-          - -o Optimizer.lr.learning_rate=0.0025
-        result:
-          loss:
-            base: 1
             threshold: 1
             evaluation: "-"
 

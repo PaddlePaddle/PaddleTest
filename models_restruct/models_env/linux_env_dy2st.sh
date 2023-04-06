@@ -289,6 +289,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -v $(pwd):/workspace \
         -v /home/:/home/ \
         -v /mnt:/mnt  \
+        -v /ssd3/dy2st_data/:/ssd3/dy2st_data/  \
         -e AK=${AK} \
         -e SK=${SK} \
         -e bce_whl_url=${bce_whl_url} \
