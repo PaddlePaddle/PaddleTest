@@ -14,6 +14,7 @@ class Logger:
     """
     logger base
     """
+
     SAVE_LEVEL = ["both", "file", "channel"]
 
     def __init__(self, loggername, save_level="both"):
@@ -32,7 +33,6 @@ class Logger:
         )  # 指定输出的日志文件名
         # 定义handler的输出格式
         formatter = logging.Formatter("%(asctime)s-%(name)s-[%(levelname)s] ===> %(message)s")
-
 
         # 给logger添加handler
         if save_level not in self.SAVE_LEVEL:
