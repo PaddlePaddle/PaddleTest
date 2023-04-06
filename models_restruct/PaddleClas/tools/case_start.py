@@ -54,7 +54,7 @@ class PaddleClas_Case_Start(object):
             os.environ["FLAGS_conv_workspace_size_limit"] = "400"
             logger.info("set FLAGS_conv_workspace_size_limit {}".format(os.getenv("FLAGS_conv_workspace_size_limit")))
             # os.environ["FLAGS_cudnn_exhaustive_search"] = "1" #设置后无法固定随机量
-            # os.environ["FLAGS_cudnn_deterministic"] = "1" #之前已经设置过了
+            os.environ["FLAGS_cudnn_deterministic"] = "1"
             logger.info("set FLAGS_cudnn_exhaustive_search as {}".format(os.getenv("FLAGS_cudnn_exhaustive_search")))
 
             if self.case_name.split("train_")[-1] == "dy2st_cinn":
@@ -74,6 +74,7 @@ class PaddleClas_Case_Start(object):
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"
                 os.environ["FLAGS_cudnn_deterministic"] = "False"
+                os.environ["FLAGS_nvrtc_compile_to_cubin"] = "1"
             elif self.case_name.split("train_")[-1] == "dy2st_all":
                 os.environ["FLAGS_cudnn_deterministic"] = "False"
 
@@ -81,6 +82,7 @@ class PaddleClas_Case_Start(object):
             logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
             logger.info("set FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+            logger.info("set FLAGS_nvrtc_compile_to_cubin as {}".format(os.getenv("FLAGS_nvrtc_compile_to_cubin")))
         else:
             return 0
 

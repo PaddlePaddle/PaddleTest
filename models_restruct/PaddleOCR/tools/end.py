@@ -140,11 +140,13 @@ class PaddleOCR_End(object):
         # set the limits
         ax.set_xlim([0, len(xdata1)])
         if "loss" in value:
-            ax.set_ylim([0, math.ceil(np.percentile(ydata1, 99))])
+            ax.set_ylim([0, math.ceil(np.percentile(ydata1, 99.99))])
         else:
             ax.set_ylim([0, math.ceil(max(ydata1))])
-
-        ax.set_xlabel("iteration")
+        if "loss" in value:
+            ax.set_xlabel("iteration")
+        else:
+            ax.set_xlabel("epoch")
         ax.set_ylabel(value)
         ax.grid()
         ax.set_title("PaddleOCR_DB")
@@ -162,7 +164,7 @@ class PaddleOCR_End(object):
         data_list = []
         f = open(filepath, encoding="utf-8", errors="ignore")
         for line in f.readlines():
-            if kpi + ":" in line:
+            if kpi + ":" in line and line.startswith("20"):
                 if "current" in line:
                     pass
                 else:
