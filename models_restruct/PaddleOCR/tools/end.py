@@ -175,18 +175,18 @@ class PaddleOCR_End(object):
                     data_list.append(kpi_value)
         return data_list
 
-    def get_traning_curve(self):
+    def get_traning_curve(self, tag1, tag2):
         """
         get_traning_curve
         """
-        if "dygraph2static_prim" in self.step:
+        if "dygraph2static" in self.step:
             print("self.step:{}".format(self.step))
             filepath_baseline = os.path.join(
                 "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/",
-                "train_dygraph2static_baseline.log",
+                "train_" + tag1 + ".log",
             )
             filepath_prim = os.path.join(
-                "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/", "train_dygraph2static_prim.log"
+                "logs/PaddleOCR/config^benchmark^icdar2015_resnet50_FPN_DBhead_polyLR/", "train_" + tag2 + ".log"
             )
 
             # loss
@@ -219,7 +219,8 @@ class PaddleOCR_End(object):
         # logger.info("config_report_enviorement_variable start")
         # self.config_report_enviorement_variable()
         # logger.info("config_report_enviorement_variable end")
-        self.get_traning_curve()
+        self.get_traning_curve("dygraph2static_baseline", "dygraph2static_prim")
+        self.get_traning_curve("dygraph2static_amp", "dygraph2static_amp_prim")
 
 
 def run():
