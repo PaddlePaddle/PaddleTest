@@ -13,7 +13,7 @@ case:
                 base: 1
                 threshold: 0
                 evaluation: "="
-            heman:
+              hmean:
                 base: 1
                 threshold: 0
                 evaluation: "="
@@ -29,7 +29,7 @@ case:
                 base: 1
                 threshold: 0
                 evaluation: "="
-              heman:
+              hmean:
                 base: 1
                 threshold: 0
                 evaluation: "="
