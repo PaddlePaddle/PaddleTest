@@ -176,7 +176,7 @@ class PaddleOCR_End(object):
                     data_list.append(kpi_value)
         return data_list
 
-    def get_traning_curve(self, tag1, tag2, keyworkd='prim'):
+    def get_traning_curve(self, tag1, tag2, keyworld='prim'):
         """
         get_traning_curve
         """
@@ -194,14 +194,14 @@ class PaddleOCR_End(object):
             data_baseline = self.get_paddle_data(filepath_baseline, "loss")
             data_prime = self.get_paddle_data(filepath_prim, "loss")
             logger.info("Get data successfully!")
-            self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss", keyworkd)
+            self.plot_paddle_compare_value(data_baseline, data_prime, "train_loss", keyworld)
             logger.info("Plot figure successfully!")
 
             # hmeans
             data_baseline_hmeans = self.get_paddle_data(filepath_baseline, "hmean")
             data_prime_hmeans = self.get_paddle_data(filepath_prim, "hmean")
             logger.info("Get data successfully!")
-            self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans", keyworkd)
+            self.plot_paddle_compare_value(data_baseline_hmeans, data_prime_hmeans, "eval_hmeans", keyworld)
             logger.info("Plot figure successfully!")
 
     def build_end(self):
