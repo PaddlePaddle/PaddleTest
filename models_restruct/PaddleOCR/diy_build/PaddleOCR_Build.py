@@ -43,6 +43,9 @@ class PaddleOCR_Build(Model_Build):
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.test_model_list = []
+        self.mount_path = str(os.getenv("mount_path"))
+        self.use_data_cfs = str(args.use_data_cfs)
+
         if str(self.models_list) != "None":
             for line in self.models_list.split(","):
                 if ".yaml" or ".yml" in line:
@@ -67,10 +70,13 @@ class PaddleOCR_Build(Model_Build):
 
             sysstr = platform.system()
             if sysstr == "Linux":
-                if os.path.exists("/ssd2/ce_data/PaddleOCR"):
-                    src_path = "/ssd2/ce_data/PaddleOCR"
+                if os.path.exists(self.mount_path) and self.use_data_cfs == "True":
+                    src_path = self.mount_path
                 else:
-                    src_path = "/home/data/cfs/models_ce/PaddleOCR"
+                    if os.path.exists("/ssd2/ce_data/PaddleOCR"):
+                        src_path = "/ssd2/ce_data/PaddleOCR"
+                    else:
+                        src_path = "/home/data/cfs/models_ce/PaddleOCR"
             elif sysstr == "Windows":
                 # src_path = "F:\\PaddleOCR"
                 # os.system("mklink /d train_data F:\\PaddleOCR\\train_data")
