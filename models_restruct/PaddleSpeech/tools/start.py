@@ -40,6 +40,8 @@ class PaddleSpeech_Start(object):
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)  # 所有和yaml相关的变量与此拼接
         self.env_dict = {}
         self.model = self.qa_yaml_name
+        self.mount_path = str(os.getenv("mount_path"))
+        # self.use_data_cfs = str(args.use_data_cfs)
 
     def prepare_cli_cmd(self):
         """

@@ -17,6 +17,11 @@ case:
               - amp=None
               - dataset.train.loader.batch_size=8
               - trainer.epochs=200
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
           -
             name: dygraph2static_prim
             path: benchmark/PaddleOCR_DBNet
@@ -33,3 +38,8 @@ case:
               - amp=None
               - dataset.train.loader.batch_size=8
               - trainer.epochs=200
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
