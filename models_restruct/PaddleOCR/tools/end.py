@@ -120,7 +120,7 @@ class PaddleOCR_End(object):
             for key, value in report_enviorement_dict.items():
                 f.write(str(key) + "=" + str(value) + "\n")
 
-    def plot_paddle_compare_value(self, data1, data2, value, keyworld='prim'):
+    def plot_paddle_compare_value(self, data1, data2, value, keyworld="prim"):
         """
         plot_paddle_compare_value
         """
@@ -176,7 +176,7 @@ class PaddleOCR_End(object):
                     data_list.append(kpi_value)
         return data_list
 
-    def get_traning_curve(self, tag1, tag2, keyworld='prim'):
+    def get_traning_curve(self, tag1, tag2, keyworld="prim"):
         """
         get_traning_curve
         """
@@ -220,8 +220,8 @@ class PaddleOCR_End(object):
         # logger.info("config_report_enviorement_variable start")
         # self.config_report_enviorement_variable()
         # logger.info("config_report_enviorement_variable end")
-        self.get_traning_curve("dygraph2static_baseline", "dygraph2static_prim", 'prim')
-        self.get_traning_curve("dygraph2static_amp", "dygraph2static_amp_prim", 'amp')
+        self.get_traning_curve("dygraph2static_baseline", "dygraph2static_prim", "prim")
+        self.get_traning_curve("dygraph2static_amp", "dygraph2static_amp_prim", "amp")
 
 
 def run():
