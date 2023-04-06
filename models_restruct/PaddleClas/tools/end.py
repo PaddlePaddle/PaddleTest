@@ -12,7 +12,9 @@ import logging
 import yaml
 import wget
 import numpy as np
-from picture.analysis import analysis, draw
+
+# from picture.analysis import analysis, draw
+from picture.analysis import plt_dy2st
 
 logger = logging.getLogger("ce")
 
@@ -36,21 +38,25 @@ class PaddleClas_End(object):
         path_now = os.getcwd()
         os.chdir("picture")
         try:
-            with open("dy2st.yaml", "r", encoding="utf-8") as f:
-                content = yaml.load(f, Loader=yaml.FullLoader)
-            self.dy2st_yaml = content[self.qa_yaml_name]
-            logger.info("self.dy2st_yaml is {}".format(self.dy2st_yaml))
-            # train
-            train_log_info_map = analysis(
-                os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "train"
-            )
-            draw(train_log_info_map, self.dy2st_yaml, "train")
-            # eval
-            if "eval" in self.dy2st_yaml.keys():
-                train_log_info_map = analysis(
-                    os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "eval"
-                )
-                draw(train_log_info_map, self.dy2st_yaml, "eval")
+            path_list = []
+            for name in os.listdir("../logs"):
+                path_list.append(os.path.join("../logs", name))
+            plt_dy2st(path_list, self.qa_yaml_name)
+            # with open("dy2st.yaml", "r", encoding="utf-8") as f:
+            #     content = yaml.load(f, Loader=yaml.FullLoader)
+            # self.dy2st_yaml = content[self.qa_yaml_name]
+            # logger.info("self.dy2st_yaml is {}".format(self.dy2st_yaml))
+            # # train
+            # train_log_info_map = analysis(
+            #     os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "train"
+            # )
+            # draw(train_log_info_map, self.dy2st_yaml, "train")
+            # # eval
+            # if "eval" in self.dy2st_yaml.keys():
+            #     train_log_info_map = analysis(
+            #         os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "eval"
+            #     )
+            #     draw(train_log_info_map, self.dy2st_yaml, "eval")
         except Exception as e:
             logger.info("draw picture failed")
             logger.info("error info : {}".format(e))
